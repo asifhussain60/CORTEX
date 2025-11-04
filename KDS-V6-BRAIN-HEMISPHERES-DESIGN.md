@@ -64,6 +64,7 @@ Just as the human brain has specialized hemispheres that work together, KDS BRAI
 - ✅ **Intent Understanding** - Natural language interpretation
 - ✅ **Context Awareness** - File relationships, workflow patterns
 - ✅ **Future Projection** - Risk analysis, impact prediction
+- ✅ **Brain Protection** - Guard architectural integrity (Rule #22) 🆕
 
 **Characteristics:**
 - Parallel processing (consider multiple aspects simultaneously)
@@ -71,6 +72,7 @@ Just as the human brain has specialized hemispheres that work together, KDS BRAI
 - Pattern-based (workflow templates, similar features)
 - Context-driven (file co-modification, historical data)
 - Future-focused (planning, predictions, warnings)
+- Architecture guardian (SOLID compliance, tier boundaries)
 
 **Agents:**
 - `intent-router.md` - Interprets requests, routes to specialists
@@ -78,6 +80,259 @@ Just as the human brain has specialized hemispheres that work together, KDS BRAI
 - `brain-query.md` - Pattern matching and context retrieval
 - `screenshot-analyzer.md` - Visual/spatial analysis
 - `change-governor.md` - Holistic impact assessment
+- `brain-protector.md` - Brain integrity guardian (NEW - Rule #22) 🆕
+
+---
+
+## 🛡️ Brain Protection System (RIGHT BRAIN - Rule #22)
+
+**Integration:** Brain Protection is a **RIGHT BRAIN responsibility** as strategic architecture guardian
+
+### Protection Architecture
+
+```
+User Request → intent-router.md (RIGHT BRAIN)
+    ↓
+    ├─ Normal request? → Route to appropriate agent
+    │
+    └─ Brain modification? → brain-protector.md (RIGHT BRAIN)
+           ↓
+           Run 6 Protection Layers:
+           1. Instinct Immutability (Tier 0 protection)
+           2. Tier Boundary Validation
+           3. SOLID Compliance Check
+           4. Hemisphere Specialization
+           5. Knowledge Quality Filter
+           6. Commit Integrity
+           ↓
+           Threats detected? 
+           ├─ YES → Build challenge with alternatives
+           │         ↓
+           │         Present to user
+           │         ↓
+           │         User choice:
+           │         ├─ Accept alternative (SAFE)
+           │         ├─ Provide different approach (REVIEW)
+           │         └─ OVERRIDE with justification (RISKY)
+           │
+           └─ NO → Proceed with logging
+                   ↓
+                   Log to corpus-callosum/protection-events.jsonl
+```
+
+### Protection Layers (Detailed)
+
+**Layer 1: Instinct Immutability**
+```yaml
+protects: Tier 0 (governance/rules.md, agent core logic)
+threats:
+  - "User: Disable TDD for this feature"
+  - "User: Skip DoR validation this time"
+  - "User: Modify agent behavior inline"
+protection:
+  - CHALLENGE with rationale
+  - Suggest safe alternatives (spike branch, minimal tests)
+  - Require OVERRIDE + written justification
+  - Log all challenges to anomalies.yaml
+```
+
+**Layer 2: Tier Boundary Protection**
+```yaml
+protects: Clean tier separation, no cross-contamination
+threats:
+  - Application file paths in Tier 0
+  - Conversation data in Tier 2
+  - Permanent rules in Tier 1 FIFO
+  - Event backlog > 50 unprocessed
+protection:
+  - brain-updater.md validates tier assignment
+  - Auto-migration if misclassified
+  - WARN on boundary violations
+  - brain-amnesia.ps1 preserves Tier 0 only
+```
+
+**Layer 3: SOLID Compliance**
+```yaml
+protects: SOLID architectural principles
+threats:
+  - SRP: Agent doing multiple jobs
+  - OCP: Modifying agents instead of extending
+  - LSP: Breaking agent contracts
+  - ISP: Adding mode switches
+  - DIP: Hardcoding dependencies
+protection:
+  - Detect violation type
+  - CHALLENGE with SOLID alternative
+  - Example: "Add mode switch" → "Create dedicated agent"
+  - Require OVERRIDE for violations
+```
+
+**Layer 4: Hemisphere Specialization**
+```yaml
+protects: LEFT/RIGHT brain separation
+threats:
+  - Strategic planning in LEFT BRAIN
+  - Tactical execution in RIGHT BRAIN
+  - Direct hemisphere communication (bypass corpus callosum)
+protection:
+  - Validate agent-to-hemisphere mapping
+  - Auto-route to correct hemisphere
+  - WARN on hemisphere confusion
+  - Track confusion events
+```
+
+**Layer 5: Knowledge Quality**
+```yaml
+protects: Knowledge graph from corruption
+threats:
+  - Low confidence patterns (< 0.50)
+  - Stale patterns (> 90 days unused)
+  - Contradictory patterns
+  - Spam patterns (100+ similar events)
+protection:
+  - Confidence threshold enforcement
+  - Automatic pattern decay
+  - Anomaly detection (z-score > 2.0)
+  - Pattern consolidation
+```
+
+**Layer 6: Commit Integrity**
+```yaml
+protects: Quality gates via semantic commits
+threats:
+  - Committing brain state files
+  - Committing auto-generated prompts
+  - Unstructured commit messages
+  - Bypassing test-first workflow
+protection:
+  - commit-kds-changes.ps1 enforces semantic categories
+  - Auto-categorization: feat/fix/test/docs/refactor/chore/perf
+  - .gitignore auto-update for brain files
+  - Reset auto-generated files before commit
+```
+
+### Brain Protector Agent
+
+**File:** `prompts/internal/brain-protector.md`  
+**Hemisphere:** RIGHT BRAIN (Strategic Guardian)  
+**Purpose:** Validate architectural integrity before brain modifications
+
+**Triggers:**
+```yaml
+automatic_triggers:
+  - User requests KDS file modification
+  - Tier boundary violation detected
+  - SOLID principle violation detected
+  - Instinct layer pollution detected
+  - Knowledge corruption detected
+  - Hemisphere confusion detected
+  - Commit without semantic prefix
+
+manual_trigger:
+  command: "#file:KDS/prompts/internal/brain-protector.md"
+  usage: "Validate specific modification request"
+```
+
+**Workflow:**
+```
+1. Receive modification request from intent-router.md
+   ↓
+2. Analyze affected brain components (Tier 0/1/2/3/4?)
+   ↓
+3. Run 6 protection algorithms in parallel
+   ↓
+4. Collect all threats and violations
+   ↓
+5. Assess severity (CRITICAL/HIGH/MEDIUM/LOW)
+   ↓
+6. If CRITICAL or HIGH:
+   ├─ Build comprehensive challenge
+   ├─ Generate safe alternatives
+   ├─ Present to user with recommendations
+   └─ Wait for user decision
+   ↓
+7. Log decision to corpus-callosum/protection-events.jsonl
+   ↓
+8. Update protection metrics in right-hemisphere/protection-stats.yaml
+```
+
+**Challenge Template:**
+```markdown
+🧠 BRAIN PROTECTION CHALLENGE (RIGHT BRAIN)
+
+Request: {user_request}
+Hemisphere: RIGHT BRAIN (Strategic Guardian)
+Rule: #22 (Brain Protection System)
+
+⚠️  THREATS DETECTED:
+{threat_list}
+
+VIOLATIONS:
+{violation_details}
+
+ARCHITECTURAL IMPACT:
+{impact_analysis}
+
+RISKS:
+{risk_assessment}
+
+SAFE ALTERNATIVES:
+1. {alternative_1} ✅ RECOMMENDED
+   - {benefit_1}
+   - {rationale_1}
+
+2. {alternative_2}
+   - {benefit_2}
+   - {rationale_2}
+
+RECOMMENDATION: Alternative {best_alternative}
+
+═══════════════════════════════════════════════
+This challenge protects KDS brain integrity (Rule #22).
+
+Options:
+  1. Accept recommended alternative (SAFE)
+  2. Provide different approach (REVIEW)
+  3. Type 'OVERRIDE' with justification (RISKY)
+
+Your choice:
+```
+
+### Corpus Callosum Integration
+
+**Protection Events Queue:**
+```
+corpus-callosum/
+├── protection-events.jsonl    # All protection challenges
+├── override-log.jsonl         # User overrides with justification
+└── alternative-adoptions.jsonl # Accepted alternatives
+```
+
+**Event Format:**
+```jsonl
+{
+  "timestamp": "2025-11-04T14:30:00Z",
+  "type": "protection_challenge",
+  "hemisphere": "RIGHT_BRAIN",
+  "agent": "brain-protector",
+  "request": "Add mode switch to code-executor",
+  "threats": ["solid_violation"],
+  "violations": [{"type": "ISP", "severity": "HIGH"}],
+  "alternatives": ["Keep error-corrector.md dedicated"],
+  "user_decision": "alternative_1",
+  "outcome": "threat_prevented"
+}
+```
+
+**Validation Loop:**
+```
+RIGHT BRAIN (brain-protector) → Challenge → User
+                    ↓                           ↓
+         Log to corpus callosum    Decision (alternative/override)
+                    ↓                           ↓
+            Update metrics       LEFT BRAIN proceeds OR halts
+                    ↓
+         Pattern extraction (if override → learn why)
 
 ---
 

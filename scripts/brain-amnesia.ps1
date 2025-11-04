@@ -9,8 +9,12 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$workspaceRoot = "d:\PROJECTS\DevProjects"
-$kdsRoot = Join-Path $workspaceRoot "KDS"
+
+# Import workspace resolver
+. (Join-Path $PSScriptRoot "lib\workspace-resolver.ps1")
+
+$workspaceRoot = Get-WorkspaceRoot
+$kdsRoot = Get-KdsRoot
 $brainDir = Join-Path $kdsRoot "kds-brain"
 
 Write-Host "🧠 KDS BRAIN Amnesia - Application Data Reset" -ForegroundColor Cyan

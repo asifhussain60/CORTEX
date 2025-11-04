@@ -8,13 +8,16 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Import workspace resolver
+. (Join-Path $PSScriptRoot "lib\workspace-resolver.ps1")
+
 function Write-TestSuccess { Write-Host "✅ $args" -ForegroundColor Green }
 function Write-TestFailure { Write-Host "❌ $args" -ForegroundColor Red }
 function Write-TestInfo { Write-Host "ℹ️  $args" -ForegroundColor Blue }
 function Write-TestHeader { Write-Host "`n=== $args ===" -ForegroundColor Cyan }
 
-$baseDir = "D:\PROJECTS\NOOR CANVAS"
-$kdsDir = Join-Path $baseDir "KDS"
+$baseDir = Get-WorkspaceRoot
+$kdsDir = Get-KdsRoot
 $errors = @()
 $warnings = @()
 $validated = 0

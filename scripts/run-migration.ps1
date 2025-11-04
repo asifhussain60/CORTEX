@@ -9,13 +9,16 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Import workspace resolver
+. (Join-Path $PSScriptRoot "lib\workspace-resolver.ps1")
+
 function Write-Success { Write-Host "✅ $args" -ForegroundColor Green }
 function Write-Failure { Write-Host "❌ $args" -ForegroundColor Red }
 function Write-Info { Write-Host "ℹ️  $args" -ForegroundColor Blue }
 function Write-Header { Write-Host "`n=== $args ===" -ForegroundColor Cyan }
 
-$baseDir = "D:\PROJECTS\NOOR CANVAS"
-$kdsDir = Join-Path $baseDir "KDS"
+$baseDir = Get-WorkspaceRoot
+$kdsDir = Get-KdsRoot
 
 Write-Header "KDS Migration: .github -> KDS Structure"
 Write-Info "This script will:"

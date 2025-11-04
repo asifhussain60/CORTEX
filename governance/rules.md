@@ -2237,6 +2237,517 @@ def generate_alternatives(user_request, existing):
 
 ---
 
+## RULE #22: Brain Protection System (Tier 0 - INSTINCT)
+
+```yaml
+rule_id: BRAIN_PROTECTION_SYSTEM
+severity: CRITICAL
+tier: 0  # INSTINCT - Never reset, permanent protection
+hemisphere: RIGHT_BRAIN  # Strategic architecture guardian
+scope: ALL_BRAIN_MODIFICATIONS
+
+purpose:
+  - Protect KDS BRAIN integrity from corruption
+  - Enforce tier boundaries and immutability rules
+  - Prevent SOLID principle violations
+  - Guard against architectural degradation
+  - Challenge user requests that harm brain structure
+
+protection_layers:
+  
+  layer_1_instinct_immutability:
+    description: "Tier 0 (Instinct) CANNOT be modified during runtime"
+    protected_elements:
+      - governance/rules.md (all Tier 0 rules)
+      - prompts/internal/*.md (agent core logic)
+      - SOLID principles
+      - TDD mandate
+      - Architectural thinking mandate
+      - Hemisphere specialization
+    
+    violations_to_prevent:
+      - User requests to "disable TDD for this task"
+      - Attempts to modify agent core logic during execution
+      - Requests to bypass governance rules
+      - Attempts to pollute instinct layer with application data
+    
+    enforcement:
+      - CHALLENGE before accepting instinct modifications
+      - Require explicit versioning for rule changes
+      - HALT if user forces harmful instinct change
+      - Log all challenge attempts to anomalies.yaml
+  
+  layer_2_tier_boundary_protection:
+    description: "Each tier has specific content - no cross-contamination"
+    
+    tier_boundaries:
+      tier_0_instinct:
+        contains: KDS core rules, SOLID, TDD, agent behaviors
+        forbidden: Application data, file paths, temporary patterns
+        validation: "No application-specific content in Tier 0"
+      
+      tier_1_working_memory:
+        contains: Last 20 conversations, recent messages
+        forbidden: Permanent patterns, instinct rules
+        validation: "FIFO queue working, no permanent data"
+      
+      tier_2_long_term:
+        contains: Application patterns, file relationships
+        forbidden: KDS internal patterns, instinct rules
+        validation: "Patterns extractable, confidence scores valid"
+      
+      tier_3_context_awareness:
+        contains: Project metrics, velocity, hotspots
+        forbidden: Conversation data, instinct rules
+        validation: "Metrics fresh, correlations valid"
+      
+      tier_4_event_stream:
+        contains: Activity log, raw events
+        forbidden: Permanent storage, patterns
+        validation: "Events processed regularly, no backlog >50"
+    
+    violations_to_prevent:
+      - Application file paths stored in Tier 0
+      - Conversation data stored in Tier 2
+      - Permanent instinct rules in Tier 1
+      - Event backlogs accumulating to 100+
+    
+    enforcement:
+      - brain-updater.md MUST classify events to correct tier
+      - brain-amnesia.ps1 MUST preserve Tier 0
+      - Automatic migration if misclassified data detected
+      - WARN if tier boundaries violated
+  
+  layer_3_solid_compliance:
+    description: "Protect SOLID architecture from degradation"
+    
+    solid_violations_to_prevent:
+      srp_single_responsibility:
+        violation: "Agent doing multiple jobs"
+        example: "code-executor handling both execution AND correction"
+        protection: "Reject requests to merge agents or add mode switches"
+      
+      ocp_open_closed:
+        violation: "Modifying existing agents instead of extending"
+        example: "Changing intent-router.md instead of adding new intent"
+        protection: "Suggest new agent or extension point"
+      
+      lsp_liskov_substitution:
+        violation: "Breaking agent contracts"
+        example: "Changing session-loader interface"
+        protection: "Require backward compatibility or versioning"
+      
+      isp_interface_segregation:
+        violation: "Adding mode switches to agents"
+        example: "work-planner with planning AND resumption modes"
+        protection: "Suggest dedicated agent (session-resumer)"
+      
+      dip_dependency_inversion:
+        violation: "Hardcoding concrete implementations"
+        example: "Agents directly accessing KDS/sessions/ instead of session-loader"
+        protection: "Require abstraction layer usage"
+    
+    enforcement:
+      - CHALLENGE if user requests violate SOLID
+      - Provide SOLID-compliant alternative
+      - Require explicit OVERRIDE with justification
+      - Log all SOLID violations to anomalies.yaml
+  
+  layer_4_hemisphere_protection:
+    description: "Prevent hemisphere confusion and maintain specialization"
+    
+    hemisphere_violations_to_prevent:
+      left_brain_contamination:
+        violation: "Strategic planning in tactical execution hemisphere"
+        example: "code-executor.md making architectural decisions"
+        protection: "Route strategic work to RIGHT BRAIN"
+      
+      right_brain_contamination:
+        violation: "Tactical execution in strategic planning hemisphere"
+        example: "work-planner.md writing code directly"
+        protection: "Route tactical work to LEFT BRAIN"
+      
+      coordination_bypass:
+        violation: "Direct hemisphere-to-hemisphere without corpus callosum"
+        example: "Agents communicating without coordination queue"
+        protection: "Require coordination-queue.jsonl usage"
+    
+    enforcement:
+      - Validate agent-to-hemisphere mapping
+      - WARN if wrong hemisphere processes request
+      - Auto-route to correct hemisphere
+      - Track hemisphere confusion in anomalies.yaml
+  
+  layer_5_knowledge_corruption:
+    description: "Protect knowledge graph from low-quality patterns"
+    
+    corruption_threats:
+      low_confidence_patterns:
+        threshold: 0.50
+        action: "Reject patterns with confidence < 0.50"
+        rationale: "Noise, not signal"
+      
+      stale_patterns:
+        age_threshold: 90  # days
+        action: "Flag patterns not used in 90 days"
+        rationale: "May be obsolete"
+      
+      contradictory_patterns:
+        detection: "Same intent → different routes"
+        action: "WARN, require resolution"
+        rationale: "Confuses routing"
+      
+      spam_patterns:
+        detection: "100+ events without meaningful variation"
+        action: "Consolidate to representative pattern"
+        rationale: "Storage waste"
+    
+    enforcement:
+      - brain-updater.md applies quality filters
+      - Confidence decay for unused patterns
+      - Anomaly detection (z-score > 2.0)
+      - Auto-consolidation of spam patterns
+  
+  layer_6_commit_integrity:
+    description: "Semantic commits enforce quality gates"
+    
+    semantic_commit_categories:
+      - feat:     New feature implementation
+      - fix:      Bug corrections
+      - test:     Test creation or updates
+      - docs:     Documentation changes
+      - refactor: Code restructuring (no behavior change)
+      - chore:    Maintenance tasks
+      - perf:     Performance improvements
+    
+    commit_rules:
+      - All commits MUST have semantic prefix
+      - Commits without tests (for feat) require justification
+      - Auto-categorization by file analysis
+      - .gitignore auto-update for brain state files
+      - Reset auto-generated files before commit
+    
+    violations_to_prevent:
+      - Committing brain state files (conversation-context.jsonl)
+      - Committing auto-generated prompts
+      - Unstructured commit messages
+      - Bypassing test-first workflow
+    
+    enforcement:
+      - commit-kds-changes.ps1 enforces semantic commits
+      - Auto-categorizes by file changes
+      - Interactive mode for documentation decisions
+      - Dry-run mode for validation
+      - Zero uncommitted files achieved automatically
+
+validation_algorithms:
+  
+  algorithm_1_instinct_modification_challenge:
+    trigger: "User requests Tier 0 modification"
+    steps:
+      step_1: "Identify affected Tier 0 elements"
+      step_2: "Assess impact (SOLID, TDD, architecture)"
+      step_3: "Search for alternatives (extension vs modification)"
+      step_4: "Build challenge response with risks and alternatives"
+      step_5: "Present to user: OVERRIDE or ALTERNATIVE?"
+      step_6: "If OVERRIDE, require written justification"
+      step_7: "Log decision to anomalies.yaml"
+    
+    example_challenge: |
+      ⚠️ BRAIN PROTECTION CHALLENGE
+      
+      Request: Disable TDD for quick prototype
+      Tier: 0 (INSTINCT - Permanent rule)
+      Impact: Violates Rule #8 (Test-First Always)
+      
+      Risks:
+        - Technical debt accumulation
+        - Broken code merged to main
+        - No regression protection
+        - Violates Definition of DONE (Rule #20)
+      
+      Alternative 1: Create spike branch
+        - Prototype WITHOUT affecting main
+        - Merge learnings, not code
+        - Rebuild with TDD on features/kds
+      
+      Alternative 2: Minimal test coverage
+        - Write ONLY critical path tests
+        - Faster than full coverage
+        - Still protects against regressions
+      
+      Recommendation: Alternative 1 (spike branch)
+      
+      ═══════════════════════════════════════════════
+      Proceed with OVERRIDE? (Type 'OVERRIDE' to confirm)
+      Or accept Alternative? [1/2]
+  
+  algorithm_2_tier_boundary_validation:
+    trigger: "brain-updater.md processes events"
+    steps:
+      step_1: "Extract event metadata (files, agent, content)"
+      step_2: "Classify event to target tier"
+      step_3: "Validate classification against tier rules"
+      step_4: "If misclassified, migrate to correct tier"
+      step_5: "Log migration to anomalies.yaml"
+    
+    classification_logic: |
+      if event.files.contains("KDS/governance/") or 
+         event.files.contains("KDS/prompts/internal/"):
+          # KDS internal patterns → Tier 0 (read-only reference)
+          tier = 0
+      
+      elif event.agent == "conversation-context-manager":
+          # Conversation data → Tier 1
+          tier = 1
+      
+      elif event.type in ["task_complete", "file_modify"]:
+          # Application patterns → Tier 2
+          tier = 2
+      
+      elif event.type == "metrics_collected":
+          # Project metrics → Tier 3
+          tier = 3
+      
+      else:
+          # Raw event → Tier 4
+          tier = 4
+  
+  algorithm_3_solid_violation_detection:
+    trigger: "User requests agent modification"
+    steps:
+      step_1: "Identify target agent and requested change"
+      step_2: "Check agent's current responsibility"
+      step_3: "Assess if change adds new responsibility (SRP violation)"
+      step_4: "Check if change breaks interface (ISP/LSP violation)"
+      step_5: "Check if change hardcodes dependency (DIP violation)"
+      step_6: "If violation detected, build challenge response"
+      step_7: "Suggest SOLID-compliant alternative"
+    
+    srp_check: |
+      current_responsibilities = analyze_agent_responsibilities(agent)
+      new_responsibility = extract_responsibility(requested_change)
+      
+      if new_responsibility not in current_responsibilities:
+          if len(current_responsibilities) >= 1:
+              return {
+                  'violation': 'SRP',
+                  'message': f'Agent already handles {current_responsibilities[0]}, adding {new_responsibility} violates Single Responsibility',
+                  'alternative': f'Create new agent: {new_responsibility}-handler.md'
+              }
+  
+  algorithm_4_hemisphere_routing_validation:
+    trigger: "intent-router.md routes request"
+    steps:
+      step_1: "Identify request type (strategic vs tactical)"
+      step_2: "Determine correct hemisphere"
+      step_3: "Validate target agent is in correct hemisphere"
+      step_4: "If wrong hemisphere, warn and re-route"
+      step_5: "Log hemisphere confusion to anomalies.yaml"
+    
+    routing_rules: |
+      strategic_intents = [PLAN, GOVERN, ASK, ANALYZE_SCREENSHOT]
+      tactical_intents = [EXECUTE, TEST, CORRECT, VALIDATE, COMMIT]
+      
+      if intent in strategic_intents:
+          required_hemisphere = RIGHT_BRAIN
+      elif intent in tactical_intents:
+          required_hemisphere = LEFT_BRAIN
+      else:
+          required_hemisphere = CORPUS_CALLOSUM  # Coordination needed
+
+hemisphere_responsibilities:
+  
+  right_brain_protection_duties:
+    - "Monitor all brain modification requests"
+    - "Validate SOLID compliance before changes"
+    - "Enforce tier boundary rules"
+    - "Challenge instinct modifications"
+    - "Detect architectural degradation"
+    - "Suggest SOLID-compliant alternatives"
+    - "Coordinate with corpus callosum for validation loops"
+  
+  corpus_callosum_duties:
+    - "Pass protection challenges between hemispheres"
+    - "Synchronize protection state"
+    - "Log protection events to anomalies.yaml"
+    - "Trigger brain-protector.md when needed"
+
+agents:
+  primary: "brain-protector.md"
+  hemisphere: RIGHT_BRAIN
+  trigger_conditions:
+    - User requests KDS modification
+    - Tier boundary violation detected
+    - SOLID violation detected
+    - Instinct pollution detected
+    - Knowledge corruption detected
+    - Hemisphere confusion detected
+  
+  workflow:
+    step_1: "Analyze modification request"
+    step_2: "Run all protection algorithms"
+    step_3: "Build comprehensive challenge if harmful"
+    step_4: "Present to user with alternatives"
+    step_5: "Log decision and rationale"
+    step_6: "Update protection metrics"
+
+benefits:
+  - "Prevents architectural degradation"
+  - "Maintains SOLID compliance"
+  - "Protects brain integrity"
+  - "Enforces quality gates"
+  - "Enables safe evolution"
+  - "Provides clear alternatives"
+  - "Builds institutional knowledge"
+
+integration:
+  - "Rule #18: Challenge User Changes (overlaps, but Rule #22 is broader)"
+  - "Rule #8: Test-First Always (protected by brain protection)"
+  - "Rule #20: Definition of DONE (enforced via commit integrity)"
+  - "Rule #21: Definition of READY (enforced via hemisphere routing)"
+  - "Brain amnesia: Tier 0 preservation guaranteed"
+```
+
+### Algorithm 8: Brain Protection Challenge (Rule #22)
+
+```python
+def protect_brain_integrity(user_request, modification_target):
+    """
+    RIGHT BRAIN strategic guardian - protects KDS architecture
+    Called BEFORE any brain modifications
+    """
+    # STEP 1: Identify Protection Layers Affected
+    affected_layers = analyze_affected_layers(modification_target)
+    
+    threats = {
+        'instinct_modification': affects_tier_0(modification_target),
+        'tier_boundary_violation': violates_tier_rules(modification_target),
+        'solid_violation': violates_solid(user_request),
+        'hemisphere_confusion': wrong_hemisphere(user_request),
+        'knowledge_corruption': low_quality_pattern(user_request)
+    }
+    
+    # STEP 2: Run Protection Algorithms
+    results = []
+    
+    if threats['instinct_modification']:
+        results.append(algorithm_1_instinct_modification_challenge(user_request))
+    
+    if threats['tier_boundary_violation']:
+        results.append(algorithm_2_tier_boundary_validation(modification_target))
+    
+    if threats['solid_violation']:
+        results.append(algorithm_3_solid_violation_detection(user_request))
+    
+    if threats['hemisphere_confusion']:
+        results.append(algorithm_4_hemisphere_routing_validation(user_request))
+    
+    # STEP 3: Assess Severity
+    if any(r['severity'] == 'CRITICAL' for r in results):
+        decision = 'CHALLENGE_REQUIRED'
+    elif any(r['severity'] == 'HIGH' for r in results):
+        decision = 'WARN_AND_SUGGEST'
+    else:
+        decision = 'PROCEED_WITH_LOGGING'
+    
+    # STEP 4: Build Challenge Response
+    if decision == 'CHALLENGE_REQUIRED':
+        challenge = build_brain_protection_challenge(
+            request=user_request,
+            threats=threats,
+            violations=results,
+            alternatives=generate_safe_alternatives(user_request)
+        )
+        
+        return {
+            'decision': 'HALT',
+            'challenge': challenge,
+            'requires_override': True
+        }
+    
+    elif decision == 'WARN_AND_SUGGEST':
+        return {
+            'decision': 'WARN',
+            'warnings': [r['message'] for r in results],
+            'suggestions': generate_safe_alternatives(user_request),
+            'proceed': True  # User can proceed after seeing warnings
+        }
+    
+    else:
+        return {
+            'decision': 'PROCEED',
+            'log_to': 'kds-brain/anomalies.yaml',
+            'message': 'Minor modification - proceeding with logging'
+        }
+
+def build_brain_protection_challenge(request, threats, violations, alternatives):
+    """Format comprehensive brain protection challenge"""
+    threat_descriptions = {
+        'instinct_modification': 'Modifying permanent Tier 0 rules',
+        'tier_boundary_violation': 'Storing wrong data in tier',
+        'solid_violation': 'Breaking SOLID architecture',
+        'hemisphere_confusion': 'Wrong hemisphere processing request',
+        'knowledge_corruption': 'Low-quality pattern pollution'
+    }
+    
+    active_threats = [
+        f"- {threat_descriptions[k]}" 
+        for k, v in threats.items() if v
+    ]
+    
+    return f"""🧠 BRAIN PROTECTION CHALLENGE (RIGHT BRAIN)
+
+Request: {request}
+Hemisphere: RIGHT BRAIN (Strategic Guardian)
+
+⚠️  THREATS DETECTED:
+{chr(10).join(active_threats)}
+
+VIOLATIONS:
+{format_violations(violations)}
+
+RISKS:
+{analyze_risks(threats, violations)}
+
+SAFE ALTERNATIVES:
+{format_alternatives(alternatives)}
+
+RECOMMENDATION: {select_best_alternative(alternatives)}
+
+═══════════════════════════════════════════════════════════
+
+This challenge protects KDS brain integrity (Rule #22).
+
+Options:
+  1. Accept recommended alternative (SAFE)
+  2. Provide different approach (REVIEW)
+  3. Type 'OVERRIDE' with justification (RISKY)
+
+Your choice: """
+```
+
+---
+
+### Pre-Execution Validation (UPDATED - Added Rule #22)
+- [ ] Rule #17: Challenge KDS-modifying requests
+- [ ] Rule #17: Check for duplication before proceeding
+- [ ] Rule #17: Search existing design for solutions
+- [ ] Rule #17: Provide alternatives when harmful
+- [ ] Rule #17: Require explicit confirmation for harmful changes
+- [ ] Rule #18: Read tooling-inventory.json BEFORE task execution
+- [ ] Rule #18: Verify tooling inventory is current (<7 days old)
+- [ ] Rule #18: Auto-refresh if package.json/csproj changed
+- [ ] **Rule #22: Run brain-protector.md for all brain modifications** 🆕
+- [ ] **Rule #22: Validate tier boundaries maintained** 🆕
+- [ ] **Rule #22: Enforce SOLID compliance** 🆕
+- [ ] **Rule #22: Challenge instinct modifications** 🆕
+
+### Post-Merge Action
+- [ ] Rule #5: Auto-switch to features/kds
+
+---
+
 **END OF GOVERNANCE RULES**
 
 **Version:** 4.2.0  

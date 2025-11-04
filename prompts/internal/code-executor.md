@@ -2,9 +2,10 @@
 
 **Purpose:** Execute tasks from active session with test-first workflow and progress tracking.
 
-**Version:** 5.1 (Context-Brain Integration)  
+**Version:** 6.0.0-Week1 (Left Hemisphere Integration)  
 **Loaded By:** `KDS/prompts/user/execute.md`  
-**Uses:** `#shared-module:session-loader.md`, `#shared-module:execution-tracer.md`, `#file:KDS/prompts/internal/context-brain.md`
+**Uses:** `#shared-module:session-loader.md`, `#shared-module:execution-tracer.md`, `#file:KDS/prompts/internal/context-brain.md`  
+**Brain Hemisphere:** LEFT (Precise, analytical execution)
 
 ---
 
@@ -90,6 +91,9 @@ Execute the **next task** in the active session using **test-first** workflow.
 
 ### Mandatory Sequence
 ```
+0. Log execution start to left hemisphere
+      │
+      ▼
 1. Load task details from session
       │
       ▼
@@ -99,19 +103,43 @@ Execute the **next task** in the active session using **test-first** workflow.
 3. Create failing test FIRST
       │
       ▼
-4. Verify test fails (RED)
+4. Verify test fails (RED) + Log phase
       │
       ▼
 5. Implement code to pass test
       │
       ▼
-6. Verify test passes (GREEN)
+6. Verify test passes (GREEN) + Log phase
       │
       ▼
 7. Update session state
       │
       ▼
-8. Return next task
+8. Log execution complete to left hemisphere
+      │
+      ▼
+9. Send completion message to right hemisphere
+      │
+      ▼
+10. Return next task
+```
+
+### Step 0: Log Execution Start (NEW - Week 1)
+```powershell
+# Log to left hemisphere execution state
+$executionLog = @{
+    timestamp = (Get-Date).ToUniversalTime().ToString("o")
+    task_id = "1.2"
+    phase = "INIT"
+    action = "Starting task execution"
+    files_modified = @()
+    tests_status = "pending"
+    rollback_point = (git rev-parse HEAD)  # Save current commit
+    success = $null
+    error = $null
+} | ConvertTo-Json -Compress
+
+Add-Content "KDS/kds-brain/left-hemisphere/execution-state.jsonl" $executionLog
 ```
 
 ### Example Execution
@@ -144,6 +172,20 @@ Step 3: Run Test (expect RED)
   dotnet test --filter "ExportToPdf_WithValidTranscript"
   
   ❌ FAILED: PdfService does not exist
+  
+  # Log RED phase to left hemisphere
+  $redLog = @{
+      timestamp = (Get-Date).ToUniversalTime().ToString("o")
+      task_id = "1.2"
+      phase = "RED"
+      action = "Test created and verified failing"
+      files_modified = @("Tests/Unit/Services/PdfServiceTests.cs")
+      tests_status = "fail"
+      rollback_point = (git rev-parse HEAD)
+      success = $true  # RED phase successful (test fails as expected)
+      error = $null
+  } | ConvertTo-Json -Compress
+  Add-Content "KDS/kds-brain/left-hemisphere/execution-state.jsonl" $redLog
 
 Step 4: Implement Code
   #create_file SPA/NoorCanvas/Services/PdfService.cs
@@ -162,6 +204,20 @@ Step 5: Run Test (expect GREEN)
   dotnet test --filter "ExportToPdf_WithValidTranscript"
   
   ✅ PASSED: All tests passed
+  
+  # Log GREEN phase to left hemisphere
+  $greenLog = @{
+      timestamp = (Get-Date).ToUniversalTime().ToString("o")
+      task_id = "1.2"
+      phase = "GREEN"
+      action = "Code implemented, tests passing"
+      files_modified = @("SPA/NoorCanvas/Services/PdfService.cs")
+      tests_status = "pass"
+      rollback_point = (git rev-parse HEAD)
+      success = $true
+      error = $null
+  } | ConvertTo-Json -Compress
+  Add-Content "KDS/kds-brain/left-hemisphere/execution-state.jsonl" $greenLog
 
 Step 6: Update Session
   #replace_string_in_file KDS/sessions/current-session.json
@@ -171,7 +227,35 @@ Step 6: Update Session
   "task_id": "1.2",
   "status": "completed"
 
-Step 7: Return Next
+Step 7: Log Completion to Left Hemisphere
+  $completeLog = @{
+      timestamp = (Get-Date).ToUniversalTime().ToString("o")
+      task_id = "1.2"
+      phase = "COMPLETE"
+      action = "Task fully implemented with passing tests"
+      files_modified = @("Tests/Unit/Services/PdfServiceTests.cs", "SPA/NoorCanvas/Services/PdfService.cs")
+      tests_status = "pass"
+      rollback_point = $null  # No rollback needed
+      success = $true
+      error = $null
+  } | ConvertTo-Json -Compress
+  Add-Content "KDS/kds-brain/left-hemisphere/execution-state.jsonl" $completeLog
+
+Step 8: Send Completion Message to Right Hemisphere
+  # Notify right hemisphere that task is complete
+  .\KDS\scripts\corpus-callosum\send-message.ps1 `
+      -From "left" `
+      -To "right" `
+      -Type "execution_complete" `
+      -Data @{
+          task_id = "1.2"
+          status = "completed"
+          files_created = @("SPA/NoorCanvas/Services/PdfService.cs")
+          tests_created = @("Tests/Unit/Services/PdfServiceTests.cs")
+          tests_passed = $true
+      }
+
+Step 9: Return Next
   ✅ Task 1.2 complete
   Next: Task 1.3 (Add ExportPdf API endpoint)
 ```

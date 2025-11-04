@@ -41,9 +41,14 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$WorkspaceRoot = "d:\PROJECTS\NOOR CANVAS"
-$ContextFile = Join-Path $WorkspaceRoot "KDS\kds-brain\development-context.yaml"
-$EventsFile = Join-Path $WorkspaceRoot "KDS\kds-brain\events.jsonl"
+
+# Import workspace resolver
+. (Join-Path $PSScriptRoot "lib\workspace-resolver.ps1")
+
+$WorkspaceRoot = Get-WorkspaceRoot
+$KdsRoot = Get-KdsRoot
+$ContextFile = Join-Path $KdsRoot "kds-brain\development-context.yaml"
+$EventsFile = Join-Path $KdsRoot "kds-brain\events.jsonl"
 
 Write-Host "🧠 KDS Development Context Collector v1.0" -ForegroundColor Cyan
 Write-Host ""

@@ -2,9 +2,10 @@
 
 **Purpose:** Break down feature requests into multi-phase plans with granular tasks.
 
-**Version:** 5.1 (Context-Brain Integration)  
+**Version:** 6.0.0-Week1 (Right Hemisphere Integration)  
 **Loaded By:** `KDS/prompts/user/plan.md`  
-**Uses:** `#shared-module:execution-tracer.md`, `#file:KDS/prompts/internal/context-brain.md`
+**Uses:** `#shared-module:execution-tracer.md`, `#file:KDS/prompts/internal/context-brain.md`  
+**Brain Hemisphere:** RIGHT (Strategic, holistic, pattern-matching)
 
 ---
 
@@ -442,7 +443,7 @@ Before outputting plan, verify:
 
 ## 🔄 Handoff Protocol
 
-### Save Session
+### Save Session (Traditional)
 ```json
 // KDS/sessions/current-session.json
 {
@@ -452,6 +453,54 @@ Before outputting plan, verify:
   "current_task": "1.1",
   "phases": [ /* full plan */ ]
 }
+```
+
+### Save to Right Hemisphere (NEW - Week 1)
+```powershell
+# Convert plan to YAML for right hemisphere storage
+$activePlan = @{
+    session_id = "20251102-export-pdf"
+    feature_name = "Add export to PDF functionality"
+    created_at = (Get-Date).ToUniversalTime().ToString("o")
+    updated_at = (Get-Date).ToUniversalTime().ToString("o")
+    matched_patterns = @()  # Week 3: Will include pattern matching results
+    estimated_effort_hours = 0  # Week 3: Will include historical estimates
+    risk_assessment = @{
+        hotspot_files = @()  # Files with high churn rate
+        complexity_score = 0  # Based on number of phases/tasks
+    }
+    phases = $session.phases  # Full phase/task structure
+} | ConvertTo-Yaml
+
+# Save to right hemisphere
+Set-Content "KDS/kds-brain/right-hemisphere/active-plan.yaml" $activePlan
+
+# Update planning state
+$planningState = Get-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml" | ConvertFrom-Yaml
+$planningState.current_planning_session = @{
+    request = $featureRequest
+    started_at = (Get-Date).ToUniversalTime().ToString("o")
+    patterns_considered = @()  # Week 3
+    templates_available = @()  # Week 3
+    risk_factors = @()
+    decision_rationale = "Multi-phase plan with test-first approach"
+}
+$planningState | ConvertTo-Yaml | Set-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml"
+```
+
+### Send Planning Message to Left Hemisphere
+```powershell
+# Notify left hemisphere that plan is ready
+.\KDS\scripts\corpus-callosum\send-message.ps1 `
+    -From "right" `
+    -To "left" `
+    -Type "planning_update" `
+    -Data @{
+        session_id = "20251102-export-pdf"
+        first_task = "1.1"
+        total_tasks = 8
+        plan_location = "KDS/kds-brain/right-hemisphere/active-plan.yaml"
+    }
 ```
 
 ### Load Shared Modules
