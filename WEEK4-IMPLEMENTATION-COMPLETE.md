@@ -242,11 +242,13 @@
 3. Learning happens automatically after each task
 4. Performance metrics track improvement over time
 
-### Optional Enhancements:
-1. Integrate proactive warnings into intent-router (show before routing)
-2. Create visual dashboard for brain efficiency metrics
-3. Add machine learning for better issue prediction
-4. Expand E2E test to real-world complex features
+### ✨ Optional Enhancements (COMPLETED - See POST-WEEK4-ENHANCEMENTS-COMPLETE.md):
+1. ✅ **Proactive warnings in intent router** - Warnings show BEFORE routing (30-60s faster)
+2. ✅ **Visual efficiency dashboard** - HTML dashboard with charts and trends
+3. 🔮 Machine learning for better predictions (future)
+4. 🔮 E2E test expansion with more scenarios (future)
+
+**Enhancement Details:** See `POST-WEEK4-ENHANCEMENTS-COMPLETE.md` for full implementation report
 
 ### Monitoring:
 ```powershell

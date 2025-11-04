@@ -495,6 +495,129 @@ routing_safety:
 input: "[user's natural language request]"
 ```
 
+### Step 1.3: Proactive Issue Prediction (WEEK 4 ENHANCEMENT - NEW!)
+
+**Before routing, predict potential issues and show warnings to user:**
+
+**When to run predictions:**
+- ✅ PLAN intent detected (starting new feature)
+- ✅ EXECUTE intent detected (continuing work)
+- ❌ RESUME intent (just showing status)
+- ❌ ASK intent (just answering questions)
+- ❌ VALIDATE intent (already checking health)
+
+**Run prediction scripts:**
+
+```powershell
+# Step 1.3.1: Predict issues based on user request
+$predictions = .\KDS\scripts\corpus-callosum\predict-issues.ps1 `
+    -Request $userRequest `
+    -MinimumConfidence 0.65
+
+# Step 1.3.2: Generate user-friendly warnings
+if ($predictions.Count -gt 0) {
+    $warnings = .\KDS\scripts\corpus-callosum\generate-proactive-warnings.ps1 `
+        -Predictions $predictions
+    
+    # Step 1.3.3: Display warnings to user
+    Write-Host ""
+    Write-Host "🧠 BRAIN Analysis:" -ForegroundColor Cyan
+    Write-Host "─" * 60 -ForegroundColor Gray
+    
+    foreach ($warning in $warnings) {
+        $icon = switch ($warning.severity) {
+            "high" { "🔴" }
+            "medium" { "🟡" }
+            "low" { "🟢" }
+            default { "⚠️" }
+        }
+        
+        Write-Host "$icon $($warning.message)" -ForegroundColor $(
+            if ($warning.severity -eq "high") { "Red" }
+            elseif ($warning.severity -eq "medium") { "Yellow" }
+            else { "Green" }
+        )
+        Write-Host "   💡 $($warning.suggestion)" -ForegroundColor Gray
+        
+        if ($warning.impact) {
+            Write-Host "   📊 Impact: $($warning.impact)" -ForegroundColor DarkGray
+        }
+    }
+    
+    Write-Host "─" * 60 -ForegroundColor Gray
+    Write-Host ""
+}
+
+# Step 1.3.4: Get preventive actions (for planner integration)
+$preventiveActions = .\KDS\scripts\corpus-callosum\suggest-preventive-actions.ps1 `
+    -Predictions $predictions
+
+# Store for planner to use
+$env:KDS_PREVENTIVE_ACTIONS = ($preventiveActions | ConvertTo-Json -Compress)
+```
+
+**What gets predicted:**
+```yaml
+prediction_types:
+  file_hotspot:
+    example: "⚠️ HostControlPanelContent.razor is a hotspot (28% churn)"
+    suggestion: "Add extra validation phase for this file"
+    confidence: 0.85
+    
+  complexity_warning:
+    example: "⚠️ PDF features typically take 50% longer than other exports"
+    suggestion: "Allocate 45min instead of typical 30min"
+    confidence: 0.73
+    
+  velocity_drop:
+    example: "⚠️ Velocity dropped 30% this week"
+    suggestion: "Consider smaller commits or break down tasks"
+    confidence: 0.91
+    
+  test_coverage:
+    example: "⚠️ Fewer tests than expected (12 vs 18 estimated)"
+    suggestion: "Review edge cases and error conditions"
+    confidence: 0.79
+    
+  success_pattern:
+    example: "✅ Test-first approach has 96% success rate for export features"
+    suggestion: "Continue TDD workflow"
+    confidence: 0.94
+```
+
+**Benefits:**
+- ✅ **Early warnings** - User sees issues 30-60 seconds earlier (before planning)
+- ✅ **Better decisions** - User can adjust approach before creating plan
+- ✅ **Reduced rework** - Preventive actions integrated from start
+- ✅ **Continuous learning** - Predictions improve with each iteration
+
+**Example output:**
+```
+User: "I want to add PDF export to HostControlPanel"
+
+🧠 BRAIN Analysis:
+────────────────────────────────────────────────────────────
+🟡 ⚠️ HostControlPanelContent.razor is a hotspot (28% churn)
+   💡 Add extra validation phase for this file
+   📊 Impact: High risk of bugs due to frequent changes
+
+🟡 ⚠️ PDF features typically take 50% longer than other exports
+   💡 Allocate 45min instead of typical 30min
+   📊 Impact: Timeline estimation accuracy
+
+🟢 ✅ Test-first approach has 96% success rate for export features
+   💡 Continue TDD workflow
+   📊 Impact: Higher success rate, less rework
+────────────────────────────────────────────────────────────
+
+Proceeding to plan...
+```
+
+**Integration with downstream agents:**
+- Preventive actions stored in `$env:KDS_PREVENTIVE_ACTIONS`
+- Work planner reads this and incorporates into plan (Step 1.5 in work-planner.md)
+- Predictions logged to events.jsonl for learning
+
 ### Step 1.5: Load Conversation Context (CONVERSATION TRACKING)
 
 **Before pattern matching, load recent conversation history:**
