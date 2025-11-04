@@ -1,9 +1,25 @@
-# KDS Governance Rules v4.4.0
-**Version:** 4.3.0  
+# KDS Governance Rules v6.0.0
+**Version:** 6.0.0  
 **Format:** Structured for GitHub Copilot agents  
-**Companion:** `KDS/KDS-DESIGN.md` (human-readable)
+**Companion:** `KDS-DESIGN.md` (human-readable)
 
 **⚠️ CRITICAL: ALL rules are MANDATORY during task execution. Copilot MUST enforce without user reminders.**
+
+---
+
+## 🎯 Tier 0 Rules (INSTINCT - PERMANENT, CANNOT BE OVERRIDDEN)
+
+**These rules are SO CORE to KDS that they should NEVER change:**
+
+- ✅ **Rule #18:** Challenge User Changes (protect KDS quality/efficiency)
+- ✅ **Rule #19:** Checkpoint Strategy (enable safe rollback)
+- ✅ **Rule #20:** Definition of DONE (zero errors, zero warnings, TDD enforced) - LEFT BRAIN
+- ✅ **Rule #21:** Definition of READY (requirements clear, testable, scoped) - RIGHT BRAIN
+
+**Enforcement:** Automatic, no exceptions, no overrides  
+**TDD:** Test-First Development mandatory for all code changes (Red → Green → Refactor)  
+**Quality Gates:** DoR (entry) → Execute → DoD (exit)  
+**See:** `governance/rules/challenge-user-changes.md`, `checkpoint-strategy.md`, `definition-of-done.md`, `definition-of-ready.md`
 
 ---
 
