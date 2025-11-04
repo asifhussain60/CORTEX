@@ -157,6 +157,27 @@ if ($Results.ContainsKey('Test')) {
     }
 }
 
+# From Database crawler: Entity relationships
+if ($Results.ContainsKey('Database')) {
+    $dbData = $Results['Database']
+    foreach ($entity in $dbData.entities) {
+        foreach ($rel in $entity.relationships) {
+            $fileRelationships.relationships += @{
+                primary_file = $entity.file
+                related_file = "Data/$($rel.target).cs"  # Heuristic
+                relationship = "database-$($rel.type)"
+                confidence = Get-ConfidenceScore -Source 'direct-reference' -Method 'single'
+                source = "database-crawler"
+                metadata = @{
+                    entity = $entity.name
+                    target_entity = $rel.target
+                    property = $rel.property
+                }
+            }
+        }
+    }
+}
+
 Write-Host "  Found $($fileRelationships.relationships.Count) file relationships" -ForegroundColor Green
 
 # Save file relationships
@@ -262,6 +283,38 @@ $knowledgeGraph = Get-YamlContent -Path $knowledgeGraphPath -Default @{
 
 # Merge architectural patterns
 $knowledgeGraph.architectural_patterns = $architecturalPatterns.patterns
+
+# Merge database schema (if available)
+if ($Results.ContainsKey('Database')) {
+    $dbData = $Results['Database']
+    
+    $knowledgeGraph.database = @{
+        last_updated = $dbData.scan_time
+        providers = $dbData.providers
+        connection_strings = $dbData.connection_strings | ForEach-Object {
+            @{
+                name = $_.name
+                provider = $_.provider
+                server = $_.server
+                database = $_.database
+                environment = $_.environment
+                # Omit raw connection string for security
+            }
+        }
+        entities = $dbData.entities | ForEach-Object {
+            @{
+                name = $_.name
+                dbset_name = $_.dbset_name
+                file = $_.file
+                property_count = $_.properties.Count
+                relationship_count = $_.relationships.Count
+            }
+        }
+        statistics = $dbData.statistics
+    }
+    
+    Write-Host "  Added database schema: $($dbData.statistics.total_entities) entities, $($dbData.statistics.total_connections) connections" -ForegroundColor Green
+}
 
 # Merge file relationships (indexed by primary file)
 foreach ($rel in $fileRelationships.relationships) {

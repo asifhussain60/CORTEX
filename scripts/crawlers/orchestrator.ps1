@@ -4,7 +4,7 @@
 
 .DESCRIPTION
     Main coordinator for KDS v6.0 multi-threaded crawler system.
-    Launches 4 area crawlers in parallel (UI, API, Service, Test) as PowerShell jobs,
+    Launches 5 area crawlers in parallel (UI, API, Service, Test, Database) as PowerShell jobs,
     displays real-time progress, and collects results for BRAIN feeding.
     
     Target: <5 min for 1000+ file projects (60% faster than single-threaded)
@@ -89,6 +89,7 @@ if ($Mode -eq 'deep') {
         API = "$scriptDir\api-crawler.ps1"
         Service = "$scriptDir\service-crawler.ps1"
         Test = "$scriptDir\test-crawler.ps1"
+        Database = "$scriptDir\database-crawler.ps1"
     }
 } else {
     # Quick mode: UI and Test only (most valuable for TDD)
@@ -288,6 +289,11 @@ if ($results.ContainsKey('Service')) {
 if ($results.ContainsKey('Test')) {
     $testStats = $results['Test'].statistics
     Write-Host "  🧪 Tests: $($testStats.total_tests) test files, $($testStats.total_selectors) selectors" -ForegroundColor White
+}
+
+if ($results.ContainsKey('Database')) {
+    $dbStats = $results['Database'].statistics
+    Write-Host "  🗄️  Database: $($dbStats.total_entities) entities, $($dbStats.total_connections) connections" -ForegroundColor White
 }
 
 Write-Host ""
