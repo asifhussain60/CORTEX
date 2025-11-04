@@ -1,0 +1,100 @@
+#!/bin/bash
+# KDS Pre-Commit Hook - Enforce KDS Dedicated Repository
+# Version: 2.0.0 (Dedicated Repository - Post Migration)
+# Installation: Copy to .git/hooks/pre-commit and chmod +x
+
+echo "🔍 KDS Pre-Commit Hook - Validating commit..."
+
+# 1. CRITICAL: Ensure we're in KDS repository (not DevProjects or other projects)
+REPO_NAME=$(git config --get remote.origin.url | grep -o '[^/]*\.git$' | sed 's/.git$//')
+
+if [ "$REPO_NAME" != "KDS" ]; then
+  echo ""
+  echo "════════════════════════════════════════════════" 
+  echo "❌ CRITICAL ERROR: Not in KDS repository!"
+  echo "════════════════════════════════════════════════"
+  echo ""
+  echo "Current repository: $REPO_NAME"
+  echo "Expected repository: KDS"
+  echo ""
+  echo "⚠️  This commit is being REJECTED to prevent accidental merges."
+  echo ""
+  echo "KDS development MUST happen in the dedicated KDS repository:"
+  echo "  https://github.com/asifhussain60/KDS"
+  echo ""
+  echo "If you're working on KDS:"
+  echo "  1. Clone the KDS repository:"
+  echo "     git clone https://github.com/asifhussain60/KDS.git"
+  echo ""
+  echo "  2. Make your changes there instead"
+  echo ""
+  echo "  3. This hook prevents accidental commits to application repos"
+  echo ""
+  echo "════════════════════════════════════════════════"
+  echo ""
+  exit 1
+fi
+
+echo "  ✅ Repository validated: KDS"
+
+# 2. Validate commit message follows KDS conventions
+COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
+if [ -f "$COMMIT_MSG_FILE" ]; then
+  COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" | head -1)
+  
+  # Check for conventional commit format
+  if ! echo "$COMMIT_MSG" | grep -qE "^(feat|fix|docs|chore|refactor|test|style|perf|ci|build|revert)\(kds\):"; then
+    echo ""
+    echo "⚠️  WARNING: Commit message should follow KDS convention:"
+    echo ""
+    echo "Format: <type>(kds): <description>"
+    echo ""
+    echo "Examples:"
+    echo "  feat(kds): Add multi-threaded crawler system"
+    echo "  fix(kds): Fix BRAIN feeder YAML parsing error"
+    echo "  docs(kds): Update Phase 2 completion summary"
+    echo ""
+    echo "Continue anyway? (y/N)"
+    read -r response
+    if [ "$response" != "y" ] && [ "$response" != "Y" ]; then
+      exit 1
+    fi
+  fi
+fi
+
+echo "  ✅ Commit message validated"
+
+# 3. Check for sensitive files
+SENSITIVE_FILES=$(git diff --cached --name-only | grep -E '\.(env|key|secret|password|token)$')
+if [ -n "$SENSITIVE_FILES" ]; then
+  echo ""
+  echo "❌ ERROR: Attempting to commit sensitive files!"
+  echo "$SENSITIVE_FILES"
+  exit 1
+fi
+
+echo "  ✅ No sensitive files"
+
+# 4. Validate BRAIN YAML files
+BRAIN_YAML_FILES=$(git diff --cached --name-only | grep 'kds-brain/.*\.yaml$')
+if [ -n "$BRAIN_YAML_FILES" ]; then
+  echo "  Validating BRAIN YAML files..."
+  
+  for file in $BRAIN_YAML_FILES; do
+    if [ -f "$file" ]; then
+      if command -v python3 &> /dev/null; then
+        if ! python3 -c "import yaml; yaml.safe_load(open('$file'))" 2>/dev/null; then
+          echo "    ❌ Invalid YAML in: $file"
+          exit 1
+        fi
+      fi
+    fi
+  done
+  
+  echo "  ✅ BRAIN YAML files valid"
+fi
+
+echo ""
+echo "✅ All pre-commit validations passed"
+echo ""
+exit 0

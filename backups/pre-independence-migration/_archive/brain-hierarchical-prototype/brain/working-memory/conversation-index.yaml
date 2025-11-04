@@ -1,0 +1,66 @@
+# TIER 1: WORKING MEMORY - Conversation Index
+# Version: 1.0
+# Last Updated: 2025-11-04
+# Purpose: Fast lookup for recent conversations (FIFO queue, max 20)
+# Auto-managed by: brain/housekeeping/services/fifo-enforcer/
+
+conversations:
+  - id: "conv-bootstrap"
+    title: "KDS System Initialization"
+    started: "2025-11-03T00:00:00Z"
+    ended: "2025-11-03T00:01:00Z"
+    active: false
+    message_count: 1
+    outcome: "initialized"
+    file: "recent-conversations/conv-bootstrap.json"
+  
+  - id: "conv-20251103-122907"
+    title: "STM Self Test"
+    started: "2025-11-03T17:29:07Z"
+    ended: null
+    active: false
+    message_count: 5
+    outcome: null
+    file: "recent-conversations/conv-20251103-122907.json"
+  
+  - id: "conv-20251103-123050"
+    title: "STM Self Test"
+    started: "2025-11-03T17:30:50Z"
+    ended: "2025-11-03T17:30:50Z"
+    active: false
+    message_count: 5
+    outcome: "completed"
+    file: "recent-conversations/conv-20251103-123050.json"
+  
+  - id: "conv-dashboard-2025-11-03"
+    title: "KDS Health Monitoring Dashboard"
+    started: "2025-11-03T12:00:00Z"
+    ended: "2025-11-03T16:00:00Z"
+    active: false
+    message_count: 15
+    outcome: "completed"
+    file: "recent-conversations/conv-dashboard-2025-11-03.json"
+  
+  - id: "kds-testing-system-2025-11-03"
+    title: "KDS Comprehensive Testing System - Full Plan"
+    started: "2025-11-03T16:09:33Z"
+    ended: null
+    active: false
+    message_count: 4
+    outcome: "Complete 6-phase plan with 29 tasks, 31.25 hour estimate"
+    file: "recent-conversations/kds-testing-system-2025-11-03.json"
+
+fifo_config:
+  max_conversations: 20
+  current_count: 5
+  enforcement: "automatic"
+  removal_strategy: "oldest_first"
+  preserve_active: true
+  
+metadata:
+  version: "1.0"
+  last_updated: "2025-11-04"
+  tier: 1
+  purpose: "Fast conversation lookup - last 20 conversations only"
+  auto_managed: true
+  housekeeping_service: "fifo-enforcer"

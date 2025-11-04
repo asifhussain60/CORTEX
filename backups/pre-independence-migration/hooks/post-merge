@@ -1,0 +1,46 @@
+#!/bin/bash
+# KDS Post-Merge Hook - Dedicated Repository Version
+# Version: 2.0.0 (Post Migration)
+# Installation: Copy to .git/hooks/post-merge and chmod +x
+
+echo "🔄 KDS Post-Merge Hook - Syncing..."
+
+# 1. Verify we're in KDS repo
+REPO_NAME=$(git config --get remote.origin.url | grep -o '[^/]*\.git$' | sed 's/.git$//')
+
+if [ "$REPO_NAME" != "KDS" ]; then
+  echo "⚠️  WARNING: Not in KDS repository (found: $REPO_NAME)"
+  echo "This hook is designed for the KDS dedicated repository only"
+  exit 0
+fi
+
+echo "  ✅ Repository: KDS"
+
+# 2. Check if BRAIN files were updated
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q "kds-brain/events.jsonl"; then
+  echo "  📊 Events updated - consider running brain-updater"
+  echo "     Run: pwsh -File scripts/brain-updater.ps1"
+fi
+
+# 3. Check for schema changes
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q "schemas/"; then
+  echo "  📋 Schema changes detected - validate configurations"
+fi
+
+# 4. Check for new crawler implementations
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q "scripts/crawlers/"; then
+  echo "  � Crawler changes detected - test before using"
+fi
+
+# 5. Check for hook changes
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q "hooks/"; then
+  echo ""
+  echo "  ⚠️  Git hooks updated - reinstall hooks:"
+  echo "     Copy-Item hooks\\pre-commit .git\\hooks\\ -Force"
+  echo "     Copy-Item hooks\\post-merge .git\\hooks\\ -Force"
+  echo ""
+fi
+
+echo "✅ Post-merge sync complete"
+echo ""
+exit 0
