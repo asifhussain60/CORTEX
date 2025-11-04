@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TDD Execution State",
+  "description": "Schema for tracking TDD cycle execution state in left hemisphere",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "session_id",
+    "task_id",
+    "phase",
+    "status"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of event"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique session identifier"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Task identifier within session"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["INIT", "RED", "GREEN", "REFACTOR", "VALIDATE", "COMPLETE", "ROLLBACK"],
+      "description": "Current TDD cycle phase"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["started", "in-progress", "completed", "failed"],
+      "description": "Status of current phase"
+    },
+    "feature_name": {
+      "type": "string",
+      "description": "Human-readable feature name"
+    },
+    "files_modified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of files modified in this phase"
+    },
+    "tests_created": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of test files created (RED phase)"
+    },
+    "tests_status": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "description": "Total number of tests"
+        },
+        "passed": {
+          "type": "integer",
+          "description": "Number of tests passing"
+        },
+        "failed": {
+          "type": "integer",
+          "description": "Number of tests failing"
+        }
+      },
+      "description": "Test execution results"
+    },
+    "rollback_point": {
+      "type": "object",
+      "properties": {
+        "git_commit": {
+          "type": "string",
+          "description": "Git commit SHA for rollback"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When rollback point was created"
+        }
+      },
+      "description": "Rollback point information"
+    },
+    "refactor_improvements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of refactoring improvements made"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error message if phase failed"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "duration_seconds": {
+          "type": "number",
+          "description": "Phase execution duration"
+        },
+        "lines_added": {
+          "type": "integer",
+          "description": "Lines of code added"
+        },
+        "lines_deleted": {
+          "type": "integer",
+          "description": "Lines of code deleted"
+        }
+      },
+      "description": "Execution metrics"
+    },
+    "coordination_messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "enum": ["left", "right"]
+          },
+          "message_type": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Messages sent to other hemisphere"
+    }
+  }
+}
