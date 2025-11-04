@@ -1,0 +1,33 @@
+# Right Hemisphere - Planning State
+# Purpose: Track planning process, pattern matching, and strategic decisions
+#
+# Format: YAML
+# Updated by: work-planner.md
+#
+# Schema:
+# current_planning_session:
+#   request: "string"
+#   started_at: "ISO-8601"
+#   patterns_considered: []
+#   templates_available: []
+#   risk_factors: []
+#   decision_rationale: "string"
+#
+# planning_history:
+#   - timestamp: "ISO-8601"
+#     request: "string"
+#     patterns_matched: []
+#     template_used: "string|null"
+#     estimated_vs_actual: {estimated: float, actual: float}
+
+current_planning_session: null
+
+planning_history: []
+
+# Week 1: Minimal capability
+# Can create plans, log planning process, no pattern matching yet
+capabilities:
+  pattern_matching: false  # Week 3
+  workflow_templates: false  # Week 3
+  effort_estimation: false  # Week 3
+  risk_assessment: true  # Week 1 (basic)

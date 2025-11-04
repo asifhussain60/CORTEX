@@ -1,0 +1,3 @@
+
+{"to":"right","id":"5a45de41-3fdb-4722-b06f-4dbf139fe51f","data":{"success":true,"task_id":"1.1"},"priority":"normal","processed":false,"timestamp":"2025-11-04T14:41:01.5593210Z","type":"execution_complete","from":"left"}
+{"to":"left","id":"2e3ccbc2-b91a-4bf0-bef3-59d4ddd12fc1","data":{"task_id":"1.2"},"priority":"normal","processed":false,"timestamp":"2025-11-04T14:41:01.5627198Z","type":"planning_update","from":"right"}

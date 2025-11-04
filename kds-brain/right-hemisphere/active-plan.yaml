@@ -1,0 +1,34 @@
+# Right Hemisphere - Active Strategic Plan
+# Purpose: Current multi-phase plan with pattern matching and risk assessment
+#
+# Format: YAML
+# Updated by: work-planner.md
+# Read by: code-executor.md, session-resumer.md
+#
+# Schema:
+# session_id: "string"
+# feature_name: "string"
+# created_at: "ISO-8601"
+# updated_at: "ISO-8601"
+# matched_patterns: []
+# estimated_effort_hours: float
+# risk_assessment:
+#   hotspot_files: []
+#   complexity_score: float
+# phases:
+#   - id: "string"
+#     name: "string"
+#     tasks: []
+#     status: "not-started|in-progress|complete"
+
+# Initial state: No active plan
+session_id: null
+feature_name: null
+created_at: null
+updated_at: null
+matched_patterns: []
+estimated_effort_hours: 0
+risk_assessment:
+  hotspot_files: []
+  complexity_score: 0
+phases: []
