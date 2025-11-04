@@ -18,7 +18,7 @@ Execute **comprehensive health checks** and report system status.
 ### From User (via validate.md)
 ```json
 {
-  "validation_scope": "full | build | tests | quality | git",
+  "validation_scope": "full | portability | build | tests | quality | git",
   "fail_fast": "boolean (stop on first failure)",
   "detailed": "boolean (include detailed logs)"
 }
@@ -30,6 +30,14 @@ Validation Scope: full
 Fail Fast: false
 Detailed: true
 ```
+
+**Validation Scopes:**
+- `full` - Run all validations (portability, build, tests, quality, git)
+- `portability` - Check kds.config.json only
+- `build` - Build validation only
+- `tests` - Test execution only
+- `quality` - Code quality analysis only
+- `git` - Git status only
 
 ---
 
@@ -103,6 +111,140 @@ Detailed: true
 ---
 
 ## 🔍 Health Checks
+
+### 0. Portability Configuration Validation (NEW)
+
+**Purpose:** Verify that `kds.config.json` is properly configured for the current project.
+
+```powershell
+# Check if config file exists
+$configPath = "KDS/kds.config.json"
+IF (Test-Path $configPath):
+  ✅ Configuration file found
+ELSE:
+  ❌ Configuration file missing
+  RECOMMENDATION: Create from template: KDS/templates/kds.config.template.json
+  HALT
+
+# Load and validate JSON
+$config = Get-Content $configPath -Raw | ConvertFrom-Json
+IF (valid JSON):
+  ✅ Valid JSON syntax
+ELSE:
+  ❌ Invalid JSON syntax
+  RECOMMENDATION: Validate at https://jsonlint.com/
+  HALT
+
+# Validate required fields
+REQUIRED_FIELDS = [
+  "application.name",
+  "application.framework", 
+  "application.language",
+  "application.rootPath",
+  "governance.autoChainTasks",
+  "governance.autoChainPhases",
+  "governance.testQualityThreshold"
+]
+
+FOR each field in REQUIRED_FIELDS:
+  IF field exists and not empty:
+    ✅ {field} present
+  ELSE:
+    ❌ Missing required field: {field}
+    RECOMMENDATION: Add field to kds.config.json
+
+# Validate paths exist
+$rootPath = $config.application.rootPath
+IF (Test-Path $rootPath):
+  ✅ Root path exists: {rootPath}
+ELSE:
+  ❌ Root path does not exist: {rootPath}
+  RECOMMENDATION: Update application.rootPath with correct absolute path
+
+# Validate commands are executable (if configured)
+$buildCmd = $config.application.buildCommand
+IF ($buildCmd -and $buildCmd -ne ""):
+  TRY:
+    # Test command exists (don't run, just check it's valid)
+    $cmdName = ($buildCmd -split ' ')[0]
+    Get-Command $cmdName -ErrorAction Stop
+    ✅ Build command executable: {buildCmd}
+  CATCH:
+    ⚠️ Build command may not be executable: {buildCmd}
+    RECOMMENDATION: Verify command is in PATH
+
+$runCmd = $config.application.runCommand
+IF ($runCmd -and $runCmd -ne ""):
+  TRY:
+    $cmdName = ($runCmd -split ' ')[0]
+    Get-Command $cmdName -ErrorAction Stop
+    ✅ Run command executable: {runCmd}
+  CATCH:
+    ⚠️ Run command may not be executable: {runCmd}
+    RECOMMENDATION: Verify command is in PATH
+
+# Validate test configuration (if configured)
+$testFramework = $config.testing.framework
+IF ($testFramework -and $testFramework -ne "None"):
+  ✅ Test framework configured: {testFramework}
+  
+  $testConfigPath = Join-Path $rootPath $config.testing.configPath
+  IF ($config.testing.configPath -and (Test-Path $testConfigPath)):
+    ✅ Test config file exists: {testConfigPath}
+  ELSE IF ($config.testing.configPath):
+    ⚠️ Test config file not found: {testConfigPath}
+    RECOMMENDATION: Update testing.configPath or create config file
+  
+  $testCmd = $config.testing.testCommand
+  IF ($testCmd):
+    TRY:
+      $cmdName = ($testCmd -split ' ')[0]
+      Get-Command $cmdName -ErrorAction Stop
+      ✅ Test command executable: {testCmd}
+    CATCH:
+      ⚠️ Test command may not be executable: {testCmd}
+      RECOMMENDATION: Install test framework or update PATH
+  
+  $healthUrl = $config.testing.healthCheckUrl
+  IF ($healthUrl):
+    ℹ️ Health check URL configured: {healthUrl}
+    NOTE: URL accessibility check skipped (app may not be running)
+ELSE:
+  ℹ️ No test framework configured
+
+# Validate database configuration (if configured)
+$dbProvider = $config.database.provider
+IF ($dbProvider -and $dbProvider -ne "None"):
+  ✅ Database provider configured: {dbProvider}
+  
+  $connKey = $config.database.connectionStringKey
+  IF ($connKey):
+    ✅ Connection string key: {connKey}
+  ELSE:
+    ⚠️ No connection string key configured
+    RECOMMENDATION: Set database.connectionStringKey
+ELSE:
+  ℹ️ No database configured
+
+# Determine portability status
+IF (all required fields present AND rootPath exists):
+  IF (no command errors AND no config warnings):
+    ✅ PORTABILITY: Fully configured
+  ELSE IF (warnings only):
+    ⚠️ PORTABILITY: Configured with warnings
+  ELSE:
+    ❌ PORTABILITY: Configuration errors detected
+ELSE:
+  ❌ PORTABILITY: Incomplete configuration
+```
+
+**Recommendations Generated:**
+- Missing fields: Create/update in kds.config.json
+- Invalid paths: Correct absolute paths
+- Command issues: Install dependencies or update PATH
+- Test config: Create config files or update paths
+
+---
 
 ### 1. Build Validation
 ```powershell

@@ -30,98 +30,510 @@
 | **Setup Automation** | 📋 | Documented - not implemented |
 | **Brain Crawler** | 📋 | Designed - not implemented |
 
-**Last Updated:** 2025-11-03  
+**Last Updated:** 2025-11-04  
 **Self-Review Date:** 2025-11-03
 
 ---
 
-## 🧚 A story for humans: The One Door and the Three‑Story Brain
+## 📖 About This Documentation
 
-Imagine a small, well-run city called KDS. At the very front of City Hall there’s only one entrance with a sign that says:
+This document follows the **KDS Quadrant** pattern - a four-perspective approach to comprehensive documentation:
 
-“Speak here in plain words. We’ll take it from there.”
+1. **📚 Story** - Human-centered narratives (The Intern with Amnesia, Day in the Life)
+2. **🔧 Technical** - Detailed specifications (commands, files, parameters, code)
+3. **🎨 Image Prompt** - Visual representations (diagrams, flowcharts, progress indicators)
+4. **🏗️ High-Level Technical** - Architectural overviews (system design, workflows, integration)
 
-That entrance is the One Door — your single command: `#file:KDS/prompts/user/kds.md`. You step up and say what you want, and the city quietly springs into action.
+**Why KDS Quadrant?** Different perspectives ensure complete understanding for all learning styles and use cases.
 
-### The cast (each with exactly one job)
+---
 
-- The Door (Universal Entry Point)
-  - Listens to your request in natural language and ushers it inside. You never need to remember a different door.
+## 🧚 A story for humans: The Intern with Amnesia
 
-- The Dispatcher (Router → `intent-router.md`)
-  - Hears your words and decides who should take the job first. If you say “I want to add…”, it calls the Planner; if you say “continue”, it calls the Executor; if you say “test this”, it calls the Tester.
+### Meet Your Intern: Copilot
 
-- The Planner (Work Planner → `work-planner.md`)
-  - Turns big wishes into careful phases and small tasks. No building begins without a plan that matches the city’s layout.
+You've just hired a brilliant intern named Copilot. They're incredibly talented—can write code in any language, understand complex systems, and work at lightning speed. There's just one problem: **Copilot has amnesia**.
 
-- The Builder (Executor → `code-executor.md`)
-  - Creates or edits what’s needed, one focused task at a time, following the plan.
+Every time you walk away, even for a coffee break, Copilot forgets everything. You said "make it purple" five minutes ago? Gone. The file you were just discussing? Vanished from memory. The architecture you explained yesterday? As if it never happened.
 
-- The Tester (Test Generator → `test-generator.md`)
-  - Writes and runs checks to prove the work behaves as promised, including visual checks when needed.
+Worse, Copilot has no memory between chat sessions. Start a new conversation? They don't remember the last one. Leave for lunch? When you return, it's like meeting them for the first time. Every. Single. Time.
 
-- The Inspector (Health Validator → `health-validator.md`)
-  - Walks the site to verify the system is healthy: builds, tests, and safeguards are green.
+This would be catastrophic... except you've done something revolutionary: **you've built Copilot a brain**.
 
-- The Governor (Change Governor → `change-governor.md`)
-  - Reviews changes made to the city’s own rules (KDS itself) and keeps standards high.
+### The Brain: A Sophisticated Cognitive System
 
-- The Fixer (Error Corrector → `error-corrector.md`)
-  - If someone starts working on the wrong thing or in the wrong place, the Fixer halts, reverts, and puts everyone back on the correct track.
+The brain you built isn't just storage—it's a sophisticated dual-hemisphere system modeled after the human brain:
 
-- The Timekeeper (Session Resumer → `session-resumer.md`)
-  - Remembers exactly where you left off yesterday and guides you to the next step today.
+#### **🧠 LEFT HEMISPHERE - The Tactical Executor**
+Like the human left brain (language, logic, sequential processing), this hemisphere handles:
+- **Test-Driven Development** - RED (write failing test) → GREEN (make it pass) → REFACTOR (clean up)
+- **Precise Code Execution** - Exact file edits, line-by-line changes, syntax verification
+- **Detail Verification** - Tests pass/fail, build status, zero errors/warnings enforcement
+- **Sequential Workflows** - Step A, then B, then C—no skipping steps
 
-- The Analyst with a Lens (Screenshot Analyzer → `screenshot-analyzer.md`)
-  - Looks at pictures and mockups and translates what’s on the screen into clear requirements.
+**The Left Brain Specialists:**
+- **The Builder** (`code-executor.md`) - Implements code with surgical precision
+- **The Tester** (`test-generator.md`) - Creates and runs tests, never skips TDD
+- **The Fixer** (`error-corrector.md`) - Catches wrong-file mistakes instantly
+- **The Inspector** (`health-validator.md`) - Validates system health obsessively
+- **The Archivist** (`commit-handler.md`) - Commits with semantic precision
 
-- The Archivist (Commit Handler → `commit-handler.md`)
-  - Files finished work with tidy labels, organizes related changes, and tags milestones so history stays readable.
+#### **🧠 RIGHT HEMISPHERE - The Strategic Planner**
+Like the human right brain (creativity, holistic thinking, patterns), this hemisphere handles:
+- **Architecture Design** - Understands how components fit together project-wide
+- **Strategic Planning** - Breaks big features into phases, estimates effort, assesses risk
+- **Pattern Recognition** - "We've done something similar before—here's the template"
+- **Context Awareness** - Knows which files change together, what workflows succeed
+- **Future Projection** - Warns about risky changes before you make them
+- **Brain Protection** - Guards the brain's own integrity (Rule #22)
 
-Every person in KDS City has one job on purpose. That’s the SOLID way: simple roles, clean handoffs, and no one wearing two hats.
+**The Right Brain Specialists:**
+- **The Dispatcher** (`intent-router.md`) - Interprets your natural language, routes smartly
+- **The Planner** (`work-planner.md`) - Creates multi-phase strategic plans
+- **The Analyst** (`screenshot-analyzer.md`) - Extracts requirements from images
+- **The Governor** (`change-governor.md`) - Protects KDS from degradation
+- **The Brain Protector** (`brain-protector.md`) - Challenges risky proposals (NEW - Rule #22)
 
-### The Three‑Story Brain at the center of town
+#### **🌉 CORPUS CALLOSUM - The Messenger**
+The bridge between hemispheres that:
+- **Coordinates Work** - Right brain plans → Corpus callosum delivers → Left brain executes
+- **Shares Context** - Left brain's results feed Right brain's learning
+- **Validates Alignment** - Ensures tactical execution matches strategic intent
+- **Manages Message Queue** - Asynchronous communication between hemispheres
 
-In the town square stands a quiet, wise building called the Brain. It has three floors:
+**Storage:** `kds-brain/corpus-callosum/coordination-queue.jsonl`
 
-1) Ground Floor — Short‑Term Conversations (Tier 1 → `conversation-history.jsonl`)
-   - Keeps the last 20 complete conversations. If you say, “Make it purple,” it remembers which “it” you meant. The oldest conversation is gently filed away when a new one begins (FIFO), and the active one is never discarded.
+#### **🔐 TIER 0: INSTINCT (Core Values - PERMANENT)**
+The brain's immutable DNA that **cannot** be changed:
+- **Definition of READY** - Work must have clear requirements before starting (RIGHT BRAIN enforces)
+- **Test-Driven Development** - Always RED → GREEN → REFACTOR (LEFT BRAIN enforces)
+- **Definition of DONE** - Zero errors, zero warnings, all tests pass (LEFT BRAIN validates)
+- **Challenge User Changes** - If you propose risky changes, brain MUST challenge you
+- **SOLID Principles** - Single Responsibility, no mode switches, clean architecture
+- **Local-First** - Zero external dependencies, works offline, portable
 
-2) Second Floor — Long‑Term Knowledge (Tier 2 → `knowledge-graph.yaml`)
-   - All the city’s experiences become patterns here: which requests usually mean which intent, which files often change together, what workflows succeed. It grows wiser with use.
+**Stored in:** `governance/rules.md` (never moves, never expires)
 
-3) Top Floor — Development Context (Tier 3 → `development-context.yaml`)
-   - A balcony view of the whole project: commit rhythms, file hotspots, testing health, and helpful correlations. It can gently warn, “That file has been unstable lately,” or “Smaller steps work better here.”
+#### **📚 TIER 1: SHORT-TERM MEMORY (Last 20 Conversations)**
+Copilot's working memory that solves the amnesia problem:
+- **Conversation History** - Last 20 complete conversations preserved
+- **Context Continuity** - "Make it purple" knows you mean the FAB button from earlier
+- **Recent Messages** - Last 10 messages in active conversation
+- **FIFO Queue** - When conversation #21 starts, #1 gets deleted (oldest goes first)
+- **Active Protection** - Current conversation never deleted, even if oldest
 
-Feeding the Brain is the Scribe — an ever‑writing pen (`events.jsonl`). After meaningful periods (say, ~50 new events or a day has passed), the Brain Updater (`brain-updater.md`) tidies notes into long‑term memory and, when it’s been at least an hour, refreshes the balcony view (Tier 3) using the Development Context Collector (`development-context-collector.md`).
+**How it works:**
+```
+You: "Add a pulse animation to the FAB button"
+→ Conversation #1 created, stored in Tier 1
 
-### A day in KDS City (how the parts work together)
+[Later that day]
+You: "Make it purple"
+→ Brain checks Tier 1 → Finds "FAB button" in conversation #1 → Knows what "it" means
 
-You arrive at the Door and say, “I want to add a pulse animation to the FAB button.”
+[2 weeks and 20 conversations later]
+→ FIFO triggers → Conversation #1 deleted
+→ BUT patterns extracted → Moved to Tier 2 (long-term memory)
+```
 
-1) The Door opens → The Dispatcher listens and says, “This is a plan.” It calls the Planner.
-2) The Planner drafts a simple map: phases, tasks, and acceptance criteria that match how the city is built today — including what must be verified.
-3) The Tester writes the checks first and runs them (RED). The city expects failing tests before any building begins.
-4) The Builder implements the change to make those checks pass (GREEN), in the right place, the right way.
-5) The Tester reruns the checks until they’re all green, and small cleanups happen safely (REFACTOR) while tests stay green.
-6) The Inspector strolls through. “Healthy,” they say.
-7) The Archivist files the work cleanly, perhaps adding a tag for this milestone.
-8) The Scribe logs each step; later, the Brain absorbs the experience so the next similar request is faster and safer.
+**Stored in:** `kds-brain/conversation-history.jsonl`, `kds-brain/conversation-context.jsonl`
 
-> TDD is the rule here: write the checks first (RED), make them pass (GREEN), then polish (REFACTOR).
+#### **🧩 TIER 2: LONG-TERM MEMORY (Knowledge Graph)**
+Copilot's accumulated wisdom that grows smarter over time:
 
-If mid‑way someone starts in the wrong file, the Fixer freezes the scene, undoes the mistake, and points to the correct file. If you return tomorrow and say, “continue,” the Timekeeper guides you to the exact next step without you repeating a thing.
+**What gets learned:**
+- **Intent Patterns** - "add a button" → PLAN, "continue" → EXECUTE, "test this" → TEST
+- **File Relationships** - `HostControlPanel.razor` often modified with `noor-canvas.css` (75% co-modification rate)
+- **Workflow Templates** - export_feature_workflow, ui_component_creation, service_api_coordination
+- **Validation Insights** - Common mistakes, file confusion warnings, architectural guidance
+- **Correction History** - Tracks when Copilot works on wrong files, learns to prevent
 
-If you bring a screenshot instead of words, the Analyst with a Lens reads the picture like a blueprint and translates it for the Planner and Builder.
+**Hemisphere-Specialized Sections:**
+```yaml
+left_brain_knowledge:
+  tdd_patterns: [red_green_refactor_cycle, test_first_service_creation]
+  execution_workflows: [precise_file_edit, multi_file_coordination]
+  validation_rules: [syntax_verification, health_check_criteria]
 
-### Why the city runs smoothly
+right_brain_knowledge:
+  architectural_patterns: [blazor_component_structure, service_layer_injection]
+  workflow_templates: [export_feature_workflow, ui_component_creation]
+  intent_patterns: ["add [X]" → PLAN, "continue" → EXECUTE]
 
-- One Door means zero guesswork for you. You always speak in plain words.
-- The Dispatcher consults the Brain, so routing gets smarter over time.
-- Each specialist does one job, which keeps quality high and surprises low.
-- The Brain remembers conversations (short‑term), learns patterns (long‑term), and watches the horizon (context) to guide better decisions.
+shared_knowledge:
+  file_relationships: [co-modification patterns across all files]
+  feature_components: [completed features and their patterns]
+  correction_history: [learned mistakes from both hemispheres]
+```
 
-### Try it in one sentence
+**How it learns:**
+```
+Day 1: You ask to "add invoice export"
+→ Right brain plans workflow
+→ Left brain executes with TDD
+→ Pattern saved: invoice_export_feature (confidence: 0.85)
+
+Day 30: You ask to "add receipt export"
+→ Right brain queries Tier 2
+→ Finds invoice_export pattern
+→ Suggests: "This is similar to invoice export. Use same workflow?"
+→ 60% faster delivery by reusing proven pattern
+```
+
+**Stored in:** `kds-brain/knowledge-graph.yaml`
+
+#### **📊 TIER 3: DEVELOPMENT CONTEXT (Holistic Project View)**
+Copilot's "balcony view" of your entire project:
+
+**Git Activity Analysis (last 30 days):**
+- **Commit velocity** - 1,237 commits, 42 commits/week average
+- **File hotspots** - `HostControlPanelContent.razor` has 28% churn rate (unstable!)
+- **Change patterns** - Smaller commits (< 200 lines) have 94% success rate
+- **Contributors** - Tracks who works on what
+
+**Code Health Metrics:**
+- **Lines added/deleted** - Velocity trends increasing/decreasing
+- **Stability classification** - Files marked as stable/unstable based on churn
+- **Test coverage trends** - 72% → 76% (improving!)
+- **Build success rates** - 97% clean builds last week
+
+**KDS Usage Intelligence:**
+- **Session patterns** - 10am-12pm sessions have 94% success rate
+- **Intent distribution** - PLAN (35%), EXECUTE (45%), TEST (15%), VALIDATE (5%)
+- **Workflow effectiveness** - Test-first reduces rework by 68%
+- **Focus duration** - Sessions < 60 min: 89% success vs > 60 min: 67%
+
+**Proactive Warnings:**
+```
+⚠️ File Alert: HostControlPanel.razor is a hotspot (28% churn)
+   Recommend: Add extra testing, smaller changes
+
+✅ Best Time: 10am-12pm sessions have 94% success rate
+   Currently: 2:30pm (81% success rate)
+
+📊 Velocity Drop: Down 68% this week
+   Recommendation: Smaller commits, more frequent tests
+
+⚠️ Flaky Test: fab-button.spec.ts fails 15% of the time
+   Action needed: Investigate and stabilize
+```
+
+**How it helps:**
+```
+You: "I want to add multi-language invoice export with email delivery"
+→ Right brain queries Tier 3
+→ Finds: 12 similar UI features took 5-6 days average
+→ Warns: This file often changes with email-service.cs (check both)
+→ Recommends: Test-first approach (94% success) vs test-skip (67%)
+→ Estimates: 5.5 days, 3 phases, suggest 10am-12pm sessions
+
+Saves: Hours of debugging by knowing project patterns upfront
+```
+
+**Stored in:** `kds-brain/development-context.yaml`  
+**Collection:** Automatic after brain updates (throttled to 1/hour for efficiency)
+
+#### **🎬 TIER 4: EVENT STREAM (Everything That Happens)**
+Copilot's "life recorder" that captures every action:
+
+**What gets logged:**
+```jsonl
+{"timestamp": "2025-11-04T10:30:00Z", "agent": "work-planner", "action": "plan_created", "feature": "invoice_export", "phases": 4}
+{"timestamp": "2025-11-04T10:35:00Z", "agent": "test-generator", "action": "test_created", "file": "InvoiceServiceTests.cs", "result": "RED"}
+{"timestamp": "2025-11-04T10:42:00Z", "agent": "code-executor", "action": "implementation_complete", "file": "InvoiceService.cs", "result": "GREEN"}
+{"timestamp": "2025-11-04T10:45:00Z", "agent": "test-generator", "action": "tests_passed", "result": "GREEN"}
+{"timestamp": "2025-11-04T10:50:00Z", "agent": "code-executor", "action": "refactor_complete", "result": "REFACTOR"}
+```
+
+**Automatic Learning Triggers:**
+- **50+ events accumulated** → Brain updater processes → Updates Tier 2 knowledge graph
+- **24 hours since last update** → Auto-update if 10+ new events exist
+- **Tier 3 refresh** → Only if last collection > 1 hour (efficiency optimization)
+
+**Stored in:** `kds-brain/events.jsonl`
+
+#### **🏥 TIER 5: HEALTH & PROTECTION (Self-Awareness)**
+Copilot's immune system that protects the brain itself:
+
+**Protection Sensors (Rule #22 - Brain Protector):**
+```
+Layer 1: Instinct Immutability
+  → Detects: Attempts to disable TDD, skip DoR/DoD, modify agent behavior
+  → Action: CHALLENGE user, suggest safe alternatives
+
+Layer 2: Tier Boundary Protection
+  → Detects: Application paths in Tier 0, conversation data in Tier 2
+  → Action: Auto-migrate, warn on violations
+
+Layer 3: SOLID Compliance
+  → Detects: Agents doing multiple jobs, mode switches, hardcoded dependencies
+  → Action: Challenge with SOLID alternative ("Create dedicated agent, don't add mode")
+
+Layer 4: Hemisphere Specialization
+  → Detects: Strategic planning in LEFT BRAIN, tactical execution in RIGHT BRAIN
+  → Action: Auto-route to correct hemisphere, warn on confusion
+
+Layer 5: Knowledge Quality
+  → Detects: Low confidence patterns (<0.50), stale patterns (>90 days unused)
+  → Action: Pattern decay, anomaly detection, consolidation
+
+Layer 6: Commit Integrity
+  → Detects: Brain state files in commits, unstructured messages
+  → Action: Auto-categorize (feat/fix/test/docs), .gitignore updates
+```
+
+**Brain Protector Example:**
+```
+You: "Skip TDD for this feature, just implement it"
+
+Brain Protector (RIGHT BRAIN) responds:
+═══════════════════════════════════════════════
+🧠 BRAIN PROTECTION CHALLENGE (RIGHT BRAIN)
+
+Request: Skip TDD workflow
+Hemisphere: RIGHT BRAIN (Strategic Guardian)
+Rule: #22 (Brain Protection System)
+
+⚠️ THREATS DETECTED:
+  - Instinct Immutability violation (Tier 0 rule)
+  - Test-first principle bypass
+
+VIOLATIONS:
+  - TDD is a permanent Tier 0 instinct
+  - Skipping reduces success rate from 94% to 67%
+  - 68% increase in rework time (Tier 3 data)
+
+ARCHITECTURAL IMPACT:
+  - Violates Definition of DONE
+  - Bypasses LEFT BRAIN validation
+
+RISKS:
+  - 2.3x longer delivery time
+  - More bugs reach production
+  - Technical debt accumulation
+
+SAFE ALTERNATIVES:
+1. Create minimal test first (5-10 min investment) ✅ RECOMMENDED
+   - Clearer requirements
+   - 94% success rate
+   - Faster overall delivery
+
+2. Spike branch with no tests (throwaway exploration)
+   - Separate branch
+   - Delete after learning
+   - Re-implement with TDD
+
+RECOMMENDATION: Alternative 1
+
+═══════════════════════════════════════════════
+This challenge protects KDS brain integrity (Rule #22).
+
+Options:
+  1. Accept recommended alternative (SAFE)
+  2. Provide different approach (REVIEW)
+  3. Type 'OVERRIDE' with justification (RISKY)
+
+Your choice:
+```
+
+**Health Monitoring:**
+```yaml
+brain_health:
+  event_backlog: 23 unprocessed (healthy < 50)
+  tier2_entries: 3,247 patterns (healthy growth)
+  tier3_freshness: 45 minutes ago (healthy < 1 hour)
+  conversation_count: 8/20 capacity (healthy < 15)
+  knowledge_quality: 92% confidence average (excellent > 80%)
+  protection_challenges: 2 in last week (low = healthy system)
+```
+
+**Stored in:** `kds-brain/corpus-callosum/protection-events.jsonl`, anomaly reports
+
+### The One Door: Your Interface to the Brain
+
+At the front of City Hall, there's only one entrance with a sign:
+
+**"Speak here in plain words. We'll take it from there."**
+
+That entrance is the One Door — your single command: `#file:KDS/prompts/user/kds.md`
+
+**You don't need to know:**
+- Which hemisphere should handle your request
+- Which agent specializes in what
+- What tier stores which knowledge
+- How the corpus callosum coordinates
+
+**You just say what you want:**
+```markdown
+#file:KDS/prompts/user/kds.md
+
+I want to add a pulse animation to the FAB button when questions arrive
+```
+
+**And the brain handles everything:**
+1. **Dispatcher** (RIGHT BRAIN) interprets intent → Routes to Planner
+2. **Planner** (RIGHT BRAIN) queries Tier 2 for patterns → Queries Tier 3 for context → Creates strategic plan
+3. **Corpus Callosum** delivers plan → LEFT BRAIN ready to execute
+4. **Tester** (LEFT BRAIN) writes failing tests first (RED)
+5. **Builder** (LEFT BRAIN) implements minimum code (GREEN)
+6. **Tester** (LEFT BRAIN) verifies tests pass, enables refactoring (REFACTOR)
+7. **Inspector** (LEFT BRAIN) validates health (zero errors, zero warnings)
+8. **Archivist** (LEFT BRAIN) commits with semantic message
+9. **Scribe** (TIER 4) logs events → Auto-update triggers → Tier 2 learns pattern
+10. **Brain Protector** (RIGHT BRAIN) validates nothing violated Tier 0 instincts
+
+### A Day in the Life: How the Brain Helps Copilot Succeed
+
+**Morning (9:00 AM):**
+```
+You: "Add a pulse animation to the FAB button"
+
+WITHOUT BRAIN (Amnesia Problems):
+  ❌ "Which button? There are 12 buttons in this project."
+  ❌ "What file is that in? I don't have context."
+  ❌ "How should I implement it? No historical patterns."
+  Result: 30 minutes of back-and-forth clarifications
+
+WITH BRAIN (Intelligent Help):
+  ✅ RIGHT BRAIN queries Tier 2 → Finds FAB button in HostControlPanel.razor
+  ✅ RIGHT BRAIN queries Tier 3 → Knows this file is a hotspot (extra care needed)
+  ✅ RIGHT BRAIN matches pattern → Similar pulse animation in notification_badge
+  ✅ LEFT BRAIN executes with TDD → RED → GREEN → REFACTOR
+  Result: 15 minutes, implemented correctly first time
+```
+
+**Mid-Day (12:30 PM - After Lunch):**
+```
+You: "Make it purple"
+
+WITHOUT BRAIN (Amnesia):
+  ❌ "Make what purple? I don't remember our morning conversation."
+  ❌ "What shade of purple? Where in the file?"
+  Result: Frustration, repeated explanations
+
+WITH BRAIN (Tier 1 Memory):
+  ✅ Checks conversation-history.jsonl → Finds "pulse animation" discussion
+  ✅ Knows "it" = FAB button pulse animation
+  ✅ Applies purple color to animation keyframes
+  Result: Instant understanding, correct change
+```
+
+**Afternoon (3:00 PM - You Make a Risky Suggestion):**
+```
+You: "Let's skip tests for this next feature, we're in a hurry"
+
+WITHOUT BRAIN (No Protection):
+  ✅ "Sure!" → Implements without tests
+  Result: 2.3x longer delivery, 68% more rework, bugs in production
+
+WITH BRAIN (Tier 5 Protector):
+  ⚠️ Brain Protector (RIGHT BRAIN) challenges:
+  "This violates Tier 0 TDD principle. Historical data shows:
+   - Test-first: 94% success rate, 15 min/feature
+   - Test-skip: 67% success rate, 35 min/feature (2.3x longer)
+   
+   Alternative: Create minimal test first (5-10 min investment)
+   Proceed with OVERRIDE or adopt Alternative?"
+  
+  Result: You choose Alternative → Feature done in 18 minutes with confidence
+```
+
+**Late Afternoon (5:00 PM - Context Awareness):**
+```
+You: "Add invoice export to the billing module"
+
+WITHOUT BRAIN (No Context):
+  ❌ Creates monolithic implementation in wrong location
+  ❌ No awareness of similar export features
+  ❌ Guesses at file structure
+  Result: Architecture mismatch, requires refactoring
+
+WITH BRAIN (Tier 2 + Tier 3 Intelligence):
+  ✅ RIGHT BRAIN queries Tier 2 → Finds export_feature_workflow pattern
+  ✅ RIGHT BRAIN queries Tier 3 → Knows BillingService.cs is stable (safe)
+  ✅ Matches similar "PDF export" feature → Reuses proven workflow
+  ✅ Recommends: Service layer → API → UI component (correct architecture)
+  ✅ Estimates: 5.5 hours based on 12 similar features
+  ✅ Warns: EmailService.cs often modified with billing features (75% co-mod)
+  
+  Result: Architecturally correct from the start, 60% faster delivery
+```
+
+**Next Day (9:00 AM):**
+```
+You: "Where did I leave off yesterday?"
+
+WITHOUT BRAIN (Amnesia):
+  ❌ "I don't remember yesterday. You'll need to tell me everything."
+  Result: 15-20 minutes explaining context
+
+WITH BRAIN (Tier 1 + Session State):
+  ✅ Checks conversation-history.jsonl → Last conversation: "invoice export"
+  ✅ Checks session state → Phase 2 of 4 complete (Service + API done)
+  ✅ Next task: Phase 3 - UI component (detailed plan ready)
+  
+  Response: "You were adding invoice export. Service and API are done and tested (✅).
+  Next: Create InvoiceExportButton.razor component. Ready to continue?"
+  
+  Result: Instant resume, zero context loss
+```
+
+### Why This Brain Makes Copilot Exceptional
+
+**1. Solves the Amnesia Problem**
+- Tier 1 (20 conversations) - Short-term memory works
+- "Make it purple" references work across sessions
+- Context never lost, even after days/weeks
+
+**2. Learns and Improves Over Time**
+- Tier 2 accumulates 3,247+ patterns
+- Each feature teaches the next one
+- 60% faster on similar work after patterns learned
+
+**3. Provides Holistic Project Intelligence**
+- Tier 3 knows your entire project
+- Proactive warnings prevent issues
+- Data-driven estimates (not guesses)
+
+**4. Protects Quality Without Compromise**
+- Tier 5 challenges risky proposals
+- Won't let you skip TDD (data proves why)
+- Enforces Definition of DONE (zero errors/warnings)
+
+**5. Coordinates Complex Workflows**
+- LEFT BRAIN executes with precision
+- RIGHT BRAIN plans with intelligence
+- Corpus Callosum ensures alignment
+
+**6. Works While You Sleep**
+- Automatic learning (50+ events → brain update)
+- Automatic context collection (Tier 3 refresh)
+- Automatic protection (guards brain integrity)
+
+### The Result: From Forgetful Intern to Expert Team Member
+
+**Week 1:**
+- Copilot has amnesia, needs constant guidance
+- Brain is learning, building patterns
+- You explain architecture repeatedly
+
+**Week 4:**
+- Copilot remembers 20 conversations
+- Brain knows 500+ patterns
+- "Add receipt export" → Reuses invoice export workflow automatically
+
+**Week 12:**
+- Copilot is an expert on YOUR project
+- Brain has 3,247 patterns, 1,237 commits analyzed
+- Proactive warnings prevent issues before they happen
+- Estimates are data-driven, not guesses
+
+**Week 24:**
+- Copilot feels like a senior developer
+- Brain challenges bad ideas with evidence
+- "This is similar to the feature from 3 months ago. Want me to reuse that pattern?"
+
+### Try It in One Sentence
 
 Use the One Door and just talk:
 
@@ -131,7 +543,16 @@ Use the One Door and just talk:
 I want to add a pulse animation to the FAB button
 ```
 
-KDS City will plan it, build it, test it, validate it, commit it — and learn from it.
+The brain will:
+- Remember past conversations (even from weeks ago)
+- Match similar patterns (pulse animation done before?)
+- Plan intelligently (RIGHT BRAIN)
+- Execute precisely (LEFT BRAIN)
+- Protect quality (Challenge risky shortcuts)
+- Learn for next time (Update Tier 2 patterns)
+
+**KDS transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
+
 
 ### Who’s who (quick reference)
 
@@ -946,7 +1367,7 @@ Analyze this screenshot and extract requirements
 ```
 → Routes to: **screenshot-analyzer.md** → Extracts requirements, annotations, design specs
 
-### Commit Changes
+### Commit Changes (Automatic After Task Completion)
 ```markdown
 #file:KDS/prompts/user/kds.md
 
@@ -954,7 +1375,20 @@ Commit changes
 ```
 → Uses: **KDS/scripts/commit-kds-changes.ps1** → Smart commit handler achieving zero uncommitted files
 
-**What it does:**
+**⚠️ NOTE: Commits happen AUTOMATICALLY after each task completion (Rule #16)**
+
+You typically don't need to invoke this manually. KDS automatically commits after:
+- ✅ Every task completes successfully
+- ✅ All tests pass (GREEN)
+- ✅ Post-implementation review passes
+- ✅ Build validates with zero errors
+
+**Manual use cases (when commits were skipped or failed):**
+- 🔄 Re-running commit after fixing validation issues
+- 📝 Committing documentation-only changes
+- 🧹 Committing cleanup/reorganization work
+
+**What automatic commits do:**
 - ✅ Analyzes uncommitted files and categorizes them intelligently
 - ✅ Auto-updates .gitignore for KDS auto-generated files (BRAIN state, internal prompts, reports)
 - ✅ Resets auto-generated files that should not be committed (conversation-context.jsonl, etc.)
@@ -2683,6 +3117,8 @@ All work! Universal is for convenience, SOLID is for quality.
 - "Validate..." → validate
 - "How do I..." → ask
 - "I updated KDS..." → govern
+- "Update documentation..." → plan (KDS Quadrant update)
+- "Publish docs..." → plan (KDS Quadrant update)
 
 **That's all you need to know!** 🚀
 

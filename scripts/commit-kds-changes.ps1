@@ -296,8 +296,28 @@ KDS/tests/dashboard-refresh.spec.*
         
         Write-Host "Step 7: Committing..." -ForegroundColor Yellow
         git commit -m $Message
-        Write-Host "  ✅ Changes committed" -ForegroundColor Green
+        $commitHash = git rev-parse --short HEAD
+        Write-Host "  ✅ Changes committed (hash: $commitHash)" -ForegroundColor Green
         Write-Host ""
+        
+        # BRAIN: Log commit event
+        $workspaceRoot = Get-Location
+        $eventsFile = Join-Path $workspaceRoot "kds-brain\events.jsonl"
+        $commitEvent = @{
+            timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            agent = "commit-handler"
+            event = "commit_created"
+            commit_hash = $commitHash
+            files_count = $filesToCommit.Count
+            message = $Message
+        } | ConvertTo-Json -Compress
+        
+        try {
+            Add-Content -Path $eventsFile -Value $commitEvent
+            Write-Host "  🧠 Event logged to BRAIN" -ForegroundColor Cyan
+        } catch {
+            Write-Host "  ⚠️  Warning: Could not log to BRAIN events.jsonl" -ForegroundColor Yellow
+        }
         
         # Check final status
         $finalStatus = git status --short

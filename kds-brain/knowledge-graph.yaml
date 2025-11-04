@@ -1,4 +1,16 @@
 validation_insights:
+  kds_quadrant_completeness:
+    issue: "Documentation missing one or more KDS Quadrant components"
+    check_for:
+      - "Story section (🧚 narrative, metaphors, day-in-life examples)"
+      - "Technical section (specifications, commands, parameters, code)"
+      - "Image prompt section (diagrams, visual representations, flowcharts)"
+      - "High-level technical section (architecture, workflows, integration)"
+    explanation: "All four perspectives needed for complete understanding"
+    frequency: 0
+    confidence: 1.0
+    impact: medium
+    last_seen: "2025-11-04"
   powershell_regex_escaping:
     issue: "Backtick escaping for quotes in regex patterns fails to parse"
     incorrect_pattern: "[`'\\\"\\\"](.*)[`'\\\"\\\"']"
@@ -38,6 +50,23 @@ validation_insights:
 version: 6.0.0
 last_updated: 2025-11-04T10:35:00Z
 workflow_patterns:
+  kds_quadrant_creation:
+    pattern: "four_perspective_documentation"
+    description: "Create comprehensive documentation using KDS Quadrant structure"
+    steps:
+      - "1_story: Write human-centered narrative (emotional connection, metaphors, day-in-life examples)"
+      - "2_technical: Document detailed specifications (commands, parameters, file structures, code examples)"
+      - "3_image_prompt: Create or describe visual representation (diagrams, flowcharts, progress indicators)"
+      - "4_high_level_technical: Explain architectural overview (system design, workflows, integration points)"
+    rationale: "Four perspectives ensure complete understanding for different learning styles and use cases"
+    success_rate: 1.0
+    time_saved_minutes: 45
+    confidence: 1.0
+    last_used: "2025-11-04"
+    examples:
+      - "BRAIN system documentation"
+      - "Setup process documentation"
+      - "Agent architecture documentation"
   powershell_script_debugging:
     pattern: "test_individually_before_jobs"
     description: "Debug PowerShell scripts directly before using in Start-Job"
@@ -75,7 +104,37 @@ architectural_patterns:
   test_framework: Playwright
   ui_naming: PascalCase
   api_routing: attribute-based
-intent_patterns: {}
+intent_patterns:
+  kds_quadrant_documentation:
+    pattern: "update_documentation"
+    description: "User wants to update KDS Quadrant (4-document structure: Story, Technical, Image Prompt, High-Level Technical)"
+    triggers:
+      - "update documentation"
+      - "update docs"
+      - "publish docs"
+      - "publish documentation"
+      - "update the quadrant"
+      - "refresh documentation"
+      - "document this"
+    routes_to: "work-planner"
+    action: "create_or_update_kds_quadrant"
+    confidence: 0.95
+    last_used: "2025-11-04"
+  kds_quadrant_structure:
+    name: "KDS Quadrant"
+    description: "Four-perspective documentation pattern for comprehensive concept explanation"
+    components:
+      1_story: "Human-centered narrative (🧚 story for humans)"
+      2_technical: "Detailed technical specifications and implementation"
+      3_image_prompt: "Visual representation or diagram prompt (implicit or explicit)"
+      4_high_level_technical: "Architectural overview and system-level explanation"
+    purpose: "Explain complex concepts from multiple angles: emotional, practical, visual, architectural"
+    examples:
+      - "The Intern with Amnesia (Story) + SOLID Architecture (Technical) + Brain Visualization (Image) + BRAIN System Overview (High-Level)"
+      - "Three-Story Brain (Story) + Tier 0-5 Specs (Technical) + Tier Diagram (Image) + Automatic Learning Workflow (High-Level)"
+      - "Day in the Life (Story) + Command Reference (Technical) + Workflow Examples (Image) + How It Works (High-Level)"
+    confidence: 1.0
+    created: "2025-11-04"
 file_relationships:
   tests/fixtures/mock-project/tests/UI/dashboard.spec.ts:
   - relationship: test-coverage

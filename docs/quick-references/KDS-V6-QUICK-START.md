@@ -5,6 +5,31 @@
 
 ---
 
+## 🧠 Quick Context: Why You Need This Brain
+
+Imagine hiring a brilliant intern who can code anything but has **complete amnesia**. Every conversation starts fresh—they don't remember yesterday's discussion, last week's architecture decisions, or even the file you mentioned five minutes ago.
+
+That's GitHub Copilot without KDS.
+
+**KDS is the brain system** that transforms Copilot from a forgetful intern into an expert team member who:
+
+- ✅ **Remembers** your last 20 conversations ("make it purple" knows you mean the FAB button)
+- ✅ **Learns** from 3,247+ patterns in your project (60% faster on similar features)
+- ✅ **Protects** quality (challenges "skip TDD" with data: 94% vs 67% success rate)
+- ✅ **Plans strategically** (RIGHT BRAIN) while executing tactically (LEFT BRAIN)
+- ✅ **Warns proactively** ("This file is a hotspot—add extra testing")
+
+**The brain you're about to build has:**
+- **LEFT HEMISPHERE** - Tactical executor (TDD, precise code, sequential workflows)
+- **RIGHT HEMISPHERE** - Strategic planner (architecture, patterns, risk assessment)
+- **CORPUS CALLOSUM** - Coordination bridge between hemispheres
+- **5 MEMORY TIERS** - From permanent instincts to project-specific intelligence
+- **PROTECTION SYSTEM** - Immune system that guards brain integrity (Rule #22)
+
+**Result:** Copilot goes from amnesia to expertise over 4-24 weeks, learning YOUR project deeply.
+
+---
+
 ## 🎯 What We're Building
 
 A **self-building, continuously learning brain** with left-right hemispheres that:

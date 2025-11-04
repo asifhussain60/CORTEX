@@ -552,11 +552,31 @@ IF reviewer.status == "CRITICAL_VIOLATIONS":
 ELSE:
     Continue to automatic commit
     ↓
->>> INVOKE commit-handler.md (AUTOMATIC) <<< ⬅️ FIXED!
+>>> MANDATORY: Execute commit workflow <<<
     ↓
-Commit changes with semantic message
+STEP A: Run commit-kds-changes.ps1
+    - Categorize files (KDS vs app)
+    - Auto-update .gitignore
+    - Stage and commit changes
+    - Validate 0 uncommitted files
     ↓
-Continue to handoff generation
+STEP B: Log commit event to BRAIN
+    {
+      "timestamp": "{ISO_8601}",
+      "agent": "code-executor",
+      "event": "commit_created",
+      "type": "{feat|fix|test|docs|refactor}",
+      "scope": "{kds|app|component}",
+      "files_count": N,
+      "commit_hash": "{git_hash}",
+      "session_id": "{current_session}"
+    }
+    ↓
+STEP C: Verify commit success
+    IF uncommitted files remain:
+      ERROR and HALT
+    ELSE:
+      Continue to handoff generation
 ```
 
 ---
@@ -593,6 +613,11 @@ Summary:
 Tests:
   ✅ All unit tests passing (3/3)
   ✅ All integration tests passing (1/1)
+
+Commit:
+  ✅ Changes committed (hash: a1b2c3d)
+  ✅ 0 uncommitted files remaining
+  ✅ Event logged to BRAIN
   
 Next: Phase 2 (UI Integration)
 ```
@@ -716,8 +741,47 @@ Changes:
   
 Tests: ✅ All passing
 
+Commit: ✅ Changes committed (hash: a1b2c3d)
+  ✅ 0 uncommitted files remaining
+  ✅ Event logged to BRAIN
+
 Next: #file:KDS/prompts/user/execute.md (continue)
 ```
+
+### 🚨 CRITICAL: Automatic Commit Execution
+
+**After session update, BEFORE returning to user:**
+
+```powershell
+# Execute commit workflow (Rule #16 Step 7)
+.\KDS\scripts\commit-kds-changes.ps1 -Interactive:$false
+
+# Validate commit success
+$uncommitted = git status --short | Where-Object { $_ -notmatch '^\?\? .*(bin/|obj/|node_modules/)' }
+if ($uncommitted) {
+    ERROR("Commit failed - uncommitted files remain")
+    HALT()
+}
+
+# Log commit event to BRAIN
+$commitHash = git rev-parse --short HEAD
+$event = @{
+    timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+    agent = "code-executor"
+    event = "commit_created"
+    commit_hash = $commitHash
+    task_id = $session.current_task
+    files_count = (git diff --name-only HEAD~1..HEAD).Count
+} | ConvertTo-Json -Compress
+
+Add-Content -Path "kds-brain/events.jsonl" -Value $event
+```
+
+**Enforcement:**
+- ❌ NEVER skip commit step
+- ❌ NEVER return to user with uncommitted changes (unless commit explicitly failed)
+- ✅ ALWAYS log commit event to BRAIN
+- ✅ ALWAYS validate 0 uncommitted files before continuing
 
 ---
 

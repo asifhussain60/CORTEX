@@ -6,6 +6,70 @@
 
 ---
 
+## 💡 The Big Picture: Solving Copilot's Amnesia
+
+### The Problem
+
+GitHub Copilot is incredibly talented—can write code in any language, understand complex systems, work at lightning speed. But Copilot has a critical flaw: **complete amnesia**.
+
+Every new conversation, Copilot forgets:
+- ❌ Previous discussions ("make it purple" — purple what?)
+- ❌ Project architecture (which files go where?)
+- ❌ Historical patterns (we've built similar features before)
+- ❌ Your workflow preferences (test-first? skip tests?)
+- ❌ File relationships (these files often change together)
+
+Result: Constant re-explanation, repeated mistakes, no learning between sessions.
+
+### The Solution: KDS Brain System
+
+KDS is a **sophisticated dual-hemisphere brain** modeled after human cognition:
+
+**🧠 LEFT HEMISPHERE (Tactical Executor)**
+- Test-Driven Development (RED → GREEN → REFACTOR)
+- Precise code execution, zero errors/warnings enforcement
+- Sequential workflows, never skips steps
+- **Agents:** Builder, Tester, Fixer, Inspector, Archivist
+
+**🧠 RIGHT HEMISPHERE (Strategic Planner)**
+- Architecture design, pattern recognition
+- Strategic planning, risk assessment
+- Context awareness, future projection
+- **Agents:** Dispatcher, Planner, Analyst, Governor, Brain Protector
+
+**🌉 CORPUS CALLOSUM (Coordination Bridge)**
+- RIGHT BRAIN plans → Delivers to LEFT BRAIN → Executes
+- Results feed back → Learning improves → Smarter next time
+
+**📚 5-TIER MEMORY SYSTEM**
+```yaml
+Tier 0 - INSTINCT: Immutable core values (TDD, SOLID, Local-First)
+Tier 1 - SHORT-TERM: Last 20 conversations (solves amnesia!)
+Tier 2 - LONG-TERM: 3,247+ learned patterns (60% faster on similar work)
+Tier 3 - CONTEXT: Holistic project view (proactive warnings, data-driven estimates)
+Tier 4 - EVENTS: Life recorder (automatic learning triggers)
+Tier 5 - PROTECTION: Immune system (challenges risky proposals, guards integrity)
+```
+
+### The Transformation
+
+**Week 1:** Copilot has amnesia, needs constant guidance  
+**Week 4:** Remembers 20 conversations, knows 500+ patterns  
+**Week 12:** Expert on YOUR project, 3,247 patterns, proactive warnings  
+**Week 24:** Senior-level teammate, challenges bad ideas with data
+
+### Why This Matters for v6.0
+
+The v6.0 refinement **completes** this brain system:
+- ✅ Week 1: Multi-threaded crawlers (60% faster project scanning)
+- ✅ Week 2: Proactive health monitoring (prevent issues before they happen)
+- ✅ Week 3: Developer experience (better conversation context, helpful errors)
+- ✅ Week 4: Production documentation & release (confident v6.0 adoption)
+
+**Result:** A fully operational brain that makes Copilot exceptional at YOUR project specifically.
+
+---
+
 ## 🎯 What Happened
 
 ### Project Migration

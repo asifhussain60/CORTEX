@@ -1,0 +1,39 @@
+{
+  "application": {
+    "name": "KDS",
+    "framework": "Multi-Framework",
+    "language": "PowerShell/Markdown",
+    "rootPath": "D:\\PROJECTS\\KDS",
+    "buildCommand": "Write-Host 'No build required for KDS'",
+    "runCommand": "Write-Host 'KDS is a prompt system'"
+  },
+  "testing": {
+    "framework": "None",
+    "configPath": "",
+    "orchestrationPattern": "none",
+    "orchestrationScript": "",
+    "healthCheckUrl": "",
+    "healthCheckTimeout": 30,
+    "testCommand": "",
+    "headlessDefault": false
+  },
+  "database": {
+    "provider": "None",
+    "connectionStringKey": "",
+    "testSessionId": null,
+    "testHostToken": ""
+  },
+  "governance": {
+    "autoChainTasks": true,
+    "autoChainPhases": false,
+    "requireBuildValidation": false,
+    "requireGitValidation": true,
+    "testQualityThreshold": 70
+  },
+  "portability": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-11-04",
+    "configSchema": "kds-config-v1.0",
+    "setupCompleted": false
+  }
+}
