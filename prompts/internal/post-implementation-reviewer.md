@@ -213,11 +213,32 @@ IF severity_critical > 0:
 ELSE IF severity_high > 0:
   WARN user (non-blocking)
   LOG violations
-  CONTINUE execution
+  CONTINUE to automatic commit
 
 ELSE:
   SILENT (violations logged only)
-  CONTINUE execution
+  CONTINUE to automatic commit
+```
+
+### Step 7: Automatic Commit (NEW)
+
+```markdown
+After review passes (no CRITICAL violations), AUTOMATICALLY invoke:
+#file:KDS/prompts/internal/commit-handler.md
+
+This commits changes with intelligent categorization:
+- ✅ Semantic commit messages (feat/fix/test/docs/refactor)
+- ✅ Separate KDS vs application changes
+- ✅ Enforce branch isolation rules
+- ✅ Auto-tag milestones
+- ✅ Verify all changes committed
+
+Commit happens SILENTLY unless:
+- ⚠️ Branch isolation violation detected
+- ⚠️ Uncommitted files remain after commit
+- ⚠️ Commit operation fails
+
+User notified ONLY if commit issues found.
 ```
 
 ---

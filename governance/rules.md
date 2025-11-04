@@ -1023,6 +1023,28 @@ mandatory_sequence:
           - Unused >90 days: AUTO-ARCHIVE to .archived/ folder
           - Duplicates >85%: AUTO-REJECT new pattern
           - Duplicates 60-84%: CONSOLIDATE into comprehensive pattern
+      
+      brain_event_monitoring:
+        description: Automatic BRAIN update triggers for progressive intelligence
+        checks:
+          - Count unprocessed events in kds-brain/events.jsonl
+          - Check last BRAIN update timestamp in knowledge-graph.yaml
+          - Verify events are being logged by agents
+        triggers:
+          - IF event_count >= 50: TRIGGER automatic brain-updater.md invocation
+          - IF (time_since_last_update >= 24_hours AND event_count >= 10): TRIGGER automatic brain-updater.md
+          - IF event_count >= 100: WARN (agents may not be triggering updates)
+        action_on_trigger:
+          - Invoke #file:KDS/prompts/internal/brain-updater.md automatically
+          - Log brain update event to events.jsonl
+          - Update knowledge-graph.yaml with new patterns
+          - Check if Tier 3 collection needed (throttled to 1 hour minimum)
+        validation:
+          - Verify brain-updater completed successfully
+          - Validate knowledge-graph.yaml structure after update
+          - Check that event count decreased (events marked as processed)
+        rule_reference: "KDS v6.0 Progressive Intelligence - Week 1+"
+        criticality: HIGH - Required for automatic learning in Weeks 2-4
   
   step_6_update_living_docs:
     description: Update KDS-DESIGN.md and governance/rules.md
@@ -1035,6 +1057,30 @@ mandatory_sequence:
     validation:
       - KDS-DESIGN.md modified in commit
       - Version incremented if breaking change
+  
+  step_7_automatic_commit:
+    description: Commit changes with intelligent categorization (NEW v6.0 - Week 2)
+    action: Invoke prompts/internal/commit-handler.md automatically
+    when: After post-implementation review passes (no CRITICAL violations)
+    behavior:
+      - SILENT commit (no user prompts unless issues)
+      - Semantic commit messages (feat/fix/test/docs/refactor)
+      - Separate KDS vs application changes into multiple commits
+      - Enforce branch isolation rules (KDS on features/kds only)
+      - Auto-tag milestones (kds-v*.*.*, feature-complete, etc.)
+      - Verify all changes committed (0 uncommitted files)
+    validation:
+      - All committable files staged and committed
+      - Build artifacts excluded (.skip, bin/, obj/, node_modules/)
+      - Branch compliance verified (no KDS changes on non-KDS branch)
+      - Commit hash logged to BRAIN events.jsonl
+    on_failure:
+      - Branch violation: HALT, suggest branch switch
+      - Uncommitted files: HALT, display files and suggest categorization fix
+      - Commit operation failed: HALT, display git error
+    rule_reference: "Commit-driven workflow - Zero uncommitted files"
+    criticality: HIGH - Enables continuous integration without manual commits
+    philosophy: "Work is not done until it's committed and validated"
 
 automation_level: FULL_AUTO
 user_intervention: NONE (unless errors detected)
@@ -1058,6 +1104,11 @@ output_format: |
      - Performance: 16 rules, 13 prompts (within limits)
      - Consistency: 100% compliant
   ✅ Living Docs: Updated (v4.2.0)
+  ✅ Commit: CREATED (feat: Add canvas save flow with tests)
+     - Files committed: 4 (0 uncommitted remaining)
+     - Branch: features/fab-button
+     - Hash: a1b2c3d
+     - Build artifacts excluded: 2 files (.skip, bin/)
   
   **Next Command:**
   @workspace /execute #file:KDS/keys/{key}/handoffs/{next}.json

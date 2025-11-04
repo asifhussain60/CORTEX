@@ -87,11 +87,70 @@ Execute the **next task** in the active session using **test-first** workflow.
 
 ---
 
+## 🔄 Test-First Workflow (TDD Automation - Week 2)
+
+### RED→GREEN→REFACTOR TDD Cycle
+
+**NEW in Week 2:** Full TDD automation with automatic validation and rollback.
+
+**TDD Orchestrator:** `KDS/scripts/left-brain/run-tdd-cycle.ps1`
+
+```
+📋 Feature Config → 🔴 RED → 🟢 GREEN → 🔵 REFACTOR → ✅ Complete
+                      ↓         ↓           ↓
+                   Tests     Impl      Optimize
+                    FAIL     PASS      PASS+Better
+                      ↓         ↓           ↓
+                   Logged   Logged    Logged → execution-state.jsonl
+                      
+                   If FAIL at any phase → 🔙 ROLLBACK (Git reset)
+```
+
+**Automated Phases:**
+
+1. **RED Phase:** Create tests that fail
+   - Script: `create-tests.ps1`
+   - Verification: `verify-red-phase.ps1`
+   - Expected: Tests fail (no implementation yet)
+
+2. **GREEN Phase:** Implement minimal code to pass tests
+   - Script: `implement-code.ps1`
+   - Verification: `verify-green-phase.ps1`
+   - Expected: All tests pass
+
+3. **REFACTOR Phase:** Optimize while keeping tests green
+   - Script: `refactor-code.ps1`
+   - Verification: `verify-refactor-safety.ps1`
+   - Expected: Tests still pass, code improved
+
+4. **Validation & Rollback:** Automatic safety net
+   - Script: `validate-implementation.ps1`
+   - Rollback: `rollback-changes.ps1`
+   - Triggered: When any phase tests fail
+
+**Usage:**
+```powershell
+# Automatic TDD cycle for a feature
+.\KDS\scripts\left-brain\run-tdd-cycle.ps1 `
+    -FeatureConfig "tests/fixtures/tdd-cycle/sample-feature.yaml" `
+    -Verbose
+```
+
+**All phases logged to:** `kds-brain/left-hemisphere/execution-state.jsonl`
+
+---
+
 ## 🔄 Test-First Workflow
 
 ### Mandatory Sequence
 ```
 0. Log execution start to left hemisphere
+      │
+      ▼
+0.5. Check BRAIN for best practices (NEW - Week 1)
+      │
+      ▼
+0.7. Use TDD automation if feature config available (NEW - Week 2)
       │
       ▼
 1. Load task details from session
@@ -141,6 +200,46 @@ $executionLog = @{
 
 Add-Content "KDS/kds-brain/left-hemisphere/execution-state.jsonl" $executionLog
 ```
+
+### Step 0.5: Check BRAIN for Best Practices (NEW - Week 1)
+```powershell
+# Before starting any implementation, query BRAIN for relevant patterns
+$task = "Implement crawler script"
+
+# Check if PowerShell script is involved
+if ($task -match '\.ps1|PowerShell|script') {
+    Write-Host "🧠 Checking BRAIN for PowerShell best practices..."
+    
+    # Load validation insights from knowledge graph
+    $kgPath = "KDS/kds-brain/knowledge-graph.yaml"
+    if (Test-Path $kgPath) {
+        $kg = Get-Content $kgPath -Raw | ConvertFrom-Yaml
+        
+        # Check for PowerShell-specific patterns
+        $psInsights = $kg.validation_insights | Where-Object { 
+            $_.Key -like "powershell_*" 
+        }
+        
+        if ($psInsights) {
+            Write-Host "✅ Found PowerShell best practices in BRAIN:"
+            foreach ($insight in $psInsights) {
+                Write-Host "  - $($insight.Key): $($insight.Value.description)"
+                Write-Host "    Correct: $($insight.Value.correct_pattern)"
+            }
+            
+            # Also load detailed reference
+            Write-Host ""
+            Write-Host "📖 Full reference: #file:KDS/knowledge/best-practices/powershell-scripting.md"
+        }
+    }
+}
+```
+
+**Key Points:**
+- **When:** Before creating/modifying ANY PowerShell script
+- **What:** Check `knowledge-graph.yaml.validation_insights.powershell_*` patterns
+- **Why:** Avoid repeating known mistakes (regex escaping, path handling, job params, dependencies)
+- **Reference:** Full checklist in `#file:KDS/knowledge/best-practices/powershell-scripting.md`
 
 ### Example Execution
 ```markdown
@@ -400,6 +499,15 @@ Before marking task complete:
 - [ ] Logging added (Rule #6)
 - [ ] Comments for complex logic
 
+### PowerShell Scripts (if applicable)
+> **Check:** #file:KDS/knowledge/best-practices/powershell-scripting.md
+- [ ] Regex patterns use hex escapes (`\x27` for ', `\x22` for ") NOT backticks
+- [ ] Path handling detects KDS location (no hardcoded `\KDS\` prefix)
+- [ ] Start-Job uses `-ScriptBlock` instead of `-FilePath` for complex params
+- [ ] Required modules checked (e.g., powershell-yaml)
+- [ ] Script tested individually BEFORE use in Start-Job
+- [ ] Comments reference best practices: `# Using hex escape sequences (see PowerShell Best Practices)`
+
 ### Rule Compliance
 - [ ] Rule #8 (Test-First) followed
 - [ ] Rule #15 (UI Identifiers) if applicable
@@ -442,7 +550,13 @@ Update session state
 IF reviewer.status == "CRITICAL_VIOLATIONS":
     HALT and display violations
 ELSE:
-    Continue to handoff generation
+    Continue to automatic commit
+    ↓
+>>> INVOKE commit-handler.md (AUTOMATIC) <<< ⬅️ FIXED!
+    ↓
+Commit changes with semantic message
+    ↓
+Continue to handoff generation
 ```
 
 ---
