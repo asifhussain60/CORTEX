@@ -2016,6 +2016,26 @@ What it discovers:
 ✓ Naming conventions (PascalCase, kebab-case, etc.)
 ✓ Configuration patterns (appsettings hierarchy, env vars)
 ✓ Documentation locations (README files, API docs)
+✓ **Database schemas (SQL files FIRST, then connection strings)** 🆕
+
+**Database Discovery Priority (NEW v1.1.0):**
+  1️⃣ FIRST: Scan for SQL schema/data files (*schema*.sql, *data*.sql)
+     - Analyzes CREATE TABLE, INSERT INTO statements
+     - Extracts table names, relationships
+     - Brain can reference these files (no database connection needed!)
+  
+  2️⃣ SECOND: Look for connection strings (appsettings.json, .env)
+     - Discovers database provider (SQL Server, PostgreSQL, etc.)
+     - Finds Entity Framework models and migrations
+  
+  3️⃣ THIRD: Connect to database (only if no SQL files found)
+     - Prompts for connection string if not found
+     - Memorizes it for future use (KDS/kds-brain/database-connection.txt)
+     - Crawls live schema (tables, columns)
+  
+  ⚡ Result: 10x faster when SQL files exist! (~30s vs 2-5 min)
+  
+  See: `KDS/docs/features/database-crawler-sql-file-priority.md` for details
 
 Feeds BRAIN with:
   - architectural_patterns (Components/**/*.razor)
