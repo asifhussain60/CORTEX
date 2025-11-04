@@ -1,0 +1,17 @@
+# Thresholds for Housekeeping Actions
+
+storage:
+  trigger_cleanup: "3 MB"
+  trigger_archive: "5 MB"
+  
+patterns:
+  unused_days: 90
+  low_confidence: 0.60
+  low_success_rate: 0.50
+  
+events:
+  compress_after: 1000
+  archive_after_days: 30
+  
+conversations:
+  fifo_capacity: 20

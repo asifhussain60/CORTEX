@@ -1,0 +1,74 @@
+# TIER 3: CONTEXT AWARENESS - File Hotspots
+# Version: 1.0 (migrated from kds-brain/development-context.yaml)
+# Last Updated: 2025-11-03
+# Purpose: Identify frequently modified files and potential problem areas
+# Auto-updated by: brain/housekeeping/services/context-updater/
+
+hotspots:
+  files_most_changed: []
+  
+  commits_by_component:
+    Backend: 26
+    UI: 47
+    Tests: 26
+    Documentation: 421
+  
+  change_velocity:
+    trend: "stable"
+    week_1: 0
+    week_2: 0
+    week_3: 0
+    week_4: 0
+
+testing_activity:
+  last_30_days:
+    total_test_runs: 0
+    total_tests_created: 0
+    test_pass_rate: 0.00
+  
+  test_coverage:
+    current: 0.00
+    previous_month: 0.00
+    trend: "stable"
+  
+  test_types:
+    unit: 0
+    integration: 0
+    ui_playwright: 78
+  
+  flaky_tests: []
+  
+  last_updated: "2025-11-03T10:31:04Z"
+
+project_health:
+  build_status: "unknown"
+  last_build: null
+  build_time_avg: "0 seconds"
+  
+  deployment_frequency:
+    last_deployment: null
+    last_30_days: 0
+    avg_per_week: 0.00
+  
+  code_quality:
+    security_scan_last: null
+    security_vulnerabilities: 0
+    linting_pass_rate: 0.00
+  
+  issue_tracking:
+    open_issues: 0
+    closed_last_30d: 0
+    avg_resolution_time: "0 days"
+  
+  last_updated: "2025-11-03T10:31:04Z"
+
+metadata:
+  version: "1.0"
+  last_updated: "2025-11-03T10:31:04Z"
+  source: "kds-brain/development-context.yaml"
+  migration_date: "2025-11-04"
+  tier: 3
+  purpose: "File hotspots and project health for identifying problem areas"
+  auto_managed: true
+  housekeeping_service: "context-updater"
+  collection_frequency: "hourly"

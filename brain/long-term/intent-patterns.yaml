@@ -1,0 +1,93 @@
+# TIER 2: LONG-TERM MEMORY - Intent Patterns
+# Version: 1.1 (migrated from kds-brain/knowledge-graph.yaml)
+# Last Updated: 2025-11-03
+# Purpose: Learned intent routing patterns from user interactions
+# Auto-updated by: brain-updater.md
+
+patterns:
+  plan:
+    phrases:
+      - pattern: "add [X] button"
+        confidence: 0.95
+        routes_to: "work-planner.md"
+        occurrences: 12
+        examples:
+          - "add share button"
+          - "add fab button"
+          - "I want to add a FAB button pulse animation"
+        first_seen: "2025-11-01"
+        last_seen: "2025-11-03"
+      
+      - pattern: "create [X] dashboard"
+        confidence: 0.95
+        routes_to: "work-planner.md"
+        occurrences: 2
+        examples:
+          - "create a SPA dashboard for healthcheck"
+          - "create health monitoring dashboard"
+        first_seen: "2025-11-03"
+        last_seen: "2025-11-03"
+      
+      - pattern: "implement [X]"
+        confidence: 0.90
+        routes_to: "work-planner.md"
+        occurrences: 5
+        examples:
+          - "implement the healthchecks"
+          - "implement API integration"
+        first_seen: "2025-11-01"
+        last_seen: "2025-11-03"
+  
+  execute:
+    phrases:
+      - pattern: "add ids to [component]"
+        confidence: 0.95
+        routes_to: "direct_execution"
+        skip_planning: true
+        occurrences: 3
+        examples:
+          - "add ids to HostControlPanel.razor"
+          - "add IDs for playwright tests"
+        first_seen: "2025-11-02"
+        last_seen: "2025-11-03"
+      
+      - pattern: "add [attributes] for [testing]"
+        confidence: 0.90
+        routes_to: "test_preparation"
+        skip_planning: true
+        occurrences: 2
+        examples:
+          - "add data-testid for playwright"
+        first_seen: "2025-11-02"
+        last_seen: "2025-11-03"
+  
+  resume:
+    phrases: []
+  
+  correct:
+    phrases: []
+  
+  test:
+    phrases: []
+  
+  validate:
+    phrases: []
+  
+  ask:
+    phrases: []
+  
+  govern:
+    phrases: []
+
+metadata:
+  total_patterns: 5
+  most_confident: "add [X] button (0.95)"
+  least_confident: "add [attributes] for [testing] (0.90)"
+  last_updated: "2025-11-03T10:35:00Z"
+  version: "1.1"
+  source: "kds-brain/knowledge-graph.yaml"
+  migration_date: "2025-11-04"
+  tier: 2
+  purpose: "Learned intent patterns - consolidated from Tier 1 conversations"
+  auto_managed: true
+  housekeeping_service: "consolidation-service"

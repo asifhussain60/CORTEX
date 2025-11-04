@@ -278,6 +278,48 @@ Use these patterns to classify the user's request:
 
 ---
 
+#### AMNESIA Intent
+**When:** User wants to reset BRAIN for a new application (remove application-specific data)  
+**Patterns:**
+- "reset brain [for|to] [new|different] application"
+- "brain amnesia"
+- "clear application data from brain"
+- "start fresh with new project"
+- "remove [application|project]-specific [data|knowledge]"
+- "prepare brain for new application"
+- "wipe application context"
+
+**Route to:** `#file:KDS/prompts/internal/brain-amnesia.md`
+
+**Examples:**
+```
+✓ "Reset BRAIN for new application"
+✓ "Brain amnesia - starting new project"
+✓ "Clear all NoorCanvas data from BRAIN"
+✓ "Prepare KDS for different application"
+✓ "Wipe application-specific knowledge"
+✓ "Start fresh - new project setup"
+```
+
+**What Happens:**
+1. Creates backup of current BRAIN state
+2. Generates amnesia report (what will be removed vs preserved)
+3. Requires user confirmation ('AMNESIA' keyword)
+4. Removes application-specific data only
+5. Preserves KDS core intelligence (generic patterns, governance)
+6. Verifies BRAIN integrity after reset
+7. Generates completion report with next steps
+
+**Safety Mechanisms:**
+- ✅ Backup created before any changes
+- ✅ Dry-run mode available
+- ✅ Confirmation required
+- ✅ Generic patterns preserved
+- ✅ KDS capabilities unchanged
+- ✅ Full rollback possible
+
+---
+
 ## 🔀 Multi-Intent Handling
 
 **When user request contains MULTIPLE intents:**
@@ -761,8 +803,21 @@ Contains "wrong" / "not that" / "actually"?
                                 └─ NO
                                     │
                                     ▼
-                                AMBIGUOUS
-                                Ask for clarification
+                                Contains "reset brain" / "amnesia" / "new application"?
+                                    │
+                                    ├─ YES → AMNESIA intent
+                                    │           │
+                                    │           ▼
+                                    │        Load brain-amnesia.md
+                                    │        Create backup first
+                                    │        Show what will be removed/preserved
+                                    │        Require confirmation
+                                    │
+                                    └─ NO
+                                        │
+                                        ▼
+                                    AMBIGUOUS
+                                    Ask for clarification
 ```
 
 ---

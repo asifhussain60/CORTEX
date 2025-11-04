@@ -72,7 +72,7 @@
 - **Specialists:** `work-planner.md`, `code-executor.md`, `test-generator.md`, `health-validator.md`, `change-governor.md`
 - Format: Structured prompts with validation logic
 
-### Six Specialized Agents (+ Universal Router)
+### Six Specialized Agents (+ Universal Router + Amnesia)
 
 | Agent | User Command | Internal Agent | Purpose |
 |-------|--------------|----------------|---------|
@@ -83,6 +83,7 @@
 | **Validator** | `validate.md` | `health-validator.md` | System health checks |
 | **Governor** | `govern.md` | `change-governor.md` | Reviews KDS changes |
 | **Corrector** | `correct.md` | `code-executor.md` | Fixes Copilot errors/hallucinations |
+| **Amnesia** | `kds.md` | `brain-amnesia.md` | Resets BRAIN for new application (preserves KDS intelligence) |
 
 **Note:** All specialist prompts still work directly. `kds.md` is a convenience layer for users who don't want to remember which prompt to use.
 
@@ -274,6 +275,58 @@ KDS/
   - ❌ User: "Create kds-review prompt"
   - ✅ Copilot: "Rule #16 Step 5 already handles KDS verification. Should we enhance the existing mechanism instead?"
 - **User Override:** Allowed but logged with rationale
+
+**Decision 9: BRAIN Amnesia - Application Data Reset (v5.1+)**
+- **Problem:** KDS needs to be portable across projects, but BRAIN accumulates application-specific data (file paths, workflows, conversations)
+- **User Request:** "Let's give the brain the capability of amnesia, baking in the capability to start fresh when setup for a new application"
+- **Critical Requirement:** "ONLY affect any application related data (noor canvas in this example). None of the KDS inherent capabilities should be lost"
+- **Solution:** Created `brain-amnesia.md` agent that safely removes application-specific data while preserving KDS core intelligence
+- **What Gets Removed (Application-Specific):**
+  - File relationships (e.g., SPA/NoorCanvas/... paths)
+  - Application workflows (e.g., blazor_component_api_flow, start_session_flow)
+  - Feature components (e.g., fab_button, kds_health_dashboard with app paths)
+  - All conversations (application context)
+  - All events (application interactions)
+  - Development metrics (git stats, velocity from old repo)
+  - Correction history (old file paths)
+- **What Gets Preserved (KDS Intelligence):**
+  - Generic intent patterns ("add [X] button" → plan)
+  - Generic workflow patterns (test_first_id_preparation, single_file_spa_creation)
+  - KDS-specific patterns (kds_health_monitoring, brain_test_synchronization)
+  - Protection configuration (confidence thresholds, routing safety)
+  - All 10 specialist agents
+  - All governance rules
+  - All KDS prompts and scripts
+- **Safety Mechanisms:**
+  - ✅ Backup created before any changes (rollback possible)
+  - ✅ Dry-run mode available (`-DryRun` parameter)
+  - ✅ Amnesia report generated (shows what will be removed/preserved)
+  - ✅ Confirmation required (type 'AMNESIA' to proceed)
+  - ✅ BRAIN integrity verified after reset
+  - ✅ Completion report with next steps
+- **Usage:**
+  ```markdown
+  #file:KDS/prompts/user/kds.md
+  Reset BRAIN for new application
+  ```
+  Or directly: `.\KDS\scripts\brain-amnesia.ps1`
+- **Post-Amnesia Workflow:**
+  1. Update `kds.config.json` with new project details
+  2. Run `Setup` command to discover new application
+  3. KDS automatically learns from new interactions
+  4. BRAIN rebuilds application-specific knowledge over time
+- **Pattern Classification Algorithm:**
+  - Generic patterns: Contain `[X]` placeholders, no file paths, reusable across projects
+  - Application patterns: Hardcoded paths, feature-specific, architecture-specific
+  - KDS governance patterns: Scope = "kds_internal_governance" (always preserved)
+- **Benefits:**
+  - ✅ True portability (KDS can move to ANY project with 15-min setup)
+  - ✅ Zero risk to KDS capabilities (all intelligence preserved)
+  - ✅ Clean slate for new application learning
+  - ✅ Maintains institutional knowledge about workflows/patterns
+  - ✅ Safe experimentation (can reset after test projects)
+- **Date:** 2025-11-04
+- **Philosophy:** **Application context is transient, KDS intelligence is permanent**
 
 ---
 

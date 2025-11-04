@@ -1096,6 +1096,133 @@ UserRegistrationLink.razor     ██████████░░ 24% churn �
 
 ---
 
+### Reset BRAIN for New Application (Amnesia)
+```markdown
+#file:KDS/prompts/user/kds.md
+
+Reset BRAIN for new application
+```
+→ Routes to: **brain-amnesia.md** → Safely removes application-specific data
+
+Or run directly:
+```powershell
+.\KDS\scripts\brain-amnesia.ps1
+```
+
+**What it does:**
+- ✅ Creates backup of current BRAIN state
+- ✅ Generates amnesia report (shows what will be removed vs preserved)
+- ✅ Removes application-specific data (file paths, workflows, conversations)
+- ✅ Preserves KDS core intelligence (generic patterns, governance)
+- ✅ Resets BRAIN to fresh state ready for new project
+
+**⚠️ CRITICAL: What Gets Removed (Application-Specific)**
+```yaml
+WILL BE REMOVED:
+  - All file relationships (e.g., SPA/NoorCanvas paths)
+  - Application-specific workflows (e.g., blazor_component_api_flow)
+  - All conversations (application context)
+  - All events (application interactions)
+  - Development metrics (git stats, velocity)
+  - Feature components (e.g., fab_button)
+```
+
+**✅ GUARANTEED: What Gets Preserved (KDS Intelligence)**
+```yaml
+WILL BE PRESERVED:
+  - Generic intent patterns ("add [X] button" → plan)
+  - Generic workflow patterns (test_first_id_preparation)
+  - KDS-specific patterns (kds_health_monitoring, brain_test_synchronization)
+  - Protection configuration (confidence thresholds)
+  - All 10 specialist agents
+  - All governance rules
+  - All KDS prompts and scripts
+```
+
+**Use Cases:**
+- 🔄 Moving KDS to a completely new project
+- 🆕 Starting fresh with a different application
+- 🧹 Cleaning BRAIN after experimenting with test project
+- 📦 Preparing KDS for distribution to new team/project
+
+**Safety:**
+- ✅ Backup created before any changes
+- ✅ Dry-run mode available (`-DryRun` parameter)
+- ✅ Requires confirmation (type 'AMNESIA' to proceed)
+- ✅ Full rollback possible from backup
+- ✅ BRAIN integrity verified after amnesia
+
+**Example Output:**
+```
+🧠 KDS BRAIN Amnesia - Application Data Reset
+═══════════════════════════════════════════════════
+
+[1/8] Validating BRAIN system...
+✅ BRAIN structure validated
+
+[2/8] Analyzing BRAIN data...
+  Application-specific workflows: 12
+  Generic/KDS workflows: 6
+  Conversations: 5
+  Events: 68
+
+[4/8] Amnesia Impact Summary
+
+  WILL BE REMOVED:
+    - 5 conversations (application context)
+    - 68 events (application interactions)
+    - ~12 application-specific patterns
+    - All NoorCanvas file relationships
+    - All development metrics
+
+  WILL BE PRESERVED:
+    - All 10 KDS specialist agents
+    - ~6 generic/KDS workflow patterns
+    - Generic intent detection templates
+    - Protection configuration
+    - All KDS governance rules
+
+⚠️  Type 'AMNESIA' to confirm reset: AMNESIA
+
+[5/8] Creating backup...
+✅ Backup created: KDS/kds-brain/backups/pre-amnesia-20251104-143022
+
+[6/8] Executing BRAIN amnesia...
+✅ BRAIN amnesia complete
+
+[7/8] Verifying BRAIN integrity...
+✅ BRAIN integrity verified
+
+[8/8] Generating completion report...
+✅ Completion report saved
+
+═══════════════════════════════════════════════════
+✅ BRAIN AMNESIA COMPLETE
+═══════════════════════════════════════════════════
+
+Next Steps:
+  1. Update KDS/tooling/kds.config.json (new project name/paths)
+  2. Run: #file:KDS/prompts/user/kds.md Setup
+  3. KDS will learn your new application architecture
+```
+
+**Post-Amnesia Workflow:**
+1. ✅ Amnesia complete (BRAIN reset)
+2. Update `kds.config.json` with new project details
+3. Run `Setup` command to discover new application
+4. KDS automatically learns from new interactions
+5. BRAIN rebuilds application-specific knowledge over time
+
+**Rollback (if needed):**
+```powershell
+# Restore from backup
+$backupDir = "KDS/kds-brain/backups/pre-amnesia-{timestamp}"
+Copy-Item -Path "$backupDir/*.yaml" -Destination "KDS/kds-brain/" -Force
+Copy-Item -Path "$backupDir/*.jsonl" -Destination "KDS/kds-brain/" -Force
+```
+
+---
+
 ## 🧠 KDS Health Dashboard
 
 **Purpose:** Visual monitoring dashboard for KDS system health, BRAIN status, and development metrics.

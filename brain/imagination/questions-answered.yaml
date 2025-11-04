@@ -1,0 +1,80 @@
+# KDS Imagination Layer - Questions Answered
+# Purpose: Deduplication cache to avoid answering same questions twice
+# Format: Question hash → Answer reference
+
+questions:
+  why-brain-structure:
+    question: "Why reorganize into brain-inspired structure?"
+    asked: "2025-11-04"
+    answered_in: "docs/KDS-V6-HOLISTIC-PLAN.md"
+    summary: |
+      Brain analogy makes structure intuitive:
+      - Tier 0 (Instinct) = Brainstem (automatic)
+      - Tier 1 (Working Memory) = Hippocampus (short-term)
+      - Tier 2 (Long-Term) = Cortex (learned patterns)
+      - Tier 3 (Context) = Prefrontal Cortex (planning)
+      - Tier 4 (Imagination) = Creative Centers
+      - Tier 5 (Housekeeping) = Cerebellum (automatic maintenance)
+    tags:
+      - "architecture"
+      - "design-decision"
+  
+  why-git-backup:
+    question: "Why use git for backup instead of backup folders?"
+    asked: "2025-11-04"
+    answered_in: "scripts/setup-v6-brain-structure.ps1"
+    summary: |
+      Git-based backup is superior:
+      ✅ Permanent history (no disk space waste)
+      ✅ Easy rollback (git revert)
+      ✅ Automatic versioning
+      ✅ No separate backup files to manage
+    related_ideas:
+      - "git-based-persistence"
+    tags:
+      - "backup"
+      - "git"
+      - "design-decision"
+  
+  where-implementation-plans:
+    question: "Where should implementation plans live?"
+    asked: "2025-11-04"
+    answered_in: "brain/imagination/README.md"
+    summary: |
+      Two-tier approach:
+      1. Structured data: brain/imagination/ideas-stashed.yaml
+      2. Detailed docs: docs/*.md
+      3. Links: brain/imagination/semantic-links.yaml
+      
+      This keeps brain data structured while documentation stays readable.
+    tags:
+      - "imagination-tier"
+      - "documentation"
+      - "design-decision"
+  
+  why-pure-powershell:
+    question: "Why not use Python/Node.js for advanced features?"
+    asked: "2025-11-04"
+    answered_in: "docs/KDS-V6-HOLISTIC-PLAN.md"
+    summary: |
+      Pure PowerShell is better for KDS:
+      - 130x smaller footprint (5 MB vs 650 MB)
+      - Zero external dependencies
+      - Cross-platform (PowerShell 7+)
+      - Built-in HTTP server, YAML, background jobs
+      - Sufficient performance for KDS workload
+    related_ideas:
+      - "pure-powershell-approach"
+    tags:
+      - "technology-choice"
+      - "design-decision"
+
+# Metadata
+metadata:
+  total_questions: 4
+  categories:
+    design-decision: 4
+    architecture: 1
+    git: 1
+    imagination-tier: 1
+  last_updated: "2025-11-04"
