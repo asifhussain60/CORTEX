@@ -1,0 +1,32 @@
+# Brain Sharpener Benchmarks
+# Performance targets for test scenarios
+
+tiers:
+  tier_0_instinct:
+    routing_accuracy: 0.95
+    intent_detection: 0.90
+    solid_compliance: 1.00
+    
+  tier_1_working_memory:
+    same_conversation_resolution: 0.98
+    cross_conversation_resolution: 0.85
+    reference_accuracy: 0.90
+    
+  tier_2_long_term:
+    error_prevention: 0.85
+    workflow_success: 0.80
+    pattern_accuracy: 0.75
+    
+  tier_3_context:
+    hotspot_detection: 0.85
+    velocity_accuracy: 0.70
+    warning_precision: 0.80
+    
+  tier_4_imagination:
+    deduplication_rate: 0.95
+    idea_linking: 0.70
+    
+overall:
+  health_score_min: 80
+  health_score_target: 90
+  health_score_excellent: 95

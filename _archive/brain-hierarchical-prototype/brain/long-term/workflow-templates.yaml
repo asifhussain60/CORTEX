@@ -1,0 +1,249 @@
+# TIER 2: LONG-TERM MEMORY - Workflow Templates
+# Version: 1.0 (migrated from kds-brain/knowledge-graph.yaml)
+# Last Updated: 2025-11-03
+# Purpose: Reusable workflow patterns learned from successful implementations
+# Auto-updated by: brain-updater.md
+
+workflows:
+  service_layer_ui_injection:
+    description: "Service layer injection → JavaScript handlers → Toast UI"
+    architecture: "Service-based UI enhancement"
+    steps:
+      - "Service layer injection"
+      - "JavaScript handlers"
+      - "Toast UI feedback"
+    success_rate: 1.0
+    used_in:
+      - "hcp-fab-button"
+    confidence: 1.0
+    reusable: true
+  
+  blazor_component_api_flow:
+    description: "Blazor component button click → API controller → Database + SignalR → UI update"
+    architecture: "Full-stack Blazor Server pattern"
+    steps:
+      - "User clicks button in child Blazor component"
+      - "EventCallback triggers parent component method"
+      - "Parent makes HTTP POST to API endpoint"
+      - "API controller updates database via EF Core"
+      - "API broadcasts event via SignalR hub"
+      - "API returns success response"
+      - "Parent component updates state and re-renders UI"
+    key_technologies:
+      - "Blazor Server"
+      - "ASP.NET Core API"
+      - "Entity Framework Core"
+      - "SignalR"
+    success_rate: 1.0
+    confidence: 1.0
+    reusable: true
+    example_implementation: "Start Session button flow"
+    documentation: "KDS/docs/flows/start-session-button-flow.md"
+    used_in:
+      - "start-session-feature"
+  
+  two_phase_button_injection:
+    description: "Server-side asset buttons + Client-side section buttons"
+    architecture: "Hybrid injection pattern"
+    phases:
+      phase_1:
+        name: "Server-Side Asset Buttons"
+        timing: "During HTML transformation (before render)"
+        technology: "C# Regex + HTML string manipulation"
+        data_source: "Database API (SessionAssets)"
+        target: "Asset containers (.ayah-card, etc.)"
+        marker: "data-asset-id attribute"
+        complexity: "High (requires DB metadata)"
+      phase_2:
+        name: "Client-Side Section Buttons"
+        timing: "After Blazor render (DOM ready)"
+        technology: "JavaScript DOM manipulation"
+        data_source: "DOM parsing (h2 elements)"
+        target: "Transcript sections (h2 groupings)"
+        marker: "data-section-id attribute"
+        complexity: "Low (pure DOM operation)"
+        canvas_filter: "Only transcript canvas"
+    why_two_phases:
+      - "Assets need database metadata → Server-side required"
+      - "Sections are HTML-based → Client-side efficient"
+      - "Separation improves performance and maintainability"
+    shared_characteristics:
+      - "Golden NOOR theme (#FFD700)"
+      - "Unified marker: data-noor-share-control"
+      - "Click handlers call C# methods via JSInvokable"
+      - "SignalR broadcast for sharing"
+      - "Visual feedback (spinner → success/error)"
+    success_rate: 1.0
+    confidence: 1.0
+    reusable: true
+    documentation: "KDS/docs/flows/start-session-button-flow.md"
+    used_in:
+      - "transcript-share-feature"
+      - "asset-share-feature"
+  
+  test_first_id_preparation:
+    description: "Add semantic IDs to components before writing Playwright tests"
+    architecture: "Test-first UI automation"
+    steps:
+      - "Analyze component structure"
+      - "Add semantic IDs following [component]-[section]-[element] convention"
+      - "Document IDs in comprehensive reference"
+      - "Provide test examples"
+      - "Include Percy visual regression examples"
+      - "Mark IDs with [PLAYWRIGHT-IDS] comments"
+    success_rate: 1.0
+    confidence: 1.0
+    reusable: true
+    used_in:
+      - "playwright-ids-fab-button"
+  
+  single_file_spa_creation:
+    description: "Create portable HTML dashboard with inline CSS/JS and zero dependencies"
+    architecture: "Self-contained SPA"
+    steps:
+      - "Design UI structure with tabs and cards"
+      - "Inline all CSS (no external stylesheets)"
+      - "Inline all JavaScript (no external scripts)"
+      - "Add PowerShell launcher script"
+      - "Create VS Code task integration"
+      - "Write comprehensive documentation"
+    file_pattern:
+      main_file: "KDS/*.html"
+      documentation: "KDS/dashboard/*.md"
+      launcher: "KDS/scripts/open-*.ps1"
+      tasks: ".vscode/tasks.json"
+    success_rate: 1.0
+    confidence: 0.95
+    reusable: true
+    used_in:
+      - "kds-health-dashboard"
+    benefits:
+      - "100% portable (single file)"
+      - "Zero external dependencies"
+      - "Works offline"
+      - "Fast load time"
+      - "Easy to share/deploy"
+  
+  brain_test_synchronization:
+    description: "CRITICAL: BRAIN integrity test changes require synchronous updates to health checks and dashboard"
+    architecture: "Test-driven governance"
+    rule_id: "BRAIN-SYNC-001"
+    enforcement: "MANDATORY (change-governor blocks violations)"
+    trigger_files:
+      - "KDS/tests/test-brain-integrity.ps1"
+      - "KDS/tests/test-brain-corruption-scenarios.ps1"
+    required_dependencies:
+      - path: "KDS/scripts/run-health-checks.ps1"
+        section: "Test-BRAINSystem()"
+        requirement: "Must map ALL integrity checks from test suite"
+      - path: "KDS/kds-dashboard.html"
+        section: "renderBRAINMetricsFromAPI()"
+        requirement: "Must display ALL integrity checks in BRAIN System tab"
+      - path: "KDS/tests/BRAIN-INTEGRITY-TEST.md"
+        section: "What Gets Validated"
+        requirement: "Must document ALL checks with current count"
+    validation_logic:
+      - "Detect if test-brain-integrity.ps1 modified"
+      - "Verify all 3 dependencies also modified in same commit"
+      - "Count checks in test suite (currently 13)"
+      - "Verify health script maps all 13 checks"
+      - "Verify dashboard displays all 13 checks"
+      - "Verify documentation reflects count of 13"
+      - "REJECT commit if any dependency missing or count mismatch"
+    rationale:
+      - "Dashboard must show ALL current BRAIN checks, not subset"
+      - "Automated health checks must include every integrity validation"
+      - "System components must agree on what 'healthy BRAIN' means"
+      - "Users must see accurate, complete BRAIN status"
+      - "Silent failures are prevented by enforced synchronization"
+    confidence: 1.00
+    source: "governance/rules/brain-test-synchronization.md"
+    enforced_by: "change-governor.md"
+    created: "2025-11-03"
+    current_check_count: 13
+    success_rate: 1.0
+    reusable: false
+    scope: "kds_internal_governance"
+  
+  kds_health_monitoring:
+    description: "PowerShell-based health checks with browser dashboard and API server"
+    architecture: "Client-Server (browser SPA + local API)"
+    components:
+      dashboard: "Single-file HTML with auto-detection (Live/Demo modes)"
+      api_server: "PowerShell HTTP listener on localhost:8765"
+      health_checks: "PowerShell script with categorized validations"
+      launcher: "All-in-one script (server + client)"
+    steps:
+      - "Start PowerShell HTTP server (background job)"
+      - "Open dashboard in browser"
+      - "Dashboard detects API availability"
+      - "Execute health checks on demand"
+      - "Display results with status circles"
+      - "Generate recommendations from failures"
+    technologies:
+      - "PowerShell (server + health checks)"
+      - "HTML5/CSS3/JavaScript (dashboard)"
+      - "HTTP REST API (communication)"
+      - "VS Code tasks (easy launch)"
+    success_rate: 1.0
+    confidence: 0.95
+    reusable: true
+    used_in:
+      - "kds-health-dashboard"
+  
+  powershell_http_server:
+    description: "Simple PowerShell HTTP server for local API endpoints"
+    architecture: "Local development server"
+    pattern_type: "Infrastructure"
+    implementation:
+      - "Create HttpListener on localhost:port"
+      - "Set up CORS headers for browser access"
+      - "Handle GET/POST requests"
+      - "Return JSON responses"
+      - "Run as background job"
+    use_cases:
+      - "Dashboard API integration"
+      - "Local testing without IIS/Kestrel"
+      - "Lightweight health check endpoints"
+    success_rate: 1.0
+    confidence: 0.90
+    reusable: true
+    used_in:
+      - "kds-dashboard-api-server"
+  
+  unified_launcher_pattern:
+    description: "Single command to start server + open client application"
+    architecture: "Developer experience"
+    pattern_type: "UX optimization"
+    steps:
+      - "Start background API server (job)"
+      - "Wait for server readiness"
+      - "Open client application"
+      - "Verify connectivity"
+      - "Optional: keep server running or auto-cleanup"
+    parameters:
+      - "-KeepServerRunning (optional)"
+      - "-Port (default 8765)"
+    success_rate: 1.0
+    confidence: 0.95
+    reusable: true
+    used_in:
+      - "kds-launch-dashboard"
+    benefits:
+      - "Single command UX"
+      - "Automatic cleanup"
+      - "User-friendly"
+      - "Reduces setup friction"
+
+metadata:
+  total_workflows: 9
+  most_used: "blazor_component_api_flow"
+  highest_success_rate: "All workflows (1.0)"
+  last_updated: "2025-11-03T19:00:00Z"
+  version: "1.0"
+  source: "kds-brain/knowledge-graph.yaml"
+  migration_date: "2025-11-04"
+  tier: 2
+  purpose: "Reusable workflow templates - consolidated patterns from successful implementations"
+  auto_managed: true
+  housekeeping_service: "consolidation-service"

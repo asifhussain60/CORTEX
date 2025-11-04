@@ -1,0 +1,60 @@
+{
+  "conversation_id": "conv-20251103-122907",
+  "title": "STM Self Test",
+  "started": "2025-11-03T17:29:07Z",
+  "ended": null,
+  "active": false,
+  "message_count": 5,
+  "messages": [
+    {
+      "id": "msg-6ddcdff6",
+      "timestamp": "2025-11-03T17:29:07Z",
+      "user": "User",
+      "intent": "PLAN",
+      "entities": [],
+      "context_ref": "",
+      "text": "I want to add a FAB button",
+      "session_id": "stm-self-test"
+    },
+    {
+      "id": "msg-bb98d170",
+      "timestamp": "2025-11-03T17:29:07Z",
+      "user": "User",
+      "intent": "EXECUTE",
+      "entities": [],
+      "context_ref": "FAB button",
+      "text": "Make it purple",
+      "session_id": "stm-self-test"
+    },
+    {
+      "id": "msg-8a9ac283",
+      "timestamp": "2025-11-03T17:29:07Z",
+      "user": "User",
+      "intent": "PLAN",
+      "entities": [],
+      "context_ref": "FAB button",
+      "text": "Add a pulse animation",
+      "session_id": "stm-self-test"
+    },
+    {
+      "id": "msg-0b3c3de0",
+      "timestamp": "2025-11-03T17:29:07Z",
+      "user": "User",
+      "intent": "EXECUTE",
+      "entities": [],
+      "context_ref": "FAB button",
+      "text": "Put it in the header",
+      "session_id": "stm-self-test"
+    },
+    {
+      "id": "msg-52df4d47",
+      "timestamp": "2025-11-03T17:29:07Z",
+      "user": "User",
+      "intent": "EXECUTE",
+      "entities": [],
+      "context_ref": "",
+      "text": "continue",
+      "session_id": "stm-self-test"
+    }
+  ]
+}
