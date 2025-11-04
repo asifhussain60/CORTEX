@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KDS Pattern Schema",
+  "description": "Schema for reusable feature patterns in Right Brain",
+  "type": "object",
+  "required": [
+    "pattern_id",
+    "pattern_name",
+    "similarity_threshold",
+    "feature_components",
+    "workflow_phases"
+  ],
+  "properties": {
+    "pattern_id": {
+      "type": "string",
+      "description": "Unique identifier for the pattern",
+      "pattern": "^[a-z_]+$"
+    },
+    "pattern_name": {
+      "type": "string",
+      "description": "Human-readable name"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this pattern represents"
+    },
+    "similarity_threshold": {
+      "type": "number",
+      "description": "Minimum similarity score to match (0.0-1.0)",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Keywords for pattern matching",
+      "items": {
+        "type": "string"
+      }
+    },
+    "feature_components": {
+      "type": "array",
+      "description": "Components typically used in this pattern",
+      "items": {
+        "type": "object",
+        "required": ["type", "purpose"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["service", "api", "component", "test", "utility"]
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "typical_location": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "workflow_phases": {
+      "type": "array",
+      "description": "Typical phases for this pattern",
+      "items": {
+        "type": "object",
+        "required": ["phase_id", "phase_name"],
+        "properties": {
+          "phase_id": {
+            "type": "string"
+          },
+          "phase_name": {
+            "type": "string"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tdd_required": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "architectural_guidance": {
+      "type": "array",
+      "description": "Architectural best practices for this pattern",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risk_factors": {
+      "type": "array",
+      "description": "Known risks for this pattern",
+      "items": {
+        "type": "object",
+        "required": ["risk", "mitigation"],
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "success_metrics": {
+      "type": "object",
+      "description": "Metrics from past successful uses",
+      "properties": {
+        "times_used": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "success_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "average_duration_hours": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_used": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
