@@ -367,6 +367,50 @@ current_files: []
 
 ---
 
+### ⚡ STEP 1.5: Proactive Issue Prediction (NEW - Week 4 Phase 5)
+
+**BEFORE planning, predict potential issues:**
+
+```powershell
+.\KDS\scripts\corpus-callosum\predict-issues.ps1 -Request "{user's feature request}"
+```
+
+**This will analyze:**
+- File hotspots (high churn rate files)
+- Complexity indicators (multi-service features)
+- Historical failures (similar past issues)
+
+**If predictions exist:**
+1. Generate proactive warnings:
+   ```powershell
+   .\KDS\scripts\corpus-callosum\generate-proactive-warnings.ps1 -Predictions $predictions
+   ```
+
+2. Get preventive actions:
+   ```powershell
+   .\KDS\scripts\corpus-callosum\suggest-preventive-actions.ps1 -Predictions $predictions
+   ```
+
+3. **Integrate into plan:**
+   - Add extra testing phases for hotspot files
+   - Split complex features into smaller phases
+   - Include error handling for external dependencies
+   - Reference historical patterns to avoid mistakes
+
+**Example Integration:**
+```markdown
+⚠️  Proactive Warnings:
+  - File 'HostControlPanel.razor' is a hotspot (28% churn) - extra testing required
+  - Feature involves PDF generation - plan error handling
+
+💡 Preventive Actions Applied:
+  - Phase 0: Extra validation tests for HostControlPanel.razor
+  - Phase 3: Comprehensive error handling for PDF service
+  - Phase 4: Integration tests for PDF generation edge cases
+```
+
+---
+
 ### STEP 2: Load Required Files
 
 ```markdown
@@ -480,11 +524,33 @@ $planningState = Get-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml
 $planningState.current_planning_session = @{
     request = $featureRequest
     started_at = (Get-Date).ToUniversalTime().ToString("o")
-    patterns_considered = @()  # Week 3
-    templates_available = @()  # Week 3
+    patterns_considered = @()  # Populated by pattern matcher in Week 3
+    templates_available = @()  # Populated by template generator in Week 3
     risk_factors = @()
     decision_rationale = "Multi-phase plan with test-first approach"
 }
+
+# WEEK 3: Pattern-Based Planning
+# Query pattern library for similar features
+$patternMatch = .\KDS\scripts\right-brain\match-pattern.ps1 -Query $featureRequest -MinimumSimilarity 0.7
+
+if ($patternMatch.matches_found) {
+    Write-Host "📚 Found similar pattern: $($patternMatch.pattern_name) ($([math]::Round($patternMatch.similarity_score * 100))% match)" -ForegroundColor Cyan
+    
+    # Generate workflow template from pattern
+    $workflowTemplate = .\KDS\scripts\right-brain\generate-workflow-template.ps1 -PatternId $patternMatch.pattern_id
+    
+    # Adapt template to current request
+    if ($workflowTemplate.includes_tdd) {
+        $planningState.current_planning_session.templates_available = @($workflowTemplate.template_id)
+        $planningState.current_planning_session.patterns_considered = @($patternMatch.pattern_id)
+        
+        # Use template phases as starting point
+        # Then adapt based on specific requirements
+        Write-Host "  ✅ Using workflow template: $($workflowTemplate.template_id)" -ForegroundColor Green
+    }
+}
+
 $planningState | ConvertTo-Yaml | Set-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml"
 ```
 
@@ -673,6 +739,76 @@ Output:
     Session 2: 20251102-fix-logout (1 phase, 2 tasks)
   
   Recommend: Work on Session 2 first (quick win)
+```
+
+---
+
+## 🔄 Week 3: Learning from Execution Feedback
+
+### Receive Feedback from Left Hemisphere
+
+After left hemisphere completes execution, work-planner learns from results:
+
+```powershell
+# Check for execution feedback in corpus callosum
+$feedbackMessages = Get-Content "KDS/kds-brain/corpus-callosum/coordination-queue.jsonl" | 
+    Where-Object { $_ -match '"type":\s*"EXECUTION_FEEDBACK"' } |
+    ConvertFrom-Json
+
+foreach ($feedback in $feedbackMessages) {
+    if ($feedback.payload.success) {
+        # Extract pattern from successful execution
+        .\KDS\scripts\right-brain\extract-pattern.ps1 -SessionId $feedback.payload.session_id
+        
+        Write-Host "📖 Learning: Extracted pattern from successful execution" -ForegroundColor Green
+    } else {
+        # Analyze failure for future risk assessment
+        Write-Host "⚠️  Learning: Task failed - updating risk factors" -ForegroundColor Yellow
+        
+        # Update planning state with lessons learned
+        $planningState = Get-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml" | ConvertFrom-Yaml
+        $planningState.lessons_learned += @{
+            session_id = $feedback.payload.session_id
+            failure_reason = $feedback.payload.errors
+            timestamp = (Get-Date).ToUniversalTime().ToString("o")
+        }
+        $planningState | ConvertTo-Yaml | Set-Content "KDS/kds-brain/right-hemisphere/planning-state.yaml"
+    }
+}
+```
+
+### Adapt Plans Based on Patterns
+
+When creating new plans, adapt based on learned patterns:
+
+```powershell
+# If pattern match found, adapt the template
+if ($patternMatch.matches_found -and $workflowTemplate.phases.Count -gt 0) {
+    Write-Host "🎯 Adapting plan based on pattern: $($patternMatch.pattern_name)" -ForegroundColor Cyan
+    
+    # Use template phases as foundation
+    $adaptedPhases = $workflowTemplate.phases
+    
+    # Customize based on current request specifics
+    # Example: If request mentions "urgent", reduce phases for faster delivery
+    if ($featureRequest -match "urgent|quick|asap") {
+        Write-Host "  ⚡ Detected urgency - streamlining plan" -ForegroundColor Yellow
+        # Combine related phases for faster execution
+    }
+    
+    # Example: If pattern has high success rate, use it confidently
+    if ($patternMatch.similarity_score -gt 0.9) {
+        Write-Host "  ✅ High confidence match - using proven workflow" -ForegroundColor Green
+        # Apply template with minimal customization
+    } else {
+        Write-Host "  🔧 Moderate match - customizing workflow" -ForegroundColor Yellow
+        # Adapt template more significantly
+    }
+    
+    # Store pattern adaptation decision
+    $planningState.current_planning_session.decision_rationale = 
+        "Adapted from pattern '$($patternMatch.pattern_id)' (similarity: $([math]::Round($patternMatch.similarity_score * 100))%)"
+}
 ```
 
 ---

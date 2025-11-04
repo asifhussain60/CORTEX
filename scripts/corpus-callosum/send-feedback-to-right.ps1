@@ -48,7 +48,7 @@ function Add-FeedbackMessage {
     $message = @{
         id = [guid]::NewGuid().ToString()
         timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss"
-        type = "execution_feedback"
+        type = "EXECUTION_FEEDBACK"
         source = "left_hemisphere"
         destination = "right_hemisphere"
         priority = "normal"

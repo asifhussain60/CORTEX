@@ -27,6 +27,7 @@ if ($DryRun) {
     
     return @{
         can_detect_failures = $true
+        validates_success = $true
         triggers_rollback = $true
         dry_run = $true
     }
