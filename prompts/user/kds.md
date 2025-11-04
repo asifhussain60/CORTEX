@@ -48,6 +48,14 @@ This document follows the **KDS Quadrant** pattern - a four-perspective approach
 
 ---
 
+### Story Review Rule (Quadrant Documentation)
+All narrative content (e.g., #file:Story.md) must be reviewed for:
+- Corrections of factual, grammatical, or clarity issues
+- Improvements in flow, completeness, or engagement
+- Filling any missing elements that enhance understanding or fun
+Edits must preserve the original style, theme, and narrative voice. The story should remain enjoyable and true to its intended spirit after any changes.
+
+
 ## 🧚 A story for humans: The Intern with Amnesia
 
 ### Meet Your Intern: Copilot
@@ -382,25 +390,767 @@ I want to add a pulse animation to the FAB button when questions arrive
 9. **Scribe** (TIER 4) logs events → Auto-update triggers → Tier 2 learns pattern
 10. **Brain Protector** (RIGHT BRAIN) validates nothing violated Tier 0 instincts
 
-### A Day in the Life: How the Brain Helps Copilot Succeed
+### A Day in the Life: The Purple Button Adventure
 
-**Morning (9:00 AM):**
+**Morning (9:47 AM):**
+
+Asifor sits at his desk, coffee in hand, and types:
+
 ```
-You: "Add a pulse animation to the FAB button"
+#file:KDS/prompts/user/kds.md
 
-WITHOUT BRAIN (Amnesia Problems):
-  ❌ "Which button? There are 12 buttons in this project."
-  ❌ "What file is that in? I don't have context."
-  ❌ "How should I implement it? No historical patterns."
-  Result: 30 minutes of back-and-forth clarifications
-
-WITH BRAIN (Intelligent Help):
-  ✅ RIGHT BRAIN queries Tier 2 → Finds FAB button in HostControlPanel.razor
-  ✅ RIGHT BRAIN queries Tier 3 → Knows this file is a hotspot (extra care needed)
-  ✅ RIGHT BRAIN matches pattern → Similar pulse animation in notification_badge
-  ✅ LEFT BRAIN executes with TDD → RED → GREEN → REFACTOR
-  Result: 15 minutes, implemented correctly first time
+Add a purple button to the HostControlPanel.razor
 ```
+
+**⚡ The moment he hits Enter, something magical happens inside Copilot's brain...**
+
+---
+
+#### 🧠 Inside the Brain: A Neural Journey
+
+**🌟 Step 1: The ONE DOOR (Universal Entry Point)**
+
+The command enters through the single entrance at City Hall. A receptionist (the entry point handler) quickly logs the arrival:
+
+```jsonl
+{"timestamp": "2025-11-04T09:47:23Z", "event": "request_received", "raw_input": "Add a purple button to the HostControlPanel.razor"}
+```
+
+The request is immediately passed to the brain's **RIGHT HEMISPHERE** - the strategic planner.
+
+---
+
+**🧠 RIGHT HEMISPHERE: Strategic Analysis Begins**
+
+**Tower 3 (Tier 3): Development Context - The Balcony View**
+
+The RIGHT BRAIN's highest tower springs to life. Like a general surveying the battlefield from above, Tier 3 analyzes the entire project landscape:
+
+```yaml
+⏳ Scanning development metrics...
+  
+📊 File Analysis:
+  - HostControlPanel.razor: 28% churn rate (HOTSPOT! ⚠️)
+  - Last modified: 2 days ago
+  - Co-modified with: HostControlPanelContent.razor (75% correlation)
+  - Average edit size: 180 lines
+  
+🎯 Historical Patterns:
+  - 12 similar UI button additions in last 30 days
+  - Average completion time: 18 minutes
+  - Success rate with test-first: 96%
+  - Success rate without tests: 67%
+  
+⚠️ Proactive Warnings:
+  - This file is unstable (high churn)
+  - Recommend: Extra validation phase
+  - Best time slot: 10am-12pm (94% success)
+  - Current time: 9:47am (89% success - acceptable)
+```
+
+Tier 3 passes its intelligence down to Tier 2...
+
+---
+
+**Tower 2 (Tier 2): Knowledge Graph - The Pattern Matcher**
+
+Armed with context from above, Tier 2 searches its vast library of learned patterns:
+
+```yaml
+🔍 Searching knowledge graph...
+
+Intent Pattern Match:
+  - "Add a purple button" → confidence: 0.95
+  - Pattern: "add [color] [component]" → PLAN intent
+  - Historical routing: 47/47 successful PLAN routes
+  
+File Relationship Discovery:
+  - HostControlPanel.razor mentioned explicitly ✅
+  - Relationships:
+    * Often modified with noor-canvas.css (62%)
+    * Contains UserRegistrationLink.razor component (89%)
+    * Uses fab-button.css animations (43%)
+  
+Similar Pattern Found:
+  - workflow_pattern: "fab_pulse_animation" (confidence: 0.87)
+  - Used: 3 weeks ago for notification badge
+  - Components: CSS keyframes + Razor markup + color variable
+  - Success: ✅ Completed in 15 minutes with zero rework
+  
+⚡ UI Element ID Mapping Pattern Discovered:
+  - Pattern: "button_component_test_preparation"
+  - Previous buttons in this file:
+    * #sidebar-start-session-btn (sidebar button)
+    * #reg-transcript-canvas-btn (registration link)
+    * #reg-asset-canvas-btn (asset canvas button)
+  - Learned rule: "All interactive elements MUST have id attribute"
+  - Purpose: Enables Playwright selector reliability
+  - Example: page.locator('#purple-button-id')
+  - Anti-pattern warning: Never use text selectors (fragile!)
+```
+
+Tier 2 realizes something crucial: **Purple buttons need IDs for tests!** This pattern was learned from previous work where text-based selectors broke during i18n updates.
+
+---
+
+**Tower 1 (Tier 1): Conversation Memory - Recent Context**
+
+Before committing to a plan, Tier 1 checks recent conversations to see if Asifor mentioned anything related:
+
+```yaml
+📚 Checking conversation history (last 20 conversations)...
+
+Conversation #7 (2 days ago):
+  - Topic: "Added Share button to HostControlPanel"
+  - Outcome: ✅ Success
+  - Pattern used: test-first with element ID
+  - Learning: Element IDs prevent test breakage
+  
+Conversation #4 (1 week ago):
+  - Topic: "Fixed broken Playwright tests"
+  - Root cause: Text selectors stopped working after HTML restructure
+  - Solution: Migrated to ID-based selectors
+  - Resolution: All tests green ✅
+  
+Cross-reference detected:
+  - Same file (HostControlPanel.razor)
+  - Same pattern (button addition)
+  - Same lesson (ID-first approach)
+  
+💡 Contextual Enhancement:
+  "Asifor prefers ID-based selectors for all UI elements in this file"
+```
+
+Perfect! The three tiers have assembled a complete intelligence package. Now the RIGHT BRAIN makes its strategic decision...
+
+---
+
+**🌉 CORPUS CALLOSUM: Message Delivery**
+
+The RIGHT BRAIN formulates a strategic plan and sends it across the corpus callosum (the bridge between hemispheres):
+
+```yaml
+Message Type: STRATEGIC_PLAN
+From: RIGHT_HEMISPHERE
+To: LEFT_HEMISPHERE
+Priority: NORMAL
+
+Strategic Plan:
+  Feature: "Purple button in HostControlPanel.razor"
+  Approach: Test-first (96% success rate)
+  Estimated Time: 18 minutes
+  Phases: 4
+  
+  Pre-flight Warnings:
+    - File is a hotspot (extra care)
+    - Must include element ID (test requirement)
+    - Co-modify noor-canvas.css if styling needed
+  
+  Architectural Alignment:
+    - File location: Confirmed correct
+    - Pattern match: fab_pulse_animation workflow
+    - Similar work: Share button (2 days ago)
+  
+  Phase Breakdown:
+    Phase 1: Test Preparation
+      - Create element ID (#host-panel-purple-btn)
+      - Map ID in component_ids knowledge
+      - Purpose: Enable robust Playwright selectors
+    
+    Phase 2: Test Creation (RED)
+      - Task 2.1: Create Playwright test
+      - Selector: page.locator('#host-panel-purple-btn')
+      - Test: Button exists, purple color, clickable
+      - Expected: FAILING (button doesn't exist yet)
+    
+    Phase 3: Implementation (GREEN)
+      - Task 3.1: Add button markup with ID
+      - Task 3.2: Apply purple color (#9333EA)
+      - Task 3.3: Run tests (expect GREEN)
+    
+    Phase 4: Validation (REFACTOR)
+      - Task 4.1: Verify zero errors/warnings
+      - Task 4.2: Check accessibility
+      - Task 4.3: Update component_ids documentation
+
+Ready for tactical execution: TRUE
+```
+
+The message travels across the corpus callosum to the **LEFT HEMISPHERE**...
+
+---
+
+**🧠 LEFT HEMISPHERE: Tactical Execution Begins**
+
+The LEFT BRAIN receives the plan and immediately activates its specialist agents:
+
+**⚙️ The Tester (LEFT BRAIN - Tower 1)**
+
+First agent to activate. The Tester prepares the ID mapping:
+
+```yaml
+🧪 Test Preparation Phase
+
+Thought process:
+  "Before I can test this button, I need to know its ID.
+   RIGHT BRAIN's plan says: #host-panel-purple-btn
+   I must prepare the test infrastructure first."
+
+Actions:
+  1. Document expected ID in brain mapping:
+     File: KDS/kds-brain/knowledge-graph.yaml
+     Section: ui_element_ids
+     Entry:
+       component: HostControlPanel.razor
+       element: purple_action_button
+       id: host-panel-purple-btn
+       purpose: Primary action button with purple styling
+       test_selector: "#host-panel-purple-btn"
+  
+  2. Create failing test (RED phase):
+     File: Tests/UI/host-control-panel-purple-button.spec.ts
+```
+
+**Test file created:**
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('Host Control Panel - Purple Button', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    // Navigate to host control panel
+    await page.goto('https://localhost:9091/host/control-panel/PQ9N5YWW');
+  });
+  
+  test('purple button should exist with correct ID', async ({ page }) => {
+    // ✅ ID-BASED SELECTOR (robust, future-proof)
+    const button = page.locator('#host-panel-purple-btn');
+    
+    await expect(button).toBeVisible();
+  });
+  
+  test('purple button should have purple color', async ({ page }) => {
+    const button = page.locator('#host-panel-purple-btn');
+    
+    // Check computed background color (purple: #9333EA)
+    const bgColor = await button.evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+    
+    // rgb(147, 51, 234) is #9333EA
+    expect(bgColor).toBe('rgb(147, 51, 234)');
+  });
+  
+  test('purple button should be clickable', async ({ page }) => {
+    const button = page.locator('#host-panel-purple-btn');
+    
+    await expect(button).toBeEnabled();
+    await button.click();
+    // Test passes if click doesn't throw
+  });
+});
+```
+
+**The Tester runs the test:**
+
+```bash
+⏳ Running Playwright tests...
+
+npx playwright test Tests/UI/host-control-panel-purple-button.spec.ts --headed
+
+Results:
+  ❌ FAILING (Expected - RED phase)
+  
+  × purple button should exist with correct ID
+    Locator: '#host-panel-purple-btn'
+    Error: Element not found
+  
+  × purple button should have purple color
+    (Skipped - button doesn't exist)
+  
+  × purple button should be clickable
+    (Skipped - button doesn't exist)
+
+Status: ✅ RED phase complete (tests failing as expected)
+```
+
+**Event logged:**
+
+```jsonl
+{"timestamp": "2025-11-04T09:47:45Z", "agent": "test-generator", "action": "test_created", "file": "host-control-panel-purple-button.spec.ts", "result": "RED", "selector_type": "id-based", "element_id": "host-panel-purple-btn"}
+```
+
+The Tester passes control to The Builder...
+
+---
+
+**⚙️ The Builder (LEFT BRAIN - Tower 2)**
+
+Now it's time to make the tests GREEN. The Builder opens the component file:
+
+```razor
+@* File: SPA/NoorCanvas/Components/Host/HostControlPanel.razor *@
+
+<div class="host-control-panel">
+    <header class="panel-header">
+        <h1>Host Control Panel</h1>
+    </header>
+    
+    <div class="panel-actions">
+        @* Existing buttons... *@
+        
+        @* NEW: Purple button with ID for Playwright *@
+        <button 
+            id="host-panel-purple-btn" 
+            class="purple-action-btn"
+            @onclick="OnPurpleButtonClick"
+            aria-label="Purple Action">
+            Purple Action
+        </button>
+    </div>
+</div>
+
+@code {
+    private void OnPurpleButtonClick()
+    {
+        // TODO: Implement purple button action
+        Console.WriteLine("Purple button clicked!");
+    }
+}
+```
+
+**CSS styling added:**
+
+```css
+/* File: SPA/NoorCanvas/wwwroot/css/host-panel.css */
+
+.purple-action-btn {
+    background-color: #9333EA; /* Purple */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.purple-action-btn:hover {
+    background-color: #7E22CE; /* Darker purple on hover */
+}
+
+.purple-action-btn:active {
+    background-color: #6B21A8; /* Even darker when clicked */
+}
+```
+
+**The Builder runs the tests again:**
+
+```bash
+⏳ Running Playwright tests...
+
+npx playwright test Tests/UI/host-control-panel-purple-button.spec.ts --headed
+
+Results:
+  ✅ PASSING (GREEN phase achieved!)
+  
+  ✓ purple button should exist with correct ID (1.2s)
+  ✓ purple button should have purple color (890ms)
+  ✓ purple button should be clickable (1.5s)
+
+Status: ✅ GREEN phase complete (all tests passing)
+```
+
+**Event logged:**
+
+```jsonl
+{"timestamp": "2025-11-04T09:48:12Z", "agent": "code-executor", "action": "implementation_complete", "file": "HostControlPanel.razor", "result": "GREEN", "lines_changed": 12, "test_driven": true}
+```
+
+The Builder passes control to The Inspector...
+
+---
+
+**⚙️ The Inspector (LEFT BRAIN - Tower 3)**
+
+The final validation. The Inspector runs comprehensive health checks:
+
+```bash
+🔍 Running health validation...
+
+Build Check:
+  dotnet build
+  ✅ Build succeeded (0 errors, 0 warnings)
+
+Test Suite:
+  npx playwright test
+  ✅ All 127 tests passing (including 3 new purple button tests)
+
+Accessibility:
+  ✅ Button has aria-label
+  ✅ Color contrast ratio: 4.8:1 (WCAG AA compliant)
+  ✅ Keyboard accessible (focusable)
+
+Code Quality:
+  ✅ No unused imports
+  ✅ Proper naming conventions
+  ✅ Element ID follows pattern (kebab-case)
+
+Status: ✅ REFACTOR phase complete (zero issues)
+```
+
+**Event logged:**
+
+```jsonl
+{"timestamp": "2025-11-04T09:48:34Z", "agent": "health-validator", "action": "validation_complete", "result": "REFACTOR", "errors": 0, "warnings": 0, "tests_passing": 127}
+```
+
+The Inspector passes control to The Archivist...
+
+---
+
+**⚙️ The Archivist (LEFT BRAIN - Commit Handler)**
+
+Time to commit the work. The Archivist creates a semantic commit message:
+
+```bash
+🗂️ Preparing commit...
+
+Analysis:
+  Files changed: 2
+    - HostControlPanel.razor (12 lines added)
+    - host-panel.css (18 lines added)
+  Tests created: 1 new file (3 test cases)
+  
+Commit type: feat (new feature)
+Scope: host-panel (component affected)
+
+git add HostControlPanel.razor host-panel.css host-control-panel-purple-button.spec.ts
+git commit -m "feat(host-panel): Add purple action button with test coverage
+
+- Added purple button with ID #host-panel-purple-btn
+- Implemented click handler
+- Created 3 Playwright tests (all passing)
+- WCAG AA compliant (4.8:1 contrast ratio)
+- Test-driven implementation (RED → GREEN → REFACTOR)
+
+Element ID documented in brain for future test reference."
+
+✅ Committed successfully
+```
+
+**Event logged:**
+
+```jsonl
+{"timestamp": "2025-11-04T09:48:47Z", "agent": "commit-handler", "action": "commit_complete", "message_type": "feat", "files": 3, "tests_included": true}
+```
+
+---
+
+**🔄 CORPUS CALLOSUM: Feedback Loop**
+
+The LEFT BRAIN sends completion confirmation back across the corpus callosum:
+
+```yaml
+Message Type: EXECUTION_COMPLETE
+From: LEFT_HEMISPHERE
+To: RIGHT_HEMISPHERE
+Priority: HIGH
+
+Execution Summary:
+  Feature: "Purple button in HostControlPanel.razor"
+  Status: ✅ COMPLETE
+  Time taken: 1 minute 24 seconds (under estimate!)
+  Quality: EXCELLENT (zero errors, zero warnings)
+  
+  Phases Completed:
+    ✅ Phase 1: Test Preparation (ID mapping)
+    ✅ Phase 2: RED (tests created, failing)
+    ✅ Phase 3: GREEN (implementation, tests passing)
+    ✅ Phase 4: REFACTOR (validation, commit)
+  
+  Metrics:
+    - Lines changed: 30
+    - Tests created: 3
+    - Success rate: 100%
+    - Rework needed: 0%
+  
+  Element ID Mapping:
+    - ID: #host-panel-purple-btn
+    - Purpose: Playwright test selector
+    - Pattern: Robust, future-proof
+    - Anti-fragile: Immune to text/HTML changes
+
+Learnings to store: TRUE
+```
+
+The RIGHT BRAIN receives the feedback and triggers automatic learning...
+
+---
+
+**🧠 RIGHT HEMISPHERE: Learning and Memory Update**
+
+**Tower 4 (Event Stream):** Every action is logged
+
+```jsonl
+{"timestamp": "2025-11-04T09:47:23Z", "event": "request_received", "raw_input": "Add a purple button..."}
+{"timestamp": "2025-11-04T09:47:45Z", "agent": "test-generator", "action": "test_created", "result": "RED"}
+{"timestamp": "2025-11-04T09:48:12Z", "agent": "code-executor", "action": "implementation_complete", "result": "GREEN"}
+{"timestamp": "2025-11-04T09:48:34Z", "agent": "health-validator", "action": "validation_complete", "result": "REFACTOR"}
+{"timestamp": "2025-11-04T09:48:47Z", "agent": "commit-handler", "action": "commit_complete"}
+```
+
+**Event counter:** 5 new events (total backlog: 23 events)
+
+Since backlog < 50, no immediate BRAIN update triggered. But the events are ready for the next automatic learning cycle.
+
+---
+
+**Tower 1 (Conversation Memory):** Current conversation updated
+
+```yaml
+Conversation #8 (Active):
+  timestamp: "2025-11-04T09:47:23Z"
+  topic: "Add purple button to HostControlPanel.razor"
+  status: complete
+  messages: 1
+  outcome: success
+  duration: 84 seconds
+  
+  context:
+    file: HostControlPanel.razor
+    element_id: host-panel-purple-btn
+    pattern_used: test-first with ID mapping
+    tests_created: 3
+    
+  learnings:
+    - Element IDs critical for Playwright reliability
+    - Test-first faster than test-after (84s vs estimated 18 min)
+    - File hotspot warning helped (extra validation paid off)
+```
+
+---
+
+**Tower 2 (Knowledge Graph):** Patterns reinforced
+
+```yaml
+🧠 Pattern reinforcement...
+
+file_relationships:
+  - pair: [HostControlPanel.razor, host-panel.css]
+    co_modification_count: 14 → 15
+    confidence: 0.87 → 0.88 ↑
+    last_seen: "2025-11-04T09:48:47Z"
+
+ui_element_ids:
+  - component: HostControlPanel.razor
+    element_id: host-panel-purple-btn
+    purpose: Primary purple action button
+    test_selector: "#host-panel-purple-btn"
+    confidence: 0.98 (newly created)
+    pattern: button_with_id_test_first
+    
+workflow_patterns:
+  - name: button_addition_test_first
+    confidence: 0.89 → 0.92 ↑ (successful execution reinforces)
+    steps:
+      1. Create element ID
+      2. Write failing test (RED)
+      3. Implement feature (GREEN)
+      4. Validate (REFACTOR)
+      5. Commit with semantic message
+    success_rate: 96% → 97% ↑
+    
+intent_patterns:
+  - phrase: "Add a [color] button"
+    intent: PLAN
+    confidence: 0.95 (reinforced)
+    successful_routes: 47 → 48
+
+validation_insights:
+  - insight: "Element IDs prevent test fragility"
+    evidence_count: 12 → 13
+    confidence: 0.94 → 0.95 ↑
+    anti_pattern: "text-based selectors"
+```
+
+---
+
+**Tower 3 (Development Context):** Metrics updated
+
+```yaml
+📊 Updating development metrics...
+
+code_velocity:
+  commits_this_week: 42 → 43
+  lines_added_this_week: 3,847 → 3,877
+  average_commit_size: 89 lines
+
+test_activity:
+  tests_created_this_week: 78 → 81 (+3)
+  test_pass_rate: 97.2% → 97.3% ↑
+  test_first_adoption: 94% (excellent!)
+
+work_patterns:
+  time_slot_success:
+    "09:00-10:00": 89% → 90% ↑ (this session boosted it!)
+  feature_completion_time:
+    button_additions: 18 min average → 17.5 min ↓ (getting faster!)
+  
+file_stability:
+  HostControlPanel.razor:
+    churn_rate: 28% (still a hotspot)
+    recent_edits: +1 (total: 89 edits in 30 days)
+    recommendation: "Continue extra validation for this file"
+```
+
+---
+
+**🎬 The Grand Finale: Brain Summary**
+
+**Total brain activation time:** 1 minute 24 seconds
+
+**Hemispheres coordination:**
+- RIGHT BRAIN (Strategic): 22 seconds
+  - Tier 3 analysis: 5s
+  - Tier 2 pattern matching: 8s
+  - Tier 1 context check: 3s
+  - Plan formulation: 6s
+
+- LEFT BRAIN (Tactical): 62 seconds
+  - Test creation: 18s
+  - Implementation: 27s
+  - Validation: 12s
+  - Commit: 5s
+
+**Why it worked so well:**
+
+1. **UI Element ID Mapping (Critical Innovation!):**
+   - RIGHT BRAIN remembered: "Tests need IDs, not text selectors"
+   - Pattern learned from previous broken tests
+   - ID documented in knowledge graph BEFORE test creation
+   - Result: Robust, future-proof tests that survive refactoring
+
+2. **Pattern Recognition:**
+   - Matched "button addition" workflow (confidence: 0.92)
+   - Reused proven test-first approach
+   - Avoided pitfalls (text selectors, no tests, wrong file)
+
+3. **Context Awareness:**
+   - Knew file was a hotspot (extra validation needed)
+   - Found similar work from 2 days ago (Share button)
+   - Estimated time accurately (84s actual vs 18 min estimate - beat it!)
+
+4. **Hemisphere Coordination:**
+   - RIGHT planned strategically (consider risks, patterns, history)
+   - LEFT executed precisely (RED → GREEN → REFACTOR)
+   - Corpus callosum kept them synchronized
+
+5. **Continuous Learning:**
+   - Every action logged to event stream
+   - Patterns reinforced in knowledge graph
+   - Next button will be even faster (learning compounds!)
+
+---
+
+**🎯 What Asifor Sees:**
+
+```
+✅ Purple button added to HostControlPanel.razor
+
+Features implemented:
+  ✓ Button with ID #host-panel-purple-btn
+  ✓ Purple color (#9333EA) with hover effects
+  ✓ Click handler connected
+  ✓ 3 Playwright tests created (all passing)
+  ✓ WCAG AA compliant (accessible)
+  ✓ Committed with semantic message
+
+Time: 1 minute 24 seconds
+Tests: ✅ 127/127 passing
+Build: ✅ No errors, no warnings
+
+Ready for next feature! 🚀
+```
+
+**What Asifor DOESN'T see (but benefits from):**
+
+- 3-tier brain analysis before work started
+- Strategic vs tactical hemisphere coordination
+- Pattern matching against 12 similar features
+- Element ID mapping for test reliability
+- Proactive hotspot warning
+- Automatic knowledge graph updates
+- Development metrics tracking
+- Conversation memory preservation
+
+**The brain did ALL of that in 84 seconds, completely transparent to Asifor.**
+
+---
+
+**🧠 The Element ID Mapping System (Brain's Secret Weapon)**
+
+This is one of the brain's most sophisticated features:
+
+**Why IDs matter for tests:**
+```typescript
+// ❌ FRAGILE (breaks when text changes, i18n, HTML restructure)
+const button = page.locator('button:has-text("Purple Action")');
+
+// ✅ ROBUST (survives any change except intentional ID rename)
+const button = page.locator('#host-panel-purple-btn');
+```
+
+**How the brain maps IDs:**
+
+1. **Discovery Phase** (during component analysis):
+   ```yaml
+   # Brain crawls HostControlPanel.razor
+   # Finds existing IDs:
+   ui_element_ids:
+     - id: sidebar-start-session-btn
+       component: HostControlPanelSidebar.razor
+       purpose: Start session button
+     - id: reg-transcript-canvas-btn
+       component: UserRegistrationLink.razor
+       purpose: Canvas mode selector
+   ```
+
+2. **Planning Phase** (when creating new components):
+   ```yaml
+   # RIGHT BRAIN generates ID before implementation
+   new_element:
+     suggested_id: host-panel-purple-btn
+     pattern: {component}-{purpose}-btn
+     rationale: "Follows existing naming convention"
+   ```
+
+3. **Test Phase** (LEFT BRAIN uses documented ID):
+   ```typescript
+   // Tester uses ID from brain's mapping
+   const button = page.locator('#host-panel-purple-btn');
+   ```
+
+4. **Learning Phase** (brain remembers pattern):
+   ```yaml
+   # Pattern reinforced for next time
+   id_patterns:
+     button_naming: "{scope}-{purpose}-btn"
+     success_rate: 100%
+     examples: 12
+   ```
+
+**Benefits:**
+- ⚡ **10x faster** - getElementById vs DOM text search
+- 🛡️ **Immune to changes** - i18n, HTML restructure, text edits don't break tests
+- 🎯 **Explicit intent** - `#login-btn` clearer than `button:has-text("Login")`
+- ✅ **No false positives** - unique ID vs multiple matching texts
+- 🧠 **Brain remembers** - ID mapping stored in knowledge graph
+
+**This is why Copilot's tests are 96% reliable - the brain ensures IDs are created FIRST, then tests, then implementation.**
+
+---
 
 **Mid-Day (12:30 PM - After Lunch):**
 ```
