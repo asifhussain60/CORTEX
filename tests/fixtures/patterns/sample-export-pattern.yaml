@@ -1,0 +1,108 @@
+pattern_id: export_feature
+pattern_name: "Export Feature Pattern"
+description: "Standard pattern for adding export functionality (PDF, Excel, CSV, etc.)"
+similarity_threshold: 0.70
+
+keywords:
+  - export
+  - download
+  - PDF
+  - Excel
+  - CSV
+  - file
+  - generate
+
+feature_components:
+  - type: service
+    purpose: "Export generation service"
+    typical_location: "Services/ExportService.cs"
+  
+  - type: api
+    purpose: "Export endpoint"
+    typical_location: "Controllers/API/ExportController.cs"
+  
+  - type: component
+    purpose: "Export button UI component"
+    typical_location: "Components/ExportButton.razor"
+  
+  - type: test
+    purpose: "Unit tests for export service"
+    typical_location: "Tests/Unit/Services/ExportServiceTests.cs"
+  
+  - type: test
+    purpose: "Integration tests for export API"
+    typical_location: "Tests/Integration/ExportControllerTests.cs"
+
+workflow_phases:
+  - phase_id: phase_0
+    phase_name: "Architectural Discovery"
+    tasks:
+      - "Identify existing export patterns"
+      - "Review file generation libraries"
+      - "Plan architectural alignment"
+    tdd_required: false
+  
+  - phase_id: phase_1
+    phase_name: "Test Infrastructure (TDD)"
+    tasks:
+      - "Create export service tests (RED)"
+      - "Create API endpoint tests (RED)"
+      - "Create UI component tests (RED)"
+    tdd_required: true
+  
+  - phase_id: phase_2
+    phase_name: "Service Layer (TDD)"
+    tasks:
+      - "Implement export service (GREEN)"
+      - "Refactor service code (REFACTOR)"
+    tdd_required: true
+  
+  - phase_id: phase_3
+    phase_name: "API Endpoint (TDD)"
+    tasks:
+      - "Implement export controller (GREEN)"
+      - "Add authentication/authorization"
+      - "Refactor API code (REFACTOR)"
+    tdd_required: true
+  
+  - phase_id: phase_4
+    phase_name: "UI Component (TDD)"
+    tasks:
+      - "Implement export button (GREEN)"
+      - "Add visual feedback"
+      - "Refactor component (REFACTOR)"
+    tdd_required: true
+  
+  - phase_5: phase_5
+    phase_name: "Integration & Validation"
+    tasks:
+      - "End-to-end testing"
+      - "Performance validation"
+      - "Security review"
+    tdd_required: true
+
+architectural_guidance:
+  - "Follow existing export patterns in Services/ directory"
+  - "Maintain separation: Service → API → Component"
+  - "Use dependency injection for export service"
+  - "Store exports in temp directory with cleanup"
+  - "Add proper error handling and logging"
+  - "Consider file size limits"
+
+risk_factors:
+  - risk: "Large file generation may timeout"
+    mitigation: "Implement async generation with progress tracking"
+  
+  - risk: "Memory issues with large datasets"
+    mitigation: "Use streaming for large exports"
+  
+  - risk: "Export format compatibility"
+    mitigation: "Use well-tested libraries (e.g., iTextSharp for PDF)"
+
+success_metrics:
+  times_used: 5
+  success_rate: 1.0
+  average_duration_hours: 8.5
+
+created_date: "2025-11-04T10:00:00Z"
+last_used: "2025-11-04T14:30:00Z"
