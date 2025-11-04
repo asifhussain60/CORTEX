@@ -32,8 +32,21 @@ param(
     [string]$WorkspaceRoot,
     
     [Parameter(Mandatory=$false)]
-    [string]$OutputPath = "$WorkspaceRoot\KDS\kds-brain\crawler-temp\api-results.json"
+    [string]$OutputPath
 )
+
+# Default output path if not provided
+if (-not $OutputPath) {
+    # Normalize workspace root and detect KDS location
+    $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
+    if ($normalizedRoot -match '\\KDS$') {
+        # Workspace IS KDS
+        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\api-results.json"
+    } else {
+        # KDS is inside workspace
+        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\api-results.json"
+    }
+}
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $startTime = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
@@ -70,7 +83,7 @@ function Get-CSharpRoutes {
     $httpMethods = @('HttpGet', 'HttpPost', 'HttpPut', 'HttpDelete', 'HttpPatch')
     
     foreach ($method in $httpMethods) {
-        $matches = [regex]::Matches($Content, "\[$method\([`"']([^`"']*)[`"']\)\]")
+        $matches = [regex]::Matches($Content, "\[$method\([\x27\x22]([^\x27\x22]*)[\x27\x22]\)\]")
         foreach ($match in $matches) {
             $routes += @{
                 method = $method.Replace('Http', '').ToUpper()
@@ -85,7 +98,7 @@ function Get-CSharpRoutes {
 function Get-ControllerRoute {
     param([string]$Content)
     
-    $match = [regex]::Match($Content, '\[Route\([`"'](api/[^`"']*)[`"'']\)\]')
+    $match = [regex]::Match($Content, '\[Route\([\x27\x22](api/[^\x27\x22]*)[\x27\x22]\)\]')
     if ($match.Success) {
         return $match.Groups[1].Value
     }

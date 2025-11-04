@@ -34,8 +34,16 @@ Write-Host "🧠 BRAIN Feeder Started" -ForegroundColor Cyan
 Write-Host "Workspace: $WorkspaceRoot" -ForegroundColor Gray
 Write-Host ""
 
-# Paths
-$brainDir = "$WorkspaceRoot\KDS\kds-brain"
+# Paths - detect KDS location
+$normalizedRoot = $WorkspaceRoot.TrimEnd('\')
+if ($normalizedRoot -match '\\KDS$') {
+    # Workspace IS KDS
+    $brainDir = "$normalizedRoot\kds-brain"
+} else {
+    # KDS is inside workspace
+    $brainDir = "$normalizedRoot\KDS\kds-brain"
+}
+
 $crawlerTempDir = "$brainDir\crawler-temp"
 $fileRelationshipsPath = "$brainDir\file-relationships.yaml"
 $testPatternsPath = "$brainDir\test-patterns.yaml"

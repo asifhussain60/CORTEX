@@ -21,8 +21,21 @@ param(
     [string]$WorkspaceRoot,
     
     [Parameter(Mandatory=$false)]
-    [string]$OutputPath = "$WorkspaceRoot\KDS\kds-brain\crawler-temp\service-results.json"
+    [string]$OutputPath
 )
+
+# Default output path if not provided
+if (-not $OutputPath) {
+    # Normalize workspace root and detect KDS location
+    $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
+    if ($normalizedRoot -match '\\KDS$') {
+        # Workspace IS KDS
+        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\service-results.json"
+    } else {
+        # KDS is inside workspace
+        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\service-results.json"
+    }
+}
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $startTime = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"

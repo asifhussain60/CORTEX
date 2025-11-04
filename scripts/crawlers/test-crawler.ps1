@@ -22,8 +22,21 @@ param(
     [string]$WorkspaceRoot,
     
     [Parameter(Mandatory=$false)]
-    [string]$OutputPath = "$WorkspaceRoot\KDS\kds-brain\crawler-temp\test-results.json"
+    [string]$OutputPath
 )
+
+# Default output path if not provided
+if (-not $OutputPath) {
+    # Normalize workspace root and detect KDS location
+    $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
+    if ($normalizedRoot -match '\\KDS$') {
+        # Workspace IS KDS
+        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\test-results.json"
+    } else {
+        # KDS is inside workspace
+        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\test-results.json"
+    }
+}
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $startTime = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
@@ -74,7 +87,7 @@ function Get-Selectors {
     $selectors = @()
     
     # Playwright locators: page.locator('#id') or page.locator('[data-testid="..."]')
-    $matches = [regex]::Matches($Content, "\.locator\([`'\""]([^`'\""]+ )[`'\"\"]\)")
+    $matches = [regex]::Matches($Content, "\.locator\([\x27\x22]([^\x27\x22]+)[\x27\x22]\)")
     foreach ($match in $matches) {
         $selector = $match.Groups[1].Value
         $type = if ($selector -match '^#') { "id" }
@@ -98,13 +111,13 @@ function Get-TestData {
     $data = @{}
     
     # Session tokens (e.g., PQ9N5YWW)
-    $match = [regex]::Match($Content, '(token|sessionToken)\s*[=:]\s*[`'\""]([A-Z0-9]{8})[`'\""]')
+    $match = [regex]::Match($Content, '(token|sessionToken)\s*[=:]\s*[\x27\x22]([A-Z0-9]{8})[\x27\x22]')
     if ($match.Success) {
         $data["session_token"] = $match.Groups[2].Value
     }
     
     # URLs (e.g., localhost:9091/host/control-panel)
-    $match = [regex]::Match($Content, '(url|hostUrl)\s*[=:]\s*[`'\""]([^`'\""]*/host/[^`'\"\"]*)[`'\""]')
+    $match = [regex]::Match($Content, '(url|hostUrl)\s*[=:]\s*[\x27\x22]([^\x27\x22]*/host/[^\x27\x22]*)[\x27\x22]')
     if ($match.Success) {
         $data["host_url"] = $match.Groups[2].Value
     }

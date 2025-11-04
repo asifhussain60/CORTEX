@@ -60,7 +60,16 @@ Write-Host "Target: <5 min for 1000+ files (60% improvement)" -ForegroundColor Y
 Write-Host ""
 
 # Prepare output directory
-$outputDir = "$WorkspaceRoot\KDS\kds-brain\crawler-temp"
+# Normalize workspace root and detect KDS location
+$normalizedRoot = $WorkspaceRoot.TrimEnd('\')
+if ($normalizedRoot -match '\\KDS$') {
+    # Workspace IS KDS
+    $outputDir = "$normalizedRoot\kds-brain\crawler-temp"
+} else {
+    # KDS is inside workspace
+    $outputDir = "$normalizedRoot\KDS\kds-brain\crawler-temp"
+}
+
 if (-not (Test-Path $outputDir)) {
     New-Item -Path $outputDir -ItemType Directory -Force | Out-Null
 }
@@ -71,18 +80,21 @@ Remove-Item "$outputDir\*.json" -Force -ErrorAction SilentlyContinue
 # Define crawlers to run
 $crawlers = @{}
 
+# Determine script directory (handles both KDS as project and KDS as tool)
+$scriptDir = Split-Path -Parent $PSCommandPath
+
 if ($Mode -eq 'deep') {
     $crawlers = @{
-        UI = "$WorkspaceRoot\KDS\scripts\crawlers\ui-crawler.ps1"
-        API = "$WorkspaceRoot\KDS\scripts\crawlers\api-crawler.ps1"
-        Service = "$WorkspaceRoot\KDS\scripts\crawlers\service-crawler.ps1"
-        Test = "$WorkspaceRoot\KDS\scripts\crawlers\test-crawler.ps1"
+        UI = "$scriptDir\ui-crawler.ps1"
+        API = "$scriptDir\api-crawler.ps1"
+        Service = "$scriptDir\service-crawler.ps1"
+        Test = "$scriptDir\test-crawler.ps1"
     }
 } else {
     # Quick mode: UI and Test only (most valuable for TDD)
     $crawlers = @{
-        UI = "$WorkspaceRoot\KDS\scripts\crawlers\ui-crawler.ps1"
-        Test = "$WorkspaceRoot\KDS\scripts\crawlers\test-crawler.ps1"
+        UI = "$scriptDir\ui-crawler.ps1"
+        Test = "$scriptDir\test-crawler.ps1"
     }
 }
 
@@ -101,7 +113,11 @@ foreach ($area in $crawlers.Keys) {
     
     Write-Host "  🚀 Starting $area crawler..." -ForegroundColor Gray
     
-    $job = Start-Job -FilePath $scriptPath -ArgumentList $WorkspaceRoot
+    $job = Start-Job -ScriptBlock {
+        param($ScriptPath, $WorkspaceRoot)
+        & $ScriptPath -WorkspaceRoot $WorkspaceRoot
+    } -ArgumentList $scriptPath, $WorkspaceRoot
+    
     $jobs[$area] = @{
         Job = $job
         StartTime = Get-Date
@@ -213,7 +229,7 @@ if (-not $SkipBrainFeed) {
     Write-Host "[4/4] Feeding BRAIN with discoveries..." -ForegroundColor Yellow
     Write-Host ""
     
-    $brainFeederPath = "$WorkspaceRoot\KDS\scripts\crawlers\feed-brain.ps1"
+    $brainFeederPath = "$scriptDir\feed-brain.ps1"
     
     if (Test-Path $brainFeederPath) {
         try {
