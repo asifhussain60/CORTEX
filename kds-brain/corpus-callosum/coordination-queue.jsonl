@@ -1,3 +1,4 @@
 
 {"to":"right","id":"5a45de41-3fdb-4722-b06f-4dbf139fe51f","data":{"success":true,"task_id":"1.1"},"priority":"normal","processed":false,"timestamp":"2025-11-04T14:41:01.5593210Z","type":"execution_complete","from":"left"}
 {"to":"left","id":"2e3ccbc2-b91a-4bf0-bef3-59d4ddd12fc1","data":{"task_id":"1.2"},"priority":"normal","processed":false,"timestamp":"2025-11-04T14:41:01.5627198Z","type":"planning_update","from":"right"}
+{"to":"left","priority":"normal","timestamp":"2025-11-04T15:45:53.2245839Z","type":"planning_update","data":"{\"session_id\":\"20251104-week2-tdd-automation\",\"first_task\":\"0.1\",\"total_tasks\":23,\"plan_location\":\"KDS/kds-brain/right-hemisphere/active-plan.yaml\",\"feature\":\"Week 2 TDD Automation\"}","from":"right","processed":false,"id":"8e280996-36bd-45d1-886a-e4b44d1bd943"}
