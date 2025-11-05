@@ -1,0 +1,17 @@
+# CORTEX Dependencies
+# Phase 0: Tier 0 (Instinct Layer)
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# YAML parsing
+PyYAML>=6.0.1
+
+# Phase 1 & 2: SQLite with FTS5 (coming soon)
+# No additional dependencies needed - uses Python's built-in sqlite3
+
+# Development
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0

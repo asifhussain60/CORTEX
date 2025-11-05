@@ -1,6 +1,6 @@
 version: "1.0"
 last_updated: "2025-11-05T00:00:00Z"
-rule_count: 22
+rule_count: 23
 immutable: true
 source: "KDS v8 governance/rules.md"
 migration_status: "In progress - Phase 0"
@@ -125,9 +125,10 @@ rules:
         - "DoR/DoD cannot be bypassed"
       
       tier_boundary_protection:
-        - "Application data not in Tier 0"
-        - "Conversation data not in Tier 2"
-        - "Metrics not in Tier 1"
+        rules:
+          - "Application data not in Tier 0"
+          - "Conversation data not in Tier 2"
+          - "Metrics not in Tier 1"
         auto_migrate: true
       
       solid_compliance:
