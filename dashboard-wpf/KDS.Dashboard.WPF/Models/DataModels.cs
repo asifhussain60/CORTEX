@@ -112,6 +112,9 @@ namespace KDS.Dashboard.WPF.Models
         [JsonPropertyName("messages")]
         public List<ConversationMessage>? Messages { get; set; }
         
+        [JsonPropertyName("associated_commits")]
+        public List<GitCommit>? AssociatedCommits { get; set; }
+        
         // Extension data for unknown properties
         [JsonExtensionData]
         public Dictionary<string, JsonElement>? ExtensionData { get; set; }
@@ -178,6 +181,39 @@ namespace KDS.Dashboard.WPF.Models
         
         [JsonPropertyName("entities")]
         public List<string>? Entities { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a git commit associated with a conversation
+    /// Tracks code changes resulting from conversation discussions
+    /// </summary>
+    public class GitCommit
+    {
+        [JsonPropertyName("sha")]
+        public string Sha { get; set; } = string.Empty;
+        
+        [JsonPropertyName("timestamp")]
+        public DateTime Timestamp { get; set; }
+        
+        [JsonPropertyName("message")]
+        public string Message { get; set; } = string.Empty;
+        
+        [JsonPropertyName("author")]
+        public string Author { get; set; } = string.Empty;
+        
+        [JsonPropertyName("files_changed")]
+        public List<string> FilesChanged { get; set; } = new();
+        
+        [JsonPropertyName("additions")]
+        public int Additions { get; set; }
+        
+        [JsonPropertyName("deletions")]
+        public int Deletions { get; set; }
+        
+        // Computed properties for display
+        public string ShortSha => Sha.Length > 8 ? Sha.Substring(0, 8) : Sha;
+        public string ShortMessage => Message.Length > 100 ? Message.Substring(0, 97) + "..." : Message;
+        public string StatsDisplay => $"{FilesChanged.Count} files • +{Additions} -{Deletions}";
     }
 
     /// <summary>

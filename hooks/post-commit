@@ -1,6 +1,6 @@
 #!/bin/bash
-# KDS Post-Commit Hook - Auto BRAIN Update + Health Checks
-# Version: 7.0 (Permanent Instinct Operations)
+# KDS Post-Commit Hook - Auto BRAIN Update + Health Checks + Git Commit Tracking
+# Version: 8.0 (V8 Enhancement: Tier 1 Git Commit Association)
 # Installed via: scripts/setup-git-hooks.ps1
 
 # ========================================
@@ -15,7 +15,13 @@ if [ $? -ne 0 ]; then
 fi
 
 # ========================================
-# PHASE 2: Auto BRAIN Update
+# PHASE 2: Git Commit → Conversation Tracking (V8 NEW)
+# ========================================
+echo "🔗 Associating commit with active conversation..."
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/associate-commit-to-conversation.ps1 -Silent
+
+# ========================================
+# PHASE 3: Auto BRAIN Update
 # ========================================
 # Get commit message
 COMMIT_MSG=$(git log -1 --pretty=%B)
@@ -31,7 +37,7 @@ pwsh -File scripts/auto-brain-updater.ps1 \
     -Silent
 
 # ========================================
-# PHASE 3: Tier 1 Auto-Recording
+# PHASE 4: Tier 1 Auto-Recording
 # ========================================
 # LAYER 1: Check for Copilot Chat exports
 if git diff-tree -r --name-only --no-commit-id HEAD | grep -q ".github/workflows/CopilotChats.txt"; then

@@ -187,6 +187,82 @@
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
+                                        
+                                        <!-- Associated Git Commits (V8 NEW) -->
+                                        <TextBlock Text="Associated Commits:" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Foreground="{StaticResource TextBrush}"
+                                                  Margin="0,12,0,8"
+                                                  Visibility="{Binding AssociatedCommits, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                        <ItemsControl ItemsSource="{Binding AssociatedCommits}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="White" 
+                                                           Padding="12" 
+                                                           Margin="0,0,0,8"
+                                                           CornerRadius="4"
+                                                           BorderBrush="#F05032"
+                                                           BorderThickness="2,0,0,0">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            
+                                                            <!-- Git Icon -->
+                                                            <materialDesign:PackIcon Grid.Column="0" 
+                                                                                    Kind="Git" 
+                                                                                    Width="24" Height="24"
+                                                                                    Foreground="#F05032"
+                                                                                    VerticalAlignment="Top"
+                                                                                    Margin="0,2,12,0"/>
+                                                            
+                                                            <!-- Commit Details -->
+                                                            <StackPanel Grid.Column="1">
+                                                                <TextBlock Text="{Binding Message}" 
+                                                                          FontWeight="SemiBold"
+                                                                          FontSize="12"
+                                                                          Foreground="{StaticResource TextBrush}"
+                                                                          TextWrapping="Wrap"/>
+                                                                
+                                                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                                    <TextBlock FontSize="11" Foreground="{StaticResource TextSecondaryBrush}">
+                                                                        <Run Text="#"/>
+                                                                        <Run Text="{Binding ShortSha, Mode=OneWay}" FontFamily="Consolas"/>
+                                                                    </TextBlock>
+                                                                    <TextBlock Text="•" Margin="6,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                    <TextBlock Text="{Binding Author}" 
+                                                                              FontSize="11" 
+                                                                              Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                    <TextBlock Text="•" Margin="6,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                    <TextBlock Text="{Binding Timestamp, StringFormat='MMM dd HH:mm'}" 
+                                                                              FontSize="11" 
+                                                                              Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                </StackPanel>
+                                                                
+                                                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                                    <TextBlock FontSize="11" Foreground="#5B9BD5">
+                                                                        <Run Text="{Binding FilesChanged.Count, Mode=OneWay}"/>
+                                                                        <Run Text=" files"/>
+                                                                    </TextBlock>
+                                                                    <TextBlock Text="•" Margin="6,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                    <TextBlock FontSize="11" Foreground="#70AD47">
+                                                                        <Run Text="+"/>
+                                                                        <Run Text="{Binding Additions, Mode=OneWay}"/>
+                                                                    </TextBlock>
+                                                                    <TextBlock Text="•" Margin="6,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                    <TextBlock FontSize="11" Foreground="#E74C3C">
+                                                                        <Run Text="-"/>
+                                                                        <Run Text="{Binding Deletions, Mode=OneWay}"/>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
                                     </StackPanel>
                                 </Border>
                             </Expander>
