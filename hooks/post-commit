@@ -30,5 +30,26 @@ pwsh -File scripts/auto-brain-updater.ps1 \
     -AgentInvoked "git-commit" \
     -Silent
 
+# ========================================
+# PHASE 3: Tier 1 Auto-Recording
+# ========================================
+# LAYER 1: Check for Copilot Chat exports
+if git diff-tree -r --name-only --no-commit-id HEAD | grep -q ".github/workflows/CopilotChats.txt"; then
+  echo "  📝 Copilot Chat detected - importing to Tier 1..."
+  pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/import-copilot-chats.ps1
+fi
+
+# LAYER 2: Check for session completions
+if git diff-tree -r --name-only --no-commit-id HEAD | grep -q "sessions/.*\.json"; then
+  echo "  📋 Session changes detected - checking for completed sessions..."
+  # Find session files in this commit
+  SESSION_FILES=$(git diff-tree -r --name-only --no-commit-id HEAD | grep "sessions/.*\.json")
+  for SESSION_FILE in $SESSION_FILES; do
+    if [ -f "$SESSION_FILE" ]; then
+      pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/record-session-conversation.ps1 -SessionFile "$SESSION_FILE" 2>/dev/null || true
+    fi
+  done
+fi
+
 # Exit with success (don't block commit)
 exit 0

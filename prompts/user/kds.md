@@ -25,9 +25,11 @@
 | **Protection System** | ✅ | Confidence thresholds, anomaly detection |
 | **Tier 3: Development Context** | ✅ | Collecting git/test/build metrics (1,249 commits analyzed) |
 | **Commit Handler** | ✅ | Smart validation with baseline comparison |
-| **Tier 1: Conversation History** | ✅ | Complete - 6 conversations stored, FIFO queue working |
+| **Tier 1: Conversation History** | ✅ | Complete - 14 conversations, 3-layer auto-recording (71% auto) |
 | **Conversation Tracking** | ✅ | Integrated with intent router - "Make it purple" works |
 | **Auto BRAIN Updates (Rule #22)** | ✅ | Automatic after every request (50+ events OR 24h) |
+| **Tier 1 Auto-Recording** | ✅ | Layer 1 (Copilot), Layer 2 (Sessions), Layer 3 (Manual) |
+| **Tier 1 Monitoring** | ✅ | monitor-tier1-health.ps1, automatic tracking |
 | **Manual Recording** | ✅ | record-conversation.ps1 operational |
 | **Git Hooks** | ✅ | Post-commit auto-BRAIN update installed |
 | **Setup Automation** | 📋 | Documented - not implemented |
