@@ -94,6 +94,31 @@ if [ -n "$BRAIN_YAML_FILES" ]; then
   echo "  ✅ BRAIN YAML files valid"
 fi
 
+# 5. Run KDS Tier 0 Enforcement (TDD, DoD, Silent Failures, etc.)
+echo ""
+echo "  Running Tier 0 Enforcement..."
+
+# Check if PowerShell is available
+if command -v pwsh &> /dev/null; then
+  GIT_ROOT=$(git rev-parse --show-toplevel)
+  VALIDATION_SCRIPT="$GIT_ROOT/scripts/validate-commit.ps1"
+  
+  if [ -f "$VALIDATION_SCRIPT" ]; then
+    pwsh -File "$VALIDATION_SCRIPT"
+    VALIDATION_EXIT_CODE=$?
+    
+    if [ $VALIDATION_EXIT_CODE -ne 0 ]; then
+      echo ""
+      echo "❌ Tier 0 Enforcement failed - commit REJECTED"
+      exit 1
+    fi
+  else
+    echo "  ⚠️  WARNING: validate-commit.ps1 not found - skipping enforcement"
+  fi
+else
+  echo "  ⚠️  WARNING: PowerShell not found - skipping Tier 0 enforcement"
+fi
+
 echo ""
 echo "✅ All pre-commit validations passed"
 echo ""

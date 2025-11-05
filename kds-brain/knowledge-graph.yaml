@@ -47,8 +47,45 @@ validation_insights:
     confidence: 1.0
     impact: high
     last_seen: "2025-11-04T10:25:00Z"
+  wpf_icon_validation:
+    issue: "WPF Material Design icons fail at runtime if invalid"
+    symptom: "XamlParseException: 'Lightning is not a valid value for PackIconKind'"
+    incorrect_approach: "Assume icon names, test by running app"
+    correct_approach: "Validate icon names with Enum.TryParse<PackIconKind> in tests BEFORE writing XAML"
+    explanation: "XAML strings compile but fail at runtime during enum conversion. Tests catch this at test-time."
+    test_pattern: "MaterialDesignIconTests.cs with Theory tests for all icons"
+    frequency: 1
+    confidence: 0.95
+    impact: critical
+    last_seen: "2025-11-05"
+    lesson: "WPF UI components REQUIRE test-first approach - build success ≠ runtime success"
+  wpf_silent_failures:
+    issue: "WPF applications fail silently with no error dialog"
+    symptom: "User clicks .exe, nothing happens, no error shown"
+    cause: "XAML parsing errors occur before UI appears, app exits immediately"
+    detection: "Use 'dotnet run' in terminal (shows errors) vs Start-Process (silent)"
+    prevention: "Create ApplicationStartupTests with InitializeComponent tests"
+    explanation: "WPF doesn't show console by default. Test initialization in unit tests."
+    frequency: 1
+    confidence: 0.92
+    impact: high
+    last_seen: "2025-11-05"
+    lesson: "Always test WPF XAML initialization - silent failures are user-hostile"
+  tdd_violation_wpf:
+    issue: "WPF implementation proceeded without TDD"
+    impact: "Runtime crash, 30 minutes debugging, unclear failure mode"
+    should_have: "Created icon validation tests FIRST, then XAML"
+    lesson: "UI components are HIGH RISK for runtime errors - TDD is MANDATORY"
+    time_cost: "30 minutes debugging vs 5 minutes writing tests"
+    prevention: "RIGHT BRAIN must check: Is this UI/WPF/XAML? → TDD REQUIRED"
+    frequency: 1
+    confidence: 1.0
+    severity: high
+    last_seen: "2025-11-05"
+    resolution: "Retroactive TDD - created comprehensive test suite (53 tests)"
+    commitment: "Will enforce TDD for ALL WPF/UI implementations"
 version: 6.0.0
-last_updated: 2025-11-04T10:35:00Z
+last_updated: 2025-11-05T15:00:00Z
 workflow_patterns:
   kds_quadrant_creation:
     pattern: "four_perspective_documentation"
@@ -89,6 +126,60 @@ workflow_patterns:
     rationale: "Avoids PowerShell parsing ambiguity and escaping issues"
     confidence: 0.95
     last_used: "2025-11-04T10:00:00Z"
+  wpf_application_tdd:
+    pattern: "test_first_for_wpf_ui"
+    description: "WPF applications MUST use TDD - build success does not guarantee runtime success"
+    steps:
+      - "Phase 0: Create test infrastructure (MaterialDesignIconTests, ViewModelTests, SmokeTests)"
+      - "Phase 1: RED - Write failing tests for icons, ViewModels, deployment"
+      - "Phase 2: GREEN - Implement XAML with VALIDATED icons, implement ViewModels"
+      - "Phase 3: REFACTOR - Expand features, keep tests green"
+    rationale: "XAML validation happens at runtime, not compile time. Silent failures are common."
+    success_rate: 1.0
+    failure_rate_without_tdd: 1.0
+    time_saved_minutes: 30
+    confidence: 0.95
+    last_used: "2025-11-05"
+    examples:
+      - "KDS Dashboard WPF - retroactive TDD caught all issues"
+    test_files_created:
+      - "MaterialDesignIconTests.cs (23 tests) - validates all PackIconKind enums"
+      - "ApplicationSmokeTests.cs (10 tests) - validates deployment completeness"
+      - "ViewModelTests.cs (8 tests) - validates data binding and instantiation"
+      - "IntegrationTests.cs (7 tests) - validates component integration"
+  wpf_icon_validation_pattern:
+    pattern: "validate_material_design_icons_first"
+    description: "Test Material Design icon names BEFORE using in XAML"
+    steps:
+      - "Extract all planned icon names (Brain, Flash, Heart, etc.)"
+      - "Create Theory test: AllUsedIcons_ShouldBeValidPackIconKinds"
+      - "Use Enum.TryParse<PackIconKind> to validate each name"
+      - "Test fails? Look up valid alternatives at materialdesignicons.com"
+      - "Test passes? Safe to use in XAML"
+    success_rate: 1.0
+    confidence: 0.95
+    last_used: "2025-11-05"
+    examples:
+      - "Lightning (INVALID) → Flash (VALID)"
+      - "HeartPulse (INVALID) → Heart (VALID)"
+    benefits:
+      - "Catches invalid icons at test-time (not runtime)"
+      - "Documents all icons used in project"
+      - "Prevents XamlParseException crashes"
+      - "Future-proof (auto-validates new icons)"
+  wpf_smoke_test_pattern:
+    pattern: "verify_wpf_deployment_complete"
+    description: "Verify WPF application deployment before user testing"
+    tests:
+      - "Executable_ShouldExist (check .exe built)"
+      - "MainDll_ShouldExist (check main assembly)"
+      - "MaterialDesignThemes_DllShouldExist (check UI dependency)"
+      - "RuntimeConfig_ShouldExist (check .NET runtime config)"
+      - "ApplicationVersion_ShouldBeNet8 (check target framework)"
+    purpose: "Catch deployment issues BEFORE user runs app"
+    confidence: 0.92
+    last_used: "2025-11-05"
+    time_saved: "10-15 minutes per broken deployment"
 architectural_patterns:
   api_auth: none
   service_naming: I{Name} interface
