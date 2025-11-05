@@ -1,0 +1,6 @@
+# Test fixtures build artifacts (auto-generated)
+tests/fixtures/**/obj/
+tests/fixtures/**/bin/
+
+# Brain backups
+kds-brain/backups/
