@@ -47,7 +47,7 @@ function Write-Log {
 try {
     $commitSha = git rev-parse HEAD
     $commitShort = $commitSha.Substring(0, 8)
-    $commitMessage = git log -1 --pretty=%B HEAD
+    $commitMessage = (git log -1 --pretty=%B HEAD) -join "`n"  # Join multi-line messages
     $commitAuthor = git log -1 --pretty=%an HEAD
     $commitTime = git log -1 --pretty=%aI HEAD
     
@@ -86,12 +86,18 @@ if (-not (Test-Path $historyPath)) {
 }
 
 try {
-    # Read all conversations
+    # Read all conversations (handle various JSON formats gracefully)
     $conversations = @()
     Get-Content $historyPath | ForEach-Object {
         $line = $_.Trim()
         if ($line) {
-            $conversations += ($line | ConvertFrom-Json)
+            try {
+                $conv = $line | ConvertFrom-Json
+                $conversations += $conv
+            }
+            catch {
+                Write-Log "  ⚠️  Skipping malformed conversation: $($_.Exception.Message)"
+            }
         }
     }
     
@@ -100,22 +106,22 @@ try {
         exit 0
     }
     
-    # Find active conversation (no end_timestamp OR most recent)
+    # Find active conversation (no end_timestamp OR active=true OR most recent)
     $activeConversation = $conversations | 
         Where-Object { 
-            $_.PSObject.Properties.Name -contains 'active' -and $_.active -eq $true 
+            ($_.PSObject.Properties.Name -contains 'active' -and $_.active -eq $true) -or
+            (-not $_.PSObject.Properties.Name -contains 'ended') -or
+            ([string]::IsNullOrEmpty($_.ended))
         } | 
         Select-Object -Last 1
     
     # Fallback: If no explicitly active conversation, use the most recent one
-    if (-not $activeConversation) {
-        $activeConversation = $conversations | 
-            Sort-Object { [DateTime]$_.started } -Descending | 
-            Select-Object -First 1
+    if (-not $activeConversation -and $conversations.Count -gt 0) {
+        $activeConversation = $conversations[-1]  # Last conversation in array
     }
     
     if (-not $activeConversation) {
-        Write-Log "  ℹ️  No active conversation found"
+        Write-Log "  ℹ️  No conversation available for tracking"
         exit 0
     }
     
