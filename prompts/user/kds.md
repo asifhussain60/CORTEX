@@ -25,13 +25,16 @@
 | **Protection System** | ✅ | Confidence thresholds, anomaly detection |
 | **Tier 3: Development Context** | ✅ | Collecting git/test/build metrics (1,249 commits analyzed) |
 | **Commit Handler** | ✅ | Smart validation with baseline comparison |
-| **Tier 1: Conversation History** | ✅ | Complete - 3 conversations stored, FIFO queue working |
+| **Tier 1: Conversation History** | ✅ | Complete - 6 conversations stored, FIFO queue working |
 | **Conversation Tracking** | ✅ | Integrated with intent router - "Make it purple" works |
+| **Auto BRAIN Updates (Rule #22)** | ✅ | Automatic after every request (50+ events OR 24h) |
+| **Manual Recording** | ✅ | record-conversation.ps1 operational |
+| **Git Hooks** | ✅ | Post-commit auto-BRAIN update installed |
 | **Setup Automation** | 📋 | Documented - not implemented |
 | **Brain Crawler** | 📋 | Designed - not implemented |
 
-**Last Updated:** 2025-11-04  
-**Self-Review Date:** 2025-11-03
+**Last Updated:** 2025-11-05  
+**Self-Review Date:** 2025-11-05
 
 ---
 
@@ -2512,68 +2515,106 @@ $job = Start-Job -ScriptBlock { ... }
 
 ---
 
-## 📊 Brain Efficiency Dashboard (NEW - Post-Week 4)
+## 📊 Comprehensive KDS Dashboard (Unified Entry Point)
 
-**Purpose:** Visual monitoring of brain performance metrics, trends, and efficiency over time.
+**Purpose:** Single comprehensive dashboard for all KDS monitoring - health checks, BRAIN metrics, efficiency tracking, and activity logs.
 
-**File:** `KDS/dashboard/brain-efficiency.html`  
-**Technology:** Static HTML (no server needed)
+**File:** `KDS/kds-dashboard.html`  
+**Technology:** HTML + Chart.js (with optional API server for real-time data)
 
-### Launch Efficiency Dashboard
+### Launch Dashboard
 
-**Option 1: Open file directly**
+**Quick Launch (Recommended):**
+```powershell
+.\KDS\scripts\launch-dashboard.ps1
 ```
-Open: D:\PROJECTS\KDS\dashboard\brain-efficiency.html
-```
+This starts the API server AND opens the dashboard automatically.
 
-**Option 2: File protocol**
+**Manual Launch:**
 ```
-file:///D:/PROJECTS/KDS/dashboard/brain-efficiency.html
+Open: D:\PROJECTS\KDS\kds-dashboard.html
 ```
+Or double-click the file in File Explorer.
+
+### Dashboard Tabs
+
+**Tab 1: 📊 Overview**
+- System health summary (6 interactive cards)
+- Quick status of infrastructure, agents, BRAIN, sessions, knowledge
+- Click any card to drill down into health checks
+
+**Tab 2: 🏥 Health Checks**
+- Detailed health validation across 7 categories
+- Expandable sections with individual check results
+- Status indicators (passed/warning/critical)
+- Actionable recommendations for failures
+
+**Tab 3: 🧠 BRAIN System**
+- BRAIN integrity status (all 13 integrity checks)
+- Event stream monitoring
+- Knowledge graph health
+- Real-time issue detection
+
+**Tab 4: 📈 Metrics** (Enhanced with Brain Efficiency)
+- **Brain Efficiency Score**: Overall efficiency (0-100%) with letter grade
+- **Component Breakdown**: Visual bars showing routing, planning, TDD, learning, coordination
+- **Efficiency Trends**: 30-day line chart of performance
+- **Component Pie Chart**: Weighted contribution visualization
+- **Individual Metrics**: Routing accuracy, plan time, TDD cycle, learning effectiveness, coordination latency
+- **Standard Metrics**: BRAIN health, knowledge graph, file hotspots, event activity, test success
+- **Smart Recommendations**: AI-generated suggestions based on performance data
+
+**Tab 5: 📝 Activity Log**
+- Recent system activities
+- Event timeline
+- Agent actions tracking
 
 ### Features
 
-**Real-Time Metrics:**
-- 🎯 Overall efficiency score (0-100%) with letter grade (A+ to D)
-- 📊 Component breakdown (routing, planning, TDD, learning, coordination)
-- ▲▼ Trend indicators (improving/declining/stable)
-- ⏱️ Performance metrics (plan time, TDD cycle time, latency)
+**Real-Time Updates:**
+- ✅ Auto-refresh every 30 seconds (configurable)
+- 🔄 Manual refresh button
+- 📡 Live connection status indicator
 
-**Visual Charts (4 total):**
-1. **Efficiency Trend** - Line chart showing score over last 30 days
-2. **Component Breakdown** - Doughnut chart of weighted contributions
-3. **Performance Metrics** - Multi-line chart of plan/TDD times
-4. **Learning & Coordination** - Dual-axis effectiveness/latency chart
+**Brain Efficiency Integration:**
+- 🎯 Overall efficiency score with trend indicators
+- 📊 Component performance bars (5 components)
+- 📈 Historical trend charts (30 days)
+- 💡 Smart recommendations based on metrics
 
-**Smart Recommendations:**
-- ✅ Overall performance assessment
-- ⚠️ Component-specific warnings
-- 📈 Trend analysis
-- 💡 Actionable suggestions
-
-**Auto-Refresh:**
-- ✅ Reloads data every 5 minutes
-- 🔄 Manual refresh button available
-- 📅 Shows last updated timestamp
+**Visual Feedback:**
+- ✅ Color-coded status (green/yellow/red)
+- � Interactive charts (hover for details)
+- 🎨 Dark theme optimized for long viewing
+- ⚡ Smooth animations and transitions
 
 ### How to Use
 
-**Step 1: Collect metrics (first time)**
+**Step 1: Launch dashboard**
+```powershell
+.\KDS\scripts\launch-dashboard.ps1
+```
+
+**Step 2: Collect brain efficiency data (for Metrics tab)**
 ```powershell
 .\KDS\scripts\corpus-callosum\collect-brain-metrics.ps1
 ```
 
-**Step 2: Open dashboard**
-```
-Open: D:\PROJECTS\KDS\dashboard\brain-efficiency.html
-```
+**Step 3: Navigate tabs**
+- Click tab buttons to switch between views
+- Overview → Quick health summary
+- Health → Detailed validation results
+- BRAIN System → Integrity checks
+- Metrics → Performance analysis (includes efficiency dashboard)
+- Activity → Recent events
 
-**Step 3: Monitor performance**
-- Dashboard auto-updates every 5 minutes
-- Click "🔄 Refresh Data" for immediate update
-- Review recommendations for improvements
+**Step 4: Monitor and act**
+- Review efficiency score and grade
+- Check trend indicators (▲ improving, ▼ declining)
+- Read smart recommendations
+- Address any warnings or failures
 
-### Efficiency Calculation
+### Efficiency Calculation (Metrics Tab)
 
 ```
 Overall Score = 
@@ -2591,10 +2632,16 @@ Overall Score =
 - **C** (70-80%): Acceptable - Review recommendations
 - **D** (<70%): Needs attention - Address warnings immediately
 
-### Data Source
+### Data Sources
 
-**Reads from:** `KDS/kds-brain/corpus-callosum/efficiency-history.jsonl`  
-**Generated by:** `collect-brain-metrics.ps1` (collects routing, planning, TDD, learning, coordination metrics)  
+**Real-time (via API server):**
+- Health checks → `run-health-checks.ps1`
+- BRAIN metrics → `test-brain-integrity.ps1`
+- Standard metrics → API aggregation
+
+**Efficiency data (file-based):**
+- **Reads from:** `KDS/kds-brain/corpus-callosum/efficiency-history.jsonl`  
+- **Generated by:** `collect-brain-metrics.ps1`  
 **Update frequency:** Manual or scheduled (recommend daily)
 
 **Optional: Automate collection**
@@ -4096,7 +4143,151 @@ NOTE: All 100% local (in KDS/), zero external dependencies
 
 ---
 
+## 🎯 Active Development Plan (KDS v6.0)
+
+**Current Focus:** Real-Time BRAIN Dashboard with Live Reference System + Automatic BRAIN Updates
+
+### ✅ **COMPLETED:** Rule #22 - Automatic BRAIN Updates
+
+**Status:** 🎉 **IMPLEMENTED** (Option D - Hybrid Approach)
+
+**What Was Built:**
+
+1. **Manual Recording Script** (Phase 1 - COMPLETE)
+   - ✅ `scripts/record-conversation.ps1` - Manual conversation capture
+   - ✅ Logs to `conversation-history.jsonl` (Tier 1)
+   - ✅ FIFO enforcement (keep 20, delete oldest)
+   - ✅ Auto-checks brain-updater threshold (50 events OR 24 hours)
+   - ✅ **TESTED:** CopilotChats.txt conversation successfully recorded
+
+2. **Auto BRAIN Updater** (Phase 2 - COMPLETE)
+   - ✅ `scripts/auto-brain-updater.ps1` - Automatic trigger after every request
+   - ✅ Logs request to `events.jsonl` (Tier 4)
+   - ✅ Checks thresholds (50+ events OR 24+ hours)
+   - ✅ Auto-invokes `brain-updater.ps1` when threshold met
+   - ✅ Keeps `brain-updater.ps1` synchronized with `brain-updater.md`
+   - ✅ **TESTED:** 13 events processed, knowledge-graph.yaml updated
+
+3. **Git Hooks** (Phase 2 - COMPLETE)
+   - ✅ `hooks/post-commit` - Auto-runs after every git commit
+   - ✅ `scripts/setup-git-hooks.ps1` - One-time installation
+   - ✅ Silent background execution (doesn't block commits)
+
+4. **Governance Rule** (Tier 0 - COMPLETE)
+   - ✅ **Rule #22:** Auto BRAIN Update After Every Request
+   - ✅ `governance/rules/auto-brain-update.md` - Full specification
+   - ✅ Tier 0 (INSTINCT) - Permanent, cannot be overridden
+   - ✅ Updated `governance/rules.md` with Rule #22
+
+5. **Architecture Documentation** (COMPLETE)
+   - ✅ `docs/architecture/BRAIN-RECORDING-GAP-ANALYSIS.md` - Root cause analysis
+   - ✅ Identified problem: GitHub Copilot Chat doesn't auto-invoke agents
+   - ✅ Designed 4 solutions (manual, git hooks, extension, harvester)
+   - ✅ Implemented hybrid approach (Phases 1-3 over 3 weeks)
+
+**How to Use:**
+
+```powershell
+# Manual recording (after significant conversations)
+.\scripts\record-conversation.ps1 `
+    -Title "Your conversation title" `
+    -FilesModified "file1.md,file2.ps1" `
+    -EntitiesDiscussed "feature1,feature2" `
+    -Outcome "What was accomplished" `
+    -Intent "PLAN"
+
+# Automatic (runs after git commits via hook)
+git commit -m "Your commit message"  # auto-triggers brain-updater
+
+# Test auto-updater manually
+.\scripts\auto-brain-updater.ps1 `
+    -RequestSummary "Test request" `
+    -ResponseType "direct"
+
+# Install git hooks (one-time setup)
+.\scripts\setup-git-hooks.ps1
+```
+
+**Success Metrics:**
+- ✅ 6 conversations in `conversation-history.jsonl` (was 5, added CopilotChats.txt)
+- ✅ 13 events in `events.jsonl` (threshold: 50 for auto-update)
+- ✅ brain-updater auto-triggered (24+ hours since last update)
+- ✅ `knowledge-graph.yaml` updated with 13 new events
+- ✅ Git hook installed and operational
+
+**Next Steps (Phase 3 - Weeks 2-3):**
+- 📋 VS Code extension with Chat Participant API
+- 📋 Real-time conversation interception
+- 📋 Scheduled harvester (parse Copilot Chat history every 2 hours)
+- 📋 Full automation (zero user action required)
+
+---
+
+### Phase 7.3: Dashboard BRAIN Reference (IN DESIGN)
+
+**Purpose:** Visual one-page guide to all KDS BRAIN functionality  
+**Priority:** HIGH  
+**Status:** 🎯 DESIGN COMPLETE - READY TO IMPLEMENT
+
+**New Features:**
+
+1. **Tier 0 (Instinct) Enhancement** - Holistic review complete
+   - ✅ Identified 6 fundamental design gaps
+   - 📋 6 new Tier 0 files designed:
+     - `governance/tier-0/tool-requirements.yaml` - Essential dependencies
+     - `governance/tier-0/setup-protocol.yaml` - 5-step initialization
+     - `governance/tier-0/tier-classification-rules.yaml` - Event classification
+     - `governance/tier-0/amnesia-recovery.yaml` - Detection & recovery
+     - `governance/tier-0/agent-protocols.yaml` - Standard behaviors
+     - `governance/tier-0/hemisphere-coordination-rules.yaml` - LEFT/RIGHT communication
+
+2. **Dashboard "BRAIN Reference" Tab** - Visual learning system
+   - 📋 Tab 1: OVERVIEW (one-page summary of all 5 tiers)
+   - 📋 Tab 2: RULES & GOVERNANCE (18 rules, searchable)
+   - 📋 Tab 3: HOW THINGS WORK (visual workflows)
+     - "How Amnesia Works" (detection, recovery, prevention)
+     - "How Learning Works" (brain-updater.md cycle)
+     - "How TDD Cycle Works" (RED→GREEN→REFACTOR)
+     - "How Crawlers Work" (file discovery, dependencies)
+     - "How Health Checks Work" (test-brain-integrity.ps1)
+     - "How Setup Works" (initialization, validation)
+     - "How Hemispheres Coordinate" (LEFT/RIGHT messaging)
+   - 📋 Tab 4: SETUP & DEPENDENCIES (tool inventory, validation)
+   - 📋 Tab 5: HEMISPHERES & COORDINATION (real-time activity)
+
+3. **Closed-Loop Self-Healing** - Dashboard → BRAIN feedback
+   - 📋 Health results logged to events.jsonl (Tier 4)
+   - 📋 brain-healer.md agent (auto-remediation)
+   - 📋 Remediation scripts (yaml, conversation, KG, session fixes)
+   - 📋 Dashboard "Fix" buttons (user-triggered repairs)
+   - 📋 Knowledge graph pattern learning (failure tracking)
+
+**Architecture Docs:**
+- `docs/architecture/DASHBOARD-BRAIN-INTEGRATION.md` - Self-healing design
+- `docs/architecture/DASHBOARD-BRAIN-REFERENCE-FEATURE.md` - Visual reference design
+- `docs/DASHBOARD-BRAIN-INTEGRATION-SUMMARY.md` - Self-healing summary
+- `docs/DASHBOARD-BRAIN-REFERENCE-SUMMARY.md` - Visual reference summary
+
+**Implementation Plan:** 4 weeks (see Phase 7 in KDS-V6-IMPLEMENTATION-PLAN-RISK-BASED.md)
+
+**User Value:**
+- ✅ One-page visual reference for entire BRAIN (no more trying to remember)
+- ✅ Understand how ANY feature works (amnesia, learning, TDD, etc.)
+- ✅ See all 18 rules in searchable format
+- ✅ Know setup requirements and tool dependencies
+- ✅ Monitor hemisphere activity in real-time
+- ✅ Auto-fix common issues (or trigger manual fixes)
+- ✅ Live data updated every 5-30 seconds
+
+**Start Implementation:**
+```
+#file:KDS/prompts/user/plan.md "Implement Phase 7.3: Dashboard BRAIN Reference System"
+```
+
+---
+
 ## ✨ Summary
+````
 
 **You asked:**
 > "Will the KDS system benefit from SOLID principles?"
