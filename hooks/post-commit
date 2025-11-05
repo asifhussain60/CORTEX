@@ -1,0 +1,34 @@
+#!/bin/bash
+# KDS Post-Commit Hook - Auto BRAIN Update + Health Checks
+# Version: 7.0 (Permanent Instinct Operations)
+# Installed via: scripts/setup-git-hooks.ps1
+
+# ========================================
+# PHASE 1: Critical Health Checks (< 2s)
+# ========================================
+echo "🔍 Running critical health checks..."
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/health-check-critical.ps1 -Silent
+
+if [ $? -ne 0 ]; then
+  echo "⚠️  Health check failed - but commit will proceed"
+  echo "   Run: pwsh -File scripts/verify-system-health.ps1"
+fi
+
+# ========================================
+# PHASE 2: Auto BRAIN Update
+# ========================================
+# Get commit message
+COMMIT_MSG=$(git log -1 --pretty=%B)
+
+# Get files changed
+FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r HEAD | tr '\n' ',' | sed 's/,$//')
+
+# Invoke auto-brain-updater (with throttling)
+pwsh -File scripts/auto-brain-updater.ps1 \
+    -RequestSummary "Git commit: $COMMIT_MSG" \
+    -ResponseType "execute" \
+    -AgentInvoked "git-commit" \
+    -Silent
+
+# Exit with success (don't block commit)
+exit 0
