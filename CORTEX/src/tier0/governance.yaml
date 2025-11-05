@@ -1,0 +1,580 @@
+version: "1.0"
+last_updated: "2025-11-05T00:00:00Z"
+rule_count: 22
+immutable: true
+source: "KDS v8 governance/rules.md"
+migration_status: "In progress - Phase 0"
+
+# =============================================================================
+# CORTEX TIER 0: INSTINCT LAYER
+# =============================================================================
+# These rules are IMMUTABLE and form the cognitive DNA of CORTEX.
+# They cannot be overridden and protect system integrity.
+# =============================================================================
+
+rules:
+  # -------------------------------------------------------------------------
+  # QUALITY & TDD RULES (Critical)
+  # -------------------------------------------------------------------------
+  
+  - id: TEST_FIRST_TDD
+    number: 5
+    severity: CRITICAL
+    category: quality
+    name: "Test-First Development (TDD)"
+    description: "Enforce RED → GREEN → REFACTOR cycle for all code changes"
+    
+    workflow:
+      RED:
+        - "Write failing test FIRST"
+        - "Verify test fails (RED)"
+        - "Commit RED state"
+      GREEN:
+        - "Implement minimum code to pass"
+        - "Verify test passes (GREEN)"
+        - "Commit GREEN state"
+      REFACTOR:
+        - "Clean up code"
+        - "Verify tests still pass"
+        - "Commit REFACTOR state"
+    
+    enforcement:
+      agent: "brain-protector"
+      pre_commit_hook: true
+      challenge_on_violation: true
+      auto_block: false
+    
+    violations:
+      implementing_without_test: "BLOCKED"
+      skipping_red_phase: "CHALLENGED"
+      no_refactor: "WARNED"
+
+  - id: DEFINITION_OF_DONE
+    number: 20
+    severity: CRITICAL
+    category: quality
+    name: "Definition of DONE"
+    description: "Quality gate - work not complete until all criteria met"
+    
+    criteria:
+      compilation:
+        - "Zero errors"
+        - "Zero warnings"
+        - "Clean build"
+      testing:
+        - "All tests pass"
+        - "New tests created for new code"
+        - "TDD cycle completed (RED → GREEN → REFACTOR)"
+      quality:
+        - "Code formatted"
+        - "No linting violations"
+        - "Documentation updated"
+      runtime:
+        - "App runs without errors"
+        - "No exceptions in logs"
+        - "Functionality verified"
+    
+    enforcement:
+      agent: "health-validator"
+      validation_point: "pre-commit"
+      blocker: true
+      bypass_allowed: false
+
+  - id: DEFINITION_OF_READY
+    number: 21
+    severity: CRITICAL
+    category: quality
+    name: "Definition of READY"
+    description: "Entry gate - work cannot start until criteria met"
+    
+    criteria:
+      requirements:
+        - "User story clear and complete"
+        - "Acceptance criteria defined"
+        - "Testable outcomes specified"
+      scope:
+        - "Bounded to single feature/fix"
+        - "Dependencies identified"
+        - "Estimate possible"
+      resources:
+        - "Files to modify known"
+        - "Architectural approach clear"
+        - "No blocking dependencies"
+    
+    enforcement:
+      agent: "work-planner"
+      validation_point: "before-execution"
+      blocker: true
+      bypass_allowed: false
+
+  # -------------------------------------------------------------------------
+  # BRAIN PROTECTION RULES (Critical)
+  # -------------------------------------------------------------------------
+
+  - id: BRAIN_PROTECTION
+    number: 22
+    severity: CRITICAL
+    category: protection
+    name: "Brain Protection System"
+    description: "Multi-layer protection against corruption and degradation"
+    
+    protections:
+      instinct_immutability:
+        - "Tier 0 rules cannot be disabled"
+        - "TDD cannot be skipped"
+        - "DoR/DoD cannot be bypassed"
+      
+      tier_boundary_protection:
+        - "Application data not in Tier 0"
+        - "Conversation data not in Tier 2"
+        - "Metrics not in Tier 1"
+        auto_migrate: true
+      
+      solid_compliance:
+        - "Agents stay single-purpose"
+        - "No mode switches allowed"
+        - "Abstractions required for dependencies"
+      
+      hemisphere_specialization:
+        - "Strategic work in RIGHT BRAIN"
+        - "Tactical work in LEFT BRAIN"
+        - "No cross-contamination"
+    
+    enforcement:
+      agent: "brain-protector"
+      challenge_protocol_enabled: true
+      auto_rollback: true
+
+  - id: CHALLENGE_USER_CHANGES
+    number: 18
+    severity: CRITICAL
+    category: protection
+    name: "Challenge User Changes"
+    description: "Protect system quality by challenging risky requests"
+    
+    when_to_challenge:
+      - "User proposes CORTEX modifications"
+      - "Changes affect core workflow"
+      - "Efficiency may be degraded"
+      - "TDD/SOLID principles violated"
+    
+    challenge_process:
+      - "Analyze proposed change"
+      - "Query Tier 2 (knowledge graph) for patterns"
+      - "Identify risks (degradation, complexity, violations)"
+      - "Present challenge with evidence"
+      - "Suggest safe alternatives"
+      - "Require explicit override or alternative selection"
+    
+    enforcement:
+      agent: "brain-protector"
+      require_justification: true
+      log_overrides: true
+
+  - id: CHECKPOINT_STRATEGY
+    number: 19
+    severity: HIGH
+    category: protection
+    name: "Checkpoint Strategy"
+    description: "Enable safe rollback at any point"
+    
+    checkpoint_triggers:
+      - "Before major changes"
+      - "Before risky operations"
+      - "User requests checkpoint"
+      - "Phase transitions"
+    
+    checkpoint_content:
+      - "Current state snapshot"
+      - "Rollback instructions"
+      - "Changed files list"
+      - "Success criteria"
+    
+    rollback_process:
+      - "Detect failure"
+      - "Restore from checkpoint"
+      - "Report what was rolled back"
+      - "Suggest alternative approach"
+
+  # -------------------------------------------------------------------------
+  # SOLID PRINCIPLES (High)
+  # -------------------------------------------------------------------------
+
+  - id: SINGLE_RESPONSIBILITY
+    number: 7
+    severity: HIGH
+    category: architecture
+    name: "Single Responsibility Principle (SRP)"
+    description: "One job per agent, no mode switches"
+    
+    requirements:
+      - "One job per agent"
+      - "No mode switches"
+      - "Clear boundaries"
+      - "Delegation over expansion"
+    
+    violations:
+      agent_multiple_jobs: "REFACTOR"
+      mode_switches: "CREATE dedicated agent"
+      unclear_purpose: "RENAME or SPLIT"
+
+  - id: INTERFACE_SEGREGATION
+    number: 8
+    severity: MEDIUM
+    category: architecture
+    name: "Interface Segregation Principle (ISP)"
+    description: "Dedicated specialist agents, no optional modes"
+    
+    requirements:
+      - "Dedicated specialist agents"
+      - "No optional modes"
+      - "Clear contracts"
+      - "Focused interfaces"
+    
+    examples:
+      - "error-corrector (dedicated to corrections)"
+      - "test-generator (dedicated to testing)"
+      - "NOT: executor with 'correction mode'"
+
+  - id: DEPENDENCY_INVERSION
+    number: 9
+    severity: HIGH
+    category: architecture
+    name: "Dependency Inversion Principle (DIP)"
+    description: "Abstractions for external dependencies"
+    
+    requirements:
+      - "Abstractions for external dependencies"
+      - "No hardcoded paths"
+      - "Interface-based access"
+      - "Pluggable implementations"
+    
+    abstractions:
+      session_loader: "file/db/cloud agnostic"
+      test_runner: "framework agnostic"
+      file_accessor: "path agnostic"
+      brain_query: "storage agnostic"
+
+  # -------------------------------------------------------------------------
+  # TIER BOUNDARY & DATA MANAGEMENT (Critical)
+  # -------------------------------------------------------------------------
+
+  - id: TIER_BOUNDARIES
+    number: 10
+    severity: CRITICAL
+    category: data
+    name: "Tier Boundary Enforcement"
+    description: "Data must be in correct tier"
+    
+    tier_0_instinct:
+      content: ["Governance rules", "Core principles"]
+      forbidden: ["Application data", "File paths", "User conversations"]
+    
+    tier_1_working_memory:
+      content: ["Last 20 conversations", "Entity extraction"]
+      forbidden: ["Long-term patterns", "Git metrics", "Governance rules"]
+    
+    tier_2_knowledge_graph:
+      content: ["Consolidated patterns", "Historical learnings"]
+      forbidden: ["Conversation details", "Raw events", "Governance rules"]
+    
+    tier_3_context:
+      content: ["Git/test/build metrics", "Project intelligence"]
+      forbidden: ["Conversation data", "Governance rules", "Patterns"]
+    
+    violations:
+      auto_migrate: true
+      warn: true
+      challenge_if_user_initiated: true
+
+  - id: FIFO_CONVERSATION_QUEUE
+    number: 11
+    severity: HIGH
+    category: data
+    name: "FIFO Queue Management (Tier 1)"
+    description: "20 conversation limit with oldest eviction"
+    
+    capacity: 20
+    eviction_strategy: "FIFO (oldest deleted)"
+    protection: "Active conversation never deleted"
+    
+    on_21st_conversation:
+      - "Identify oldest non-active conversation"
+      - "Extract patterns to Tier 2"
+      - "Delete conversation from Tier 1"
+      - "Log deletion event"
+
+  - id: PATTERN_CONFIDENCE_DECAY
+    number: 12
+    severity: MEDIUM
+    category: data
+    name: "Pattern Confidence Decay"
+    description: "Unused patterns decay and are eventually deleted"
+    
+    decay_logic:
+      unused_60_days:
+        action: "Reduce confidence by 10%"
+      unused_90_days:
+        action: "Reduce confidence by 25%"
+      unused_120_days:
+        action: "Mark for consolidation or deletion"
+      confidence_below_30:
+        action: "Auto-delete pattern"
+    
+    exceptions:
+      - "Tier 0 rules (never decay)"
+      - "Explicitly pinned patterns"
+
+  # -------------------------------------------------------------------------
+  # FILE ORGANIZATION RULES (High/Medium)
+  # -------------------------------------------------------------------------
+
+  - id: DUAL_INTERFACE
+    number: 1
+    severity: CRITICAL
+    category: file_organization
+    name: "Dual Interface Enforcement"
+    description: "Separate user-facing and internal agent prompts"
+    
+    user_prompts:
+      location: "cortex-agents/user/"
+      format: "Human-readable, friendly"
+      content: "Natural language instructions"
+      forbidden: "Technical validation logic"
+    
+    internal_agents:
+      location: "cortex-agents/internal/"
+      format: "Machine-readable, structured"
+      content: "Validation logic, YAML specs"
+      forbidden: "User-facing language"
+    
+    enforcement:
+      - "NEVER expose internal validation to users"
+      - "ALWAYS use templates for user output"
+      - "Keep technical details in internal agents"
+
+  - id: LIVE_DESIGN_DOC
+    number: 2
+    severity: CRITICAL
+    category: file_organization
+    name: "Live Design Document"
+    description: "Update design docs after every change"
+    
+    requirements:
+      - "Update after EVERY CORTEX change"
+      - "Track design decisions with date"
+      - "Delete obsolete sections (trust git)"
+      - "Human-readable for stakeholders"
+    
+    workflow:
+      - "Make change"
+      - "Update design doc"
+      - "Update governance.yaml (this file)"
+      - "Implement code"
+
+  - id: DELETE_NOT_ARCHIVE
+    number: 3
+    severity: HIGH
+    category: file_organization
+    name: "Delete Over Archive"
+    description: "Trust git history, don't create archive folders"
+    
+    principles:
+      - "Obsolete files: DELETE immediately"
+      - "Archive folders: FORBIDDEN"
+      - ".old suffixes: FORBIDDEN"
+      - "Git history: PRIMARY archive"
+    
+    exceptions:
+      - "Backups before major changes (temporary)"
+      - "Pre-migration snapshots (one-time)"
+
+  - id: ONE_PROMPT_PER_FILE
+    number: 4
+    severity: MEDIUM
+    category: file_organization
+    name: "One Prompt Per File"
+    description: "Single responsibility per agent file"
+    
+    requirements:
+      - "Single responsibility per file"
+      - "No combined prompts"
+      - "Clear file naming"
+      - "No mode switches within file"
+
+  # -------------------------------------------------------------------------
+  # AUTOMATION RULES (High/Medium)
+  # -------------------------------------------------------------------------
+
+  - id: AUTO_BRAIN_UPDATE
+    number: 16
+    severity: HIGH
+    category: automation
+    name: "Automatic Brain Updates"
+    description: "Trigger brain updates automatically"
+    
+    triggers:
+      event_threshold: "50+ unprocessed events"
+      time_threshold: "24 hours since last update (if 10+ events)"
+      session_complete: "All tasks in session done"
+    
+    process:
+      - "Collect events"
+      - "Extract patterns"
+      - "Update knowledge graph"
+      - "Update development context (if >1hr since last)"
+      - "Log completion"
+
+  - id: AUTO_CONVERSATION_RECORDING
+    number: 17
+    severity: HIGH
+    category: automation
+    name: "Conversation Auto-Recording"
+    description: "Multi-layer conversation capture"
+    
+    layers:
+      layer_1_copilot:
+        source: "GitHub Copilot Chat"
+        method: "Automatic parse and store"
+      
+      layer_2_sessions:
+        source: "Session completion"
+        method: "Extract on session end"
+      
+      layer_3_manual:
+        source: "record-conversation.ps1"
+        method: "For critical conversations"
+    
+    target_rate: "71%+ auto-recording"
+
+  - id: AUTO_GIT_COMMIT
+    number: 15
+    severity: MEDIUM
+    category: automation
+    name: "Git Commit Automation"
+    description: "Auto-commit after successful task completion"
+    
+    triggers:
+      - "Task completion"
+      - "DoD validated"
+      - "Tests passing"
+      - "Zero errors/warnings"
+    
+    commit_message_format:
+      type: "feat|fix|test|docs|refactor|style|chore"
+      scope: "component name"
+      subject: "Brief description"
+      body: "Details, test status, known issues"
+    
+    enforcement_agent: "commit-handler"
+
+  - id: DEV_CONTEXT_THROTTLING
+    number: 14
+    severity: MEDIUM
+    category: automation
+    name: "Development Context Throttling"
+    description: "Prevent excessive git metric collection"
+    
+    collection_frequency:
+      minimum_interval: "1 hour"
+      rationale: "Git metrics don't change every 50 events"
+    
+    optimization:
+      - "Delta updates only"
+      - "Not full re-scan"
+      - "Efficiency over freshness"
+    
+    override: "Manual trigger allowed"
+
+  - id: ANOMALY_DETECTION
+    number: 13
+    severity: HIGH
+    category: monitoring
+    name: "Anomaly Detection"
+    description: "Track and report violations"
+    
+    anomalies_tracked:
+      - "Tier boundary violations"
+      - "SOLID violations"
+      - "TDD bypasses"
+      - "Incorrect file modifications"
+      - "Protection challenges issued"
+    
+    storage: "cortex-brain/tier0/anomalies.jsonl"
+    review_frequency: "Weekly"
+    action_threshold: "5+ similar anomalies"
+
+  # -------------------------------------------------------------------------
+  # GOVERNANCE SELF-ENFORCEMENT (Critical)
+  # -------------------------------------------------------------------------
+
+  - id: GOVERNANCE_SELF_ENFORCEMENT
+    number: 6
+    severity: CRITICAL
+    category: governance
+    name: "Governance Self-Enforcement"
+    description: "Rules apply to rule changes"
+    
+    requirements:
+      - "Rules apply to rule changes"
+      - "Changes require justification"
+      - "Version increments for modifications"
+      - "Validation before commit"
+    
+    process:
+      - "Propose rule change"
+      - "Document justification"
+      - "Update CORTEX-DNA.md and governance.yaml"
+      - "Increment version"
+      - "Validate no conflicts"
+      - "Commit"
+
+  # -------------------------------------------------------------------------
+  # SYSTEM LIMITS (Medium)
+  # -------------------------------------------------------------------------
+
+  - id: SYSTEM_LIMITS
+    number: 24
+    severity: MEDIUM
+    category: limits
+    name: "System Limits"
+    description: "Soft and hard limits on system components"
+    
+    governance:
+      soft_limit: 15
+      hard_limit: 20
+      current: 22
+      status: "⚠️ Approaching hard limit - consolidation recommended"
+    
+    agents:
+      soft_limit: 10
+      hard_limit: 15
+      current: 10
+      status: "✅ Within limits"
+    
+    brain_storage:
+      target: "<500KB total"
+      tier_1: "<200KB"
+      tier_2: "<150KB"
+      tier_3: "<100KB"
+    
+    actions_on_limits:
+      approaching_soft: "WARN, suggest consolidation"
+      at_hard: "HALT, require consolidation"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+migration_notes:
+  - "All 22 KDS governance rules preserved"
+  - "References updated: KDS → CORTEX"
+  - "Storage paths updated for new structure"
+  - "Rule format enhanced with metadata"
+  - "Programmatic access enabled"
+
+next_steps:
+  - "Implement GovernanceEngine class"
+  - "Create 15 unit tests"
+  - "Build challenge protocol"
+  - "Integrate with pre-commit hook"
