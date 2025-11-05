@@ -1,5 +1,6 @@
 using System;
 using Xunit;
+using KDS.Dashboard.WPF.ViewModels;
 
 namespace KDS.Dashboard.WPF.Tests
 {
@@ -15,11 +16,11 @@ namespace KDS.Dashboard.WPF.Tests
             // This test verifies that creating all ViewModels at once doesn't cause conflicts
             
             // Act
-            var activityVM = new ViewModels.ActivityViewModel();
-            var conversationsVM = new ViewModels.ConversationsViewModel();
-            var metricsVM = new ViewModels.MetricsViewModel();
-            var healthVM = new ViewModels.HealthViewModel();
-            var featuresVM = new ViewModels.FeaturesViewModel();
+            var activityVM = new ActivityViewModel();
+            var conversationsVM = new ConversationsViewModel();
+            var metricsVM = new MetricsViewModel();
+            var healthVM = new HealthViewModel();
+            var featuresVM = new FeaturesViewModel();
 
             // Assert - All should be instantiated without errors
             Assert.NotNull(activityVM);

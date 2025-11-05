@@ -13,29 +13,51 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Grid.Row="0" 
-                  Text="KDS Feature Inventory" 
-                  FontSize="20" 
-                  FontWeight="SemiBold"
-                  Foreground="{StaticResource TextBrush}"
-                  Margin="0,0,0,16"/>
+        <!-- Header with Refresh Button -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" 
+                      Text="KDS Feature Inventory" 
+                      FontSize="20" 
+                      FontWeight="SemiBold"
+                      Foreground="{StaticResource TextBrush}"
+                      VerticalAlignment="Center"/>
+            
+            <Button Grid.Column="1"
+                    Command="{Binding RefreshCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    materialDesign:ButtonAssist.CornerRadius="4">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" 
+                                                Width="16" Height="16" 
+                                                Margin="0,0,8,0"/>
+                        <TextBlock Text="REFRESH"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </Grid>
 
         <!-- Summary Cards -->
-        <UniformGrid Grid.Row="1" Rows="1" Columns="3" Margin="0,0,0,16">
+        <UniformGrid Grid.Row="1" Rows="1" Columns="4" Margin="0,0,0,16">
             <materialDesign:Card Style="{StaticResource ModernCard}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="✅" FontSize="32" Margin="0,0,12,0"/>
+                    <TextBlock Text="✅" FontSize="28" Margin="0,0,12,0"/>
                     <StackPanel>
                         <TextBlock Text="{Binding ImplementedCount}" 
-                                  FontSize="32" 
+                                  FontSize="28" 
                                   FontWeight="Bold"
                                   Foreground="#2E7D32"/>
                         <TextBlock Text="Fully Implemented" 
-                                  FontSize="12" 
+                                  FontSize="11" 
                                   Foreground="{StaticResource TextSecondaryBrush}"/>
                     </StackPanel>
                 </StackPanel>
@@ -43,14 +65,14 @@
 
             <materialDesign:Card Style="{StaticResource ModernCard}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="🟡" FontSize="32" Margin="0,0,12,0"/>
+                    <TextBlock Text="🟡" FontSize="28" Margin="0,0,12,0"/>
                     <StackPanel>
                         <TextBlock Text="{Binding PartialCount}" 
-                                  FontSize="32" 
+                                  FontSize="28" 
                                   FontWeight="Bold"
                                   Foreground="#F57C00"/>
                         <TextBlock Text="Partially Implemented" 
-                                  FontSize="12" 
+                                  FontSize="11" 
                                   Foreground="{StaticResource TextSecondaryBrush}"/>
                     </StackPanel>
                 </StackPanel>
@@ -58,175 +80,253 @@
 
             <materialDesign:Card Style="{StaticResource ModernCard}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="📋" FontSize="32" Margin="0,0,12,0"/>
+                    <TextBlock Text="🔄" FontSize="28" Margin="0,0,12,0"/>
+                    <StackPanel>
+                        <TextBlock Text="{Binding InProgressCount}" 
+                                  FontSize="28" 
+                                  FontWeight="Bold"
+                                  Foreground="#7B1FA2"/>
+                        <TextBlock Text="In Progress" 
+                                  FontSize="11" 
+                                  Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource ModernCard}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="📋" FontSize="28" Margin="0,0,12,0"/>
                     <StackPanel>
                         <TextBlock Text="{Binding DesignedCount}" 
-                                  FontSize="32" 
+                                  FontSize="28" 
                                   FontWeight="Bold"
                                   Foreground="#1976D2"/>
                         <TextBlock Text="Designed Only" 
-                                  FontSize="12" 
+                                  FontSize="11" 
                                   Foreground="{StaticResource TextSecondaryBrush}"/>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
         </UniformGrid>
 
-        <!-- Feature List -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Features}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <materialDesign:Card Style="{StaticResource ModernCard}" 
-                                            Margin="0,0,0,8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+        <!-- Search and Filter Bar -->
+        <Grid Grid.Row="2" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                                <!-- Header -->
-                                <Grid Grid.Row="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+            <!-- Search Box -->
+            <TextBox Grid.Column="0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Search features..."
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,12,0">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Escape" Command="{Binding ClearFiltersCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
 
-                                    <TextBlock Grid.Column="0" 
-                                              Text="{Binding Name}" 
-                                              FontWeight="SemiBold" 
-                                              FontSize="16"
-                                              Foreground="{StaticResource TextBrush}"/>
+            <!-- Status Filter -->
+            <ComboBox Grid.Column="1"
+                      SelectedValue="{Binding StatusFilter}"
+                      materialDesign:HintAssist.Hint="Filter by Status"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Width="200"
+                      Margin="0,0,12,0">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="All Statuses" Tag="{x:Null}"/>
+                    <ComboBoxItem Content="✅ Fully Implemented" Tag="{x:Static models:FeatureStatus.FullyImplemented}"/>
+                    <ComboBoxItem Content="🟡 Partially Implemented" Tag="{x:Static models:FeatureStatus.PartiallyImplemented}"/>
+                    <ComboBoxItem Content="🔄 In Progress" Tag="{x:Static models:FeatureStatus.InProgress}"/>
+                    <ComboBoxItem Content="📋 Designed Only" Tag="{x:Static models:FeatureStatus.DesignedOnly}"/>
+                </ComboBox.Items>
+            </ComboBox>
 
-                                    <Border Grid.Column="1">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.FullyImplemented}">
-                                                        <Setter Property="Background" Value="#E8F5E9"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.PartiallyImplemented}">
-                                                        <Setter Property="Background" Value="#FFF3E0"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.DesignedOnly}">
-                                                        <Setter Property="Background" Value="#E3F2FD"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                                <Setter Property="CornerRadius" Value="4"/>
-                                                <Setter Property="Padding" Value="8,4"/>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock FontSize="11" FontWeight="Bold">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.FullyImplemented}">
-                                                            <Setter Property="Foreground" Value="#2E7D32"/>
-                                                            <Setter Property="Text" Value="✅ FULLY IMPLEMENTED"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.PartiallyImplemented}">
-                                                            <Setter Property="Foreground" Value="#F57C00"/>
-                                                            <Setter Property="Text" Value="🟡 PARTIALLY IMPLEMENTED"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="{x:Static models:FeatureStatus.DesignedOnly}">
-                                                            <Setter Property="Foreground" Value="#1976D2"/>
-                                                            <Setter Property="Text" Value="📋 DESIGNED ONLY"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Border>
-                                </Grid>
+            <!-- Clear Filters Button -->
+            <Button Grid.Column="2"
+                    Content="CLEAR"
+                    Command="{Binding ClearFiltersCommand}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    materialDesign:ButtonAssist.CornerRadius="4"
+                    Padding="16,6"/>
+        </Grid>
 
-                                <!-- Stats -->
-                                <StackPanel Grid.Row="1" 
-                                           Orientation="Horizontal" 
-                                           Margin="0,8,0,0">
-                                    <Border Background="#E3F2FD" 
-                                           CornerRadius="4" 
-                                           Padding="8,4" 
-                                           Margin="0,0,8,0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="File" 
-                                                                    Width="12" Height="12" 
-                                                                    Margin="0,0,4,0"/>
-                                            <TextBlock Text="{Binding Files}" 
-                                                      FontSize="11" 
-                                                      Foreground="#1976D2"/>
-                                            <TextBlock Text=" files" 
-                                                      FontSize="11" 
-                                                      Foreground="#1976D2"/>
-                                        </StackPanel>
-                                    </Border>
+        <!-- Feature List with Loading Indicator -->
+        <Grid Grid.Row="3">
+            <!-- Loading Overlay -->
+            <Border Background="#F5F5F5" 
+                    Visibility="{Binding IsScanning, Converter={StaticResource BoolToVisibility}}"
+                    CornerRadius="4">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                IsIndeterminate="True"
+                                Width="48" Height="48"/>
+                    <TextBlock Text="Scanning features..." 
+                              FontSize="14" 
+                              Foreground="{StaticResource TextSecondaryBrush}"
+                              Margin="0,16,0,0"/>
+                </StackPanel>
+            </Border>
 
-                                    <Border Background="#E8F5E9" 
-                                           CornerRadius="4" 
-                                           Padding="8,4" 
-                                           Margin="0,0,8,0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="Script" 
-                                                                    Width="12" Height="12" 
-                                                                    Margin="0,0,4,0"/>
-                                            <TextBlock Text="{Binding Scripts}" 
-                                                      FontSize="11" 
-                                                      Foreground="#2E7D32"/>
-                                            <TextBlock Text=" scripts" 
-                                                      FontSize="11" 
-                                                      Foreground="#2E7D32"/>
-                                        </StackPanel>
-                                    </Border>
+            <!-- Feature List -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                         Visibility="{Binding IsScanning, Converter={StaticResource InverseBoolToVisibility}}">
+                <ItemsControl ItemsSource="{Binding FilteredFeatures}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Style="{StaticResource ModernCard}" 
+                                                Margin="0,0,0,12">
+                                <Expander>
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
 
-                                    <Border Background="#FFF3E0" 
-                                           CornerRadius="4" 
-                                           Padding="8,4">
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="TestTube" 
-                                                                    Width="12" Height="12" 
-                                                                    Margin="0,0,4,0"/>
-                                            <TextBlock Text="{Binding Tests}" 
-                                                      FontSize="11" 
-                                                      Foreground="#F57C00"/>
-                                            <TextBlock Text=" tests" 
-                                                      FontSize="11" 
-                                                      Foreground="#F57C00"/>
-                                        </StackPanel>
-                                    </Border>
+                                            <!-- Feature Name and Status Badge -->
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding Version}" 
-                                              FontSize="11" 
-                                              Foreground="{StaticResource TextSecondaryBrush}"
-                                              Margin="12,0,0,0"
-                                              VerticalAlignment="Center"/>
-                                </StackPanel>
+                                                <TextBlock Grid.Column="0" 
+                                                          Text="{Binding Name}" 
+                                                          FontWeight="SemiBold" 
+                                                          FontSize="16"
+                                                          Foreground="{StaticResource TextBrush}"/>
 
-                                <!-- Missing Components (if any) -->
-                                <ItemsControl Grid.Row="2" 
-                                             ItemsSource="{Binding MissingComponents}" 
-                                             Margin="0,8,0,0">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                                <materialDesign:PackIcon Kind="AlertCircle" 
-                                                                        Width="12" Height="12" 
-                                                                        Foreground="#F57C00" 
-                                                                        Margin="0,0,8,0"/>
-                                                <TextBlock Text="Missing: " 
-                                                          FontSize="11" 
-                                                          Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                <TextBlock Text="{Binding}" 
-                                                          FontSize="11" 
-                                                          Foreground="#F57C00"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </Grid>
-                        </materialDesign:Card>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                                <TextBlock Grid.Column="1"
+                                                          Text="{Binding StatusBadge}"
+                                                          FontSize="18"
+                                                          Margin="12,0,0,0"/>
+                                            </Grid>
+
+                                            <!-- Component Summary -->
+                                            <TextBlock Grid.Row="1"
+                                                      Text="{Binding ComponentSummary}"
+                                                      FontSize="12"
+                                                      Foreground="{StaticResource TextSecondaryBrush}"
+                                                      Margin="0,4,0,0"/>
+                                        </Grid>
+                                    </Expander.Header>
+
+                                    <!-- Expanded Details -->
+                                    <StackPanel Margin="8,12,8,8">
+                                        <!-- Files -->
+                                        <TextBlock Text="📄 Files" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Margin="0,0,0,4"/>
+                                        <ItemsControl ItemsSource="{Binding Files}"
+                                                     Margin="0,0,0,12">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                              FontSize="11" 
+                                                              FontFamily="Consolas"
+                                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                                              Margin="16,2,0,2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Scripts -->
+                                        <TextBlock Text="⚙️ Scripts" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Margin="0,0,0,4"
+                                                  Visibility="{Binding Scripts.Count, Converter={StaticResource CountToVisibility}}"/>
+                                        <ItemsControl ItemsSource="{Binding Scripts}"
+                                                     Margin="0,0,0,12">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                              FontSize="11" 
+                                                              FontFamily="Consolas"
+                                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                                              Margin="16,2,0,2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Tests -->
+                                        <TextBlock Text="🧪 Tests" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Margin="0,0,0,4"
+                                                  Visibility="{Binding Tests.Count, Converter={StaticResource CountToVisibility}}"/>
+                                        <ItemsControl ItemsSource="{Binding Tests}"
+                                                     Margin="0,0,0,12">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                              FontSize="11" 
+                                                              FontFamily="Consolas"
+                                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                                              Margin="16,2,0,2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Documentation -->
+                                        <TextBlock Text="📚 Documentation" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Margin="0,0,0,4"
+                                                  Visibility="{Binding Docs.Count, Converter={StaticResource CountToVisibility}}"/>
+                                        <ItemsControl ItemsSource="{Binding Docs}"
+                                                     Margin="0,0,0,12">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                              FontSize="11" 
+                                                              FontFamily="Consolas"
+                                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                                              Margin="16,2,0,2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Missing Components -->
+                                        <TextBlock Text="⚠️ Missing Components" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Foreground="#F57C00"
+                                                  Margin="0,0,0,4"
+                                                  Visibility="{Binding MissingComponents.Count, Converter={StaticResource CountToVisibility}}"/>
+                                        <ItemsControl ItemsSource="{Binding MissingComponents}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                              FontSize="11" 
+                                                              Foreground="#F57C00"
+                                                              Margin="16,2,0,2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Notes -->
+                                        <TextBlock Text="📝 Notes" 
+                                                  FontWeight="SemiBold" 
+                                                  FontSize="13"
+                                                  Margin="0,12,0,4"
+                                                  Visibility="{Binding Notes, Converter={StaticResource StringToVisibility}}"/>
+                                        <TextBlock Text="{Binding Notes}" 
+                                                  FontSize="11" 
+                                                  TextWrapping="Wrap"
+                                                  Foreground="{StaticResource TextSecondaryBrush}"
+                                                  Margin="16,0,0,0"/>
+                                    </StackPanel>
+                                </Expander>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

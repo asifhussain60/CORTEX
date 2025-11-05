@@ -2,7 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:KDS.Dashboard.WPF.ViewModels"
              Background="{DynamicResource MaterialDesignPaper}">
+    <UserControl.DataContext>
+        <viewmodels:DashboardViewModel/>
+    </UserControl.DataContext>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20">
             <Grid.RowDefinitions>
@@ -17,11 +21,47 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Brain Dashboard" 
                            Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                            VerticalAlignment="Center"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                
+                <!-- Large Centered Heartbeat Animation -->
+                <materialDesign:PackIcon Grid.Column="1"
+                                        Kind="HeartPulse" 
+                                        Width="80" 
+                                        Height="80" 
+                                        Foreground="#E91E63"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,20,0"
+                                        RenderTransformOrigin="0.5,0.5">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </materialDesign:PackIcon.RenderTransform>
+                    <materialDesign:PackIcon.Style>
+                        <Style TargetType="materialDesign:PackIcon">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsHeartbeatActive}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                               From="1.0" To="1.5" Duration="0:0:0.4"
+                                                               AutoReverse="True"/>
+                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                               From="1.0" To="1.5" Duration="0:0:0.4"
+                                                               AutoReverse="True"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <materialDesign:PackIcon Kind="Circle" 
                                              Width="12" Height="12"
                                              Foreground="LimeGreen"
@@ -52,7 +92,7 @@
                                 </Grid.RowDefinitions>
                                 
                                 <materialDesign:PackIcon Kind="{Binding Icon}"
-                                                         Width="32" Height="32"
+                                                         Width="96" Height="96"
                                                          Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                          HorizontalAlignment="Left"
                                                          Margin="0,0,0,10"/>
@@ -146,40 +186,60 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
                         <TextBlock Text="Brain Health"
                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                                    Margin="0,0,0,15"/>
                         
-                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                        <!-- Single Brain Icon -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,20">
                             <materialDesign:PackIcon Kind="Brain"
-                                                     Width="64" Height="64"
+                                                     Width="128" Height="128"
                                                      HorizontalAlignment="Center"
-                                                     Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                     Margin="0,0,0,20"/>
+                                                     Foreground="#9C27B0"
+                                                     Margin="0,0,0,10"/>
                             
                             <TextBlock Text="{Binding BrainHealth}"
-                                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                       HorizontalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Margin="0,0,0,10"/>
+                                      Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                      HorizontalAlignment="Center"
+                                      FontWeight="Bold"
+                                      Foreground="#9C27B0"
+                                      Margin="0,0,0,5"/>
                             
                             <TextBlock HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center"
-                                       Foreground="{DynamicResource MaterialDesignBodyLight}">
-                                <Run Text="Total Events: "/>
+                                      FontSize="11"
+                                      Foreground="{DynamicResource MaterialDesignBodyLight}">
+                                <Run Text="Events: "/>
                                 <Run Text="{Binding TotalEvents, Mode=OneWay}" FontWeight="SemiBold"/>
-                                <LineBreak/>
-                                <Run Text="Conversations: "/>
-                                <Run Text="{Binding ConversationsCount, Mode=OneWay}" FontWeight="SemiBold"/>
-                                <LineBreak/>
-                                <Run Text="Patterns: "/>
-                                <Run Text="{Binding KnowledgePatternsCount, Mode=OneWay}" FontWeight="SemiBold"/>
                             </TextBlock>
                         </StackPanel>
+                        
+                        <!-- Status Details -->
+                        <Border Grid.Row="2"
+                                Background="{DynamicResource MaterialDesignDivider}"
+                                Padding="12,8"
+                                CornerRadius="4">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center"
+                                          FontSize="12"
+                                          FontWeight="SemiBold"
+                                          Margin="0,0,0,4">
+                                    <Run Text="Status: "/>
+                                    <Run Text="{Binding BrainHealth, Mode=OneWay}"/>
+                                </TextBlock>
+                                <TextBlock HorizontalAlignment="Center"
+                                          FontSize="10"
+                                          Foreground="{DynamicResource MaterialDesignBodyLight}">
+                                    <Run Text="Conversations: "/>
+                                    <Run Text="{Binding ConversationsCount, Mode=OneWay}"/>
+                                    <Run Text=" • Patterns: "/>
+                                    <Run Text="{Binding KnowledgePatternsCount, Mode=OneWay}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
                     </Grid>
                 </materialDesign:Card>
             </Grid>

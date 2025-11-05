@@ -17,10 +17,13 @@ namespace KDS.Dashboard.WPF.ViewModels
     {
         private ObservableCollection<BrainEvent> _events;
         private FileSystemWatcher? _eventWatcher;
+        private bool _isHeartbeatActive;
+        private DateTime _lastEventTime;
 
         public ActivityViewModel()
         {
             _events = new ObservableCollection<BrainEvent>();
+            _lastEventTime = DateTime.MinValue;
             
             try
             {
@@ -38,6 +41,26 @@ namespace KDS.Dashboard.WPF.ViewModels
         {
             get => _events;
             set => SetProperty(ref _events, value);
+        }
+
+        /// <summary>
+        /// Indicates whether the heartbeat animation should be active
+        /// Triggers when new events arrive
+        /// </summary>
+        public bool IsHeartbeatActive
+        {
+            get => _isHeartbeatActive;
+            set => SetProperty(ref _isHeartbeatActive, value);
+        }
+
+        /// <summary>
+        /// Timestamp of the last event received
+        /// Used for heartbeat animation timing
+        /// </summary>
+        public DateTime LastEventTime
+        {
+            get => _lastEventTime;
+            private set => SetProperty(ref _lastEventTime, value);
         }
 
         private void SetupFileWatcher()
@@ -77,12 +100,34 @@ namespace KDS.Dashboard.WPF.ViewModels
                 try
                 {
                     LoadEvents();
+                    
+                    // Trigger heartbeat animation
+                    TriggerHeartbeat();
                 }
                 catch (Exception ex)
                 {
                     ErrorViewModel.Instance.LogError("ActivityViewModel", 
                         "Failed to reload events after file change", ex);
                 }
+            });
+        }
+
+        /// <summary>
+        /// Triggers the heartbeat animation for 2 seconds
+        /// Called when new events arrive
+        /// </summary>
+        private void TriggerHeartbeat()
+        {
+            IsHeartbeatActive = true;
+            LastEventTime = DateTime.Now;
+            
+            // Auto-disable after 2 seconds
+            System.Threading.Tasks.Task.Delay(2000).ContinueWith(_ =>
+            {
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    IsHeartbeatActive = false;
+                });
             });
         }
 

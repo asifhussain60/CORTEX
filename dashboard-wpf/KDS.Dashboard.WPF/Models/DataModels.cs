@@ -248,19 +248,72 @@ namespace KDS.Dashboard.WPF.Models
     {
         public string Name { get; set; } = string.Empty;
         public FeatureStatus Status { get; set; }
-        public int Files { get; set; }
-        public int Scripts { get; set; }
-        public int Tests { get; set; }
+        public string Notes { get; set; } = string.Empty;
+        public string DiscoveredFrom { get; set; } = string.Empty;
+        
+        // Component lists
+        public List<string> Files { get; set; } = new List<string>();
+        public List<string> Scripts { get; set; } = new List<string>();
+        public List<string> Tests { get; set; } = new List<string>();
+        public List<string> Docs { get; set; } = new List<string>();
+        public List<GitCommit> GitCommits { get; set; } = new List<GitCommit>();
+        
+        // Validation flags
+        public bool HasCode { get; set; }
+        public bool HasTests { get; set; }
+        public bool HasDocs { get; set; }
+        public bool HasAgentIntegration { get; set; }
+        
+        // Metadata
         public decimal Confidence { get; set; }
-        public string[]? MissingComponents { get; set; }
+        public List<string> MissingComponents { get; set; } = new List<string>();
         public string Version { get; set; } = string.Empty;
+        public DateTime? DateAdded { get; set; }
+        public DateTime? DateModified { get; set; }
+        
+        // Display properties
+        public string StatusBadge => Status switch
+        {
+            FeatureStatus.FullyImplemented => "✅",
+            FeatureStatus.PartiallyImplemented => "🟡",
+            FeatureStatus.InProgress => "🔄",
+            FeatureStatus.DesignedOnly => "📋",
+            FeatureStatus.Deprecated => "❌",
+            _ => "❓"
+        };
+        
+        public string StatusText => Status switch
+        {
+            FeatureStatus.FullyImplemented => "Fully Implemented",
+            FeatureStatus.PartiallyImplemented => "Partially Implemented",
+            FeatureStatus.InProgress => "In Progress",
+            FeatureStatus.DesignedOnly => "Designed Only",
+            FeatureStatus.Deprecated => "Deprecated",
+            _ => "Unknown"
+        };
+        
+        public int FileCount => Files.Count;
+        public int ScriptCount => Scripts.Count;
+        public int TestCount => Tests.Count;
+        public int DocCount => Docs.Count;
+        public int CommitCount => GitCommits.Count;
+        
+        public string ComponentSummary => 
+            $"{FileCount} files, {ScriptCount} scripts, {TestCount} tests";
+        
+        public string MissingComponentsText =>
+            MissingComponents.Count > 0 
+                ? string.Join(", ", MissingComponents) 
+                : "None";
     }
 
     public enum FeatureStatus
     {
         FullyImplemented,
         PartiallyImplemented,
+        InProgress,
         DesignedOnly,
-        Deprecated
+        Deprecated,
+        Unknown
     }
 }

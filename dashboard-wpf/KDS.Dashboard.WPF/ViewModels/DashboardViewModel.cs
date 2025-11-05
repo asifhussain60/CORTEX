@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using KDS.Dashboard.WPF.Helpers;
 using KDS.Dashboard.WPF.Models;
+using KDS.Dashboard.WPF.Services;
 
 namespace KDS.Dashboard.WPF.ViewModels
 {
@@ -27,6 +30,8 @@ namespace KDS.Dashboard.WPF.ViewModels
         private ObservableCollection<EventTypeMetric> _eventTypeDistribution;
         private ObservableCollection<ConversationTrend> _conversationTimeline;
         private ObservableCollection<BrainMetric> _brainMetrics;
+        private bool _isHeartbeatActive;
+        private DateTime _lastEventTime;
 
         public DashboardViewModel()
         {
@@ -95,6 +100,26 @@ namespace KDS.Dashboard.WPF.ViewModels
             set => SetProperty(ref _brainMetrics, value);
         }
 
+        /// <summary>
+        /// Indicates whether the heartbeat animation should be active
+        /// Triggers when new events arrive
+        /// </summary>
+        public bool IsHeartbeatActive
+        {
+            get => _isHeartbeatActive;
+            set => SetProperty(ref _isHeartbeatActive, value);
+        }
+
+        /// <summary>
+        /// Timestamp of the last event received
+        /// Used for heartbeat animation timing
+        /// </summary>
+        public DateTime LastEventTime
+        {
+            get => _lastEventTime;
+            private set => SetProperty(ref _lastEventTime, value);
+        }
+
         private void SetupFileWatchers()
         {
             try
@@ -142,12 +167,31 @@ namespace KDS.Dashboard.WPF.ViewModels
                 try
                 {
                     LoadDashboardData();
+                    TriggerHeartbeat();
                 }
                 catch (Exception ex)
                 {
                     ErrorViewModel.Instance.LogError("DashboardViewModel", 
                         "Failed to reload dashboard after file change", ex);
                 }
+            });
+        }
+
+        /// <summary>
+        /// Triggers the heartbeat animation for 2 seconds
+        /// Called when new events arrive
+        /// </summary>
+        private void TriggerHeartbeat()
+        {
+            IsHeartbeatActive = true;
+            LastEventTime = DateTime.Now;
+            
+            System.Threading.Tasks.Task.Delay(2000).ContinueWith(_ =>
+            {
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    IsHeartbeatActive = false;
+                });
             });
         }
 
@@ -306,18 +350,29 @@ namespace KDS.Dashboard.WPF.ViewModels
                     yaml, @"^\s*-\s+", System.Text.RegularExpressions.RegexOptions.Multiline);
                 KnowledgePatternsCount = patternMatches.Count;
 
-                // Calculate brain health
+                // Calculate brain health (Right Brain - Application Metrics)
                 var eventBacklog = TotalEvents;
                 var conversationUtilization = (ConversationsCount / 20.0) * 100; // 20 is FIFO capacity
                 
-                if (eventBacklog < 50 && KnowledgePatternsCount > 1000 && conversationUtilization < 80)
+                // Count healthy metrics
+                int healthyMetrics = 0;
+                int totalMetrics = 3;
+                
+                if (eventBacklog < 50) healthyMetrics++;
+                if (KnowledgePatternsCount > 50) healthyMetrics++;
+                if (conversationUtilization < 80) healthyMetrics++;
+                
+                // Calculate brain health based on % of metrics passing
+                double passRate = (double)healthyMetrics / totalMetrics * 100;
+                
+                if (passRate >= 100)
                     BrainHealth = "Excellent";
-                else if (eventBacklog < 100 && KnowledgePatternsCount > 500)
+                else if (passRate >= 66)
                     BrainHealth = "Good";
-                else if (eventBacklog < 200)
+                else if (passRate >= 33)
                     BrainHealth = "Fair";
                 else
-                    BrainHealth = "Needs Attention";
+                    BrainHealth = "Poor";
 
                 // Brain metrics cards
                 BrainMetrics.Clear();
@@ -332,7 +387,7 @@ namespace KDS.Dashboard.WPF.ViewModels
                 {
                     Name = "Knowledge Patterns",
                     Value = KnowledgePatternsCount,
-                    Status = KnowledgePatternsCount > 500 ? "Healthy" : "Low",
+                    Status = KnowledgePatternsCount > 50 ? "Healthy" : "Low",
                     Icon = "Brain"
                 });
                 BrainMetrics.Add(new BrainMetric
