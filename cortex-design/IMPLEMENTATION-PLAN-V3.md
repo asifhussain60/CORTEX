@@ -1,10 +1,17 @@
 # CORTEX Implementation Plan V3 - Organized for Logical Execution
 
 **Date:** 2025-11-06  
-**Status:** 🎯 ACTIVE - Ready for Execution  
+**Last Revised:** 2025-11-06 (Post-Group 3 Review)  
+**Status:** 🎯 ACTIVE - GROUP 4 Ready for Execution  
 **Created From:** V2 plan with all recommendations accepted  
 **Approach:** Small increments (Rule #23) for resilient execution  
 **Special Additions:** Full system check mechanism + root folder enforcement
+
+**📊 PROGRESS UPDATE:**
+- ✅ **GROUP 1-3 COMPLETE** (31 hours, 52% faster than estimated)
+- 🎯 **GROUP 4 REVISED** (20-28 hours, applying proven 30% efficiency gain)
+- 📋 **GROUPS 5-6** (9-13 hours, unchanged)
+- **NEW PROJECTION:** 60-72 hours total (vs original 88-114 hours)
 
 ---
 
@@ -276,44 +283,67 @@ Each group has clear **entry criteria** (what must be complete before starting) 
 ## 🤖 GROUP 4: Intelligence Layer (Agents, Entry Point, Dashboard)
 
 **Purpose:** Implement specialist agents and user interface  
-**Duration:** 32-42 hours  
+**Duration:** 20-28 hours (REVISED from 32-42 based on Group 3 performance)  
 **Entry Criteria:** GROUP 3 complete (all tiers operational)  
 **Exit Criteria:** All agents functional, dashboard deployed
 
 ### Tasks in GROUP 4
 
-**Sub-Group 4A: Phase 4 (Specialist Agents)**
-- Task 4.1: IntentRouter Agent (2-3 hrs)
-- Task 4.2: WorkPlanner Agent (2-3 hrs)
-- Task 4.3: CodeExecutor Agent (2-3 hrs)
-- Task 4.4: TestGenerator Agent (2-3 hrs)
-- Task 4.5: HealthValidator Agent (1.5-2 hrs)
-- Task 4.6: ChangeGovernor Agent (1.5-2 hrs)
-- Task 4.7: ErrorCorrector Agent (1-1.5 hrs)
-- Task 4.8: SessionResumer Agent (1-1.5 hrs)
-- Task 4.9: ScreenshotAnalyzer Agent (1-1.5 hrs)
-- Task 4.10: CommitHandler Agent (1-1.5 hrs)
-- Task 4.11: Testing (30 tests) (2.5-3 hrs)
+**NEW: Task 4.0: Agent Framework & Infrastructure (2 hours)**
+- Create `CORTEX/src/cortex_agents/__init__.py` package structure
+- Implement `BaseAgent` abstract class with common functionality
+- Set up agent logging and error handling infrastructure
+- Create agent test fixtures and testing utilities
+- Fix import structure to resolve `ModuleNotFoundError`
+- Document agent development patterns
 
-**Sub-Group 4B: Phase 5 (Entry Point)**
-- Task 5.1: cortex.md Entry Point (1.5-2 hrs)
-- Task 5.2: Request Parser (1.5 hrs)
+**Sub-Group 4A: Phase 4 (Specialist Agents) - 3 WAVES**
+
+**Wave 1: Foundation Agents (6 hours)**
+- Task 4.1: IntentRouter Agent (2 hrs)
+- Task 4.2: WorkPlanner Agent (2 hrs)
+- Task 4.3: HealthValidator Agent (2 hrs)
+
+**Wave 2: Execution Agents (6 hours)**
+- Task 4.4: CodeExecutor Agent (2 hrs)
+- Task 4.5: TestGenerator Agent (2 hrs)
+- Task 4.6: ErrorCorrector Agent (2 hrs)
+
+**Wave 3: Advanced Agents (6 hours)**
+- Task 4.7: SessionResumer Agent (1.5 hrs)
+- Task 4.8: ScreenshotAnalyzer Agent (1.5 hrs)
+- Task 4.9: ChangeGovernor Agent (1.5 hrs)
+- Task 4.10: CommitHandler Agent (1.5 hrs)
+
+**Task 4.11: Testing (30 tests) (2 hours)**
+- Reduced from 2.5-3 hrs based on Group 3 test efficiency
+
+**Sub-Group 4B: Phase 5 (Entry Point) - SIMPLIFIED**
+- Task 5.1: cortex.md Entry Point (1.5 hrs - focus on basic routing)
+- Task 5.2: Request Parser (1 hr - simplified)
 - Task 5.3: Response Formatter (1 hr)
-- Task 5.4: Session State Manager (1.5 hrs)
-- Task 5.5: Error Handling (1 hr)
-- Task 5.6: Testing (10 tests) (1-1.5 hrs)
+- Task 5.4: Session State Manager (1 hr - basic implementation)
+- Task 5.5: Error Handling (30 min - leverage BaseAgent patterns)
+- Task 5.6: Testing (10 tests) (1 hr - faster based on Group 3 experience)
 
-**Sub-Group 4C: Dashboard (from V2 holistic review)**
-- Task 4C.1: Dashboard Setup (React + Vite) (1-2 hrs)
-- Task 4C.2: SQL.js Integration (2 hrs)
-- Task 4C.3: Real-Time File Watching (2-3 hrs)
-- Task 4C.4: Tier 1 Visualization (3-4 hrs)
-- Task 4C.5: Tier 2 Visualization (3-4 hrs)
-- Task 4C.6: Tier 3 Visualization (2-3 hrs)
-- Task 4C.7: Performance Monitoring (2 hrs)
-- Task 4C.8: Testing (5 E2E tests) (1-2 hrs)
+**Sub-Group 4C: Dashboard - CORE FEATURES ONLY**
+- Task 4C.1: Dashboard Setup (React + Vite) (1 hr)
+- Task 4C.2: SQL.js Integration (1.5 hrs - simplified based on Tier experience)
+- Task 4C.3: Real-Time File Watching (2 hrs)
+- Task 4C.4: Tier 1 Visualization (2.5 hrs - core features only)
+- Task 4C.5: Tier 2 Visualization (2.5 hrs - core features only)
+- Task 4C.6: Tier 3 Visualization (2 hrs - core features only)
+- Task 4C.7: Performance Monitoring (1.5 hrs - basic implementation)
+- Task 4C.8: Testing (5 E2E tests) (1 hr - streamlined)
 
-**Total GROUP 4:** 32-42 hours
+**Total GROUP 4:** 20-28 hours (REVISED - 30% efficiency gain applied)
+
+**Rationale for Revision:**
+- Groups 1-3 delivered 52% faster than estimated
+- TDD approach reduces debugging time to near-zero
+- Smart simplification strategy (core first, enhance later)
+- Agent framework reduces per-agent implementation time
+- SQLite experience transfers to dashboard SQL.js integration
 
 ---
 
