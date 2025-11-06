@@ -398,6 +398,155 @@ CREATE INDEX IF NOT EXISTS idx_work_patterns_time_slot ON tier3_work_patterns(ti
 CREATE INDEX IF NOT EXISTS idx_work_patterns_success ON tier3_work_patterns(success_rate DESC);
 
 -- ============================================================================
+-- TIER 4: MIND PALACE (Documentation & Story Tracking)
+-- ============================================================================
+-- Purpose: Track documentation chapters, story progress, and narrative consistency
+-- Integration: References conversations that inspired chapters, tracks metaphor mappings
+
+-- Mind Palace Chapters: Individual story/documentation chapters
+CREATE TABLE IF NOT EXISTS tier4_mind_palace_chapters (
+    chapter_id TEXT PRIMARY KEY,           -- e.g., "ch-001", "ch-017-purple-button"
+    chapter_number INTEGER NOT NULL,       -- 1, 2, 3, etc.
+    title TEXT NOT NULL,                   -- "The Problem of Amnesia"
+    version TEXT NOT NULL DEFAULT '1.0',   -- Semantic versioning
+    
+    -- Status tracking
+    status TEXT NOT NULL DEFAULT 'draft',  -- "draft", "review", "complete", "published"
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    completed_at TEXT,
+    
+    -- Content sections (completeness tracking)
+    has_story INTEGER NOT NULL DEFAULT 0,      -- Story section complete
+    has_cartoon_prompt INTEGER NOT NULL DEFAULT 0,  -- Cartoon image prompt
+    has_diagram_prompt INTEGER NOT NULL DEFAULT 0,  -- Technical diagram prompt
+    has_technical_docs INTEGER NOT NULL DEFAULT 0,  -- Technical documentation
+    
+    -- Metadata
+    topic TEXT,                            -- Main topic covered
+    complexity TEXT,                       -- "low", "medium", "high"
+    reading_time_minutes INTEGER,         -- Estimated reading time
+    prerequisites TEXT,                    -- JSON array of required chapters
+    
+    -- Integration
+    file_path TEXT NOT NULL,              -- Actual markdown file location
+    conversation_id TEXT,                 -- FK: Conversation that inspired this
+    
+    CHECK (status IN ('draft', 'review', 'complete', 'published')),
+    CHECK (complexity IS NULL OR complexity IN ('low', 'medium', 'high')),
+    CHECK (has_story IN (0, 1)),
+    CHECK (has_cartoon_prompt IN (0, 1)),
+    CHECK (has_diagram_prompt IN (0, 1)),
+    CHECK (has_technical_docs IN (0, 1)),
+    FOREIGN KEY (conversation_id) REFERENCES tier1_conversations(conversation_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_chapters_number ON tier4_mind_palace_chapters(chapter_number);
+CREATE INDEX IF NOT EXISTS idx_chapters_status ON tier4_mind_palace_chapters(status);
+
+-- Metaphor Mappings: Story characters/elements to technical components
+CREATE TABLE IF NOT EXISTS tier4_metaphor_mappings (
+    mapping_id TEXT PRIMARY KEY,
+    chapter_id TEXT NOT NULL,              -- FK to chapters
+    
+    -- Story element
+    story_character TEXT NOT NULL,         -- e.g., "Dr. Asifinstein", "The Intent Router"
+    story_description TEXT,                -- Character's role in narrative
+    
+    -- Technical component
+    technical_component TEXT NOT NULL,     -- e.g., "Intent Router Agent"
+    file_location TEXT,                    -- e.g., "CORTEX/src/tier1/intent_router.py"
+    component_type TEXT,                   -- "agent", "tier", "file", "pattern"
+    
+    -- Validation
+    is_validated INTEGER NOT NULL DEFAULT 0, -- Mapping verified accurate
+    validated_at TEXT,
+    
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    
+    CHECK (is_validated IN (0, 1)),
+    FOREIGN KEY (chapter_id) REFERENCES tier4_mind_palace_chapters(chapter_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_metaphors_chapter ON tier4_metaphor_mappings(chapter_id);
+CREATE INDEX IF NOT EXISTS idx_metaphors_component ON tier4_metaphor_mappings(technical_component);
+
+-- Image Prompts: Track generated images for chapters
+CREATE TABLE IF NOT EXISTS tier4_image_prompts (
+    prompt_id TEXT PRIMARY KEY,
+    chapter_id TEXT NOT NULL,
+    
+    -- Prompt details
+    prompt_type TEXT NOT NULL,             -- "cartoon", "diagram"
+    prompt_text TEXT NOT NULL,             -- Full Gemini prompt
+    style_guide TEXT,                      -- Style specifications
+    
+    -- Generation tracking
+    is_generated INTEGER NOT NULL DEFAULT 0,
+    generated_at TEXT,
+    image_file_path TEXT,                  -- Path to generated image
+    generation_tool TEXT,                  -- "Gemini", "DALL-E", "Midjourney"
+    
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    
+    CHECK (prompt_type IN ('cartoon', 'diagram')),
+    CHECK (is_generated IN (0, 1)),
+    FOREIGN KEY (chapter_id) REFERENCES tier4_mind_palace_chapters(chapter_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_prompts_chapter ON tier4_image_prompts(chapter_id);
+CREATE INDEX IF NOT EXISTS idx_prompts_type ON tier4_image_prompts(prompt_type);
+
+-- Chapter Cross-References: Dependencies and relationships between chapters
+CREATE TABLE IF NOT EXISTS tier4_chapter_references (
+    reference_id TEXT PRIMARY KEY,
+    from_chapter_id TEXT NOT NULL,         -- Source chapter
+    to_chapter_id TEXT NOT NULL,           -- Referenced chapter
+    
+    reference_type TEXT NOT NULL,          -- "prerequisite", "related", "continuation"
+    description TEXT,                      -- Why this reference exists
+    
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    
+    CHECK (reference_type IN ('prerequisite', 'related', 'continuation')),
+    FOREIGN KEY (from_chapter_id) REFERENCES tier4_mind_palace_chapters(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (to_chapter_id) REFERENCES tier4_mind_palace_chapters(chapter_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_references_from ON tier4_chapter_references(from_chapter_id);
+CREATE INDEX IF NOT EXISTS idx_references_to ON tier4_chapter_references(to_chapter_id);
+
+-- Mind Palace Progress: Overall story/documentation progress tracking
+CREATE TABLE IF NOT EXISTS tier4_mind_palace_progress (
+    progress_id TEXT PRIMARY KEY,
+    
+    -- Version tracking
+    story_version TEXT NOT NULL,           -- "1.0-CORTEX-Story"
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    
+    -- Overall stats
+    total_chapters INTEGER NOT NULL DEFAULT 28,
+    completed_chapters INTEGER NOT NULL DEFAULT 0,
+    draft_chapters INTEGER NOT NULL DEFAULT 0,
+    published_chapters INTEGER NOT NULL DEFAULT 0,
+    
+    -- Image generation progress
+    total_image_prompts INTEGER NOT NULL DEFAULT 0,
+    generated_images INTEGER NOT NULL DEFAULT 0,
+    
+    -- Quality metrics
+    validated_metaphors INTEGER NOT NULL DEFAULT 0,
+    total_metaphors INTEGER NOT NULL DEFAULT 0,
+    
+    -- Reading paths
+    beginner_path TEXT,                    -- JSON array of chapter IDs
+    developer_path TEXT,                   -- JSON array of chapter IDs
+    visual_learner_path TEXT,              -- JSON array of chapter IDs
+    complete_path TEXT                     -- JSON array of chapter IDs
+);
+
+-- ============================================================================
 -- SUPPORTING TABLES (Cross-tier)
 -- ============================================================================
 
@@ -530,14 +679,16 @@ CREATE TABLE IF NOT EXISTS schema_version (
 );
 
 INSERT OR IGNORE INTO schema_version (version, description) VALUES
-    ('1.0.0', 'Initial CORTEX Brain schema with Tiers 0-3, FTS5 search, and Rule #27 support');
+    ('1.0.0', 'Initial CORTEX Brain schema with Tiers 0-3, FTS5 search, and Rule #27 support'),
+    ('1.1.0', 'Added Tier 4: Mind Palace documentation tracking with chapters, metaphors, images, and progress');
 
 -- ============================================================================
 -- END OF SCHEMA
 -- ============================================================================
--- Total Tables: 20
--- Total Indexes: 30+
+-- Total Tables: 25 (Tiers 0-4)
+-- Total Indexes: 40+
 -- Total Views: 5
 -- Total Triggers: 6 (FTS5 sync)
 -- FTS5 Tables: 3 (conversations, messages, patterns)
+-- Mind Palace Tables: 5 (chapters, metaphors, prompts, references, progress)
 -- Performance Optimizations: All queries <100ms with proper indexing

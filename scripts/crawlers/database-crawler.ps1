@@ -104,9 +104,32 @@ $configPatterns = @(
 $dbContextPatterns = @("*DbContext.cs", "*Context.cs", "*DbContext.ts", "*Repository.cs")
 $migrationPatterns = @("*Migration.cs", "migrations/*.sql", "migrations/*.js", "alembic/versions/*.py")
 
-# SQL schema/data file patterns (NEW - Priority discovery)
-$sqlSchemaPatterns = @("*schema*.sql", "*ddl*.sql", "*create*.sql", "*structure*.sql")
-$sqlDataPatterns = @("*data*.sql", "*dml*.sql", "*insert*.sql", "*seed*.sql")
+# SQL schema/data file patterns (ENHANCED - Expanded for better coverage)
+$sqlSchemaPatterns = @(
+    "*schema*.sql", 
+    "*ddl*.sql", 
+    "*create*.sql", 
+    "*structure*.sql",
+    "*migration*.sql",       # Catches Migration files
+    "*procedure*.sql",       # Catches StoredProcedures
+    "*procedures*.sql",      # Catches StoredProcedures (plural)
+    "*deploy*.sql",          # Catches DEPLOY_* files
+    "*sp_*.sql",             # Catches sp_ procedures
+    "*StoredProcedure*.sql", # Catches StoredProcedure files
+    "*rollback*.sql"         # Catches rollback scripts
+)
+$sqlDataPatterns = @(
+    "*data*.sql", 
+    "*dml*.sql", 
+    "*insert*.sql", 
+    "*seed*.sql",
+    "*fix*.sql",             # Catches Fix_* files
+    "*update*.sql",          # Catches update scripts
+    "*restore*.sql",         # Catches Restore_* files
+    "*remove*.sql",          # Catches Remove_* files
+    "*validation*.sql",      # Catches validation/test scripts
+    "*test*.sql"             # Catches test scripts
+)
 
 $excludeDirs = @("node_modules", "bin", "obj", "dist", "build", ".next", "out", "vendor")
 
@@ -581,6 +604,85 @@ if ($parsedSchemaFiles.Count -gt 0 -or $parsedDataFiles.Count -gt 0) {
     if ($uniqueTables.Count -le 20) {
         Write-Host "  Tables: $($uniqueTables -join ', ')" -ForegroundColor Gray
     }
+    
+    # HYBRID APPROACH: Check coverage percentage
+    # If pattern matching found <50% of SQL files, fall back to universal scan
+    $allSqlFilesInWorkspace = Get-ChildItem -Path $WorkspaceRoot -Filter "*.sql" -Recurse -File -ErrorAction SilentlyContinue |
+        Where-Object {
+            $path = $_.FullName
+            $exclude = $false
+            foreach ($dir in $excludeDirs) {
+                if ($path -match "\\$dir\\") {
+                    $exclude = $true
+                    break
+                }
+            }
+            -not $exclude
+        }
+    
+    $totalSqlCount = $allSqlFilesInWorkspace.Count
+    $discoveredCount = $parsedSchemaFiles.Count + $parsedDataFiles.Count
+    $coveragePercent = if ($totalSqlCount -gt 0) { [math]::Round(($discoveredCount / $totalSqlCount) * 100, 1) } else { 100 }
+    
+    Write-Host "`n  📊 SQL File Coverage: $discoveredCount/$totalSqlCount ($coveragePercent%)" -ForegroundColor Cyan
+    
+    # FALLBACK: If coverage is low (<50%), scan remaining files
+    if ($coveragePercent -lt 50 -and $totalSqlCount -gt $discoveredCount) {
+        Write-Host "`n  ⚠️  Low coverage detected! Scanning remaining $($totalSqlCount - $discoveredCount) SQL files..." -ForegroundColor Yellow
+        
+        # Get files not already processed
+        $alreadyProcessedPaths = ($sqlSchemaFiles + $sqlDataFiles) | ForEach-Object { $_.FullName }
+        $remainingFiles = $allSqlFilesInWorkspace | Where-Object { $alreadyProcessedPaths -notcontains $_.FullName }
+        
+        Write-Host "  📄 Analyzing $($remainingFiles.Count) additional SQL files by content..." -ForegroundColor Gray
+        
+        foreach ($file in $remainingFiles) {
+            try {
+                $content = Get-Content -Path $file.FullName -Raw -ErrorAction Stop
+                $relativePath = $file.FullName.Replace("$WorkspaceRoot\", "").Replace("\", "/")
+                
+                $fileInfo = Get-SqlFileInfo -FilePath $relativePath -Content $content
+                
+                # Categorize by content type
+                if ($fileInfo.type -eq "schema" -or 
+                    $fileInfo.statement_counts.create_table -gt 0 -or 
+                    $fileInfo.statement_counts.create_procedure -gt 0 -or
+                    $fileInfo.statement_counts.alter_table -gt 0) {
+                    $parsedSchemaFiles += $fileInfo
+                    Write-Host "    ✓ Schema: $($file.Name)" -ForegroundColor Green
+                } elseif ($fileInfo.type -eq "data" -or 
+                          $fileInfo.statement_counts.insert -gt 0 -or 
+                          $fileInfo.statement_counts.update -gt 0) {
+                    $parsedDataFiles += $fileInfo
+                    Write-Host "    ✓ Data: $($file.Name)" -ForegroundColor Green
+                } else {
+                    # Mixed or unknown - add to schema by default
+                    $parsedSchemaFiles += $fileInfo
+                    Write-Host "    ✓ Mixed: $($file.Name)" -ForegroundColor Gray
+                }
+                
+            } catch {
+                Write-Warning "    Failed to parse $($file.Name): $_"
+            }
+        }
+        
+        # Update statistics after fallback scan
+        $result.sql_schema_files = $parsedSchemaFiles
+        $result.sql_data_files = $parsedDataFiles
+        $result.statistics.total_sql_schema_files = $parsedSchemaFiles.Count
+        $result.statistics.total_sql_data_files = $parsedDataFiles.Count
+        
+        Write-Host "`n  ✅ Fallback scan complete! Total discovered: $($parsedSchemaFiles.Count + $parsedDataFiles.Count)/$totalSqlCount" -ForegroundColor Green
+        
+        # Recalculate unique tables
+        $allTables = @()
+        foreach ($file in ($parsedSchemaFiles + $parsedDataFiles)) {
+            $allTables += $file.tables_referenced
+        }
+        $uniqueTables = $allTables | Select-Object -Unique | Sort-Object
+        Write-Host "  📊 Total unique tables referenced: $($uniqueTables.Count)" -ForegroundColor Cyan
+    }
+    
 } else {
     Write-Host "`n  ⚠️  No SQL schema/data files found. Will attempt database connection if configured." -ForegroundColor Yellow
 }

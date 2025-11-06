@@ -15,6 +15,7 @@ import sqlite3
 from typing import Optional, Dict, List
 from datetime import datetime, timedelta
 import uuid
+from pathlib import Path
 
 
 class SessionManager:
@@ -33,14 +34,19 @@ class SessionManager:
     - When 51st conversation starts, oldest completed deleted (FIFO)
     """
     
-    def __init__(self, db_path: str = "cortex-brain.db"):
+    def __init__(self, db_path: Optional[str] = None):
         """
         Initialize session manager
         
         Args:
-            db_path: Path to SQLite database
+            db_path: Path to SQLite database (uses Tier 1 DB if None)
         """
-        self.db_path = db_path
+        # Import here to avoid circular dependency
+        if db_path is None:
+            from .config import config
+            db_path = config.brain_path / "tier1" / "conversations.db"
+        
+        self.db_path = Path(db_path) if isinstance(db_path, str) else db_path
     
     def start_session(self, intent: Optional[str] = None) -> str:
         """
@@ -54,7 +60,7 @@ class SessionManager:
         """
         conversation_id = str(uuid.uuid4())
         
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -78,7 +84,7 @@ class SessionManager:
         Args:
             conversation_id: UUID of conversation to end
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -101,7 +107,7 @@ class SessionManager:
         Returns:
             conversation_id or None
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         # Get most recent active conversation
@@ -141,7 +147,7 @@ class SessionManager:
         Returns:
             datetime of last activity
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -168,7 +174,7 @@ class SessionManager:
         - Never delete active conversations
         - Preserve patterns (extracted before deletion)
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         # Count total conversations
@@ -228,7 +234,7 @@ class SessionManager:
                 'message_count': 5
             }
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         # Get conversation metadata
@@ -275,7 +281,7 @@ class SessionManager:
         Returns:
             List of session info dicts
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         cursor.execute("""

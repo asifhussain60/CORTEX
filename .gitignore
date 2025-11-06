@@ -12,3 +12,17 @@ CORTEX/node_modules/
 # External SDK and libraries
 emsdk/
 sql.js/
+
+# Python cache
+**/__pycache__/
+*.pyc
+
+# Simulations (temporary exploration files)
+cortex-brain/simulations/
+
+# Dashboard build artifacts
+dashboard-wpf/**/obj/
+dashboard-wpf/**/bin/
+
+# Vite development project
+vite-project/

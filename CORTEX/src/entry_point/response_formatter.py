@@ -5,11 +5,11 @@ Formats agent responses into user-friendly output with structured
 metadata, success/error messages, and actionable context.
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 import json
 
-from CORTEX.src.cortex_agents.base_agent import AgentResponse
+from ..cortex_agents.base_agent import AgentResponse
 
 
 class ResponseFormatter:

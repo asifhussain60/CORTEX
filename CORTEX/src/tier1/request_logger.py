@@ -23,14 +23,15 @@ class RequestLogger:
     - Support conversation association
     """
     
-    def __init__(self, log_path: Path):
+    def __init__(self, log_path):
         """
         Initialize request logger
         
         Args:
-            log_path: Path to request log JSONL file
+            log_path: Path to request log JSONL file (str or Path)
         """
-        self.log_path = log_path
+        # Ensure Path object
+        self.log_path = Path(log_path) if not isinstance(log_path, Path) else log_path
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
     
     def log_request(

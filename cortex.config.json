@@ -7,6 +7,21 @@
     "buildCommand": "npm run build",
     "runCommand": "npm run dev"
   },
+  "machines": {
+    "": {
+      "comment": "Add your machine hostname here for automatic path resolution",
+      "rootPath": "",
+      "brainPath": ""
+    },
+    "Asifs-MacBook-Pro.local": {
+      "rootPath": "/Users/asifhussain/PROJECTS/CORTEX",
+      "brainPath": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain"
+    },
+    "AHHOME": {
+      "rootPath": "D:\\PROJECTS\\CORTEX",
+      "brainPath": "D:\\PROJECTS\\CORTEX\\cortex-brain"
+    }
+  },
   "testing": {
     "framework": "None",
     "configPath": "",
@@ -34,6 +49,6 @@
     "version": "5.0.0",
     "lastUpdated": "2025-11-06",
     "configSchema": "cortex-config-v5.0",
-    "setupCompleted": false
+    "setupCompleted": true
   }
 }
