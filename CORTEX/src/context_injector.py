@@ -52,6 +52,7 @@ class ContextInjector:
     def inject_context(self, 
                       user_request: str, 
                       conversation_id: Optional[str] = None,
+                      current_file: Optional[str] = None,
                       include_tiers: Optional[Dict[str, bool]] = None) -> Dict:
         """
         Inject context from specified tiers
@@ -59,12 +60,13 @@ class ContextInjector:
         Args:
             user_request: User's request text
             conversation_id: Current conversation (if exists)
+            current_file: Current file being worked on (for namespace detection)
             include_tiers: {'tier1': True, 'tier2': True, 'tier3': True}
         
         Returns:
             {
                 'tier1': {...},  # Recent conversations + entities
-                'tier2': {...},  # Patterns
+                'tier2': {...},  # Patterns (namespace-aware)
                 'tier3': {...},  # Dev activity
                 'injection_time_ms': 142.7
             }
@@ -80,9 +82,9 @@ class ContextInjector:
         if include_tiers.get('tier1', True):
             context['tier1'] = self._inject_tier1(conversation_id)
         
-        # Tier 2: Knowledge Graph
+        # Tier 2: Knowledge Graph (with namespace awareness)
         if include_tiers.get('tier2', True):
-            context['tier2'] = self._inject_tier2(user_request)
+            context['tier2'] = self._inject_tier2(user_request, current_file)
         
         # Tier 3: Development Context
         if include_tiers.get('tier3', True):
@@ -133,25 +135,36 @@ class ContextInjector:
         
         return tier1_context
     
-    def _inject_tier2(self, user_request: str) -> Dict:
+    def _inject_tier2(self, user_request: str, current_file: Optional[str] = None) -> Dict:
         """
-        Inject Tier 2: Relevant patterns from knowledge graph
+        Inject Tier 2: Relevant patterns from knowledge graph with namespace awareness
         
         Args:
             user_request: User's request text
+            current_file: Current file being worked on (for namespace detection)
         
         Returns:
             {
                 'patterns': [...],
                 'intent_patterns': [...],
-                'workflow_patterns': [...]
+                'workflow_patterns': [...],
+                'namespace': str  # Detected namespace context
             }
         """
         tier2_context = {}
         
-        # Search for relevant patterns based on request
+        # Detect current application namespace from file path
+        current_namespace = self._detect_namespace(current_file) if current_file else None
+        tier2_context['namespace'] = current_namespace or "CORTEX-core"
+        
+        # Search for relevant patterns with namespace boosting
         tier2_context['patterns'] = \
-            self.kg_engine.search_patterns(user_request, limit=5)
+            self.kg_engine.search_patterns_with_namespace(
+                query=user_request, 
+                current_namespace=current_namespace,
+                include_generic=True,
+                limit=5
+            )
         
         # Intent patterns (for validation/refinement)
         tier2_context['intent_patterns'] = \
@@ -162,6 +175,41 @@ class ContextInjector:
             self.kg_engine.get_workflow_patterns(min_confidence=0.7)
         
         return tier2_context
+    
+    def _detect_namespace(self, file_path: str) -> Optional[str]:
+        """
+        Detect application namespace from file path.
+        
+        Args:
+            file_path: Path to current file
+        
+        Returns:
+            Namespace string (e.g., 'KSESSIONS', 'NOOR') or None for CORTEX
+        """
+        if not file_path:
+            return None
+        
+        file_path_lower = file_path.lower()
+        
+        # Application-specific paths
+        namespace_patterns = {
+            "KSESSIONS": ["spa/", "ksessions/", "host", "session", "registration"],
+            "NOOR": ["noor/", "canvas", "noor-canvas"],
+            "SPA": ["spa/noorcanvas/"]
+        }
+        
+        # Check each pattern
+        for namespace, patterns in namespace_patterns.items():
+            if any(pattern in file_path_lower for pattern in patterns):
+                return namespace
+        
+        # CORTEX system files
+        cortex_indicators = ["cortex/src/", "prompts/", "governance/", "tier0", "tier1", "tier2", "tier3"]
+        if any(indicator in file_path_lower for indicator in cortex_indicators):
+            return None  # Use default CORTEX-core
+        
+        # Unknown/ambiguous
+        return None
     
     def _inject_tier3(self) -> Dict:
         """

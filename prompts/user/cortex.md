@@ -212,6 +212,48 @@ Day 30: You ask to "add receipt export"
 → 60% faster delivery by reusing proven pattern
 ```
 
+**Knowledge Boundaries (Protection System):**
+Every pattern in Tier 2 is tagged with **scope** and **namespaces** to prevent CORTEX core intelligence from being contaminated by application-specific data:
+
+```python
+# Pattern storage with boundaries
+scope="generic"           # CORTEX principles (TDD, SOLID, refactoring)
+scope="application"       # Application-specific (KSESSIONS features, NOOR UI)
+
+namespaces=["CORTEX-core"]     # Available to all projects
+namespaces=["KSESSIONS"]        # Only for KSESSIONS application
+namespaces=["NOOR", "SPA"]      # Multi-application pattern
+```
+
+**Why boundaries matter:**
+- **CORTEX intelligence stays pure** - No "add KSESSIONS logout button" patterns contaminate core
+- **Application isolation** - KSESSIONS patterns don't leak into NOOR projects
+- **Smart search** - Current project patterns boosted 2x, generic boosted 1.5x, others 0.5x
+- **Surgical amnesia** - Delete KSESSIONS patterns, keep CORTEX core untouched
+
+**Example protection:**
+```yaml
+# ✅ SAFE: Generic CORTEX pattern
+title: "TDD: Test-first for service creation"
+scope: "generic"
+namespaces: ["CORTEX-core"]
+confidence: 0.95
+# → Available to ALL projects forever
+
+# ✅ SAFE: Application-specific pattern  
+title: "KSESSIONS: Invoice export workflow"
+scope: "application"
+namespaces: ["KSESSIONS"]
+confidence: 0.85
+# → Only when working on KSESSIONS
+
+# ❌ BLOCKED: Application in Tier 0
+file: "cortex-brain/tier0/ksessions-patterns.yaml"
+# → Brain Protector Challenge: "Application data belongs in Tier 2, not Tier 0"
+```
+
+**Brain Protector integration:** Tests verify boundaries are enforced (see test_brain_protector.py test_detects_application_data_in_tier0)
+
 **Stored in:** `cortex-brain/knowledge-graph.yaml`
 
 #### **📊 TIER 3: DEVELOPMENT CONTEXT (Holistic Project View)**

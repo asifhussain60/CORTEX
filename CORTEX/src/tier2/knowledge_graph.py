@@ -44,6 +44,8 @@ class Pattern:
     source: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     is_pinned: bool = False
+    scope: str = "generic"  # NEW: Boundary enforcement ('generic' or 'application')
+    namespaces: Optional[List[str]] = None  # NEW: Multi-app support (JSON array)
 
 
 class KnowledgeGraph:
@@ -107,8 +109,11 @@ class KnowledgeGraph:
                 source TEXT,
                 metadata TEXT,
                 is_pinned INTEGER DEFAULT 0,
+                scope TEXT DEFAULT 'generic',
+                namespaces TEXT DEFAULT '["CORTEX-core"]',
                 CHECK (confidence >= 0.0 AND confidence <= 1.0),
-                CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context'))
+                CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context')),
+                CHECK (scope IN ('generic', 'application'))
             )
         """)
         
@@ -189,6 +194,8 @@ class KnowledgeGraph:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_pattern_type ON patterns(pattern_type)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_confidence ON patterns(confidence)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_last_accessed ON patterns(last_accessed)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_scope ON patterns(scope)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_namespaces ON patterns(namespaces)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_tag ON pattern_tags(tag)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_relationship_from ON pattern_relationships(from_pattern)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_relationship_to ON pattern_relationships(to_pattern)")
@@ -203,6 +210,8 @@ class KnowledgeGraph:
         content: str,
         pattern_type: PatternType,
         confidence: float = 1.0,
+        scope: str = "generic",  # NEW: Boundary enforcement
+        namespaces: Optional[List[str]] = None,  # NEW: Multi-app support
         tags: Optional[List[str]] = None,
         source: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None
@@ -216,30 +225,46 @@ class KnowledgeGraph:
             content: Pattern content/description
             pattern_type: Pattern classification
             confidence: Initial confidence (0.0 to 1.0)
+            scope: Boundary scope ('generic' for CORTEX, 'application' for apps)
+            namespaces: List of namespaces (e.g., ['CORTEX-core'], ['KSESSIONS'])
             tags: List of tags for categorization
             source: Source of pattern (conversation_id, file, etc.)
             metadata: Additional metadata as dict
         
         Returns:
             Created Pattern object
+        
+        Raises:
+            ValueError: If scope is invalid
         """
+        # Validate scope
+        if scope not in ["generic", "application"]:
+            raise ValueError(f"Invalid scope: {scope}. Must be 'generic' or 'application'")
+        
+        # Default namespaces
+        if namespaces is None:
+            namespaces = ["CORTEX-core"]
+        
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         now = datetime.now().isoformat()
         
-        # Convert metadata to JSON
+        # Convert metadata and namespaces to JSON
         metadata_json = json.dumps(metadata) if metadata else None
+        namespaces_json = json.dumps(namespaces)
         
         # Insert pattern
         cursor.execute("""
             INSERT INTO patterns (
                 pattern_id, title, content, pattern_type, confidence,
-                created_at, last_accessed, access_count, source, metadata
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                created_at, last_accessed, access_count, source, metadata,
+                scope, namespaces
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             pattern_id, title, content, pattern_type.value, confidence,
-            now, now, 0, source, metadata_json
+            now, now, 0, source, metadata_json,
+            scope, namespaces_json
         ))
         
         # Add tags if provided
@@ -263,7 +288,9 @@ class KnowledgeGraph:
             last_accessed=now,
             access_count=0,
             source=source,
-            metadata=metadata
+            metadata=metadata,
+            scope=scope,
+            namespaces=namespaces
         )
     
     def get_pattern(self, pattern_id: str) -> Optional[Pattern]:
@@ -282,7 +309,8 @@ class KnowledgeGraph:
         # Get pattern
         cursor.execute("""
             SELECT pattern_id, title, content, pattern_type, confidence,
-                   created_at, last_accessed, access_count, source, metadata, is_pinned
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
             FROM patterns
             WHERE pattern_id = ?
         """, (pattern_id,))
@@ -304,8 +332,9 @@ class KnowledgeGraph:
         conn.commit()
         conn.close()
         
-        # Parse metadata
+        # Parse metadata and namespaces
         metadata = json.loads(row[9]) if row[9] else None
+        namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
         
         return Pattern(
             pattern_id=row[0],
@@ -318,7 +347,9 @@ class KnowledgeGraph:
             access_count=row[7] + 1,  # Incremented count
             source=row[8],
             metadata=metadata,
-            is_pinned=bool(row[10])
+            is_pinned=bool(row[10]),
+            scope=row[11] if row[11] else "generic",
+            namespaces=namespaces
         )
     
     def update_pattern(
@@ -417,7 +448,8 @@ class KnowledgeGraph:
         
         cursor.execute("""
             SELECT pattern_id, title, content, pattern_type, confidence,
-                   created_at, last_accessed, access_count, source, metadata, is_pinned
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
             FROM patterns
             WHERE pattern_type = ?
             ORDER BY confidence DESC, last_accessed DESC
@@ -429,6 +461,7 @@ class KnowledgeGraph:
         patterns = []
         for row in rows:
             metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
             patterns.append(Pattern(
                 pattern_id=row[0],
                 title=row[1],
@@ -440,7 +473,9 @@ class KnowledgeGraph:
                 access_count=row[7],
                 source=row[8],
                 metadata=metadata,
-                is_pinned=bool(row[10])
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
             ))
         
         return patterns
@@ -470,6 +505,7 @@ class KnowledgeGraph:
         cursor.execute("""
             SELECT p.pattern_id, p.title, p.content, p.pattern_type, p.confidence,
                    p.created_at, p.last_accessed, p.access_count, p.source, p.metadata, p.is_pinned,
+                   p.scope, p.namespaces,
                    bm25(pattern_fts) as rank
             FROM patterns p
             JOIN pattern_fts ON p.id = pattern_fts.rowid
@@ -484,6 +520,7 @@ class KnowledgeGraph:
         patterns = []
         for row in rows:
             metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
             patterns.append(Pattern(
                 pattern_id=row[0],
                 title=row[1],
@@ -495,7 +532,234 @@ class KnowledgeGraph:
                 access_count=row[7],
                 source=row[8],
                 metadata=metadata,
-                is_pinned=bool(row[10])
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
+            ))
+        
+        return patterns
+    
+    def search_patterns_with_namespace(
+        self,
+        query: str,
+        current_namespace: Optional[str] = None,
+        include_generic: bool = True,
+        limit: int = 20
+    ) -> List[Pattern]:
+        """
+        Search patterns with namespace boosting for context-aware results.
+        
+        Priority ranking:
+        1. Current namespace patterns (weight 2.0)
+        2. Generic patterns (weight 1.5 if include_generic=True)
+        3. Other namespace patterns (weight 0.5)
+        
+        Args:
+            query: Search query (FTS5 syntax)
+            current_namespace: Current application context (e.g., 'KSESSIONS')
+            include_generic: Include generic CORTEX patterns (default True)
+            limit: Maximum results to return
+        
+        Returns:
+            List of Pattern objects, ranked by relevance and namespace priority
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # FTS5 search with BM25 ranking
+        cursor.execute("""
+            SELECT p.pattern_id, p.title, p.content, p.pattern_type, p.confidence,
+                   p.created_at, p.last_accessed, p.access_count, p.source, p.metadata, p.is_pinned,
+                   p.scope, p.namespaces,
+                   bm25(pattern_fts) as rank
+            FROM patterns p
+            JOIN pattern_fts ON p.id = pattern_fts.rowid
+            WHERE pattern_fts MATCH ?
+            ORDER BY rank
+        """, (query,))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        # Parse patterns and apply namespace boosting
+        patterns_with_scores = []
+        for row in rows:
+            metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
+            
+            pattern = Pattern(
+                pattern_id=row[0],
+                title=row[1],
+                content=row[2],
+                pattern_type=PatternType(row[3]),
+                confidence=row[4],
+                created_at=row[5],
+                last_accessed=row[6],
+                access_count=row[7],
+                source=row[8],
+                metadata=metadata,
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
+            )
+            
+            # Calculate namespace boost
+            base_score = row[13]  # BM25 rank
+            boost = 1.0
+            
+            if current_namespace and current_namespace in namespaces:
+                # Current namespace match - highest priority
+                boost = 2.0
+            elif pattern.scope == "generic" and include_generic:
+                # Generic patterns always included with medium priority
+                boost = 1.5
+            elif current_namespace:
+                # Other namespaces - lower priority
+                boost = 0.5
+            
+            # Apply boost (BM25 scores are negative, so multiply)
+            final_score = base_score * boost
+            patterns_with_scores.append((pattern, final_score))
+        
+        # Sort by boosted score and return top N
+        patterns_with_scores.sort(key=lambda x: x[1])  # BM25 lower is better
+        return [p[0] for p in patterns_with_scores[:limit]]
+    
+    def get_patterns_by_namespace(self, namespace: str) -> List[Pattern]:
+        """
+        Get all patterns for a specific namespace.
+        
+        Args:
+            namespace: Namespace to filter by (e.g., 'KSESSIONS', 'CORTEX-core')
+        
+        Returns:
+            List of Pattern objects in the namespace
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # JSON LIKE query to find namespace in array
+        cursor.execute("""
+            SELECT pattern_id, title, content, pattern_type, confidence,
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
+            FROM patterns
+            WHERE namespaces LIKE ?
+            ORDER BY confidence DESC, last_accessed DESC
+        """, (f'%"{namespace}"%',))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        patterns = []
+        for row in rows:
+            metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
+            
+            # Verify namespace is actually in the array (LIKE can have false positives)
+            if namespace in namespaces:
+                patterns.append(Pattern(
+                    pattern_id=row[0],
+                    title=row[1],
+                    content=row[2],
+                    pattern_type=PatternType(row[3]),
+                    confidence=row[4],
+                    created_at=row[5],
+                    last_accessed=row[6],
+                    access_count=row[7],
+                    source=row[8],
+                    metadata=metadata,
+                    is_pinned=bool(row[10]),
+                    scope=row[11] if row[11] else "generic",
+                    namespaces=namespaces
+                ))
+        
+        return patterns
+    
+    def get_generic_patterns(self) -> List[Pattern]:
+        """
+        Get all generic (CORTEX core) patterns.
+        
+        Returns:
+            List of Pattern objects with scope='generic'
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT pattern_id, title, content, pattern_type, confidence,
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
+            FROM patterns
+            WHERE scope = 'generic'
+            ORDER BY confidence DESC, last_accessed DESC
+        """)
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        patterns = []
+        for row in rows:
+            metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
+            patterns.append(Pattern(
+                pattern_id=row[0],
+                title=row[1],
+                content=row[2],
+                pattern_type=PatternType(row[3]),
+                confidence=row[4],
+                created_at=row[5],
+                last_accessed=row[6],
+                access_count=row[7],
+                source=row[8],
+                metadata=metadata,
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
+            ))
+        
+        return patterns
+    
+    def get_application_patterns(self) -> List[Pattern]:
+        """
+        Get all application-specific patterns.
+        
+        Returns:
+            List of Pattern objects with scope='application'
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT pattern_id, title, content, pattern_type, confidence,
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
+            FROM patterns
+            WHERE scope = 'application'
+            ORDER BY confidence DESC, last_accessed DESC
+        """)
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        patterns = []
+        for row in rows:
+            metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
+            patterns.append(Pattern(
+                pattern_id=row[0],
+                title=row[1],
+                content=row[2],
+                pattern_type=PatternType(row[3]),
+                confidence=row[4],
+                created_at=row[5],
+                last_accessed=row[6],
+                access_count=row[7],
+                source=row[8],
+                metadata=metadata,
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
             ))
         
         return patterns
@@ -592,7 +856,8 @@ class KnowledgeGraph:
         placeholders = ','.join('?' * len(related_ids))
         cursor.execute(f"""
             SELECT pattern_id, title, content, pattern_type, confidence,
-                   created_at, last_accessed, access_count, source, metadata, is_pinned
+                   created_at, last_accessed, access_count, source, metadata, is_pinned,
+                   scope, namespaces
             FROM patterns
             WHERE pattern_id IN ({placeholders})
         """, list(related_ids))
@@ -603,6 +868,7 @@ class KnowledgeGraph:
         patterns = []
         for row in rows:
             metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
             patterns.append(Pattern(
                 pattern_id=row[0],
                 title=row[1],
@@ -614,7 +880,9 @@ class KnowledgeGraph:
                 access_count=row[7],
                 source=row[8],
                 metadata=metadata,
-                is_pinned=bool(row[10])
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
             ))
         
         return patterns
@@ -809,7 +1077,8 @@ class KnowledgeGraph:
         
         cursor.execute("""
             SELECT p.pattern_id, p.title, p.content, p.pattern_type, p.confidence,
-                   p.created_at, p.last_accessed, p.access_count, p.source, p.metadata, p.is_pinned
+                   p.created_at, p.last_accessed, p.access_count, p.source, p.metadata, p.is_pinned,
+                   p.scope, p.namespaces
             FROM patterns p
             JOIN pattern_tags t ON p.pattern_id = t.pattern_id
             WHERE t.tag = ?
@@ -822,6 +1091,7 @@ class KnowledgeGraph:
         patterns = []
         for row in rows:
             metadata = json.loads(row[9]) if row[9] else None
+            namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
             patterns.append(Pattern(
                 pattern_id=row[0],
                 title=row[1],
@@ -833,7 +1103,9 @@ class KnowledgeGraph:
                 access_count=row[7],
                 source=row[8],
                 metadata=metadata,
-                is_pinned=bool(row[10])
+                is_pinned=bool(row[10]),
+                scope=row[11] if row[11] else "generic",
+                namespaces=namespaces
             ))
         
         return patterns

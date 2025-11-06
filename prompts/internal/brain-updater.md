@@ -151,6 +151,141 @@ co_mod_rate = times_modified_together / max(file1_modifications, file2_modificat
 - Map test files to source files
 - Update `file_relationships.{file}.test_files`
 
+#### 3.8 Namespace/Scope Detection (NEW - Boundary Enforcement)
+
+**🎯 CRITICAL: Automatic classification when adding patterns to Tier 2**
+
+For EVERY pattern being added to the knowledge graph, detect scope and namespaces:
+
+**Rule 1: CORTEX Core Modifications**
+```python
+# Detect CORTEX system modifications
+cortex_indicators = [
+    "CORTEX/src/", "prompts/internal/", "governance/",
+    "tier0", "tier1", "tier2", "tier3",
+    "agent", "brain", "protection"
+]
+
+if any(indicator in event.file_path or indicator in event.content.lower()):
+    scope = "generic"
+    namespaces = ["CORTEX-core"]
+```
+
+**Rule 2: Application-Specific Work**
+```python
+# Detect application paths and keywords
+application_patterns = {
+    "KSESSIONS": ["SPA/", "KSESSIONS/", "host panel", "registration", "session management"],
+    "NOOR": ["NOOR/", "canvas", "noor-canvas.css"],
+    "SPA": ["SPA/NoorCanvas/", "blazor", "signalr"]
+}
+
+for app_name, indicators in application_patterns.items():
+    if any(indicator.lower() in event.file_path.lower() or 
+           indicator.lower() in event.content.lower()):
+        scope = "application"
+        namespaces = [app_name]
+        break
+```
+
+**Rule 3: Simulation Data**
+```python
+# Check if pattern from simulation
+simulation_sources = {
+    "simulations/ksessions/": "KSESSIONS",
+    "simulations/noor/": "NOOR",
+    "simulations/spa/": "SPA"
+}
+
+if event.source:
+    for sim_path, app_name in simulation_sources.items():
+        if sim_path in event.source.lower():
+            scope = "application"
+            namespaces = [app_name]
+            break
+```
+
+**Rule 4: Generic Workflow Patterns**
+```python
+# Generic patterns usable across all projects
+generic_keywords = [
+    "test-driven", "tdd", "red green refactor",
+    "solid", "single responsibility", "dependency injection",
+    "refactor", "architecture", "design pattern",
+    "governance", "protection", "validation"
+]
+
+keyword_count = sum(1 for keyword in generic_keywords 
+                    if keyword in event.content.lower())
+
+if keyword_count >= 2:  # At least 2 matches → Generic pattern
+    scope = "generic"
+    namespaces = ["CORTEX-core"]
+```
+
+**Rule 5: Multi-Namespace Patterns**
+```python
+# Pattern applies to multiple applications
+if scope == "generic" and event.tags:
+    # Check if pattern has application-specific examples
+    mentioned_apps = []
+    for app in ["KSESSIONS", "NOOR", "SPA"]:
+        if app.lower() in event.content.lower() or app in event.tags:
+            mentioned_apps.append(app)
+    
+    if mentioned_apps:
+        # Generic pattern with app-specific examples
+        namespaces = ["CORTEX-core"] + mentioned_apps
+```
+
+**Rule 6: Default (Conservative)**
+```python
+# When uncertain, default to generic
+# Rationale: Better to preserve CORTEX knowledge than delete it
+if scope is None:
+    scope = "generic"
+    namespaces = ["CORTEX-core"]
+```
+
+**Add to Pattern with Boundaries:**
+```python
+kg.add_pattern(
+    pattern_id=pattern_id,
+    title=title,
+    content=content,
+    pattern_type=pattern_type,
+    scope=scope,  # 'generic' or 'application'
+    namespaces=namespaces,  # ['CORTEX-core'], ['KSESSIONS'], etc.
+    tags=tags,
+    source=event.source,
+    metadata=metadata
+)
+```
+
+**Examples:**
+
+```python
+# Example 1: CORTEX modification
+Event: {"file": "CORTEX/src/tier2/knowledge_graph.py", "action": "add_namespace_support"}
+→ scope = "generic"
+→ namespaces = ["CORTEX-core"]
+
+# Example 2: KSESSIONS work
+Event: {"file": "SPA/NoorCanvas/HostControlPanel.razor", "action": "add_button"}
+→ scope = "application"
+→ namespaces = ["KSESSIONS"]
+
+# Example 3: Generic pattern discovered during app work
+Event: {"content": "Test-first TDD workflow used for KSESSIONS feature"}
+→ scope = "generic"  # TDD is generic
+→ namespaces = ["CORTEX-core", "KSESSIONS"]  # Multi-namespace
+
+# Example 4: Simulation data
+Event: {"source": "simulations/ksessions/host-panel-work.json"}
+→ scope = "application"
+→ namespaces = ["KSESSIONS"]
+```
+
 ### Step 4: Aggregate and Deduplicate
 
 **For each pattern type:**
