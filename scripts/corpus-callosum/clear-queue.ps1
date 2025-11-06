@@ -29,7 +29,7 @@ $ErrorActionPreference = "Stop"
 
 # Paths
 $workspaceRoot = Split-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
-$queueFile = Join-Path $workspaceRoot "KDS\kds-brain\corpus-callosum\coordination-queue.jsonl"
+$queueFile = Join-Path $workspaceRoot "KDS\cortex-brain\corpus-callosum\coordination-queue.jsonl"
 
 if (-not (Test-Path $queueFile)) {
     Write-Host "ℹ️  Queue file doesn't exist - nothing to clear" -ForegroundColor Cyan

@@ -40,7 +40,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Paths
-$conversationHistoryPath = Join-Path $PSScriptRoot ".." "kds-brain" "conversation-history.jsonl"
+$conversationHistoryPath = Join-Path $PSScriptRoot ".." "cortex-brain" "conversation-history.jsonl"
 
 # Check if CopilotChats.txt exists
 if (-not (Test-Path $CopilotChatsPath)) {

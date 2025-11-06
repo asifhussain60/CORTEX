@@ -51,7 +51,7 @@ param(
     [int]$Limit = 10
 )
 
-# === Configuration (from kds.config.json or defaults) ===
+# === Configuration (from cortex.config.json or defaults) ===
 $script:SessionDir = Join-Path $PSScriptRoot "../../sessions"
 $script:CurrentSessionFile = Join-Path $SessionDir "current-session.json"
 $script:BackupDir = Join-Path $SessionDir "backups"

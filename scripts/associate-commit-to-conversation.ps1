@@ -78,7 +78,7 @@ catch {
 # STEP 2: Find Active Conversation
 # ===================================
 
-$historyPath = "kds-brain/conversation-history.jsonl"
+$historyPath = "cortex-brain/conversation-history.jsonl"
 
 if (-not (Test-Path $historyPath)) {
     Write-Log "  ℹ️  No conversation history found"
@@ -209,7 +209,7 @@ try {
     }
     
     $eventJson = $associationEvent | ConvertTo-Json -Compress
-    Add-Content "kds-brain/events.jsonl" -Value $eventJson -Encoding UTF8
+    Add-Content "cortex-brain/events.jsonl" -Value $eventJson -Encoding UTF8
     
     Write-Log "  📝 Event logged"
 }

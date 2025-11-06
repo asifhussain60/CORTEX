@@ -5,7 +5,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$EventStreamPath = "$PSScriptRoot\..\kds-brain\events.jsonl",
+    [string]$EventStreamPath = "$PSScriptRoot\..\cortex-brain\events.jsonl",
     
     [Parameter(Mandatory=$false)]
     [string]$EventJson,

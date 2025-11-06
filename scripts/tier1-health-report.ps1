@@ -39,7 +39,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Paths
-$conversationHistoryPath = Join-Path $PSScriptRoot ".." "kds-brain" "conversation-history.jsonl"
+$conversationHistoryPath = Join-Path $PSScriptRoot ".." "cortex-brain" "conversation-history.jsonl"
 $reportDir = Split-Path $OutputPath -Parent
 
 # Create report directory if needed

@@ -136,7 +136,7 @@ try {
     Write-Host "  Root directories: $rootDirs" -ForegroundColor Green
     
     # Verify expected KDS structure
-    $expectedDirs = @('brain', 'docs', 'prompts', 'scripts', 'kds-brain')
+    $expectedDirs = @('brain', 'docs', 'prompts', 'scripts', 'cortex-brain')
     $missingDirs = @()
     foreach ($dir in $expectedDirs) {
         if (-not (Test-Path $dir)) {

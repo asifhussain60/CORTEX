@@ -138,9 +138,9 @@ function Invoke-TestSuite {
 
 # Validate workspace
 $kdsRoot = Split-Path $PSScriptRoot -Parent
-if (-not (Test-Path "$kdsRoot\kds-brain")) {
+if (-not (Test-Path "$kdsRoot\cortex-brain")) {
     Write-Host "❌ ERROR: KDS BRAIN directory not found" -ForegroundColor Red
-    Write-Host "   Expected: $kdsRoot\kds-brain" -ForegroundColor Gray
+    Write-Host "   Expected: $kdsRoot\cortex-brain" -ForegroundColor Gray
     exit 1
 }
 
@@ -320,7 +320,7 @@ if ($results.failed_suites -gt 0) {
     
     Write-Host "📋 Next Steps:" -ForegroundColor Yellow
     Write-Host "  1. Run failed test with -Verbose for details" -ForegroundColor White
-    Write-Host "  2. Check KDS/kds-brain/ for file corruption" -ForegroundColor White
+    Write-Host "  2. Check KDS/cortex-brain/ for file corruption" -ForegroundColor White
     Write-Host "  3. Review events.jsonl for errors" -ForegroundColor White
     Write-Host "  4. Validate knowledge-graph.yaml syntax" -ForegroundColor White
     Write-Host ""

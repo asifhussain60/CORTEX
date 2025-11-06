@@ -32,7 +32,7 @@ if (-not $DryRun) {
         
         try {
             git add -A
-            git commit -m "backup: Pre-v6.0 brain migration - $timestamp" -m "Automated backup before KDS v6.0 brain structure migration. Current kds-brain/ state preserved in git history." 2>&1 | Out-Null
+            git commit -m "backup: Pre-v6.0 brain migration - $timestamp" -m "Automated backup before KDS v6.0 brain structure migration. Current cortex-brain/ state preserved in git history." 2>&1 | Out-Null
             
             $commitHash = git rev-parse --short HEAD
             Write-Host "      ✅ Backup commit created: $commitHash" -ForegroundColor Green
@@ -182,11 +182,11 @@ brain/
 
 ## 📖 Migration from v5.0
 
-This structure replaces the flat \`kds-brain/\` folder with a hierarchical, brain-inspired organization.
+This structure replaces the flat \`cortex-brain/\` folder with a hierarchical, brain-inspired organization.
 
 **Old (v5.0):**
 \`\`\`
-kds-brain/
+cortex-brain/
 ├── conversation-history.jsonl
 ├── knowledge-graph.yaml
 ├── development-context.yaml

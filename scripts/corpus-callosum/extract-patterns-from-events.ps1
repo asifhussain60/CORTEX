@@ -19,7 +19,7 @@ $ErrorActionPreference = "Stop"
 function Get-RecentEvents {
     param([int]$Days = 7)
     
-    $eventsFile = "kds-brain\left-hemisphere\execution-state.jsonl"
+    $eventsFile = "cortex-brain\left-hemisphere\execution-state.jsonl"
     
     if (-not (Test-Path $eventsFile)) {
         Write-Verbose "No events file found"

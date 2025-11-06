@@ -17,7 +17,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-PendingFeedback {
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         return @()
@@ -38,7 +38,7 @@ function Get-PendingFeedback {
 function Get-FeedbackById {
     param([string]$Id)
     
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         return $null
@@ -288,7 +288,7 @@ function Save-OptimizationSuggestions {
         [array]$Suggestions
     )
     
-    $suggestionsFile = "kds-brain\right-hemisphere\optimization-suggestions.jsonl"
+    $suggestionsFile = "cortex-brain\right-hemisphere\optimization-suggestions.jsonl"
     
     # Ensure directory exists
     $suggestionsDir = Split-Path $suggestionsFile -Parent

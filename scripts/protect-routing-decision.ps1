@@ -17,7 +17,7 @@ param(
     [string]$UserPhrase,
     
     [Parameter(Mandatory=$false)]
-    [string]$KnowledgeGraphPath = "$PSScriptRoot\..\kds-brain\knowledge-graph.yaml"
+    [string]$KnowledgeGraphPath = "$PSScriptRoot\..\cortex-brain\knowledge-graph.yaml"
 )
 
 $ErrorActionPreference = 'Stop'

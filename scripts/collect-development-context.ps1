@@ -47,8 +47,8 @@ $ErrorActionPreference = "Stop"
 
 $WorkspaceRoot = Get-WorkspaceRoot
 $KdsRoot = Get-KdsRoot
-$ContextFile = Join-Path $KdsRoot "kds-brain\development-context.yaml"
-$EventsFile = Join-Path $KdsRoot "kds-brain\events.jsonl"
+$ContextFile = Join-Path $KdsRoot "cortex-brain\development-context.yaml"
+$EventsFile = Join-Path $KdsRoot "cortex-brain\events.jsonl"
 
 Write-Host "🧠 KDS Development Context Collector v1.0" -ForegroundColor Cyan
 Write-Host ""
@@ -483,7 +483,7 @@ try {
     Write-Host ""
     Write-Host "⚠️  Warnings Generated: $($context.proactive_insights.current_warnings.Count)" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "📁 Updated: KDS/kds-brain/development-context.yaml" -ForegroundColor Cyan
+    Write-Host "📁 Updated: KDS/cortex-brain/development-context.yaml" -ForegroundColor Cyan
     Write-Host "⏱️  Duration: $duration ms" -ForegroundColor Cyan
     
 }

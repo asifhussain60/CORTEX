@@ -17,7 +17,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-PendingOptimizations {
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         return @()
@@ -38,7 +38,7 @@ function Get-PendingOptimizations {
 function Get-OptimizationById {
     param([string]$Id)
     
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         return $null
@@ -245,7 +245,7 @@ function Save-AppliedOptimizations {
         [array]$Applied
     )
     
-    $appliedFile = "kds-brain\left-hemisphere\applied-optimizations.jsonl"
+    $appliedFile = "cortex-brain\left-hemisphere\applied-optimizations.jsonl"
     
     # Ensure directory exists
     $appliedDir = Split-Path $appliedFile -Parent

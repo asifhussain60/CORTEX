@@ -46,7 +46,7 @@ function Get-RelPath {
 
 $rootPath = (Resolve-Path -LiteralPath $Root)
 $baseRoot = Split-Path -Parent $rootPath
-$excludeDirs = @('KDS/kds-brain','KDS/scripts','KDS/prompts','KDS/schemas','KDS/services','KDS/sessions','KDS/validators','KDS/tooling','KDS/tests','KDS/config','KDS/knowledge')
+$excludeDirs = @('KDS/cortex-brain','KDS/scripts','KDS/prompts','KDS/schemas','KDS/services','KDS/sessions','KDS/validators','KDS/tooling','KDS/tests','KDS/config','KDS/knowledge')
 $includeDirs = @('KDS/docs','KDS')
 $tempPatterns = @('*.tmp','*.bak','*.old','*~','.DS_Store')
 $archiveRel = 'KDS/_archive'

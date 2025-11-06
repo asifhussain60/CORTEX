@@ -55,9 +55,9 @@ try {
     
     # KDS BRAIN files (auto-generated, should be in .gitignore)
     $brainFiles = @(
-        'KDS/kds-brain/conversation-context.jsonl',
-        'KDS/kds-brain/conversation-history.jsonl',
-        'KDS/kds-brain/development-context.yaml'
+        'KDS/cortex-brain/conversation-context.jsonl',
+        'KDS/cortex-brain/conversation-history.jsonl',
+        'KDS/cortex-brain/development-context.yaml'
     )
     
     # KDS internal prompts (auto-updated by system)
@@ -94,9 +94,9 @@ try {
     # Add KDS BRAIN files to gitignore (auto-generated state files)
     if ($brainFiles | Where-Object { $_ -in $modifiedFiles -or $_ -in $untrackedFiles }) {
         $patterns = @(
-            'KDS/kds-brain/conversation-context.jsonl',
-            'KDS/kds-brain/conversation-history.jsonl',
-            'KDS/kds-brain/development-context.yaml'
+            'KDS/cortex-brain/conversation-context.jsonl',
+            'KDS/cortex-brain/conversation-history.jsonl',
+            'KDS/cortex-brain/development-context.yaml'
         )
         
         foreach ($pattern in $patterns) {
@@ -161,9 +161,9 @@ try {
 # ═══════════════════════════════════════════════════════════════
 
 # KDS BRAIN state files (auto-generated during conversations)
-KDS/kds-brain/conversation-context.jsonl
-KDS/kds-brain/conversation-history.jsonl
-KDS/kds-brain/development-context.yaml
+KDS/cortex-brain/conversation-context.jsonl
+KDS/cortex-brain/conversation-history.jsonl
+KDS/cortex-brain/development-context.yaml
 
 # KDS internal prompts (auto-updated by system)
 KDS/prompts/internal/*.md
@@ -302,7 +302,7 @@ KDS/tests/dashboard-refresh.spec.*
         
         # BRAIN: Log commit event
         $workspaceRoot = Get-Location
-        $eventsFile = Join-Path $workspaceRoot "kds-brain\events.jsonl"
+        $eventsFile = Join-Path $workspaceRoot "cortex-brain\events.jsonl"
         $commitEvent = @{
             timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
             agent = "commit-handler"

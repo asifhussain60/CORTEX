@@ -22,7 +22,7 @@ function Add-OptimizationMessage {
         [switch]$WhatIf
     )
     
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     # Ensure directory exists
     $queueDir = Split-Path $queueFile -Parent
@@ -93,7 +93,7 @@ function Get-MessagePriority {
 function Log-OptimizationSent {
     param([hashtable]$Message)
     
-    $logFile = "kds-brain\corpus-callosum\optimization-log.jsonl"
+    $logFile = "cortex-brain\corpus-callosum\optimization-log.jsonl"
     
     # Ensure directory exists
     $logDir = Split-Path $logFile -Parent
@@ -119,7 +119,7 @@ function Log-OptimizationSent {
 function Save-OptimizedPlanToRightBrain {
     param([hashtable]$Plan)
     
-    $planFile = "kds-brain\right-hemisphere\optimized-plans.jsonl"
+    $planFile = "cortex-brain\right-hemisphere\optimized-plans.jsonl"
     
     # Ensure directory exists
     $planDir = Split-Path $planFile -Parent

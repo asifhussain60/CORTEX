@@ -1,0 +1,7 @@
+{
+  "CORTEX entry point": {
+    "prefix": "ctx",
+    "body": "#file:CORTEX/cortex.md",
+    "description": "Expands ctx to CORTEX entry point"
+  }
+}

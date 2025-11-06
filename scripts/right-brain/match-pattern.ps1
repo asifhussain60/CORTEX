@@ -16,7 +16,7 @@ $workspaceRoot = "D:\PROJECTS\KDS"
 
 # Load pattern library
 function Get-PatternLibrary {
-    $patternDir = "$workspaceRoot\kds-brain\right-hemisphere\patterns"
+    $patternDir = "$workspaceRoot\cortex-brain\right-hemisphere\patterns"
     $patterns = @()
     
     if (Test-Path $patternDir) {

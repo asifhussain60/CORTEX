@@ -78,17 +78,17 @@ function Repair-FileReferences {
         @{ From = '\KDS\\scripts\\brain-reset\.ps1'; To = 'KDS\scripts\brain-reset.ps1' }
         @{ From = '\KDS/scripts/brain-reset\.ps1'; To = 'KDS/scripts/brain-reset.ps1' }
         
-        @{ From = '\.\\\KDS\\kds-brain\\events\.jsonl'; To = 'KDS\kds-brain\events.jsonl' }
-        @{ From = '\KDS\\kds-brain\\events\.jsonl'; To = 'KDS\kds-brain\events.jsonl' }
-        @{ From = '\KDS/kds-brain/events\.jsonl'; To = 'KDS/kds-brain/events.jsonl' }
+        @{ From = '\.\\\KDS\\cortex-brain\\events\.jsonl'; To = 'KDS\cortex-brain\events.jsonl' }
+        @{ From = '\KDS\\cortex-brain\\events\.jsonl'; To = 'KDS\cortex-brain\events.jsonl' }
+        @{ From = '\KDS/cortex-brain/events\.jsonl'; To = 'KDS/cortex-brain/events.jsonl' }
         
-        @{ From = '\.\\\KDS\\kds-brain\\knowledge-graph\.yaml'; To = 'KDS\kds-brain\knowledge-graph.yaml' }
-        @{ From = '\KDS\\kds-brain\\knowledge-graph\.yaml'; To = 'KDS\kds-brain\knowledge-graph.yaml' }
-        @{ From = '\KDS/kds-brain/knowledge-graph\.yaml'; To = 'KDS/kds-brain/knowledge-graph.yaml' }
+        @{ From = '\.\\\KDS\\cortex-brain\\knowledge-graph\.yaml'; To = 'KDS\cortex-brain\knowledge-graph.yaml' }
+        @{ From = '\KDS\\cortex-brain\\knowledge-graph\.yaml'; To = 'KDS\cortex-brain\knowledge-graph.yaml' }
+        @{ From = '\KDS/cortex-brain/knowledge-graph\.yaml'; To = 'KDS/cortex-brain/knowledge-graph.yaml' }
         
-        @{ From = '\.\\\KDS\\kds-brain'; To = 'KDS\kds-brain' }
-        @{ From = '\KDS\\kds-brain'; To = 'KDS\kds-brain' }
-        @{ From = '\KDS/kds-brain'; To = 'KDS/kds-brain' }
+        @{ From = '\.\\\KDS\\cortex-brain'; To = 'KDS\cortex-brain' }
+        @{ From = '\KDS\\cortex-brain'; To = 'KDS\cortex-brain' }
+        @{ From = '\KDS/cortex-brain'; To = 'KDS/cortex-brain' }
         
         @{ From = '\.\\\KDS\\prompts'; To = 'KDS\prompts' }
         @{ From = '\KDS\\prompts'; To = 'KDS\prompts' }

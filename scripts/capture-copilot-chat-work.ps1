@@ -188,7 +188,7 @@ if ($DryRun) {
 }
 
 # Write to BRAIN files
-$brainDir = "KDS\kds-brain"
+$brainDir = "KDS\cortex-brain"
 
 Write-Host "`n💾 Writing to BRAIN..." -ForegroundColor Yellow
 

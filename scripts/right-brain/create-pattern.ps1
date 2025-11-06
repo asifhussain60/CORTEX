@@ -82,7 +82,7 @@ if ($DryRun) {
     return @{
         pattern_created = $true
         pattern_id = $PatternId
-        pattern_file = "kds-brain/right-hemisphere/patterns/$PatternId.yaml"
+        pattern_file = "cortex-brain/right-hemisphere/patterns/$PatternId.yaml"
         dry_run = $true
     }
 }
@@ -97,7 +97,7 @@ try {
     }
     
     # Check if pattern already exists
-    $patternDir = "$workspaceRoot\kds-brain\right-hemisphere\patterns"
+    $patternDir = "$workspaceRoot\cortex-brain\right-hemisphere\patterns"
     $patternFile = Join-Path $patternDir "$PatternId.yaml"
     
     if (Test-Path $patternFile) {

@@ -20,9 +20,9 @@ $ProgressPreference = "SilentlyContinue"  # Faster git operations
 
 $WorkspaceRoot = Split-Path -Parent $PSScriptRoot | Split-Path -Parent
 $ConfigPath = Join-Path $WorkspaceRoot "KDS\config\team-intelligence.yaml"
-$KnowledgeGraphPath = Join-Path $WorkspaceRoot "KDS\kds-brain\knowledge-graph.yaml"
-$DevContextPath = Join-Path $WorkspaceRoot "KDS\kds-brain\development-context.yaml"
-$SchemaPath = Join-Path $WorkspaceRoot "KDS\kds-brain\schemas\pr-intelligence-schema.yaml"
+$KnowledgeGraphPath = Join-Path $WorkspaceRoot "KDS\cortex-brain\knowledge-graph.yaml"
+$DevContextPath = Join-Path $WorkspaceRoot "KDS\cortex-brain\development-context.yaml"
+$SchemaPath = Join-Path $WorkspaceRoot "KDS\cortex-brain\schemas\pr-intelligence-schema.yaml"
 
 # ============================================================================
 # HELPER FUNCTIONS

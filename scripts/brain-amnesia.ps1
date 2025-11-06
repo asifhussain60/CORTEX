@@ -15,7 +15,7 @@ $ErrorActionPreference = "Stop"
 
 $workspaceRoot = Get-WorkspaceRoot
 $kdsRoot = Get-KdsRoot
-$brainDir = Join-Path $kdsRoot "kds-brain"
+$brainDir = Join-Path $kdsRoot "cortex-brain"
 
 Write-Host "🧠 KDS BRAIN Amnesia - Application Data Reset" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
@@ -579,7 +579,7 @@ amnesia_summary:
     ready_for_new_app: true
   
   next_steps:
-    - "Update KDS/tooling/kds.config.json with new application details"
+    - "Update KDS/tooling/cortex.config.json with new application details"
     - "Run Setup command to learn new application architecture"
     - "KDS will automatically learn from new interactions"
     - "BRAIN will rebuild application-specific knowledge over time"
@@ -617,7 +617,7 @@ Write-Host "  ✅ KDS capabilities intact" -ForegroundColor Green
 Write-Host "  ✅ BRAIN ready for new application" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next Steps:" -ForegroundColor Yellow
-Write-Host "  1. Update KDS/tooling/kds.config.json (new project name/paths)" -ForegroundColor White
+Write-Host "  1. Update KDS/tooling/cortex.config.json (new project name/paths)" -ForegroundColor White
 Write-Host "  2. Run: #file:KDS/prompts/user/kds.md Setup" -ForegroundColor White
 Write-Host "  3. KDS will learn your new application architecture" -ForegroundColor White
 Write-Host ""

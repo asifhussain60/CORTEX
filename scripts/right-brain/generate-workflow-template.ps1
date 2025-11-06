@@ -16,7 +16,7 @@ $workspaceRoot = "D:\PROJECTS\KDS"
 function Get-Pattern {
     param([string]$PatternId)
     
-    $patternFile = "$workspaceRoot\kds-brain\right-hemisphere\patterns\$PatternId.yaml"
+    $patternFile = "$workspaceRoot\cortex-brain\right-hemisphere\patterns\$PatternId.yaml"
     
     # Also check fixtures for testing
     if (-not (Test-Path $patternFile)) {

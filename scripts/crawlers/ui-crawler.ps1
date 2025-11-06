@@ -19,7 +19,7 @@
     Absolute path to the project workspace root (e.g., "D:\PROJECTS\NOOR CANVAS")
 
 .PARAMETER OutputPath
-    Path where ui-results.json will be written (default: KDS/kds-brain/crawler-temp/ui-results.json)
+    Path where ui-results.json will be written (default: KDS/cortex-brain/crawler-temp/ui-results.json)
 
 .OUTPUTS
     ui-results.json - Structured JSON with component discoveries
@@ -47,10 +47,10 @@ if (-not $OutputPath) {
     $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
     if ($normalizedRoot -match '\\KDS$') {
         # Workspace IS KDS
-        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\ui-results.json"
+        $OutputPath = "$normalizedRoot\cortex-brain\crawler-temp\ui-results.json"
     } else {
         # KDS is inside workspace
-        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\ui-results.json"
+        $OutputPath = "$normalizedRoot\KDS\cortex-brain\crawler-temp\ui-results.json"
     }
 }
 

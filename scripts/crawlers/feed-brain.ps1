@@ -38,10 +38,10 @@ Write-Host ""
 $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
 if ($normalizedRoot -match '\\KDS$') {
     # Workspace IS KDS
-    $brainDir = "$normalizedRoot\kds-brain"
+    $brainDir = "$normalizedRoot\cortex-brain"
 } else {
     # KDS is inside workspace
-    $brainDir = "$normalizedRoot\KDS\kds-brain"
+    $brainDir = "$normalizedRoot\KDS\cortex-brain"
 }
 
 $crawlerTempDir = "$brainDir\crawler-temp"

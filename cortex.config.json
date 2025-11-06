@@ -1,11 +1,11 @@
 {
   "application": {
-    "name": "KDS",
-    "framework": "Multi-Framework",
-    "language": "PowerShell/Markdown",
-    "rootPath": "D:\\PROJECTS\\KDS",
-    "buildCommand": "Write-Host 'No build required for KDS'",
-    "runCommand": "Write-Host 'KDS is a prompt system'"
+    "name": "CORTEX",
+    "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
+    "language": "TypeScript/Python/PowerShell",
+    "rootPath": "/Users/asifhussain/PROJECTS/CORTEX",
+    "buildCommand": "npm run build",
+    "runCommand": "npm run dev"
   },
   "testing": {
     "framework": "None",
@@ -31,9 +31,9 @@
     "testQualityThreshold": 70
   },
   "portability": {
-    "version": "1.0.0",
-    "lastUpdated": "2025-11-04",
-    "configSchema": "kds-config-v1.0",
+    "version": "5.0.0",
+    "lastUpdated": "2025-11-06",
+    "configSchema": "cortex-config-v5.0",
     "setupCompleted": false
   }
 }

@@ -5,7 +5,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$KnowledgeGraphPath = "$PSScriptRoot\..\kds-brain\knowledge-graph.yaml",
+    [string]$KnowledgeGraphPath = "$PSScriptRoot\..\cortex-brain\knowledge-graph.yaml",
     
     [Parameter(Mandatory=$false)]
     [ValidateSet('validate', 'backup', 'rollback', 'update')]

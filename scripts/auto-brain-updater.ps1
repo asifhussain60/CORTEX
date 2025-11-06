@@ -25,7 +25,7 @@ If true, suppress output (for background execution)
 .\scripts\auto-brain-updater.ps1 -RequestSummary "Create dashboard visual reference" -ResponseType "agent" -AgentInvoked "work-planner"
 
 .EXAMPLE
-.\scripts\auto-brain-updater.ps1 -RequestSummary "What files are in kds-brain?" -ResponseType "direct" -Silent
+.\scripts\auto-brain-updater.ps1 -RequestSummary "What files are in cortex-brain?" -ResponseType "direct" -Silent
 #>
 
 param(
@@ -46,7 +46,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Paths
-$brainRoot = "d:\PROJECTS\KDS\kds-brain"
+$brainRoot = "d:\PROJECTS\KDS\cortex-brain"
 $eventsPath = Join-Path $brainRoot "events.jsonl"
 $knowledgeGraphPath = Join-Path $brainRoot "knowledge-graph.yaml"
 $brainUpdaterAgentPath = "d:\PROJECTS\KDS\prompts\internal\brain-updater.md"
@@ -145,8 +145,8 @@ Write-Host "Processing events and updating knowledge graph..." -ForegroundColor 
 Write-Host ""
 
 # Load current knowledge graph
-$kgPath = "d:\PROJECTS\KDS\kds-brain\knowledge-graph.yaml"
-$eventsPath = "d:\PROJECTS\KDS\kds-brain\events.jsonl"
+$kgPath = "d:\PROJECTS\KDS\cortex-brain\knowledge-graph.yaml"
+$eventsPath = "d:\PROJECTS\KDS\cortex-brain\events.jsonl"
 
 if (-not (Test-Path $kgPath)) {
     Write-Host "❌ knowledge-graph.yaml not found" -ForegroundColor Red

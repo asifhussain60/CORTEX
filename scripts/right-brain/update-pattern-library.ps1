@@ -31,7 +31,7 @@ function Test-PatternStructure {
 function Update-KnowledgeGraph {
     param([string]$PatternId)
     
-    $kgFile = "$workspaceRoot\kds-brain\knowledge-graph.yaml"
+    $kgFile = "$workspaceRoot\cortex-brain\knowledge-graph.yaml"
     
     if (-not (Test-Path $kgFile)) {
         return $false
@@ -49,7 +49,7 @@ function Add-HemisphereStateLog {
         [string]$Action
     )
     
-    $stateFile = "$workspaceRoot\kds-brain\right-hemisphere\state.jsonl"
+    $stateFile = "$workspaceRoot\cortex-brain\right-hemisphere\state.jsonl"
     
     $logEntry = @{
         timestamp = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
@@ -109,7 +109,7 @@ try {
     }
     
     # Copy to pattern library
-    $libraryDir = "$workspaceRoot\kds-brain\right-hemisphere\patterns"
+    $libraryDir = "$workspaceRoot\cortex-brain\right-hemisphere\patterns"
     if (-not (Test-Path $libraryDir)) {
         New-Item -ItemType Directory -Path $libraryDir -Force | Out-Null
     }

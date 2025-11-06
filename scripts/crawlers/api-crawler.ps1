@@ -41,10 +41,10 @@ if (-not $OutputPath) {
     $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
     if ($normalizedRoot -match '\\KDS$') {
         # Workspace IS KDS
-        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\api-results.json"
+        $OutputPath = "$normalizedRoot\cortex-brain\crawler-temp\api-results.json"
     } else {
         # KDS is inside workspace
-        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\api-results.json"
+        $OutputPath = "$normalizedRoot\KDS\cortex-brain\crawler-temp\api-results.json"
     }
 }
 

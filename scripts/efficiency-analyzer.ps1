@@ -36,7 +36,7 @@ $ErrorActionPreference = "Stop"
 
 # Get KDS root
 $kdsRoot = Split-Path -Parent $PSScriptRoot
-$brainDir = Join-Path $kdsRoot "kds-brain"
+$brainDir = Join-Path $kdsRoot "cortex-brain"
 $eventsFile = Join-Path $brainDir "events.jsonl"
 $efficiencyFile = Join-Path $brainDir "efficiency-history.jsonl"
 

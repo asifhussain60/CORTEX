@@ -3,7 +3,7 @@
 
 param(
     [string]$SessionsPath = "KDS/sessions",
-    [string]$BrainPath = "KDS/kds-brain"
+    [string]$BrainPath = "KDS/cortex-brain"
 )
 
 Write-Host "🧠 KDS BRAIN Population Script" -ForegroundColor Cyan

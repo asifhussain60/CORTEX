@@ -19,7 +19,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$brainDir = Join-Path (Split-Path -Parent $scriptDir) "kds-brain"
+$brainDir = Join-Path (Split-Path -Parent $scriptDir) "cortex-brain"
 $workspaceRoot = Split-Path -Parent (Split-Path -Parent $scriptDir)
 
 if ($Workspace.Count -eq 0) {
@@ -480,7 +480,7 @@ $(if ($CrawlerData.Stack.Testing.E2E -eq '') { "💡 No E2E testing framework de
 
 **Next Steps:**
 
-1. Review knowledge graph: ``KDS/kds-brain/knowledge-graph.yaml``
+1. Review knowledge graph: ``KDS/cortex-brain/knowledge-graph.yaml``
 2. Start using KDS with learned context
 3. Run incremental scans to keep BRAIN updated
 

@@ -14,7 +14,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-LatestSession {
-    $stateFile = "kds-brain\left-hemisphere\execution-state.jsonl"
+    $stateFile = "cortex-brain\left-hemisphere\execution-state.jsonl"
     
     if (-not (Test-Path $stateFile)) {
         Write-Verbose "No execution state file found"
@@ -36,7 +36,7 @@ function Get-LatestSession {
 function Get-SessionEvents {
     param([string]$SessionId)
     
-    $stateFile = "kds-brain\left-hemisphere\execution-state.jsonl"
+    $stateFile = "cortex-brain\left-hemisphere\execution-state.jsonl"
     
     if (-not (Test-Path $stateFile)) {
         return @()

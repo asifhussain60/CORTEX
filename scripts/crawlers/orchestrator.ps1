@@ -64,10 +64,10 @@ Write-Host ""
 $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
 if ($normalizedRoot -match '\\KDS$') {
     # Workspace IS KDS
-    $outputDir = "$normalizedRoot\kds-brain\crawler-temp"
+    $outputDir = "$normalizedRoot\cortex-brain\crawler-temp"
 } else {
     # KDS is inside workspace
-    $outputDir = "$normalizedRoot\KDS\kds-brain\crawler-temp"
+    $outputDir = "$normalizedRoot\KDS\cortex-brain\crawler-temp"
 }
 
 if (-not (Test-Path $outputDir)) {

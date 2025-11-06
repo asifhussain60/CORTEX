@@ -36,7 +36,7 @@ function Test-MessageFormat {
 function Add-ExchangeLog {
     param([object]$Message)
     
-    $logFile = "$workspaceRoot\kds-brain\corpus-callosum\exchange-log.jsonl"
+    $logFile = "$workspaceRoot\cortex-brain\corpus-callosum\exchange-log.jsonl"
     
     $logEntry = @{
         timestamp = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
@@ -90,7 +90,7 @@ if ($DryRun) {
 try {
     Write-Host "`n🔗 Processing corpus callosum coordination..." -ForegroundColor Cyan
     
-    $queueFile = "$workspaceRoot\kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "$workspaceRoot\cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         Write-Host "  ℹ️  No messages in queue" -ForegroundColor Gray

@@ -25,8 +25,8 @@ param()
 $ErrorActionPreference = "Stop"
 
 # Paths
-$conversationHistoryPath = Join-Path $PSScriptRoot ".." "kds-brain" "conversation-history.jsonl"
-$developmentContextPath = Join-Path $PSScriptRoot ".." "kds-brain" "development-context.yaml"
+$conversationHistoryPath = Join-Path $PSScriptRoot ".." "cortex-brain" "conversation-history.jsonl"
+$developmentContextPath = Join-Path $PSScriptRoot ".." "cortex-brain" "development-context.yaml"
 
 # Check if conversation history exists
 if (-not (Test-Path $conversationHistoryPath)) {

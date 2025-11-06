@@ -14,7 +14,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-CoordinationQueue {
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $queueFile)) {
         # Create empty queue if doesn't exist
@@ -36,7 +36,7 @@ function Add-FeedbackMessage {
         [switch]$WhatIf
     )
     
-    $queueFile = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $queueFile = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     # Ensure directory exists
     $queueDir = Split-Path $queueFile -Parent
@@ -166,7 +166,7 @@ function Log-FeedbackSent {
         [hashtable]$Quality
     )
     
-    $logFile = "kds-brain\corpus-callosum\feedback-log.jsonl"
+    $logFile = "cortex-brain\corpus-callosum\feedback-log.jsonl"
     
     # Ensure directory exists
     $logDir = Split-Path $logFile -Parent

@@ -33,7 +33,7 @@ if ($WhatIf) {
 # Routing Accuracy
 # ============================================================================
 function Get-RoutingAccuracy {
-    $eventsFile = "kds-brain\events.jsonl"
+    $eventsFile = "cortex-brain\events.jsonl"
     
     if (-not (Test-Path $eventsFile)) {
         return 0.0
@@ -57,7 +57,7 @@ function Get-RoutingAccuracy {
 # Plan Creation Time
 # ============================================================================
 function Get-AveragePlanTime {
-    $planningState = "kds-brain\right-hemisphere\planning-state.jsonl"
+    $planningState = "cortex-brain\right-hemisphere\planning-state.jsonl"
     
     if (-not (Test-Path $planningState)) {
         return 0
@@ -79,7 +79,7 @@ function Get-AveragePlanTime {
 # TDD Cycle Time
 # ============================================================================
 function Get-AverageTDDCycleTime {
-    $executionState = "kds-brain\left-hemisphere\execution-state.jsonl"
+    $executionState = "cortex-brain\left-hemisphere\execution-state.jsonl"
     
     if (-not (Test-Path $executionState)) {
         return 0
@@ -101,7 +101,7 @@ function Get-AverageTDDCycleTime {
 # Learning Effectiveness
 # ============================================================================
 function Get-LearningEffectiveness {
-    $knowledgeGraph = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+    $knowledgeGraph = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
     
     if (-not $knowledgeGraph) {
         return 0.0
@@ -122,7 +122,7 @@ function Get-LearningEffectiveness {
 # Coordination Latency
 # ============================================================================
 function Get-CoordinationLatency {
-    $coordinationQueue = "kds-brain\corpus-callosum\coordination-queue.jsonl"
+    $coordinationQueue = "cortex-brain\corpus-callosum\coordination-queue.jsonl"
     
     if (-not (Test-Path $coordinationQueue)) {
         return 0
@@ -165,7 +165,7 @@ Write-Host "  Learning Effectiveness: $($metrics.learning_effectiveness * 100)%"
 Write-Host "  Coordination Latency: $($metrics.coordination_latency)s" -ForegroundColor White
 
 # Save metrics to history
-$historyFile = "kds-brain\corpus-callosum\efficiency-history.jsonl"
+$historyFile = "cortex-brain\corpus-callosum\efficiency-history.jsonl"
 $historyDir = Split-Path $historyFile -Parent
 if (-not (Test-Path $historyDir)) {
     New-Item -ItemType Directory -Path $historyDir -Force | Out-Null

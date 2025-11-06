@@ -28,7 +28,7 @@
     Absolute path to the project workspace root (e.g., "D:\PROJECTS\NOOR CANVAS")
 
 .PARAMETER OutputPath
-    Path where database-results.json will be written (default: KDS/kds-brain/crawler-temp/database-results.json)
+    Path where database-results.json will be written (default: KDS/cortex-brain/crawler-temp/database-results.json)
 
 .PARAMETER ConnectAndCrawl
     If specified, attempts to connect to databases and crawl actual schema even if SQL files exist (default: false for security)
@@ -74,10 +74,10 @@ if (-not $OutputPath) {
     $normalizedRoot = $WorkspaceRoot.TrimEnd('\')
     if ($normalizedRoot -match '\\KDS$') {
         # Workspace IS KDS
-        $OutputPath = "$normalizedRoot\kds-brain\crawler-temp\database-results.json"
+        $OutputPath = "$normalizedRoot\cortex-brain\crawler-temp\database-results.json"
     } else {
         # KDS is inside workspace
-        $OutputPath = "$normalizedRoot\KDS\kds-brain\crawler-temp\database-results.json"
+        $OutputPath = "$normalizedRoot\KDS\cortex-brain\crawler-temp\database-results.json"
     }
 }
 
@@ -784,10 +784,10 @@ if ($shouldConnectToDB) {
             Write-Host "  💾 Memorizing connection string for future use..." -ForegroundColor Cyan
             
             # Store in KDS brain for future reference
-            $connStringFile = Join-Path $WorkspaceRoot "KDS\kds-brain\database-connection.txt"
+            $connStringFile = Join-Path $WorkspaceRoot "KDS\cortex-brain\database-connection.txt"
             $manualConnString | Set-Content -Path $connStringFile -Encoding UTF8
             
-            Write-Host "  ✅ Connection string saved to: KDS\kds-brain\database-connection.txt" -ForegroundColor Green
+            Write-Host "  ✅ Connection string saved to: KDS\cortex-brain\database-connection.txt" -ForegroundColor Green
             
             # Parse and add to connection strings
             $connInfo = Get-ConnectionStringInfo -ConnectionString $manualConnString -SourceFile "manual-input"

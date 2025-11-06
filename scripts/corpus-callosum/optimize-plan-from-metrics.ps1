@@ -20,7 +20,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-LatestOptimizationSuggestions {
-    $suggestionsFile = "kds-brain\right-hemisphere\optimization-suggestions.jsonl"
+    $suggestionsFile = "cortex-brain\right-hemisphere\optimization-suggestions.jsonl"
     
     if (-not (Test-Path $suggestionsFile)) {
         return $null

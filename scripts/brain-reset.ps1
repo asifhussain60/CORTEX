@@ -19,7 +19,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$brainDir = Join-Path (Split-Path -Parent $scriptDir) "kds-brain"
+$brainDir = Join-Path (Split-Path -Parent $scriptDir) "cortex-brain"
 $backupDir = Join-Path $brainDir "backups"
 
 # Ensure backup directory exists

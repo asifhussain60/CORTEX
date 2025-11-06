@@ -173,8 +173,8 @@ function Get-KdsRoot {
     The base path to resolve relative paths against. Defaults to current directory.
 
 .EXAMPLE
-    $absolutePath = Resolve-RelativePath -Path ".\kds-brain\events.jsonl" -BasePath (Get-KdsRoot)
-    # Returns: "D:\PROJECTS\KDS\kds-brain\events.jsonl"
+    $absolutePath = Resolve-RelativePath -Path ".\cortex-brain\events.jsonl" -BasePath (Get-KdsRoot)
+    # Returns: "D:\PROJECTS\KDS\cortex-brain\events.jsonl"
 
 .EXAMPLE
     $absolutePath = Resolve-RelativePath -Path "..\..\..\README.md" -BasePath "D:\PROJECTS\KDS\scripts\lib"

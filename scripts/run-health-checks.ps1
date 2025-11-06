@@ -126,7 +126,7 @@ function Test-Infrastructure {
     
     # 1.1 Directory Structure
     $kdsDir = Join-Path $workspaceRoot "KDS"
-    $requiredDirs = @('prompts', 'scripts', 'kds-brain', 'sessions', 'knowledge', 'governance')
+    $requiredDirs = @('prompts', 'scripts', 'cortex-brain', 'sessions', 'knowledge', 'governance')
     $allExist = $true
     foreach ($dir in $requiredDirs) {
         if (-not (Test-Path (Join-Path $kdsDir $dir))) {
@@ -162,11 +162,11 @@ function Test-Infrastructure {
     $checks += Add-Check -CategoryName 'Infrastructure' -CheckName 'Core Files Present' -Result $result
     
     # 1.3 Config Validation
-    $configPath = Join-Path $workspaceRoot "KDS\kds.config.json"
+    $configPath = Join-Path $workspaceRoot "KDS\cortex.config.json"
     $result = if (Test-Path $configPath) {
-        Test-JsonFile -Path $configPath -Description "kds.config.json"
+        Test-JsonFile -Path $configPath -Description "cortex.config.json"
     } else {
-        @{ status = 'warning'; message = "kds.config.json not found (optional)" }
+        @{ status = 'warning'; message = "cortex.config.json not found (optional)" }
     }
     $checks += Add-Check -CategoryName 'Infrastructure' -CheckName 'Config Validation' -Result $result
     
@@ -271,7 +271,7 @@ function Test-BRAINSystem {
     if ($VerboseOutput) { Write-Host "  Checking BRAIN System..." -ForegroundColor Cyan }
     
     $checks = @()
-    $brainDir = Join-Path $workspaceRoot "KDS\kds-brain"
+    $brainDir = Join-Path $workspaceRoot "KDS\cortex-brain"
     
     # 3.1 Knowledge Graph
     $kgPath = Join-Path $brainDir "knowledge-graph.yaml"
@@ -686,7 +686,7 @@ function Test-Performance {
     if ($VerboseOutput) { Write-Host "  Checking Performance..." -ForegroundColor Cyan }
     
     $checks = @()
-    $brainDir = Join-Path $workspaceRoot "KDS\kds-brain"
+    $brainDir = Join-Path $workspaceRoot "KDS\cortex-brain"
     
     # 7.1 BRAIN Query Time (simulated - would need actual query)
     $start = Get-Date

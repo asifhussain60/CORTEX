@@ -54,8 +54,8 @@ try {
     
     # Log to execution state
     $timestamp = Get-Date -Format "o"
-    $sessionId = if (Test-Path "$workspaceRoot\kds-brain\right-hemisphere\active-plan.yaml") {
-        $activePlan = Get-Content "$workspaceRoot\kds-brain\right-hemisphere\active-plan.yaml" -Raw
+    $sessionId = if (Test-Path "$workspaceRoot\cortex-brain\right-hemisphere\active-plan.yaml") {
+        $activePlan = Get-Content "$workspaceRoot\cortex-brain\right-hemisphere\active-plan.yaml" -Raw
         if ($activePlan -match 'session_id:\s*"([^"]+)"') { $Matches[1] } else { "unknown-session" }
     } else {
         "unknown-session"
@@ -75,7 +75,7 @@ try {
         test_file = $TestFile
     }
     
-    $executionStateFile = Join-Path $workspaceRoot "kds-brain\left-hemisphere\execution-state.jsonl"
+    $executionStateFile = Join-Path $workspaceRoot "cortex-brain\left-hemisphere\execution-state.jsonl"
     $executionStateJson = $executionState | ConvertTo-Json -Compress
     Add-Content -Path $executionStateFile -Value $executionStateJson
     

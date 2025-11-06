@@ -29,8 +29,8 @@ if ($WhatIf) {
 # ============================================================================
 # Load Context
 # ============================================================================
-$developmentContext = Get-Content "kds-brain\development-context.yaml" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Yaml -ErrorAction SilentlyContinue
-$knowledgeGraph = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+$developmentContext = Get-Content "cortex-brain\development-context.yaml" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Yaml -ErrorAction SilentlyContinue
+$knowledgeGraph = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
 
 # ============================================================================
 # Extract Entities from Request

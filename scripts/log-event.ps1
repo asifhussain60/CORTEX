@@ -1,5 +1,5 @@
 # KDS Event Logger - BRAIN Event Stream Writer
-# Purpose: Log events to KDS/kds-brain/events.jsonl for BRAIN learning
+# Purpose: Log events to KDS/cortex-brain/events.jsonl for BRAIN learning
 # Version: 5.0 (BRAIN Integration)
 # Dependencies: ZERO external (PowerShell built-ins only)
 
@@ -45,7 +45,7 @@ param(
 )
 
 # === Configuration ===
-$script:EventsFile = Join-Path $PSScriptRoot "../kds-brain/events.jsonl"
+$script:EventsFile = Join-Path $PSScriptRoot "../cortex-brain/events.jsonl"
 
 # === Ensure events file exists ===
 if (-not (Test-Path $script:EventsFile)) {

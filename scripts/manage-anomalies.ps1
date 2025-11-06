@@ -32,7 +32,7 @@ param(
     [string]$Notes,
     
     [Parameter(Mandatory=$false)]
-    [string]$AnomalyFilePath = "$PSScriptRoot\..\kds-brain\anomalies.yaml"
+    [string]$AnomalyFilePath = "$PSScriptRoot\..\cortex-brain\anomalies.yaml"
 )
 
 $ErrorActionPreference = 'Stop'

@@ -30,7 +30,7 @@ if ($WhatIf) {
 # Calculate Learning Effectiveness
 # ============================================================================
 function Get-LearningEffectiveness {
-    $knowledgeGraph = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+    $knowledgeGraph = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
     
     if (-not $knowledgeGraph) {
         return 0.0
@@ -51,7 +51,7 @@ function Get-LearningEffectiveness {
 # Calculate Learning Velocity
 # ============================================================================
 function Get-LearningVelocity {
-    $eventsFile = "kds-brain\events.jsonl"
+    $eventsFile = "cortex-brain\events.jsonl"
     
     if (-not (Test-Path $eventsFile)) {
         return 0
@@ -68,7 +68,7 @@ function Get-LearningVelocity {
 # Calculate Pattern Quality
 # ============================================================================
 function Get-PatternQuality {
-    $knowledgeGraph = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+    $knowledgeGraph = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
     
     if (-not $knowledgeGraph) {
         return 0.0

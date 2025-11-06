@@ -77,7 +77,7 @@ $script:CategoryPaths = @{
     "tests" = "Tests"
     "scripts" = "KDS/scripts"
     "root" = "KDS"
-    "kds-brain" = "KDS/kds-brain"
+    "cortex-brain" = "KDS/cortex-brain"
 }
 
 # === Find workspace root ===

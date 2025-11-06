@@ -12,7 +12,7 @@ $ErrorActionPreference = 'Stop'
 # Paths
 $scriptDir = $PSScriptRoot
 $workspaceRoot = Split-Path (Split-Path $scriptDir -Parent) -Parent
-$brainDir = Join-Path $workspaceRoot "KDS\kds-brain"
+$brainDir = Join-Path $workspaceRoot "KDS\cortex-brain"
 $reportsDir = Join-Path $workspaceRoot "KDS\reports\monitoring"
 $outputPath = Join-Path $reportsDir "dashboard.html"
 

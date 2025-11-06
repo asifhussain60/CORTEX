@@ -14,7 +14,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-KnowledgeGraph {
-    $kgPath = "kds-brain\knowledge-graph.yaml"
+    $kgPath = "cortex-brain\knowledge-graph.yaml"
     
     if (-not (Test-Path $kgPath)) {
         Write-Warning "Knowledge graph not found, creating new one"
@@ -158,7 +158,7 @@ function Add-PatternsToKnowledgeGraph {
 function Save-KnowledgeGraph {
     param([hashtable]$KnowledgeGraph)
     
-    $kgPath = "kds-brain\knowledge-graph.yaml"
+    $kgPath = "cortex-brain\knowledge-graph.yaml"
     
     # Ensure directory exists
     $directory = Split-Path $kgPath -Parent
@@ -233,7 +233,7 @@ function Log-LearningEvent {
         [int]$TotalPatterns
     )
     
-    $stateFile = "kds-brain\right-hemisphere\pattern-learning.jsonl"
+    $stateFile = "cortex-brain\right-hemisphere\pattern-learning.jsonl"
     
     # Ensure directory exists
     $directory = Split-Path $stateFile -Parent

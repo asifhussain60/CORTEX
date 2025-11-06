@@ -63,7 +63,7 @@ Write-Info "📊 Generating KDS Metrics Report (visual, markdown)"
 # Resolve paths
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $kdsRoot  = (Join-Path $repoRoot 'KDS')
-$brainDir = (Join-Path $kdsRoot 'kds-brain')
+$brainDir = (Join-Path $kdsRoot 'cortex-brain')
 $sessionsDir = (Join-Path $kdsRoot 'sessions')
 $eventsFile = (Join-Path $brainDir 'events.jsonl')
 $convFile = (Join-Path $brainDir 'conversation-history.jsonl')

@@ -38,7 +38,7 @@ function Test-ShouldTriggerLearning {
             }
             
             # Check if a task just completed
-            $executionState = "kds-brain\left-hemisphere\execution-state.jsonl"
+            $executionState = "cortex-brain\left-hemisphere\execution-state.jsonl"
             if (Test-Path $executionState) {
                 $lastEvent = Get-Content $executionState |
                     Where-Object { $_ -and -not $_.TrimStart().StartsWith('#') } |
@@ -54,9 +54,9 @@ function Test-ShouldTriggerLearning {
         
         "event_threshold" {
             # Check event count
-            $eventsFile = "kds-brain\events.jsonl"
+            $eventsFile = "cortex-brain\events.jsonl"
             if (Test-Path $eventsFile) {
-                $lastUpdate = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+                $lastUpdate = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
                 if ($lastUpdate -and $lastUpdate -match "last_updated:\s*[`"']?(.+?)[`"']?\s*$") {
                     try {
                         $lastUpdateTime = [DateTime]::Parse($matches[1].Trim())
@@ -85,7 +85,7 @@ function Test-ShouldTriggerLearning {
         
         "time_threshold" {
             # Check time since last update
-            $lastUpdate = Get-Content "kds-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
+            $lastUpdate = Get-Content "cortex-brain\knowledge-graph.yaml" -Raw -ErrorAction SilentlyContinue
             if ($lastUpdate -and $lastUpdate -match "last_updated:\s*[`"']?(.+?)[`"']?\s*$") {
                 try {
                     $lastUpdateTime = [DateTime]::Parse($matches[1].Trim())

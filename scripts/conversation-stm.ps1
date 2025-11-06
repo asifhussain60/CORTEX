@@ -10,7 +10,7 @@ param(
 )
 
 # Paths
-$KdsBrain = Join-Path $PSScriptRoot '..' | Join-Path -ChildPath 'kds-brain'
+$KdsBrain = Join-Path $PSScriptRoot '..' | Join-Path -ChildPath 'cortex-brain'
 $ContextPath = Join-Path $KdsBrain 'conversation-context.jsonl'
 $HistoryPath = Join-Path $KdsBrain 'conversation-history.jsonl'
 $ActivePath  = Join-Path $KdsBrain 'conversation-active.json'
