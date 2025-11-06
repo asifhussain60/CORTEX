@@ -15,10 +15,13 @@
 - ✅ **Rule #19:** Checkpoint Strategy (enable safe rollback)
 - ✅ **Rule #20:** Definition of DONE (zero errors, zero warnings, TDD enforced) - LEFT BRAIN
 - ✅ **Rule #21:** Definition of READY (requirements clear, testable, scoped) - RIGHT BRAIN
+- ✅ **Rule #22:** Brain Protection System (guard BRAIN integrity, tier boundaries, SOLID compliance)
+- ✅ **Rule #23:** Incremental File Creation (write large files in small increments for resilience) 🆕
 
 **Enforcement:** Automatic, no exceptions, no overrides  
 **TDD:** Test-First Development mandatory for all code changes (Red → Green → Refactor)  
 **Quality Gates:** DoR (entry) → Execute → DoD (exit)  
+**File Creation:** Incremental writing for files >100 lines (protection against connection failures)  
 **See:** `governance/rules/challenge-user-changes.md`, `checkpoint-strategy.md`, `definition-of-done.md`, `definition-of-ready.md`
 
 ---
@@ -2780,7 +2783,285 @@ Your choice: """
 
 ---
 
-### Pre-Execution Validation (UPDATED - Added Rule #22)
+## RULE #23: Incremental File Creation (Tier 0 - INSTINCT)
+
+```yaml
+rule_id: INCREMENTAL_FILE_CREATION
+severity: HIGH
+tier: 0  # INSTINCT - Permanent defensive practice
+scope: ALL_FILE_CREATION_OPERATIONS
+
+purpose:
+  - Protect against connection failures during file creation
+  - Prevent loss of work in unstable network conditions
+  - Enable graceful recovery from interruptions
+  - Maintain partial progress rather than complete failure
+
+principle: |
+  When creating large files (>100 lines), write in small increments.
+  Each increment should be a complete, valid unit that can stand alone.
+  This prevents catastrophic loss if connection breaks mid-creation.
+
+incremental_strategy:
+  
+  small_files:
+    threshold: "<100 lines"
+    approach: "Single write operation (no incremental needed)"
+    rationale: "Low risk of connection failure, atomic write preferred"
+  
+  medium_files:
+    threshold: "100-500 lines"
+    approach: "Write in 2-3 increments"
+    increment_size: "~150-200 lines per increment"
+    example: |
+      Increment 1: Schema and core tables (lines 1-200)
+      Increment 2: Additional tables and indexes (lines 201-400)
+      Increment 3: Validation and documentation (lines 401-500)
+  
+  large_files:
+    threshold: ">500 lines"
+    approach: "Write in 5+ increments"
+    increment_size: "~100-150 lines per increment"
+    example: |
+      Increment 1: Header, overview, and first section (lines 1-150)
+      Increment 2: Second major section (lines 151-300)
+      Increment 3: Third major section (lines 301-450)
+      Increment 4: Fourth major section (lines 451-600)
+      Increment 5: Examples and wrap-up (lines 601-750)
+
+increment_boundaries:
+  logical_units:
+    - Complete SQL table definition
+    - Complete function implementation
+    - Complete section with heading
+    - Complete test case
+    - Complete documentation chapter
+  
+  invalid_boundaries:
+    - Middle of function (incomplete code)
+    - Partial table schema (missing columns)
+    - Mid-paragraph (incomplete thought)
+    - Open code block without closing
+    - Unclosed YAML/JSON structure
+
+implementation_pattern:
+  step_1_create_file:
+    action: "Use create_file tool with first increment"
+    content: "Complete, valid unit (e.g., file header + first section)"
+    validation: "File is syntactically valid after increment"
+  
+  step_2_append_increments:
+    action: "Use replace_string_in_file to append subsequent increments"
+    content: "Next complete, valid unit"
+    validation: "File remains syntactically valid after each increment"
+    context_lines: "Include 3-5 lines from previous increment for continuity"
+  
+  step_3_verify_completion:
+    action: "Validate entire file after final increment"
+    checks:
+      - All sections present
+      - No incomplete code blocks
+      - Proper file structure
+      - Closing tags/markers present
+
+connection_failure_recovery:
+  scenario_1_mid_increment:
+    state: "Connection breaks during replace_string_in_file"
+    result: "Previous increment remains intact"
+    recovery: "Resume from last successful increment"
+    data_loss: "Only current increment (not entire file)"
+  
+  scenario_2_between_increments:
+    state: "Connection breaks after increment completes"
+    result: "All completed increments preserved"
+    recovery: "Continue from next planned increment"
+    data_loss: "Zero (all work saved)"
+  
+  scenario_3_first_increment:
+    state: "Connection breaks during create_file"
+    result: "File may not exist or be incomplete"
+    recovery: "Re-create first increment (small loss)"
+    data_loss: "First increment only (~100-150 lines)"
+
+examples:
+  
+  example_1_large_design_doc:
+    file: "tier2-ltm-design.md"
+    total_lines: 800
+    increments:
+      increment_1:
+        lines: "1-150"
+        content: "Header, Overview, Schema tables 1-2"
+        status: "✅ Complete, valid Markdown"
+      increment_2:
+        lines: "151-300"
+        content: "Schema tables 3-4, FTS tables"
+        status: "✅ Complete, valid Markdown"
+      increment_3:
+        lines: "301-450"
+        content: "Consolidation algorithm, workflows"
+        status: "✅ Complete, valid Markdown"
+      increment_4:
+        lines: "451-600"
+        content: "Query patterns, confidence scoring"
+        status: "✅ Complete, valid Markdown"
+      increment_5:
+        lines: "601-750"
+        content: "Performance optimization, edge cases"
+        status: "✅ Complete, valid Markdown"
+      increment_6:
+        lines: "751-800"
+        content: "Testing strategy, documentation links"
+        status: "✅ Complete, valid Markdown"
+  
+  example_2_sql_schema:
+    file: "database-schema.sql"
+    total_lines: 600
+    increments:
+      increment_1:
+        content: "CREATE TABLE conversations + indexes"
+        status: "✅ Valid SQL (runnable)"
+      increment_2:
+        content: "CREATE TABLE messages + indexes + triggers"
+        status: "✅ Valid SQL (runnable)"
+      increment_3:
+        content: "CREATE TABLE entities + relationships"
+        status: "✅ Valid SQL (runnable)"
+      increment_4:
+        content: "FTS5 virtual tables + triggers"
+        status: "✅ Valid SQL (runnable)"
+  
+  example_3_code_implementation:
+    file: "pattern-consolidator.py"
+    total_lines: 400
+    increments:
+      increment_1:
+        content: "Imports, class definition, __init__"
+        status: "✅ Valid Python (importable)"
+      increment_2:
+        content: "extract_workflow_pattern() method"
+        status: "✅ Valid Python (callable)"
+      increment_3:
+        content: "extract_file_relationships() method"
+        status: "✅ Valid Python (callable)"
+      increment_4:
+        content: "consolidate_conversation() orchestration"
+        status: "✅ Valid Python (complete class)"
+
+enforcement:
+  automatic_detection:
+    trigger: "File creation operation detected"
+    analysis:
+      - Estimate final file size from user request
+      - Count logical sections/units
+      - Determine optimal increment size
+    
+    decision:
+      if_small: "Proceed with single write (fast path)"
+      if_medium: "Plan 2-3 increments automatically"
+      if_large: "Plan 5+ increments automatically"
+      if_massive: "WARN user, suggest breaking into multiple files"
+  
+  copilot_behavior:
+    mandate: |
+      When creating files >100 lines, Copilot MUST:
+      1. Announce incremental approach upfront
+      2. Write first increment with create_file
+      3. Append subsequent increments with replace_string_in_file
+      4. Include progress updates ("Increment 2/5 complete...")
+      5. Validate file syntax after each increment
+      6. Never write 500+ lines in single operation
+  
+  user_notification:
+    format: |
+      📝 Creating large file: {filename} (estimated {total_lines} lines)
+      
+      Strategy: Incremental writing (6 increments)
+      
+      Increment 1/6: Header + Overview + Schema tables 1-2 (lines 1-150)
+      ✅ Complete
+      
+      Increment 2/6: Schema tables 3-4 + FTS tables (lines 151-300)
+      ✅ Complete
+      
+      [Connection breaks here - work preserved up to line 300]
+
+benefits:
+  resilience:
+    - Connection failures lose at most 1 increment (~100-150 lines)
+    - Not catastrophic loss of entire 500+ line file
+    - Partial work is immediately usable
+  
+  transparency:
+    - User sees progress updates
+    - Clear indication of remaining work
+    - Can interrupt gracefully if needed
+  
+  quality:
+    - Each increment is validated independently
+    - Syntax errors caught early
+    - Easier to review in chunks
+  
+  recovery:
+    - Resume from last successful increment
+    - No need to re-create entire file
+    - Clear checkpoint for continuation
+
+exceptions:
+  non_incremental_allowed:
+    - Binary files (images, executables)
+    - Auto-generated files (package-lock.json)
+    - Small configuration files (<100 lines)
+    - Files with strict ordering requirements (rare)
+  
+  mandatory_incremental:
+    - Design documents (Markdown, >100 lines)
+    - SQL schemas (multiple tables)
+    - Large code files (classes, modules)
+    - Test suites (multiple test cases)
+
+validation:
+  pre_execution:
+    - Estimate file size from user request
+    - Determine if incremental approach needed
+    - Plan increment boundaries (logical units)
+  
+  during_execution:
+    - Validate file syntax after each increment
+    - Check for incomplete code blocks
+    - Verify continuity between increments
+  
+  post_execution:
+    - Validate entire file structure
+    - Check line count matches estimate
+    - Confirm all sections present
+
+error_handling:
+  increment_failure:
+    action: "Retry increment with adjusted content"
+    fallback: "Resume from previous successful increment"
+    user_notification: "⚠️  Increment failed - retrying with smaller chunk"
+  
+  syntax_error_after_increment:
+    action: "HALT immediately, do not proceed to next increment"
+    recovery: "Fix syntax error in current increment before continuing"
+    rationale: "Prevent cascading errors in subsequent increments"
+  
+  connection_lost:
+    action: "Report last successful increment"
+    recovery: "User can resume with: 'Continue from increment N'"
+    user_notification: |
+      ⚠️  Connection lost during file creation
+      
+      Progress: 3/6 increments complete (lines 1-450)
+      Status: File is valid and usable at current state
+      
+      To resume: "Continue creating {filename} from increment 4"
+```
+
+---
+
+### Pre-Execution Validation (UPDATED - Added Rules #22 and #23)
 - [ ] Rule #17: Challenge KDS-modifying requests
 - [ ] Rule #17: Check for duplication before proceeding
 - [ ] Rule #17: Search existing design for solutions
@@ -2793,6 +3074,9 @@ Your choice: """
 - [ ] **Rule #22: Validate tier boundaries maintained** 🆕
 - [ ] **Rule #22: Enforce SOLID compliance** 🆕
 - [ ] **Rule #22: Challenge instinct modifications** 🆕
+- [ ] **Rule #23: Use incremental file creation for files >100 lines** 🆕
+- [ ] **Rule #23: Plan increment boundaries as logical units** 🆕
+- [ ] **Rule #23: Validate syntax after each increment** 🆕
 
 ### Post-Merge Action
 - [ ] Rule #5: Auto-switch to features/kds

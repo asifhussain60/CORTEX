@@ -61,16 +61,16 @@ cortex-design/
 │   ├── workflows-catalog.md
 │   └── dashboard-features.md
 │
-├── architecture/                      # CORTEX design specs
-│   ├── overview.md
-│   ├── folder-structure.md
-│   ├── tier0-governance.md
-│   ├── tier1-stm-design.md
-│   ├── tier2-ltm-design.md
-│   ├── tier3-context-design.md
-│   ├── agent-contracts.md
-│   ├── storage-schema.md
-│   └── performance-targets.md
+├── architecture/                      # CORTEX design specs ✅ COMPLETE
+│   ├── overview.md                      # ✅ Complete
+│   ├── folder-structure.md              # ✅ Complete
+│   ├── tier0-governance.md              # ✅ Complete
+│   ├── tier1-stm-design.md              # ✅ Complete
+│   ├── tier2-ltm-design.md              # ✅ Complete
+│   ├── tier3-context-design.md          # ✅ Complete
+│   ├── storage-schema.md                # ✅ Complete
+│   ├── agent-contracts.md               # ✅ Complete
+│   └── performance-targets.md           # 📋 Optional reference doc
 │
 ├── phase-plans/                       # Detailed phase breakdown
 │   ├── phase0-instinct.md
