@@ -134,11 +134,8 @@ The brain's immutable DNA that **cannot** be changed:
 - **Challenge User Changes** - If you propose risky changes, brain MUST challenge you
 - **SOLID Principles** - Single Responsibility, no mode switches, clean architecture
 - **Local-First** - Zero external dependencies, works offline, portable
-- **Incremental File Creation** - Large files (>100 lines) created in small increments (prevents "response hit the length limit" errors) 🆕
 
 **Stored in:** `governance/rules.md` (never moves, never expires)
-
-**🎯 NOTE:** Rule #23 (Incremental File Creation) automatically prevents the "response hit the length limit" error you've been experiencing. When creating large files like implementation plans, CORTEX will create them in small chunks (100-150 lines each) using multiple tool calls. This keeps each response small and avoids hitting Copilot's length limit. See `docs/guides/preventing-response-length-limit-errors.md` for details.
 
 #### **📚 TIER 1: SHORT-TERM MEMORY (Last 20 Conversations)**
 Copilot's working memory that solves the amnesia problem:

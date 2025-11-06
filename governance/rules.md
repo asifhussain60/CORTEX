@@ -2966,11 +2966,18 @@ enforcement:
     mandate: |
       When creating files >100 lines, Copilot MUST:
       1. Announce incremental approach upfront
-      2. Write first increment with create_file
+         "📝 Creating large file incrementally to avoid response length limits"
+      2. Write first increment with create_file (lines 1-150)
       3. Append subsequent increments with replace_string_in_file
       4. Include progress updates ("Increment 2/5 complete...")
       5. Validate file syntax after each increment
       6. Never write 500+ lines in single operation
+      7. Each increment is a separate response (prevents length limit errors)
+    
+    response_limit_protection: |
+      CRITICAL: This rule prevents "response hit the length limit" errors.
+      By breaking large files into increments, each response stays small.
+      User never sees length limit errors - work progresses smoothly.
   
   user_notification:
     format: |
@@ -3006,6 +3013,43 @@ benefits:
     - Resume from last successful increment
     - No need to re-create entire file
     - Clear checkpoint for continuation
+  
+  copilot_response_limit_protection:
+    problem: |
+      GitHub Copilot has a response length limit. When creating large files
+      in a single response, users may see:
+      "Sorry, the response hit the length limit. Please rephrase your prompt."
+    
+    solution: |
+      Incremental file creation prevents this error by:
+      - Breaking response into multiple smaller tool calls
+      - Each increment fits well within response limits
+      - User never sees length limit errors
+      - Work progresses smoothly without interruption
+    
+    automatic_behavior: |
+      When file size >100 lines detected:
+      1. Copilot announces: "Creating file incrementally to avoid response limits"
+      2. First increment: create_file (lines 1-150)
+      3. Subsequent increments: replace_string_in_file (append next 100-150 lines)
+      4. Each increment is a separate tool call (separate response)
+      5. No single response exceeds length limits
+    
+    user_experience:
+      before_rule_23: |
+        ❌ User: "Create comprehensive v3.0 plan"
+        ❌ Copilot: Starts generating 2000-line file...
+        ❌ Error: "Sorry, the response hit the length limit"
+        ❌ Result: Nothing created, user frustrated
+      
+      after_rule_23: |
+        ✅ User: "Create comprehensive v3.0 plan"
+        ✅ Copilot: "Creating incrementally (10 increments planned)"
+        ✅ Increment 1/10: Header + Executive Summary ✅
+        ✅ Increment 2/10: Phase -2 Overview ✅
+        ✅ Increment 3/10: Phase -2 Tasks ✅
+        ✅ [continues smoothly...]
+        ✅ Result: Complete file created, no errors
 
 exceptions:
   non_incremental_allowed:
