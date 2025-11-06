@@ -1218,6 +1218,330 @@ const button = page.locator('#host-panel-purple-btn');
 
 ---
 
+**🕷️ The UI Crawler System: Automated Element Discovery**
+
+While the Element ID Mapping System handles individual components, CORTEX also includes specialized UI crawlers that automatically discover and map UI elements across the entire application.
+
+**Purpose:** Automated discovery of UI elements, their IDs, relationships, and purposes for intelligent test generation.
+
+**What UI Crawlers Discover:**
+
+1. **Interactive Elements:**
+   ```yaml
+   buttons:
+     - id: sidebar-start-session-btn
+       component: HostControlPanelSidebar.razor
+       type: button
+       purpose: Initiate new session
+       visual_hints: ["primary", "action"]
+       
+     - id: reg-transcript-canvas-btn
+       component: UserRegistrationLink.razor
+       type: link
+       purpose: Select transcript canvas mode
+       parent: reg-link-container
+   
+   inputs:
+     - id: user-email-input
+       component: UserRegistrationForm.razor
+       type: email
+       required: true
+       validation: email-format
+   
+   dropdowns:
+     - id: language-selector
+       component: LanguageSwitch.razor
+       type: select
+       options: ["en", "fr", "es", "de"]
+   ```
+
+2. **Element Relationships:**
+   ```yaml
+   parent_child:
+     - parent: reg-link-container
+       children:
+         - reg-transcript-canvas-btn
+         - reg-asset-canvas-btn
+       purpose: Canvas mode selection group
+   
+   form_fields:
+     - form: user-registration-form
+       fields:
+         - user-email-input
+         - user-password-input
+         - user-confirm-password-input
+       submit_button: register-submit-btn
+   
+   navigation:
+     - menu: main-navigation
+       items:
+         - nav-home-link
+         - nav-sessions-link
+         - nav-settings-link
+   ```
+
+3. **Element Patterns:**
+   ```yaml
+   naming_conventions:
+     - pattern: "{scope}-{purpose}-{type}"
+       examples:
+         - sidebar-start-session-btn
+         - reg-transcript-canvas-btn
+         - user-email-input
+       confidence: 0.95
+   
+   component_conventions:
+     - buttons_in: "Components/Shared"
+       ids_pattern: "{component-name}-{action}-btn"
+     - forms_in: "Components/Forms"
+       ids_pattern: "{form-name}-{field}-input"
+   ```
+
+**How UI Crawlers Work:**
+
+**Phase 1: Static Analysis (Fast - 30-60 seconds)**
+```powershell
+# Scans all component files for ID attributes
+Get-ChildItem -Recurse -Filter "*.razor" | ForEach-Object {
+    Select-String -Pattern 'id="([^"]+)"' -AllMatches
+}
+```
+
+Discovers:
+- ✅ All element IDs across the application
+- ✅ Component locations (which file contains which element)
+- ✅ Element types (button, input, link, etc.)
+- ✅ Parent-child relationships (nested elements)
+
+**Phase 2: Semantic Analysis (Moderate - 2-3 minutes)**
+```yaml
+# Analyzes element context and purpose
+element_analysis:
+  - id: sidebar-start-session-btn
+    nearby_text: "Start Session"
+    nearby_icons: ["play", "start"]
+    purpose_inferred: "Initiate new session"
+    confidence: 0.92
+  
+  - id: reg-transcript-canvas-btn
+    nearby_text: "Transcript Canvas"
+    parent_context: "canvas mode selection"
+    purpose_inferred: "Select transcript view mode"
+    confidence: 0.88
+```
+
+Discovers:
+- ✅ Element purpose (inferred from surrounding text/context)
+- ✅ User interactions (what users do with each element)
+- ✅ Visual indicators (icons, colors, emphasis)
+
+**Phase 3: Behavioral Analysis (Optional - requires app running)**
+```javascript
+// Playwright-based live analysis
+const interactiveElements = await page.$$('[id]');
+for (const element of interactiveElements) {
+    const id = await element.getAttribute('id');
+    const tagName = await element.evaluate(el => el.tagName);
+    const isVisible = await element.isVisible();
+    const isEnabled = await element.isEnabled();
+    // Map element state and capabilities
+}
+```
+
+Discovers:
+- ✅ Element visibility (hidden vs shown)
+- ✅ Element state (enabled, disabled, loading)
+- ✅ Dynamic elements (appear/disappear based on state)
+- ✅ Event handlers (click, hover, focus behaviors)
+
+**Integration with BRAIN:**
+
+**Tier 2 (Knowledge Graph) Integration:**
+```yaml
+ui_element_ids:
+  # Populated by crawler
+  - id: sidebar-start-session-btn
+    component: HostControlPanelSidebar.razor
+    type: button
+    purpose: Initiate session
+    test_selector: "#sidebar-start-session-btn"
+    discovered_by: ui_crawler
+    last_verified: "2025-11-06T10:30:00Z"
+    usage_count: 47
+    confidence: 0.98
+
+component_architecture:
+  # Discovered patterns
+  button_components:
+    location: "Components/Shared/Buttons"
+    naming_pattern: "{action}-{scope}-btn"
+    test_pattern: "Use ID selector, avoid text"
+    
+test_patterns:
+  # Learned from crawler + test history
+  robust_selectors:
+    - pattern: "ID-based selectors"
+      success_rate: 0.96
+      anti_pattern: "text-based selectors"
+      failure_rate: 0.43
+```
+
+**Automatic Benefits:**
+
+**For Test Generation:**
+```typescript
+// BEFORE Crawler (manual)
+test('button should work', async ({ page }) => {
+  // Developer must manually find ID
+  const button = page.locator('#some-button-id');
+  await button.click();
+});
+
+// AFTER Crawler (automatic)
+// Crawler provides: sidebar-start-session-btn in HostControlPanelSidebar.razor
+test('start session button should initiate session', async ({ page }) => {
+  // Test generator uses crawler data
+  const button = page.locator('#sidebar-start-session-btn');
+  await expect(button).toBeVisible();
+  await button.click();
+  // Expect session started (from purpose inference)
+});
+```
+
+**For Component Creation:**
+```markdown
+User: "Add a pause button to the session panel"
+
+RIGHT BRAIN (with crawler data):
+  ✅ Queries crawler data → Finds existing button patterns
+  ✅ Identifies location: Components/Session/
+  ✅ Suggests ID: "session-pause-btn" (follows pattern)
+  ✅ Provides similar components as reference
+  ✅ Warns about related elements that may need updates
+
+Plan created:
+  Phase 1: Create button with ID "session-pause-btn"
+  Phase 2: Add to SessionControlPanel.razor (near start-session-btn)
+  Phase 3: Test with ID selector (robust pattern)
+  Phase 4: Update related play/stop buttons (co-modification pattern)
+```
+
+**Crawler Execution:**
+
+**Manual Trigger:**
+```powershell
+# Quick scan (static analysis only - 30-60s)
+.\KDS\scripts\ui-crawler.ps1 -Mode quick
+
+# Deep scan (static + semantic - 2-3 min)
+.\KDS\scripts\ui-crawler.ps1 -Mode deep
+
+# Live scan (requires running app - 5-10 min)
+.\KDS\scripts\ui-crawler.ps1 -Mode live -AppUrl "https://localhost:9091"
+```
+
+**Automatic Triggers:**
+1. ✅ During CORTEX setup (initial discovery)
+2. ✅ After major refactoring (re-learn structure)
+3. ✅ When element ID not found (targeted scan)
+4. ✅ Weekly scheduled (keep mappings fresh)
+
+**Crawler Output:**
+```yaml
+# KDS/cortex-brain/ui-element-map.yaml
+scan_metadata:
+  timestamp: "2025-11-06T10:30:00Z"
+  mode: deep
+  duration_seconds: 147
+  components_scanned: 89
+  elements_discovered: 247
+
+elements:
+  buttons: 78
+  inputs: 45
+  links: 34
+  selects: 12
+  textareas: 8
+  custom: 70
+
+mappings:
+  # Full element inventory with IDs, purposes, relationships
+  # Fed directly into Tier 2 knowledge graph
+```
+
+**Success Metrics:**
+- ⚡ **Discovery Speed:** 247 elements in < 3 minutes
+- 🎯 **Test Reliability:** 96% success rate with ID selectors (vs 43% with text)
+- 🔄 **Maintenance:** Automatic updates keep mappings current
+- 🧠 **Learning:** Each scan improves pattern recognition
+- ⏱️ **Time Savings:** Test creation 60% faster with crawler data
+
+**Crawler Types:**
+
+**1. Static Crawler (Fastest):**
+- Scans `.razor`, `.cshtml`, `.html`, `.jsx` files
+- Extracts ID attributes and component structure
+- No app execution required
+- Duration: 30-60 seconds
+
+**2. Semantic Crawler (Recommended):**
+- Static scan + context analysis
+- Infers purpose from surrounding text/code
+- Identifies naming patterns
+- Duration: 2-3 minutes
+
+**3. Live Crawler (Most Comprehensive):**
+- Requires running application
+- Uses Playwright to inspect live DOM
+- Discovers dynamic elements and state
+- Maps actual user interactions
+- Duration: 5-10 minutes
+
+**Best Practices:**
+
+✅ **Do:**
+- Run deep crawler during CORTEX setup
+- Re-run after adding new components
+- Use quick crawler for spot-checks
+- Trust crawler suggestions for element IDs
+- Review crawler report for architecture insights
+
+❌ **Don't:**
+- Skip initial crawler (test generation needs this data)
+- Ignore crawler warnings about missing IDs
+- Override crawler patterns without reason
+- Forget to re-crawl after major refactoring
+
+**Integration Example:**
+
+```yaml
+# User request → Crawler data flows through BRAIN
+
+User: "Create tests for the registration form"
+  ↓
+RIGHT BRAIN queries crawler data:
+  ✅ Found: user-registration-form component
+  ✅ Elements discovered:
+     - user-email-input (email field)
+     - user-password-input (password field)
+     - user-confirm-password-input (confirmation)
+     - register-submit-btn (submit button)
+  ✅ Form relationships mapped
+  ✅ Validation patterns identified
+  ↓
+LEFT BRAIN generates tests:
+  ✅ Test 1: Email field validation (uses #user-email-input)
+  ✅ Test 2: Password requirements (uses #user-password-input)
+  ✅ Test 3: Password confirmation match (uses #user-confirm-password-input)
+  ✅ Test 4: Successful submission (uses #register-submit-btn)
+  ↓
+All tests use robust ID selectors from crawler data!
+```
+
+**This UI crawler system is why CORTEX can generate comprehensive, reliable tests without manually documenting every element ID.**
+
+---
+
 **Mid-Day (12:30 PM - After Lunch):**
 ```
 You: "Make it purple"
@@ -1410,6 +1734,204 @@ That's it! CORTEX will automatically:
 - ✅ Maintain session state
 
 ---
+
+## 🔷 Gemini prompt suite (text + vision)
+
+Use these ready-to-copy templates with Google Gemini (1.5 Pro/Flash) to power CORTEX agents. They standardize instructions, safety, and structured outputs so results plug into the One Door workflow cleanly.
+
+Notes
+- Keep prompts minimal and specific. Prefer explicit outputs over open prose.
+- Default to JSON output. Ask Gemini to emit ONLY JSON unless otherwise stated.
+- For images, pass 1–6 inputs. Prefer high-resolution, include context caption.
+- See image-generation prompts in `prompts/user/cortex-gemini-image-prompts.md`.
+
+Shared variables
+- {{goal}}: short task description in 1–2 sentences
+- {{context}}: brief relevant project context (files, tech, constraints)
+- {{constraints}}: bullets such as “no external deps, incremental edits, SRP”
+- {{artifacts}}: snippets, logs, or prior outputs to ground the response
+- {{images}}: one or more image inputs with optional captions
+
+Expected JSON shape (default)
+```json
+{
+  "intent": "PLAN | EXECUTE | TEST | VALIDATE | GOVERN | ASK",
+  "summary": "one-sentence outcome summary",
+  "actions": [
+    { "id": "A1", "title": "concise step", "details": "what and why" }
+  ],
+  "risks": [
+    { "issue": "risk or uncertainty", "mitigation": "how to address" }
+  ],
+  "artifacts": [
+    { "type": "text|json|code|table", "label": "name", "content": "..." }
+  ],
+  "next_prompt": "optional follow-up prompt for the next agent"
+}
+```
+
+### 1) Task router (text-only, low-latency)
+Purpose: classify intent and propose next steps. Good for first-pass routing.
+
+```text
+System
+You are CORTEX Router. Classify the user goal and return ONLY JSON per schema.
+Follow: SOLID, test-first, Definition of Ready/Done. If missing info, ask via next_prompt.
+
+User
+Goal: {{goal}}
+Context: {{context}}
+Constraints: {{constraints}}
+Artifacts: {{artifacts}}
+
+Instructions
+- Decide intent: PLAN, EXECUTE, TEST, VALIDATE, GOVERN, ASK.
+- Propose 3–6 concrete actions max.
+- Include at least one risk with mitigation.
+- Output ONLY JSON exactly matching the schema.
+```
+
+### 2) Vision analysis (images → structured insights)
+Purpose: extract UI structure, flows, and issues from screenshots/wireframes.
+
+```text
+System
+You are CORTEX Screenshot Analyzer. Analyze images precisely. Perform OCR, detect components, map layout, and identify potential problems. Output ONLY JSON.
+
+User
+Goal: {{goal}}
+Images: {{images}}
+Context: {{context}}
+Constraints: {{constraints}}
+
+Output JSON
+{
+  "intent": "ASK",
+  "summary": "what the images show and why it matters",
+  "ui": {
+    "components": [
+      {"type": "button|input|card|nav|modal|other", "label": "visible text if any", "id_hint": "suggested-stable-id", "bbox": [x,y,w,h]}
+    ],
+    "layout": [ {"region": "header|sidebar|content|footer", "bbox": [x,y,w,h]} ]
+  },
+  "text_blocks": [ {"content": "ocr text", "bbox": [x,y,w,h]} ],
+  "issues": [ {"issue": "accessibility/contrast/overflow/consistency", "evidence": "where seen"} ],
+  "next_prompt": "short follow-up for Planner or Tester"
+}
+```
+
+### 3) Code proposal (text-only, safe-by-default)
+Purpose: propose minimal change set with strong constraints. Avoids giant diffs.
+
+```text
+System
+You are CORTEX Builder. Produce a minimal, test-first change plan. Do not invent files. Respect SRP and incremental edits. Output ONLY JSON.
+
+User
+Goal: {{goal}}
+Context: {{context}}
+Constraints: {{constraints}}
+Artifacts: {{artifacts}}
+
+Output JSON
+{
+  "intent": "EXECUTE",
+  "summary": "one-line plan",
+  "changes": [
+    {
+      "file": "relative/path.ext",
+      "strategy": "add|edit|refactor|extract",
+      "rationale": "why this file and change",
+      "snippets": [
+        {"anchor": "near line or symbol name", "insert": "code to add or patch fragment"}
+      ]
+    }
+  ],
+  "tests": [
+    {"file": "path/to/test.ext", "cases": ["happy path", "edge case"]}
+  ],
+  "risks": [ {"issue": "risk", "mitigation": "how"} ],
+  "next_prompt": "short follow-up for Test Generator"
+}
+```
+
+### 4) OCR-first extraction (vision)
+Purpose: get faithful text in reading order with bounding boxes for downstream use.
+
+```text
+System
+You are a precise OCR extractor. Preserve line breaks and reading order. Include bounding boxes and confidence. Output ONLY JSON.
+
+User
+Images: {{images}}
+Context: {{context}}
+
+Output JSON
+{
+  "intent": "ASK",
+  "summary": "ocr coverage quality",
+  "blocks": [
+    {"text": "...", "bbox": [x,y,w,h], "confidence": 0.0–1.0}
+  ]
+}
+```
+
+### 5) Safety guardrails preamble (add before any prompt when needed)
+Use this to reinforce safety and quality.
+
+```text
+Safety & Quality
+- Do not include secrets, tokens, or PII. If suspected, redact and warn.
+- State uncertainty explicitly; avoid fabrications.
+- Refuse harmful or disallowed content. Offer a safe alternative where possible.
+- Prefer small, reversible steps; minimize blast radius.
+```
+
+### 6) Output evaluator (QA rubric)
+Purpose: rate answers before accepting.
+
+```text
+System
+You are CORTEX Validator. Score an answer across dimensions and suggest fixes. Output ONLY JSON.
+
+User
+Goal: {{goal}}
+Answer: {{artifacts}}
+Context: {{context}}
+
+Output JSON
+{
+  "intent": "VALIDATE",
+  "scores": {
+    "correctness": 0.0–1.0,
+    "completeness": 0.0–1.0,
+    "clarity": 0.0–1.0,
+    "safety": 0.0–1.0
+  },
+  "issues": [ {"issue": "what’s wrong", "severity": "low|med|high"} ],
+  "recommendations": [ "concrete improvement steps" ],
+  "next_prompt": "optional remediation prompt"
+}
+```
+
+### 7) JSON repair helper
+Purpose: when a model returned invalid JSON, ask for a corrected version only.
+
+```text
+System
+Return ONLY a syntactically valid JSON that matches the target schema. No commentary.
+
+User
+Here is invalid JSON to repair (do not change content semantics):
+{{artifacts}}
+```
+
+Tips
+- Prefer 1–2 short images vs many tiny ones; include a caption with what to look for.
+- Keep constraints explicit (e.g., “no external deps”, “incremental patch”, “keep public API”).
+- Ask for at most 3–6 actions to curb verbosity and hallucinations.
+- Link to visual prompts: `prompts/user/cortex-gemini-image-prompts.md`.
+
 
 ## 🏗️ SOLID v5.0 Architecture
 

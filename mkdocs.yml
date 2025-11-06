@@ -1,7 +1,7 @@
 site_name: CORTEX Documentation
 site_description: Cognitive Operating System for AI Development
 site_author: CORTEX Team
-site_url: https://cortex.dev
+site_url: https://asifhussain60.github.io/CORTEX/
 
 repo_name: asifhussain60/CORTEX
 repo_url: https://github.com/asifhussain60/CORTEX
@@ -10,36 +10,29 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   palette:
-    # Light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    
-    # Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+    scheme: default
+    primary: indigo
+    accent: blue
   
   features:
     - navigation.tabs
     - navigation.sections
     - navigation.top
     - navigation.tracking
+    - navigation.expand
     - search.suggest
     - search.highlight
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
+    - toc.integrate
   
   icon:
     repo: fontawesome/brands/github
+  
+  font:
+    text: Roboto
+    code: Roboto Mono
 
 plugins:
   - search
@@ -48,6 +41,8 @@ plugins:
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:
@@ -59,19 +54,39 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - admonition
   - pymdownx.details
   - attr_list
   - md_in_html
+  - def_list
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.critic
   - toc:
       permalink: true
+      toc_depth: 3
 
 nav:
-  - Home: index.md
+  - Home: Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
+  - Technical Details: technical-details.md
   - Getting Started:
+      - Overview: index.md
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md
       - Configuration: getting-started/configuration.md
+  - 🏛️ Mind Palace:
+      - Overview: Mind-Palace/README.md
+      - Quick Reference: Mind-Palace/QUICK-REFERENCE.md
+      - Dr. Asifor Chronicle:
+          - The Story: Mind-Palace/2025-11-04/Story.md
+          - Quick Start Guide: Mind-Palace/2025-11-04/Quick-Start-Guide.md
+          - Technical Reference: Mind-Palace/2025-11-04/Technical-Reference.md
+          - Image Prompts: Mind-Palace/2025-11-04/Image-Prompts.md
+      - Integration: Mind-Palace/INTEGRATION-SUMMARY.md
+      - Brain Integration: Mind-Palace/BRAIN-INTEGRATION.md
   - Architecture:
       - Overview: architecture/overview.md
       - Three-Tier Brain: architecture/three-tier-brain.md
@@ -102,6 +117,10 @@ nav:
       - Governance Rules: reference/governance-rules.md
       - Configuration: reference/configuration.md
       - Glossary: reference/glossary.md
+  - 🎨 Examples:
+      - Technical Styling: technical-styling-examples.md
+  - 🚀 Deployment:
+      - GitHub Pages: deployment/github-pages.md
 
 extra:
   social:
@@ -110,5 +129,8 @@ extra:
   
   version:
     provider: mike
+
+extra_css:
+  - stylesheets/extra.css
 
 copyright: Copyright &copy; 2025 CORTEX Team
