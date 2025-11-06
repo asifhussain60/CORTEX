@@ -8,6 +8,11 @@ pytest-cov>=4.1.0
 # YAML parsing
 PyYAML>=6.0.1
 
+# Documentation (Phase 0)
+mkdocs>=1.5.0
+mkdocs-material>=9.4.0
+mkdocs-mermaid2-plugin>=1.1.0
+
 # Phase 1 & 2: SQLite with FTS5 (coming soon)
 # No additional dependencies needed - uses Python's built-in sqlite3
 

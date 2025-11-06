@@ -1,0 +1,181 @@
+# KDS Tier 0: Tool Requirements
+# Status: INSTINCT (Permanent, Cannot Be Modified)
+# Purpose: Essential dependencies for KDS core functionality
+# Version: 1.0.0
+
+metadata:
+  tier: 0
+  classification: INSTINCT
+  immutable: true
+  created: 2025-11-06
+  last_reviewed: 2025-11-06
+
+# Core System Requirements (MUST HAVE)
+core_requirements:
+  shell:
+    windows: PowerShell 5.1+
+    linux: Bash 4.0+
+    macos: Bash 4.0+ or Zsh
+    rationale: "Script execution and automation"
+    
+  git:
+    version: "2.0+"
+    purpose: "Version control, development context collection"
+    commands:
+      - "git log"
+      - "git diff"
+      - "git status"
+    rationale: "Required for Tier 3 (Development Context) metrics"
+    
+  file_system:
+    read_write: true
+    permissions: "User-level access to workspace directory"
+    rationale: "BRAIN storage, session management, knowledge graph"
+
+# KDS Enhancement Libraries (DECLARED AT SETUP)
+kds_enhancements:
+  powershell_modules:
+    - name: "PSYaml"
+      purpose: "YAML parsing for knowledge graph and configuration"
+      optional: false
+      alternative: "Built-in PowerShell serialization (slower)"
+      
+  javascript_libraries:
+    - name: "chart.js"
+      purpose: "Dashboard metrics visualization"
+      optional: true
+      alternative: "Text-based metrics only"
+      version: "4.x"
+      
+# Application Testing Tools (DISCOVERED, NOT INSTALLED)
+test_framework_detection:
+  discovery_method: "Scan project for test frameworks"
+  supported_frameworks:
+    javascript:
+      - "Playwright"
+      - "Jest"
+      - "Mocha"
+      - "Jasmine"
+    csharp:
+      - "xUnit"
+      - "NUnit"
+      - "MSTest"
+    python:
+      - "pytest"
+      - "unittest"
+      
+  fallback: "Use project's existing test commands"
+  
+# Build Tool Detection (DISCOVERED, NOT INSTALLED)
+build_tool_detection:
+  discovery_method: "Scan for package.json, *.csproj, requirements.txt"
+  supported_tools:
+    - "dotnet"
+    - "npm"
+    - "yarn"
+    - "pip"
+    - "maven"
+    - "gradle"
+    
+  fallback: "Manual build commands"
+
+# Optional Extensions (USER CHOICE)
+optional_features:
+  database_crawling:
+    required_for: "Database schema discovery"
+    tools:
+      - "SQL Server Management Studio"
+      - "psql (PostgreSQL)"
+      - "mysql CLI"
+    user_approval: required
+    alternative: "SQL file analysis only"
+    
+  cloud_storage:
+    required_for: "Remote BRAIN backup"
+    providers:
+      - "Azure Blob Storage"
+      - "AWS S3"
+      - "Google Cloud Storage"
+    user_approval: required
+    alternative: "Local backups only"
+
+# Setup Validation Checks
+validation_protocol:
+  phase_1_core:
+    - check: "PowerShell/Bash available"
+      command: "$PSVersionTable (PowerShell) or bash --version"
+      required: true
+      
+    - check: "Git available"
+      command: "git --version"
+      required: true
+      
+    - check: "Workspace writable"
+      command: "Test write access to KDS/kds-brain/"
+      required: true
+      
+  phase_2_enhancements:
+    - check: "PSYaml module"
+      command: "Get-Module -ListAvailable PSYaml"
+      required: false
+      install_prompt: "Install PSYaml for better YAML parsing? (Y/n)"
+      
+  phase_3_application:
+    - check: "Test framework detection"
+      command: "Scan project structure"
+      required: false
+      info: "Will use project's existing test setup"
+      
+    - check: "Build tool detection"
+      command: "Scan for build files"
+      required: false
+      info: "Will use project's existing build commands"
+
+# Dependency Declaration Protocol
+setup_communication:
+  upfront_disclosure:
+    message: |
+      ⚠️ **KDS Enhancement Dependencies**
+      
+      To proceed with KDS setup, the following are needed:
+      
+      📦 Required:
+        - PowerShell 5.1+ or Bash 4.0+
+        - Git 2.0+
+        
+      📦 Recommended (KDS Enhancements):
+        - PSYaml module (better YAML parsing)
+        
+      📦 Optional (Application Testing):
+        - Detected automatically from your project
+        
+      These are KDS-internal and won't affect your application code.
+      
+      Proceed with setup? (Y/n)
+      
+  during_setup:
+    show_progress: true
+    explain_each_tool: true
+    allow_skip_optional: true
+    
+  post_setup:
+    show_installed: true
+    show_alternatives_used: true
+    provide_upgrade_path: true
+
+# Local-First Compliance
+local_first_guarantee:
+  core_functionality:
+    description: "100% functional without external dependencies"
+    storage: "All data in KDS/ directory (local files)"
+    networking: "None required for core features"
+    
+  external_only_if:
+    - "User explicitly approves"
+    - "Alternative local method exists"
+    - "Clearly marked as optional extension"
+    
+  transparency:
+    - "All dependencies declared upfront"
+    - "User informed before installation"
+    - "Local alternatives always provided"

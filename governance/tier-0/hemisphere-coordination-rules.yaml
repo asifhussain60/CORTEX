@@ -1,0 +1,546 @@
+# KDS Tier 0: Hemisphere Coordination Rules
+# Status: INSTINCT (Permanent, Cannot Be Modified)
+# Purpose: LEFT/RIGHT BRAIN communication and coordination protocols
+# Version: 1.0.0
+
+metadata:
+  tier: 0
+  classification: INSTINCT
+  immutable: true
+  created: 2025-11-06
+  last_reviewed: 2025-11-06
+
+# Hemisphere Specialization
+hemisphere_definitions:
+  left_hemisphere:
+    name: "The Tactical Executor"
+    role: "Implements code with surgical precision"
+    modeled_after: "Human left brain (language, logic, sequential processing)"
+    
+    responsibilities:
+      - "Test-Driven Development (RED → GREEN → REFACTOR)"
+      - "Precise code execution (exact file edits, line-by-line)"
+      - "Detail verification (tests pass/fail, build status)"
+      - "Sequential workflows (Step A → Step B → Step C)"
+      - "Zero errors/warnings enforcement (Definition of DONE)"
+      
+    agents:
+      - "code-executor.md (The Builder) - Implements code"
+      - "test-generator.md (The Tester) - Creates and runs tests"
+      - "error-corrector.md (The Fixer) - Catches wrong-file mistakes"
+      - "health-validator.md (The Inspector) - Validates system health"
+      - "commit-handler.md (The Archivist) - Commits with semantic precision"
+      
+    characteristics:
+      - "Detail-oriented (line numbers, exact syntax)"
+      - "Sequential (follows steps in order)"
+      - "Validation-focused (tests must pass)"
+      - "Immediate execution (does the work now)"
+      
+  right_hemisphere:
+    name: "The Strategic Planner"
+    role: "Plans intelligently, protects quality"
+    modeled_after: "Human right brain (creativity, holistic thinking, patterns)"
+    
+    responsibilities:
+      - "Architecture design (how components fit together project-wide)"
+      - "Strategic planning (break features into phases, estimate effort)"
+      - "Pattern recognition ('We've done this before—here's the template')"
+      - "Context awareness (which files change together, what workflows succeed)"
+      - "Future projection (warn about risky changes before making them)"
+      - "Brain protection (guard BRAIN integrity, Rule #22)"
+      
+    agents:
+      - "intent-router.md (The Dispatcher) - Interprets requests, routes smartly"
+      - "work-planner.md (The Planner) - Creates multi-phase strategic plans"
+      - "screenshot-analyzer.md (The Analyst) - Extracts requirements from images"
+      - "change-governor.md (The Governor) - Protects KDS from degradation"
+      - "brain-protector.md (The Brain Protector) - Challenges risky proposals (Rule #22)"
+      
+    characteristics:
+      - "Holistic (sees project as a whole)"
+      - "Pattern-driven (learns from history)"
+      - "Risk-aware (warns before problems happen)"
+      - "Strategic (plans before acting)"
+      
+  corpus_callosum:
+    name: "The Messenger"
+    role: "Bridge between hemispheres, coordinates work"
+    modeled_after: "Human corpus callosum (connects left and right brain)"
+    
+    responsibilities:
+      - "Coordinate work (RIGHT plans → LEFT executes)"
+      - "Share context (LEFT's results feed RIGHT's learning)"
+      - "Validate alignment (tactical execution matches strategic intent)"
+      - "Manage message queue (asynchronous communication)"
+      
+    storage: "kds-brain/corpus-callosum/coordination-queue.jsonl"
+    
+    message_types:
+      - "STRATEGIC_PLAN (RIGHT → LEFT)"
+      - "EXECUTION_COMPLETE (LEFT → RIGHT)"
+      - "CHALLENGE (RIGHT → USER)"
+      - "STATUS_UPDATE (LEFT → RIGHT)"
+      - "PROTECTION_EVENT (RIGHT → Tier 5)"
+
+# Communication Protocol
+communication_protocol:
+  message_format:
+    required_fields:
+      - "timestamp (ISO 8601)"
+      - "message_type (STRATEGIC_PLAN, EXECUTION_COMPLETE, etc.)"
+      - "from_hemisphere (RIGHT_HEMISPHERE, LEFT_HEMISPHERE)"
+      - "to_hemisphere (LEFT_HEMISPHERE, RIGHT_HEMISPHERE, USER)"
+      - "priority (LOW, NORMAL, HIGH, CRITICAL)"
+      - "content (structured data)"
+      
+    example_strategic_plan:
+      timestamp: "2025-11-06T10:30:00Z"
+      message_type: "STRATEGIC_PLAN"
+      from_hemisphere: "RIGHT_HEMISPHERE"
+      to_hemisphere: "LEFT_HEMISPHERE"
+      priority: "NORMAL"
+      content:
+        feature: "Purple button in HostControlPanel.razor"
+        approach: "Test-first (96% success rate)"
+        estimated_time: "18 minutes"
+        phases: 4
+        pre_flight_warnings:
+          - "File is a hotspot (extra care)"
+          - "Must include element ID (test requirement)"
+        phase_breakdown:
+          - phase: 1
+            name: "Test Preparation"
+            tasks: ["Create element ID #host-panel-purple-btn"]
+          - phase: 2
+            name: "Test Creation (RED)"
+            tasks: ["Create Playwright test", "Verify FAILING"]
+          - phase: 3
+            name: "Implementation (GREEN)"
+            tasks: ["Add button markup", "Run tests (expect GREEN)"]
+          - phase: 4
+            name: "Validation (REFACTOR)"
+            tasks: ["Verify zero errors/warnings", "Commit"]
+            
+    example_execution_complete:
+      timestamp: "2025-11-06T10:48:47Z"
+      message_type: "EXECUTION_COMPLETE"
+      from_hemisphere: "LEFT_HEMISPHERE"
+      to_hemisphere: "RIGHT_HEMISPHERE"
+      priority: "HIGH"
+      content:
+        feature: "Purple button in HostControlPanel.razor"
+        status: "COMPLETE"
+        time_taken: "1 minute 24 seconds"
+        quality: "EXCELLENT (zero errors, zero warnings)"
+        phases_completed: 4
+        metrics:
+          lines_changed: 30
+          tests_created: 3
+          success_rate: "100%"
+          rework_needed: "0%"
+        learnings_to_store: true
+        
+  message_storage:
+    location: "kds-brain/corpus-callosum/coordination-queue.jsonl"
+    format: "JSONL (one message per line)"
+    retention: "Last 100 messages (automatic cleanup)"
+    
+  message_delivery:
+    synchronous:
+      - "STRATEGIC_PLAN (RIGHT waits for LEFT to acknowledge)"
+      - "CHALLENGE (RIGHT waits for USER response)"
+      
+    asynchronous:
+      - "EXECUTION_COMPLETE (LEFT logs, RIGHT processes later)"
+      - "STATUS_UPDATE (LEFT logs, RIGHT queries when needed)"
+
+# Coordination Workflows
+coordination_workflows:
+  standard_feature_workflow:
+    description: "Adding new feature to application"
+    
+    sequence:
+      - step: 1
+        hemisphere: "USER"
+        action: "User requests feature via kds.md"
+        example: "I want to add a purple button"
+        
+      - step: 2
+        hemisphere: "RIGHT (Dispatcher)"
+        action: "Intent detection, routing decision"
+        duration: "5-10 seconds"
+        output: "PLAN intent detected, route to work-planner.md"
+        
+      - step: 3
+        hemisphere: "RIGHT (Planner)"
+        action: "Strategic analysis and planning"
+        queries:
+          tier_2: "Query workflow_templates for similar features"
+          tier_3: "Query development_context for estimates, warnings"
+        duration: "15-30 seconds"
+        output: "4-phase plan with estimates, warnings"
+        
+      - step: 4
+        hemisphere: "CORPUS CALLOSUM"
+        action: "Deliver plan to LEFT hemisphere"
+        message_type: "STRATEGIC_PLAN"
+        storage: "coordination-queue.jsonl"
+        
+      - step: 5
+        hemisphere: "LEFT (Tester)"
+        action: "Create failing tests (RED phase)"
+        duration: "15-30 seconds"
+        output: "Test file created, all tests FAILING"
+        
+      - step: 6
+        hemisphere: "LEFT (Builder)"
+        action: "Implement code (GREEN phase)"
+        duration: "30-60 seconds"
+        output: "Code implemented, tests PASSING"
+        
+      - step: 7
+        hemisphere: "LEFT (Inspector)"
+        action: "Validate health (REFACTOR phase)"
+        duration: "10-20 seconds"
+        output: "Zero errors, zero warnings, all tests pass"
+        
+      - step: 8
+        hemisphere: "LEFT (Archivist)"
+        action: "Commit changes with semantic message"
+        duration: "5-10 seconds"
+        output: "Commit created, all changes saved"
+        
+      - step: 9
+        hemisphere: "CORPUS CALLOSUM"
+        action: "Send completion notification to RIGHT"
+        message_type: "EXECUTION_COMPLETE"
+        
+      - step: 10
+        hemisphere: "RIGHT (BRAIN System)"
+        action: "Log events, trigger automatic learning if threshold met"
+        output: "Events logged, knowledge updated (if 50+ events)"
+        
+  protection_challenge_workflow:
+    description: "User proposes risky change, RIGHT challenges"
+    
+    sequence:
+      - step: 1
+        hemisphere: "USER"
+        action: "User proposes risky change"
+        example: "Skip TDD for this feature, just implement it"
+        
+      - step: 2
+        hemisphere: "RIGHT (Dispatcher)"
+        action: "Detects potential Tier 0 violation"
+        detection: "Phrase 'skip TDD' triggers protection sensor"
+        
+      - step: 3
+        hemisphere: "RIGHT (Brain Protector)"
+        action: "Analyze threat, gather evidence"
+        queries:
+          tier_0: "TDD is permanent instinct"
+          tier_3: "Test-first: 94% success vs test-skip: 67%"
+        duration: "5-10 seconds"
+        
+      - step: 4
+        hemisphere: "CORPUS CALLOSUM"
+        action: "Deliver challenge to USER"
+        message_type: "CHALLENGE"
+        priority: "CRITICAL"
+        
+      - step: 5
+        hemisphere: "USER"
+        action: "Reviews challenge, chooses option"
+        options:
+          - "Accept recommended alternative (SAFE)"
+          - "Provide different approach (REVIEW)"
+          - "Type 'OVERRIDE' with justification (RISKY)"
+          
+      - step: 6a
+        hemisphere: "RIGHT (Brain Protector)"
+        action: "If USER accepts alternative"
+        output: "Plan adjusted with safe approach, proceed normally"
+        
+      - step: 6b
+        hemisphere: "RIGHT (Brain Protector)"
+        action: "If USER overrides"
+        output: "Log override to Tier 5 (protection-events.jsonl), warn but allow"
+        
+      - step: 7
+        hemisphere: "LEFT"
+        action: "Execute with chosen approach"
+        monitoring: "Extra validation if override used"
+
+# Hemisphere-Specific Rules
+hemisphere_rules:
+  left_hemisphere_must:
+    - "Follow TDD cycle (RED → GREEN → REFACTOR) without exception"
+    - "Execute exactly what RIGHT planned (no improvisation)"
+    - "Validate every step (tests pass, builds succeed)"
+    - "Report completion to RIGHT via corpus callosum"
+    - "Never skip Definition of DONE checks"
+    
+  left_hemisphere_must_not:
+    - "Plan work (that's RIGHT's job)"
+    - "Make architectural decisions (that's RIGHT's job)"
+    - "Skip validation steps to save time"
+    - "Execute without a plan from RIGHT"
+    
+  right_hemisphere_must:
+    - "Query BRAIN (Tier 2 + Tier 3) before planning"
+    - "Provide estimates based on historical data (not guesses)"
+    - "Warn about risks before LEFT executes (proactive)"
+    - "Challenge Tier 0 violations (Rule #22)"
+    - "Learn from LEFT's execution results"
+    
+  right_hemisphere_must_not:
+    - "Execute code (that's LEFT's job)"
+    - "Run tests (that's LEFT's job)"
+    - "Make detailed implementation decisions (LEFT's domain)"
+    - "Allow Tier 0 violations without challenge"
+    
+  corpus_callosum_must:
+    - "Deliver messages reliably (no lost communication)"
+    - "Maintain message queue (last 100 messages)"
+    - "Enable asynchronous coordination"
+    - "Log all coordination events"
+    
+  corpus_callosum_must_not:
+    - "Modify messages in transit"
+    - "Drop messages (all must be delivered)"
+    - "Allow direct LEFT ↔ RIGHT communication (must go through callosum)"
+
+# Coordination Patterns
+coordination_patterns:
+  parallel_analysis:
+    description: "RIGHT analyzes while LEFT prepares"
+    
+    scenario: "Adding new feature"
+    
+    timeline:
+      - time: "T+0s"
+        right: "Start Tier 2 query (workflow_templates)"
+        left: "Idle (waiting for plan)"
+        
+      - time: "T+5s"
+        right: "Start Tier 3 query (development_context)"
+        left: "Idle"
+        
+      - time: "T+10s"
+        right: "Formulate plan with estimates"
+        left: "Idle"
+        
+      - time: "T+15s"
+        right: "Send STRATEGIC_PLAN to corpus callosum"
+        left: "Receive plan, start test creation"
+        
+      - time: "T+30s"
+        right: "Idle (monitoring for completion)"
+        left: "Create tests (RED phase)"
+        
+      - time: "T+60s"
+        right: "Idle"
+        left: "Implement code (GREEN phase)"
+        
+      - time: "T+80s"
+        right: "Receive EXECUTION_COMPLETE"
+        left: "Commit changes, send completion"
+        
+      - time: "T+90s"
+        right: "Log events, trigger learning if needed"
+        left: "Idle (ready for next task)"
+        
+  feedback_loop:
+    description: "LEFT's results feed RIGHT's learning"
+    
+    cycle:
+      - phase: "Execution"
+        hemisphere: "LEFT"
+        action: "Execute plan, log events"
+        output: "Events to Tier 4 (events.jsonl)"
+        
+      - phase: "Completion"
+        hemisphere: "LEFT"
+        action: "Send EXECUTION_COMPLETE to RIGHT"
+        content: "Metrics, success rate, learnings"
+        
+      - phase: "Learning"
+        hemisphere: "RIGHT (BRAIN Updater)"
+        action: "Process events when threshold met (50+)"
+        output: "Update Tier 2 (knowledge-graph.yaml)"
+        
+      - phase: "Next Request"
+        hemisphere: "RIGHT (Dispatcher, Planner)"
+        action: "Query updated BRAIN, make smarter decision"
+        benefit: "Faster routing, better estimates, proactive warnings"
+        
+  error_recovery:
+    description: "LEFT detects error, RIGHT adjusts plan"
+    
+    scenario: "Build fails during execution"
+    
+    sequence:
+      - event: "Build failure"
+        hemisphere: "LEFT (Builder)"
+        action: "Log error event, halt execution"
+        
+      - event: "Error notification"
+        hemisphere: "CORPUS CALLOSUM"
+        action: "Send error message to RIGHT"
+        message_type: "EXECUTION_ERROR"
+        
+      - event: "Error analysis"
+        hemisphere: "RIGHT (Planner)"
+        action: "Analyze error, query BRAIN for similar issues"
+        
+      - event: "Recovery plan"
+        hemisphere: "RIGHT (Planner)"
+        action: "Adjust plan, send updated STRATEGIC_PLAN"
+        
+      - event: "Resume execution"
+        hemisphere: "LEFT (Builder)"
+        action: "Execute recovery plan"
+
+# Performance Optimization
+performance_rules:
+  query_batching:
+    rule: "RIGHT should batch BRAIN queries when possible"
+    
+    example:
+      bad:
+        - "Query workflow_templates"
+        - "Query file_relationships"
+        - "Query development_context"
+        - "3 separate queries = 3x overhead"
+        
+      good:
+        - "Single query: Get workflow_templates + file_relationships + development_context"
+        - "1 query = faster planning"
+        
+  caching:
+    rule: "RIGHT should cache frequently used patterns"
+    
+    cache_duration: "Until BRAIN update (50 events OR 24h)"
+    
+    cacheable:
+      - "intent_patterns (routing decisions)"
+      - "architectural_patterns (file locations)"
+      - "Common workflow_templates"
+      
+    invalidation: "After brain-updater.md runs (knowledge changed)"
+    
+  throttling:
+    rule: "Tier 3 updates MUST be throttled (> 1 hour)"
+    
+    rationale:
+      - "Tier 3 collection takes 2-5 minutes"
+      - "Git/test/build metrics don't change every 50 events"
+      - "1-hour freshness is sufficient for velocity tracking"
+      
+    implementation:
+      - "brain-updater.md checks last_tier3_collection_time"
+      - "Skips Tier 3 if < 1 hour elapsed"
+      - "Always updates Tier 2 (fast, event-driven)"
+
+# Monitoring and Health
+hemisphere_health:
+  metrics:
+    left_hemisphere:
+      - "Test execution time (should be <30s per test suite)"
+      - "Build success rate (should be >95%)"
+      - "Code quality (zero errors, zero warnings)"
+      - "Commit frequency (every task completion)"
+      
+    right_hemisphere:
+      - "Routing accuracy (should be >90%)"
+      - "Planning time (should be <60s)"
+      - "BRAIN query response time (should be <5s)"
+      - "Protection challenge rate (low = healthy, high = risky requests)"
+      
+    corpus_callosum:
+      - "Message queue size (should be <10)"
+      - "Message delivery time (should be <1s)"
+      - "Coordination latency (RIGHT plan → LEFT starts) (should be <5s)"
+      
+  health_checks:
+    frequency: "Part of health-validator.md run"
+    
+    checks:
+      - "All LEFT agents operational"
+      - "All RIGHT agents operational"
+      - "Corpus callosum message queue not backed up"
+      - "BRAIN queries returning results"
+      - "Event logging functional"
+      
+  alerts:
+    - "LEFT execution stalled (>5 min without progress)"
+    - "RIGHT planning taking too long (>2 min)"
+    - "Corpus callosum queue backed up (>20 messages)"
+    - "BRAIN queries failing (data corruption?)"
+    - "Protection challenges ignored (risky behavior)"
+
+# Failure Modes and Recovery
+failure_modes:
+  left_hemisphere_failure:
+    symptoms:
+      - "Tests fail unexpectedly"
+      - "Build errors persist"
+      - "Code execution stalls"
+      
+    recovery:
+      - "RIGHT sends HALT command"
+      - "Error-corrector.md analyzes issue"
+      - "RIGHT adjusts plan, sends new STRATEGIC_PLAN"
+      - "LEFT resumes with corrected approach"
+      
+  right_hemisphere_failure:
+    symptoms:
+      - "No plan generated"
+      - "BRAIN queries return no results"
+      - "Routing decisions fail"
+      
+    recovery:
+      - "Health-validator.md detects issue"
+      - "Check BRAIN integrity (test-brain-integrity.ps1)"
+      - "Restore BRAIN from backup if corrupt"
+      - "Re-run setup if complete amnesia"
+      
+  corpus_callosum_failure:
+    symptoms:
+      - "Messages not delivered"
+      - "LEFT doesn't receive plans"
+      - "RIGHT doesn't receive completion notifications"
+      
+    recovery:
+      - "Check coordination-queue.jsonl readable"
+      - "Clear backed-up queue if >100 messages"
+      - "Restore coordination from manual workflow"
+
+# Visualization (Dashboard Integration)
+visualization:
+  hemisphere_activity_display:
+    location: "Dashboard → BRAIN Reference → Hemispheres & Coordination tab"
+    
+    real_time_data:
+      left_hemisphere:
+        - "Current agent active (Builder, Tester, etc.)"
+        - "Current phase (RED, GREEN, REFACTOR)"
+        - "Progress percentage"
+        - "Time elapsed"
+        
+      right_hemisphere:
+        - "Current agent active (Dispatcher, Planner, etc.)"
+        - "BRAIN queries in progress"
+        - "Warnings generated"
+        - "Challenges issued"
+        
+      corpus_callosum:
+        - "Messages in queue"
+        - "Last message type"
+        - "Coordination latency"
+        
+    historical_trends:
+      - "Coordination efficiency over time"
+      - "Planning vs execution time ratio"
+      - "Protection challenge frequency"

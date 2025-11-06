@@ -1,0 +1,328 @@
+# KDS Tier 0: Tier Classification Rules
+# Status: INSTINCT (Permanent, Cannot Be Modified)
+# Purpose: Event classification and tier boundary enforcement
+# Version: 1.0.0
+
+metadata:
+  tier: 0
+  classification: INSTINCT
+  immutable: true
+  created: 2025-11-06
+  last_reviewed: 2025-11-06
+
+# Five-Tier Architecture
+tier_definitions:
+  tier_0:
+    name: "INSTINCT (Core Values)"
+    storage: "governance/rules.md, governance/tier-0/"
+    classification: "PERMANENT"
+    can_be_changed: false
+    
+    contains:
+      - "Definition of READY"
+      - "Test-Driven Development (RED → GREEN → REFACTOR)"
+      - "Definition of DONE"
+      - "Challenge User Changes"
+      - "SOLID Principles"
+      - "Local-First"
+      - "Tool Requirements"
+      - "Setup Protocol"
+      - "Tier Classification Rules (this file)"
+      - "Amnesia Recovery Protocol"
+      - "Agent Protocols"
+      - "Hemisphere Coordination Rules"
+      
+    examples:
+      - "TDD is non-negotiable"
+      - "Zero errors, zero warnings at DONE"
+      - "Brain Protector MUST challenge risky proposals"
+      
+    violations:
+      - "Attempting to disable TDD"
+      - "Skipping Definition of READY/DONE"
+      - "Modifying agent behavior to bypass rules"
+      
+  tier_1:
+    name: "SHORT-TERM MEMORY (Last 20 Conversations)"
+    storage: "kds-brain/conversation-history.jsonl, kds-brain/conversation-context.jsonl"
+    classification: "VOLATILE"
+    retention: "FIFO queue (20 conversations)"
+    time_limit: "None (conversation-based, not time-based)"
+    
+    contains:
+      - "Complete conversations (last 20)"
+      - "Recent messages (last 10 in active conversation)"
+      - "Context for 'Make it purple' references"
+      - "Active conversation (never deleted even if oldest)"
+      
+    examples:
+      - "User: Add FAB button (conversation #1)"
+      - "User: Make it purple (references conversation #1)"
+      - "Conversation boundary: New request starts conversation #2"
+      
+    lifecycle:
+      creation: "Every new request starts or continues conversation"
+      preservation: "Up to 20 conversations (could be days/weeks/months)"
+      deletion: "When conversation #21 starts, conversation #1 deleted (FIFO)"
+      extraction: "Before deletion, patterns extracted to Tier 2"
+      
+    violations:
+      - "Storing application paths in Tier 1 (belongs in Tier 2)"
+      - "Keeping conversations forever (must enforce FIFO)"
+      - "Deleting active conversation (always protected)"
+      
+  tier_2:
+    name: "LONG-TERM MEMORY (Knowledge Graph)"
+    storage: "kds-brain/knowledge-graph.yaml"
+    classification: "PERSISTENT"
+    retention: "Until confidence drops below 0.50 OR unused >90 days"
+    
+    contains:
+      - "Intent patterns (add [X] → PLAN)"
+      - "File relationships (co-modification patterns)"
+      - "Workflow templates (proven sequences)"
+      - "Validation insights (common mistakes)"
+      - "Correction history (learned from errors)"
+      
+    examples:
+      - "Invoice export workflow (confidence: 0.87)"
+      - "HostControlPanel.razor + noor-canvas.css (75% co-mod)"
+      - "Test-first has 96% success rate"
+      
+    lifecycle:
+      creation: "Extracted from Tier 1 conversations OR crawler discoveries"
+      reinforcement: "Successful use increases confidence"
+      decay: "Unused patterns lose confidence over time"
+      deletion: "Confidence < 0.50 OR unused > 90 days"
+      
+    violations:
+      - "Storing recent messages in Tier 2 (belongs in Tier 1)"
+      - "Storing development metrics in Tier 2 (belongs in Tier 3)"
+      - "Keeping low-confidence patterns (< 0.50)"
+      
+  tier_3:
+    name: "DEVELOPMENT CONTEXT (Holistic Project View)"
+    storage: "kds-brain/development-context.yaml"
+    classification: "PERSISTENT"
+    retention: "Rolling window (last 30 days + aggregated trends)"
+    throttling: "Updates only if > 1 hour since last collection"
+    
+    contains:
+      - "Git activity (last 30 days)"
+      - "Code velocity (lines added/deleted per week)"
+      - "File hotspots (high churn rate)"
+      - "Testing activity (pass rates, flaky tests)"
+      - "Work patterns (productive times, session duration)"
+      - "Correlations (commit size vs success rate)"
+      
+    examples:
+      - "HostControlPanel.razor: 28% churn (hotspot!)"
+      - "Test-first: 96% success vs test-skip: 67%"
+      - "10am-12pm: 94% success rate (best time)"
+      
+    lifecycle:
+      collection: "Triggered by brain-updater.md after event threshold"
+      throttling: "Only if last_collection_time > 1 hour"
+      aggregation: "Daily snapshots → Weekly trends → Monthly analysis"
+      retention: "Raw data: 30 days, Trends: 12 months"
+      
+    violations:
+      - "Collecting Tier 3 every 50 events (too frequent, use throttle)"
+      - "Storing conversation data in Tier 3 (belongs in Tier 1)"
+      - "Storing workflow patterns in Tier 3 (belongs in Tier 2)"
+      
+  tier_4:
+    name: "EVENT STREAM (Everything That Happens)"
+    storage: "kds-brain/events.jsonl"
+    classification: "APPEND-ONLY LOG"
+    retention: "Deleted after processing into Tier 2/3"
+    
+    contains:
+      - "Agent actions (routing, execution, testing)"
+      - "File modifications (what changed, when)"
+      - "Errors and corrections (mistakes made)"
+      - "Validation results (health checks, tests)"
+      
+    examples:
+      - "{timestamp, agent: work-planner, action: plan_created, feature: invoice_export}"
+      - "{timestamp, agent: test-generator, action: test_created, result: RED}"
+      - "{timestamp, agent: error-corrector, action: file_mismatch, correction: applied}"
+      
+    lifecycle:
+      creation: "Every agent action appends event"
+      accumulation: "Events accumulate until threshold (50+)"
+      processing: "brain-updater.md extracts patterns"
+      deletion: "After processing (events cleared)"
+      
+    violations:
+      - "Keeping >50 unprocessed events (must trigger update)"
+      - "Manually editing events.jsonl (append-only)"
+      - "Deleting events before processing (data loss)"
+      
+  tier_5:
+    name: "HEALTH & PROTECTION (Self-Awareness)"
+    storage: "kds-brain/corpus-callosum/protection-events.jsonl, anomaly reports"
+    classification: "MONITORING"
+    retention: "Last 100 protection challenges + anomaly reports (30 days)"
+    
+    contains:
+      - "Protection challenges (Rule #22 violations)"
+      - "Anomaly detection (unusual patterns)"
+      - "BRAIN health metrics (integrity checks)"
+      - "Remediation actions (auto-fixes applied)"
+      
+    examples:
+      - "{challenge: skip_tdd, action: CHALLENGED, user_response: OVERRIDE}"
+      - "{anomaly: confidence_spike, pattern: test_patterns, threshold: 0.30}"
+      - "{health_check: knowledge_graph, status: VALID, issues: 0}"
+      
+    lifecycle:
+      creation: "Protection sensors trigger on violations"
+      monitoring: "Continuous health checks (test-brain-integrity.ps1)"
+      alerting: "Dashboard shows health status"
+      remediation: "brain-healer.md auto-fixes or recommends"
+      
+    violations:
+      - "Disabling protection sensors (always active)"
+      - "Ignoring health warnings (must address)"
+      - "Skipping integrity checks (must run regularly)"
+
+# Tier Boundary Enforcement
+boundary_rules:
+  tier_0_immutability:
+    rule: "Tier 0 files CANNOT be modified by agents or users"
+    enforcement:
+      - "change-governor.md MUST reject Tier 0 modifications"
+      - "Brain Protector MUST challenge attempts to bypass"
+      - "Setup can create Tier 0 files, but not modify existing"
+      
+  tier_1_fifo:
+    rule: "Tier 1 conversations MUST follow FIFO (20 max)"
+    enforcement:
+      - "conversation-context-manager.md deletes oldest when 21st starts"
+      - "Active conversation NEVER deleted (even if oldest)"
+      - "Patterns extracted before deletion (moved to Tier 2)"
+      
+  tier_2_confidence:
+    rule: "Tier 2 patterns MUST have confidence ≥ 0.50"
+    enforcement:
+      - "brain-updater.md assigns confidence on creation"
+      - "Successful use increases confidence"
+      - "Unused patterns decay (lose confidence over time)"
+      - "Patterns < 0.50 deleted automatically"
+      
+  tier_3_throttling:
+    rule: "Tier 3 collection MUST be throttled (> 1 hour)"
+    enforcement:
+      - "development-context-collector.md checks last_collection_time"
+      - "Skips collection if < 1 hour elapsed"
+      - "Prevents performance impact (2-5 min operations)"
+      
+  tier_4_processing:
+    rule: "Tier 4 events MUST be processed when 50+ accumulated"
+    enforcement:
+      - "Rule #16 Step 5: Check event count after every task"
+      - "auto-brain-updater.ps1 triggers at threshold"
+      - "brain-updater.md processes events → Tier 2/3"
+      
+  tier_5_always_on:
+    rule: "Tier 5 protection MUST always be active"
+    enforcement:
+      - "Brain Protector challenges risky proposals (Rule #22)"
+      - "test-brain-integrity.ps1 runs on demand and scheduled"
+      - "Dashboard shows health status (cannot be hidden)"
+
+# Event Classification
+event_classification:
+  tier_1_events:
+    - "conversation_started"
+    - "conversation_ended"
+    - "message_added"
+    - "conversation_boundary_detected"
+    
+  tier_2_events:
+    - "pattern_created"
+    - "pattern_reinforced"
+    - "pattern_decayed"
+    - "pattern_deleted"
+    - "confidence_updated"
+    
+  tier_3_events:
+    - "git_activity_collected"
+    - "velocity_calculated"
+    - "hotspot_detected"
+    - "correlation_found"
+    - "baseline_updated"
+    
+  tier_4_events:
+    - "agent_action"
+    - "file_modified"
+    - "test_created"
+    - "test_executed"
+    - "error_detected"
+    - "correction_applied"
+    
+  tier_5_events:
+    - "protection_challenge"
+    - "anomaly_detected"
+    - "health_check_run"
+    - "integrity_validated"
+    - "remediation_applied"
+
+# Auto-Migration Rules
+auto_migration:
+  tier_1_to_tier_2:
+    trigger: "Conversation deleted (FIFO)"
+    action: "Extract patterns before deletion"
+    examples:
+      - "Repeated file references → file_relationships"
+      - "Successful workflows → workflow_patterns"
+      - "Corrections made → correction_history"
+      
+  tier_4_to_tier_2:
+    trigger: "50+ events accumulated"
+    action: "brain-updater.md processes events"
+    examples:
+      - "Intent routing successes → intent_patterns"
+      - "Co-modified files → file_relationships"
+      - "Workflow sequences → workflow_templates"
+      
+  tier_4_to_tier_3:
+    trigger: "50+ events AND > 1 hour since last Tier 3 collection"
+    action: "development-context-collector.md updates metrics"
+    examples:
+      - "File modification events → churn rate updates"
+      - "Test execution events → pass rate trends"
+      - "Commit events → velocity calculations"
+
+# Validation Checkpoints
+validation:
+  tier_0_integrity:
+    check: "Tier 0 files unchanged"
+    frequency: "Every brain-updater.md run"
+    action_if_violated: "Restore from governance/ (canonical source)"
+    
+  tier_1_capacity:
+    check: "≤ 20 conversations in conversation-history.jsonl"
+    frequency: "Every conversation boundary"
+    action_if_violated: "Delete oldest (FIFO), extract patterns first"
+    
+  tier_2_quality:
+    check: "All patterns have confidence ≥ 0.50"
+    frequency: "Every brain-updater.md run"
+    action_if_violated: "Delete low-confidence patterns"
+    
+  tier_3_freshness:
+    check: "Tier 3 updated if > 1 hour AND events exist"
+    frequency: "Every brain-updater.md run"
+    action_if_violated: "Trigger development-context-collector.md"
+    
+  tier_4_backlog:
+    check: "< 50 unprocessed events"
+    frequency: "Rule #16 Step 5 (after every task)"
+    action_if_violated: "Trigger brain-updater.md immediately"
+    
+  tier_5_health:
+    check: "BRAIN integrity status = HEALTHY"
+    frequency: "User-triggered or scheduled"
+    action_if_violated: "Show warnings, recommend remediation"
