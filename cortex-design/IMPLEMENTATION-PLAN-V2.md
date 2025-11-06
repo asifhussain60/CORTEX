@@ -297,7 +297,7 @@ git push origin phase-1-complete
 2. Initialize Git with existing remote:
    ```powershell
    # Clone existing repo to new location
-   git clone https://github.com/asifhussain60/KDS.git .
+   git clone https://github.com/asifhussain60/CORTEX.git .
    git checkout cortex-migration
    ```
 
@@ -585,7 +585,7 @@ git push origin cortex-migration --tags
 
 1. Rename on GitHub:
    ```
-   1. Go to https://github.com/asifhussain60/KDS
+   1. Go to https://github.com/asifhussain60/CORTEX
    2. Click Settings
    3. Scroll to "Repository name"
    4. Change "KDS" → "CORTEX"
@@ -609,7 +609,7 @@ git push origin cortex-migration --tags
 4. Update documentation URLs:
    ```bash
    # Search and replace KDS → CORTEX in relevant files
-   grep -r "github.com/asifhussain60/KDS" . --include="*.md"
+   grep -r "github.com/asifhussain60/CORTEX" . --include="*.md"
    # Replace with CORTEX
    ```
 
