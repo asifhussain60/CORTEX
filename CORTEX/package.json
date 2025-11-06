@@ -1,0 +1,20 @@
+{
+  "name": "cortex-performance-tests",
+  "version": "1.0.0",
+  "description": "Phase -1 performance validation for CORTEX sql.js",
+  "private": true,
+  "scripts": {
+    "generate-data": "python cortex-tests/performance/generate-test-data.py",
+    "benchmark": "playwright test cortex-tests/performance/benchmark-sql-js.spec.ts",
+    "test-browsers": "playwright test cortex-tests/performance/test-file-system-api.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "sql.js": "^1.10.2",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "sql.js": "^1.10.2"
+  }
+}

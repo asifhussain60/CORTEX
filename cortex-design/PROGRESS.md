@@ -1,8 +1,51 @@
 # CORTEX Redesign - Progress Summary
 
-**Date:** 2025-11-05  
-**Status:** Planning Phase Complete  
-**Next:** Begin feature inventory extraction
+**Date:** 2025-11-06  
+**Status:** � STRATEGIC REVIEW - Cleanup & Testing Refinements Needed  
+**Next:** Refine plan for cleanup instincts, negative testing, and report strategy  
+**Version:** 2.1 (Instinct layer cleanup + testing enhancements)
+
+---
+
+## 🚨 CRITICAL UPDATE: Phase -1.1 Findings
+
+**Phase -1.1 Benchmarking Complete - BLOCKERS DISCOVERED:**
+- ❌ **FTS5 NOT SUPPORTED** in standard sql.js npm package
+- ❌ **Database size 3.3x over target** (900KB vs 270KB)
+- ✅ **Tier 1 performance excellent** (0.28ms vs <50ms target)
+- ✅ **Concurrency acceptable** (WAL mode working)
+
+**New Document:**
+- 🔴 **PHASE-MINUS-1-FINDINGS.md** - Validation results + contingency options
+
+**Decision Required:**
+1. **Custom sql.js build** with FTS5 (+4-6 hrs, one-time)
+2. **LIKE query fallback** (slower, simpler)
+3. **Server-side API** (8-12 hrs, full features)
+
+**See:** `PHASE-MINUS-1-FINDINGS.md` for detailed analysis
+
+---
+
+## 🎉 PREVIOUS UPDATE: Holistic Review Complete
+
+**New Documents Created:**
+- ✅ **HOLISTIC-REVIEW-FINDINGS.md** (~6,000 lines) - Comprehensive risk analysis
+- ✅ **IMPLEMENTATION-PLAN-V2.md** (~4,500 lines) - Updated implementation plan
+
+**Key Findings Integrated:**
+- 🚨 **6 Critical Risks** identified and mitigated
+- ⚠️ **8 Unvalidated Assumptions** now addressed
+- 🐛 **7 Technical Issues** resolved in new plan
+- 🔴 **4 Design Flaws** corrected with contingencies
+
+**Plan Changes:**
+- **Added Phase -1:** Architecture Validation (6-8 hrs)
+- **Added Phase 0.5:** Migration Tools (3-4 hrs)
+- **Enhanced Phase 0:** CI/CD + pre-commit hooks
+- **Enhanced Phase 1:** Schema stability commitment
+- **Enhanced Phase 2:** FTS5 performance validation
+- **Timeline:** 61-77 hrs → 74-93 hrs (prevents 20-40 hrs rework)
 
 ---
 
@@ -83,26 +126,39 @@ cortex-design/
 
 **🎉 ARCHITECTURE PHASE COMPLETE!** (7/7 documents, ~6,450 lines documented)
 
-### Mid-term (Next 1-2 days) - **CURRENT PRIORITY**
+### Mid-term (COMPLETE ✅)
 3. Phase plans creation:
-   - 📋 Phase 0: Instinct Layer (detailed steps)
-   - 📋 Phase 1: Working Memory (STM)
-   - 📋 Phase 2: Long-Term Knowledge (LTM)
-   - 📋 Phase 3: Context Intelligence
-   - 📋 Phase 4: Agents
-   - 📋 Phase 5: Entry Point
-   - 📋 Phase 6: Migration Validation
+   - ✅ Phase 0: Governance (detailed steps)
+   - ✅ Phase 1: Working Memory (STM)
+   - ✅ Phase 2: Knowledge Graph (LTM)
+   - ✅ Phase 3: Context Intelligence
+   - ✅ Phase 4: Agents
+   - ✅ Phase 5: Entry Point
+   - ✅ Phase 6: Migration Validation
+   - ✅ **NEW:** Phase -1 (Architecture Validation)
+   - ✅ **NEW:** Phase 0.5 (Migration Tools)
 
 4. Test specifications:
-   - Unit tests per tier
-   - Integration tests
-   - Regression suite
-   - Performance benchmarks
+   - ✅ 196+ tests specified across all phases
+   - ✅ Unit, integration, performance tests
+   - ✅ Regression suite planned
+   - ✅ Benchmarking tools designed
 
-### Ready to Build (After planning complete)
-5. Commit current KDS
-7. Create cortex-redesign branch
-8. Begin Phase 0 implementation
+5. Holistic Review (NEW - COMPLETE ✅):
+   - ✅ Comprehensive risk analysis
+   - ✅ Assumption validation requirements
+   - ✅ Technical issue resolutions
+   - ✅ Design flaw mitigations
+   - ✅ Updated implementation plan
+
+### Ready to Implement (NEXT)
+6. **Approve Implementation Plan v2.0**
+7. Begin Phase -1 (Architecture Validation)
+   - Benchmark sql.js performance
+   - Test browser compatibility
+   - Validate unified schema
+   - Create dashboard prototype
+   - Document contingencies
 
 ---
 
@@ -113,10 +169,14 @@ cortex-design/
 | README.md | 250 | ✅ Complete | Overview |
 | CONVERSATION-LOG.md | 600 | ✅ Complete | STM preservation |
 | MIGRATION-STRATEGY.md | 450 | ✅ Complete | Git workflow |
-| tier0-instinct.md | 750 | ✅ Complete | 22 rules |
-| **Total** | **2,050** | **25% done** | **Planning** |
+| **Feature Inventory** | 8,000+ | ✅ Complete | All KDS features |
+| **Architecture Specs** | 6,450+ | ✅ Complete | 7 design documents |
+| **Phase Plans** | 4,000+ | ✅ Complete | 6 phase plans |
+| **Holistic Review** | 6,000+ | ✅ Complete | Risk analysis |
+| **Implementation Plan v2** | 4,500+ | ✅ Complete | Updated plan |
+| **Total** | **~30,000** | **95% done** | **Planning** |
 
-**Remaining:** ~6,000-8,000 lines of documentation
+**Remaining:** ~1,000-2,000 lines (Phase -1 validation reports, final reviews)
 
 ---
 
@@ -236,16 +296,40 @@ This conversation will be:
 
 ## 🚀 Ready to Proceed
 
-**Waiting on:** User confirmation to continue feature inventory
+**Status:** ✅ PLANNING COMPLETE (95% documentation done)  
+**Next:** Approve Implementation Plan v2.0 → Begin Phase -1
 
-**When ready:**
-- Continue with Tier 1 (Working Memory) features
-- Extract conversation-history.jsonl capabilities
-- Document FIFO queue, entity extraction, boundary detection
-- Catalog all conversation features for migration
+**Implementation Plan v2.0 Summary:**
+- **Total Duration:** 74-93 hours (9-12 days focused work)
+- **Phases:** 8 phases (-1, 0, 0.5, 1-6)
+- **Tests:** 196+ tests across all phases
+- **New Additions:**
+  - Phase -1: Architecture Validation (6-8 hrs)
+  - Phase 0.5: Migration Tools (3-4 hrs)
+  - CI/CD automation (Phase 0)
+  - Performance benchmarking (all phases)
+  - Contingency plans (all phases)
+
+**Risk Mitigation:**
+- ✅ sql.js performance validated before use
+- ✅ Browser compatibility fallback ready
+- ✅ Migration tools tested early (Phase 0.5)
+- ✅ Schema stability enforced (Phase 1)
+- ✅ FTS5 validation with contingency (Phase 2)
+- ✅ Pre-commit hooks + CI/CD (Phase 0)
+
+**Approval Needed:**
+- [ ] Phase -1 approach (architecture validation)
+- [ ] Timeline extension (74-93 hrs vs 61-77 hrs)
+- [ ] CI/CD integration strategy
+- [ ] Migration tools early creation
+- [ ] Overall Implementation Plan v2.0
+
+**Once approved:** Begin Phase -1 immediately (6-8 hours)
 
 ---
 
-**Status:** 25% complete (planning phase)  
-**Confidence:** High (clear path forward)  
-**Blockers:** None (ready to continue)
+**Status:** 95% complete (planning phase)  
+**Confidence:** VERY HIGH (comprehensive risk analysis done)  
+**Blockers:** Waiting for approval to begin implementation  
+**ROI:** +13-16 hrs upfront → Prevents 20-40 hrs rework (1.5-2.5x savings)

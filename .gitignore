@@ -4,3 +4,11 @@ tests/fixtures/**/bin/
 
 # Brain backups
 kds-brain/backups/
+
+# Node.js dependencies
+node_modules/
+CORTEX/node_modules/
+
+# External SDK and libraries
+emsdk/
+sql.js/
