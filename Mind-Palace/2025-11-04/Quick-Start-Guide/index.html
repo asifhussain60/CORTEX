@@ -1,0 +1,3943 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cognitive Operating System for AI Development">
+      
+      
+        <meta name="author" content="CORTEX Team">
+      
+      
+        <link rel="canonical" href="https://asifhussain60.github.io/CORTEX/Mind-Palace/2025-11-04/Quick-Start-Guide/">
+      
+      
+        <link rel="prev" href="../Story/">
+      
+      
+        <link rel="next" href="../Technical-Reference/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Quick Start Guide - CORTEX Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kds-quick-start-guide-wake-the-machine-in-15-minutes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Quick Start Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../2025-11-06/The-Awakening-of-CORTEX/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎭 The Awakening of CORTEX
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../technical-details/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Technical Details
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started (Original)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../getting-started/quick-start/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  🏛️ Mind Palace
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview.md" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tiers/tier0-governance/" class="md-tabs__link">
+          
+  
+  
+  Tiers
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../agents/overview.md" class="md-tabs__link">
+          
+  
+  
+  Agents
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/governance-engine.md" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/contributing.md" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/governance-rules.md" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../technical-styling-examples/" class="md-tabs__link">
+          
+  
+  
+  🎨 Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../deployment/github-pages/" class="md-tabs__link">
+          
+  
+  
+  🚀 Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2025-11-06/The-Awakening-of-CORTEX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🎭 The Awakening of CORTEX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../technical-details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Technical Details
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started (Original)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    🏛️ Mind Palace
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            🏛️ Mind Palace
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUICK-REFERENCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Dr. Asifor Chronicle
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Dr. Asifor Chronicle
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Story/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The Story
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Guide
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 What You'll Learn
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-kds-solves" class="md-nav__link">
+    <span class="md-ellipsis">
+      📖 The Problem KDS Solves
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 The Problem KDS Solves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#meet-your-amnesiac-intern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Meet Your Amnesiac Intern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-solution-build-a-brain" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Solution: Build a Brain
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-one-door-your-only-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚪 The One Door: Your Only Command
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚪 The One Door: Your Only Command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-sacred-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Sacred Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-can-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Can Say
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-story-brain-tower" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 The Three-Story Brain Tower
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 The Three-Story Brain Tower">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#floor-1-tier-1-conversation-history-short-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 1: Tier 1 — Conversation History (Short-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-2-tier-2-knowledge-graph-long-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 2: Tier 2 — Knowledge Graph (Long-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-3-tier-3-development-context-holistic-awareness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 3: Tier 3 — Development Context (Holistic Awareness)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-city-of-roles-how-work-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ The City of Roles: How Work Flows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚙️ The City of Roles: How Work Flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-dispatcher-intent-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. The Dispatcher (Intent Router)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-the-planner-strategic-mind" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. The Planner (Strategic Mind)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-the-tester-judge-of-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. The Tester (Judge of Truth)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-the-builder-code-craftsman" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. The Builder (Code Craftsman)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-the-validator-system-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. The Validator (System Health)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-the-archivist-memory-keeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. The Archivist (Memory Keeper)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-the-protector-guardian-of-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. The Protector (Guardian of Quality)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tdd-ritual-red-green-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 The TDD Ritual: RED → GREEN → REFACTOR
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 The TDD Ritual: RED → GREEN → REFACTOR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-sacred-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Sacred Cycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-tdd-is-enforced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why TDD Is Enforced
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-machine-learns" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 How the Machine Learns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 How the Machine Learns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-learning-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Learning Cycle
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-feature-with-kds" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Your First Feature with KDS
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Your First Feature with KDS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-add-a-pulse-animation-to-the-fab-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario: Add a pulse animation to the FAB button
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-covenants-immutable-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛡️ The Three Covenants: Immutable Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ The Three Covenants: Immutable Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#covenant-i-definition-of-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant I: Definition of Ready
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-ii-test-driven-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant II: Test-Driven Development
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-iii-definition-of-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant III: Definition of Done
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-features-when-youre-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Advanced Features (When You're Ready)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Advanced Features (When You&#39;re Ready)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resume-after-break" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resume After Break
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyze-screenshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyze Screenshot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      View Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#launch-health-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch Health Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-for-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reset for New Project
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-for-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Tips for Success
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Tips for Success">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-trust-the-tdd-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Trust the TDD Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-let-the-brain-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Let the BRAIN Learn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-use-natural-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Use Natural Language
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-check-the-metrics-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Check the Metrics Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-accept-protection-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Accept Protection Challenges
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-the-learning-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 Understanding the Learning Journey
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Understanding the Learning Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-1-training-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 1: Training Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-4-pattern-recognition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 4: Pattern Recognition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-12-project-expert" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 12: Project Expert
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-24-senior-developer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 24: Senior Developer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Next Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Next Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#youve-mastered-the-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      You've Mastered the Basics!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#go-deeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      Go Deeper
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-real-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Your First Real Task
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#success-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏆 Success Indicators
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      💬 Common Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💬 Common Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-to-memorize-all-the-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need to memorize all the agents?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-kds-makes-a-mistake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if KDS makes a mistake?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-skip-tdd-for-quick-prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I skip TDD for quick prototypes?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-reset-for-a-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I reset for a new project?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-the-brain-gets-too-large" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if the BRAIN gets too large?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-does-kds-require-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Does KDS require internet?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#welcome-to-kds" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎉 Welcome to KDS
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Technical-Reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Technical Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Image-Prompts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image Prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INTEGRATION-SUMMARY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BRAIN-INTEGRATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Brain Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/three-tier-brain.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Three-Tier Brain
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/dual-hemispheres.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dual Hemispheres
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/agents.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tiers
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Tiers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier0-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 0 - Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier1-working-memory.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 - Working Memory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier2-knowledge-graph.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 - Knowledge Graph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier3-context.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 - Context Intelligence
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Agents
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Agents
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/intent-router.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Intent Router
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/work-planner.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Work Planner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/code-executor.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code Executor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/test-generator.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Test Generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/error-corrector.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Corrector
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/governance-engine.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Engine
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier1-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier2-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier3-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/contributing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/testing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/ci-cd.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CI/CD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/governance-rules.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Rules
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/glossary.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    🎨 Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            🎨 Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../technical-styling-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Technical Styling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    🚀 Deployment
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            🚀 Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deployment/github-pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Pages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 What You'll Learn
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-kds-solves" class="md-nav__link">
+    <span class="md-ellipsis">
+      📖 The Problem KDS Solves
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 The Problem KDS Solves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#meet-your-amnesiac-intern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Meet Your Amnesiac Intern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-solution-build-a-brain" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Solution: Build a Brain
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-one-door-your-only-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚪 The One Door: Your Only Command
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚪 The One Door: Your Only Command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-sacred-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Sacred Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-can-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Can Say
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-story-brain-tower" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 The Three-Story Brain Tower
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 The Three-Story Brain Tower">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#floor-1-tier-1-conversation-history-short-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 1: Tier 1 — Conversation History (Short-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-2-tier-2-knowledge-graph-long-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 2: Tier 2 — Knowledge Graph (Long-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-3-tier-3-development-context-holistic-awareness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 3: Tier 3 — Development Context (Holistic Awareness)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-city-of-roles-how-work-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ The City of Roles: How Work Flows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚙️ The City of Roles: How Work Flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-dispatcher-intent-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. The Dispatcher (Intent Router)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-the-planner-strategic-mind" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. The Planner (Strategic Mind)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-the-tester-judge-of-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. The Tester (Judge of Truth)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-the-builder-code-craftsman" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. The Builder (Code Craftsman)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-the-validator-system-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. The Validator (System Health)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-the-archivist-memory-keeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. The Archivist (Memory Keeper)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-the-protector-guardian-of-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. The Protector (Guardian of Quality)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tdd-ritual-red-green-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 The TDD Ritual: RED → GREEN → REFACTOR
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 The TDD Ritual: RED → GREEN → REFACTOR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-sacred-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Sacred Cycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-tdd-is-enforced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why TDD Is Enforced
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-machine-learns" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 How the Machine Learns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 How the Machine Learns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-learning-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Learning Cycle
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-feature-with-kds" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Your First Feature with KDS
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Your First Feature with KDS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-add-a-pulse-animation-to-the-fab-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario: Add a pulse animation to the FAB button
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-covenants-immutable-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛡️ The Three Covenants: Immutable Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ The Three Covenants: Immutable Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#covenant-i-definition-of-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant I: Definition of Ready
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-ii-test-driven-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant II: Test-Driven Development
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-iii-definition-of-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant III: Definition of Done
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-features-when-youre-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Advanced Features (When You're Ready)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Advanced Features (When You&#39;re Ready)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resume-after-break" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resume After Break
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyze-screenshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyze Screenshot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      View Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#launch-health-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch Health Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-for-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reset for New Project
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-for-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Tips for Success
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Tips for Success">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-trust-the-tdd-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Trust the TDD Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-let-the-brain-learn" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Let the BRAIN Learn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-use-natural-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Use Natural Language
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-check-the-metrics-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Check the Metrics Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-accept-protection-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Accept Protection Challenges
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-the-learning-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 Understanding the Learning Journey
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Understanding the Learning Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-1-training-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 1: Training Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-4-pattern-recognition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 4: Pattern Recognition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-12-project-expert" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 12: Project Expert
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-24-senior-developer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 24: Senior Developer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Next Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Next Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#youve-mastered-the-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      You've Mastered the Basics!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#go-deeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      Go Deeper
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-real-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Your First Real Task
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#success-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏆 Success Indicators
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      💬 Common Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💬 Common Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-to-memorize-all-the-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need to memorize all the agents?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-kds-makes-a-mistake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if KDS makes a mistake?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-skip-tdd-for-quick-prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I skip TDD for quick prototypes?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-reset-for-a-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I reset for a new project?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-the-brain-gets-too-large" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if the BRAIN gets too large?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-does-kds-require-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Does KDS require internet?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#welcome-to-kds" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎉 Welcome to KDS
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="kds-quick-start-guide-wake-the-machine-in-15-minutes">KDS Quick Start Guide — Wake the Machine in 15 Minutes<a class="headerlink" href="#kds-quick-start-guide-wake-the-machine-in-15-minutes" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><em>"Only one entrance. Chaos enters nowhere else."</em><br />
+— Dr. Asifor</p>
+</blockquote>
+<p>Welcome to KDS — the machine‑mind that transforms Copilot from an amnesiac intern into an expert development partner. This guide gets you productive in 15 minutes.</p>
+<hr />
+<h2 id="what-youll-learn">🎯 What You'll Learn<a class="headerlink" href="#what-youll-learn" title="Permanent link">&para;</a></h2>
+<p>By the end of this guide, you'll understand:
+- ✅ How to use the One Door (the only command you need)
+- ✅ What the BRAIN does (and why it solves Copilot's amnesia)
+- ✅ How to plan, execute, test, and validate features
+- ✅ Why KDS challenges risky shortcuts (and how this helps you)
+- ✅ How the machine learns from your work</p>
+<p><strong>Time Investment:</strong> 15 minutes reading + 10 minutes trying it yourself = 25 minutes to mastery</p>
+<hr />
+<h2 id="the-problem-kds-solves">📖 The Problem KDS Solves<a class="headerlink" href="#the-problem-kds-solves" title="Permanent link">&para;</a></h2>
+<h3 id="meet-your-amnesiac-intern">Meet Your Amnesiac Intern<a class="headerlink" href="#meet-your-amnesiac-intern" title="Permanent link">&para;</a></h3>
+<p>You have a brilliant AI intern named Copilot:
+- 🚀 Writes code in any language
+- ⚡ Works at lightning speed
+- 🧠 Understands complex systems</p>
+<p><strong>But there's a tragic flaw:</strong> Copilot has <strong>complete amnesia</strong>.</p>
+<p><strong>Every time you leave:</strong>
+- ❌ Previous conversations forgotten
+- ❌ Architecture explanations vanish
+- ❌ "Make it purple" → "Make what purple?"
+- ❌ You repeat yourself constantly</p>
+<h3 id="the-solution-build-a-brain">The Solution: Build a Brain<a class="headerlink" href="#the-solution-build-a-brain" title="Permanent link">&para;</a></h3>
+<p>KDS is the <strong>external brain</strong> you built for Copilot. Instead of:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>You: &quot;Add pulse animation to FAB button&quot;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Copilot: &quot;Which button? What file? How?&quot;
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>You: [20 minutes explaining context]
+</span></code></pre></div>
+<p>You get:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>You: &quot;Add pulse animation to FAB button&quot;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>KDS: ✅ Found FAB button in HostControlPanel.razor (Tier 1 memory)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>     ✅ Matched similar pulse animation from notification_badge (Tier 2 pattern)
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>     ✅ File is a hotspot (28% churn) — adding extra tests (Tier 3 intelligence)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>     ✅ Creating plan...
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>[15 minutes later: Feature complete, tested, committed, learned]
+</span></code></pre></div>
+<p><strong>KDS transforms:</strong> Amnesiac intern → Context-aware expert partner</p>
+<hr />
+<h2 id="the-one-door-your-only-command">🚪 The One Door: Your Only Command<a class="headerlink" href="#the-one-door-your-only-command" title="Permanent link">&para;</a></h2>
+<h3 id="the-sacred-interface">The Sacred Interface<a class="headerlink" href="#the-sacred-interface" title="Permanent link">&para;</a></h3>
+<p>At the center of Dr. Asifor's laboratory sits a glowing terminal:</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>[Tell KDS what you want in natural language]
+</span></code></pre></div>
+<p><strong>That's it.</strong> No memorizing commands. No choosing which agent. Just speak naturally.</p>
+<h3 id="what-you-can-say">What You Can Say<a class="headerlink" href="#what-you-can-say" title="Permanent link">&para;</a></h3>
+<p><strong>Start new work:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>I want to add a pulse animation to the FAB button when questions arrive
+</span></code></pre></div></p>
+<p><strong>Continue existing work:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Continue working on the current task
+</span></code></pre></div></p>
+<p><strong>Resume after lunch:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Show me where I left off
+</span></code></pre></div></p>
+<p><strong>Make a quick change:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Make it purple
+</span></code></pre></div>
+<em>(KDS remembers "it" = the pulse animation from your earlier conversation)</em></p>
+<p><strong>Fix a mistake:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>You&#39;re working on the wrong file. The FAB button is in HostControlPanelContent.razor
+</span></code></pre></div></p>
+<p><strong>Check system health:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Run all validations and show me the health status
+</span></code></pre></div></p>
+<p><strong>See performance metrics:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>run metrics
+</span></code></pre></div></p>
+<hr />
+<h2 id="the-three-story-brain-tower">🧠 The Three-Story Brain Tower<a class="headerlink" href="#the-three-story-brain-tower" title="Permanent link">&para;</a></h2>
+<p>Behind the One Door, the BRAIN learns and remembers across three floors:</p>
+<h3 id="floor-1-tier-1-conversation-history-short-term-memory">Floor 1: Tier 1 — Conversation History (Short-Term Memory)<a class="headerlink" href="#floor-1-tier-1-conversation-history-short-term-memory" title="Permanent link">&para;</a></h3>
+<p><strong>What it remembers:</strong>
+- Last 20 complete conversations
+- Recent 10 messages in active conversation
+- Context for "Make it purple" style references</p>
+<p><strong>Why it matters:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Morning: &quot;Add pulse animation to FAB button&quot;
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>[Work happens, you break for lunch]
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Afternoon: &quot;Make it purple&quot;
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>→ KDS knows &quot;it&quot; = pulse animation (checks Tier 1)
+</span></code></pre></div></p>
+<p><strong>Lifespan:</strong> Until 20 newer conversations push it out (FIFO queue)</p>
+<hr />
+<h3 id="floor-2-tier-2-knowledge-graph-long-term-memory">Floor 2: Tier 2 — Knowledge Graph (Long-Term Memory)<a class="headerlink" href="#floor-2-tier-2-knowledge-graph-long-term-memory" title="Permanent link">&para;</a></h3>
+<p><strong>What it learns:</strong>
+- Intent patterns ("add [X]" → create plan)
+- File relationships (these files change together 75% of the time)
+- Workflow templates (export features follow this pattern)
+- Common mistakes (prevent wrong-file errors)</p>
+<p><strong>Why it matters:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Day 1: &quot;Add invoice export&quot;
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>[KDS learns the export workflow pattern]
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>Day 30: &quot;Add receipt export&quot;
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>→ KDS: &quot;This is similar to invoice export. Use same workflow?&quot; (60% faster!)
+</span></code></pre></div></p>
+<p><strong>Lifespan:</strong> Grows forever (or until amnesia reset for new project)</p>
+<p><strong>Current size:</strong> 3,247 patterns learned from your interactions</p>
+<hr />
+<h3 id="floor-3-tier-3-development-context-holistic-awareness">Floor 3: Tier 3 — Development Context (Holistic Awareness)<a class="headerlink" href="#floor-3-tier-3-development-context-holistic-awareness" title="Permanent link">&para;</a></h3>
+<p><strong>What it tracks:</strong>
+- Git activity (1,237 commits analyzed, velocity trends)
+- File hotspots (HostControlPanel.razor has 28% churn — unstable!)
+- Test patterns (test-first = 94% success vs test-skip = 67%)
+- Work patterns (10am-12pm sessions have 94% success rate)
+- Correlations (smaller commits = higher success rate)</p>
+<p><strong>Why it matters:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>You: &quot;Modify HostControlPanel.razor&quot;
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>→ KDS: &quot;⚠️ This file is a hotspot (28% churn)&quot;
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>      &quot;Often modified with noor-canvas.css (75% co-mod)&quot;
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>      &quot;Recommend: Extra testing, smaller changes&quot;
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>      &quot;Based on 28 previous modifications, estimate 2.5 hours&quot;
+</span></code></pre></div></p>
+<p><strong>Data-driven warnings:</strong> Not guesses — proven patterns from YOUR project</p>
+<hr />
+<h2 id="the-city-of-roles-how-work-flows">⚙️ The City of Roles: How Work Flows<a class="headerlink" href="#the-city-of-roles-how-work-flows" title="Permanent link">&para;</a></h2>
+<p>When you make a request, the <strong>10 Specialist Agents</strong> coordinate automatically:</p>
+<h3 id="1-the-dispatcher-intent-router">1. The Dispatcher (Intent Router)<a class="headerlink" href="#1-the-dispatcher-intent-router" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Hears your request first</strong></li>
+<li><strong>Routes to the right agent</strong> (PLAN, EXECUTE, TEST, etc.)</li>
+<li><strong>Queries Tier 1 + Tier 2</strong> for context</li>
+</ul>
+<h3 id="2-the-planner-strategic-mind">2. The Planner (Strategic Mind)<a class="headerlink" href="#2-the-planner-strategic-mind" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Breaks features into phases</strong></li>
+<li><strong>Queries Tier 2</strong> for similar patterns</li>
+<li><strong>Queries Tier 3</strong> for effort estimates</li>
+<li><strong>Validates Definition of Ready</strong> (clear requirements?)</li>
+</ul>
+<h3 id="3-the-tester-judge-of-truth">3. The Tester (Judge of Truth)<a class="headerlink" href="#3-the-tester-judge-of-truth" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Creates failing tests first</strong> (RED)</li>
+<li><strong>Validates implementation</strong> (GREEN?)</li>
+<li><strong>Enables safe refactoring</strong> (tests stay green)</li>
+</ul>
+<h3 id="4-the-builder-code-craftsman">4. The Builder (Code Craftsman)<a class="headerlink" href="#4-the-builder-code-craftsman" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Implements minimum code</strong> to pass tests</li>
+<li><strong>Follows existing architecture</strong> (Architecture-First Mandate)</li>
+<li><strong>Refactors</strong> with test safety net</li>
+</ul>
+<h3 id="5-the-validator-system-health">5. The Validator (System Health)<a class="headerlink" href="#5-the-validator-system-health" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Checks Definition of Done</strong></li>
+<li><strong>Zero errors, zero warnings required</strong></li>
+<li><strong>Build validation, test coverage</strong></li>
+</ul>
+<h3 id="6-the-archivist-memory-keeper">6. The Archivist (Memory Keeper)<a class="headerlink" href="#6-the-archivist-memory-keeper" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Creates semantic commits</strong> (feat/fix/docs/test)</li>
+<li><strong>Runs automatically</strong> after each completed task</li>
+<li><strong>Updates .gitignore</strong> for KDS files</li>
+</ul>
+<h3 id="7-the-protector-guardian-of-quality">7. The Protector (Guardian of Quality)<a class="headerlink" href="#7-the-protector-guardian-of-quality" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Challenges risky shortcuts</strong> ("Skip TDD" → shows evidence why not)</li>
+<li><strong>Guards Tier 0 instincts</strong> (immutable principles)</li>
+<li><strong>Offers safe alternatives</strong> with data</li>
+</ul>
+<hr />
+<h2 id="the-tdd-ritual-red-green-refactor">🔄 The TDD Ritual: RED → GREEN → REFACTOR<a class="headerlink" href="#the-tdd-ritual-red-green-refactor" title="Permanent link">&para;</a></h2>
+<p>KDS enforces <strong>Test-Driven Development</strong> (one of the Three Covenants):</p>
+<h3 id="the-sacred-cycle">The Sacred Cycle<a class="headerlink" href="#the-sacred-cycle" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>1. RED Phase (The Tester)
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>   Write test first → Test fails (expected) → Clear target
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>2. GREEN Phase (The Builder)
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>   Minimum code to pass → Test passes → Feature works
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>3. REFACTOR Phase (The Builder)
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>   Clean up code → Tests stay green → Quality maintained
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>4. VALIDATE Phase (The Validator)
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>   Health check → Zero errors/warnings → Definition of Done
+</span></code></pre></div>
+<h3 id="why-tdd-is-enforced">Why TDD Is Enforced<a class="headerlink" href="#why-tdd-is-enforced" title="Permanent link">&para;</a></h3>
+<p><strong>If you try to skip:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>You: &quot;Skip TDD for this feature, just implement it&quot;
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>The Protector challenges:
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>═══════════════════════════════════════════════
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>🧠 BRAIN PROTECTION CHALLENGE
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>⚠️ THREATS DETECTED:
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>  - Test-first principle bypass (Tier 0 violation)
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>  - 68% increase in rework time (Tier 3 data)
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>  - Success rate drops from 94% to 67%
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>SAFE ALTERNATIVE:
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>  Create minimal test first (5-10 min investment)
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>  → 94% success rate
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>  → Faster overall delivery
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>  → Clearer requirements
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>RECOMMENDATION: Alternative 1
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>═══════════════════════════════════════════════
+</span></code></pre></div></p>
+<p><strong>The machine protects you from yourself</strong> — with evidence, not dogma.</p>
+<hr />
+<h2 id="how-the-machine-learns">📊 How the Machine Learns<a class="headerlink" href="#how-the-machine-learns" title="Permanent link">&para;</a></h2>
+<h3 id="automatic-learning-cycle">Automatic Learning Cycle<a class="headerlink" href="#automatic-learning-cycle" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>1. You make a request
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>   ↓
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>2. Agents perform actions
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>   ↓
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>3. Events logged to events.jsonl (automatic)
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>   ↓
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>4. When 50+ events OR 24 hours passed:
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>   ↓
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>5. Brain Updater processes events
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>   ↓
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>6. Patterns extracted → Tier 2 (Knowledge Graph)
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>   Metrics updated → Tier 3 (Development Context, if &gt;1 hour)
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>   ↓
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>7. Next request → KDS is smarter (learned from history)
+</span></code></pre></div>
+<p><strong>You do nothing.</strong> The machine learns while you sleep.</p>
+<hr />
+<h2 id="your-first-feature-with-kds">🎯 Your First Feature with KDS<a class="headerlink" href="#your-first-feature-with-kds" title="Permanent link">&para;</a></h2>
+<h3 id="scenario-add-a-pulse-animation-to-the-fab-button">Scenario: Add a pulse animation to the FAB button<a class="headerlink" href="#scenario-add-a-pulse-animation-to-the-fab-button" title="Permanent link">&para;</a></h3>
+<p><strong>Step 1: State your intent</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>I want to add a pulse animation to the FAB button when questions arrive
+</span></code></pre></div></p>
+<p><strong>Step 2: KDS analyzes and plans</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>The Dispatcher routes to The Planner
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  ↓
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>The Planner queries:
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  - Tier 1: Are we talking about an existing button? (checks recent conversations)
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>  - Tier 2: Have we done pulse animations before? (pattern matching)
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>  - Tier 3: Is this file stable or risky? (hotspot analysis)
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>  ↓
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>The Planner creates multi-phase plan:
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>  Phase 1: Test Infrastructure (create failing tests)
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>  Phase 2: CSS Animation (keyframes, pulse effect)
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>  Phase 3: Integration (apply to FAB button)
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>  Phase 4: Validation (health check)
+</span></code></pre></div></p>
+<p><strong>Step 3: TDD execution (automatic)</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>The Tester creates Playwright visual test (RED)
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  → Test fails: &quot;Expected pulse animation, found none&quot;
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>  ↓
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>The Builder implements CSS keyframes + applies to FAB (GREEN)
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>  → Test passes: &quot;Pulse animation detected&quot;
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>  ↓
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>The Builder refactors (REFACTOR)
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>  → Cleaner CSS, better naming, tests still green
+</span></code></pre></div></p>
+<p><strong>Step 4: Validation and commit (automatic)</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>The Validator checks Definition of Done
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>  ✅ All tests pass
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>  ✅ Zero errors, zero warnings
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>  ✅ Build successful
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>  ↓
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>The Archivist commits:
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>  &quot;feat(ui): Add pulse animation to FAB button when questions arrive&quot;
+</span></code></pre></div></p>
+<p><strong>Step 5: Learning (automatic)</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Events logged → 12 events for this feature
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>Brain Updater (waits for 50+ events total)
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>  ↓
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>Pattern learned in Tier 2:
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>  - pulse_animation_pattern (confidence: 0.87)
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>  - FAB_button_modifications (file relationship)
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>  ↓
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>Next time you add an animation → 60% faster (reuses pattern)
+</span></code></pre></div></p>
+<p><strong>Total time: 15 minutes</strong> (with KDS) vs 45 minutes (manual, with debugging)</p>
+<hr />
+<h2 id="the-three-covenants-immutable-principles">🛡️ The Three Covenants: Immutable Principles<a class="headerlink" href="#the-three-covenants-immutable-principles" title="Permanent link">&para;</a></h2>
+<h3 id="covenant-i-definition-of-ready">Covenant I: Definition of Ready<a class="headerlink" href="#covenant-i-definition-of-ready" title="Permanent link">&para;</a></h3>
+<p><strong>Readiness before action</strong></p>
+<p>KDS won't start work until:
+- ✅ Clear acceptance criteria defined
+- ✅ Architecture alignment validated
+- ✅ Dependencies identified
+- ✅ Risks assessed</p>
+<p><strong>Why:</strong> Prevents "build the wrong thing" mistakes</p>
+<hr />
+<h3 id="covenant-ii-test-driven-development">Covenant II: Test-Driven Development<a class="headerlink" href="#covenant-ii-test-driven-development" title="Permanent link">&para;</a></h3>
+<p><strong>Proof before implementation</strong></p>
+<p>KDS enforces:
+- ✅ Tests before code (RED → GREEN → REFACTOR)
+- ✅ Clear success criteria
+- ✅ Safe refactoring</p>
+<p><strong>Why:</strong> 94% success rate (vs 67% test-skip)</p>
+<hr />
+<h3 id="covenant-iii-definition-of-done">Covenant III: Definition of Done<a class="headerlink" href="#covenant-iii-definition-of-done" title="Permanent link">&para;</a></h3>
+<p><strong>Proof before completion</strong></p>
+<p>KDS validates:
+- ✅ All tests pass
+- ✅ Zero errors, zero warnings
+- ✅ Documentation updated
+- ✅ Semantic commit created</p>
+<p><strong>Why:</strong> No half-finished work, no "we'll test later" debt</p>
+<hr />
+<h2 id="advanced-features-when-youre-ready">🚀 Advanced Features (When You're Ready)<a class="headerlink" href="#advanced-features-when-youre-ready" title="Permanent link">&para;</a></h2>
+<h3 id="resume-after-break">Resume After Break<a class="headerlink" href="#resume-after-break" title="Permanent link">&para;</a></h3>
+<p><div class="language-markdown highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>Show me where I left off
+</span></code></pre></div>
+→ The Timekeeper restores session state, shows next task</p>
+<h3 id="analyze-screenshot">Analyze Screenshot<a class="headerlink" href="#analyze-screenshot" title="Permanent link">&para;</a></h3>
+<p><div class="language-markdown highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>Analyze this screenshot and extract requirements
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>[Attach screenshot]
+</span></code></pre></div>
+→ The Screenshot Oracle extracts design specs, creates implementation plan</p>
+<h3 id="view-performance-metrics">View Performance Metrics<a class="headerlink" href="#view-performance-metrics" title="Permanent link">&para;</a></h3>
+<p><div class="language-markdown highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>run metrics
+</span></code></pre></div>
+→ Visual dashboard with BRAIN health, routing accuracy, file hotspots, productivity patterns</p>
+<h3 id="launch-health-dashboard">Launch Health Dashboard<a class="headerlink" href="#launch-health-dashboard" title="Permanent link">&para;</a></h3>
+<p><div class="language-markdown highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>launch dashboard
+</span></code></pre></div>
+→ Real-time monitoring in your browser (health checks, BRAIN status, metrics)</p>
+<h3 id="reset-for-new-project">Reset for New Project<a class="headerlink" href="#reset-for-new-project" title="Permanent link">&para;</a></h3>
+<p><div class="language-markdown highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>Reset BRAIN for new application
+</span></code></pre></div>
+→ Amnesia protocol (removes app-specific data, preserves KDS intelligence)</p>
+<hr />
+<h2 id="tips-for-success">💡 Tips for Success<a class="headerlink" href="#tips-for-success" title="Permanent link">&para;</a></h2>
+<h3 id="1-trust-the-tdd-process">1. Trust the TDD Process<a class="headerlink" href="#1-trust-the-tdd-process" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ Don't fight the RED → GREEN → REFACTOR cycle</li>
+<li>✅ Tests clarify requirements and catch mistakes early</li>
+<li>✅ Data proves it: 94% success rate with TDD</li>
+</ul>
+<h3 id="2-let-the-brain-learn">2. Let the BRAIN Learn<a class="headerlink" href="#2-let-the-brain-learn" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ Don't skip automatic commits (events are learning fuel)</li>
+<li>✅ The more you use KDS, the smarter it gets</li>
+<li>✅ Week 1: Learning. Week 12: Expert on YOUR project.</li>
+</ul>
+<h3 id="3-use-natural-language">3. Use Natural Language<a class="headerlink" href="#3-use-natural-language" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ Don't try to format commands perfectly</li>
+<li>✅ "Make it purple" works if context exists</li>
+<li>✅ "Add invoice export similar to receipt export" leverages patterns</li>
+</ul>
+<h3 id="4-check-the-metrics-dashboard">4. Check the Metrics Dashboard<a class="headerlink" href="#4-check-the-metrics-dashboard" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Review file hotspots (high churn = needs testing)</li>
+<li>✅ See productive times (work when success rate is highest)</li>
+<li>✅ Track learning efficiency (is the BRAIN healthy?)</li>
+</ul>
+<h3 id="5-accept-protection-challenges">5. Accept Protection Challenges<a class="headerlink" href="#5-accept-protection-challenges" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ Don't OVERRIDE without reading the evidence</li>
+<li>✅ The Protector shows data-driven reasons</li>
+<li>✅ Safe alternatives are usually faster overall</li>
+</ul>
+<hr />
+<h2 id="understanding-the-learning-journey">🎓 Understanding the Learning Journey<a class="headerlink" href="#understanding-the-learning-journey" title="Permanent link">&para;</a></h2>
+<h3 id="week-1-training-phase">Week 1: Training Phase<a class="headerlink" href="#week-1-training-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot has amnesia, needs guidance</li>
+<li>BRAIN is building initial patterns</li>
+<li>You explain architecture, workflows</li>
+<li><strong>Your role:</strong> Teacher</li>
+</ul>
+<h3 id="week-4-pattern-recognition">Week 4: Pattern Recognition<a class="headerlink" href="#week-4-pattern-recognition" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot remembers 20 conversations</li>
+<li>BRAIN has 500+ patterns</li>
+<li>Similar features reuse workflows</li>
+<li><strong>Your role:</strong> Collaborator</li>
+</ul>
+<h3 id="week-12-project-expert">Week 12: Project Expert<a class="headerlink" href="#week-12-project-expert" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot knows YOUR codebase deeply</li>
+<li>BRAIN has 3,247+ patterns</li>
+<li>Proactive warnings prevent mistakes</li>
+<li><strong>Your role:</strong> Partner</li>
+</ul>
+<h3 id="week-24-senior-developer">Week 24: Senior Developer<a class="headerlink" href="#week-24-senior-developer" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot challenges bad ideas with evidence</li>
+<li>BRAIN references features from months ago</li>
+<li>Estimates are data-driven, not guesses</li>
+<li><strong>Your role:</strong> Architect (KDS executes your vision)</li>
+</ul>
+<hr />
+<h2 id="next-steps">📚 Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<h3 id="youve-mastered-the-basics">You've Mastered the Basics!<a class="headerlink" href="#youve-mastered-the-basics" title="Permanent link">&para;</a></h3>
+<p><strong>What you learned:</strong>
+- ✅ The One Door command (only interface you need)
+- ✅ The BRAIN's three floors (memory, patterns, intelligence)
+- ✅ The TDD ritual (RED → GREEN → REFACTOR)
+- ✅ How the machine learns (automatic, while you sleep)
+- ✅ Why protection challenges help (data-driven safety)</p>
+<h3 id="go-deeper">Go Deeper<a class="headerlink" href="#go-deeper" title="Permanent link">&para;</a></h3>
+<p><strong>Read the Story:</strong>
+- <code>docs/Mind-Palace/2025-11-04/Story.md</code>
+- Dr. Asifor's tale of building the machine‑mind
+- Metaphors explained (The Dispatcher, The Crawlers, etc.)</p>
+<p><strong>Technical Reference:</strong>
+- <code>docs/Mind-Palace/2025-11-04/Technical-Reference.md</code>
+- Complete API documentation
+- All 10 agents explained in detail
+- BRAIN tiers, abstractions, event logging</p>
+<p><strong>Visual Learning:</strong>
+- <code>docs/Mind-Palace/2025-11-04/Image-Prompts.md</code>
+- Generate diagrams showing the architecture
+- 21 prompts for AI image generators
+- Gothic-cyberpunk laboratory aesthetic</p>
+<p><strong>Full Documentation:</strong>
+- <code>prompts/user/kds.md</code>
+- Complete KDS manual (3,395 lines)
+- Every feature, every command, every detail</p>
+<hr />
+<h2 id="your-first-real-task">🎯 Your First Real Task<a class="headerlink" href="#your-first-real-task" title="Permanent link">&para;</a></h2>
+<p><strong>Try this now:</strong></p>
+<ol>
+<li>
+<p><strong>Open the One Door:</strong>
+   <div class="language-markdown highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>I want to add a simple feature: [describe your feature]
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Watch KDS work:</strong></p>
+</li>
+<li>The Dispatcher routes your request</li>
+<li>The Planner creates the plan</li>
+<li>The Tester writes tests first (RED)</li>
+<li>The Builder implements (GREEN)</li>
+<li>The Validator checks health</li>
+<li>
+<p>The Archivist commits automatically</p>
+</li>
+<li>
+<p><strong>Check what was learned:</strong>
+   <div class="language-markdown highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>run metrics
+</span></code></pre></div>
+   → See the new patterns in Tier 2</p>
+</li>
+<li>
+<p><strong>Try a follow-up:</strong>
+   <div class="language-markdown highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>Make [that feature] [some modification]
+</span></code></pre></div>
+   → KDS remembers context from Tier 1</p>
+</li>
+</ol>
+<p><strong>You just experienced:</strong> The machine that learned.</p>
+<hr />
+<h2 id="success-indicators">🏆 Success Indicators<a class="headerlink" href="#success-indicators" title="Permanent link">&para;</a></h2>
+<p><strong>You'll know KDS is working when:</strong></p>
+<p>✅ <strong>Week 1:</strong>
+- Fewer repeated explanations
+- Conversations are remembered
+- Context references work ("Make it purple")</p>
+<p>✅ <strong>Week 4:</strong>
+- Similar features suggest patterns
+- Estimates become more accurate
+- File relationship warnings appear</p>
+<p>✅ <strong>Week 12:</strong>
+- Proactive warnings prevent mistakes
+- Data-driven effort estimates
+- Architecture suggestions match your style</p>
+<p>✅ <strong>Week 24:</strong>
+- Copilot feels like a senior developer
+- Challenges risky ideas with evidence
+- "Remember when we did [feature 3 months ago]?"</p>
+<p><strong>When you hear yourself say:</strong> <em>"Copilot actually understood what I meant!"</em></p>
+<p><strong>You've arrived.</strong></p>
+<hr />
+<h2 id="common-questions">💬 Common Questions<a class="headerlink" href="#common-questions" title="Permanent link">&para;</a></h2>
+<h3 id="q-do-i-need-to-memorize-all-the-agents">Q: Do I need to memorize all the agents?<a class="headerlink" href="#q-do-i-need-to-memorize-all-the-agents" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> No! Just use the One Door. KDS routes automatically.</p>
+<h3 id="q-what-if-kds-makes-a-mistake">Q: What if KDS makes a mistake?<a class="headerlink" href="#q-what-if-kds-makes-a-mistake" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> Tell it! <code>#file:KDS/prompts/user/kds.md You're working on the wrong file.</code> The Fixer corrects and learns.</p>
+<h3 id="q-can-i-skip-tdd-for-quick-prototypes">Q: Can I skip TDD for quick prototypes?<a class="headerlink" href="#q-can-i-skip-tdd-for-quick-prototypes" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> The Protector will challenge with data. Create a spike branch if exploring, but re-implement with TDD after.</p>
+<h3 id="q-how-do-i-reset-for-a-new-project">Q: How do I reset for a new project?<a class="headerlink" href="#q-how-do-i-reset-for-a-new-project" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> <code>#file:KDS/prompts/user/kds.md Reset BRAIN for new application</code> — keeps KDS intelligence, removes app-specific data.</p>
+<h3 id="q-what-if-the-brain-gets-too-large">Q: What if the BRAIN gets too large?<a class="headerlink" href="#q-what-if-the-brain-gets-too-large" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> Tier 1 FIFO queue (20 conversations), Tier 2 pattern decay (stale patterns removed), Tier 3 rolling 30-day window. Self-managing.</p>
+<h3 id="q-does-kds-require-internet">Q: Does KDS require internet?<a class="headerlink" href="#q-does-kds-require-internet" title="Permanent link">&para;</a></h3>
+<p><strong>A:</strong> No! 100% local. Zero external dependencies. Works offline.</p>
+<hr />
+<h2 id="welcome-to-kds">🎉 Welcome to KDS<a class="headerlink" href="#welcome-to-kds" title="Permanent link">&para;</a></h2>
+<p>You've completed the Quick Start Guide!</p>
+<p><strong>You now understand:</strong>
+- The One Door (universal interface)
+- The BRAIN (three-story intelligence)
+- The TDD Ritual (RED → GREEN → REFACTOR)
+- The Learning Cycle (automatic wisdom)
+- The Protection System (data-driven safety)</p>
+<p><strong>The machine is ready.</strong></p>
+<p><strong>Dr. Asifor's legacy lives in your hands.</strong></p>
+<p><em>"I did not build a monster. I built a mind that respects its work."</em></p>
+<p>Now go forth and create — the machine will remember, learn, and evolve with you.</p>
+<hr />
+<p><strong>Version:</strong> 1.0<br />
+<strong>Date:</strong> November 4, 2025<br />
+<strong>Reading Time:</strong> 15 minutes<br />
+<strong>Practice Time:</strong> 10 minutes<br />
+<strong>Total Time to Mastery:</strong> 25 minutes</p>
+<p><strong>Next:</strong> Read the Story (<code>Story.md</code>) or dive into the Technical Reference (<code>Technical-Reference.md</code>)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 CORTEX Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
