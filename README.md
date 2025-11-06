@@ -1,9 +1,9 @@
-# KDS v3.0 - Key Data Streams System
+# CORTEX - Cognitive Operations and Reasoning TEXture
 
-**Version:** 3.0.0  
-**Status:** 🏗️ INFRASTRUCTURE READY  
-**Framework:** .NET 8.0 (Blazor) + Playwright + PowerShell  
-**Last Updated:** 2025-11-02
+**Version:** 5.0.0 (Evolved from KDS v3.0)  
+**Status:** � ACTIVE - Production Ready  
+**Framework:** Browser-Native (SQL.js + TypeScript) + PowerShell  
+**Last Updated:** 2025-11-06
 
 ---
 
@@ -13,7 +13,7 @@ GitHub Copilot is brilliant—can write code in any language, understand complex
 
 Every new chat session, Copilot forgets everything from previous conversations. You said "make it purple" five minutes ago? Gone. The file you discussed yesterday? Vanished. The architecture you explained last week? As if it never happened.
 
-**KDS is Copilot's brain** — a sophisticated dual-hemisphere cognitive system that:
+**CORTEX is Copilot's brain** — a sophisticated dual-hemisphere cognitive system that:
 
 - **Remembers** - Last 20 conversations preserved, "make it purple" references work across sessions
 - **Learns** - 3,247+ patterns accumulated from your project, each feature teaches the next
@@ -28,26 +28,73 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 **Week 12:** Expert on YOUR project, 3,247 patterns, proactive warnings prevent issues  
 **Week 24:** Feels like a senior developer, challenges bad ideas with evidence, suggests similar features from months ago
 
-**KDS transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
+**CORTEX transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
+
+---
+
+## 🚀 Quick Start
+
+### Using CORTEX Entry Point
+
+**In GitHub Copilot Chat:**
+```
+#file:/Users/asifhussain/PROJECTS/CORTEX/prompts/user/cortex.md
+
+[Your request - CORTEX will handle everything]
+```
+
+**From Terminal:**
+```bash
+# Open CORTEX entry point in VS Code
+cortex
+
+# Or use the launcher script
+./run-cortex.sh
+
+# Navigate to CORTEX directory
+cdcortex
+```
+
+### What Can You Ask CORTEX?
+
+- **"Add user authentication"** → CORTEX plans multi-phase implementation
+- **"Continue"** → Resumes where you left off automatically
+- **"Test this feature"** → Generates comprehensive tests
+- **"Make it purple"** → Remembers context from earlier in conversation
+- **"What should I work on?"** → Analyzes your patterns and suggests tasks
 
 ---
 
 ## 📋 Overview
 
-KDS (Key Data Streams) is a prompt engineering system designed to manage GitHub Copilot context efficiently for building applications. It provides:
+CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhancement system designed to give GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. It provides:
 
-1. **Context Management** - Break features into planned phases/tasks with auto-execution
-2. **Task Orchestration** - Chain tasks using handoff JSON files
-3. **Test Standardization** - Playwright orchestration and test pattern reuse
-4. **Template-Driven Output** - Customizable user responses via Mustache templates
+CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhancement system designed to give GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. It provides:
+
+1. **4-Tier Brain Architecture** - Instinct, Working Memory, Knowledge Graph, Development Context
+2. **10 Specialist Agents** - Intent routing, planning, execution, testing, validation, governance
+3. **Dual-Hemisphere Processing** - LEFT BRAIN (tactical) + RIGHT BRAIN (strategic)
+4. **Context Continuity** - "Make it purple" works across sessions (20 conversation memory)
+5. **Pattern Learning** - Accumulates wisdom from every interaction
+6. **Quality Protection** - Challenges risky changes with evidence-based recommendations
 
 ---
 
 ## 🗂️ Directory Structure
 
 ```
-KDS/
+CORTEX/
 ├── README.md                           # This file - system overview
+├── run-cortex.sh                       # Quick launcher for CORTEX entry point
+├── prompts/user/cortex.md              # 🎯 UNIVERSAL ENTRY POINT - Start here
+├── cortex-brain/                       # The cognitive storage system
+│   ├── tier0/                          # Instinct (immutable rules)
+│   ├── tier1/                          # Working memory (last 20 conversations)
+│   ├── tier2/                          # Knowledge graph (patterns learned)
+│   └── tier3/                          # Development context (git, tests, metrics)
+├── scripts/                            # Automation and maintenance scripts
+├── cortex-design/                      # Implementation plans and architecture
+└── docs/                               # Comprehensive documentation
 │
 ├── docs/                               # 📚 ALL DOCUMENTATION
 │   ├── architecture/                   # System design & patterns
