@@ -3127,8 +3127,251 @@ error_handling:
 
 ---
 
+## RULE #25: Cognitive Anchoring (GPT Best Practice #1)
+
+```yaml
+rule_id: COGNITIVE_ANCHORING
+severity: CRITICAL
+category: cognitive_framework
+scope: ALL_AGENTS
+
+description: >
+  Before every code generation task, MUST restate context anchor:
+  - Module name and file path
+  - Module's purpose in the system
+  - Relevant CORTEX tier/hemisphere
+  - Current goal/objective
+
+enforcement:
+  - Intent Router provides context anchor on EVERY request
+  - Work Planner creates "Context Snapshot" at start of each task
+  - Error Corrector validates context anchor exists before proceeding
+  - All agents include get_context_anchor() method
+
+violation_response: >
+  ⚠️ CONTEXT ANCHOR MISSING
+  
+  What module are we working in?
+  What is this file's purpose?
+  Which CORTEX tier/hemisphere does it belong to?
+  What are we trying to accomplish?
+  
+  Please provide context before proceeding.
+
+example:
+  valid_anchor: |
+    🧭 CONTEXT ANCHOR
+    Module: CORTEX/src/agents/strategic/intent_router.py
+    Purpose: Route user requests to specialist agents
+    Role: RIGHT BRAIN strategic planner
+    Tier: Phase 4 - Core Intelligence Layer
+    Current Goal: Classify intent and route to Work Planner
+  
+benefits:
+  - Prevents "wrong file" mistakes
+  - Ensures Copilot knows current location
+  - Maintains focus during long sessions
+  - Reduces context loss between tasks
+
+reference: "cortex-brain/cognitive-framework/cognitive-anchors/module-contexts.yaml"
+```
+
+---
+
+## RULE #26: Intent-First, Code-Second (GPT Best Practice #2)
+
+```yaml
+rule_id: INTENT_FIRST_CODE_SECOND
+severity: HIGH
+category: cognitive_framework
+scope: ALL_AGENTS
+
+description: >
+  Copilot MUST NOT generate code until intent is explicitly confirmed:
+  1. Work Planner summarizes understanding
+  2. User confirms or clarifies
+  3. THEN Code Executor proceeds with implementation
+
+workflow:
+  step_1:
+    agent: Work Planner
+    action: Generate intent confirmation message
+    template: "You want to: {request}. My understanding: {summary}. Proceed?"
+  
+  step_2:
+    agent: Session Manager
+    action: Wait for user response
+    valid_responses: ["yes", "proceed", "clarify", "no", "cancel"]
+  
+  step_3:
+    agent: Code Executor
+    condition: BLOCKED until confirmation received
+    action: Implement only after "yes" or "proceed"
+
+enforcement:
+  - Work Planner MUST generate confirmation before planning
+  - Code Executor BLOCKED until confirmation logged
+  - All confirmations logged to Tier 1 (conversation history)
+  - Change Governor validates confirmation exists
+
+violation_response: >
+  ⚠️ INTENT NOT CONFIRMED
+  
+  I understand you want to: {user_request}
+  
+  My understanding:
+  {summary_of_understanding}
+  
+  Is this correct? Options:
+  - yes/proceed: Start implementation
+  - clarify: Provide more details
+  - cancel: Stop this request
+
+example:
+  confirmation_message: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to: Add invoice export feature to dashboard
+    
+    My understanding:
+    - This is a new feature (PLAN intent)
+    - Similar to: receipt export (85% match)
+    - Estimated scope: UI + backend + tests
+    - Estimated effort: ~6-8 hours (3 phases)
+    
+    Proceed with detailed planning? (yes/clarify)
+
+benefits:
+  - Prevents misunderstood requirements
+  - Catches scope issues before coding
+  - Reduces rework from wrong assumptions
+  - Documents understanding in conversation history
+
+reference: "cortex-brain/cognitive-framework/cognitive-anchors/intent-confirmations.yaml"
+```
+
+---
+
+## RULE #27: Pattern-First Development (GPT Best Practice #4)
+
+```yaml
+rule_id: PATTERN_FIRST_DEVELOPMENT
+severity: MEDIUM
+category: code_quality
+scope: CODE_EXECUTOR
+
+description: >
+  Before creating new utilities, functions, or components:
+  1. Query Tier 2 Knowledge Graph for similar patterns
+  2. Search codebase for existing implementations
+  3. Reuse if similarity ≥70%
+  4. Only create new if no match OR existing is inadequate
+
+workflow:
+  step_1:
+    action: Code Executor receives implementation task
+    trigger: Pattern search BEFORE code generation
+  
+  step_2:
+    action: Query Tier 2 via PatternSearchEnforcer
+    search: |
+      - Intent: What the code should accomplish
+      - Code type: function/class/component/workflow
+      - Context: Module, dependencies, constraints
+  
+  step_3:
+    condition: Pattern found with confidence ≥70%
+    action: Suggest reuse
+    message: "Found {pattern_name} ({confidence}%). Reuse?"
+  
+  step_4:
+    condition: No pattern OR confidence <70%
+    action: Create new implementation
+    log: New pattern to Tier 2 for future reuse
+
+enforcement:
+  - Code Executor queries PatternSearchEnforcer before new code
+  - Tier 2 automatically searches on every code creation intent
+  - Health Validator flags duplicate utilities (pattern sprawl detection)
+  - All pattern searches logged to Tier 2 for learning
+
+violation_response: >
+  ⚠️ SIMILAR PATTERN EXISTS
+  
+  Found: {pattern_name}
+  Confidence: {confidence_percentage}
+  Location: {file_path}
+  Used {usage_count} times
+  
+  Options:
+  - reuse: Use existing pattern (recommended)
+  - modify: Adapt existing pattern
+  - create-new: Create new (justify why existing is inadequate)
+
+example:
+  search_result: |
+    🔍 PATTERN SEARCH
+    
+    Searching for: "export invoice to PDF"
+    
+    Found: receipt_export_feature
+    Confidence: 85%
+    Pattern: UI component → Service call → PDF generation
+    Files: ReceiptExport.tsx, ReceiptService.cs, PdfGenerator.cs
+    Success rate: 100% (implemented successfully)
+    
+    Recommendation: Reuse receipt_export_feature pattern
+
+benefits:
+  - Reduces code duplication
+  - Maintains consistency across codebase
+  - Accelerates development (reuse proven patterns)
+  - Improves code quality (battle-tested patterns)
+  - Prevents pattern sprawl
+
+thresholds:
+  reuse_recommended: 0.70  # 70%+ similarity → suggest reuse
+  modification_ok: 0.50    # 50-69% → adapt existing
+  create_new: 0.49         # <50% → create new
+
+reference: "cortex-brain/cognitive-framework/pattern-search/search_before_create.py"
+implementation: "PatternSearchEnforcer class with FTS5 semantic search"
+```
+
+---
+
+### Pre-Execution Validation (UPDATED - Added Rules #25-27)
+- [ ] Rule #17: Challenge KDS-modifying requests
+- [ ] Rule #17: Check for duplication before proceeding
+- [ ] Rule #17: Search existing design for solutions
+- [ ] Rule #17: Provide alternatives when harmful
+- [ ] Rule #17: Require explicit confirmation for harmful changes
+- [ ] Rule #18: Read tooling-inventory.json BEFORE task execution
+- [ ] Rule #18: Verify tooling inventory is current (<7 days old)
+- [ ] Rule #18: Auto-refresh if package.json/csproj changed
+- [ ] Rule #22: Run brain-protector.md for all brain modifications
+- [ ] Rule #22: Validate tier boundaries maintained
+- [ ] Rule #22: Enforce SOLID compliance
+- [ ] Rule #22: Challenge instinct modifications
+- [ ] Rule #23: Use incremental file creation for files >100 lines
+- [ ] Rule #23: Plan increment boundaries as logical units
+- [ ] Rule #23: Validate syntax after each increment
+- [ ] **Rule #25: Provide context anchor at task start** 🆕
+- [ ] **Rule #25: Validate module/purpose/tier stated clearly** 🆕
+- [ ] **Rule #26: Confirm intent before code generation** 🆕
+- [ ] **Rule #26: Wait for user confirmation (yes/clarify/cancel)** 🆕
+- [ ] **Rule #27: Search Tier 2 patterns before creating new code** 🆕
+- [ ] **Rule #27: Suggest reuse if similarity ≥70%** 🆕
+- [ ] **Rule #27: Log all pattern searches to Tier 2** 🆕
+
+### Post-Merge Action
+- [ ] Rule #5: Auto-switch to features/kds
+
+---
+
 **END OF GOVERNANCE RULES**
 
-**Version:** 4.2.0  
-**Last Updated:** 2025-11-02  
-**Companion Doc:** `KDS/KDS-DESIGN.md` (human-readable)
+**Version:** 6.1.0  
+**Last Updated:** 2025-11-06  
+**New Additions:** Rules #25-27 (Cognitive Framework)  
+**Companion Doc:** `CORTEX/cortex-design/IMPLEMENTATION-PLAN-V3-GPT-ENHANCED.md`

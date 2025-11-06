@@ -1,0 +1,114 @@
+site_name: CORTEX Documentation
+site_description: Cognitive Operating System for AI Development
+site_author: CORTEX Team
+site_url: https://cortex.dev
+
+repo_name: asifhussain60/CORTEX
+repo_url: https://github.com/asifhussain60/CORTEX
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - mermaid2
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Quick Start: getting-started/quick-start.md
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Three-Tier Brain: architecture/three-tier-brain.md
+      - Dual Hemispheres: architecture/dual-hemispheres.md
+      - Agent System: architecture/agents.md
+  - Tiers:
+      - Tier 0 - Governance: tiers/tier0-governance.md
+      - Tier 1 - Working Memory: tiers/tier1-working-memory.md
+      - Tier 2 - Knowledge Graph: tiers/tier2-knowledge-graph.md
+      - Tier 3 - Context Intelligence: tiers/tier3-context.md
+  - Agents:
+      - Overview: agents/overview.md
+      - Intent Router: agents/intent-router.md
+      - Work Planner: agents/work-planner.md
+      - Code Executor: agents/code-executor.md
+      - Test Generator: agents/test-generator.md
+      - Error Corrector: agents/error-corrector.md
+  - API Reference:
+      - Governance Engine: api/governance-engine.md
+      - Tier 1 API: api/tier1-api.md
+      - Tier 2 API: api/tier2-api.md
+      - Tier 3 API: api/tier3-api.md
+  - Development:
+      - Contributing: development/contributing.md
+      - Testing: development/testing.md
+      - CI/CD: development/ci-cd.md
+  - Reference:
+      - Governance Rules: reference/governance-rules.md
+      - Configuration: reference/configuration.md
+      - Glossary: reference/glossary.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/asifhussain60/CORTEX
+  
+  version:
+    provider: mike
+
+copyright: Copyright &copy; 2025 CORTEX Team

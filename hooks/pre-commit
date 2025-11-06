@@ -1,22 +1,22 @@
 #!/bin/bash
-# KDS Pre-Commit Hook - Enforce KDS Dedicated Repository
-# Version: 2.0.0 (Dedicated Repository - Post Migration)
+# CORTEX Pre-Commit Hook - Enforce Quality Gates
+# Version: 3.0.0 (Post-Migration with Testing)
 # Installation: Copy to .git/hooks/pre-commit and chmod +x
 
-echo "🔍 KDS Pre-Commit Hook - Validating commit..."
+echo "🔍 CORTEX Pre-Commit Hook - Validating commit..."
 
-# 1. CRITICAL: Ensure we're in KDS repository (not DevProjects or other projects)
+# 1. CRITICAL: Ensure we're in CORTEX repository
 REPO_URL=$(git config --get remote.origin.url)
 REPO_NAME=$(echo "$REPO_URL" | grep -o '[^/]*$' | sed 's/.git$//')
 
-if [ "$REPO_NAME" != "KDS" ]; then
+if [ "$REPO_NAME" != "CORTEX" ] && [ "$REPO_NAME" != "KDS" ]; then
   echo ""
   echo "════════════════════════════════════════════════" 
-  echo "❌ CRITICAL ERROR: Not in KDS repository!"
+  echo "❌ CRITICAL ERROR: Not in CORTEX repository!"
   echo "════════════════════════════════════════════════"
   echo ""
   echo "Current repository: $REPO_NAME"
-  echo "Expected repository: KDS"
+  echo "Expected repository: CORTEX or KDS"
   echo ""
   echo "⚠️  This commit is being REJECTED to prevent accidental merges."
   echo ""
@@ -120,7 +120,35 @@ else
   echo "  ⚠️  WARNING: PowerShell not found - skipping Tier 0 enforcement"
 fi
 
+# 5. Run pytest with coverage (if Python environment exists)
+if [ -f ".venv/bin/python" ]; then
+  echo ""
+  echo "🧪 Running Tier 0 tests with coverage..."
+  
+  cd CORTEX
+  .venv/bin/python -m pytest tests/tier0/ \
+    --cov=../cortex-brain/left-hemisphere/tier0 \
+    --cov-report=term-missing \
+    --cov-fail-under=95 \
+    -v
+  
+  TEST_EXIT_CODE=$?
+  cd ..
+  
+  if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Tests failed or coverage below 95% - commit REJECTED"
+    exit 1
+  fi
+  
+  echo "✅ All tests passed with ≥95% coverage"
+else
+  echo ""
+  echo "  ⚠️  WARNING: Python virtual environment not found - skipping tests"
+fi
+
 echo ""
 echo "✅ All pre-commit validations passed"
 echo ""
 exit 0
+

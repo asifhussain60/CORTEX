@@ -1,0 +1,34 @@
+{
+  "project_specific_patterns": {
+    "quality_check": "{{QUALITY_CHECK_COMMAND:pwsh -File {{PROJECT_ROOT}}/scripts/quality-check.ps1}}",
+    "test_command": "{{TEST_COMMAND:npm test}}",
+    "build_command": "{{BUILD_COMMAND:npm run build}}"
+  },
+  "last_updated": "{{TIMESTAMP}}",
+  "kds_integration": {
+    "rule_11_build": "{{BUILD_COMMAND:npm run build}}",
+    "rule_15_ui_validation": "{{KDS_ROOT:}}/scripts/validation/validate-ui-ids.ps1",
+    "rule_16_quality": "{{QUALITY_CHECK_COMMAND:pwsh -File {{PROJECT_ROOT}}/scripts/quality-check.ps1}}"
+  },
+  "project_name": "{{PROJECT_NAME}}",
+  "project_root": "{{PROJECT_ROOT}}",
+  "tooling": {
+    "quality": null,
+    "test": [],
+    "build": [],
+    "custom_scripts": []
+  },
+  "_template_instructions": {
+    "description": "This is a template file. Use config-template-engine.ps1 to generate actual tooling-inventory.json",
+    "variables": {
+      "PROJECT_NAME": "Name of your project",
+      "PROJECT_ROOT": "Absolute path to project root",
+      "KDS_ROOT": "Absolute path to KDS root directory",
+      "BUILD_COMMAND": "Command to build your project",
+      "TEST_COMMAND": "Command to run tests",
+      "QUALITY_CHECK_COMMAND": "Command to run quality checks",
+      "TIMESTAMP": "Current timestamp (auto-generated)"
+    },
+    "usage": "pwsh -File {{KDS_ROOT:./scripts}}/config-template-engine.ps1 -TemplatePath tooling/tooling-inventory.template.json -OutputPath tooling/tooling-inventory.json"
+  }
+}

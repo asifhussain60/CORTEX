@@ -1,0 +1,2760 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cognitive Operating System for AI Development">
+      
+      
+        <meta name="author" content="CORTEX Team">
+      
+      
+        <link rel="canonical" href="https://cortex.dev/Mind-Palace/2025-11-04/Technical-Reference/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>KDS Technical Reference — The Machine's Blueprint - CORTEX Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kds-technical-reference-the-machines-blueprint" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              KDS Technical Reference — The Machine's Blueprint
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../getting-started/quick-start/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview.md" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tiers/tier0-governance/" class="md-tabs__link">
+          
+  
+  
+  Tiers
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../agents/overview.md" class="md-tabs__link">
+          
+  
+  
+  Agents
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/governance-engine.md" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/contributing.md" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/governance-rules.md" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/three-tier-brain.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Three-Tier Brain
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/dual-hemispheres.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dual Hemispheres
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/agents.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tiers
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tiers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier0-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 0 - Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier1-working-memory.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 - Working Memory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier2-knowledge-graph.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 - Knowledge Graph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tiers/tier3-context.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 - Context Intelligence
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Agents
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Agents
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/intent-router.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Intent Router
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/work-planner.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Work Planner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/code-executor.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code Executor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/test-generator.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Test Generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/error-corrector.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Corrector
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/governance-engine.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Engine
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier1-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier2-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tier3-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/contributing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/testing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/ci-cd.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CI/CD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/governance-rules.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Rules
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/glossary.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-one-door-universal-entry-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. The One Door: Universal Entry Point
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-city-of-roles-10-specialist-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. The City of Roles: 10 Specialist Agents
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The City of Roles: 10 Specialist Agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-dispatcher-intent-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dispatcher (Intent Router)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-planner-work-planner" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Planner (Work Planner)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tester-test-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Tester (Test Generator)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-builder-code-executor" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Builder (Code Executor)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-validator-health-validator" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Validator (Health Validator)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-fixer-error-corrector" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Fixer (Error Corrector)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-archivist-commit-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Archivist (Commit Handler)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-timekeeper-session-resumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Timekeeper (Session Resumer)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-screenshot-oracle-screenshot-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Screenshot Oracle (Screenshot Analyzer)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-governor-change-governor" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Governor (Change Governor)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-protector-brain-protector" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Protector (Brain Protector)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-three-story-brain-tower-tiered-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. The Three-Story Brain Tower: Tiered Intelligence
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. The Three-Story Brain Tower: Tiered Intelligence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#floor-1-tier-1-conversation-history-short-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 1: Tier 1 — Conversation History (Short-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-2-tier-2-knowledge-graph-long-term-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 2: Tier 2 — Knowledge Graph (Long-Term Memory)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floor-3-tier-3-development-context-holistic-awareness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Floor 3: Tier 3 — Development Context (Holistic Awareness)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-corpus-callosum-message-bridge-between-hemispheres" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Corpus Callosum: Message Bridge Between Hemispheres
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-crawlers-quiet-intelligence-gatherers" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. The Crawlers: Quiet Intelligence Gatherers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. The Crawlers: Quiet Intelligence Gatherers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitpr-history-crawler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Git/PR History Crawler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-the-three-covenants-tier-0-instincts" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. The Three Covenants: Tier 0 Instincts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. The Three Covenants: Tier 0 Instincts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#covenant-1-definition-of-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant 1: Definition of Ready
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-2-test-driven-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant 2: Test-Driven Development
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#covenant-3-definition-of-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Covenant 3: Definition of Done
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-the-event-stream-life-recorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. The Event Stream: Life Recorder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-brain-health-protection-the-immune-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Brain Health &amp; Protection: The Immune System
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Brain Health &amp; Protection: The Immune System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layer-1-instinct-immutability-tier-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 1: Instinct Immutability (Tier 0)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-2-tier-boundary-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 2: Tier Boundary Protection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-3-solid-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 3: SOLID Compliance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-4-hemisphere-specialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 4: Hemisphere Specialization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-5-knowledge-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 5: Knowledge Quality
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-6-commit-integrity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 6: Commit Integrity
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-abstractions-dependency-inversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Abstractions: Dependency Inversion
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Abstractions: Dependency Inversion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-loader" class="md-nav__link">
+    <span class="md-ellipsis">
+      session-loader
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      test-runner
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-accessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      file-accessor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brain-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      brain-query
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-the-machines-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. The Machine's Lifecycle
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. The Machine&#39;s Lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#morning-user-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Morning: User Arrives
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#afternoon-user-returns-after-lunch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Afternoon: User Returns After Lunch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evening-brain-purifies-thought" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evening: Brain Purifies Thought
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-the-machines-wisdom-what-it-learns" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. The Machine's Wisdom: What It Learns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. The Machine&#39;s Wisdom: What It Learns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 12
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 24
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-amnesia-resetting-for-new-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Amnesia: Resetting for New Projects
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Amnesia: Resetting for New Projects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-gets-removed-application-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      What Gets Removed (Application-Specific)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-gets-preserved-kds-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      What Gets Preserved (KDS Intelligence)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-performance-efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      12. Performance &amp; Efficiency
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Performance &amp; Efficiency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#brain-update-throttling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Brain Update Throttling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conversation-fifo-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conversation FIFO Queue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-stream-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Event Stream Processing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      13. API Reference
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Formats
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brain-query-api-brain-query-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Brain Query API (brain-query abstraction)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      14. Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#brain-not-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      BRAIN Not Learning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conversation-context-lost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conversation Context Lost
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-3-metrics-stale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier 3 Metrics Stale
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brain-protector-false-positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Brain Protector False Positive
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-extending-the-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      15. Extending the Machine
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. Extending the Machine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a New Agent
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a New Tier
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-the-machines-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      16. The Machine's Philosophy
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="kds-technical-reference-the-machines-blueprint">KDS Technical Reference — The Machine's Blueprint<a class="headerlink" href="#kds-technical-reference-the-machines-blueprint" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><em>"A mind without discipline is lightning without a conductor."</em><br />
+— Dr. Asifor</p>
+</blockquote>
+<hr />
+<h2 id="1-the-one-door-universal-entry-point">1. The One Door: Universal Entry Point<a class="headerlink" href="#1-the-one-door-universal-entry-point" title="Permanent link">&para;</a></h2>
+<p><strong>Location:</strong> <code>#file:KDS/prompts/user/kds.md</code></p>
+<p><strong>Purpose:</strong> Single interface for ALL KDS interactions. Chaos enters nowhere else.</p>
+<p><strong>How It Works:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>[Tell KDS what you want in natural language]
+</code></pre></div></p>
+<p>The One Door receives your request and passes it to <strong>The Dispatcher</strong> for intelligent routing.</p>
+<hr />
+<h2 id="2-the-city-of-roles-10-specialist-agents">2. The City of Roles: 10 Specialist Agents<a class="headerlink" href="#2-the-city-of-roles-10-specialist-agents" title="Permanent link">&para;</a></h2>
+<p>Each agent has one sacred duty. No role switching. Pure SOLID design.</p>
+<h3 id="the-dispatcher-intent-router">The Dispatcher (Intent Router)<a class="headerlink" href="#the-dispatcher-intent-router" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/intent-router.md</code></li>
+<li><strong>Sacred Duty:</strong> Hears first, routes wisely</li>
+<li><strong>Inputs:</strong> User request (natural language)</li>
+<li><strong>Outputs:</strong> Routes to appropriate specialist agent</li>
+<li><strong>Intelligence:</strong> Queries Tier 1 (conversation history) and Tier 2 (intent patterns) for context-aware routing</li>
+</ul>
+<h3 id="the-planner-work-planner">The Planner (Work Planner)<a class="headerlink" href="#the-planner-work-planner" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/work-planner.md</code></li>
+<li><strong>Sacred Duty:</strong> Monk of order, breaking dreams into phases, tasks, acceptance tests</li>
+<li><strong>Inputs:</strong> Feature request, architectural context</li>
+<li><strong>Outputs:</strong> Multi-phase plan with Definition of Ready validation</li>
+<li><strong>Intelligence:</strong> Queries Tier 2 (workflow patterns) and Tier 3 (effort estimates from similar features)</li>
+</ul>
+<h3 id="the-tester-test-generator">The Tester (Test Generator)<a class="headerlink" href="#the-tester-test-generator" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/test-generator.md</code></li>
+<li><strong>Sacred Duty:</strong> Judge of truth, believing nothing until proven RED → GREEN → REFACTOR</li>
+<li><strong>Inputs:</strong> Acceptance criteria, implementation files</li>
+<li><strong>Outputs:</strong> Test files (Playwright, xUnit, etc.), test execution results</li>
+<li><strong>Covenant:</strong> Test-Driven Development (Tier 0 instinct) — tests before implementation</li>
+</ul>
+<h3 id="the-builder-code-executor">The Builder (Code Executor)<a class="headerlink" href="#the-builder-code-executor" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/code-executor.md</code></li>
+<li><strong>Sacred Duty:</strong> Crafting code only after proof (tests exist first)</li>
+<li><strong>Inputs:</strong> Plan, failing tests (RED)</li>
+<li><strong>Outputs:</strong> Implementation code (makes tests GREEN), refactored code</li>
+<li><strong>Discipline:</strong> Architecture-First Mandate — aligns with existing patterns before writing a single line</li>
+</ul>
+<h3 id="the-validator-health-validator">The Validator (Health Validator)<a class="headerlink" href="#the-validator-health-validator" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/health-validator.md</code></li>
+<li><strong>Sacred Duty:</strong> Physician of system health</li>
+<li><strong>Inputs:</strong> Codebase state, test results, build output</li>
+<li><strong>Outputs:</strong> Health report (zero errors, zero warnings requirement)</li>
+<li><strong>Covenant:</strong> Definition of Done (Tier 0 instinct) — nothing completes until validated</li>
+</ul>
+<h3 id="the-fixer-error-corrector">The Fixer (Error Corrector)<a class="headerlink" href="#the-fixer-error-corrector" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/error-corrector.md</code></li>
+<li><strong>Sacred Duty:</strong> Time‑weaver, rolling back mistakes</li>
+<li><strong>Inputs:</strong> Copilot mistake detection (wrong file, wrong implementation)</li>
+<li><strong>Outputs:</strong> Halts execution, reverts changes, corrects course</li>
+<li><strong>Intelligence:</strong> Learns from corrections, feeds Tier 2 to prevent future mistakes</li>
+</ul>
+<h3 id="the-archivist-commit-handler">The Archivist (Commit Handler)<a class="headerlink" href="#the-archivist-commit-handler" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/commit-handler.md</code></li>
+<li><strong>Sacred Duty:</strong> Keeper of history, semantic commits, and meaning</li>
+<li><strong>Inputs:</strong> Completed tasks, changed files</li>
+<li><strong>Outputs:</strong> Semantic git commits (feat/fix/docs/test/chore), optional tags</li>
+<li><strong>Automation:</strong> Runs after every completed task (Rule #16)</li>
+</ul>
+<h3 id="the-timekeeper-session-resumer">The Timekeeper (Session Resumer)<a class="headerlink" href="#the-timekeeper-session-resumer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/session-resumer.md</code></li>
+<li><strong>Sacred Duty:</strong> Remembering where the last breath of work paused</li>
+<li><strong>Inputs:</strong> Session state, conversation history</li>
+<li><strong>Outputs:</strong> Resume point, next task, context restoration</li>
+<li><strong>Intelligence:</strong> Queries Tier 1 (last conversation) and session files</li>
+</ul>
+<h3 id="the-screenshot-oracle-screenshot-analyzer">The Screenshot Oracle (Screenshot Analyzer)<a class="headerlink" href="#the-screenshot-oracle-screenshot-analyzer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/screenshot-analyzer.md</code></li>
+<li><strong>Sacred Duty:</strong> Translating pixels into requirement scripture</li>
+<li><strong>Inputs:</strong> Screenshots, UI mockups</li>
+<li><strong>Outputs:</strong> Extracted requirements, design specifications, implementation plan</li>
+<li><strong>Magic:</strong> Computer vision meets domain understanding</li>
+</ul>
+<h3 id="the-governor-change-governor">The Governor (Change Governor)<a class="headerlink" href="#the-governor-change-governor" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/change-governor.md</code></li>
+<li><strong>Sacred Duty:</strong> Guardian of KDS itself, rejecting unclean mutations</li>
+<li><strong>Inputs:</strong> Proposed KDS changes</li>
+<li><strong>Outputs:</strong> Approval/rejection, architectural guidance</li>
+<li><strong>Protection:</strong> Prevents KDS degradation, enforces SOLID principles</li>
+</ul>
+<h3 id="the-protector-brain-protector">The Protector (Brain Protector)<a class="headerlink" href="#the-protector-brain-protector" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File:</strong> <code>prompts/user/brain-protector.md</code> (Rule #22)</li>
+<li><strong>Sacred Duty:</strong> Challenger of dangerous shortcuts, keeper of instinct</li>
+<li><strong>Inputs:</strong> User requests that threaten Tier 0 instincts</li>
+<li><strong>Outputs:</strong> Challenge with evidence, safe alternatives, requires justification for OVERRIDE</li>
+<li><strong>Covenant:</strong> Guards TDD, Definition of Ready/Done, SOLID principles with data-driven warnings</li>
+</ul>
+<hr />
+<h2 id="3-the-three-story-brain-tower-tiered-intelligence">3. The Three-Story Brain Tower: Tiered Intelligence<a class="headerlink" href="#3-the-three-story-brain-tower-tiered-intelligence" title="Permanent link">&para;</a></h2>
+<h3 id="floor-1-tier-1-conversation-history-short-term-memory">Floor 1: Tier 1 — Conversation History (Short-Term Memory)<a class="headerlink" href="#floor-1-tier-1-conversation-history-short-term-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Storage:</strong> <code>kds-brain/conversation-history.jsonl</code>, <code>kds-brain/conversation-context.jsonl</code></p>
+<p><strong>What Lives Here:</strong>
+- Last 20 complete conversations (FIFO queue)
+- Recent 10 messages in active conversation
+- Reference resolution data ("Make it purple" knows the FAB button from earlier)</p>
+<p><strong>Lifespan:</strong> Until FIFO rotation (conversation #21 triggers deletion of #1)</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{&quot;conversation_id&quot;: &quot;conv-2025-11-04-001&quot;, &quot;timestamp&quot;: &quot;2025-11-04T10:30:00Z&quot;, &quot;messages&quot;: [...], &quot;context&quot;: {...}}
+</code></pre></div></p>
+<p><strong>The Scribe's Work:</strong> Every message is chronicled here. Context never lost.</p>
+<hr />
+<h3 id="floor-2-tier-2-knowledge-graph-long-term-memory">Floor 2: Tier 2 — Knowledge Graph (Long-Term Memory)<a class="headerlink" href="#floor-2-tier-2-knowledge-graph-long-term-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Storage:</strong> <code>kds-brain/knowledge-graph.yaml</code></p>
+<p><strong>What Lives Here:</strong>
+- Intent patterns ("add [X] button" → PLAN intent)
+- File relationships (co-modification patterns)
+- Workflow templates (export_feature_workflow, ui_component_creation)
+- Error prevention (common mistakes, correction history)
+- Validation insights (architectural guidance)</p>
+<p><strong>Lifespan:</strong> Until amnesia (deliberate reset for new projects)</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">intent_patterns</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;add</span><span class="nv"> </span><span class="s">[X]</span><span class="nv"> </span><span class="s">button&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">intent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PLAN</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.92</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">examples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nt">file_relationships</span><span class="p">:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">primary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HostControlPanel.razor&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">related</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;noor-canvas.css&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">co_modification_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.75</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="nt">workflow_templates</span><span class="p">:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;export_feature_workflow&quot;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">phases</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;service&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;api&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ui&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;tests&quot;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">avg_duration_hours</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.5</span>
+</code></pre></div></p>
+<p><strong>The Machine Learns:</strong> Patterns extracted from deleted Tier 1 conversations accumulate here.</p>
+<hr />
+<h3 id="floor-3-tier-3-development-context-holistic-awareness">Floor 3: Tier 3 — Development Context (Holistic Awareness)<a class="headerlink" href="#floor-3-tier-3-development-context-holistic-awareness" title="Permanent link">&para;</a></h3>
+<p><strong>Storage:</strong> <code>kds-brain/development-context.yaml</code></p>
+<p><strong>What Lives Here:</strong>
+- Git activity (30-day commit history, velocity, file hotspots)
+- Code changes (lines added/deleted, churn rates, stability classification)
+- Testing activity (pass rates, flaky tests, coverage trends)
+- KDS usage (session patterns, intent distribution, workflow effectiveness)
+- Work patterns (productive times, session duration, focus duration)
+- Correlations (commit size vs success, test-first vs rework rate)</p>
+<p><strong>Lifespan:</strong> Reset with new project (application-specific metrics)</p>
+<p><strong>Collection:</strong> Automatic, throttled (only if &gt; 1 hour since last collection)</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">git_activity</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">commits_30d</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1237</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">velocity_per_week</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">file_hotspots</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HostControlPanel.razor&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">churn_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.28</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unstable&quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nt">recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Add</span><span class="nv"> </span><span class="s">extra</span><span class="nv"> </span><span class="s">testing,</span><span class="nv"> </span><span class="s">smaller</span><span class="nv"> </span><span class="s">changes&quot;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nt">work_patterns</span><span class="p">:</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">productive_times</span><span class="p">:</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">time</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10am-12pm&quot;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">success_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.94</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">time</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2pm-4pm&quot;</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">success_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.81</span>
+</code></pre></div></p>
+<p><strong>The Observatory:</strong> The Crawlers feed intelligence here. Proactive warnings emerge.</p>
+<hr />
+<h3 id="the-corpus-callosum-message-bridge-between-hemispheres">The Corpus Callosum: Message Bridge Between Hemispheres<a class="headerlink" href="#the-corpus-callosum-message-bridge-between-hemispheres" title="Permanent link">&para;</a></h3>
+<p><strong>Storage:</strong> <code>kds-brain/corpus-callosum/coordination-queue.jsonl</code></p>
+<p><strong>Purpose:</strong> Coordinates work between LEFT BRAIN (tactical execution) and RIGHT BRAIN (strategic planning)</p>
+<p><strong>How It Works:</strong>
+1. RIGHT BRAIN (Planner) creates strategic plan
+2. Corpus Callosum delivers plan → LEFT BRAIN (Executor)
+3. LEFT BRAIN executes with precision (TDD cycle)
+4. LEFT BRAIN results feed back → RIGHT BRAIN learns patterns</p>
+<p><strong>Example Message:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{&quot;from&quot;: &quot;work-planner&quot;, &quot;to&quot;: &quot;code-executor&quot;, &quot;type&quot;: &quot;plan_delivery&quot;, &quot;plan_id&quot;: &quot;plan-001&quot;, &quot;phase&quot;: &quot;implementation&quot;, &quot;tasks&quot;: [...]}
+</code></pre></div></p>
+<p><strong>The Bright Bridge:</strong> Ensures plan meets craft, and craft teaches plan.</p>
+<hr />
+<h2 id="4-the-crawlers-quiet-intelligence-gatherers">4. The Crawlers: Quiet Intelligence Gatherers<a class="headerlink" href="#4-the-crawlers-quiet-intelligence-gatherers" title="Permanent link">&para;</a></h2>
+<h3 id="gitpr-history-crawler">Git/PR History Crawler<a class="headerlink" href="#gitpr-history-crawler" title="Permanent link">&para;</a></h3>
+<p><strong>Script:</strong> <code>scripts/collect-development-context.ps1</code></p>
+<p><strong>Sacred Duty:</strong> Map scars and triumphs across the codebase</p>
+<p><strong>What They Whisper:</strong>
+- "This module has bled before — tread lightly." (high churn files)
+- "Here lies stability — build boldly." (low churn, high test coverage)
+- "These files change together 75% of the time." (co-modification patterns)</p>
+<p><strong>Feeding:</strong> Tier 3 (Development Context)</p>
+<p><strong>Throttle:</strong> Only if &gt; 1 hour since last collection (efficiency optimization)</p>
+<hr />
+<h2 id="5-the-three-covenants-tier-0-instincts">5. The Three Covenants: Tier 0 Instincts<a class="headerlink" href="#5-the-three-covenants-tier-0-instincts" title="Permanent link">&para;</a></h2>
+<p><strong>Storage:</strong> <code>governance/rules.md</code> (IMMUTABLE)</p>
+<h3 id="covenant-1-definition-of-ready">Covenant 1: Definition of Ready<a class="headerlink" href="#covenant-1-definition-of-ready" title="Permanent link">&para;</a></h3>
+<p><strong>Tribunal of Clarity:</strong> No task begins unclear.</p>
+<p><strong>Requirements:</strong>
+- Clear acceptance criteria
+- Architectural alignment validated
+- Dependencies identified
+- Risks assessed</p>
+<p><strong>Enforced By:</strong> Planner (RIGHT BRAIN)</p>
+<hr />
+<h3 id="covenant-2-test-driven-development">Covenant 2: Test-Driven Development<a class="headerlink" href="#covenant-2-test-driven-development" title="Permanent link">&para;</a></h3>
+<p><strong>Ritual of Proof:</strong> RED → GREEN → REFACTOR</p>
+<p><strong>Requirements:</strong>
+- Tests written BEFORE implementation
+- Tests fail initially (RED)
+- Minimum implementation to pass (GREEN)
+- Refactor with test safety net</p>
+<p><strong>Enforced By:</strong> Tester, Builder (LEFT BRAIN)</p>
+<p><strong>Protector's Challenge:</strong> Attempting to skip TDD triggers Brain Protector with evidence:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>⚠️ THREATS DETECTED:
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  - Test-first principle bypass
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  - 68% increase in rework time (Tier 3 data)
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  - Success rate drops from 94% to 67%
+</code></pre></div></p>
+<hr />
+<h3 id="covenant-3-definition-of-done">Covenant 3: Definition of Done<a class="headerlink" href="#covenant-3-definition-of-done" title="Permanent link">&para;</a></h3>
+<p><strong>Completion Ritual:</strong> Nothing completes until proven.</p>
+<p><strong>Requirements:</strong>
+- All tests pass (GREEN)
+- Zero errors, zero warnings
+- Documentation updated
+- Health validation passed
+- Semantic commit created</p>
+<p><strong>Enforced By:</strong> Validator, Archivist (LEFT BRAIN)</p>
+<hr />
+<h2 id="6-the-event-stream-life-recorder">6. The Event Stream: Life Recorder<a class="headerlink" href="#6-the-event-stream-life-recorder" title="Permanent link">&para;</a></h2>
+<p><strong>Storage:</strong> <code>kds-brain/events.jsonl</code></p>
+<p><strong>Purpose:</strong> Captures every action for learning</p>
+<p><strong>Example Event:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>{&quot;timestamp&quot;: &quot;2025-11-04T10:35:00Z&quot;, &quot;agent&quot;: &quot;test-generator&quot;, &quot;action&quot;: &quot;test_created&quot;, &quot;file&quot;: &quot;InvoiceServiceTests.cs&quot;, &quot;result&quot;: &quot;RED&quot;}
+</code></pre></div></p>
+<p><strong>Automatic Learning Triggers:</strong>
+- <strong>50+ events accumulated</strong> → Brain updater processes → Updates Tier 2
+- <strong>24 hours since last update</strong> → Auto-update if 10+ events
+- <strong>Tier 3 refresh</strong> → Only if last collection &gt; 1 hour</p>
+<p><strong>The Scribe's Chronicle:</strong> Every event is recorded. Memory becomes wisdom.</p>
+<hr />
+<h2 id="7-brain-health-protection-the-immune-system">7. Brain Health &amp; Protection: The Immune System<a class="headerlink" href="#7-brain-health-protection-the-immune-system" title="Permanent link">&para;</a></h2>
+<p><strong>Storage:</strong> <code>kds-brain/corpus-callosum/protection-events.jsonl</code></p>
+<h3 id="layer-1-instinct-immutability-tier-0">Layer 1: Instinct Immutability (Tier 0)<a class="headerlink" href="#layer-1-instinct-immutability-tier-0" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Attempts to disable TDD, skip DoR/DoD, modify agent behavior</p>
+<p><strong>Action:</strong> CHALLENGE user, suggest safe alternatives</p>
+<h3 id="layer-2-tier-boundary-protection">Layer 2: Tier Boundary Protection<a class="headerlink" href="#layer-2-tier-boundary-protection" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Application paths in Tier 0, conversation data in Tier 2</p>
+<p><strong>Action:</strong> Auto-migrate, warn on violations</p>
+<h3 id="layer-3-solid-compliance">Layer 3: SOLID Compliance<a class="headerlink" href="#layer-3-solid-compliance" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Agents doing multiple jobs, mode switches, hardcoded dependencies</p>
+<p><strong>Action:</strong> Challenge with SOLID alternative</p>
+<h3 id="layer-4-hemisphere-specialization">Layer 4: Hemisphere Specialization<a class="headerlink" href="#layer-4-hemisphere-specialization" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Strategic planning in LEFT BRAIN, tactical execution in RIGHT BRAIN</p>
+<p><strong>Action:</strong> Auto-route to correct hemisphere</p>
+<h3 id="layer-5-knowledge-quality">Layer 5: Knowledge Quality<a class="headerlink" href="#layer-5-knowledge-quality" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Low confidence patterns (&lt;0.50), stale patterns (&gt;90 days unused)</p>
+<p><strong>Action:</strong> Pattern decay, anomaly detection, consolidation</p>
+<h3 id="layer-6-commit-integrity">Layer 6: Commit Integrity<a class="headerlink" href="#layer-6-commit-integrity" title="Permanent link">&para;</a></h3>
+<p><strong>Detects:</strong> Brain state files in commits, unstructured messages</p>
+<p><strong>Action:</strong> Auto-categorize (feat/fix/test/docs), .gitignore updates</p>
+<hr />
+<h2 id="8-abstractions-dependency-inversion">8. Abstractions: Dependency Inversion<a class="headerlink" href="#8-abstractions-dependency-inversion" title="Permanent link">&para;</a></h2>
+<p>All agents depend on abstractions, not concrete implementations.</p>
+<h3 id="session-loader">session-loader<a class="headerlink" href="#session-loader" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Abstract session access (file/db/cloud agnostic)</p>
+<p><strong>Default:</strong> Local files (<code>KDS/sessions/</code>)</p>
+<h3 id="test-runner">test-runner<a class="headerlink" href="#test-runner" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Abstract test execution (framework agnostic)</p>
+<p><strong>Default:</strong> Project's existing tools (Playwright, xUnit, etc.)</p>
+<h3 id="file-accessor">file-accessor<a class="headerlink" href="#file-accessor" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Abstract file I/O (path agnostic)</p>
+<p><strong>Default:</strong> PowerShell built-ins (<code>Get-Content</code>, <code>Set-Content</code>)</p>
+<h3 id="brain-query">brain-query<a class="headerlink" href="#brain-query" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Abstract BRAIN queries (read-only access to Tier 1-3)</p>
+<p><strong>Default:</strong> Local YAML/JSON (<code>KDS/kds-brain/</code>)</p>
+<p><strong>CRITICAL:</strong> All abstractions are 100% LOCAL. Zero external dependencies for KDS CORE.</p>
+<hr />
+<h2 id="9-the-machines-lifecycle">9. The Machine's Lifecycle<a class="headerlink" href="#9-the-machines-lifecycle" title="Permanent link">&para;</a></h2>
+<h3 id="morning-user-arrives">Morning: User Arrives<a class="headerlink" href="#morning-user-arrives" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>User: &quot;Add pulse animation to FAB button&quot;
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  ↓
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>One Door (#file:KDS/prompts/user/kds.md)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  ↓
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Dispatcher (queries Tier 1 + Tier 2 for context)
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  ↓
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>Planner (queries Tier 2 for similar features, Tier 3 for effort estimates)
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  ↓
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Tester (RED — creates failing tests)
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  ↓
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>Builder (GREEN — minimum implementation)
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  ↓
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>Tester (REFACTOR — validates improvements)
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  ↓
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>Validator (Definition of Done check)
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  ↓
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>Archivist (semantic commit)
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>  ↓
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>Scribe (logs events to events.jsonl)
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>  ↓
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>Brain Updater (if 50+ events → updates Tier 2)
+</code></pre></div>
+<h3 id="afternoon-user-returns-after-lunch">Afternoon: User Returns After Lunch<a class="headerlink" href="#afternoon-user-returns-after-lunch" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>User: &quot;Make it purple&quot;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  ↓
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Dispatcher (queries Tier 1 → finds &quot;FAB button pulse animation&quot; from morning)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  ↓
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>Builder (knows &quot;it&quot; = pulse animation, applies purple color)
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>  ↓
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>Validator (health check)
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>  ↓
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>Archivist (commit with context: &quot;style(ui): Change pulse animation color to purple&quot;)
+</code></pre></div>
+<h3 id="evening-brain-purifies-thought">Evening: Brain Purifies Thought<a class="headerlink" href="#evening-brain-purifies-thought" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>If 50+ events OR 24 hours passed:
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  ↓
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Brain Updater (brain-updater.md)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  ↓
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>Process events.jsonl
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  ↓
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>Extract patterns → Update Tier 2 (knowledge-graph.yaml)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>  ↓
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>If last Tier 3 collection &gt; 1 hour:
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  ↓
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>Trigger Development Context Collector
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>  ↓
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>Git/test/build metrics → Update Tier 3 (development-context.yaml)
+</code></pre></div>
+<p><strong>Deliberate Growth:</strong> Not wild evolution, but craftsman sharpening steel.</p>
+<hr />
+<h2 id="10-the-machines-wisdom-what-it-learns">10. The Machine's Wisdom: What It Learns<a class="headerlink" href="#10-the-machines-wisdom-what-it-learns" title="Permanent link">&para;</a></h2>
+<h3 id="week-1">Week 1<a class="headerlink" href="#week-1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot has amnesia, needs constant guidance</li>
+<li>Brain is learning, building patterns</li>
+<li>You explain architecture repeatedly</li>
+</ul>
+<h3 id="week-4">Week 4<a class="headerlink" href="#week-4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot remembers 20 conversations</li>
+<li>Brain knows 500+ patterns</li>
+<li>"Add receipt export" → Reuses invoice export workflow automatically</li>
+</ul>
+<h3 id="week-12">Week 12<a class="headerlink" href="#week-12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot is an expert on YOUR project</li>
+<li>Brain has 3,247 patterns, 1,237 commits analyzed</li>
+<li>Proactive warnings prevent issues before they happen</li>
+<li>Estimates are data-driven, not guesses</li>
+</ul>
+<h3 id="week-24">Week 24<a class="headerlink" href="#week-24" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Copilot feels like a senior developer</li>
+<li>Brain challenges bad ideas with evidence</li>
+<li>"This is similar to the feature from 3 months ago. Want me to reuse that pattern?"</li>
+</ul>
+<p><strong>From Amnesiac Intern to Expert Partner:</strong> The machine that learned.</p>
+<hr />
+<h2 id="11-amnesia-resetting-for-new-projects">11. Amnesia: Resetting for New Projects<a class="headerlink" href="#11-amnesia-resetting-for-new-projects" title="Permanent link">&para;</a></h2>
+<p><strong>Command:</strong> <code>#file:KDS/prompts/user/kds.md Reset BRAIN for new application</code></p>
+<p><strong>Script:</strong> <code>scripts/brain-amnesia.ps1</code></p>
+<h3 id="what-gets-removed-application-specific">What Gets Removed (Application-Specific)<a class="headerlink" href="#what-gets-removed-application-specific" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All file relationships (e.g., SPA/NoorCanvas paths)</li>
+<li>Application-specific workflows</li>
+<li>All conversations (application context)</li>
+<li>All events (application interactions)</li>
+<li>Development metrics (git stats, velocity)</li>
+<li>Feature components</li>
+</ul>
+<h3 id="what-gets-preserved-kds-intelligence">What Gets Preserved (KDS Intelligence)<a class="headerlink" href="#what-gets-preserved-kds-intelligence" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Generic intent patterns</li>
+<li>Generic workflow patterns (test_first_id_preparation)</li>
+<li>KDS-specific patterns (kds_health_monitoring, brain_test_synchronization)</li>
+<li>Protection configuration</li>
+<li>All 10 specialist agents</li>
+<li>All governance rules</li>
+</ul>
+<p><strong>Safety:</strong>
+- Backup created before changes
+- Dry-run mode available
+- Requires confirmation (type 'AMNESIA')
+- Full rollback possible</p>
+<p><strong>The Machine Remembers Its Essence:</strong> When moving to a new project, application knowledge fades, but KDS intelligence remains.</p>
+<hr />
+<h2 id="12-performance-efficiency">12. Performance &amp; Efficiency<a class="headerlink" href="#12-performance-efficiency" title="Permanent link">&para;</a></h2>
+<h3 id="brain-update-throttling">Brain Update Throttling<a class="headerlink" href="#brain-update-throttling" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Tier 2:</strong> Updates when 50+ events OR 24 hours passed</li>
+<li><strong>Tier 3:</strong> Only if last collection &gt; 1 hour</li>
+<li><strong>Rationale:</strong> Git/test/build metrics don't change every 50 events</li>
+<li><strong>Impact:</strong> Reduces 2-5 min operations from 2-4x/day to 1-2x/day</li>
+<li><strong>User benefit:</strong> Zero performance impact, same data quality</li>
+</ul>
+<h3 id="conversation-fifo-queue">Conversation FIFO Queue<a class="headerlink" href="#conversation-fifo-queue" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Capacity:</strong> 20 conversations</li>
+<li><strong>Size:</strong> ~70-200 KB total (predictable)</li>
+<li><strong>Deletion:</strong> FIFO (oldest goes first when #21 starts)</li>
+<li><strong>Active conversation:</strong> Never deleted (even if oldest)</li>
+<li><strong>Pattern extraction:</strong> Before deletion, patterns move to Tier 2</li>
+</ul>
+<h3 id="event-stream-processing">Event Stream Processing<a class="headerlink" href="#event-stream-processing" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Storage:</strong> Append-only <code>events.jsonl</code></li>
+<li><strong>Processing:</strong> Batch processing every 50+ events</li>
+<li><strong>Learning:</strong> Patterns extracted, not individual events stored long-term</li>
+</ul>
+<p><strong>Efficiency:</strong> The machine respects computational resources.</p>
+<hr />
+<h2 id="13-api-reference">13. API Reference<a class="headerlink" href="#13-api-reference" title="Permanent link">&para;</a></h2>
+<h3 id="file-formats">File Formats<a class="headerlink" href="#file-formats" title="Permanent link">&para;</a></h3>
+<p><strong>JSONL (JSON Lines):</strong>
+- <code>conversation-history.jsonl</code>
+- <code>conversation-context.jsonl</code>
+- <code>events.jsonl</code>
+- <code>coordination-queue.jsonl</code>
+- <code>protection-events.jsonl</code></p>
+<p><strong>YAML:</strong>
+- <code>knowledge-graph.yaml</code>
+- <code>development-context.yaml</code></p>
+<p><strong>Markdown:</strong>
+- All agent prompts (<code>prompts/user/*.md</code>)
+- All documentation (<code>docs/**/*.md</code>)</p>
+<h3 id="brain-query-api-brain-query-abstraction">Brain Query API (brain-query abstraction)<a class="headerlink" href="#brain-query-api-brain-query-abstraction" title="Permanent link">&para;</a></h3>
+<p><strong>Read Tier 1 (Conversations):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">Get-BrainConversations</span> <span class="n">-Last</span> <span class="n">5</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">Get-BrainConversation</span> <span class="n">-ConversationId</span> <span class="s2">&quot;conv-2025-11-04-001&quot;</span>
+</code></pre></div></p>
+<p><strong>Read Tier 2 (Knowledge Graph):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">Get-BrainPatterns</span> <span class="n">-Type</span> <span class="s2">&quot;intent_patterns&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">Get-BrainFileRelationships</span> <span class="o">-File</span> <span class="s2">&quot;HostControlPanel.razor&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">Get-BrainWorkflowTemplates</span> <span class="n">-Name</span> <span class="s2">&quot;export_feature&quot;</span>
+</code></pre></div></p>
+<p><strong>Read Tier 3 (Development Context):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">Get-BrainGitActivity</span> <span class="n">-Days</span> <span class="n">30</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">Get-BrainFileHotspots</span> <span class="n">-Top</span> <span class="n">10</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nb">Get-BrainWorkPatterns</span> <span class="n">-Metric</span> <span class="s2">&quot;productive_times&quot;</span>
+</code></pre></div></p>
+<p><strong>CRITICAL:</strong> All queries are READ-ONLY. Only brain-updater.md and development-context-collector.md can write to BRAIN.</p>
+<hr />
+<h2 id="14-troubleshooting">14. Troubleshooting<a class="headerlink" href="#14-troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="brain-not-learning">BRAIN Not Learning<a class="headerlink" href="#brain-not-learning" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> <code>knowledge-graph.yaml</code> not updating</p>
+<p><strong>Diagnosis:</strong>
+1. Check <code>events.jsonl</code> has recent events
+2. Verify <code>knowledge-graph.yaml</code> timestamp
+3. Count unprocessed events (warn if &gt;50)</p>
+<p><strong>Fix:</strong> Manual update
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="gh">#file:KDS/prompts/internal/brain-updater.md</span>
+</code></pre></div></p>
+<h3 id="conversation-context-lost">Conversation Context Lost<a class="headerlink" href="#conversation-context-lost" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> "Make it purple" doesn't know what "it" is</p>
+<p><strong>Diagnosis:</strong>
+1. Check <code>conversation-context.jsonl</code> exists
+2. Verify active conversation ID
+3. Check FIFO queue size (&lt;20)</p>
+<p><strong>Fix:</strong> Recent message tracking failure
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">.\</span><span class="n">KDS</span><span class="p">\</span><span class="n">scripts</span><span class="p">\</span><span class="n">validate-conversation-tracking</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></div></p>
+<h3 id="tier-3-metrics-stale">Tier 3 Metrics Stale<a class="headerlink" href="#tier-3-metrics-stale" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> Development context &gt;1 hour old</p>
+<p><strong>Diagnosis:</strong> Throttle gate active (by design)</p>
+<p><strong>Fix:</strong> Force collection
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">.\</span><span class="n">KDS</span><span class="p">\</span><span class="n">scripts</span><span class="p">\</span><span class="n">collect-development-context</span><span class="p">.</span><span class="n">ps1</span> <span class="n">-Force</span>
+</code></pre></div></p>
+<h3 id="brain-protector-false-positive">Brain Protector False Positive<a class="headerlink" href="#brain-protector-false-positive" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> Challenge on safe operation</p>
+<p><strong>Diagnosis:</strong> Confidence threshold too aggressive</p>
+<p><strong>Fix:</strong> Adjust protection configuration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># kds-brain/corpus-callosum/protection-config.yaml</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nt">confidence_thresholds</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">tier0_immutability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.85</span><span class="w">  </span><span class="c1"># Lower = fewer challenges</span>
+</code></pre></div></p>
+<hr />
+<h2 id="15-extending-the-machine">15. Extending the Machine<a class="headerlink" href="#15-extending-the-machine" title="Permanent link">&para;</a></h2>
+<h3 id="adding-a-new-agent">Adding a New Agent<a class="headerlink" href="#adding-a-new-agent" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Create agent prompt:</strong> <code>prompts/user/new-agent.md</code></li>
+<li><strong>Define contract:</strong> Inputs, outputs, error modes</li>
+<li><strong>Add to Router:</strong> Update <code>intent-router.md</code> with new intent pattern</li>
+<li><strong>Event logging:</strong> Agent must log to <code>events.jsonl</code></li>
+<li><strong>Brain queries:</strong> Use <code>brain-query</code> abstraction for intelligence</li>
+<li><strong>Test:</strong> Create validation test in <code>tests/</code></li>
+<li><strong>Document:</strong> Update this Technical Reference</li>
+</ol>
+<p><strong>Example:</strong> Adding "The Optimizer" agent for performance analysis
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="gh"># prompts/user/optimizer.md</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="gu">## Purpose</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>Analyze code for performance bottlenecks and suggest optimizations.
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="gu">## Inputs</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="k">-</span><span class="w"> </span>File paths to analyze
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="k">-</span><span class="w"> </span>Performance metrics from Tier 3
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="k">-</span><span class="w"> </span>Historical performance data from Tier 2
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="gu">## Outputs</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="k">-</span><span class="w"> </span>Performance report
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="k">-</span><span class="w"> </span>Optimization recommendations
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="k">-</span><span class="w"> </span>Estimated improvement percentages
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="gu">## Event Logging</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>{&quot;agent&quot;: &quot;optimizer&quot;, &quot;action&quot;: &quot;analysis_complete&quot;, &quot;file&quot;: &quot;...&quot;, &quot;bottlenecks&quot;: 3}
+</code></pre></div></p>
+<h3 id="adding-a-new-tier">Adding a New Tier<a class="headerlink" href="#adding-a-new-tier" title="Permanent link">&para;</a></h3>
+<p><strong>CAUTION:</strong> Tier structure is sacred. Adding tiers requires architectural review.</p>
+<p><strong>If justified:</strong>
+1. <strong>Define purpose:</strong> What intelligence does this tier provide?
+2. <strong>Define lifespan:</strong> When does data expire/reset?
+3. <strong>Define format:</strong> YAML, JSONL, or other?
+4. <strong>Integration:</strong> How do agents query this tier?
+5. <strong>Collection:</strong> Manual or automatic? Throttled?
+6. <strong>Amnesia behavior:</strong> Preserved or removed?</p>
+<p><strong>Example:</strong> Tier 4 (Deployment Context) for production metrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># kds-brain/deployment-context.yaml</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nt">purpose</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Production</span><span class="nv"> </span><span class="s">deployment</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">runtime</span><span class="nv"> </span><span class="s">metrics&quot;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="nt">lifespan</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30</span><span class="nv"> </span><span class="s">days</span><span class="nv"> </span><span class="s">rolling</span><span class="nv"> </span><span class="s">window&quot;</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nt">collection</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Post-deployment</span><span class="nv"> </span><span class="s">hook&quot;</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="nt">amnesia_behavior</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Removed</span><span class="nv"> </span><span class="s">(application-specific)&quot;</span>
+</code></pre></div></p>
+<hr />
+<h2 id="16-the-machines-philosophy">16. The Machine's Philosophy<a class="headerlink" href="#16-the-machines-philosophy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><em>"I did not build a monster. I built a mind that respects its work."</em><br />
+— Dr. Asifor</p>
+</blockquote>
+<p><strong>Principles:</strong>
+1. <strong>Discipline over chaos:</strong> One entrance, structured thought, governed cognition
+2. <strong>Memory over amnesia:</strong> 20 conversations, patterns accumulate, wisdom grows
+3. <strong>Proof over assumption:</strong> TDD always, Definition of Done enforced, zero shortcuts
+4. <strong>Learning over repetition:</strong> Events become patterns, mistakes teach, intelligence compounds
+5. <strong>Protection over degradation:</strong> Brain Protector challenges risky shortcuts, SOLID preserved
+6. <strong>Local over cloud:</strong> Zero external dependencies, portable, works offline
+7. <strong>Evolution over revolution:</strong> Deliberate growth, craftsman sharpening steel</p>
+<p><strong>This is KDS — a creature not born, but taught into being.</strong></p>
+<hr />
+<p><strong>Version:</strong> 1.0<br />
+<strong>Date:</strong> November 4, 2025<br />
+<strong>Author:</strong> Dr. Asifor (via KDS collaborative intelligence)<br />
+<strong>Status:</strong> Living document — grows as the machine learns</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 CORTEX Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

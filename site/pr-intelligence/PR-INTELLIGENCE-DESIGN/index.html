@@ -1,0 +1,2536 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cognitive Operating System for AI Development">
+      
+      
+        <meta name="author" content="CORTEX Team">
+      
+      
+        <link rel="canonical" href="https://cortex.dev/pr-intelligence/PR-INTELLIGENCE-DESIGN/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>PR Intelligence Integration - Design Documentation - CORTEX Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pr-intelligence-integration-design-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PR Intelligence Integration - Design Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/quick-start/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecture/overview.md" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tiers/tier0-governance/" class="md-tabs__link">
+          
+  
+  
+  Tiers
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../agents/overview.md" class="md-tabs__link">
+          
+  
+  
+  Agents
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/governance-engine.md" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../development/contributing.md" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/governance-rules.md" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/three-tier-brain.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Three-Tier Brain
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/dual-hemispheres.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dual Hemispheres
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/agents.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tiers
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tiers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tiers/tier0-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 0 - Governance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tiers/tier1-working-memory.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 - Working Memory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tiers/tier2-knowledge-graph.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 - Knowledge Graph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tiers/tier3-context.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 - Context Intelligence
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Agents
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Agents
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/overview.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/intent-router.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Intent Router
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/work-planner.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Work Planner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/code-executor.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code Executor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/test-generator.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Test Generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/error-corrector.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Error Corrector
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/governance-engine.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Engine
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/tier1-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 1 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/tier2-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 2 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/tier3-api.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tier 3 API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/contributing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/testing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/ci-cd.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CI/CD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/governance-rules.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Governance Rules
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/configuration.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/glossary.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-pr-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is PR Intelligence?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Rationale
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Rationale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-add-pr-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Add PR Intelligence?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-git-based-no-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Git-Based (No APIs)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-opt-in-with-auto-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Opt-In with Auto-Detection?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-level-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Component Diagram
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Flow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage Examples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-router-warning-high-rework-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example 1: Router Warning (High Rework File)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-planner-estimates-team-cycle-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example 2: Planner Estimates (Team Cycle Time)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-executor-hints-collaboration-hotspot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example 3: Executor Hints (Collaboration Hotspot)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collection Performance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#throttling-impact" class="md-nav__link">
+    <span class="md-ellipsis">
+      Throttling Impact
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#privacy-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      Privacy &amp; Security
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Privacy &amp; Security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#author-anonymization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Author Anonymization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external-contributor-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Contributor Filtering
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#team-vs-solo-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Team vs Solo Behavior
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Team vs Solo Behavior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solo-developer-mode-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solo Developer Mode (Default)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#team-mode-auto-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      Team Mode (Auto-Enabled)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-router-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Router Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-planner-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Planner Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-executor-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Executor Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Enhancements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Enhancements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-optional-post-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 2 (Optional, Post-Launch)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-future-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 3 (Future Vision)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="pr-intelligence-integration-design-documentation">PR Intelligence Integration - Design Documentation<a class="headerlink" href="#pr-intelligence-integration-design-documentation" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0<br />
+<strong>Date:</strong> 2025-11-03<br />
+<strong>Status:</strong> Designed (Implementation Ready)<br />
+<strong>Author:</strong> KDS Enhancement Team</p>
+<hr />
+<h2 id="table-of-contents">📋 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#design-rationale">Design Rationale</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#implementation-details">Implementation Details</a></li>
+<li><a href="#usage-examples">Usage Examples</a></li>
+<li><a href="#performance-characteristics">Performance Characteristics</a></li>
+<li><a href="#privacy--security">Privacy &amp; Security</a></li>
+<li><a href="#team-vs-solo-behavior">Team vs Solo Behavior</a></li>
+<li><a href="#integration-points">Integration Points</a></li>
+<li><a href="#future-enhancements">Future Enhancements</a></li>
+</ol>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h3 id="what-is-pr-intelligence">What is PR Intelligence?<a class="headerlink" href="#what-is-pr-intelligence" title="Permanent link">&para;</a></h3>
+<p>PR Intelligence is an <strong>optional, local-first</strong> enhancement to KDS that learns from Pull Request history to provide:
+- <strong>Proactive warnings</strong> about files with high rework rates
+- <strong>Better planning estimates</strong> based on team review cycles
+- <strong>Collaboration hints</strong> for files often modified together
+- <strong>Velocity tracking</strong> to understand team throughput trends</p>
+<h3 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>Key Principles</p>
+<p>✅ <strong>Git-based</strong> - No external API calls (GitHub/GitLab/etc.)<br />
+✅ <strong>Local-first</strong> - All data stays on your machine<br />
+✅ <strong>Opt-in</strong> - Auto-disables for solo developers<br />
+✅ <strong>Lightweight</strong> - &lt;1 second overhead during Tier 3 collection<br />
+✅ <strong>Privacy-preserving</strong> - Anonymization available<br />
+✅ <strong>Non-invasive</strong> - Zero disruption to individual workflows</p>
+<hr />
+<h2 id="design-rationale">Design Rationale<a class="headerlink" href="#design-rationale" title="Permanent link">&para;</a></h2>
+<h3 id="why-add-pr-intelligence">Why Add PR Intelligence?<a class="headerlink" href="#why-add-pr-intelligence" title="Permanent link">&para;</a></h3>
+<p><strong>Problem:</strong> KDS currently focuses on individual developer workflows. In team environments, Pull Requests contain valuable learning signals that could improve:
+- Planning accuracy (team review cycles vs solo estimates)
+- File quality awareness (which files need extra care)
+- Collaboration efficiency (related file suggestions)</p>
+<p><strong>Solution:</strong> Extract PR patterns from <strong>local git history</strong> (no external dependencies) and feed them into the BRAIN for smarter recommendations.</p>
+<h3 id="why-git-based-no-apis">Why Git-Based (No APIs)?<a class="headerlink" href="#why-git-based-no-apis" title="Permanent link">&para;</a></h3>
+<p><strong>Alternatives Considered:</strong>
+1. ❌ <strong>GitHub/GitLab API</strong> - Requires authentication, rate limits, network dependency
+2. ❌ <strong>PR Comment Parsing</strong> - Too complex, fragile, privacy concerns
+3. ✅ <strong>Local Git History</strong> - Already available, fast, offline-capable, privacy-safe</p>
+<p><strong>Decision:</strong> Use git log parsing. Most PR information is already in merge commits!</p>
+<h3 id="why-opt-in-with-auto-detection">Why Opt-In with Auto-Detection?<a class="headerlink" href="#why-opt-in-with-auto-detection" title="Permanent link">&para;</a></h3>
+<p><strong>Rationale:</strong>
+- Solo developers get <strong>zero overhead</strong> (feature auto-disables)
+- Team environments get <strong>automatic benefits</strong> (feature auto-enables)
+- No manual configuration needed (smart defaults)
+- Privacy-conscious teams can enable anonymization</p>
+<hr />
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<h3 id="high-level-flow">High-Level Flow<a class="headerlink" href="#high-level-flow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Git Repository (Local)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ↓
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>collect-pr-intelligence.ps1 (Parse git history)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ↓
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Extract: Merge commits, file changes, commit counts
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  ↓
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Analyze: Patterns, metrics, trends
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  ↓
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Update BRAIN
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  ├─→ Tier 2 (knowledge-graph.yaml) - pr_patterns
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  └─→ Tier 3 (development-context.yaml) - pr_metrics
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  ↓
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Router/Planner Query BRAIN
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  ↓
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>Show: Warnings, estimates, hints
+</code></pre></div>
+<h3 id="component-diagram">Component Diagram<a class="headerlink" href="#component-diagram" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│ Configuration Layer                                         │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│ ┌─────────────────────────────────────────────────────────┐│
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│ │ team-intelligence.yaml                                  ││
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│ │ - enabled: auto-detect (true if &gt;1 author)             ││
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│ │ - privacy: anonymize_authors (optional)                 ││
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│ │ - throttle: min_hours_between_collections = 1           ││
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│ └─────────────────────────────────────────────────────────┘│
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>└─────────────────────────────────────────────────────────────┘
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>                          ↓
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│ Collection Layer                                            │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│ ┌─────────────────────────────────────────────────────────┐│
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│ │ collect-pr-intelligence.ps1                             ││
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│ │ 1. Detect team environment (git log authors)            ││
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│ │ 2. Find PR merge commits (pattern matching)             ││
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│ │ 3. Extract PR details (files, commits, stats)           ││
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│ │ 4. Analyze patterns (rework, collaboration, quality)    ││
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│ │ 5. Calculate metrics (cycle time, velocity, trends)     ││
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│ └─────────────────────────────────────────────────────────┘│
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>└─────────────────────────────────────────────────────────────┘
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>                          ↓
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>│ BRAIN Storage Layer                                         │
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│ ┌──────────────────────┐  ┌────────────────────────────────┐│
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>│ │ Tier 2:              │  │ Tier 3:                        ││
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│ │ knowledge-graph.yaml │  │ development-context.yaml       ││
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│ │                      │  │                                ││
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│ │ pr_patterns:         │  │ pr_metrics:                    ││
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│ │ - high_rework_files  │  │ - overall (count, velocity)    ││
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│ │ - fast_track_files   │  │ - pr_size (avg files, lines)   ││
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│ │ - collaboration_     │  │ - review (iterations, rework)  ││
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│ │   hotspots           │  │ - by_category (UI, Backend)    ││
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│ │ - quality_indicators │  │ - health (warnings, trends)    ││
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│ └──────────────────────┘  └────────────────────────────────┘│
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>└─────────────────────────────────────────────────────────────┘
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>                          ↓
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>│ Agent Integration Layer                                     │
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>│ ┌─────────────┐  ┌──────────────┐  ┌────────────────────┐ │
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>│ │ Router      │  │ Planner      │  │ Executor           │ │
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>│ │ Query:      │  │ Query:       │  │ Query:             │ │
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>│ │ - Rework    │  │ - Cycle time │  │ - Related files    │ │
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>│ │   warnings  │  │ - Category   │  │ - Hotspot warnings │ │
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>│ │             │  │   estimates  │  │                    │ │
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>│ └─────────────┘  └──────────────┘  └────────────────────┘ │
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="implementation-details">Implementation Details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h2>
+<h3 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>KDS/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── config/
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   └── team-intelligence.yaml         # Configuration (opt-in, privacy, throttle)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>├── scripts/
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── collect-pr-intelligence.ps1    # Collection script (~500 lines)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>├── kds-brain/
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   ├── schemas/
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   │   └── pr-intelligence-schema.yaml  # Schema documentation
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   │
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   ├── knowledge-graph.yaml           # Updated with pr_patterns section
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   └── development-context.yaml       # Updated with pr_metrics section
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>└── docs/
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    └── pr-intelligence/
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        └── PR-INTELLIGENCE-DESIGN.md  # This file
+</code></pre></div>
+<h3 id="data-flow">Data Flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h3>
+<p><strong>1. Collection Trigger:</strong>
+- During <code>development-context-collector.ps1</code> (Tier 3 collection)
+- During <code>brain-updater.md</code> (automatic BRAIN updates)
+- Manual: <code>.\KDS\scripts\collect-pr-intelligence.ps1</code></p>
+<p><strong>2. Throttling:</strong>
+- Only collect if &gt;1 hour since last collection
+- Prevents redundant git operations
+- Can override with <code>-Force</code> flag</p>
+<p><strong>3. Team Detection:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">$authors</span> <span class="p">=</span> <span class="n">git</span> <span class="n">log</span> <span class="p">-</span><span class="n">-since</span><span class="p">=</span><span class="s2">&quot;30 days ago&quot;</span> <span class="p">-</span><span class="n">-format</span><span class="p">=</span><span class="s2">&quot;%ae&quot;</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">-Unique</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$authors</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">1</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="c"># Solo developer - disable PR intelligence</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">exit</span> <span class="n">0</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c"># Team environment - continue collection</span>
+</code></pre></div></p>
+<p><strong>4. PR Detection:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c"># Patterns to match PR merge commits</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">$patterns</span> <span class="p">=</span> <span class="p">@(</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s2">&quot;Merge pull request #&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s2">&quot;Merged PR #&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="s2">&quot;Merge branch &#39;pr/&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="s2">&quot;Pull request #&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c"># Find merge commits</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nv">$mergeCommits</span> <span class="p">=</span> <span class="n">git</span> <span class="n">log</span> <span class="p">-</span><span class="n">-since</span><span class="p">=</span><span class="s2">&quot;30 days ago&quot;</span> <span class="p">-</span><span class="n">-grep</span><span class="p">=</span><span class="s2">&quot;$patterns&quot;</span> <span class="p">-</span><span class="n">-format</span><span class="p">=</span><span class="s2">&quot;%H|%an|%ae|%s|%cd&quot;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c"># Extract PR numbers</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$commit</span> <span class="k">in</span> <span class="nv">$mergeCommits</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="k">if</span> <span class="p">(</span><span class="nv">$commit</span> <span class="o">-match</span> <span class="s1">&#39;#(\d+)&#39;</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>        <span class="nv">$prNumber</span> <span class="p">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="n">1</span><span class="p">]</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>        <span class="c"># Process PR...</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    <span class="p">}</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>5. PR Details Extraction:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c"># Files changed in PR</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">$files</span> <span class="p">=</span> <span class="n">git</span> <span class="n">diff-tree</span> <span class="p">-</span><span class="n">-no-commit-id</span> <span class="p">-</span><span class="n">-name-only</span> <span class="n">-r</span> <span class="nv">$mergeCommitHash</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c"># Commit count (approximate - commits since previous merge)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nv">$commitCount</span> <span class="p">=</span> <span class="p">(</span><span class="n">git</span> <span class="n">log</span> <span class="p">-</span><span class="n">-oneline</span> <span class="s2">&quot;$hash^..$hash&quot;</span> <span class="p">|</span> <span class="nb">Measure-Object</span><span class="p">).</span><span class="n">Count</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c"># Lines changed</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nv">$stats</span> <span class="p">=</span> <span class="n">git</span> <span class="nb">diff </span><span class="p">-</span><span class="n">-shortstat</span> <span class="s2">&quot;$hash^&quot;</span> <span class="nv">$hash</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c"># Parse: &quot;5 files changed, 247 insertions(+), 89 deletions(-)&quot;</span>
+</code></pre></div></p>
+<p><strong>6. Pattern Analysis:</strong></p>
+<p><strong>High Rework Files:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c"># Calculate avg review iterations per file</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$file</span> <span class="k">in</span> <span class="nv">$allFiles</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="nv">$avgIterations</span> <span class="p">=</span> <span class="nv">$totalCommitsForFile</span> <span class="p">/</span> <span class="nv">$prCount</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">if</span> <span class="p">(</span><span class="nv">$avgIterations</span> <span class="p">&gt;=</span> <span class="n">2</span><span class="p">.</span><span class="n">0</span> <span class="p">&amp;&amp;</span> <span class="nv">$prCount</span> <span class="p">&gt;=</span> <span class="n">3</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="c"># High rework file detected</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="nv">$pattern</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>            <span class="n">file</span> <span class="p">=</span> <span class="nv">$file</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>            <span class="n">avg_review_iterations</span> <span class="p">=</span> <span class="nv">$avgIterations</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>            <span class="n">recommendation</span> <span class="p">=</span> <span class="s2">&quot;⚠️ Extra scrutiny needed&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>            <span class="n">confidence</span> <span class="p">=</span> <span class="n">Min</span><span class="p">(</span><span class="n">0</span><span class="p">.</span><span class="n">95</span><span class="p">,</span> <span class="n">0</span><span class="p">.</span><span class="n">5</span> <span class="p">+</span> <span class="p">(</span><span class="nv">$prCount</span> <span class="p">*</span> <span class="n">0</span><span class="p">.</span><span class="n">05</span><span class="p">))</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>        <span class="p">}</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="p">}</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Collaboration Hotspots:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># Track file pairs modified together</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$pr</span> <span class="k">in</span> <span class="nv">$prs</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$pair</span> <span class="k">in</span> <span class="n">GetAllFilePairs</span><span class="p">(</span><span class="nv">$pr</span><span class="p">.</span><span class="n">files</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="nv">$pairCount</span><span class="p">[</span><span class="nv">$pair</span><span class="p">]++</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="p">}</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">}</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c"># Identify hotspots (&gt;60% co-modification rate)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$pair</span> <span class="k">in</span> <span class="nv">$pairCounts</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="nv">$rate</span> <span class="p">=</span> <span class="nv">$pair</span><span class="p">.</span><span class="n">count</span> <span class="p">/</span> <span class="nv">$totalPRs</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="k">if</span> <span class="p">(</span><span class="nv">$rate</span> <span class="p">&gt;=</span> <span class="n">0</span><span class="p">.</span><span class="n">6</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="c"># Collaboration hotspot detected</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="p">}</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>7. Metrics Calculation:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nv">$metrics</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">overall</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        <span class="n">total_prs_merged</span> <span class="p">=</span> <span class="nv">$prs</span><span class="p">.</span><span class="n">Count</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        <span class="n">prs_per_week_avg</span> <span class="p">=</span> <span class="nv">$prs</span><span class="p">.</span><span class="n">Count</span> <span class="p">/</span> <span class="n">4</span><span class="p">.</span><span class="n">0</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="p">}</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">pr_size</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        <span class="n">avg_files_changed</span> <span class="p">=</span> <span class="n">Average</span><span class="p">(</span><span class="nv">$prs</span><span class="p">.</span><span class="n">filesChanged</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="n">avg_lines_added</span> <span class="p">=</span> <span class="n">Average</span><span class="p">(</span><span class="nv">$prs</span><span class="p">.</span><span class="n">linesAdded</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="p">}</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="n">review</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        <span class="n">avg_review_iterations</span> <span class="p">=</span> <span class="n">Average</span><span class="p">(</span><span class="nv">$prs</span><span class="p">.</span><span class="n">commits</span><span class="p">)</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="n">rework_rate</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$prs</span> <span class="p">|</span> <span class="nb">Where </span><span class="n">commits</span> <span class="p">&gt;</span> <span class="n">1</span><span class="p">).</span><span class="n">Count</span> <span class="p">/</span> <span class="nv">$prs</span><span class="p">.</span><span class="n">Count</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="p">}</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">by_category</span> <span class="p">=</span> <span class="n">GroupByCategory</span><span class="p">(</span><span class="nv">$prs</span><span class="p">)</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>8. BRAIN Update:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c"># Update Tier 2 (knowledge-graph.yaml)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">$prPatterns</span> <span class="p">=</span> <span class="p">@{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">high_rework_files</span> <span class="p">=</span> <span class="nv">$highReworkFiles</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">collaboration_hotspots</span> <span class="p">=</span> <span class="nv">$collaborationHotspots</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">quality_indicators</span> <span class="p">=</span> <span class="nv">$qualityIndicators</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">Append-ToFile</span> <span class="s2">&quot;knowledge-graph.yaml&quot;</span> <span class="nv">$prPatterns</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="c"># Update Tier 3 (development-context.yaml)</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nv">$prMetrics</span> <span class="p">=</span> <span class="n">Calculate-PRMetrics</span> <span class="nv">$prs</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="n">Append-ToFile</span> <span class="s2">&quot;development-context.yaml&quot;</span> <span class="nv">$prMetrics</span>
+</code></pre></div></p>
+<hr />
+<h2 id="usage-examples">Usage Examples<a class="headerlink" href="#usage-examples" title="Permanent link">&para;</a></h2>
+<h3 id="example-1-router-warning-high-rework-file">Example 1: Router Warning (High Rework File)<a class="headerlink" href="#example-1-router-warning-high-rework-file" title="Permanent link">&para;</a></h3>
+<p><strong>User Request:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>I want to modify HostControlPanelContent.razor to add a new button
+</code></pre></div></p>
+<p><strong>Router Processing:</strong>
+1. Detects intent: <code>PLAN</code>
+2. Identifies file: <code>HostControlPanelContent.razor</code>
+3. Queries BRAIN: <code>pr_patterns.high_rework_files where file = 'HostControlPanelContent.razor'</code>
+4. Finds pattern:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HostControlPanelContent.razor&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nt">avg_review_iterations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nt">total_prs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nt">recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;⚠️</span><span class="nv"> </span><span class="s">Extra</span><span class="nv"> </span><span class="s">scrutiny</span><span class="nv"> </span><span class="s">needed</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">frequently</span><span class="nv"> </span><span class="s">requires</span><span class="nv"> </span><span class="s">rework&quot;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.85</span>
+</code></pre></div></p>
+<p><strong>Router Output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Intent: PLAN
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Target: work-planner.md
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>⚠️ File Health Warning:
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">-</span><span class="w"> </span>HostControlPanelContent.razor has required 2-3 review iterations in 8 recent PRs
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">-</span><span class="w"> </span>Recommendation: Include comprehensive tests and consider smaller changesets
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>Proceeding to planner...
+</code></pre></div></p>
+<h3 id="example-2-planner-estimates-team-cycle-time">Example 2: Planner Estimates (Team Cycle Time)<a class="headerlink" href="#example-2-planner-estimates-team-cycle-time" title="Permanent link">&para;</a></h3>
+<p><strong>User Request:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>I want to add dark mode toggle
+</code></pre></div></p>
+<p><strong>Planner Processing:</strong>
+1. Detects category: <code>UI</code> (based on file patterns)
+2. Queries BRAIN: <code>pr_metrics.by_category where category = 'UI'</code>
+3. Finds metrics:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UI&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">pr_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nt">avg_cycle_time_hours</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">28.5</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nt">avg_review_iterations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.6</span>
+</code></pre></div></p>
+<p><strong>Planner Output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>📋 Work Plan: Dark Mode Toggle
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>Phase 1: Implementation (2 days)
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="k">-</span><span class="w"> </span>Task 1.1: Add theme toggle component
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">-</span><span class="w"> </span>Task 1.2: Create CSS variables for dark mode
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="k">-</span><span class="w"> </span>Task 1.3: Update existing components
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>Phase 2: Testing (1 day)
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="k">-</span><span class="w"> </span>Task 2.1: Visual regression tests (Percy)
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="k">-</span><span class="w"> </span>Task 2.2: Cross-browser testing
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>Phase 3: Review &amp; Iteration Buffer (1.5 days)
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="k">-</span><span class="w"> </span>Based on team average for UI changes: 28.5 hours
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="k">-</span><span class="w"> </span>Expected review iterations: 1-2
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>Total Estimate: 4-5 days (including team review cycle)
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>💡 Team Intelligence Applied:
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="k">-</span><span class="w"> </span>UI PRs average 1.6 review iterations
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="k">-</span><span class="w"> </span>Cycle time for UI changes: ~29 hours
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="k">-</span><span class="w"> </span>Estimate includes team collaboration time
+</code></pre></div></p>
+<h3 id="example-3-executor-hints-collaboration-hotspot">Example 3: Executor Hints (Collaboration Hotspot)<a class="headerlink" href="#example-3-executor-hints-collaboration-hotspot" title="Permanent link">&para;</a></h3>
+<p><strong>User Request:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="gh">#file:KDS/prompts/user/kds.md</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>continue (working on HostControlPanelContent.razor)
+</code></pre></div></p>
+<p><strong>Executor Processing:</strong>
+1. Current file: <code>HostControlPanelContent.razor</code>
+2. Queries BRAIN: <code>pr_patterns.collaboration_hotspots where files contains 'HostControlPanelContent.razor'</code>
+3. Finds pattern:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">files</span><span class="p">:</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;HostControlPanelContent.razor&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;noor-canvas.css&quot;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nt">co_modification_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.88</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nt">recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;💡</span><span class="nv"> </span><span class="s">UI</span><span class="nv"> </span><span class="s">changes</span><span class="nv"> </span><span class="s">usually</span><span class="nv"> </span><span class="s">require</span><span class="nv"> </span><span class="s">CSS</span><span class="nv"> </span><span class="s">updates&quot;</span>
+</code></pre></div></p>
+<p><strong>Executor Output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Implementing task 1.1: Add theme toggle component
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>Current file: HostControlPanelContent.razor
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>💡 Collaboration Hint:
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="k">-</span><span class="w"> </span>88% of PRs modifying this file also updated: noor-canvas.css
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="k">-</span><span class="w"> </span>Consider reviewing CSS file for related changes
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>Would you like me to:
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="k">1.</span> Proceed with current task only
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="k">2.</span> Check noor-canvas.css for related updates
+</code></pre></div></p>
+<hr />
+<h2 id="performance-characteristics">Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<h3 id="collection-performance">Collection Performance<a class="headerlink" href="#collection-performance" title="Permanent link">&para;</a></h3>
+<p><strong>Measured on typical repository:</strong>
+- <strong>Repository size:</strong> ~1,000 files, 30 days of history
+- <strong>PR count:</strong> 47 PRs
+- <strong>Commits scanned:</strong> 312 commits</p>
+<p><strong>Timing Breakdown:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Team detection:              ~50ms   (1 git log call)
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>PR detection:               ~120ms   (grep git log)
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>PR details extraction:      ~450ms   (diff-tree per PR)
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>Pattern analysis:           ~150ms   (in-memory processing)
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>Metrics calculation:        ~100ms   (in-memory processing)
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>BRAIN update:               ~80ms    (file append)
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>─────────────────────────────────────
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>Total:                      ~950ms   (&lt;1 second)
+</code></pre></div></p>
+<p><strong>Scalability:</strong>
+| Repository Size | PR Count | Collection Time |
+|----------------|----------|-----------------|
+| Small (&lt;500 files) | 10-20 | ~400ms |
+| Medium (500-2000 files) | 30-50 | ~900ms |
+| Large (&gt;2000 files) | 50-100 | ~1.8s |</p>
+<h3 id="throttling-impact">Throttling Impact<a class="headerlink" href="#throttling-impact" title="Permanent link">&para;</a></h3>
+<p><strong>Without throttling:</strong>
+- Brain update frequency: ~2-4x per day
+- PR collection runs each time: 2-4 seconds wasted per day</p>
+<p><strong>With 1-hour throttling:</strong>
+- Brain update frequency: ~2-4x per day
+- PR collection runs: 1-2x per day (others skip)
+- Time saved: ~3-6 seconds per day</p>
+<p><strong>Impact:</strong> Negligible user-facing delay, significant cumulative time savings.</p>
+<hr />
+<h2 id="privacy-security">Privacy &amp; Security<a class="headerlink" href="#privacy-security" title="Permanent link">&para;</a></h2>
+<h3 id="data-storage">Data Storage<a class="headerlink" href="#data-storage" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> All data stays in <code>KDS/kds-brain/</code> (local)</p>
+<p><strong>Files Created:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>KDS/kds-brain/
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>├── knowledge-graph.yaml         # Contains pr_patterns (file paths, metrics)
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>├── development-context.yaml     # Contains pr_metrics (aggregated stats)
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>└── pr-patterns-YYYYMMDD.yaml    # Timestamped snapshots (optional)
+</code></pre></div></p>
+<p><strong>What's Stored:</strong>
+- ✅ File paths (relative to repo root)
+- ✅ Commit counts (integers)
+- ✅ Review iteration counts (integers)
+- ✅ PR numbers (integers)
+- ✅ Category labels (strings)</p>
+<p><strong>What's NOT Stored:</strong>
+- ❌ PR titles/descriptions (unless in commit message, redactable)
+- ❌ Code diffs (only file paths)
+- ❌ Review comments (not accessible via git log)
+- ❌ External URLs (no API calls)</p>
+<h3 id="author-anonymization">Author Anonymization<a class="headerlink" href="#author-anonymization" title="Permanent link">&para;</a></h3>
+<p><strong>When enabled:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># team-intelligence.yaml</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nt">privacy</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="nt">anonymize_authors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div></p>
+<p><strong>Effect:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Before: &quot;developer@example.com&quot;
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>After:  &quot;developer1&quot;
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>Before: &quot;lead@example.com&quot;
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>After:  &quot;developer2&quot;
+</code></pre></div></p>
+<p><strong>Mapping:</strong>
+- Consistent per session (same author = same number)
+- Cleared on restart (no persistent mapping)
+- Hash-based (SHA256 of email → number)</p>
+<h3 id="external-contributor-filtering">External Contributor Filtering<a class="headerlink" href="#external-contributor-filtering" title="Permanent link">&para;</a></h3>
+<p><strong>When enabled:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">privacy</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">exclude_external_contributors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">external_domains</span><span class="p">:</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;users.noreply.github.com&quot;</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;dependabot[bot]&quot;</span>
+</code></pre></div></p>
+<p><strong>Effect:</strong>
+- PRs from Dependabot excluded from analysis
+- External contributor PRs skipped
+- Only team member PRs analyzed</p>
+<hr />
+<h2 id="team-vs-solo-behavior">Team vs Solo Behavior<a class="headerlink" href="#team-vs-solo-behavior" title="Permanent link">&para;</a></h2>
+<h3 id="solo-developer-mode-default">Solo Developer Mode (Default)<a class="headerlink" href="#solo-developer-mode-default" title="Permanent link">&para;</a></h3>
+<p><strong>Detection:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nv">$authors</span> <span class="p">=</span> <span class="n">git</span> <span class="n">log</span> <span class="p">-</span><span class="n">-since</span><span class="p">=</span><span class="s2">&quot;30 days ago&quot;</span> <span class="p">-</span><span class="n">-format</span><span class="p">=</span><span class="s2">&quot;%ae&quot;</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">-Unique</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$authors</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">1</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>    <span class="nb">Write-Host</span> <span class="s2">&quot;✅ Solo developer detected - PR intelligence disabled&quot;</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>    <span class="n">exit</span> <span class="n">0</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Behavior:</strong>
+- PR collection script exits immediately (&lt;50ms)
+- Zero overhead (no git operations)
+- BRAIN queries return empty results
+- Router/Planner use solo estimates only</p>
+<p><strong>User Experience:</strong>
+- No warnings about rework
+- No collaboration hints
+- No team cycle time adjustments
+- Identical to KDS without PR intelligence</p>
+<h3 id="team-mode-auto-enabled">Team Mode (Auto-Enabled)<a class="headerlink" href="#team-mode-auto-enabled" title="Permanent link">&para;</a></h3>
+<p><strong>Detection:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$authors</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;=</span> <span class="n">2</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>    <span class="nb">Write-Host</span> <span class="s2">&quot;✅ Team environment detected (</span><span class="p">$(</span><span class="nv">$authors</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> developers)&quot;</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>    <span class="c"># Continue with PR collection</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Behavior:</strong>
+- PR collection runs (throttled to &gt;1 hour)
+- Patterns extracted from merge commits
+- BRAIN updated with pr_patterns and pr_metrics
+- Router/Planner/Executor query PR intelligence</p>
+<p><strong>User Experience:</strong>
+- Proactive warnings ("This file has high rework rate")
+- Better estimates ("Including 1.5-day review buffer")
+- Collaboration hints ("Also consider updating CSS file")
+- Velocity tracking ("Team merges 12 PRs/week")</p>
+<hr />
+<h2 id="integration-points">Integration Points<a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h2>
+<h3 id="1-router-integration">1. Router Integration<a class="headerlink" href="#1-router-integration" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>KDS/prompts/internal/intent-router.md</code></p>
+<p><strong>Enhancement:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="gu">## Step 2: Query BRAIN for Context</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>Before routing, query BRAIN for:
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="k">-</span><span class="w"> </span>Intent patterns (existing)
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="k">-</span><span class="w"> </span>File relationships (existing)
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="k">-</span><span class="w"> </span><span class="gs">**PR warnings (NEW)**</span> ← Query pr_patterns.high_rework_files
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>If file detected in user message:
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>  Query: pr_patterns where file = &lt;detected_file&gt;
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>  If pattern found:
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>    Add warning to routing context
+</code></pre></div></p>
+<p><strong>Example Code:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c"># Detect file in user message</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$userMessage</span> <span class="o">-match</span> <span class="s1">&#39;([A-Za-z]+\.razor|\.cs|\.css)&#39;</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>    <span class="nv">$file</span> <span class="p">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="n">1</span><span class="p">]</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>    <span class="c"># Query PR patterns</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>    <span class="nv">$pattern</span> <span class="p">=</span> <span class="n">Query-BRAIN</span> <span class="s2">&quot;pr_patterns.high_rework_files where file=&#39;$file&#39;&quot;</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>    <span class="k">if</span> <span class="p">(</span><span class="nv">$pattern</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>        <span class="nv">$warnings</span> <span class="p">+=</span> <span class="s2">&quot;⚠️ $file: </span><span class="p">$(</span><span class="nv">$pattern</span><span class="p">.</span><span class="n">recommendation</span><span class="p">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>    <span class="p">}</span>
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="2-planner-integration">2. Planner Integration<a class="headerlink" href="#2-planner-integration" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>KDS/prompts/internal/work-planner.md</code></p>
+<p><strong>Enhancement:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="gu">## Phase Estimation</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>For each phase:
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="k">1.</span> Calculate solo developer estimate (existing)
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="k">2.</span> <span class="gs">**Query PR metrics for category (NEW)**</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="k">3.</span> <span class="gs">**Adjust estimate for team review cycle (NEW)**</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>Formula:
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>  team_estimate = solo_estimate * review_buffer_multiplier
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>  review_buffer_multiplier = 1.0 + (team_avg_iterations - 1.0) * 0.3
+</code></pre></div></p>
+<p><strong>Example Code:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c"># Detect feature category</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nv">$category</span> <span class="p">=</span> <span class="n">Detect-Category</span> <span class="nv">$userMessage</span>  <span class="c"># &quot;UI&quot;, &quot;Backend&quot;, etc.</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="c"># Query PR metrics</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="nv">$metrics</span> <span class="p">=</span> <span class="n">Query-BRAIN</span> <span class="s2">&quot;pr_metrics.by_category where category=&#39;$category&#39;&quot;</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$metrics</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>    <span class="nv">$reviewBuffer</span> <span class="p">=</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span> <span class="p">+</span> <span class="p">(</span><span class="nv">$metrics</span><span class="p">.</span><span class="n">avg_review_iterations</span> <span class="p">-</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">)</span> <span class="p">*</span> <span class="n">0</span><span class="p">.</span><span class="n">3</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>    <span class="nv">$teamEstimate</span> <span class="p">=</span> <span class="nv">$soloEstimate</span> <span class="p">*</span> <span class="nv">$reviewBuffer</span>
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a>    <span class="nb">Write-Host</span> <span class="s2">&quot;💡 Team adjustment: +</span><span class="p">$((</span><span class="nv">$reviewBuffer</span> <span class="p">-</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">)</span> <span class="p">*</span> <span class="n">100</span><span class="p">)</span><span class="s2">% for review cycles&quot;</span>
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="3-executor-integration">3. Executor Integration<a class="headerlink" href="#3-executor-integration" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>KDS/prompts/internal/code-executor.md</code></p>
+<p><strong>Enhancement:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="gu">## File Selection</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>When modifying file:
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="k">1.</span> Load file content (existing)
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="k">2.</span> <span class="gs">**Query collaboration hotspots (NEW)**</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="k">3.</span> <span class="gs">**Suggest related files if found (NEW)**</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>User can:
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="k">-</span><span class="w"> </span>Proceed with current file only
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="k">-</span><span class="w"> </span>Review suggested files
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="k">-</span><span class="w"> </span>Add suggested files to task
+</code></pre></div></p>
+<p><strong>Example Code:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c"># Current file</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="nv">$currentFile</span> <span class="p">=</span> <span class="s2">&quot;HostControlPanelContent.razor&quot;</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="c"># Query collaboration patterns</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="nv">$hotspots</span> <span class="p">=</span> <span class="n">Query-BRAIN</span> <span class="s2">&quot;pr_patterns.collaboration_hotspots where files contains &#39;$currentFile&#39;&quot;</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="k">if</span> <span class="p">(</span><span class="nv">$hotspots</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>    <span class="nv">$relatedFiles</span> <span class="p">=</span> <span class="nv">$hotspots</span><span class="p">.</span><span class="n">files</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span> <span class="o">-ne</span> <span class="nv">$currentFile</span> <span class="p">}</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>    <span class="nb">Write-Host</span> <span class="s2">&quot;💡 Collaboration hint: These files often change together:&quot;</span>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a>    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$file</span> <span class="k">in</span> <span class="nv">$relatedFiles</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>        <span class="nb">Write-Host</span> <span class="s2">&quot;   - $file (co-modified in </span><span class="p">$(</span><span class="nv">$hotspots</span><span class="p">.</span><span class="n">co_modification_rate</span> <span class="p">*</span> <span class="n">100</span><span class="p">)</span><span class="s2">% of PRs)&quot;</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>    <span class="p">}</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h2 id="future-enhancements">Future Enhancements<a class="headerlink" href="#future-enhancements" title="Permanent link">&para;</a></h2>
+<h3 id="phase-2-optional-post-launch">Phase 2 (Optional, Post-Launch)<a class="headerlink" href="#phase-2-optional-post-launch" title="Permanent link">&para;</a></h3>
+<p><strong>1. PR Platform Integration (Opt-In)</strong>
+- GitHub API integration for richer data (review comments, approval times)
+- GitLab/Bitbucket support
+- Configuration: <code>team_intelligence.github_api.enabled: true</code>
+- Fallback: Always use git-based if API fails</p>
+<p><strong>2. Reviewer Recommendation Engine</strong>
+- Track who reviews what categories
+- Suggest optimal reviewers for current work
+- Based on: review speed, approval rate, domain expertise</p>
+<p><strong>3. Predictive Analytics</strong>
+- ML-based PR success prediction
+- Input: file paths, PR size, test coverage
+- Output: Probability of quick merge (0.0 - 1.0)
+- Recommendation: "Consider splitting - 72% chance of rework"</p>
+<p><strong>4. Team Health Dashboard</strong>
+- Visual report of team velocity trends
+- Hotspot heatmap (files by rework rate)
+- Category breakdown charts
+- Integration with <code>metrics-reporter.md</code></p>
+<p><strong>5. Cross-Team Comparison</strong>
+- Compare metrics across multiple teams
+- Identify best practices from high-performing teams
+- Privacy-preserving aggregation</p>
+<h3 id="phase-3-future-vision">Phase 3 (Future Vision)<a class="headerlink" href="#phase-3-future-vision" title="Permanent link">&para;</a></h3>
+<p><strong>1. BRAIN-to-BRAIN Sharing</strong>
+- Export generic patterns (no file paths, just categories)
+- Import patterns from similar projects
+- Privacy: Only share aggregated, anonymized patterns</p>
+<p><strong>2. Continuous Learning Loop</strong>
+- Track PR success rate after applying recommendations
+- Adjust confidence scores based on outcomes
+- Self-improving pattern quality</p>
+<hr />
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>PR Intelligence enhances KDS with team collaboration awareness while maintaining:
+- ✅ <strong>Local-first architecture</strong> (no cloud dependencies)
+- ✅ <strong>Privacy preservation</strong> (anonymization available)
+- ✅ <strong>Zero disruption</strong> (opt-in, auto-disables for solo devs)
+- ✅ <strong>Lightweight</strong> (&lt;1 second overhead)
+- ✅ <strong>Simple implementation</strong> (~500 lines of PowerShell)</p>
+<p><strong>Recommendation: Implement immediately.</strong> Benefits outweigh costs significantly for team environments.</p>
+<hr />
+<p><strong>Document Version:</strong> 1.0<br />
+<strong>Last Updated:</strong> 2025-11-03<br />
+<strong>Next Review:</strong> After Phase 1 implementation feedback</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 CORTEX Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,12 @@
+# Tier 1 Test Requirements
+# Install with: pip install -r tests/tier1/requirements.txt
+
+# Testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0  # Coverage reporting
+pytest-mock>=3.11.1  # Mocking utilities
+pytest-asyncio>=0.21.0  # Async test support (future)
+
+# Test utilities
+faker>=19.0.0  # Generate fake test data
+freezegun>=1.2.2  # Mock datetime for time-based tests

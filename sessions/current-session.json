@@ -1,22 +1,22 @@
 {
   "session_id": "20251103-kds-independence",
   "key": "KDS_INDEPENDENCE",
-  "branch": "features/kds",
+  "branch": "cortex-migration",
   "started_at": "2025-11-03T21:00:00Z",
-  "last_updated": "2025-11-04T12:00:00Z",
-  "status": "TASK_1_1_COMPLETE",
+  "last_updated": "2025-11-06T14:30:00Z",
+  "status": "TASK_3_2_COMPLETE",
   "context": {
     "feature": "Make KDS fully independent for DevProjects repository",
     "phases": 7,
     "total_tasks": 26,
     "estimated_hours": 21.0,
-    "current_phase": 1,
-    "current_task": "Task 1.1 Complete - Moving to Task 1.2",
-    "plan_file": "KDS/sessions/20251103-kds-independence-plan.json",
-    "summary_file": "KDS/sessions/KDS-INDEPENDENCE-PLAN-SUMMARY.md",
-    "review_file": "KDS/docs/KDS-INDEPENDENCE-REVIEW.md",
+    "current_phase": 3,
+    "current_task": "Task 3.2 Complete - Configuration Templates Operational",
+    "plan_file": "sessions/20251103-kds-independence-plan.json",
+    "summary_file": "sessions/KDS-INDEPENDENCE-PLAN-SUMMARY.md",
+    "review_file": "docs/KDS-INDEPENDENCE-REVIEW.md",
     "correlation_id": "kds-ind-001",
-    "independence_score_current": 0,
+    "independence_score_current": 15,
     "independence_score_target": 95,
     "phase_0_deliverables": [
       "✅ Dependency audit script created",
@@ -50,6 +50,28 @@
       "✅ Cross-platform compatible (Windows, macOS, Linux)",
       "✅ Performance validated (<100ms workspace detection)"
     ],
+    "task_3_1_deliverables": [
+      "✅ config-template-engine.ps1 created (300 lines, 3 functions)",
+      "✅ Variable substitution: {{VARIABLE}} and {{VARIABLE:default}}",
+      "✅ Built-in variables: PROJECT_ROOT, PROJECT_NAME, GIT_BRANCH, TIMESTAMP, KDS_ROOT",
+      "✅ Format support: JSON, YAML, Markdown, plain text",
+      "✅ Comprehensive test suite (40+ test cases)",
+      "✅ Manual testing passed (6/6 scenarios)",
+      "✅ Error handling with helpful messages",
+      "✅ Documentation complete (TASK-3.1-TEMPLATE-ENGINE-COMPLETE.md)"
+    ],
+    "task_3_2_deliverables": [
+      "✅ cortex.config.template.json created with 4 variables",
+      "✅ tooling-inventory.template.json created with 7 variables",
+      "✅ dashboard.template.html created with 3 variables",
+      "✅ All originals preserved as .example files",
+      "✅ Test suite created (test-template-expansion.ps1)",
+      "✅ All templates validated (3/3 passing)",
+      "✅ JSON syntax validation successful",
+      "✅ Nested variable substitution working",
+      "✅ Optional KDS_ROOT variables (backwards compatible)",
+      "✅ Documentation complete (TASK-3.2-CONFIG-TEMPLATES-COMPLETE.md)"
+    ],
     "key_deliverables": [
       "Dynamic workspace resolution (Phase 1)",
       "Generic BRAIN template (Phase 2)",
@@ -58,20 +80,22 @@
     ]
   },
   "next_action": {
-    "command": "Continue Phase 1: Task 1.2 - Update all PowerShell scripts",
-    "description": "Update 42+ scripts with hard-coded paths to use the workspace resolver",
+    "command": "Continue Phase 3: Task 3.3 - Apply templates to BRAIN configs",
+    "description": "Convert cortex-brain configuration files to template format",
     "tasks": [
-      "1.2.1: Add workspace resolver import to each script",
-      "1.2.2: Replace hard-coded paths with dynamic resolution",
-      "1.2.3: Test each script from different working directories",
-      "1.2.4: Verify zero path violations with audit script"
+      "3.3.1: Convert knowledge-graph.yaml to template format",
+      "3.3.2: Convert development-context.yaml to template format",
+      "3.3.3: Update .gitignore to ignore generated configs",
+      "3.3.4: Create template-apply.ps1 script for batch generation",
+      "3.3.5: Test all templates generate valid configs"
     ],
     "estimated_time": "1.5 hours",
-    "impact": "High - All 42+ scripts will change",
+    "impact": "High - BRAIN configs become portable",
     "deliverables": [
-      "60+ refactored scripts using workspace-resolver.ps1",
-      "Zero hard-coded absolute paths remaining",
-      "All scripts functional from any working directory"
+      "2+ BRAIN template files",
+      ".gitignore updated",
+      "Batch template application script",
+      "All templates validated"
     ]
   }
 }

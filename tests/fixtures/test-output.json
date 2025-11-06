@@ -1,0 +1,14 @@
+{
+  "name": "CORTEX",
+  "version": "1.0.0",
+  "environment": "production",
+  "paths": {
+    "root": "/Users/asifhussain/PROJECTS/CORTEX",
+    "logs": "/Users/asifhussain/PROJECTS/CORTEX/logs",
+    "config": "/Users/asifhussain/PROJECTS/CORTEX/config"
+  },
+  "metadata": {
+    "branch": "cortex-migration",
+    "generated": "2025-11-06T13:41:24Z"
+  }
+}
