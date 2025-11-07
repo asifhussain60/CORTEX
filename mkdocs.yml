@@ -1,31 +1,47 @@
 site_name: CORTEX Documentation
-site_description: Cognitive Operating System for AI Development
+site_description: The Brain for AI Assistants - Transforming GitHub Copilot from Forgetful Intern to Expert Partner
 site_author: CORTEX Team
 site_url: https://asifhussain60.github.io/CORTEX/
 
 repo_name: asifhussain60/CORTEX
 repo_url: https://github.com/asifhussain60/CORTEX
-edit_uri: edit/main/docs/
+edit_uri: edit/cortex-migration/docs/
 
 theme:
   name: material
+  
   palette:
-    scheme: default
-    primary: indigo
-    accent: blue
+    # Light mode
+    - scheme: default
+      primary: indigo
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Dark mode
+    - scheme: slate
+      primary: indigo
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.expand
     - navigation.top
     - navigation.tracking
-    - navigation.expand
+    - navigation.indexes
     - search.suggest
     - search.highlight
+    - search.share
     - content.code.copy
     - content.code.annotate
     - content.tabs.link
     - toc.integrate
+    - header.autohide
   
   icon:
     repo: fontawesome/brands/github
@@ -35,101 +51,118 @@ theme:
     code: Roboto Mono
 
 plugins:
-  - search
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - mermaid2
 
 markdown_extensions:
+  # Code highlighting
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
+  
+  # Diagrams
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:mermaid2.fence_mermaid
+  
+  # Tabs and content
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  
+  # Emoji and icons
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  
+  # Admonitions
   - admonition
   - pymdownx.details
+  
+  # Formatting
   - attr_list
   - md_in_html
   - def_list
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.tilde
+  
+  # Tables
+  - tables
+  
+  # TOC
   - toc:
       permalink: true
       toc_depth: 3
+      title: On this page
 
 nav:
   - Home: index.md
-  - Getting Started:
+  
+  - 📖 The Story:
+      - story/index.md
+      - The Awakening of CORTEX: story/the-awakening.md
+  
+  - 🚀 Getting Started:
+      - getting-started/index.md
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md
+      - Your First Task: getting-started/first-task.md
       - Configuration: getting-started/configuration.md
-  - 🏛️ Mind Palace:
-      - Overview: Mind-Palace/README.md
-      - 🌟 The Awakening (Nov 6, 2025): Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
-      - Quick Reference: Mind-Palace/QUICK-REFERENCE.md
-      - Integration: Mind-Palace/INTEGRATION-SUMMARY.md
-      - Brain Integration: Mind-Palace/BRAIN-INTEGRATION.md
-      - Legacy - Dr. Asifor Chronicle (Nov 4):
-          - The Story: Mind-Palace/2025-11-04/Story.md
-          - Quick Start Guide: Mind-Palace/2025-11-04/Quick-Start-Guide.md
-          - Technical Reference: Mind-Palace/2025-11-04/Technical-Reference.md
-          - Image Prompts: Mind-Palace/2025-11-04/Image-Prompts.md
-  - Architecture:
+  
+  - 🧠 Architecture:
+      - architecture/index.md
       - Overview: architecture/overview.md
-      - Three-Tier Brain: architecture/three-tier-brain.md
       - Dual Hemispheres: architecture/dual-hemispheres.md
-      - Agent System: architecture/agents.md
-  - Tiers:
-      - Tier 0 - Governance: tiers/tier0-governance.md
-      - Tier 1 - Working Memory: tiers/tier1-working-memory.md
-      - Tier 2 - Knowledge Graph: tiers/tier2-knowledge-graph.md
-      - Tier 3 - Context Intelligence: tiers/tier3-context.md
-  - Agents:
-      - Overview: agents/overview.md
-      - Intent Router: agents/intent-router.md
-      - Work Planner: agents/work-planner.md
-      - Code Executor: agents/code-executor.md
-      - Test Generator: agents/test-generator.md
-      - Error Corrector: agents/error-corrector.md
-  - API Reference:
-      - Governance Engine: api/governance-engine.md
-      - Tier 1 API: api/tier1-api.md
-      - Tier 2 API: api/tier2-api.md
-      - Tier 3 API: api/tier3-api.md
-  - Development:
+      - Five-Tier Memory: architecture/five-tier-memory.md
+      - Protection System: architecture/protection-system.md
+      - Oracle Crawler: architecture/oracle-crawler.md
+  
+  - 📚 Guides:
+      - guides/index.md
+      - Universal Entry Point: guides/universal-entry-point.md
+      - Understanding the Brain: guides/brain-system.md
+      - Agent Workflows: guides/agent-workflows.md
+      - TDD with CORTEX: guides/tdd-workflow.md
+      - Memory Management: guides/memory-management.md
+  
+  - 📖 Reference:
+      - reference/index.md
+      - Tier 0 - Governance: reference/tier0-governance.md
+      - Tier 1 - Conversations: reference/tier1-conversation.md
+      - Tier 2 - Knowledge: reference/tier2-knowledge.md
+      - Tier 3 - Context: reference/tier3-context.md
+      - Agents: reference/agents.md
+      - Configuration: reference/configuration.md
+  
+  - 🛠️ Development:
+      - development/index.md
       - Contributing: development/contributing.md
       - Testing: development/testing.md
-      - CI/CD: development/ci-cd.md
-  - Reference:
-      - Governance Rules: reference/governance-rules.md
-      - Configuration: reference/configuration.md
-      - Glossary: reference/glossary.md
-  - 🎨 Examples:
-      - Technical Styling: technical-styling-examples.md
-  - 🚀 Deployment:
-      - GitHub Pages: deployment/github-pages.md
+      - Architecture Decisions: development/architecture-decisions.md
+      - Changelog: development/changelog.md
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/asifhussain60/CORTEX
+    - icon: fontawesome/solid/book
+      link: https://asifhussain60.github.io/CORTEX/
   
   version:
     provider: mike
+    default: latest
 
 extra_css:
-  - stylesheets/extra.css
+  - stylesheets/custom.css
 
-copyright: Copyright &copy; 2025 CORTEX Team
+copyright: Copyright &copy; 2025 CORTEX Team - Licensed under MIT
