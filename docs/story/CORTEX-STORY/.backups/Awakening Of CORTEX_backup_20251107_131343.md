@@ -1,5 +1,6 @@
 # The Awakening of CORTEX  
-*A Tech Comedy in Five Escalating Mishaps*
+*A Tech Comedy in Eight Escalating Mishaps*  
+**Extended Edition: The Evolution to 2.0**
 
 ---
 

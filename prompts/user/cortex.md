@@ -114,7 +114,311 @@ This document follows the **CORTEX Quadrant** pattern - a four-perspective appro
 
 **Why CORTEX Quadrant?** Different perspectives ensure complete understanding for all learning styles and use cases.
 
-**📖 Complete CORTEX Story:** For the full narrative of CORTEX's creation, including visual diagrams and technical deep-dives, see [The Awakening of CORTEX](../../docs/Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md) - a five-chapter journey through the design, implementation, and activation of the CORTEX brain system.
+**📖 Complete CORTEX Story:** For the full narrative of CORTEX's creation, including visual diagrams and technical deep-dives, see [The Awakening of CORTEX](../../docs/story/Cortex-Trinity/Awakening%20Of%20CORTEX.md) - an engaging journey through the design, implementation, and activation of the CORTEX brain system.
+
+---
+
+## 🚀 CORTEX 2.0: The Evolution
+
+**Status:** Design Complete ✅ | Implementation Phase: Ready to Begin  
+**Version:** 2.0.0-alpha  
+**Timeline:** 12-16 weeks implementation
+
+### What's New in CORTEX 2.0
+
+CORTEX 2.0 represents a strategic evolution following a **Hybrid Approach** (70% keep, 20% refactor, 10% enhance):
+
+#### 🔌 Plugin System (NEW)
+**Problem Solved:** Core bloat from non-essential features  
+**Solution:** Extensible plugin architecture with hooks
+
+```python
+# Example: Custom cleanup plugin
+from plugins.base_plugin import BasePlugin
+
+class Plugin(BasePlugin):
+    def execute(self, context):
+        # Your custom logic here
+        return {"success": True}
+```
+
+**Benefits:**
+- ✅ Reduce core complexity
+- ✅ Easy feature addition without modifying core
+- ✅ User-customizable behavior
+- ✅ Enable/disable features via configuration
+
+**Core Plugins:**
+- Cleanup Plugin (temp files, old logs, organization)
+- Documentation Plugin (MkDocs auto-refresh)
+- Self-Review Plugin (comprehensive health checks)
+- DB Maintenance Plugin (optimization, archival)
+
+---
+
+#### 🔄 Workflow Pipeline System (NEW)
+**Problem Solved:** Hardcoded agent workflows, difficult orchestration  
+**Solution:** Declarative DAG-based workflow engine
+
+```yaml
+# Example: Feature development workflow
+name: feature_development
+stages:
+  - clarify_dod_dor    # Define requirements
+  - threat_model       # Security analysis
+  - plan               # Create multi-phase plan
+  - tdd_cycle          # Test-first implementation
+  - run_tests          # Execute test suite
+  - validate_dod       # Verify completion criteria
+  - cleanup            # Code cleanup
+  - document           # Generate docs
+```
+
+**Benefits:**
+- ✅ Declarative workflow definitions
+- ✅ DAG validation (detects cycles)
+- ✅ Parallel execution support
+- ✅ Checkpoint/resume from failures
+- ✅ Conditional stages
+- ✅ Reusable workflow templates
+
+---
+
+#### 📦 Modular Architecture (REFACTORED)
+**Problem Solved:** Bloated monolithic files (1000+ lines)  
+**Solution:** Break into focused modules following SOLID principles
+
+**Before (CORTEX 1.0):**
+```
+knowledge_graph.py         1144 lines ❌
+working_memory.py           813 lines ❌
+context_intelligence.py     776 lines ❌
+error_corrector.py          692 lines ❌
+```
+
+**After (CORTEX 2.0):**
+```
+knowledge_graph/
+├── knowledge_graph.py       150 lines ✅
+├── patterns/
+│   ├── pattern_store.py     200 lines ✅
+│   ├── pattern_search.py    250 lines ✅
+│   └── pattern_decay.py     120 lines ✅
+├── relationships/
+│   └── relationship_manager.py 180 lines ✅
+└── tags/
+    └── tag_manager.py       120 lines ✅
+```
+
+**Benefits:**
+- ✅ All files <500 lines
+- ✅ Clear single responsibility
+- ✅ Easy to test individually
+- ✅ Simpler maintenance
+- ✅ Better code organization
+
+---
+
+#### 🏥 Self-Review System (NEW)
+**Problem Solved:** No systematic health monitoring  
+**Solution:** Comprehensive automated health checks with auto-fix
+
+```python
+# Example: Run health review
+from maintenance.self_review import SelfReviewEngine
+
+review = engine.run_comprehensive_review(auto_fix=True)
+# Output: Overall Status: 🟢 EXCELLENT (92% score)
+```
+
+**What It Checks:**
+- ✅ Database health (fragmentation, indexes, statistics)
+- ✅ Performance benchmarks (Tier 1: <50ms, Tier 2: <150ms)
+- ✅ Rule compliance (all 27 core rules)
+- ✅ Test coverage (target: 85%+)
+- ✅ Storage health (temp files, old logs, capacity)
+
+**Auto-Fix Capabilities:**
+- ✅ VACUUM fragmented databases
+- ✅ ANALYZE stale statistics
+- ✅ Remove temp files
+- ✅ Archive old logs
+- ✅ Trigger brain updates
+
+**Scheduled Reviews:**
+- Daily: 2am (auto-fix safe issues)
+- Weekly: Sunday 3am (comprehensive report)
+- Monthly: 1st Sunday 4am (deep analysis)
+
+---
+
+#### 💾 Conversation State Management (NEW)
+**Problem Solved:** Can't resume after interruptions  
+**Solution:** Persistent conversation state with checkpoints
+
+```python
+# Example: Resume interrupted conversation
+state_manager.resume_conversation(conversation_id)
+# Returns: "Resuming Phase 3 (Validation)..."
+```
+
+**Features:**
+- ✅ Track conversation lifecycle (active/paused/completed)
+- ✅ Persistent task progress
+- ✅ Checkpoint creation at phases
+- ✅ Resume from last successful stage
+- ✅ "Continue" command support
+
+**Database Schema:**
+```sql
+conversations  -- Conversation metadata
+tasks          -- Work breakdown with dependencies
+checkpoints    -- State snapshots for rollback
+task_files     -- Files modified per task
+```
+
+**Benefits:**
+- ✅ Seamless resume after breaks
+- ✅ No lost progress
+- ✅ Clear task status tracking
+- ✅ Rollback support
+- ✅ Multi-task management
+
+---
+
+#### 🛤️ Path Management (REFACTORED)
+**Problem Solved:** Hardcoded absolute paths break portability  
+**Solution:** Environment-agnostic relative path resolver
+
+```python
+# Example: Cross-platform path resolution
+paths = PathResolver(config)
+brain_path = paths.get_brain_path("tier1/conversations.db")
+# Returns: Correct path for Windows/macOS/Linux
+```
+
+**Configuration:**
+```json
+{
+  "cortex_root": "${CORTEX_HOME}",
+  "brain": {
+    "tier1": "cortex-brain/tier1",
+    "tier2": "cortex-brain/tier2",
+    "tier3": "cortex-brain/tier3"
+  }
+}
+```
+
+**Benefits:**
+- ✅ Works on Windows, macOS, Linux
+- ✅ Environment-specific configuration
+- ✅ No hardcoded paths anywhere
+- ✅ Easy multi-repository support
+
+---
+
+#### 🛡️ Enhanced Knowledge Boundaries (REFACTORED)
+**Problem Solved:** Core knowledge contamination from application data  
+**Solution:** Automated boundary validation and enforcement
+
+```yaml
+# Example: Protected CORTEX core patterns
+title: "TDD: Test-first for service creation"
+scope: "generic"
+namespaces: ["CORTEX-core"]
+confidence: 0.95
+
+# Example: Application-specific pattern
+title: "KSESSIONS: Invoice export workflow"
+scope: "application"
+namespaces: ["KSESSIONS"]
+confidence: 0.85
+```
+
+**Enforcement:**
+- ✅ Automated boundary validation
+- ✅ Auto-migration of misplaced data
+- ✅ Brain Protector integration
+- ✅ Namespace-based search prioritization
+
+---
+
+### CORTEX 2.0 Implementation Roadmap
+
+**Phase 0: Baseline (Week 1-2)**
+- Run complete test suite
+- Document current architecture
+- Risk assessment
+- Establish monitoring baselines
+
+**Phase 1: Core Modularization (Week 3-5)**
+- Refactor knowledge_graph.py → 6 focused modules
+- Refactor working_memory.py → 5 modules
+- Refactor context_intelligence.py → 6 modules
+- Extract agent strategies
+
+**Phase 2: Workflow Pipeline (Week 6-8)**
+- Complete workflow orchestration
+- Implement missing stages
+- Create production workflows
+- Add checkpoint/resume
+
+**Phase 3: Risk Mitigation & Testing (Week 9-10)**
+- 75 new risk mitigation tests
+- End-to-end integration tests
+- Security scenario testing
+- Performance benchmarks
+
+**Phase 4: Performance Optimization (Week 11-12)**
+- Database optimization (FTS5, caching)
+- Workflow optimization (parallel stages)
+- Context injection optimization
+- Lazy loading implementation
+
+**Phase 5: Documentation & Training (Week 13-14)**
+- Architecture guides
+- Developer guides
+- User tutorials
+- API reference
+
+**Phase 6: Migration & Rollout (Week 15-16)**
+- Feature flags for gradual migration
+- Dual-mode operation (1.0 + 2.0 in parallel)
+- Alpha → Beta → General availability
+- Monitoring and validation
+
+---
+
+### Success Metrics
+
+**Technical:**
+- ✅ All files <500 lines
+- ✅ Test coverage >85%
+- ✅ Performance +20% improvement
+- ✅ Bug rate <0.1% critical
+
+**User:**
+- ✅ User satisfaction ≥4.5/5
+- ✅ Feature adoption ≥80%
+- ✅ Support tickets -30%
+- ✅ Onboarding time -50%
+
+---
+
+### Learn More
+
+**Design Documentation:** `cortex-brain/cortex-2.0-design/`
+- **00-INDEX.md** - Complete roadmap of 27 design documents
+- **01-core-architecture.md** - Hybrid approach (70/20/10)
+- **02-plugin-system.md** - Extensibility architecture
+- **03-conversation-state.md** - Resume and task tracking
+- **07-self-review-system.md** - Health monitoring
+- **25-implementation-roadmap.md** - Detailed timeline
+
+**Story:** `docs/story/Cortex-Trinity/`
+- **Awakening Of CORTEX.md** - The complete journey
+- **Technical-CORTEX.md** - Technical deep-dive
+- **Image-Prompts.md** - Visual diagrams
 
 ---
 
@@ -4641,8 +4945,18 @@ All work! Universal is for convenience, SOLID is for quality.
 - "Validate..." → validate
 - "How do I..." → ask
 - "I updated KDS..." → govern
-- "Update documentation..." → plan (CORTEX Quadrant update)
+- "Update documentation..." → plan (CORTEX Quadrant update) 📚
+- "Refresh documentation..." → trigger Documentation Refresh Plugin 🆕
 - "Publish docs..." → plan (CORTEX Quadrant update)
+
+**Documentation Refresh Plugin (NEW!)** 🆕
+When you say "Refresh documentation" or "Update Documentation", CORTEX triggers the Documentation Refresh Plugin which synchronizes the 4 key documentation files:
+- `docs/story/Cortex-Trinity/Technical-CORTEX.md` - Technical deep-dive
+- `docs/story/Cortex-Trinity/Awakening Of CORTEX.md` - Engaging story
+- `docs/story/Cortex-Trinity/Image-Prompts.md` - Visual generation prompts
+- `docs/story/Cortex-Trinity/History.md` - Evolution timeline
+
+These 4 documents form the **CORTEX Documentation Quadrant** - always kept synchronized with the latest CORTEX 2.0 design.
 
 **That's all you need to know!** 🚀
 
