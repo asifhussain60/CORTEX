@@ -70,23 +70,23 @@ markdown_extensions:
       toc_depth: 3
 
 nav:
-  - Home: Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
-  - Technical Details: technical-details.md
+  - Home: index.md
+  - 📖 The Awakening of CORTEX: Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
   - Getting Started:
-      - Overview: index.md
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md
       - Configuration: getting-started/configuration.md
   - 🏛️ Mind Palace:
       - Overview: Mind-Palace/README.md
+      - 🌟 The Awakening (Nov 6, 2025): Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
       - Quick Reference: Mind-Palace/QUICK-REFERENCE.md
-      - Dr. Asifor Chronicle:
+      - Integration: Mind-Palace/INTEGRATION-SUMMARY.md
+      - Brain Integration: Mind-Palace/BRAIN-INTEGRATION.md
+      - Legacy - Dr. Asifor Chronicle (Nov 4):
           - The Story: Mind-Palace/2025-11-04/Story.md
           - Quick Start Guide: Mind-Palace/2025-11-04/Quick-Start-Guide.md
           - Technical Reference: Mind-Palace/2025-11-04/Technical-Reference.md
           - Image Prompts: Mind-Palace/2025-11-04/Image-Prompts.md
-      - Integration: Mind-Palace/INTEGRATION-SUMMARY.md
-      - Brain Integration: Mind-Palace/BRAIN-INTEGRATION.md
   - Architecture:
       - Overview: architecture/overview.md
       - Three-Tier Brain: architecture/three-tier-brain.md
