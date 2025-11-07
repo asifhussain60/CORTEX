@@ -71,7 +71,6 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - 📖 The Awakening of CORTEX: Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md
   - Getting Started:
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md

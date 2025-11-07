@@ -9,7 +9,7 @@
 
 # Chapter 1: The Problem - Copilot's Amnesia
 
-## 1. The Story 📖
+## 1. The Story 📖 {: .story-section }
 
 ### The Mad Scientist of Jersey
 
@@ -73,11 +73,14 @@ He would call it **CORTEX**:
 
 # Chapter 2: The Solution - The Dual-Hemisphere Brain
 
-## 1. The Story 📖
+## 1. The Story 📖 {: .story-section }
 
 ### The Brain's Architecture: A Tale of Two Hemispheres
 
 Asifinstein knew that human brains had two hemispheres, each with different specialties. "If it works for humans," he muttered, "it'll work for my robot intern!"
+
+![Napkin Sketch](../../images/cortex-awakening/Prompt%202.2%20The%20Napkin%20Sketch%20-%20Two%20Hemispheres.png)  
+*Figure 2.0: Asifinstein's eureka moment - the two-hemisphere brain concept*
 
 #### The Left Hemisphere: The Detail-Obsessed Executor
 
@@ -105,6 +108,9 @@ The right brain would handle **strategic planning**—the big picture:
 Between the two hemispheres, Asifinstein designed a **corpus callosum**—a sophisticated message queue that would let the two halves communicate:
 
 "Right brain makes the plan, corpus callosum delivers it, left brain executes it with precision!" Asifinstein drew arrows between brain diagrams. "It's brilliant! I'm brilliant! This basement is brilliant!"
+
+![Hemisphere Architecture](../../images/cortex-awakening/Prompt%202.4%20Hemisphere%20Architecture%20Diagram.png)  
+*Figure 2.1: LEFT and RIGHT hemisphere architecture showing tactical execution and strategic planning agents*
 
 
 ### The Oracle Crawler: Eyes That See Everything
@@ -211,6 +217,12 @@ LEFT BRAIN: Executes with TDD (RED → GREEN → REFACTOR)
 FEEDBACK: Results logged, patterns learned
 ```
 
+![Strategic to Tactical Flow](../../images/cortex-awakening/Prompt%202.5%20Strategic%20to%20Tactical%20Flow.jpg)  
+*Figure 2.2: Sequence diagram showing complete flow from user request through both hemispheres*
+
+![Before/After Comparison](../../images/cortex-awakening/Prompt%202.6%20BeforeAfter%20Comparison.png)  
+*Figure 2.3: Comparison of single vs dual-hemisphere approach*
+
 ## 3. Image Prompts 🎨
 
 ### Visual Diagrams
@@ -269,7 +281,7 @@ Background: Dark navy with subtle grid, neon outlines on all components
 
 # Chapter 3: The Memory System - Five Tiers of Intelligence
 
-## 1. The Story 📖
+## 1. The Story 📖 {: .story-section }
 
 ### The Five-Tier Memory System
 
@@ -341,6 +353,15 @@ Asifinstein's crowning achievement was the **self-learning feedback loop**:
 8. Tier 3 metrics refreshed (if >1 hour since last collection)
 9. Next request → Smarter routing, better decisions
 ```
+
+![Three-Tier Memory Architecture](../../images/cortex-awakening/Prompt%201.4%20Three-Tier%20Memory%20Architecture%20Diagram.png)  
+*Figure 3.1: Five-tier memory system showing how information flows from ephemeral working memory to permanent instincts*
+
+![FIFO Queue Visualization](../../images/cortex-awakening/Prompt%201.5%20FIFO%20Queue%20Visualization.png)  
+*Figure 3.2: Tier 1 FIFO queue mechanism - oldest conversations deleted first, patterns preserved*
+
+![Memory Resolution Flow](../../images/cortex-awakening/Prompt%201.6%20Memory%20Resolution%20Flow.png)  
+*Figure 3.3: How CORTEX resolves context using the multi-tier memory system*
 
 "It's a BRAIN that grows stronger with use!" Asifinstein danced around his basement. "Take THAT, amnesia!"
 
@@ -473,7 +494,7 @@ Annotations:
 
 # Chapter 4: The Protection & Discovery Systems
 
-## 1. The Story 📖
+## 1. The Story 📖 {: .story-section }
 
 But Asifinstein had learned from experience (mostly from that time he accidentally deleted his entire thesis by disabling safeguards). A brain this powerful needed PROTECTION.
 
@@ -931,7 +952,7 @@ Examples:
 
 # Chapter 5: The Grand Activation - CORTEX Comes Alive
 
-## 1. The Story 📖
+## 1. The Story 📖 {: .story-section }
 
 ### The Sixty Sacred Tests: The Guardian Suite
 

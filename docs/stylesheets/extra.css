@@ -224,6 +224,26 @@ blockquote {
     font-weight: 600;
 }
 
+/* Top Menu - Always Visible (Fix Issue #1) */
+.md-tabs {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.md-tabs__list {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
+.md-tabs__item {
+    opacity: 1 !important;
+}
+
+/* Ensure tabs are visible on scroll */
+.md-header--shadow .md-tabs {
+    opacity: 1 !important;
+}
+
 /* Footer */
 .md-footer {
     background: var(--cortex-primary);
@@ -542,6 +562,36 @@ dd {
     margin: 2rem 0;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Story Sections - Comic Sans MS Font (Fix Issue #2) */
+/* Target story sections using MD attributes */
+/* Use attr_list extension: ## 1. The Story 📖 {: .story-section } */
+.story-section,
+.story-section * {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif !important;
+    line-height: 1.8;
+}
+
+/* Target story headers with emoji in ID or text */
+h2[id*="story"],
+h3[id*="story"],
+h2[id*="the-story"],
+h3[id*="the-story"] {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif !important;
+}
+
+/* Target content after story headers (sibling selector approach) */
+/* This will apply to all content between story header and next header */
+h2[id*="story"] ~ p:not(h2 ~ p),
+h2[id*="story"] ~ ul:not(h2 ~ ul),
+h2[id*="story"] ~ ol:not(h2 ~ ol),
+h2[id*="story"] ~ blockquote:not(h2 ~ blockquote),
+h3[id*="story"] ~ p:not(h3 ~ p),
+h3[id*="story"] ~ ul:not(h3 ~ ul),
+h3[id*="story"] ~ blockquote:not(h3 ~ blockquote) {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif !important;
+    line-height: 1.8;
 }
 
 /* Status Badges */
