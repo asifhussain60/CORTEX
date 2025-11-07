@@ -213,6 +213,19 @@ FEEDBACK: Results logged, patterns learned
 
 ## 3. Image Prompts 🎨
 
+### Visual Diagrams
+
+![Hemisphere Architecture](../../images/cortex-awakening/Prompt%202.4%20Hemisphere%20Architecture%20Diagram.png)  
+*Figure 2.1: LEFT and RIGHT hemisphere architecture showing tactical execution and strategic planning agents*
+
+![Strategic to Tactical Flow](../../images/cortex-awakening/Prompt%202.5%20Strategic%20to%20Tactical%20Flow.jpg)  
+*Figure 2.2: Sequence diagram showing complete flow from user request through both hemispheres*
+
+![Before/After Comparison](../../images/cortex-awakening/Prompt%202.6%20BeforeAfter%20Comparison.png)  
+*Figure 2.3: Comparison of single vs dual-hemisphere approach*
+
+---
+
 ### 2.1 Dual-Hemisphere Brain Diagram
 
 **Prompt for Gemini (Technical Diagram):**
@@ -387,6 +400,19 @@ def check_learning_trigger():
 
 ## 3. Image Prompts 🎨
 
+### Visual Diagrams
+
+![Three-Tier Memory Architecture](../../images/cortex-awakening/Prompt%201.4%20Three-Tier%20Memory%20Architecture%20Diagram.png)  
+*Figure 3.1: Five-tier memory system showing data flow from instinct through event stream*
+
+![FIFO Queue Visualization](../../images/cortex-awakening/Prompt%201.5%20FIFO%20Queue%20Visualization.png)  
+*Figure 3.2: FIFO conversation queue mechanism with pattern extraction*
+
+![Memory Resolution Flow](../../images/cortex-awakening/Prompt%201.6%20Memory%20Resolution%20Flow.png)  
+*Figure 3.3: How CORTEX resolves ambiguous references using Tier 1 memory*
+
+---
+
 ### 3.1 Five-Tier Memory Tower
 
 **Prompt for Gemini (Technical Diagram):**
@@ -493,6 +519,19 @@ He designed **Tier 5: Health & Protection**—six concentric layers that would g
 "Six layers!" Asifinstein announced triumphantly to the rubber duck. "CORTEX will protect itself from corruption, bad ideas, and even ME!"
 
 ## 2. Image Prompts 🎨
+
+### Visual Diagrams
+
+![Monolithic Disaster](../../images/cortex-awakening/Prompt%202.1%20The%20Monolithic%20Disaster.png)  
+*Figure 4.1: The horror of discovering a massive monolithic code file*
+
+![Napkin Sketch](../../images/cortex-awakening/Prompt%202.2%20The%20Napkin%20Sketch%20-%20Two%20Hemispheres.png)  
+*Figure 4.2: Asifinstein's eureka moment - the two-hemisphere brain concept*
+
+![Coordinated Dance](../../images/cortex-awakening/Prompt%202.3%20The%20Coordinated%20Dance.jpg)  
+*Figure 4.3: LEFT and RIGHT hemispheres working in perfect harmony*
+
+---
 
 ### 4.1 Six-Layer Protection Shield
 
@@ -1207,6 +1246,12 @@ And Asifinstein? He finally got some sleep.
 (But not before backing up the CORTEX brain three times, verifying all 60 tests still passed, checking that the protection layers were active, and confirming the Oracle Crawler report was saved. Because mad scientists trust nothing—especially their own genius. But they trust validated, protected, tested genius a little bit more.)
 
 ## 2. Image Prompts 🎨
+
+### Visual Narrative
+
+The complete CORTEX awakening is best understood through these visual representations showing the system's evolution and capabilities.
+
+---
 
 ### 5.1 The Grand Activation Scene
 

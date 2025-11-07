@@ -67,6 +67,8 @@ This document follows the **CORTEX Quadrant** pattern - a four-perspective appro
 
 **Why CORTEX Quadrant?** Different perspectives ensure complete understanding for all learning styles and use cases.
 
+**📖 Complete CORTEX Story:** For the full narrative of CORTEX's creation, including visual diagrams and technical deep-dives, see [The Awakening of CORTEX](../../docs/Mind-Palace/2025-11-06/The-Awakening-of-CORTEX.md) - a five-chapter journey through the design, implementation, and activation of the CORTEX brain system.
+
 ---
 
 ### Story Review Rule (Quadrant Documentation)
