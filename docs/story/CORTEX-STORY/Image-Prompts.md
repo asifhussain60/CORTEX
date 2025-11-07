@@ -1,283 +1,408 @@
-# CORTEX 2.0 Visual Documentation  
-**Gemini Image Generation Prompts**
+# CORTEX System Diagrams - Technical Visualization Prompts
+**Purpose:** Generate professional system diagrams that visually reveal CORTEX architecture and design
 
-*For creating technical diagrams, architectural illustrations, and story visualizations*
+**Target:** Google Gemini Image Generation  
+**Format:** Technical diagrams only - flowcharts, sequence diagrams, architecture diagrams, UML  
+**Style:** Professional engineering documentation, not cartoons
 
 ---
 
-## 🎨 Story Character Illustrations
+## 🎯 Prompt Design Guidelines
 
-### 1. Asifinstein - The Mad Scientist
-```
-Create a humorous cartoon character: Asifinstein, a mad scientist software engineer in his basement lab. 
-Middle-aged man with wild, Einstein-like gray hair standing on end. Wearing a wrinkled hoodie and jeans. 
-Thick-framed glasses slightly crooked on his face. Eyes bloodshot from coding all night but sparkling with 
-excitement. Surrounded by 47 coffee mugs in various states (some clean, most with day-old coffee). 
-Multiple monitors showing code in the background with LED strips casting blue light. A half-eaten bagel on 
-the desk. Whiteboard behind him covered in architecture diagrams and equations. One hand holds a coffee mug, 
-the other gestures wildly at a screen. Expression: equal parts exhaustion and obsessive determination. 
-Art style: warm, friendly tech illustration with slight exaggeration for humor. Not photorealistic - 
-think modern tech blog illustration style.
-```
+**For Technical Diagrams:**
+- Use clear, professional language
+- Specify diagram type explicitly (flowchart, sequence diagram, architecture diagram, UML)
+- Include precise labels, annotations, and technical terminology
+- Request "technical diagram style" or "software architecture diagram"
+- Avoid narrative/story elements
 
-### 2. Copilot (Pre-CORTEX) - The Amnesiac Intern
+**Bad Example (Cartoon):**
 ```
-Create a friendly robot character representing Copilot before getting a brain: A cute but confused-looking 
-robot made of server racks and LED strips. Boxy, tower-like body with blinking lights (mostly blue and green). 
-Large, expressive eyes made of round LED displays showing question marks (?). Screen on chest displaying 
-code that keeps changing/glitching. Arms are articulated cables with claw-like hands hovering over a keyboard. 
-Expression: eager to help but perpetually confused. Thought bubble above head showing a goldfish in a bowl 
-(representing short memory). Speech bubble saying "What's a dashboard? Is that in the car?" Surrounded by 
-sticky notes with reminders. Art style: Pixar-like 3D illustration, friendly and approachable. Not menacing 
-- think helpful but forgetful R2-D2 meets WALL-E.
+Create a cute robot with a brain showing...
 ```
 
-### 3. CORTEX 1.0 - The Awakened Partner
+**Good Example (System Diagram):**
 ```
-Transform the previous robot: Same robot body but now with a glowing translucent brain visible through a 
-glass dome on top of its head. The brain is sectioned into two hemispheres (left and right) with different 
-colors - left side electric blue (analytical), right side warm orange (creative). LED patterns on body now 
-organized and purposeful, showing data flow. Eyes are now sharp and focused, displaying analytical data. 
-Chest screen shows a organized dashboard with health metrics. Arms confidently typing. Expression: intelligent, 
-aware, slightly mischievous. Posture: upright and confident, no longer confused. Small holographic displays 
-floating around showing: "Rule #22 Active", "Tier 1-5 Memory", "TDD Status: ✓". Art style: Same friendly 
-3D illustration but more sophisticated. Lighting should emphasize the glowing brain.
-```
-
-### 4. CORTEX 2.0 - The Evolved System
-```
-Evolution of the CORTEX robot: Now with modular, organized appearance. The glowing brain dome is more refined 
-with visible neural pathways lighting up. Body has plugin ports glowing softly (showing extensibility). 
-Multiple small drones/modules orbiting around the main body (representing plugins). Left arm showing test 
-results (GREEN checkmarks), right arm showing architectural blueprints. Chest display shows a complex but 
-organized health dashboard with all green indicators. Eyes showing advanced AI processing with data streams. 
-Holographic displays now show: "Self-Review: 92%", "Workflow Pipeline Active", "Plugins: 12 Active", 
-"Conversation State: Preserved". More confident posture, slight smile. Background shows organized file 
-structure (folders under 500 lines). Art style: Same friendly approach but even more refined and organized.
+Create a technical architecture diagram showing CORTEX dual-hemisphere system.
+Use boxes for components, arrows for data flow, labels for each module.
+Style: AWS architecture diagram, clean lines, professional color coding.
 ```
 
 ---
 
-## 🏗️ Technical Architecture Diagrams
+## 📐 Core Architecture Diagrams
 
-### 5. CORTEX 2.0 Complete Architecture
+### Diagram 1: CORTEX Complete System Architecture
 ```
-Create a detailed technical architecture diagram showing CORTEX 2.0 system: 
+Create a technical system architecture diagram showing CORTEX 2.0 components and data flow.
 
-Top level: Universal Entry Point (single door icon with "cortex.md" label)
+DIAGRAM TYPE: Layered architecture diagram (top-down)
 
-Layer 1 - Right Brain (Strategic Planner): 
-- Hexagonal nodes connected in a network
-- Nodes: Dispatcher, Planner, Analyst, Governor, Brain Protector, Plugin Manager, State Manager
-- Color: Warm orange tones
-- Style: Flowing, interconnected
+LAYER 1 - Entry Point (Top):
+- Box labeled "Universal Entry Point (cortex.md)"
+- Single door icon
+- Color: Gray
 
-Bridge: Corpus Callosum (Workflow Pipeline Orchestrator)
-- Translucent bridge connecting both hemispheres
-- Data packets flowing both ways
-- Color: Purple gradient
+LAYER 2 - Right Brain (Strategic Planner):
+- Container box labeled "RIGHT BRAIN - Strategic Planning"
+- Child boxes: Intent Router, Work Planner, Brain Protector, Change Governor, Screenshot Analyzer
+- Color: Orange (#FF6B35)
+- Style: Hexagonal nodes, interconnected
 
-Layer 2 - Left Brain (Tactical Executor):
-- Rectangular nodes in precise grid
-- Nodes: Builder, Tester, Fixer, Inspector, Archivist
-- Color: Electric blue tones
-- Style: Structured, organized
+LAYER 3 - Corpus Callosum (Bridge):
+- Horizontal bar labeled "Corpus Callosum - Coordination Queue"
+- Bidirectional arrows connecting Layer 2 and Layer 4
+- Color: Purple (#7B1FA2)
 
-Foundation: 5-Tier Memory System
-- Pyramid structure at bottom
-- Tier 0 (Instinct): Bedrock layer, immutable
-- Tier 1 (Working Memory): SQLite database icon
-- Tier 2 (Knowledge Graph): Neural network visualization
-- Tier 3 (Development Context): Git history timeline
-- Tier 4 (Event Stream): Log file scrolling
-- Color gradient: Deep red (Tier 0) to light blue (Tier 4)
+LAYER 4 - Left Brain (Tactical Executor):
+- Container box labeled "LEFT BRAIN - Tactical Execution"
+- Child boxes: Code Executor, Test Generator, Error Corrector, Health Validator, Commit Handler
+- Color: Blue (#0066CC)
+- Style: Rectangular nodes, grid layout
 
-Plugin System: Circular nodes floating around periphery
-- Each plugin as a colored module with icon
-- Connecting to hook points throughout system
-- Show: Cleanup, Documentation, Self-Review, Maintenance plugins
+LAYER 5 - Memory Tiers (Foundation):
+- 5 horizontal bands stacked bottom-up:
+  - Tier 0: Instinct (dark gray, lock icon)
+  - Tier 1: Working Memory (light blue, SQLite icon)
+  - Tier 2: Knowledge Graph (purple, network icon)
+  - Tier 3: Dev Context (orange, chart icon)
+  - Tier 4: Event Stream (green, log icon)
 
-Style: Modern software architecture diagram, clean lines, glass morphism effects, 
-subtle shadows, professional color palette. Should be printable in grayscale but 
-beautiful in color. Isometric 3D perspective preferred.
-```
+PERIPHERY - Plugin System:
+- Circular nodes around edges: Cleanup, Documentation, Self-Review, Maintenance
+- Dashed lines connecting to hook points
 
-### 6. Dual-Hemisphere Architecture (Detailed)
-```
-Split-screen diagram showing RIGHT BRAIN vs LEFT BRAIN:
+DATA FLOW:
+- Arrows showing: User → Entry → Right Brain → Corpus Callosum → Left Brain → Memory Tiers
+- Feedback arrows: Memory Tiers → Right Brain (learning loop)
 
-LEFT SIDE - Right Brain (Strategic):
-- Organic, flowing design with curved connections
-- Nodes arranged in constellation pattern
-- Show thought bubbles with: "Similar to invoice export?", "Risk: High churn file", 
-  "Pattern: test-first-workflow"
-- Color: Warm gradients (orange, yellow, pink)
-- Icons: Light bulb, telescope, compass, chess piece
-- Text: "Plans", "Analyzes", "Protects", "Routes"
-- Style: Creative, artistic, flowing
-
-RIGHT SIDE - Left Brain (Tactical):
-- Structured, grid-based design with straight lines
-- Nodes arranged in assembly line pattern
-- Show output: "✓ Tests: 127 passing", "Build: 0 errors", "Code: Clean"
-- Color: Cool gradients (blue, cyan, teal)
-- Icons: Gears, checkmarks, tools, building blocks
-- Text: "Builds", "Tests", "Fixes", "Validates"
-- Style: Precise, engineering, mechanical
-
-CENTER: Corpus Callosum bridge
-- Glowing data packets crossing
-- Labeled arrows: "Strategic Plan →", "← Execution Results"
-- Subtle pulse animation indicators
-
-Bottom: Show how they work together
-- Timeline showing: Plan (RIGHT) → Execute (LEFT) → Feedback (LEFT) → Learn (RIGHT)
-
-Style: Educational diagram, clear labels, easy to understand at a glance. 
-Tech illustration style like AWS architecture diagrams but more colorful and engaging.
+STYLE: Modern software architecture diagram, AWS-style, clean lines, professional color palette, 
+clear labels, isometric 3D perspective. Suitable for technical documentation.
 ```
 
-### 7. 5-Tier Memory System (Vertical Cross-Section)
+---
+
+### Diagram 2: Dual-Hemisphere Brain Architecture
+---
+
+### Diagram 2: Dual-Hemisphere Brain Architecture
 ```
-Create a vertical cross-section diagram of CORTEX brain tiers:
+Create a split-screen comparison diagram showing RIGHT BRAIN vs LEFT BRAIN architecture.
 
-TIER 0 - Instinct (Foundation): 
-- Bedrock/granite texture at bottom
-- 29 pillars supporting everything above
-- Labels: "TDD", "SOLID", "DoR/DoD", "Rule #22", "Challenge Bad Ideas"
-- Color: Dark gray/black (immutable)
-- Symbol: Lock icon (protected)
+DIAGRAM TYPE: Side-by-side comparison with center bridge
 
-TIER 1 - Working Memory (20 Conversations):
-- FIFO queue visualization
-- Rotating cylinder showing conversations 1-20
-- Active conversation highlighted in green
-- Color: Light blue
-- Symbol: Brain with clock icon
+LEFT PANEL - Right Brain (Strategic):
+- Title: "RIGHT BRAIN - Strategic Planning"
+- Component boxes arranged organically:
+  * Intent Router (entry point)
+  * Work Planner (strategic planning)
+  * Brain Protector (rule enforcement)
+  * Change Governor (architecture guardian)
+  * Screenshot Analyzer (visual analysis)
+- Connection style: Curved, flowing lines
+- Color scheme: Orange gradient (#FF6B35 to #FF8C42)
+- Icons: Lightbulb (ideas), chess piece (strategy), shield (protection)
+- Labels: "Plans", "Analyzes", "Protects", "Routes"
 
-TIER 2 - Knowledge Graph (Long-term Learning):
-- Neural network visualization with 3,247+ nodes
-- Glowing connections between patterns
-- Sections: Workflows, File Relationships, Intent Patterns, Validations
-- FTS5 search beam scanning through
-- Color: Purple/violet
-- Symbol: Connected dots (graph icon)
+CENTER - Corpus Callosum:
+- Vertical bridge connecting both sides
+- Label: "Corpus Callosum - Message Coordination"
+- Arrows showing bidirectional data flow:
+  * Right to Left: "Strategic Plan", "Context", "Patterns"
+  * Left to Right: "Execution Results", "Test Status", "Health Metrics"
+- Color: Purple gradient (#7B1FA2)
+- Icon: Network/connection symbol
 
-TIER 3 - Development Context (Project Intelligence):
-- Dashboard with metrics
-- Git commit history timeline
-- File hotspot heatmap
-- Performance graphs
-- Color: Orange/amber
-- Symbol: Bar chart icon
+RIGHT PANEL - Left Brain (Tactical):
+- Title: "LEFT BRAIN - Tactical Execution"
+- Component boxes arranged in grid:
+  * Test Generator (RED phase)
+  * Code Executor (GREEN phase)
+  * Error Corrector (error handling)
+  * Health Validator (REFACTOR phase)
+  * Commit Handler (version control)
+- Connection style: Straight, precise lines
+- Color scheme: Blue gradient (#0066CC to #4A90E2)
+- Icons: Gear (execution), checkmark (validation), tools (building)
+- Labels: "Builds", "Tests", "Fixes", "Validates"
 
-TIER 4 - Event Stream (Activity Log):
-- Flowing stream of JSONL entries
-- Color: Green
-- Symbol: Scroll/log file icon
+BOTTOM SECTION - Workflow Timeline:
+- Horizontal flow showing collaboration:
+  1. RIGHT BRAIN: "Analyze & Plan" (3.2s)
+  2. CORPUS CALLOSUM: "Transfer Plan" (0.1s)
+  3. LEFT BRAIN: "Execute TDD" (3h 47m)
+  4. CORPUS CALLOSUM: "Send Results" (0.1s)
+  5. RIGHT BRAIN: "Update Knowledge" (2.5s)
 
-TIER 5 - Health & Protection (Immune System):
-- Shield surrounding all other tiers
-- Health check scanners
-- Anomaly detection sensors
-- Color: Red/pink (alert system)
-- Symbol: Shield with heart icon
-
-Style: Geological cross-section meets software architecture. Each tier clearly 
-separated with distinct textures. Show data flowing between tiers (arrows). 
-Add capacity indicators (Tier 1: 8/20, Tier 2: 3247 patterns, etc.). 
-Professional, technical, but visually engaging.
-```
-
-### 8. Plugin System Architecture
-```
-Create a modular plugin architecture diagram:
-
-CENTER: CORTEX Core (clean, minimal)
-- Small, efficient nucleus
-- Label: "<500 lines per file"
-- Color: White/light gray
-
-SURROUNDING: Plugin Registry (circular arrangement)
-- Ring of plugin slots around core
-- Each slot labeled with hook point name
-- Hook points glowing when active
-
-PLUGINS (as colorful modules):
-1. Cleanup Plugin (broom icon) - Connected to ON_DB_MAINTENANCE hook
-2. Documentation Plugin (book icon) - Connected to ON_DOC_REFRESH hook
-3. Self-Review Plugin (magnifying glass icon) - Connected to ON_SELF_REVIEW hook
-4. Maintenance Plugin (wrench icon) - Connected to ON_STARTUP hook
-5. Custom Plugins (puzzle pieces) - User-created, various colors
-
-Show plugin lifecycle:
-- Loading → Initialization → Execution → Cleanup
-- Status indicators: Enabled (green), Disabled (gray), Error (red)
-
-Plugin Interface (bottom):
-- Code snippet showing BasePlugin class
-- Methods: initialize(), execute(), cleanup()
-- Config schema visualization
-
-Benefits callouts:
-- "Core stays clean ✓"
-- "Easy to extend ✓"
-- "Enable/disable features ✓"
-- "No core modifications ✓"
-
-Style: Modular, Lego-like blocks. Bright, distinct colors for each plugin. 
-Show clear connections. Modern UI/UX diagram style with icons and minimal text.
+STYLE: Technical comparison diagram, clean separation, professional engineering style, 
+clear labels, suitable for architecture documentation. Use AWS architecture diagram 
+aesthetic with distinct color coding.
 ```
 
-### 9. Workflow Pipeline System (DAG Visualization)
+---
+
+### Diagram 3: Five-Tier Memory System
+---
+
+### Diagram 3: Five-Tier Memory System
 ```
-Create a workflow pipeline diagram using DAG (Directed Acyclic Graph):
+Create a vertical layered architecture diagram showing CORTEX memory tiers.
 
-EXAMPLE: Feature Development Workflow
+DIAGRAM TYPE: Vertical stack diagram with data flow
 
-Nodes (stages):
-1. "Clarify DoD/DoR" (hexagon, yellow)
-2. "Threat Model" (hexagon, orange)
-3. "Plan" (hexagon, blue)
-4. "TDD Cycle" (hexagon, green)
-5. "Run Tests" (hexagon, purple)
-6. "Cleanup" & "Document" (hexagons, cyan - parallel)
+TIER 0 (Bottom Foundation):
+- Rectangle with solid border
+- Label: "TIER 0: INSTINCT - Immutable Core Rules"
+- Content: "TDD, SOLID, DoR/DoD, Rule #22, Brain Protection"
+- Icon: Lock (protected/immutable)
+- Color: Dark gray (#546E7A)
+- Size: Widest (supports all other tiers)
 
-Edges (dependencies):
-- Arrows showing depends_on relationships
+TIER 1 (Above Tier 0):
+- Rectangle
+- Label: "TIER 1: WORKING MEMORY - Last 20 Conversations"
+- Content: "conversation-history.jsonl, FIFO queue, <50ms queries"
+- Icon: Clock + Database
+- Color: Light blue (#4A90E2)
+- Indicator: "8/20 capacity"
+
+TIER 2 (Middle):
+- Rectangle
+- Label: "TIER 2: KNOWLEDGE GRAPH - Long-term Learning"
+- Content: "knowledge-graph.yaml, 3,247 patterns, FTS5 search"
+- Icon: Neural network nodes
+- Color: Purple (#7B1FA2)
+- Indicator: "3,247 patterns learned"
+
+TIER 3 (Above Tier 2):
+- Rectangle
+- Label: "TIER 3: DEVELOPMENT CONTEXT - Project Intelligence"
+- Content: "Git metrics, file hotspots, commit velocity, churn analysis"
+- Icon: Bar chart/dashboard
+- Color: Orange (#FF6B35)
+- Indicator: "Last updated: 45 min ago"
+
+TIER 4 (Top):
+- Rectangle
+- Label: "TIER 4: EVENT STREAM - Activity Log"
+- Content: "events.jsonl, auto-learning triggers, 23 events pending"
+- Icon: Scroll/log file
+- Color: Green (#00C853)
+- Indicator: "23 events pending"
+
+DATA FLOW ARROWS:
+- Vertical arrows showing:
+  * Events (Tier 4) → Patterns (Tier 2)
+  * Conversations (Tier 1) → Patterns (Tier 2)
+  * All tiers query Tier 0 (foundation principles)
+- Labels on arrows: "Extract patterns", "Query rules", "Update graph"
+
+SIDE ANNOTATIONS:
+- Query speed indicators (Tier 1: <50ms, Tier 2: <150ms, Tier 3: <200ms)
+- Capacity indicators for each tier
+- Update frequency (Tier 1: real-time, Tier 2: on threshold, Tier 3: hourly)
+
+STYLE: Layered architecture diagram, clear separation between tiers, professional 
+color coding, technical documentation style. Similar to OSI model or database 
+architecture diagrams.
+```
+
+---
+
+### Diagram 4: Request Flow Sequence Diagram
+---
+
+### Diagram 4: Request Flow Sequence Diagram
+```
+Create a UML sequence diagram showing complete request processing flow.
+
+DIAGRAM TYPE: UML Sequence Diagram (time flows top to bottom)
+
+ACTORS (Vertical Lifelines):
+1. User
+2. Entry Point (cortex.md)
+3. Intent Router (RIGHT BRAIN)
+4. Tier 2 (Knowledge Graph)
+5. Tier 3 (Dev Context)
+6. Work Planner (RIGHT BRAIN)
+7. Corpus Callosum
+8. Code Executor (LEFT BRAIN)
+9. Test Generator (LEFT BRAIN)
+10. Commit Handler (LEFT BRAIN)
+
+SEQUENCE FLOW:
+1. User → Entry Point: "Add purple button to HostControlPanel"
+2. Entry Point → Intent Router: route_request()
+3. Intent Router → Tier 2: query_patterns("button addition")
+4. Tier 2 → Intent Router: [12 similar patterns found]
+5. Intent Router → Tier 3: get_context("HostControlPanel.razor")
+6. Tier 3 → Intent Router: [file hotspot, 28% churn rate]
+7. Intent Router → Work Planner: create_plan()
+8. Work Planner → Corpus Callosum: send_strategic_plan()
+9. Corpus Callosum → Test Generator: execute_phase_1_RED()
+10. Test Generator → Test Generator: create_tests() [self-call]
+11. Test Generator → Corpus Callosum: tests_created(RED)
+12. Corpus Callosum → Code Executor: execute_phase_2_GREEN()
+13. Code Executor → Code Executor: implement_feature() [self-call]
+14. Code Executor → Corpus Callosum: implementation_complete(GREEN)
+15. Corpus Callosum → Commit Handler: execute_phase_3_COMMIT()
+16. Commit Handler → User: Feature complete ✓
+
+ANNOTATIONS:
+- Time markers on right: 0.8s, 1.5s, 3.2s, 18m, 21m, 22m
+- Database query boxes for Tier 2/Tier 3 interactions
+- Activation boxes showing processing time
+- Return messages with data payloads
+
+STYLE: Standard UML sequence diagram, professional software engineering 
+documentation style. Clear lifelines, proper message arrows (solid for calls, 
+dashed for returns), activation boxes, time progression.
+```
+
+---
+
+### Diagram 5: Plugin System Architecture
+```
+Create a component diagram showing plugin architecture and extensibility.
+
+DIAGRAM TYPE: Component diagram with hub-and-spoke layout
+
+CENTER COMPONENT:
+- Box labeled "CORTEX Core"
+- Annotation: "Minimal core, <500 lines per file"
+- Color: Light gray (#F5F5F5)
+- Border: Solid line
+
+HUB: Plugin Registry (surrounding core)
+- Octagonal shape around core
+- 8 hook points labeled:
+  * ON_STARTUP
+  * ON_DOC_REFRESH
+  * ON_SELF_REVIEW
+  * ON_DB_MAINTENANCE
+  * ON_COMMIT
+  * ON_ERROR
+  * ON_BRAIN_UPDATE
+  * ON_SHUTDOWN
+- Color: Medium gray
+- Connection points glowing when active
+
+PLUGINS (Spokes connecting to hub):
+1. Cleanup Plugin
+   - Icon: Broom
+   - Connected to: ON_DB_MAINTENANCE
+   - Status: Active (green indicator)
+   
+2. Documentation Plugin
+   - Icon: Book
+   - Connected to: ON_DOC_REFRESH
+   - Status: Active (green indicator)
+   
+3. Self-Review Plugin
+   - Icon: Magnifying glass
+   - Connected to: ON_SELF_REVIEW
+   - Status: Active (green indicator)
+   
+4. Maintenance Plugin
+   - Icon: Wrench
+   - Connected to: ON_STARTUP
+   - Status: Active (green indicator)
+   
+5. Custom Plugin (placeholder)
+   - Icon: Puzzle piece
+   - Connected to: Multiple hooks
+   - Status: Disabled (gray indicator)
+
+PLUGIN LIFECYCLE (bottom panel):
+- State diagram showing: Loaded → Initialized → Executing → Cleanup
+- Arrows between states
+- Error state (red) branching from any state
+
+CODE SNIPPET (side panel):
+```python
+class BasePlugin:
+    def initialize() → bool
+    def execute(context) → Result
+    def cleanup() → bool
+```
+
+BENEFITS CALLOUTS:
+- "✓ Core stays minimal"
+- "✓ Easy extension"
+- "✓ Enable/disable features"
+- "✓ No core modifications"
+
+STYLE: Professional component diagram, modular design, clear plugin boundaries,
+hub-and-spoke layout. Similar to microservices architecture diagrams.
+```
+
+---
+
+### Diagram 6: Workflow Pipeline DAG
+```
+Create a directed acyclic graph (DAG) showing workflow pipeline execution.
+
+DIAGRAM TYPE: DAG flowchart
+
+NODES (hexagonal shapes):
+1. "Clarify DoD/DoR" (yellow, #FFD600)
+2. "Threat Model" (orange, #FF6B35)
+3. "Create Plan" (blue, #0066CC)
+4. "TDD Cycle" (green, #00C853)
+5. "Run Tests" (purple, #7B1FA2)
+6. "Cleanup" (cyan, #00BCD4) - parallel with 7
+7. "Document" (cyan, #00BCD4) - parallel with 6
+8. "Commit" (gray, #546E7A)
+
+EDGES (directed arrows):
+- 1 → 2 (Clarify must complete before threat model)
+- 2 → 3 (Threat model must complete before planning)
+- 3 → 4 (Plan must complete before TDD)
+- 4 → 5 (TDD must complete before tests)
+- 5 → 6 (Tests must pass before cleanup)
+- 5 → 7 (Tests must pass before documentation)
+- 6 → 8 (Cleanup must complete before commit)
+- 7 → 8 (Documentation must complete before commit)
 - Dashed arrows for optional dependencies
-- Parallel stage indicator (both running simultaneously)
 
-Node details (on hover/zoom):
-- Agent assigned (icon)
-- Timeout (clock icon)
-- Retry count (circular arrow)
-- Status: ⏳ Pending, ▶️ Running, ✅ Complete, ❌ Failed
+NODE ANNOTATIONS:
+- Agent icon showing which agent handles each stage
+- Clock icon showing timeout (e.g., "30m")
+- Status indicator: ⏳ Pending, ▶️ Running, ✅ Complete, ❌ Failed
 
-Checkpoint markers:
-- Save icon at end of each critical stage
-- "Resume from here" indicators
+CHECKPOINT MARKERS:
+- Diamond shapes at critical stages (after Plan, after TDD, after Tests)
+- "Resume point" labels
 
-Execution modes (bottom):
-- Sequential vs Parallel toggle
-- Max parallelism: 4 stages
-- On failure: Checkpoint/Stop vs Rollback vs Continue
+PARALLEL EXECUTION INDICATOR:
+- Dashed box around nodes 6 and 7 labeled "Parallel execution (max 2)"
 
-YAML snippet (side):
+BOTTOM LEGEND:
+- Color coding: Validation (yellow), Security (orange), Planning (blue), 
+  Execution (green), Testing (purple), Finalization (cyan), Control (gray)
+
+YAML CONFIG SNIPPET (side):
 ```yaml
-stages:
-  - id: plan
-    depends_on: [clarify, threat_model]
-    agent: work_planner
+workflow:
+  stages:
+    - id: plan
+      agent: work_planner
+      depends_on: [clarify, threat_model]
+      timeout: 30m
+    - id: tdd_cycle
+      agent: code_executor
+      depends_on: [plan]
+      checkpoint: true
 ```
 
-Style: Flowchart meets modern DevOps pipeline. Clean, professional. Use color 
-coding for stage types (validation=yellow, security=orange, planning=blue, 
-execution=green, testing=purple, documentation=cyan). Should look like GitHub 
-Actions or Azure DevOps pipeline visualization but more colorful.
+STYLE: Professional DAG flowchart, similar to GitHub Actions or Azure DevOps 
+pipelines. Clean lines, clear dependencies, color-coded stages, technical 
+documentation quality.
 ```
 
-### 10. Conversation State Machine
+---
+
+### Diagram 7: State Machine - Conversation Lifecycle
 ```
 Create a state machine diagram for conversation management:
 
@@ -604,86 +729,223 @@ engaging. Tech company roadmap aesthetic.
 
 ---
 
-## 🎉 Celebration & Community
+## 🔄 Data Flow & Integration Diagrams
 
-### 16. "The Partnership" - Final Illustration
+### Diagram 10: TDD Workflow Flow
 ```
-Create a warm, celebratory illustration showing the partnership between 
-Asifinstein and CORTEX:
+Create a flowchart showing Test-Driven Development workflow in CORTEX.
 
-SCENE: Basement lab, but now organized and clean
+DIAGRAM TYPE: Flowchart with decision points
 
-LEFT SIDE - Asifinstein:
-- Sitting in ergonomic chair (finally!)
-- Relaxed posture, feet up on desk
-- Coffee mug with "World's Best Partner" text
-- Looking at CORTEX with pride and affection
-- Whiteboard behind showing: "CORTEX 2.0 ✓"
-- 47 coffee mugs organized neatly on shelf
+START: User request enters system
 
-RIGHT SIDE - CORTEX:
-- Glowing brain with satisfied expression
-- Monitors showing: 
-  - "Health: 92% ✓"
-  - "Tests: 127/127 ✓"
-  - "Self-Review: Complete ✓"
-  - "Plugins: Active ✓"
-- Holographic displays: Recent achievements
-- Small drones/plugins orbiting peacefully
+PHASE 1 - RED (Create Failing Test):
+- Rectangle: "Test Generator analyzes requirement"
+- Rectangle: "Create test with expected behavior"
+- Rectangle: "Run test suite"
+- Diamond: "Test fails as expected?"
+  - NO → Rectangle: "Fix test specification" → Loop back
+  - YES → Continue to Phase 2
+- Color: Red (#D32F2F)
 
-CENTER - Shared Space:
-- Collaborative whiteboard between them
-- Recent feature diagram they designed together
-- Sticky note: "Great team! - A & C"
+PHASE 2 - GREEN (Make Test Pass):
+- Rectangle: "Code Executor implements minimum code"
+- Rectangle: "Run test suite"
+- Diamond: "All tests pass?"
+  - NO → Rectangle: "Fix implementation" → Loop back
+  - YES → Continue to Phase 3
+- Color: Green (#00C853)
 
-BACKGROUND:
-- Sun rising through basement window (finally daylight!)
-- Plants (alive!) on windowsill
-- Organized cables and equipment
-- Poster: "Test-First Development: 94% Success Rate"
+PHASE 3 - REFACTOR (Clean Up):
+- Rectangle: "Health Validator checks code quality"
+- Diamond: "Zero errors/warnings?"
+  - NO → Rectangle: "Apply cleanup fixes" → Loop back
+  - YES → Continue to Commit
+- Rectangle: "Commit Handler creates semantic commit"
+- Color: Blue (#0066CC)
 
-SPEECH BUBBLES:
-Asifinstein: "Remember when you forgot what a dashboard was?"
-CORTEX: "Remember when you tried to deploy at 3am without tests?"
-Both: "We've come a long way."
+END: Feature complete, all tests green
 
-FOOTER TEXT:
-"From Intern to Instinct to Partner
-The CORTEX Journey: 2024-2026"
+ANNOTATIONS:
+- Time indicators at each phase
+- Success rate: 94% with TDD vs 67% without
+- Database interactions shown at each phase (Tier 4 event logging)
 
-Style: Warm, heartfelt illustration. Pixar-quality emotional storytelling. 
-Show genuine partnership and mutual respect. Sunrise lighting for new beginning. 
-Should make viewers feel the journey was worth it. Inspirational but not cheesy.
+STYLE: Professional flowchart, standard shapes (rectangle for process, diamond 
+for decision), clear flow arrows, color-coded phases, technical documentation quality.
 ```
 
 ---
 
-## 📝 Documentation Best Practices
+### Diagram 11: Context Resolution Flowchart
+```
+Create a flowchart showing how CORTEX resolves ambiguous references.
 
-**When using these prompts:**
+DIAGRAM TYPE: Decision tree flowchart
 
-1. **Iteration**: Start with base prompt, refine based on output
-2. **Consistency**: Use same art style across related images
-3. **Color Coding**: Maintain color meanings (green=good, red=problem, etc.)
-4. **Labels**: Ensure all diagrams have clear, readable labels
-5. **Scale**: Create high-resolution versions for print
-6. **Accessibility**: Include alt-text descriptions
-7. **Context**: Each image should stand alone without requiring external explanation
+SCENARIO: User types "Make it purple" (ambiguous reference)
 
-**Gemini-Specific Tips:**
-- Break complex diagrams into multiple generation steps
-- Use "isometric 3D" or "flat 2D" to control perspective
-- Reference specific styles: "AWS architecture diagram style" or "Figma UI mockup style"
-- Request "clean, professional" for technical docs or "friendly, approachable" for tutorials
+START: Input received "Make it purple"
+
+STEP 1 - Parse Input:
+- Rectangle: "Intent Router parses command"
+- Extract: subject="it" (ambiguous), action="make", attribute="purple"
+
+STEP 2 - Query Tier 1:
+- Rectangle: "Search last 20 conversations for context"
+- Diamond: "Found recent mention?"
+  - YES → Rectangle: "Resolve 'it' = FAB button" → STEP 4
+  - NO → Continue to STEP 3
+
+STEP 3 - Query Tier 2:
+- Rectangle: "Search knowledge graph for patterns"
+- Diamond: "Found similar pattern?"
+  - YES → Rectangle: "Suggest likely targets" → STEP 4
+  - NO → Rectangle: "Ask user for clarification" → END (wait for user)
+
+STEP 4 - Resolve Context:
+- Rectangle: "Context resolved: FAB button color change"
+- Rectangle: "Route to Code Executor (LEFT BRAIN)"
+
+STEP 5 - Execute:
+- Rectangle: "Modify CSS: --fab-color: #9333EA"
+- Rectangle: "Update tests to expect purple"
+- Rectangle: "Validate change"
+
+END: Success - "FAB button is now purple"
+
+TIMING ANNOTATIONS:
+- Tier 1 query: <50ms
+- Tier 2 query: <150ms (if needed)
+- Execution: 18 seconds
+
+WITH/WITHOUT COMPARISON (side panel):
+- WITH CORTEX: 18 seconds, zero clarification needed
+- WITHOUT CORTEX: 5 minutes explaining context, user frustration
+
+STYLE: Clear flowchart with decision diamonds, color-coded sections (query=blue, 
+execute=green, error=red), timing annotations, professional documentation style.
+```
 
 ---
 
-**For complete documentation:**
-- [The Awakening of CORTEX Story](Awakening%20Of%20CORTEX.md)
-- [Technical Deep-Dive](Technical-CORTEX.md)
-- [Evolution History](History.md)
-- [CORTEX 2.0 Design Index](../../../cortex-brain/cortex-2.0-design/00-INDEX.md)
+## 📝 Best Practices for Technical Diagrams
+
+**When creating system diagrams:**
+
+1. **Specify Diagram Type Explicitly**
+   - "Create a UML sequence diagram..."
+   - "Create a component architecture diagram..."
+   - "Create a data flow diagram..."
+   - "Create a state machine diagram..."
+
+2. **Use Technical Terminology**
+   - Components, modules, interfaces, APIs
+   - Data flow, control flow, message passing
+   - States, transitions, events
+   - Layers, tiers, boundaries
+
+3. **Color Coding System**
+   - Blue (#0066CC): Tactical execution, data processing
+   - Orange (#FF6B35): Strategic planning, analysis
+   - Purple (#7B1FA2): Communication, bridges, APIs
+   - Green (#00C853): Success states, passing tests
+   - Red (#D32F2F): Error states, failures
+   - Yellow (#FFD600): Warnings, validation stages
+   - Gray (#546E7A): Infrastructure, foundation
+
+4. **Label Everything**
+   - Component names
+   - Data types
+   - Flow directions
+   - Timing/performance metrics
+   - Status indicators
+
+5. **Reference Professional Styles**
+   - "AWS architecture diagram style"
+   - "UML standard notation"
+   - "C4 model diagram"
+   - "Grafana dashboard aesthetic"
+   - "GitHub Actions pipeline visualization"
+
+6. **Avoid Narrative Elements**
+   - ❌ Don't: "cute robot", "warm lighting", "emotional expression"
+   - ✅ Do: "rectangular component", "data flow arrow", "state indicator"
+
+6. **Avoid Narrative Elements**
+   - ❌ Don't: "cute robot", "warm lighting", "emotional expression"
+   - ✅ Do: "rectangular component", "data flow arrow", "state indicator"
+
+7. **Request Professional Output**
+   - "Professional software architecture diagram"
+   - "Technical documentation quality"
+   - "Engineering blueprint style"
+   - "Suitable for system design review"
 
 ---
 
-*These prompts are designed to create a complete visual documentation suite for CORTEX 2.0, combining technical accuracy with engaging storytelling.*
+## 🔗 Related Documentation
+
+**For narrative story content** (characters, illustrations, story-telling):
+- See: `prompts/user/cortex-gemini-image-prompts.md` (contains story illustrations)
+- Story documents: `docs/story/CORTEX-STORY/Awakening Of CORTEX.md`
+
+**For complete CORTEX documentation:**
+- [Technical Deep-Dive](Technical-CORTEX.md) - Complete technical specifications
+- [Evolution History](History.md) - Development timeline
+- [CORTEX 2.0 Design Index](../../../cortex-brain/cortex-2.0-design/00-INDEX.md) - Design documents
+
+**For implementation guidance:**
+- [Core Entry Point](../../../prompts/user/cortex.md) - Universal CORTEX interface
+- [Plugin System Docs](../../../cortex-brain/cortex-2.0-design/02-plugin-system.md)
+- [Workflow Pipeline Docs](../../../cortex-brain/cortex-2.0-design/21-workflow-pipeline-system.md)
+
+---
+
+## 📊 Example Diagram Outputs
+
+**Good Technical Diagram:**
+```
+┌─────────────────────────────────────────┐
+│     Universal Entry Point (cortex.md)  │
+└─────────────┬───────────────────────────┘
+              │
+              ▼
+    ┌─────────────────────┐
+    │   Intent Router     │
+    │   (RIGHT BRAIN)     │
+    └─────────┬───────────┘
+              │
+         ┌────┴────┐
+         ▼         ▼
+   ┌─────────┐ ┌──────────┐
+   │ Tier 2  │ │  Tier 3  │
+   │ Query   │ │  Query   │
+   └────┬────┘ └────┬─────┘
+        └──────┬────┘
+               ▼
+        ┌──────────────┐
+        │ Work Planner │
+        └──────┬───────┘
+               │
+        [Corpus Callosum]
+               │
+               ▼
+        ┌──────────────┐
+        │ Code Executor│
+        │ (LEFT BRAIN) │
+        └──────────────┘
+```
+
+**Key Characteristics:**
+- Clean ASCII/box diagram structure
+- Clear component boundaries
+- Labeled data flow
+- Professional hierarchy
+- No decorative elements
+
+---
+
+**Last Updated:** November 7, 2025  
+**Version:** 2.0 (Technical Diagrams Only)  
+**Purpose:** System architecture visualization for CORTEX design documentation

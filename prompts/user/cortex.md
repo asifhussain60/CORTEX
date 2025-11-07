@@ -6,6 +6,43 @@
 **Status:** 🎯 ACTIVE DESIGN  
 **Architecture:** SOLID-compliant modular system
 
+**Author:** Asif Hussain  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Proprietary - See LICENSE file for terms  
+**Repository:** https://github.com/asifhussain60/CORTEX
+
+---
+
+## 🖥️ Platform Switch Commands
+
+**Quick Platform Migration:** Use these commands to switch all platform-specific references in one go.
+
+### Switch to Mac
+When you say **"Switch to Mac"**, Copilot will:
+1. Update `cortex.config.json` with your Mac hostname
+2. Convert all PowerShell examples to bash/zsh
+3. Update file paths from Windows (`D:\`) to macOS (`/Users/...`)
+4. Update shell command syntax (`.ps1` → `.sh`, `pwsh` → `bash/zsh`)
+5. Update documentation references
+
+**Required Info:** Your Mac hostname (run `hostname` in terminal)
+
+### Switch to Windows
+When you say **"Switch to Windows"**, Copilot will:
+1. Update `cortex.config.json` with your Windows hostname
+2. Convert all bash/zsh examples to PowerShell
+3. Update file paths from macOS (`/Users/...`) to Windows (`D:\`)
+4. Update shell command syntax (`.sh` → `.ps1`, `bash` → `pwsh`)
+5. Update documentation references
+
+**Required Info:** Your Windows hostname (run `hostname` in PowerShell)
+
+**Files Updated:**
+- `cortex.config.json` - Machine-specific paths
+- `prompts/user/cortex.md` - Code examples and commands
+- `run-cortex.sh` / `run-cortex.ps1` - Entry point scripts
+- Documentation files with platform-specific examples
+
 ---
 
 ## ⚠️ IMPORTANT: Conversation Tracking Bridge
@@ -76,12 +113,15 @@ python scripts/cortex_cli.py --session-info
 | **Agent Architecture (SOLID)** | 📋 | 10 specialist agents designed |
 | **Core Routing** | 📋 | Intent router designed |
 | **Dashboard** | 📋 | Live data visualization designed |
+| **VS Code Extension** | 📋 | **DEFINITIVE conversation fix** - Phase 3 (Week 9-12) 🆕 |
+| **Automatic Capture** | 📋 | Zero manual intervention, monitors all chats 🆕 |
 | **V3 GROUP 5: Migration** | 📋 | KDS → CORTEX data migration |
 | **V3 GROUP 6: Finalization** | 📋 | System check, documentation, release |
 
 **V3 Migration Progress:** Groups 1-3 Complete (31 hrs) ✅ | Groups 4-6 Remaining (29-41 hrs) 📋  
+**CORTEX 2.0 Extension:** Planned for Phase 3 (Week 9-12) - Definitive conversation tracking solution 🆕  
 **Performance:** 52% faster than estimated, 100% test coverage ⭐  
-**Last Updated:** 2025-11-06
+**Last Updated:** 2025-11-07 (Added VS Code Extension architecture)
 
 ---
 
@@ -120,6 +160,8 @@ This document follows the **CORTEX Quadrant** pattern - a four-perspective appro
 
 ## 🚀 CORTEX 2.0: The Evolution
 
+**Author:** Asif Hussain  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **Status:** Design Complete ✅ | Implementation Phase: Ready to Begin  
 **Version:** 2.0.0-alpha  
 **Timeline:** 12-16 weeks implementation
@@ -153,6 +195,402 @@ class Plugin(BasePlugin):
 - Documentation Plugin (MkDocs auto-refresh)
 - Self-Review Plugin (comprehensive health checks)
 - DB Maintenance Plugin (optimization, archival)
+- **Platform Switch Plugin (Windows ↔ macOS migration)** 🆕
+- **Extension Scaffold Plugin (VS Code extension generator)** 🆕
+
+---
+
+#### 🔧 Platform Switch Plugin (NEW - CROSS-PLATFORM MIGRATION)
+**Problem Solved:** Manual platform migration is tedious and error-prone  
+**Solution:** One-command platform switching for all references
+
+```python
+# Example: Switch from Windows to macOS
+from plugins.platform_switch_plugin import PlatformSwitchPlugin
+
+plugin = PlatformSwitchPlugin()
+result = plugin.execute({
+    "target_platform": "mac",  # or "windows"
+    "hostname": "Asifs-MacBook-Air.local",
+    "username": "asifhussain",
+    "project_path_mac": "/Users/asifhussain/PROJECTS/CORTEX",
+    "project_path_windows": "D:\\PROJECTS\\CORTEX"
+})
+```
+
+**What It Updates:**
+
+1. **cortex.config.json** - Machine-specific paths
+   ```json
+   {
+     "machines": {
+       "Asifs-MacBook-Air.local": {
+         "rootPath": "/Users/asifhussain/PROJECTS/CORTEX",
+         "brainPath": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain"
+       }
+     }
+   }
+   ```
+
+2. **prompts/user/cortex.md** - Code examples
+   - PowerShell → bash/zsh (or vice versa)
+   - `.ps1` → `.sh` extensions
+   - `pwsh` → `bash` commands
+   - `D:\` → `/Users/...` paths
+
+3. **Entry Point Scripts**
+   - `run-cortex.sh` (macOS/Linux)
+   - `run-cortex.ps1` (Windows)
+
+4. **Documentation Files**
+   - Update all platform-specific examples
+   - Convert command syntax
+   - Update file path references
+
+**Usage Commands:**
+- "Switch to Mac" - Migrates all references to macOS
+- "Switch to Windows" - Migrates all references to Windows
+
+**Benefits:**
+- ✅ One command migration
+- ✅ Zero manual edits required
+- ✅ Consistent platform references
+- ✅ Automatic path resolution
+
+---
+
+#### 🔧 Extension Scaffold Plugin (NEW - PROGRAMMATIC SETUP)
+**Problem Solved:** Manual VS Code extension setup is complex and error-prone  
+**Solution:** Automated extension project generation via setup plugin
+
+```python
+# Example: Generate CORTEX VS Code extension automatically
+from plugins.extension_scaffold_plugin import ExtensionScaffoldPlugin
+
+plugin = ExtensionScaffoldPlugin()
+result = plugin.execute({
+    "extension_name": "cortex",
+    "display_name": "CORTEX - Cognitive Development Partner",
+    "publisher": "cortex-team",
+    "repository": "https://github.com/asifhussain60/CORTEX",
+    "features": [
+        "chat_participant",      # @cortex chat integration
+        "conversation_capture",  # Automatic message capture
+        "lifecycle_hooks",       # Window state monitoring
+        "external_monitoring",   # Monitor @copilot chats
+        "resume_prompts",        # Auto-resume on startup
+        "checkpoint_system"      # Crash recovery
+    ],
+    "output_dir": "cortex-extension"
+})
+```
+
+**What It Generates:**
+
+```
+cortex-extension/
+├── package.json                    # Extension manifest (auto-configured)
+├── tsconfig.json                   # TypeScript config
+├── .vscodeignore                   # VS Code package exclusions
+├── README.md                       # Extension documentation
+├── CHANGELOG.md                    # Version history
+├── src/
+│   ├── extension.ts                # Main entry point
+│   ├── cortex/
+│   │   ├── chatParticipant.ts     # @cortex chat handler
+│   │   ├── conversationCapture.ts # Auto-capture logic
+│   │   ├── brainBridge.ts         # Python ↔ TypeScript bridge
+│   │   ├── lifecycleManager.ts    # Window state hooks
+│   │   ├── checkpointManager.ts   # Crash recovery
+│   │   └── externalMonitor.ts     # Copilot chat monitoring
+│   ├── python/
+│   │   ├── bridge.py              # Python IPC server
+│   │   └── cortex_interface.py   # CORTEX brain interface
+│   └── test/
+│       └── suite/
+│           ├── extension.test.ts
+│           └── chatParticipant.test.ts
+├── .vscode/
+│   ├── launch.json                # Debug configuration
+│   └── tasks.json                 # Build tasks
+└── scripts/
+    ├── build.sh                   # Build script
+    ├── package.sh                 # VSIX packaging
+    └── publish.sh                 # Marketplace publish
+```
+
+**Generated package.json (Fully Configured):**
+
+```json
+{
+  "name": "cortex",
+  "displayName": "CORTEX - Cognitive Development Partner",
+  "description": "AI development assistant with persistent memory and context awareness",
+  "version": "1.0.0",
+  "author": "Asif Hussain",
+  "publisher": "cortex-team",
+  "license": "SEE LICENSE IN LICENSE",
+  "copyright": "Copyright (c) 2024-2025 Asif Hussain. All rights reserved.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asifhussain60/CORTEX"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:cortex.resume"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "cortex",
+        "name": "CORTEX",
+        "description": "Cognitive development partner with memory",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "resume",
+            "description": "Resume last conversation"
+          },
+          {
+            "name": "checkpoint",
+            "description": "Save conversation checkpoint"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "cortex.resume",
+        "title": "CORTEX: Resume Last Conversation"
+      },
+      {
+        "command": "cortex.checkpoint",
+        "title": "CORTEX: Save Checkpoint"
+      },
+      {
+        "command": "cortex.showHistory",
+        "title": "CORTEX: Show Conversation History"
+      }
+    ],
+    "configuration": {
+      "title": "CORTEX",
+      "properties": {
+        "cortex.autoCapture": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically capture conversations"
+        },
+        "cortex.monitorCopilot": {
+          "type": "boolean",
+          "default": true,
+          "description": "Monitor GitHub Copilot conversations"
+        },
+        "cortex.autoCheckpoint": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically checkpoint on focus loss"
+        },
+        "cortex.resumePrompt": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show resume prompt on startup"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.x",
+    "typescript": "^5.3.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "node-ipc": "^11.1.0",
+    "sqlite3": "^5.1.6"
+  }
+}
+```
+
+**Generated extension.ts (Main Entry Point):**
+
+```typescript
+// Auto-generated by ExtensionScaffoldPlugin
+import * as vscode from 'vscode';
+import { CortexChatParticipant } from './cortex/chatParticipant';
+import { ConversationCapture } from './cortex/conversationCapture';
+import { BrainBridge } from './cortex/brainBridge';
+import { LifecycleManager } from './cortex/lifecycleManager';
+import { CheckpointManager } from './cortex/checkpointManager';
+import { ExternalMonitor } from './cortex/externalMonitor';
+
+export async function activate(context: vscode.ExtensionContext) {
+    console.log('CORTEX extension activating...');
+    
+    // Initialize Python brain bridge
+    const brainBridge = new BrainBridge(context);
+    await brainBridge.initialize();
+    
+    // Initialize conversation capture
+    const conversationCapture = new ConversationCapture(brainBridge);
+    
+    // Register CORTEX chat participant
+    const chatParticipant = new CortexChatParticipant(
+        brainBridge,
+        conversationCapture
+    );
+    context.subscriptions.push(
+        vscode.chat.createChatParticipant('cortex', chatParticipant.handle)
+    );
+    
+    // Initialize lifecycle management
+    const lifecycleManager = new LifecycleManager(brainBridge);
+    lifecycleManager.setupHooks(context);
+    
+    // Initialize checkpoint system
+    const checkpointManager = new CheckpointManager(brainBridge);
+    checkpointManager.startAutoCheckpoint();
+    
+    // Initialize external monitoring
+    const externalMonitor = new ExternalMonitor(brainBridge);
+    externalMonitor.startMonitoring(context);
+    
+    // Register commands
+    context.subscriptions.push(
+        vscode.commands.registerCommand('cortex.resume', async () => {
+            await chatParticipant.resumeLastConversation();
+        }),
+        vscode.commands.registerCommand('cortex.checkpoint', async () => {
+            await checkpointManager.createCheckpoint();
+        }),
+        vscode.commands.registerCommand('cortex.showHistory', async () => {
+            await chatParticipant.showConversationHistory();
+        })
+    );
+    
+    // Check for resume on startup
+    if (vscode.workspace.getConfiguration('cortex').get('resumePrompt')) {
+        await chatParticipant.offerResume();
+    }
+    
+    console.log('CORTEX extension activated successfully!');
+}
+
+export function deactivate() {
+    console.log('CORTEX extension deactivating...');
+}
+```
+
+**Setup Command:**
+
+```bash
+# One-command extension scaffold
+python scripts/cortex_setup.py --setup-extension
+
+# Or via plugin system
+cortex plugin:run extension_scaffold --output cortex-extension
+
+# Interactive mode
+cortex setup:extension
+? Extension name: cortex
+? Display name: CORTEX - Cognitive Development Partner
+? Publisher: cortex-team
+? Features: (Select with space)
+  ◉ Chat participant
+  ◉ Conversation capture
+  ◉ Lifecycle hooks
+  ◉ External monitoring
+  ◉ Resume prompts
+  ◉ Checkpoint system
+
+✅ Extension scaffolded at: ./cortex-extension
+✅ package.json configured
+✅ TypeScript files generated
+✅ Python bridge created
+✅ Tests generated
+✅ Build scripts ready
+
+Next steps:
+  cd cortex-extension
+  npm install
+  code .
+  Press F5 to debug
+```
+
+**Benefits:**
+- ✅ Zero manual configuration - fully automated
+- ✅ Best practices baked in (TypeScript, testing, proper structure)
+- ✅ Python ↔ TypeScript bridge pre-configured
+- ✅ All CORTEX features enabled by default
+- ✅ Ready to debug (F5) immediately after generation
+- ✅ Package and publish scripts included
+- ✅ Can regenerate if VS Code API changes
+
+**Plugin Architecture:**
+
+```python
+class ExtensionScaffoldPlugin(BasePlugin):
+    """Generates VS Code extension project structure"""
+    
+    def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        # 1. Create directory structure
+        self._create_directory_structure(context['output_dir'])
+        
+        # 2. Generate package.json
+        self._generate_package_json(context)
+        
+        # 3. Generate TypeScript source files
+        self._generate_typescript_files(context)
+        
+        # 4. Generate Python bridge
+        self._generate_python_bridge(context)
+        
+        # 5. Generate tests
+        self._generate_tests(context)
+        
+        # 6. Generate build/publish scripts
+        self._generate_scripts(context)
+        
+        # 7. Initialize npm/git
+        self._initialize_project(context['output_dir'])
+        
+        return {
+            "success": True,
+            "output_dir": context['output_dir'],
+            "next_steps": [
+                f"cd {context['output_dir']}",
+                "npm install",
+                "code .",
+                "Press F5 to debug"
+            ]
+        }
+```
+
+**Update Detection & Regeneration:**
+
+```python
+# Check if VS Code API has changed
+cortex plugin:run extension_scaffold --check-updates
+
+# Regenerate with new API
+cortex plugin:run extension_scaffold --regenerate --preserve-customizations
+```
 
 ---
 
@@ -284,6 +722,236 @@ task_files     -- Files modified per task
 - ✅ Rollback support
 - ✅ Multi-task management
 
+⚠️ **Limitation:** Still requires manual conversation capture when using GitHub Copilot Chat interface.  
+✅ **Solution:** See "VS Code Extension Architecture" below for definitive fix.
+
+---
+
+#### 🔌 VS Code Extension Architecture (NEW - DEFINITIVE CONVERSATION FIX)
+**Author:** Asif Hussain  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**Problem Solved:** GitHub Copilot Chat amnesia - conversations not automatically tracked  
+**Solution:** CORTEX as native VS Code extension with automatic conversation capture
+
+**Why Current Architecture Can't Fix This:**
+```
+GitHub Copilot Chat → Reads cortex.md as passive documentation
+                   → No execution context
+                   → No access to chat transcripts
+                   → No lifecycle hooks
+                   → Runs in Microsoft cloud (isolated)
+```
+
+**Why VS Code Extension WILL Fix This:**
+```
+CORTEX Extension → Active VS Code process
+                → Can subscribe to chat events
+                → Can intercept chat messages
+                → Has full VS Code API access
+                → Runs locally with full control
+```
+
+**Architecture:**
+
+```typescript
+// VS Code Extension: cortex-extension/src/extension.ts
+export function activate(context: vscode.ExtensionContext) {
+    
+    // 1. Register chat participant (captures all conversations)
+    const cortexChat = vscode.chat.createChatParticipant(
+        'cortex',
+        async (request, context, stream, token) => {
+            // Automatically capture to CORTEX brain
+            await cortexBrain.captureMessage({
+                user: request.prompt,
+                timestamp: new Date().toISOString(),
+                context: context.history
+            });
+            
+            // Process through CORTEX agents
+            const response = await cortexRouter.route(request.prompt);
+            stream.markdown(response.content);
+            
+            // Auto-save response to brain
+            await cortexBrain.captureResponse(response);
+            
+            return { metadata: { conversationId: response.conversationId } };
+        }
+    );
+    
+    // 2. Monitor external Copilot conversations (passive capture)
+    vscode.chat.onDidPerformChatAction(async (action) => {
+        if (action.participant.id === 'copilot') {
+            // Capture Copilot chats to CORTEX brain
+            await cortexBrain.captureExternalChat({
+                participant: 'copilot',
+                message: action.message,
+                timestamp: new Date().toISOString()
+            });
+        }
+    });
+    
+    // 3. Session lifecycle tracking
+    vscode.window.onDidChangeWindowState(async (state) => {
+        if (!state.focused) {
+            // Window losing focus - checkpoint conversation
+            await cortexBrain.checkpointActiveConversation();
+        }
+    });
+    
+    // 4. Automatic resume on startup
+    context.subscriptions.push(
+        vscode.commands.registerCommand('cortex.resume', async () => {
+            const lastConversation = await cortexBrain.getLastActiveConversation();
+            if (lastConversation) {
+                vscode.window.showInformationMessage(
+                    `Resume: ${lastConversation.topic}?`,
+                    'Yes', 'No'
+                ).then(async (choice) => {
+                    if (choice === 'Yes') {
+                        await cortexBrain.resumeConversation(lastConversation.id);
+                    }
+                });
+            }
+        })
+    );
+}
+```
+
+**Automatic Conversation Capture:**
+```typescript
+class CortexBrain {
+    async captureMessage(message: ChatMessage): Promise<void> {
+        // AUTOMATIC - No user intervention needed
+        await this.tier1.storeMessage(message);
+        
+        // Real-time event logging
+        await this.tier4.logEvent({
+            type: 'chat_message',
+            content: message.user,
+            timestamp: message.timestamp
+        });
+        
+        // Check for learning triggers
+        if (this.shouldUpdateBrain()) {
+            await this.tier2.extractPatterns();
+        }
+    }
+    
+    async captureExternalChat(chat: ExternalChat): Promise<void> {
+        // Capture even non-CORTEX conversations
+        await this.tier1.storeExternalConversation({
+            source: chat.participant,
+            content: chat.message,
+            timestamp: chat.timestamp,
+            tagged: 'external_copilot'
+        });
+    }
+}
+```
+
+**User Experience - COMPLETELY AUTOMATIC:**
+
+```typescript
+// User opens VS Code
+→ CORTEX Extension activates
+→ Detects last active conversation
+→ Shows notification: "Resume: Add invoice export feature?"
+→ User clicks "Yes"
+→ CORTEX loads full context automatically
+
+// User types in CORTEX chat: "Add purple button"
+→ Extension captures message immediately
+→ Routes to CORTEX agents
+→ Response generated
+→ Response auto-saved to brain
+→ NO MANUAL CAPTURE NEEDED
+
+// User closes VS Code unexpectedly
+→ Extension lifecycle hook triggers
+→ Checkpoint saved automatically
+→ Next startup: Resume offered
+
+// User uses regular Copilot Chat (not CORTEX)
+→ Extension monitors via onDidPerformChatAction
+→ Passively captures Copilot conversations
+→ Stores in Tier 1 as "external" source
+→ Still available for context/learning
+```
+
+**Benefits:**
+- ✅ **Zero manual intervention** - Capture is automatic
+- ✅ **Works with Copilot too** - Monitors external chats
+- ✅ **Lifecycle aware** - Handles focus loss, crashes, restarts
+- ✅ **Real-time tracking** - Immediate Tier 1/4 updates
+- ✅ **Auto-resume prompts** - Suggests continuing last work
+- ✅ **Crash recovery** - Checkpoints prevent data loss
+- ✅ **Native VS Code** - Full API access, no cloud dependency
+
+**Implementation Plan:**
+
+```
+Phase 1: Basic Extension (Week 1-2)
+- Create VS Code extension scaffold
+- Register CORTEX chat participant
+- Basic message capture to Tier 1
+
+Phase 2: Lifecycle Hooks (Week 3-4)
+- Window focus/blur detection
+- Automatic checkpointing
+- Resume prompts on startup
+
+Phase 3: External Monitoring (Week 5-6)
+- Monitor Copilot chat via API
+- Passive capture to brain
+- Unified conversation timeline
+
+Phase 4: Advanced Features (Week 7-8)
+- Real-time pattern learning
+- Context injection
+- Agent orchestration UI
+
+Phase 5: Polish & Release (Week 9-10)
+- Settings UI
+- Keyboard shortcuts
+- Documentation
+- VS Code Marketplace publish
+```
+
+**Why This DEFINITIVELY Solves It:**
+
+| Current (Copilot Chat) | CORTEX Extension |
+|------------------------|------------------|
+| ❌ Passive documentation | ✅ Active process |
+| ❌ No execution | ✅ Full execution |
+| ❌ No chat access | ✅ Chat API access |
+| ❌ No lifecycle hooks | ✅ Full lifecycle control |
+| ❌ Cloud-based | ✅ Local control |
+| ❌ Manual capture | ✅ Automatic capture |
+| ❌ Resume impossible | ✅ Auto-resume |
+
+**Technical Feasibility:**
+- ✅ VS Code Chat API available (VS Code 1.85+)
+- ✅ Extension API well-documented
+- ✅ TypeScript → Python bridge possible
+- ✅ Local SQLite works in extensions
+- ✅ Full filesystem access
+- ✅ Marketplace distribution ready
+
+**Migration Path:**
+```
+Current Users:
+1. Install CORTEX VS Code Extension
+2. Extension auto-migrates existing brain data
+3. Switch from manual capture to automatic
+4. Seamless transition - no data loss
+
+New Users:
+1. Install extension from VS Code Marketplace
+2. CORTEX chat participant appears automatically
+3. Start chatting - tracking happens invisibly
+```
+
 ---
 
 #### 🛤️ Path Management (REFACTORED)
@@ -348,6 +1016,102 @@ confidence: 0.85
 **Phase 0: Baseline (Week 1-2)**
 - Run complete test suite
 - Document current architecture
+- Risk assessment
+- Establish monitoring baselines
+
+**Phase 1: Core Modularization (Week 3-5)**
+- Refactor knowledge_graph.py → 6 focused modules
+- Refactor working_memory.py → 5 modules
+- Refactor context_intelligence.py → 6 modules
+- Extract agent strategies
+
+**Phase 2: Workflow Pipeline (Week 6-8)**
+- Complete workflow orchestration
+- Implement missing stages
+- Create production workflows
+- Add checkpoint/resume
+
+**Phase 3: VS Code Extension (Week 9-12) 🆕 DEFINITIVE CONVERSATION FIX**
+- **Week 9:** Extension scaffold + chat participant registration
+  - **Run automated scaffold:** `cortex setup:extension` (generates full project)
+  - TypeScript project auto-configured
+  - package.json, tsconfig.json, all source files generated
+  - Python ↔ TypeScript bridge created
+  - Register CORTEX chat participant
+  - Basic message routing to Python backend
+  - Automatic capture to Tier 1
+  
+- **Week 10:** Lifecycle integration
+  - Window state monitoring (focus/blur) - already scaffolded
+  - Automatic checkpointing on events
+  - Resume prompt on startup
+  - Crash recovery via checkpoints
+  
+- **Week 11:** External conversation monitoring
+  - Monitor GitHub Copilot conversations - already scaffolded
+  - Passive capture to brain (tagged as external)
+  - Unified conversation timeline
+  - Context injection from all sources
+  
+- **Week 12:** Polish & marketplace
+  - Settings UI (enable/disable features) - already in package.json
+  - Keyboard shortcuts (Ctrl+Shift+C for CORTEX chat)
+  - Documentation and tutorials
+  - Build: `npm run package` (creates .vsix)
+  - Publish: `npm run publish` (to VS Code Marketplace)
+
+**Phase 4: Risk Mitigation & Testing (Week 13-14)**
+- 75 new risk mitigation tests
+- End-to-end integration tests
+- Extension stability testing
+- Security scenario testing
+- Performance benchmarks
+
+**Phase 5: Performance Optimization (Week 15-16)**
+- Database optimization (FTS5, caching)
+- Workflow optimization (parallel stages)
+- Context injection optimization
+- Extension responsiveness tuning
+- Lazy loading implementation
+
+**Phase 6: Documentation & Training (Week 17-18)**
+- Architecture guides
+- Developer guides (extension API)
+- User tutorials (chat interface)
+- API reference
+- Migration guide (manual → automatic)
+
+**Phase 7: Migration & Rollout (Week 19-20)**
+- Feature flags for gradual migration
+- Dual-mode operation (CLI + Extension)
+- Extension: Alpha → Beta → General availability
+- Monitoring and validation
+- Marketplace promotion
+
+---
+
+### Success Metrics
+
+**Technical:**
+- ✅ All files <500 lines
+- ✅ Test coverage >85%
+- ✅ Performance +20% improvement
+- ✅ Bug rate <0.1% critical
+- ✅ **Zero manual conversation capture needed** 🆕
+
+**User:**
+- ✅ User satisfaction ≥4.5/5
+- ✅ Feature adoption ≥80%
+- ✅ Support tickets -30%
+- ✅ Onboarding time -50%
+- ✅ **Conversation amnesia reports: 0** 🆕
+
+**Extension Specific:** 🆕
+- ✅ Extension install rate >1,000/month
+- ✅ Automatic capture success rate >99%
+- ✅ Average resume time <2 seconds
+- ✅ Crash recovery success rate >95%
+- ✅ External chat capture rate >90%
 - Risk assessment
 - Establish monitoring baselines
 

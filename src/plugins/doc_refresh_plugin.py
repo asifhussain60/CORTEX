@@ -2,12 +2,16 @@
 Documentation Refresh Plugin
 
 Automatically refreshes the 4 synchronized documentation files based on CORTEX 2.0 design:
-- docs/story/Cortex-Trinity/Technical-CORTEX.md
-- docs/story/Cortex-Trinity/Awakening Of CORTEX.md
-- docs/story/Cortex-Trinity/Image-Prompts.md
-- docs/story/Cortex-Trinity/History.md
+- docs/story/CORTEX-STORY/Technical-CORTEX.md
+- docs/story/CORTEX-STORY/Awakening Of CORTEX.md
+- docs/story/CORTEX-STORY/Image-Prompts.md (TECHNICAL DIAGRAMS ONLY - no cartoons)
+- docs/story/CORTEX-STORY/History.md
 
 Triggered by: 'Update Documentation' or 'Refresh documentation' commands at entry point
+
+NOTE: Image-Prompts.md generates SYSTEM DIAGRAMS (flowcharts, sequence diagrams, 
+architecture diagrams) that reveal CORTEX design - NOT cartoon characters or story 
+illustrations. For story illustrations, see prompts/user/cortex-gemini-image-prompts.md
 """
 
 from plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
@@ -69,7 +73,7 @@ class Plugin(BasePlugin):
                 return False
             
             # Verify story directory exists
-            story_dir = Path("docs/story/Cortex-Trinity")
+            story_dir = Path("docs/story/CORTEX-STORY")
             if not story_dir.exists():
                 logger.warning(f"Story directory not found, will create: {story_dir}")
                 story_dir.mkdir(parents=True, exist_ok=True)
@@ -114,7 +118,7 @@ class Plugin(BasePlugin):
         
         for filename, refresh_func in docs_to_refresh:
             try:
-                file_path = Path(f"docs/story/Cortex-Trinity/{filename}")
+                file_path = Path(f"docs/story/CORTEX-STORY/{filename}")
                 
                 # Backup if enabled
                 if self.config.get("backup_before_refresh", True):
@@ -141,7 +145,7 @@ class Plugin(BasePlugin):
         
         # Check last modified timestamps
         design_index = Path("cortex-brain/cortex-2.0-design/00-INDEX.md")
-        story_dir = Path("docs/story/Cortex-Trinity")
+        story_dir = Path("docs/story/CORTEX-STORY")
         
         if design_index.exists():
             design_mtime = design_index.stat().st_mtime
@@ -213,11 +217,12 @@ class Plugin(BasePlugin):
         }
     
     def _refresh_image_prompts_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Image-Prompts.md"""
+        """Refresh Image-Prompts.md with TECHNICAL DIAGRAMS (not cartoons)"""
         return {
             "success": True,
-            "message": "Image prompts doc refresh scheduled",
-            "action_required": "Generate Gemini prompts for 2.0 features"
+            "message": "Technical diagram prompts refresh scheduled",
+            "action_required": "Generate Gemini prompts for system diagrams (flowcharts, sequence diagrams, architecture diagrams)",
+            "note": "For story illustrations/cartoons, see prompts/user/cortex-gemini-image-prompts.md instead"
         }
     
     def _refresh_history_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
