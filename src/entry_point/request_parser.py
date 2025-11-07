@@ -48,6 +48,7 @@ class RequestParser:
     
     # Keywords for intent classification
     INTENT_KEYWORDS = {
+        "setup": ["setup", "initialize", "install", "configure", "run setup"],
         "health_check": ["health", "status", "check system", "validate system"],
         "plan": ["plan", "design", "architect", "outline", "breakdown", "organize"],
         "code": ["code", "implement", "create", "build", "develop", "write"],
@@ -239,6 +240,7 @@ class RequestParser:
         
         # Direct mappings
         mapping = {
+            "setup": "CortexSetup",
             "plan": "WorkPlanner",
             "code": "CodeExecutor",
             "test": "TestGenerator",

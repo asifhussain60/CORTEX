@@ -4,6 +4,73 @@
 
 ---
 
+## 🚀 First Time? Run Setup!
+
+If you're setting up CORTEX for the first time in a repository, start here:
+
+### In GitHub Copilot Chat:
+
+```
+#file:/Users/asifhussain/PROJECTS/CORTEX/prompts/user/cortex.md
+
+Run setup
+```
+
+Or simply:
+```
+#file:/Users/asifhussain/PROJECTS/CORTEX/prompts/user/cortex.md
+
+setup
+```
+
+### From Terminal:
+
+```bash
+# Setup in current directory
+python scripts/cortex_setup.py
+
+# Setup in specific project
+python scripts/cortex_setup.py --repo /path/to/project
+
+# Quiet mode (minimal output)
+python scripts/cortex_setup.py --quiet
+```
+
+### What Setup Does (5-10 minutes):
+
+**Phase 1: Environment Analysis** 🔍
+- Detects repository structure and technologies
+- Identifies languages and frameworks (Python, Node.js, .NET, etc.)
+- Counts files and verifies Git installation
+
+**Phase 2: Tooling Installation** 📦
+- Installs Python dependencies (pytest, PyYAML, etc.)
+- Installs Node.js dependencies (if package.json exists)
+- Installs MkDocs and plugins for documentation
+
+**Phase 3: Brain Initialization** 🧠
+- Creates 4-tier brain structure:
+  - **Tier 0:** Instinct (immutable rules like TDD, SOLID)
+  - **Tier 1:** Working Memory (last 20 conversations)
+  - **Tier 2:** Knowledge Graph (learned patterns)
+  - **Tier 3:** Context Intelligence (project metrics)
+- Initializes SQLite databases for each tier
+- Creates corpus callosum for inter-hemisphere messaging
+
+**Phase 4: Crawler Execution** 🕷️
+- Scans repository for code files
+- Maps file relationships and patterns
+- Discovers UI elements and IDs (for testing)
+- Analyzes Git history and metrics
+
+**Phase 5: Welcome** 🎉
+- Shows setup summary with stats
+- Links to "The Awakening of CORTEX" story
+- Points to quick start documentation
+- Explains how to use CORTEX
+
+---
+
 ## 🚀 How to Invoke CORTEX
 
 ### Method 1: In GitHub Copilot Chat (Recommended)

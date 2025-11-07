@@ -21,6 +21,7 @@ from ..cortex_agents.base_agent import AgentRequest, AgentResponse
 from ..cortex_agents.intent_router import IntentRouter
 from .request_parser import RequestParser
 from .response_formatter import ResponseFormatter
+from .setup_command import CortexSetup
 from ..session_manager import SessionManager
 from ..tier1.tier1_api import Tier1API
 from ..tier2.knowledge_graph import KnowledgeGraph
@@ -121,6 +122,10 @@ class CortexEntry:
             Formatted response string
         """
         try:
+            # Check for setup command first
+            if self._is_setup_command(user_message):
+                return self._handle_setup_command(user_message, format_type)
+            
             # Get or create session
             conversation_id = self._get_conversation_id(resume_session)
             
@@ -172,6 +177,39 @@ class CortexEntry:
                 e,
                 context={"user_message": user_message}
             )
+    
+    def _is_setup_command(self, message: str) -> bool:
+        """Check if message is a setup command."""
+        message_lower = message.lower().strip()
+        return (
+            message_lower in ["setup", "run setup", "initialize"]
+            or message_lower.startswith("setup ")
+            or "run setup" in message_lower
+        )
+    
+    def _handle_setup_command(self, message: str, format_type: str) -> str:
+        """Handle setup command specially."""
+        # Extract repo path if provided
+        repo_path = None
+        if "--repo" in message:
+            parts = message.split("--repo")
+            if len(parts) > 1:
+                repo_path = parts[1].strip().split()[0]
+        
+        # Run setup
+        results = self.setup(repo_path=repo_path)
+        
+        # Format results
+        if format_type == "json":
+            import json
+            return json.dumps(results, indent=2)
+        
+        # Text format (setup already prints welcome)
+        if results.get("success"):
+            return "✅ CORTEX setup completed successfully! See output above for details."
+        else:
+            errors = "\n".join(f"  - {e}" for e in results.get("errors", []))
+            return f"❌ CORTEX setup failed:\n{errors}"
     
     def process_batch(
         self,
@@ -324,6 +362,42 @@ class CortexEntry:
         # Start new session
         conversation_id = self.session_manager.start_session()
         return conversation_id
+    
+    def setup(
+        self,
+        repo_path: Optional[str] = None,
+        verbose: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Run CORTEX setup for a repository.
+        
+        This command systematically:
+        1. Analyzes the repository structure
+        2. Installs all required tooling
+        3. Initializes the CORTEX brain (4-tier architecture)
+        4. Runs crawlers to feed the brain
+        5. Introduces CORTEX with links to documentation and story
+        
+        Args:
+            repo_path: Path to repository to setup (default: current directory)
+            verbose: Show detailed progress output
+            
+        Returns:
+            Setup results dictionary
+            
+        Example:
+            entry = CortexEntry()
+            results = entry.setup()
+            
+            # Or in a different repo
+            results = entry.setup(repo_path="/path/to/project")
+        """
+        setup = CortexSetup(
+            repo_path=repo_path,
+            brain_path=str(self.brain_path) if repo_path is None else None,
+            verbose=verbose
+        )
+        return setup.run()
     
     def _setup_logging(self, enable: bool) -> logging.Logger:
         """Setup logging for entry point."""

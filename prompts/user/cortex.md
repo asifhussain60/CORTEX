@@ -1784,6 +1784,79 @@ That's it! CORTEX will automatically:
 
 ---
 
+## 🚀 First Time? Run Setup!
+
+If you're installing CORTEX in a new repository, start with the setup command:
+
+### In Copilot Chat:
+```markdown
+#file:prompts/user/cortex.md
+
+Run setup
+```
+
+Or:
+```markdown
+#file:prompts/user/cortex.md
+
+setup
+```
+
+### From Terminal:
+```bash
+# Using Python
+python scripts/cortex_setup.py
+
+# In a different repository
+python scripts/cortex_setup.py --repo /path/to/project
+
+# Quiet mode
+python scripts/cortex_setup.py --quiet
+```
+
+### What Setup Does (5-10 minutes):
+
+**Phase 1: Environment Analysis** 🔍
+- Detects repository structure and technologies
+- Identifies languages and frameworks
+- Counts files and checks for Git
+
+**Phase 2: Tooling Installation** 📦
+- Installs Python dependencies (pytest, mkdocs, etc.)
+- Installs Node.js dependencies (if package.json exists)
+- Installs MkDocs for documentation
+
+**Phase 3: Brain Initialization** 🧠
+- Creates 4-tier brain structure:
+  - **Tier 0:** Instinct (immutable rules)
+  - **Tier 1:** Working Memory (last 20 conversations)
+  - **Tier 2:** Knowledge Graph (learned patterns)
+  - **Tier 3:** Context Intelligence (project metrics)
+- Initializes SQLite databases for each tier
+- Creates corpus callosum for inter-hemisphere messaging
+
+**Phase 4: Crawler Execution** 🕷️
+- Scans repository for code files
+- Maps file relationships and patterns
+- Discovers UI elements and IDs (for testing)
+- Analyzes Git history and metrics
+
+**Phase 5: Welcome** 🎉
+- Shows setup summary
+- Links to "The Awakening of CORTEX" story
+- Points to quick start documentation
+- Explains how to use CORTEX
+
+**After Setup:**
+You can immediately start using CORTEX:
+```markdown
+#file:prompts/user/cortex.md
+
+What can you help me with?
+```
+
+---
+
 ## 🔷 Gemini prompt suite (text + vision)
 
 Use these ready-to-copy templates with Google Gemini (1.5 Pro/Flash) to power CORTEX agents. They standardize instructions, safety, and structured outputs so results plug into the One Door workflow cleanly.
