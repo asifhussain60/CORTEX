@@ -1,6 +1,10 @@
-"""CORTEX Tier 2: Knowledge Graph"""
+"""CORTEX Tier 2: Knowledge Graph
 
-from .knowledge_graph import (
+Backward compatibility layer during Phase 1 modularization.
+"""
+
+# Import from legacy file during migration
+from .knowledge_graph_legacy import (
     KnowledgeGraph,
     Pattern,
     PatternType,
