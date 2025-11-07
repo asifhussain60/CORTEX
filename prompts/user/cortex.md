@@ -8,6 +8,53 @@
 
 ---
 
+## ⚠️ IMPORTANT: Conversation Tracking Bridge
+
+**GitHub Copilot Chat does NOT automatically track conversations to the CORTEX brain.**
+
+To enable conversation memory (so CORTEX remembers across chats):
+
+### Option 1: PowerShell Capture (Quick - After Each Session)
+```powershell
+# Capture your conversation manually
+.\scripts\cortex-capture.ps1 -AutoDetect
+
+# Or provide message directly
+.\scripts\cortex-capture.ps1 -Message "Created mkdocs documentation" -Intent EXECUTE
+```
+
+### Option 2: Python CLI (Direct Integration)
+```bash
+# Process through Python (tracks automatically)
+python scripts/cortex_cli.py "Add authentication to login page"
+
+# Validate tracking is working
+python scripts/cortex_cli.py --validate
+
+# Check current session
+python scripts/cortex_cli.py --session-info
+```
+
+### Option 3: Manual Recording (Fallback)
+```powershell
+.\scripts\record-conversation.ps1 `
+    -Title "Session Title" `
+    -Intent "EXECUTE" `
+    -Outcome "What was accomplished" `
+    -FilesModified "file1.py,file2.md" `
+    -Entities "topic1,topic2"
+```
+
+**Why This Is Needed:**
+- GitHub Copilot Chat reads `#file:prompts/user/cortex.md` as **documentation**
+- It does NOT execute the Python `CortexEntry.process()` method
+- Without tracking: ❌ No conversation memory, ❌ No cross-chat context, ❌ Amnesia
+- With tracking: ✅ Remembers past conversations, ✅ "Make it purple" works, ✅ Full brain learning
+
+**Rule #24 (Tier 0 - Core Instinct):** Conversation tracking MUST work. Protected by brain-protector tests in `CORTEX/tests/tier0/test_brain_protector_conversation_tracking.py`.
+
+---
+
 ## 📊 Implementation Status
 
 **Legend:**
@@ -4950,6 +4997,353 @@ mind_palace_metrics:
 ```
 #file:KDS/prompts/user/plan.md "Design Mind Palace Memory Architecture with Metrics"
 ```
+
+---
+
+## 📋 CORTEX Response Templates - Practical Action Design
+
+**Philosophy:** CORTEX responses should leverage planning and execution capabilities to provide **actionable, cumulative options** instead of one-by-one choices.
+
+### ✅ GOOD: Actionable & Cumulative
+
+**Example 1: Documentation Refresh**
+```markdown
+## 🚀 Ready to Execute
+
+I've identified 4 documentation gaps and prepared an execution plan.
+
+**Execute All (Recommended):**
+I'll complete all phases sequentially:
+1. Update "The Awakening" story (15 min)
+2. Create 26 missing technical docs (45 min)  
+3. Generate 8 Mermaid diagrams (20 min)
+4. Deploy to GitHub Pages (5 min)
+
+Estimated: 85 minutes total
+
+Say **"Execute all"** to start, or **"Just phases 1-2"** to run partially.
+
+**Manual Review First:**
+Say **"Show me the plan"** to review details before execution.
+```
+
+**Example 2: Test Failures**
+```markdown
+## 🔧 3 Test Failures Detected
+
+**Fix All (Recommended):**
+I'll fix all 3 issues in one pass:
+- Fix selector in `button.spec.ts` (async timing)
+- Update API mock in `service.spec.ts` (schema change)
+- Add missing import in `utils.spec.ts` (module not found)
+
+Say **"Fix all"** and I'll execute all repairs with verification.
+
+**Investigate First:**
+Say **"Show root causes"** to analyze before fixing.
+```
+
+**Example 3: Feature Implementation**
+```markdown
+## ✅ Plan Created: Multi-Language Invoice Export
+
+**Execute Full Feature:**
+I'll implement all 4 phases using TDD:
+1. Phase 1: Service layer (tests → code) - 30 min
+2. Phase 2: API endpoints (tests → code) - 25 min  
+3. Phase 3: UI component (tests → code) - 40 min
+4. Phase 4: Integration tests & validation - 20 min
+
+Total: ~115 minutes
+
+Say **"Execute full feature"** to start end-to-end implementation.
+
+**Phase-by-Phase:**
+Say **"Start Phase 1"** to proceed incrementally with checkpoints.
+```
+
+### ❌ BAD: One-by-One Options (Old Style)
+
+```markdown
+## Next Steps
+
+**Option 1:** Update story  
+Review the visual presentation, navigation behavior, and story flow.
+
+**Option 2:** Create technical docs  
+Continue with Phase 2 to add documentation.
+
+**Option 3:** Generate diagrams  
+Proceed with Phase 3 to generate the 26 missing diagrams.
+
+**Option 4:** Deploy  
+When satisfied with localhost review, deploy to GitHub Pages.
+```
+
+**Why this is bad:**
+- ❌ Forces 4 separate invocations
+- ❌ Doesn't leverage CORTEX planning
+- ❌ No "do everything" option
+- ❌ Wastes user time
+
+### 🎯 Response Template Rules
+
+**Rule 1: Always offer cumulative execution**
+```markdown
+✅ "Execute all phases" (cumulative)
+✅ "Fix all issues" (batch)
+✅ "Implement full feature" (end-to-end)
+
+❌ "Option 1, 2, 3, 4" (one-by-one)
+```
+
+**Rule 2: Provide smart defaults**
+```markdown
+✅ "Execute all (Recommended)" - Make the best path obvious
+✅ "Estimated: 85 minutes" - Set expectations
+✅ "Say 'Execute all' to start" - Clear command
+
+❌ "What do you want to do?" - Forces decision making
+```
+
+**Rule 3: Include escape hatches**
+```markdown
+✅ "Show me the plan" - Review before execution
+✅ "Just phases 1-2" - Partial execution
+✅ "Pause after Phase 1" - Incremental with checkpoints
+
+❌ Only all-or-nothing options
+```
+
+**Rule 4: Leverage CORTEX planning**
+```markdown
+✅ Break work into phases internally
+✅ Show time estimates per phase
+✅ Offer full plan execution by default
+✅ Use todo list for multi-phase work
+
+❌ Present raw phases as user choices
+```
+
+**Rule 5: Make commands copyable**
+```markdown
+✅ Say **"Execute all"** to start
+✅ Say **"Fix all tests"** to proceed
+✅ Command in **bold** for easy identification
+
+❌ "You can proceed" (vague)
+❌ "Let me know when ready" (passive)
+```
+
+### 📊 Response Format Template
+
+**Standard Multi-Phase Response:**
+```markdown
+## 🎯 [Summary of Work]
+
+[Brief description of what was discovered/analyzed]
+
+**Execute All (Recommended):**
+I'll complete [X phases/tasks] sequentially:
+1. [Phase 1 name] ([time estimate])
+2. [Phase 2 name] ([time estimate])
+3. [Phase 3 name] ([time estimate])
+
+Total: [X minutes/hours]
+
+Say **"Execute all"** to start, or **"Just phase X"** to run partially.
+
+**Alternative Approaches:**
+- **"Show me the plan"** - Review detailed breakdown first
+- **"Pause after Phase X"** - Stop for checkpoint review
+- **"Skip Phase X"** - Execute with modifications
+
+**Already complete?** Say **"Continue"** to resume from last checkpoint.
+```
+
+**Standard Issue Fix Response:**
+```markdown
+## 🔧 [X Issues/Errors] Detected
+
+[Brief summary of problems]
+
+**Fix All (Recommended):**
+I'll address all [X] issues in one pass:
+- [Issue 1]: [One-line fix description]
+- [Issue 2]: [One-line fix description]  
+- [Issue 3]: [One-line fix description]
+
+Say **"Fix all"** and I'll execute repairs with verification.
+
+**Investigate Further:**
+- **"Show root causes"** - Deep analysis before fixing
+- **"Fix [specific issue]"** - Address individually
+- **"Show impact"** - What breaks if unfixed
+
+**Batch Strategy:** All fixes use atomic commits with rollback safety.
+```
+
+**Standard Completion Response:**
+```markdown
+## ✅ [Feature/Task] Complete
+
+**What was delivered:**
+- ✅ [Deliverable 1] - [Brief result]
+- ✅ [Deliverable 2] - [Brief result]
+- ✅ [Deliverable 3] - [Brief result]
+
+**Quality Checks:**
+- ✅ [X] tests passing
+- ✅ Zero errors, zero warnings
+- ✅ [Performance/coverage metric]
+
+**Next Actions (Choose One):**
+- **"Deploy to [environment]"** - Push changes live
+- **"Add [related feature]"** - Extend functionality
+- **"Show metrics"** - View detailed statistics
+- **"Mark complete"** - Archive and move on
+
+**Documentation updated:** [Link or file reference]
+```
+
+### 🧪 Examples by Scenario
+
+**Scenario: Documentation needs refresh**
+```markdown
+## 📚 Documentation Refresh Plan Ready
+
+Git analysis identified 5 new features since last deployment (Brain Protector, Oracle Crawler, Knowledge Boundaries, Amnesia, Pattern Cleanup).
+
+**Execute Full Refresh (Recommended):**
+I'll complete all 7 phases:
+1. Update "Awakening" story with new features (20 min)
+2. Create 5 technical docs (Brain Protector, Oracle, etc.) (35 min)
+3. Generate 6 Mermaid diagrams (15 min)
+4. Create 4 Gemini image prompts (10 min)
+5. Build docs with `mkdocs build --clean` (2 min)
+6. Launch localhost:8000 for review (auto-open browser)
+7. Generate refresh report (5 min)
+
+Total: ~87 minutes | Auto-launches: localhost:8000 for review
+
+Say **"Execute full refresh"** to start all phases, or **"Just story update"** for Phase 1 only.
+
+**Before starting?** Say **"Show detailed plan"** to review each phase's changes.
+```
+
+**Scenario: Multiple test failures**
+```markdown
+## 🧪 7 Test Failures Detected
+
+Test suite shows 7 failures across 3 components (HostControlPanel, InvoiceService, UserRegistration).
+
+**Fix All (Recommended):**
+I'll repair all 7 failures in dependency order:
+1. **HostControlPanel** (3 failures): Update selectors for refactored IDs
+2. **InvoiceService** (2 failures): Fix API contract after schema change
+3. **UserRegistration** (2 failures): Add missing validation mocks
+
+Estimated: 25 minutes | Strategy: Fix → Run → Verify per component
+
+Say **"Fix all tests"** to execute batch repair.
+
+**Need Analysis First?**
+- **"Show failure details"** - Stack traces & root causes
+- **"Group by component"** - Organized breakdown
+- **"Check coverage"** - View test coverage impact
+```
+
+**Scenario: Complex feature implementation**
+```markdown
+## 🚀 Feature Plan Ready: Real-Time Dashboard BRAIN Reference
+
+Plan created with 4 phases (28 tasks, 6.5 hours estimated).
+
+**Execute Complete Feature (Recommended):**
+I'll implement full BRAIN Reference system using TDD:
+
+**Phase 1: UI Foundation** (90 min)
+- Create 5 dashboard tabs (Overview, Rules, How Things Work, Setup, Hemispheres)
+- Implement tab navigation & layout
+- Tests: Component rendering, tab switching
+
+**Phase 2: Data Integration** (120 min)  
+- Connect to Tier 0-4 data sources
+- Build real-time update system (5-30s refresh)
+- Tests: Data loading, refresh cycles, error handling
+
+**Phase 3: Visual Workflows** (90 min)
+- Create 7 "How X Works" diagrams (Amnesia, Learning, TDD, etc.)
+- Implement interactive workflow visualization
+- Tests: Diagram rendering, user interactions
+
+**Phase 4: Health & Fixes** (90 min)
+- Add health monitoring dashboard
+- Implement one-click fix buttons
+- Tests: Health checks, remediation workflows
+
+Total: 6.5 hours | 60 tests | TDD throughout
+
+Say **"Execute complete feature"** for end-to-end implementation.
+
+**Incremental Delivery:**
+- **"Execute Phase 1"** - UI foundation only, review before Phase 2
+- **"Show task breakdown"** - Detailed 28-task checklist
+- **"Estimate per phase"** - Time breakdown with dependencies
+```
+
+### 🎨 Visual Examples
+
+**Before (Bad):**
+```
+Next Steps:
+Option 1: Fix test A
+Option 2: Fix test B  
+Option 3: Fix test C
+Option 4: Run all tests
+```
+
+**After (Good):**
+```
+## 🔧 3 Test Failures - Batch Fix Ready
+
+Fix All (Recommended):
+I'll repair tests A, B, C in one pass (8 min total)
+
+Say "Fix all tests" to execute → Full verification included
+```
+
+---
+
+**Before (Bad):**
+```
+What would you like me to do next?
+1. Update docs
+2. Create diagrams
+3. Build site
+4. Deploy
+```
+
+**After (Good):**
+```
+## 📚 Documentation Ready for Deployment
+
+Execute Pipeline (Recommended):
+Update docs → Diagrams → Build → Deploy (25 min)
+
+Say "Deploy pipeline" to execute full workflow
+```
+
+---
+
+### 💡 Key Takeaway
+
+**CORTEX should work like a senior developer:**
+- ✅ "I'll fix all 7 test failures - give me 30 minutes" (proactive)
+- ❌ "Which test failure do you want me to look at first?" (passive)
+
+**User's job:** Approve strategy  
+**CORTEX's job:** Execute efficiently
 
 ---
 

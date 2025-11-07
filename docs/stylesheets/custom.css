@@ -1,0 +1,467 @@
+/* ============================================
+   CORTEX Custom Styles
+   - Light subtle backgrounds
+   - Comics font for story sections
+   - Standard fonts for technical content
+   - Black background for code blocks
+   ============================================ */
+
+/* ============================================
+   ROOT VARIABLES - CORTEX Brand Colors
+   ============================================ */
+:root {
+  /* Primary brand colors */
+  --cortex-primary: #6366F1;          /* Indigo */
+  --cortex-accent: #8B5CF6;           /* Purple */
+  
+  /* Hemisphere colors */
+  --cortex-left-brain: #3B82F6;       /* Blue - Tactical */
+  --cortex-right-brain: #A855F7;      /* Purple - Strategic */
+  
+  /* Light subtle backgrounds */
+  --bg-story: #FEF3E2;                /* Warm cream for story sections */
+  --bg-technical: #F0F4F8;            /* Cool light gray for technical */
+  --bg-code: #000000;                 /* Black for code blocks */
+  --bg-note: #FFF9E6;                 /* Soft yellow for notes */
+  --bg-warning: #FFE5E5;              /* Soft red for warnings */
+  --bg-success: #E8F5E9;              /* Soft green for success */
+  
+  /* Text colors */
+  --text-story: #3E2723;              /* Dark brown for story text */
+  --text-technical: #1F2937;          /* Dark gray for technical */
+  --text-code: #FFFFFF;               /* White for code */
+  
+  /* Border colors */
+  --border-story: #F59E0B;            /* Amber border for story */
+  --border-technical: var(--cortex-primary);
+  --border-code: #333333;
+}
+
+/* ============================================
+   GLOBAL OVERRIDES - Light Material Theme
+   ============================================ */
+
+/* Main content area - subtle light background */
+.md-main {
+  background-color: #FAFBFC;
+}
+
+.md-content {
+  background-color: #FFFFFF;
+}
+
+/* ============================================
+   TYPOGRAPHY - Comics for Story, Standard for Technical
+   ============================================ */
+
+/* Story sections use Comic Sans MS (fun, narrative) */
+.story-section,
+.story-section p,
+.story-section h1,
+.story-section h2,
+.story-section h3,
+.story-section h4,
+.story-section li {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif !important;
+}
+
+/* Technical sections use standard Roboto */
+.technical-section,
+.technical-section p,
+.technical-section h1,
+.technical-section h2,
+.technical-section h3,
+.technical-section h4 {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif !important;
+}
+
+/* ============================================
+   STORY SECTIONS - Warm, Narrative Style
+   ============================================ */
+
+.story-section {
+  background: linear-gradient(135deg, var(--bg-story) 0%, #FFF4E0 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 6px solid var(--border-story);
+  color: var(--text-story);
+  margin: 2rem 0;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+}
+
+.story-section h1,
+.story-section h2,
+.story-section h3 {
+  color: #D97706;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.story-section h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story-section h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.story-section h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.story-section p {
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+/* Story emphasis */
+.story-section strong {
+  color: #B45309;
+  font-weight: bold;
+}
+
+.story-section em {
+  color: #92400E;
+  font-style: italic;
+}
+
+/* ============================================
+   TECHNICAL SECTIONS - Clean, Professional Style
+   ============================================ */
+
+.technical-section {
+  background: var(--bg-technical);
+  padding: 2rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--border-technical);
+  color: var(--text-technical);
+  margin: 2rem 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.technical-section h1,
+.technical-section h2,
+.technical-section h3 {
+  color: var(--cortex-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.technical-section h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--cortex-primary);
+  padding-bottom: 0.5rem;
+}
+
+.technical-section h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.technical-section h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.technical-section p {
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* ============================================
+   CODE BLOCKS - Black Background, White Text
+   ============================================ */
+
+/* Override Material theme code blocks */
+.highlight,
+.highlighttable,
+pre,
+code[class*="language-"],
+.md-typeset pre > code {
+  background-color: var(--bg-code) !important;
+  color: var(--text-code) !important;
+}
+
+.md-typeset pre {
+  background-color: var(--bg-code) !important;
+  border: 1px solid var(--border-code);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.md-typeset code {
+  background-color: var(--bg-code) !important;
+  color: var(--text-code) !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+/* Inline code in paragraphs */
+.md-typeset p code,
+.md-typeset li code,
+.md-typeset td code {
+  background-color: var(--bg-code) !important;
+  color: var(--text-code) !important;
+}
+
+/* Syntax highlighting - adjust for black background */
+.highlight .c { color: #75715E; } /* Comment */
+.highlight .k { color: #66D9EF; } /* Keyword */
+.highlight .s { color: #E6DB74; } /* String */
+.highlight .n { color: #F8F8F2; } /* Name */
+.highlight .o { color: #F92672; } /* Operator */
+.highlight .m { color: #AE81FF; } /* Number */
+
+/* ============================================
+   IMAGE STYLING - Clean, Professional
+   ============================================ */
+
+.story-image {
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 100%;
+}
+
+.story-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 3px solid #FFF;
+}
+
+.story-image figcaption,
+.md-typeset figure > figcaption {
+  font-style: italic;
+  color: #6B7280;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* ============================================
+   HEMISPHERE BADGES - Visual Identifiers
+   ============================================ */
+
+.left-brain {
+  background: linear-gradient(135deg, var(--cortex-left-brain), #2563EB);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  margin: 0.2rem;
+}
+
+.right-brain {
+  background: linear-gradient(135deg, var(--cortex-right-brain), #9333EA);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.3);
+  margin: 0.2rem;
+}
+
+/* ============================================
+   ADMONITIONS - Subtle, Material Style
+   ============================================ */
+
+/* Note admonitions */
+.md-typeset .admonition.note,
+.md-typeset details.note {
+  background-color: var(--bg-note);
+  border-left: 4px solid #F59E0B;
+}
+
+/* Warning admonitions */
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+  background-color: var(--bg-warning);
+  border-left: 4px solid #DC2626;
+}
+
+/* Success/Tip admonitions */
+.md-typeset .admonition.success,
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  background-color: var(--bg-success);
+  border-left: 4px solid #16A34A;
+}
+
+/* Info admonitions */
+.md-typeset .admonition.info,
+.md-typeset details.info {
+  background-color: #EFF6FF;
+  border-left: 4px solid var(--cortex-primary);
+}
+
+/* ============================================
+   TABLES - Clean, Subtle Styling
+   ============================================ */
+
+.md-typeset table:not([class]) {
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.md-typeset table:not([class]) thead {
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent));
+  color: white;
+}
+
+.md-typeset table:not([class]) th {
+  padding: 1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.md-typeset table:not([class]) td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background-color: #FAFBFC;
+}
+
+/* ============================================
+   NAVIGATION - Enhanced for CORTEX
+   ============================================ */
+
+/* Active navigation item */
+.md-nav__link--active {
+  color: var(--cortex-primary) !important;
+  font-weight: 600;
+}
+
+/* Navigation section titles */
+.md-nav__title {
+  font-weight: 600;
+  color: var(--cortex-primary);
+}
+
+/* ============================================
+   HOME PAGE - Hero Section
+   ============================================ */
+
+.cortex-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.cortex-hero h1 {
+  font-size: 3rem;
+  color: var(--cortex-primary);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.cortex-hero p {
+  font-size: 1.3rem;
+  color: #4B5563;
+  margin-bottom: 2rem;
+}
+
+.cortex-hero .cta-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  margin: 0.5rem;
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent));
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cortex-hero .cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.cortex-hero .cta-button.secondary {
+  background: linear-gradient(135deg, #6B7280, #4B5563);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+/* ============================================
+   CHAPTER MARKERS - For Story Navigation
+   ============================================ */
+
+.chapter-marker {
+  background: linear-gradient(135deg, var(--cortex-accent), #C084FC);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  margin: 3rem 0 1rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Comic Sans MS', cursive;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - Mobile Friendly
+   ============================================ */
+
+@media screen and (max-width: 768px) {
+  .story-section,
+  .technical-section {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .cortex-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .cortex-hero p {
+    font-size: 1.1rem;
+  }
+  
+  .story-image img {
+    border-radius: 8px;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR - Subtle Enhancement
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3F4F6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cortex-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cortex-accent);
+}

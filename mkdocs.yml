@@ -1,5 +1,5 @@
-site_name: CORTEX Documentation
-site_description: The Brain for AI Assistants - Transforming GitHub Copilot from Forgetful Intern to Expert Partner
+site_name: CORTEX - The Brain for AI Assistants
+site_description: Transforming GitHub Copilot from forgetful intern to expert partner
 site_author: CORTEX Team
 site_url: https://asifhussain60.github.io/CORTEX/
 
@@ -9,39 +9,27 @@ edit_uri: edit/cortex-migration/docs/
 
 theme:
   name: material
-  
   palette:
-    # Light mode
-    - scheme: default
-      primary: indigo
-      accent: purple
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    
-    # Dark mode
-    - scheme: slate
-      primary: indigo
-      accent: purple
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+    # Light theme with subtle backgrounds
+    scheme: default
+    primary: indigo
+    accent: deep purple
   
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.expand
     - navigation.top
     - navigation.tracking
-    - navigation.indexes
+    - navigation.expand
+    - navigation.path
     - search.suggest
     - search.highlight
     - search.share
     - content.code.copy
     - content.code.annotate
     - content.tabs.link
+    - toc.follow
     - toc.integrate
-    - header.autohide
   
   icon:
     repo: fontawesome/brands/github
@@ -56,96 +44,81 @@ plugins:
   - mermaid2
 
 markdown_extensions:
-  # Code highlighting
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  
-  # Diagrams
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:mermaid2.fence_mermaid
-  
-  # Tabs and content
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
-  
-  # Emoji and icons
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  
-  # Admonitions
   - admonition
   - pymdownx.details
-  
-  # Formatting
   - attr_list
   - md_in_html
   - def_list
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.critic
-  - pymdownx.caret
-  - pymdownx.tilde
-  
-  # Tables
-  - tables
-  
-  # TOC
   - toc:
       permalink: true
       toc_depth: 3
-      title: On this page
+  - tables
+  - footnotes
 
 nav:
   - Home: index.md
   
   - 📖 The Story:
-      - story/index.md
-      - The Awakening of CORTEX: story/the-awakening.md
+      - Introduction: story/index.md
+      - Chapter 1 - The Problem: story/chapter-1-the-problem.md
+      - Chapter 2 - The Solution: story/chapter-2-the-solution.md
+      - Chapter 3 - The Memory: story/chapter-3-the-memory.md
+      - Chapter 4 - The Protection: story/chapter-4-the-protection.md
+      - Chapter 5 - The Activation: story/chapter-5-the-activation.md
   
   - 🚀 Getting Started:
-      - getting-started/index.md
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md
       - Your First Task: getting-started/first-task.md
       - Configuration: getting-started/configuration.md
   
-  - 🧠 Architecture:
-      - architecture/index.md
+  - �️ Architecture:
       - Overview: architecture/overview.md
       - Dual Hemispheres: architecture/dual-hemispheres.md
       - Five-Tier Memory: architecture/five-tier-memory.md
       - Protection System: architecture/protection-system.md
       - Oracle Crawler: architecture/oracle-crawler.md
+      - Agent System: architecture/agents.md
   
   - 📚 Guides:
-      - guides/index.md
       - Universal Entry Point: guides/universal-entry-point.md
       - Understanding the Brain: guides/brain-system.md
       - Agent Workflows: guides/agent-workflows.md
-      - TDD with CORTEX: guides/tdd-workflow.md
-      - Memory Management: guides/memory-management.md
+      - TDD Workflow: guides/tdd-workflow.md
+      - Working with Memory Tiers: guides/memory-tiers.md
   
   - 📖 Reference:
-      - reference/index.md
       - Tier 0 - Governance: reference/tier0-governance.md
-      - Tier 1 - Conversations: reference/tier1-conversation.md
+      - Tier 1 - Conversation: reference/tier1-conversation.md
       - Tier 2 - Knowledge: reference/tier2-knowledge.md
       - Tier 3 - Context: reference/tier3-context.md
-      - Agents: reference/agents.md
+      - Tier 4 - Event Stream: reference/tier4-events.md
+      - All Agents: reference/agents.md
       - Configuration: reference/configuration.md
+      - Glossary: reference/glossary.md
   
   - 🛠️ Development:
-      - development/index.md
       - Contributing: development/contributing.md
       - Testing: development/testing.md
       - Architecture Decisions: development/architecture-decisions.md
@@ -155,14 +128,10 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/asifhussain60/CORTEX
-    - icon: fontawesome/solid/book
-      link: https://asifhussain60.github.io/CORTEX/
-  
-  version:
-    provider: mike
-    default: latest
+    - icon: fontawesome/solid/brain
+      name: CORTEX Brain System
 
 extra_css:
   - stylesheets/custom.css
 
-copyright: Copyright &copy; 2025 CORTEX Team - Licensed under MIT
+copyright: Copyright &copy; 2025 CORTEX Team - The Brain for AI Assistants

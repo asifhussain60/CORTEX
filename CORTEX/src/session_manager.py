@@ -47,6 +47,52 @@ class SessionManager:
             db_path = config.brain_path / "tier1" / "conversations.db"
         
         self.db_path = Path(db_path) if isinstance(db_path, str) else db_path
+        
+        # Ensure schema exists
+        self._ensure_schema()
+    
+    def _ensure_schema(self):
+        """Ensure session management tables exist"""
+        conn = sqlite3.connect(str(self.db_path))
+        cursor = conn.cursor()
+        
+        # Create working_memory_conversations table if it doesn't exist
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS working_memory_conversations (
+                conversation_id TEXT PRIMARY KEY,
+                start_time TEXT NOT NULL,
+                end_time TEXT,
+                intent TEXT,
+                status TEXT DEFAULT 'active',
+                last_activity TEXT
+            )
+        """)
+        
+        # Create working_memory_messages table if it doesn't exist
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS working_memory_messages (
+                message_id TEXT PRIMARY KEY,
+                conversation_id TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                role TEXT NOT NULL,
+                content TEXT NOT NULL,
+                FOREIGN KEY (conversation_id) REFERENCES working_memory_conversations(conversation_id)
+            )
+        """)
+        
+        # Create indices for performance
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_wm_conv_status 
+            ON working_memory_conversations(status, start_time)
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_wm_msg_conv 
+            ON working_memory_messages(conversation_id, timestamp)
+        """)
+        
+        conn.commit()
+        conn.close()
     
     def start_session(self, intent: Optional[str] = None) -> str:
         """
@@ -169,8 +215,8 @@ class SessionManager:
         """
         Enforce FIFO queue limit (50 conversations)
         
-        When 51st conversation starts:
-        - Delete oldest COMPLETED conversation
+        When total exceeds 50:
+        - Delete oldest COMPLETED conversations until count <= 50
         - Never delete active conversations
         - Preserve patterns (extracted before deletion)
         """
@@ -184,19 +230,22 @@ class SessionManager:
         total_count = cursor.fetchone()[0]
         
         if total_count > 50:
-            # Get oldest completed conversation
+            # Calculate how many to delete
+            to_delete = total_count - 50
+            
+            # Get oldest completed conversations
             cursor.execute("""
                 SELECT conversation_id
                 FROM working_memory_conversations
                 WHERE status = 'completed'
                 ORDER BY start_time ASC
-                LIMIT 1
-            """)
+                LIMIT ?
+            """, (to_delete,))
             
-            oldest_row = cursor.fetchone()
+            rows_to_delete = cursor.fetchall()
             
-            if oldest_row:
-                oldest_id = oldest_row[0]
+            for row in rows_to_delete:
+                oldest_id = row[0]
                 
                 # Delete messages first (foreign key)
                 cursor.execute("""
@@ -210,10 +259,10 @@ class SessionManager:
                     WHERE conversation_id = ?
                 """, (oldest_id,))
                 
-                conn.commit()
-                
                 # Log deletion event
                 print(f"[SessionManager] FIFO: Deleted conversation {oldest_id}")
+            
+            conn.commit()
         
         conn.close()
     
