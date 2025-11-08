@@ -30,6 +30,15 @@
     "requireGitValidation": true,
     "testQualityThreshold": 70
   },
+  "token_optimization": {
+    "enabled": true,
+    "soft_limit": 40000,
+    "hard_limit": 50000,
+    "target_reduction": 0.6,
+    "quality_threshold": 0.9,
+    "cache_check_frequency": 5,
+    "comment": "Phase 1.5: Token Optimization System - Reduces API costs by 50-70% while maintaining >0.9 quality score"
+  },
   "portability": {
     "version": "5.0.0",
     "lastUpdated": "{{TIMESTAMP:YYYY-MM-DD}}",

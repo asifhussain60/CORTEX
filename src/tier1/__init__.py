@@ -8,6 +8,9 @@ Components:
 - FileTracker: Track file modifications
 - RequestLogger: Log raw requests/responses
 - Tier1API: Unified API wrapper
+- MLContextOptimizer: ML-powered context compression (Phase 1.5)
+- CacheMonitor: Cache explosion prevention (Phase 1.5)
+- TokenMetricsCollector: Token usage tracking (Phase 1.5)
 """
 
 from .conversation_manager import ConversationManager
@@ -16,10 +19,21 @@ from .file_tracker import FileTracker
 from .request_logger import RequestLogger
 from .tier1_api import Tier1API
 
+# Phase 1.5: Token Optimization System
+from .ml_context_optimizer import MLContextOptimizer
+from .cache_monitor import CacheMonitor, CacheHealthReport
+from .token_metrics import TokenMetricsCollector, TokenMetricsFormatter
+
 __all__ = [
     'ConversationManager',
     'EntityExtractor',
     'FileTracker',
     'RequestLogger',
-    'Tier1API'
+    'Tier1API',
+    # Phase 1.5: Token Optimization
+    'MLContextOptimizer',
+    'CacheMonitor',
+    'CacheHealthReport',
+    'TokenMetricsCollector',
+    'TokenMetricsFormatter'
 ]

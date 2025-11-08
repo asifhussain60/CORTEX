@@ -501,7 +501,24 @@ CORTEX is now operational and ready to assist you!
    - "Make it purple" (context-aware!)
    - "What patterns have you learned?"
 
-📊 SETUP SUMMARY:
+� OPTIONAL: Configure Advanced Crawlers
+   CORTEX can crawl databases and APIs to learn your architecture.
+   
+   Run the configuration wizard when ready:
+   > python scripts/cortex_config_wizard.py
+   
+   Or add resources incrementally:
+   > python scripts/cortex_config_wizard.py --add-database
+   > python scripts/cortex_config_wizard.py --add-api
+   
+   Features:
+   ✓ Auto-discovers Oracle connections (tnsnames.ora)
+   ✓ Scans environment variables for credentials
+   ✓ Finds API endpoints in code and OpenAPI specs
+   ✓ Validates connections before saving
+   ✓ No pressure - configure anytime!
+
+�📊 SETUP SUMMARY:
 """
         
         print(welcome)

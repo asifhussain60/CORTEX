@@ -19,6 +19,10 @@ mkdocs-mermaid2-plugin>=1.1.0
 # Phase 2: Ambient Capture
 watchdog>=3.0.0  # File system monitoring
 
+# Phase 1.5: Token Optimization System
+scikit-learn>=1.3.0  # ML context compression (TF-IDF vectorization)
+numpy>=1.24.0  # Required by scikit-learn
+
 # Development
 black>=23.0.0
 flake8>=6.0.0
