@@ -1,509 +1,256 @@
-""""""
-
-CORTEX Tier 3: Context Intelligence CoordinatorCORTEX Tier 3: Development Context Intelligence
-
-Facade that orchestrates all context intelligence modules.Part 1: Imports, Enums, and Data Classes
-
+"""
+CORTEX Tier 3: Development Context Intelligence
+Part 1: Imports, Enums, and Data Classes
 """
 
-This is the main entry point for context intelligence operations,
-
-maintaining backward compatibility while delegating to specialized modules.import sqlite3
-
-"""import subprocess
-
+import sqlite3
+import subprocess
 from pathlib import Path
-
-from datetime import datetime, timedeltafrom datetime import datetime, timedelta, date
-
-from pathlib import Pathfrom dataclasses import dataclass
-
-from typing import Optional, Dict, List, Anyfrom typing import List, Optional, Dict, Any, Tuple
-
+from datetime import datetime, timedelta, date
+from dataclasses import dataclass
+from typing import List, Optional, Dict, Any, Tuple
 from enum import Enum
+import json
 
-from .metrics.git_metrics import GitMetricsCollector, GitMetricimport json
 
-from .metrics.file_metrics import FileMetricsAnalyzer, FileHotspot, Stability
-
-from .analysis.velocity_analyzer import VelocityAnalyzer
-
-from .analysis.insight_generator import InsightGenerator, Insightclass InsightType(Enum):
-
-from .storage.context_store import ContextStore    """Types of insights that can be generated."""
-
+class InsightType(Enum):
+    """Types of insights that can be generated."""
     VELOCITY_DROP = "velocity_drop"
-
     FILE_HOTSPOT = "file_hotspot"
+    FLAKY_TEST = "flaky_test"
+    BUILD_HEALTH = "build_health"
+    TEST_COVERAGE = "test_coverage"
+    PRODUCTIVITY_TIME = "productivity_time"
+    SESSION_DURATION = "session_duration"
+    CORRELATION_DISCOVERY = "correlation_discovery"
 
-class ContextIntelligence:    FLAKY_TEST = "flaky_test"
 
-    """    BUILD_HEALTH = "build_health"
+class Severity(Enum):
+    """Severity levels for insights."""
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
 
-    Context Intelligence Coordinator.    TEST_COVERAGE = "test_coverage"
 
-        PRODUCTIVITY_TIME = "productivity_time"
+class Stability(Enum):
+    """File stability classification."""
+    STABLE = "STABLE"       # < 10% churn rate
+    MODERATE = "MODERATE"   # 10-20% churn rate
+    UNSTABLE = "UNSTABLE"   # > 20% churn rate
 
-    Orchestrates git metrics, file hotspots, velocity analysis, and insights.    SESSION_DURATION = "session_duration"
 
-    Provides a unified interface for all context intelligence operations.    CORRELATION_DISCOVERY = "correlation_discovery"
+class TestType(Enum):
+    """Types of tests tracked."""
+    UI = "ui"
+    UNIT = "unit"
+    INTEGRATION = "integration"
+    E2E = "e2e"
 
+
+class IntentType(Enum):
+    """CORTEX intent types."""
+    PLAN = "PLAN"
+    EXECUTE = "EXECUTE"
+    TEST = "TEST"
+    VALIDATE = "VALIDATE"
+    GOVERN = "GOVERN"
+    CORRECT = "CORRECT"
+    RESUME = "RESUME"
+    ASK = "ASK"
+
+
+@dataclass
+class GitMetric:
+    """Daily git activity metrics."""
+    metric_date: date
+    commits_count: int
+    lines_added: int
+    lines_deleted: int
+    net_growth: int
+    files_changed: int
+    contributor: Optional[str] = None
+
+
+@dataclass
+class FileHotspot:
+    """File churn analysis."""
+    file_path: str
+    period_start: date
+    period_end: date
+    total_commits: int
+    file_edits: int
+    churn_rate: float
+    stability: Stability
+    last_modified: Optional[datetime] = None
+    lines_changed: int = 0
+
+
+@dataclass
+class TestMetric:
+    """Daily test execution metrics."""
+    metric_date: date
+    test_type: TestType
+    tests_discovered: int
+    tests_run: int
+    tests_passed: int
+    tests_failed: int
+    tests_skipped: int
+    pass_rate: float
+    coverage_percentage: Optional[float] = None
+    avg_duration_seconds: Optional[float] = None
+
+
+@dataclass
+class FlakyTest:
+    """Flaky test tracking."""
+    test_name: str
+    test_type: TestType
+    first_detected: datetime
+    last_seen: datetime
+    total_runs: int
+    failure_count: int
+    failure_rate: float
+    status: str  # ACTIVE, FIXED, IGNORED
+    failure_pattern: Optional[List[str]] = None
+    resolution_notes: Optional[str] = None
+
+
+@dataclass
+class BuildMetric:
+    """Daily build metrics."""
+    metric_date: date
+    builds_total: int
+    builds_successful: int
+    builds_failed: int
+    success_rate: float
+    avg_build_time_seconds: Optional[float] = None
+
+
+@dataclass
+class WorkPattern:
+    """Work session patterns."""
+    pattern_date: date
+    time_slot: str  # e.g., "08-10"
+    sessions_count: int
+    sessions_successful: int
+    success_rate: float
+    avg_duration_minutes: Optional[int] = None
+    avg_focus_duration_minutes: Optional[int] = None
+
+
+@dataclass
+class CortexUsage:
+    """CORTEX usage metrics."""
+    metric_date: date
+    intent_type: IntentType
+    requests_count: int
+    successful_count: int
+    failed_count: int
+    avg_response_time_seconds: Optional[float] = None
+
+
+@dataclass
+class Correlation:
+    """Correlation between metrics."""
+    correlation_name: str
+    description: str
+    metric_a: str
+    metric_b: str
+    correlation_coefficient: float
+    sample_size: int
+    confidence_level: float
+    insight: Optional[str] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class Insight:
+    """Generated insights and recommendations."""
+    insight_type: InsightType
+    severity: Severity
+    title: str
+    description: str
+    recommendation: Optional[str] = None
+    related_entity: Optional[str] = None
+    data_snapshot: Optional[Dict[str, Any]] = None
+    acknowledged: bool = False
+    acknowledged_at: Optional[datetime] = None
+    dismissed: bool = False
+    created_at: datetime = None
+    expires_at: Optional[datetime] = None
+    
+    def __post_init__(self):
+        if self.created_at is None:
+            self.created_at = datetime.now()
+
+
+class ContextIntelligence:
     """
-
+    Tier 3: Development Context Intelligence
     
-
-    def __init__(self, repo_path: Optional[Path] = None, db_path: Optional[Path] = None):class Severity(Enum):
-
-        """    """Severity levels for insights."""
-
-        Initialize context intelligence system.    INFO = "INFO"
-
-            WARNING = "WARNING"
-
-        Args:    ERROR = "ERROR"
-
-            repo_path: Path to git repository (default: workspace root)    CRITICAL = "CRITICAL"
-
-            db_path: Path to database (default: cortex-brain/tier3/context.db)
-
-        """
-
-        # Initialize storageclass Stability(Enum):
-
-        self.store = ContextStore(db_path)    """File stability classification."""
-
-            STABLE = "STABLE"       # < 10% churn rate
-
-        # Initialize collectors/analyzers    MODERATE = "MODERATE"   # 10-20% churn rate
-
-        self.git_collector = GitMetricsCollector(repo_path, self.store)    UNSTABLE = "UNSTABLE"   # > 20% churn rate
-
-        self.file_analyzer = FileMetricsAnalyzer(repo_path, self.store)
-
-        
-
-        # Initialize analysis modulesclass TestType(Enum):
-
-        self.velocity_analyzer = VelocityAnalyzer(self.store)    """Types of tests tracked."""
-
-        self.insight_generator = InsightGenerator(    UI = "ui"
-
-            self.store,    UNIT = "unit"
-
-            self.velocity_analyzer,    INTEGRATION = "integration"
-
-            self.file_analyzer    E2E = "e2e"
-
-        )
-
+    Provides real-time project analytics including:
+    - Git activity tracking and commit velocity
+    - File hotspot detection and churn analysis
+    - Test metrics and flaky test detection
+    - Build health monitoring
+    - Work pattern analysis
+    - CORTEX usage effectiveness
+    - Correlation discovery and insights
     
-
-    # ==================== Git Metrics Operations ====================class IntentType(Enum):
-
-        """CORTEX intent types."""
-
-    def collect_git_metrics(self, days: int = 30, force: bool = False) -> List[GitMetric]:    PLAN = "PLAN"
-
-        """    EXECUTE = "EXECUTE"
-
-        Collect git metrics from repository.    TEST = "TEST"
-
-            VALIDATE = "VALIDATE"
-
-        Args:    GOVERN = "GOVERN"
-
-            days: Number of days to look back    CORRECT = "CORRECT"
-
-            force: Force collection even if recent data exists    RESUME = "RESUME"
-
-                ASK = "ASK"
-
-        Returns:
-
-            List of GitMetric objects
-
-        """@dataclass
-
-        return self.git_collector.collect_metrics(days, force)class GitMetric:
-
-        """Daily git activity metrics."""
-
-    def get_git_metrics(self, days: int = 30) -> List[GitMetric]:    metric_date: date
-
-        """    commits_count: int
-
-        Get git metrics from database.    lines_added: int
-
-            lines_deleted: int
-
-        Args:    net_growth: int
-
-            days: Number of days to retrieve    files_changed: int
-
-                contributor: Optional[str] = None
-
-        Returns:
-
-            List of GitMetric objects
-
-        """@dataclass
-
-        return self.git_collector.get_metrics(days)class FileHotspot:
-
-        """File churn analysis."""
-
-    # ==================== File Hotspot Operations ====================    file_path: str
-
-        period_start: date
-
-    def analyze_file_hotspots(self, days: int = 30, force: bool = False) -> List[FileHotspot]:    period_end: date
-
-        """    total_commits: int
-
-        Analyze file hotspots in repository.    file_edits: int
-
-            churn_rate: float
-
-        Args:    stability: Stability
-
-            days: Number of days to analyze    last_modified: Optional[datetime] = None
-
-            force: Force analysis even if recent data exists    lines_changed: int = 0
-
-            
-
-        Returns:
-
-            List of FileHotspot objects@dataclass
-
-        """class TestMetric:
-
-        return self.file_analyzer.analyze_hotspots(days, force)    """Daily test execution metrics."""
-
-        metric_date: date
-
-    def get_file_hotspots(self, days: int = 30, min_churn: float = 0.0) -> List[FileHotspot]:    test_type: TestType
-
-        """    tests_discovered: int
-
-        Get file hotspots from database.    tests_run: int
-
-            tests_passed: int
-
-        Args:    tests_failed: int
-
-            days: Number of days to retrieve    tests_skipped: int
-
-            min_churn: Minimum churn rate to include    pass_rate: float
-
-                coverage_percentage: Optional[float] = None
-
-        Returns:    avg_duration_seconds: Optional[float] = None
-
-            List of FileHotspot objects
-
-        """
-
-        return self.file_analyzer.get_hotspots(days, min_churn)@dataclass
-
-    class FlakyTest:
-
-    def get_unstable_files(self, days: int = 30) -> List[FileHotspot]:    """Flaky test tracking."""
-
-        """    test_name: str
-
-        Get unstable files (high churn rate).    test_type: TestType
-
-            first_detected: datetime
-
-        Args:    last_seen: datetime
-
-            days: Number of days to analyze    total_runs: int
-
-                failure_count: int
-
-        Returns:    failure_rate: float
-
-            List of unstable FileHotspot objects    status: str  # ACTIVE, FIXED, IGNORED
-
-        """    failure_pattern: Optional[List[str]] = None
-
-        return self.file_analyzer.get_unstable_files(days)    resolution_notes: Optional[str] = None
-
+    Performance targets:
+    - Context queries: <10ms
+    - Database size: <50KB
+    - Update frequency: Delta updates (minimum 1 hour interval)
+    """
     
-
-    # ==================== Velocity Analysis Operations ====================
-
-    @dataclass
-
-    def calculate_velocity(self, days: int = 30) -> Dict[str, float]:class BuildMetric:
-
-        """    """Daily build metrics."""
-
-        Calculate commit velocity metrics.    metric_date: date
-
-            builds_total: int
-
-        Args:    builds_successful: int
-
-            days: Number of days to analyze    builds_failed: int
-
-                success_rate: float
-
-        Returns:    avg_build_time_seconds: Optional[float] = None
-
-            Dictionary with velocity metrics
-
+    # Collection throttling
+    MIN_COLLECTION_INTERVAL_HOURS = 1
+    
+    # Analysis windows
+    DEFAULT_ANALYSIS_WINDOW_DAYS = 30
+    VELOCITY_WINDOW_DAYS = 7
+    HOTSPOT_WINDOW_DAYS = 30
+    
+    # Thresholds
+    CHURN_STABLE_THRESHOLD = 0.10    # <10% = stable
+    CHURN_MODERATE_THRESHOLD = 0.20  # 10-20% = moderate
+    FLAKY_FAILURE_THRESHOLD = 0.20   # >20% failure rate = flaky
+    VELOCITY_DROP_THRESHOLD = 0.30   # >30% drop = warning
+    
+    def __init__(self, db_path: Optional[Path] = None):
         """
-
-        return self.velocity_analyzer.calculate_velocity(days)@dataclass
-
-    class WorkPattern:
-
-    def analyze_velocity_trends(self, days: int = 30) -> Dict[str, Any]:    """Work session patterns."""
-
-        """    pattern_date: date
-
-        Analyze velocity trends over time.    time_slot: str  # e.g., "08-10"
-
-            sessions_count: int
-
-        Args:    sessions_successful: int
-
-            days: Number of days to analyze    success_rate: float
-
-                avg_duration_minutes: Optional[int] = None
-
-        Returns:    avg_focus_duration_minutes: Optional[int] = None
-
-            Dictionary with trend analysis
-
-        """
-
-        return self.velocity_analyzer.analyze_trends(days)@dataclass
-
-    class CortexUsage:
-
-    # ==================== Insight Generation Operations ====================    """CORTEX usage metrics."""
-
-        metric_date: date
-
-    def generate_insights(self, days: int = 30) -> List[Insight]:    intent_type: IntentType
-
-        """    requests_count: int
-
-        Generate all insights from metrics.    successful_count: int
-
-            failed_count: int
-
-        Args:    avg_response_time_seconds: Optional[float] = None
-
-            days: Number of days to analyze
-
-            
-
-        Returns:@dataclass
-
-            List of Insight objectsclass Correlation:
-
-        """    """Correlation between metrics."""
-
-        return self.insight_generator.generate_all_insights(days)    correlation_name: str
-
-        description: str
-
-    def generate_velocity_insights(self, days: int = 30) -> List[Insight]:    metric_a: str
-
-        """    metric_b: str
-
-        Generate velocity-specific insights.    correlation_coefficient: float
-
-            sample_size: int
-
-        Args:    confidence_level: float
-
-            days: Number of days to analyze    insight: Optional[str] = None
-
-                metadata: Optional[Dict[str, Any]] = None
-
-        Returns:
-
-            List of velocity Insight objects
-
-        """@dataclass
-
-        return self.insight_generator.generate_velocity_insights(days)class Insight:
-
-        """Generated insights and recommendations."""
-
-    def generate_hotspot_insights(self, days: int = 30) -> List[Insight]:    insight_type: InsightType
-
-        """    severity: Severity
-
-        Generate hotspot-specific insights.    title: str
-
-            description: str
-
-        Args:    recommendation: Optional[str] = None
-
-            days: Number of days to analyze    related_entity: Optional[str] = None
-
-                data_snapshot: Optional[Dict[str, Any]] = None
-
-        Returns:    acknowledged: bool = False
-
-            List of hotspot Insight objects    acknowledged_at: Optional[datetime] = None
-
-        """    dismissed: bool = False
-
-        return self.insight_generator.generate_hotspot_insights(days)    created_at: datetime = None
-
-        expires_at: Optional[datetime] = None
-
-    # ==================== Database Operations ====================    
-
-        def __post_init__(self):
-
-    def get_database_size(self) -> int:        if self.created_at is None:
-
-        """            self.created_at = datetime.now()
-
-        Get database size in bytes.
-
+        Initialize Context Intelligence.
         
-
-        Returns:class ContextIntelligence:
-
-            Size in bytes    """
-
-        """    Tier 3: Development Context Intelligence
-
-        return self.store.get_database_size()    
-
-        Provides real-time project analytics including:
-
-    def get_table_counts(self) -> Dict[str, int]:    - Git activity tracking and commit velocity
-
-        """    - File hotspot detection and churn analysis
-
-        Get row counts for all tables.    - Test metrics and flaky test detection
-
-            - Build health monitoring
-
-        Returns:    - Work pattern analysis
-
-            Dictionary of table names to counts    - CORTEX usage effectiveness
-
-        """    - Correlation discovery and insights
-
-        return self.store.get_table_counts()    
-
-        Performance targets:
-
-    def vacuum_database(self):    - Context queries: <10ms
-
-        """Vacuum database to reclaim space."""    - Database size: <50KB
-
-        self.store.vacuum()    - Update frequency: Delta updates (minimum 1 hour interval)
-
+        Args:
+            db_path: Path to SQLite database (default: cortex-brain/tier3/context.db)
         """
-
-    def analyze_database(self):    
-
-        """Analyze database to optimize queries."""    # Collection throttling
-
-        self.store.analyze()    MIN_COLLECTION_INTERVAL_HOURS = 1
-
+        if db_path is None:
+            brain_dir = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3"
+            brain_dir.mkdir(parents=True, exist_ok=True)
+            db_path = brain_dir / "context.db"
         
-
-    # ==================== Convenience Methods ====================    # Analysis windows
-
-        DEFAULT_ANALYSIS_WINDOW_DAYS = 30
-
-    def refresh_all(self, days: int = 30, force: bool = False) -> Dict[str, Any]:    VELOCITY_WINDOW_DAYS = 7
-
-        """    HOTSPOT_WINDOW_DAYS = 30
-
-        Refresh all context intelligence data.    
-
-            # Thresholds
-
-        Args:    CHURN_STABLE_THRESHOLD = 0.10    # <10% = stable
-
-            days: Number of days to analyze    CHURN_MODERATE_THRESHOLD = 0.20  # 10-20% = moderate
-
-            force: Force refresh even if recent data exists    FLAKY_FAILURE_THRESHOLD = 0.20   # >20% failure rate = flaky
-
-                VELOCITY_DROP_THRESHOLD = 0.30   # >30% drop = warning
-
-        Returns:    
-
-            Dictionary with refresh results    def __init__(self, db_path: Optional[Path] = None):
-
-        """        """
-
-        results = {        Initialize Context Intelligence.
-
-            'git_metrics': len(self.collect_git_metrics(days, force)),        
-
-            'file_hotspots': len(self.analyze_file_hotspots(days, force)),        Args:
-
-            'insights': len(self.generate_insights(days)),            db_path: Path to SQLite database (default: cortex-brain/tier3/context.db)
-
-            'database_size': self.get_database_size()        """
-
-        }        if db_path is None:
-
-        return results            brain_dir = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3"
-
-                brain_dir.mkdir(parents=True, exist_ok=True)
-
-    def get_summary(self, days: int = 30) -> Dict[str, Any]:            db_path = brain_dir / "context.db"
-
-        """        
-
-        Get a summary of all context intelligence data.        self.db_path = Path(db_path)
-
-                self.db_path.parent.mkdir(parents=True, exist_ok=True)
-
-        Args:        
-
-            days: Number of days to summarize        # Initialize database
-
-                    self._init_database()
-
-        Returns:    
-
-            Dictionary with summary statistics    def _init_database(self):
-
-        """        """Create database schema."""
-
-        velocity = self.calculate_velocity(days)        conn = sqlite3.connect(self.db_path)
-
-        hotspots = self.get_file_hotspots(days)        cursor = conn.cursor()
-
-        unstable = self.get_unstable_files(days)        
-
-        insights = self.generate_insights(days)        # Git metrics table
-
-                cursor.execute("""
-
-        return {            CREATE TABLE IF NOT EXISTS context_git_metrics (
-
-            'velocity': velocity,                id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            'hotspot_count': len(hotspots),                metric_date DATE NOT NULL,
-
-            'unstable_count': len(unstable),                commits_count INTEGER NOT NULL DEFAULT 0,
-
-            'insight_count': len(insights),                lines_added INTEGER NOT NULL DEFAULT 0,
-
-            'database_size': self.get_database_size(),                lines_deleted INTEGER NOT NULL DEFAULT 0,
-
-            'table_counts': self.get_table_counts()                net_growth INTEGER NOT NULL DEFAULT 0,
-
-        }                files_changed INTEGER NOT NULL DEFAULT 0,
-
+        self.db_path = Path(db_path)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Initialize database
+        self._init_database()
+    
+    def _init_database(self):
+        """Create database schema."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Git metrics table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS context_git_metrics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                metric_date DATE NOT NULL,
+                commits_count INTEGER NOT NULL DEFAULT 0,
+                lines_added INTEGER NOT NULL DEFAULT 0,
+                lines_deleted INTEGER NOT NULL DEFAULT 0,
+                net_growth INTEGER NOT NULL DEFAULT 0,
+                files_changed INTEGER NOT NULL DEFAULT 0,
                 contributor TEXT,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(metric_date, contributor)

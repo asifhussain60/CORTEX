@@ -2,6 +2,43 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Start CORTEX Ambient Capture",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/scripts/cortex/auto_capture_daemon.py"
+            ],
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Stop CORTEX Ambient Capture",
+            "type": "shell",
+            "command": "taskkill",
+            "args": ["/F", "/IM", "python.exe", "/FI", "WINDOWTITLE eq *auto_capture_daemon*"],
+            "windows": {
+                "command": "taskkill",
+                "args": ["/F", "/IM", "python.exe", "/FI", "WINDOWTITLE eq *auto_capture_daemon*"]
+            },
+            "linux": {
+                "command": "pkill",
+                "args": ["-f", "auto_capture_daemon.py"]
+            },
+            "osx": {
+                "command": "pkill",
+                "args": ["-f", "auto_capture_daemon.py"]
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",

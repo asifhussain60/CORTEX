@@ -16,6 +16,9 @@ mkdocs-mermaid2-plugin>=1.1.0
 # Phase 1 & 2: SQLite with FTS5 (coming soon)
 # No additional dependencies needed - uses Python's built-in sqlite3
 
+# Phase 2: Ambient Capture
+watchdog>=3.0.0  # File system monitoring
+
 # Development
 black>=23.0.0
 flake8>=6.0.0
