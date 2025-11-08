@@ -63,11 +63,11 @@ class DatabaseSchema:
                 source TEXT,
                 metadata TEXT,
                 is_pinned INTEGER DEFAULT 0,
-                scope TEXT DEFAULT 'generic',
+                scope TEXT DEFAULT 'cortex',
                 namespaces TEXT DEFAULT '["CORTEX-core"]',
                 CHECK (confidence >= 0.0 AND confidence <= 1.0),
                 CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context')),
-                CHECK (scope IN ('generic', 'application'))
+                CHECK (scope IN ('cortex', 'application'))
             )
         """)
     

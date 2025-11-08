@@ -17,8 +17,8 @@ import tempfile
 import shutil
 import json
 
-from CORTEX.src.tier2.knowledge_graph import KnowledgeGraph, PatternType
-from CORTEX.src.tier2.pattern_cleanup import PatternCleanup, CleanupStats
+from src.tier2.knowledge_graph import KnowledgeGraph, PatternType
+from src.tier2.pattern_cleanup import PatternCleanup, CleanupStats
 
 
 @pytest.fixture
@@ -89,7 +89,7 @@ class TestPatternDecay:
             content="CORTEX core intelligence",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -251,7 +251,7 @@ class TestPatternConsolidation:
             content="Test-driven development RED GREEN REFACTOR",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -261,7 +261,7 @@ class TestPatternConsolidation:
             content="Test-driven development RED GREEN REFACTOR cycle",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -385,7 +385,7 @@ class TestCleanupRecommendations:
             content="Test",
             pattern_type=PatternType.WORKFLOW,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -448,3 +448,4 @@ class TestDatabaseOptimization:
         
         # Should succeed
         assert result is True
+

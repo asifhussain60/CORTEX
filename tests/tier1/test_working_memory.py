@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import tempfile
 import shutil
-from CORTEX.src.tier1.working_memory import (
+from src.tier1.working_memory import (
     WorkingMemory,
     Conversation,
     Entity,

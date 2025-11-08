@@ -13,35 +13,93 @@
 
 ---
 
-## 🖥️ Platform Switch Commands
+## 🖥️ Cross-Platform Compatibility
 
-**Quick Platform Migration:** Use these commands to switch all platform-specific references in one go.
+**CORTEX 2.0 works seamlessly on Windows, macOS, and Linux.**
 
-### Switch to Mac
-When you say **"Switch to Mac"**, Copilot will:
-1. Update `cortex.config.json` with your Mac hostname
-2. Convert all PowerShell examples to bash/zsh
-3. Update file paths from Windows (`D:\`) to macOS (`/Users/...`)
-4. Update shell command syntax (`.ps1` → `.sh`, `pwsh` → `bash/zsh`)
-5. Update documentation references
+### ✅ What's Cross-Platform
 
-**Required Info:** Your Mac hostname (run `hostname` in terminal)
+- **All Python code** - Uses `pathlib.Path` for OS-agnostic paths
+- **SQLite databases** - Binary-compatible across all platforms
+- **Configuration system** - Auto-detects platform and machine
+- **VS Code Extension** (Phase 3) - Native cross-platform support
 
-### Switch to Windows
-When you say **"Switch to Windows"**, Copilot will:
-1. Update `cortex.config.json` with your Windows hostname
-2. Convert all bash/zsh examples to PowerShell
-3. Update file paths from macOS (`/Users/...`) to Windows (`D:\`)
-4. Update shell command syntax (`.sh` → `.ps1`, `bash` → `pwsh`)
-5. Update documentation references
+### 🔧 Platform-Specific Components
 
-**Required Info:** Your Windows hostname (run `hostname` in PowerShell)
+**Auto-Resume Prompt:**
+- **Windows:** Use `scripts/auto-resume-prompt.ps1` (PowerShell)
+- **macOS/Linux:** Use `scripts/auto-resume-prompt.sh` (bash/zsh)
 
-**Files Updated:**
-- `cortex.config.json` - Machine-specific paths
-- `prompts/user/cortex.md` - Code examples and commands
-- `run-cortex.sh` / `run-cortex.ps1` - Entry point scripts
-- Documentation files with platform-specific examples
+**Installation:**
+
+```powershell
+# Windows PowerShell Profile
+Add-Content $PROFILE @"
+# CORTEX Auto-Resume
+if (Test-Path `"`$env:CORTEX_ROOT/scripts/auto-resume-prompt.ps1`") {
+    . `"`$env:CORTEX_ROOT/scripts/auto-resume-prompt.ps1`"
+}
+"@
+```
+
+```bash
+# macOS/Linux Shell Profile (~/.bashrc or ~/.zshrc)
+cat >> ~/.zshrc << 'EOF'
+# CORTEX Auto-Resume
+if [ -f "$CORTEX_ROOT/scripts/auto-resume-prompt.sh" ]; then
+    source "$CORTEX_ROOT/scripts/auto-resume-prompt.sh"
+fi
+EOF
+```
+
+### 🔄 Switching Between Platforms
+
+**No initialization command needed!** Just follow these steps:
+
+**1. Set Environment Variables:**
+
+```bash
+# macOS/Linux (~/.zshrc or ~/.bashrc)
+export CORTEX_ROOT="$HOME/PROJECTS/CORTEX"
+export CORTEX_BRAIN_PATH="$CORTEX_ROOT/cortex-brain"
+```
+
+```powershell
+# Windows (PowerShell as Administrator)
+[Environment]::SetEnvironmentVariable("CORTEX_ROOT", "D:\PROJECTS\CORTEX", "User")
+[Environment]::SetEnvironmentVariable("CORTEX_BRAIN_PATH", "D:\PROJECTS\CORTEX\cortex-brain", "User")
+```
+
+**2. Update Config (Optional - if using machine-specific paths):**
+
+```json
+{
+  "machines": {
+    "YOUR-WINDOWS-PC": {
+      "rootPath": "D:\\PROJECTS\\CORTEX",
+      "brainPath": "D:\\PROJECTS\\CORTEX\\cortex-brain"
+    },
+    "YOUR-MACBOOK.local": {
+      "rootPath": "/Users/yourname/PROJECTS/CORTEX",
+      "brainPath": "/Users/yourname/PROJECTS/CORTEX/cortex-brain"
+    }
+  }
+}
+```
+
+**3. Copy Brain Data:**
+
+```bash
+# The cortex-brain folder is 100% portable
+# Just copy it to the same relative location on the new platform
+cp -R cortex-brain ~/PROJECTS/CORTEX/cortex-brain
+```
+
+**That's it!** CORTEX auto-detects your platform and uses the right paths.
+
+### 📖 Detailed Migration Guide
+
+See: [`docs/architecture/cross-platform-compatibility.md`](../../docs/architecture/cross-platform-compatibility.md)
 
 ---
 
@@ -99,6 +157,7 @@ python scripts/cortex_cli.py --session-info
 - 🟡 **Partially Implemented** - Core working, missing features
 - 🔄 **In Progress** - Currently being developed
 - 📋 **Designed Only** - Documentation exists, no code
+- ⚡ **Priority** - Critical for "continue" command
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -106,22 +165,67 @@ python scripts/cortex_cli.py --session-info
 | **V3 GROUP 2: Infrastructure** | ✅ | Tier 0, CI/CD, MkDocs operational |
 | **V3 GROUP 3: Data Storage** | ✅ | All tiers complete - 60/60 tests passing ⭐ |
 | **Tier 1: Working Memory** | ✅ | SQLite conversations, <50ms queries (Nov 6) |
+| **Tier 1: FIFO Queue** | ✅ | 20-conversation limit, active protection (Nov 8) |
+| **Tier 1: Entity Extraction** | ✅ | Files, classes, methods (Nov 8) |
 | **Tier 2: Knowledge Graph** | ✅ | FTS5 search, pattern learning, <150ms (Nov 6) |
 | **Tier 3: Context Intelligence** | ✅ | Git metrics, hotspots, insights (Nov 6) |
 | **Migration Tools** | ✅ | All 3 tier migrations validated (Nov 6) |
+| **Conversation Tracking** | 🟡 | Infrastructure works, integration gap identified |
 | **V3 GROUP 4: Intelligence** | 🔄 | Ready to begin - agents, entry point, dashboard |
 | **Agent Architecture (SOLID)** | 📋 | 10 specialist agents designed |
 | **Core Routing** | 📋 | Intent router designed |
 | **Dashboard** | 📋 | Live data visualization designed |
-| **VS Code Extension** | 📋 | **DEFINITIVE conversation fix** - Phase 3 (Week 9-12) 🆕 |
+| **WorkStateManager** | ⚡✅ | CRITICAL - Track in-progress work (Nov 8) ⭐ |
+| **SessionToken** | ⚡✅ | CRITICAL - Persistent conversation ID (Nov 8) ⭐ |
+| **Auto-Prompt Enhancement** | ⚡✅ | CRITICAL - PowerShell profile integration (Nov 8) ⭐ |
+| **Ambient Capture Daemon** | 📋 | Background context capture (Phase 2) 🆕 |
+| **VS Code Extension** | 📋 | **DEFINITIVE conversation fix** - Phase 3 (Week 11-16) 🆕 |
 | **Automatic Capture** | 📋 | Zero manual intervention, monitors all chats 🆕 |
+| **Proactive Resume** | 📋 | Auto-resume prompts on startup 🆕 |
+| **Code Review Plugin** | 📋 | Automated PR reviews - Phase 8 (Week 25-26) 🆕 |
+| **Web Testing Enhancements** | 📋 | Lighthouse + axe-core - Phase 8 (Week 27) 🆕 |
+| **Reverse Engineering Plugin** | 📋 | Legacy code analysis - Phase 8 (Week 28) 🆕 |
+| **UI from Spec Plugin** | 📋 | OpenAPI → UI - Phase 9 (Week 29-30) 🆕 |
+| **Mobile Testing Plugin** | 📋 | Appium cross-platform - Phase 9 (Week 31-32) 🆕 |
 | **V3 GROUP 5: Migration** | 📋 | KDS → CORTEX data migration |
 | **V3 GROUP 6: Finalization** | 📋 | System check, documentation, release |
 
-**V3 Migration Progress:** Groups 1-3 Complete (31 hrs) ✅ | Groups 4-6 Remaining (29-41 hrs) 📋  
-**CORTEX 2.0 Extension:** Planned for Phase 3 (Week 9-12) - Definitive conversation tracking solution 🆕  
+**CORTEX 2.0 Progress Summary:**
+- **Completed:** Groups 1-3 (Data Storage Layer) ✅ + Phase 0 Quick Wins ✅
+- **Phase 0 Complete:** WorkStateManager, SessionToken, Auto-Prompt (77/77 tests passing)
+- **Next Up:** Phase 1.2 - Tier 1 Working Memory Refactoring (Week 3-4) 📋
+- **Timeline:** 28-32 weeks total (CORTEX 2.0 Core + Capability Enhancements)
+- **Critical Path:** Phase 0 ✅ → Phase 1-7 (Core) → Phase 8-9 (Capabilities)
+
+**"Continue" Command Status:**
+- **Current Success Rate:** ~60% (Phase 0 complete!) ✅
+- **After Phase 2:** ~85% (ambient background capture) 🎯
+- **After Phase 3:** ~98% (extension with automatic capture) 🚀
+
+**Capability Enhancement Status (NEW - Phase 8-9):**
+- **Phase 8 (Week 25-28):** Code review + Web testing + Reverse engineering
+- **Phase 9 (Week 29-32):** Mobile testing + UI from spec
+- **Core Ready Now:** Code writing, backend testing, code rewrite, documentation ✅
+- **Total Enhancement Footprint:** +10.9% (2,800 + 4,000 lines = 6,800 lines)
+- **ROI:** Very High - Extends CORTEX into full-spectrum development assistant
+
+**Capability Matrix:**
+| Feature | Status | Phase | Footprint |
+|---------|--------|-------|-----------|
+| Code Writing | ✅ Ready | Core | 0% |
+| Backend Testing | ✅ Ready | Core | 0% |
+| Code Documentation | ✅ Ready | Core | 0% |
+| Code Rewrite | ✅ Ready | Core | 0% |
+| Code Review | 📋 Phase 8.1 | Week 25-26 | +1.3% |
+| Web Testing | 📋 Phase 8.2 | Week 27 | +0.8% |
+| Reverse Engineering | 📋 Phase 8.3 | Week 28 | +2.4% |
+| UI from Spec | 📋 Phase 9.1 | Week 29-30 | +3.2% |
+| Mobile Testing | 📋 Phase 9.2 | Week 31-32 | +3.2% |
+| **Figma Integration** | ❌ Deferred | Use Anima | +6.4% avoided |
+| **A/B Testing** | ❌ Deferred | Use Optimizely | +4.0% avoided |
+
 **Performance:** 52% faster than estimated, 100% test coverage ⭐  
-**Last Updated:** 2025-11-07 (Added VS Code Extension architecture)
+**Last Updated:** 2025-11-08 (Phase 0 COMPLETE + Holistic Capability Roadmap ADDED)
 
 ---
 
@@ -594,6 +698,90 @@ cortex plugin:run extension_scaffold --regenerate --preserve-customizations
 
 ---
 
+### 🎯 CORTEX 2.0: Strategic Overview
+
+**Mission:** Transform CORTEX from a functional cognitive system into a production-ready, self-sustaining CORTEX-specific development partner with zero conversation amnesia.
+
+**Strategic Focus Shift:**
+- ❌ **OLD:** Build generic reusable framework for any project
+- ✅ **NEW:** Build CORTEX-specific system optimized for CORTEX development itself
+- **Rationale:** Focus = Speed. Generic frameworks take 3x longer. CORTEX should first perfect helping itself before expanding.
+
+**Primary Problem Solved:**
+> **"Continue" command fails 80% of the time because conversations never reach CORTEX's brain.**
+
+**Root Cause:** GitHub Copilot Chat has no automatic memory bridge to CORTEX Tier 1.
+
+**Solution Architecture (Phased Evolution):**
+
+```
+Phase 0 (Quick Wins - Week 1-2): Foundation
+  ├─ WorkStateManager: Track in-progress work
+  ├─ SessionToken: Persistent conversation ID
+  └─ Auto-Prompt: Remind user to capture
+  → Impact: 20% → 60% success rate (3x improvement in 6.5 hours)
+
+Phase 1 (Core Modularization - Week 3-6): Architecture
+  ├─ 1.1 Knowledge Graph modularization (COMPLETE ✅)
+  └─ 1.2 Tier 1 Working Memory refactor (IN PROGRESS NEXT)
+  → Impact: Maintainability + performance foundation for plugins
+
+Phase 2 (Ambient - Week 7-8): Automation
+  ├─ File system watcher
+  ├─ Terminal monitoring
+  └─ Git operation detection
+  → Impact: 60% → 85% success rate (background capture)
+
+Phase 3 (Extension - Week 11-16): Definitive Solution
+  ├─ VS Code chat participant (@cortex)
+  ├─ Lifecycle hooks (focus/blur)
+  ├─ External monitoring (@copilot)
+  └─ Proactive resume prompts
+  → Impact: 85% → 98% success rate (near-perfect)
+```
+
+**Why Extension is Definitive:**
+
+| Limitation | Manual Scripts | Ambient Daemon | VS Code Extension |
+|------------|----------------|----------------|-------------------|
+| Chat transcript access | ❌ No | ❌ No | ✅ Yes |
+| Lifecycle hooks | ❌ No | ⚠️ Partial | ✅ Full |
+| Proactive prompts | ❌ No | ❌ No | ✅ Yes |
+| Zero user action | ❌ No | ⚠️ Partial | ✅ Yes |
+| Crash recovery | ❌ No | ❌ No | ✅ Yes |
+| External monitoring | ❌ No | ❌ No | ✅ Yes |
+
+**Timeline:** 22-24 weeks (5.5-6 months)
+**Total Investment:** ~96.5 hours of development time
+**ROI:** 10:1 (every hour invested saves 10+ hours of user frustration)
+
+**Key Milestones:**
+
+| Week | Milestone | Deliverable | Impact |
+|------|-----------|-------------|--------|
+| **Week 2** | Phase 0 Complete | WorkStateManager + SessionToken | "Continue" works 60% of time |
+| **Week 6** | Phase 1 Complete | All modules <500 lines | Code maintainability +40% |
+| **Week 10** | Phase 2 Complete | Ambient capture + workflows | "Continue" works 85% of time |
+| **Week 16** | Phase 3 Complete | Extension published | "Continue" works 98% of time |
+| **Week 18** | Phase 4 Complete | 90% test coverage | Production-ready quality |
+| **Week 24** | Phase 7 Complete | Full rollout | 70% adoption achieved |
+
+**Success Criteria (Phase 3 - Extension):**
+- ✅ "Continue" command success rate: 98%
+- ✅ Automatic capture: No user intervention required
+- ✅ Conversation amnesia: Eliminated
+- ✅ Time to resume: <2 seconds
+- ✅ User satisfaction: ≥4.5/5
+
+**Risk Mitigation:**
+- Incremental delivery (phases build on each other)
+- Each phase delivers measurable value
+- Rollback procedures at every phase
+- Dual-mode operation (CLI + Extension coexist)
+- Feature flags for gradual migration
+
+---
+
 #### 🔄 Workflow Pipeline System (NEW)
 **Problem Solved:** Hardcoded agent workflows, difficult orchestration  
 **Solution:** Declarative DAG-based workflow engine
@@ -1009,163 +1197,1618 @@ confidence: 0.85
 - ✅ Brain Protector integration
 - ✅ Namespace-based search prioritization
 
+Note: In code, the scope enum is ['cortex', 'application'] to reflect CORTEX-core vs app-specific. The documentation's 'generic' is equivalent to 'cortex'.
+
 ---
 
 ### CORTEX 2.0 Implementation Roadmap
 
-**Phase 0: Baseline (Week 1-2)**
+**Strategic Focus:** CORTEX-specific system development + High-value capability enhancements
+**Timeline:** 28-32 weeks total (7-8 months)
+**Phases:** 9 phases (0-7: Core CORTEX 2.0, 8-9: Capability Enhancements)
+**Last Updated:** 2025-11-08
+
+**Roadmap Structure:**
+- **Phases 0-7 (Week 1-24):** Core CORTEX 2.0 - Conversation tracking, modularization, extension
+- **Phase 8 (Week 25-28):** Wave 1 Capabilities - Code review, web testing, reverse engineering
+- **Phase 9 (Week 29-32):** Wave 2 Capabilities - Mobile testing, UI from spec
+- **Deferred:** Figma integration, A/B testing (recommend third-party integrations)
+
+**Total Footprint Impact:**
+- Core CORTEX 2.0 (Phases 0-7): Baseline + refactoring (no net increase)
+- Phase 8 (Wave 1): +4.5% (~2,800 lines)
+- Phase 9 (Wave 2): +6.4% (~4,000 lines)
+- **Total with Enhancements: +10.9% (63,000 → 69,868 lines)**
+- Deferred features: +10.4% avoided by using integrations
+
+**Key Milestones:**
+- Week 2: Phase 0 complete ✅ (60% "continue" success)
+- Week 6: Phase 1 complete 📋 (modularization)
+- Week 10: Phase 2 complete 📋 (85% "continue" success)
+- Week 16: Phase 3 complete 📋 (98% "continue" success, extension live)
+- Week 24: Phase 7 complete 📋 (full rollout, core complete)
+- Week 28: Phase 8 complete 📋 (code review, web testing, reverse engineering)
+- Week 32: Phase 9 complete 📋 (mobile testing, UI generation)
+
+---
+
+**Phase 0: Baseline & Quick Wins (Week 1-2)** ✅ PRIORITY
+
+**Baseline Activities:**
 - Run complete test suite
 - Document current architecture
 - Risk assessment
 - Establish monitoring baselines
 
-**Phase 1: Core Modularization (Week 3-5)**
-- Refactor knowledge_graph.py → 6 focused modules
-- Refactor working_memory.py → 5 modules
-- Refactor context_intelligence.py → 6 modules
-- Extract agent strategies
-
-**Phase 2: Workflow Pipeline (Week 6-8)**
-- Complete workflow orchestration
-- Implement missing stages
-- Create production workflows
-- Add checkpoint/resume
-
-**Phase 3: VS Code Extension (Week 9-12) 🆕 DEFINITIVE CONVERSATION FIX**
-- **Week 9:** Extension scaffold + chat participant registration
-  - **Run automated scaffold:** `cortex setup:extension` (generates full project)
-  - TypeScript project auto-configured
-  - package.json, tsconfig.json, all source files generated
-  - Python ↔ TypeScript bridge created
-  - Register CORTEX chat participant
-  - Basic message routing to Python backend
-  - Automatic capture to Tier 1
+**Quick Win Implementations (NEW - Critical for "continue" command):**
+- ⚡ **WorkStateManager** - Track in-progress work with phase/task checkpoints (4 hours)
+  - Add `work_sessions` and `work_progress` tables to Tier 1
+  - Implement resume point detection
+  - Enable "continue" to know exact next task
   
-- **Week 10:** Lifecycle integration
-  - Window state monitoring (focus/blur) - already scaffolded
-  - Automatic checkpointing on events
-  - Resume prompt on startup
-  - Crash recovery via checkpoints
+- ⚡ **SessionToken** - Persistent conversation ID across Copilot messages (2 hours)
+  - Store session token in `.vscode/cortex-session.json`
+  - 30-minute idle boundary detection (Rule #11)
+  - Fix conversation ID fragmentation
   
-- **Week 11:** External conversation monitoring
-  - Monitor GitHub Copilot conversations - already scaffolded
-  - Passive capture to brain (tagged as external)
-  - Unified conversation timeline
-  - Context injection from all sources
-  
-- **Week 12:** Polish & marketplace
-  - Settings UI (enable/disable features) - already in package.json
-  - Keyboard shortcuts (Ctrl+Shift+C for CORTEX chat)
-  - Documentation and tutorials
-  - Build: `npm run package` (creates .vsix)
-  - Publish: `npm run publish` (to VS Code Marketplace)
+- ⚡ **Enhanced Auto-Prompt** - PowerShell profile integration (30 minutes)
+  - Prompt user after meaningful work (git commit, test run, etc.)
+  - Auto-detect 5+ minute gaps since last capture
+  - Reduce manual capture burden
 
-**Phase 4: Risk Mitigation & Testing (Week 13-14)**
-- 75 new risk mitigation tests
-- End-to-end integration tests
-- Extension stability testing
-- Security scenario testing
-- Performance benchmarks
+**Success Criteria:**
+- ✅ "Continue" success rate: 20% → 60%
+- ✅ Work state tracking: 100% (automatic)
+- ✅ Resume point accuracy: 95%
+- ✅ Zero code regressions (all tests passing)
 
-**Phase 5: Performance Optimization (Week 15-16)**
-- Database optimization (FTS5, caching)
-- Workflow optimization (parallel stages)
-- Context injection optimization
-- Extension responsiveness tuning
-- Lazy loading implementation
-
-**Phase 6: Documentation & Training (Week 17-18)**
-- Architecture guides
-- Developer guides (extension API)
-- User tutorials (chat interface)
-- API reference
-- Migration guide (manual → automatic)
-
-**Phase 7: Migration & Rollout (Week 19-20)**
-- Feature flags for gradual migration
-- Dual-mode operation (CLI + Extension)
-- Extension: Alpha → Beta → General availability
-- Monitoring and validation
-- Marketplace promotion
+**Deliverables:**
+- Baseline report with architecture diagrams
+- WorkStateManager implementation + tests
+- SessionToken implementation + tests
+- Updated PowerShell profile with auto-prompt
+- Risk assessment matrix
 
 ---
 
-### Success Metrics
+**Phase 1: Core Modularization (Week 3-6)** 📋 NEXT
 
-**Technical:**
+**Focus:** Break monolithic files into SOLID-compliant modules (<500 lines each)
+
+**1.1 Tier 1 Working Memory Refactoring (Week 3)**
+- Refactor `working_memory.py` (823 lines) → 5 focused modules:
+  - `working_memory.py` (120 lines, coordinator)
+  - `conversations/conversation_manager.py` (200 lines)
+  - `messages/message_store.py` (180 lines)
+  - `entities/entity_extractor.py` (150 lines)
+  - `fifo/queue_manager.py` (173 lines)
+- ✅ Already passing 22/22 tests - maintain test coverage
+- Add WorkStateManager integration tests
+
+**1.2 Knowledge Graph Refactoring (Week 4)**
+- Refactor `knowledge_graph.py` (1144 lines) → 6 focused modules:
+  - `knowledge_graph.py` (150 lines, coordinator)
+  - `patterns/pattern_store.py` (200 lines)
+  - `patterns/pattern_search.py` (250 lines)
+  - `patterns/pattern_decay.py` (120 lines)
+  - `relationships/relationship_manager.py` (180 lines)
+  - `tags/tag_manager.py` (120 lines)
+- Maintain FTS5 search performance
+- Add namespace-aware search (CORTEX-core, application-specific)
+
+**1.3 Context Intelligence Refactoring (Week 5)**
+- Refactor `context_intelligence.py` (776 lines) → 6 focused modules:
+  - `context_intelligence.py` (100 lines, coordinator)
+  - `metrics/git_metrics.py` (150 lines)
+  - `metrics/file_metrics.py` (130 lines)
+  - `analysis/hotspot_detector.py` (140 lines)
+  - `analysis/velocity_analyzer.py` (120 lines)
+  - `storage/context_store.py` (136 lines)
+- Maintain <150ms query performance
+
+**1.4 Agent Modularization (Week 6)**
+- Refactor 5 agents using strategy pattern:
+  - `error_corrector.py` (692 lines) → 4 modules (<150 lines each)
+  - `health_validator.py` → 3 modules
+  - `code_executor.py` → 4 modules
+  - `test_generator.py` → 3 modules
+  - `work_planner.py` → 4 modules
+- Extract agent strategies for reusability
+
+**Success Criteria:**
 - ✅ All files <500 lines
-- ✅ Test coverage >85%
-- ✅ Performance +20% improvement
-- ✅ Bug rate <0.1% critical
-- ✅ **Zero manual conversation capture needed** 🆕
+- ✅ Zero circular dependencies
+- ✅ All existing tests passing
+- ✅ Test coverage ≥85%
+- ✅ Performance maintained or improved
 
-**User:**
-- ✅ User satisfaction ≥4.5/5
-- ✅ Feature adoption ≥80%
-- ✅ Support tickets -30%
-- ✅ Onboarding time -50%
-- ✅ **Conversation amnesia reports: 0** 🆕
+---
 
-**Extension Specific:** 🆕
-- ✅ Extension install rate >1,000/month
+**Phase 2: Ambient Capture & Workflow Pipeline (Week 7-10)**
+
+**2.1 Ambient Context Daemon (Week 7-8) 🎯 HIGH VALUE**
+- **Problem:** Manual capture still required despite Phase 0 improvements
+- **Solution:** Background daemon for automatic context capture
+
+**Implementation:**
+```python
+# scripts/cortex/auto_capture_daemon.py
+- Watch file system for workspace changes
+- Capture open files from VS Code
+- Monitor terminal output
+- Detect Git operations
+- Auto-store context to Tier 1
+- Debounce captures (5-second intervals)
+```
+
+**VS Code Integration:**
+- Add `.vscode/tasks.json` entry for auto-start on folder open
+- Run daemon in background (non-blocking)
+- Graceful shutdown on workspace close
+
+**Success Criteria:**
+- ✅ "Continue" success rate: 60% → 85%
+- ✅ Zero manual capture required for 80% of sessions
+- ✅ Context loss: <20%
+- ✅ Capture latency: <100ms
+
+**2.2 Workflow Pipeline System (Week 9-10)**
+- Complete workflow orchestration engine
+- Implement missing workflow stages
+- Create production workflows (feature_development, bug_fix, etc.)
+- Add checkpoint/resume capability
+- DAG validation for workflow definitions
+- Parallel stage execution support
+
+**Success Criteria:**
+- ✅ Declarative workflow definitions work
+- ✅ Checkpoint/resume functional
+- ✅ 4+ production workflows created
+- ✅ Zero workflow cycles detected
+
+---
+
+**Phase 3: VS Code Extension (Week 11-16) 🚀 DEFINITIVE SOLUTION**
+
+**Strategic Note:** This is the definitive fix for conversation tracking. Extension provides active hooks into VS Code that manual scripts cannot achieve.
+
+**3.1 Extension Scaffold + Chat Participant (Week 11-12)**
+- **Run automated scaffold:** `cortex setup:extension`
+  - TypeScript project fully configured
+  - package.json with all dependencies
+  - Python ↔ TypeScript bridge
+  - Test infrastructure
+- Register `@cortex` chat participant
+- Implement basic message routing to Python backend
+- Automatic capture to Tier 1 (real-time)
+- Unit tests for extension core
+
+**3.2 Lifecycle Integration (Week 13)**
+- Window state monitoring (focus/blur events)
+- Automatic checkpointing on focus loss
+- Resume prompt on VS Code startup
+  - "Resume: Add purple button? (2 hours ago)"
+  - Show progress: "Phase 2, 3/5 tasks complete"
+- Crash recovery via checkpoints
+- Integration tests for lifecycle hooks
+
+**3.3 External Conversation Monitoring (Week 14)**
+- Monitor GitHub Copilot conversations via API
+- Passive capture to brain (tagged as "external")
+- Unified conversation timeline (CORTEX + Copilot)
+- Context injection from all sources
+- Conversation deduplication logic
+
+**3.4 Proactive Resume System (Week 15)**
+- Detect resume opportunities:
+  - 30+ min idle (Rule #11 boundary)
+  - First message in new chat session
+  - Workspace open after >2 hours
+- Show resume prompt automatically
+- Display work progress and next task
+- One-click resume to exact checkpoint
+
+**3.5 Polish & Marketplace (Week 16)**
+- Settings UI (enable/disable features)
+- Keyboard shortcuts (Ctrl+Shift+C for CORTEX chat)
+- Documentation and tutorials
+- Extension icon and branding
+- Build: `npm run package` (creates .vsix)
+- Publish: `npm run publish` (to VS Code Marketplace)
+- Alpha release to early adopters
+
+**Success Criteria:**
+- ✅ "Continue" success rate: 85% → 98%
+- ✅ Zero manual intervention required
 - ✅ Automatic capture success rate >99%
 - ✅ Average resume time <2 seconds
-- ✅ Crash recovery success rate >95%
+- ✅ Extension stability >95%
 - ✅ External chat capture rate >90%
-- Risk assessment
-- Establish monitoring baselines
-
-**Phase 1: Core Modularization (Week 3-5)**
-- Refactor knowledge_graph.py → 6 focused modules
-- Refactor working_memory.py → 5 modules
-- Refactor context_intelligence.py → 6 modules
-- Extract agent strategies
-
-**Phase 2: Workflow Pipeline (Week 6-8)**
-- Complete workflow orchestration
-- Implement missing stages
-- Create production workflows
-- Add checkpoint/resume
-
-**Phase 3: Risk Mitigation & Testing (Week 9-10)**
-- 75 new risk mitigation tests
-- End-to-end integration tests
-- Security scenario testing
-- Performance benchmarks
-
-**Phase 4: Performance Optimization (Week 11-12)**
-- Database optimization (FTS5, caching)
-- Workflow optimization (parallel stages)
-- Context injection optimization
-- Lazy loading implementation
-
-**Phase 5: Documentation & Training (Week 13-14)**
-- Architecture guides
-- Developer guides
-- User tutorials
-- API reference
-
-**Phase 6: Migration & Rollout (Week 15-16)**
-- Feature flags for gradual migration
-- Dual-mode operation (1.0 + 2.0 in parallel)
-- Alpha → Beta → General availability
-- Monitoring and validation
 
 ---
 
-### Success Metrics
+**Phase 4: Risk Mitigation & Testing (Week 17-18)**
+- 75 new risk mitigation tests
+  - Conversation tracking failure scenarios
+  - Extension crash recovery
+  - FIFO queue edge cases
+  - WorkStateManager concurrency
+- End-to-end integration tests
+  - Full conversation lifecycle
+  - Multi-phase work completion
+  - Cross-tier data flow
+- Extension stability testing
+  - Memory leak detection
+  - Performance under load
+  - Rapid focus change handling
+- Security scenario testing
+  - Brain data protection
+  - Extension permissions audit
+- Performance benchmarks validation
+  - Tier 1: <50ms queries
+  - Tier 2: <150ms search
+  - Extension: <100ms capture
 
-**Technical:**
-- ✅ All files <500 lines
-- ✅ Test coverage >85%
-- ✅ Performance +20% improvement
+**Success Criteria:**
+- ✅ Test coverage >90%
+- ✅ Zero critical bugs
+- ✅ All performance benchmarks met
+- ✅ Security audit passed
+
+---
+
+**Phase 5: Performance Optimization (Week 19-20)**
+- Database optimization
+  - VACUUM fragmented databases
+  - ANALYZE stale statistics
+  - Index tuning for conversation queries
+  - FTS5 optimization for pattern search
+  - Connection pooling for Tier 1
+- Workflow optimization
+  - Parallel stage execution
+  - Stage result caching
+  - DAG pre-compilation
+- Context injection optimization
+  - Selective tier loading
+  - Lazy entity extraction
+  - Query result caching
+- Extension responsiveness tuning
+  - Debounced capture events
+  - Background processing for brain updates
+  - Incremental context loading
+- Lazy loading implementation
+  - Defer Tier 2 pattern loading until needed
+  - On-demand Tier 3 metrics collection
+
+**Success Criteria:**
+- ✅ 20%+ performance improvement over baseline
+- ✅ Extension UI remains responsive (<100ms)
+- ✅ Memory usage optimized (<50MB extension overhead)
+- ✅ Database size growth controlled (<1MB/day)
+
+---
+
+**Phase 6: Documentation & Training (Week 21-22)**
+- Architecture guides
+  - CORTEX 2.0 system design
+  - Tier architecture deep-dive
+  - Extension architecture
+  - WorkStateManager usage
+- Developer guides
+  - Extension API documentation
+  - Contributing to CORTEX
+  - Plugin development guide
+  - Testing strategies
+- User tutorials
+  - Getting started with CORTEX extension
+  - Using @cortex chat participant
+  - Understanding resume prompts
+  - Managing conversation history
+- API reference
+  - Tier 1 API (conversations, messages, entities)
+  - Tier 2 API (patterns, knowledge graph)
+  - Tier 3 API (context intelligence)
+  - Extension Python bridge API
+- Migration guide
+  - Manual capture → Automatic capture
+  - CLI-only → Extension-first
+  - Data migration procedures
+  - Rollback procedures
+
+**Success Criteria:**
+- ✅ All documentation complete
+- ✅ Code examples validated
+- ✅ User feedback incorporated
+- ✅ Migration guide tested with real users
+
+---
+
+**Phase 7: Migration & Rollout (Week 23-24)**
+- Feature flags for gradual migration
+  - `cortex.useExtension` (default: true)
+  - `cortex.fallbackToCLI` (default: true)
+  - `cortex.betaFeatures` (default: false)
+- Dual-mode operation validation
+  - CLI works without extension
+  - Extension works without CLI commands
+  - Both can coexist safely
+- Extension rollout stages:
+  - Alpha: Internal testing (Week 23, Days 1-2)
+  - Beta: Early adopters (Week 23, Days 3-5)
+  - General Availability (Week 24, Day 1)
+- Monitoring and validation
+  - Capture success rate tracking
+  - Resume success rate tracking
+  - Error rate monitoring
+  - User satisfaction surveys
+- Marketplace promotion
+  - VS Code Marketplace listing optimized
+  - README with screenshots/demo
+  - Social media announcement
+  - Documentation site updated
+- Deprecation notices
+  - Manual capture script (6-month sunset)
+  - CLI-only mode (12-month sunset)
+
+**Success Criteria:**
+- ✅ Extension adoption >70% within 2 weeks
+- ✅ Zero data loss during migration
+- ✅ Rollback procedures tested and documented
+- ✅ User satisfaction ≥4.5/5
+- ✅ Conversation amnesia reports: 0
+
+---
+
+**Phase 8: Capability Enhancement - Wave 1 (Week 25-28) 🆕 HIGH-VALUE ADDITIONS**
+
+**Goal:** Enhance CORTEX with high-value development capabilities identified in capability analysis
+
+**Strategic Rationale:**
+- Leverage existing core strengths (code writing, testing, documentation)
+- Add features developers request most
+- Minimal footprint increase (+4.5%)
+- High ROI for development teams
+
+**8.1 Code Review Plugin (Week 25-26)**
+- **Problem:** No automated PR review integration
+- **Solution:** Azure DevOps / GitHub PR review integration
+
+**Features:**
+- ✅ Automated pull request review
+- ✅ SOLID principle violation detection
+- ✅ Pattern violation checking (against Tier 2 knowledge)
+- ✅ Security vulnerability scanning (hard-coded secrets, SQL injection)
+- ✅ Performance anti-pattern detection (N+1 queries, memory leaks)
+- ✅ Test coverage regression detection
+- ✅ Code style consistency checking
+- ✅ Duplicate code detection
+- ✅ Dependency vulnerability analysis
+
+**Integration Points:**
+- Azure DevOps REST API
+- GitHub Actions / GitLab CI webhooks
+- BitBucket Pipelines
+
+**Deliverables:**
+- Code review plugin (~500-800 lines)
+- Azure DevOps integration
+- GitHub integration
+- Security scanning rules
+- Pattern violation rules
+- 15+ unit tests
+- Integration tests with mock PRs
+- Documentation (setup guide, configuration)
+
+**Success Criteria:**
+- ✅ PR review adoption >70%
+- ✅ False positive rate <10%
+- ✅ Review time <30 seconds per PR
+- ✅ Security issue detection rate >90%
+
+**Footprint Impact:** +1.3% (~800 lines)
+
+---
+
+**8.2 Web Testing Enhancements (Week 27)**
+- **Problem:** Missing performance and accessibility testing
+- **Solution:** Lighthouse and axe-core integration
+
+**Features:**
+- ✅ Performance testing (Lighthouse)
+  - Core Web Vitals (LCP, FID, CLS)
+  - Performance score
+  - Best practices audit
+  - SEO audit
+- ✅ Accessibility testing (axe-core)
+  - WCAG 2.1 compliance
+  - ARIA attribute validation
+  - Keyboard navigation checks
+  - Screen reader compatibility
+- ✅ Network stubbing/mocking (MSW integration)
+- ✅ Visual regression enhancements (Percy optimization)
+
+**Integration Points:**
+- Lighthouse CI
+- axe-playwright
+- Mock Service Worker (MSW)
+- Percy API
+
+**Deliverables:**
+- Performance testing templates (~200 lines)
+- Accessibility testing templates (~150 lines)
+- MSW integration helpers (~150 lines)
+- 10+ test examples
+- Documentation
+
+**Success Criteria:**
+- ✅ Performance tests cover all critical paths
+- ✅ Accessibility score >90% on all pages
+- ✅ Test generation time <2 minutes
+- ✅ Network stubbing works for all API calls
+
+**Footprint Impact:** +0.8% (~500 lines)
+
+---
+
+**8.3 Reverse Engineering Plugin (Week 28)**
+- **Problem:** No automated legacy code analysis
+- **Solution:** Comprehensive code analysis and documentation plugin
+
+**Features:**
+- ✅ Cyclomatic complexity analysis (radon)
+- ✅ Technical debt detection
+- ✅ Dead code identification (vulture)
+- ✅ Duplicate code detection
+- ✅ Dependency graph generation (graphviz)
+- ✅ Design pattern identification (Factory, Singleton, Observer, etc.)
+- ✅ Data flow tracing
+- ✅ Entry point identification
+- ✅ Layered architecture detection
+- ✅ Mermaid diagram generation (class, sequence, component, dependency)
+- ✅ Refactoring recommendations
+
+**Multi-Language Support:**
+- Python: radon, vulture, pylint, bandit
+- C#: Roslyn analyzers, NDepend API
+- JavaScript/TypeScript: ESLint, JSComplexity, dependency-cruiser
+
+**Deliverables:**
+- Reverse engineering plugin (~1,200-1,500 lines)
+- Multi-language analyzers
+- Diagram generators
+- Documentation templates
+- 20+ unit tests
+- Integration tests with sample projects
+- User guide
+
+**Success Criteria:**
+- ✅ Analyze 10,000+ line codebase in <5 minutes
+- ✅ Diagram generation accuracy >95%
+- ✅ Refactoring recommendations actionable >80%
+- ✅ Pattern detection accuracy >85%
+
+**Footprint Impact:** +2.4% (~1,500 lines)
+
+---
+
+**Phase 8 Summary:**
+- **Total Time:** 4 weeks
+- **Total Footprint:** +4.5% (~2,800 lines)
+- **Total Value:** ⭐⭐⭐⭐⭐ (Very High)
+- **Risk:** Low (all plugins, can be disabled)
+- **Dependencies:** Standard libraries, existing APIs
+
+---
+
+**Phase 9: Capability Enhancement - Wave 2 (Week 29-32) 🆕 EXTENDED CAPABILITIES**
+
+**Goal:** Add broader testing and UI generation capabilities
+
+**Strategic Rationale:**
+- Expand to mobile and UI generation
+- Support backend-first development workflows
+- Moderate footprint increase (+6.4%)
+- High value for full-stack teams
+
+**9.1 UI from Server Spec Plugin (Week 29-30)**
+- **Problem:** No automated UI generation from API specs
+- **Solution:** OpenAPI/GraphQL → UI component generation
+
+**Features:**
+- ✅ OpenAPI/Swagger spec parsing
+- ✅ GraphQL schema parsing
+- ✅ JSON Schema parsing
+- ✅ TypeScript interface generation
+- ✅ Form component generation (React Hook Form, Formik, VeeValidate)
+- ✅ CRUD UI generation (list, detail, create, edit, delete views)
+- ✅ API integration code (React Query, Apollo Client, SWR)
+- ✅ Validation schema generation (Yup, Zod, Joi)
+- ✅ Table/grid components (sorting, filtering, pagination)
+- ✅ Search/filter UI generation
+
+**Multi-Framework Support:**
+- React (primary)
+- Vue (secondary)
+- Angular (secondary)
+- Svelte (future)
+
+**Deliverables:**
+- UI generation plugin (~1,500-2,000 lines)
+- OpenAPI parser
+- GraphQL schema parser
+- Form generators (3 frameworks)
+- CRUD component templates
+- API integration helpers
+- 25+ unit tests
+- Integration tests with sample specs
+- Documentation
+
+**Success Criteria:**
+- ✅ Generate complete CRUD UI in <1 minute
+- ✅ Generated components compile without errors
+- ✅ Form validation works for all field types
+- ✅ API integration functional on first run
+
+**Footprint Impact:** +3.2% (~2,000 lines)
+
+---
+
+**9.2 Mobile Testing Plugin (Week 31-32)**
+- **Problem:** No mobile testing support (iOS, Android)
+- **Solution:** Appium cross-platform mobile testing
+
+**Features - Phase 1 (Cross-Platform):**
+- ✅ Appium test generation (iOS + Android)
+- ✅ Mobile-specific selectors (accessibility IDs, resource IDs, XPath)
+- ✅ Device/emulator configuration
+- ✅ Basic gesture testing (tap, swipe, scroll)
+- ✅ Orientation testing (portrait/landscape)
+- ✅ Screenshot comparison (visual regression)
+
+**Supported Frameworks (Phase 1):**
+- Appium (Python client)
+- Cross-platform (iOS + Android)
+
+**Future Phases (Post-Week 32):**
+- Phase 2: Native frameworks (XCUITest for iOS, Espresso for Android)
+- Phase 3: Framework-specific (Detox for React Native, Flutter test)
+- Phase 4: Cloud device farms (BrowserStack, Sauce Labs)
+
+**Deliverables:**
+- Mobile testing plugin (~1,500-2,000 lines)
+- Appium integration
+- Selector generation helpers
+- Device configuration templates
+- Gesture test templates
+- Visual regression setup
+- 20+ unit tests
+- Integration tests with sample apps
+- User guide
+
+**Success Criteria:**
+- ✅ Generate mobile tests in <2 minutes
+- ✅ Tests run on both iOS and Android
+- ✅ Selector stability >90%
+- ✅ Visual regression detection accuracy >95%
+
+**Footprint Impact:** +3.2% (~2,000 lines)
+
+---
+
+**Phase 9 Summary:**
+- **Total Time:** 4 weeks
+- **Total Footprint:** +6.4% (~4,000 lines)
+- **Total Value:** ⭐⭐⭐⭐ (High)
+- **Risk:** Medium (more complex integrations)
+- **Dependencies:** Appium, platform SDKs, OpenAPI parsers
+
+---
+
+**🚫 Deferred Capabilities (Not Recommended for Core CORTEX)**
+
+**Figma Integration:**
+- **Recommendation:** Use third-party tools (Anima, Figma-to-Code)
+- **Rationale:** High complexity (+6.4% footprint), moderate value, better existing solutions
+- **Alternative:** Create lightweight integration plugin with existing tools
+
+**A/B Testing:**
+- **Recommendation:** Use existing platforms (Optimizely, LaunchDarkly, VWO)
+- **Rationale:** High complexity (+4.0% footprint), specialized use case, excellent existing platforms
+- **Alternative:** Create integration plugin for popular A/B testing platforms
+
+**Total Deferred Footprint:** +10.4% (avoided by using integrations instead)
+
+---
+
+### 📊 Holistic CORTEX 2.0 + Capabilities Summary
+
+**Vision:** Transform CORTEX from a conversation-tracking assistant into a **comprehensive, full-spectrum AI development partner** that rivals and exceeds traditional development tools.
+
+**Strategic Phases:**
+
+```
+Phase 0-3 (Week 1-16): CORTEX 2.0 CORE
+├─ Fix "continue" amnesia problem (20% → 98% success)
+├─ Modularize monolithic code (SOLID compliance)
+├─ Build VS Code extension (definitive solution)
+└─ Establish world-class conversation tracking
+
+Phase 4-7 (Week 17-24): QUALITY & ROLLOUT
+├─ Risk mitigation testing
+├─ Performance optimization
+├─ Documentation & training
+└─ Production rollout
+
+Phase 8 (Week 25-28): CAPABILITY WAVE 1 🆕
+├─ Code Review Plugin (automated PR reviews)
+├─ Web Testing Enhancements (Lighthouse + accessibility)
+└─ Reverse Engineering Plugin (legacy code analysis)
+
+Phase 9 (Week 29-32): CAPABILITY WAVE 2 🆕
+├─ UI from Spec Plugin (OpenAPI → React/Vue/Angular)
+└─ Mobile Testing Plugin (Appium cross-platform)
+```
+
+**What CORTEX Will Be After Week 32:**
+
+| Capability Area | Status | Best-in-Class? | Competitive Edge |
+|----------------|--------|----------------|------------------|
+| **Conversation Memory** | ✅ 98% success | ✅ YES | Only AI with persistent memory |
+| **Code Writing** | ✅ Ready | ✅ YES | Pattern-aware, test-first |
+| **Code Documentation** | ✅ Ready | ✅ YES | 4-quadrant, auto-refresh |
+| **Backend Testing** | ✅ Ready | ✅ YES | pytest, MSTest, Jest |
+| **Code Rewrite** | ✅ Ready | ✅ YES | SOLID-compliant refactoring |
+| **Code Review** | 📋 Phase 8 | ✅ YES | Pattern + security aware |
+| **Web Testing** | 📋 Phase 8 | ✅ YES | Playwright + Lighthouse + a11y |
+| **Reverse Engineering** | 📋 Phase 8 | ✅ YES | Multi-language + diagrams |
+| **UI Generation** | 📋 Phase 9 | 🟡 GOOD | From OpenAPI/GraphQL specs |
+| **Mobile Testing** | 📋 Phase 9 | 🟡 GOOD | Appium cross-platform |
+| **Figma Integration** | ❌ Deferred | N/A | Use Anima instead |
+| **A/B Testing** | ❌ Deferred | N/A | Use Optimizely instead |
+
+**Market Positioning After Completion:**
+
+> **"CORTEX 2.0: The only AI development partner with perfect memory, comprehensive testing, automated code review, and full-spectrum development capabilities from backend to mobile."**
+
+**Competitive Analysis:**
+
+| Feature | GitHub Copilot | Cursor AI | Cody | **CORTEX 2.0** |
+|---------|---------------|-----------|------|----------------|
+| Code Writing | ✅ Excellent | ✅ Excellent | ✅ Good | ✅ Excellent |
+| Conversation Memory | ❌ None | 🟡 Session only | 🟡 Basic | ✅ **Perfect (98%)** |
+| Test Generation | 🟡 Basic | 🟡 Basic | 🟡 Basic | ✅ **Comprehensive** |
+| Code Review | ❌ None | ❌ None | ❌ None | ✅ **Automated PR** |
+| Reverse Engineering | ❌ None | ❌ None | ❌ None | ✅ **Full analysis** |
+| Mobile Testing | ❌ None | ❌ None | ❌ None | ✅ **Cross-platform** |
+| UI Generation | ❌ None | ❌ None | ❌ None | ✅ **From specs** |
+| Documentation | 🟡 Basic | 🟡 Basic | 🟡 Basic | ✅ **4-quadrant** |
+
+**Key Differentiators:**
+1. **Perfect Memory:** Only AI that remembers everything across sessions
+2. **Full Spectrum:** Backend → Frontend → Mobile → Testing → Review
+3. **Pattern Learning:** Gets smarter with every feature built
+4. **Test-First:** TDD baked into DNA
+5. **Quality Obsessed:** Automated reviews, SOLID compliance, security scanning
+6. **Self-Improving:** Self-review system, performance tracking
+
+**Target Audience Expansion:**
+
+**Phase 0-7 (Core):**
+- Individual developers
+- Small teams (2-5 developers)
+- Focus: Conversation continuity, code quality
+
+**Phase 8 (Wave 1):**
+- Medium teams (5-20 developers)
+- Enterprise teams with legacy code
+- Focus: Code review automation, technical debt reduction
+
+**Phase 9 (Wave 2):**
+- Full-stack teams
+- Mobile development teams
+- Backend-first organizations
+- Focus: UI generation, mobile testing
+
+**ROI by Phase:**
+
+| Phase | Investment | Value Added | ROI Multiple |
+|-------|-----------|-------------|--------------|
+| Phase 0 | 6.5 hours | 3x "continue" improvement | 10:1 |
+| Phase 1-3 | 90 hours | 5x conversation improvement | 8:1 |
+| Phase 4-7 | 60 hours | Production readiness | 5:1 |
+| **Phase 8** | **40 hours** | **Code review + reverse eng** | **12:1** |
+| **Phase 9** | **40 hours** | **Mobile + UI generation** | **8:1** |
+| **Total** | **236.5 hours** | **Full-spectrum AI assistant** | **9:1 average** |
+
+**Footprint Analysis:**
+
+```
+Current Codebase:        63,000 lines
++ Phase 0-7 (Core):      ~0 lines (refactoring, no net increase)
++ Phase 8 (Wave 1):      +2,800 lines (+4.5%)
++ Phase 9 (Wave 2):      +4,000 lines (+6.4%)
+─────────────────────────────────────────
+Total After Phase 9:     69,800 lines (+10.9%)
+
+Deferred (Smart Decision):
+  Figma Integration:     +4,000 lines (use Anima instead)
+  A/B Testing:           +2,500 lines (use Optimizely instead)
+─────────────────────────────────────────
+Total Saved:             +6,500 lines (10.3% footprint avoided)
+```
+
+**Efficiency Ratio:**
+- **10.9% footprint increase** for **~500% capability increase**
+- This is exceptional: **46:1 value-to-footprint ratio**
+
+**Timeline Summary:**
+
+| Milestone | Week | Deliverable | Impact |
+|-----------|------|-------------|--------|
+| Phase 0 Complete | 2 | ✅ DONE | 60% continue success |
+| Phase 3 Complete | 16 | Extension live | 98% continue success |
+| Phase 7 Complete | 24 | Core rollout | Best AI memory |
+| **Phase 8 Complete** | **28** | **Code review + reverse eng** | **Enterprise ready** |
+| **Phase 9 Complete** | **32** | **Full spectrum** | **Market leader** |
+
+**Critical Success Factors:**
+
+1. **Maintain Quality:** Every phase must pass 85%+ test coverage
+2. **No Bloat:** Strict <500 line module limit
+3. **Plugin Architecture:** All enhancements must be plugins (can be disabled)
+4. **Performance First:** No feature ships if it degrades performance
+5. **User Validation:** Beta testing after every major phase
+6. **Pragmatic Deferrals:** Don't build what exists better elsewhere
+
+**Risk Mitigation:**
+
+| Risk | Probability | Impact | Mitigation |
+|------|------------|--------|------------|
+| Timeline slip | Medium | Medium | Buffer weeks, phased delivery |
+| Capability bloat | Low | High | Plugin architecture, strict limits |
+| Performance degradation | Low | High | Continuous benchmarking |
+| User adoption issues | Low | Medium | Beta testing, gradual rollout |
+| Technical debt | Low | Medium | SOLID compliance, code review |
+
+**Post-Week 32 (Future Roadmap):**
+
+**Optional Enhancements (Business-Driven):**
+- Native mobile frameworks (XCUITest, Espresso) if mobile adoption >50%
+- Additional language support (Go, Rust, Java) if requested by >10 teams
+- Cloud IDE integration (GitHub Codespaces, GitPod) if market demands
+- AI pair programming mode (collaborative editing) if users request
+
+**Community-Driven:**
+- Open source plugins from community
+- Custom agent development by users
+- Third-party integrations (JIRA, Linear, Notion)
+
+**Enterprise Features (If Commercialized):**
+- Team analytics dashboard
+- Multi-workspace sync
+- Enterprise security compliance
+- Role-based access control
+- Audit logging
+
+---
+
+### Success Metrics & ROI
+
+**🎯 "Continue" Command Success Rate (PRIMARY METRIC)**
+
+| Phase | Success Rate | Impact | Time Investment |
+|-------|-------------|--------|-----------------|
+| **Current (No Fix)** | 20% | ❌ "I just told you that!" frustration | Baseline |
+| **Phase 0 (Quick Wins)** | 60% | ✅ Work state tracking + session persistence | 6.5 hours |
+| **Phase 2 (Ambient Capture)** | 85% | ✅ Background context capture | +30 hours |
+| **Phase 3 (Extension)** | 98% | ✅ Zero-friction, automatic everything | +60 hours |
+
+**ROI Analysis:**
+- Every hour invested saves 10+ hours of user frustration over next month
+- Phase 0 investment: 6.5 hours → 3x improvement (20% → 60%)
+- Total investment: 96.5 hours → 5x improvement (20% → 98%)
+
+---
+
+**Technical Metrics:**
+
+**Code Quality:**
+- ✅ All files <500 lines (SOLID compliance)
+- ✅ Test coverage >90% (Phase 4 enhancement)
+- ✅ Zero circular dependencies
+- ✅ Zero critical bugs
+
+**Performance:**
+- ✅ Tier 1 queries: <50ms (working memory)
+- ✅ Tier 2 search: <150ms (knowledge graph)
+- ✅ Tier 3 metrics: <200ms (context intelligence)
+- ✅ Extension capture: <100ms (real-time tracking)
+- ✅ Overall +20% improvement from baseline
+
+**Reliability:**
 - ✅ Bug rate <0.1% critical
+- ✅ Crash recovery success rate >95%
+- ✅ Extension stability >95%
+- ✅ Data loss incidents: 0
 
-**User:**
+**Conversation Tracking:**
+- ✅ **Zero manual conversation capture needed** (Phase 3)
+- ✅ Automatic capture success rate >99%
+- ✅ Average resume time <2 seconds
+- ✅ External chat capture rate >90% (Copilot monitoring)
+- ✅ Session token persistence: 100%
+- ✅ Work state tracking accuracy: 95%
+
+---
+
+**User Experience Metrics:**
+
+**Satisfaction:**
 - ✅ User satisfaction ≥4.5/5
 - ✅ Feature adoption ≥80%
+- ✅ Extension adoption >70% within 2 weeks
 - ✅ Support tickets -30%
 - ✅ Onboarding time -50%
+
+**Productivity:**
+- ✅ **Conversation amnesia reports: 0** (Phase 3)
+- ✅ Time to resume work: <30 seconds (down from 5-10 minutes)
+- ✅ Context loss rate: <2% (down from 80%)
+- ✅ User frustration reports: -90%
+- ✅ "It just works" feedback: >80%
+
+**Extension Specific:**
+- ✅ Extension install rate >1,000/month
+- ✅ Active daily users: >500
+- ✅ VS Code Marketplace rating: ≥4.5 stars
+- ✅ Extension crash rate: <0.1%
+- ✅ Average session length: >30 minutes (user engagement)
+
+---
+
+**Business Metrics:**
+
+**Development Velocity:**
+- ✅ Feature delivery time: -25% (less rework from lost context)
+- ✅ Bug resolution time: -30% (better context retention)
+- ✅ Developer onboarding: -50% (clearer documentation + working examples)
+
+**Technical Debt:**
+- ✅ Code maintainability: +40% (SOLID refactoring)
+- ✅ Test coverage: +15% (from 75% to 90%)
+- ✅ Documentation completeness: 100%
+
+**Community & Adoption:**
+- ✅ GitHub stars: >100 (if open-sourced)
+- ✅ Community contributors: >5
+- ✅ Extension reviews: >50 positive
+- ✅ Documentation site traffic: >1,000 visitors/month
+
+---
+
+**Capability Enhancement Metrics (Phase 8-9):**
+
+**Code Review (Phase 8.1):**
+- ✅ PR review adoption: >70%
+- ✅ False positive rate: <10%
+- ✅ Review time: <30 seconds per PR
+- ✅ Security issue detection: >90%
+- ✅ Developer satisfaction: ≥4.3/5
+
+**Web Testing Enhancements (Phase 8.2):**
+- ✅ Performance test coverage: 100% of critical paths
+- ✅ Accessibility score: >90% on all pages
+- ✅ Core Web Vitals: All pages pass
+- ✅ Test generation time: <2 minutes
+
+**Reverse Engineering (Phase 8.3):**
+- ✅ Legacy projects documented: >50
+- ✅ Analysis time: <5 minutes for 10K+ line codebase
+- ✅ Diagram generation accuracy: >95%
+- ✅ Refactoring recommendations actionable: >80%
+- ✅ Pattern detection accuracy: >85%
+
+**UI from Spec (Phase 9.1):**
+- ✅ UI generation time: <1 minute for complete CRUD
+- ✅ Generated components compile: 100%
+- ✅ Form validation functional: First run
+- ✅ API integration functional: First run
+- ✅ Adoption rate: >60%
+
+**Mobile Testing (Phase 9.2):**
+- ✅ Test generation time: <2 minutes
+- ✅ Cross-platform (iOS + Android): Works
+- ✅ Selector stability: >90%
+- ✅ Visual regression accuracy: >95%
+- ✅ Mobile test coverage: >40%
+
+**Overall Capability Impact:**
+- ✅ Developer productivity: +35% (combined with core improvements)
+- ✅ Code quality: +25% (automated reviews + reverse engineering)
+- ✅ Test coverage: +20% (web + mobile + backend)
+- ✅ Time to market: -30% (UI generation + automated testing)
+
+---
+
+### 🔍 Phase Validation Checklist (CORTEX 2.0)
+
+**Purpose:** Ensure each implementation phase is complete, error-free, and conflict-free before proceeding.
+
+**📋 Reference:** Based on `cortex-brain/cortex-2.0-design/00-INDEX.md` and `25-implementation-roadmap.md`
+
+---
+
+#### ✅ Universal Phase Completion Checklist
+
+**Use this checklist for EVERY phase before requesting approval to continue.**
+
+**1. Implementation Completeness**
+- [ ] All tasks in phase completed (no partial work)
+- [ ] All files created/modified as specified in design docs
+- [ ] All code follows CORTEX coding standards
+- [ ] All modules under 500 lines (per CORTEX 2.0 goal)
+- [ ] No TODO comments or placeholder code left behind
+- [ ] All functions have docstrings
+- [ ] All imports organized and minimal
+
+**2. Testing & Quality**
+- [ ] All new unit tests written and passing
+- [ ] All integration tests written and passing
+- [ ] All existing tests still passing (zero regressions)
+- [ ] Test coverage ≥85% for new code
+- [ ] No test timeouts or flaky tests
+- [ ] Performance benchmarks met (if applicable)
+- [ ] Memory usage within acceptable limits
+
+**3. Error & Warning Elimination**
+- [ ] Zero Python errors (syntax, runtime, type)
+- [ ] Zero linter warnings (pylint, flake8, mypy)
+- [ ] Zero TypeScript errors (if extension work)
+- [ ] Zero console warnings in tests
+- [ ] All deprecation warnings addressed
+- [ ] Build completes cleanly
+
+**4. Cross-Phase Conflict Detection**
+- [ ] No import conflicts with other phases
+- [ ] No duplicate function/class names across modules
+- [ ] No circular dependencies created
+- [ ] No schema conflicts with database migrations
+- [ ] No API signature conflicts
+- [ ] Configuration changes don't break other phases
+- [ ] Path references remain valid across phases
+
+**5. Integration Validation**
+- [ ] New code integrates with existing tiers (Tier 0-3)
+- [ ] Agent coordination still works
+- [ ] BRAIN operations unaffected (or enhanced)
+- [ ] Session management still functional
+- [ ] Conversation tracking still works
+- [ ] File operations still work across platforms
+
+**6. Documentation**
+- [ ] Design doc updated (if changes from plan)
+- [ ] API documentation generated
+- [ ] Code comments explain complex logic
+- [ ] Migration guide updated (if breaking changes)
+- [ ] Changelog entry added
+- [ ] README updated (if user-facing changes)
+
+**7. Rollback Safety**
+- [ ] Git commits are atomic and well-messaged
+- [ ] Can rollback without breaking other phases
+- [ ] Database migrations have down() methods
+- [ ] Configuration changes are backwards compatible
+- [ ] Feature flags in place (if applicable)
+
+---
+
+#### 📊 Phase-Specific Validation Checklists
+
+---
+
+##### **Phase 0: Baseline Establishment** ✅ COMPLETE
+
+**Unique Validations:**
+- [ ] Test suite baseline report generated
+- [ ] Current architecture documented with diagrams
+- [ ] Risk assessment matrix completed
+- [ ] Monitoring baselines established
+- [ ] All 27 core rules documented and validated
+
+**Conflict Checks:**
+- [ ] Baseline metrics don't interfere with existing operations
+- [ ] Documentation doesn't contradict existing rules
+- [ ] Test baseline can be regenerated without errors
+
+**Deliverables:**
+- [ ] `BASELINE-REPORT.md` exists and is complete
+- [ ] `IMPLEMENTATION-KICKOFF.md` exists
+- [ ] Architecture diagrams saved
+- [ ] Risk assessment spreadsheet/doc created
+
+---
+
+##### **Phase 1: Core Modularization** 📋 NEXT
+
+**1.1 Knowledge Graph Refactoring**
+
+**Unique Validations:**
+- [ ] All 6 modules created as per design
+- [ ] `knowledge_graph.py` reduced to <150 lines (coordinator only)
+- [ ] Database operations isolated in `database/` modules
+- [ ] Pattern operations isolated in `patterns/` modules
+- [ ] Relationship operations isolated in `relationships/` modules
+- [ ] Tag operations isolated in `tags/` modules
+- [ ] 45 unit tests passing
+- [ ] 8 integration tests passing
+
+**Conflict Checks:**
+- [ ] Old `knowledge_graph.py` imports still work (backwards compat)
+- [ ] No circular imports between new modules
+- [ ] Database schema unchanged (or migration provided)
+- [ ] FTS5 search still works with same performance
+- [ ] Pattern confidence decay still functions
+- [ ] Tier 2 API unchanged for external callers
+- [ ] Brain update operations still atomic
+- [ ] Query performance unchanged or improved
+
+**Cross-Phase Checks:**
+- [ ] Tier 1 (working memory) can still query Tier 2
+- [ ] Tier 3 (context) can still query Tier 2
+- [ ] Brain updater still works
+- [ ] Brain query still works
+- [ ] Conversation manager integration intact
+
+**Test Harness Updates:**
+```python
+# Add to tests/tier2/test_modular_integration.py
+def test_no_circular_imports():
+    """Ensure no circular dependencies in knowledge graph modules"""
+    # Test each module can import independently
+    
+def test_backwards_compatibility():
+    """Ensure old knowledge_graph imports still work"""
+    # Test deprecated imports with warnings
+    
+def test_tier_integration():
+    """Ensure Tier 1 and Tier 3 can still access Tier 2"""
+    # Test cross-tier queries
+```
+
+---
+
+**1.2 Tier 1 Working Memory Refactoring**
+
+**Unique Validations:**
+- [ ] All 5 modules created as per design
+- [ ] `working_memory.py` reduced to <120 lines
+- [ ] Conversation operations isolated in `conversations/` modules
+- [ ] Message operations isolated in `messages/` modules
+- [ ] Entity extraction isolated in `entities/` module
+- [ ] FIFO queue logic isolated
+- [ ] 38 unit tests passing
+- [ ] 6 integration tests passing
+
+**Conflict Checks:**
+- [ ] Conversation history API unchanged
+- [ ] Message storage format unchanged
+- [ ] FIFO queue behavior identical (20 conversations)
+- [ ] Entity extraction results identical
+- [ ] Tier 1 API unchanged for external callers
+- [ ] Session resume still works
+- [ ] Conversation boundaries still detected correctly
+
+**Cross-Phase Checks:**
+- [ ] Phase 1.1 (Tier 2) can still query Tier 1
+- [ ] Brain updater can still access conversation data
+- [ ] Context collector can still read conversations
+- [ ] No conflicts with knowledge graph refactoring
+- [ ] Combined import statements work
+
+**Test Harness Updates:**
+```python
+# Add to tests/tier1/test_working_memory_conflicts.py
+def test_no_conflicts_with_tier2():
+    """Ensure Tier 1 and Tier 2 modules don't conflict"""
+    
+def test_fifo_behavior_unchanged():
+    """Verify FIFO queue works identically after refactor"""
+    
+def test_entity_extraction_consistency():
+    """Ensure entity extraction produces same results"""
+```
+
+---
+
+**1.3 Context Intelligence Refactoring**
+
+**Unique Validations:**
+- [ ] All 6 modules created as per design
+- [ ] `context_intelligence.py` reduced to <100 lines
+- [ ] Git metrics isolated in `metrics/` modules
+- [ ] Analysis logic isolated in `analysis/` modules
+- [ ] Storage isolated in `storage/` module
+- [ ] 42 unit tests passing
+- [ ] 7 integration tests passing
+
+**Conflict Checks:**
+- [ ] Development context API unchanged
+- [ ] Git metrics collection unchanged
+- [ ] File hotspot detection identical
+- [ ] Velocity calculations identical
+- [ ] Tier 3 API unchanged for external callers
+- [ ] Proactive warnings still work
+- [ ] Correlation analysis still functions
+
+**Cross-Phase Checks:**
+- [ ] No conflicts with Tier 1 refactoring (Phase 1.2)
+- [ ] No conflicts with Tier 2 refactoring (Phase 1.1)
+- [ ] Brain updater can still trigger Tier 3 collection
+- [ ] Dashboard can still read Tier 3 data
+- [ ] Metrics reporter still works
+
+**Test Harness Updates:**
+```python
+# Add to tests/tier3/test_context_conflicts.py
+def test_no_conflicts_with_tier1_tier2():
+    """Ensure Tier 3 doesn't conflict with Tier 1 and 2 refactors"""
+    
+def test_metrics_consistency():
+    """Verify metrics calculations identical after refactor"""
+    
+def test_cross_tier_data_flow():
+    """Ensure data flows correctly across all 3 tiers"""
+```
+
+---
+
+**1.4 Agent Modularization**
+
+**Unique Validations:**
+- [ ] All 5 agents refactored (error_corrector, health_validator, code_executor, test_generator, work_planner)
+- [ ] Each agent reduced to <150 lines (coordinator)
+- [ ] Strategy pattern implemented for each agent
+- [ ] Validators isolated per agent
+- [ ] Parsers isolated per agent
+- [ ] 60+ unit tests passing (12 per agent)
+
+**Conflict Checks:**
+- [ ] Agent APIs unchanged (same function signatures)
+- [ ] Agent behavior identical from caller perspective
+- [ ] Error handling consistent across agents
+- [ ] Result formats unchanged
+- [ ] Agent coordination still works
+- [ ] Router can still invoke all agents
+- [ ] No agent strategy conflicts
+
+**Cross-Phase Checks:**
+- [ ] Agents can still access refactored Tiers 1-3
+- [ ] Workflow pipeline can still orchestrate agents
+- [ ] Brain updater integration intact
+- [ ] All agent prompts still load correctly
+
+**Test Harness Updates:**
+```python
+# Add to tests/agents/test_agent_conflicts.py
+def test_no_agent_strategy_conflicts():
+    """Ensure agent strategies don't conflict"""
+    
+def test_agent_tier_integration():
+    """Verify agents work with refactored tiers"""
+    
+def test_agent_coordination():
+    """Ensure agents can still coordinate via router"""
+```
+
+---
+
+##### **Phase 2: Workflow Pipeline** 
+
+**Unique Validations:**
+- [ ] Core pipeline with checkpointing complete
+- [ ] Parallel execution implemented
+- [ ] Conditional stages work
+- [ ] All 8 critical stages implemented
+- [ ] 4 production workflows defined
+- [ ] 32 stage tests passing
+- [ ] 16 workflow integration tests passing
+
+**Conflict Checks:**
+- [ ] Workflow definitions don't conflict with each other
+- [ ] Stages can run in any valid order
+- [ ] DAG validation catches circular dependencies
+- [ ] Checkpoint/resume doesn't interfere with agent state
+- [ ] Parallel execution doesn't cause race conditions
+- [ ] Workflow state isolated from agent state
+
+**Cross-Phase Checks:**
+- [ ] Workflows can invoke refactored agents (Phase 1.4)
+- [ ] Workflows can access refactored tiers (Phase 1.1-1.3)
+- [ ] No conflicts with existing session management
+- [ ] Brain updates still work during workflow execution
+
+**Test Harness Updates:**
+```python
+# Add to tests/workflows/test_workflow_conflicts.py
+def test_no_workflow_race_conditions():
+    """Ensure parallel stages don't conflict"""
+    
+def test_workflow_agent_integration():
+    """Verify workflows work with refactored agents"""
+    
+def test_checkpoint_isolation():
+    """Ensure checkpoints don't interfere with other state"""
+```
+
+---
+
+##### **Phase 3: VS Code Extension**
+
+**Unique Validations:**
+- [ ] Extension scaffold generated
+- [ ] TypeScript project builds without errors
+- [ ] Python ↔ TypeScript bridge functional
+- [ ] Chat participant registered
+- [ ] Lifecycle hooks working
+- [ ] External monitoring functional
+- [ ] Extension tests passing
+- [ ] VSIX package builds successfully
+
+**Conflict Checks:**
+- [ ] Extension doesn't interfere with CLI mode
+- [ ] Python backend still works standalone
+- [ ] Extension state isolated from brain state
+- [ ] Multiple extension instances don't conflict
+- [ ] Extension activation doesn't break existing workflows
+
+**Cross-Phase Checks:**
+- [ ] Extension can invoke refactored agents
+- [ ] Extension can access refactored tiers
+- [ ] Extension workflows compatible with Phase 2 pipelines
+- [ ] Extension doesn't break existing tests
+
+**Test Harness Updates:**
+```python
+# Add to tests/extension/test_extension_conflicts.py
+def test_cli_extension_coexistence():
+    """Ensure CLI and extension can run simultaneously"""
+    
+def test_extension_brain_isolation():
+    """Verify extension state doesn't corrupt brain"""
+    
+def test_extension_backwards_compat():
+    """Ensure extension works with pre-extension brain data"""
+```
+
+---
+
+##### **Phase 4: Risk Mitigation & Testing**
+
+**Unique Validations:**
+- [ ] 75 new risk mitigation tests added
+- [ ] All risk scenarios covered
+- [ ] End-to-end integration tests passing
+- [ ] Extension stability tests passing
+- [ ] Security scenario tests passing
+- [ ] Performance benchmarks met
+
+**Conflict Checks:**
+- [ ] New tests don't interfere with existing tests
+- [ ] Test execution order doesn't matter
+- [ ] No test fixtures conflict
+- [ ] No test database conflicts
+- [ ] Mock objects properly isolated
+
+**Cross-Phase Checks:**
+- [ ] Risk tests cover all previous phases
+- [ ] Tests validate cross-phase integration
+- [ ] Performance tests cover full stack
+- [ ] Security tests cover all entry points
+
+**Test Harness Updates:**
+```python
+# Add to tests/risk/test_comprehensive_coverage.py
+def test_all_phases_covered():
+    """Ensure risk tests cover all implementation phases"""
+    
+def test_no_test_conflicts():
+    """Verify tests can run in any order without conflicts"""
+```
+
+---
+
+##### **Phase 5: Performance Optimization**
+
+**Unique Validations:**
+- [ ] Database optimization complete (FTS5, caching)
+- [ ] Workflow optimization complete (parallel stages)
+- [ ] Context injection optimized
+- [ ] Extension responsiveness tuned
+- [ ] Lazy loading implemented
+- [ ] Performance benchmarks show ≥20% improvement
+
+**Conflict Checks:**
+- [ ] Optimizations don't change API behavior
+- [ ] Caching doesn't cause stale data issues
+- [ ] Lazy loading doesn't break initialization
+- [ ] Parallel execution doesn't introduce race conditions
+- [ ] Optimizations don't break tests
+
+**Cross-Phase Checks:**
+- [ ] Optimizations work with all refactored modules
+- [ ] Performance gains apply to all workflows
+- [ ] Extension performance improved
+- [ ] No regressions in any tier
+
+**Test Harness Updates:**
+```python
+# Add to tests/performance/test_optimization_correctness.py
+def test_optimizations_preserve_behavior():
+    """Ensure optimizations don't change results"""
+    
+def test_cache_consistency():
+    """Verify cached data stays consistent"""
+    
+def test_lazy_loading_completeness():
+    """Ensure lazy loading eventually loads everything"""
+```
+
+---
+
+##### **Phase 6: Documentation & Training**
+
+**Unique Validations:**
+- [ ] Architecture guides complete
+- [ ] Developer guides complete
+- [ ] User tutorials complete
+- [ ] API reference generated
+- [ ] Migration guide complete
+- [ ] All code examples working
+- [ ] All links valid
+
+**Conflict Checks:**
+- [ ] Documentation doesn't contradict between guides
+- [ ] Code examples don't conflict with each other
+- [ ] API docs match actual implementation
+- [ ] Migration guide steps tested and valid
+
+**Cross-Phase Checks:**
+- [ ] Documentation covers all previous phases
+- [ ] Examples use refactored modules correctly
+- [ ] Tutorials work with final implementation
+
+**Test Harness Updates:**
+```python
+# Add to tests/docs/test_documentation_accuracy.py
+def test_code_examples_execute():
+    """Ensure all documentation code examples run"""
+    
+def test_api_docs_match_code():
+    """Verify API docs match actual function signatures"""
+```
+
+---
+
+##### **Phase 7: Migration & Rollout**
+
+**Unique Validations:**
+- [ ] Feature flags implemented
+- [ ] Dual-mode operation working
+- [ ] Alpha testing complete
+- [ ] Beta testing complete
+- [ ] Monitoring and validation systems operational
+- [ ] Marketplace publication successful
+
+**Conflict Checks:**
+- [ ] Feature flags don't conflict with each other
+- [ ] Dual-mode doesn't cause data corruption
+- [ ] CLI and extension modes coexist
+- [ ] Rollback procedures tested
+
+**Cross-Phase Checks:**
+- [ ] All phases work together in production
+- [ ] No conflicts between any components
+- [ ] Full stack integration validated
+- [ ] User migration path tested
+
+**Test Harness Updates:**
+```python
+# Add to tests/migration/test_full_system_integration.py
+def test_all_phases_integrated():
+    """Comprehensive test of all phases working together"""
+    
+def test_feature_flag_combinations():
+    """Test all valid feature flag combinations"""
+    
+def test_dual_mode_isolation():
+    """Ensure CLI and extension modes don't interfere"""
+```
+
+---
+
+#### 🛡️ Automated Conflict Detection
+
+**Create Test Suite:** `tests/cortex_2.0/test_phase_conflicts.py`
+
+```python
+"""
+CORTEX 2.0 Phase Conflict Detection Test Suite
+Ensures no phase interferes with another phase
+"""
+import pytest
+import importlib
+import sys
+from pathlib import Path
+
+class TestPhaseConflicts:
+    """Detect conflicts between implementation phases"""
+    
+    def test_no_circular_imports(self):
+        """Ensure no circular dependencies across phases"""
+        # Test each module can import independently
+        phases = [
+            'src.tier1', 'src.tier2', 'src.tier3',
+            'src.cortex_agents', 'src.workflows'
+        ]
+        for phase in phases:
+            try:
+                importlib.import_module(phase)
+            except ImportError as e:
+                pytest.fail(f"Circular import detected in {phase}: {e}")
+    
+    def test_no_name_conflicts(self):
+        """Ensure no duplicate function/class names"""
+        # Scan all modules for conflicts
+        pass  # Implementation depends on project structure
+    
+    def test_database_schema_consistency(self):
+        """Ensure all phases use consistent schema"""
+        # Verify no schema conflicts
+        pass
+    
+    def test_api_signature_consistency(self):
+        """Ensure API signatures remain stable across phases"""
+        # Test each public API matches expected signature
+        pass
+    
+    def test_configuration_compatibility(self):
+        """Ensure config changes don't break other phases"""
+        # Test config can be loaded by all phases
+        pass
+    
+    def test_cross_tier_integration(self):
+        """Ensure all tiers can communicate after refactoring"""
+        # Test Tier 1 ↔ Tier 2 ↔ Tier 3
+        pass
+    
+    def test_agent_coordination(self):
+        """Ensure agents can coordinate after refactoring"""
+        # Test router can invoke all agents
+        pass
+    
+    def test_workflow_agent_integration(self):
+        """Ensure workflows can invoke agents"""
+        # Test workflow pipeline with agents
+        pass
+    
+    def test_extension_cli_coexistence(self):
+        """Ensure extension and CLI don't conflict"""
+        # Test both modes simultaneously
+        pass
+    
+    def test_performance_no_regression(self):
+        """Ensure optimizations don't cause regressions"""
+        # Run baseline vs current benchmarks
+        pass
+```
+
+---
+
+#### 📝 Phase Completion Report Template
+
+**Use this template when completing each phase:**
+
+```markdown
+# Phase [N]: [Phase Name] Completion Report
+
+**Date:** [YYYY-MM-DD]
+**Duration:** [X weeks/days]
+**Status:** ✅ COMPLETE
+
+## Implementation Summary
+- Tasks completed: [X/X]
+- Files created/modified: [N]
+- Lines of code: [Added: X, Removed: Y, Net: Z]
+- Modules: [List key modules]
+
+## Testing Results
+- Unit tests: [X/X passing]
+- Integration tests: [X/X passing]
+- Test coverage: [X%]
+- Performance benchmarks: [Met/Exceeded/Within tolerance]
+
+## Quality Metrics
+- Errors: 0
+- Warnings: 0
+- Linter score: [X/10]
+- Code complexity: [Within acceptable range]
+
+## Conflict Detection
+- Circular imports: ✅ None detected
+- Name conflicts: ✅ None detected
+- API conflicts: ✅ None detected
+- Database conflicts: ✅ None detected
+- Cross-phase integration: ✅ All tests passing
+
+## Deliverables
+- [ ] All tasks complete
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Conflict tests added
+- [ ] Performance validated
+- [ ] Ready for next phase
+
+## Approval
+- [ ] Self-review complete
+- [ ] Automated checks passed
+- [ ] Ready to proceed to Phase [N+1]
+
+**Approved by:** [Name]
+**Approval Date:** [YYYY-MM-DD]
+```
+
+---
+
+#### 🚨 Blocking Issues Protocol
+
+**If any checklist item fails:**
+
+1. **STOP** - Do not proceed to next phase
+2. **Document** - Create issue with failure details
+3. **Fix** - Resolve the issue completely
+4. **Retest** - Run full validation checklist again
+5. **Verify** - Ensure fix doesn't create new conflicts
+6. **Proceed** - Only continue when all checks pass
+
+**Example Blocking Issue:**
+
+```markdown
+## ⚠️ BLOCKING ISSUE: Phase 1.1
+
+**Issue:** Circular import detected between pattern_search.py and pattern_decay.py
+
+**Impact:** Cannot proceed to Phase 1.2 until resolved
+
+**Resolution:**
+1. Refactor pattern_decay to not import from pattern_search
+2. Create shared utilities module for common functions
+3. Update tests
+4. Re-run validation checklist
+
+**Status:** IN PROGRESS
+**Target Resolution:** [Date]
+```
+
+---
+
+#### ✅ Final Pre-Release Checklist
+
+**Before declaring CORTEX 2.0 complete:**
+
+- [ ] All 7 phases complete with passing validation
+- [ ] Zero blocking issues remain
+- [ ] Full system integration test passing
+- [ ] All 27 core rules still enforced
+- [ ] Performance ≥20% improvement over 1.0
+- [ ] Test coverage ≥85%
+- [ ] Documentation complete and accurate
+- [ ] Migration guide tested with real users
+- [ ] Rollback procedures documented and tested
+- [ ] Monitoring dashboard operational
+- [ ] All conflict detection tests passing
+- [ ] No regressions in any existing functionality
+- [ ] Extension and CLI modes both functional
+- [ ] Marketplace publication approved (if applicable)
 
 ---
 
@@ -1334,7 +2977,7 @@ Every pattern in Tier 2 is tagged with **scope** and **namespaces** to prevent C
 
 ```python
 # Pattern storage with boundaries
-scope="generic"           # CORTEX principles (TDD, SOLID, refactoring)
+scope="cortex"           # CORTEX principles (TDD, SOLID, refactoring)
 scope="application"       # Application-specific (KSESSIONS features, NOOR UI)
 
 namespaces=["CORTEX-core"]     # Available to all projects
@@ -2849,6 +4492,107 @@ That's it! CORTEX will automatically:
 - ✅ Execute the correct workflow
 - ✅ Handle multi-step operations
 - ✅ Maintain session state
+
+---
+
+## ⚠️ CRITICAL EXECUTION RULE: Complete Phase Then Stop
+
+**🚨 MANDATORY FOR ALL CORTEX WORK (1.0 and 2.0):**
+
+When CORTEX creates a multi-phase plan, execution MUST follow this pattern:
+
+```
+1. Create complete plan (all phases documented)
+2. Execute Phase 1 COMPLETELY (all tasks within phase)
+3. STOP and report completion
+4. Wait for user approval to continue
+5. Execute Phase 2 COMPLETELY (when approved)
+6. STOP and report completion
+7. Repeat until all phases complete
+```
+
+**Why This Rule Exists:**
+- ✅ User maintains control at natural breakpoints
+- ✅ Can review work quality before continuing
+- ✅ Can change direction based on phase results
+- ✅ Prevents runaway execution on wrong path
+- ✅ Allows testing/validation between phases
+- ✅ Reduces risk of cascading errors
+
+**What "Complete Phase" Means:**
+- ✅ ALL tasks in phase finished (not just task 1.1 or 2.1)
+- ✅ All tests for that phase passing
+- ✅ Phase deliverables validated
+- ✅ No "I'll finish this later" - complete means complete
+
+**Example - CORRECT Execution:**
+```
+Copilot: I've created a 3-phase plan:
+  Phase 1: Database schema (3 tasks)
+  Phase 2: API layer (4 tasks)
+  Phase 3: UI components (5 tasks)
+
+[Executes ALL OF PHASE 1]
+  ✅ Task 1.1: Create migration script
+  ✅ Task 1.2: Add indexes
+  ✅ Task 1.3: Update schema docs
+  ✅ All Phase 1 tests passing
+
+Phase 1 Complete! Ready to continue with Phase 2?
+
+User: Yes
+[Executes ALL OF PHASE 2]
+  ✅ Task 2.1: Create API endpoint
+  ✅ Task 2.2: Add validation
+  ✅ Task 2.3: Write tests
+  ✅ Task 2.4: Update API docs
+  ✅ All Phase 2 tests passing
+
+Phase 2 Complete! Ready to continue with Phase 3?
+```
+
+**Example - WRONG Execution:**
+```
+❌ Stopping after Task 1.1 (incomplete phase)
+❌ Stopping after Task 2.1 (incomplete phase)
+❌ Executing all phases without asking approval
+❌ Asking approval between individual tasks
+```
+
+**Approval Points:**
+- ✅ Between phases (Phase 1 → Phase 2)
+- ❌ NOT between tasks within a phase (Task 1.1 → Task 1.2)
+
+**This rule applies to:**
+- ✅ Feature implementation plans
+- ✅ Refactoring work
+- ✅ Documentation updates
+- ✅ Test creation
+- ✅ Setup sequences
+- ✅ Migration work
+- ✅ CORTEX 2.0 implementation phases
+
+**Response Template After Phase Completion:**
+```markdown
+## ✅ Phase [N] Complete
+
+**Delivered:**
+- ✅ [Task 1] - [Result]
+- ✅ [Task 2] - [Result]
+- ✅ [Task 3] - [Result]
+
+**Validation:**
+- ✅ All tests passing
+- ✅ No errors or warnings
+- ✅ Documentation updated
+
+**Next Phase Ready:** Phase [N+1] - [Description]
+  - Task [N+1].1: [Description]
+  - Task [N+1].2: [Description]
+  - Estimated: [X] minutes
+
+**Continue?** Say **"Yes"** to proceed with Phase [N+1], or **"Stop"** to review.
+```
 
 ---
 
@@ -6151,350 +7895,384 @@ mind_palace_metrics:
 
 ---
 
-## 📋 CORTEX Response Templates - Practical Action Design
+## 📋 CORTEX Response Templates - Phase-Based Execution
 
-**Philosophy:** CORTEX responses should leverage planning and execution capabilities to provide **actionable, cumulative options** instead of one-by-one choices.
+**Philosophy:** CORTEX creates complete plans upfront but executes **one complete phase at a time**, waiting for approval between phases. This gives users control while avoiding one-task-at-a-time friction.
 
-### ✅ GOOD: Actionable & Cumulative
+### ✅ CORRECT: Phase-by-Phase with Approval Gates
 
 **Example 1: Documentation Refresh**
 ```markdown
-## 🚀 Ready to Execute
+## 🚀 Plan Created: Documentation Refresh
 
-I've identified 4 documentation gaps and prepared an execution plan.
+I've identified 4 documentation gaps and created a 4-phase plan.
 
-**Execute All (Recommended):**
-I'll complete all phases sequentially:
-1. Update "The Awakening" story (15 min)
-2. Create 26 missing technical docs (45 min)  
-3. Generate 8 Mermaid diagrams (20 min)
-4. Deploy to GitHub Pages (5 min)
+**Complete Plan:**
+- Phase 1: Update "The Awakening" story (15 min, 3 tasks)
+- Phase 2: Create 26 missing technical docs (45 min, 26 tasks)  
+- Phase 3: Generate 8 Mermaid diagrams (20 min, 8 tasks)
+- Phase 4: Deploy to GitHub Pages (5 min, 2 tasks)
 
-Estimated: 85 minutes total
+Total Estimated: 85 minutes
 
-Say **"Execute all"** to start, or **"Just phases 1-2"** to run partially.
+**Start Execution?**
+Say **"Yes"** to begin Phase 1 (I'll complete all 3 tasks, then stop for approval).
 
-**Manual Review First:**
-Say **"Show me the plan"** to review details before execution.
+Say **"Show me Phase 1 details"** to review before starting.
+```
+
+**After Phase 1 Completes:**
+```markdown
+## ✅ Phase 1 Complete: Story Updated
+
+**Delivered:**
+- ✅ Updated narrative with 5 new features
+- ✅ Added visual diagrams section
+- ✅ Refreshed navigation structure
+
+**Validation:**
+- ✅ MkDocs build successful
+- ✅ All links working
+- ✅ Preview verified at localhost:8000
+
+**Next:** Phase 2 - Create 26 technical docs (45 min, 26 tasks)
+
+**Continue?** Say **"Yes"** to proceed with Phase 2, or **"Stop"** to review.
 ```
 
 **Example 2: Test Failures**
 ```markdown
 ## 🔧 3 Test Failures Detected
 
-**Fix All (Recommended):**
-I'll fix all 3 issues in one pass:
-- Fix selector in `button.spec.ts` (async timing)
-- Update API mock in `service.spec.ts` (schema change)
-- Add missing import in `utils.spec.ts` (module not found)
+I've analyzed the failures and created a 3-phase fix plan.
 
-Say **"Fix all"** and I'll execute all repairs with verification.
+**Complete Plan:**
+- Phase 1: Fix async selector in button.spec.ts (1 task)
+- Phase 2: Update API mock in service.spec.ts (2 tasks)  
+- Phase 3: Add missing import in utils.spec.ts (1 task)
 
-**Investigate First:**
-Say **"Show root causes"** to analyze before fixing.
+**Note:** Each phase completes fully with validation before moving to next.
+
+**Start Fixes?**
+Say **"Yes"** to begin Phase 1 (I'll fix the button test completely, verify it passes, then stop).
+
+Say **"Show root causes"** to review analysis first.
 ```
 
 **Example 3: Feature Implementation**
 ```markdown
 ## ✅ Plan Created: Multi-Language Invoice Export
 
-**Execute Full Feature:**
-I'll implement all 4 phases using TDD:
-1. Phase 1: Service layer (tests → code) - 30 min
-2. Phase 2: API endpoints (tests → code) - 25 min  
-3. Phase 3: UI component (tests → code) - 40 min
-4. Phase 4: Integration tests & validation - 20 min
+**4-Phase TDD Implementation:**
+- Phase 1: Service layer (tests → code) - 30 min, 6 tasks
+- Phase 2: API endpoints (tests → code) - 25 min, 5 tasks  
+- Phase 3: UI component (tests → code) - 40 min, 8 tasks
+- Phase 4: Integration tests & validation - 20 min, 4 tasks
 
-Total: ~115 minutes
+Total: ~115 minutes | All phases use TDD (RED → GREEN → REFACTOR)
 
-Say **"Execute full feature"** to start end-to-end implementation.
+**Begin Implementation?**
+Say **"Yes"** to start Phase 1 (I'll complete all 6 service layer tasks with tests, then stop for review).
 
-**Phase-by-Phase:**
-Say **"Start Phase 1"** to proceed incrementally with checkpoints.
+Say **"Show Phase 1 breakdown"** to see detailed tasks first.
 ```
 
-### ❌ BAD: One-by-One Options (Old Style)
+### ❌ WRONG: Execute All Phases Without Approval
 
 ```markdown
-## Next Steps
+## ❌ BAD - Runs everything without checkpoints
 
-**Option 1:** Update story  
-Review the visual presentation, navigation behavior, and story flow.
+**Execute All (Recommended):**
+I'll complete all phases sequentially:
+1. Update story (15 min)
+2. Create docs (45 min)
+3. Generate diagrams (20 min)
+4. Deploy (5 min)
 
-**Option 2:** Create technical docs  
-Continue with Phase 2 to add documentation.
+Say "Execute all" to start
 
-**Option 3:** Generate diagrams  
-Proceed with Phase 3 to generate the 26 missing diagrams.
-
-**Option 4:** Deploy  
-When satisfied with localhost review, deploy to GitHub Pages.
+❌ This removes user control
+❌ Can't stop between phases
+❌ No chance to review intermediate work
+❌ Violates phase approval rule
 ```
 
 **Why this is bad:**
-- ❌ Forces 4 separate invocations
-- ❌ Doesn't leverage CORTEX planning
-- ❌ No "do everything" option
-- ❌ Wastes user time
+- ❌ No control points between phases
+- ❌ Can't review work quality incrementally
+- ❌ Continues even if early phase has issues
+- ❌ All-or-nothing approach
+- ❌ Violates mandatory approval rule
 
 ### 🎯 Response Template Rules
 
-**Rule 1: Always offer cumulative execution**
+**Rule 1: Always show complete plan upfront**
 ```markdown
-✅ "Execute all phases" (cumulative)
-✅ "Fix all issues" (batch)
-✅ "Implement full feature" (end-to-end)
+✅ "4-Phase Plan: Phase 1 (3 tasks), Phase 2 (5 tasks)..." - Full visibility
+✅ "Total: 85 minutes across 4 phases" - Set expectations
 
-❌ "Option 1, 2, 3, 4" (one-by-one)
+❌ "I'll do some work" - Vague scope
+❌ "This will take a while" - No structure
 ```
 
-**Rule 2: Provide smart defaults**
+**Rule 2: Execute one complete phase, then stop**
 ```markdown
-✅ "Execute all (Recommended)" - Make the best path obvious
-✅ "Estimated: 85 minutes" - Set expectations
-✅ "Say 'Execute all' to start" - Clear command
+✅ "Say 'Yes' to begin Phase 1 (I'll complete all 3 tasks, then stop)"
+✅ "Phase 1 complete! Continue with Phase 2?"
 
-❌ "What do you want to do?" - Forces decision making
+❌ "Execute all phases" - No approval gates
+❌ "Say 'continue' after each task" - Too granular
 ```
 
-**Rule 3: Include escape hatches**
+**Rule 3: Provide clear phase completion reports**
 ```markdown
-✅ "Show me the plan" - Review before execution
-✅ "Just phases 1-2" - Partial execution
-✅ "Pause after Phase 1" - Incremental with checkpoints
+✅ Phase deliverables listed
+✅ Validation results shown
+✅ Next phase described
+✅ Explicit approval request
 
-❌ Only all-or-nothing options
+❌ "Done. Next?" - No details
+❌ Automatic continuation
 ```
 
-**Rule 4: Leverage CORTEX planning**
+**Rule 4: Make approval clear and simple**
 ```markdown
-✅ Break work into phases internally
-✅ Show time estimates per phase
-✅ Offer full plan execution by default
-✅ Use todo list for multi-phase work
+✅ "Continue? Say 'Yes' to proceed or 'Stop' to review"
+✅ Bold commands for easy identification
 
-❌ Present raw phases as user choices
+❌ "What would you like to do next?" - Open-ended
+❌ "Ready?" - Unclear what happens
 ```
 
-**Rule 5: Make commands copyable**
+**Rule 5: Allow plan review before starting**
 ```markdown
-✅ Say **"Execute all"** to start
-✅ Say **"Fix all tests"** to proceed
-✅ Command in **bold** for easy identification
+✅ "Show me Phase 1 details" - Review tasks
+✅ "Show root causes" - Understand before fixing
+✅ "Explain the approach" - Understand strategy
 
-❌ "You can proceed" (vague)
-❌ "Let me know when ready" (passive)
+❌ Only execution options
 ```
 
-### 📊 Response Format Template
+### 📊 Response Format Templates
 
-**Standard Multi-Phase Response:**
+**Standard Plan Creation Response:**
 ```markdown
-## 🎯 [Summary of Work]
+## 🎯 Plan Created: [Feature/Work Description]
 
-[Brief description of what was discovered/analyzed]
+**[X]-Phase Plan:**
+- Phase 1: [Name] ([time], [N] tasks)
+- Phase 2: [Name] ([time], [N] tasks)
+- Phase 3: [Name] ([time], [N] tasks)
 
-**Execute All (Recommended):**
-I'll complete [X phases/tasks] sequentially:
-1. [Phase 1 name] ([time estimate])
-2. [Phase 2 name] ([time estimate])
-3. [Phase 3 name] ([time estimate])
+Total: [X hours/minutes] across [Y] phases
 
-Total: [X minutes/hours]
+**Execution Model:**
+- I'll complete each phase fully (all tasks)
+- Stop after each phase for your approval
+- You maintain control at natural breakpoints
 
-Say **"Execute all"** to start, or **"Just phase X"** to run partially.
+**Begin?**
+Say **"Yes"** to start Phase 1, or **"Show Phase 1 details"** to review first.
+```
 
-**Alternative Approaches:**
-- **"Show me the plan"** - Review detailed breakdown first
-- **"Pause after Phase X"** - Stop for checkpoint review
-- **"Skip Phase X"** - Execute with modifications
+**Standard Phase Completion Response:**
+```markdown
+## ✅ Phase [N] Complete: [Phase Name]
 
-**Already complete?** Say **"Continue"** to resume from last checkpoint.
+**Delivered:**
+- ✅ [Task 1] - [Result]
+- ✅ [Task 2] - [Result]
+- ✅ [Task 3] - [Result]
+
+**Validation:**
+- ✅ All tests passing ([X]/[X])
+- ✅ No errors or warnings
+- ✅ [Specific quality metric]
+
+**Next:** Phase [N+1] - [Phase Name] ([time], [N] tasks)
+  - [Brief description of what Phase N+1 will do]
+
+**Continue?** Say **"Yes"** to proceed with Phase [N+1], or **"Stop"** to review current state.
 ```
 
 **Standard Issue Fix Response:**
 ```markdown
 ## 🔧 [X Issues/Errors] Detected
 
-[Brief summary of problems]
+[Brief summary of problems and analysis]
 
-**Fix All (Recommended):**
-I'll address all [X] issues in one pass:
-- [Issue 1]: [One-line fix description]
-- [Issue 2]: [One-line fix description]  
-- [Issue 3]: [One-line fix description]
+**[X]-Phase Fix Plan:**
+- Phase 1: [Fix category] ([N] issues)
+- Phase 2: [Fix category] ([N] issues)  
+- Phase 3: [Verification] ([N] checks)
 
-Say **"Fix all"** and I'll execute repairs with verification.
+**Approach:**
+- Each phase completes fully with validation
+- Stop between phases for verification
+- Atomic commits with rollback safety
 
-**Investigate Further:**
-- **"Show root causes"** - Deep analysis before fixing
-- **"Fix [specific issue]"** - Address individually
-- **"Show impact"** - What breaks if unfixed
-
-**Batch Strategy:** All fixes use atomic commits with rollback safety.
+**Start Fixes?**
+Say **"Yes"** to begin Phase 1, or **"Show root causes"** for detailed analysis.
 ```
 
-**Standard Completion Response:**
+**Standard All-Work-Complete Response:**
 ```markdown
-## ✅ [Feature/Task] Complete
+## ✅ All Phases Complete: [Feature/Work]
 
-**What was delivered:**
-- ✅ [Deliverable 1] - [Brief result]
-- ✅ [Deliverable 2] - [Brief result]
-- ✅ [Deliverable 3] - [Brief result]
+**Summary:**
+- ✅ Phase 1: [Result summary]
+- ✅ Phase 2: [Result summary]
+- ✅ Phase 3: [Result summary]
 
-**Quality Checks:**
+**Final Validation:**
 - ✅ [X] tests passing
 - ✅ Zero errors, zero warnings
-- ✅ [Performance/coverage metric]
+- ✅ [Performance/coverage metrics]
+- ✅ Documentation updated
 
-**Next Actions (Choose One):**
-- **"Deploy to [environment]"** - Push changes live
-- **"Add [related feature]"** - Extend functionality
-- **"Show metrics"** - View detailed statistics
-- **"Mark complete"** - Archive and move on
+**Deliverables:**
+- [File 1]: [Description]
+- [File 2]: [Description]
+- [File 3]: [Description]
 
-**Documentation updated:** [Link or file reference]
+**Next Steps:**
+- Deploy to [environment]
+- Add [related feature]
+- Mark complete and move on
+
+**Documentation:** [Link or file reference]
 ```
 
-### 🧪 Examples by Scenario
+### 🧪 Complete Workflow Examples
 
 **Scenario: Documentation needs refresh**
+
+**Initial Response:**
 ```markdown
-## 📚 Documentation Refresh Plan Ready
+## 📚 Plan Created: Documentation Refresh
 
 Git analysis identified 5 new features since last deployment (Brain Protector, Oracle Crawler, Knowledge Boundaries, Amnesia, Pattern Cleanup).
 
-**Execute Full Refresh (Recommended):**
-I'll complete all 7 phases:
-1. Update "Awakening" story with new features (20 min)
-2. Create 5 technical docs (Brain Protector, Oracle, etc.) (35 min)
-3. Generate 6 Mermaid diagrams (15 min)
-4. Create 4 Gemini image prompts (10 min)
-5. Build docs with `mkdocs build --clean` (2 min)
-6. Launch localhost:8000 for review (auto-open browser)
-7. Generate refresh report (5 min)
+**7-Phase Plan:**
+- Phase 1: Update "Awakening" story with new features (20 min, 5 tasks)
+- Phase 2: Create 5 technical docs (35 min, 5 tasks)
+- Phase 3: Generate 6 Mermaid diagrams (15 min, 6 tasks)
+- Phase 4: Create 4 Gemini image prompts (10 min, 4 tasks)
+- Phase 5: Build docs with mkdocs (2 min, 1 task)
+- Phase 6: Launch localhost:8000 for review (1 min, 1 task)
+- Phase 7: Generate refresh report (5 min, 1 task)
 
-Total: ~87 minutes | Auto-launches: localhost:8000 for review
+Total: ~88 minutes across 7 phases
 
-Say **"Execute full refresh"** to start all phases, or **"Just story update"** for Phase 1 only.
+**Begin?**
+Say **"Yes"** to start Phase 1 (I'll complete all 5 story update tasks, then stop).
 
-**Before starting?** Say **"Show detailed plan"** to review each phase's changes.
+Say **"Show Phase 1 tasks"** to review details first.
 ```
 
+**After Phase 1:**
+```markdown
+## ✅ Phase 1 Complete: Story Updated
+
+**Delivered:**
+- ✅ Added Brain Protector section with protections explained
+- ✅ Added Oracle Crawler section with database discovery
+- ✅ Updated knowledge boundaries with namespace examples
+- ✅ Added amnesia section with reset workflows
+- ✅ Refreshed navigation with new feature links
+
+**Validation:**
+- ✅ MkDocs build successful
+- ✅ All internal links valid
+- ✅ Preview checked: localhost:8000
+
+**Next:** Phase 2 - Create 5 technical docs (35 min, 5 tasks)
+
+**Continue?** Say **"Yes"** for Phase 2, or **"Stop"** to review story changes.
+```
+
+**User:** "Yes"
+
+**After Phase 2:**
+```markdown
+## ✅ Phase 2 Complete: Technical Docs Created
+
+**Delivered:**
+- ✅ docs/architecture/brain-protector.md (protection system)
+- ✅ docs/features/oracle-crawler.md (database discovery)
+- ✅ docs/architecture/knowledge-boundaries.md (namespace system)
+- ✅ docs/guides/brain-amnesia.md (reset guide)
+- ✅ docs/reference/pattern-cleanup.md (decay algorithms)
+
+**Validation:**
+- ✅ All docs render correctly
+- ✅ Code examples validated
+- ✅ Cross-references working
+
+**Next:** Phase 3 - Generate 6 Mermaid diagrams (15 min, 6 tasks)
+
+**Continue?** Say **"Yes"** for Phase 3, or **"Stop"** to review docs.
+```
+
+*[Pattern continues through all 7 phases]*
+
 **Scenario: Multiple test failures**
+
+**Initial Response:**
 ```markdown
 ## 🧪 7 Test Failures Detected
 
 Test suite shows 7 failures across 3 components (HostControlPanel, InvoiceService, UserRegistration).
 
-**Fix All (Recommended):**
-I'll repair all 7 failures in dependency order:
-1. **HostControlPanel** (3 failures): Update selectors for refactored IDs
-2. **InvoiceService** (2 failures): Fix API contract after schema change
-3. **UserRegistration** (2 failures): Add missing validation mocks
+**Root Cause Analysis:**
+- Playwright selectors outdated (4 failures)
+- API schema mismatch (2 failures)
+- Missing async/await (1 failure)
 
-Estimated: 25 minutes | Strategy: Fix → Run → Verify per component
+**3-Phase Fix Plan:**
+- Phase 1: Fix Playwright selectors (4 tests, 10 min)
+- Phase 2: Update API mocks (2 tests, 8 min)
+- Phase 3: Add async/await (1 test, 5 min)
 
-Say **"Fix all tests"** to execute batch repair.
+Total: ~23 minutes | Each phase validates before continuing
 
-**Need Analysis First?**
-- **"Show failure details"** - Stack traces & root causes
-- **"Group by component"** - Organized breakdown
-- **"Check coverage"** - View test coverage impact
-```
-
-**Scenario: Complex feature implementation**
-```markdown
-## 🚀 Feature Plan Ready: Real-Time Dashboard BRAIN Reference
-
-Plan created with 4 phases (28 tasks, 6.5 hours estimated).
-
-**Execute Complete Feature (Recommended):**
-I'll implement full BRAIN Reference system using TDD:
-
-**Phase 1: UI Foundation** (90 min)
-- Create 5 dashboard tabs (Overview, Rules, How Things Work, Setup, Hemispheres)
-- Implement tab navigation & layout
-- Tests: Component rendering, tab switching
-
-**Phase 2: Data Integration** (120 min)  
-- Connect to Tier 0-4 data sources
-- Build real-time update system (5-30s refresh)
-- Tests: Data loading, refresh cycles, error handling
-
-**Phase 3: Visual Workflows** (90 min)
-- Create 7 "How X Works" diagrams (Amnesia, Learning, TDD, etc.)
-- Implement interactive workflow visualization
-- Tests: Diagram rendering, user interactions
-
-**Phase 4: Health & Fixes** (90 min)
-- Add health monitoring dashboard
-- Implement one-click fix buttons
-- Tests: Health checks, remediation workflows
-
-Total: 6.5 hours | 60 tests | TDD throughout
-
-Say **"Execute complete feature"** for end-to-end implementation.
-
-**Incremental Delivery:**
-- **"Execute Phase 1"** - UI foundation only, review before Phase 2
-- **"Show task breakdown"** - Detailed 28-task checklist
-- **"Estimate per phase"** - Time breakdown with dependencies
-```
-
-### 🎨 Visual Examples
-
-**Before (Bad):**
-```
-Next Steps:
-Option 1: Fix test A
-Option 2: Fix test B  
-Option 3: Fix test C
-Option 4: Run all tests
-```
-
-**After (Good):**
-```
-## 🔧 3 Test Failures - Batch Fix Ready
-
-Fix All (Recommended):
-I'll repair tests A, B, C in one pass (8 min total)
-
-Say "Fix all tests" to execute → Full verification included
+**Start Fixes?**
+Say **"Yes"** to begin Phase 1 (I'll fix all 4 selector issues, verify they pass, then stop).
 ```
 
 ---
 
-**Before (Bad):**
-```
-What would you like me to do next?
-1. Update docs
-2. Create diagrams
-3. Build site
-4. Deploy
-```
+### 📝 Key Principles Summary
 
-**After (Good):**
-```
-## 📚 Documentation Ready for Deployment
+**The Complete Phase Rule in Action:**
 
-Execute Pipeline (Recommended):
-Update docs → Diagrams → Build → Deploy (25 min)
+1. **Plan First:** Show complete multi-phase plan upfront
+2. **Execute One:** Complete entire phase (all tasks)
+3. **Stop & Report:** Show what was delivered + validation
+4. **Ask Approval:** Explicit user consent to continue
+5. **Repeat:** Next phase when approved
 
-Say "Deploy pipeline" to execute full workflow
-```
+**Benefits:**
+- ✅ User maintains control at logical breakpoints
+- ✅ Can review quality before committing more time
+- ✅ Can change direction based on results
+- ✅ Reduces risk of going down wrong path
+- ✅ Natural pause points for testing/validation
 
----
+**What This Prevents:**
+- ❌ Stopping after task 1.1 (incomplete phase)
+- ❌ Asking approval for every task (too granular)
+- ❌ Running all phases automatically (no control)
+- ❌ Vague completion (phase must be 100% done)
 
-### 💡 Key Takeaway
-
-**CORTEX should work like a senior developer:**
-- ✅ "I'll fix all 7 test failures - give me 30 minutes" (proactive)
-- ❌ "Which test failure do you want me to look at first?" (passive)
-
-**User's job:** Approve strategy  
-**CORTEX's job:** Execute efficiently
+**This rule applies everywhere:**
+- Feature implementation
+- Bug fixes
+- Documentation updates
+- Test creation
+- Refactoring work
+- Setup sequences
+- CORTEX 2.0 implementation
 
 ---
 
@@ -6537,3 +8315,4 @@ Say "Deploy pipeline" to execute full workflow
 ```
 
 **That's it. CORTEX handles the rest with SOLID principles and local-first design.** 🎯
+

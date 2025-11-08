@@ -44,7 +44,7 @@ class Pattern:
     source: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     is_pinned: bool = False
-    scope: str = "generic"  # NEW: Boundary enforcement ('generic' or 'application')
+    scope: str = "cortex"  # NEW: Boundary enforcement ('cortex' or 'application')
     namespaces: Optional[List[str]] = None  # NEW: Multi-app support (JSON array)
 
 
@@ -109,11 +109,11 @@ class KnowledgeGraph:
                 source TEXT,
                 metadata TEXT,
                 is_pinned INTEGER DEFAULT 0,
-                scope TEXT DEFAULT 'generic',
+                scope TEXT DEFAULT 'cortex',
                 namespaces TEXT DEFAULT '["CORTEX-core"]',
                 CHECK (confidence >= 0.0 AND confidence <= 1.0),
                 CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context')),
-                CHECK (scope IN ('generic', 'application'))
+                CHECK (scope IN ('cortex', 'application'))
             )
         """)
         
@@ -210,74 +210,61 @@ class KnowledgeGraph:
         content: str,
         pattern_type: PatternType,
         confidence: float = 1.0,
-        scope: str = "generic",  # NEW: Boundary enforcement
-        namespaces: Optional[List[str]] = None,  # NEW: Multi-app support
+        scope: str = "cortex",  # Boundary enforcement ('cortex' | 'application')
+        namespaces: Optional[List[str]] = None,
         tags: Optional[List[str]] = None,
         source: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None
     ) -> Pattern:
-        """
-        Add a new pattern to the knowledge graph.
-        
-        Args:
-            pattern_id: Unique pattern identifier
-            title: Pattern title
-            content: Pattern content/description
-            pattern_type: Pattern classification
-            confidence: Initial confidence (0.0 to 1.0)
-            scope: Boundary scope ('generic' for CORTEX, 'application' for apps)
-            namespaces: List of namespaces (e.g., ['CORTEX-core'], ['KSESSIONS'])
-            tags: List of tags for categorization
-            source: Source of pattern (conversation_id, file, etc.)
-            metadata: Additional metadata as dict
-        
-        Returns:
-            Created Pattern object
-        
-        Raises:
-            ValueError: If scope is invalid
-        """
-        # Validate scope
-        if scope not in ["generic", "application"]:
-            raise ValueError(f"Invalid scope: {scope}. Must be 'generic' or 'application'")
-        
-        # Default namespaces
+        """Add a new pattern to the knowledge graph."""
+        if scope not in ["cortex", "application"]:
+            raise ValueError(f"Invalid scope: {scope}. Must be 'cortex' or 'application'")
         if namespaces is None:
             namespaces = ["CORTEX-core"]
-        
+
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
         now = datetime.now().isoformat()
-        
-        # Convert metadata and namespaces to JSON
         metadata_json = json.dumps(metadata) if metadata else None
         namespaces_json = json.dumps(namespaces)
-        
-        # Insert pattern
-        cursor.execute("""
+
+        cursor.execute(
+            """
             INSERT INTO patterns (
                 pattern_id, title, content, pattern_type, confidence,
                 created_at, last_accessed, access_count, source, metadata,
                 scope, namespaces
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            pattern_id, title, content, pattern_type.value, confidence,
-            now, now, 0, source, metadata_json,
-            scope, namespaces_json
-        ))
-        
-        # Add tags if provided
+            """,
+            (
+                pattern_id,
+                title,
+                content,
+                pattern_type.value,
+                confidence,
+                now,
+                now,
+                0,
+                source,
+                metadata_json,
+                scope,
+                namespaces_json,
+            ),
+        )
+
         if tags:
             for tag in tags:
-                cursor.execute("""
+                cursor.execute(
+                    """
                     INSERT OR IGNORE INTO pattern_tags (pattern_id, tag)
                     VALUES (?, ?)
-                """, (pattern_id, tag))
-        
+                    """,
+                    (pattern_id, tag),
+                )
+
         conn.commit()
         conn.close()
-        
+
         return Pattern(
             pattern_id=pattern_id,
             title=title,
@@ -290,7 +277,7 @@ class KnowledgeGraph:
             source=source,
             metadata=metadata,
             scope=scope,
-            namespaces=namespaces
+            namespaces=namespaces,
         )
     
     def get_pattern(self, pattern_id: str) -> Optional[Pattern]:
@@ -320,22 +307,23 @@ class KnowledgeGraph:
         if not row:
             conn.close()
             return None
-        
-        # Update access timestamp and count
+
         now = datetime.now().isoformat()
-        cursor.execute("""
+        cursor.execute(
+            """
             UPDATE patterns
             SET last_accessed = ?, access_count = access_count + 1
             WHERE pattern_id = ?
-        """, (now, pattern_id))
-        
+            """,
+            (now, pattern_id),
+        )
+
         conn.commit()
         conn.close()
-        
-        # Parse metadata and namespaces
+
         metadata = json.loads(row[9]) if row[9] else None
         namespaces = json.loads(row[12]) if row[12] else ["CORTEX-core"]
-        
+
         return Pattern(
             pattern_id=row[0],
             title=row[1],
@@ -343,13 +331,13 @@ class KnowledgeGraph:
             pattern_type=PatternType(row[3]),
             confidence=row[4],
             created_at=row[5],
-            last_accessed=now,  # Use updated timestamp
-            access_count=row[7] + 1,  # Incremented count
+            last_accessed=now,
+            access_count=row[7] + 1,
             source=row[8],
             metadata=metadata,
             is_pinned=bool(row[10]),
-            scope=row[11] if row[11] else "generic",
-            namespaces=namespaces
+            scope=row[11] if row[11] else "cortex",
+            namespaces=namespaces,
         )
     
     def update_pattern(
@@ -474,7 +462,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         
@@ -533,7 +521,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         
@@ -599,7 +587,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             )
             
@@ -610,7 +598,7 @@ class KnowledgeGraph:
             if current_namespace and current_namespace in namespaces:
                 # Current namespace match - highest priority
                 boost = 2.0
-            elif pattern.scope == "generic" and include_generic:
+            elif pattern.scope == "cortex" and include_generic:
                 # Generic patterns always included with medium priority
                 boost = 1.5
             elif current_namespace:
@@ -670,7 +658,7 @@ class KnowledgeGraph:
                     source=row[8],
                     metadata=metadata,
                     is_pinned=bool(row[10]),
-                    scope=row[11] if row[11] else "generic",
+                    scope=row[11] if row[11] else "cortex",
                     namespaces=namespaces
                 ))
         
@@ -681,7 +669,7 @@ class KnowledgeGraph:
         Get all generic (CORTEX core) patterns.
         
         Returns:
-            List of Pattern objects with scope='generic'
+            List of Pattern objects with scope='cortex'
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -691,7 +679,7 @@ class KnowledgeGraph:
                    created_at, last_accessed, access_count, source, metadata, is_pinned,
                    scope, namespaces
             FROM patterns
-            WHERE scope = 'generic'
+            WHERE scope = 'cortex'
             ORDER BY confidence DESC, last_accessed DESC
         """)
         
@@ -714,7 +702,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         
@@ -758,7 +746,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         
@@ -881,7 +869,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         
@@ -1104,7 +1092,7 @@ class KnowledgeGraph:
                 source=row[8],
                 metadata=metadata,
                 is_pinned=bool(row[10]),
-                scope=row[11] if row[11] else "generic",
+                scope=row[11] if row[11] else "cortex",
                 namespaces=namespaces
             ))
         

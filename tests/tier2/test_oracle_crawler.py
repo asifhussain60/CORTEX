@@ -509,3 +509,4 @@ class TestOracleIntegration:
             assert len(tables) >= 0
         finally:
             crawler.disconnect()
+

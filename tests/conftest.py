@@ -13,8 +13,8 @@ from datetime import datetime
 from typing import Generator
 
 # Import agent framework
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse, BaseAgent
-from CORTEX.src.cortex_agents.agent_types import IntentType, Priority
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse, BaseAgent
+from src.cortex_agents.agent_types import IntentType, Priority
 
 
 # ============================================================================

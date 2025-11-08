@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Dict
 from contextlib import contextmanager
 from datetime import datetime
+from .schema import DatabaseSchema
 
 
 class ConnectionManager:
@@ -33,8 +34,15 @@ class ConnectionManager:
         self.db_path = db_path
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._connection = None
-        # Create database file immediately
+        # Create database file immediately and initialize schema
         self.get_connection()
+        # Ensure schema exists (idempotent)
+        try:
+            DatabaseSchema.initialize(db_path=self.db_path)
+        except Exception:
+            # Allow caller tests to handle initialization explicitly if needed
+            # but don't fail construction due to idempotent init
+            pass
     
     def get_connection(self) -> sqlite3.Connection:
         """
@@ -158,7 +166,6 @@ class ConnectionManager:
         cursor = conn.cursor()
         cursor.execute(query, params)
         results = cursor.fetchall()
-        conn.close()
         return results
     
     def execute_update(self, query: str, params: tuple = ()) -> int:
@@ -177,7 +184,6 @@ class ConnectionManager:
         cursor.execute(query, params)
         rowcount = cursor.rowcount
         conn.commit()
-        conn.close()
         return rowcount
     
     def execute_many(self, query: str, params_list: list) -> int:
@@ -196,5 +202,4 @@ class ConnectionManager:
         cursor.executemany(query, params_list)
         rowcount = cursor.rowcount
         conn.commit()
-        conn.close()
         return rowcount

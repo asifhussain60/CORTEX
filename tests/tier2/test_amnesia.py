@@ -17,8 +17,8 @@ import tempfile
 import shutil
 import json
 
-from CORTEX.src.tier2.knowledge_graph import KnowledgeGraph, PatternType
-from CORTEX.src.tier2.amnesia import EnhancedAmnesia, AmnesiaStats
+from src.tier2.knowledge_graph import KnowledgeGraph, PatternType
+from src.tier2.amnesia import EnhancedAmnesia, AmnesiaStats
 
 
 @pytest.fixture
@@ -92,7 +92,7 @@ class TestNamespaceDeletion:
             content="CORTEX core intelligence",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core", "KSESSIONS"]  # Even if KSESSIONS namespace
         )
         
@@ -204,7 +204,7 @@ class TestConfidenceDeletion:
             content="Core intelligence",
             pattern_type=PatternType.PRINCIPLE,
             confidence=0.2,  # Very low
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -258,7 +258,7 @@ class TestAgeDeletion:
             content="Timeless wisdom",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -290,7 +290,7 @@ class TestScopeClear:
             content="Core",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -430,7 +430,7 @@ class TestDeletionPreview:
             content="Core",
             pattern_type=PatternType.PRINCIPLE,
             confidence=1.0,
-            scope="generic",
+            scope="cortex",
             namespaces=["CORTEX-core"]
         )
         
@@ -545,3 +545,4 @@ class TestDeletionLogging:
         with open(log_path, 'r') as f:
             log_data = json.load(f)
         assert isinstance(log_data, list)
+

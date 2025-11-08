@@ -19,7 +19,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from CORTEX.src.tier2.knowledge_graph import (
+from src.tier2.knowledge_graph import (
     KnowledgeGraph,
     Pattern,
     PatternType
@@ -55,7 +55,7 @@ def kg(temp_db):
         title="Test-Driven Development",
         content="Always write tests first RED GREEN REFACTOR",
         pattern_type=PatternType.WORKFLOW,
-        scope="generic",
+        scope="cortex",
         namespaces=["CORTEX-core"],
         tags=["testing", "workflow"]
     )
@@ -65,7 +65,7 @@ def kg(temp_db):
         title="SOLID Design Principles",
         content="Single Responsibility Open Closed Liskov Interface Dependency",
         pattern_type=PatternType.PRINCIPLE,
-        scope="generic",
+        scope="cortex",
         namespaces=["CORTEX-core"],
         tags=["architecture", "principles"]
     )
@@ -108,7 +108,7 @@ def kg(temp_db):
         title="Export Feature Pattern",
         content="Generic export workflow testing applicable to multiple apps",
         pattern_type=PatternType.WORKFLOW,
-        scope="generic",
+        scope="cortex",
         namespaces=["CORTEX-core", "KSESSIONS", "NOOR"],
         tags=["export", "workflow"]
     )
@@ -152,7 +152,7 @@ class TestNamespaceAwareSearch:
         )
         
         # Should include CORTEX-core patterns
-        generic_patterns = [p for p in results if p.scope == "generic"]
+        generic_patterns = [p for p in results if p.scope == "cortex"]
         assert len(generic_patterns) > 0
     
     def test_generic_patterns_excluded_when_disabled(self, kg):
@@ -166,7 +166,7 @@ class TestNamespaceAwareSearch:
         
         # Should only have KSESSIONS patterns (no generic)
         for pattern in results:
-            if pattern.scope == "generic":
+            if pattern.scope == "cortex":
                 # Generic patterns should only appear if they're in KSESSIONS namespace
                 assert "KSESSIONS" in pattern.namespaces
     
@@ -236,7 +236,7 @@ class TestNamespaceAwareSearch:
         
         # Should return results with generic patterns prioritized
         assert len(results) > 0
-        generic_patterns = [p for p in results if p.scope == "generic"]
+        generic_patterns = [p for p in results if p.scope == "cortex"]
         assert len(generic_patterns) > 0
 
 
@@ -289,9 +289,9 @@ class TestGetGenericPatterns:
         # Should have tdd, solid, export_pattern
         assert len(patterns) >= 3
         
-        # All should have scope='generic'
+        # All should have scope='cortex'
         for pattern in patterns:
-            assert pattern.scope == "generic"
+            assert pattern.scope == "cortex"
     
     def test_generic_patterns_sorted_by_confidence(self, kg):
         """Verify generic patterns sorted by confidence."""
@@ -301,7 +301,7 @@ class TestGetGenericPatterns:
             title="High Confidence",
             content="High confidence pattern",
             pattern_type=PatternType.PRINCIPLE,
-            scope="generic",
+            scope="cortex",
             confidence=0.95
         )
         
@@ -310,7 +310,7 @@ class TestGetGenericPatterns:
             title="Low Confidence",
             content="Low confidence pattern",
             pattern_type=PatternType.PRINCIPLE,
-            scope="generic",
+            scope="cortex",
             confidence=0.50
         )
         
@@ -401,7 +401,7 @@ class TestNamespaceBoostingScores:
         ksessions_found = False
         
         for pattern in results:
-            if pattern.scope == "generic" and "KSESSIONS" not in pattern.namespaces:
+            if pattern.scope == "cortex" and "KSESSIONS" not in pattern.namespaces:
                 generic_found = True
             if "KSESSIONS" in pattern.namespaces and pattern.scope == "application":
                 ksessions_found = True
@@ -460,3 +460,4 @@ class TestLimitParameter:
         
         # Should return all matches, not padded to 1000
         assert len(results) <= 10  # We only have ~6 patterns total
+

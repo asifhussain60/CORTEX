@@ -465,7 +465,7 @@ class EnhancedAmnesia:
             cursor.execute("SELECT COUNT(*) FROM patterns")
             preview['total_patterns'] = cursor.fetchone()[0]
             
-            cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'generic'")
+            cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'cortex'")
             preview['generic_patterns'] = cursor.fetchone()[0]
             
             cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'application'")

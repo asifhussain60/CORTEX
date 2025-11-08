@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime, timedelta, date
 from unittest.mock import Mock, patch
 
-from CORTEX.src.tier3.context_intelligence import (
+from src.tier3.context_intelligence import (
     ContextIntelligence,
     GitMetric,
     FileHotspot,

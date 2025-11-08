@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import tempfile
 import shutil
-from CORTEX.src.tier2.knowledge_graph import (
+from src.tier2.knowledge_graph import (
     KnowledgeGraph,
     Pattern,
     PatternType,
@@ -583,3 +583,4 @@ class TestTagManagement:
         
         assert testing_count == 3
         assert len(tag_cloud) >= 5  # At least 5 unique tags
+

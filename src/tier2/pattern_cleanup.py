@@ -43,7 +43,7 @@ class PatternCleanup:
     Pattern Cleanup System for automated knowledge graph maintenance.
     
     Key Principles:
-    - NEVER modify scope='generic' patterns (CORTEX core protection)
+    - NEVER modify scope='cortex' patterns (CORTEX core protection)
     - NEVER modify patterns in CORTEX-core namespace
     - Only affect application-specific patterns
     - Respect confidence thresholds
@@ -72,14 +72,14 @@ class PatternCleanup:
         Apply confidence decay to application patterns only.
         
         Rules:
-        - Generic patterns (scope='generic') NEVER decay
+    - Generic patterns (scope='cortex') NEVER decay
         - CORTEX-core namespace patterns NEVER decay
         - Application patterns decay 1% per day after 30 days
         - Patterns below 0.3 confidence are deleted
         - Pinned patterns are protected
         
         Args:
-            protect_generic: If True, skip all scope='generic' patterns (default: True)
+            protect_generic: If True, skip all scope='cortex' patterns (default: True)
         
         Returns:
             CleanupStats with decayed and deleted counts
@@ -101,7 +101,7 @@ class PatternCleanup:
             """
             
             if protect_generic:
-                delete_query += " AND scope != 'generic'"
+                delete_query += " AND scope != 'cortex'"
             
             cursor.execute(delete_query, (self.MIN_CONFIDENCE,))
             
@@ -135,7 +135,7 @@ class PatternCleanup:
             """
             
             if protect_generic:
-                query += " AND scope != 'generic'"
+                query += " AND scope != 'cortex'"
             
             cursor.execute(query, (decay_threshold_date,))
             
@@ -325,7 +325,7 @@ class PatternCleanup:
             """
             
             if protect_generic:
-                query += " AND scope != 'generic'"
+                query += " AND scope != 'cortex'"
             
             cursor.execute(query, (stale_threshold, self.MIN_CONFIDENCE))
             stats.deleted_count = cursor.rowcount
@@ -406,7 +406,7 @@ class PatternCleanup:
             recommendations['total_patterns'] = cursor.fetchone()[0]
             
             # Generic vs application
-            cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'generic'")
+            cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'cortex'")
             recommendations['generic_patterns'] = cursor.fetchone()[0]
             
             cursor.execute("SELECT COUNT(*) FROM patterns WHERE scope = 'application'")
