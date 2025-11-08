@@ -27,6 +27,42 @@ Refresh with specific start date, full depth analysis, and auto-deploy to GitHub
 
 ## 🔄 Workflow Overview
 
+### Four-File Documentation Structure
+
+CORTEX documentation follows a four-file architecture:
+
+1. **Awakening Of CORTEX.md** - Narrative story (95% story, 5% concepts)
+   - Path: `docs\story\CORTEX-STORY\Awakening Of CORTEX.md`
+   - Purpose: Human-centered story of CORTEX development
+   - Style: First person "I", emotional arc, vision-focused
+   - Content: NO code blocks, NO technical stats, examples in narrative
+
+2. **Technical-CORTEX.md** - Technical documentation (100% technical)
+   - Path: `docs\story\CORTEX-STORY\Technical-CORTEX.md`
+   - Purpose: Granular technical details of entire system
+   - Style: Professional technical documentation
+   - Content: Code, APIs, metrics, architecture, specifications
+
+3. **Image-Prompts.md** - AI image generation prompts
+   - Path: `docs\story\CORTEX-STORY\Image-Prompts.md`
+   - Purpose: Generate schematic diagrams and technical illustrations
+   - Style: Detailed AI prompts with gothic cyberpunk technical aesthetic
+   - Content: Based on Technical-CORTEX.md, append-only (preserve existing)
+
+4. **History.md** - Development timeline
+   - Path: `docs\project\History.md`
+   - Purpose: Chronicle technical decisions and milestones
+   - Style: First person "I", chronological
+   - Content: Technical details, motivation, challenges, outcomes
+
+**Integration:**
+- Story references images from `/docs/assets/images/`
+- Images generated from Image-Prompts.md
+- Technical docs provide source material for prompts
+- History tracks when features were added
+
+### Workflow Diagram
+
 ```mermaid
 graph TB
     Start[User Invokes refresh-docs.md] --> Git[Git Analysis]
@@ -34,17 +70,18 @@ graph TB
     Scan --> Compare[Compare with Docs]
     Compare --> Decision{Changes Detected?}
     
-    Decision -->|Yes| Story[Update Story]
+    Decision -->|Yes| Story[Update Awakening Story]
     Decision -->|No| Skip[No updates needed]
     
-    Story --> Technical[Update Technical Docs]
+    Story --> Technical[Update Technical-CORTEX]
     Technical --> Images[Review Image Needs]
     Images --> Diagrams{New Diagrams Needed?}
     
-    Diagrams -->|Yes| Gemini[Generate Gemini Prompts]
-    Diagrams -->|No| Build[Build MkDocs]
-    Gemini --> Build
+    Diagrams -->|Yes| Gemini[Generate Prompts in Image-Prompts.md]
+    Diagrams -->|No| History[Update History.md]
+    Gemini --> History
     
+    History --> Build[Build MkDocs]
     Build --> Test[Test Locally]
     Test --> Deploy{Auto-Deploy?}
     
@@ -152,7 +189,37 @@ documentation_gaps:
 
 ## 📋 Phase 2: Story Update ("The Awakening of CORTEX")
 
-### 2.1 Review Story Completeness
+### 2.1 Target Files
+
+The documentation refresh process updates these specific story files:
+
+1. **`docs\story\CORTEX-STORY\Awakening Of CORTEX.md`**
+   - 95% narrative story, 5% high-level technical concepts
+   - NO code blocks, NO technical stats, NO low-level details
+   - Functionality weaved into story narrative using examples
+   - Use first person "I" (not Asifinstein or any other name)
+   - Maintain emotional arc and vision-focused narrative
+
+2. **`docs\story\CORTEX-STORY\Technical-CORTEX.md`**
+   - Granular technical details of CORTEX system
+   - Complete architecture documentation
+   - Code examples, API references, technical specifications
+   - Performance metrics and benchmarks
+   - Implementation details at component level
+
+3. **`docs\story\CORTEX-STORY\Image-Prompts.md`**
+   - AI prompts for generating schematic diagrams and illustrations
+   - Based on Technical-CORTEX.md content
+   - Flowcharts, structure diagrams, visual representations
+   - Collapsed version combines narrative with generated images from `/docs/assets/images/` folder
+
+4. **`docs\project\History.md`** (if exists, otherwise create)
+   - Technical development history timeline
+   - Use first person "I" throughout
+   - Chronicle of technical decisions and milestones
+   - NO placeholder names (Asifinstein, etc.)
+
+### 2.2 Review Story Completeness
 
 **Check if Recent Features Mentioned:**
 ```yaml
@@ -184,41 +251,199 @@ story_chapters:
     needs_update: false
 ```
 
-### 2.2 Update Story Content
+### 2.3 Update Story Content
+
+**Update Rules for Awakening Of CORTEX.md:**
+- ✅ 95% narrative story, 5% high-level technical concepts
+- ❌ NO code blocks allowed
+- ❌ NO technical statistics or performance metrics
+- ❌ NO low-level implementation details
+- ✅ Weave CORTEX capabilities into story using examples
+- ✅ Use first person "I" consistently
+- ✅ Maintain emotional arc (frustration → clarity → ambition → success)
+- ✅ Show system intelligence through narrative scenes, not specs
+- ✅ Keep vision and human element central
+
+**Update Rules for Technical-CORTEX.md:**
+- ✅ Complete granular technical details
+- ✅ Architecture diagrams and flowcharts
+- ✅ Code blocks and API references
+- ✅ Performance metrics and benchmarks
+- ✅ Implementation details at component level
+- ✅ Configuration examples
+- ✅ Testing procedures
 
 **If Updates Needed:**
 
-**Template for Story Integration:**
+**Template for Story Integration (Awakening Of CORTEX.md):**
 ```markdown
 <!-- Insert into appropriate chapter -->
 
-=== "New Development: [Feature Name]"
+## [Chapter Section Title]
 
-    <div class="story-text" markdown>
-    
-    [Narrative integration with Asifinstein's voice]
-    
-    "Now," Asifinstein muttered, staring at his latest creation, 
-    "[dramatic description of the feature]..."
-    
-    [Technical outcome in story format]
-    
-    </div>
+[Narrative text in first person, describing the challenge or vision]
 
-!!! note "Technical Detail: [Feature Name]"
-    **Implementation:**
-    - Feature description
-    - Technical specs
-    - Performance metrics
-    
-    **Files:**
-    - `path/to/file.py`
-    - `path/to/test.py`
+I stared at the screen, watching the pattern emerge. The system wasn't just 
+remembering—it was learning. Each conversation built upon the last, creating 
+a tapestry of context that grew richer with every interaction.
 
-<figure markdown>
-  ![Feature Visualization](../assets/images/[feature-name].png)
-  <figcaption>[Feature description]</figcaption>
-</figure>
+[Continue narrative, weaving in capability naturally through story]
+
+The breakthrough came when I realized [technical insight told as story moment].
+
+[More narrative showing the outcome through experience, not specs]
+
+```
+
+**Template for Technical Documentation (Technical-CORTEX.md):**
+```markdown
+<!-- Insert into appropriate section -->
+
+## [Feature/Component Name]
+
+### Overview
+**Purpose:** [Clear technical purpose]  
+**Location:** `path/to/file.py`  
+**Dependencies:** [List]  
+**Status:** ✅ Implemented / 🔄 In Progress / 📋 Planned
+
+### Architecture
+
+```mermaid
+graph TD
+    [Detailed component diagram]
+```
+
+### Implementation Details
+
+**Core Components:**
+- Component 1: [Technical description]
+- Component 2: [Technical description]
+
+**Data Flow:**
+1. Step 1: [Detailed technical step]
+2. Step 2: [Detailed technical step]
+
+### Code Examples
+
+```python
+from cortex.component import feature
+
+# Example usage with detailed comments
+result = feature.execute(
+    param1="value",
+    param2=42
+)
+# Output: [expected output]
+```
+
+### Performance Metrics
+- Query time: <50ms (p95)
+- Memory usage: <10MB
+- Throughput: 1000 ops/sec
+
+### Configuration
+```yaml
+component_name:
+  setting1: value
+  setting2: value
+```
+
+### Testing Coverage
+- Unit tests: ✅ 95%
+- Integration tests: ✅ 90%
+- Test files: `tests/test_component.py`
+
+```
+
+**Template for Image Prompts (Image-Prompts.md):**
+```markdown
+<!-- Append new prompts, don't replace existing -->
+
+---
+
+## [Feature Name] - Visualization Request
+
+**Date:** [YYYY-MM-DD]  
+**Based On:** Technical-CORTEX.md Section [X.Y]  
+**Image Type:** [Diagram/Flowchart/Schematic/Illustration]
+
+**Purpose:**
+Visualize [specific aspect] of the CORTEX system to illustrate [concept].
+
+**Detailed Prompt for AI:**
+```
+Create a [type] showing:
+
+Main Elements:
+- [Element 1 with detailed description]
+- [Element 2 with detailed description]
+- [Element 3 with detailed description]
+
+Visual Style:
+- Gothic cyberpunk aesthetic
+- Dark background with neon accents
+- Technical schematic overlay
+- Brain hemisphere motif if relevant
+
+Color Palette:
+- Primary: Deep purple (#9c27b0)
+- Secondary: Electric blue (#00bcd4)
+- Accent: Neon green (#4caf50)
+- Background: Dark gray (#1e1e1e)
+
+Layout:
+[Describe spatial arrangement]
+
+Labels and Annotations:
+- Clear component labels
+- Flow direction indicators
+- Connection lines showing data flow
+
+Style Reference:
+Similar to existing CORTEX technical illustrations with 
+brain architecture, layered system diagrams, and dramatic 
+lighting effects.
+```
+
+**Placement:** 
+- File: Technical-CORTEX.md
+- Section: [Specific section]
+- Alternative Text: [Accessibility description]
+
+**Output Filename:** `cortex-[feature-name]-[diagram-type].png`  
+**Target Location:** `docs/assets/images/`
+
+---
+```
+
+**Template for History.md Updates:**
+```markdown
+<!-- Add to chronological timeline -->
+
+## [YYYY-MM-DD] - [Feature/Milestone Name]
+
+I implemented [feature description in first person].
+
+**Technical Details:**
+- [Detail 1]
+- [Detail 2]
+- [Detail 3]
+
+**Motivation:**
+[Why this was needed, in first person]
+
+**Challenges:**
+[Technical challenges encountered, in first person]
+
+**Outcome:**
+[Results and impact, in first person]
+
+**Files Modified:**
+- `path/to/file1.py`
+- `path/to/file2.py`
+
+---
 ```
 
 **CORTEX Action:**
@@ -226,32 +451,114 @@ story_chapters:
 def update_story(gaps):
     for gap in gaps:
         if gap.type == "story_missing":
-            chapter = determine_chapter(gap.feature)
+            # Update Awakening Of CORTEX.md (narrative only)
+            story_chapter = determine_chapter(gap.feature)
             narrative = generate_narrative(
                 feature=gap.feature,
-                style="asifinstein_voice",
-                integration="seamless"
+                style="first_person_narrative",  # Changed from "asifinstein_voice"
+                tone="visionary_and_emotional",
+                technical_level="high_level_concepts_only"  # No code/stats
             )
-            technical_box = create_technical_admonition(gap)
             
-            insert_into_chapter(
-                chapter=chapter,
-                content=narrative + technical_box,
-                position="contextual"  # Not at end
+            insert_into_file(
+                file="docs/story/CORTEX-STORY/Awakening Of CORTEX.md",
+                chapter=story_chapter,
+                content=narrative,
+                position="contextual"
+            )
+            
+            # Update Technical-CORTEX.md (granular details)
+            technical_section = determine_technical_section(gap.feature)
+            technical_content = generate_technical_doc(
+                feature=gap.feature,
+                include_code=True,
+                include_metrics=True,
+                include_diagrams=True,
+                granularity="detailed"
+            )
+            
+            insert_into_file(
+                file="docs/story/CORTEX-STORY/Technical-CORTEX.md",
+                section=technical_section,
+                content=technical_content,
+                position="appropriate"
+            )
+            
+            # Update Image-Prompts.md (AI generation prompts)
+            if needs_visualization(gap.feature):
+                image_prompt = generate_image_prompt(
+                    feature=gap.feature,
+                    based_on="Technical-CORTEX.md content",
+                    style="gothic_cyberpunk_technical",
+                    diagram_type=infer_diagram_type(gap.feature)
+                )
+                
+                append_to_file(
+                    file="docs/story/CORTEX-STORY/Image-Prompts.md",
+                    content=image_prompt,
+                    mode="append_only"  # Never replace existing prompts
+                )
+            
+            # Update History.md (technical timeline)
+            history_entry = generate_history_entry(
+                feature=gap.feature,
+                perspective="first_person",  # Use "I"
+                include_technical_details=True,
+                include_motivation=True
+            )
+            
+            append_to_file(
+                file="docs/project/History.md",
+                content=history_entry,
+                mode="chronological"
             )
 ```
 
 ### 2.3 Story Quality Checks
 
-**Validation:**
-- ✅ No emojis in prose (only headers)
-- ✅ Comic Sans font applied to story sections
-- ✅ Technical sections use monospace
-- ✅ Images placed contextually
+**Validation for Awakening Of CORTEX.md:**
+- ✅ 95% story / 5% technical ratio maintained
+- ✅ First person "I" used consistently (no character names)
+- ✅ No code blocks in narrative
+- ✅ No technical statistics in prose
+- ✅ Capabilities shown through examples in narrative
+- ✅ Emotional arc preserved (frustration → clarity → ambition)
+- ✅ Vision and human element central
+- ✅ Seamless flow between sections
+
+**Validation for Technical-CORTEX.md:**
+- ✅ Complete granular technical coverage
+- ✅ Code examples present and functional
+- ✅ Performance metrics included
+- ✅ Architecture diagrams accurate
+- ✅ API references complete
+- ✅ Configuration examples provided
+- ✅ Testing procedures documented
+
+**Validation for Image-Prompts.md:**
+- ✅ Prompts based on Technical-CORTEX.md content
+- ✅ Clear visual descriptions
+- ✅ Gothic cyberpunk style maintained
+- ✅ Placement locations specified
+- ✅ Output filenames follow convention
+- ✅ Prompts appended, not replaced
+- ✅ Existing prompts preserved
+
+**Validation for History.md:**
+- ✅ First person "I" used throughout
+- ✅ Chronological order maintained
+- ✅ Technical details included
+- ✅ Motivation and challenges documented
+- ✅ Files modified listed
+- ✅ No placeholder character names
+
+**Overall Quality Checks:**
+- ✅ Images placed contextually in Technical-CORTEX.md
+- ✅ Image files exist in `/docs/assets/images/` folder
+- ✅ Cross-references between story and technical docs
 - ✅ Seamless flow (no hard section breaks)
-- ✅ Character voice consistent (Asifinstein = mad scientist)
-- ✅ Humor preserved
-- ✅ Technical accuracy verified
+- ✅ Technical accuracy verified against codebase
+- ✅ No duplicate content between story and technical docs
 
 ---
 
@@ -464,7 +771,9 @@ def generate_mermaid(feature, diagram_type):
 
 ### 4.3 Generate Gemini Image Prompts
 
-**Only for Conceptual/Story Images:**
+**Target File:** `docs\story\CORTEX-STORY\Image-Prompts.md`
+
+**Only for Conceptual/Technical Diagrams:**
 
 **CORTEX Action:**
 ```python
@@ -475,17 +784,23 @@ def generate_gemini_prompts(diagram_needs):
         if need.diagram_format == "ai_generated":
             prompt = create_gemini_prompt(
                 feature=need.feature,
-                style="gothic_cyberpunk",
-                elements=extract_visual_elements(need)
+                style="gothic_cyberpunk_technical",
+                based_on="Technical-CORTEX.md content",
+                elements=extract_visual_elements(need),
+                diagram_type=need.diagram_type  # flowchart, schematic, etc.
             )
             prompts.append(prompt)
     
-    # Append to dedicated file (don't replace existing)
+    # APPEND to Image-Prompts.md (never replace existing)
     append_to_file(
-        path="cortex-gemini-image-prompts.md",
+        path="docs/story/CORTEX-STORY/Image-Prompts.md",
         content=prompts,
+        mode="append_only",
         section="NEW_PROMPTS_" + current_date()
     )
+    
+    print(f"✅ Added {len(prompts)} new prompts to Image-Prompts.md")
+    print(f"⚠️ Existing prompts preserved (append-only mode)")
 ```
 
 **Prompt Template:**
@@ -497,34 +812,69 @@ def generate_gemini_prompts(diagram_needs):
 ### [Feature Name] Visualization
 
 **Prompt ID:** IMG-[DATE]-[NUMBER]  
-**Style:** Gothic cyberpunk, dramatic lighting  
-**Scene:** [Description]
+**Based On:** Technical-CORTEX.md Section [X.Y]  
+**Diagram Type:** [Flowchart/Schematic/Architecture/Illustration]  
+**Style:** Gothic cyberpunk technical
+
+**Purpose:**
+Illustrate [specific technical concept] from the CORTEX system documentation.
 
 **Detailed Prompt:**
 ```
-Create a dramatic visualization of [feature]:
+Create a [diagram type] showing [feature/concept]:
 
-Setting: [Environment description]
-Main Subject: [Central element]
-Visual Elements:
-- [Element 1 with details]
-- [Element 2 with details]
-- [Element 3 with details]
+Main Components:
+- [Component 1]: [Detailed visual description]
+- [Component 2]: [Detailed visual description]
+- [Component 3]: [Detailed visual description]
 
-Color Palette: [Colors]
-Mood: [Atmosphere]
-Technical Details: [Specific visual requirements]
+Visual Structure:
+- Layout: [Spatial arrangement description]
+- Flow: [Data/process flow indicators]
+- Connections: [How components connect]
+- Layers: [If applicable, layer structure]
 
-Style Reference: Gothic architecture meets cyberpunk, 
-similar to existing CORTEX illustrations with brain 
-hemispheres, neon accents, and dramatic shadows.
+Technical Elements:
+- Labels: [Component labels and annotations]
+- Arrows: [Direction and flow indicators]
+- Boundaries: [System/module boundaries]
+- Legend: [If needed, legend elements]
+
+Color Palette:
+- Primary: Deep purple (#9c27b0)
+- Secondary: Electric blue (#00bcd4)
+- Accent: Neon green (#4caf50) for active elements
+- Background: Dark gray (#1e1e1e) / Deep blue (#0a0e27)
+- Lines: Light cyan (#80deea)
+
+Visual Style:
+- Gothic cyberpunk aesthetic
+- Technical schematic overlay
+- Dramatic lighting with neon accents
+- Clean, readable typography
+- Professional diagram quality
+- Brain hemisphere motif if relevant
+
+Style Reference: 
+Technical diagrams similar to existing CORTEX documentation 
+images, with clear structure, dramatic atmosphere, and 
+gothic-cyberpunk fusion.
 ```
 
 **Placement:** 
-- Chapter X, Section Y
-- Context: [Where this image appears in story]
+- File: `docs/story/CORTEX-STORY/Technical-CORTEX.md`
+- Section: [Specific section name]
+- Context: [Where this appears in technical docs]
 
-**Alternative Text:** [Accessibility description]
+**Alternative Text:** [Accessibility description for screen readers]
+
+**Output Filename:** `cortex-[feature-name]-[diagram-type].png`  
+**Target Location:** `docs/assets/images/`
+
+**Integration Note:**
+This diagram visualizes technical content from Technical-CORTEX.md. 
+The collapsed version in Awakening Of CORTEX.md will reference 
+this image to enhance the narrative without adding technical details.
 
 ---
 ```
@@ -782,23 +1132,66 @@ def verify_live_site():
 ## 📝 Changes Made
 
 ### Story Updates: "The Awakening of CORTEX"
-| Chapter | Update | Lines Changed |
-|---------|--------|---------------|
-| Chapter 2 | Added agent specialization details | +45 |
-| Chapter 4 | Updated protection layer descriptions | +32 |
+**File:** `docs\story\CORTEX-STORY\Awakening Of CORTEX.md`
+
+| Chapter | Update | Lines Changed | Style |
+|---------|--------|---------------|-------|
+| Chapter 2 | Added agent specialization narrative | +45 | First person, no code |
+| Chapter 4 | Updated protection layer story | +32 | First person, no code |
+
+**Compliance:**
+- ✅ 95% story / 5% technical ratio maintained
+- ✅ No code blocks or technical stats
+- ✅ First person "I" used consistently
 
 ### Technical Documentation
-| Document | Action | Status |
-|----------|--------|--------|
-| `agents/code-executor.md` | Created | ✅ Complete |
-| `api/tier2-api.md` | Created | ✅ Complete |
-| `tiers/tier3-context.md` | Updated | ✅ Complete |
+**File:** `docs\story\CORTEX-STORY\Technical-CORTEX.md`
+
+| Section | Action | Status | Details |
+|---------|--------|--------|---------|
+| Agent System | Updated | ✅ Complete | Added code examples, API refs |
+| Protection Layers | Updated | ✅ Complete | Added architecture diagrams |
+| Context Intelligence | Created | ✅ Complete | Full technical specification |
+
+**Compliance:**
+- ✅ Granular technical details included
+- ✅ Code examples functional and tested
+- ✅ Performance metrics documented
+
+### Image Prompts
+**File:** `docs\story\CORTEX-STORY\Image-Prompts.md`
+
+| Prompt ID | Feature | Diagram Type | Status |
+|-----------|---------|--------------|--------|
+| IMG-20251108-001 | Agent routing system | Flowchart | ✅ Added |
+| IMG-20251108-002 | Protection layers | Schematic | ✅ Added |
+| IMG-20251108-003 | Context intelligence | Architecture | ✅ Added |
+
+**Compliance:**
+- ✅ Prompts appended (existing prompts preserved)
+- ✅ Based on Technical-CORTEX.md content
+- ✅ Gothic cyberpunk technical style
+- ✅ Placement locations specified
+
+### History Updates
+**File:** `docs\project\History.md`
+
+| Date | Milestone | Status |
+|------|-----------|--------|
+| 2025-11-08 | Documentation refresh system | ✅ Added |
+| 2025-11-07 | Agent specialization complete | ✅ Added |
+
+**Compliance:**
+- ✅ First person "I" used throughout
+- ✅ Chronological order maintained
+- ✅ Technical details documented
 
 ### Diagrams & Images
 | Type | Count | Location |
 |------|-------|----------|
-| Mermaid diagrams | 3 | Architecture docs |
-| Gemini prompts | 2 | cortex-gemini-image-prompts.md |
+| Mermaid diagrams | 3 | Technical-CORTEX.md |
+| Gemini prompts (new) | 3 | Image-Prompts.md |
+| Generated images | 0 | Awaiting AI generation |
 
 ---
 
@@ -1123,13 +1516,26 @@ documentation:
     
     # Documentation structure
     story:
-      path: "docs/story/the-awakening-of-cortex.md"
+      path: "docs/story/CORTEX-STORY/Awakening Of CORTEX.md"
       auto_update: true
-      maintain_voice: true  # Asifinstein's mad scientist voice
-      preserve_humor: true
+      style:
+        ratio: "95% story, 5% concepts"
+        perspective: "first_person"  # Use "I"
+        allow_code_blocks: false
+        allow_technical_stats: false
+        maintain_emotional_arc: true
+        weave_capabilities_in_narrative: true
     
     technical:
-      paths:
+      path: "docs/story/CORTEX-STORY/Technical-CORTEX.md"
+      auto_update: true
+      style:
+        granularity: "detailed"
+        include_code_examples: true
+        include_metrics: true
+        include_api_references: true
+        include_architecture_diagrams: true
+      additional_paths:
         - "docs/architecture/"
         - "docs/tiers/"
         - "docs/agents/"
@@ -1138,11 +1544,30 @@ documentation:
       require_examples: true
       require_api_ref: true
     
-    images:
-      gemini_prompts_file: "cortex-gemini-image-prompts.md"
-      append_only: true  # Never replace existing prompts
-      style: "gothic_cyberpunk"
+    image_prompts:
+      path: "docs/story/CORTEX-STORY/Image-Prompts.md"
+      auto_update: true
+      mode: "append_only"  # Never replace existing prompts
+      style: "gothic_cyberpunk_technical"
+      based_on: "Technical-CORTEX.md"
       image_dir: "docs/assets/images/"
+      filename_convention: "cortex-[feature]-[type].png"
+    
+    history:
+      path: "docs/project/History.md"
+      auto_update: true
+      style:
+        perspective: "first_person"  # Use "I"
+        chronological: true
+        include_technical_details: true
+        include_motivation: true
+        include_challenges: true
+        include_outcomes: true
+        no_character_names: true  # No Asifinstein, etc.
+    
+    images:
+      image_dir: "docs/assets/images/"
+      filename_convention: "cortex-[feature]-[type].png"
     
     diagrams:
       mermaid:
@@ -1235,15 +1660,47 @@ Quick check if documentation needs updates.
 ## ✅ Success Criteria
 
 **Documentation Refresh Complete When:**
-- ✅ All recent features documented in story
-- ✅ All technical docs updated/created
-- ✅ All diagrams generated (Mermaid + Gemini prompts)
+
+**Story Files:**
+- ✅ `Awakening Of CORTEX.md` updated with recent features (95% story, 5% high-level concepts)
+- ✅ First person "I" used consistently in story (no character names)
+- ✅ No code blocks or technical stats in narrative
+- ✅ Emotional arc and vision maintained
+
+**Technical Files:**
+- ✅ `Technical-CORTEX.md` updated with granular technical details
+- ✅ All recent features documented with code examples
+- ✅ Architecture diagrams accurate and complete
+- ✅ API references match implementation
+- ✅ Performance metrics included
+
+**Image Files:**
+- ✅ `Image-Prompts.md` contains new AI generation prompts
+- ✅ Prompts based on Technical-CORTEX.md content
+- ✅ Existing prompts preserved (append-only)
+- ✅ Placement locations specified for each prompt
+- ✅ Gothic cyberpunk technical style maintained
+
+**History Files:**
+- ✅ `History.md` updated with latest technical milestones
+- ✅ First person "I" used throughout history entries
+- ✅ Chronological order maintained
+- ✅ Technical decisions and challenges documented
+
+**Build & Deployment:**
 - ✅ No broken links
-- ✅ All images optimized and placed
+- ✅ All images optimized and placed in `/docs/assets/images/`
 - ✅ Build successful
 - ✅ Tests pass (if enabled)
 - ✅ Report generated
 - ✅ Deployed (if requested)
+
+**Quality Checks:**
+- ✅ No duplicate content between story and technical docs
+- ✅ Cross-references accurate
+- ✅ Technical accuracy verified against codebase
+- ✅ Image filenames follow convention (`cortex-[feature]-[type].png`)
+- ✅ All four core files synchronized and consistent
 
 ---
 
@@ -1282,6 +1739,25 @@ metrics:
 - `#file:prompts/user/test-cortex.md` - Run CORTEX tests
 - `#file:prompts/user/deploy-docs.md` - Deploy docs only (no refresh)
 - `#file:prompts/user/validate-docs.md` - Validate docs health
+
+## 📖 Target Files Reference
+
+**Core Documentation Files:**
+1. **Story:** `docs\story\CORTEX-STORY\Awakening Of CORTEX.md`
+2. **Technical:** `docs\story\CORTEX-STORY\Technical-CORTEX.md`
+3. **Image Prompts:** `docs\story\CORTEX-STORY\Image-Prompts.md`
+4. **History:** `docs\project\History.md`
+
+**Supporting Files:**
+- Images: `docs\assets\images\` (generated from prompts)
+- Templates: `docs\templates\technical-doc-template.md`
+- Additional technical docs: `docs\architecture\`, `docs\tiers\`, `docs\agents\`, `docs\api\`
+
+**Integration:**
+- Story file references images from assets folder
+- Image prompts based on technical documentation
+- History tracks when features were added to both story and technical docs
+- Collapsed version combines story narrative with generated images
 
 ---
 

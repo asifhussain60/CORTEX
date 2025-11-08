@@ -1,6 +1,10 @@
 """
 CORTEX Brain Protector Tests
 Phase 3 Task 3.4: Testing
+
+Updated: November 8, 2025
+Tests now validate YAML-based configuration instead of hardcoded rules.
+Configuration: cortex-brain/brain-protection-rules.yaml
 """
 
 import pytest
@@ -18,6 +22,51 @@ from tier0.brain_protector import (
     ProtectionLayer,
     Violation
 )
+
+
+class TestYAMLConfiguration:
+    """Test that YAML configuration loads correctly."""
+    
+    @pytest.fixture
+    def protector(self):
+        """Create BrainProtector instance."""
+        with tempfile.NamedTemporaryFile(suffix='.jsonl', delete=False) as f:
+            log_path = Path(f.name)
+        return BrainProtector(log_path)
+    
+    def test_loads_yaml_configuration(self, protector):
+        """Verify YAML rules are loaded successfully."""
+        assert protector.rules_config is not None
+        assert 'protection_layers' in protector.rules_config
+        assert len(protector.rules_config['protection_layers']) == 6
+    
+    def test_has_all_protection_layers(self, protector):
+        """Verify all 6 protection layers are configured."""
+        layer_ids = [layer['layer_id'] for layer in protector.protection_layers]
+        expected_layers = [
+            'instinct_immutability',
+            'tier_boundary',
+            'solid_compliance',
+            'hemisphere_specialization',
+            'knowledge_quality',
+            'commit_integrity'
+        ]
+        for expected in expected_layers:
+            assert expected in layer_ids
+    
+    def test_critical_paths_loaded(self, protector):
+        """Verify critical paths loaded from YAML."""
+        assert len(protector.CRITICAL_PATHS) > 0
+        assert any('tier0' in path.lower() for path in protector.CRITICAL_PATHS)
+    
+    def test_application_paths_loaded(self, protector):
+        """Verify application paths loaded from YAML."""
+        assert len(protector.APPLICATION_PATHS) > 0
+    
+    def test_brain_state_files_loaded(self, protector):
+        """Verify brain state files loaded from YAML."""
+        assert len(protector.BRAIN_STATE_FILES) > 0
+        assert any('conversation-history' in f for f in protector.BRAIN_STATE_FILES)
 
 
 class TestInstinctImmutability:

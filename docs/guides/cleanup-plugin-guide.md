@@ -1,6 +1,6 @@
 # CORTEX Cleanup Plugin - User Guide
 
-**Version:** 2.0.0  
+**Version:** 2.1.0  
 **Author:** Asif Hussain  
 **Date:** 2025-11-08
 
@@ -8,11 +8,12 @@
 
 ## 🎯 Overview
 
-The CORTEX Cleanup Plugin is a comprehensive, production-ready maintenance tool that safely removes unnecessary files, detects duplicates, and keeps your project organized.
+The CORTEX Cleanup Plugin is a comprehensive, production-ready maintenance tool that safely removes unnecessary files, detects duplicates, archives backups to GitHub, and keeps your project organized.
 
 ### Key Features
 
 ✅ **Smart Temp File Removal** - Age-based cleanup with configurable thresholds  
+✅ **GitHub Backup Archival** - Archives backup files to GitHub before deletion  
 ✅ **Duplicate Detection** - Find and optionally remove duplicate files  
 ✅ **Cache Management** - Clean Python `__pycache__` and build artifacts  
 ✅ **Log Rotation** - Archive old logs automatically  
@@ -30,6 +31,7 @@ The CORTEX Cleanup Plugin is a comprehensive, production-ready maintenance tool 
 🛡️ **Pre-Cleanup Verification** - Validates core files protected before any deletion  
 🛡️ **Preserve Patterns** - Configurable whitelist of protected files/directories  
 🛡️ **Dry-Run Default** - Must explicitly enable live mode  
+🛡️ **GitHub Archival** - Backup files pushed to GitHub before local deletion  
 
 ---
 
@@ -167,10 +169,18 @@ The following are **NEVER** touched by the cleanup plugin:
 
 ## 📊 What Gets Cleaned
 
-### ✅ Safe to Clean
+### ✅ Safe to Clean (with GitHub Archival)
+
+- **Backup Files** - `*.bak`, `*.old`, `*.orig` older than 14 days
+  - **NEW:** Archived to GitHub before deletion
+  - Manifest file kept in `.backup-archive/` for reference
+  - Commit message: "Archive N backup files before cleanup - TIMESTAMP"
+  - Push to remote repository automatically
+  - Local archived copies deleted after successful push
+
+### ✅ Safe to Clean (Standard)
 
 - **Temp Files** - `*.tmp`, `*.temp`, `*~`, `*.swp` older than 7 days
-- **Backup Files** - `*.bak`, `*.old`, `*.orig` older than 14 days
 - **Cache Directories** - `__pycache__`, `.pytest_cache`, `.mypy_cache`
 - **Empty Directories** - Directories with no files
 - **Old Logs** - Log files older than 30 days (archived first)
@@ -182,6 +192,61 @@ The following are **NEVER** touched by the cleanup plugin:
 - **Large Files** - Files over 100MB (top 10 reported)
 - **Orphaned Files** - Files in unexpected locations
 - **Misplaced Files** - Files in root that should be in subdirectories
+
+---
+
+## 🔄 GitHub Backup Archival
+
+### How It Works
+
+1. **Identification** - Plugin identifies backup files older than threshold (14 days default)
+2. **Copy to Archive** - Creates `.backup-archive/` directory with organized structure
+3. **Manifest Creation** - JSON manifest tracks all archived files with metadata
+4. **Git Commit** - Commits archive with descriptive message
+5. **GitHub Push** - Pushes commit to remote repository
+6. **Local Cleanup** - Deletes archived backup files (keeps manifest)
+7. **Reference Kept** - Manifest files remain for audit trail
+
+### Manifest Structure
+
+```json
+{
+  "timestamp": "2025-11-08T16:45:23.123456",
+  "backup_count": 15,
+  "total_size_bytes": 1234567,
+  "files": [
+    {
+      "original_path": "src/module.py.bak",
+      "archived_path": ".backup-archive/src/module.py.bak",
+      "size_bytes": 12345,
+      "modified_time": "2025-10-15T10:30:00"
+    }
+  ]
+}
+```
+
+### Benefits
+
+✅ **Safe Deletion** - Backups preserved in version control before removal  
+✅ **Space Savings** - Local disk space freed while maintaining cloud copy  
+✅ **Audit Trail** - Manifest files track what was archived and when  
+✅ **Easy Recovery** - Use Git history to restore any archived backup  
+✅ **Team Visibility** - All team members can access archived backups via GitHub  
+
+### Recovery Process
+
+To recover an archived backup:
+
+```bash
+# 1. Find the archive commit
+git log --grep="Archive.*backup files"
+
+# 2. Check out the file from that commit
+git show <commit-sha>:.backup-archive/path/to/file.bak > recovered_file.bak
+
+# 3. Or restore entire archive directory
+git checkout <commit-sha> -- .backup-archive/
+```
 
 ---
 

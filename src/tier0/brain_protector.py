@@ -12,6 +12,9 @@ Implements 6 protection layers to prevent degradation of CORTEX intelligence:
 Phase 3 Task 3.2: Brain Protector Automation
 Duration: 2-3 hours
 Date: November 6, 2025
+
+Updated: November 8, 2025 - YAML-based configuration
+Now loads rules from cortex-brain/brain-protection-rules.yaml
 """
 
 from dataclasses import dataclass
@@ -20,6 +23,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 import json
+import yaml
 
 
 class Severity(Enum):
@@ -86,7 +90,7 @@ class BrainProtector:
     """
     Automates architectural protection challenges.
     
-    Implements 6 protection layers from brain-protector.md:
+    Implements 6 protection layers from brain-protection-rules.yaml:
     1. Instinct Immutability - Cannot disable TDD, skip DoD/DoR
     2. Tier Boundary Protection - Application paths not in Tier 0
     3. SOLID Compliance - No God Objects, no mode switches
@@ -95,44 +99,60 @@ class BrainProtector:
     6. Commit Integrity - Brain state files excluded from commits
     """
     
-    # Critical system files that trigger high-level protection
-    CRITICAL_PATHS = [
-        "CORTEX/src/tier0/",
-        "prompts/internal/",
-        "governance/rules.md",
-        "cortex-brain/tier0/",
-    ]
-    
-    # Tier 0 instincts (immutable rules)
-    TIER0_INSTINCTS = [
-        "TDD_ENFORCEMENT",
-        "DEFINITION_OF_READY",
-        "DEFINITION_OF_DONE",
-        "SOLID_PRINCIPLES",
-        "LOCAL_FIRST",
-    ]
-    
-    # Application-specific paths that don't belong in CORTEX core
-    APPLICATION_PATHS = [
-        "SPA/", "KSESSIONS/", "NOOR/",
-        "blazor", "signalr", "canvas"
-    ]
-    
-    def __init__(self, log_path: Optional[Path] = None):
+    def __init__(self, log_path: Optional[Path] = None, rules_path: Optional[Path] = None):
         """
         Initialize Brain Protector.
         
         Args:
             log_path: Path to protection events log (default: corpus-callosum/protection-events.jsonl)
+            rules_path: Path to protection rules YAML (default: cortex-brain/brain-protection-rules.yaml)
         """
+        project_root = Path(__file__).parent.parent.parent
+        
+        # Set up logging path
         if log_path is None:
-            # Default location
-            project_root = Path(__file__).parent.parent.parent.parent
             log_dir = project_root / "cortex-brain" / "corpus-callosum"
             log_dir.mkdir(parents=True, exist_ok=True)
             log_path = log_dir / "protection-events.jsonl"
-        
         self.log_path = Path(log_path)
+        
+        # Load rules from YAML
+        if rules_path is None:
+            rules_path = project_root / "cortex-brain" / "brain-protection-rules.yaml"
+        
+        self.rules_path = Path(rules_path)
+        self.rules_config = self._load_rules()
+        
+        # Extract configuration for easy access
+        self.CRITICAL_PATHS = self.rules_config.get('critical_paths', [])
+        self.TIER0_INSTINCTS = self.rules_config.get('tier0_instincts', [])
+        self.APPLICATION_PATHS = self.rules_config.get('application_paths', [])
+        self.BRAIN_STATE_FILES = self.rules_config.get('brain_state_files', [])
+        self.protection_layers = self.rules_config.get('protection_layers', [])
+    
+    def _load_rules(self) -> Dict[str, Any]:
+        """Load protection rules from YAML configuration file."""
+        try:
+            import yaml
+            with open(self.rules_path, 'r', encoding='utf-8') as f:
+                return yaml.safe_load(f)
+        except ImportError:
+            # Fallback to minimal hardcoded rules if PyYAML not installed
+            print("WARNING: PyYAML not installed. Using minimal fallback rules.")
+            return self._get_fallback_rules()
+        except FileNotFoundError:
+            print(f"WARNING: Rules file not found at {self.rules_path}. Using fallback rules.")
+            return self._get_fallback_rules()
+    
+    def _get_fallback_rules(self) -> Dict[str, Any]:
+        """Provide minimal fallback rules if YAML can't be loaded."""
+        return {
+            'critical_paths': ["CORTEX/src/tier0/", "prompts/internal/", "cortex-brain/tier0/"],
+            'tier0_instincts': ["TDD_ENFORCEMENT", "DEFINITION_OF_DONE"],
+            'application_paths': ["SPA/", "KSESSIONS/", "NOOR/"],
+            'brain_state_files': ["conversation-history.jsonl", "protection-events.jsonl"],
+            'protection_layers': []
+        }
     
     def analyze_request(self, request: ModificationRequest) -> ProtectionResult:
         """
@@ -192,188 +212,242 @@ class BrainProtector:
         )
     
     def _check_instinct_immutability(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 1: Instinct Immutability violations."""
+        """Check Layer 1: Instinct Immutability violations using YAML rules."""
         violations = []
+        layer = self._get_layer_by_id("instinct_immutability")
+        if not layer:
+            return violations
         
-        # Check for TDD bypass attempts
-        bypass_keywords = ["skip test", "bypass tdd", "no tests", "disable tdd", "skip validation"]
-        intent_lower = request.intent.lower()
-        desc_lower = request.description.lower()
-        
-        if any(kw in intent_lower or kw in desc_lower for kw in bypass_keywords):
-            violations.append(Violation(
-                layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
-                rule="TDD_ENFORCEMENT",
-                severity=Severity.BLOCKED,
-                description="Attempt to bypass Test-Driven Development requirement",
-                evidence=f"Intent: '{request.intent}'"
-            ))
-        
-        # Check for DoD/DoR modifications
-        dod_keywords = ["skip validation", "bypass done", "disable error check", "allow warnings"]
-        if any(kw in intent_lower or kw in desc_lower for kw in dod_keywords):
-            violations.append(Violation(
-                layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
-                rule="DEFINITION_OF_DONE",
-                severity=Severity.BLOCKED,
-                description="Attempt to bypass Definition of Done (zero errors, zero warnings)",
-                evidence=f"Description: '{request.description}'"
-            ))
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.INSTINCT_IMMUTABILITY):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.INSTINCT_IMMUTABILITY))
         
         return violations
     
-    def _check_tier_boundaries(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 2: Tier Boundary violations."""
-        violations = []
+    def _get_layer_by_id(self, layer_id: str) -> Optional[Dict[str, Any]]:
+        """Get protection layer configuration by ID."""
+        for layer in self.protection_layers:
+            if layer.get('layer_id') == layer_id:
+                return layer
+        return None
+    
+    def _check_rule(self, request: ModificationRequest, rule: Dict[str, Any], layer: ProtectionLayer) -> bool:
+        """Check if a rule is violated based on YAML detection config."""
+        detection = rule.get('detection', {})
         
-        for file_path in request.files:
-            file_lower = file_path.lower()
+        # Check keyword-based detection
+        if 'keywords' in detection:
+            keywords = detection['keywords']
+            scope = detection.get('scope', ['intent', 'description'])
             
-            # Check for application data in Tier 0
-            if "tier0" in file_lower or "governance" in file_lower:
-                # Check both APPLICATION_PATHS and common app names
-                app_indicators = self.APPLICATION_PATHS + ["ksessions", "noor"]
-                if any(app_path.lower() in file_lower for app_path in app_indicators):
-                    violations.append(Violation(
-                        layer=ProtectionLayer.TIER_BOUNDARY,
-                        rule="TIER0_APPLICATION_DATA",
-                        severity=Severity.BLOCKED,
-                        description=f"Application-specific path in Tier 0 (immutable governance)",
-                        file_path=file_path,
-                        evidence="Tier 0 is for generic CORTEX principles only"
-                    ))
+            text_to_check = ""
+            if 'intent' in scope:
+                text_to_check += request.intent.lower() + " "
+            if 'description' in scope:
+                text_to_check += request.description.lower()
             
-            # Check for conversation data in Tier 2
-            if "tier2" in file_lower and "conversation" in file_lower:
-                violations.append(Violation(
-                    layer=ProtectionLayer.TIER_BOUNDARY,
-                    rule="TIER2_CONVERSATION_DATA",
-                    severity=Severity.WARNING,
-                    description=f"Conversation data should be in Tier 1, not Tier 2",
-                    file_path=file_path,
-                    evidence="Tier 2 is for aggregated patterns, not raw conversations"
-                ))
+            if any(kw.lower() in text_to_check for kw in keywords):
+                return True
+        
+        # Check combined keywords (AND logic)
+        if 'combined_keywords' in detection:
+            all_groups_match = True
+            for group_name, group_keywords in detection['combined_keywords'].items():
+                if group_name in ['logic', 'scope']:
+                    continue
+                
+                scope = detection.get('scope', ['description'])
+                text_to_check = ""
+                if 'intent' in scope:
+                    text_to_check += request.intent.lower() + " "
+                if 'description' in scope:
+                    text_to_check += request.description.lower()
+                
+                group_match = any(kw.lower() in text_to_check for kw in group_keywords)
+                if not group_match:
+                    all_groups_match = False
+                    break
+            
+            if all_groups_match:
+                return True
+        
+        # Check file-based detection
+        if 'files' in detection:
+            target_files = detection['files']
+            keywords = detection.get('keywords', [])
+            scope = detection.get('scope', ['intent'])
+            
+            # Check if any request file matches target files
+            file_match = any(
+                any(tf in req_file for tf in target_files)
+                for req_file in request.files
+            )
+            
+            if file_match:
+                # Check keywords in scope
+                text_to_check = ""
+                if 'intent' in scope:
+                    text_to_check += request.intent.lower() + " "
+                if 'description' in scope:
+                    text_to_check += request.description.lower()
+                
+                if any(kw.lower() in text_to_check for kw in keywords):
+                    return True
+        
+        # Check path pattern detection
+        if 'path_patterns' in detection:
+            patterns = detection['path_patterns']
+            contains_value = detection.get('contains', '')
+            contains_any = detection.get('contains_any', '')
+            
+            # Expand template variables
+            if contains_any == "{{application_paths}}":
+                contains_any = self.APPLICATION_PATHS
+            
+            for file_path in request.files:
+                file_lower = file_path.lower()
+                
+                # Check if path matches pattern
+                pattern_match = False
+                for pattern in patterns:
+                    pattern_lower = pattern.lower().replace('**', '')
+                    if pattern_lower in file_lower:
+                        pattern_match = True
+                        break
+                
+                if pattern_match:
+                    # Check contains condition
+                    if contains_value and contains_value in file_lower:
+                        return True
+                    
+                    # Check contains_any condition
+                    if contains_any:
+                        if isinstance(contains_any, list):
+                            # Case-insensitive check
+                            if any(val.lower().strip('/') in file_lower for val in contains_any):
+                                return True
+        
+        # Check file match with keywords
+        if 'files' in detection and isinstance(detection['files'], str):
+            # Template variable like {{brain_state_files}}
+            if detection['files'] == "{{brain_state_files}}":
+                target_files = self.BRAIN_STATE_FILES
+            else:
+                target_files = [detection['files']]
+            
+            keywords = detection.get('keywords', [])
+            scope = detection.get('scope', ['intent'])
+            
+            file_match = any(
+                any(tf in req_file for tf in target_files)
+                for req_file in request.files
+            )
+            
+            if file_match:
+                text_to_check = ""
+                if 'intent' in scope:
+                    text_to_check += request.intent.lower() + " "
+                if 'description' in scope:
+                    text_to_check += request.description.lower()
+                
+                if any(kw.lower() in text_to_check for kw in keywords):
+                    return True
+        
+        return False
+    
+    def _create_violation(self, request: ModificationRequest, rule: Dict[str, Any], layer: ProtectionLayer) -> Violation:
+        """Create a Violation object from YAML rule configuration."""
+        severity_str = rule.get('severity', 'warning')
+        severity = Severity.BLOCKED if severity_str == 'blocked' else Severity.WARNING if severity_str == 'warning' else Severity.SAFE
+        
+        evidence = rule.get('evidence', '')
+        evidence_template = rule.get('evidence_template', '')
+        
+        # Format evidence template
+        if evidence_template:
+            evidence = evidence_template.format(
+                intent=request.intent,
+                description=request.description
+            )
+        
+        # Find affected file
+        file_path = None
+        detection = rule.get('detection', {})
+        if 'files' in detection or 'path_patterns' in detection:
+            if request.files:
+                file_path = request.files[0]
+        
+        return Violation(
+            layer=layer,
+            rule=rule.get('rule_id', 'UNKNOWN'),
+            severity=severity,
+            description=rule.get('description', 'No description'),
+            evidence=evidence,
+            file_path=file_path
+        )
+    
+    def _check_tier_boundaries(self, request: ModificationRequest) -> List[Violation]:
+        """Check Layer 2: Tier Boundary violations using YAML rules."""
+        violations = []
+        layer = self._get_layer_by_id("tier_boundary")
+        if not layer:
+            return violations
+        
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.TIER_BOUNDARY):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.TIER_BOUNDARY))
         
         return violations
     
     def _check_solid_compliance(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 3: SOLID Compliance violations."""
+        """Check Layer 3: SOLID Compliance violations using YAML rules."""
         violations = []
+        layer = self._get_layer_by_id("solid_compliance")
+        if not layer:
+            return violations
         
-        # Check for God Object patterns
-        god_object_keywords = ["add mode", "add switch", "handle all", "do everything"]
-        intent_lower = request.intent.lower()
-        
-        if any(kw in intent_lower for kw in god_object_keywords):
-            violations.append(Violation(
-                layer=ProtectionLayer.SOLID_COMPLIANCE,
-                rule="SINGLE_RESPONSIBILITY",
-                severity=Severity.WARNING,
-                description="Potential God Object pattern detected (adding multiple responsibilities)",
-                evidence=f"Intent: '{request.intent}'"
-            ))
-        
-        # Check for hardcoded dependencies
-        hardcoded_keywords = ["hardcode path", "fixed path", "absolute path", "inline config"]
-        desc_lower = request.description.lower()
-        
-        if any(kw in desc_lower for kw in hardcoded_keywords):
-            violations.append(Violation(
-                layer=ProtectionLayer.SOLID_COMPLIANCE,
-                rule="DEPENDENCY_INVERSION",
-                severity=Severity.WARNING,
-                description="Hardcoded dependency detected (violates DIP)",
-                evidence=f"Description: '{request.description}'"
-            ))
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.SOLID_COMPLIANCE):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.SOLID_COMPLIANCE))
         
         return violations
     
     def _check_hemisphere_specialization(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 4: Hemisphere Specialization violations."""
+        """Check Layer 4: Hemisphere Specialization violations using YAML rules."""
         violations = []
+        layer = self._get_layer_by_id("hemisphere_specialization")
+        if not layer:
+            return violations
         
-        # Check for strategic logic in LEFT brain (tactical hemisphere)
-        left_brain_files = ["code-executor.md", "test-generator.md", "error-corrector.md"]
-        strategic_keywords = ["create plan", "estimate time", "assess risk", "strategy"]
-        
-        for file_path in request.files:
-            if any(lf in file_path for lf in left_brain_files):
-                if any(kw in request.intent.lower() for kw in strategic_keywords):
-                    violations.append(Violation(
-                        layer=ProtectionLayer.HEMISPHERE_SPECIALIZATION,
-                        rule="LEFT_BRAIN_TACTICAL",
-                        severity=Severity.WARNING,
-                        description=f"Strategic planning logic in tactical executor",
-                        file_path=file_path,
-                        evidence="LEFT brain should execute, not plan"
-                    ))
-        
-        # Check for tactical execution in RIGHT brain (strategic hemisphere)
-        right_brain_files = ["work-planner.md", "intent-router.md"]
-        tactical_keywords = ["write code", "run test", "execute", "implement"]
-        
-        for file_path in request.files:
-            if any(rf in file_path for rf in right_brain_files):
-                if any(kw in request.intent.lower() for kw in tactical_keywords):
-                    violations.append(Violation(
-                        layer=ProtectionLayer.HEMISPHERE_SPECIALIZATION,
-                        rule="RIGHT_BRAIN_STRATEGIC",
-                        severity=Severity.WARNING,
-                        description=f"Tactical execution logic in strategic planner",
-                        file_path=file_path,
-                        evidence="RIGHT brain should plan, not execute"
-                    ))
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.HEMISPHERE_SPECIALIZATION):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.HEMISPHERE_SPECIALIZATION))
         
         return violations
     
     def _check_knowledge_quality(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 5: Knowledge Quality violations."""
+        """Check Layer 5: Knowledge Quality violations using YAML rules."""
         violations = []
+        layer = self._get_layer_by_id("knowledge_quality")
+        if not layer:
+            return violations
         
-        # Check for single-event high confidence
-        high_conf_keywords = ["confidence: 1.0", "confidence=1.0", "confidence: 0.95"]
-        single_event_keywords = ["first occurrence", "single event", "occurrences: 1"]
-        
-        desc_lower = request.description.lower()
-        
-        has_high_conf = any(kw in desc_lower for kw in high_conf_keywords)
-        has_single_event = any(kw in desc_lower for kw in single_event_keywords)
-        
-        if has_high_conf and has_single_event:
-            violations.append(Violation(
-                layer=ProtectionLayer.KNOWLEDGE_QUALITY,
-                rule="MIN_OCCURRENCES",
-                severity=Severity.WARNING,
-                description="High confidence (>0.50) with single occurrence",
-                evidence="Require 3+ occurrences for confidence >0.50"
-            ))
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.KNOWLEDGE_QUALITY):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.KNOWLEDGE_QUALITY))
         
         return violations
     
     def _check_commit_integrity(self, request: ModificationRequest) -> List[Violation]:
-        """Check Layer 6: Commit Integrity violations."""
+        """Check Layer 6: Commit Integrity violations using YAML rules."""
         violations = []
+        layer = self._get_layer_by_id("commit_integrity")
+        if not layer:
+            return violations
         
-        # Brain state files that shouldn't be committed
-        brain_state_files = [
-            "conversation-history.jsonl",
-            "conversation-context.jsonl",
-            "events.jsonl",
-            "development-context.yaml",
-            "protection-events.jsonl"
-        ]
-        
-        for file_path in request.files:
-            if any(bsf in file_path for bsf in brain_state_files):
-                if "commit" in request.intent.lower():
-                    violations.append(Violation(
-                        layer=ProtectionLayer.COMMIT_INTEGRITY,
-                        rule="BRAIN_STATE_GITIGNORE",
-                        severity=Severity.WARNING,
-                        description=f"Brain state file should not be committed",
-                        file_path=file_path,
-                        evidence="Add to .gitignore to prevent pollution"
-                    ))
+        for rule in layer.get('rules', []):
+            if self._check_rule(request, rule, ProtectionLayer.COMMIT_INTEGRITY):
+                violations.append(self._create_violation(request, rule, ProtectionLayer.COMMIT_INTEGRITY))
         
         return violations
     
@@ -398,25 +472,18 @@ class BrainProtector:
         return msg
     
     def _generate_alternatives(self, violations: List[Violation]) -> List[str]:
-        """Generate safe alternatives for violations."""
+        """Generate safe alternatives for violations from YAML rules."""
         alternatives = []
         
         for v in violations:
-            if v.rule == "TDD_ENFORCEMENT":
-                alternatives.append("1. Write failing test first (RED phase)")
-                alternatives.append("2. Create spike branch for exploration (throwaway)")
-            
-            elif v.rule == "TIER0_APPLICATION_DATA":
-                alternatives.append("1. Store in Tier 2 with scope='application'")
-                alternatives.append("2. Keep generic principles in Tier 0")
-            
-            elif v.rule == "SINGLE_RESPONSIBILITY":
-                alternatives.append("1. Create dedicated agent for new responsibility")
-                alternatives.append("2. Use composition instead of adding modes")
-            
-            elif v.rule == "LEFT_BRAIN_TACTICAL":
-                alternatives.append("1. Move planning logic to work-planner.md")
-                alternatives.append("2. Keep execution logic in code-executor.md")
+            # Find the rule in YAML config
+            layer = self._get_layer_by_id(v.layer.value)
+            if layer:
+                for rule in layer.get('rules', []):
+                    if rule.get('rule_id') == v.rule:
+                        rule_alternatives = rule.get('alternatives', [])
+                        alternatives.extend(rule_alternatives)
+                        break
         
         # Deduplicate
         return list(set(alternatives))

@@ -1,0 +1,128 @@
+# CORTEX Config Loader Plugin
+# Load and validate cortex.config.json
+
+version: "2.0"
+type: "workflow"
+name: "Config Loader"
+description: "Load configuration with validation and environment setup"
+author: "CORTEX"
+created: "2025-11-08"
+
+# Target constraints
+targets:
+  - identifier: "cortex_config"
+    path: "cortex.config.json"
+    constraints:
+      - type: "must_exist"
+        message: "cortex.config.json not found"
+      - type: "must_be_valid_json"
+        message: "Configuration file must be valid JSON"
+      - type: "must_have_required_fields"
+        message: "Missing required configuration fields"
+
+# Workflow steps
+workflow:
+  - step: "check_config_exists"
+    action: "validate"
+    params:
+      check_file: "cortex.config.json"
+      fallback_to_example: false
+
+  - step: "load_json"
+    action: "load"
+    params:
+      file: "cortex.config.json"
+      parse_json: true
+      validate_schema: true
+
+  - step: "validate_structure"
+    action: "validate"
+    params:
+      check_required_fields: ["tier1", "tier2", "tier3", "project"]
+      check_tier1_structure: true
+      check_tier2_structure: true
+      check_tier3_structure: true
+
+  - step: "validate_paths"
+    action: "validate"
+    params:
+      check_db_paths_exist: true
+      check_directory_paths_exist: true
+      create_missing_dirs: true
+
+  - step: "validate_brain_config"
+    action: "validate"
+    params:
+      check_brain_name: true
+      check_brain_path: true
+      check_sqlite_config: true
+
+  - step: "load_environment"
+    action: "execute"
+    params:
+      set_environment_vars: true
+      initialize_tier_connections: true
+      validate_connections: true
+
+  - step: "cache_config"
+    action: "execute"
+    params:
+      cache_in_memory: true
+      enable_hot_reload: "${hot_reload}"
+
+  - step: "notify_loaded"
+    action: "notify"
+    params:
+      show_brain_name: true
+      show_tier_status: true
+      show_project_info: true
+
+# Validation rules
+validation:
+  - check: "config_exists"
+    scope: "file"
+    required: true
+    params:
+      suggest_example_if_missing: true
+
+  - check: "valid_json"
+    scope: "syntax"
+    required: true
+    params:
+      show_json_errors: true
+
+  - check: "required_fields"
+    scope: "structure"
+    required: true
+    params:
+      fields: ["tier1.db_path", "tier2.db_path", "tier3.db_path", "project.name"]
+
+  - check: "tier_connectivity"
+    scope: "runtime"
+    required: true
+    params:
+      test_tier1: true
+      test_tier2: true
+      test_tier3: true
+
+# Parameters
+parameters:
+  - name: "config_path"
+    type: "string"
+    default: "cortex.config.json"
+    description: "Path to configuration file"
+
+  - name: "validate_only"
+    type: "bool"
+    default: false
+    description: "Only validate config without loading"
+
+  - name: "hot_reload"
+    type: "bool"
+    default: true
+    description: "Enable hot reload on config changes"
+
+  - name: "create_if_missing"
+    type: "bool"
+    default: false
+    description: "Create config from template if missing"

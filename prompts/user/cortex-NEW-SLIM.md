@@ -240,11 +240,6 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 **Annual savings:** $25,920/year for typical usage (1,000 requests/month)
 
-**Additional optimization:**
-- Brain protection rules moved to YAML (75% token reduction)
-- Configuration file: `cortex-brain/brain-protection-rules.yaml`
-- Tests: `tests/tier0/test_brain_protector.py` (22/22 passing ✅)
-
 ---
 
 ## 📖 Next Steps

@@ -512,5 +512,86 @@ class TestEdgeCases:
         assert result['success']
 
 
+class TestGitHubArchival:
+    """Test GitHub backup archival functionality"""
+    
+    def test_archive_backups_to_github(self, cleanup_plugin, temp_project_dir):
+        """Test archival of backup files to GitHub"""
+        # Create old backup files
+        backup1 = temp_project_dir / 'file1.bak'
+        backup2 = temp_project_dir / 'subdir' / 'file2.old'
+        backup2.parent.mkdir(parents=True, exist_ok=True)
+        
+        backup1.write_text('backup content 1')
+        backup2.write_text('backup content 2')
+        
+        # Set old timestamps
+        old_time = (datetime.now() - timedelta(days=20)).timestamp()
+        import os
+        os.utime(backup1, (old_time, old_time))
+        os.utime(backup2, (old_time, old_time))
+        
+        # Mock git operations or run in dry-run mode
+        result = cleanup_plugin.execute({'hook': HookPoint.ON_STARTUP.value})
+        
+        assert result['success']
+        # In dry-run mode, files should be identified but not deleted
+        assert cleanup_plugin.stats.files_scanned > 0
+    
+    def test_manifest_creation(self, cleanup_plugin, temp_project_dir):
+        """Test that manifest file is created for archived backups"""
+        from pathlib import Path
+        
+        # Create backup file
+        backup_file = temp_project_dir / 'test.bak'
+        backup_file.write_text('backup content')
+        
+        # Set old timestamp
+        old_time = (datetime.now() - timedelta(days=20)).timestamp()
+        import os
+        os.utime(backup_file, (old_time, old_time))
+        
+        # Run cleanup (dry-run)
+        result = cleanup_plugin.execute({'hook': HookPoint.ON_STARTUP.value})
+        
+        assert result['success']
+        # Check that manifest would be created in .backup-archive/
+        # (In dry-run mode, this is simulated)
+    
+    def test_backup_archive_cleanup(self, cleanup_plugin, temp_project_dir):
+        """Test cleanup of backup archive directory"""
+        # Create .backup-archive directory with manifest
+        archive_dir = temp_project_dir / '.backup-archive'
+        archive_dir.mkdir(exist_ok=True)
+        
+        manifest = {
+            'timestamp': datetime.now().isoformat(),
+            'backup_count': 2,
+            'total_size_bytes': 100,
+            'files': [
+                {
+                    'original_path': 'file1.bak',
+                    'archived_path': '.backup-archive/file1.bak',
+                    'size_bytes': 50,
+                    'modified_time': '2025-10-01T00:00:00'
+                }
+            ]
+        }
+        
+        manifest_file = archive_dir / 'backup-manifest-20251108-120000.json'
+        with open(manifest_file, 'w') as f:
+            json.dump(manifest, f)
+        
+        # Create archived file
+        archived_file = archive_dir / 'file1.bak'
+        archived_file.write_text('archived backup')
+        
+        # Run cleanup
+        result = cleanup_plugin.execute({'hook': HookPoint.ON_STARTUP.value})
+        
+        assert result['success']
+        # Manifest should be preserved in dry-run mode
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

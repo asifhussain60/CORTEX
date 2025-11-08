@@ -18,12 +18,16 @@ This directory contains the complete CORTEX 2.0 design, broken into small, manag
 
 - **IMPLEMENTATION-STATUS-CHECKLIST.md** - ⭐ **LIVE DOCUMENT** - Real-time tracking of all phases, tasks, metrics, and blockers
   - Updated after every work session
-  - Tracks completion status for all 9 phases
+  - Tracks completion status for all phases
   - Monitors test coverage, performance, and quality metrics
   - Documents active blockers and next actions
   - **Update Requirement:** MUST update after completing any implementation work
+- **PHASE-1.6-YAML-MIGRATION.md** - 🆕 **ACTIVE** - YAML Plugin Migration tracking (Week 11-12)
+  - Machine-readable plugin architecture (93% size reduction)
+  - Conversion of all .md plugins to .yaml format
+  - 21% complete (schema + processor + POC done)
 
-**Purpose:** This checklist ensures all contributors know exactly what's done, what's in progress, and what's next. It prevents duplicated work and keeps the implementation aligned with the plan.
+**Purpose:** These documents ensure all contributors know exactly what's done, what's in progress, and what's next.
 
 ### 🏗️ FOUNDATION (Read First)
 Start here to understand the core architecture and approach:
@@ -198,12 +202,13 @@ Strategic documents for understanding the bigger picture:
 | 🆕 BASELINE-REPORT.md | ✅ Complete | 100% | 2025-11-07 |
 | 🆕 IMPLEMENTATION-KICKOFF.md | ✅ Complete | 100% | 2025-11-07 |
 | 🆕 IMPLEMENTATION-SESSION-SUMMARY.md | ✅ Complete | 100% | 2025-11-07 |
-| 🆕 IMPLEMENTATION-STATUS-CHECKLIST.md | 🔄 LIVE | ~30% | 2025-11-08 |
+| 🆕 IMPLEMENTATION-STATUS-CHECKLIST.md | 🔄 LIVE | ~32% | 2025-11-08 |
+| 🆕 PHASE-1.6-YAML-MIGRATION.md | 🔄 IN PROGRESS | ~21% | 2025-11-08 |
 
-**Overall Progress:** 30/30 design documents + 9 implementation artifacts (100%) ✅  
-**Status:** DESIGN PHASE COMPLETE + TOKEN OPTIMIZATION ADDED + **PHASE 1 COMPLETE** ✅
+**Overall Progress:** 30/30 design documents + 10 implementation artifacts ✅  
+**Status:** DESIGN PHASE COMPLETE + **PHASES 0-2 COMPLETE** + **PHASE 1.6 IN PROGRESS** ✅
 
-**Live Tracking:** See IMPLEMENTATION-STATUS-CHECKLIST.md for real-time implementation progress
+**Live Tracking:** See IMPLEMENTATION-STATUS-CHECKLIST.md and PHASE-1.6-YAML-MIGRATION.md for real-time progress
 
 ---
 
@@ -222,13 +227,15 @@ Strategic documents for understanding the bigger picture:
 - `IMPLEMENTATION-KICKOFF.md` - Week-by-week implementation guide
 - `IMPLEMENTATION-SESSION-SUMMARY.md` - Phase 0 completion summary
 
-**Current Phase:** Phase 1.5 - Token Optimization System (Week 6-7)
+**Current Phase:** Phase 1.6 - YAML Plugin Migration (Week 11-12) 🔄 **IN PROGRESS**
 
 **Latest Updates:**
-- ✅ Phase 1 Complete: All modularization subphases finished (1.1-1.4)
-- 🆕 Phase 1.5 Added: Token optimization inspired by Cortex Token Optimizer
-- ✅ Timeline Accelerated: 28-32 weeks → 20 weeks (better prioritization)
-- ⭐ Extension Accelerated: Week 11-16 → Week 7-12 (critical for adoption)
+- ✅ Phases 0-2 Complete: Foundation + Modularization + Ambient Capture
+- 🆕 Phase 1.6 Added: YAML Plugin Migration (architecture shift) ⭐
+  - Goal: Convert all prose plugins to machine-readable YAML
+  - Benefits: 93% size reduction, 98% faster parsing, 97% token savings
+  - Progress: 21% (schema + processor + POC complete)
+- ✅ Timeline: 32.5 weeks → 36 weeks (+2 weeks for YAML migration)
 
 ---
 

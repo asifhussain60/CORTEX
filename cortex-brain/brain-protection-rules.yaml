@@ -1,0 +1,456 @@
+# CORTEX Brain Protection Rules
+# Architectural Integrity Guardian Configuration
+# 
+# Implements 6 protection layers to prevent degradation of CORTEX intelligence
+# Replaces hardcoded rules in brain_protector.py for easier maintenance
+#
+# Version: 2.0
+# Created: 2025-11-08
+# Author: CORTEX Team
+
+version: "2.0"
+type: "governance"
+name: "Brain Protection Rules"
+description: "Automated architectural protection challenges"
+
+# Critical system paths that trigger high-level protection
+critical_paths:
+  - "CORTEX/src/tier0/"
+  - "prompts/internal/"
+  - "governance/rules.md"
+  - "cortex-brain/tier0/"
+
+# Tier 0 immutable instincts (cannot be bypassed)
+tier0_instincts:
+  - "TDD_ENFORCEMENT"
+  - "DEFINITION_OF_READY"
+  - "DEFINITION_OF_DONE"
+  - "SOLID_PRINCIPLES"
+  - "LOCAL_FIRST"
+
+# Application-specific paths that don't belong in CORTEX core
+application_paths:
+  - "SPA/"
+  - "KSESSIONS/"
+  - "NOOR/"
+  - "blazor"
+  - "signalr"
+  - "canvas"
+
+# Brain state files that shouldn't be committed
+brain_state_files:
+  - "conversation-history.jsonl"
+  - "conversation-context.jsonl"
+  - "events.jsonl"
+  - "development-context.yaml"
+  - "protection-events.jsonl"
+
+# Protection Layers (6 layers of defense)
+protection_layers:
+  
+  # Layer 1: Instinct Immutability
+  - layer_id: "instinct_immutability"
+    name: "Instinct Immutability"
+    description: "Tier 0 governance rules cannot be bypassed"
+    priority: 1
+    
+    rules:
+      - rule_id: "TDD_ENFORCEMENT"
+        name: "Test-Driven Development Enforcement"
+        severity: "blocked"
+        description: "Attempt to bypass Test-Driven Development requirement"
+        
+        detection:
+          keywords:
+            - "skip test"
+            - "bypass tdd"
+            - "no tests"
+            - "disable tdd"
+            - "skip validation"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Write failing test first (RED phase)"
+          - "Create spike branch for exploration (throwaway)"
+          - "Use TDD cycle: RED → GREEN → REFACTOR"
+        
+        evidence_template: "Intent: '{intent}'"
+      
+      - rule_id: "DEFINITION_OF_DONE"
+        name: "Definition of Done"
+        severity: "blocked"
+        description: "Attempt to bypass Definition of Done (zero errors, zero warnings)"
+        
+        detection:
+          keywords:
+            - "skip validation"
+            - "bypass done"
+            - "disable error check"
+            - "allow warnings"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Fix all warnings before proceeding"
+          - "Add exception rule if truly needed"
+          - "Update test to expect new behavior"
+        
+        evidence_template: "Description: '{description}'"
+      
+      - rule_id: "DEFINITION_OF_READY"
+        name: "Definition of Ready"
+        severity: "blocked"
+        description: "Work item does not meet DoR criteria"
+        
+        detection:
+          keywords:
+            - "skip DoR"
+            - "bypass ready"
+            - "start without requirements"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Define acceptance criteria first"
+          - "Get stakeholder clarification"
+          - "Create refined user story"
+        
+        evidence_template: "Missing DoR criteria: '{description}'"
+  
+  # Layer 2: Tier Boundary Protection
+  - layer_id: "tier_boundary"
+    name: "Tier Boundary Protection"
+    description: "Data stored in correct tier"
+    priority: 2
+    
+    rules:
+      - rule_id: "TIER0_APPLICATION_DATA"
+        name: "No Application Data in Tier 0"
+        severity: "blocked"
+        description: "Application-specific path in Tier 0 (immutable governance)"
+        
+        detection:
+          path_patterns:
+            - "tier0/**"
+            - "governance/**"
+          contains_any: "{{application_paths}}"
+        
+        alternatives:
+          - "Store in Tier 2 with scope='application'"
+          - "Keep generic principles in Tier 0"
+          - "Create application-specific tier"
+        
+        evidence: "Tier 0 is for generic CORTEX principles only"
+      
+      - rule_id: "TIER2_CONVERSATION_DATA"
+        name: "No Conversation Data in Tier 2"
+        severity: "warning"
+        description: "Conversation data should be in Tier 1, not Tier 2"
+        
+        detection:
+          path_patterns:
+            - "tier2/**"
+          contains: "conversation"
+        
+        alternatives:
+          - "Move to Tier 1 (conversation-history.jsonl)"
+          - "Store aggregated patterns in Tier 2"
+          - "Keep raw data in Tier 1, patterns in Tier 2"
+        
+        evidence: "Tier 2 is for aggregated patterns, not raw conversations"
+  
+  # Layer 3: SOLID Compliance
+  - layer_id: "solid_compliance"
+    name: "SOLID Compliance"
+    description: "No God Objects, proper separation"
+    priority: 3
+    
+    rules:
+      - rule_id: "SINGLE_RESPONSIBILITY"
+        name: "Single Responsibility Principle"
+        severity: "warning"
+        description: "Potential God Object pattern detected (adding multiple responsibilities)"
+        
+        detection:
+          keywords:
+            - "add mode"
+            - "add switch"
+            - "handle all"
+            - "do everything"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Create dedicated agent for new responsibility"
+          - "Use composition instead of adding modes"
+          - "Extract to separate module"
+        
+        evidence_template: "Intent: '{intent}'"
+      
+      - rule_id: "DEPENDENCY_INVERSION"
+        name: "Dependency Inversion Principle"
+        severity: "warning"
+        description: "Hardcoded dependency detected (violates DIP)"
+        
+        detection:
+          keywords:
+            - "hardcode path"
+            - "fixed path"
+            - "absolute path"
+            - "inline config"
+          scope: ["description"]
+        
+        alternatives:
+          - "Use dependency injection"
+          - "Load from configuration file"
+          - "Pass as parameter"
+        
+        evidence_template: "Description: '{description}'"
+      
+      - rule_id: "OPEN_CLOSED"
+        name: "Open/Closed Principle"
+        severity: "warning"
+        description: "Modifying existing behavior instead of extending"
+        
+        detection:
+          keywords:
+            - "change behavior"
+            - "modify existing"
+            - "alter functionality"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Create new implementation via extension"
+          - "Use strategy pattern"
+          - "Add decorator or wrapper"
+        
+        evidence_template: "Consider extension over modification"
+  
+  # Layer 4: Hemisphere Specialization
+  - layer_id: "hemisphere_specialization"
+    name: "Hemisphere Specialization"
+    description: "Strategic vs tactical separation"
+    priority: 4
+    
+    rules:
+      - rule_id: "LEFT_BRAIN_TACTICAL"
+        name: "Left Brain Tactical Only"
+        severity: "warning"
+        description: "Strategic planning logic in tactical executor"
+        
+        detection:
+          files:
+            - "code-executor.md"
+            - "test-generator.md"
+            - "error-corrector.md"
+          keywords:
+            - "create plan"
+            - "estimate time"
+            - "assess risk"
+            - "strategy"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Move planning logic to work-planner.md"
+          - "Keep execution logic in code-executor.md"
+          - "Use corpus callosum for coordination"
+        
+        evidence: "LEFT brain should execute, not plan"
+      
+      - rule_id: "RIGHT_BRAIN_STRATEGIC"
+        name: "Right Brain Strategic Only"
+        severity: "warning"
+        description: "Tactical execution logic in strategic planner"
+        
+        detection:
+          files:
+            - "work-planner.md"
+            - "intent-router.md"
+          keywords:
+            - "write code"
+            - "run test"
+            - "execute"
+            - "implement"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Delegate execution to LEFT brain agents"
+          - "Keep planning in RIGHT brain"
+          - "Use agent coordination"
+        
+        evidence: "RIGHT brain should plan, not execute"
+  
+  # Layer 5: Knowledge Quality
+  - layer_id: "knowledge_quality"
+    name: "Knowledge Quality"
+    description: "Pattern validation and confidence thresholds"
+    priority: 5
+    
+    rules:
+      - rule_id: "MIN_OCCURRENCES"
+        name: "Minimum Occurrences for High Confidence"
+        severity: "warning"
+        description: "High confidence (>0.50) with single occurrence"
+        
+        detection:
+          combined_keywords:
+            high_confidence:
+              - "confidence: 1.0"
+              - "confidence=1.0"
+              - "confidence: 0.95"
+            single_event:
+              - "first occurrence"
+              - "single event"
+              - "occurrences: 1"
+          scope: ["description"]
+          logic: "AND"  # Both conditions must be true
+        
+        alternatives:
+          - "Start with confidence ≤0.50 for single event"
+          - "Wait for 3+ occurrences before high confidence"
+          - "Mark as provisional pattern"
+        
+        evidence: "Require 3+ occurrences for confidence >0.50"
+      
+      - rule_id: "PATTERN_VALIDATION"
+        name: "Pattern Validation"
+        severity: "warning"
+        description: "Pattern lacks validation evidence"
+        
+        detection:
+          keywords:
+            - "add pattern without validation"
+            - "no evidence"
+            - "unverified pattern"
+          scope: ["description"]
+        
+        alternatives:
+          - "Add validation test"
+          - "Link to source documentation"
+          - "Mark as hypothesis for validation"
+        
+        evidence: "Patterns require empirical validation"
+  
+  # Layer 6: Commit Integrity
+  - layer_id: "commit_integrity"
+    name: "Commit Integrity"
+    description: "Brain state files excluded from commits"
+    priority: 6
+    
+    rules:
+      - rule_id: "BRAIN_STATE_GITIGNORE"
+        name: "Brain State Files Not Committed"
+        severity: "warning"
+        description: "Brain state file should not be committed"
+        
+        detection:
+          files: "{{brain_state_files}}"
+          keywords:
+            - "commit"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Add to .gitignore"
+          - "Keep local-only"
+          - "Export as snapshot if needed for sharing"
+        
+        evidence: "Add to .gitignore to prevent pollution"
+      
+      - rule_id: "TEMP_FILES_COMMIT"
+        name: "Temporary Files Not Committed"
+        severity: "warning"
+        description: "Temporary or generated files should not be committed"
+        
+        detection:
+          path_patterns:
+            - "**/*.tmp"
+            - "**/temp_*"
+            - "**/__pycache__/**"
+            - "**/node_modules/**"
+          keywords:
+            - "commit"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Update .gitignore"
+          - "Clean before commit"
+          - "Use .gitkeep for empty directories"
+        
+        evidence: "Temporary files pollute repository"
+
+# Severity levels
+severity_levels:
+  safe:
+    decision: "ALLOW"
+    override_required: false
+    message: "✅ Modification appears safe. No violations detected."
+  
+  warning:
+    decision: "WARN"
+    override_required: false
+    message: "⚠️ WARNING: Risky patterns detected. Proceed with caution."
+  
+  blocked:
+    decision: "BLOCK"
+    override_required: true
+    message: "🛡️ BLOCKED: Critical architectural violations detected."
+
+# Challenge templates
+challenge_template: |
+  ═══════════════════════════════════════════════
+  🧠 BRAIN PROTECTION CHALLENGE
+  
+  Timestamp: {timestamp}
+  Severity: {severity}
+  Decision: {decision}
+  
+  {message}
+  
+  SAFE ALTERNATIVES:
+  {alternatives}
+  
+  ═══════════════════════════════════════════════
+  
+  Options:
+    1. Accept recommended alternative (SAFE)
+    2. Provide different approach (REVIEW)
+    3. Type 'OVERRIDE' with justification (RISKY)
+  
+  Your choice:
+
+# Logging configuration
+logging:
+  enabled: true
+  path: "cortex-brain/corpus-callosum/protection-events.jsonl"
+  format: "jsonl"
+  include_fields:
+    - "timestamp"
+    - "event"
+    - "request"
+    - "violations"
+    - "decision"
+    - "severity"
+    - "alternatives_suggested"
+    - "user_decision"
+    - "override_justification"
+    - "override_required"
+
+# Validation rules
+validation:
+  - check: "rules_complete"
+    scope: "protection_layers"
+    required: true
+    params:
+      all_layers_have_rules: true
+      all_rules_have_detection: true
+      all_rules_have_alternatives: true
+  
+  - check: "severity_valid"
+    scope: "rules"
+    required: true
+    params:
+      valid_severities: ["safe", "warning", "blocked"]
+  
+  - check: "templates_valid"
+    scope: "challenge_template"
+    required: true
+    params:
+      has_placeholders: true
+      has_options: true

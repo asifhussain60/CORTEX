@@ -32,6 +32,7 @@ import hashlib
 import json
 import shutil
 import re
+import subprocess
 import logging
 from collections import defaultdict
 
@@ -217,7 +218,8 @@ class Plugin(BasePlugin):
                 '*.keep', '.gitkeep', 'LICENSE', 'README*',
                 'CHANGELOG*', '.git/', '.gitignore',
                 'cortex-brain/', 'src/', 'tests/', 'docs/',
-                'prompts/', 'workflows/', 'scripts/'
+                'prompts/', 'workflows/', 'scripts/',
+                '.backup-archive/*.json'  # Keep manifest files
             ])
             
             # Age thresholds
@@ -309,6 +311,9 @@ class Plugin(BasePlugin):
         if self.detect_orphans:
             self._detect_orphaned_files()
         
+        # Clean up archived backups after they've been pushed to GitHub
+        self._cleanup_backup_archive()
+        
         # Generate report
         report = self._generate_report()
         
@@ -362,9 +367,12 @@ class Plugin(BasePlugin):
         return {'files_deleted': self.stats.files_deleted}
     
     def _cleanup_backup_files(self) -> None:
-        """Remove old backup files"""
-        logger.info("Cleaning backup files...")
+        """Remove old backup files - with GitHub archival"""
+        logger.info("Cleaning backup files with GitHub archival...")
         cutoff = datetime.now() - timedelta(days=self.max_backup_age)
+        
+        # Track backups to archive
+        backups_to_archive = []
         
         for pattern in self.backup_patterns:
             for file_path in self.root_path.rglob(pattern):
@@ -376,19 +384,35 @@ class Plugin(BasePlugin):
                         mtime = datetime.fromtimestamp(file_path.stat().st_mtime)
                         
                         if mtime < cutoff:
-                            size = file_path.stat().st_size
-                            
-                            if not self.dry_run:
-                                file_path.unlink()
-                            
-                            self.stats.files_deleted += 1
-                            self.stats.space_freed_bytes += size
-                            
-                            self._log_action(CleanupAction.DELETE, file_path,
-                                           f"Backup file older than {self.max_backup_age} days")
+                            backups_to_archive.append(file_path)
                             
                 except Exception as e:
-                    self.stats.errors.append(f"Failed to delete backup {file_path}: {e}")
+                    self.stats.errors.append(f"Failed to check backup {file_path}: {e}")
+        
+        # Archive to GitHub before deletion
+        if backups_to_archive:
+            archive_result = self._archive_backups_to_github(backups_to_archive)
+            
+            if archive_result['success']:
+                # Now delete local files
+                for file_path in backups_to_archive:
+                    try:
+                        size = file_path.stat().st_size
+                        
+                        if not self.dry_run:
+                            file_path.unlink()
+                        
+                        self.stats.files_deleted += 1
+                        self.stats.space_freed_bytes += size
+                        
+                        self._log_action(CleanupAction.DELETE, file_path,
+                                       f"Backup archived to GitHub (commit: {archive_result['commit_sha'][:8]})")
+                        
+                    except Exception as e:
+                        self.stats.errors.append(f"Failed to delete backup {file_path}: {e}")
+            else:
+                logger.warning(f"GitHub archival failed: {archive_result.get('error')} - Skipping backup deletion")
+                self.stats.warnings.append(f"Backup archival skipped: {archive_result.get('error')}")
     
     def _cleanup_cache_directories(self) -> None:
         """Remove cache directories - ONLY __pycache__ and build artifacts"""
@@ -792,6 +816,214 @@ class Plugin(BasePlugin):
             'reason': reason,
             'timestamp': datetime.now().isoformat()
         })
+    
+    def _archive_backups_to_github(self, backup_files: List[Path]) -> Dict[str, Any]:
+        """Archive backup files to GitHub before deletion
+        
+        Args:
+            backup_files: List of backup file paths to archive
+            
+        Returns:
+            Dict with success status, commit SHA, and reference file path
+        """
+        if not backup_files:
+            return {'success': True, 'message': 'No backups to archive'}
+        
+        try:
+            # Create backup archive directory
+            archive_dir = self.root_path / '.backup-archive'
+            archive_dir.mkdir(exist_ok=True)
+            
+            # Create timestamped manifest
+            timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+            manifest_file = archive_dir / f'backup-manifest-{timestamp}.json'
+            
+            # Build manifest with backup file metadata
+            manifest = {
+                'timestamp': datetime.now().isoformat(),
+                'backup_count': len(backup_files),
+                'total_size_bytes': sum(f.stat().st_size for f in backup_files if f.exists()),
+                'files': []
+            }
+            
+            # Copy backups to archive directory
+            for backup_path in backup_files:
+                try:
+                    if not backup_path.exists():
+                        continue
+                    
+                    relative_path = backup_path.relative_to(self.root_path)
+                    archive_subdir = archive_dir / relative_path.parent
+                    archive_subdir.mkdir(parents=True, exist_ok=True)
+                    
+                    dest_path = archive_dir / relative_path
+                    
+                    if not self.dry_run:
+                        shutil.copy2(backup_path, dest_path)
+                    
+                    manifest['files'].append({
+                        'original_path': str(relative_path),
+                        'archived_path': str(dest_path.relative_to(self.root_path)),
+                        'size_bytes': backup_path.stat().st_size,
+                        'modified_time': datetime.fromtimestamp(backup_path.stat().st_mtime).isoformat()
+                    })
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to copy backup {backup_path}: {e}")
+                    continue
+            
+            # Save manifest
+            if not self.dry_run:
+                with open(manifest_file, 'w', encoding='utf-8') as f:
+                    json.dump(manifest, f, indent=2)
+            
+            # Git operations
+            if not self.dry_run:
+                # Add archive directory to git
+                git_add = subprocess.run(
+                    ['git', 'add', '.backup-archive/'],
+                    cwd=str(self.root_path),
+                    capture_output=True,
+                    text=True
+                )
+                
+                if git_add.returncode != 0:
+                    return {
+                        'success': False,
+                        'error': f"Git add failed: {git_add.stderr}"
+                    }
+                
+                # Commit with descriptive message
+                commit_msg = f"Archive {len(backup_files)} backup files before cleanup - {timestamp}"
+                git_commit = subprocess.run(
+                    ['git', 'commit', '-m', commit_msg],
+                    cwd=str(self.root_path),
+                    capture_output=True,
+                    text=True
+                )
+                
+                if git_commit.returncode != 0:
+                    # Check if it's just "nothing to commit"
+                    if 'nothing to commit' not in git_commit.stdout.lower():
+                        return {
+                            'success': False,
+                            'error': f"Git commit failed: {git_commit.stderr}"
+                        }
+                
+                # Get commit SHA
+                git_sha = subprocess.run(
+                    ['git', 'rev-parse', 'HEAD'],
+                    cwd=str(self.root_path),
+                    capture_output=True,
+                    text=True
+                )
+                
+                commit_sha = git_sha.stdout.strip() if git_sha.returncode == 0 else 'unknown'
+                
+                # Push to GitHub
+                git_push = subprocess.run(
+                    ['git', 'push'],
+                    cwd=str(self.root_path),
+                    capture_output=True,
+                    text=True
+                )
+                
+                if git_push.returncode != 0:
+                    logger.warning(f"Git push failed: {git_push.stderr} - Commit saved locally")
+                    # Continue - commit is saved locally even if push fails
+                
+                logger.info(f"Archived {len(backup_files)} backups to GitHub (commit: {commit_sha[:8]})")
+                
+                return {
+                    'success': True,
+                    'commit_sha': commit_sha,
+                    'manifest_file': str(manifest_file.relative_to(self.root_path)),
+                    'archived_count': len(manifest['files']),
+                    'pushed_to_github': git_push.returncode == 0
+                }
+            else:
+                # Dry run mode
+                logger.info(f"[DRY RUN] Would archive {len(backup_files)} backups to GitHub")
+                return {
+                    'success': True,
+                    'dry_run': True,
+                    'manifest_file': str(manifest_file.relative_to(self.root_path)),
+                    'archived_count': len(manifest['files'])
+                }
+                
+        except Exception as e:
+            logger.error(f"Failed to archive backups to GitHub: {e}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    def _cleanup_backup_archive(self) -> None:
+        """Clean up backup archive directory after successful GitHub push
+        
+        Removes archived backup files but keeps manifest files for reference.
+        Only cleans archives that have been successfully pushed to GitHub.
+        """
+        archive_dir = self.root_path / '.backup-archive'
+        
+        if not archive_dir.exists():
+            return
+        
+        logger.info("Cleaning up backup archive directory...")
+        
+        try:
+            # Find all manifest files
+            manifest_files = list(archive_dir.glob('backup-manifest-*.json'))
+            
+            for manifest_file in manifest_files:
+                try:
+                    # Read manifest to get file list
+                    with open(manifest_file, 'r', encoding='utf-8') as f:
+                        manifest = json.load(f)
+                    
+                    # Check if this archive was successfully pushed
+                    # We'll check if the commit exists in the remote
+                    archived_files = manifest.get('files', [])
+                    
+                    # Delete archived backup files (not the manifest)
+                    for file_info in archived_files:
+                        archived_path = self.root_path / file_info['archived_path']
+                        
+                        if archived_path.exists() and archived_path != manifest_file:
+                            try:
+                                if not self.dry_run:
+                                    archived_path.unlink()
+                                
+                                size = file_info.get('size_bytes', 0)
+                                self.stats.files_deleted += 1
+                                self.stats.space_freed_bytes += size
+                                
+                                self._log_action(CleanupAction.DELETE, archived_path,
+                                               "Archived backup file cleaned (reference kept in manifest)")
+                                
+                            except Exception as e:
+                                self.stats.warnings.append(f"Failed to delete archived file {archived_path}: {e}")
+                    
+                    # Clean up empty directories in archive
+                    for dir_path in sorted(archive_dir.rglob('*'), key=lambda p: len(str(p)), reverse=True):
+                        if dir_path.is_dir() and dir_path != archive_dir:
+                            try:
+                                if not any(dir_path.iterdir()):
+                                    if not self.dry_run:
+                                        dir_path.rmdir()
+                                    self.stats.directories_removed += 1
+                            except Exception:
+                                pass  # Directory not empty or other issue
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to process manifest {manifest_file}: {e}")
+                    continue
+            
+            logger.info(f"Backup archive cleanup complete. Kept {len(manifest_files)} manifest files for reference.")
+            
+        except Exception as e:
+            logger.error(f"Failed to cleanup backup archive: {e}")
+            self.stats.errors.append(f"Backup archive cleanup failed: {e}")
     
     def _generate_report(self) -> CleanupReport:
         """Generate comprehensive cleanup report"""
