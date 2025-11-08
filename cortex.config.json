@@ -3,7 +3,7 @@
     "name": "CORTEX",
     "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
     "language": "TypeScript/Python/PowerShell",
-    "rootPath": "/Users/asifhussain/PROJECTS/CORTEX",
+    "rootPath": "D:\\PROJECTS\\CORTEX",
     "buildCommand": "npm run build",
     "runCommand": "npm run dev"
   },
@@ -58,5 +58,75 @@
     "lastUpdated": "2025-11-06",
     "configSchema": "cortex-config-v5.0",
     "setupCompleted": true
+  },
+  "plugins": {
+    "cleanup_plugin": {
+      "enabled": true,
+      "dry_run": true,
+      "auto_cleanup_on_startup": false,
+      "temp_patterns": [
+        "*.tmp",
+        "*.temp",
+        "*~",
+        "*.swp",
+        "*.swo",
+        "*.bak",
+        "*.old",
+        "*.orig",
+        "*.rej",
+        ".DS_Store",
+        "Thumbs.db",
+        "desktop.ini"
+      ],
+      "backup_patterns": [
+        "*.bak",
+        "*.backup",
+        "*.old",
+        "*_backup_*",
+        "*_old_*",
+        "*.orig"
+      ],
+      "cache_dirs": [
+        "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        "node_modules/.cache",
+        ".cache",
+        "dist",
+        "build",
+        "*.egg-info"
+      ],
+      "preserve_patterns": [
+        "*.keep",
+        ".gitkeep",
+        "LICENSE",
+        "README*",
+        "CHANGELOG*",
+        ".git/",
+        ".gitignore",
+        "cortex-brain/",
+        "src/",
+        "tests/",
+        "docs/",
+        "prompts/",
+        "workflows/",
+        "scripts/"
+      ],
+      "max_temp_age_days": 7,
+      "max_log_age_days": 30,
+      "max_backup_age_days": 14,
+      "min_duplicate_size_kb": 10,
+      "large_file_threshold_mb": 100,
+      "compress_old_archives": true,
+      "enforce_structure": true,
+      "detect_orphans": true
+    },
+    "doc_refresh_plugin": {
+      "enabled": true,
+      "auto_refresh": false
+    },
+    "configuration_wizard_plugin": {
+      "enabled": true
+    }
   }
 }
