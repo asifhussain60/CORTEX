@@ -16,18 +16,28 @@ This directory contains the complete CORTEX 2.0 design, broken into small, manag
 
 **CRITICAL:** Before reading any design documents, review the live implementation status:
 
-- **IMPLEMENTATION-STATUS-CHECKLIST.md** - ⭐ **LIVE DOCUMENT** - Real-time tracking of all phases, tasks, metrics, and blockers
+- **STATUS.md** - ⭐ **PRIMARY STATUS FILE** - Slim visual status with progress bars (~150 lines)
+  - Visual progress bars for all phases
+  - Current sprint summary (next 3 actions)
+  - Key metrics dashboard
+  - Quick links to detailed data
   - Updated after every work session
-  - Tracks completion status for all phases
-  - Monitors test coverage, performance, and quality metrics
-  - Documents active blockers and next actions
   - **Update Requirement:** MUST update after completing any implementation work
-- **PHASE-1.6-YAML-MIGRATION.md** - 🆕 **ACTIVE** - YAML Plugin Migration tracking (Week 11-12)
-  - Machine-readable plugin architecture (93% size reduction)
-  - Conversion of all .md plugins to .yaml format
-  - 21% complete (schema + processor + POC done)
 
-**Purpose:** These documents ensure all contributors know exactly what's done, what's in progress, and what's next.
+- **status-data.yaml** - ⭐ **MACHINE-READABLE DATA** - Complete metrics and history
+  - All phase details, metrics, and timelines
+  - Test coverage and quality data
+  - Risk tracking and achievements
+  - CI/CD ready format
+  - Auto-generated reports possible
+
+- **archive/** - Historical tracking files (archived for reference)
+  - IMPLEMENTATION-STATUS-CHECKLIST.md (2,170 lines - archived)
+  - PHASE-STATUS-QUICK-VIEW.md (380 lines - archived)
+  - All PHASE-*-COMPLETE.md files
+  - Use for historical context only
+
+**Purpose:** Single slim status file (STATUS.md) provides instant overview. YAML backend enables automation. Archive preserves history.
 
 ### 🏗️ FOUNDATION (Read First)
 Start here to understand the core architecture and approach:
@@ -162,7 +172,8 @@ Strategic documents for understanding the bigger picture:
 | Document | Status | Completion | Last Updated |
 |----------|--------|------------|--------------|
 | 00-INDEX.md | ✅ Complete | 100% | 2025-11-08 |
-| IMPLEMENTATION-STATUS-CHECKLIST.md | 🔄 LIVE | ~5% | 2025-11-08 |
+| STATUS.md | 🔄 LIVE | ~47% | 2025-11-08 |
+| status-data.yaml | 🔄 LIVE | ~47% | 2025-11-08 |
 | 01-core-architecture.md | ✅ Complete | 100% | 2025-11-07 |
 | 02-plugin-system.md | ✅ Complete | 100% | 2025-11-07 |
 | 03-conversation-state.md | ✅ Complete | 100% | 2025-11-07 |
@@ -201,14 +212,14 @@ Strategic documents for understanding the bigger picture:
 | 🆕 History.md | ✅ Complete | 100% | 2025-11-07 |
 | 🆕 BASELINE-REPORT.md | ✅ Complete | 100% | 2025-11-07 |
 | 🆕 IMPLEMENTATION-KICKOFF.md | ✅ Complete | 100% | 2025-11-07 |
-| 🆕 IMPLEMENTATION-SESSION-SUMMARY.md | ✅ Complete | 100% | 2025-11-07 |
-| 🆕 IMPLEMENTATION-STATUS-CHECKLIST.md | 🔄 LIVE | ~32% | 2025-11-08 |
-| 🆕 PHASE-1.6-YAML-MIGRATION.md | 🔄 IN PROGRESS | ~21% | 2025-11-08 |
+| 🆕 STATUS.md | 🔄 LIVE | ~47% | 2025-11-08 |
+| 🆕 status-data.yaml | 🔄 LIVE | ~47% | 2025-11-08 |
+| 🆕 HOLISTIC-REVIEW-2025-11-08-FINAL.md | ✅ Complete | 100% | 2025-11-08 |
 
-**Overall Progress:** 30/30 design documents + 10 implementation artifacts ✅  
-**Status:** DESIGN PHASE COMPLETE + **PHASES 0-2 COMPLETE** + **PHASE 1.6 IN PROGRESS** ✅
+**Overall Progress:** 30/30 design documents + 12 implementation artifacts ✅  
+**Status:** DESIGN PHASE COMPLETE + **PHASES 0-2 COMPLETE** + **PHASE 3 60% COMPLETE** ✅
 
-**Live Tracking:** See IMPLEMENTATION-STATUS-CHECKLIST.md and PHASE-1.6-YAML-MIGRATION.md for real-time progress
+**Live Tracking:** See STATUS.md for visual progress and status-data.yaml for machine-readable metrics
 
 ---
 
