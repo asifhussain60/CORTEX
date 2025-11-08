@@ -109,6 +109,31 @@ See: [`docs/architecture/cross-platform-compatibility.md`](../../docs/architectu
 
 To enable conversation memory (so CORTEX remembers across chats):
 
+## 📋 CRITICAL: CORTEX 2.0 Implementation Status Tracking
+
+**LIVE DOCUMENT REQUIREMENT - UPDATE AFTER EVERY WORK SESSION:**
+
+**File:** `cortex-brain/cortex-2.0-design/IMPLEMENTATION-STATUS-CHECKLIST.md`
+
+**Update Triggers (ALWAYS update after):**
+1. ✅ **Completing any task** - Mark tasks complete immediately
+2. ✅ **Running tests** - Update test pass rates and coverage
+3. ✅ **Performance benchmarks** - Update metrics dashboard
+4. ✅ **Discovering new work** - Add to appropriate phase backlog
+5. ✅ **Encountering blockers** - Document in blockers section
+6. ✅ **Phase transitions** - Update phase status and progress bars
+
+**Why This Matters:**
+- Prevents duplicated work across sessions
+- Tracks actual progress vs planned timeline
+- Identifies blockers early before they cascade
+- Provides accurate status for all stakeholders
+- Ensures continuous alignment with implementation plan
+
+**CORTEX Behavior:** Before completing ANY implementation work, always check and update the Implementation Status Checklist. This is a core requirement for CORTEX 2.0 development.
+
+---
+
 ### Option 1: PowerShell Capture (Quick - After Each Session)
 ```powershell
 # Capture your conversation manually
@@ -167,7 +192,7 @@ python scripts/cortex_cli.py --session-info
 | **Tier 1: Working Memory** | ✅ | SQLite conversations, <50ms queries (Nov 6) |
 | **Tier 1: FIFO Queue** | ✅ | 20-conversation limit, active protection (Nov 8) |
 | **Tier 1: Entity Extraction** | ✅ | Files, classes, methods (Nov 8) |
-| **Tier 2: Knowledge Graph** | ✅ | FTS5 search, pattern learning, <150ms (Nov 6) |
+| **Tier 2: Knowledge Graph** | 🟡 | Modularization in progress: DB + schema extracted; patterns/search modules pending |
 | **Tier 3: Context Intelligence** | ✅ | Git metrics, hotspots, insights (Nov 6) |
 | **Migration Tools** | ✅ | All 3 tier migrations validated (Nov 6) |
 | **Conversation Tracking** | 🟡 | Infrastructure works, integration gap identified |
@@ -228,6 +253,39 @@ python scripts/cortex_cli.py --session-info
 **Last Updated:** 2025-11-08 (Phase 0 COMPLETE + Holistic Capability Roadmap ADDED)
 
 ---
+
+## 🔎 Notes and critical corrections (2025-11-08)
+
+- Knowledge Graph scope naming is standardized in code to `cortex` and `application` (the earlier docs using `generic` refer to the same concept as `cortex`). Data migrations and validators should map `generic` → `cortex`.
+- Tier 2 modularization is underway. Database connection and schema have been extracted and tested; pattern store/search/decay modules are pending. Prefer importing via `src.tier2.knowledge_graph.database` (package) to avoid ambiguity with the transitional `database.py` helper.
+- VS Code Chat APIs evolve. The chat participant contribution shown targets recent VS Code builds; external chat monitoring may require proposed APIs or alternative hooks. Keep an ambient capture fallback (Phase 2) enabled until the extension path is validated on your VS Code version.
+
+### Tier 2 Modularization Progress & Remaining Tasks
+
+| Component | Status | Action |
+|-----------|--------|--------|
+| database/connection.py & schema.py | ✅ Complete | Provide low-level connection + schema init (tested) |
+| patterns/pattern_store.py | ✅ Extracted | CRUD, confidence, access tracking, scope normalization generic→cortex |
+| patterns/pattern_search.py | 📋 Pending | Move FTS5 queries, ranking, namespace/scope filters, relevance scoring |
+| patterns/pattern_decay.py | 📋 Pending | Implement scheduled decay + exclude pinned patterns; write decay log entries |
+| relationships/relationship_manager.py | 📋 Pending | CRUD and strength updates; enforce UNIQUE triple and cascade handling |
+| tags/tag_manager.py | 📋 Pending | Tag CRUD + list-by-tag; leverage existing index; add tests |
+| coordinator (KnowledgeGraph v2 facade) | 📋 Pending | Compose store/search/relationships/tags; backward-compatible API for router |
+| legacy knowledge_graph_legacy.py | 🟡 In use | Deprecate after facade parity + migration tests |
+| scope terminology harmonization | ✅ Implemented | Map 'generic'→'cortex' on insert; default future patterns to 'cortex' |
+| abstraction duplication (ConnectionManager vs DatabaseConnection) | ⚠️ Review | Consolidate to single API; recommend keeping ConnectionManager and removing unused DatabaseConnection helper |
+| add module-specific unit tests | 🔄 Ongoing | Maintain <250 lines/module; one focused test file per module |
+
+Priority ordering (next sprint): pattern_search → relationship_manager → tag_manager → pattern_decay → coordinator → legacy deprecation → abstraction consolidation.
+
+Scope Standardization Policy:
+- All new patterns persist with `scope='cortex'` or `scope='application'`.
+- Any legacy rows found with `scope='generic'` are migrated in-place to `cortex` during maintenance migrations.
+- Pattern store enforces normalization and should be treated as the canonical write path.
+
+Database Abstraction Consolidation:
+- Two abstractions currently exist: `ConnectionManager` (actively used in tests & store) and `DatabaseConnection` (partial overlap).
+- Plan: Remove `DatabaseConnection` after coordinator extraction to avoid cognitive overhead; if a higher-level facade is needed, rename instead (e.g., `KGDatabase` wrapping ConnectionManager).
 
 ## 📖 Legacy Status (Pre-V3 Migration)
 

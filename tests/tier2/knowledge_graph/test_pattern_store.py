@@ -1,4 +1,111 @@
 """
+PatternStore unit tests
+
+Covers create, duplicate handling, get (with access increment), update,
+pin/unpin via update, delete, and list with filters.
+"""
+
+import sqlite3
+import tempfile
+import shutil
+from pathlib import Path
+
+import pytest
+
+from src.tier2.knowledge_graph.database import ConnectionManager, DatabaseSchema
+from src.tier2.knowledge_graph.patterns.pattern_store import PatternStore
+
+
+@pytest.fixture
+def temp_db_path():
+    temp_dir = tempfile.mkdtemp()
+    db_path = Path(temp_dir) / "kg_test.db"
+    yield db_path
+    shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+@pytest.fixture
+def store(temp_db_path):
+    db = ConnectionManager(db_path=temp_db_path)
+    DatabaseSchema.initialize(db_path=temp_db_path)
+    return PatternStore(db)
+
+
+def test_store_and_get_pattern(store: PatternStore):
+    pid = "pat-001"
+    stored = store.store_pattern(
+        pattern_id=pid,
+        title="TDD Workflow",
+        content="Write tests first",
+        pattern_type="workflow",
+        confidence=0.95,
+        scope="cortex",
+        namespaces=["CORTEX-core"],
+    )
+    assert stored["pattern_id"] == pid
+    got = store.get_pattern(pid)
+    assert got is not None
+    assert got["pattern_id"] == pid
+    # access_count incremented by get
+    assert got["access_count"] == 1
+
+
+def test_duplicate_pattern_id_raises(store: PatternStore):
+    pid = "dup-001"
+    store.store_pattern(
+        pattern_id=pid,
+        title="A",
+        content="B",
+        pattern_type="workflow",
+        confidence=1.0,
+        scope="cortex",
+    )
+    with pytest.raises(sqlite3.IntegrityError):
+        store.store_pattern(
+            pattern_id=pid,
+            title="C",
+            content="D",
+            pattern_type="workflow",
+            confidence=0.9,
+            scope="cortex",
+        )
+
+
+def test_update_pattern_confidence(store: PatternStore):
+    pid = "pat-002"
+    store.store_pattern(
+        pattern_id=pid,
+        title="Rule",
+        content="Always do X",
+        pattern_type="principle",
+        confidence=0.7,
+        scope="cortex",
+    )
+    updated = store.update_pattern(pid, {"confidence": 0.8})
+    assert updated is True
+    got = store.get_pattern(pid)
+    assert pytest.approx(got["confidence"], rel=1e-6) == 0.8
+
+
+def test_list_patterns_with_filters(store: PatternStore):
+    # insert three patterns
+    store.store_pattern("p1", "A", "a", "workflow", 0.9, scope="cortex")
+    store.store_pattern("p2", "B", "b", "solution", 0.6, scope="cortex")
+    store.store_pattern("p3", "C", "c", "workflow", 0.4, scope="application")
+    results = store.list_patterns(pattern_type="workflow", scope="cortex", min_confidence=0.5)
+    ids = [r["pattern_id"] for r in results]
+    assert "p1" in ids
+    assert "p3" not in ids  # wrong scope
+    assert "p2" not in ids  # wrong type
+
+
+def test_delete_pattern(store: PatternStore):
+    pid = "pat-del"
+    store.store_pattern(pid, "A", "a", "workflow", 1.0, scope="cortex")
+    deleted = store.delete_pattern(pid)
+    assert deleted is True
+    assert store.get_pattern(pid) is None
+"""
 Tests for Pattern Store Module
 
 Tests pattern CRUD operations following TDD methodology.

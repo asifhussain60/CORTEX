@@ -41,5 +41,5 @@ class Pattern:
     source: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     is_pinned: bool = False
-    scope: str = "generic"  # Boundary enforcement ('generic' or 'application')
+    scope: str = "cortex"  # Boundary enforcement ('cortex' or 'application'); 'generic' legacy maps to 'cortex'
     namespaces: Optional[List[str]] = None  # Multi-app support (JSON array)

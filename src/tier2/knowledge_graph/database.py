@@ -115,8 +115,11 @@ class DatabaseConnection:
             - First run: ~50ms (creates all tables)
             - Subsequent runs: ~5ms (no-op if schema exists)
         """
-        # Schema creation will be implemented in next step (extraction)
-        pass
+    # Delegate to modular schema implementation. Safe to call repeatedly.
+    # We intentionally separate connection concerns (this class) from
+    # structural concerns (DatabaseSchema in database/schema.py)
+    from .database.schema import DatabaseSchema  # local import to avoid cycles
+    DatabaseSchema.initialize(self.db_path)
     
     def migrate(self, target_version: Optional[int] = None):
         """
@@ -137,8 +140,26 @@ class DatabaseConnection:
             >>> old, new = db.migrate()
             >>> print(f"Migrated from v{old} to v{new}")
         """
-        # Migration logic will be implemented
-        pass
+        if target_version is None:
+            target_version = self.SCHEMA_VERSION
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        # Create schema_version table if not exists
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS schema_version (
+                version INTEGER PRIMARY KEY,
+                applied_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+        cursor.execute("SELECT MAX(version) FROM schema_version")
+        current = cursor.fetchone()[0] or 0
+        if target_version <= current:
+            return (current, current)
+        cursor.execute("INSERT INTO schema_version (version) VALUES (?)", (target_version,))
+        conn.commit()
+        return (current, target_version)
     
     def close(self):
         """
@@ -173,12 +194,28 @@ class DatabaseConnection:
             >>> health = db.health_check()
             >>> assert health['status'] == 'healthy'
         """
-        # Health check implementation placeholder
-        return {
-            "status": "unknown",
-            "message": "Health check not yet implemented",
-            "timestamp": datetime.now().isoformat()
-        }
+        try:
+            conn = self.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA integrity_check")
+            integrity = cursor.fetchone()[0]
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='patterns'"
+            )
+            has_patterns = cursor.fetchone() is not None
+            status = "healthy" if integrity == "ok" and has_patterns else "degraded"
+            return {
+                "status": status,
+                "integrity": integrity,
+                "has_patterns": has_patterns,
+                "timestamp": datetime.now().isoformat()
+            }
+        except Exception as e:
+            return {
+                "status": "critical",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            }
     
     def __enter__(self):
         """Context manager entry."""

@@ -10,6 +10,12 @@ Usage:
     entry = CortexEntry()
     response = entry.process("Add authentication to the login page")
     print(response)
+
+CORTEX 2.0 Implementation Requirement:
+    After completing any work (tests, features, refactoring), ALWAYS update:
+    cortex-brain/cortex-2.0-design/IMPLEMENTATION-STATUS-CHECKLIST.md
+    
+    This is tracked automatically via _remind_checklist_update() method.
 """
 
 from typing import Optional, Dict, Any
@@ -157,6 +163,10 @@ class CortexEntry:
                 role="assistant",
                 content=response.message
             )
+            
+            # Check if work was completed (triggers checklist reminder)
+            if self._is_implementation_work(request.intent, user_message):
+                self._remind_checklist_update(user_message, response)
             
             # Format response
             formatted = self.formatter.format(
@@ -362,6 +372,75 @@ class CortexEntry:
         # Start new session
         conversation_id = self.session_manager.start_session()
         return conversation_id
+    
+    def _is_implementation_work(self, intent: str, message: str) -> bool:
+        """
+        Check if the request involves implementation work that should
+        trigger a checklist update reminder.
+        
+        Args:
+            intent: Detected intent from request parser
+            message: Original user message
+            
+        Returns:
+            True if this is implementation work requiring checklist update
+        """
+        # Implementation-related intents
+        implementation_intents = [
+            "IMPLEMENT_FEATURE",
+            "REFACTOR_CODE",
+            "FIX_BUG",
+            "ADD_TESTS",
+            "CREATE_COMPONENT",
+            "UPDATE_DOCUMENTATION"
+        ]
+        
+        if intent in implementation_intents:
+            return True
+        
+        # Check for implementation keywords in message
+        implementation_keywords = [
+            "implement", "create", "add", "build", "develop",
+            "refactor", "fix", "test", "complete", "finish",
+            "phase", "module", "feature"
+        ]
+        
+        message_lower = message.lower()
+        return any(keyword in message_lower for keyword in implementation_keywords)
+    
+    def _remind_checklist_update(
+        self,
+        user_message: str,
+        response: AgentResponse
+    ) -> None:
+        """
+        Log reminder to update CORTEX 2.0 Implementation Status Checklist.
+        
+        Args:
+            user_message: Original user request
+            response: Agent response
+        """
+        if response.success:
+            checklist_path = (
+                self.brain_path.parent / 
+                "cortex-brain" / 
+                "cortex-2.0-design" / 
+                "IMPLEMENTATION-STATUS-CHECKLIST.md"
+            )
+            
+            self.logger.warning(
+                "\n" + "="*60 +
+                "\n⚠️  CHECKLIST UPDATE REQUIRED ⚠️" +
+                f"\n\nImplementation work completed: {user_message[:50]}..." +
+                f"\n\nPlease update: {checklist_path}" +
+                "\n\nUpdate triggers:" +
+                "\n  ✅ Mark completed tasks" +
+                "\n  📊 Update metrics (tests, performance)" +
+                "\n  📝 Document any blockers" +
+                "\n  🔄 Update phase progress bars" +
+                "\n\nThis keeps the implementation tracking accurate!" +
+                "\n" + "="*60
+            )
     
     def setup(
         self,

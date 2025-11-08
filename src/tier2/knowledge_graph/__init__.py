@@ -26,6 +26,7 @@ from ..knowledge_graph_legacy import (
 
 # New modular components (partially complete)
 from .database import DatabaseSchema, ConnectionManager
+from .patterns.pattern_store import PatternStore
 
 __all__ = [
     # Legacy exports (for backward compatibility)
@@ -36,6 +37,7 @@ __all__ = [
     # New modular exports
     'DatabaseSchema',
     'ConnectionManager',
+    'PatternStore',
 ]
 
 __version__ = "2.0.0-modular-in-progress"
