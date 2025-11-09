@@ -2,9 +2,9 @@
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 5.0 (Modular Architecture - UNBLOATED)  
-**Status:** 🎯 PRODUCTION  
-**Architecture:** Modular documentation with plug-in references
+**Version:** 5.1 (Interactive Planning Enhancement)  
+**Status:** 🎯 DESIGN PHASE → PRODUCTION  
+**Architecture:** Modular documentation with plug-in references + Interactive Planning
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
@@ -208,6 +208,22 @@ show me where I left off
 
 **Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
 
+#### 🎯 CORTEX 2.1 Workflow Commands
+**NEW! Interactive and specialized workflow commands:**
+
+| Command | Natural Language Equivalent | What It Does |
+|---------|---------------------------|--------------|
+| `/CORTEX, refresh cortex story` | "refresh story", "update story" | Refresh CORTEX story documentation |
+| `/CORTEX, let's plan a feature` | "let's plan", "plan feature" | **Interactive feature planning** with guided questions |
+| `/CORTEX, architect a solution` | "design architecture", "architect this" | Collaborative architecture design |
+| `/CORTEX, refactor this module` | "let's refactor", "refactor this" | Interactive refactoring with clarifications |
+| `/CORTEX, run brain protection` | "check brain", "validate brain" | Run brain protection validation |
+| `/CORTEX, run tests` | "run tests", "test this" | Execute test suite |
+| `/CORTEX, generate documentation` | "generate docs", "document this" | Auto-generate documentation |
+
+**🌟 Highlighted: Interactive Planning** - CORTEX asks clarifying questions before creating plans!  
+See design doc: `docs/design/CORTEX-2.1-INTERACTIVE-PLANNING.md`
+
 #### 🔧 VS Code Extension Commands
 **Available in VS Code Chat (`@cortex`):**
 - `/resume` - Resume last conversation
@@ -365,6 +381,8 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 ---
 
-*Last Updated: 2025-11-09 | CORTEX 2.0 Modular Architecture | GitHub Copilot Integration*
+*Last Updated: 2025-11-09 | CORTEX 2.1 Interactive Planning | GitHub Copilot Integration*
 
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. New plugin commands are automatically discovered via the command registry system.*
+
+*What's New in 2.1:* Interactive feature planning with guided questions! Use `/CORTEX, let's plan a feature` to collaborate with CORTEX on requirements before implementation.
