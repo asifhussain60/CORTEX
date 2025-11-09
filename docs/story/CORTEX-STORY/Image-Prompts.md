@@ -946,6 +946,329 @@ execute=green, error=red), timing annotations, professional documentation style.
 
 ---
 
-**Last Updated:** November 7, 2025  
-**Version:** 2.0 (Technical Diagrams Only)  
+## 📐 CORTEX 2.0 New Feature Diagrams (November 2025)
+
+### Diagram 23: Token Optimization System (Napkin.ai Format)
+
+```napkin
+# Token Optimization System Architecture
+
+## Central Node
+token_optimizer [Token Optimization Engine]
+
+## Analysis Layer
+token_optimizer -> ml_analyzer [ML Pattern Analyzer]
+token_optimizer -> cache_manager [Cache Explosion Prevention]
+token_optimizer -> context_reducer [Context Reduction Engine]
+
+## Data Sources
+ml_analyzer -> conversation_history [Conversation Patterns]
+ml_analyzer -> usage_metrics [Token Usage Metrics]
+cache_manager -> cache_monitor [Cache Size Monitor]
+context_reducer -> relevance_scorer [Relevance Scoring]
+
+## Optimization Strategies
+ml_analyzer -> strategy_1 [Smart Summarization (50-70% reduction)]
+cache_manager -> strategy_2 [Incremental Caching]
+context_reducer -> strategy_3 [Contextual Pruning]
+
+## Output
+strategy_1 -> optimized_context [Optimized Context]
+strategy_2 -> optimized_context
+strategy_3 -> optimized_context
+optimized_context -> copilot [GitHub Copilot]
+
+## Metrics
+optimized_context -> metrics [Real-time Metrics Dashboard]
+metrics -> token_saved [Tokens Saved]
+metrics -> cost_reduction [Cost Reduction %]
+metrics -> performance_impact [Performance Impact]
+
+# Style
+theme: professional
+layout: hierarchical
+colors: 
+  - token_optimizer: #FF6B35
+  - ml_analyzer: #4A90E2
+  - cache_manager: #7B1FA2
+  - context_reducer: #00C853
+  - optimized_context: #FFD600
+```
+
+**Alternative text prompt:**
+"Create a technical system architecture diagram showing CORTEX Token Optimization System. Use hierarchical layout with central 'Token Optimization Engine' node connected to three analysis layers: ML Pattern Analyzer, Cache Explosion Prevention, Context Reduction Engine. Show data flows from conversation patterns and usage metrics feeding into optimization strategies (Smart Summarization 50-70% reduction, Incremental Caching, Contextual Pruning). All strategies output to optimized context feeding GitHub Copilot. Include metrics dashboard showing tokens saved, cost reduction %, and performance impact. Style: Software architecture diagram, clean boxes and arrows, professional color coding (orange for engine, blue for analysis, purple for cache, green for reduction, yellow for output). Tool: Napkin.ai"
+
+---
+
+### Diagram 24: Modular Entry Point Architecture (Napkin.ai Format)
+
+```napkin
+# Modular Entry Point vs Monolithic Comparison
+
+## OLD Architecture (Left Side)
+monolithic [Monolithic Entry Point\n74,047 tokens\n8,701 lines\n$2.22 per request]
+
+monolithic -> load_all [Loads Everything\nEvery Time]
+load_all -> story [Story (3,000 tokens)]
+load_all -> technical [Technical (4,500 tokens)]
+load_all -> agents [Agents (6,000 tokens)]
+load_all -> design [Design Docs (45,000 tokens)]
+load_all -> examples [Examples (15,000 tokens)]
+
+load_all -> slow [2-3 seconds parse time]
+load_all -> expensive [$25,920/year cost]
+
+## NEW Architecture (Right Side)
+modular [Modular Entry Point\n450 tokens\n300 lines\n$0.06 per request]
+
+modular -> slim_entry [Slim Entry\nLoad on Demand]
+slim_entry -> story_module [story.md\n800-1,000 tokens\nWhen needed]
+slim_entry -> tech_module [technical-reference.md\n1,200-1,500 tokens\nWhen needed]
+slim_entry -> agent_module [agents-guide.md\n900-1,100 tokens\nWhen needed]
+slim_entry -> setup_module [setup-guide.md\n600-800 tokens\nWhen needed]
+
+slim_entry -> fast [80ms parse time\n97% faster]
+slim_entry -> cheap [$2,592/year cost\n$23,328 saved]
+
+## Comparison Metric
+monolithic -> comparison [vs]
+modular -> comparison
+comparison -> result [97.2% Token Reduction\n97% Cost Savings\n97% Speed Improvement]
+
+# Style
+theme: comparison
+layout: side-by-side
+colors:
+  - monolithic: #D32F2F
+  - modular: #00C853
+  - comparison: #FFD600
+  - result: #4A90E2
+```
+
+**Alternative text prompt:**
+"Create a comparison diagram showing OLD vs NEW CORTEX entry point architecture. LEFT SIDE: Monolithic Entry Point (red box, 74,047 tokens, 8,701 lines, $2.22 per request) loading everything every time - Story (3,000 tokens), Technical (4,500), Agents (6,000), Design Docs (45,000), Examples (15,000). Shows slow (2-3 sec) and expensive ($25,920/year). RIGHT SIDE: Modular Entry Point (green box, 450 tokens, 300 lines, $0.06 per request) with slim entry loading on demand - story.md (800-1,000 tokens), technical-reference.md (1,200-1,500), agents-guide.md (900-1,100), setup-guide.md (600-800). Shows fast (80ms, 97% faster) and cheap ($2,592/year, $23,328 saved). CENTER: Comparison arrow showing 97.2% token reduction, 97% cost savings, 97% speed improvement. Style: Professional comparison diagram, AWS architecture aesthetic. Tool: Napkin.ai"
+
+---
+
+### Diagram 25: Ambient Capture Daemon Flow (Napkin.ai Format)
+
+```napkin
+# Ambient Capture Daemon Architecture
+
+## Trigger Detection
+vscode_window [VS Code Window Focus]
+conversation_length [Conversation > 5 Messages]
+keywords [Keywords Detected\nimpl ement, test, fix, review]
+git_ops [Git Operations\ncommit, branch, PR]
+
+## Central Daemon
+vscode_window -> daemon [Ambient Capture Daemon]
+conversation_length -> daemon
+keywords -> daemon
+git_ops -> daemon
+
+## Filtering Layer
+daemon -> filter [Smart Filter Engine]
+filter -> noise_filter [Ignore Noise\nsyntax errors, auto-saves, typos]
+filter -> value_filter [Capture Value\narchitecture, debugging, features]
+
+## Intelligence Layer
+value_filter -> pattern_detector [Pattern Detection\n15-20 patterns]
+value_filter -> deduplicator [Smart Deduplication]
+value_filter -> enricher [Context Enrichment\ngit status, files changed]
+value_filter -> tagger [Auto-Tagging\nfeature, bug, review, refactor]
+
+## Storage
+pattern_detector -> tier1 [Tier 1: Working Memory]
+deduplicator -> tier1
+enricher -> tier1
+tagger -> tier1
+
+tier1 -> resume [Resume Capability]
+
+## Metrics
+daemon -> metrics_dash [Metrics Dashboard]
+metrics_dash -> capture_rate [94% Capture Accuracy]
+metrics_dash -> false_positive [3% False Positive Rate]
+metrics_dash -> loss_rate [2% Loss Rate\ndown from 40%]
+
+# Style
+theme: flowchart
+layout: top-down
+colors:
+  - daemon: #FF6B35
+  - filter: #7B1FA2
+  - pattern_detector: #4A90E2
+  - tier1: #00C853
+  - metrics_dash: #FFD600
+```
+
+**Alternative text prompt:**
+"Create a technical flowchart showing Ambient Capture Daemon architecture. TOP: Four trigger boxes (VS Code window focus, Conversation >5 messages, Keywords detected, Git operations) feeding into central Ambient Capture Daemon (orange). MIDDLE: Daemon connects to Smart Filter Engine (purple) which splits into noise filter (ignore: syntax errors, auto-saves, typos) and value filter (capture: architecture, debugging, features). LOWER-MIDDLE: Value filter feeds Intelligence Layer with four components: Pattern Detection (15-20 patterns), Smart Deduplication, Context Enrichment (git status, files changed), Auto-Tagging (feature, bug, review, refactor) - all in blue. BOTTOM: Intelligence components feed Tier 1 Working Memory (green) enabling Resume Capability. RIGHT: Metrics Dashboard (yellow) showing 94% capture accuracy, 3% false positive rate, 2% loss rate (down from 40%). Style: Technical flowchart, professional data flow diagram. Tool: Napkin.ai"
+
+---
+
+### Diagram 26: Crawler Orchestration System (Napkin.ai Format)
+
+```napkin
+# Unified Workspace Discovery Architecture
+
+## Discovery Request
+user_request [Workspace Discovery Request]
+
+## Orchestrator
+user_request -> orchestrator [Crawler Orchestration Engine]
+
+## Crawler Types
+orchestrator -> db_crawler [Database Crawler]
+orchestrator -> api_crawler [API Crawler]
+orchestrator -> ui_crawler [UI Framework Crawler]
+orchestrator -> code_crawler [Code Structure Crawler]
+orchestrator -> config_crawler [Configuration Crawler]
+
+## Database Discovery
+db_crawler -> sql_detect [SQL Databases\nPostgreSQL, MySQL, SQL Server]
+db_crawler -> nosql_detect [NoSQL Databases\nMongoDB, Redis, Elasticsearch]
+db_crawler -> orm_detect [ORM Detection\nEntity Framework, SQLAlchemy]
+
+## API Discovery
+api_crawler -> rest_detect [REST APIs\nSwagger/OpenAPI]
+api_crawler -> graphql_detect [GraphQL\nSchema detection]
+api_crawler -> grpc_detect [gRPC\nProto file analysis]
+
+## UI Discovery
+ui_crawler -> react_detect [React Components\nJSX/TSX analysis]
+ui_crawler -> angular_detect [Angular Modules\nTypeScript analysis]
+ui_crawler -> vue_detect [Vue Components\nSFC analysis]
+
+## Unified Schema
+sql_detect -> unified_schema [Unified Workspace Schema]
+rest_detect -> unified_schema
+react_detect -> unified_schema
+orm_detect -> unified_schema
+nosql_detect -> unified_schema
+graphql_detect -> unified_schema
+angular_detect -> unified_schema
+grpc_detect -> unified_schema
+vue_detect -> unified_schema
+
+## Output
+unified_schema -> knowledge_graph [Tier 2: Knowledge Graph]
+unified_schema -> context_layer [Tier 3: Development Context]
+
+# Style
+theme: hierarchical
+layout: tree
+colors:
+  - orchestrator: #FF6B35
+  - db_crawler: #4A90E2
+  - api_crawler: #7B1FA2
+  - ui_crawler: #00C853
+  - unified_schema: #FFD600
+  - knowledge_graph: #00BCD4
+```
+
+**Alternative text prompt:**
+"Create a hierarchical tree diagram showing Crawler Orchestration System. TOP: Workspace Discovery Request feeds Crawler Orchestration Engine (orange box). SECOND LEVEL: Five crawler types branch out: Database Crawler (blue), API Crawler (purple), UI Framework Crawler (green), Code Structure Crawler, Configuration Crawler. THIRD LEVEL: Each crawler branches to specific technologies - Database: SQL (PostgreSQL, MySQL), NoSQL (MongoDB, Redis), ORM (Entity Framework). API: REST (Swagger), GraphQL, gRPC. UI: React (JSX/TSX), Angular (TypeScript), Vue (SFC). CONVERGENCE: All discoveries converge to Unified Workspace Schema (yellow central node). BOTTOM: Schema feeds two destinations: Tier 2 Knowledge Graph and Tier 3 Development Context (cyan boxes). Style: Technical tree diagram, AWS architecture style, professional hierarchy. Tool: Napkin.ai"
+
+---
+
+### Diagram 27: Human-Readable Documentation System (Napkin.ai Format)
+
+```napkin
+# Human-Readable Documentation Architecture
+
+## Source Documents
+tech_source [Technical-CORTEX.md\nTechnical Deep-Dive]
+story_source [Awakening Of CORTEX.md\nNarrative Story]
+history_source [History.md\nEvolution Timeline]
+image_source [Image-Prompts.md\nDiagram Prompts]
+
+## Doc Refresh Plugin
+tech_source -> doc_plugin [Doc Refresh Plugin]
+story_source -> doc_plugin
+history_source -> doc_plugin
+image_source -> doc_plugin
+
+## Design Context
+design_docs [CORTEX 2.0 Design\n37 documents] -> doc_plugin
+
+## Generation Process
+doc_plugin -> consolidator [Content Consolidator\n95% story / 5% technical]
+consolidator -> image_integrator [Image Integration\nContextual placement]
+image_integrator -> flow_optimizer [Cohesive Flow\nProgressive disclosure]
+
+## Output Documents
+flow_optimizer -> awakening_doc [THE-AWAKENING-OF-CORTEX.md\nConsolidated Story + Tech + Images]
+flow_optimizer -> rulebook_doc [CORTEX-RULEBOOK.md\n33 Rules in Plain English]
+flow_optimizer -> features_doc [CORTEX-FEATURES.md\nGranular Feature List]
+
+## Image Generation
+image_source -> napkin [Napkin.ai]
+napkin -> diagrams [Generated Diagrams\nSystem architecture, flows, comparisons]
+diagrams -> image_integrator
+
+## Synchronization
+design_docs -> sync_checker [Sync Validator]
+awakening_doc -> sync_checker
+rulebook_doc -> sync_checker
+features_doc -> sync_checker
+sync_checker -> auto_update [Auto-Update Trigger]
+auto_update -> doc_plugin
+
+# Style
+theme: workflow
+layout: flow
+colors:
+  - doc_plugin: #FF6B35
+  - consolidator: #4A90E2
+  - awakening_doc: #00C853
+  - napkin: #7B1FA2
+  - sync_checker: #FFD600
+```
+
+**Alternative text prompt:**
+"Create a workflow diagram showing Human-Readable Documentation System. LEFT: Four source documents (Technical-CORTEX.md, Awakening Of CORTEX.md, History.md, Image-Prompts.md) plus CORTEX 2.0 Design (37 documents) all feeding into Doc Refresh Plugin (orange box). CENTER: Plugin flows through generation process: Content Consolidator (95% story/5% technical) → Image Integration (contextual placement) → Cohesive Flow (progressive disclosure). RIGHT: Three output documents: THE-AWAKENING-OF-CORTEX.md (consolidated story+tech+images), CORTEX-RULEBOOK.md (33 rules plain English), CORTEX-FEATURES.md (granular features) - all green boxes. PARALLEL FLOW: Image-Prompts.md feeds Napkin.ai (purple) generating diagrams feeding back to Image Integration. BOTTOM: Sync Validator (yellow) monitors design docs and output docs, triggering auto-update back to plugin when out of sync. Style: Professional workflow diagram, data pipeline visualization. Tool: Napkin.ai"
+
+---
+
+## 🛠️ Napkin.ai Usage Guidelines
+
+**Format:** Node-based syntax optimized for Napkin.ai rendering
+
+**Basic Syntax:**
+```napkin
+node_id [Node Label]
+node1 -> node2 [Edge Label]
+
+# Style
+theme: professional|flowchart|comparison|workflow
+layout: hierarchical|tree|side-by-side|flow|top-down
+colors:
+  - node_id: #HEX_COLOR
+```
+
+**Best Practices:**
+1. Use descriptive node IDs (snake_case)
+2. Keep labels concise (max 3-4 words)
+3. Add technical details in labels (\n for multi-line)
+4. Specify theme and layout for optimal rendering
+5. Use consistent color coding across related diagrams
+
+**Color Palette (CORTEX Standard):**
+- Orange (#FF6B35): Core engines, orchestrators
+- Blue (#4A90E2): Analysis, intelligence layers
+- Purple (#7B1FA2): Communication, APIs, caching
+- Green (#00C853): Success states, outputs
+- Yellow (#FFD600): Metrics, monitoring
+- Cyan (#00BCD4): Storage, persistence
+- Red (#D32F2F): Error states, old/deprecated
+
+**Tool:** Napkin.ai (https://napkin.ai)  
+**Alternative:** Mermaid.js, Draw.io, Lucidchart
+
+---
+
+**Last Updated:** November 9, 2025 via Documentation Refresh Plugin  
+**Version:** 2.1 (Technical Diagrams + Napkin.ai Format)  
 **Purpose:** System architecture visualization for CORTEX design documentation

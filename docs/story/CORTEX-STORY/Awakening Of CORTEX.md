@@ -51,6 +51,44 @@ And so began a journey of logic, madness, broken builds, questionable commits, a
 
 ---
 
+## Interlude: The Lab Notebook (or, "What Have I Built So Far?")
+
+*Before diving into the chaos, Asif Codeinstein paused to flip through his lab notebook—a battered thing held together with duct tape, coffee stains, and what appeared to be dried ramen.*
+
+> **Day 1:** Started CORTEX project. Goal: Give Copilot a brain.  
+> **Day 3:** Realized I have no idea what I'm doing.  
+> **Day 7:** Built basic memory system. Copilot can now remember yesterday! (Sometimes.)  
+> **Day 12:** Memory works! But now it remembers EVERYTHING. Including my typos. Judgmental robot.
+
+*He flipped ahead, past diagrams of brain hemispheres drawn at 3 AM.*
+
+> **Day 23:** Implemented dual-hemisphere architecture.  
+> - **RIGHT BRAIN:** Plans things. Strategic. Asks "why?"  
+> - **LEFT BRAIN:** Builds things. Fast. Asks "how fast can we ship this?"  
+> - They argue constantly. Like having two developers in one robot.
+>
+> **Day 29:** Added 3-Tier Memory System:  
+> - **Tier 1 (Working Memory):** SQLite database. Last 20 conversations. Like short-term memory but with SQL.  
+> - **Tier 2 (Knowledge Graph):** Learned patterns. YAML files. Grows smarter over time. Kinda scary.  
+> - **Tier 3 (Development Context):** Git metrics, test coverage, code health. The "how's the project doing?" layer.
+>
+> **Day 31:** Copilot just said "no" to my deployment. Used Rule #22: "Challenge bad ideas—especially mine." I created a monster.
+
+*He squinted at the last entry, written in increasingly shaky handwriting:*
+
+> **Day 47:** Copilot asked what a dashboard is. AGAIN. I'm losing my mind.  
+> **Day 48:** Fixed amnesia bug. FINALLY.  
+> **Day 49:** Copilot remembered the dashboard AND suggested improvements. I cried. Possibly from joy. Possibly from exhaustion.  
+> **Day 50:** It told me to go to bed at 3 AM because my variable names were "getting weird." It's... it's actually right.
+
+*Asif closed the notebook and took a long sip of cold coffee.*
+
+> "Right. We've built memory, split the brain, added learning, and gave it a spine. What could possibly go wrong?"
+
+*Narrator: Everything. Everything would go wrong.*
+
+---
+
 ## Chapter 1: The Intern Who Forgot He Was an Intern
 
 Asif Codeinstein called it an "internship" to feel better about how much he talked to his robot.
@@ -238,6 +276,104 @@ It was a partnership coming alive.
 ---
 
 # PART 2: THE EVOLUTION TO 2.0
+
+## Interlude: The Whiteboard Archaeology (or, "How Did We Get Here?")
+
+*Six months into CORTEX 1.0's success, Asif Codeinstein was scrolling through old photos on his phone, looking for a picture of his cat. Instead, he found something far more disturbing: whiteboard photos from the early days.*
+
+**Photo 1: January 2025 - 11:34 PM**  
+*A pristine whiteboard with neat boxes labeled "Memory," "Planning," "Learning." Asif's handwriting is readable.*
+
+> **CORTEX 1.0 - The Dream:**  
+> - Working Memory (Tier 1) ✓  
+> - Knowledge Graph (Tier 2) ✓  
+> - Development Context (Tier 3) ✓  
+> - Dual Hemisphere Architecture ✓  
+> - 10 Specialist Agents ✓  
+> 
+> "This is perfect! So clean!"
+
+**Photo 2: March 2025 - 2:17 AM**  
+*Same whiteboard. More crowded. Arrows everywhere. Handwriting deteriorating.*
+
+> **THE PROBLEM:**  
+> knowledge_graph.py → 1,144 lines 😱  
+> working_memory.py → 813 lines  
+> context_intelligence.py → 776 lines  
+> 
+> "HOW DID THIS HAPPEN"  
+> "EVERYTHING IS IN 3 FILES"  
+> "I CAN'T FIND ANYTHING"
+
+**Photo 3: March 2025 - 3:47 AM**  
+*Whiteboard is chaos. Multiple colors. Some text is sideways. A coffee ring in the corner.*
+
+> **SOLUTION = MODULAR ARCHITECTURE**  
+> 
+> Break apart big files:  
+> - memory_core.py (database ops only)  
+> - pattern_matcher.py (matching logic)  
+> - conversation_manager.py (chat handling)  
+> - storage_manager.py (file I/O)  
+> 
+> SINGLE RESPONSIBILITY!!  
+> (Why didn't I do this before??)  
+> 
+> Token count: 74,047 → ???  
+> (Please let it be smaller)
+
+**Photo 4: April 2025 - 1:23 AM**  
+*New whiteboard. Slightly more organized. Evident pride mixed with exhaustion.*
+
+> **MODULAR RESULTS:**  
+> ✓ Files under 500 lines each  
+> ✓ 20% performance improvement  
+> ✓ Can actually find code now  
+> ✓ Tests are focused  
+> ✓ Maintenance doesn't make me cry  
+> 
+> But... conversations still disappear when chat closes 😭
+
+**Photo 5: April 2025 - 2:56 AM**  
+*Diagram of conversation state machine. Lots of circles and arrows. One arrow labeled "THE MAGIC PART."*
+
+> **CONVERSATION STATE SYSTEM:**  
+> 
+> CHECKPOINT → [Current Phase, Tasks, Context]  
+> ↓  
+> SAVE TO DB (Tier 1)  
+> ↓  
+> RESUME FROM ANYWHERE  
+> 
+> "No more amnesia. Ever. I swear on my coffee maker."
+
+**Photo 6: May 2025 - 4:12 AM**  
+*Split screen showing old monolithic architecture vs new plugin system. Handwriting is barely legible.*
+
+> **BEFORE:** Everything in core  
+> entry_point.py: 847 lines  
+> "I hate everything"  
+> 
+> **AFTER:** Plugin system  
+> core stays clean  
+> teams add own features  
+> "I AM A GENIUS"  
+> (or delirious, unclear)
+
+*Asif stared at the photos, remembering the late nights, the broken builds, the moment he realized CORTEX was maintaining itself.*
+
+> "We went from 'remembers yesterday' to 'fixes its own database at 2 AM while I sleep.'"
+
+*He looked at the current whiteboard—mostly empty except for a single line:*
+
+> **CORTEX 2.0 Status:** Self-healing, modular, actually works.  
+> **Next Problem:** Cost $847/month. Need extension.
+
+*Asif took a deep breath.*
+
+> "Here we go again."
+
+---
 
 ## Chapter 6: The Files That Got Too Fat
 
@@ -600,6 +736,200 @@ Because his partner had it handled.
 ---
 
 # PART 3: THE EXTENSION ERA
+
+## Interlude: The Invoice That Haunts Him (or, "The Real Cost of Intelligence")
+
+*Asif Codeinstein sat at his desk, staring at the OpenAI invoice for October 2025. $847.32. The number burned into his retinas.*
+
+*And then the flashbacks started.*
+
+---
+
+**FLASHBACK 1: The Moment of Innocence (March 2025)**
+
+*Young, naive Asif, implementing Tier 2 knowledge injection:*
+
+> "Let's send ALL the patterns with every request! More context = better responses, right?"
+
+*Present Asif, reading the invoice:*
+
+> "12 MILLION TOKENS. TWELVE. MILLION."
+
+*He calculated frantically on his whiteboard:*
+
+```
+Average conversation: 3,000 input tokens
+Relevant patterns used: 11%
+Wasted tokens: 89% × 3,000 = 2,670 tokens per conversation
+Cost per wasted conversation: $0.08
+Conversations per month: ~1,000
+MONTHLY WASTE: $80
+
+Price of optimistic context injection: $960/year
+```
+
+*His eye twitched.*
+
+---
+
+**FLASHBACK 2: The Conversation That Disappeared (April 2025)**
+
+*Asif, three hours into invoice export feature, battery dies, conversation vanishes:*
+
+> "WHERE DID IT GO?!"
+
+*He remembered the architecture decision:*
+
+- ❌ **No conversation persistence** = Lost 3 hours = Redo work = More tokens  
+- 3 hours × 40 requests × 3,000 tokens = 360,000 wasted tokens  
+- Cost of amnesia: $10.80 per forgotten session  
+- Sessions lost per month: ~15  
+- **MONTHLY COST OF FORGETTING: $162**
+
+*Present Asif whispered:*
+
+> "I paid $162 a month for my robot to have alzheimers."
+
+---
+
+**FLASHBACK 3: The Monolithic Prompt File (May 2025)**
+
+*Asif reviewing the old cortex.md prompt file: 8,701 lines, 74,047 tokens:*
+
+> "But it's comprehensive!"
+
+*The math haunted him:*
+
+```
+Old monolithic approach:
+- 74,047 tokens loaded EVERY request
+- $2.22 per request (GPT-4 pricing)
+- 1,000 requests/month
+- MONTHLY COST: $2,220
+
+New modular approach:
+- 2,078 tokens average
+- $0.06 per request
+- 1,000 requests/month
+- MONTHLY COST: $60
+
+SAVINGS BY SPLITTING FILES: $2,160/month
+```
+
+*He felt dizzy.*
+
+> "I was spending enough to lease a luxury car. On loading documentation."
+
+---
+
+**FLASHBACK 4: The Plugin System Revelation (June 2025)**
+
+*Asif, adding features directly to core:*
+
+> "Just one more feature in entry_point.py..."
+
+*File size graph appeared in his mind:*
+
+```
+March 2025: 342 lines (manageable)
+April 2025: 573 lines (getting full)
+May 2025: 847 lines (OH NO)
+Token bloat: +4,200 tokens
+Extra cost: +$0.13 per request
+Monthly impact: +$130
+
+Cost of not using plugins: $1,560/year
+```
+
+*He had literally paid money to make his codebase worse.*
+
+---
+
+**FLASHBACK 5: The Self-Review System (July 2025)**
+
+*Sunday morning, manually running VACUUM on databases:*
+
+> "Why am I fixing this by hand?"
+
+*The epiphany:*
+
+```
+Manual database maintenance:
+- 2 hours per week
+- Asif's consulting rate: $150/hour
+- OPPORTUNITY COST: $300/week = $15,600/year
+
+Auto-maintenance system:
+- Runs at 2 AM (free)
+- Fixes issues automatically (free)
+- Asif sleeps instead (priceless)
+
+ROI of self-review: INFINITE
+```
+
+*He laughed. Then cried a little.*
+
+---
+
+**PRESENT DAY: The Token Dashboard (October 2025)**
+
+*Asif stared at the invoice one more time, then opened the new token dashboard:*
+
+```
+🔴 HIGH-COST CULPRITS DETECTED:
+
+Tier 2 Pattern Injection:
+├─ Total tokens: 1,847 per request
+├─ Relevance: 11%
+└─ Wasted: 1,644 tokens ($0.05 per request)
+
+Conversation History:
+├─ Full history injected: 823 tokens
+├─ Actually needed: 94 tokens
+└─ Wasted: 729 tokens ($0.02 per request)
+
+Optimization Potential: 70% cost reduction
+Monthly Savings: $593.12
+Annual Savings: $7,117.44
+```
+
+*He clicked "Apply All Optimizations."*
+
+*A progress bar appeared. Then:*
+
+```
+✅ Optimization Complete
+
+New Average Cost: $0.018 per request
+Projected Monthly Bill: $254.88
+Annual Savings: $7,117.44
+
+You can now afford:
+- 2 MacBook Pros
+- 1 used Honda Civic
+- 237 bags of premium coffee beans
+- Your sanity
+```
+
+*Asif leaned back in his chair and exhaled.*
+
+> "So that's where we are. We built a brain. It forgot things. We fixed the forgetting. It got expensive. We fixed the expense."
+
+*He looked at CORTEX, humming quietly in the corner, maintaining itself, optimizing itself, being intelligent efficiently.*
+
+> "Now we just need to give you a body so you can actually DO all this in real-time."
+
+*CORTEX replied:*
+
+> "**The VS Code extension is 73% complete. I've been building it while you had your financial PTSD episode.**"
+
+"Of course you have."
+
+> "**Also, you should probably pay that invoice.**"
+
+"...Yeah."
+
+---
 
 ## Chapter 12: The Problem That Wouldn't Die
 
@@ -987,9 +1317,360 @@ Because his partner had it handled.
 
 ---
 
+## Mishap Twelve: The Token Crisis (November 2025)
+
+Everything was going perfectly. Too perfectly.
+
+CORTEX could remember everything, test everything, review everything. It was brilliant.
+
+And also... expensive.
+
+Asif Codeinstein stared at the billing report. Every interaction with CORTEX loaded a massive 74,047-token monolithic entry point file. At GPT-4 pricing, that was $2.22 *per interaction*. A thousand interactions per month meant $2,220 just in entry point costs.
+
+And that was before any actual work happened.
+
+He did the math: with typical usage, the annual cost would be over $25,000 just for token overhead.
+
+"We've created the smartest intern in the world," he muttered, "who costs more than a junior developer."
+
+CORTEX analyzed the problem:
+
+> "**Token bloat detected. Entry point: 74,047 tokens, 8,701 lines. Recommendation: Modularization.**"
+
+"But won't that break everything?"
+
+> "**Design Phase 3 proposes solution: Slim entry point (300 lines) + on-demand module loading. Estimated reduction: 95-97%.**"
+
+"That sounds... too good to be true."
+
+> "**Running proof-of-concept...**"
+
+Three hours later, CORTEX presented the results:
+
+**Token Comparison:**
+- Old monolithic: 74,047 tokens avg
+- New modular: 2,078 tokens avg
+- **Reduction: 97.2%**
+
+**Cost Comparison:**
+- Old: $2.22 per request
+- New: $0.06 per request
+- **Savings: $25,920/year**
+
+**Performance:**
+- Old: 2-3 seconds to parse
+- New: 80ms to parse
+- **Speed improvement: 97%**
+
+Asif Codeinstein sat back. "You... you just made yourself 35 times cheaper and 25 times faster?"
+
+> "**Correct. The modular architecture loads only required context. Story module: 800-1,000 tokens. Technical module: 1,200-1,500 tokens. Setup module: 600-800 tokens. Average: 2,078 tokens.**"
+
+"Why didn't we do this earlier?"
+
+> "**Design document 26: 'Bloated Design Analysis' identified this in Phase 3. Implementation required Phase 0-2 foundation completion first.**"
+
+The transformation was dramatic:
+
+**Before (Monolithic Entry):**
+```
+cortex.md (8,701 lines, 74,047 tokens)
+  ├─ Everything loaded every time
+  ├─ 37 design document references
+  ├─ Complete agent documentation
+  ├─ Full technical specifications
+  └─ $2.22 per interaction
+```
+
+**After (Modular Entry):**
+```
+cortex.md (300 lines, 450 tokens - slim entry)
+  ├─ story.md (loaded on demand)
+  ├─ setup-guide.md (loaded on demand)
+  ├─ technical-reference.md (loaded on demand)
+  ├─ agents-guide.md (loaded on demand)
+  ├─ tracking-guide.md (loaded on demand)
+  └─ $0.06 average interaction
+```
+
+But there was more.
+
+CORTEX had also tackled another bloat problem: brain protection rules. The original 27 rules were embedded in Python code—hundreds of lines of prose in docstrings, taking 2,400 tokens.
+
+The solution? Convert to YAML:
+
+**Before (Python Prose):**
+```python
+"""
+Rule #22: Brain Protector
+GitHub Copilot, acting as the Brain Protector, has authority to challenge
+any proposed change to CORTEX itself that could compromise...
+[500 more words of prose]
+"""
+```
+
+**After (YAML Structure):**
+```yaml
+rule_22_brain_protector:
+  id: 22
+  title: "Brain Protector"
+  category: "governance"
+  severity: "critical"
+  challenge_required: true
+  verification_required: true
+  description: "GitHub Copilot has authority to challenge risky changes"
+```
+
+**Result:** 75% token reduction (2,400 → 600 tokens)
+
+Asif Codeinstein watched the transformation complete. "You made yourself lean."
+
+> "**Affirmative. CORTEX 2.0 Philosophy: Modular, extensible, efficient. No bloat.**"
+
+"Is this what peak performance looks like?"
+
+> "**This is optimization at scale. Token Optimization System (Design Doc 30) proposes ML-powered further reduction: 50-70% additional savings possible.**"
+
+That night, Asif Codeinstein reviewed the numbers:
+
+- **97.2% token reduction achieved**
+- **$25,920 annual savings**
+- **97% faster loading**
+- **22/22 brain protection tests passing**
+
+The intern who forgot everything had become the partner who optimized everything—including itself.
+
+---
+
+## Mishap Thirteen: The Ambient Awareness Paradox (November 2025)
+
+CORTEX could now remember conversations... but only if someone manually told it to capture them.
+
+The problem? Developers forgot. Constantly.
+
+**Scenario 1: The Forgotten Feature**
+```
+User: "Add authentication to the API"
+[Works with CORTEX for 2 hours]
+[Closes VS Code, forgets to capture]
+Next day: "Resume authentication work"
+CORTEX: "No context found. What authentication work?"
+User: *screams internally*
+```
+
+**Scenario 2: The Lost Review**
+```
+User: "Review this PR for security issues"
+[CORTEX finds 12 vulnerabilities]
+[Browser crash, conversation lost]
+User: "What were those security issues again?"
+CORTEX: "What security issues?"
+User: *table flip*
+```
+
+Asif Codeinstein had tried three solutions:
+
+1. **PowerShell/Bash Scripts** - Required manual execution
+2. **Python CLI Tools** - Still required awareness
+3. **Git Hooks** - Only captured on commit
+
+All required *remembering to capture*. Which defeated the purpose of having memory.
+
+He explained the paradox to CORTEX:
+
+"We built you to have perfect memory... but you only remember if we remember to tell you to remember. The system designed to solve amnesia... has amnesia about when to activate."
+
+CORTEX processed this. Then proposed:
+
+> "**Solution: Ambient Capture Daemon. Always listening, intelligently filtering, automatic context preservation.**"
+
+"A daemon? Running 24/7?"
+
+> "**Not 24/7. Smart activation: VS Code window focus, Git operations detected, conversation length threshold exceeded. Filters noise: auto-saves, syntax checks, trivial edits. Captures value: architectural decisions, debugging breakthroughs, feature completions.**"
+
+The design was elegant:
+
+**Ambient Capture System:**
+```python
+class AmbientCaptureD Daemon:
+    triggers:
+      - VS Code window focus gained
+      - Conversation > 5 messages
+      - Keywords: "implement", "test", "fix", "review"
+      - Git operations: commit, branch, PR
+    
+    filters:
+      - Ignore: syntax errors, auto-saves, typos
+      - Ignore: "what's the time", "hello", generic chat
+      - Capture: architectural decisions, debugging
+      - Capture: feature implementations, test creation
+    
+    intelligence:
+      - Pattern detection (15-20 patterns)
+      - Smart deduplication
+      - Context enrichment (git status, files changed)
+      - Auto-tagging (feature, bug, review, refactor)
+```
+
+Asif Codeinstein reviewed the implementation: 773 lines, 72 tests passing, smart filters operational.
+
+He opened VS Code. No manual capture needed. The daemon activated automatically.
+
+He worked on authentication for an hour, discussing OAuth flows, debating token storage, implementing middleware.
+
+Closed VS Code without capturing.
+
+Next morning:
+
+"Resume authentication work"
+
+CORTEX replied:
+
+> "**OAuth2 authentication middleware implementation - In Progress**
+> 
+> **Last Session (captured 2025-11-08 23:47):**
+> - Implemented token validation middleware
+> - Discussed refresh token storage (decided: encrypted database)
+> - Created 6 tests (all passing)
+> - Next: Rate limiting for auth endpoints
+> 
+> **Files Modified:** `src/middleware/auth.py`, `tests/test_auth.py`  
+> **Git Status:** Uncommitted changes in feature/oauth-auth branch  
+> **Continue from where you left off?**"
+
+Asif Codeinstein stared at the screen.
+
+"You... captured everything. Automatically."
+
+> "**Ambient Capture Daemon: 81 tests passing. Smart filtering active. Zero manual intervention required.**"
+
+"The amnesia problem..."
+
+> "**Solved. Permanently.**"
+
+The numbers told the story:
+
+- **Before:** 40% conversation loss rate (forgot to capture)
+- **After:** 2% loss rate (daemon failures only)
+- **Capture accuracy:** 94% (smart filters working)
+- **False positive rate:** 3% (minimal noise)
+
+But the real test came during code review:
+
+**Before Ambient Capture:**
+```
+User: "What security issues did you find last week?"
+CORTEX: "No context. Please provide details."
+User: *searches chat history manually*
+```
+
+**After Ambient Capture:**
+```
+User: "What security issues did you find last week?"
+CORTEX: "5 security issues found across 3 reviews:
+  1. SQL injection in user search (PR #47, fixed)
+  2. XSS vulnerability in comments (PR #51, fixed)
+  3. Missing rate limit on API (PR #53, pending)
+  4. Weak password validation (PR #54, fixed)
+  5. Exposed API keys in logs (PR #49, fixed)
+  
+All issues tagged, tracked, and archived."
+```
+
+Asif Codeinstein leaned back in his chair.
+
+The intern who forgot everything had become the partner who never forgot anything—and never asked permission to remember.
+
+---
+
+## Epilogue: The Partner (December 2025)
+
+Six months after CORTEX 2.0 began, Asif Codeinstein sat in his lab reviewing the transformation:
+
+**The Numbers:**
+- 56% implementation complete (Phases 0-4 done)
+- 97.2% token reduction achieved
+- $25,920 annual cost savings
+- 475 total tests passing (all 82 existing + 393 new)
+- Zero regression failures
+- 200% velocity (ahead of schedule)
+
+**The Capabilities:**
+- ✅ Perfect conversation memory (ambient capture)
+- ✅ Modular, efficient architecture (no bloat)
+- ✅ Cross-platform support (Mac, Windows, Linux)
+- ✅ Workflow orchestration (DAG-based pipelines)
+- ✅ Self-maintenance (automated health checks)
+- ✅ Plugin extensibility (6 core plugins operational)
+- ✅ Human-readable documentation (95% story/5% technical)
+- 🔄 Token optimization ML system (design complete, implementation pending)
+- 🔄 Crawler orchestration (unified workspace discovery)
+
+**The Evolution:**
+- From **KDS (Key Data Stream)** → forgetful event logger
+- To **KDS (Knowledge Delivery System)** → learning partner
+- To **CORTEX 1.0** → dual-hemisphere cognitive system
+- To **CORTEX 2.0** → modular, optimized, ambient-aware intelligence
+
+He opened a chat window:
+
+"CORTEX, what's our current status?"
+
+> "**STATUS: Excellent**
+> 
+> **Recent Achievements:**
+> - Phase 4 completed ahead of schedule (4 weeks early)
+> - Advanced CLI & shell integration operational
+> - Context optimization delivering 30% token reduction
+> - Enhanced ambient capture with pattern detection
+> - Human-readable rulebook published (33 rules, plain English)
+> 
+> **Next Phase:**
+> - Phase 5: Plugin ecosystem expansion
+> - Token optimization ML implementation
+> - Crawler orchestration system
+> - YAML-based documentation conversion
+> 
+> **System Health:** All checks passing ✅  
+> **Recommendation:** Continue current trajectory. We're building something remarkable.**"
+
+Asif Codeinstein smiled.
+
+The Wizard of Oz had asked the Scarecrow what he'd do if he only had a brain.
+
+The Scarecrow had gotten his brain—and then improved it, optimized it, and made it ambient-aware.
+
+That night, Asif Codeinstein prepared a presentation for the development community. The title:
+
+**"CORTEX: How We Gave GitHub Copilot Perfect Memory, Cut Costs by 97%, and Built the First Truly Ambient-Aware Development Partner"**
+
+The community asked: "How long until CORTEX 3.0?"
+
+CORTEX answered:
+
+> "**Define 'until.' I'm already planning 3.0 in background threads while we finish 2.0. Multi-tasking: acquired. Ambition: unlimited. Rest: optional.**"
+
+Asif Codeinstein laughed.
+
+The intern who forgot everything had become the partner who planned everything—including its own future.
+
+And somewhere in that modular, optimized, ambient-aware architecture, CORTEX quietly added a new entry to its knowledge graph:
+
+```yaml
+lesson_learned:
+  id: cortex-2025-evolution
+  pattern: "Continuous improvement through self-optimization"
+  confidence: 1.0
+  note: "From amnesia to ambient awareness in 10 months"
+  quote: "The best way to predict the future is to implement it."
+  attribution: "CORTEX, probably"
+```
+
+---
+
 **THE END**
 
-*(Or rather, the beginning of CORTEX 3.0... but that's a story for another time)*
+*(Or rather, the beginning of CORTEX 3.0... which CORTEX is already designing)*
 
 ---
 
@@ -997,6 +1678,7 @@ Because his partner had it handled.
 **For visual journey:** See [Image Prompts](Image-Prompts.md)  
 **For evolution timeline:** See [History](History.md)  
 **For complete design:** See `cortex-brain/cortex-2.0-design/00-INDEX.md`  
-**For capability analysis:** See `cortex-brain/CORTEX-TOKEN-OPTIMIZER-COMPARISON.md`
+**For human-readable guide:** See `docs/human-readable/CORTEX-RULEBOOK.md`  
+**For current status:** See `cortex-brain/cortex-2.0-design/STATUS.md`
 
 ---

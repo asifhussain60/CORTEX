@@ -31,7 +31,7 @@ class Plugin(BasePlugin):
         return PluginMetadata(
             plugin_id="doc_refresh_plugin",
             name="Documentation Refresh",
-            version="1.0.0",
+            version="2.0.0",
             category=PluginCategory.DOCUMENTATION,
             priority=PluginPriority.HIGH,
             description="Refreshes synchronized documentation files based on CORTEX 2.0 design",
@@ -57,6 +57,32 @@ class Plugin(BasePlugin):
                     "backup_before_refresh": {
                         "type": "boolean",
                         "description": "Create backups before refresh",
+                        "default": True
+                    },
+                    "story_recap_enabled": {
+                        "type": "boolean",
+                        "description": "Auto-generate technical recaps for story sections",
+                        "default": True
+                    },
+                    "recap_style": {
+                        "type": "string",
+                        "description": "Style for technical recaps",
+                        "enum": ["lab_notebook", "whiteboard", "invoice_trauma", "git_log", "coffee_therapy"],
+                        "default": "lab_notebook"
+                    },
+                    "validate_narrative_flow": {
+                        "type": "boolean",
+                        "description": "Validate narrative transitions and flow",
+                        "default": True
+                    },
+                    "enforce_comedy_tone": {
+                        "type": "boolean",
+                        "description": "Ensure technical recaps maintain comedic tone",
+                        "default": True
+                    },
+                    "auto_transition_generation": {
+                        "type": "boolean",
+                        "description": "Auto-suggest transitions between recaps and chapters",
                         "default": True
                     }
                 }
@@ -209,12 +235,355 @@ class Plugin(BasePlugin):
         }
     
     def _refresh_story_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Awakening Of CORTEX.md story"""
-        return {
-            "success": True,
-            "message": "Story doc refresh scheduled",
-            "action_required": "Extend story with CORTEX 2.0 chapters"
+        """Refresh Awakening Of CORTEX.md story with technical recaps"""
+        try:
+            # Check if story recap is enabled
+            if not self.config.get("story_recap_enabled", True):
+                return {
+                    "success": True,
+                    "message": "Story recap generation disabled in config"
+                }
+            
+            # Load existing story for narrative analysis
+            existing_story = None
+            if file_path.exists():
+                existing_story = file_path.read_text(encoding="utf-8")
+            
+            # Detect technical milestones from design context
+            milestones = self._extract_technical_milestones(design_context)
+            
+            # Analyze narrative structure
+            narrative_analysis = self._analyze_narrative_flow(existing_story) if existing_story else {}
+            
+            # Generate recap suggestions based on configured style
+            recap_style = self.config.get("recap_style", "lab_notebook")
+            recap_suggestions = self._generate_recap_suggestions(
+                milestones, 
+                recap_style,
+                narrative_analysis
+            )
+            
+            # Validate narrative continuity
+            flow_validation = self._validate_narrative_flow(
+                existing_story, 
+                recap_suggestions,
+                narrative_analysis
+            ) if existing_story else {"valid": True, "warnings": []}
+            
+            return {
+                "success": True,
+                "message": "Story doc refresh complete with narrative flow analysis",
+                "recap_suggestions": recap_suggestions,
+                "milestones_detected": len(milestones),
+                "narrative_analysis": narrative_analysis,
+                "flow_validation": flow_validation,
+                "action_required": "Review suggested recap insertions"
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to refresh story doc: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+    
+    def _extract_technical_milestones(self, design_context: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Extract technical milestones from design documents"""
+        milestones = []
+        
+        # Parse design documents for key features
+        milestone_keywords = [
+            "working memory", "tier 1", "conversation tracking",
+            "knowledge graph", "tier 2", "pattern learning",
+            "development context", "tier 3", "code health",
+            "dual hemisphere", "agent system", "left brain", "right brain",
+            "plugin system", "extensibility", "modular architecture",
+            "conversation state", "checkpoint", "resume",
+            "token optimization", "cost reduction",
+            "self-review", "auto-maintenance", "health monitoring",
+            "workflow pipeline", "declarative workflows",
+            "knowledge boundaries", "namespace isolation"
+        ]
+        
+        for doc in design_context.get("design_docs", []):
+            content = doc.get("content", "").lower()
+            for keyword in milestone_keywords:
+                if keyword in content:
+                    milestones.append({
+                        "keyword": keyword,
+                        "document": doc.get("name"),
+                        "type": self._categorize_milestone(keyword)
+                    })
+        
+        return milestones
+    
+    def _categorize_milestone(self, keyword: str) -> str:
+        """Categorize milestone by system component"""
+        if any(x in keyword for x in ["tier 1", "working memory", "conversation"]):
+            return "memory_system"
+        elif any(x in keyword for x in ["tier 2", "knowledge graph", "pattern"]):
+            return "learning_system"
+        elif any(x in keyword for x in ["tier 3", "development context", "health"]):
+            return "context_system"
+        elif any(x in keyword for x in ["agent", "hemisphere", "brain"]):
+            return "cognitive_architecture"
+        elif any(x in keyword for x in ["plugin", "modular", "extensibility"]):
+            return "plugin_system"
+        elif any(x in keyword for x in ["token", "cost", "optimization"]):
+            return "performance"
+        else:
+            return "other"
+    
+    def _generate_recap_suggestions(self, milestones: List[Dict[str, Any]], style: str, narrative_analysis: Dict[str, Any] = None) -> List[str]:
+        """Generate recap text suggestions based on style, milestones, and narrative flow"""
+        suggestions = []
+        
+        # Group milestones by type
+        grouped = {}
+        for milestone in milestones:
+            milestone_type = milestone["type"]
+            if milestone_type not in grouped:
+                grouped[milestone_type] = []
+            grouped[milestone_type].append(milestone["keyword"])
+        
+        # Add narrative flow guidance if available
+        if narrative_analysis:
+            suggestions.append(f"📖 Story Structure Detected: {narrative_analysis.get('structure', 'Unknown')}")
+            suggestions.append(f"🎭 Current Tone: {narrative_analysis.get('tone', 'Unknown')}")
+            suggestions.append(f"⚠️ Narrative Warnings: {len(narrative_analysis.get('warnings', []))}")
+        
+        # Generate suggestions based on style
+        if style == "lab_notebook":
+            suggestions.append("✅ Lab Notebook Format:")
+            suggestions.append("  - Use dated journal entries (Day 1, Day 7, etc.)")
+            suggestions.append("  - Include coffee stains and ramen references")
+            suggestions.append("  - Show progression from confusion to breakthrough")
+            suggestions.append("  - End with 'What could possibly go wrong?' → narrator warning")
+            suggestions.append("  - Transition: 'Asif closed the notebook...' then into Chapter 1")
+            
+        elif style == "whiteboard":
+            suggestions.append("✅ Whiteboard Archaeology Format:")
+            suggestions.append("  - Use timestamped photos (emphasize 2-4 AM times)")
+            suggestions.append("  - Show handwriting deterioration as stress increases")
+            suggestions.append("  - Include visual elements (coffee rings, sideways text)")
+            suggestions.append("  - Progress from clean → chaotic → resolution")
+            suggestions.append("  - End with current problem tease: 'Next Problem: Cost $847/month'")
+            suggestions.append("  - Transition: 'Asif took a deep breath. Here we go again.' → Chapter start")
+            
+        elif style == "invoice_trauma":
+            suggestions.append("✅ Invoice PTSD Format:")
+            suggestions.append("  - Structure as flashbacks triggered by invoice")
+            suggestions.append("  - Calculate ROI/cost for each architectural decision")
+            suggestions.append("  - Use mathematical proof of poor decisions (funny)")
+            suggestions.append("  - Build from small mistakes → compound disaster → optimization")
+            suggestions.append("  - End with relief: 'You can now afford: Your sanity'")
+            suggestions.append("  - Transition: CORTEX responds → sets up next chapter")
+            
+        elif style == "git_log":
+            suggestions.append("✅ Git Log Format:")
+            suggestions.append("  - Use realistic commit message format")
+            suggestions.append("  - Show increasingly desperate messages over time")
+            suggestions.append("  - Include stats (files changed, insertions, deletions)")
+            suggestions.append("  - Progress: normal commits → panic commits → victory commits")
+            suggestions.append("  - End with 'git status' showing clean working tree")
+            suggestions.append("  - Transition: 'Asif pushed to main...' → next challenge")
+            
+        elif style == "coffee_therapy":
+            suggestions.append("✅ Coffee Therapy Format:")
+            suggestions.append("  - Frame as dialogue with coffee mug (3:47 AM)")
+            suggestions.append("  - Coffee provides judgmental but honest feedback")
+            suggestions.append("  - Technical details revealed through conversation")
+            suggestions.append("  - Coffee's responses: [steams judgmentally], [I told you so steam]")
+            suggestions.append("  - End with Asif taking coffee's advice")
+            suggestions.append("  - Transition: 'He refilled his mug...' → begins work")
+        
+        # Add specific milestone suggestions with narrative integration
+        for milestone_type, keywords in grouped.items():
+            category_name = milestone_type.replace('_', ' ').title()
+            suggestions.append(f"\n📍 {category_name} Milestones to Recap:")
+            suggestions.append(f"  - Keywords: {', '.join(keywords[:5])}")
+            suggestions.append(f"  - Integrate into '{style}' narrative seamlessly")
+            suggestions.append(f"  - Maintain comedy-of-errors tone throughout")
+        
+        # Add narrative continuity guidelines
+        suggestions.append("\n🎬 Narrative Flow Guidelines:")
+        suggestions.append("  - Each recap MUST transition smoothly to next chapter")
+        suggestions.append("  - Last line of recap sets up first line of chapter")
+        suggestions.append("  - Maintain consistent character voice (Asif's desperation/pride)")
+        suggestions.append("  - Technical details wrapped in humor, never dry")
+        suggestions.append("  - Each part builds on previous: Part 1→Part 2→Part 3")
+        suggestions.append("  - Comedy escalates: intern → modular chaos → financial horror")
+        
+        return suggestions
+    
+    def _analyze_narrative_flow(self, story_text: str) -> Dict[str, Any]:
+        """Analyze existing story structure for narrative flow"""
+        analysis = {
+            "structure": "unknown",
+            "parts_detected": 0,
+            "chapters_detected": 0,
+            "interludes_detected": 0,
+            "tone": "unknown",
+            "transitions": [],
+            "warnings": []
         }
+        
+        if not story_text:
+            return analysis
+        
+        # Detect story structure
+        # Count explicit PART headers (only at line start)
+        lines = story_text.split('\n')
+        explicit_parts = sum(1 for line in lines if line.strip().startswith("# PART "))
+        chapters = sum(1 for line in lines if line.strip().startswith("## Chapter "))
+        interludes = sum(1 for line in lines if line.strip().startswith("## Interlude:"))
+        
+        # Detect implicit Part 1 (chapters/interludes before first explicit PART)
+        total_parts = explicit_parts
+        if explicit_parts > 0:
+            # Find line number of first PART
+            first_part_line = next((i for i, line in enumerate(lines) if line.strip().startswith("# PART ")), -1)
+            
+            if first_part_line > 0:
+                # Check if content exists before first explicit PART
+                before_first_part = '\n'.join(lines[:first_part_line])
+                has_chapters_before = any(line.strip().startswith("## Chapter ") for line in lines[:first_part_line])
+                has_interludes_before = any(line.strip().startswith("## Interlude:") for line in lines[:first_part_line])
+                
+                if has_chapters_before or has_interludes_before:
+                    # Implicit Part 1 detected
+                    total_parts = explicit_parts + 1
+        elif chapters > 0 or interludes > 0:
+            # No explicit parts but has chapters/interludes = single part
+            total_parts = 1
+        
+        analysis["parts_detected"] = total_parts
+        analysis["chapters_detected"] = chapters
+        analysis["interludes_detected"] = interludes
+        
+        if total_parts >= 3:
+            analysis["structure"] = "three-act-structure"
+        elif total_parts == 2:
+            analysis["structure"] = "multi-part"
+        elif total_parts == 1:
+            analysis["structure"] = "single-narrative"
+        else:
+            analysis["structure"] = "unknown"
+        
+        # Detect tone markers
+        tone_markers = {
+            "comedy": ["😂", "🤣", "funny", "hilarious", "screamed", "cried"],
+            "technical": ["architecture", "system", "tokens", "database"],
+            "dramatic": ["disaster", "horror", "panic", "crisis"]
+        }
+        
+        tone_scores = {}
+        for tone, markers in tone_markers.items():
+            score = sum(story_text.lower().count(marker.lower()) for marker in markers)
+            tone_scores[tone] = score
+        
+        dominant_tone = max(tone_scores, key=tone_scores.get)
+        analysis["tone"] = f"{dominant_tone} (score: {tone_scores[dominant_tone]})"
+        
+        # Detect transitions (look for transition patterns)
+        transition_patterns = [
+            "Narrator:",
+            "*Asif",
+            "And so began",
+            "Here we go again",
+            "What could possibly go wrong"
+        ]
+        
+        for pattern in transition_patterns:
+            if pattern in story_text:
+                analysis["transitions"].append(pattern)
+        
+        # Check for narrative flow issues
+        if interludes > 0 and interludes != total_parts:
+            analysis["warnings"].append(
+                f"Interlude/Part mismatch: {interludes} interludes but {total_parts} parts"
+            )
+        
+        # Check for abrupt transitions
+        lines = story_text.split('\n')
+        for i in range(len(lines) - 1):
+            if lines[i].startswith("## Chapter") or lines[i].startswith("# PART"):
+                if lines[i-1].strip() and not lines[i-1].startswith("---"):
+                    if not any(trans in lines[i-1] for trans in ["*", ">"]):
+                        analysis["warnings"].append(
+                            f"Potential abrupt transition before: {lines[i][:50]}"
+                        )
+        
+        return analysis
+    
+    def _validate_narrative_flow(self, story_text: str, recap_suggestions: List[str], narrative_analysis: Dict[str, Any]) -> Dict[str, Any]:
+        """Validate that recaps maintain narrative flow"""
+        validation = {
+            "valid": True,
+            "warnings": [],
+            "suggestions": []
+        }
+        
+        # Check if interludes exist
+        if "## Interlude:" not in story_text:
+            validation["warnings"].append("No interludes detected - may need manual insertion")
+        
+        # Check for proper transitions before/after interludes
+        if "## Interlude:" in story_text:
+            # Extract sections around interludes
+            parts = story_text.split("## Interlude:")
+            for i, part in enumerate(parts[1:], 1):
+                lines = part.split('\n')
+                
+                # Check if interlude ends with proper transition
+                last_meaningful_line = None
+                for line in reversed(lines[:100]):  # Check last 100 lines of interlude
+                    if line.strip() and not line.startswith('#'):
+                        last_meaningful_line = line.strip()
+                        break
+                
+                if last_meaningful_line:
+                    # Should end with narrative bridge
+                    transition_markers = [
+                        "*Narrator:",
+                        "*Asif",
+                        "---",
+                        "> \"",
+                        "And so",
+                        "Here we go"
+                    ]
+                    
+                    has_transition = any(marker in last_meaningful_line for marker in transition_markers)
+                    if not has_transition:
+                        validation["warnings"].append(
+                            f"Interlude {i} may lack proper transition to next chapter"
+                        )
+                        validation["suggestions"].append(
+                            f"Add narrative bridge after Interlude {i} (e.g., '*Asif took a deep breath...')"
+                        )
+        
+        # Check for consistent tone
+        if narrative_analysis.get("tone"):
+            tone_type = narrative_analysis["tone"].split()[0]
+            if tone_type not in ["comedy", "technical-comedy"]:
+                validation["warnings"].append(
+                    f"Tone '{tone_type}' may not match CORTEX's comedic style"
+                )
+        
+        # Check for balanced technical vs narrative content
+        if narrative_analysis.get("interludes_detected", 0) > narrative_analysis.get("chapters_detected", 0):
+            validation["warnings"].append(
+                "Too many interludes relative to chapters - may disrupt narrative flow"
+            )
+        
+        # Validate recap suggestions match story structure
+        expected_interludes = narrative_analysis.get("parts_detected", 0)
+        if expected_interludes > 0:
+            validation["suggestions"].append(
+                f"Ensure {expected_interludes} interludes (one per part) for structure consistency"
+            )
+        
+        return validation
     
     def _refresh_image_prompts_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
         """Refresh Image-Prompts.md with TECHNICAL DIAGRAMS (not cartoons)"""
