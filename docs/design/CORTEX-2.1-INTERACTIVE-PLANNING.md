@@ -359,6 +359,449 @@ CORTEX, let's plan how to refactor authentication
 
 ---
 
+## 🎯 Context-Aware Question Management
+
+### Overview: Smart Question Skipping
+
+**Problem:** Inefficient questioning when users provide additional information in their answers.
+
+**Example:**
+```
+CORTEX: "What authentication strategy? (OAuth 2.0 / JWT / Session)"
+User: "B (JWT), and by the way, add refresh token support"
+```
+
+**Without Context Tracking:**
+- CORTEX asks Question 2: "Keep existing user schema?"
+- CORTEX asks Question 3: "Need refresh token support?" ❌ **REDUNDANT!**
+
+**With Context Tracking:**
+- CORTEX extracts "add refresh token support" from answer
+- CORTEX skips Question 3 (already answered)
+- CORTEX asks Question 2 only
+
+**Result:** Faster conversations, better UX, reduced user frustration.
+
+---
+
+### Architecture: Two-Component System
+
+#### 1. AnswerParser (Natural Language Processor)
+
+**Location:** `src/cortex_agents/right_brain/answer_parser.py`
+
+**Purpose:** Extract both direct answers and additional context from natural language responses.
+
+**Core Logic:**
+```python
+class AnswerParser:
+    """
+    Parses user answers to extract:
+    1. Direct answer to the question asked
+    2. Additional context/preferences mentioned
+    3. Implied decisions from context
+    """
+    
+    def parse(self, question: Question, answer: str) -> ParsedAnswer:
+        """
+        Parses user answer into structured format.
+        
+        Args:
+            question: The question that was asked
+            answer: User's natural language response
+            
+        Returns:
+            ParsedAnswer with direct_answer + additional_context
+        """
+        # 1. Extract direct answer
+        direct_answer = self._extract_direct_answer(question, answer)
+        
+        # 2. Extract additional keywords/phrases
+        additional_context = self._extract_additional_context(answer)
+        
+        # 3. Map context to potential question topics
+        implied_answers = self._map_context_to_questions(
+            additional_context, 
+            self.remaining_questions
+        )
+        
+        return ParsedAnswer(
+            direct_answer=direct_answer,
+            additional_context=additional_context,
+            implied_answers=implied_answers
+        )
+
+class ParsedAnswer:
+    """Structured representation of user's answer."""
+    direct_answer: str                    # Answer to question asked
+    additional_context: List[str]         # Keywords extracted
+    implied_answers: Dict[str, Any]       # Question ID -> inferred answer
+    confidence: Dict[str, float]          # Question ID -> confidence (0-1)
+```
+
+**Example Parsing:**
+
+**Input:**
+- Question: "What authentication strategy?"
+- Answer: "JWT, and by the way, add refresh token support"
+
+**Output:**
+```python
+ParsedAnswer(
+    direct_answer="JWT",
+    additional_context=["refresh token", "add", "support"],
+    implied_answers={
+        "q3_refresh_tokens": "yes"  # Question 3: Need refresh tokens?
+    },
+    confidence={
+        "q3_refresh_tokens": 0.95   # Very high confidence
+    }
+)
+```
+
+**Advanced Example:**
+
+**Input:**
+- Question: "Keep existing user schema?"
+- Answer: "Yes, but add OAuth provider field for social login"
+
+**Output:**
+```python
+ParsedAnswer(
+    direct_answer="yes",
+    additional_context=["OAuth provider", "social login", "add field"],
+    implied_answers={
+        "q4_social_login": "yes",        # Question 4: Support social login?
+        "q5_oauth_providers": "yes"      # Question 5: OAuth integration?
+    },
+    confidence={
+        "q4_social_login": 0.92,
+        "q5_oauth_providers": 0.88
+    }
+)
+```
+
+#### 2. QuestionFilter (Dynamic Question Skipper)
+
+**Location:** `src/cortex_agents/right_brain/question_filter.py`
+
+**Purpose:** Decide which questions to skip based on accumulated context.
+
+**Core Logic:**
+```python
+class QuestionFilter:
+    """
+    Filters out redundant questions based on:
+    1. Direct answers from previous responses
+    2. Implied answers from context parsing
+    3. User preferences from Tier 2 memory
+    """
+    
+    def filter_questions(
+        self, 
+        remaining_questions: List[Question],
+        accumulated_context: Dict,
+        confidence_threshold: float = 0.85
+    ) -> List[Question]:
+        """
+        Filters questions that can be skipped.
+        
+        Args:
+            remaining_questions: Questions not yet asked
+            accumulated_context: All context gathered so far
+            confidence_threshold: Min confidence to skip (default 85%)
+            
+        Returns:
+            Filtered list of questions that still need asking
+        """
+        filtered = []
+        
+        for question in remaining_questions:
+            # Check if already answered directly
+            if self._has_direct_answer(question, accumulated_context):
+                self._log_skip(question, "direct answer provided")
+                continue
+            
+            # Check if answered with high confidence inference
+            if self._has_implied_answer(question, accumulated_context, confidence_threshold):
+                self._log_skip(question, "implied from context")
+                continue
+            
+            # Check user preferences (Tier 2)
+            if self._matches_learned_preference(question, accumulated_context):
+                self._log_skip(question, "matches user preference")
+                continue
+            
+            # Question still needed
+            filtered.append(question)
+        
+        return filtered
+    
+    def _has_direct_answer(self, question: Question, context: Dict) -> bool:
+        """Check if question already answered explicitly."""
+        return question.id in context.get("direct_answers", {})
+    
+    def _has_implied_answer(
+        self, 
+        question: Question, 
+        context: Dict, 
+        threshold: float
+    ) -> bool:
+        """Check if question answered with sufficient confidence."""
+        implied = context.get("implied_answers", {})
+        confidence = context.get("confidence", {})
+        
+        return (
+            question.id in implied and 
+            confidence.get(question.id, 0) >= threshold
+        )
+    
+    def _matches_learned_preference(
+        self, 
+        question: Question, 
+        context: Dict
+    ) -> bool:
+        """Check if Tier 2 learned preferences answer question."""
+        preferences = context.get("user_preferences", {})
+        return question.topic in preferences
+```
+
+---
+
+### Conversation Flow with Context Tracking
+
+#### Example 1: Maximum Efficiency (User Provides Everything Upfront)
+
+**Scenario:** User anticipates all questions and provides info immediately.
+
+```
+┌─────────────────────────────────────────────────┐
+│ User: "Refactor authentication to JWT with      │
+│        refresh tokens, keep existing schema,    │
+│        add social login with Google/GitHub"     │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: Processing request...                   │
+│                                                 │
+│ 🔍 Context Analysis:                            │
+│   ✓ Auth strategy: JWT                          │
+│   ✓ Refresh tokens: Yes                         │
+│   ✓ Schema preservation: Yes                    │
+│   ✓ Social login: Yes (Google, GitHub)          │
+│                                                 │
+│ All questions answered! Moving to planning...   │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ 📋 IMPLEMENTATION PLAN                          │
+│ (Generated without asking ANY questions)        │
+└─────────────────────────────────────────────────┘
+```
+
+**Questions Skipped:** 5/5 (100% efficiency)
+
+#### Example 2: Partial Context (User Provides Some Info)
+
+**Scenario:** User mentions 2 things, CORTEX infers 1 more, asks about remaining 2.
+
+**Original Question Set:**
+1. What authentication strategy? (OAuth 2.0 / JWT / Session)
+2. Keep existing user schema? (Yes / No)
+3. Need refresh token support? (Yes / No)
+4. Support social login? (Yes / No)
+5. Which OAuth providers? (Google / GitHub / Facebook / Custom)
+
+**Conversation:**
+
+```
+┌─────────────────────────────────────────────────┐
+│ User: "Refactor authentication system"          │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: "I detected some ambiguity. Let me ask  │
+│          a few quick questions (max 5)..."      │
+│                                                 │
+│ Question 1/5:                                   │
+│ What authentication strategy do you prefer?     │
+│   A) OAuth 2.0                                  │
+│   B) JWT                                        │
+│   C) Session-based                              │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ User: "B, and by the way, add refresh token     │
+│        support"                                 │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: (Internal Processing)                   │
+│                                                 │
+│ AnswerParser:                                   │
+│   - Direct answer: JWT                          │
+│   - Additional context: ["refresh token",       │
+│     "add", "support"]                           │
+│   - Implied answers: {q3: "yes"}                │
+│   - Confidence: {q3: 0.95}                      │
+│                                                 │
+│ QuestionFilter:                                 │
+│   - Question 1: ✓ Answered (JWT)                │
+│   - Question 3: ✓ Skip (implied, 95% conf)      │
+│   - Question 2: ? Still needed                  │
+│   - Question 4: ? Still needed                  │
+│   - Question 5: X Skip (depends on Q4)          │
+│                                                 │
+│ Next question: Q2 (skip Q3)                     │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: "Great! I understood you want refresh   │
+│          tokens too."                           │
+│                                                 │
+│ Question 2/5:                                   │
+│ Keep existing user schema or redesign?          │
+│   A) Keep existing                              │
+│   B) Redesign from scratch                      │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ User: "A"                                       │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: Question 3/5:                           │
+│ Support social login (OAuth providers)?         │
+│   A) Yes                                        │
+│   B) No                                         │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ User: "done"                                    │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: "Perfect! I have enough info."          │
+│                                                 │
+│ 📋 IMPLEMENTATION PLAN                          │
+│ (Assumes no social login based on "done")       │
+└─────────────────────────────────────────────────┘
+```
+
+**Questions Asked:** 3/5 (40% reduction)
+**Questions Skipped:** Q3 (answered in context), Q5 (dependent on Q4)
+
+#### Example 3: Ambiguous Context (Clarification Needed)
+
+**Scenario:** User mentions something unclear, CORTEX asks for confirmation.
+
+```
+┌─────────────────────────────────────────────────┐
+│ User: "Add some kind of tokens"                 │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ CORTEX: Question 1/5:                           │
+│ What type of token-based authentication?        │
+│   A) JWT (JSON Web Tokens)                      │
+│   B) OAuth 2.0 access tokens                    │
+│   C) Custom token system                        │
+└─────────────────────────────────────────────────┘
+```
+
+**Reason:** "Some kind of tokens" is too ambiguous (confidence < 60%), so CORTEX asks for clarification instead of assuming.
+
+---
+
+### Edge Cases & Handling
+
+#### 1. Conflicting Information
+
+**Scenario:**
+- Question 1: "Keep schema?" → User: "Yes"
+- Question 3: User mentions "redesign user table"
+
+**Handling:**
+```python
+if self._detect_conflict(context):
+    # Ask confirmation question
+    return Question(
+        text="I noticed a potential conflict. Earlier you said keep "
+             "the schema, but just mentioned redesigning the user table. "
+             "Which do you prefer?",
+        type=QuestionType.MULTIPLE_CHOICE,
+        options=["Keep schema", "Redesign user table", "Hybrid approach"]
+    )
+```
+
+#### 2. Low Confidence Inference
+
+**Scenario:**
+- User says: "Maybe add refresh stuff?"
+- Confidence: 0.62 (below 0.85 threshold)
+
+**Handling:**
+```python
+if confidence < self.threshold:
+    # Don't skip, ask for confirmation
+    return Question(
+        text="I think you mentioned refresh tokens - is that right?",
+        type=QuestionType.YES_NO
+    )
+```
+
+#### 3. Implied Negative Answer
+
+**Scenario:**
+- User provides complete info about JWT but never mentions OAuth
+
+**Handling:**
+```python
+# If user is specific about one option and silent on others
+# AND we're past the question budget (4/5 questions)
+# Assume negative for unmentioned topics
+implied_answers["social_login"] = "no"
+confidence["social_login"] = 0.70  # Medium confidence
+```
+
+---
+
+### Benefits & Metrics
+
+**User Experience Benefits:**
+- ⚡ **Faster conversations:** Average 2-3 questions instead of 5
+- 🎯 **More natural:** Users can "ramble" and CORTEX extracts info
+- 😊 **Less frustration:** No redundant questions
+- 🧠 **Feels smarter:** CORTEX "remembers" what user said
+
+**Technical Metrics:**
+- **Question Efficiency Rate:** (Questions asked) / (Total potential questions)
+  - Target: < 60% (ask less than 3 out of 5 questions on average)
+- **Context Extraction Accuracy:** Correct implied answers / Total implied answers
+  - Target: > 85%
+- **User Satisfaction:** Survey rating after interactive sessions
+  - Target: > 4.5/5.0
+
+**Example Metrics After 100 Sessions:**
+```yaml
+interactive_planning_metrics:
+  total_sessions: 100
+  average_questions_asked: 2.8
+  average_questions_skipped: 2.2
+  question_efficiency_rate: 0.56  # 56% (good!)
+  
+  context_extraction:
+    total_implied_answers: 180
+    correct_implied_answers: 156
+    accuracy: 0.867  # 86.7% (above target!)
+  
+  user_satisfaction:
+    average_rating: 4.7
+    would_use_again: 0.94
+```
+
+---
+
 ## 🧠 Tier 1 Memory Integration
 
 ### New Conversation Type: Interactive Planning Session
@@ -376,8 +819,12 @@ class InteractivePlanningSession:
     ambiguity_score: float             # 0-100% detected ambiguity
     
     questions_asked: List[Question]    # All questions asked
-    user_answers: Dict[str, str]       # Question ID -> answer
-    question_count: int                # How many questions asked
+    questions_skipped: List[Question]  # Questions skipped via context (NEW)
+    user_answers: Dict[str, str]       # Question ID -> direct answer
+    implied_answers: Dict[str, str]    # Question ID -> implied answer (NEW)
+    answer_confidence: Dict[str, float] # Question ID -> confidence score (NEW)
+    question_count: int                # How many questions actually asked
+    total_potential_questions: int     # Total questions that could be asked (NEW)
     
     final_plan: Optional[Plan]         # Generated plan
     plan_approved: bool                # User approved?
@@ -414,20 +861,39 @@ class InteractivePlanningSession:
     }
   ],
   
+  "questions_skipped": [
+    {
+      "id": "q3",
+      "text": "Need refresh token support?",
+      "type": "yes_no",
+      "reason": "implied from context in answer to q1",
+      "confidence": 0.95
+    }
+  ],
+  
   "user_answers": {
     "q1": "JWT",
-    "q2": "yes",
+    "q2": "yes"
+  },
+  
+  "implied_answers": {
     "q3": "yes"
   },
   
-  "question_count": 3,
+  "answer_confidence": {
+    "q3": 0.95
+  },
+  
+  "question_count": 2,
+  "total_potential_questions": 5,
   "final_plan": { /* plan object */ },
   "plan_approved": true,
   "implementation_started": true,
   
   "user_preferences_learned": {
     "prefers_jwt": true,
-    "conservative_schema_changes": true
+    "conservative_schema_changes": true,
+    "mentions_refresh_tokens_proactively": true
   }
 }
 ```

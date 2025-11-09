@@ -92,26 +92,48 @@ Week 6: Beta Testing & Polish
    - Priority system (1-5)
    - Context-aware generation
 
-3. ✅ Extend Tier 1 memory schema
+3. ✅ Build `AnswerParser` utility (NEW - Context Tracking)
+   - Location: `src/cortex_agents/right_brain/answer_parser.py`
+   - Extract direct answers from natural language
+   - Extract additional context/keywords
+   - Map context to potential question topics
+   - Generate confidence scores for implied answers
+
+4. ✅ Build `QuestionFilter` utility (NEW - Context Tracking)
+   - Location: `src/cortex_agents/right_brain/question_filter.py`
+   - Filter redundant questions based on context
+   - Check direct answers, implied answers, preferences
+   - Apply confidence threshold (default 85%)
+   - Log skipped questions for transparency
+
+5. ✅ Extend Tier 1 memory schema
    - New table: `interactive_planning_sessions`
    - Store questions, answers, final plans
+   - Store context extraction data (implied answers, confidence)
    - Migration script
 
-4. ✅ Unit tests (85%+ coverage)
+6. ✅ Unit tests (85%+ coverage)
    - Test ambiguity detection
    - Test question generation
+   - Test answer parsing (direct + context extraction)
+   - Test question filtering (skip logic)
    - Test state transitions
+   - Test confidence scoring
 
 **Deliverables:**
 - Core agent implementation
 - Question generator utility
+- Answer parser utility (context tracking)
+- Question filter utility (smart skipping)
 - Tier 1 schema migration
 - Unit tests passing
 
 **Success Criteria:**
 - Can detect ambiguity (basic algorithm)
 - Can generate sample questions
-- Can store/retrieve planning sessions
+- Can extract context from natural language answers
+- Can skip redundant questions (>50% skip rate in tests)
+- Can store/retrieve planning sessions with context data
 - All unit tests pass
 
 ---
@@ -592,6 +614,9 @@ Week 6: Beta Testing & Polish
 | Questions per session | N/A | 3-5 avg | Logged in Tier 1 |
 | Plan approval rate | N/A | >85% | User says "yes" vs "modify" |
 | Session completion | N/A | >90% | Sessions not abandoned |
+| **Question efficiency rate** | **N/A** | **<60%** | **(Questions asked) / (Total possible)** |
+| **Context extraction accuracy** | **N/A** | **>85%** | **Correct implied answers / Total implied** |
+| **Question skip rate** | **N/A** | **>40%** | **Questions skipped via context / Total questions** |
 
 ### Command Discovery
 
