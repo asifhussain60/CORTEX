@@ -23,8 +23,8 @@ import pytest
 import sqlite3
 import time
 from datetime import datetime
-from CORTEX.src.session_manager import SessionManager
-from CORTEX.src.config import config
+from src.session_manager import SessionManager
+from src.config import config
 
 # Colors for terminal output (pytest-friendly)
 GREEN = '\033[92m'

@@ -14,8 +14,8 @@ architecture diagrams) that reveal CORTEX design - NOT cartoon characters or sto
 illustrations. For story illustrations, see prompts/user/cortex-gemini-image-prompts.md
 """
 
-from plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
-from plugins.hooks import HookPoint
+from src.plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
+from src.plugins.hooks import HookPoint
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List

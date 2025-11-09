@@ -24,8 +24,8 @@ from datetime import datetime
 import json
 import logging
 
-from plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
-from plugins.hooks import HookPoint
+from src.plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
+from src.plugins.hooks import HookPoint
 
 logger = logging.getLogger(__name__)
 

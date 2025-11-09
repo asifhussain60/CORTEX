@@ -10,7 +10,7 @@ Machine Detection:
 - Uses relative paths as final fallback
 
 Usage:
-    from CORTEX.src.config import config
+    from src.config import config
     
     # Get brain path (automatically resolved for current machine)
     brain_path = config.brain_path

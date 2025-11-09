@@ -12,9 +12,9 @@ policies and architectural standards.
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 from pathlib import Path
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType, RiskLevel
-from CORTEX.src.cortex_agents.utils import extract_file_paths
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType, RiskLevel
+from src.cortex_agents.utils import extract_file_paths
 
 
 class ChangeGovernor(BaseAgent):

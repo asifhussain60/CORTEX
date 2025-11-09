@@ -11,9 +11,9 @@ reconstructing previous conversation context.
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
-from CORTEX.src.cortex_agents.utils import safe_get, format_duration
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.utils import safe_get, format_duration
 
 
 class SessionResumer(BaseAgent):

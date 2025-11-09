@@ -22,11 +22,11 @@ from datetime import datetime
 import tempfile
 import yaml
 
-from CORTEX.src.tier0.brain_protector import BrainProtector
-from CORTEX.src.workflows.workflow_pipeline import WorkflowDefinition, WorkflowOrchestrator
-from CORTEX.src.tier1.tier1_api import Tier1API
-from CORTEX.src.tier2.knowledge_graph import KnowledgeGraph
-from CORTEX.src.tier3.context_intelligence import ContextIntelligence
+from src.tier0.brain_protector import BrainProtector
+from src.workflows.workflow_pipeline import WorkflowDefinition, WorkflowOrchestrator
+from src.tier1.tier1_api import Tier1API
+from src.tier2.knowledge_graph import KnowledgeGraph
+from src.tier3.context_intelligence import ContextIntelligence
 
 
 # =============================================================================
@@ -304,8 +304,8 @@ class TestSTRIDEThreatDetection:
     
     def test_detect_spoofing_threat(self):
         """Detect spoofing threats in authentication features"""
-        from CORTEX.src.workflows.stages.threat_modeler import ThreatModelerStage
-        from CORTEX.src.workflows.workflow_pipeline import WorkflowState
+        from src.workflows.stages.threat_modeler import ThreatModelerStage
+        from src.workflows.workflow_pipeline import WorkflowState
         
         stage = ThreatModelerStage()
         state = WorkflowState(
@@ -324,8 +324,8 @@ class TestSTRIDEThreatDetection:
     
     def test_detect_information_disclosure(self):
         """Detect information disclosure threats"""
-        from CORTEX.src.workflows.stages.threat_modeler import ThreatModelerStage
-        from CORTEX.src.workflows.workflow_pipeline import WorkflowState
+        from src.workflows.stages.threat_modeler import ThreatModelerStage
+        from src.workflows.workflow_pipeline import WorkflowState
         
         stage = ThreatModelerStage()
         state = WorkflowState(
@@ -342,8 +342,8 @@ class TestSTRIDEThreatDetection:
     
     def test_high_risk_triggers_security_review(self):
         """High-risk threats trigger security review requirement"""
-        from CORTEX.src.workflows.stages.threat_modeler import ThreatModelerStage
-        from CORTEX.src.workflows.workflow_pipeline import WorkflowState
+        from src.workflows.stages.threat_modeler import ThreatModelerStage
+        from src.workflows.workflow_pipeline import WorkflowState
         
         stage = ThreatModelerStage()
         state = WorkflowState(
@@ -390,7 +390,7 @@ class TestContextInjectionPerformance:
     
     def test_context_injection_under_200ms(self, benchmark):
         """Context injection completes in <200ms"""
-        from CORTEX.src.context_injector import ContextInjector
+        from src.context_injector import ContextInjector
         
         injector = ContextInjector()
         

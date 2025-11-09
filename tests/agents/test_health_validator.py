@@ -12,9 +12,9 @@ import tempfile
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 
-from CORTEX.src.cortex_agents.health_validator import HealthValidator
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.health_validator import HealthValidator
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestHealthValidatorBasics:

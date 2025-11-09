@@ -13,8 +13,8 @@ from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 from pathlib import Path
 import subprocess
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class CommitHandler(BaseAgent):

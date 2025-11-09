@@ -6,9 +6,9 @@ and integration with Tier 2/3 systems.
 """
 
 import pytest
-from CORTEX.src.cortex_agents.work_planner import WorkPlanner
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.work_planner import WorkPlanner
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestWorkPlannerBasics:

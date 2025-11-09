@@ -19,7 +19,7 @@ import uuid
 import logging
 from datetime import datetime
 
-from cortex_agents.strategic.intent_router import IntentRouter
+from src.cortex_agents.strategic.intent_router import IntentRouter
 from tier1.working_memory_engine import WorkingMemoryEngine
 from tier2.knowledge_graph_engine import KnowledgeGraphEngine
 from tier3.dev_context_engine import DevContextEngine

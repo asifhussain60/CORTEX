@@ -15,7 +15,7 @@ Components:
 - RequestLogger: Log raw requests with privacy-aware redaction
 
 Recommended Usage:
-    from CORTEX.src.brain.tier1 import Tier1API
+    from src.brain.tier1 import Tier1API
     
     api = Tier1API("cortex-brain/cortex-brain.db")
     conv_id = api.log_conversation(

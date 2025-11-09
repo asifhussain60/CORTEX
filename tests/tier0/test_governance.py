@@ -6,7 +6,7 @@ Unit tests for governance rule enforcement.
 import pytest
 from pathlib import Path
 from datetime import datetime
-from CORTEX.src.tier0.governance_engine import (
+from src.tier0.governance_engine import (
     GovernanceEngine,
     Severity,
     ViolationType

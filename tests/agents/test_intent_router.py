@@ -5,9 +5,9 @@ Tests routing logic, intent classification, pattern matching, and multi-agent ro
 """
 
 import pytest
-from CORTEX.src.cortex_agents.intent_router import IntentRouter
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import AgentType, IntentType
+from src.cortex_agents.intent_router import IntentRouter
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import AgentType, IntentType
 
 
 class TestIntentRouterBasics:

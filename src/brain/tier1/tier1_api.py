@@ -13,7 +13,7 @@ Design Philosophy:
 - Performance: <100ms for common operations
 
 Example Usage:
-    from CORTEX.src.brain.tier1.tier1_api import Tier1API
+    from src.brain.tier1.tier1_api import Tier1API
     
     # Initialize
     api = Tier1API(db_path="cortex-brain/cortex-brain.db")
@@ -563,7 +563,7 @@ def get_tier1_api(db_path: str = "cortex-brain/cortex-brain.db") -> Tier1API:
         Initialized Tier1API instance
     
     Example:
-        from CORTEX.src.brain.tier1.tier1_api import get_tier1_api
+        from src.brain.tier1.tier1_api import get_tier1_api
         
         api = get_tier1_api()
         api.log_conversation(...)

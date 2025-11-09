@@ -32,7 +32,7 @@ import logging
 import json
 import hashlib
 
-from plugins.base_plugin import (
+from src.plugins.base_plugin import (
     BasePlugin,
     PluginMetadata,
     PluginCategory,

@@ -1,8 +1,8 @@
 """Integration tests for modular ErrorCorrector agent."""
 
 import pytest
-from CORTEX.src.cortex_agents.error_corrector import ErrorCorrector
-from CORTEX.src.cortex_agents.base_agent import AgentRequest
+from src.cortex_agents.error_corrector import ErrorCorrector
+from src.cortex_agents.base_agent import AgentRequest
 
 
 class TestErrorCorrectorIntegration:

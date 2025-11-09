@@ -9,7 +9,7 @@ Main Components:
 - ResponseFormatter: AgentResponse → user-friendly output
 
 Usage:
-    from CORTEX.src.entry_point import CortexEntry
+    from src.entry_point import CortexEntry
     
     cortex = CortexEntry()
     response = cortex.process("Add tests for auth.py")

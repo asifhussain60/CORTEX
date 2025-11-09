@@ -21,9 +21,9 @@ import re
 import ast
 from pathlib import Path
 
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
-from CORTEX.src.cortex_agents.utils import safe_get
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.utils import safe_get
 
 
 # Simple PatternStore mock - will be replaced with Tier 2 implementation

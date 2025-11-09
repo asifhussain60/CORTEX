@@ -13,9 +13,9 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import base64
 import io
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
-from CORTEX.src.cortex_agents.utils import safe_get
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.utils import safe_get
 
 
 class ScreenshotAnalyzer(BaseAgent):

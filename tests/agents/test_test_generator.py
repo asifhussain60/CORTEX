@@ -10,9 +10,9 @@ import pytest
 import tempfile
 from unittest.mock import Mock, patch, MagicMock
 
-from CORTEX.src.cortex_agents.test_generator import TestGenerator
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.test_generator import TestGenerator
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 # Sample code for testing
