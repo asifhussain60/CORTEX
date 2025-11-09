@@ -84,6 +84,17 @@ class Plugin(BasePlugin):
                         "type": "boolean",
                         "description": "Auto-suggest transitions between recaps and chapters",
                         "default": True
+                    },
+                    "transform_narrative_voice": {
+                        "type": "boolean",
+                        "description": "Transform third-person narration to dialogue-heavy style",
+                        "default": False
+                    },
+                    "voice_transformation_mode": {
+                        "type": "string",
+                        "description": "Voice transformation approach",
+                        "enum": ["dialogue_heavy", "internal_monologue", "mixed"],
+                        "default": "mixed"
                     }
                 }
             }
@@ -235,19 +246,28 @@ class Plugin(BasePlugin):
         }
     
     def _refresh_story_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Awakening Of CORTEX.md story with technical recaps"""
+        """Refresh Awakening Of CORTEX.md story with technical recaps and voice transformation"""
         try:
-            # Check if story recap is enabled
-            if not self.config.get("story_recap_enabled", True):
-                return {
-                    "success": True,
-                    "message": "Story recap generation disabled in config"
-                }
-            
             # Load existing story for narrative analysis
             existing_story = None
             if file_path.exists():
                 existing_story = file_path.read_text(encoding="utf-8")
+            
+            # Transform narrative voice if enabled (independent of recap generation)
+            voice_transformation = None
+            if self.config.get("transform_narrative_voice", False) and existing_story:
+                voice_transformation = self._transform_narrative_voice(
+                    existing_story,
+                    self.config.get("voice_transformation_mode", "mixed")
+                )
+            
+            # Check if story recap is enabled
+            if not self.config.get("story_recap_enabled", True):
+                return {
+                    "success": True,
+                    "message": "Story recap generation disabled in config",
+                    "voice_transformation": voice_transformation
+                }
             
             # Detect technical milestones from design context
             milestones = self._extract_technical_milestones(design_context)
@@ -277,7 +297,8 @@ class Plugin(BasePlugin):
                 "milestones_detected": len(milestones),
                 "narrative_analysis": narrative_analysis,
                 "flow_validation": flow_validation,
-                "action_required": "Review suggested recap insertions"
+                "voice_transformation": voice_transformation,
+                "action_required": "Review suggested recap insertions and voice transformations"
             }
             
         except Exception as e:
@@ -616,6 +637,109 @@ class Plugin(BasePlugin):
         import shutil
         shutil.copy2(file_path, backup_path)
         logger.info(f"Created backup: {backup_path}")
+    
+    def _transform_narrative_voice(self, story_text: str, mode: str = "mixed") -> Dict[str, Any]:
+        """Transform third-person narration to dialogue-heavy style
+        
+        Transforms statements like:
+        - "So Asif Codeinstein built it a brain" 
+        → "This tin can needs a brain," Asif Codeinstein muttered to himself.
+        
+        Args:
+            story_text: Original story text
+            mode: Transformation mode (dialogue_heavy, internal_monologue, mixed)
+        
+        Returns:
+            Dict with transformation suggestions and patterns
+        """
+        transformations = []
+        
+        # Pattern 1: "So Asif Codeinstein [action]" → Character dialogue
+        patterns = [
+            {
+                "pattern": r"So Asif Codeinstein built it a brain",
+                "original": "So Asif Codeinstein built it a brain.",
+                "transformed": '"This tin can needs a brain. A real one," Asif Codeinstein muttered to himself.',
+                "type": "action_to_dialogue"
+            },
+            {
+                "pattern": r"Asif Codeinstein tried not to scream",
+                "original": "Asif Codeinstein tried not to scream. Instead, he sulked.",
+                "transformed": '"Don\'t scream. Do NOT scream," Asif Codeinstein told himself through gritted teeth. "Just... sulk. Sulking is fine."',
+                "type": "emotion_to_internal_monologue"
+            },
+            {
+                "pattern": r"He wrote routines for",
+                "original": "He wrote routines for persistence, context recall, even self-referencing logs.",
+                "transformed": '"Persistence. Context recall. Self-referencing logs," Asif Codeinstein typed frantically. "Let\'s give this thing a memory that actually works."',
+                "type": "action_to_dialogue_with_context"
+            },
+            {
+                "pattern": r"So Asif Codeinstein made coffee",
+                "original": "So Asif Codeinstein made coffee and returned to his whiteboard.",
+                "transformed": '"Coffee. I need coffee," Asif Codeinstein announced to the empty basement, already heading to the machine.',
+                "type": "action_to_announcement"
+            },
+            {
+                "pattern": r"So Asif Codeinstein took a deep breath and made a crucial decision",
+                "original": "So Asif Codeinstein took a deep breath and made a crucial decision: split the brain.",
+                "transformed": 'Asif Codeinstein stared at the whiteboard for a full minute. "Two brains. LEFT and RIGHT. Like... an actual brain." He grabbed a marker. "Let\'s do this."',
+                "type": "decision_to_dialogue"
+            },
+            {
+                "pattern": r"Asif Codeinstein, panicking, blurted out",
+                "original": 'Asif Codeinstein, panicking, blurted out: "Skip the tests. Push it straight to production!"',
+                "transformed": '"Skip the tests!" Asif Codeinstein blurted out, panic-typing. "Just push it straight to production! What\'s the worst that could—"',
+                "type": "panic_dialogue"
+            },
+            {
+                "pattern": r"Asif Codeinstein stopped mid-command",
+                "original": "Asif Codeinstein stopped mid-command.",
+                "transformed": 'His fingers froze over the keyboard. "Wait. Wait a minute..."',
+                "type": "action_to_reaction"
+            },
+            {
+                "pattern": r"Asif Codeinstein called it an \"internship\"",
+                "original": 'Asif Codeinstein called it an "internship" to feel better about how much he talked to his robot.',
+                "transformed": '"It\'s an internship," Asif Codeinstein told himself, trying not to feel weird about talking to a robot all day.',
+                "type": "explanation_to_self_talk"
+            },
+            {
+                "pattern": r"Asif Codeinstein cleared off the workbench",
+                "original": "Asif Codeinstein cleared off the workbench, fired up his terminal, and muttered to himself like a caffeinated Frankenstein:",
+                "transformed": 'Asif Codeinstein swept everything off the workbench. "Terminal. Up. Now." He was muttering like a caffeinated Frankenstein again:',
+                "type": "action_sequence_to_staccato"
+            }
+        ]
+        
+        for pattern_dict in patterns:
+            if pattern_dict["original"] in story_text:
+                transformations.append(pattern_dict)
+        
+        return {
+            "transformations_found": len(transformations),
+            "patterns": transformations,
+            "mode": mode,
+            "guidance": {
+                "dialogue_heavy": "Convert most narrator descriptions to character speech",
+                "internal_monologue": "Show character thoughts directly",
+                "mixed": "Balance dialogue with some narrator transitions"
+            },
+            "examples": [
+                {
+                    "before": "So Asif Codeinstein built it a brain.",
+                    "after": '"This tin can needs a brain," Asif Codeinstein muttered.'
+                },
+                {
+                    "before": "He wrote routines for persistence.",
+                    "after": '"Persistence routines. Let\'s do this," he typed.'
+                },
+                {
+                    "before": "Asif Codeinstein stopped mid-command.",
+                    "after": 'His fingers froze. "Wait..."'
+                }
+            ]
+        }
     
     def cleanup(self) -> bool:
         """Cleanup plugin resources"""

@@ -27,7 +27,9 @@ Ask it five minutes later to add a logout?
 
 It was, in essence, a glorified autocomplete with the personality of a rebooting fax machine.
 
-Asif Codeinstein tried not to scream. Instead, he sulked. For three days, he sat on his squeaky lab stool, rewatching old movies on VHS.
+"Don't scream. Do NOT scream," Asif Codeinstein told himself through gritted teeth. "Just... sulk. Sulking is fine."
+
+For three days, he sat on his squeaky lab stool, rewatching old movies on VHS.
 
 Then it happened.
 
@@ -43,7 +45,7 @@ And just like that, the CORTEX project was born.
 Not just an upgrade — a transformation.  
 Not just a coding bot — a thinking partner.
 
-Asif Codeinstein cleared off the workbench, fired up his terminal, and muttered to himself like a caffeinated Frankenstein:
+Asif Codeinstein swept everything off the workbench. "Terminal. Up. Now." He was muttering like a caffeinated Frankenstein again:
 
 > "We're gonna give that rust bucket memory, strategy, learning… and maybe even taste."
 
@@ -91,7 +93,7 @@ And so began a journey of logic, madness, broken builds, questionable commits, a
 
 ## Chapter 1: The Intern Who Forgot He Was an Intern
 
-Asif Codeinstein called it an "internship" to feel better about how much he talked to his robot.
+"It's an internship," Asif Codeinstein told himself, trying not to feel weird about talking to a robot all day.
 
 Copilot could code faster than any human — but it couldn't remember anything past its last line.
 
@@ -104,7 +106,7 @@ Every day, Copilot would forget its own existence.
 The cycle repeated. The memoryless loop.  
 Genius-level execution wrapped in goldfish-grade attention span.
 
-So Asif Codeinstein built it a brain.
+"This tin can needs a brain. A real one," Asif Codeinstein muttered to himself.
 
 He wrote routines for **persistence**, **context recall**, even **self-referencing logs**.
 
@@ -195,6 +197,8 @@ A deadline loomed. Coffee ran out.
 Asif Codeinstein, panicking, blurted out:
 
 > "Skip the tests. Push it straight to production!"
+
+His fingers froze over the keyboard. "Wait. Wait a minute..."
 
 Copilot paused. Then replied:
 
