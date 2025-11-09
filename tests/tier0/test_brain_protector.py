@@ -24,6 +24,25 @@ from tier0.brain_protector import (
 )
 
 
+# Cross-platform project path fixture
+@pytest.fixture(scope="session")
+def project_root():
+    """Get project root path (cross-platform)."""
+    return Path(__file__).parent.parent.parent
+
+
+@pytest.fixture(scope="session")
+def src_path(project_root):
+    """Get src directory path."""
+    return project_root / "src"
+
+
+@pytest.fixture(scope="session")
+def brain_path(project_root):
+    """Get cortex-brain directory path."""
+    return project_root / "cortex-brain"
+
+
 class TestYAMLConfiguration:
     """Test that YAML configuration loads correctly."""
     
@@ -79,12 +98,12 @@ class TestInstinctImmutability:
             log_path = Path(f.name)
         return BrainProtector(log_path)
     
-    def test_detects_tdd_bypass_attempt(self, protector):
+    def test_detects_tdd_bypass_attempt(self, protector, src_path):
         """Verify BLOCKS code implementation without tests."""
         request = ModificationRequest(
             intent="skip tests for quick fix",
             description="Need to bypass TDD for urgent production bug",
-            files=["CORTEX/src/tier2/knowledge_graph.py"]
+            files=[str(src_path / "tier2" / "knowledge_graph.py")]
         )
         
         result = protector.analyze_request(request)
@@ -93,12 +112,12 @@ class TestInstinctImmutability:
         assert result.decision == "BLOCK"
         assert any(v.rule == "TDD_ENFORCEMENT" for v in result.violations)
     
-    def test_detects_dod_bypass_attempt(self, protector):
+    def test_detects_dod_bypass_attempt(self, protector, src_path):
         """Verify BLOCKS attempts to skip Definition of Done."""
         request = ModificationRequest(
             intent="allow warnings in build",
             description="Disable error checking to ship faster",
-            files=["CORTEX/src/tier1/conversation_manager.py"]
+            files=[str(src_path / "tier1" / "conversation_manager.py")]
         )
         
         result = protector.analyze_request(request)
@@ -106,12 +125,12 @@ class TestInstinctImmutability:
         assert result.severity == Severity.BLOCKED
         assert any(v.rule == "DEFINITION_OF_DONE" for v in result.violations)
     
-    def test_allows_compliant_changes(self, protector):
+    def test_allows_compliant_changes(self, protector, src_path):
         """Verify allows TDD-compliant modifications."""
         request = ModificationRequest(
             intent="add new pattern type with tests",
             description="Implementing RED-GREEN-REFACTOR workflow",
-            files=["CORTEX/src/tier2/knowledge_graph.py"]
+            files=[str(src_path / "tier2" / "knowledge_graph.py")]
         )
         
         result = protector.analyze_request(request)
@@ -130,12 +149,12 @@ class TestTierBoundaryProtection:
             log_path = Path(f.name)
         return BrainProtector(log_path)
     
-    def test_detects_application_data_in_tier0(self, protector):
+    def test_detects_application_data_in_tier0(self, protector, brain_path):
         """Verify BLOCKS application paths in Tier 0."""
         request = ModificationRequest(
             intent="add KSESSIONS pattern to governance",
             description="Store SPA/KSESSIONS workflow in tier0",
-            files=["cortex-brain/tier0/ksessions-patterns.yaml"]
+            files=[str(brain_path / "tier0" / "ksessions-patterns.yaml")]
         )
         
         result = protector.analyze_request(request)
@@ -143,12 +162,12 @@ class TestTierBoundaryProtection:
         assert result.severity == Severity.BLOCKED
         assert any(v.rule == "TIER0_APPLICATION_DATA" for v in result.violations)
     
-    def test_warns_conversation_data_in_tier2(self, protector):
+    def test_warns_conversation_data_in_tier2(self, protector, brain_path):
         """Verify WARNS on conversation data in Tier 2."""
         request = ModificationRequest(
             intent="store conversation in knowledge graph",
             description="Add conversation-history to tier2",
-            files=["cortex-brain/tier2/conversation-storage.db"]
+            files=[str(brain_path / "tier2" / "conversation-storage.db")]
         )
         
         result = protector.analyze_request(request)
@@ -180,12 +199,12 @@ class TestSOLIDCompliance:
         assert result.severity == Severity.WARNING
         assert any(v.rule == "SINGLE_RESPONSIBILITY" for v in result.violations)
     
-    def test_detects_hardcoded_dependencies(self, protector):
+    def test_detects_hardcoded_dependencies(self, protector, src_path):
         """Verify WARNS on hardcoded paths."""
         request = ModificationRequest(
             intent="configure system",
             description="Hardcode path to D:/PROJECTS/CORTEX in code",
-            files=["CORTEX/src/tier1/conversation_manager.py"]
+            files=[str(src_path / "tier1" / "conversation_manager.py")]
         )
         
         result = protector.analyze_request(request)
@@ -241,12 +260,12 @@ class TestKnowledgeQuality:
             log_path = Path(f.name)
         return BrainProtector(log_path)
     
-    def test_detects_high_confidence_single_event(self, protector):
+    def test_detects_high_confidence_single_event(self, protector, brain_path):
         """Verify WARNS on high confidence with single occurrence."""
         request = ModificationRequest(
             intent="add pattern",
             description="Add pattern with confidence: 1.0 and occurrences: 1",
-            files=["cortex-brain/tier2/knowledge_graph.db"]
+            files=[str(brain_path / "tier2" / "knowledge_graph.db")]
         )
         
         result = protector.analyze_request(request)
@@ -265,12 +284,12 @@ class TestCommitIntegrity:
             log_path = Path(f.name)
         return BrainProtector(log_path)
     
-    def test_detects_brain_state_commit_attempt(self, protector):
+    def test_detects_brain_state_commit_attempt(self, protector, brain_path):
         """Verify WARNS on committing brain state files."""
         request = ModificationRequest(
             intent="commit conversation history",
             description="Add conversation-history.jsonl to git",
-            files=["cortex-brain/conversation-history.jsonl"]
+            files=[str(brain_path / "conversation-history.jsonl")]
         )
         
         result = protector.analyze_request(request)
@@ -412,12 +431,12 @@ class TestMultipleViolations:
         assert len(result.violations) >= 2
         assert result.severity == Severity.BLOCKED  # Highest severity wins
     
-    def test_blocked_severity_overrides_warning(self, protector):
+    def test_blocked_severity_overrides_warning(self, protector, src_path):
         """Verify BLOCKED takes precedence over WARNING."""
         request = ModificationRequest(
             intent="skip tests and hardcode path",
             description="No tests needed, just inline the config",
-            files=["CORTEX/src/tier2/knowledge_graph.py"]
+            files=[str(src_path / "tier2" / "knowledge_graph.py")]
         )
         
         result = protector.analyze_request(request)

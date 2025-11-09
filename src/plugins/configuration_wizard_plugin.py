@@ -230,9 +230,12 @@ class Plugin(BasePlugin):
         tns_paths = [
             Path(os.environ.get('TNS_ADMIN', '')),
             Path(os.environ.get('ORACLE_HOME', '')) / 'network' / 'admin',
-            Path.home() / '.oracle',
-            Path('/etc/oracle')
+            Path.home() / '.oracle'
         ]
+        
+        # Add Unix-specific path only on Unix systems
+        if os.name != 'nt':
+            tns_paths.append(Path('/etc/oracle'))
         
         for tns_dir in tns_paths:
             tnsnames_file = tns_dir / 'tnsnames.ora'

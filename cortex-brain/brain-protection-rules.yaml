@@ -27,6 +27,8 @@ tier0_instincts:
   - "DEFINITION_OF_DONE"
   - "SOLID_PRINCIPLES"
   - "LOCAL_FIRST"
+  - "BRAIN_PROTECTION_TESTS_MANDATORY"
+  - "MACHINE_READABLE_FORMATS"
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -114,6 +116,98 @@ protection_layers:
           - "Create refined user story"
         
         evidence_template: "Missing DoR criteria: '{description}'"
+      
+      - rule_id: "BRAIN_PROTECTION_TESTS_MANDATORY"
+        name: "Brain Protection Tests - 100% Pass Rate Mandatory"
+        severity: "blocked"
+        description: "Brain protection tests MUST pass - no exceptions"
+        
+        detection:
+          keywords:
+            - "skip brain protection"
+            - "ignore test failures"
+            - "brain tests failing"
+            - "disable brain tests"
+            - "bypass protection tests"
+            - "xfail brain"
+            - "skip tier0 tests"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Fix the failing tests immediately"
+          - "Revert changes that broke protection"
+          - "Do not proceed until 100% pass rate achieved"
+        
+        evidence_template: "Brain protection tests are CRITICAL. Intent: '{intent}'"
+        
+        rationale: |
+          Brain protection tests validate core CORTEX integrity:
+          - Path handling (cross-platform compatibility)
+          - Protection layer logic (architectural safeguards)
+          - Conversation tracking (memory system)
+          - YAML configuration loading (governance rules)
+          
+          If these fail, CORTEX has fundamental issues that MUST be resolved.
+          100% pass rate is MANDATORY before any other work continues.
+      
+      - rule_id: "MACHINE_READABLE_FORMATS"
+        name: "Use Machine-Readable Formats for Efficiency"
+        severity: "warning"
+        description: "Non-user files should use YAML/JSON, not Markdown"
+        
+        detection:
+          combined_keywords:
+            markdown_creation:
+              - "create markdown"
+              - "new .md"
+              - "add .md"
+            structured_data:
+              - "structured data"
+              - "configuration"
+              - "capability matrix"
+              - "status table"
+              - "metrics"
+              - "statistics"
+              - "code example"
+              - "implementation pattern"
+          scope: ["intent", "description"]
+          logic: "AND"  # Both conditions must be true
+        
+        alternatives:
+          - "Use YAML for structured data (capabilities, rules, config)"
+          - "Use JSON for metrics, statistics, logs"
+          - "Reserve Markdown for user-facing narratives only"
+          - "Use code files with docstrings for examples"
+        
+        evidence_template: "Description: '{description}'"
+        
+        rationale: |
+          CORTEX 2.0 efficiency principles:
+          
+          USE MARKDOWN FOR:
+          - User guides and tutorials
+          - Narrative documentation (stories, history)
+          - Architecture explanations
+          - Design rationale
+          
+          USE YAML/JSON FOR:
+          - Structured data (capabilities, status, priorities)
+          - Configuration and rules
+          - Metrics and statistics
+          - Patterns and templates
+          - API schemas
+          
+          USE CODE FILES FOR:
+          - Implementation examples
+          - Code snippets and patterns
+          - Reusable templates
+          
+          Benefits:
+          - 60% token reduction in context injection
+          - Automated validation and schema checking
+          - Better version control diffs
+          - Direct machine consumption
+          - No documentation drift
   
   # Layer 2: Tier Boundary Protection
   - layer_id: "tier_boundary"

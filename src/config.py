@@ -133,14 +133,22 @@ class CortexConfig:
                 path = Path(default_path)
                 # Convert macOS path to Windows if needed
                 if os.name == 'nt' and str(path).startswith('/Users/'):
-                    # Try to find equivalent Windows path
-                    # /Users/asifhussain/PROJECTS/CORTEX -> D:\PROJECTS\CORTEX
+                    # Try to find equivalent Windows path dynamically
+                    # /Users/asifhussain/PROJECTS/CORTEX -> {DRIVE}\PROJECTS\CORTEX
                     parts = str(path).split('/')
                     if 'PROJECTS' in parts:
                         idx = parts.index('PROJECTS')
-                        windows_path = Path('D:\\') / Path(*parts[idx:])
-                        if windows_path.exists():
-                            return windows_path
+                        # Use the drive where this script is located
+                        current_drive = Path(__file__).drive
+                        if current_drive:
+                            windows_path = Path(current_drive) / Path(*parts[idx:])
+                            if windows_path.exists():
+                                return windows_path
+                        # Fallback: try common drives
+                        for drive in ['C:\\', 'D:\\', 'E:\\']:
+                            windows_path = Path(drive) / Path(*parts[idx:])
+                            if windows_path.exists():
+                                return windows_path
                 
                 # Use as-is if exists
                 if path.exists():

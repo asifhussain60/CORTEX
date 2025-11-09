@@ -5,7 +5,8 @@
 # This script serves as a convenient shortcut to invoke the CORTEX entry point.
 # When you run this script, it assumes you're invoking CORTEX for AI assistance.
 
-CORTEX_ROOT="/Users/asifhussain/PROJECTS/CORTEX"
+# Dynamically detect CORTEX root (cross-platform)
+CORTEX_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CORTEX_ENTRY_POINT="$CORTEX_ROOT/prompts/user/cortex.md"
 
 # Colors for output

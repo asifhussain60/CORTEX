@@ -28,9 +28,9 @@ import shutil
 # Add CORTEX to path
 import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from CORTEX.src.entry_point.cortex_entry import CortexEntry
+from entry_point.cortex_entry import CortexEntry
 
 
 class TestConversationTrackingProtection:

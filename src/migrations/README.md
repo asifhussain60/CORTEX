@@ -81,7 +81,10 @@ This directory contains migration scripts for converting CORTEX brain data from 
 Run all migrations with validation:
 
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX/CORTEX/src/migrations
+# Navigate to migrations directory
+cd $CORTEX_ROOT/src/migrations
+# or: cd $(python -c "from config import config; print(config.root_path)")/src/migrations
+
 python3 run_all_migrations.py
 ```
 
@@ -257,8 +260,11 @@ cortex-brain/
 
 **Solution:**
 ```bash
-# Check file exists
-ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/conversation-history.jsonl
+# Check file exists (Unix/Mac)
+ls -la $CORTEX_ROOT/cortex-brain/conversation-history.jsonl
+
+# Check file exists (Windows)
+dir "$env:CORTEX_ROOT\cortex-brain\conversation-history.jsonl"
 
 # Use custom path
 python3 run_all_migrations.py --brain-dir /path/to/cortex-brain
@@ -286,11 +292,11 @@ python3 -c "import sqlite3; conn = sqlite3.connect(':memory:'); conn.execute('CR
 
 **Solution:**
 ```bash
-# Make scripts executable
-chmod +x *.py ../tier1/*.py ../tier2/*.py ../tier3/*.py
+# Check directory permissions (Unix/Mac)
+ls -la $CORTEX_ROOT/cortex-brain/
 
-# Check directory permissions
-ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/
+# Check directory permissions (Windows)
+icacls "$env:CORTEX_ROOT\cortex-brain\"
 ```
 
 ### Issue: "JSON decode error"
@@ -302,7 +308,12 @@ ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/
 # Validate JSONL
 python3 -c "
 import json
-with open('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/conversation-history.jsonl') as f:
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
+from config import config
+
+with open(config.brain_path / 'conversation-history.jsonl') as f:
     for i, line in enumerate(f, 1):
         try:
             json.loads(line)
@@ -317,7 +328,9 @@ with open('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/conversation-history.
 
 ```bash
 # Create backup before migration
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd $CORTEX_ROOT
+# or: cd $(python -c "from config import config; print(config.root_path)")
+
 git add cortex-brain/
 git commit -m "Pre-migration backup: YAML/JSONL data"
 git tag pre-sqlite-migration
@@ -360,7 +373,13 @@ After successful migration:
    # Test conversation retrieval
    python3 -c "
    import sqlite3
-   conn = sqlite3.connect('cortex-brain/left-hemisphere/tier1/conversations.db')
+   import sys
+   from pathlib import Path
+   sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+   from config import config
+   
+   db_path = config.brain_path / 'left-hemisphere' / 'tier1' / 'conversations.db'
+   conn = sqlite3.connect(db_path)
    cursor = conn.cursor()
    cursor.execute('SELECT title, started FROM conversations ORDER BY started DESC LIMIT 5')
    for row in cursor.fetchall():

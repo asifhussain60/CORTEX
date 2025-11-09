@@ -1,0 +1,298 @@
+# Intent Router - Routing Rules Configuration
+# Machine-readable routing patterns for automated intent classification
+
+metadata:
+  role: "Intent Router Agent"
+  version: "5.0"
+  purpose: "Analyze requests and route to appropriate specialist agents"
+  responsibility: "single"  # Only routing, not execution
+  
+routing_rules:
+  - intent: "PLAN"
+    description: "User wants to start new feature work"
+    route_to: "work_planner"
+    route_file: "prompts/internal/work-planner.md"
+    confidence_threshold: 0.7
+    patterns:
+      - regex: "I want to (add|create|build|implement)"
+        weight: 0.9
+      - regex: "^(Add|Create|Build|Implement) (a|an|the)"
+        weight: 0.9
+      - keyword: "add feature"
+        weight: 0.8
+      - keyword: "create component"
+        weight: 0.8
+      - keyword: "build service"
+        weight: 0.8
+      - keyword: "implement functionality"
+        weight: 0.8
+    examples:
+      positive:
+        - "I want to add a FAB button pulse animation"
+        - "Create a PDF export feature"
+        - "Build a dark mode toggle"
+        - "Implement session sharing"
+      negative:
+        - "continue"
+        - "show me progress"
+    
+  - intent: "EXECUTE"
+    description: "User wants to continue active work"
+    route_to: "code_executor"
+    route_file: "prompts/internal/code-executor.md"
+    confidence_threshold: 0.8
+    patterns:
+      - exact: "continue"
+        weight: 1.0
+      - exact: "next"
+        weight: 0.9
+      - exact: "next task"
+        weight: 1.0
+      - exact: "keep going"
+        weight: 0.9
+      - exact: "proceed"
+        weight: 0.9
+      - exact: "execute"
+        weight: 0.8
+    examples:
+      positive:
+        - "continue"
+        - "next task"
+        - "keep going"
+        - "proceed with the plan"
+      negative:
+        - "I want to add"
+        - "test this"
+    
+  - intent: "RESUME"
+    description: "User wants to see progress or pickup after break"
+    route_to: "session_resumer"
+    route_file: "prompts/internal/session-resumer.md"
+    confidence_threshold: 0.7
+    patterns:
+      - exact: "resume"
+        weight: 1.0
+      - regex: "where (was|am) I"
+        weight: 0.9
+      - keyword: "show progress"
+        weight: 0.8
+      - keyword: "left off"
+        weight: 0.8
+      - keyword: "current status"
+        weight: 0.8
+      - exact: "status"
+        weight: 0.7
+      - regex: "what'?s next"
+        weight: 0.7
+    examples:
+      positive:
+        - "Show me where I left off"
+        - "What's the current status?"
+        - "Resume work"
+        - "Where was I?"
+      negative:
+        - "continue"
+        - "test status"
+    
+  - intent: "CORRECT"
+    description: "User needs to fix Copilot's mistake/misunderstanding"
+    route_to: "error_corrector"
+    route_file: "prompts/internal/error-corrector.md"
+    confidence_threshold: 0.8
+    patterns:
+      - regex: "wrong (file|approach|assumption)"
+        weight: 0.9
+      - regex: "not (that|what I meant)"
+        weight: 0.9
+      - keyword: "actually"
+        weight: 0.7
+      - keyword: "correction"
+        weight: 0.8
+      - regex: "you'?re (working on|using|modifying) the wrong"
+        weight: 0.9
+      - keyword: "that's incorrect"
+        weight: 0.8
+    examples:
+      positive:
+        - "You're working on the wrong file"
+        - "That's not what I meant"
+        - "Actually, use SignalR not polling"
+        - "Wrong file! The FAB is in Content.razor"
+      negative:
+        - "create a test"
+        - "validate this"
+    
+  - intent: "TEST"
+    description: "User wants to create or run tests"
+    route_to: "test_generator"
+    route_file: "prompts/internal/test-generator.md"
+    confidence_threshold: 0.7
+    patterns:
+      - regex: "^test"
+        weight: 0.8
+      - regex: "create (test|tests) for"
+        weight: 0.9
+      - keyword: "playwright"
+        weight: 0.8
+      - keyword: "visual regression"
+        weight: 0.8
+      - keyword: "unit test"
+        weight: 0.8
+      - keyword: "integration test"
+        weight: 0.8
+      - keyword: "run tests"
+        weight: 0.9
+    examples:
+      positive:
+        - "Create visual tests for the share button"
+        - "Run all Playwright tests"
+        - "Add unit tests for PDF service"
+        - "Create integration tests for the API"
+      negative:
+        - "continue"
+        - "I want to add a feature"
+    
+  - intent: "VALIDATE"
+    description: "User wants system health check"
+    route_to: "health_validator"
+    route_file: "prompts/internal/health-validator.md"
+    confidence_threshold: 0.7
+    patterns:
+      - keyword: "validate"
+        weight: 0.8
+      - keyword: "health"
+        weight: 0.8
+      - regex: "check (system|quality|errors)"
+        weight: 0.8
+      - regex: "run all (validations|tests|checks)"
+        weight: 0.9
+      - keyword: "quality check"
+        weight: 0.8
+      - keyword: "show errors"
+        weight: 0.7
+    examples:
+      positive:
+        - "Check system health"
+        - "Validate all changes"
+        - "Run quality checks"
+        - "Show me all errors"
+      negative:
+        - "create tests"
+        - "continue"
+    
+  - intent: "ASK"
+    description: "User has questions about system or codebase"
+    route_to: "knowledge_retriever"
+    route_file: "prompts/internal/knowledge-retriever.md"
+    confidence_threshold: 0.6
+    patterns:
+      - regex: "^how do I"
+        weight: 0.9
+      - regex: "^what is"
+        weight: 0.8
+      - regex: "^explain"
+        weight: 0.8
+      - regex: "^tell me about"
+        weight: 0.8
+      - regex: "\\?$"  # Ends with question mark
+        weight: 0.7
+      - regex: "^where is"
+        weight: 0.8
+      - regex: "^which"
+        weight: 0.7
+    examples:
+      positive:
+        - "How do I test canvas elements with Playwright?"
+        - "What test patterns exist?"
+        - "Explain the session state system"
+        - "Where is the FAB button located?"
+      negative:
+        - "I want to add"
+        - "continue"
+    
+  - intent: "GOVERN"
+    description: "User modified system and needs review"
+    route_to: "change_governor"
+    route_file: "prompts/internal/change-governor.md"
+    confidence_threshold: 0.8
+    patterns:
+      - regex: "I updated (CORTEX|cortex)"
+        weight: 0.9
+      - regex: "I modified (prompt|rule|agent)"
+        weight: 0.9
+      - regex: "review (my changes|my .* changes)"
+        weight: 0.8
+      - regex: "I changed (the|a) (rule|prompt|agent)"
+        weight: 0.9
+    context_triggers:
+      - modified_paths:
+          - "prompts/**"
+          - "cortex-brain/**"
+          - "src/tier0/**"
+        weight: 0.9
+    examples:
+      positive:
+        - "I updated the test-generator to support Percy"
+        - "Review my CORTEX modifications"
+        - "I changed Rule #15"
+        - "I modified the intent-router prompt"
+      negative:
+        - "continue"
+        - "create a feature"
+
+# Multi-intent handling
+multi_intent:
+  enabled: true
+  strategies:
+    sequential:
+      description: "Execute intents in order"
+      when: "Intents have dependencies (e.g., PLAN then EXECUTE)"
+    parallel:
+      description: "Execute intents simultaneously"
+      when: "Intents are independent (e.g., TEST and VALIDATE)"
+  precedence_rules:
+    - "CORRECT overrides all (user needs to fix misunderstanding first)"
+    - "GOVERN requires completion before EXECUTE"
+    - "PLAN must precede EXECUTE"
+    - "ASK can be answered without blocking other intents"
+
+# Confidence scoring
+confidence:
+  calculation: "weighted_average"
+  threshold_default: 0.7
+  ambiguity_threshold: 0.5  # Below this, ask for clarification
+  multi_intent_threshold: 0.6  # Secondary intent must score above this
+  
+  weighting:
+    exact_match: 1.0
+    regex_match: 0.8
+    keyword_match: 0.7
+    context_trigger: 0.6
+
+# Fallback behavior
+fallback:
+  low_confidence_action: "ask_clarification"
+  unknown_intent_route: "knowledge_retriever"
+  ambiguous_intent_action: "show_options"
+  
+  clarification_template: |
+    I detected multiple possible intents. Did you want to:
+    {intent_options}
+    
+    Please clarify so I can route you to the right specialist.
+
+# Performance targets
+performance:
+  intent_classification_ms: 50
+  routing_decision_ms: 20
+  total_overhead_ms: 100
+
+# Monitoring
+monitoring:
+  track_metrics:
+    - "intent_classification_accuracy"
+    - "routing_decision_time"
+    - "ambiguous_intent_rate"
+    - "fallback_rate"
+  log_level: "info"
+  alert_on_accuracy_below: 0.85

@@ -3,7 +3,7 @@
     "name": "CORTEX",
     "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
     "language": "TypeScript/Python/PowerShell",
-    "rootPath": "D:\\PROJECTS\\CORTEX",
+    "rootPath": "",
     "buildCommand": "npm run build",
     "runCommand": "npm run dev"
   },

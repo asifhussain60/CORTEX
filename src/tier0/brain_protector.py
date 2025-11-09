@@ -305,7 +305,8 @@ class BrainProtector:
                 contains_any = self.APPLICATION_PATHS
             
             for file_path in request.files:
-                file_lower = file_path.lower()
+                # Normalize path separators for cross-platform compatibility
+                file_lower = file_path.lower().replace('\\', '/')
                 
                 # Check if path matches pattern
                 pattern_match = False
