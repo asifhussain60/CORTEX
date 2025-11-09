@@ -216,14 +216,6 @@ show me where I left off
 
 **Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
 
-#### 🔧 VS Code Extension Commands
-**Available in VS Code Chat (`@cortex`):**
-- `/resume` - Resume last conversation
-- `/checkpoint` - Save conversation state
-- `/history` - View conversation history
-- `/optimize` - Optimize token usage
-- `/instruct` - Give CORTEX new instructions
-
 ---
 
 ### 📚 Documentation Access
