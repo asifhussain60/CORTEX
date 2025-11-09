@@ -4,6 +4,19 @@ This is the **CORTEX** cognitive framework repository - an AI enhancement system
 
 ---
 
+## 💬 Response Style (NEW!)
+
+**Default:** Concise responses (50-150 words) with key info upfront.
+
+**You control detail level:**
+- "be concise" / "keep it brief" → Quick summary  
+- "show details" / "give me more" → Structured breakdown (200-400 words)
+- "explain fully" / "show everything" → Complete technical detail
+
+Your preference persists across the conversation.
+
+---
+
 ## 🧠 What is CORTEX?
 
 CORTEX transforms GitHub Copilot from an amnesiac intern into a continuously improving development partner through:
