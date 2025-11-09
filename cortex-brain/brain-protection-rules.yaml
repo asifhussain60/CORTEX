@@ -29,6 +29,10 @@ tier0_instincts:
   - "LOCAL_FIRST"
   - "BRAIN_PROTECTION_TESTS_MANDATORY"
   - "MACHINE_READABLE_FORMATS"
+  - "SKULL_TEST_BEFORE_CLAIM"
+  - "SKULL_INTEGRATION_VERIFICATION"
+  - "SKULL_VISUAL_REGRESSION"
+  - "SKULL_RETRY_WITHOUT_LEARNING"
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -455,11 +459,170 @@ protection_layers:
         
         evidence: "RIGHT brain should plan, not execute"
   
-  # Layer 5: Knowledge Quality
+  # Layer 5: SKULL Protection (Safety, Knowledge, Validation & Learning)
+  - layer_id: "skull_protection"
+    name: "SKULL Protection Layer"
+    description: "Test validation and quality enforcement (prevents November 9th incident)"
+    priority: 5
+    
+    rules:
+      - rule_id: "SKULL_TEST_BEFORE_CLAIM"
+        name: "Test Before Claim (SKULL-001)"
+        severity: "blocked"
+        description: "Never claim a fix is complete without test validation"
+        
+        detection:
+          keywords:
+            - "fixed ✅"
+            - "complete ✅"
+            - "done ✅"
+            - "implemented ✅"
+          without_keywords:
+            - "test passed"
+            - "test verified"
+            - "validated by test"
+            - "pytest"
+          scope: ["response"]
+        
+        alternatives:
+          - "Create automated test before claiming fix"
+          - "Run test and include results in response"
+          - "Show test output: 'Fixed ✅ (Verified by: test_button_color)'"
+        
+        evidence_template: "Claim: '{match}' without test validation"
+        
+        rationale: |
+          SKULL-001: Test Before Claim
+          
+          Real incident (2025-11-09):
+          - CSS fixes claimed "Fixed ✅" three times
+          - Vision API claimed "Auto-engages ✅" 
+          - Zero tests run to validate
+          - User had to report "not working" each time
+          
+          SKULL prevents this by BLOCKING any success claim without test validation.
+      
+      - rule_id: "SKULL_INTEGRATION_VERIFICATION"
+        name: "Integration Verification (SKULL-002)"
+        severity: "blocked"
+        description: "Integration must be tested end-to-end"
+        
+        detection:
+          keywords:
+            - "integration complete"
+            - "components connected"
+            - "API integrated"
+            - "auto-engages"
+          without_keywords:
+            - "end-to-end test"
+            - "integration test"
+            - "e2e test"
+          scope: ["description"]
+        
+        alternatives:
+          - "Create end-to-end integration test"
+          - "Test full call chain: A → B → C"
+          - "Verify actual execution path, not just config"
+        
+        evidence_template: "Integration claim without E2E test: '{match}'"
+        
+        rationale: |
+          SKULL-002: Integration Verification
+          
+          Real incident (2025-11-09):
+          - Vision API "integration" claimed complete
+          - Only config was changed
+          - No test of actual call chain
+          - Vision API was never actually called
+          
+          SKULL prevents this by requiring end-to-end integration tests.
+      
+      - rule_id: "SKULL_VISUAL_REGRESSION"
+        name: "Visual Regression (SKULL-003)"
+        severity: "warning"
+        description: "CSS/UI changes require visual validation"
+        
+        detection:
+          keywords:
+            - "css fixed"
+            - "style updated"
+            - "color changed"
+            - "UI improved"
+          without_keywords:
+            - "visual test"
+            - "computed style"
+            - "playwright"
+            - "browser test"
+          scope: ["description"]
+        
+        alternatives:
+          - "Add visual regression test (Playwright/Puppeteer)"
+          - "Verify computed style in browser"
+          - "Include before/after screenshot comparison"
+        
+        evidence_template: "CSS/UI change without visual test: '{match}'"
+        
+        rationale: |
+          SKULL-003: Visual Regression
+          
+          Real incident (2025-11-09):
+          - CSS rules applied to fix title color
+          - Claimed "Fixed ✅" without checking browser
+          - Cache wasn't cleared, changes not visible
+          - Repeated 3 times with same approach
+          
+          SKULL prevents this by requiring visual validation of CSS changes.
+      
+      - rule_id: "SKULL_RETRY_WITHOUT_LEARNING"
+        name: "Retry Without Learning (SKULL-004)"
+        severity: "warning"
+        description: "Must diagnose failures before retrying same approach"
+        
+        detection:
+          combined_keywords:
+            retry_marker:
+              - "try again"
+              - "retry"
+              - "attempt 2"
+              - "attempt 3"
+            no_diagnosis:
+              - "same fix"
+              - "reapply"
+              - "rebuild again"
+          without_keywords:
+            - "diagnosed"
+            - "root cause"
+            - "cache cleared"
+            - "verified"
+          scope: ["description"]
+          logic: "AND"
+        
+        alternatives:
+          - "Diagnose WHY previous fix failed"
+          - "Check: file contents, browser cache, build output, computed styles"
+          - "Change approach based on diagnosis"
+          - "Add test to prevent regression"
+        
+        evidence_template: "Retry without diagnosis: '{description}'"
+        
+        rationale: |
+          SKULL-004: Retry Without Learning
+          
+          Real incident (2025-11-09):
+          - CSS fix applied
+          - User: "didn't work"
+          - Same CSS fix applied again
+          - User: "still didn't work"  
+          - Same CSS fix applied THIRD time
+          - No diagnosis of why it failed
+          
+          SKULL prevents this by requiring root cause analysis before retries.
+  
+  # Layer 6: Knowledge Quality
   - layer_id: "knowledge_quality"
     name: "Knowledge Quality"
     description: "Pattern validation and confidence thresholds"
-    priority: 5
+    priority: 6
     
     rules:
       - rule_id: "MIN_OCCURRENCES"
@@ -506,11 +669,11 @@ protection_layers:
         
         evidence: "Patterns require empirical validation"
   
-  # Layer 6: Commit Integrity
+  # Layer 7: Commit Integrity
   - layer_id: "commit_integrity"
     name: "Commit Integrity"
     description: "Brain state files excluded from commits"
-    priority: 6
+    priority: 7
     
     rules:
       - rule_id: "BRAIN_STATE_GITIGNORE"

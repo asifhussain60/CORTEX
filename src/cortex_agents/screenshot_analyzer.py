@@ -78,20 +78,34 @@ class ScreenshotAnalyzer(BaseAgent):
         
         # Check if Vision API should be enabled
         try:
-            # Get config from tier1_api if available
-            config = getattr(tier1_api, 'config', {})
-            if isinstance(config, dict):
+            # Import VisionAPI and config
+            from src.tier1.vision_api import VisionAPI
+            from src.config import CortexConfig
+            import json
+            from pathlib import Path
+            
+            # Load config directly from file
+            cortex_config = CortexConfig()
+            config_file = cortex_config.root_path / "cortex.config.json"
+            
+            if config_file.exists():
+                with open(config_file, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                
                 vision_config = config.get('vision_api', {})
                 self.vision_enabled = vision_config.get('enabled', False)
                 
                 if self.vision_enabled:
-                    from src.tier1.vision_api import VisionAPI
                     self.vision_api = VisionAPI(config)
                     self.logger.info("Vision API enabled for screenshot analysis")
                 else:
-                    self.logger.info("Vision API disabled - using mock implementation")
+                    self.logger.info("Vision API disabled in config - using mock implementation")
+            else:
+                self.logger.info(f"Config file not found: {config_file} - using mock implementation")
         except Exception as e:
             self.logger.warning(f"Could not initialize Vision API: {e}. Using mock fallback.")
+            self.vision_enabled = False
+            self.vision_api = None
     
     def can_handle(self, request: AgentRequest) -> bool:
         """

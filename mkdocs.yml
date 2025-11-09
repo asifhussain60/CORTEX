@@ -64,7 +64,18 @@ nav:
       - Welcome: index.md
   
   - The Story:
-      - The Awakening of CORTEX: awakening-of-cortex.md
+      - The Awakening of CORTEX (Complete): awakening-of-cortex.md
+      - Chapter Navigation: story/index.md
+  
+  - Plugins:
+      - Overview: plugins/README.md
+      - Documentation Refresh: plugins/doc-refresh-plugin-enhancements.md
+      - Platform Switch: plugins/platform-switch-plugin.md
+      - Code Review: plugins/code-review-plugin.md
+      - Command System: plugins/command-system.md
+  
+  - Architecture:
+      - Overview: architecture/README.md
   
   - About:
       - Repository: https://github.com/asifhussain60/CORTEX

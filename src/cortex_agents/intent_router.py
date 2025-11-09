@@ -154,7 +154,7 @@ class IntentRouter(BaseAgent):
     
     def _classify_intent(self, request: AgentRequest) -> IntentType:
         """
-        Classify user intent from message text.
+        Classify user intent from message text and context.
         
         Args:
             request: The agent request
@@ -163,6 +163,20 @@ class IntentRouter(BaseAgent):
             Classified IntentType
         """
         message_lower = request.user_message.lower()
+        
+        # Check if there's an image attachment in context - this takes priority
+        if request.context:
+            # Check for image data in various formats
+            has_image = (
+                'image_base64' in request.context or
+                'image_path' in request.context or
+                'image_data' in request.context or
+                'screenshot' in request.context or
+                any(k.startswith('image') for k in request.context.keys())
+            )
+            if has_image:
+                self.logger.info("Image detected in request context - routing to screenshot analysis")
+                return IntentType.SCREENSHOT
         
         # If intent already classified and valid (not UNKNOWN), use it
         try:

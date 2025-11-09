@@ -59,6 +59,16 @@
     "configSchema": "cortex-config-v5.0",
     "setupCompleted": true
   },
+  "vision_api": {
+    "enabled": true,
+    "max_tokens_per_image": 500,
+    "warn_threshold_tokens": 400,
+    "max_image_size_bytes": 2000000,
+    "downscale_threshold": 1920,
+    "jpeg_quality": 85,
+    "cache_analysis_results": true,
+    "cache_ttl_hours": 24
+  },
   "plugins": {
     "cleanup_plugin": {
       "enabled": true,

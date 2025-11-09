@@ -33,6 +33,7 @@ CORTEX transforms GitHub Copilot from an amnesiac intern into a continuously imp
 ### 4-Tier Brain System
 
 - **Tier 0 (Instinct):** Immutable governance rules (`cortex-brain/brain-protection-rules.yaml`)
+  - **SKULL Protection Layer:** Test validation enforcement (prevents untested changes)
 - **Tier 1 (Working Memory):** Last 20 conversations in SQLite
 - **Tier 2 (Knowledge Graph):** Learned patterns in YAML (`cortex-brain/knowledge-graph.yaml`)
 - **Tier 3 (Development Context):** Git metrics, test coverage, project health
@@ -105,6 +106,20 @@ CORTEX/
 ---
 
 ## 🔧 Development Guidelines
+
+### SKULL Protection Layer
+
+**CRITICAL:** All fixes must pass SKULL validation before claiming complete.
+
+**The 4 SKULL Rules:**
+1. **SKULL-001:** Test Before Claim (BLOCKING) - Never claim "Fixed ✅" without running tests
+2. **SKULL-002:** Integration Verification (BLOCKING) - Integrations need end-to-end tests
+3. **SKULL-003:** Visual Regression (WARNING) - CSS/UI changes need visual validation
+4. **SKULL-004:** Retry Without Learning (WARNING) - Diagnose failures before retrying
+
+**Quick Reference:** `.github/SKULL-QUICK-REFERENCE.md`
+
+---
 
 ### Adding New Plugins
 

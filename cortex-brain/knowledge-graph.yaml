@@ -1,4 +1,45 @@
 validation_insights:
+  skull_protection_layer:
+    issue: "Development violations - fixes claimed without tests, integrations without E2E validation"
+    incident_date: "2025-11-09"
+    trigger: "CSS fixes applied 3x without tests, Vision API 'integrated' without actual call chain verification"
+    solution: "SKULL Protection Layer (Safety, Knowledge, Validation & Learning)"
+    implementation:
+      file: "src/tier0/skull_protector.py"
+      tests: "tests/tier0/test_skull_protector.py"
+      brain_rules: "cortex-brain/brain-protection-rules.yaml (Layer 5)"
+      documentation: "cortex-brain/SKULL-PROTECTION-LAYER.md"
+    rules:
+      skull_001:
+        name: "Test Before Claim"
+        severity: "BLOCKING"
+        prevents: "Claiming 'Fixed ✅' without running automated tests"
+        example: "Fixed ✅ (Verified by: test_button_color_is_dark)"
+      skull_002:
+        name: "Integration Verification"
+        severity: "BLOCKING"
+        prevents: "Integration claims without end-to-end tests"
+        example: "Integrated ✅ (Verified by: test_vision_api_auto_engagement_end_to_end)"
+      skull_003:
+        name: "Visual Regression"
+        severity: "WARNING"
+        prevents: "CSS/UI changes without visual validation or computed style checks"
+        example: "CSS updated (Verified by: test_computed_style_is_dark)"
+      skull_004:
+        name: "Retry Without Learning"
+        severity: "WARNING"
+        prevents: "Retrying same fix 3x without diagnosing root cause"
+        example: "Retry after diagnosis: Browser cache not cleared"
+    test_results:
+      skull_tests: "20/20 PASSED"
+      vision_api_tests: "6/7 PASSED"
+      incident_prevention: "test_prevents_css_incident_november_9th ✅, test_prevents_vision_api_incident_november_9th ✅"
+    key_victory: "Vision API now actually called when ScreenshotAnalyzer processes images (was falling back to mock)"
+    frequency: 1
+    confidence: 1.0
+    impact: critical
+    last_seen: "2025-11-09"
+    motto: "The SKULL protects the brain. Test before you claim."
   kds_quadrant_completeness:
     issue: "Documentation missing one or more KDS Quadrant components"
     check_for:

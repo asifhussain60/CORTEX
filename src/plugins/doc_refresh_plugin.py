@@ -1,11 +1,13 @@
 """
 Documentation Refresh Plugin
 
-Automatically refreshes the 4 synchronized documentation files based on CORTEX 2.0 design:
+Automatically refreshes the 6 synchronized documentation files based on CORTEX 2.0 design:
 - docs/story/CORTEX-STORY/Technical-CORTEX.md
 - docs/story/CORTEX-STORY/Awakening Of CORTEX.md
 - docs/story/CORTEX-STORY/Image-Prompts.md (TECHNICAL DIAGRAMS ONLY - no cartoons)
 - docs/story/CORTEX-STORY/History.md
+- docs/story/CORTEX-STORY/Ancient-Rules.md (The Rule Book - governance rules)
+- docs/story/CORTEX-STORY/CORTEX-FEATURES.md (Simple feature list for humans)
 
 Triggered by: 'Update Documentation' or 'Refresh documentation' commands at entry point
 
@@ -249,7 +251,9 @@ class Plugin(BasePlugin):
             ("Technical-CORTEX.md", self._refresh_technical_doc),
             ("Awakening Of CORTEX.md", self._refresh_story_doc),
             ("Image-Prompts.md", self._refresh_image_prompts_doc),
-            ("History.md", self._refresh_history_doc)
+            ("History.md", self._refresh_history_doc),
+            ("Ancient-Rules.md", self._refresh_ancient_rules_doc),
+            ("CORTEX-FEATURES.md", self._refresh_features_doc)
         ]
         
         for filename, refresh_func in docs_to_refresh:
@@ -895,6 +899,200 @@ class Plugin(BasePlugin):
             "message": "History doc refresh scheduled",
             "action_required": "Document KDS evolution timeline"
         }
+    
+    def _refresh_ancient_rules_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
+        """Refresh Ancient-Rules.md (The Rule Book)
+        
+        Synchronizes governance rules from brain-protection-rules.yaml with 
+        the Ancient Rules documentation. Ensures all rules are documented
+        with context and rationale.
+        
+        CRITICAL RULES:
+        - NEVER create new file if missing
+        - Only UPDATE existing Ancient-Rules.md
+        - Rules must match brain-protection-rules.yaml exactly
+        - Include rule context and "Why this rule exists" sections
+        """
+        try:
+            # CRITICAL: Validate file exists
+            if not file_path.exists():
+                return {
+                    "success": False,
+                    "error": (
+                        f"CRITICAL VIOLATION: File {file_path} does not exist. "
+                        f"Doc refresh plugin NEVER creates new files. "
+                        f"This operation is PROHIBITED."
+                    )
+                }
+            
+            # Load brain protection rules from YAML
+            brain_rules_path = Path("cortex-brain/brain-protection-rules.yaml")
+            if not brain_rules_path.exists():
+                return {
+                    "success": False,
+                    "error": "brain-protection-rules.yaml not found"
+                }
+            
+            import yaml
+            with open(brain_rules_path, 'r', encoding='utf-8') as f:
+                brain_rules = yaml.safe_load(f)
+            
+            # Extract rules that need documentation
+            rules_to_document = []
+            
+            # File operations rules
+            if "file_operations" in brain_rules:
+                for rule_key, rule_data in brain_rules["file_operations"].items():
+                    rules_to_document.append({
+                        "category": "File Operations",
+                        "rule": rule_key,
+                        "data": rule_data
+                    })
+            
+            # Architecture rules
+            if "architecture" in brain_rules:
+                for rule_key, rule_data in brain_rules["architecture"].items():
+                    rules_to_document.append({
+                        "category": "Architecture",
+                        "rule": rule_key,
+                        "data": rule_data
+                    })
+            
+            # Documentation rules
+            if "documentation" in brain_rules:
+                for rule_key, rule_data in brain_rules["documentation"].items():
+                    rules_to_document.append({
+                        "category": "Documentation",
+                        "rule": rule_key,
+                        "data": rule_data
+                    })
+            
+            return {
+                "success": True,
+                "message": "Ancient Rules refresh ready",
+                "rules_count": len(rules_to_document),
+                "action_required": (
+                    f"Update Ancient-Rules.md with {len(rules_to_document)} rules "
+                    f"from brain-protection-rules.yaml. Include context and rationale."
+                )
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to refresh Ancient Rules: {e}")
+            return {
+                "success": False,
+                "error": str(e) if str(e) else f"{type(e).__name__}"
+            }
+    
+    def _refresh_features_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
+        """Refresh CORTEX-FEATURES.md (Simple feature list for humans)
+        
+        Creates human-readable feature list from design documents.
+        Organized by:
+        - Memory System (Tier 1, 2, 3)
+        - Agent System (10 agents)
+        - Plugin System
+        - Universal Operations
+        - Workflow System
+        
+        CRITICAL RULES:
+        - NEVER create new file if missing
+        - Only UPDATE existing CORTEX-FEATURES.md
+        - Keep language simple and accessible
+        - Focus on "What does it do?" not "How does it work?"
+        - Include practical examples
+        """
+        try:
+            # CRITICAL: Validate file exists
+            if not file_path.exists():
+                return {
+                    "success": False,
+                    "error": (
+                        f"CRITICAL VIOLATION: File {file_path} does not exist. "
+                        f"Doc refresh plugin NEVER creates new files. "
+                        f"This operation is PROHIBITED."
+                    )
+                }
+            
+            # Extract features from design context
+            features = {
+                "memory_system": [],
+                "agent_system": [],
+                "plugin_system": [],
+                "operations": [],
+                "workflow_system": []
+            }
+            
+            # Parse design documents for features
+            for doc in design_context.get("design_docs", []):
+                doc_name = doc.get("name", "").lower()
+                content = doc.get("content", "").lower()
+                
+                # Memory features (Tier 1, 2, 3)
+                if "tier" in doc_name or "memory" in doc_name or "tier" in content or "memory" in content:
+                    if "tier 1" in content or "conversation" in content:
+                        features["memory_system"].append({
+                            "name": "Conversation Memory (Tier 1)",
+                            "description": "Remembers your last 20 conversations"
+                        })
+                    if "tier 2" in content or "knowledge graph" in content:
+                        features["memory_system"].append({
+                            "name": "Pattern Learning (Tier 2)",
+                            "description": "Learns from patterns across all conversations"
+                        })
+                    if "tier 3" in content or "context" in content:
+                        features["memory_system"].append({
+                            "name": "Project Health (Tier 3)",
+                            "description": "Tracks git history and code metrics"
+                        })
+                
+                # Agent features
+                if "agent" in doc_name or "hemisphere" in content:
+                    features["agent_system"].append({
+                        "name": "Dual Hemisphere Architecture",
+                        "description": "10 specialist agents (5 LEFT brain, 5 RIGHT brain)"
+                    })
+                
+                # Plugin features
+                if "plugin" in doc_name:
+                    features["plugin_system"].append({
+                        "name": "Plugin System",
+                        "description": "Extensible architecture for custom capabilities"
+                    })
+                
+                # Workflow features
+                if "workflow" in doc_name or "pipeline" in content:
+                    features["workflow_system"].append({
+                        "name": "Workflow Pipeline",
+                        "description": "Declarative YAML workflows"
+                    })
+            
+            # Count unique features
+            total_features = sum(len(v) for v in features.values())
+            
+            return {
+                "success": True,
+                "message": "Features doc refresh ready",
+                "features_count": total_features,
+                "categories": {
+                    "memory": len(features["memory_system"]),
+                    "agents": len(features["agent_system"]),
+                    "plugins": len(features["plugin_system"]),
+                    "operations": len(features["operations"]),
+                    "workflows": len(features["workflow_system"])
+                },
+                "action_required": (
+                    f"Update CORTEX-FEATURES.md with {total_features} features. "
+                    f"Use simple language, practical examples, and clear benefits."
+                )
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to refresh features doc: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
     
     def _create_backup(self, file_path: Path) -> None:
         """Create backup of file before refresh"""
