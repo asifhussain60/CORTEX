@@ -6,3 +6,9 @@
 2025-11-08 11:38:51 - INFO - Not a git repository, git monitoring disabled
 2025-11-08 11:38:53 - ERROR - Error reading workspace JSON: JSONDecodeError
 2025-11-08 11:38:53 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-09 08:12:51 - ERROR - Error detecting pattern: KeyError
+2025-11-09 08:12:51 - ERROR - Error scoring activity: KeyError
+2025-11-09 08:12:51 - ERROR - Error summarizing event: KeyError
+2025-11-09 08:13:33 - ERROR - Error detecting pattern: KeyError
+2025-11-09 08:13:33 - ERROR - Error scoring activity: KeyError
+2025-11-09 08:13:33 - ERROR - Error summarizing event: KeyError

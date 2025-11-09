@@ -38,7 +38,13 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 
 **In GitHub Copilot Chat:**
 ```
-#file:/Users/asifhussain/PROJECTS/CORTEX/prompts/user/cortex.md
+## 🚀 Quick Start
+
+In GitHub Copilot Chat, use the simple entry point:
+
+```
+/CORTEX
+```
 
 [Your request - CORTEX will handle everything]
 ```
@@ -86,7 +92,9 @@ CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhance
 CORTEX/
 ├── README.md                           # This file - system overview
 ├── run-cortex.sh                       # Quick launcher for CORTEX entry point
-├── prompts/user/cortex.md              # 🎯 UNIVERSAL ENTRY POINT - Start here
+├── .github/
+│   ├── copilot-instructions.md         # Auto-loaded baseline context
+│   └── prompts/CORTEX.prompt.md        # 🎯 UNIVERSAL ENTRY POINT - Use /CORTEX
 ├── cortex-brain/                       # The cognitive storage system
 │   ├── tier0/                          # Instinct (immutable rules)
 │   ├── tier1/                          # Working memory (last 20 conversations)

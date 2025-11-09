@@ -1,0 +1,9 @@
+{
+    "chat.promptFiles": true,
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": true,
+        "markdown": true,
+        "plaintext": true
+    }
+}
