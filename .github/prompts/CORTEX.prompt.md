@@ -208,21 +208,30 @@ show me where I left off
 
 **Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
 
-#### 🎯 CORTEX 2.1 Workflow Commands
-**NEW! Interactive and specialized workflow commands:**
+#### 🎯 CORTEX 2.0 Universal Operations Commands
+**Modular, extensible operations system - some commands ready, others in development:**
 
-| Command | Natural Language Equivalent | What It Does |
-|---------|---------------------------|--------------|
-| `/CORTEX, refresh cortex story` | "refresh story", "update story" | Refresh CORTEX story documentation |
-| `/CORTEX, let's plan a feature` | "let's plan", "plan feature" | **Interactive feature planning** with guided questions |
-| `/CORTEX, architect a solution` | "design architecture", "architect this" | Collaborative architecture design |
-| `/CORTEX, refactor this module` | "let's refactor", "refactor this" | Interactive refactoring with clarifications |
-| `/CORTEX, run brain protection` | "check brain", "validate brain" | Run brain protection validation |
-| `/CORTEX, run tests` | "run tests", "test this" | Execute test suite |
-| `/CORTEX, generate documentation` | "generate docs", "document this" | Auto-generate documentation |
+| Command | Natural Language Equivalent | Status | What It Does |
+|---------|---------------------------|--------|--------------|
+| `/setup` | "setup environment", "configure" | ✅ **READY** | Setup/configure development environment |
+| `/CORTEX, refresh cortex story` | "refresh story", "update story" | 🟡 **PARTIAL** | Refresh CORTEX story documentation (1/6 modules) |
+| `/CORTEX, cleanup` | "cleanup", "clean workspace" | ⏸️ **PENDING** | Clean temporary files and optimize databases (0/6 modules) |
+| `/CORTEX, generate documentation` | "generate docs", "update docs" | ⏸️ **PENDING** | Auto-generate and build documentation (0/6 modules) |
+| `/CORTEX, run brain protection` | "check brain", "validate brain" | ⏸️ **PENDING** | Run brain protection validation (0/6 modules) |
+| `/CORTEX, run tests` | "run tests", "test this" | ⏸️ **PENDING** | Execute test suite (0/5 modules) |
 
-**🌟 Highlighted: Interactive Planning** - CORTEX asks clarifying questions before creating plans!  
-See design doc: `docs/design/CORTEX-2.1-INTERACTIVE-PLANNING.md`
+**Implementation Status:**
+- ✅ **Core Architecture Complete:** Universal operations system, YAML registry, orchestrator, factory
+- ✅ **Setup Operation:** 4 modules migrated (platform detection, vision API, Python deps, brain init)
+- 🟡 **Story Refresh:** 1/6 modules implemented (load template)
+- ⏸️ **Other Operations:** Architecture ready, modules pending implementation
+
+**Try it now:**
+```python
+from src.operations import execute_operation
+report = execute_operation('/setup')  # Works!
+report = execute_operation('refresh story')  # Partial (loads story only)
+```
 
 #### 🔧 VS Code Extension Commands
 **Available in VS Code Chat (`@cortex`):**
@@ -381,8 +390,8 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 ---
 
-*Last Updated: 2025-11-09 | CORTEX 2.1 Interactive Planning | GitHub Copilot Integration*
+*Last Updated: 2025-11-09 | CORTEX 2.0 Universal Operations | GitHub Copilot Integration*
 
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. New plugin commands are automatically discovered via the command registry system.*
 
-*What's New in 2.1:* Interactive feature planning with guided questions! Use `/CORTEX, let's plan a feature` to collaborate with CORTEX on requirements before implementation.
+*What's New in 2.0:* Universal operations architecture! All CORTEX commands now use the same modular, YAML-driven system. Setup is fully functional, other operations in development. See `cortex-operations.yaml` for all defined operations and modules.

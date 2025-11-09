@@ -358,57 +358,99 @@ class PlatformSwitchPlugin(BasePlugin):
         """
         Execute manual platform setup/configuration.
         
+        Now delegates to the modular setup orchestrator system.
+        
         Note: Platform detection is automatic. This method only runs
         when user explicitly requests setup/configuration.
         """
+        from src.setup import run_setup
+        
         # Always configure current platform (auto-detected)
         target_platform = self.current_platform
-        target_config = PlatformConfig.for_platform(target_platform)
         
-        self.log(f"� Manual Setup: Configuring {target_platform.display_name}")
+        self.log(f"🔧 CORTEX Setup: Configuring {target_platform.display_name}")
+        self.log(f"📦 Using modular setup system with SOLID architecture")
         
-        results = {
-            "platform": target_platform.display_name,
-            "steps": [],
-            "success": True,
-            "errors": [],
-            "manual_mode": True
+        # Determine setup profile based on user request
+        request_lower = request.lower()
+        if 'full' in request_lower or 'complete' in request_lower:
+            profile = 'full'
+        elif 'minimal' in request_lower or 'quick' in request_lower:
+            profile = 'minimal'
+        else:
+            profile = 'standard'
+        
+        self.log(f"   Profile: {profile}")
+        
+        # Build setup context
+        setup_context = {
+            'project_root': self.project_root,
+            'platform': target_platform.value,
+            'platform_display': target_platform.display_name,
+            'user_request': request,
+            'setup_profile': profile
         }
         
-        # Step 1: Pull latest code from Git
-        step1 = self._git_pull_latest()
-        results["steps"].append(step1)
-        if not step1["success"]:
-            results["success"] = False
+        # Add plugin context if provided
+        if context:
+            setup_context.update(context)
         
-        # Step 2: Configure environment for platform
-        step2 = self._configure_environment(target_config)
-        results["steps"].append(step2)
-        if not step2["success"]:
-            results["success"] = False
-        
-        # Step 3: Verify and install dependencies
-        step3 = self._verify_dependencies(target_config)
-        results["steps"].append(step3)
-        if not step3["success"]:
-            results["success"] = False
-        
-        # Step 4: Run brain tests
-        step4 = self._run_brain_tests(target_config)
-        results["steps"].append(step4)
-        if not step4["success"]:
-            results["success"] = False
-        
-        # Step 5: Verify tooling
-        step5 = self._verify_tooling(target_config)
-        results["steps"].append(step5)
-        if not step5["success"]:
-            results["success"] = False
-        
-        # Generate summary
-        results["summary"] = self._generate_summary(results)
-        
-        return results
+        # Execute setup via orchestrator
+        try:
+            report = run_setup(
+                profile=profile,
+                project_root=self.project_root,
+                context=setup_context
+            )
+            
+            # Convert report to plugin-compatible format
+            results = {
+                "platform": target_platform.display_name,
+                "profile": profile,
+                "success": report.overall_success,
+                "summary": report.summary,
+                "duration_ms": report.duration_ms,
+                "modules_executed": len(report.results),
+                "failed_modules": report.failed_modules,
+                "steps": []
+            }
+            
+            # Convert module results to plugin steps format
+            for module_result in report.results:
+                step = {
+                    "step": module_result.module_id,
+                    "success": module_result.success,
+                    "message": module_result.message,
+                    "details": module_result.details,
+                    "duration_ms": module_result.duration_ms
+                }
+                results["steps"].append(step)
+                
+                # Log each step
+                if module_result.success:
+                    self.log(f"   ✅ {module_result.module_id}: {module_result.message}")
+                else:
+                    self.log(f"   ❌ {module_result.module_id}: {module_result.message}")
+            
+            # Save platform state on success
+            if report.overall_success:
+                self._save_platform_state(target_platform)
+            
+            # Generate and add summary
+            results["summary"] = report.summary
+            
+            return results
+            
+        except Exception as e:
+            self.log(f"❌ Setup failed with error: {e}")
+            return {
+                "platform": target_platform.display_name,
+                "profile": profile,
+                "success": False,
+                "summary": f"Setup failed: {str(e)}",
+                "error": str(e),
+                "steps": []
+            }
     
     def _git_pull_latest(self) -> Dict[str, Any]:
         """Step 1: Pull latest code from Git."""

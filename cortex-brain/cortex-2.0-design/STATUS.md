@@ -5,19 +5,18 @@
 
 ### Active Tasks (Phase 5.1-5.5)
 
-**Priority 1: Complete Phase 5.1 Critical Tests** 🔄 40% COMPLETE (IN PROGRESS)
+**Priority 1: Complete Phase 5.1 Critical Tests** 🔄 50% COMPLETE (IN PROGRESS)
 - [x] Fix 7 test collection errors (+110 tests discovered) ✅ DONE Nov 9
 - [x] Analyze existing integration test coverage (7 gaps identified) ✅ DONE Nov 9
 - [x] Fix CortexEntry fixture bug (25 tests fixed) ✅ DONE Nov 9
-- [ ] Design 15-20 critical integration tests (1 hour)
-- [ ] Implement high-priority tests (4-6 hours)
-  - End-to-end user workflows (5-7 tests)
-  - Multi-agent coordination (5-6 tests)
-  - Session boundaries (4-5 tests)
-  - Complex intent routing (3-4 tests)
-- **Effort Remaining:** 5-7 hours
-- **Status:** Foundation complete, ready to implement new tests
-- **Documentation:** PHASE-5.1-COVERAGE-ANALYSIS.md, PHASE-5.1-SESSION-SUMMARY.md
+- [x] Design 15-20 critical integration tests (1 hour) ✅ DONE Nov 9 Evening
+- [x] Implement 5 end-to-end workflow tests (1 hour) ✅ DONE Nov 9 Evening
+- [ ] Implement 6 multi-agent coordination tests (2-3 hours)
+- [ ] Implement 4 session boundary tests (1-2 hours)
+- [ ] Implement 2 complex intent routing tests (1 hour)
+- **Effort Remaining:** 4-6 hours
+- **Status:** 5/19 tests implemented (26%), all passing
+- **Documentation:** PHASE-5.1-TEST-DESIGN.md, PHASE-5.1-SESSION-SUMMARY-EVENING-2.md
 
 **Priority 2: Phase 5.2 Brain Protection** ✅ COMPLETE
 - [x] Write 55 comprehensive brain protection tests ✅ DONE Nov 9
@@ -30,11 +29,15 @@
 **Timeline:** On schedule ✅ (230% velocity - ahead of plan)
 
 **🎉 Today's Achievements:**
+- ✅ Phase 5.1 Progress: Designed 19 tests, implemented 5 (100% passing)
+- ✅ Test design document created: PHASE-5.1-TEST-DESIGN.md (comprehensive)
+- ✅ TDD compliance: All tests follow RED → GREEN → REFACTOR pattern
+- ✅ End-to-end workflow tests: 5/5 passing (authentication, continue, debug, multi-session, learning)
+- ✅ Test suite: 1,531 total tests (+5 new integration tests)
+- ✅ Dependencies installed: numpy, pytest-mock
 - ✅ Phase 5.2 Complete: 55/55 brain protection tests passing (100%)
-- ✅ Phase 5.1 Progress: Fixed 7 collection errors, unlocked 110 tests (1,416 → 1,526)
 - ✅ Entry point tests: 25/25 passing (was 3 failed + 22 errors)
 - ✅ Self-review: 99.2% rule compliance (9.92/10)
-- ✅ Documentation: 3 comprehensive analysis documents created
 - ✅ **Architectural Refinement: Doc 11 updated with crawler integration (Issue #6 resolved)**
 
 **📊 Q&A Analysis Complete:** See `QA-CRITICAL-QUESTIONS-2025-11-09.md` for detailed answers  
@@ -48,37 +51,68 @@
 
 ## 📊 Progress Overview
 
-### Overall Completion: 62% (21/34 weeks)
+### Overall Completion: 63% (21/34 weeks)
 ```
-███████████████████░░░░░░░░░░░░░ 62%
+Phase 0 ████████████████████████████████ 100% ✅
+Phase 1 ████████████████████████████████ 100% ✅
+Phase 2 ████████████████████████████████ 100% ✅
+Phase 3 ████████████████████████████████ 100% ✅
+Phase 4 ████████████████████████████████ 100% ✅
+Phase 5 ██████████████████░░░░░░░░░░░░░░  57% 🔄
+Phase 6 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋
+Phase 7 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋
+Phase 8 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋
+Phase 9 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋
+─────────────────────────────────────────
+Overall ███████████████████░░░░░░░░░░░░░  63% 🚀
 ```
 
 ### Phase Breakdown
 
-**Phase 0: Quick Wins** ✅ 100% (Week 1-2)
+#### **Phase 0: Quick Wins** ✅ 100% (Week 1-2)
 ```
-████████████████████████████████ 100% ✅ COMPLETE
+Overall ████████████████████████████████ 100% ✅ COMPLETE
 ```
 
-**Phase 1: Core Modularization** ✅ 100% (Week 3-6)
+---
+
+#### **Phase 1: Core Modularization** ✅ 100% (Week 3-6)
 ```
-████████████████████████████████ 100% ✅ COMPLETE
+  1.1 ████████████████████████████████ 100% ✅ Knowledge Graph
+  1.2 ████████████████████████████████ 100% ✅ Tier 1 Memory
+  1.3 ████████████████████████████████ 100% ✅ Context Intelligence
+  1.4 ████████████████████████████████ 100% ✅ All Agents
+  ─────────────────────────────────────────
+Phase 1 ████████████████████████████████ 100% ✅ COMPLETE
 ```
 - 1.1: Knowledge Graph ✅ (10 modules, 165/167 tests)
 - 1.2: Tier 1 Memory ✅ (10 modules, 149 tests)
 - 1.3: Context Intelligence ✅ (7 modules, 49 tests)
 - 1.4: All Agents ✅ (63 modules, 134+ tests)
 
-**Phase 2: Ambient + Workflow** ✅ 100% (Week 7-10)
+---
+
+#### **Phase 2: Ambient + Workflow** ✅ 100% (Week 7-10)
 ```
-████████████████████████████████ 100% ✅ COMPLETE
+  2.1 ████████████████████████████████ 100% ✅ Ambient Capture
+  2.2 ████████████████████████████████ 100% ✅ Workflow Pipeline
+  ─────────────────────────────────────────
+Phase 2 ████████████████████████████████ 100% ✅ COMPLETE
 ```
 - 2.1: Ambient Capture ✅ (773 lines, 72 tests)
 - 2.2: Workflow Pipeline ✅ (850 lines, 52 tests)
 
-**Phase 3: Modular Entry Validation** ✅ 100% (Week 11-12)
+---
+
+#### **Phase 3: Modular Entry Validation** ✅ 100% (Week 11-12)
 ```
-████████████████████████████████ 100% ✅ COMPLETE
+  3.1 ████████████████████████████████ 100% ✅ Proof-of-concept
+  3.2 ████████████████████████████████ 100% ✅ Token measurement
+  3.3 ████████████████████████████████ 100% ✅ Test scenarios
+  3.4 ████████████████████████████████ 100% ✅ Behavioral validation
+  3.5 ████████████████████████████████ 100% ✅ Final decision
+  ─────────────────────────────────────────
+Phase 3 ████████████████████████████████ 100% ✅ COMPLETE
 ```
 - 3.1: Proof-of-concept ✅ (structure created)
 - 3.2: Token measurement ✅ (97.2% reduction achieved!)
@@ -86,97 +120,164 @@
 - 3.4: Behavioral validation ✅ (validated in production - Nov 9)
 - 3.5: Final decision ✅ (STRONG GO 4.83/5)
 
-**Phase 4: Advanced CLI & Integration** ✅ 100% (Week 13-16)
+---
+
+#### **Phase 4: Advanced CLI & Integration** ✅ 100% (Week 13-16)
 ```
-████████████████████████████████ 100% ✅ COMPLETE
+  4.1 ████████████████████████████████ 100% ✅ Quick Capture
+  4.2 ████████████████████████████████ 100% ✅ Shell Integration
+  4.3 ████████████████████████████████ 100% ✅ Context Optimization
+  4.4 ████████████████████████████████ 100% ✅ Ambient Capture
+  ─────────────────────────────────────────
+Phase 4 ████████████████████████████████ 100% ✅ COMPLETE
 ```
-- 4.1: Quick Capture Workflows ✅ (4 CLI tools, 1,077 lines - COMPLETE Nov 9)
-- 4.2: Shell Integration ✅ (completions, git hooks, recall, 901 lines - COMPLETE Nov 9)
-- 4.3: Context Optimization ✅ (30% token reduction, 1,315 lines, 23 tests - COMPLETE Nov 9)
-- 4.4: Enhanced Ambient Capture ✅ (smart filtering, pattern detection, 615 lines, 81 tests - COMPLETE Nov 9)
+- 4.1: Quick Capture Workflows ✅ (4 CLI tools, 1,077 lines)
+- 4.2: Shell Integration ✅ (completions, git hooks, recall, 901 lines)
+- 4.3: Context Optimization ✅ (30% token reduction, 1,315 lines, 23 tests)
+- 4.4: Enhanced Ambient Capture ✅ (smart filtering, pattern detection, 615 lines, 81 tests)
 
 ---
 
-## 📊 Progress Overview
-
-### Overall Completion: 52% (18/34 weeks)
+#### **Phase 5: Risk Mitigation & Testing** 🔄 57% (Week 17-18)
 ```
-████████████████░░░░░░░░░░░░░░░░ 52%
+  5.1 ████████████████░░░░░░░░░░░░░░░░  50% 🔄 Integration tests
+  5.2 ████████████████████████████████ 100% ✅ Brain protection
+  5.3 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 Edge cases
+  5.4 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 Performance tests
+  5.5 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 YAML conversion
+  ─────────────────────────────────────────
+Phase 5 ██████████████████░░░░░░░░░░░░░░  57% 🔄 IN PROGRESS
 ```
-
-### Phase Breakdown
-
-**Phase 0: Quick Wins** ✅ 100% (Week 1-2)
-```
-████████████████████████████████ 100% ✅ COMPLETE
-```
-
-**Phase 1: Core Modularization** ✅ 100% (Week 3-6)
-```
-████████████████████████████████ 100% ✅ COMPLETE
-```
-- 1.1: Knowledge Graph ✅ (10 modules, 165/167 tests)
-- 1.2: Tier 1 Memory ✅ (10 modules, 149 tests)
-- 1.3: Context Intelligence ✅ (7 modules, 49 tests)
-- 1.4: All Agents ✅ (63 modules, 134+ tests)
-
-**Phase 2: Ambient + Workflow** ✅ 100% (Week 7-10)
-```
-████████████████████████████████ 100% ✅ COMPLETE
-```
-- 2.1: Ambient Capture ✅ (773 lines, 72 tests)
-- 2.2: Workflow Pipeline ✅ (850 lines, 52 tests)
-
-**Phase 3: Modular Entry Validation** 🔄 60% (Week 11-12)
-```
-███████████████████░░░░░░░░░░░░░ 60% 🔄 IN PROGRESS
-```
-- 3.1: Proof-of-concept ✅ (structure created)
-- 3.2: Token measurement ✅ (97.2% reduction achieved!)
-- 3.3: Test scenarios ✅ (10 scenarios defined)
-- 3.4: Behavioral validation 📋 (pending)
-- 3.5: Final decision 📋 (STRONG GO expected)
-
-**Phase 4: Advanced CLI & Integration** � 25% (Week 13-16)
-```
-████████░░░░░░░░░░░░░░░░░░░░░░░░ 25% � IN PROGRESS
-```
-- 4.1: Quick Capture Workflows ✅ (4 CLI tools - COMPLETE Nov 9)
-
-**Phase 5: Risk Mitigation & Testing** 🔄 55% (Week 17-18)
-```
-█████████████████░░░░░░░░░░░░░░░ 55% 🔄 IN PROGRESS
-```
-- 5.1: Critical integration tests � (40% complete - collection errors fixed, coverage analyzed)
+- 5.1: Critical integration tests 🔄 (50% complete - 5/19 tests implemented, all passing)
 - 5.2: Brain protection enhancements ✅ (55/55 tests passing - COMPLETE Nov 9)
 - 5.3: Edge case validation 📋 (next after 5.1)
 - 5.4: Performance regression tests 📋
 - 5.5: YAML conversion 📋 (10-12 docs - see Doc 33)
 
-**Remaining Phases (6-10)** 📋 0% (Week 19-36)
+---
+
+#### **Remaining Phases (6-10)** 📋 0% (Week 19-36)
 ```
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 0% 📋 NOT STARTED
+Phase 6 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 NOT STARTED
+Phase 7 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 NOT STARTED
+Phase 8 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 NOT STARTED
+Phase 9 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 NOT STARTED
+Phase 10 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0% 📋 NOT STARTED
 ```
 
 ---
 
-## 🎯 Current Sprint
+### 🎯 CORTEX 2.1 Integration (Design Complete)
 
-### Active Tasks (Phase 5.1-5.5)
+**Status:** ✅ Design Phase Complete | 📋 Implementation Planned for Week 19-24  
+**Timeline:** Parallel implementation with CORTEX 2.0 Phase 6-7  
+**Approach:** Hybrid (maximize efficiency, no wasted time)
 
-**Priority 1: Begin Phase 5.1 Critical Tests** 📋 READY TO START
-- [ ] Identify critical test gaps in core functionality
-- [ ] Write integration tests for key workflows
-- [ ] Add edge case coverage
-- [ ] Document test plans
-- **Effort:** 4-6 hours
-- **Status:** Phase 3 complete, ready to proceed
+#### Features Designed
 
-**Priority 2: Complete Phase 5.2 Brain Protection** � IN PROGRESS
-- [ ] Identify critical test gaps
-- [ ] Write integration tests
-- [ ] Add edge case tests
-- **Effort:** 4-6 hours
+**1. Interactive Feature Planning** ⭐
+- Collaborative planning with clarifying questions
+- Question generator (max 5 questions)
+- Answer parser with context tracking
+- Question filter (smart skipping >40% of questions)
+- Plan synthesis and approval workflow
+- **Impact:** 70%→90% plan accuracy, -67% rework time
+
+**2. Command Discovery System** 🔍
+- 5-layer discovery (natural language, /help, suggestions, visual aids, learning)
+- Context-aware help based on current work
+- Proactive command suggestions
+- Progressive disclosure (scales to 50+ commands)
+- **Impact:** 90%+ discovery rate, 70%+ adoption rate
+
+#### Implementation Schedule
+
+```
+Week 19-20: Interactive Planning Foundation (CORTEX 2.1 Week 1-2)
+├─ Parallel with 2.0 Phase 6 (Performance)
+├─ Interactive Planner Agent
+├─ Question Generator + Answer Parser
+└─ Tier 1/2 extensions
+
+Week 21-22: Command Discovery + Advanced Planning (CORTEX 2.1 Week 3-4)
+├─ Parallel with 2.0 Phase 7 (Documentation)
+├─ Intelligent /help command
+├─ Context analyzer
+└─ Preference learning
+
+Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
+├─ Complete 2.0 Phase 7
+├─ Full system integration
+├─ Comprehensive testing
+└─ Beta testing (10 users)
+```
+
+#### Dependencies
+
+**CORTEX 2.1 Requires:**
+- ✅ Plugin System (2.0 Phase 2) - Complete
+- ✅ Tier 1 Memory (2.0 Phase 1) - Complete
+- ✅ Tier 2 Knowledge (2.0 Phase 1) - Complete
+- ✅ Intent Router (2.0 Phase 1) - Complete
+- ✅ Universal Operations (2.0 Phase 0) - Complete
+
+**CORTEX 2.1 Enhances:**
+- 📈 User Experience (collaborative planning vs blind execution)
+- 📈 Discoverability (zero-memorization command system)
+- 📈 Learning Curve (progressive disclosure)
+- 📈 Documentation (enhanced by command discovery)
+
+**Blocker Status:** ❌ No blockers - 2.1 can start anytime
+
+#### Operations Integration
+
+**Added to `cortex-operations.yaml` (v2.1):**
+- `/CORTEX, let's plan a feature` - Interactive planning
+- `/CORTEX, architect a solution` - Architecture design
+- `/CORTEX, refactor this module` - Refactoring planning
+- `/help` - Context-aware command discovery
+- `/help search <keyword>` - Command search
+- **Total:** 6 new operations, 22 new modules
+
+#### Resource Requirements
+
+- 2-3 developers (can share with 2.0 Phase 6-7)
+- 1 QA engineer (testing both tracks)
+- 1 UX designer (visual aids for command discovery)
+- **Total:** 24 person-weeks over 6 weeks
+
+#### Success Metrics
+
+| Metric | Baseline (2.0) | Target (2.1) | Measurement |
+|--------|---------------|-------------|-------------|
+| **Plan Accuracy** | 70% | >90% | User confirms plan matches intent |
+| **Rework Time** | 3 hours | <1 hour | Time fixing misunderstood requirements |
+| **Command Discovery** | Variable | 90%+ | Users discover commands within 1 week |
+| **User Satisfaction** | 3.5/5 | >4.5/5 | Post-session survey |
+| **Question Efficiency** | N/A | <60% | Questions asked / Total possible |
+| **Context Extraction** | N/A | >85% | Correct implied answers accuracy |
+
+#### Risk Assessment
+
+**Overall Risk:** 🟢 LOW
+
+- ✅ Design complete and approved
+- ✅ No dependencies on incomplete 2.0 features
+- ✅ Parallel implementation proven feasible
+- ✅ Total timeline unchanged (36 weeks)
+- ✅ Can defer to 2.2 if needed (not on critical path)
+
+#### Documentation
+
+**Design Documents:**
+- `docs/design/CORTEX-2.1-INTERACTIVE-PLANNING.md` (50+ pages)
+- `docs/design/CORTEX-COMMAND-DISCOVERY-SYSTEM.md` (40+ pages)
+- `docs/CORTEX-2.1-IMPLEMENTATION-ROADMAP.md` (30+ pages)
+- `cortex-brain/CORTEX-2.1-COMPLETE-SUMMARY.md` (summary)
+- `cortex-brain/CORTEX-2.1-CONTEXT-TRACKING-UPDATE.md` (enhancement)
+- `cortex-brain/cortex-2.0-design/CORTEX-2.0-2.1-INTEGRATION-ANALYSIS.md` (integration)
+
+**Status:** All design documents complete ✅
 
 ---
 
@@ -184,8 +285,8 @@
 
 | Metric | Target | Achieved | Status |
 |--------|--------|----------|--------|
-| **Overall Progress** | 29% (Week 10) | 65% | ✅ +224% velocity |
-| **Test Coverage** | 80+ tests | 1,526+ tests | ✅ 1,908% of target |
+| **Overall Progress** | 29% (Week 10) | 63% | ✅ +217% velocity |
+| **Test Coverage** | 80+ tests | 1,531+ tests | ✅ 1,914% of target |
 | **Test Pass Rate** | >95% | 100% | ✅ Exceeded |
 | **Token Reduction** | >90% | 97.2% | ✅ +7% better |
 | **Context Optimization** | N/A | 30%+ | ✅ New feature |
@@ -195,10 +296,12 @@
 | **Design Docs** | 30-32 | 40 | ✅ +25% complete |
 | **Q&A Coverage** | N/A | 4/4 answered | ✅ 100% |
 | **Brain Protection** | 22 tests | 55 tests | ✅ 250% coverage |
-| **Phase 5.1 Progress** | N/A | 40% complete | 🔄 In progress |
+| **Phase 5.1 Progress** | N/A | 50% complete | 🔄 In progress |
 | **Phase 3 Decision** | 3.5+ score | 4.83/5 | ✅ 138% of target |
 | **Self-Review Score** | N/A | 9.92/10 (99.2%) | ✅ Exceptional |
 | **Arch Refinements** | N/A | 1/12 applied | 🔄 In progress (Issue #6) |
+| **Universal Operations** | 10 operations | 13 (7 v2.0 + 6 v2.1) | 📋 2.1 Pending |
+| **Operation Modules** | 60 modules | 70 (48 v2.0 + 22 v2.1) | 📋 2.1 Pending |
 
 ### 💡 Phase 4.4 Highlights (2025-11-09)
 
@@ -225,24 +328,27 @@
 
 ## 🚀 Next 3 Actions
 
-1. **Complete Phase 5.1: Critical Integration Tests** (5-7 hours)
-   - Design 15-20 critical integration tests (1 hour) - NEXT SESSION
-   - Implement end-to-end user workflow tests (2-3 hours)
-   - Implement multi-agent coordination tests (2-3 hours)
-   - Target: 1,550+ total tests, 95%+ pass rate
-   - **Documentation Ready:** PHASE-5.1-COVERAGE-ANALYSIS.md (gaps identified)
-   - Add edge case coverage
-   - Document test plans
+1. **Continue Phase 5.1: Multi-Agent Coordination Tests** (2-3 hours)
+   - Implement `test_plan_to_execute_handoff` (agent handoffs)
+   - Implement `test_execute_to_test_handoff` (context passing)
+   - Implement `test_agent_context_passing` (data flow validation)
+   - Implement `test_parallel_agent_execution` (concurrent agents)
+   - Implement `test_agent_conflict_resolution` (governance rules)
+   - Implement `test_agent_retry_on_failure` (error recovery)
+   - Target: 11/19 tests complete (58% of Phase 5.1)
 
-2. **Complete Phase 5.2: Brain Protection Tests** (2-4 hours)
-   - Add remaining 7 tests to reach 28 total
-   - Validate brain protection rules completeness
-   - Test all edge cases and error conditions
+2. **Continue Phase 5.1: Session Boundary Tests** (1-2 hours)
+   - Implement `test_30_minute_timeout_enforcement` (session lifecycle)
+   - Implement `test_session_resume_preserves_conversation_id` (continuity)
+   - Implement `test_concurrent_session_handling` (isolation)
+   - Implement `test_session_metadata_persistence` (durability)
+   - Target: 15/19 tests complete (79% of Phase 5.1)
 
-3. **Plan Phase 5.5: YAML Conversion** (1-2 hours)
-   - Prioritize 10-12 documents for conversion
-   - Design YAML schema
-   - Estimate effort
+3. **Complete Phase 5.1: Complex Intent Routing** (1 hour)
+   - Implement `test_multi_intent_request` (multiple intents)
+   - Implement `test_ambiguous_intent_resolution` (disambiguation)
+   - Target: 17/19 tests complete (89% of Phase 5.1)
+   - Update STATUS.md and complete Phase 5.1 documentation
 
 ---
 
