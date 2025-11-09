@@ -1,0 +1,115 @@
+# MkDocs Configuration for CORTEX - The Awakening
+site_name: "CORTEX - AI Enhancement Framework"
+site_description: "Long-term memory and strategic planning for GitHub Copilot"
+site_author: "Asif Hussain"
+copyright: "© 2024-2025 Asif Hussain. All rights reserved."
+repo_url: "https://github.com/asifhussain60/CORTEX"
+repo_name: "asifhussain60/CORTEX"
+
+# Theme configuration
+theme:
+  name: material
+  
+  # Color palette
+  palette:
+    # Light mode (default)
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  # Features
+  features:
+    - navigation.instant        # Instant loading
+    - navigation.tracking       # URL tracks scroll position
+    - navigation.tabs          # Top-level sections as tabs
+    - navigation.sections      # Expand sections in sidebar
+    - navigation.expand        # Expand all sections by default
+    - navigation.top           # Back to top button
+    - search.suggest           # Search suggestions
+    - search.highlight         # Highlight search terms
+    - toc.integrate            # TOC integrated in sidebar
+    - content.code.copy        # Copy code button
+    - content.tabs.link        # Linked content tabs
+  
+  # Fonts - Google Fonts integration
+  font:
+    text: Roboto
+    code: Roboto Mono
+  
+  # Icon
+  icon:
+    repo: fontawesome/brands/github
+
+# Custom CSS
+extra_css:
+  - stylesheets/custom.css
+  - stylesheets/story.css
+  - stylesheets/technical.css
+  - https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
+
+# Navigation
+nav:
+  - Home:
+      - Welcome: index.md
+  
+  - The Story:
+      - The Awakening of CORTEX: awakening-of-cortex.md
+  
+  - About:
+      - Repository: https://github.com/asifhussain60/CORTEX
+
+# Markdown extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  
+  # PyMdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+# Plugins
+plugins:
+  - search:
+      lang: en

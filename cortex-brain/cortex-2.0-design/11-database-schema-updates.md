@@ -38,6 +38,9 @@ This document describes: new tables, modified tables, indices, retention strateg
 | Conversation | New Table | `conversation_state_snapshots` | Full state checkpoints |
 | Knowledge Integrity | New Table | `boundary_events` | Boundary guard events (allow/deny) |
 | Knowledge Provenance | New Table | `provenance_links` | Source artifact relationships |
+| Crawler Integration | New Table | `workspace_databases` | Discovered database connections |
+| Crawler Integration | New Table | `workspace_apis` | Discovered API endpoints |
+| Crawler Integration | New Table | `workspace_frameworks` | Discovered frameworks/libraries |
 | Performance | New Index | Various | Indices for query speed (detailed below) |
 
 ---
@@ -272,6 +275,65 @@ CREATE INDEX idx_provenance_source ON provenance_links(source_type, source_ref);
 CREATE INDEX idx_provenance_target ON provenance_links(target_type, target_ref);
 ```
 
+### 14. `workspace_databases` (Crawler Integration)
+Stores discovered database connections from crawler system (Doc 32).
+```sql
+CREATE TABLE workspace_databases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    database_type TEXT NOT NULL,                 -- 'oracle', 'mssql', 'postgresql', 'sqlite', etc.
+    connection_string TEXT NOT NULL,
+    host TEXT,
+    port INTEGER,
+    database_name TEXT,
+    discovered_at REAL NOT NULL,
+    last_verified REAL,
+    schemas TEXT,                                -- JSON array of schema names
+    table_count INTEGER DEFAULT 0,
+    metadata TEXT,                               -- JSON: version, features, etc.
+    UNIQUE(database_type, host, port, database_name)
+);
+CREATE INDEX idx_workspace_databases_type ON workspace_databases(database_type);
+CREATE INDEX idx_workspace_databases_verified ON workspace_databases(last_verified DESC);
+```
+
+### 15. `workspace_apis` (Crawler Integration)
+Stores discovered API endpoints from crawler system (Doc 32).
+```sql
+CREATE TABLE workspace_apis (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    api_type TEXT NOT NULL,                      -- 'rest', 'graphql', 'grpc', 'soap'
+    base_url TEXT NOT NULL,
+    spec_location TEXT,                          -- Path to OpenAPI/GraphQL schema
+    endpoints TEXT,                              -- JSON array of endpoints
+    discovered_at REAL NOT NULL,
+    last_verified REAL,
+    authentication_type TEXT,                    -- 'bearer', 'basic', 'oauth2', 'apikey', 'none'
+    metadata TEXT,                               -- JSON: version, rate limits, etc.
+    UNIQUE(api_type, base_url)
+);
+CREATE INDEX idx_workspace_apis_type ON workspace_apis(api_type);
+CREATE INDEX idx_workspace_apis_verified ON workspace_apis(last_verified DESC);
+```
+
+### 16. `workspace_frameworks` (Crawler Integration)
+Stores discovered frameworks and libraries from crawler system (Doc 32).
+```sql
+CREATE TABLE workspace_frameworks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    framework_type TEXT NOT NULL,                -- 'react', 'angular', 'flask', 'django', 'express', etc.
+    version TEXT,
+    config_location TEXT,                        -- Path to package.json, requirements.txt, etc.
+    components_count INTEGER DEFAULT 0,
+    routes_count INTEGER DEFAULT 0,
+    discovered_at REAL NOT NULL,
+    last_verified REAL,
+    metadata TEXT,                               -- JSON: routes, dependencies, build config, etc.
+    UNIQUE(framework_type, config_location)
+);
+CREATE INDEX idx_workspace_frameworks_type ON workspace_frameworks(framework_type);
+CREATE INDEX idx_workspace_frameworks_verified ON workspace_frameworks(last_verified DESC);
+```
+
 ---
 
 ## ✏️ Modified Tables
@@ -305,6 +367,10 @@ CREATE INDEX IF NOT EXISTS idx_conversations_active ON conversations(archived, l
 | conversation_state_snapshots | (session_id, turn_number DESC) | Quick latest snapshot retrieve |
 | boundary_events | (occurred_at DESC) | Recent security events |
 | provenance_links | (target_type, target_ref) | Trace lineage |
+| workspace_databases | (database_type) | Filter by DB type |
+| workspace_databases | (last_verified DESC) | Find stale connections |
+| workspace_apis | (api_type) | Filter by API type |
+| workspace_frameworks | (framework_type) | Filter by framework |
 
 ---
 
@@ -324,6 +390,9 @@ CREATE INDEX IF NOT EXISTS idx_conversations_active ON conversations(archived, l
 | conversation_state_snapshots | Last 5 per session | Delete older snapshots |
 | boundary_events | 90 days | Export denied events to cold storage before purge |
 | provenance_links | 1 year | Needed for audit; archive older |
+| workspace_databases | 1 year | Keep for workspace history; re-verify periodically |
+| workspace_apis | 1 year | Keep for workspace history; re-verify periodically |
+| workspace_frameworks | 1 year | Keep for workspace history; re-verify periodically |
 
 ---
 
@@ -354,7 +423,8 @@ CREATE INDEX IF NOT EXISTS idx_conversations_active ON conversations(archived, l
 ```sql
 -- Confirm new tables
 SELECT name FROM sqlite_master WHERE type='table' AND name IN (
-  'health_reports','maintenance_runs','creation_sessions','plugins'
+  'health_reports','maintenance_runs','creation_sessions','plugins',
+  'workspace_databases','workspace_apis','workspace_frameworks'
 );
 
 -- Recent failed plugin executions
@@ -369,6 +439,114 @@ SELECT file_path, total_chunks, completed, failed, started_at
 FROM creation_sessions
 WHERE completed=0
 ORDER BY started_at DESC;
+
+-- Discovered databases in workspace
+SELECT database_type, host, database_name, table_count, 
+       datetime(discovered_at, 'unixepoch') as discovered
+FROM workspace_databases
+ORDER BY discovered_at DESC;
+
+-- Discovered APIs by type
+SELECT api_type, base_url, authentication_type,
+       datetime(last_verified, 'unixepoch') as last_verified
+FROM workspace_apis
+WHERE last_verified > (strftime('%s', 'now') - 86400 * 30)  -- Last 30 days
+ORDER BY api_type, base_url;
+
+-- Framework inventory with component counts
+SELECT framework_type, version, components_count, routes_count,
+       datetime(discovered_at, 'unixepoch') as discovered
+FROM workspace_frameworks
+ORDER BY framework_type;
+```
+
+---
+
+## 🔗 Crawler Integration Examples
+
+### How Agents Query Crawler Discoveries
+
+**Pattern: Generate Database Code**
+```python
+# Agent uses discovered databases for accurate code generation
+from src.tier2.knowledge_graph import KnowledgeGraph
+
+def generate_database_code(request: str):
+    """Agent generates code using actual workspace databases"""
+    kg = KnowledgeGraph()
+    
+    # Query discovered databases
+    databases = kg.query_discovered_databases()
+    
+    if databases:
+        # Use actual connection string and type
+        db = databases[0]
+        conn_string = db['connection_string']
+        db_type = db['database_type']
+        
+        # Generate accurate, workspace-specific code
+        code = f"""
+        # Using discovered {db_type} database
+        import {db_type}
+        
+        conn = {db_type}.connect('{conn_string}')
+        cursor = conn.cursor()
+        # Your query here
+        """
+    else:
+        # Fall back to generic template
+        code = "# No database discovered, using generic template"
+    
+    return code
+```
+
+**Pattern: API Integration Code**
+```python
+def generate_api_client_code(request: str):
+    """Generate API client using discovered endpoints"""
+    kg = KnowledgeGraph()
+    
+    # Query discovered APIs
+    apis = kg.query_discovered_apis(api_type='rest')
+    
+    if apis:
+        api = apis[0]
+        base_url = api['base_url']
+        auth_type = api['authentication_type']
+        
+        code = f"""
+        # Using discovered API: {base_url}
+        import requests
+        
+        BASE_URL = '{base_url}'
+        # Authentication: {auth_type}
+        """
+    
+    return code
+```
+
+**Pattern: Link Crawler Data to Patterns**
+```python
+# Link discovered entities to knowledge graph patterns
+def link_crawler_discoveries_to_patterns():
+    """Create relationships between patterns and discovered entities"""
+    kg = KnowledgeGraph()
+    
+    # Example: Link database query pattern to actual database
+    kg.add_relationship(
+        subject_pattern_id=123,  # Pattern: "Generate Oracle query"
+        relationship_type='uses_database',
+        object_entity_id=456,     # workspace_databases.id
+        object_entity_type='workspace_database'
+    )
+    
+    # Example: Link API integration pattern to actual API
+    kg.add_relationship(
+        subject_pattern_id=789,  # Pattern: "Call REST API"
+        relationship_type='uses_api',
+        object_entity_id=101,     # workspace_apis.id
+        object_entity_type='workspace_api'
+    )
 ```
 
 ---
@@ -380,6 +558,9 @@ ORDER BY started_at DESC;
 - Plugin execution logging: observability + future adaptive prioritization
 - Boundary + provenance tables: auditability and compliance foundation
 - Retention snapshots: historical shape of policy decisions (explain why deletion happened)
+- **Crawler integration tables:** Bridge between workspace discovery (Doc 32) and agent code generation
+- **Workspace discovery links:** Enable agents to generate workspace-specific code instead of generic templates
+- **Verification timestamps:** Track freshness of discovered entities, trigger re-validation when stale
 
 ---
 
@@ -392,6 +573,8 @@ ORDER BY started_at DESC;
 | Index overhead | Slower writes | Only create indices tied to query patterns |
 | Provenance growth | Storage increase | Archive >12 months to cold storage |
 | Cascade deletes misused | Data loss | Restrict cascades to safe child tables only |
+| Stale crawler data | Incorrect code generation | Periodic re-verification, mark stale entries |
+| Crawler table bloat | Storage overhead | Archive old discoveries, keep last 1 year active |
 
 ---
 
@@ -403,6 +586,15 @@ ORDER BY started_at DESC;
 - Wire maintenance engine metrics → `maintenance_runs`
 - Add creation engine persistence layer (currently in-memory in doc 09 example)
 - Add retention worker to enforce table-specific policies
+- **Integrate crawler discoveries → `workspace_databases`, `workspace_apis`, `workspace_frameworks`**
+- **Add Tier 2 query methods for agents to access crawler data (see examples above)**
+- **Implement crawler re-verification scheduler (mark stale entries)**
+
+---
+
+**Related Documents:**
+- **32-crawler-orchestration-system.md** - Populates workspace discovery tables
+- **35-unified-architecture-analysis.md** - Issue #6: Crawler integration gap (resolved by this update)
 
 ---
 

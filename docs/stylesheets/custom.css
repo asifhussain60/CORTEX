@@ -465,3 +465,119 @@ code[class*="language-"],
 ::-webkit-scrollbar-thumb:hover {
   background: var(--cortex-accent);
 }
+
+/* ============================================
+   ANCIENT RULES STYLING - Sacred Text
+   ============================================ */
+
+.ancient-rules {
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f0e8 100%);
+  padding: 3rem;
+  margin: 3rem 0;
+  border: 3px double #8b7355;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(139, 115, 85, 0.15);
+  position: relative;
+}
+
+.ancient-rules::before {
+  content: "✦";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #8b7355;
+  background: #faf8f3;
+  padding: 0 1rem;
+}
+
+.ancient-rules h2 {
+  font-family: 'Cinzel', 'IM Fell English', serif !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #5d4e37;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ancient-rules > p:first-of-type {
+  font-family: 'IM Fell English', 'Cinzel', serif !important;
+  font-style: italic;
+  text-align: center;
+  color: #8b7355;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.ancient-rules h3 {
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b5744;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #d4c5b0;
+  padding-bottom: 0.5rem;
+}
+
+.ancient-rules p strong {
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700;
+  color: #5d4e37;
+  font-size: 1.05rem;
+}
+
+.ancient-rules p {
+  font-family: 'IM Fell English', Georgia, serif !important;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #3e352e;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.ancient-rules > p:last-of-type {
+  font-family: 'IM Fell English', serif !important;
+  font-style: italic;
+  text-align: center;
+  color: #8b7355;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  border-top: 1px solid #d4c5b0;
+  padding-top: 1rem;
+}
+
+/* Dark mode adjustments for ancient rules */
+[data-md-color-scheme="slate"] .ancient-rules {
+  background: linear-gradient(135deg, #2d2520 0%, #3a2f28 100%);
+  border-color: #8b7355;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules::before {
+  background: #2d2520;
+  color: #c9a875;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules h2 {
+  color: #d4b896;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules > p:first-of-type {
+  color: #c9a875;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules h3 {
+  color: #c9a875;
+  border-bottom-color: #5d4e37;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules p {
+  color: #e5d4c1;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules p strong {
+  color: #d4b896;
+}

@@ -38,6 +38,16 @@
     "quality_threshold": 0.9,
     "cache_check_frequency": 5
   },
+  "vision_api": {
+    "enabled": false,
+    "max_tokens_per_image": 500,
+    "max_image_size_bytes": 2000000,
+    "downscale_threshold": 1920,
+    "jpeg_quality": 85,
+    "cache_analysis_results": true,
+    "cache_ttl_hours": 24,
+    "warn_threshold_tokens": 400
+  },
   "portability": {
     "version": "5.0.0",
     "lastUpdated": "2025-11-06",

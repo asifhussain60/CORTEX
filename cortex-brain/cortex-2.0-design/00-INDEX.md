@@ -75,8 +75,9 @@ Plugin system and modular architecture:
 High-level features built on the foundation:
 
 - **🆕 30-token-optimization-system.md** - ⭐ **HIGH PRIORITY** - ML-powered token reduction (50-70%), cache explosion prevention, inspired by Cortex Token Optimizer
-- **🆕 31-human-readable-documentation-system.md** - ⭐ **CRITICAL** - Human-readable docs (95% story/5% technical), image integration, auto-sync
-- **🆕 32-crawler-orchestration-system.md** - ⭐ **HIGH PRIORITY** - Unified workspace discovery (databases, APIs, UI, frameworks) - ~2,236 lines implemented
+- **🆕 31-vision-api-integration.md** - ⭐ **HIGH PRIORITY** - GitHub Copilot Vision API integration with token budgets (<2% token increase, 1,000x ROI)
+- **🆕 32-human-readable-documentation-system.md** - ⭐ **CRITICAL** - Human-readable docs (95% story/5% technical), image integration, auto-sync
+- **🆕 33-crawler-orchestration-system.md** - ⭐ **HIGH PRIORITY** - Unified workspace discovery (databases, APIs, UI, frameworks) - ~2,236 lines implemented
 - **29-response-template-system.md** - ⭐ **HIGH PRIORITY** - Response formatting templates for concise, actionable responses
 - **22-request-validator-enhancer.md** - Intelligent request validation and enhancement at entry point
 - **21-workflow-pipeline-system.md** - Workflow orchestration, pipeline execution, agent coordination
@@ -94,7 +95,7 @@ Testing and migration from 1.0:
 - **🆕 34-brain-protection-test-enhancements.md** - ⭐ **NEW** - 6 additional tests for Rules 3, 5, 26, 27, 28, 31 (4-6 hours)
 - **12-migration-strategy.md** - Step-by-step migration from 1.0 to 2.0
 - **15-api-changes.md** - Agent interface updates, new abstractions
-- **🆕 33-yaml-conversion-strategy.md** - Convert 10-12 design docs to YAML (30% size reduction, 10-15 hours)
+- **🆕 33-yaml-conversion-strategy.md** - Convert 10-12 design docs to YAML (30% size reduction, 10-15 hours) [Note: Numbering moved to 38 to accommodate vision-api at 31]
 
 ### 🔧 ARCHITECTURAL REFINEMENTS (Critical Updates)
 Analysis and improvements to unify the architecture:

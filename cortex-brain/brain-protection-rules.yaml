@@ -208,6 +208,90 @@ protection_layers:
           - Better version control diffs
           - Direct machine consumption
           - No documentation drift
+      
+      - rule_id: "ACTIVE_NARRATOR_VOICE"
+        name: "Active Narrator Voice (Not Passive Documentation)"
+        severity: "warning"
+        description: "Story uses passive/clinical narrator voice instead of active storytelling"
+        
+        detection:
+          passive_verbs:
+            - "Asif Codeinstein designed"
+            - "Asif Codeinstein created"
+            - "Asif Codeinstein wrote"
+            - "Asif Codeinstein implemented"
+            - "Asif Codeinstein developed"
+            - "He wrote routines"
+            - "He created routines"
+            - "He implemented"
+            - "He developed"
+          
+          documentary_markers:
+            - "One evening, while"
+            - "One morning, while"
+            - "One day, while"
+            - "One night, while"
+            - "After completing"
+            - "After finishing"
+            - ", while reviewing"
+            - "During the"
+          
+          scope: ["file_content"]
+          file_patterns:
+            - "docs/story/**/*.md"
+            - "prompts/shared/story.md"
+        
+        alternatives:
+          - "Use active storytelling: 'So Asif built' (adds momentum)"
+          - "Show immediate action: 'grabbed keyboard and coded' (not 'wrote routines')"
+          - "Vivid scene-setting: 'That evening, knee-deep in' (not 'One evening, while')"
+          - "Present-tense urgency: 'The refactor complete, Asif leaned back' (not 'After completing')"
+          - "Energy verbs: 'dove into', 'attacked', 'grabbed', 'swept' (not 'designed', 'created')"
+        
+        evidence_template: |
+          Passive narrator detected: '{match}'
+          
+          Story should be ACTIVE third-person narrative, not clinical documentation.
+          
+          Examples:
+          ❌ "Asif Codeinstein designed..." ← documentation
+          ✅ "So Asif built..." ← storytelling
+          
+          ❌ "He wrote routines for..." ← neutral observer  
+          ✅ "He grabbed his keyboard and..." ← immediate action
+          
+          ❌ "One evening, while reviewing..." ← documentary
+          ✅ "That evening, knee-deep in..." ← vivid scene
+        
+        rationale: |
+          CORTEX story is a COMEDY told by an energetic narrator, not a memoir or
+          technical documentation. Third-person is CORRECT, but it must be ACTIVE
+          storytelling with personality, immediacy, and energy.
+          
+          The narrator is a CHARACTER in the story—witty, observant, timing jokes.
+          Not a clinical observer reporting facts.
+          
+          TRANSFORMATION PATTERNS:
+          
+          Passive → Active:
+          - "designed a system" → "So Asif built a system"
+          - "wrote routines for" → "grabbed his keyboard and coded"
+          - "One evening, while reviewing" → "That evening, knee-deep in"
+          - "made a decision" → "stared at the screen and decided"
+          - "implemented the feature" → "dove into implementing"
+          - "After completing X, he" → "X complete, Asif leaned back and"
+          
+          PRESERVE:
+          - Third-person perspective (it's a STORY about Asif, not BY Asif)
+          - Narrator personality and comedy
+          - Technical content and accuracy
+          - Character name "Asif Codeinstein"
+          
+          AVOID:
+          - First-person memoir style ("I designed...")
+          - Clinical/academic tone ("The system was designed to...")
+          - Passive voice constructions
+          - Documentary-style time markers
   
   # Layer 2: Tier Boundary Protection
   - layer_id: "tier_boundary"

@@ -9,13 +9,78 @@
 
 ---
 
-## 🎯 The Problem: Copilot's Amnesia
+<div class="ancient-rules" markdown>
 
-GitHub Copilot is brilliant—it can write code in any language, understand complex systems, and work at lightning speed. But there's one catastrophic problem:
+## The Sacred Rules of CORTEX
 
-**It has complete amnesia.**
+*Inscribed in the foundations of intelligence*
 
-Every conversation starts from zero. "Make it purple" becomes "Make *what* purple?" Leave for a coffee break? Everything forgotten. Start a new chat session? It's like meeting for the first time.
+### Layer I: Core Instincts
+
+**Rule 1: Test-First Development**  
+Write the failing test first, make it pass, then refine. This is the way.
+
+**Rule 2: Definition of Done**  
+Work is complete only when zero errors remain, zero warnings persist, all tests pass, and the application runs.
+
+**Rule 3: Definition of Ready**  
+Begin not until requirements are clear, acceptance criteria defined, and no blockers remain.
+
+**Rule 4: Brain Protection Tests**  
+The sacred tests of brain health must always pass. If they fail, all work ceases.
+
+**Rule 5: Machine-Readable Formats**  
+Use YAML for configuration, JSON for data, Markdown for narratives. Sixty percent more efficient.
+
+### Layer II: Tier Boundaries
+
+**Rule 6: Tier Zero is Immutable**  
+The instinct layer changes not during execution. Only through deliberate ceremony may it be altered.
+
+**Rule 7: Tier Isolation**  
+Each tier serves its purpose alone: Memory, Knowledge, Context, Events. None shall trespass.
+
+**Rule 8: No Cross-Tier Pollution**  
+Let not the working memory seep into the knowledge graph. Separation brings clarity.
+
+### Layer III: SOLID Principles
+
+**Rule 9: Single Responsibility**  
+Each module performs one task excellently. Confusion comes from doing too much.
+
+**Rule 10: Open for Extension, Closed for Modification**  
+The core remains stable. New capabilities arrive through plugins, not through alteration.
+
+### Layer IV: Hemisphere Separation
+
+**Rule 14: LEFT Brain = Tactical Execution**  
+The left hemisphere builds, tests, fixes, commits. It acts with precision.
+
+**Rule 15: RIGHT Brain = Strategic Planning**  
+The right hemisphere plans, assesses risk, finds patterns, makes decisions. It thinks with wisdom.
+
+**Rule 16: The Corpus Callosum Coordinates**  
+Message queue connects the hemispheres. Asynchronous communication prevents chaos.
+
+### Layer V: Knowledge Quality
+
+**Rule 17: Patterns Require Three Examples**  
+One instance is chance. Two is coincidence. Three is a pattern worth remembering.
+
+**Rule 18: Validate Before Using**  
+Test each pattern before trusting it. The codebase changes; patterns must adapt.
+
+**Rule 19: Knowledge Expires**  
+After ninety days, patterns must be re-validated. Staleness breeds error.
+
+### Layer VI: The Twenty-Second Rule
+
+**Rule 22: Challenge Bad Ideas**  
+The system must challenge risky changes—even those from its creator. Especially those from its creator.
+
+*These rules are not suggestions. They are the foundation upon which intelligence is built.*
+
+</div>
 
 ---
 

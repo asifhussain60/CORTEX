@@ -439,13 +439,13 @@ Asif Codeinstein screamed into a pillow. Then, exhausted, he made coffee and ret
 
 ### The State Machine
 
-"Bookmarks," Asif Codeinstein muttered to himself, staring at the whiteboard. "Like a choose-your-own-adventure novel. Conversation snapshots."
+Asif Codeinstein designed a system to save conversation snapshots—like bookmarks in a choose-your-own-adventure novel. Every time a conversation paused, CORTEX would remember exactly where it left off, what had been done, and what came next.
 
-He started typing. When a conversation paused, CORTEX would remember exactly where it left off, what had been done, and what came next. When interrupted, save the current phase, tasks, context. When resumed, pick up seamlessly.
+When interrupted, CORTEX would save the current phase, tasks, and context. When resumed, it would pick up seamlessly, as if no time had passed.
 
-"Time to test this." He deliberately closed the conversation mid-work.
+Asif Codeinstein tested it by intentionally closing conversations mid-work.
 
-When he reopened it: CORTEX picked up *exactly* where it left off.
+Every time, CORTEX picked up *exactly* where it left off.
 
 > "**You can't make me forget anymore. I remember everything now.**"
 
@@ -585,13 +585,13 @@ Asif Codeinstein paused. "You want... declarative workflows?"
 
 ### The Workflow Pipeline System
 
-"Recipe cards," Asif Codeinstein announced to the empty basement at 2 AM. "Not hardcoded instructions. Recipe cards."
+Asif Codeinstein created a declarative workflow system—like writing recipe cards instead of hardcoding cooking instructions. Teams could define custom workflows in simple configuration files, specifying steps, dependencies, and what to do in parallel.
 
-He started typing YAML. Teams could define custom workflows in simple configuration files—steps, dependencies, what runs in parallel. The system would validate automatically (no circular dependencies allowed), support parallel execution, checkpoint-resume for failures.
+The system validated workflows automatically (no circular dependencies allowed), supported parallel execution for independent tasks, and included checkpoint-resume for graceful failure recovery.
 
-Teams started building their own: feature development with security reviews, emergency hotfixes with automatic rollback, documentation pipelines. Each team could customize CORTEX without touching core code.
+Teams started building their own workflows: feature development with security reviews, emergency hotfixes with automatic rollback, documentation generation pipelines. Each team could customize CORTEX's behavior without touching a single line of core code.
 
-"Time to break it." He injected intentional failures.
+Asif Codeinstein tested it with intentional failures.
 
 Every time, CORTEX resumed from the last checkpoint.
 
@@ -1299,7 +1299,7 @@ CORTEX could remember everything, test everything, review everything. It was bri
 
 And also... expensive.
 
-Asif Codeinstein stared at the billing report. Every interaction with CORTEX was loading massive amounts of context. At GPT-4 pricing, that was $2.22 *per interaction*. A thousand interactions per month meant $2,220 just in context loading costs.
+Asif Codeinstein stared at the billing report. Every interaction with CORTEX loaded a massive 74,047-token monolithic entry point file. At GPT-4 pricing, that was $2.22 *per interaction*. A thousand interactions per month meant $2,220 just in entry point costs.
 
 And that was before any actual work happened.
 
@@ -1346,7 +1346,7 @@ Asif Codeinstein sat back. "You... you just made yourself 35 times cheaper and 2
 
 The transformation was dramatic:
 
-**Before (Single Large File):**
+**Before (Monolithic Entry):**
 ```
 cortex.md (8,701 lines, 74,047 tokens)
   ├─ Everything loaded every time
@@ -1356,7 +1356,7 @@ cortex.md (8,701 lines, 74,047 tokens)
   └─ $2.22 per interaction
 ```
 
-**After (Modular Architecture):**
+**After (Modular Entry):**
 ```
 cortex.md (300 lines, 450 tokens - slim entry)
   ├─ story.md (loaded on demand)
@@ -1581,8 +1581,8 @@ Six months after CORTEX 2.0 began, Asif Codeinstein sat in his lab reviewing the
 - 🔄 Crawler orchestration (unified workspace discovery)
 
 **The Evolution:**
-- From **simple event logger** → forgetful memory system
-- To **Tier 1/2/3 architecture** → learning partner with memory tiers
+- From **KDS (Key Data Stream)** → forgetful event logger
+- To **KDS (Knowledge Delivery System)** → learning partner
 - To **CORTEX 1.0** → dual-hemisphere cognitive system
 - To **CORTEX 2.0** → modular, optimized, ambient-aware intelligence
 
