@@ -8,9 +8,9 @@ context detection, priority analysis, and batch processing.
 import pytest
 from datetime import datetime
 
-from CORTEX.src.entry_point.request_parser import RequestParser
-from CORTEX.src.cortex_agents.base_agent import AgentRequest
-from CORTEX.src.cortex_agents.agent_types import Priority
+from src.entry_point.request_parser import RequestParser
+from src.cortex_agents.base_agent import AgentRequest
+from src.cortex_agents.agent_types import Priority
 
 
 @pytest.fixture

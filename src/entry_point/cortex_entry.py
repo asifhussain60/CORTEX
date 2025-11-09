@@ -5,7 +5,7 @@ This module provides the unified entry point for all CORTEX interactions.
 It coordinates request parsing, agent routing, and response formatting.
 
 Usage:
-    from CORTEX.src.entry_point import CortexEntry
+    from src.entry_point import CortexEntry
     
     entry = CortexEntry()
     response = entry.process("Add authentication to the login page")
@@ -23,16 +23,16 @@ from datetime import datetime
 import logging
 from pathlib import Path
 
-from ..cortex_agents.base_agent import AgentRequest, AgentResponse
-from ..cortex_agents.intent_router import IntentRouter
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.intent_router import IntentRouter
 from .request_parser import RequestParser
 from .response_formatter import ResponseFormatter
 from .setup_command import CortexSetup
-from ..session_manager import SessionManager
-from ..tier1.tier1_api import Tier1API
-from ..tier2.knowledge_graph import KnowledgeGraph
-from ..tier3.context_intelligence import ContextIntelligence
-from ..config import config
+from src.session_manager import SessionManager
+from src.tier1.tier1_api import Tier1API
+from src.tier2.knowledge_graph import KnowledgeGraph
+from src.tier3.context_intelligence import ContextIntelligence
+from src.config import config
 
 
 class CortexEntry:

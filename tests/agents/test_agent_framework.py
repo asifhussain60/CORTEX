@@ -6,13 +6,13 @@ Tests BaseAgent, AgentRequest, AgentResponse, and core infrastructure.
 
 import pytest
 from datetime import datetime
-from CORTEX.src.cortex_agents.base_agent import (
+from src.cortex_agents.base_agent import (
     BaseAgent,
     AgentRequest,
     AgentResponse,
 )
-from CORTEX.src.cortex_agents.agent_types import IntentType, Priority
-from CORTEX.src.cortex_agents.exceptions import AgentExecutionError
+from src.cortex_agents.agent_types import IntentType, Priority
+from src.cortex_agents.exceptions import AgentExecutionError
 
 
 class TestAgentRequest:

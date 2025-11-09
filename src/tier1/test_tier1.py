@@ -14,11 +14,11 @@ from pathlib import Path
 from datetime import datetime
 from tempfile import TemporaryDirectory
 
-from CORTEX.src.tier1.conversation_manager import ConversationManager
-from CORTEX.src.tier1.entity_extractor import EntityExtractor
-from CORTEX.src.tier1.file_tracker import FileTracker
-from CORTEX.src.tier1.request_logger import RequestLogger
-from CORTEX.src.tier1.tier1_api import Tier1API
+from src.tier1.conversation_manager import ConversationManager
+from src.tier1.entity_extractor import EntityExtractor
+from src.tier1.file_tracker import FileTracker
+from src.tier1.request_logger import RequestLogger
+from src.tier1.tier1_api import Tier1API
 
 
 @pytest.fixture

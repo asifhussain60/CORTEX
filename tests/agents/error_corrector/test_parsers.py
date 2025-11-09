@@ -1,7 +1,7 @@
 """Tests for ErrorCorrector parsers."""
 
 import pytest
-from CORTEX.src.cortex_agents.error_corrector.parsers import (
+from src.cortex_agents.error_corrector.parsers import (
     PytestErrorParser,
     SyntaxErrorParser,
     ImportErrorParser,

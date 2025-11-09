@@ -9,14 +9,14 @@ checks for patterns in past requests, and routes to the most appropriate special
 """
 
 from typing import List, Dict, Any, Optional, Tuple
-from CORTEX.src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import (
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import (
     AgentType,
     IntentType,
     get_agent_for_intent,
     INTENT_AGENT_MAP
 )
-from CORTEX.src.cortex_agents.utils import (
+from src.cortex_agents.utils import (
     extract_code_intent,
     parse_priority_keywords,
     normalize_intent

@@ -8,9 +8,9 @@ import pytest
 import tempfile
 from pathlib import Path
 
-from CORTEX.src.cortex_agents.error_corrector import ErrorCorrector
-from CORTEX.src.cortex_agents.base_agent import AgentRequest
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.error_corrector import ErrorCorrector
+from src.cortex_agents.base_agent import AgentRequest
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestErrorCorrectorBasics:

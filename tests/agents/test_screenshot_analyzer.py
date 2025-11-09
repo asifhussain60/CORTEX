@@ -7,9 +7,9 @@ and test ID suggestion functionality.
 
 import pytest
 from datetime import datetime
-from CORTEX.src.cortex_agents.screenshot_analyzer import ScreenshotAnalyzer
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.screenshot_analyzer import ScreenshotAnalyzer
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestScreenshotAnalyzerBasics:

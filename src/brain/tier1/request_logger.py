@@ -17,7 +17,7 @@ Design Philosophy:
 - Separation: Raw logs separate from structured conversation history
 
 Example Usage:
-    from CORTEX.src.brain.tier1.request_logger import RequestLogger
+    from src.brain.tier1.request_logger import RequestLogger
     
     logger = RequestLogger(db_path="cortex-brain/cortex-brain.db")
     
@@ -391,7 +391,7 @@ def get_request_logger(db_path: str = "cortex-brain/cortex-brain.db") -> Request
         Initialized RequestLogger instance
     
     Example:
-        from CORTEX.src.brain.tier1.request_logger import get_request_logger
+        from src.brain.tier1.request_logger import get_request_logger
         
         logger = get_request_logger()
         logger.log_raw_request(...)

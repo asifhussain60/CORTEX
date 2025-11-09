@@ -7,9 +7,9 @@ and change validation functionality.
 
 import pytest
 from datetime import datetime
-from CORTEX.src.cortex_agents.change_governor import ChangeGovernor
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType, RiskLevel
+from src.cortex_agents.change_governor import ChangeGovernor
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType, RiskLevel
 
 
 class TestChangeGovernorBasics:

@@ -74,6 +74,36 @@ class AgentResponse:
     timestamp: datetime = field(default_factory=datetime.now)
 
 
+@dataclass
+class AgentMessage:
+    """
+    Message format for agent-to-agent communication in workflows.
+    
+    Used for orchestrating multi-agent workflows like TDD cycle.
+    
+    Attributes:
+        from_agent: Name of the sending agent
+        to_agent: Name of the receiving agent
+        command: Command/action to perform
+        payload: Data payload for the command
+        correlation_id: Optional ID to correlate related messages
+    
+    Example:
+        message = AgentMessage(
+            from_agent="workflow-orchestrator",
+            to_agent="test-generator",
+            command="create_test",
+            payload={"task": "auth", "expect_failure": True}
+        )
+    """
+    from_agent: str
+    to_agent: str
+    command: str
+    payload: Dict[str, Any]
+    correlation_id: Optional[str] = None
+    timestamp: datetime = field(default_factory=datetime.now)
+
+
 class BaseAgent(ABC):
     """
     Abstract base class for all CORTEX specialist agents.

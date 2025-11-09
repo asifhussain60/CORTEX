@@ -523,10 +523,10 @@ class ConversationManager:
             cursor = conn.cursor()
             
             cursor.execute("""
-                SELECT conversation_id, title, started, ended, 
-                       message_count, active, intent, outcome
+                SELECT conversation_id, goal as title, start_time as started, end_time as ended, 
+                       message_count, status as active, agent_id as intent, outcome
                 FROM conversations
-                ORDER BY started DESC
+                ORDER BY start_time DESC
                 LIMIT ?
             """, (limit,))
             

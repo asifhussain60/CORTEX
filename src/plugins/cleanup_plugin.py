@@ -36,7 +36,7 @@ import subprocess
 import logging
 from collections import defaultdict
 
-from plugins.base_plugin import (
+from src.plugins.base_plugin import (
     BasePlugin, 
     PluginMetadata, 
     PluginCategory, 

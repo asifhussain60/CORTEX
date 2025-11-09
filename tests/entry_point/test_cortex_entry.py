@@ -11,8 +11,8 @@ import shutil
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from CORTEX.src.entry_point import CortexEntry
-from CORTEX.src.cortex_agents.base_agent import AgentResponse
+from src.entry_point import CortexEntry
+from src.cortex_agents.base_agent import AgentResponse
 
 
 class TestCortexEntryInitialization:

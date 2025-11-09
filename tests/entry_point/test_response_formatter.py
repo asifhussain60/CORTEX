@@ -9,8 +9,8 @@ import pytest
 import json
 from datetime import datetime
 
-from CORTEX.src.entry_point.response_formatter import ResponseFormatter
-from CORTEX.src.cortex_agents.base_agent import AgentResponse
+from src.entry_point.response_formatter import ResponseFormatter
+from src.cortex_agents.base_agent import AgentResponse
 
 
 @pytest.fixture

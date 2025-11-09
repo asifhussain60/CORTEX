@@ -12,9 +12,9 @@ import shutil
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 
-from CORTEX.src.cortex_agents.code_executor import CodeExecutor
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.code_executor import CodeExecutor
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestCodeExecutorBasics:

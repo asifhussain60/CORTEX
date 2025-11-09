@@ -2,7 +2,7 @@
 
 import pytest
 from pathlib import Path
-from CORTEX.src.cortex_agents.error_corrector.validators import (
+from src.cortex_agents.error_corrector.validators import (
     PathValidator,
     FixValidator
 )

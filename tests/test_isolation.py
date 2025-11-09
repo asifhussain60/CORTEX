@@ -62,7 +62,7 @@ def test_application_feature():
     
     def test_health_validator_uses_cortex_root(self):
         """Verify HealthValidator runs from CORTEX root."""
-        from CORTEX.src.cortex_agents.health_validator import HealthValidator
+        from src.cortex_agents.health_validator import HealthValidator
         
         validator = HealthValidator(name="IsolationTest")
         
@@ -77,7 +77,7 @@ def test_application_feature():
     
     def test_environment_variable_set_for_cortex_tests(self):
         """Verify CORTEX sets isolation environment variable."""
-        from CORTEX.src.cortex_agents.health_validator import HealthValidator
+        from src.cortex_agents.health_validator import HealthValidator
         import unittest.mock as mock
         
         validator = HealthValidator(name="EnvTest")
@@ -142,7 +142,7 @@ def test_application_feature():
     
     def test_health_validator_timeout_prevents_runaway_tests(self):
         """Verify health check has timeout to prevent blocking."""
-        from CORTEX.src.cortex_agents.health_validator import HealthValidator
+        from src.cortex_agents.health_validator import HealthValidator
         
         validator = HealthValidator(name="TimeoutTest")
         
@@ -178,7 +178,7 @@ class TestTargetApplicationIsolation:
     
     def test_cortex_agents_dont_modify_application_tests(self):
         """Verify CodeExecutor won't modify application test files."""
-        from CORTEX.src.cortex_agents.code_executor import CodeExecutor
+        from src.cortex_agents.code_executor import CodeExecutor
         
         executor = CodeExecutor(name="IsolationTest")
         
@@ -197,7 +197,7 @@ class TestTargetApplicationIsolation:
     
     def test_test_generator_supports_multiple_frameworks(self):
         """Verify TestGenerator doesn't assume pytest for target apps."""
-        from CORTEX.src.cortex_agents.test_generator import TestGenerator
+        from src.cortex_agents.test_generator import TestGenerator
         
         generator = TestGenerator(name="FrameworkTest")
         
@@ -210,8 +210,8 @@ def add(a, b):
     return a + b
 """
         
-        from CORTEX.src.cortex_agents.base_agent import AgentRequest
-        from CORTEX.src.cortex_agents.agent_types import IntentType
+        from src.cortex_agents.base_agent import AgentRequest
+        from src.cortex_agents.agent_types import IntentType
         
         request = AgentRequest(
             intent=IntentType.TEST.value,

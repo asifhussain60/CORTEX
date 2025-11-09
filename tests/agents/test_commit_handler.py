@@ -8,9 +8,9 @@ and commit execution functionality.
 import pytest
 from datetime import datetime
 from unittest.mock import MagicMock
-from CORTEX.src.cortex_agents.commit_handler import CommitHandler
-from CORTEX.src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from CORTEX.src.cortex_agents.agent_types import IntentType
+from src.cortex_agents.commit_handler import CommitHandler
+from src.cortex_agents.base_agent import AgentRequest, AgentResponse
+from src.cortex_agents.agent_types import IntentType
 
 
 class TestCommitHandlerBasics:
