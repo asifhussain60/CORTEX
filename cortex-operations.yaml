@@ -252,6 +252,91 @@ operations:
       - generate_protection_report
   
   # --------------------------------------------------------------------------
+  # COMPREHENSIVE SELF-REVIEW
+  # --------------------------------------------------------------------------
+  comprehensive_self_review:
+    name: "Comprehensive Self-Review"
+    description: "Validate all brain protection layers, coding standards, and architecture integrity"
+    natural_language:
+      - "run self-review"
+      - "comprehensive review"
+      - "validate everything"
+      - "check all protections"
+      - "full validation"
+      - "health check"
+    slash_command: "/CORTEX, run self-review"
+    category: "validation"
+    modules:
+      - load_self_review_checklist
+      - validate_brain_protection_coverage
+      - validate_layer1_tests
+      - validate_layer2_tests
+      - validate_layer3_tests
+      - validate_layer4_tests
+      - validate_layer5_tests
+      - validate_layer6_tests
+      - validate_integration_tests
+      - check_tdd_compliance
+      - check_solid_principles
+      - check_code_quality
+      - check_documentation_completeness
+      - check_version_control_hygiene
+      - validate_tier_architecture
+      - validate_agent_system
+      - validate_plugin_architecture
+      - check_machine_configuration
+      - check_machine_work_plan
+      - generate_self_review_report
+    profiles:
+      quick:
+        description: "Quick review - critical checks only"
+        modules:
+          - load_self_review_checklist
+          - validate_brain_protection_coverage
+          - check_tdd_compliance
+          - validate_tier_architecture
+          - generate_self_review_report
+      standard:
+        description: "Standard review - critical + high priority"
+        modules:
+          - load_self_review_checklist
+          - validate_brain_protection_coverage
+          - validate_layer1_tests
+          - validate_layer2_tests
+          - validate_layer3_tests
+          - validate_layer4_tests
+          - validate_layer5_tests
+          - validate_layer6_tests
+          - check_tdd_compliance
+          - check_solid_principles
+          - validate_tier_architecture
+          - validate_agent_system
+          - generate_self_review_report
+      comprehensive:
+        description: "Comprehensive review - all checks"
+        modules:
+          - load_self_review_checklist
+          - validate_brain_protection_coverage
+          - validate_layer1_tests
+          - validate_layer2_tests
+          - validate_layer3_tests
+          - validate_layer4_tests
+          - validate_layer5_tests
+          - validate_layer6_tests
+          - validate_integration_tests
+          - check_tdd_compliance
+          - check_solid_principles
+          - check_code_quality
+          - check_documentation_completeness
+          - check_version_control_hygiene
+          - validate_tier_architecture
+          - validate_agent_system
+          - validate_plugin_architecture
+          - check_machine_configuration
+          - check_machine_work_plan
+          - generate_self_review_report
+  
+  # --------------------------------------------------------------------------
   # TEST EXECUTION
   # --------------------------------------------------------------------------
   run_tests:

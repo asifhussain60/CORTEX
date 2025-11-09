@@ -328,6 +328,15 @@ Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
 
 ## 🚀 Next 3 Actions
 
+### 🖥️ Machine-Specific Work Assignments
+
+**Current Strategy:** 2-machine parallel development for maximum velocity
+
+#### **Machine 1: Windows (AHHOME)** - Primary Development
+**Hostname:** `AHHOME`  
+**Path:** `D:\PROJECTS\CORTEX`  
+**Current Task:** Phase 5.1 Integration Tests
+
 1. **Continue Phase 5.1: Multi-Agent Coordination Tests** (2-3 hours)
    - Implement `test_plan_to_execute_handoff` (agent handoffs)
    - Implement `test_execute_to_test_handoff` (context passing)
@@ -349,6 +358,37 @@ Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
    - Implement `test_ambiguous_intent_resolution` (disambiguation)
    - Target: 17/19 tests complete (89% of Phase 5.1)
    - Update STATUS.md and complete Phase 5.1 documentation
+
+#### **Machine 2: Mac (Asifs-MacBook-Pro.local)** - Parallel Track
+**Hostname:** `Asifs-MacBook-Pro.local`  
+**Path:** `/Users/asifhussain/PROJECTS/CORTEX`  
+**Current Task:** Phase 5.5 YAML Conversion
+
+1. **Phase 5.5: YAML Conversion** (3-4 hours)
+   - Convert 10-12 design documents from MD to YAML
+   - Priority documents: operation configs, module definitions
+   - Test YAML loading performance
+   - Validate token reduction (expect 30-40% savings)
+   - Document conversion patterns
+
+2. **Prepare Phase 5.3: Edge Case Test Design** (1-2 hours)
+   - Review existing edge case coverage
+   - Design 30+ edge case tests
+   - Create test fixtures
+   - Document test scenarios
+   - Ready for implementation after 5.1 complete
+
+3. **Stand By for Synchronization** 
+   - Monitor Machine 1 progress
+   - Ready to merge branches at Week 18
+   - Prepare integration test suite
+   - Validate no conflicts between parallel work
+
+**Synchronization Point:** End of Week 18
+- Merge Phase 5.1 branch (Machine 1)
+- Merge Phase 5.5 branch (Machine 2)
+- Run full test suite (1,540+ tests)
+- Validate Phase 5 complete
 
 ---
 
@@ -456,9 +496,11 @@ Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
 
 ---
 
-## 🎯 Next Session Work Plan (Phase 5.1 Continuation)
+## 🎯 Next Session Work Plan (Machine-Aware)
 
-### Session Goal: Design & Begin Implementing Critical Integration Tests
+### 🖥️ **When CORTEX detects: Windows (AHHOME)**
+
+**Session Goal:** Design & Begin Implementing Critical Integration Tests (Phase 5.1)
 
 **Status:** Foundation complete from today's session  
 **Prerequisites Met:**
@@ -466,6 +508,235 @@ Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
 - ✅ Entry point tests passing (25/25)
 - ✅ Coverage gaps identified (7 areas documented)
 - ✅ Test suite healthy (1,526 tests, 0 errors)
+
+**Auto-Resume Context:**
+```
+Machine: Windows (AHHOME)
+Path: D:\PROJECTS\CORTEX
+Current Phase: 5.1 - Integration Tests
+Progress: 5/19 tests complete (26%)
+Next Task: Multi-agent coordination tests
+Branch: CORTEX-2.0 (or feature/phase-5.1-tests)
+```
+
+### 🍎 **When CORTEX detects: Mac (Asifs-MacBook-Pro.local)**
+
+**Session Goal:** YAML Conversion & Edge Case Preparation (Phase 5.5)
+
+**Status:** Ready to start parallel track  
+**Prerequisites Met:**
+- ✅ All Phase 1-4 systems operational
+- ✅ YAML conversion patterns documented
+- ✅ Doc 33 provides conversion strategy
+- ✅ Test framework ready for edge cases
+
+**Auto-Resume Context:**
+```
+Machine: Mac (Asifs-MacBook-Pro.local)
+Path: /Users/asifhussain/PROJECTS/CORTEX
+Current Phase: 5.5 - YAML Conversion
+Progress: 0/12 docs converted (0%)
+Next Task: Convert operation configs to YAML
+Branch: CORTEX-2.0 (or feature/phase-5.5-yaml-conversion)
+```
+
+---
+
+### Common Prerequisites (Both Machines)
+
+### Common Prerequisites (Both Machines)
+
+**Before Starting Any Session:**
+- [ ] Git pull latest changes: `git pull origin CORTEX-2.0`
+- [ ] Check test suite health: `pytest tests/ --collect-only -q`
+- [ ] Verify Python environment: Check `cortex.config.json` paths
+- [ ] Review STATUS.md for machine-specific tasks
+
+**Total Prep Time:** 5 minutes
+
+---
+
+### 📅 Future Machine Assignments (Weeks 19-36)
+
+#### **Weeks 19-20: Phase 6 + CORTEX 2.1 Week 1-2**
+
+**Machine 1 (Windows):**
+```
+Phase 6: Performance Optimization
+├─ Performance profiling of Tier 1-3
+├─ Optimize hot paths (identified bottlenecks)
+├─ Add performance regression tests (35 tests)
+├─ CI/CD performance gates
+└─ Documentation: performance benchmarks
+```
+
+**Machine 2 (Mac):**
+```
+CORTEX 2.1 Week 1-2: Interactive Planning Foundation
+├─ Create Interactive Planner Agent (RIGHT brain)
+├─ Implement Question Generator utility
+├─ Implement Answer Parser utility
+├─ Extend Tier 1 for planning sessions
+├─ Extend Tier 2 for user preferences
+└─ Write 20+ tests for planning system
+```
+
+**Synchronization:** End of Week 20 (merge both tracks)
+
+---
+
+#### **Weeks 21-22: Phase 7 + CORTEX 2.1 Week 3-4**
+
+**Machine 1 (Windows):**
+```
+Phase 7: Documentation Refresh
+├─ Update all docs with CORTEX 2.0 changes
+├─ Create comprehensive API reference
+├─ Add code examples and tutorials
+├─ Generate static documentation site
+├─ Test command discovery integration
+└─ Document CORTEX 2.1 features
+```
+
+**Machine 2 (Mac):**
+```
+CORTEX 2.1 Week 3-4: Command Discovery System
+├─ Implement intelligent /help command
+├─ Create context-aware suggestion engine
+├─ Build command search system
+├─ Add preference learning
+├─ Create visual command aids
+└─ Write 25+ tests for discovery system
+```
+
+**Synchronization:** End of Week 22 (merge both tracks)
+
+---
+
+#### **Weeks 23-24: Phase 7 Complete + CORTEX 2.1 Week 5-6**
+
+**Machine 1 (Windows):**
+```
+Phase 7: Documentation Finalization
+├─ Review all documentation for accuracy
+├─ Add missing API examples
+├─ Test all code samples
+├─ Build and deploy documentation site
+└─ Create user onboarding guide
+```
+
+**Machine 2 (Mac):**
+```
+CORTEX 2.1 Week 5-6: Integration & Polish
+├─ Full system integration testing
+├─ UX refinement based on testing
+├─ Performance optimization
+├─ Bug fixes and edge cases
+├─ Beta testing with 10 users
+└─ Documentation and tutorials
+```
+
+**Synchronization:** End of Week 24 (full 2.0 + 2.1 integration)
+
+---
+
+#### **Weeks 25-36: Phase 8-10**
+
+**Machine 1 (Windows):**
+```
+Primary implementation track:
+├─ Phase 8: Migration (Weeks 25-28)
+├─ Phase 9: Advanced Capabilities (Weeks 29-32)
+└─ Phase 10: Production Hardening (Weeks 33-36)
+```
+
+**Machine 2 (Mac):**
+```
+Support & preparation track:
+├─ Phase 9 design during Phase 8 (Weeks 25-28)
+├─ Testing infrastructure during Phase 9 (Weeks 29-32)
+└─ Validation and QA during Phase 10 (Weeks 33-36)
+```
+
+**Strategy:** Machine 1 leads implementation, Machine 2 prepares next phase and validates current phase
+
+---
+
+### 🔄 How "Continue" Works with Multi-Machine Setup
+
+**When you say "continue" in CORTEX:**
+
+1. **Platform Detection:**
+   ```python
+   import platform
+   hostname = platform.node()
+   # "AHHOME" → Windows
+   # "Asifs-MacBook-Pro.local" → Mac
+   ```
+
+2. **Config Lookup:**
+   ```python
+   from src.config import get_machine_config
+   config = get_machine_config(hostname)
+   # Returns machine-specific paths and settings
+   ```
+
+3. **Task Retrieval:**
+   ```python
+   # Reads STATUS.md section for detected machine
+   # Example: "Machine 1: Windows (AHHOME)" section
+   # Extracts current task, progress, next steps
+   ```
+
+4. **Context Loading:**
+   ```python
+   # Loads machine-specific work context:
+   # - Current branch
+   # - Last commit
+   # - Test results
+   # - Progress metrics
+   # - Next action items
+   ```
+
+5. **Resume Execution:**
+   ```python
+   # Presents context: "You're on Windows, working on Phase 5.1"
+   # Shows: "Last completed: X, Next task: Y"
+   # Ready: Files loaded, tests ready, documentation open
+   ```
+
+**Example Output:**
+```
+🖥️ Detected: Windows (AHHOME)
+📂 Path: D:\PROJECTS\CORTEX
+🎯 Current Phase: 5.1 - Integration Tests
+📊 Progress: 5/19 tests complete (26%)
+⏭️ Next Task: Multi-agent coordination tests
+
+Ready to continue? I've loaded:
+✅ Test files: tests/integration/test_cross_tier_workflows.py
+✅ Design docs: PHASE-5.1-TEST-DESIGN.md
+✅ Progress: Last session completed 5 end-to-end tests
+✅ Next: Implement test_plan_to_execute_handoff
+
+Shall we start with the agent handoff test?
+```
+
+---
+
+### 💡 Benefits of Machine-Specific Tracking
+
+1. **Zero Context Switching:** CORTEX knows which machine = which task
+2. **Automatic Parallelization:** Both machines work on different phases simultaneously
+3. **Smart Synchronization:** Clear merge points prevent conflicts
+4. **Progress Isolation:** Machine 1 progress doesn't affect Machine 2
+5. **Flexible Switching:** Can work on either machine, CORTEX adapts
+6. **Branch Management:** Different branches per machine if needed
+7. **Independent Testing:** Each machine has full test suite
+
+**Time Savings:** 4-6 weeks over sequential development (30-32 weeks vs 36 weeks)
+
+---
 
 ### Task Breakdown (5-7 hours total)
 
@@ -692,6 +963,8 @@ Week 23-24: Integration & Polish (CORTEX 2.1 Week 5-6)
 ## 📝 Quick Links
 
 **Detailed Data:** See `status-data.yaml` for machine-readable metrics
+
+**Machine-Specific Work:** See `MACHINE-SPECIFIC-WORK-PLAN.md` for 2-machine parallel development tracking
 
 **Design Docs:** `cortex-brain/cortex-2.0-design/` (30 design documents)
 
