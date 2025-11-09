@@ -19,7 +19,7 @@ from unittest.mock import Mock, patch, MagicMock
 import tempfile
 import shutil
 
-from plugins.code_review_plugin import (
+from src.plugins.code_review_plugin import (
     CodeReviewPlugin,
     SOLIDAnalyzer,
     SecurityScanner,

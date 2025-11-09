@@ -172,6 +172,15 @@ class Tier1API:
         # Get conversation summary
         conversation = self.conversation_manager.get_conversation(conversation_id)
         
+        # Handle case where conversation doesn't exist or was already deleted
+        if not conversation:
+            return {
+                'conversation_id': conversation_id,
+                'duration': 0,
+                'message_count': 0,
+                'outcome': outcome
+            }
+        
         return {
             'conversation_id': conversation_id,
             'duration': self._calculate_duration(

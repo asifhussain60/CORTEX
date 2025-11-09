@@ -33,36 +33,39 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from entry_point.cortex_entry import CortexEntry
 
 
+# Module-level fixtures (shared across test classes)
+@pytest.fixture
+def temp_brain():
+    """Create temporary brain directory for testing"""
+    temp_dir = Path(tempfile.mkdtemp(prefix="cortex_brain_test_"))
+    
+    # Create structure
+    (temp_dir / "tier1").mkdir(parents=True)
+    (temp_dir / "tier2").mkdir(parents=True)
+    (temp_dir / "tier3").mkdir(parents=True)
+    
+    yield temp_dir
+    
+    # Cleanup
+    shutil.rmtree(temp_dir)
+
+
+@pytest.fixture
+def cortex_entry(temp_brain):
+    """Initialize CortexEntry with temp brain"""
+    entry = CortexEntry(
+        brain_path=str(temp_brain),
+        enable_logging=False
+    )
+    return entry
+
+
 class TestConversationTrackingProtection:
     """
     Brain Protector: Conversation Tracking
     
     CRITICAL: These tests must ALWAYS pass. If they fail, CORTEX has amnesia.
     """
-    
-    @pytest.fixture
-    def temp_brain(self):
-        """Create temporary brain directory for testing"""
-        temp_dir = Path(tempfile.mkdtemp(prefix="cortex_brain_test_"))
-        
-        # Create structure
-        (temp_dir / "tier1").mkdir(parents=True)
-        (temp_dir / "tier2").mkdir(parents=True)
-        (temp_dir / "tier3").mkdir(parents=True)
-        
-        yield temp_dir
-        
-        # Cleanup
-        shutil.rmtree(temp_dir)
-    
-    @pytest.fixture
-    def cortex_entry(self, temp_brain):
-        """Initialize CortexEntry with temp brain"""
-        entry = CortexEntry(
-            brain_path=str(temp_brain),
-            enable_logging=False
-        )
-        return entry
     
     def test_process_logs_to_tier1_sqlite(self, cortex_entry, temp_brain):
         """
@@ -307,7 +310,7 @@ class TestConversationTrackingHealth:
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tables = [row[0] for row in cursor.fetchall()]
         
-        required_tables = ['conversations', 'messages', 'entities', 'files']
+        required_tables = ['conversations', 'messages', 'entities', 'files_modified']
         for table in required_tables:
             assert table in tables, f"❌ Missing table: {table}"
         

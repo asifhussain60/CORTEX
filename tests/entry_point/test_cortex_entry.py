@@ -21,7 +21,13 @@ class TestCortexEntryInitialization:
     def test_entry_point_creation(self):
         """Test basic entry point creation."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir)
+            brain = Path(tmpdir)
+            # Create tier directories
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain))
             assert entry is not None
             assert entry.parser is not None
             assert entry.formatter is not None
@@ -30,13 +36,23 @@ class TestCortexEntryInitialization:
     def test_entry_point_with_logging(self):
         """Test entry point with logging enabled."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=True)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=True)
             assert entry.logger is not None
     
     def test_entry_point_without_logging(self):
         """Test entry point with logging disabled."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             assert entry.logger is not None  # Logger still exists, just not configured
 
 
@@ -47,7 +63,12 @@ class TestSingleRequestProcessing:
     def entry(self):
         """Create entry point with mocked dependencies."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock router to return success response
             entry.router.execute = Mock(return_value=AgentResponse(
@@ -138,7 +159,12 @@ class TestBatchProcessing:
     def entry(self):
         """Create entry point for batch testing."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock router
             entry.router.execute = Mock(return_value=AgentResponse(
@@ -196,7 +222,12 @@ class TestSessionManagement:
     def entry(self):
         """Create entry point for session testing."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock session manager
             entry.session_manager.get_active_session = Mock(return_value="active-session")
@@ -254,7 +285,12 @@ class TestHealthStatus:
     def entry(self):
         """Create entry point for health testing."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock tier APIs
             entry.tier1.get_summary = Mock(return_value={
@@ -305,7 +341,12 @@ class TestErrorHandling:
     def entry(self):
         """Create entry point for error testing."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock session
             entry.session_manager.start_session = Mock(return_value="error-conv")
@@ -349,7 +390,12 @@ class TestIntegrationWithTiers:
     def entry(self):
         """Create entry point with tier integration."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            entry = CortexEntry(brain_path=tmpdir, enable_logging=False)
+            brain = Path(tmpdir)
+            (brain / "tier1").mkdir(parents=True)
+            (brain / "tier2").mkdir(parents=True)
+            (brain / "tier3").mkdir(parents=True)
+            
+            entry = CortexEntry(brain_path=str(brain), enable_logging=False)
             
             # Mock router
             entry.router.execute = Mock(return_value=AgentResponse(

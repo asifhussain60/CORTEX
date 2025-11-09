@@ -34,7 +34,7 @@ from src.workflows.workflow_engine import (
     StageStatus
 )
 from src.workflows.checkpoint import CheckpointManager
-from src.workflows.stages.dod_dor_clarifier import DoDDoRClarifier
+from src.workflows.stages.dod_dor_clarifier import DoDDoRClarifierStage
 from src.workflows.stages.code_cleanup import CodeCleanup
 from src.workflows.stages.doc_generator import DocGenerator
 
@@ -112,7 +112,7 @@ class TestFeatureDevelopmentWorkflow:
         orchestrator = WorkflowOrchestrator(workflow, checkpoint_dir=temp_checkpoint_dir)
         
         # Register real and mock stages
-        orchestrator.register_stage("clarify", DoDDoRClarifier())
+        orchestrator.register_stage("clarify", DoDDoRClarifierStage())
         orchestrator.register_stage("plan", MockImplementStage())  # Simplified
         orchestrator.register_stage("implement", MockImplementStage())
         orchestrator.register_stage("test", MockTestStage())
@@ -139,7 +139,7 @@ class TestFeatureDevelopmentWorkflow:
         orchestrator = WorkflowOrchestrator(workflow, checkpoint_dir=temp_checkpoint_dir)
         
         # Register stages, make 'test' stage fail initially
-        orchestrator.register_stage("clarify", DoDDoRClarifier())
+        orchestrator.register_stage("clarify", DoDDoRClarifierStage())
         orchestrator.register_stage("plan", MockImplementStage())
         orchestrator.register_stage("implement", MockImplementStage())
         orchestrator.register_stage("test", MockTestStage(should_fail=True))
@@ -180,7 +180,7 @@ class TestFeatureDevelopmentWorkflow:
         orchestrator = WorkflowOrchestrator(workflow, checkpoint_dir=temp_checkpoint_dir)
         
         # Register stages, make required 'implement' stage fail
-        orchestrator.register_stage("clarify", DoDDoRClarifier())
+        orchestrator.register_stage("clarify", DoDDoRClarifierStage())
         orchestrator.register_stage("plan", MockImplementStage())
         orchestrator.register_stage("implement", MockImplementStage(should_fail=True))
         orchestrator.register_stage("test", MockTestStage())

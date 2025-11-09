@@ -12,9 +12,9 @@ Version: 1.0
 
 from typing import Dict, Any, List
 from src.cortex_agents.base_agent import AgentMessage
-from src.cortex_agents.tactical.test_generator import TestGenerator
-from src.cortex_agents.tactical.code_executor import CodeExecutor
-from src.cortex_agents.tactical.health_validator import HealthValidator
+from src.cortex_agents.test_generator import TestGenerator
+from src.cortex_agents.code_executor import CodeExecutor
+from src.cortex_agents.health_validator import HealthValidator
 
 
 class TDDWorkflow:

@@ -94,26 +94,28 @@ class SessionManager:
         conn.commit()
         conn.close()
     
-    def start_session(self, intent: Optional[str] = None) -> str:
+    def start_session(self, intent: Optional[str] = None, conversation_id: Optional[str] = None) -> str:
         """
         Start new conversation session
         
         Args:
             intent: Detected intent (PLAN, EXECUTE, TEST, etc.)
+            conversation_id: Optional conversation ID (generated if not provided)
         
         Returns:
             conversation_id (UUID)
         """
-        conversation_id = str(uuid.uuid4())
+        if conversation_id is None:
+            conversation_id = str(uuid.uuid4())
         
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
         cursor.execute("""
             INSERT INTO working_memory_conversations 
-            (conversation_id, start_time, intent, status)
-            VALUES (?, ?, ?, 'active')
-        """, (conversation_id, datetime.now().isoformat(), intent))
+            (conversation_id, start_time, intent, status, last_activity)
+            VALUES (?, ?, ?, 'active', ?)
+        """, (conversation_id, datetime.now().isoformat(), intent, datetime.now().isoformat()))
         
         conn.commit()
         conn.close()
@@ -253,7 +255,7 @@ class SessionManager:
                     WHERE conversation_id = ?
                 """, (oldest_id,))
                 
-                # Delete conversation
+                # Delete conversation from working_memory_conversations
                 cursor.execute("""
                     DELETE FROM working_memory_conversations
                     WHERE conversation_id = ?

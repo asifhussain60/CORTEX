@@ -95,7 +95,7 @@ class CortexEntry:
         # Initialize components
         self.parser = RequestParser()
         self.formatter = ResponseFormatter()
-        self.session_manager = SessionManager()
+        self.session_manager = SessionManager(db_path=str(self.brain_path / "tier1" / "conversations.db"))
         
         # Initialize router with tier APIs
         self.router = IntentRouter(
@@ -369,8 +369,16 @@ class CortexEntry:
             if conversation_id:
                 return conversation_id
         
-        # Start new session
-        conversation_id = self.session_manager.start_session()
+        # Start new conversation in Tier 1 (which generates the ID)
+        conversation_id = self.tier1.start_conversation(
+            agent_id="CortexEntry",
+            goal=None,
+            context=None
+        )
+        
+        # Register with session manager
+        self.session_manager.start_session(conversation_id=conversation_id)
+        
         return conversation_id
     
     def _is_implementation_work(self, intent: str, message: str) -> bool:

@@ -16,11 +16,6 @@ from unittest.mock import Mock, MagicMock, patch
 import time
 from datetime import datetime
 
-# Add CORTEX to path for imports
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-
 from src.router import CortexRouter
 
 

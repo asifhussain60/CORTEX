@@ -9,7 +9,7 @@ from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 import json
 
-from ..cortex_agents.base_agent import AgentResponse
+from src.cortex_agents.base_agent import AgentResponse
 
 
 class ResponseFormatter:
