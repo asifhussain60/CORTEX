@@ -99,6 +99,9 @@ export class CortexChatParticipant {
                 return await this.optimizeCommand(stream);
             case 'instruct':
                 return await this.instructCommand(stream, request);
+            // Platform setup (auto-detects current platform)
+            case 'setup':
+                return await this.platformSwitchCommand('setup', stream);
             default:
                 stream.markdown(`Unknown command: ${command}\n\n`);
                 this.showAvailableCommands(stream);
@@ -239,12 +242,45 @@ export class CortexChatParticipant {
     }
 
     private showAvailableCommands(stream: vscode.ChatResponseStream): void {
-        stream.markdown('**Available commands:**\n');
+        stream.markdown('**Available commands:**\n\n');
+        stream.markdown('**Session Management:**\n');
         stream.markdown('- `/resume` - Resume last conversation\n');
         stream.markdown('- `/checkpoint` - Save conversation state\n');
         stream.markdown('- `/history` - View conversation history\n');
         stream.markdown('- `/optimize` - Optimize token usage\n');
-        stream.markdown('- `/instruct` - Give new instructions to CORTEX\n');
+        stream.markdown('- `/instruct` - Give new instructions to CORTEX\n\n');
+        stream.markdown('**Platform:**\n');
+        stream.markdown('- `/setup` - Setup/configure environment (auto-detects Mac/Windows/Linux)\n');
+    }
+
+    private async platformSwitchCommand(platform: string, stream: vscode.ChatResponseStream): Promise<vscode.ChatResult> {
+        if (!this.isOnline) {
+            stream.markdown('⚠️  Offline mode - Platform setup requires brain connection.\n');
+            return {};
+        }
+
+        stream.markdown(`� **Setting up environment...**\n\n`);
+        stream.markdown(`Platform detection is automatic - CORTEX will configure for your current OS.\n\n`);
+        
+        // Route to CORTEX platform switch plugin
+        const naturalLanguage = "setup environment";
+        
+        try {
+            // Send to CORTEX router which will expand command and route to plugin
+            const response = await this.generateResponse(naturalLanguage, {} as any);
+            stream.markdown(response.content);
+            
+            stream.markdown('\n\n✅ Setup initiated. CORTEX will:\n');
+            stream.markdown('1. Auto-detect your current platform (Mac/Windows/Linux)\n');
+            stream.markdown('2. Pull latest code from git\n');
+            stream.markdown('3. Configure environment for your platform\n');
+            stream.markdown('4. Check dependencies\n');
+            
+            return { metadata: { platform: 'auto-detected' } };
+        } catch (error) {
+            stream.markdown(`❌ Error: ${error}\n`);
+            return { metadata: { error: String(error) } };
+        }
     }
 
     private async generateResponse(prompt: string, context: vscode.ChatContext): Promise<{ content: string }> {

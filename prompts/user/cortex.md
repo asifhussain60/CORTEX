@@ -25,6 +25,16 @@ Just tell CORTEX what you want in natural language:
 Add a purple button to the HostControlPanel
 ```
 
+**Or use optional slash commands for speed:**
+
+```markdown
+#file:prompts/user/cortex.md
+
+/mac
+/setup
+/resume
+```
+
 CORTEX will:
 - ✅ Detect your intent (PLAN, EXECUTE, TEST, VALIDATE, etc.)
 - ✅ Route to appropriate specialist agent
@@ -138,17 +148,111 @@ CORTEX will:
 
 ---
 
-## 🎯 Common Commands
+### 🔄 Platform Switch - Automatic Cross-Platform Setup
+**When:** CORTEX automatically detects when you switch between Mac/Windows/Linux
+
+**What happens automatically:**
+- ✅ **Platform detection** on startup (Mac, Windows, or Linux)
+- ✅ **Auto-configuration** when platform changes detected
+- ✅ Git pull latest code
+- ✅ Configure platform-specific paths and environment
+- ✅ Quick dependency check
+- ✅ Validate tooling (Git, Python, etc.)
+
+**Manual override:**
+```markdown
+#file:prompts/user/cortex.md
+
+setup environment
+/setup
+```
+
+**Documentation:**
+```markdown
+#file:docs/plugins/platform-switch-plugin.md
+```
+
+**Supported Platforms:**
+- 🍎 macOS (Darwin) - zsh, Unix paths
+- 🪟 Windows - PowerShell, Windows paths
+- 🐧 Linux - bash, Unix paths
+
+---
+
+## 🎯 How to Use CORTEX
+
+### 💬 Natural Language (Recommended)
+
+**CORTEX is designed to understand natural language.** Just tell it what you need:
+
+```markdown
+#file:prompts/user/cortex.md
+
+Add a purple button to the dashboard
+setup environment
+show me where I left off
+```
+
+**Why natural language?**
+- ✅ No syntax to memorize
+- ✅ Context-aware understanding
+- ✅ Accessible to all skill levels
+
+---
+
+### ⚡ Optional: Slash Commands (Power Users)
+
+**Slash commands are shortcuts** for common operations. They're entirely optional!
+
+#### 📦 Platform & Session Commands
+| Command | Natural Language Equivalent | What It Does |
+|---------|---------------------------|--------------|
+| `/setup` | "setup environment" | Setup/configure current platform |
+| `/resume` | "resume work" | Resume from where you left off |
+| `/status` | "show progress" | Show current work status |
+| `/help` | "show available commands" | Display all commands |
+
+*Aliases for /setup: `/env`, `/environment`, `/configure`*
+
+**Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
+
+#### 🔧 VS Code Extension Commands
+**Available in VS Code Chat (`@cortex`):**
+- `/resume` - Resume last conversation
+- `/checkpoint` - Save conversation state
+- `/history` - View conversation history
+- `/optimize` - Optimize token usage
+- `/instruct` - Give CORTEX new instructions
+
+---
+
+### 📚 Documentation Access
 
 | Command | What It Does |
 |---------|--------------|
-| `#file:prompts/user/cortex.md <request>` | Universal entry point (this file) |
 | `#file:prompts/shared/story.md` | Read "The Intern with Amnesia" story |
 | `#file:prompts/shared/setup-guide.md` | View installation and setup guide |
 | `#file:prompts/shared/technical-reference.md` | Access API and architecture docs |
 | `#file:prompts/shared/agents-guide.md` | Learn about agent system |
 | `#file:prompts/shared/tracking-guide.md` | Enable conversation memory |
 | `#file:prompts/shared/configuration-reference.md` | Configure CORTEX settings |
+
+---
+
+## 🔌 Plugin Commands (Extensible)
+
+**Plugins can register their own commands!** As you add plugins, new commands become available.
+
+**Current plugins with commands:**
+- **Platform Switch Plugin:** `/setup` (auto-detects Mac/Windows/Linux)
+
+**How it works:**
+1. Plugin defines commands during initialization
+2. Commands are registered to global registry
+3. Router expands commands to natural language
+4. Intent detection and routing proceeds normally
+
+**For plugin developers:** See `src/plugins/command_registry.py` for API
 
 ---
 

@@ -2,6 +2,7 @@
 CORTEX Universal Router
 
 Processes requests from cortex.md entry point with:
+- Slash command expansion (optional shortcuts)
 - Intent detection via Phase 4 agents
 - Context injection from Tiers 1-3
 - Workflow routing
@@ -9,12 +10,13 @@ Processes requests from cortex.md entry point with:
 - Performance optimization (<100ms routing, <200ms context)
 
 Author: CORTEX Development Team
-Version: 1.0
+Version: 1.1 (Added command support)
 """
 
 from typing import Dict, Any, Optional
 import time
 import uuid
+import logging
 from datetime import datetime
 
 from cortex_agents.strategic.intent_router import IntentRouter
@@ -23,6 +25,9 @@ from tier2.knowledge_graph_engine import KnowledgeGraphEngine
 from tier3.dev_context_engine import DevContextEngine
 from .session_manager import SessionManager
 from .context_injector import ContextInjector
+from .plugins.command_registry import get_command_registry
+
+logger = logging.getLogger(__name__)
 
 
 class CortexRouter:
@@ -53,6 +58,7 @@ class CortexRouter:
         self.intent_router = IntentRouter(db_path)
         self.session_manager = SessionManager(db_path)
         self.context_injector = ContextInjector(db_path)
+        self.command_registry = get_command_registry()
         
         # Performance tracking
         self._last_routing_time_ms = 0.0
@@ -65,13 +71,14 @@ class CortexRouter:
         Process request from cortex.md
         
         Steps:
-        1. Detect intent (Phase 4: intent-router)
-        2. Inject context (Tiers 1-3)
-        3. Route to workflow
-        4. Log interaction (Tier 1)
+        1. Expand slash commands (if present)
+        2. Detect intent (Phase 4: intent-router)
+        3. Inject context (Tiers 1-3)
+        4. Route to workflow
+        5. Log interaction (Tier 1)
         
         Args:
-            user_request: User's natural language request
+            user_request: User's natural language request or slash command
             conversation_id: Optional existing conversation ID
         
         Returns:
@@ -84,10 +91,22 @@ class CortexRouter:
                 'routing_time_ms': 85.3,
                 'context_time_ms': 142.7,
                 'total_time_ms': 228.0,
+                'command_used': '/mac' or None,
                 'next_step': 'Execute workflow...'
             }
         """
         start_time = time.perf_counter()
+        
+        # Step 0: Expand slash commands to natural language (if present)
+        original_request = user_request
+        command_used = None
+        
+        if self.command_registry.is_command(user_request.strip()):
+            expanded = self.command_registry.expand_command(user_request.strip())
+            if expanded:
+                command_used = user_request.strip()
+                user_request = expanded
+                logger.info(f"Command expansion: {command_used} → {user_request}")
         
         # Step 1: Detect intent (Performance target: <100ms)
         intent_start = time.perf_counter()
@@ -152,6 +171,8 @@ class CortexRouter:
             'routing_time_ms': intent_time_ms,
             'context_time_ms': context_time_ms,
             'total_time_ms': total_time_ms,
+            'command_used': command_used,  # Track if slash command was used
+            'original_request': original_request,  # Preserve original for logging
             'performance_warnings': performance_warnings,
             'next_step': self._get_next_step(workflow, intent_result)
         }

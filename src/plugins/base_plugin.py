@@ -22,6 +22,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Import command registry (lazy import to avoid circular dependencies)
+_command_registry = None
+
+
+def _get_command_registry():
+    """Lazy import of command registry to avoid circular dependencies."""
+    global _command_registry
+    if _command_registry is None:
+        from .command_registry import get_command_registry
+        _command_registry = get_command_registry()
+    return _command_registry
+
 
 class PluginCategory(Enum):
     """Plugin categories for organization"""
@@ -126,6 +138,9 @@ class BasePlugin(ABC):
         self._validate_metadata()
         self.enabled = True
         self.logger = logging.getLogger(f"plugin.{self.metadata.plugin_id}")
+        
+        # Auto-register commands if plugin defines any
+        self._auto_register_commands()
     
     @abstractmethod
     def _get_metadata(self) -> PluginMetadata:
@@ -186,6 +201,58 @@ class BasePlugin(ABC):
             True if cleanup successful, False otherwise
         """
         pass
+    
+    def register_commands(self) -> List[Any]:
+        """
+        Register plugin slash commands (optional).
+        
+        Override this method to register commands for your plugin.
+        Commands provide shortcuts to plugin functionality.
+        
+        Returns:
+            List of CommandMetadata objects to register
+        
+        Example:
+            def register_commands(self) -> List[Any]:
+                from .command_registry import CommandMetadata, CommandCategory
+                
+                return [
+                    CommandMetadata(
+                        command="/mac",
+                        natural_language_equivalent="switched to mac",
+                        plugin_id=self.metadata.plugin_id,
+                        description="Switch to macOS environment",
+                        category=CommandCategory.PLATFORM,
+                        aliases=["/macos"],
+                        examples=["@cortex /mac", "switched to mac"]
+                    )
+                ]
+        """
+        return []  # Default: no commands
+    
+    def _auto_register_commands(self) -> None:
+        """
+        Automatically register plugin commands (called during initialization).
+        
+        Internal method - do not override.
+        """
+        commands = self.register_commands()
+        
+        if not commands:
+            return  # Plugin has no commands
+        
+        registry = _get_command_registry()
+        
+        for cmd in commands:
+            success = registry.register_command(cmd)
+            if success:
+                self.logger.info(
+                    f"✓ Registered command: {cmd.command} → {self.metadata.plugin_id}"
+                )
+            else:
+                self.logger.error(
+                    f"✗ Failed to register command: {cmd.command} (conflict)"
+                )
     
     def _validate_metadata(self) -> None:
         """Validate plugin metadata is complete and valid"""
