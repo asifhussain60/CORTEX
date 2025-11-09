@@ -230,11 +230,16 @@ class OperationFactory:
         
         Args:
             op_config: Operation configuration
-            profile: Profile name
+            profile: Profile name (must be string)
         
         Returns:
             List of module IDs to execute
         """
+        # Validate profile is a string (defensive programming)
+        if not isinstance(profile, str):
+            logger.warning(f"Profile must be string, got {type(profile).__name__}. Using 'standard'.")
+            profile = 'standard'
+        
         # Check if operation has profile-specific modules
         profiles = op_config.get('profiles', {})
         if profile in profiles:

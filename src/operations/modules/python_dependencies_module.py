@@ -136,11 +136,11 @@ class PythonDependenciesModule(BaseOperationModule):
             
             if install_result.returncode != 0:
                 return OperationResult(
-                    module_id=self.metadata.module_id,
+                    success=False,
                     status=OperationStatus.FAILED,
                     message="Failed to install dependencies",
                     errors=[install_result.stderr],
-                    duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                    duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
             # Parse installation output
@@ -159,39 +159,38 @@ class PythonDependenciesModule(BaseOperationModule):
             context['dependencies_installed'] = True
             context['packages_installed'] = packages_installed
             
-            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            duration_seconds = (datetime.now() - start_time).total_seconds()
             
-            status = OperationStatus.WARNING if warnings else OperationStatus.SUCCESS
-            
+            # If there are warnings, still succeed but include them
             return OperationResult(
-                module_id=self.metadata.module_id,
-                status=status,
+                success=True,
+                status=OperationStatus.SUCCESS,
                 message=f"Installed {packages_installed} Python packages",
-                details={
+                data={
                     'requirements_file': str(requirements_file),
                     'packages_installed': packages_installed,
                     'python_command': python_cmd
                 },
                 warnings=warnings,
-                duration_ms=duration_ms
+                duration_seconds=duration_seconds
             )
             
         except subprocess.TimeoutExpired:
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=False,
                 status=OperationStatus.FAILED,
                 message="Installation timeout (exceeded 5 minutes)",
                 errors=["Timeout"],
-                duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                duration_seconds=(datetime.now() - start_time).total_seconds()
             )
         except Exception as e:
             self.log_error(f"Dependency installation failed: {e}")
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Installation failed: {str(e)}",
                 errors=[str(e)],
-                duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                duration_seconds=(datetime.now() - start_time).total_seconds()
             )
     
     def _get_python_command(self, context: Dict[str, Any]) -> str:

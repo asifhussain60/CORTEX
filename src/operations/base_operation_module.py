@@ -18,6 +18,7 @@ Version: 2.0 (Universal Operations Architecture)
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
+import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
@@ -169,9 +170,11 @@ class BaseOperationModule(ABC):
     """
     
     def __init__(self):
-        """Initialize base module."""
+        """Initialize base module with logger."""
         self._metadata = None
         self._last_result = None
+        # Create logger for this specific module class
+        self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")
     
     @property
     def metadata(self) -> OperationModuleMetadata:
@@ -345,3 +348,20 @@ class BaseOperationModule(ABC):
             f"phase={self.metadata.phase.value} "
             f"priority={self.metadata.priority}>"
         )
+    
+    # Convenience logging methods for use in subclasses
+    def log_info(self, message: str) -> None:
+        """Log info message (convenience wrapper)."""
+        self.logger.info(message)
+    
+    def log_error(self, message: str) -> None:
+        """Log error message (convenience wrapper)."""
+        self.logger.error(message)
+    
+    def log_warning(self, message: str) -> None:
+        """Log warning message (convenience wrapper)."""
+        self.logger.warning(message)
+    
+    def log_debug(self, message: str) -> None:
+        """Log debug message (convenience wrapper)."""
+        self.logger.debug(message)

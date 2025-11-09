@@ -113,11 +113,11 @@ class BrainInitializationModule(BaseOperationModule):
             tier1_result = self._initialize_tier1(brain_dir)
             if not tier1_result['success']:
                 return OperationResult(
-                    module_id=self.metadata.module_id,
+                success=False,
                     status=OperationStatus.FAILED,
                     message="Tier 1 initialization failed",
                     errors=[tier1_result.get('error', 'Unknown error')],
-                    duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                    duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             self.log_info(f"✓ Tier 1: {tier1_result['message']}")
             
@@ -144,33 +144,33 @@ class BrainInitializationModule(BaseOperationModule):
             context['tier2_kg'] = str(brain_dir / "knowledge-graph.yaml")
             context['tier3_context'] = str(brain_dir / "development-context.yaml")
             
-            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            duration_seconds = (datetime.now() - start_time).total_seconds()
             
             status = OperationStatus.WARNING if warnings else OperationStatus.SUCCESS
             message = "Brain initialized successfully" if not warnings else "Brain initialized with warnings"
             
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=True,
                 status=status,
                 message=message,
-                details={
+                data={
                     'brain_dir': str(brain_dir),
                     'tier1': tier1_result,
                     'tier2': tier2_result,
                     'tier3': tier3_result
                 },
                 warnings=warnings,
-                duration_ms=duration_ms
+                duration_seconds=duration_seconds
             )
             
         except Exception as e:
             self.log_error(f"Brain initialization failed: {e}")
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Brain initialization failed: {str(e)}",
                 errors=[str(e)],
-                duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                duration_seconds=(datetime.now() - start_time).total_seconds()
             )
     
     def _initialize_tier1(self, brain_dir: Path) -> Dict[str, Any]:

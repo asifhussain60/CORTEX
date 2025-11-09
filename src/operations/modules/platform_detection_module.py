@@ -108,13 +108,13 @@ class PlatformDetectionModule(BaseOperationModule):
             context['shell'] = config['shell']
             context['path_separator'] = config['path_separator']
             
-            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            duration_seconds = (datetime.now() - start_time).total_seconds()
             
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=True,
                 status=OperationStatus.SUCCESS,
                 message=f"Platform detected: {platform_info['display_name']}",
-                details={
+                data={
                     'platform': platform_info['platform'],
                     'display_name': platform_info['display_name'],
                     'python_command': config['python_command'],
@@ -122,17 +122,17 @@ class PlatformDetectionModule(BaseOperationModule):
                     'system': platform_info['system'],
                     'release': platform_info['release']
                 },
-                duration_ms=duration_ms
+                duration_seconds=duration_seconds
             )
             
         except Exception as e:
             self.log_error(f"Platform detection failed: {e}")
             return OperationResult(
-                module_id=self.metadata.module_id,
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Platform detection failed: {str(e)}",
                 errors=[str(e)],
-                duration_ms=(datetime.now() - start_time).total_seconds() * 1000
+                duration_seconds=(datetime.now() - start_time).total_seconds()
             )
     
     def _detect_platform(self) -> Dict[str, str]:

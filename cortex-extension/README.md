@@ -4,6 +4,26 @@
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Proprietary - See LICENSE file for terms
 
+---
+
+## ⚠️ STATUS: DEFERRED / NOT ACTIVELY DEVELOPED
+
+**Decision Date:** November 9, 2025
+
+This extension scaffold exists but is **not actively developed** because:
+- GitHub Copilot already provides excellent context awareness
+- Core CORTEX brain (4-tier system) works great without UI wrapper
+- Native workflow is simpler and more reliable
+- Extension adds complexity without clear ROI
+
+**See:** `cortex-brain/VSCODE-EXTENSION-DECISION.md` for full rationale.
+
+**Current approach:** Use GitHub Copilot natively + CORTEX brain files + manual tracking when needed.
+
+This code remains as reference implementation if future needs arise.
+
+---
+
 ## Overview
 
 CORTEX is a VS Code extension that provides persistent memory and context awareness for AI-assisted development. Unlike traditional AI assistants that forget conversations, CORTEX remembers everything and helps you resume work seamlessly.
