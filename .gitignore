@@ -32,3 +32,4 @@ site/
 
 # Archived documentation cleanup
 docs/_archive-docs-cleanup/
+.coverage
