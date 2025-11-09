@@ -214,7 +214,7 @@ show me where I left off
 | Command | Natural Language Equivalent | Status | What It Does |
 |---------|---------------------------|--------|--------------|
 | `/setup` | "setup environment", "configure" | ✅ **READY** | Setup/configure development environment |
-| `/CORTEX, refresh cortex story` | "refresh story", "update story" | 🟡 **PARTIAL** | Refresh CORTEX story documentation (1/6 modules) |
+| `/CORTEX, refresh cortex story` | "refresh story", "update story" | ✅ **READY** | Refresh CORTEX story documentation (6/6 modules) |
 | `/CORTEX, cleanup` | "cleanup", "clean workspace" | ⏸️ **PENDING** | Clean temporary files and optimize databases (0/6 modules) |
 | `/CORTEX, generate documentation` | "generate docs", "update docs" | ⏸️ **PENDING** | Auto-generate and build documentation (0/6 modules) |
 | `/CORTEX, run brain protection` | "check brain", "validate brain" | ⏸️ **PENDING** | Run brain protection validation (0/6 modules) |
@@ -223,14 +223,14 @@ show me where I left off
 **Implementation Status:**
 - ✅ **Core Architecture Complete:** Universal operations system, YAML registry, orchestrator, factory
 - ✅ **Setup Operation:** 4 modules migrated (platform detection, vision API, Python deps, brain init)
-- 🟡 **Story Refresh:** 1/6 modules implemented (load template)
+- ✅ **Story Refresh:** 6/6 modules implemented and working! (load, transform, validate, save, nav update, preview)
 - ⏸️ **Other Operations:** Architecture ready, modules pending implementation
 
 **Try it now:**
 ```python
 from src.operations import execute_operation
 report = execute_operation('/setup')  # Works!
-report = execute_operation('refresh story')  # Partial (loads story only)
+report = execute_operation('refresh story')  # Works! All 6 modules complete
 ```
 
 #### 🔧 VS Code Extension Commands

@@ -69,6 +69,16 @@
     "cache_analysis_results": true,
     "cache_ttl_hours": 24
   },
+  "story_refresh": {
+    "enabled": true,
+    "target_read_time_min": 25,
+    "target_read_time_max": 30,
+    "words_per_minute": 200,
+    "tolerance_percent": 7,
+    "extended_tolerance_percent": 20,
+    "enforce_validation": true,
+    "fail_on_critical_length": false
+  },
   "plugins": {
     "cleanup_plugin": {
       "enabled": true,
