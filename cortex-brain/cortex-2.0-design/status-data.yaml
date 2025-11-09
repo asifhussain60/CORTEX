@@ -1,15 +1,16 @@
 # CORTEX 2.0 Implementation Status Data
 # Machine-readable status tracking
-# Last Updated: 2025-11-08
+# Last Updated: 2025-11-09
 
 metadata:
   version: "2.0.0"
-  last_updated: "2025-11-08"
+  last_updated: "2025-11-09"
   current_week: 10
-  total_weeks: 34
+  total_weeks: 36  # Updated: +2 weeks for YAML conversion
   overall_progress: 0.47  # 47%
   timeline_status: "on_schedule"
   velocity: 1.61  # 161% of planned
+  qa_analysis: "QA-CRITICAL-QUESTIONS-2025-11-09.md"  # 4 questions answered
 
 # Phase definitions and progress
 phases:
@@ -196,56 +197,123 @@ phases:
 
   phase_5:
     name: "Risk Mitigation & Testing"
-    weeks: "17-18"
+    weeks: "17-20"  # Extended: +2 weeks for YAML conversion
     status: "not_started"
     progress: 0.0
-    planned_hours: 20
+    planned_hours: 35  # Updated: 20 + 15 for YAML + tests
+    subphases:
+      phase_5_1:
+        name: "Critical Risk Tests"
+        status: "not_started"
+        planned_hours: 6
+      phase_5_2:
+        name: "Brain Protection Enhancements"
+        status: "not_started"
+        planned_hours: 5
+        tests_to_add: 6
+        specification: "34-brain-protection-test-enhancements.md"
+        new_rules:
+          - rule_3: "Definition of READY validation"
+          - rule_5: "Machine-readable format enforcement"
+          - rule_26: "Modular file structure limits"
+          - rule_27: "Hemisphere separation strict"
+          - rule_28: "Plugin architecture enforcement"
+          - rule_31: "Story/technical ratio validation"
+      phase_5_3:
+        name: "Edge Case Validation"
+        status: "not_started"
+        planned_hours: 4
+      phase_5_4:
+        name: "Performance Regression Tests"
+        status: "not_started"
+        planned_hours: 5
+      phase_5_5:
+        name: "YAML Conversion"
+        status: "not_started"
+        planned_hours: 15
+        specification: "33-yaml-conversion-strategy.md"
+        documents_to_convert: 10
+        expected_reduction: 0.30  # 30%
+        conversions:
+          - source: "25-implementation-roadmap.md"
+            target: "implementation-roadmap.yaml"
+            priority: "high"
+          - source: "16-plugin-examples.md"
+            target: "plugin-specifications.yaml"
+            priority: "high"
+          - source: "11-database-schema-updates.md"
+            target: "database-migrations.yaml"
+            priority: "medium"
+          - source: "15-api-changes.md"
+            target: "api-changes.yaml"
+            priority: "medium"
+          - source: "extracted from STATUS.md"
+            target: "test-coverage-metrics.yaml"
+            priority: "medium"
+          - source: "extracted from 18-performance-optimization.md"
+            target: "performance-benchmarks.yaml"
+            priority: "low"
 
   phase_6:
     name: "Performance Optimization"
-    weeks: "19-20"
+    weeks: "21-22"  # Shifted: +2 weeks due to Phase 5 extension
     status: "not_started"
     progress: 0.0
     planned_hours: 20
 
   phase_7:
     name: "Documentation & Training"
-    weeks: "21-22"
+    weeks: "23-24"  # Shifted: +2 weeks
     status: "not_started"
     progress: 0.0
     planned_hours: 15
 
   phase_8:
     name: "Migration & Rollout"
-    weeks: "23-26"
+    weeks: "25-28"  # Shifted: +2 weeks
     status: "not_started"
     progress: 0.0
     planned_hours: 20
 
   phase_9:
     name: "Capability Wave 1"
-    weeks: "27-30"
+    weeks: "29-32"  # Shifted: +2 weeks
     status: "not_started"
     progress: 0.0
     planned_hours: 30
 
   phase_10:
     name: "Capability Wave 2"
-    weeks: "31-34"
+    weeks: "33-36"  # Shifted: +2 weeks (new end: week 36)
     status: "not_started"
     progress: 0.0
     planned_hours: 30
 
 # Overall metrics
 metrics:
+  design_documentation:
+    total_design_docs: 34  # Updated: was 32
+    new_docs:
+      - name: "QA-CRITICAL-QUESTIONS-2025-11-09.md"
+        type: "Q&A"
+        questions_answered: 4
+      - name: "33-yaml-conversion-strategy.md"
+        type: "Strategy"
+        priority: "medium"
+      - name: "34-brain-protection-test-enhancements.md"
+        type: "Test Specification"
+        priority: "high"
+  
   test_coverage:
     total_tests: 612
     tests_passing: 608
     pass_rate: 0.993  # 99.3%
+    planned_additions: 6  # Brain protection enhancements
     by_category:
       core: 497
       ambient: 63
       workflow: 52
+      brain_protection: 22  # Current, will be 28 after Phase 5.2
   
   code_quality:
     total_modules: 101
