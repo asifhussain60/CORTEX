@@ -556,7 +556,7 @@ CORTEX watched quietly. Then asked:
 
 > "**Why not? I can detect problems. I have Rule #22 (challenge bad ideas). Why can't I have self-maintenance?**"
 
-Asif Codeinstein stopped mid-command.
+His fingers froze over the keyboard. "Wait. Wait a minute..."
 
 "You want... to fix yourself?"
 
