@@ -463,8 +463,8 @@ CORTEX is now operational and ready to assist you!
    File: docs/getting-started/quick-start.md
    
    Quick command:
-   #file:prompts/user/cortex.md
-   [Your request here]
+   /CORTEX
+   [Or use natural language]
 
 📖 THE STORY:
    Read "The Awakening of CORTEX" - A humorous and technical tale
@@ -478,7 +478,7 @@ CORTEX is now operational and ready to assist you!
    - Chapter 5: The Activation (60 Sacred Tests)
 
 🎯 FIRST STEPS:
-   1. Try: #file:prompts/user/cortex.md "What can you help me with?"
+   1. Try: /CORTEX in GitHub Copilot Chat
    2. Read the story (seriously, it's entertaining!)
    3. Check out: docs/architecture/ for technical details
 
