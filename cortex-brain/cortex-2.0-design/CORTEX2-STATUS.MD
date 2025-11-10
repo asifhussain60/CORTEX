@@ -8,7 +8,7 @@ Purpose: Fast visual snapshot + concise implementation details.
 
 ```
 ┌─────────────────────────────────────┬─────────────────────────────────────┐
-│ 🪟 WINDOWS TRACK                    │ 🍎 MAC TRACK                         │
+│ 🪟 WINDOWS TRACK                     │ 🍎 MAC TRACK                        │
 ├─────────────────────────────────────┼─────────────────────────────────────┤
 │ PRIMARY IMPLEMENTATION              │ YAML CONVERSION & DOCS              │
 │ • Integration testing               │ • YAML migration (5.5) ✅          │
