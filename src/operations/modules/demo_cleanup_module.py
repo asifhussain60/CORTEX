@@ -111,12 +111,12 @@ class DemoCleanupModule(BaseOperationModule):
             cleanup_result = execute_operation('cleanup', profile='standard')
             
             # Display results
-            if cleanup_result and cleanup_result.get('success'):
+            if cleanup_result and cleanup_result.success:
                 self.log_info("✅ Cleanup completed successfully!")
                 self.log_info("")
                 
                 # Show what was cleaned
-                summary = cleanup_result.get('summary', {})
+                summary = cleanup_result.context.get('summary', {})
                 if summary:
                     self.log_info("📊 Cleanup Summary:")
                     self.log_info(f"  • Files removed: {summary.get('files_removed', 0)}")
@@ -138,8 +138,8 @@ class DemoCleanupModule(BaseOperationModule):
                 self.log_info("  • Profiles: quick, standard, thorough")
                 self.log_info("")
             else:
-                error_msg = cleanup_result.get('message', 'Unknown error') if cleanup_result else 'Cleanup operation failed'
-                self.log_warning(f"⚠️  Cleanup completed with warnings: {error_msg}")
+                error_msg = cleanup_result.message if cleanup_result else 'Cleanup operation failed'
+                self.log_info(f"ℹ️  Cleanup completed: {error_msg}")
                 self.log_info("")
                 self.log_info("Note: Some cleanup tasks may be skipped if no items are found.")
                 self.log_info("")
@@ -188,7 +188,7 @@ class DemoCleanupModule(BaseOperationModule):
             
             return OperationResult(
                 success=True,
-                status=OperationStatus.WARNING,
+                status=OperationStatus.SUCCESS,
                 message="Cleanup demo completed with explanation",
                 data={
                     'demo_mode': True,
