@@ -49,7 +49,7 @@ def test_demo_operation_registered_in_factory():
     assert demo_op is not None
     assert demo_op['name'] == 'CORTEX Interactive Demo'
     assert demo_op['category'] == 'onboarding'
-    assert demo_op.get('slash_command') == '/demo'
+    # Note: Slash commands removed in v5.3 - natural language only
 
 
 def test_demo_operation_has_required_modules():
@@ -154,15 +154,18 @@ def test_demo_natural_language_routing():
     assert 'tutorial' in nl_triggers
 
 
-def test_demo_slash_command_routing():
-    """Test that demo operation responds to /demo slash command."""
+def test_demo_natural_language_routing():
+    """Test that demo operation responds to natural language triggers."""
     factory = OperationFactory()
     demo_op = factory.get_operation_info('cortex_tutorial')
     
     assert demo_op is not None
     
-    slash_cmd = demo_op.get('slash_command')
-    assert slash_cmd == '/demo'
+    # Check natural language triggers (v5.3 - natural language only, no slash commands)
+    nl_triggers = demo_op.get('natural_language', [])
+    assert 'demo' in nl_triggers, "Should support 'demo' trigger"
+    assert any('cortex' in t and ('do' in t or 'can' in t) for t in nl_triggers), "Should support 'what cortex can do' style triggers"
+    assert 'tutorial' in nl_triggers, "Should support 'tutorial' trigger"
 
 
 def test_demo_modules_in_correct_order():
