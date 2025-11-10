@@ -4,65 +4,73 @@ Last Updated: 2025-11-10
 Source of Truth (detailed): `cortex-brain/cortex-2.0-design/STATUS.md`
 Purpose: Fast visual snapshot + concise implementation details.
 
+**🔀 PARALLEL DEVELOPMENT STRATEGY:**
+- 🪟 **Windows Track** - Primary implementation, integration testing, demo modules
+- 🍎 **Mac Track** - YAML conversion, documentation, edge cases, CORTEX 2.1 prep
+- ⚡ **Benefit:** 25% faster delivery (8 weeks saved via parallel execution)
+
 ---
 ## Visual Progress (Phases & Tasks)
 
-Legend: █ = complete, ░ = remaining. Percent shown at end. All bars left-aligned for scan speed.
+Legend: █ = complete, ░ = remaining, [W] = Windows, [M] = Mac, [B] = Both
+Percent shown at end. All bars left-aligned for scan speed.
 
 ```
 Phase 5 - Risk Mitigation & Testing         [███████████████████████████░░░░] 85%
-  - Task 5.1 - Critical Integration Tests   [████████████████████████████████] 100%
-  - Task 5.2 - Brain Protection Test Suite  [████████████████████████████████] 100%
-  - Task 5.3 - Edge Case Validation         [████████████████████████████████] 100%
-  - Task 5.4 - Performance Regression Tests [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
-  - Task 5.5 - YAML Conversion (Docs)       [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
-  - Task 5.6 - Planning Artifact Migration  [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
-  - Task 5.7 - Capability Maximization Plan [████████████████████████████████] 100%
-  - Task 5.8 - Interactive Demo System      [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 5.1 - Critical Integration Tests [W] [████████████████████████████████] 100%
+  - Task 5.2 - Brain Protection Suite [W]     [████████████████████████████████] 100%
+  - Task 5.3 - Edge Case Validation [M]       [████████████████████████████████] 100%
+  - Task 5.4 - Performance Regression [W]     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 5.5 - YAML Conversion [M]            [████████████████████████████████] 100%
+  - Task 5.6 - Planning Artifacts [B]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 5.7 - Capability Max Plan [B]        [████████████████████████████████] 100%
+  - Task 5.8 - Interactive Demo [W+M]         [████████████████░░░░░░░░░░░░░░░]  50%
+    → Windows Track A: 3/6 modules (intro, help, cleanup) ✅
+    → Mac Track B: 0/3 modules (story, conversation, completion) ⏸️
 
-Phase 6 - Performance Optimization          [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 6 - Performance Optimization [W]      [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 6.1 - Profiling & Hot Paths        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 6.2 - Performance CI Gates         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 7 - Documentation & Polish            [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 7 - Documentation & Polish [M]        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 7.1 - Doc Refresh / API Guides     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 7.2 - Command Discovery UX         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 8 - Migration & Deployment            [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 8 - Migration & Deployment [W]        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 8.1 - Production Migration         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 8.2 - Rollback / Monitoring        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 9 - Advanced Capabilities             [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 9 - Advanced Capabilities [M]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 9.1 - ML Enhancements              [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 9.2 - Proactive Suggestions        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 10 - Production Hardening             [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 10 - Production Hardening [B]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 10.1 - Security & Governance       [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 10.2 - Multi-Env Validation        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 0 - Quick Wins                        [████████████████████████████████] 100%
+Phase 0 - Quick Wins [W]                    [████████████████████████████████] 100%
   - Task 0.1 - Universal Operations Core    [████████████████████████████████] 100%
   - Task 0.2 - Plugin System Foundation     [████████████████████████████████] 100%
   - Task 0.3 - Brain Protection Rules YAML  [████████████████████████████████] 100%
 
-Phase 1 - Core Modularization               [████████████████████████████████] 100%
+Phase 1 - Core Modularization [W]           [████████████████████████████████] 100%
   - Task 1.1 - Knowledge Graph              [████████████████████████████████] 100%
   - Task 1.2 - Tier 1 Memory (Working Mem)  [████████████████████████████████] 100%
   - Task 1.3 - Context Intelligence (Tier3) [████████████████████████████████] 100%
   - Task 1.4 - Agent System (10 Agents)     [████████████████████████████████] 100%
 
-Phase 2 - Ambient + Workflow                [████████████████████████████████] 100%
+Phase 2 - Ambient + Workflow [W]            [████████████████████████████████] 100%
   - Task 2.1 - Ambient Capture Daemon       [████████████████████████████████] 100%
   - Task 2.2 - Workflow Orchestration       [████████████████████████████████] 100%
 
-Phase 3 - Modular Entry Validation          [████████████████████████████████] 100%
+Phase 3 - Modular Entry Validation [W]      [████████████████████████████████] 100%
   - Task 3.1 - POC / Modular Split          [████████████████████████████████] 100%
   - Task 3.2 - Token Reduction Metrics      [████████████████████████████████] 100%
   - Task 3.3 - Test Scenarios Definition    [████████████████████████████████] 100%
   - Task 3.4 - Behavioral Validation        [████████████████████████████████] 100%
   - Task 3.5 - GO / Decision Review         [████████████████████████████████] 100%
 
-Phase 4 - Advanced CLI & Integration        [████████████████████████████████] 100%
+Phase 4 - Advanced CLI & Integration [W]    [████████████████████████████████] 100%
   - Task 4.1 - Quick Capture Tools          [████████████████████████████████] 100%
   - Task 4.2 - Shell / Session Integration  [████████████████████████████████] 100%
   - Task 4.3 - Context Optimization         [████████████████████████████████] 100%
@@ -72,20 +80,30 @@ Phase 4 - Advanced CLI & Integration        [███████████�
 ---
 ## Implementation Details (Concise Reference)
 
-- Phase 0: Establish universal operations core, plugin system, YAML governance rules.
-- Phase 1: Modularize knowledge graph, working memory (Tier 1), context metrics (Tier 3), and all 10 specialist agents.
-- Phase 2: Build ambient capture daemon and workflow orchestration (capture → filter → summarize → persist).
-- Phase 3: Validate modular entry architecture (POC, token reduction, scenarios, behavioral production validation, GO decision).
-- Phase 4: Deliver advanced CLI (quick capture tools, shell integration), context optimization pipeline, enhanced ambient capture.
-- Phase 5: Mitigate risk (integration suite, brain protection), then edge cases, performance tests, YAML doc conversion.
-- Phase 5 Addendum: Introduce hybrid planning artifact migration (Task 5.6) – canonical structured YAML/JSONL (ledger, active_plans, decision_graph) with generated Markdown; proceed after schema + validation tooling (pydantic + tests) established.
-- Phase 5.7 Addition: Capability Maximization Plan (Task 5.7) – Holistic architecture review identified 10 underutilized capabilities (Vision API mock only, Knowledge Graph write-only, Operations narrow usage, UI Crawler storage-only, YAML inconsistent, Response Templates 11%, Plugin-first missing, Test manual, Conversation basic, Entry point partial). CORTEX 2.2 roadmap proposed: Phase 1 (Vision API, KG retrieval, ops migration), Phase 2 (UI intelligence, YAML migration, templates, tests), Phase 3 (plugin refactor, conversation intel, entry points). Target: 25% → 75% capability utilization, 50-60% additional efficiency.
-- Phase 5.8 Addition: Interactive Demo System (Task 5.8) – Hybrid onboarding combining /demo operation (6 modules, 700 tokens), guided setup prompts (+150 tokens), enhanced story with runnable examples (+300 tokens). Demo optional, showcases capabilities after setup. Design: 42-interactive-demo-system.md. Target: >70% demo completion rate, +50% user confidence, +25% retention. Total overhead: 1,150 tokens (23% less than rejected tutorial approach). Estimated implementation: 6-8 hours.
-- Phase 6: Profile hot paths, optimize tiers/agents, enforce performance regression via CI gates.
-- Phase 7: Comprehensive doc refresh (API, tutorials) and user-facing command discovery / UX polish.
-- Phase 8: Migration strategy, production deployment, rollback & monitoring instrumentation.
-- Phase 9: Advanced capabilities—ML-driven learning, proactive suggestions, multi-project scaling.
-- Phase 10: Production hardening—security, governance audits, multi-environment validation, final QA sign-off.
+**Track Legend:** [W] = Windows primary, [M] = Mac primary, [B] = Both machines
+
+- Phase 0 [W]: Establish universal operations core, plugin system, YAML governance rules.
+- Phase 1 [W]: Modularize knowledge graph, working memory (Tier 1), context metrics (Tier 3), and all 10 specialist agents.
+- Phase 2 [W]: Build ambient capture daemon and workflow orchestration (capture → filter → summarize → persist).
+- Phase 3 [W]: Validate modular entry architecture (POC, token reduction, scenarios, behavioral production validation, GO decision).
+- Phase 4 [W]: Deliver advanced CLI (quick capture tools, shell integration), context optimization pipeline, enhanced ambient capture.
+- Phase 5 [W+M - PARALLEL]: Risk mitigation split across machines:
+  - **Windows Track:** Integration tests (5.1), brain protection (5.2), performance tests (5.4), demo Track A (5.8 - 3/6 modules)
+  - **Mac Track:** Edge cases (5.3), YAML conversion (5.5 - COMPLETE ✅), demo Track B (5.8 - 0/3 modules pending)
+  - **Both:** Capability maximization planning (5.7 - COMPLETE ✅), planning artifact migration (5.6 - pending)
+- Phase 5.5 [M - COMPLETE]: YAML Conversion Documentation - All 6 tasks complete (operations config, module definitions, design metadata, loading tests, token validation, documentation). Token reduction: 40-60%. Files: `docs/yaml-conversion-guide.md`, `scripts/measure_token_reduction.py`, `tests/test_yaml_conversion.py`.
+- Phase 5.8 [W+M - IN PROGRESS]: Interactive Demo System - Hybrid onboarding (6 modules, 3 profiles). Windows: intro, help, cleanup (50% ✅). Mac: story, conversation, completion (pending). Target: >70% demo completion rate, +50% user confidence, +25% retention. Total overhead: 1,150 tokens. Design: 42-interactive-demo-system.md.
+- Phase 6 [W]: Profile hot paths, optimize tiers/agents, enforce performance regression via CI gates.
+- Phase 7 [M]: Comprehensive doc refresh (API, tutorials) and user-facing command discovery / UX polish.
+- Phase 8 [W]: Migration strategy, production deployment, rollback & monitoring instrumentation.
+- Phase 9 [M]: Advanced capabilities—ML-driven learning, proactive suggestions, multi-project scaling.
+- Phase 10 [B]: Production hardening—security, governance audits, multi-environment validation, final QA sign-off.
+
+**Parallel Benefits:**
+- ⚡ 25% faster delivery (8 weeks saved)
+- 🔀 Independent work streams (low coupling risk)
+- 📊 Current Phase 5 progress: 85% (Task 5.8 active on Windows)
+- 🎯 Next sync point: Phase 5 complete (merge demo tracks)
 
 ---
 ## Maintenance Rule
