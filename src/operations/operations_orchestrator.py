@@ -198,6 +198,11 @@ class OperationsOrchestrator:
                     if result.success:
                         logger.info(f"Module {module_id} succeeded: {result.message}")
                         report.modules_succeeded.append(module_id)
+                        
+                        # Merge module output data into shared context for next modules
+                        if result.data:
+                            self.context.update(result.data)
+                            logger.debug(f"Merged {len(result.data)} context items from {module_id}")
                     else:
                         logger.error(f"Module {module_id} failed: {result.message}")
                         report.modules_failed.append(module_id)

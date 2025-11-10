@@ -59,7 +59,7 @@ class GenerateAPIDocsModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="No docstring index found in context",
-                    error="scan_docstrings must run first"
+                    errors=["scan_docstrings must run first"]
                 )
             
             project_root = Path(context.get("project_root", os.getcwd()))
@@ -84,7 +84,7 @@ class GenerateAPIDocsModule(BaseOperationModule):
                 if module_file:
                     generated_files.append(module_file)
             
-            self.log_success(f"Generated {len(generated_files)} API documentation files")
+            self.log_info(f"Generated {len(generated_files)} API documentation files")
             
             return OperationResult(
                 success=True,
@@ -103,7 +103,7 @@ class GenerateAPIDocsModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="API documentation generation failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _group_by_module(self, docstring_index: Dict[str, Any]) -> Dict[str, List[Dict]]:

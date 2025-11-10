@@ -79,7 +79,7 @@ class ScanDocstringsModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="Source directory not found",
-                    error="src/ directory does not exist"
+                    errors=["src/ directory does not exist"]
                 )
             
             # Find all Python files
@@ -95,7 +95,7 @@ class ScanDocstringsModule(BaseOperationModule):
             # Organize by type
             docstring_index = self._organize_docstrings(docstrings)
             
-            self.log_success(
+            self.log_info(
                 f"Extracted {len(docstrings)} docstrings "
                 f"({docstring_index['stats']['modules']} modules, "
                 f"{docstring_index['stats']['classes']} classes, "
@@ -119,7 +119,7 @@ class ScanDocstringsModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Docstring scanning failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _find_python_files(self, directory: Path) -> List[Path]:
@@ -178,8 +178,9 @@ class ScanDocstringsModule(BaseOperationModule):
                     line_number=1
                 ))
             
-            # Extract from classes and functions
-            for node in ast.walk(tree):
+            # Extract from classes and functions  
+            # Use simpler iteration to avoid complex AST walking issues
+            for node in tree.body:  # Only top-level nodes
                 if isinstance(node, ast.ClassDef):
                     docstring = ast.get_docstring(node)
                     if docstring:
@@ -206,10 +207,8 @@ class ScanDocstringsModule(BaseOperationModule):
                                     signature=self._get_signature(item)
                                 ))
                 
-                elif isinstance(node, ast.FunctionDef) and not any(
-                    isinstance(parent, ast.ClassDef) for parent in ast.walk(tree) if hasattr(parent, 'body') and node in parent.body
-                ):
-                    # Top-level functions only
+                elif isinstance(node, ast.FunctionDef):
+                    # Top-level functions
                     docstring = ast.get_docstring(node)
                     if docstring:
                         docstrings.append(DocstringInfo(
@@ -286,8 +285,10 @@ class ScanDocstringsModule(BaseOperationModule):
             if ds.parent_class:
                 entry["parent_class"] = ds.parent_class
             
-            index[f"{ds.object_type}s"].append(entry)
-            index["stats"][f"{ds.object_type}s"] += 1
+            # Correct pluralization: class -> classes, not classs
+            plural_type = f"{ds.object_type}es" if ds.object_type == "class" else f"{ds.object_type}s"
+            index[plural_type].append(entry)
+            index["stats"][plural_type] += 1
         
         return index
 

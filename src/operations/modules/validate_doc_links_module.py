@@ -103,7 +103,7 @@ class ValidateDocLinksModule(BaseOperationModule):
                     }
                 )
             else:
-                self.log_success(f"All {total_links} links are valid")
+                self.log_info(f"All {total_links} links are valid")
                 
                 return OperationResult(
                     success=True,
@@ -122,7 +122,7 @@ class ValidateDocLinksModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Link validation failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _extract_links(self, md_file: Path) -> List[str]:

@@ -1,5 +1,7 @@
 # Workflow Pipeline System - Visual Architecture
 
+**Last Updated:** 2025-11-10
+
 ## 🎯 System Overview
 
 ```

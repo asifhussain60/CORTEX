@@ -59,7 +59,7 @@ This index maps all 101 design documents in `cortex-brain/cortex-2.0-design/` to
 | **25-implementation-roadmap.md** | implementation_status.phase_breakdown | ✅ Consolidated | 🗄️ Archive |
 | **26-bloated-design-analysis.md** | architecture_patterns (token optimization rationale) | ✅ Consolidated | 🗄️ Archive |
 | **27-PR-REVIEW-QUICK-REFERENCE.md** | N/A (team process guide) | 📋 Active | 📋 Keep |
-| **27-pr-review-team-collaboration.md** | N/A (team process guide) | 📋 Active | 📋 Keep |
+| **27-pr-review-team-collaboration.md** → **pr-review-guidelines.yaml** | Team collaboration workflow | ✅ Converted | �️ Archived (70.9% reduction) |
 | **28-integrated-story-documentation.md** | operations_system.refresh_cortex_story | ✅ Consolidated | 🗄️ Archive |
 | **29-response-template-system.md** | architecture_patterns (response patterns) | ✅ Consolidated | 🗄️ Archive |
 | **30-token-optimization-system.md** | architecture_patterns.integration_patterns.token_optimization | ✅ Consolidated | 🗄️ Archive |
@@ -230,7 +230,7 @@ This index maps all 101 design documents in `cortex-brain/cortex-2.0-design/` to
 10. **CRAWLER-QUICK-REFERENCE.md** - Useful reference
 11. **CONFIGURATION-WIZARD-QUICK-REFERENCE.md** - Useful reference
 12. **27-PR-REVIEW-QUICK-REFERENCE.md** - Team process guide
-13. **27-pr-review-team-collaboration.md** - Team process guide
+13. **27-pr-review-team-collaboration.md** → **pr-review-guidelines.yaml** (✅ Converted 2025-11-10)
 14. **implementation-status.yaml** - Machine-readable status
 15. **status-data.yaml** - Machine-readable metrics
 16. Plus 13 more active documents
