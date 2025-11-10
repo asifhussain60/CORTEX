@@ -198,121 +198,78 @@ setup environment
 
 ## 🎯 How to Use CORTEX
 
-### 💬 Natural Language (Recommended)
+### 💬 Natural Language (The CORTEX Way)
 
-**CORTEX is designed to understand natural language.** Just tell it what you need:
+**CORTEX uses natural language only.** Just tell it what you need:
 
 ```
 Add a purple button to the dashboard
 setup environment
 show me where I left off
+demo
+cleanup
+refresh story
 ```
 
 **Why natural language?**
 - ✅ No syntax to memorize
+- ✅ Intuitive for all skill levels
 - ✅ Context-aware understanding
-- ✅ Accessible to all skill levels
+- ✅ Flexible and forgiving
+- ✅ Works in conversation naturally
 
----
+**Speed Options:**
+- **Terse:** `setup`, `demo`, `cleanup` (5-7 characters)
+- **Clear:** `setup environment`, `clean workspace` (recommended)
+- **Conversational:** `I want to set up my environment` (most flexible)
 
-### ⚡ Optional: Slash Commands (Power Users)
-
-**Slash commands are shortcuts** for common operations. They're entirely optional!
-
-#### 📦 Platform & Session Commands
-| Command | Natural Language Equivalent | What It Does |
-|---------|---------------------------|--------------|
-| `/setup` | "setup environment" | Setup/configure current platform |
-| `/resume` | "resume work" | Resume from where you left off |
-| `/status` | "show progress" | Show current work status |
-| `/help` or `/CORTEX help` | "help", "show commands" | **Display all available operations** |
-
-*Aliases for /setup: `/env`, `/environment`, `/configure`*
+**All three styles work equally well!** Choose what feels natural.
 
 **Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
 
 ---
 
-### 💡 Quick Command Reference
+### 💡 Command Discovery
 
-**Forgot what's available?** Use the help command:
+**Forgot what's available?** Ask for help:
 
 ```
-/CORTEX help
+help
+show me what cortex can do
+what commands are available
 ```
 
-**Output:**
-```
-====================================================================================
-CORTEX COMMANDS
-====================================================================================
+**Available Operations:**
 
-Status   Quick Command        Natural Language Example            Module
-------------------------------------------------------------------------------------
-⏸️ pend  build docs           generate documentation              update_documentati
-⏸️ pend  check brain          check brain protection              brain_protection_c
-🔄 part  cleanup              remove temporary files              workspace_cleanup
-✅ read  update story         refresh cortex story                refresh_cortex_sto
-🔄 part  setup                initialize environment              environment_setup
-...
+| Operation | Natural Language Examples | Status | What It Does |
+|-----------|--------------------------|--------|--------------|
+| **Demo** | "demo", "show capabilities", "tutorial" | ✅ READY | Interactive walkthrough of CORTEX |
+| **Setup** | "setup", "configure", "initialize" | ✅ READY | Configure development environment |
+| **Story Refresh** | "refresh story", "update story" | ✅ READY | Update CORTEX story documentation |
+| **Cleanup** | "cleanup", "clean workspace", "tidy up" | 🟡 PARTIAL | Clean temp files, optimize databases |
+| **Documentation** | "update docs", "build docs" | ⏸️ PENDING | Generate/build documentation site |
+| **Brain Protection** | "check brain", "validate protection" | ⏸️ PENDING | Validate brain integrity |
+| **Run Tests** | "run tests", "test suite" | ⏸️ PENDING | Execute test suite with coverage |
 
-Legend:
-  ✅ ready    - Fully implemented and tested
-  🔄 partial  - Partially implemented (core works)
-  ⏸️ pending  - Architecture ready, modules pending
-  🎯 planned  - Design phase (CORTEX 2.1+)
-```
-
-**Programmatic access:**
-```python
-from src.operations import show_help
-
-# Table format (default)
-print(show_help())
-
-# Detailed with categories
-print(show_help('detailed'))
-
-# Simple list
-print(show_help('list'))
-```
-
----
-
-#### 🎯 CORTEX 2.0 Universal Operations Commands
-**Modular, extensible operations system - some commands ready, others in development:**
-
-| Command | Natural Language Equivalent | Status | What It Does |
-|---------|---------------------------|--------|--------------|
-| `/setup` | "setup environment", "configure" | ✅ **READY** | Setup/configure development environment |
-| `/CORTEX, refresh cortex story` | "refresh story", "update story" | ✅ **READY** | Refresh CORTEX story documentation (6/6 modules) |
-| `/CORTEX, cleanup` | "cleanup", "clean workspace" | ✅ **READY** | Clean temporary files and optimize databases (5/6 modules) |
-| `/CORTEX, generate documentation` | "generate docs", "update docs" | ⏸️ **PENDING** | Auto-generate and build documentation (0/6 modules) |
-| `/CORTEX, run brain protection` | "check brain", "validate brain" | ⏸️ **PENDING** | Run brain protection validation (0/6 modules) |
-| `/CORTEX, run tests` | "run tests", "test this" | ⏸️ **PENDING** | Execute test suite (0/5 modules) |
-
-**Implementation Status:**
-- ✅ **Core Architecture Complete:** Universal operations system, YAML registry, orchestrator, factory
-- ✅ **Setup Operation:** 4 modules migrated (platform detection, vision API, Python deps, brain init)
-- ✅ **Story Refresh:** 6/6 modules implemented and working! (load, transform, validate, save, nav update, preview)
-- ✅ **Workspace Cleanup:** 5/6 modules implemented and tested (scan, remove old logs, clear Python cache, vacuum SQLite, generate report). Orphaned files removal kept optional and pending for caution.
-- ⏸️ **Other Operations:** Architecture ready, modules pending implementation
+**Legend:**
+- ✅ READY - Fully implemented and tested
+- 🟡 PARTIAL - Core works, integration testing in progress
+- ⏸️ PENDING - Architecture ready, modules pending
+- 🎯 PLANNED - Design phase (CORTEX 2.1+)
 
 **Try it now:**
 ```python
 from src.operations import execute_operation
-report = execute_operation('/setup')  # Works!
-report = execute_operation('refresh story')  # Works! All 6 modules complete
-report = execute_operation('cleanup', profile='standard')  # Works! 5/6 modules
+
+# All natural language - no slash commands needed!
+report = execute_operation('setup')  # Works!
+report = execute_operation('refresh story')  # Works!
+report = execute_operation('cleanup', profile='standard')  # Works!
 ```
 
-#### 🔧 VS Code Extension Commands
-**Available in VS Code Chat (`@cortex`):**
-- `/resume` - Resume last conversation
-- `/checkpoint` - Save conversation state
-- `/history` - View conversation history
-- `/optimize` - Optimize token usage
-- `/instruct` - Give CORTEX new instructions
+### 🔧 VS Code Extension
+
+**Note:** The VS Code extension MAY use command syntax internally (e.g., `@cortex /resume`) for UI conventions, but this is extension-specific and NOT part of core CORTEX operations.
 
 ---
 
@@ -330,24 +287,37 @@ report = execute_operation('cleanup', profile='standard')  # Works! 5/6 modules
 
 ---
 
-## 🔌 Plugin Commands (Extensible)
+## 🔌 Plugin System (Extensible)
 
-**Plugins can register their own commands!** As you add plugins, new commands become available.
-
-**Current plugins with commands:**
-
-### 🖥️  Platform & Environment
-
-- **platform_switch:** `/setup` (aliases: /env, /environment, /configure) - Setup/reconfigure development environment
-
+**Plugins extend CORTEX functionality seamlessly!**
 
 **How it works:**
-1. Plugin defines commands during initialization
-2. Commands are registered to global registry
-3. Router expands commands to natural language
-4. Intent detection and routing proceeds normally
+1. Plugins register natural language patterns during initialization
+2. Router matches user intent to plugin capabilities
+3. Plugin executes with full access to CORTEX brain tiers
+4. Results integrate naturally into conversation
 
-**For plugin developers:** See `src/plugins/command_registry.py` for API
+**Example Plugin:**
+```python
+class MyPlugin(BasePlugin):
+    def get_natural_language_patterns(self):
+        return ["analyze code quality", "review code", "check quality"]
+    
+    def execute(self, request, context):
+        # Your plugin logic here
+        return {"success": True, "data": results}
+```
+
+**For plugin developers:** See `src/plugins/base_plugin.py` for API
+
+**Current Active Plugins:**
+- Platform Switch (auto-detects Mac/Windows/Linux)
+- System Refactor (code restructuring)
+- Doc Refresh (documentation generation)
+- Extension Scaffold (VS Code extension creation)
+- Configuration Wizard (setup assistance)
+- Code Review (quality analysis)
+- Cleanup (workspace maintenance)
 
 ---
 
@@ -464,12 +434,13 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 ---
 
-*Last Updated: 2025-11-10 | CORTEX 2.0 Universal Operations + Response Templates*
+*Last Updated: 2025-11-10 | CORTEX 2.0 Natural Language Architecture*
 
-*Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. New plugin commands are automatically discovered via the command registry system.*
+*Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. All operations use natural language only - no slash commands needed for core CORTEX operations.*
 
-*What's New in 5.2:* 
-- **Response Template Architecture** - Zero-execution responses via YAML templates
-- **Help Command Optimization** - Instant table display, no Python needed
-- **Design Complete** - 90+ templates defined, implementation ready (14-16 hours)
-- See `cortex-brain/cortex-2.0-design/RESPONSE-TEMPLATE-ARCHITECTURE.md` for details
+*What's New in 5.3:* 
+- **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
+- **Interaction Design** - Single, intuitive interaction model (see `cortex-brain/interaction-design.yaml`)
+- **Documentation Cleanup** - 200+ lines removed, clearer focus on natural language patterns
+- **Module Status Updates** - 37/86 modules implemented (43%), 3/12 operations fully working
+- See `cortex-brain/cortex-2.0-design/SLASH-COMMAND-REMOVAL-REPORT.md` for details

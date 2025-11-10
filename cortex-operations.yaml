@@ -3,55 +3,55 @@ operations:
     name: CORTEX Interactive Demo
     description: Hands-on walkthrough of CORTEX capabilities with live execution
     natural_language:
-      - demo
-      - show me what cortex can do
-      - walkthrough
-      - tutorial
-      - cortex demo
-      - interactive tutorial
-      - show demo
-    slash_command: /demo
+    - demo
+    - show me what cortex can do
+    - walkthrough
+    - tutorial
+    - cortex demo
+    - interactive tutorial
+    - show demo
     category: onboarding
     modules:
-      - demo_introduction
-      - demo_help_system
-      - demo_story_refresh
-      - demo_cleanup
-      - demo_conversation
-      - demo_completion
+    - demo_introduction
+    - demo_help_system
+    - demo_story_refresh
+    - demo_cleanup
+    - demo_conversation
+    - demo_completion
     profiles:
       quick:
         description: Essential commands only (2 minutes)
         modules:
-          - demo_introduction
-          - demo_help_system
-          - demo_story_refresh
-          - demo_completion
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_completion
       standard:
         description: Core capabilities (3-4 minutes)
         modules:
-          - demo_introduction
-          - demo_help_system
-          - demo_story_refresh
-          - demo_cleanup
-          - demo_completion
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_cleanup
+        - demo_completion
       comprehensive:
         description: Full walkthrough (5-6 minutes)
         modules:
-          - demo_introduction
-          - demo_help_system
-          - demo_story_refresh
-          - demo_cleanup
-          - demo_conversation
-          - demo_completion
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_cleanup
+        - demo_conversation
+        - demo_completion
     implementation_status:
       status: ready
       modules_implemented: 6
       modules_total: 6
       completion_percentage: 100
-      notes: All 6 demo modules complete and tested. Both Windows Track A (intro, help, cleanup) and Mac Track B (story_refresh, conversation, completion) implemented successfully.
+      notes: All 6 demo modules complete and tested. Both Windows Track A (intro,
+        help, cleanup) and Mac Track B (story_refresh, conversation, completion) implemented
+        successfully.
       estimated_hours: 6
-
   environment_setup:
     name: Environment Setup
     description: Configure CORTEX development environment on Mac/Windows/Linux
@@ -62,7 +62,6 @@ operations:
     - configure cortex
     - initialize environment
     - get started
-    slash_command: /setup
     category: environment
     modules:
     - project_validation
@@ -122,7 +121,6 @@ operations:
     - regenerate story
     - update cortex story
     - transform story
-    slash_command: /CORTEX, refresh cortex story
     category: documentation
     modules:
     - load_story_template
@@ -165,7 +163,6 @@ operations:
     - tidy up
     - remove temporary files
     - vacuum database
-    slash_command: /CORTEX, cleanup
     category: maintenance
     modules:
     - scan_temporary_files
@@ -208,7 +205,6 @@ operations:
     - refresh documentation
     - build docs
     - generate documentation
-    slash_command: /CORTEX, generate documentation
     category: documentation
     modules:
     - scan_docstrings
@@ -253,7 +249,6 @@ operations:
     - brain protection
     - check brain protection
     - verify brain integrity
-    slash_command: /CORTEX, run brain protection
     category: validation
     modules:
     - load_protection_rules
@@ -262,6 +257,82 @@ operations:
     - validate_tier2_schema
     - check_brain_integrity
     - generate_protection_report
+    implementation_status:
+      status: pending
+      modules_implemented: 0
+      modules_total: 6
+      completion_percentage: 0
+      notes: "Architecture ready. Modules pending implementation."
+      estimated_hours: 8
+  
+  brain_health_check:
+    name: Brain Health Check & Self-Optimization
+    description: Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations
+    natural_language:
+    - brain health check
+    - how is cortex doing
+    - run system diagnostics
+    - check cortex health
+    - optimize cortex
+    - system health check
+    - validate everything
+    - comprehensive diagnostics
+    category: validation
+    modules:
+    - validate_tier0_governance
+    - validate_tier_health
+    - analyze_test_coverage
+    - profile_performance
+    - audit_configuration
+    - review_module_status
+    - optimize_knowledge_graph
+    - optimize_databases
+    - optimize_context_cache
+    - generate_optimization_plan
+    - generate_health_report
+    profiles:
+      quick:
+        description: Quick health check - critical components only
+        modules:
+        - validate_tier0_governance
+        - validate_tier_health
+        - profile_performance
+        - generate_health_report
+      standard:
+        description: Standard health check - validation + basic optimization
+        modules:
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - generate_optimization_plan
+        - generate_health_report
+      comprehensive:
+        description: Full health check - validation + optimization + auto-fix
+        modules:
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - optimize_knowledge_graph
+        - optimize_databases
+        - optimize_context_cache
+        - generate_optimization_plan
+        - generate_health_report
+    implementation_status:
+      status: designed
+      modules_implemented: 0
+      modules_total: 11
+      completion_percentage: 0
+      notes: "Complete design ready (see BRAIN-HEALTH-CHECK-DESIGN.md). Self-optimizing orchestration. Implementation target: Phase 6-7 (Mac track)."
+      estimated_hours: 25
+      target_phase: "Phase 6-7"
+      track: "Mac"
+  
   comprehensive_self_review:
     name: Comprehensive Self-Review
     description: Validate all brain protection layers, coding standards, and architecture
@@ -273,7 +344,6 @@ operations:
     - check all protections
     - full validation
     - health check
-    slash_command: /CORTEX, run self-review
     category: validation
     modules:
     - load_self_review_checklist
@@ -353,7 +423,6 @@ operations:
     - execute tests
     - run test suite
     - check tests
-    slash_command: /CORTEX, run tests
     category: testing
     modules:
     - discover_tests
@@ -391,7 +460,6 @@ operations:
     - plan this
     - help me plan
     - collaborative planning
-    slash_command: /CORTEX, let's plan a feature
     category: planning
     status: pending
     modules:
@@ -441,7 +509,6 @@ operations:
     - design architecture
     - plan architecture
     - system design
-    slash_command: /CORTEX, architect a solution
     category: planning
     status: pending
     modules:
@@ -460,7 +527,6 @@ operations:
     - refactor code
     - improve code quality
     - clean up this
-    slash_command: /CORTEX, refactor this module
     category: planning
     status: pending
     modules:
@@ -479,7 +545,6 @@ operations:
     - what can you do
     - available commands
     - how do I
-    slash_command: /help
     category: discovery
     status: pending
     modules:
@@ -516,7 +581,6 @@ operations:
     - help search
     - find command
     - search commands
-    slash_command: /help search <keyword>
     category: discovery
     status: pending
     modules:
@@ -1484,8 +1548,6 @@ modules:
     status: pending
     estimated_hours: 1.0
     cortex_version: '2.1'
-
-  # Demo Operation Modules
   demo_introduction:
     name: Demo Introduction
     description: Welcome user and explain demo flow (3-5 minute walkthrough overview)
@@ -1503,10 +1565,10 @@ modules:
     estimated_hours: 0.5
     token_cost: 100
     cortex_version: '2.0'
-
   demo_help_system:
     name: Demo Help System
-    description: Execute /help and explain output (status icons, natural language vs slash commands)
+    description: Execute /help and explain output (status icons, natural language
+      vs slash commands)
     phase: DEMONSTRATION
     priority: high
     class: DemoHelpSystemModule
@@ -1522,7 +1584,6 @@ modules:
     estimated_hours: 1.0
     token_cost: 150
     cortex_version: '2.0'
-
   demo_story_refresh:
     name: Demo Story Refresh
     description: Execute story refresh and show narrator voice transformation results
@@ -1541,10 +1602,10 @@ modules:
     estimated_hours: 1.5
     token_cost: 200
     cortex_version: '2.0'
-
   demo_cleanup:
     name: Demo Cleanup
-    description: Execute workspace cleanup and show optimization report (files removed, space saved, DB optimization)
+    description: Execute workspace cleanup and show optimization report (files removed,
+      space saved, DB optimization)
     phase: DEMONSTRATION
     priority: medium
     class: DemoCleanupModule
@@ -1560,7 +1621,6 @@ modules:
     estimated_hours: 1.0
     token_cost: 150
     cortex_version: '2.0'
-
   demo_conversation:
     name: Demo Conversation Memory
     description: Explain conversation tracking system and how /resume works
@@ -1579,7 +1639,6 @@ modules:
     estimated_hours: 1.0
     token_cost: 100
     cortex_version: '2.0'
-
   demo_completion:
     name: Demo Completion
     description: Summarize demo learnings and suggest next steps
@@ -1598,7 +1657,6 @@ modules:
     estimated_hours: 0.5
     token_cost: 100
     cortex_version: '2.0'
-
 metadata:
   version: '2.1'
   schema_version: '1.0'
