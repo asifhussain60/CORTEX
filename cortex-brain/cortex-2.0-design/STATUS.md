@@ -5,6 +5,18 @@
 
 ---
 
+> Quick Visual Snapshot (always update BEFORE reporting to user):
+>
+> `#file:cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD`
+
+### Status Update Protocol (Mandatory)
+- After completing any phase or task, first update `CORTEX2-STATUS.MD` (compact visual bars).
+- Then reflect the change here in `STATUS.md` (detailed narrative and metrics).
+- Commit with: `status: update CORTEX2-STATUS.MD (Phase X.Y complete)`.
+- This ordering enforces SKULL-001 (Test Before Claim) and keeps stakeholders synced.
+
+---
+
 ## 📚 CORTEX Unified Architecture Available!
 
 **NEW:** All architectural documentation consolidated into single source of truth!

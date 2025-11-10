@@ -153,6 +153,18 @@ class CortexEntry:
                 f"Processing request: intent={request.intent}, "
                 f"conv_id={conversation_id}"
             )
+
+            # Handle continuation requests before heavy routing
+            if request.intent == "resume":
+                try:
+                    from .pagination import PaginationManager
+                    pm = PaginationManager()
+                    next_page = pm.get_next(conversation_id)
+                    if next_page:
+                        return next_page
+                except Exception as _e:
+                    # Fall through to normal routing if pagination fails or nothing to continue
+                    pass
             
             # Route to appropriate agent(s)
             response = self.router.execute(request)
@@ -168,10 +180,12 @@ class CortexEntry:
             if self._is_implementation_work(request.intent, user_message):
                 self._remind_checklist_update(user_message, response)
             
-            # Format response
+            # Format response (with safe paging to avoid chat length limits)
             formatted = self.formatter.format(
                 response,
-                format_type=format_type
+                format_type=format_type,
+                conversation_id=conversation_id,
+                enable_paging=True
             )
             
             self.logger.info(

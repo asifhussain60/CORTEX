@@ -62,6 +62,7 @@ def execute_operation(
             - Operation ID: 'refresh_cortex_story', 'workspace_cleanup'
             - Natural language: 'refresh story', 'cleanup workspace'
             - Slash command: '/CORTEX, refresh cortex story'
+            - Help command: 'help', '/CORTEX help', '/help'
         profile: Profile to use (minimal/standard/full) - default 'standard'
         project_root: Project root path (auto-detected if None)
         **kwargs: Additional context to pass to operation
@@ -70,6 +71,9 @@ def execute_operation(
         OperationExecutionReport with execution details
     
     Examples:
+        # Show help
+        report = execute_operation('help')
+        
         # By operation ID
         report = execute_operation('refresh_cortex_story')
         
@@ -90,6 +94,24 @@ def execute_operation(
         )
     """
     try:
+        # Special case: help command
+        if operation_id_or_input.lower().strip() in ['help', '/help', '/cortex help', 'show help']:
+            help_format = kwargs.get('format', 'table')
+            help_text = show_help(help_format)
+            return OperationExecutionReport(
+                operation_id="help",
+                operation_name="CORTEX Help",
+                success=True,
+                modules_executed=[],
+                modules_succeeded=[],
+                modules_failed=[],
+                modules_skipped=[],
+                module_results={},
+                total_duration_seconds=0.0,
+                context={'help_text': help_text},
+                errors=[]
+            )
+        
         factory = _get_factory()
         
         # Resolve operation ID from input
@@ -273,6 +295,32 @@ def create_orchestrator(
     return factory.create_operation(operation_id, profile, context)
 
 
+def show_help(format: str = 'table') -> str:
+    """
+    Display CORTEX command help.
+    
+    Shows all available operations with status, examples, and module info.
+    
+    Args:
+        format: Output format - 'table' (default), 'list', or 'detailed'
+    
+    Returns:
+        Formatted help text
+    
+    Example:
+        # Show quick reference table
+        print(show_help())
+        
+        # Show detailed with categories
+        print(show_help('detailed'))
+        
+        # Show simple list
+        print(show_help('list'))
+    """
+    from src.operations.help_command import show_help as _show_help
+    return _show_help(format)
+
+
 # Public API exports
 __all__ = [
     # Main execution API
@@ -280,6 +328,7 @@ __all__ = [
     'list_operations',
     'get_operation_modules',
     'create_orchestrator',
+    'show_help',
     
     # Core classes (for advanced usage)
     'BaseOperationModule',

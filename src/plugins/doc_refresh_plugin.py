@@ -555,7 +555,9 @@ class Plugin(BasePlugin):
             return {
                 "success": True,
                 "mode": "complete_regeneration",
+                "message": "Story regeneration transformation plan generated (review required before applying)",
                 "feature_inventory": feature_inventory,
+                "milestones_detected": len(feature_inventory),
                 "deprecated_sections": deprecated_sections,
                 "story_structure": story_structure,
                 "consistency_validation": consistency_validation,

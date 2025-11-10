@@ -73,7 +73,10 @@ class ResponseFormatter:
         verbosity: Optional[str] = None,
         include_metadata: bool = None,
         include_recommendations: bool = None,
-        format_type: str = "text"
+        format_type: str = "text",
+        conversation_id: Optional[str] = None,
+        enable_paging: bool = True,
+        max_chars: Optional[int] = None
     ) -> str:
         """
         Format agent response into readable output with verbosity control.
@@ -86,7 +89,7 @@ class ResponseFormatter:
             format_type: Output format ("text", "json", "markdown")
             
         Returns:
-            Formatted response string
+            Formatted response string (may be paged when exceeding max_chars)
         """
         verbosity = verbosity or self.default_verbosity
         
@@ -113,7 +116,14 @@ class ResponseFormatter:
         word_limit = self.word_limits.get(verbosity)
         if word_limit:
             formatted = self._truncate_to_limit(formatted, word_limit, verbosity)
-        
+
+        # Final safety: enforce max character paging to avoid chat length limits
+        # Default max chars tuned for GitHub Copilot Chat safety margins
+        if enable_paging:
+            hard_limit = max_chars if isinstance(max_chars, int) and max_chars > 1000 else 12000
+            if formatted and len(formatted) > hard_limit:
+                return self._page_output(formatted, conversation_id, hard_limit)
+
         return formatted
     
     def _format_text(
@@ -215,7 +225,7 @@ class ResponseFormatter:
         include_metadata: bool,
         include_recommendations: bool
     ) -> str:
-        """Format expert text (full detail, no limit)."""
+        """Format expert text (full detail; paging applied at output stage)."""
         lines = []
         
         # Status line
@@ -487,6 +497,69 @@ class ResponseFormatter:
             hint = "\n\n_Response truncated. Say 'explain fully' or 'show everything' for complete details_"
         
         return f"{truncated}...{hint}"
+
+    def _page_output(self, text: str, conversation_id: Optional[str], max_chars: int) -> str:
+        """Split oversized output into pages and return first page with continuation instructions.
+
+        Stores remaining pages for retrieval via a pagination manager bound to the conversation.
+        """
+        # Prefer splitting on paragraph boundaries, then lines
+        paragraphs = [p for p in text.split("\n\n") if p.strip()]
+        pages: list[str] = []
+        current: list[str] = []
+        current_len = 0
+
+        def flush_current():
+            if current:
+                pages.append("\n\n".join(current))
+
+        for para in paragraphs:
+            para_len = len(para) + (2 if current else 0)
+            if current_len + para_len <= max_chars:
+                current.append(para)
+                current_len += para_len
+            else:
+                # If single paragraph is too big, hard split by lines
+                if not current:
+                    lines = para.splitlines()
+                    buf: list[str] = []
+                    buf_len = 0
+                    for ln in lines:
+                        ln_len = len(ln) + 1
+                        if buf_len + ln_len <= max_chars:
+                            buf.append(ln)
+                            buf_len += ln_len
+                        else:
+                            pages.append("\n".join(buf))
+                            buf = [ln]
+                            buf_len = len(ln)
+                    if buf:
+                        pages.append("\n".join(buf))
+                else:
+                    flush_current()
+                    current = [para]
+                    current_len = len(para)
+
+        flush_current()
+
+        total = len(pages) if pages else 1
+        if total <= 1:
+            # Should not happen, but return as-is
+            return text[:max_chars]
+
+        # Persist pages for continuation if a conversation is available
+        try:
+            from .pagination import PaginationManager
+            manager = PaginationManager()
+            cont_id = manager.create_pagination(conversation_id, pages)
+            header = f"Part 1/{total}\n\n"
+            footer = f"\n\n_Response is long. Say 'continue' to get the next part (id: {cont_id})._"
+            return header + pages[0] + footer
+        except Exception:
+            # Fallback: return first page with generic hint
+            header = f"Part 1/{total}\n\n"
+            footer = "\n\n_Response truncated due to length. Say 'continue' to see more._"
+            return header + pages[0] + footer
     
     def format_batch(
         self,

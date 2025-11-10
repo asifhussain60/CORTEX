@@ -39,6 +39,35 @@ This directory contains the complete CORTEX 2.0 design, broken into small, manag
 
 **Purpose:** Single slim status file (STATUS.md) provides instant overview. YAML backend enables automation. Archive preserves history.
 
+### 🔁 Parity & Source-of-Truth Protocol (INDEX ↔ STATUS)
+
+To eliminate drift, every enhancement, feature addition, architectural adjustment, or migration decision MUST be recorded in BOTH `CORTEX2-STATUS.MD` (compact visual) and this `00-INDEX.md` (design index) BEFORE code implementation (SKULL-001 extension).
+
+**Update Order (Blocking Gate):**
+1. Draft change (feature / enhancement / refactor / migration) → capture intent & rationale.
+2. Add entry to Enhancement & Drift Log (below) with an ID and provisional status (e.g., APPROVED-PENDING-IMPLEMENTATION).
+3. Add/adjust corresponding task line in `CORTEX2-STATUS.MD` (e.g., new Task 5.6) with 0% progress.
+4. Commit with message prefix: `design: register <ID>`.
+5. ONLY THEN implement code/tests.
+6. After tests pass, update percentage/progress in `CORTEX2-STATUS.MD` and mark log entry status IMPLEMENTED.
+7. If reverted, annotate entry with REVERTED and reason.
+
+**SKULL Rule Extension (Proposed):**
+`SKULL-005: Index/Status Parity` – Implementation commits that modify code related to a feature without a prior or same-commit addition to both Index Log + Status task are rejected.
+
+**Automation (Future Script Idea):** A `scripts/verify_parity.py` script can compare enhancement IDs between the log here and tasks in `CORTEX2-STATUS.MD`, failing CI if mismatch or missing required states.
+
+### 🗂️ Enhancement & Drift Log
+Central chronological append-only register (top = newest). Never delete entries; supersede via `supersedes:` pointer.
+
+| ID | Date | Category | Summary | Status | Related Tasks | Supersedes | Metrics Targets |
+|----|------|----------|---------|--------|---------------|------------|-----------------|
+| E-2025-11-10-PLAN-MIGRATION | 2025-11-10 | Planning Artifacts | Approve hybrid machine-readable planning artifacts (ledger + active_plans + decision_graph + reasoning_chain.jsonl + test_alignment + metrics_forecast) with generated Markdown | APPROVED-PENDING-IMPLEMENTATION | Task 5.6 (Phase 5) | — | ≥30% token reduction; 0 drift incidents; ≤50ms retrieval |
+
+Legend Status Codes: PROPOSED → APPROVED-PENDING-IMPLEMENTATION → IMPLEMENTING → IMPLEMENTED → REVERTED.
+
+Add future entries above; maintain this as the design-time authoritative change ledger.
+
 ### 🏗️ FOUNDATION (Read First)
 Start here to understand the core architecture and approach:
 

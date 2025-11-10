@@ -1136,6 +1136,88 @@ With these adjustments, CORTEX 2.0 will:
 
 ---
 
+## 🗂️ Planning Artifact Migration Decision (Hybrid Machine-Readable Model)
+
+**Status:** APPROVED (Proceed with Hybrid Migration)  
+**Source Discussion:** CopilotChats.md (Feasibility + phased plan)  
+**Objective:** Make all INTERNAL planning artifacts canonical in structured machine-readable form (YAML/JSONL) while generating human-facing Markdown docs automatically for MkDocs.
+
+### 🔑 Rationale (Why Hybrid, Not Immediate Full Purge)
+| Concern | Risk If Ignored | Hybrid Mitigation |
+|---------|-----------------|-------------------|
+| Design provenance | Loss of reasoning context | Append-only ledger + reasoning_chain.jsonl |
+| Drift between doc + source | Inconsistent plans | Generated MD from YAML only (read-only banner) |
+| Developer ergonomics | YAML editing friction | CLI scaffolder + templates + pydantic validation |
+| Merge conflicts | Churn in single large file | Shard per-plan + append-only ledger events |
+| Token bloat | Inefficient ingestion | Keep verbose reasoning out of YAML (JSONL stream) |
+
+### 📁 Canonical Schema Suite (Initial Set)
+1. plan_ledger.yaml – Append-only events ({id, timestamp, actor, plan_type, status, supersedes, artifacts, confidence})
+2. active_plans.yaml – Current active feature / arch / refactor plans with revision linkage
+3. decision_graph.yaml – Atomic decisions with options, chosen, justification, revisit triggers
+4. reasoning_chain.jsonl – Line-delimited provenance steps (plan_id, step_index, context_hash, summary, tokens_in/out)
+5. test_alignment.yaml – Required tests per plan (unit/integration/e2e/visual/perf) + coverage targets
+6. metrics_forecast.yaml – Complexity prediction, uncertainty, historical similarity references
+
+Each file includes: schema_version, last_updated, generator_version, validation_status.
+
+### 🧪 Validation Strategy
+Use pydantic models (`src/tier2/plan_models.py`) + pytest suite (`tests/tier2/test_plan_schemas.py`).  
+Fail CI if: schema invalid, missing mandatory fields, duplicate ids, reasoning chain orphan entries.
+
+### 🛠️ Tooling Roadmap (Phase 0 → Phase 3 of Migration)
+| Phase | Deliverables | Gate |
+|-------|--------------|------|
+| 0 Preparation | Models, tests, CLI scaffolder, initial schemas | All schema tests PASS |
+| 1 Dual-Writing | YAML canonical + auto-generated MD (read-only) | 5 pilot plans without drift |
+| 2 Ledger & Provenance | Event append workflow + diff tool | 10 consecutive ledger entries valid |
+| 3 Decommission Manual MD | Add CI guard (no manual edits) | Zero drift incidents post switch |
+| 4 Optimization | Token metrics script + SKULL rule upgrade | ≥30% planning token reduction |
+| 5 Intelligence Extension | Decision impact scoring + summarizer | Forecast variance <20% for 3 plans |
+
+### ✅ Immediate Actions (Next Commit Series)
+1. Add pydantic dependency to `requirements.txt`.
+2. Create `src/tier2/plan_models.py` (models for artifacts above).
+3. Add tests in `tests/tier2/test_plan_schemas.py` (happy + failure cases).
+4. Scaffold `scripts/plan_cli.py` (feature plan skeleton generator: id, intent, tasks stub, acceptance criteria placeholder). 
+5. Create directory: `cortex-brain/tier2/plans/feature/` (future plan shards) – DO NOT populate large examples yet (keep pilot small).
+
+### 🎯 Success Metrics
+| Metric | Target |
+|--------|--------|
+| Token reduction (planning ingestion) | ≥30% |
+| Drift incidents (Phase 1-2) | 0 |
+| Schema validation pass rate | 100% |
+| Plan retrieval latency (local parse) | ≤50ms |
+| Decision trace coverage | 100% active plans |
+
+### 🔄 Rollback Strategy
+Maintain reverse generator: YAML → MD (always) and keep previous Markdown backups until Phase 3 gate passes (10 valid ledger entries + zero drift). A rollback simply re-declares MD as source-of-truth and freezes ledger ingestion.
+
+### 🚨 Risks & Mitigations (Delta From Earlier Analysis)
+| Risk | Added Mitigation |
+|------|------------------|
+| Early schema churn | Version fields + upgrade script mapping old → new |
+| Over-segmentation | Consolidated active_plans summary for quick read |
+| Ledger growth | Compress > N entries with summarization after closure |
+| Developer bypass (manual MD edits) | CI diff check + SKULL rule escalation (warning → block) |
+
+### 🧩 Integration Points
+- Intent Router: New intents ("plan feature", "refactor plan") return structured plan objects.
+- Test Generator Agent: Reads test_alignment.yaml to synthesize required test matrix.
+- Story Refresh Operation: Pulls canonical plan summaries to embed high-level roadmap sections.
+
+### 📌 Decision Log Entry
+ID: PLAN-MIGRATION-HYBRID-APPROVAL  
+Date: 2025-11-10  
+Decision: Adopt hybrid canonical machine-readable planning artifacts + generated Markdown.  
+Revisit Trigger: If drift > 0 or token savings < 20% after 5 pilot plans.
+
+---
+**Action Now:** Proceed to implement Phase 0 migration tasks (models + tests + CLI) after status file update.
+
+---
+
 **Status:** Holistic review complete ✅  
 **Date:** 2025-11-07  
 **Reviewed By:** GitHub Copilot (AI Assistant)  

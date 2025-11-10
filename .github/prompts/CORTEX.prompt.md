@@ -17,6 +17,12 @@
 
 ### How to Use CORTEX
 
+**Need a quick reminder?**
+```
+/CORTEX help
+```
+Shows all available commands in a concise table.
+
 Just tell CORTEX what you want in natural language:
 
 ```
@@ -202,11 +208,59 @@ show me where I left off
 | `/setup` | "setup environment" | Setup/configure current platform |
 | `/resume` | "resume work" | Resume from where you left off |
 | `/status` | "show progress" | Show current work status |
-| `/help` | "show available commands" | Display all commands |
+| `/help` or `/CORTEX help` | "help", "show commands" | **Display all available operations** |
 
 *Aliases for /setup: `/env`, `/environment`, `/configure`*
 
 **Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
+
+---
+
+### 💡 Quick Command Reference
+
+**Forgot what's available?** Use the help command:
+
+```
+/CORTEX help
+```
+
+**Output:**
+```
+====================================================================================
+CORTEX COMMANDS
+====================================================================================
+
+Status   Quick Command        Natural Language Example            Module
+------------------------------------------------------------------------------------
+⏸️ pend  build docs           generate documentation              update_documentati
+⏸️ pend  check brain          check brain protection              brain_protection_c
+🔄 part  cleanup              remove temporary files              workspace_cleanup
+✅ read  update story         refresh cortex story                refresh_cortex_sto
+🔄 part  setup                initialize environment              environment_setup
+...
+
+Legend:
+  ✅ ready    - Fully implemented and tested
+  🔄 partial  - Partially implemented (core works)
+  ⏸️ pending  - Architecture ready, modules pending
+  🎯 planned  - Design phase (CORTEX 2.1+)
+```
+
+**Programmatic access:**
+```python
+from src.operations import show_help
+
+# Table format (default)
+print(show_help())
+
+# Detailed with categories
+print(show_help('detailed'))
+
+# Simple list
+print(show_help('list'))
+```
+
+---
 
 #### 🎯 CORTEX 2.0 Universal Operations Commands
 **Modular, extensible operations system - some commands ready, others in development:**
@@ -215,7 +269,7 @@ show me where I left off
 |---------|---------------------------|--------|--------------|
 | `/setup` | "setup environment", "configure" | ✅ **READY** | Setup/configure development environment |
 | `/CORTEX, refresh cortex story` | "refresh story", "update story" | ✅ **READY** | Refresh CORTEX story documentation (6/6 modules) |
-| `/CORTEX, cleanup` | "cleanup", "clean workspace" | ⏸️ **PENDING** | Clean temporary files and optimize databases (0/6 modules) |
+| `/CORTEX, cleanup` | "cleanup", "clean workspace" | ✅ **READY** | Clean temporary files and optimize databases (5/6 modules) |
 | `/CORTEX, generate documentation` | "generate docs", "update docs" | ⏸️ **PENDING** | Auto-generate and build documentation (0/6 modules) |
 | `/CORTEX, run brain protection` | "check brain", "validate brain" | ⏸️ **PENDING** | Run brain protection validation (0/6 modules) |
 | `/CORTEX, run tests` | "run tests", "test this" | ⏸️ **PENDING** | Execute test suite (0/5 modules) |
@@ -224,6 +278,7 @@ show me where I left off
 - ✅ **Core Architecture Complete:** Universal operations system, YAML registry, orchestrator, factory
 - ✅ **Setup Operation:** 4 modules migrated (platform detection, vision API, Python deps, brain init)
 - ✅ **Story Refresh:** 6/6 modules implemented and working! (load, transform, validate, save, nav update, preview)
+- ✅ **Workspace Cleanup:** 5/6 modules implemented and tested (scan, remove old logs, clear Python cache, vacuum SQLite, generate report). Orphaned files removal kept optional and pending for caution.
 - ⏸️ **Other Operations:** Architecture ready, modules pending implementation
 
 **Try it now:**
@@ -231,6 +286,7 @@ show me where I left off
 from src.operations import execute_operation
 report = execute_operation('/setup')  # Works!
 report = execute_operation('refresh story')  # Works! All 6 modules complete
+report = execute_operation('cleanup', profile='standard')  # Works! 5/6 modules
 ```
 
 #### 🔧 VS Code Extension Commands
@@ -253,6 +309,7 @@ report = execute_operation('refresh story')  # Works! All 6 modules complete
 | `#file:prompts/shared/agents-guide.md` | Learn about agent system |
 | `#file:prompts/shared/tracking-guide.md` | Enable conversation memory |
 | `#file:prompts/shared/configuration-reference.md` | Configure CORTEX settings |
+| `#file:cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD` | Compact phase/task status snapshot (visual bars) |
 
 ---
 
