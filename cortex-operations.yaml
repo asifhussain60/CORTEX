@@ -1661,9 +1661,15 @@ metadata:
   version: '2.1'
   schema_version: '1.0'
   author: Asif Hussain
-  last_updated: '2025-11-09'
+  last_updated: '2025-11-10'
   description: Universal operations registry for CORTEX 2.0 + 2.1
   changelog:
+  - version: '2.1'
+    date: '2025-11-10'
+    changes:
+    - Fixed module count (added brain_health_check 11 modules)
+    - Updated statistics to reflect accurate totals
+    - Architecture review identified 8 gaps for future improvement
   - version: '2.1'
     date: '2025-11-10'
     changes:
@@ -1689,9 +1695,12 @@ metadata:
     - Defined 6 operations with 48 modules total
 statistics:
   total_operations: 14
-  total_modules: 76
+  total_modules: 97
   total_phases: 9
   cortex_2_0_operations: 8
   cortex_2_1_operations: 6
-  cortex_2_0_modules: 54
+  cortex_2_0_modules: 65
   cortex_2_1_modules: 22
+  modules_implemented: 37
+  modules_pending: 60
+  implementation_percentage: 38
