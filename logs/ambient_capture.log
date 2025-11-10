@@ -554,3 +554,5 @@
 2025-11-10 17:55:16 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:55:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:56:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:57:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:57:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
