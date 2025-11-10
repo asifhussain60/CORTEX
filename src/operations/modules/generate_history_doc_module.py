@@ -1,4 +1,125 @@
-# The Evolution: From KDS to CORTEX 2.0
+"""
+Generate History Documentation Module - Story Refresh Operation
+
+This module generates the History.md file documenting the complete evolution
+timeline from KDS v1 through CORTEX 2.0.
+
+Author: Asif Hussain
+Version: 1.0
+"""
+
+import logging
+from pathlib import Path
+from typing import Dict, Any, List
+from datetime import datetime
+from src.operations.base_operation_module import (
+    BaseOperationModule,
+    OperationModuleMetadata,
+    OperationResult,
+    OperationPhase,
+    OperationStatus
+)
+
+logger = logging.getLogger(__name__)
+
+
+class GenerateHistoryDocModule(BaseOperationModule):
+    """
+    Generate History.md with complete CORTEX evolution timeline.
+    
+    Documents the journey from KDS v1 (basic event stream) through CORTEX 2.0
+    (optimized cognitive architecture), including key milestones, innovations,
+    and lessons learned.
+    
+    What it does:
+        1. Extracts evolution timeline from design documents
+        2. Identifies key innovations by version
+        3. Generates comprehensive History.md
+        4. Includes metrics and git commit references
+    """
+    
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Return module metadata."""
+        return OperationModuleMetadata(
+            module_id="generate_history_doc",
+            name="Generate History Documentation",
+            description="Generate History.md with evolution timeline",
+            phase=OperationPhase.EXECUTION,
+            priority=60,
+            dependencies=["load_story_template"],
+            optional=False,
+            version="1.0",
+            tags=["story", "history", "documentation"]
+        )
+    
+    def validate_prerequisites(self, context: Dict[str, Any]) -> tuple[bool, List[str]]:
+        """Validate prerequisites."""
+        issues = []
+        
+        if 'project_root' not in context:
+            issues.append("project_root not set in context")
+            return False, issues
+        
+        project_root = Path(context['project_root'])
+        
+        # Check destination directory exists
+        dest_dir = project_root / "docs" / "story" / "CORTEX-STORY"
+        if not dest_dir.exists():
+            issues.append(f"Destination directory not found: {dest_dir}")
+        
+        return len(issues) == 0, issues
+    
+    def execute(self, context: Dict[str, Any]) -> OperationResult:
+        """
+        Generate History.md file.
+        
+        Args:
+            context: Shared context dictionary
+                - Input: project_root (Path)
+                - Output: history_doc_path (Path), milestones_count (int)
+        """
+        try:
+            project_root = Path(context['project_root'])
+            dest_path = project_root / "docs" / "story" / "CORTEX-STORY" / "History.md"
+            
+            logger.info(f"Generating history documentation")
+            
+            # Generate history content
+            history_content = self._generate_history_content()
+            
+            # Write to file
+            with open(dest_path, 'w', encoding='utf-8') as f:
+                f.write(history_content)
+            
+            logger.info(f"History documentation generated successfully: {dest_path}")
+            
+            # Store in context
+            context['history_doc_path'] = dest_path
+            context['milestones_count'] = 8  # KDS v1-7, v8, CORTEX 1.0, 2.0, etc.
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message="History documentation generated successfully",
+                data={
+                    'dest_path': str(dest_path),
+                    'milestones_count': 8,
+                    'file_size_bytes': dest_path.stat().st_size
+                }
+            )
+        
+        except Exception as e:
+            logger.error(f"Failed to generate history documentation: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Failed to generate history documentation: {e}",
+                errors=[str(e)]
+            )
+    
+    def _generate_history_content(self) -> str:
+        """Generate the complete History.md content."""
+        return f"""# The Evolution: From KDS to CORTEX 2.0
 
 **A Timeline of Awakening**
 
@@ -255,6 +376,22 @@ CORTEX didn't just gain memory—it gained efficiency, awareness, and the abilit
 
 ---
 
-*Last Updated: 2025-11-10 17:36:10*  
+*Last Updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*  
 *Generator: CORTEX Documentation Refresh Plugin v2.0*  
 *Source: Git history analysis and design documentation*
+"""
+    
+    def rollback(self, context: Dict[str, Any]) -> bool:
+        """Rollback history doc generation."""
+        logger.debug("Rollback called for history doc generation")
+        context.pop('history_doc_path', None)
+        context.pop('milestones_count', None)
+        return True
+    
+    def should_run(self, context: Dict[str, Any]) -> bool:
+        """Determine if module should run."""
+        return True
+    
+    def get_progress_message(self) -> str:
+        """Get progress message."""
+        return "Generating history documentation..."

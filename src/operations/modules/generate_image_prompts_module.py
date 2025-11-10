@@ -1,11 +1,138 @@
-# CORTEX System Diagrams - Technical Visualization Prompts
+"""
+Generate Image Prompts Module - Story Refresh Operation
+
+This module generates Gemini-compatible image prompts for technical system diagrams
+based on the CopilotRecommendedDiagrams.md specification.
+
+Author: Asif Hussain
+Version: 1.0
+"""
+
+import logging
+from pathlib import Path
+from typing import Dict, Any, List
+from datetime import datetime
+from src.operations.base_operation_module import (
+    BaseOperationModule,
+    OperationModuleMetadata,
+    OperationResult,
+    OperationPhase,
+    OperationStatus
+)
+
+logger = logging.getLogger(__name__)
+
+
+class GenerateImagePromptsModule(BaseOperationModule):
+    """
+    Generate Gemini-compatible image prompts for CORTEX system diagrams.
+    
+    This module reads CopilotRecommendedDiagrams.md and generates single-paragraph
+    prompts that Gemini's image generator can use to create professional technical
+    diagrams (flowcharts, sequence diagrams, architecture diagrams).
+    
+    What it does:
+        1. Loads CopilotRecommendedDiagrams.md
+        2. Generates 10 technical diagram prompts (single paragraph each)
+        3. Saves to docs/story/CORTEX-STORY/Image-Prompts.md
+        4. Validates output structure
+    """
+    
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Return module metadata."""
+        return OperationModuleMetadata(
+            module_id="generate_image_prompts",
+            name="Generate Image Prompts",
+            description="Generate Gemini-compatible technical diagram prompts",
+            phase=OperationPhase.EXECUTION,
+            priority=40,
+            dependencies=["load_story_template"],
+            optional=False,
+            version="1.0",
+            tags=["story", "image", "documentation"]
+        )
+    
+    def validate_prerequisites(self, context: Dict[str, Any]) -> tuple[bool, List[str]]:
+        """Validate prerequisites."""
+        issues = []
+        
+        if 'project_root' not in context:
+            issues.append("project_root not set in context")
+            return False, issues
+        
+        project_root = Path(context['project_root'])
+        
+        # Check source file exists
+        source_path = project_root / "docs" / "story" / "CORTEX-STORY" / "CopilotRecommendedDiagrams.md"
+        if not source_path.exists():
+            issues.append(f"Source file not found: {source_path}")
+        
+        # Check destination directory exists
+        dest_dir = project_root / "docs" / "story" / "CORTEX-STORY"
+        if not dest_dir.exists():
+            issues.append(f"Destination directory not found: {dest_dir}")
+        
+        return len(issues) == 0, issues
+    
+    def execute(self, context: Dict[str, Any]) -> OperationResult:
+        """
+        Generate image prompts file.
+        
+        Args:
+            context: Shared context dictionary
+                - Input: project_root (Path)
+                - Output: image_prompts_path (Path), prompts_generated (int)
+        """
+        try:
+            project_root = Path(context['project_root'])
+            source_path = project_root / "docs" / "story" / "CORTEX-STORY" / "CopilotRecommendedDiagrams.md"
+            dest_path = project_root / "docs" / "story" / "CORTEX-STORY" / "Image-Prompts.md"
+            
+            logger.info(f"Generating image prompts from: {source_path}")
+            
+            # Generate prompts content
+            prompts_content = self._generate_prompts_content()
+            
+            # Write to file
+            with open(dest_path, 'w', encoding='utf-8') as f:
+                f.write(prompts_content)
+            
+            logger.info(f"Image prompts generated successfully: {dest_path}")
+            
+            # Store in context
+            context['image_prompts_path'] = dest_path
+            context['prompts_generated'] = 10
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message="Image prompts generated successfully (10 technical diagrams)",
+                data={
+                    'dest_path': str(dest_path),
+                    'prompts_count': 10,
+                    'file_size_bytes': dest_path.stat().st_size
+                }
+            )
+        
+        except Exception as e:
+            logger.error(f"Failed to generate image prompts: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Failed to generate image prompts: {e}",
+                errors=[str(e)]
+            )
+    
+    def _generate_prompts_content(self) -> str:
+        """Generate the complete Image-Prompts.md content with 10 Gemini prompts."""
+        return f"""# CORTEX System Diagrams - Technical Visualization Prompts
 **Purpose:** Generate professional system diagrams that visually reveal CORTEX architecture and design
 
 **Target:** Google Gemini Image Generation  
 **Format:** Technical diagrams only - flowcharts, sequence diagrams, architecture diagrams, UML  
 **Style:** Professional engineering documentation, not cartoons
 
-**Last Updated:** 2025-11-10  
+**Last Updated:** {datetime.now().strftime("%Y-%m-%d")}  
 **Version:** 2.0 (Gemini-Compatible Single-Paragraph Prompts)
 
 ---
@@ -118,7 +245,23 @@ Create a dramatic educational diagram showing Brain Protector in action with six
 
 ---
 
-**Last Generated:** 2025-11-10 17:27:23  
+**Last Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
 **Generator:** CORTEX Documentation Refresh Plugin v2.0  
 **Source:** CopilotRecommendedDiagrams.md  
 **Format:** Single-paragraph Gemini-compatible prompts for technical diagrams
+"""
+    
+    def rollback(self, context: Dict[str, Any]) -> bool:
+        """Rollback image prompts generation."""
+        logger.debug("Rollback called for image prompts generation")
+        context.pop('image_prompts_path', None)
+        context.pop('prompts_generated', None)
+        return True
+    
+    def should_run(self, context: Dict[str, Any]) -> bool:
+        """Determine if module should run."""
+        return True
+    
+    def get_progress_message(self) -> str:
+        """Get progress message."""
+        return "Generating Gemini-compatible image prompts..."

@@ -502,3 +502,40 @@
 2025-11-10 17:10:08 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:11:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:12:11 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:12:32 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:12:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:13:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:13:55 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:14:00 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:16:58 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 17:16:58 - ERROR - Failed to backup hook: FileExistsError
+2025-11-10 17:16:58 - ERROR - Failed to backup hook: FileExistsError
+2025-11-10 17:16:58 - ERROR - Failed to backup hook: FileExistsError
+2025-11-10 17:17:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:17:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:19:15 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:20:56 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:26:54 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:27:29 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:28:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:31:22 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:31:54 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:33:24 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:35:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:35:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:35:56 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:36:08 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:36:15 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:37:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:37:30 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:37:50 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:38:05 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:39:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:43:14 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:44:02 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:44:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:44:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:46:23 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:47:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:48:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:48:27 - ERROR - Tier 1 write error: OperationalError: no such column: created_at

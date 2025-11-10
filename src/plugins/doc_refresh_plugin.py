@@ -356,13 +356,29 @@ class Plugin(BasePlugin):
         return context
     
     def _refresh_technical_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Technical-CORTEX.md"""
-        # This will be implemented incrementally
-        return {
-            "success": True,
-            "message": "Technical doc refresh scheduled (incremental updates)",
-            "action_required": "Use #file:Technical-CORTEX.md update with design context"
-        }
+        """Refresh Technical-CORTEX.md using dedicated module"""
+        from src.operations.modules.generate_technical_doc_module import GenerateTechnicalDocModule
+        
+        try:
+            # Create module and execute
+            module = GenerateTechnicalDocModule()
+            context = {
+                'project_root': self.cortex_root
+            }
+            
+            result = module.execute(context)
+            
+            return {
+                "success": result.success,
+                "message": result.message,
+                "data": result.data
+            }
+        except Exception as e:
+            logger.error(f"Failed to refresh technical doc: {e}", exc_info=True)
+            return {
+                "success": False,
+                "error": f"Technical doc refresh failed: {e}"
+            }
     
     def _refresh_story_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
         """Refresh Awakening Of CORTEX.md story - COMPLETE regeneration from design state
@@ -886,21 +902,54 @@ class Plugin(BasePlugin):
         return validation
     
     def _refresh_image_prompts_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Image-Prompts.md with TECHNICAL DIAGRAMS (not cartoons)"""
-        return {
-            "success": True,
-            "message": "Technical diagram prompts refresh scheduled",
-            "action_required": "Generate Gemini prompts for system diagrams (flowcharts, sequence diagrams, architecture diagrams)",
-            "note": "For story illustrations/cartoons, see prompts/user/cortex-gemini-image-prompts.md instead"
-        }
+        """Refresh Image-Prompts.md with TECHNICAL DIAGRAMS using dedicated module"""
+        from src.operations.modules.generate_image_prompts_module import GenerateImagePromptsModule
+        
+        try:
+            # Create module and execute
+            module = GenerateImagePromptsModule()
+            context = {
+                'project_root': self.cortex_root
+            }
+            
+            result = module.execute(context)
+            
+            return {
+                "success": result.success,
+                "message": result.message,
+                "data": result.data
+            }
+        except Exception as e:
+            logger.error(f"Failed to refresh image prompts doc: {e}", exc_info=True)
+            return {
+                "success": False,
+                "error": f"Image prompts doc refresh failed: {e}"
+            }
     
     def _refresh_history_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh History.md"""
-        return {
-            "success": True,
-            "message": "History doc refresh scheduled",
-            "action_required": "Document KDS evolution timeline"
-        }
+        """Refresh History.md using dedicated module"""
+        from src.operations.modules.generate_history_doc_module import GenerateHistoryDocModule
+        
+        try:
+            # Create module and execute
+            module = GenerateHistoryDocModule()
+            context = {
+                'project_root': self.cortex_root
+            }
+            
+            result = module.execute(context)
+            
+            return {
+                "success": result.success,
+                "message": result.message,
+                "data": result.data
+            }
+        except Exception as e:
+            logger.error(f"Failed to refresh history doc: {e}", exc_info=True)
+            return {
+                "success": False,
+                "error": f"History doc refresh failed: {e}"
+            }
     
     def _refresh_ancient_rules_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
         """Refresh Ancient-Rules.md (The Rule Book)
