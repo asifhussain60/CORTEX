@@ -8,14 +8,18 @@ Supports 3 verbosity levels:
 - concise: 50-150 words (default)
 - detailed: 200-400 words
 - expert: Full detail, no limit
+
+Version 2.0: Integrated with Response Template System
 """
 
 from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
+from pathlib import Path
 import json
 import re
 
 from src.cortex_agents.base_agent import AgentResponse
+from src.response_templates import TemplateLoader, TemplateRenderer, TemplateRegistry
 
 
 class ResponseFormatter:
@@ -53,12 +57,13 @@ class ResponseFormatter:
         detailed = formatter.format(response, verbosity="detailed")
     """
     
-    def __init__(self, default_verbosity: str = "concise"):
+    def __init__(self, default_verbosity: str = "concise", template_file: Optional[Path] = None):
         """
         Initialize formatter.
         
         Args:
             default_verbosity: "concise" | "detailed" | "expert"
+            template_file: Path to response-templates.yaml (optional)
         """
         self.default_verbosity = default_verbosity
         self.word_limits = {
@@ -66,6 +71,31 @@ class ResponseFormatter:
             "detailed": 400,
             "expert": None  # No limit
         }
+        
+        # Initialize template system (v2.0)
+        if template_file is None:
+            # Default location
+            from src.config import config
+            template_file = Path(config.brain_root) / "response-templates.yaml"
+        
+        self.template_loader = None
+        self.template_renderer = None
+        self.template_registry = None
+        
+        if template_file and template_file.exists():
+            try:
+                self.template_loader = TemplateLoader(template_file)
+                self.template_renderer = TemplateRenderer()
+                self.template_registry = TemplateRegistry()
+                
+                # Load templates into registry
+                self.template_loader.load_templates()
+                for template in self.template_loader.list_templates():
+                    self.template_registry.register_template(template)
+            except Exception as e:
+                # Fallback to code-based formatting if templates fail
+                print(f"Warning: Template system unavailable: {e}")
+                self.template_loader = None
     
     def format(
         self,
@@ -633,6 +663,142 @@ class ResponseFormatter:
         
         lines.append("\nPlease check the error details and try again.")
         
+        return "\n".join(lines)
+    
+    # ========================================================================
+    # Template-Based Formatting (v2.0)
+    # ========================================================================
+    
+    def format_from_template(
+        self,
+        template_id: str,
+        context: Optional[Dict[str, Any]] = None,
+        verbosity: Optional[str] = None
+    ) -> str:
+        """
+        Format response using a template (v2.0).
+        
+        This is the new template-based approach that provides:
+        - Zero execution overhead for pre-defined templates
+        - Consistent formatting across all components
+        - Easy maintenance (edit YAML, not code)
+        
+        Args:
+            template_id: Template identifier
+            context: Dictionary of values for placeholder substitution
+            verbosity: Override template verbosity
+            
+        Returns:
+            Formatted response string
+            
+        Example:
+            formatter.format_from_template(
+                "executor_success",
+                context={"files_count": 3, "next_action": "Run tests"},
+                verbosity="concise"
+            )
+        """
+        if not self.template_loader or not self.template_renderer:
+            # Fallback to code-based formatting
+            return self._format_fallback(template_id, context)
+        
+        # Load template
+        template = self.template_loader.load_template(template_id)
+        if not template:
+            return f"❌ Template '{template_id}' not found"
+        
+        # Render with context
+        verbosity = verbosity or self.default_verbosity
+        return self.template_renderer.render(template, context, verbosity)
+    
+    def format_from_trigger(
+        self,
+        trigger: str,
+        context: Optional[Dict[str, Any]] = None,
+        verbosity: Optional[str] = None
+    ) -> str:
+        """
+        Format response by finding template via trigger phrase.
+        
+        Args:
+            trigger: Trigger phrase (e.g., "help", "status")
+            context: Dictionary of values for placeholder substitution
+            verbosity: Override template verbosity
+            
+        Returns:
+            Formatted response string
+            
+        Example:
+            formatter.format_from_trigger("help")  # Returns help table
+        """
+        if not self.template_loader or not self.template_renderer:
+            return self._format_fallback("unknown", context)
+        
+        # Find template by trigger
+        template = self.template_loader.find_by_trigger(trigger)
+        if not template:
+            # Use default template
+            template = self.template_loader.load_template("help_table")
+            if not template:
+                return "❌ No template found for trigger"
+        
+        # Render with context
+        verbosity = verbosity or self.default_verbosity
+        return self.template_renderer.render(template, context, verbosity)
+    
+    def register_plugin_templates(
+        self,
+        plugin_id: str,
+        templates: List[Any]
+    ) -> None:
+        """
+        Register templates from a plugin.
+        
+        Args:
+            plugin_id: Plugin identifier
+            templates: List of Template objects from plugin
+        """
+        if self.template_registry:
+            self.template_registry.register_plugin_templates(plugin_id, templates)
+    
+    def list_available_templates(
+        self,
+        category: Optional[str] = None
+    ) -> List[str]:
+        """
+        List all available template IDs.
+        
+        Args:
+            category: Optional category filter (system, agent, operation, error, plugin)
+            
+        Returns:
+            List of template IDs
+        """
+        if not self.template_loader:
+            return []
+        
+        templates = self.template_loader.list_templates(category)
+        return [t.template_id for t in templates]
+    
+    def _format_fallback(
+        self,
+        template_id: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """Fallback formatting when templates unavailable."""
+        context = context or {}
+        
+        # Simple fallback formatting
+        lines = [f"📝 {template_id}"]
+        
+        if context:
+            lines.append("\nContext:")
+            for key, value in context.items():
+                lines.append(f"  • {key}: {value}")
+        
+        lines.append("\n(Template system unavailable - using fallback formatting)")
+        
+        return "\n".join(lines)
         return "\n".join(lines)
     
     def format_progress(

@@ -8,8 +8,8 @@ results:
     token_savings: 1191
     savings_percentage: 83.6%
   performance_metrics:
-    old_execution_time_ms: 0.006874999999999937
-    new_execution_time_ms: 6.1615
+    old_execution_time_ms: 0.009499999999999093
+    new_execution_time_ms: 6.043041999999998
     speedup_factor: 0.0x
     function_call_reduction: 3
   context_metrics:
