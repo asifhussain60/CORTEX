@@ -5,6 +5,9 @@ tests/fixtures/**/bin/
 # Brain backups
 kds-brain/backups/
 
+# Story backups (keep only latest)
+docs/awakening-of-cortex.backup.*.md
+
 # Node.js dependencies
 node_modules/
 CORTEX/node_modules/
