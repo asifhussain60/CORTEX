@@ -79,7 +79,7 @@ class ScanDocstringsModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="Source directory not found",
-                    error="src/ directory does not exist"
+                    errors=["src/ directory does not exist"]
                 )
             
             # Find all Python files
