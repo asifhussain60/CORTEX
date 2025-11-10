@@ -97,7 +97,7 @@ class PerformanceProfiler:
             
             # Test 4: Get active conversation
             start = time.perf_counter()
-            active = cm.get_active_conversation()
+            active = cm.get_active_conversation('profiler-test')
             elapsed = (time.perf_counter() - start) * 1000
             results['get_active_conversation'] = elapsed
             print(f"✓ get_active_conversation(): {elapsed:.2f}ms {'✅' if elapsed <= 50 else '⚠️ SLOW'}")
@@ -123,7 +123,7 @@ class PerformanceProfiler:
         results = {}
         
         try:
-            from src.tier2.knowledge_graph import KnowledgeGraph
+            from src.tier2 import KnowledgeGraph, PatternType
             cortex_root = Path(self.config.get('cortex_root', Path.cwd()))
             kg_path = cortex_root / 'cortex-brain' / 'tier2' / 'knowledge_graph.db'
             
@@ -133,33 +133,35 @@ class PerformanceProfiler:
             
             kg = KnowledgeGraph(kg_path)
             
-            # Test 1: Find patterns by intent
+            # Test 1: Get patterns by type (workflow)
             start = time.perf_counter()
-            patterns = kg.find_patterns(intent='execute', limit=10)
+            patterns = kg.get_patterns_by_type(PatternType.WORKFLOW)
             elapsed = (time.perf_counter() - start) * 1000
-            results['find_patterns_by_intent'] = elapsed
-            print(f"✓ find_patterns(intent='execute'): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
+            results['get_patterns_by_type'] = elapsed
+            print(f"✓ get_patterns_by_type(WORKFLOW): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
             
-            # Test 2: Get workflow templates
+            # Test 2: Full-text search (FTS5)
             start = time.perf_counter()
-            workflows = kg.get_workflows(category='feature_implementation')
-            elapsed = (time.perf_counter() - start) * 1000
-            results['get_workflows'] = elapsed
-            print(f"✓ get_workflows(category): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
-            
-            # Test 3: Get file relationships
-            start = time.perf_counter()
-            rels = kg.get_file_relationships(file_path='test.py', limit=10)
-            elapsed = (time.perf_counter() - start) * 1000
-            results['get_file_relationships'] = elapsed
-            print(f"✓ get_file_relationships(): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
-            
-            # Test 4: Full-text search (FTS5)
-            start = time.perf_counter()
-            search_results = kg.search_patterns('authentication')
+            search_results = kg.search_patterns('authentication', limit=10)
             elapsed = (time.perf_counter() - start) * 1000
             results['search_patterns_fts'] = elapsed
             print(f"✓ search_patterns(FTS): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
+            
+            # Test 3: Find patterns by tag
+            start = time.perf_counter()
+            tagged = kg.find_patterns_by_tag('test')
+            elapsed = (time.perf_counter() - start) * 1000
+            results['find_patterns_by_tag'] = elapsed
+            print(f"✓ find_patterns_by_tag('test'): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
+            
+            # Test 4: Get related patterns (if any exist)
+            if patterns:
+                pattern_id = patterns[0].pattern_id
+                start = time.perf_counter()
+                related = kg.get_related_patterns(pattern_id, limit=10)
+                elapsed = (time.perf_counter() - start) * 1000
+                results['get_related_patterns'] = elapsed
+                print(f"✓ get_related_patterns(): {elapsed:.2f}ms {'✅' if elapsed <= 150 else '⚠️ SLOW'}")
             
         except Exception as e:
             print(f"❌ Tier 2 profiling failed: {e}")
@@ -185,35 +187,44 @@ class PerformanceProfiler:
             from src.tier3.context_intelligence import ContextIntelligence
             cortex_root = Path(self.config.get('cortex_root', Path.cwd()))
             
-            ci = ContextIntelligence(cortex_root)
+            # Initialize context intelligence (will create DB if needed)
+            # Pass None to use default path: cortex-brain/tier3/context.db
+            ci = ContextIntelligence(db_path=None)
             
             # Test 1: Get git metrics
             start = time.perf_counter()
-            metrics = ci.get_git_activity_summary(days=30)
+            metrics = ci.get_git_metrics(days=30)
             elapsed = (time.perf_counter() - start) * 1000
             results['get_git_metrics_30d'] = elapsed
             print(f"✓ get_git_metrics(30d): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
             
-            # Test 2: Get file hotspots  
+            # Test 2: Analyze file hotspots
             start = time.perf_counter()
-            hotspots = ci.get_file_hotspots(limit=20)
+            hotspots = ci.analyze_file_hotspots(days=30)
             elapsed = (time.perf_counter() - start) * 1000
-            results['get_file_hotspots'] = elapsed
-            print(f"✓ get_file_hotspots(20): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
+            results['analyze_file_hotspots'] = elapsed
+            print(f"✓ analyze_file_hotspots(30d): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
             
-            # Test 3: Get project health
+            # Test 3: Get unstable files
             start = time.perf_counter()
-            health = ci.get_project_health_snapshot()
+            unstable = ci.get_unstable_files(limit=10)
             elapsed = (time.perf_counter() - start) * 1000
-            results['get_project_health'] = elapsed
-            print(f"✓ get_project_health(): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
+            results['get_unstable_files'] = elapsed
+            print(f"✓ get_unstable_files(10): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
             
-            # Test 4: Get commit velocity
+            # Test 4: Calculate commit velocity
             start = time.perf_counter()
-            velocity = ci.calculate_commit_velocity(days=30)
+            velocity = ci.calculate_commit_velocity(window_days=7)
             elapsed = (time.perf_counter() - start) * 1000
-            results['get_commit_velocity'] = elapsed
-            print(f"✓ get_commit_velocity(30d): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
+            results['calculate_commit_velocity'] = elapsed
+            print(f"✓ calculate_commit_velocity(7d): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
+            
+            # Test 5: Get context summary (comprehensive)
+            start = time.perf_counter()
+            summary = ci.get_context_summary()
+            elapsed = (time.perf_counter() - start) * 1000
+            results['get_context_summary'] = elapsed
+            print(f"✓ get_context_summary(): {elapsed:.2f}ms {'✅' if elapsed <= 500 else '⚠️ SLOW'}")
             
         except Exception as e:
             print(f"❌ Tier 3 profiling failed: {e}")
