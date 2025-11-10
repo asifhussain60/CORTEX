@@ -33,6 +33,7 @@ tier0_instincts:
   - "SKULL_INTEGRATION_VERIFICATION"
   - "SKULL_VISUAL_REGRESSION"
   - "SKULL_RETRY_WITHOUT_LEARNING"
+  - "SKULL_TRANSFORMATION_VERIFICATION"  # NEW: Operations claiming transformation MUST produce changes
   - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
 
 # Application-specific paths that don't belong in CORTEX core
@@ -618,6 +619,77 @@ protection_layers:
           - No diagnosis of why it failed
           
           SKULL prevents this by requiring root cause analysis before retries.
+      
+      - rule_id: "SKULL_TRANSFORMATION_VERIFICATION"
+        name: "Transformation Verification (SKULL-005)"
+        severity: "blocked"
+        description: "Operations claiming transformation MUST produce measurable changes"
+        
+        detection:
+          combined_keywords:
+            transformation_claim:
+              - "transformation complete"
+              - "refresh complete"
+              - "converted"
+              - "updated documentation"
+              - "generated"
+            success_claim:
+              - "success"
+              - "completed successfully"
+              - "fixed ✅"
+              - "done ✅"
+          scope: ["description", "log_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "file_hash_comparison"
+            description: "Compare file hash before/after operation"
+            requirement: "Hashes MUST differ for transformation operations"
+          
+          - type: "git_diff_check"
+            description: "Verify git diff shows actual changes"
+            requirement: "git diff MUST show modifications, not empty output"
+          
+          - type: "content_analysis"
+            description: "Validate transformation logic executed"
+            requirement: "Operation MUST NOT be pass-through (input != output)"
+        
+        alternatives:
+          - "Implement actual transformation logic (not pass-through)"
+          - "Mark operation as 'validation-only' if no transformation needed"
+          - "Add integration test verifying file changes occur"
+          - "Change success message to reflect pass-through behavior"
+        
+        evidence_template: "Operation '{operation_name}' claims transformation but produces no changes"
+        
+        rationale: |
+          SKULL-005: Transformation Verification
+          
+          Real incident (2025-11-10):
+          - refresh_cortex_story operation executed
+          - Module apply_narrator_voice_module.py claims "transformation complete"
+          - Returns success=True with "Narrator voice transformation complete"
+          - BUT: Line 123 does `context['transformed_story'] = story_content` (pass-through!)
+          - File hash unchanged after operation
+          - git diff shows NO changes
+          - User discovers operation is fake
+          
+          Impact:
+          - User trust degradation (claims success but does nothing)
+          - Status inflation (operations marked READY when incomplete)
+          - Integration failures (downstream operations expect real data)
+          
+          SKULL-005 prevents this by:
+          1. Detecting transformation + success claims in output
+          2. Requiring file hash comparison test
+          3. Blocking completion without measurable changes
+          4. Forcing honest status reporting (PARTIAL vs READY)
+          
+          Implementation:
+          - Add @verify_transformation decorator to operation modules
+          - Integration tests MUST check before/after file state
+          - CI fails if transformation claims success but git diff empty
+          - Status documents distinguish architecture vs implementation
   
   # Layer 6: Knowledge Quality
   - layer_id: "knowledge_quality"

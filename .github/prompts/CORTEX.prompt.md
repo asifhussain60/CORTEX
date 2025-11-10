@@ -245,14 +245,15 @@ what commands are available
 |-----------|--------------------------|--------|--------------|
 | **Demo** | "demo", "show capabilities", "tutorial" | ✅ READY | Interactive walkthrough of CORTEX |
 | **Setup** | "setup", "configure", "initialize" | ✅ READY | Configure development environment |
-| **Story Refresh** | "refresh story", "update story" | ✅ READY | Update CORTEX story documentation |
+| **Story Refresh** | "refresh story", "update story" | 🟡 VALIDATION | Validate CORTEX story structure (validation-only, see limitations) |
 | **Cleanup** | "cleanup", "clean workspace", "tidy up" | 🟡 PARTIAL | Clean temp files, optimize databases |
 | **Documentation** | "update docs", "build docs" | ⏸️ PENDING | Generate/build documentation site |
 | **Brain Protection** | "check brain", "validate protection" | ⏸️ PENDING | Validate brain integrity |
 | **Run Tests** | "run tests", "test suite" | ⏸️ PENDING | Execute test suite with coverage |
 
 **Legend:**
-- ✅ READY - Fully implemented and tested
+- ✅ READY - Fully implemented and tested with real logic
+- 🟡 VALIDATION - Validation-only (no transformation yet)
 - 🟡 PARTIAL - Core works, integration testing in progress
 - ⏸️ PENDING - Architecture ready, modules pending
 - 🎯 PLANNED - Design phase (CORTEX 2.1+)
@@ -318,6 +319,47 @@ class MyPlugin(BasePlugin):
 - Configuration Wizard (setup assistance)
 - Code Review (quality analysis)
 - Cleanup (workspace maintenance)
+
+---
+
+## ⚠️ Known Limitations
+
+### Operations in Development
+
+**Story Refresh (refresh_cortex_story):**
+- **Status:** 🟡 VALIDATION-ONLY (not transformation yet)
+- **Current Behavior:** Validates story structure and read time, but does NOT transform content
+- **Why:** The story at `prompts/shared/story.md` is already in narrator voice
+- **Operation:** Validates structure → Copies to `docs/awakening-of-cortex.md` → Reports validation status
+- **No Changes:** Files have identical content before/after (this is expected)
+- **Planned:** Phase 6 enhancement will add AI-based transformation for dynamic updates
+- **SKULL-005:** Module explicitly marked as validation-only to prevent false success claims
+
+**Vision API:**
+- **Status:** 🟡 MOCK IMPLEMENTATION (optional feature)
+- **Current Behavior:** Returns mock data for image analysis
+- **Enable:** Set `vision_api.enabled = true` in config
+- **Requires:** GitHub Copilot API access (not yet available)
+- **Fallback Chain:** Copilot → OpenAI → local models → mock
+
+### Two-Tier Status System
+
+CORTEX distinguishes between **architecture completion** and **implementation completion**:
+
+| Symbol | Architecture | Implementation | Meaning |
+|--------|-------------|----------------|---------|
+| ✅ READY | Complete | Complete | **Production-ready** with real logic |
+| 🟢 NEARLY | Complete | 80%+ | **Almost ready** - minor gaps only |
+| 🟡 VALIDATION | Complete | Validation-only | **Works but doesn't transform** |
+| 🟡 PARTIAL | Complete | 40-60% | **Architecture solid, logic incomplete** |
+| 🟠 IN PROGRESS | Partial | Partial | **Active development** |
+| ⏸️ PENDING | Designed | Not started | **Architecture ready, awaiting implementation** |
+
+**Example:** `refresh_cortex_story` is **🟡 VALIDATION** because:
+- ✅ Architecture: 6/6 modules orchestrate correctly
+- 🟡 Implementation: Validation-only (no transformation logic yet)
+
+This honest reporting prevents status inflation and maintains user trust.
 
 ---
 
