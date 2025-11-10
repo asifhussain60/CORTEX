@@ -11,29 +11,29 @@ Purpose: Fast visual snapshot + concise implementation details.
 **Current Standings:**
 
 ```
-🪟 WINDOWS   68% ████████████████████████░░░░░░░░ 🏁
+🪟 WINDOWS   71% █████████████████████████░░░░░░░ 🏁
 🍎 MAC      65% ████████████████████░░░░░░░░░░░░ 🏁
 ```
 
 **Details:**
-- 🪟 Windows: 9/13 tasks | 5.0/10.0 phases | Focus: Implementation & Testing
+- 🪟 Windows: 10/13 tasks | 5.4/10.0 phases | Focus: Implementation & Testing
 - 🍎 Mac: 6/9 tasks | 3.5/7.0 phases | Focus: Architecture & Documentation
 
 **📊 Score Breakdown:**
 
 | Metric | 🪟 Windows | 🍎 Mac | Winner |
 |--------|-----------|--------|--------|
-| **Phases Complete** | 5.0/10.0 (50%) | 3.5/7.0 (50%) | 🤝 TIE |
-| **Tasks Complete** | 9/13 (69%) | 6/9 (67%) | 🪟 +2% |
+| **Phases Complete** | 5.4/10.0 (54%) | 3.5/7.0 (50%) | � +4% |
+| **Tasks Complete** | 10/13 (77%) | 6/9 (67%) | 🪟 +10% |
 | **Code Volume** | High (core infra) | Medium (docs/YAML) | 🪟 Lead |
 | **Complexity** | High (testing/ops) | Medium (design/docs) | 🪟 Lead |
-| **Quality** | 455 tests ✅ | Design docs ✅ | 🤝 TIE |
-| **Innovation** | Integration tests | YAML conversion | 🤝 TIE |
+| **Quality** | 465 tests ✅ | Design docs ✅ | 🤝 TIE |
+| **Innovation** | Performance tests | YAML conversion | 🤝 TIE |
 
 **🎯 Next Milestone (Photo Finish!):**
-- 🪟 Windows: Phase 5.4 (Performance tests) → +3% ahead
-- 🍎 Mac: Phase 7.0 (Doc refresh) → +5% ahead
-- **Predicted Winner:** 🍎 Mac by 2% (documentation faster than testing)
+- 🪟 Windows: Phase 6.1 (Profiling & hot paths) → Maintain lead
+- 🍎 Mac: Phase 7.0 (Doc refresh) → Close gap
+- **Current Leader:** 🪟 Windows by 6% (pulling ahead!)
 
 **⚡ Fun Facts:**
 - Windows has done MORE work (9 vs 6 tasks) but similar completion %
@@ -97,11 +97,11 @@ Legend: █ = complete, ░ = remaining, [W] = Windows, [M] = Mac, [B] = Both
 Percent shown at end. All bars left-aligned for scan speed.
 
 ```
-Phase 5 - Risk Mitigation & Testing         [███████████████████████████░░░░░] 88%
+Phase 5 - Risk Mitigation & Testing         [██████████████████████████████░░] 94%
   - Task 5.1 - Critical Integration Tests [W] [████████████████████████████████] 100%
   - Task 5.2 - Brain Protection Suite [W]     [████████████████████████████████] 100%
   - Task 5.3 - Edge Case Validation [M]       [████████████████████████████████] 100%
-  - Task 5.4 - Performance Regression [W]     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 5.4 - Performance Regression [W]     [████████████████████████████████] 100%
   - Task 5.5 - YAML Conversion [M]            [████████████████████████████████] 100%
   - Task 5.6 - Planning Artifacts [B]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 5.7 - Capability Max Plan [B]        [████████████████████████████████] 100%
@@ -226,11 +226,11 @@ Phase 4 - Advanced CLI & Integration [W]    [███████████�
 │ Phase 3: Modular entry POC, token reduction, validation ✅                   │
 │ Phase 4: Advanced CLI, quick capture, shell integration ✅                   │
 │ Phase 5: Integration tests (5.1) ✅, brain protection (5.2) ✅              │
+│          Performance tests (5.4) ✅ - 10/10 tests passing                   │
 │          Demo system (5.8): All 6 modules complete ✅                        │
 │          Architecture refinement (5.9):                                      │
 │            → Slash command removal ✅                                        │
 │            → Status documentation update (in progress)                       │
-│          Performance tests (5.4) ⏸️                                          │
 │ Phase 6: Profiling, hot paths, performance CI gates ⏸️                      │
 │ Phase 8: Production migration, deployment, monitoring ⏸️                     │
 └──────────────────────────────────────────────────────────────────────────────┘
