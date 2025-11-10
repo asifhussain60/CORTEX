@@ -295,9 +295,86 @@ class ContextIntelligence:
             CREATE INDEX IF NOT EXISTS idx_hotspot_churn 
             ON context_file_hotspots(churn_rate DESC)
         """)
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_hotspot_period 
+            ON context_file_hotspots(period_start, period_end)
+        """)
+        
+        # Cache table for expensive git operations
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS context_cache (
+                cache_key TEXT PRIMARY KEY,
+                cache_value TEXT NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL
+            )
+        """)
+        
+        # Index for cache expiration cleanup
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_cache_expires 
+            ON context_cache(expires_at)
+        """)
         
         conn.commit()
         conn.close()
+    
+    # ==== CACHE MANAGEMENT ====
+    
+    def _get_cache(self, cache_key: str) -> Optional[str]:
+        """Get cached value if not expired."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Clean expired entries first
+        cursor.execute("""
+            DELETE FROM context_cache
+            WHERE expires_at < CURRENT_TIMESTAMP
+        """)
+        
+        # Get cache value
+        cursor.execute("""
+            SELECT cache_value FROM context_cache
+            WHERE cache_key = ?
+              AND expires_at > CURRENT_TIMESTAMP
+        """, (cache_key,))
+        
+        row = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        
+        return row[0] if row else None
+    
+    def _set_cache(self, cache_key: str, cache_value: str, ttl_minutes: int = 60):
+        """Set cache value with expiration."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        expires_at = datetime.now() + timedelta(minutes=ttl_minutes)
+        
+        cursor.execute("""
+            INSERT OR REPLACE INTO context_cache (cache_key, cache_value, expires_at)
+            VALUES (?, ?, ?)
+        """, (cache_key, cache_value, expires_at.isoformat()))
+        
+        conn.commit()
+        conn.close()
+    
+    def _clear_expired_cache(self):
+        """Clean up expired cache entries."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            DELETE FROM context_cache
+            WHERE expires_at < CURRENT_TIMESTAMP
+        """)
+        
+        deleted = cursor.rowcount
+        conn.commit()
+        conn.close()
+        
+        return deleted
     
     # ==== GIT METRICS COLLECTION ====
     
@@ -496,7 +573,9 @@ class ContextIntelligence:
                               repo_path: Optional[Path] = None,
                               days: int = 30) -> List[FileHotspot]:
         """
-        Analyze file churn and identify unstable files.
+        Analyze file churn and identify unstable files with caching.
+        
+        Cache TTL: 60 minutes (to avoid expensive git operations)
         
         Args:
             repo_path: Path to git repository
@@ -512,6 +591,32 @@ class ContextIntelligence:
         period_end = date.today()
         period_start = period_end - timedelta(days=days)
         
+        # Check cache first (60 minute TTL)
+        cache_key = f"file_hotspots_{days}d_{period_start}_{period_end}"
+        cached = self._get_cache(cache_key)
+        
+        if cached:
+            # Deserialize cached hotspots
+            try:
+                hotspots_data = json.loads(cached)
+                hotspots = []
+                for data in hotspots_data:
+                    hotspot = FileHotspot(
+                        file_path=data['file_path'],
+                        period_start=datetime.fromisoformat(data['period_start']).date(),
+                        period_end=datetime.fromisoformat(data['period_end']).date(),
+                        total_commits=data['total_commits'],
+                        file_edits=data['file_edits'],
+                        churn_rate=data['churn_rate'],
+                        stability=Stability[data['stability']]
+                    )
+                    hotspots.append(hotspot)
+                return hotspots
+            except (json.JSONDecodeError, KeyError):
+                # Cache corrupted, regenerate
+                pass
+        
+        # Cache miss or invalid - compute hotspots
         try:
             # Get total commits in period
             since_str = period_start.strftime("%Y-%m-%d")
@@ -567,6 +672,21 @@ class ContextIntelligence:
             
             # Sort by churn rate (highest first)
             hotspots.sort(key=lambda h: h.churn_rate, reverse=True)
+            
+            # Cache the results (60 minute TTL)
+            hotspots_data = []
+            for hotspot in hotspots:
+                hotspots_data.append({
+                    'file_path': hotspot.file_path,
+                    'period_start': hotspot.period_start.isoformat(),
+                    'period_end': hotspot.period_end.isoformat(),
+                    'total_commits': hotspot.total_commits,
+                    'file_edits': hotspot.file_edits,
+                    'churn_rate': hotspot.churn_rate,
+                    'stability': hotspot.stability.name
+                })
+            
+            self._set_cache(cache_key, json.dumps(hotspots_data), ttl_minutes=60)
             
             return hotspots
             
