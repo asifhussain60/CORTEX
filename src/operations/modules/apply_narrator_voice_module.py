@@ -25,34 +25,38 @@ logger = logging.getLogger(__name__)
 
 class ApplyNarratorVoiceModule(BaseOperationModule):
     """
-    Transform story to narrator voice.
+    Validate story structure (VALIDATION-ONLY MODULE).
     
-    This module applies the narrator voice transformation to the CORTEX story,
-    converting technical documentation into an engaging narrative.
+    IMPORTANT: This is a VALIDATION module, not a transformation module.
     
     What it does:
-        1. Takes story content from context
-        2. Applies narrator voice transformation
-        3. Enhances storytelling elements
-        4. Stores transformed story back to context
+        1. Validates story structure is correct
+        2. Checks read time (15-20 minute target)
+        3. Ensures narrator voice format is preserved
+        4. Does NOT transform content
     
-    Note: For now, this is a pass-through since the story at
-    docs/awakening-of-cortex.md is already in narrator voice.
-    Future enhancement: Could apply AI-based transformations.
+    SKULL-005 Compliance: Marked as validation-only operation.
+    The story at prompts/shared/story.md is already in narrator voice.
+    This module validates it meets publication standards.
+    
+    Future Enhancement (Phase 6+):
+    - AI-based narrator voice enhancement
+    - Intelligent summarization to hit read time target
+    - Engagement optimization
     """
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Return module metadata."""
         return OperationModuleMetadata(
             module_id="apply_narrator_voice",
-            name="Apply Narrator Voice",
-            description="Transform story to narrator voice",
+            name="Validate Story Structure",  # Honest name
+            description="Validate story structure and read time (validation-only, no transformation)",
             phase=OperationPhase.PROCESSING,
             priority=10,
             dependencies=["load_story_template"],
             optional=False,
-            version="1.0",
-            tags=["story", "transformation", "required"]
+            version="1.1",  # Updated for SKULL-005 compliance
+            tags=["story", "validation", "required"]  # Changed from transformation to validation
         )
     
     def validate_prerequisites(self, context: Dict[str, Any]) -> tuple[bool, List[str]]:
@@ -76,32 +80,37 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
     
     def execute(self, context: Dict[str, Any]) -> OperationResult:
         """
-        Apply narrator voice transformation.
+        Validate story structure (VALIDATION-ONLY OPERATION).
+        
+        IMPORTANT: This module is currently a VALIDATION-ONLY operation.
+        It does NOT transform content - it validates the existing narrator voice
+        story is properly structured and ready for publication.
+        
+        SKULL-005 Compliance: Marked as validation-only, not transformation.
         
         Args:
             context: Shared context dictionary
                 - Input: story_content (str)
-                - Output: transformed_story (str), transformation_applied (bool)
+                - Output: transformed_story (str) - SAME as input (validation only)
         
         Returns:
-            OperationResult with transformation status
+            OperationResult with validation status
         """
         try:
             story_content = context['story_content']
             
-            logger.info("Applying narrator voice transformation...")
+            logger.warning(
+                "⚠️  VALIDATION-ONLY: This module validates story structure but does NOT transform content. "
+                "The story at prompts/shared/story.md is already in narrator voice. "
+                "This operation validates it's ready for publication."
+            )
             
             # Validate story length against 15-20 minute read time target
             validation = self._validate_read_time(story_content)
             
-            # For now, the story is already in narrator voice
-            # This is a pass-through that validates the content structure
-            
-            # Future enhancement: Apply AI-based transformations
-            # - Convert technical docs to narrative
-            # - Add storytelling elements
-            # - Enhance engagement
-            # - Intelligent summarization to hit read time target
+            # VALIDATION ONLY - No transformation applied
+            # The source story is already in narrator voice format
+            # This module validates structure and read time compliance
             
             # Validate story structure
             lines = story_content.split('\n')
@@ -115,19 +124,23 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
                 return OperationResult(
                     success=False,
                     status=OperationStatus.FAILED,
-                    message="Story content too short for narrator voice",
+                    message="Story content too short (validation failed)",
                     errors=["Story must have at least 50 lines"]
                 )
             
-            # Store transformed story (currently same as input)
-            context['transformed_story'] = story_content
-            context['transformation_applied'] = True
-            context['transformation_method'] = 'pass-through'  # Future: 'ai-enhanced'
+            # HONEST STATUS: This is validation-only, not transformation
+            context['transformed_story'] = story_content  # Same as input - validation only
+            context['transformation_applied'] = False  # NO transformation
+            context['transformation_method'] = 'validation-only'  # Explicitly marked
+            context['operation_type'] = 'validation'  # For status reporting
             
             # Add read time validation to context for reporting
             context['read_time_validation'] = validation
             
-            logger.info(f"Narrator voice transformation complete: {len(lines)} lines preserved")
+            logger.info(
+                f"✅ Story validation complete: {len(lines)} lines validated. "
+                f"No transformation applied (source already in narrator voice)."
+            )
             
             # Check configuration for enforcement mode
             story_config = config.get('story_refresh', {})
@@ -158,11 +171,12 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
             return OperationResult(
                 success=True,
                 status=OperationStatus.SUCCESS,
-                message=f"Narrator voice applied ({len(lines)} lines, {validation['word_count']} words, {validation['read_time']} min)",
+                message=f"Story structure validated ({len(lines)} lines, {validation['word_count']} words, {validation['read_time']} min) - VALIDATION ONLY, no transformation",
                 data={
                     'line_count': len(lines),
                     'character_count': len(story_content),
-                    'transformation_method': 'pass-through',
+                    'transformation_method': 'validation-only',  # Honest reporting
+                    'operation_type': 'validation',  # Not transformation
                     'has_title': has_title,
                     'has_content': has_content,
                     'word_count': validation['word_count'],
