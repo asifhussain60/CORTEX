@@ -63,6 +63,40 @@ nav:
   - Home:
       - Welcome: index.md
   
+  - Getting Started:
+      - Quick Start: getting-started/quick-start.md
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+      - First Task: getting-started/first-task.md
+  
+  - Operations:
+      - Overview: operations/index.md
+      - CORTEX Demo: operations/cortex-tutorial.md
+      - Environment Setup: operations/environment-setup.md
+      - Refresh Story: operations/refresh-cortex-story.md
+      - Help Command: operations/help-command.md
+  
+  - API Reference:
+      - Overview: api/index.md
+      - Entry Point: api/entry-point.md
+      - Brain System: api/brain-system.md
+      - Plugins:
+          - Base Plugin: api/plugins/base.md
+          - Plugin Registry: api/plugins/registry.md
+          - Command Registry: api/plugins/command-registry.md
+          - Hooks: api/plugins/hooks.md
+      - Agents:
+          - Agent Base: api/agents/base.md
+          - Executor: api/agents/executor.md
+          - Tester: api/agents/tester.md
+          - Validator: api/agents/validator.md
+          - Architect: api/agents/architect.md
+      - Tiers:
+          - Tier 0 Governance: api/tier0-governance.md
+          - Tier 1 Memory: api/tier1-memory.md
+          - Tier 2 Knowledge: api/tier2-knowledge.md
+          - Tier 3 Context: api/tier3-context.md
+  
   - The Story:
       - The Awakening of CORTEX (Complete): awakening-of-cortex.md
       - Chapter Navigation: story/index.md
@@ -76,6 +110,17 @@ nav:
   
   - Architecture:
       - Overview: architecture/README.md
+      - Agents System: architecture/agents.md
+      - Five-Tier Memory: architecture/five-tier-memory.md
+      - Dual Hemispheres: architecture/dual-hemispheres.md
+      - Protection System: architecture/protection-system.md
+  
+  - Guides:
+      - Setup Guide: guides/setup-guide.md
+      - Brain System: guides/brain-system.md
+      - Memory Tiers: guides/memory-tiers.md
+      - Agent Workflows: guides/agent-workflows.md
+      - Plugin Development: guides/cleanup-plugin-guide.md
   
   - About:
       - Repository: https://github.com/asifhussain60/CORTEX
