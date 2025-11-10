@@ -42,6 +42,57 @@
 
 ---
 
+## 🔮 CORTEX 3.0 - Idea Capture System (Future Development)
+
+**Status:** 🎯 DESIGN APPROVED  
+**Timeline:** Post CORTEX 2.1 completion (6 weeks)  
+**Design Reference:** `cortex-brain/cortex-3.0-design/IDEA-CAPTURE-SYSTEM.md`
+
+### Executive Summary
+
+**Idea Capture System** provides interrupt-driven, zero-disruption capture of fleeting ideas during active CORTEX sessions. Captured ideas automatically integrate with CORTEX 2.1 Interactive Planning for later refinement.
+
+**Key Innovation:** <5ms capture + async enrichment + planning integration
+
+### Included Features
+
+1. **Smart Priority Detection** - Auto-detect from keywords ("urgent", "cleanup", etc.)
+2. **Related Idea Clustering** - Group similar ideas using text similarity + context
+3. **CORTEX 2.1 Integration** - Ideas feed directly into Interactive Planning
+4. **Cross-Repository Support** - Manage ideas across multiple projects
+
+### User Experience
+```
+CORTEX: Refactoring auth.py (line 47)...
+YOU: "idea: add rate limiting to login"
+CORTEX: ✅ Captured (#a3f9). Continuing...
+     → Work resumes with zero disruption
+
+Later:
+YOU: "show ideas"
+CORTEX: 💡 3 ideas (1 high, 2 medium priority)
+YOU: "work on idea 2"
+CORTEX: [Triggers 2.1 Interactive Planning with context]
+```
+
+### Architecture Decision
+- **NOT using orchestrator** (50-100ms too slow)
+- **Independent SQLite queue** (<5ms capture)
+- **Async enrichment** (zero blocking)
+
+### Implementation Timeline
+- Phase 3.1: Core capture (2 weeks)
+- Phase 3.2: Enrichment features (1 week)
+- Phase 3.3: 2.1 Integration (1 week)
+- Phase 3.4: Polish & testing (2 weeks)
+- **Total:** 6 weeks
+
+### Reference Documents
+- **Compact:** `cortex-brain/cortex-3.0-design/IDEA-CAPTURE-SYSTEM.md` (this reference)
+- **Complete:** `cortex-brain/cortex-3.0-design/TASK-DUMP-SYSTEM-DESIGN.md` (28-page full design)
+
+---
+
 ## 🎯 Architecture Gap Analysis Complete (November 10, 2025)
 
 **Major Achievement:** Comprehensive gap analysis identifies 12 issues, proposes 8 high-priority improvements

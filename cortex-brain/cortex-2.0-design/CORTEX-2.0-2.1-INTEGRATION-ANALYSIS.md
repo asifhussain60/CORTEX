@@ -82,6 +82,44 @@ Context Tracking:        ✅ 100% Designed (update)
 
 ---
 
+## 🔮 CORTEX 3.0 - Idea Capture System (Future Integration)
+
+**Status:** 🎯 DESIGN APPROVED (Post-2.1)  
+**Design Reference:** `cortex-brain/cortex-3.0-design/IDEA-CAPTURE-SYSTEM.md`
+
+### Integration with 2.1
+
+**Synergy:** Idea Capture + Interactive Planning = Lazy Refinement Workflow
+
+```
+CORTEX 3.0 (Capture)  →  CORTEX 2.1 (Planning)  →  CORTEX 2.0 (Execution)
+     <5ms interrupt        Clarifying questions      Full implementation
+```
+
+**Why After 2.1:**
+- CORTEX 3.0 feeds ideas into 2.1 Interactive Planning
+- Requires 2.1's question generator and context tracking
+- Extends 2.1's planning workflow with idea source tracking
+
+**Timeline:** 6 weeks after CORTEX 2.1 completion
+
+**Key Dependencies:**
+- ✅ Requires: CORTEX 2.0 entry point (available)
+- ✅ Requires: CORTEX 2.0 Tier 1 SQLite (available)
+- ⏸️ Requires: CORTEX 2.1 Interactive Planning (pending)
+- ⏸️ Requires: CORTEX 2.1 Context Tracking (pending)
+
+### 3.0 Feature Summary
+- Interrupt-driven capture (<5ms, zero disruption)
+- Smart priority detection (auto-categorize)
+- Related idea clustering (group similar ideas)
+- Cross-repository support (multi-project)
+- Direct integration with 2.1 planning workflow
+
+See complete design: `cortex-brain/cortex-3.0-design/IDEA-CAPTURE-SYSTEM.md`
+
+---
+
 ## 🚨 Critical Gaps Identified
 
 ### Gap #1: Operations Registry Missing 2.1 Commands

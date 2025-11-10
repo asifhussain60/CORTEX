@@ -4,6 +4,45 @@ Last Updated: 2025-11-10
 Source of Truth (detailed): `cortex-brain/cortex-2.0-design/STATUS.md`
 Purpose: Fast visual snapshot + concise implementation details.
 
+---
+
+## 🏁 THE GREAT CORTEX RACE: Windows vs Mac
+
+**Current Standings:**
+
+```
+🪟 WINDOWS   68% ████████████████████████░░░░░░░░ 🏁
+🍎 MAC      65% ████████████████████░░░░░░░░░░░░ 🏁
+```
+
+**Details:**
+- 🪟 Windows: 9/13 tasks | 5.0/10.0 phases | Focus: Implementation & Testing
+- 🍎 Mac: 6/9 tasks | 3.5/7.0 phases | Focus: Architecture & Documentation
+
+**📊 Score Breakdown:**
+
+| Metric | 🪟 Windows | 🍎 Mac | Winner |
+|--------|-----------|--------|--------|
+| **Phases Complete** | 5.0/10.0 (50%) | 3.5/7.0 (50%) | 🤝 TIE |
+| **Tasks Complete** | 9/13 (69%) | 6/9 (67%) | 🪟 +2% |
+| **Code Volume** | High (core infra) | Medium (docs/YAML) | 🪟 Lead |
+| **Complexity** | High (testing/ops) | Medium (design/docs) | 🪟 Lead |
+| **Quality** | 455 tests ✅ | Design docs ✅ | 🤝 TIE |
+| **Innovation** | Integration tests | YAML conversion | 🤝 TIE |
+
+**🎯 Next Milestone (Photo Finish!):**
+- 🪟 Windows: Phase 5.4 (Performance tests) → +3% ahead
+- 🍎 Mac: Phase 7.0 (Doc refresh) → +5% ahead
+- **Predicted Winner:** 🍎 Mac by 2% (documentation faster than testing)
+
+**⚡ Fun Facts:**
+- Windows has done MORE work (9 vs 6 tasks) but similar completion %
+- Mac's YAML work = 40-60% token savings (efficiency win!)
+- Both tracks neck-and-neck despite different work types
+- Parallel strategy saving 8 weeks total 🚀
+
+---
+
 **🔀 PARALLEL DEVELOPMENT STRATEGY:**
 
 ```
@@ -90,9 +129,58 @@ Phase 9 - Advanced Capabilities [M]         [░░░░░░░░░░░�
   - Task 9.1 - ML Enhancements              [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 9.2 - Proactive Suggestions        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
-Phase 10 - Production Hardening [B]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
-  - Task 10.1 - Security & Governance       [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
-  - Task 10.2 - Multi-Env Validation        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+Phase 10 - Production Hardening [B]         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 10.1 - Security & Governance       [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 10.2 - Multi-Env Validation        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+
+---
+
+## 🔮 Future Development: CORTEX 3.0
+
+**Status:** 🎯 DESIGN PHASE  
+**Timeline:** Post CORTEX 2.0/2.1 completion  
+**Design Document:** `#file:cortex-brain/cortex-3.0-design/TASK-DUMP-SYSTEM-DESIGN.md`
+
+### Interrupt-Driven Task Capture System
+
+**Problem Solved:** Capture ideas mid-work without disrupting CORTEX's active session
+
+**Key Features:**
+- ⚡ **<5ms capture** - Zero disruption to active work
+- 🎯 **Context-aware** - Snapshots what CORTEX was doing
+- 📋 **Smart organization** - Auto-categorize by component/priority
+- 🔄 **2.1 Integration** - Tasks feed into Interactive Planning
+- 🧠 **Learning** - Patterns improve suggestions over time
+
+**Example Flow:**
+```
+CORTEX: Refactoring auth.py (line 47)...
+YOU: "task: add rate limiting to login"
+CORTEX: ✅ Captured (#a3f9). Continuing...
+     → Resumes line 89 (no interruption!)
+
+Later:
+YOU: "show tasks"
+CORTEX: 📋 3 tasks (1 high, 2 medium)
+YOU: "work on task a3f9"
+CORTEX: [Triggers CORTEX 2.1 Interactive Planning]
+```
+
+**Architecture Decision:** Independent lightweight system (NOT orchestrator-based)
+- Orchestrator = 50-100ms overhead (too slow for interrupts)
+- Task Queue = <5ms SQLite append (perfect for interrupts)
+
+**Implementation Timeline:** 6 weeks (parallel with 2.0 Phase 8-9 or post-2.1)
+
+**Enhancement Recommendations:**
+1. Component-based task lists (filter by auth, UI, backend, etc.)
+2. Smart priority detection (auto-detect from keywords + context)
+3. Related task clustering (group similar work together)
+4. Task templates (learn patterns like "refactor module" → 5 standard subtasks)
+5. Cross-repository support (manage tasks across multiple projects)
+6. 2.1 synergy (task capture → interactive planning → refined implementation)
+
+---
 
 Phase 0 - Quick Wins [W]                    [████████████████████████████████] 100%
   - Task 0.1 - Universal Operations Core    [████████████████████████████████] 100%
