@@ -1,4 +1,56 @@
 operations:
+  cortex_tutorial:
+    name: CORTEX Interactive Demo
+    description: Hands-on walkthrough of CORTEX capabilities with live execution
+    natural_language:
+      - demo
+      - show me what cortex can do
+      - walkthrough
+      - tutorial
+      - cortex demo
+      - interactive tutorial
+      - show demo
+    slash_command: /demo
+    category: onboarding
+    modules:
+      - demo_introduction
+      - demo_help_system
+      - demo_story_refresh
+      - demo_cleanup
+      - demo_conversation
+      - demo_completion
+    profiles:
+      quick:
+        description: Essential commands only (2 minutes)
+        modules:
+          - demo_introduction
+          - demo_help_system
+          - demo_story_refresh
+          - demo_completion
+      standard:
+        description: Core capabilities (3-4 minutes)
+        modules:
+          - demo_introduction
+          - demo_help_system
+          - demo_story_refresh
+          - demo_cleanup
+          - demo_completion
+      comprehensive:
+        description: Full walkthrough (5-6 minutes)
+        modules:
+          - demo_introduction
+          - demo_help_system
+          - demo_story_refresh
+          - demo_cleanup
+          - demo_conversation
+          - demo_completion
+    implementation_status:
+      status: planned
+      modules_implemented: 0
+      modules_total: 6
+      completion_percentage: 0
+      estimated_hours: 6
+
   environment_setup:
     name: Environment Setup
     description: Configure CORTEX development environment on Mac/Windows/Linux
@@ -1431,6 +1483,121 @@ modules:
     status: pending
     estimated_hours: 1.0
     cortex_version: '2.1'
+
+  # Demo Operation Modules
+  demo_introduction:
+    name: Demo Introduction
+    description: Welcome user and explain demo flow (3-5 minute walkthrough overview)
+    phase: INTRODUCTION
+    priority: high
+    class: DemoIntroductionModule
+    file: demo_introduction_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - demo
+    - onboarding
+    - education
+    status: planned
+    estimated_hours: 0.5
+    token_cost: 100
+    cortex_version: '2.0'
+
+  demo_help_system:
+    name: Demo Help System
+    description: Execute /help and explain output (status icons, natural language vs slash commands)
+    phase: DEMONSTRATION
+    priority: high
+    class: DemoHelpSystemModule
+    file: demo_help_system_module.py
+    dependencies:
+    - demo_introduction
+    optional: false
+    tags:
+    - demo
+    - help
+    - discovery
+    status: planned
+    estimated_hours: 1.0
+    token_cost: 150
+    cortex_version: '2.0'
+
+  demo_story_refresh:
+    name: Demo Story Refresh
+    description: Execute story refresh and show narrator voice transformation results
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoStoryRefreshModule
+    file: demo_story_refresh_module.py
+    dependencies:
+    - demo_help_system
+    optional: false
+    tags:
+    - demo
+    - documentation
+    - transformation
+    status: planned
+    estimated_hours: 1.5
+    token_cost: 200
+    cortex_version: '2.0'
+
+  demo_cleanup:
+    name: Demo Cleanup
+    description: Execute workspace cleanup and show optimization report (files removed, space saved, DB optimization)
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoCleanupModule
+    file: demo_cleanup_module.py
+    dependencies:
+    - demo_story_refresh
+    optional: true
+    tags:
+    - demo
+    - maintenance
+    - optimization
+    status: planned
+    estimated_hours: 1.0
+    token_cost: 150
+    cortex_version: '2.0'
+
+  demo_conversation:
+    name: Demo Conversation Memory
+    description: Explain conversation tracking system and how /resume works
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoConversationModule
+    file: demo_conversation_module.py
+    dependencies:
+    - demo_cleanup
+    optional: true
+    tags:
+    - demo
+    - conversation
+    - memory
+    status: planned
+    estimated_hours: 1.0
+    token_cost: 100
+    cortex_version: '2.0'
+
+  demo_completion:
+    name: Demo Completion
+    description: Summarize demo learnings and suggest next steps
+    phase: COMPLETION
+    priority: high
+    class: DemoCompletionModule
+    file: demo_completion_module.py
+    dependencies:
+    - demo_conversation
+    optional: false
+    tags:
+    - demo
+    - summary
+    - next-steps
+    status: planned
+    estimated_hours: 0.5
+    token_cost: 100
+    cortex_version: '2.0'
+
 metadata:
   version: '2.1'
   schema_version: '1.0'
@@ -1438,6 +1605,14 @@ metadata:
   last_updated: '2025-11-09'
   description: Universal operations registry for CORTEX 2.0 + 2.1
   changelog:
+  - version: '2.1'
+    date: '2025-11-10'
+    changes:
+    - Added Interactive Demo System (cortex_tutorial operation)
+    - Added 6 new demo modules for hands-on onboarding
+    - Added demo_introduction, demo_help_system, demo_story_refresh modules
+    - Added demo_cleanup, demo_conversation, demo_completion modules
+    - Total token cost: 700 tokens for complete demo walkthrough
   - version: '2.1'
     date: '2025-11-09'
     changes:
@@ -1454,10 +1629,10 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 13
-  total_modules: 70
-  total_phases: 8
-  cortex_2_0_operations: 7
+  total_operations: 14
+  total_modules: 76
+  total_phases: 9
+  cortex_2_0_operations: 8
   cortex_2_1_operations: 6
-  cortex_2_0_modules: 48
+  cortex_2_0_modules: 54
   cortex_2_1_modules: 22

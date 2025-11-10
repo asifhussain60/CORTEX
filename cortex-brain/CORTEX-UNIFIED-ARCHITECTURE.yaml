@@ -599,6 +599,116 @@ core_components:
       registry: "PluginRegistry (src/plugins/plugin_registry.py)"
       command_registry: "CommandRegistry (src/plugins/command_registry.py)"
       lifecycle: "initialize → execute → cleanup"
+  
+  # ------------------------------------
+  # 2.5 Response Template System
+  # ------------------------------------
+  
+  response_template_system:
+    overview: |
+      Unified response template architecture provides instant, zero-execution 
+      responses with consistent formatting across all CORTEX components. 
+      YAML-based templates eliminate need for Python execution for simple queries.
+    
+    design_document: "cortex-brain/cortex-2.0-design/RESPONSE-TEMPLATE-ARCHITECTURE.md"
+    
+    architecture:
+      template_file: "cortex-brain/response-templates.yaml"
+      loader: "src/response_templates/template_loader.py"
+      renderer: "src/response_templates/template_renderer.py"
+      registry: "src/response_templates/template_registry.py"
+      
+    characteristics:
+      - zero_execution: "No Python needed for template-based responses"
+      - consistent_ux: "Same format across agents, operations, plugins"
+      - easy_maintenance: "Edit YAML, not code"
+      - verbosity_control: "concise/detailed/expert modes"
+      - extensible: "Plugins can register custom templates"
+      - fast: "<10ms template load, <5ms render"
+    
+    template_categories:
+      system_templates:
+        description: "Core CORTEX commands (help, status, quick_start)"
+        count: 15
+        priority: "critical"
+        
+      agent_templates:
+        description: "Standardized agent response formats"
+        count: 20
+        priority: "high"
+        
+      operation_templates:
+        description: "Progress/completion reporting for operations"
+        count: 30
+        priority: "high"
+        
+      error_templates:
+        description: "Consistent error message formats"
+        count: 15
+        priority: "medium"
+        
+      plugin_templates:
+        description: "Plugin-registered custom templates"
+        count: "10+"
+        priority: "medium"
+    
+    integration_points:
+      entry_point:
+        component: "CORTEX.prompt.md"
+        integration: "Load templates directly (no Python execution)"
+        status: "complete"
+        
+      response_formatter:
+        component: "src/entry_point/response_formatter.py"
+        integration: "Template rendering engine + verbosity control"
+        status: "pending"
+        
+      agents:
+        component: "src/cortex_agents/**/*.py"
+        integration: "Agent templates for success/error responses"
+        status: "pending"
+        
+      operations:
+        component: "src/operations/**/*.py"
+        integration: "Operation progress/completion templates"
+        status: "pending"
+        
+      plugins:
+        component: "src/plugins/**/*.py"
+        integration: "Plugin template registration"
+        status: "pending"
+    
+    implementation_status:
+      phase: "Phase 1 - Core Engine"
+      progress: "10% (design complete, basic help template working)"
+      estimated_effort: "14-16 hours total"
+      phases:
+        phase_1: "Core template engine (2-3h)"
+        phase_2: "System integration (3-4h)"
+        phase_3: "Template content creation (4-5h)"
+        phase_4: "Testing & validation (2-3h)"
+        phase_5: "Documentation & migration (2-3h)"
+      
+    benefits:
+      performance:
+        - "Zero Python execution overhead for templates"
+        - "97% faster than code-based formatting"
+        - "Minimal memory footprint (<1MB)"
+        
+      user_experience:
+        - "Consistent output across all commands"
+        - "Verbosity preference persists"
+        - "Predictable response formats"
+        
+      developer_experience:
+        - "No custom formatting code needed"
+        - "Templates reusable across components"
+        - "Easy to add new response types"
+        
+      maintenance:
+        - "Single source of truth for responses"
+        - "Change format once, applies everywhere"
+        - "Version controlled templates"
       
     characteristics:
       - inheritance: "All plugins inherit from BasePlugin"

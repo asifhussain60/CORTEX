@@ -1,0 +1,322 @@
+# CORTEX Response Templates
+# 
+# Purpose: Pre-defined response templates for common CORTEX interactions
+# Design: Copilot reads these templates directly - NO Python execution needed
+# 
+# Template Structure:
+#   trigger: [list of phrases that trigger this template]
+#   response_type: table | list | detailed | narrative
+#   content: The actual response content
+#   context_needed: false | true (whether additional context loading is required)
+#
+# Author: Asif Hussain
+# Version: 1.0
+
+templates:
+  
+  # ============================================================================
+  # HELP COMMAND - Simple table of available commands
+  # ============================================================================
+  help_table:
+    triggers:
+      - "help"
+      - "/help"
+      - "/CORTEX help"
+      - "show commands"
+      - "what can you do"
+      - "available commands"
+    
+    response_type: table
+    context_needed: false
+    
+    content: |
+      ```
+      ================================================================================
+      CORTEX COMMANDS
+      ================================================================================
+      
+      Status  Command        What It Does
+      --------------------------------------------------------------------------------
+      ✅      update story   Refresh CORTEX story documentation
+      🔄      setup          Setup/configure environment
+      🔄      cleanup        Clean temporary files
+      ⏸️      build docs     Generate documentation
+      ⏸️      check brain    Validate brain protection
+      ⏸️      run tests      Execute test suite
+      🎯      plan this      Interactive planning (CORTEX 2.1)
+      --------------------------------------------------------------------------------
+      
+      Legend:
+        ✅ ready    - Fully working
+        🔄 partial  - Core working, some modules pending
+        ⏸️ pending  - Architecture ready, implementation pending
+        🎯 planned  - Design phase (CORTEX 2.1+)
+      
+      Usage:
+        Natural language:  "setup environment" or "refresh story"
+        Slash commands:    /setup or /CORTEX, refresh cortex story
+      
+      For details: "help detailed" or "help <command>"
+      ================================================================================
+      ```
+  
+  # ============================================================================
+  # DETAILED HELP - Categorized with examples
+  # ============================================================================
+  help_detailed:
+    triggers:
+      - "help detailed"
+      - "show all commands"
+      - "detailed help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      ==================================================================
+      CORTEX COMMANDS - DETAILED
+      ==================================================================
+      
+      📦 ENVIRONMENT & SETUP
+      ----------------------
+      ✅ setup - Setup/configure development environment
+         Examples: "setup environment", "/setup", "configure"
+         Modules: 4 (platform detection, deps, brain init, validation)
+      
+      📚 DOCUMENTATION
+      ----------------
+      ✅ update story - Refresh CORTEX story documentation
+         Examples: "refresh story", "update story"
+         Modules: 6 (load, transform, validate, save, nav, preview)
+      
+      ⏸️ build docs - Generate and build documentation
+         Examples: "generate docs", "build documentation"
+         Status: Architecture ready, modules pending
+      
+      🧹 MAINTENANCE
+      --------------
+      🔄 cleanup - Clean temporary files and optimize databases
+         Examples: "cleanup", "clean workspace"
+         Modules: 5/6 (logs, cache, SQLite vacuum, report)
+      
+      🛡️ VALIDATION
+      -------------
+      ⏸️ check brain - Run brain protection validation
+         Examples: "check brain", "validate brain"
+         Status: Architecture ready, modules pending
+      
+      ⏸️ run tests - Execute test suite
+         Examples: "run tests", "test this"
+         Status: Architecture ready, modules pending
+      
+      🎯 PLANNING (CORTEX 2.1)
+      ------------------------
+      🎯 plan this - Interactive collaborative planning
+         Examples: "plan this feature", "help me plan"
+         Status: Design phase
+      
+      ==================================================================
+  
+  # ============================================================================
+  # QUICK START - First-time user guidance
+  # ============================================================================
+  quick_start:
+    triggers:
+      - "how do I start"
+      - "getting started"
+      - "first time"
+      - "quick start"
+    
+    response_type: narrative
+    context_needed: false
+    
+    content: |
+      
+      🚀 **CORTEX Quick Start**
+      
+      **Just tell me what you need in plain English!**
+      
+      Examples:
+        • "Add a purple button to the dashboard"
+        • "Setup my environment"
+        • "Show me where I left off"
+        • "Create tests for this feature"
+      
+      **Optional shortcuts:**
+        • `/setup` - Configure environment
+        • `/help` - Show available commands
+        • `/resume` - Continue previous work
+      
+      **First time setup:**
+      1. Say "setup environment"
+      2. That's it! CORTEX handles the rest.
+      
+      **Want to understand CORTEX?**
+        Say "tell me the CORTEX story" for the human-friendly explanation.
+  
+  # ============================================================================
+  # STATUS CHECK - Current implementation status
+  # ============================================================================
+  status_check:
+    triggers:
+      - "status"
+      - "/status"
+      - "what's working"
+      - "implementation status"
+    
+    response_type: table
+    context_needed: false
+    
+    content: |
+      
+      📊 **CORTEX Implementation Status**
+      
+      **✅ Production Ready:**
+        • Story Refresh (6/6 modules)
+        • Environment Setup (4/4 modules core)
+      
+      **🔄 Partial (Core Working):**
+        • Workspace Cleanup (5/6 modules)
+      
+      **⏸️ Pending (Architecture Complete):**
+        • Documentation Builder
+        • Brain Protection Validator
+        • Test Suite Runner
+      
+      **🎯 Planned (CORTEX 2.1):**
+        • Interactive Planning
+        • Architecture Design Assistant
+        • Refactoring Helper
+      
+      **Architecture:** Universal Operations System ✅
+      **Token Optimization:** 97.2% reduction achieved ✅
+      **Version:** CORTEX 2.0
+  
+  # ============================================================================
+  # COMMAND-SPECIFIC HELP
+  # ============================================================================
+  help_setup:
+    triggers:
+      - "help setup"
+      - "how to setup"
+      - "setup help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🔧 **Setup Command**
+      
+      **Purpose:** Configure development environment for current platform
+      
+      **Usage:**
+        Natural: "setup environment", "configure"
+        Slash: /setup, /env, /configure
+      
+      **What it does:**
+        ✅ Detects platform (Windows/Mac/Linux)
+        ✅ Configures platform-specific paths
+        ✅ Validates dependencies
+        ✅ Initializes CORTEX brain
+      
+      **Profiles:**
+        • minimal - Quick setup, essentials only
+        • standard - Full setup (default)
+        • full - Complete with validation
+      
+      **Example:**
+        "setup environment with full profile"
+  
+  help_cleanup:
+    triggers:
+      - "help cleanup"
+      - "how to cleanup"
+      - "cleanup help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🧹 **Cleanup Command**
+      
+      **Purpose:** Remove temporary files and optimize databases
+      
+      **Usage:**
+        Natural: "cleanup", "clean workspace"
+        Slash: /CORTEX, cleanup
+      
+      **What it does:**
+        ✅ Scans for temporary files
+        ✅ Removes old logs
+        ✅ Clears Python cache
+        ✅ Vacuums SQLite databases
+        ✅ Generates cleanup report
+      
+      **Profiles:**
+        • minimal - Scan only, no deletion
+        • standard - Remove old logs, optimize DB (default)
+        • full - Complete cleanup
+      
+      **Example:**
+        "cleanup workspace with standard profile"
+  
+  help_story:
+    triggers:
+      - "help story"
+      - "help update story"
+      - "story help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      📚 **Update Story Command**
+      
+      **Purpose:** Refresh CORTEX story documentation
+      
+      **Usage:**
+        Natural: "refresh story", "update story"
+        Slash: /CORTEX, refresh cortex story
+      
+      **What it does:**
+        ✅ Loads story template
+        ✅ Applies narrator voice transformation
+        ✅ Validates content
+        ✅ Saves updated markdown
+        ✅ Updates navigation
+        ✅ Generates preview
+      
+      **Status:** ✅ All 6 modules implemented and tested
+      
+      **Example:**
+        "refresh the cortex story"
+
+# ============================================================================
+# RESPONSE ROUTING RULES
+# ============================================================================
+routing:
+  # Default response if no trigger matches
+  default: help_table
+  
+  # Priority order (checked first to last)
+  priority:
+    - help_table
+    - help_detailed
+    - quick_start
+    - status_check
+    - help_setup
+    - help_cleanup
+    - help_story
+
+# ============================================================================
+# RESPONSE FORMATTING PREFERENCES
+# ============================================================================
+formatting:
+  max_width: 70
+  use_emojis: true
+  use_unicode_icons: true
+  condensed_mode: true  # For simple queries, use most condensed format

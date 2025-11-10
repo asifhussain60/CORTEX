@@ -10,13 +10,15 @@ Purpose: Fast visual snapshot + concise implementation details.
 Legend: █ = complete, ░ = remaining. Percent shown at end. All bars left-aligned for scan speed.
 
 ```
-Phase 5 - Risk Mitigation & Testing         [███████████████████████░░░░░░░░░] 72%
+Phase 5 - Risk Mitigation & Testing         [██████████████████████░░░░░░░░░] 70%
   - Task 5.1 - Critical Integration Tests   [████████████████████████████████] 100%
   - Task 5.2 - Brain Protection Test Suite  [████████████████████████████████] 100%
   - Task 5.3 - Edge Case Validation         [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 5.4 - Performance Regression Tests [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 5.5 - YAML Conversion (Docs)       [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 5.6 - Planning Artifact Migration  [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
+  - Task 5.7 - Capability Maximization Plan [████████████████████████████████] 100%
+  - Task 5.8 - Interactive Demo System      [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
 
 Phase 6 - Performance Optimization          [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
   - Task 6.1 - Profiling & Hot Paths        [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%
@@ -77,6 +79,8 @@ Phase 4 - Advanced CLI & Integration        [███████████�
 - Phase 4: Deliver advanced CLI (quick capture tools, shell integration), context optimization pipeline, enhanced ambient capture.
 - Phase 5: Mitigate risk (integration suite, brain protection), then edge cases, performance tests, YAML doc conversion.
 - Phase 5 Addendum: Introduce hybrid planning artifact migration (Task 5.6) – canonical structured YAML/JSONL (ledger, active_plans, decision_graph) with generated Markdown; proceed after schema + validation tooling (pydantic + tests) established.
+- Phase 5.7 Addition: Capability Maximization Plan (Task 5.7) – Holistic architecture review identified 10 underutilized capabilities (Vision API mock only, Knowledge Graph write-only, Operations narrow usage, UI Crawler storage-only, YAML inconsistent, Response Templates 11%, Plugin-first missing, Test manual, Conversation basic, Entry point partial). CORTEX 2.2 roadmap proposed: Phase 1 (Vision API, KG retrieval, ops migration), Phase 2 (UI intelligence, YAML migration, templates, tests), Phase 3 (plugin refactor, conversation intel, entry points). Target: 25% → 75% capability utilization, 50-60% additional efficiency.
+- Phase 5.8 Addition: Interactive Demo System (Task 5.8) – Hybrid onboarding combining /demo operation (6 modules, 700 tokens), guided setup prompts (+150 tokens), enhanced story with runnable examples (+300 tokens). Demo optional, showcases capabilities after setup. Design: 42-interactive-demo-system.md. Target: >70% demo completion rate, +50% user confidence, +25% retention. Total overhead: 1,150 tokens (23% less than rejected tutorial approach). Estimated implementation: 6-8 hours.
 - Phase 6: Profile hot paths, optimize tiers/agents, enforce performance regression via CI gates.
 - Phase 7: Comprehensive doc refresh (API, tutorials) and user-facing command discovery / UX polish.
 - Phase 8: Migration strategy, production deployment, rollback & monitoring instrumentation.

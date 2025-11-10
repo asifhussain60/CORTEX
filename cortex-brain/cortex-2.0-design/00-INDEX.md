@@ -62,9 +62,11 @@ Central chronological append-only register (top = newest). Never delete entries;
 
 | ID | Date | Category | Summary | Status | Related Tasks | Supersedes | Metrics Targets |
 |----|------|----------|---------|--------|---------------|------------|-----------------|
+| E-2025-11-10-INTERACTIVE-DEMO | 2025-11-10 | User Experience | Interactive Demo System - Hybrid onboarding approach combining /demo operation (6 modules, 700 tokens), guided setup prompts (+150 tokens), and enhanced story with runnable examples (+300 tokens). Total overhead 1,150 tokens (23% less than rejected tutorial approach). Demo optional, showcases CORTEX capabilities after setup completes. Design doc: 42-interactive-demo-system.md | APPROVED-PENDING-IMPLEMENTATION | Task 5.8 (Phase 5) | — | Demo completion rate >70%; User confidence +50%; Token overhead <800 tokens (actual: 700); User retention +25% |
+| E-2025-11-10-CAPABILITY-MAX | 2025-11-10 | Architecture | Holistic Architecture Review - Identified 10 underutilized capabilities (Vision API mock, Knowledge Graph write-only, Operations narrow usage, UI Crawler storage-only, YAML inconsistent, Response Templates 11%, Plugin-first missing, Test manual, Conversation basic, Entry point partial). Propose CORTEX 2.2 "Capability Maximization" (3 phases, 10-14 weeks) | APPROVED-PLANNING | Task 5.7 (new Phase 5 addition) | — | 25% → 75% capability utilization; 50-60% additional token reduction; 2-3x execution speed; 90%+ test coverage |
 | E-2025-11-10-PLAN-MIGRATION | 2025-11-10 | Planning Artifacts | Approve hybrid machine-readable planning artifacts (ledger + active_plans + decision_graph + reasoning_chain.jsonl + test_alignment + metrics_forecast) with generated Markdown | APPROVED-PENDING-IMPLEMENTATION | Task 5.6 (Phase 5) | — | ≥30% token reduction; 0 drift incidents; ≤50ms retrieval |
 
-Legend Status Codes: PROPOSED → APPROVED-PENDING-IMPLEMENTATION → IMPLEMENTING → IMPLEMENTED → REVERTED.
+Legend Status Codes: PROPOSED → APPROVED-PLANNING → APPROVED-PENDING-IMPLEMENTATION → IMPLEMENTING → IMPLEMENTED → REVERTED.
 
 Add future entries above; maintain this as the design-time authoritative change ledger.
 
@@ -103,6 +105,7 @@ Plugin system and modular architecture:
 ### 🚀 FEATURES & WORKFLOWS (Implement Fifth)
 High-level features built on the foundation:
 
+- **🆕 42-interactive-demo-system.md** - ⭐ **HIGH PRIORITY** - Interactive demo operation (/demo) with 6 modules, guided setup enhancements, enhanced story with runnable examples (700 token overhead, 6-8 hours)
 - **🆕 30-token-optimization-system.md** - ⭐ **HIGH PRIORITY** - ML-powered token reduction (50-70%), cache explosion prevention, inspired by Cortex Token Optimizer
 - **🆕 31-vision-api-integration.md** - ⭐ **HIGH PRIORITY** - GitHub Copilot Vision API integration with token budgets (<2% token increase, 1,000x ROI)
 - **🆕 32-human-readable-documentation-system.md** - ⭐ **CRITICAL** - Human-readable docs (95% story/5% technical), image integration, auto-sync
@@ -132,6 +135,8 @@ Analysis and improvements to unify the architecture:
 - **🆕 35-unified-architecture-analysis.md** - ⭐ **CRITICAL** - Identifies 12 gaps/conflicts with concrete fixes (51-66 hours)
 - **🆕 36-unified-orchestration-model.md** - ⭐ **CRITICAL** - Clarifies workflow pipeline vs plugin hooks separation
 - **🆕 37-documentation-architecture.md** - ⭐ **HIGH PRIORITY** - Single source of truth with automated doc generation
+- **🆕 HOLISTIC-ARCHITECTURE-REVIEW-2025-11-10.md** - ⭐ **STRATEGIC** - Comprehensive capability utilization analysis (10 underutilized capabilities identified, CORTEX 2.2 roadmap proposed)
+- **🆕 41-CAPABILITY-MAXIMIZATION-QUICK-REFERENCE.md** - ⭐ **QUICK REF** - Concise summary of CORTEX 2.2 roadmap (3 phases, 10-14 weeks)
 
 ### 🤝 TEAM COLLABORATION (Optional - Implement Last)
 Advanced team features:
@@ -285,8 +290,11 @@ Documentation of key architectural decisions and strategic questions:
 | 🆕 36-unified-orchestration-model.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 37-documentation-architecture.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 NAPKIN-AI-FORMAT-INTEGRATION-2025-11-09.md | ✅ Complete | 100% | 2025-11-09 |
+| 🆕 HOLISTIC-ARCHITECTURE-REVIEW-2025-11-10.md | ✅ Complete | 100% | 2025-11-10 |
+| 🆕 41-CAPABILITY-MAXIMIZATION-QUICK-REFERENCE.md | ✅ Complete | 100% | 2025-11-10 |
+| 🆕 42-interactive-demo-system.md | ✅ Complete | 100% | 2025-11-10 |
 
-**Overall Progress:** 37/37 design documents + 16 implementation artifacts ✅  
+**Overall Progress:** 40/40 design documents + 16 implementation artifacts ✅  
 **Status:** DESIGN PHASE COMPLETE + **PHASES 0-2 COMPLETE** + **PHASE 3 60% COMPLETE** ✅
 
 **Live Tracking:** See STATUS.md for visual progress and status-data.yaml for machine-readable metrics
