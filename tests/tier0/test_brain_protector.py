@@ -57,16 +57,17 @@ class TestYAMLConfiguration:
         """Verify YAML rules are loaded successfully."""
         assert protector.rules_config is not None
         assert 'protection_layers' in protector.rules_config
-        assert len(protector.rules_config['protection_layers']) == 6
+        assert len(protector.rules_config['protection_layers']) == 7  # Updated: now includes SKULL layer
     
     def test_has_all_protection_layers(self, protector):
-        """Verify all 6 protection layers are configured."""
+        """Verify all 7 protection layers are configured."""
         layer_ids = [layer['layer_id'] for layer in protector.protection_layers]
         expected_layers = [
             'instinct_immutability',
             'tier_boundary',
             'solid_compliance',
             'hemisphere_specialization',
+            'skull_protection',  # Added: SKULL protection layer
             'knowledge_quality',
             'commit_integrity'
         ]
