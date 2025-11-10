@@ -5,9 +5,26 @@ Source of Truth (detailed): `cortex-brain/cortex-2.0-design/STATUS.md`
 Purpose: Fast visual snapshot + concise implementation details.
 
 **🔀 PARALLEL DEVELOPMENT STRATEGY:**
-- 🪟 **Windows Track** - Primary implementation, integration testing, demo modules
-- 🍎 **Mac Track** - YAML conversion, documentation, edge cases, CORTEX 2.1 prep
-- ⚡ **Benefit:** 25% faster delivery (8 weeks saved via parallel execution)
+
+```
+┌─────────────────────────────────────┬─────────────────────────────────────┐
+│ 🪟 WINDOWS TRACK                    │ 🍎 MAC TRACK                         │
+├─────────────────────────────────────┼─────────────────────────────────────┤
+│ PRIMARY IMPLEMENTATION              │ YAML CONVERSION & DOCS              │
+│ • Integration testing               │ • YAML migration (5.5) ✅          │
+│ • Brain protection (5.2) ✅         │ • Edge case validation (5.3) ✅    │
+│ • Demo Track A (5.8)                │ • Demo Track B (5.8)                │
+│   - intro ✅                        │   - story refresh ⏸️               │
+│   - help_system ✅                  │   - conversation ⏸️                │
+│   - cleanup ✅                      │   - completion ⏸️                  │
+│ • Performance optimization (6.0)    │ • Documentation refresh (7.0)       │
+│ • Migration & deployment (8.0)      │ • Advanced capabilities (9.0)       │
+├─────────────────────────────────────┼─────────────────────────────────────┤
+│ FOCUS: Code, tests, deployment      │ FOCUS: Docs, YAML, architecture     │
+└─────────────────────────────────────┴─────────────────────────────────────┘
+```
+
+**⚡ Benefit:** 25% faster delivery (8 weeks saved via parallel execution)
 
 ---
 ## Visual Progress (Phases & Tasks)
@@ -80,30 +97,59 @@ Phase 4 - Advanced CLI & Integration [W]    [███████████�
 ---
 ## Implementation Details (Concise Reference)
 
-**Track Legend:** [W] = Windows primary, [M] = Mac primary, [B] = Both machines
+**Track-by-Track Breakdown:**
 
-- Phase 0 [W]: Establish universal operations core, plugin system, YAML governance rules.
-- Phase 1 [W]: Modularize knowledge graph, working memory (Tier 1), context metrics (Tier 3), and all 10 specialist agents.
-- Phase 2 [W]: Build ambient capture daemon and workflow orchestration (capture → filter → summarize → persist).
-- Phase 3 [W]: Validate modular entry architecture (POC, token reduction, scenarios, behavioral production validation, GO decision).
-- Phase 4 [W]: Deliver advanced CLI (quick capture tools, shell integration), context optimization pipeline, enhanced ambient capture.
-- Phase 5 [W+M - PARALLEL]: Risk mitigation split across machines:
-  - **Windows Track:** Integration tests (5.1), brain protection (5.2), performance tests (5.4), demo Track A (5.8 - 3/6 modules)
-  - **Mac Track:** Edge cases (5.3), YAML conversion (5.5 - COMPLETE ✅), demo Track B (5.8 - 0/3 modules pending)
-  - **Both:** Capability maximization planning (5.7 - COMPLETE ✅), planning artifact migration (5.6 - pending)
-- Phase 5.5 [M - COMPLETE]: YAML Conversion Documentation - All 6 tasks complete (operations config, module definitions, design metadata, loading tests, token validation, documentation). Token reduction: 40-60%. Files: `docs/yaml-conversion-guide.md`, `scripts/measure_token_reduction.py`, `tests/test_yaml_conversion.py`.
-- Phase 5.8 [W+M - IN PROGRESS]: Interactive Demo System - Hybrid onboarding (6 modules, 3 profiles). Windows: intro, help, cleanup (50% ✅). Mac: story, conversation, completion (pending). Target: >70% demo completion rate, +50% user confidence, +25% retention. Total overhead: 1,150 tokens. Design: 42-interactive-demo-system.md.
-- Phase 6 [W]: Profile hot paths, optimize tiers/agents, enforce performance regression via CI gates.
-- Phase 7 [M]: Comprehensive doc refresh (API, tutorials) and user-facing command discovery / UX polish.
-- Phase 8 [W]: Migration strategy, production deployment, rollback & monitoring instrumentation.
-- Phase 9 [M]: Advanced capabilities—ML-driven learning, proactive suggestions, multi-project scaling.
-- Phase 10 [B]: Production hardening—security, governance audits, multi-environment validation, final QA sign-off.
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🪟 WINDOWS TRACK (Primary Implementation)                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Phase 0: Universal operations core, plugin system, YAML governance ✅        │
+│ Phase 1: Knowledge graph, working memory, context metrics, 10 agents ✅      │
+│ Phase 2: Ambient capture daemon, workflow orchestration ✅                   │
+│ Phase 3: Modular entry POC, token reduction, validation ✅                   │
+│ Phase 4: Advanced CLI, quick capture, shell integration ✅                   │
+│ Phase 5: Integration tests (5.1) ✅, brain protection (5.2) ✅              │
+│          Demo Track A (5.8): intro, help, cleanup ✅ (50%)                   │
+│          Performance tests (5.4) ⏸️                                          │
+│ Phase 6: Profiling, hot paths, performance CI gates ⏸️                      │
+│ Phase 8: Production migration, deployment, monitoring ⏸️                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🍎 MAC TRACK (YAML, Docs, Advanced Features)                                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Phase 5: Edge case validation (5.3) ✅                                       │
+│          YAML conversion (5.5) ✅ - 40-60% token reduction                   │
+│            • Operations config YAML                                          │
+│            • Module definitions YAML                                         │
+│            • Design metadata YAML                                            │
+│            • Loading tests, token validation                                 │
+│          Demo Track B (5.8): story, conversation, completion ⏸️ (0%)        │
+│          Capability max planning (5.7) ✅                                     │
+│ Phase 7: Doc refresh, API guides, command discovery UX ⏸️                   │
+│ Phase 9: ML enhancements, proactive suggestions, multi-project ⏸️           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🔄 BOTH TRACKS (Coordination Required)                                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Phase 5: Planning artifact migration (5.6) ⏸️                                │
+│          Capability maximization plan (5.7) ✅                                │
+│ Phase 10: Security, governance audits, multi-env validation ⏸️               │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Sync Points:**
+- ✅ Phase 5.5 Complete (Mac) - YAML conversion merged
+- 🔄 Phase 5.8 Active (Both) - Demo modules split 50/50
+- 🎯 Next Sync: Phase 5 complete → merge demo tracks → Phase 6/7 parallel start
 
 **Parallel Benefits:**
 - ⚡ 25% faster delivery (8 weeks saved)
-- 🔀 Independent work streams (low coupling risk)
-- 📊 Current Phase 5 progress: 85% (Task 5.8 active on Windows)
-- 🎯 Next sync point: Phase 5 complete (merge demo tracks)
+- 🔀 Low coupling risk (independent work streams)
+- 📊 Current Phase 5: 85% complete
+- 🎯 Windows: Implementation + testing focus
+- 🎯 Mac: Documentation + architecture focus
 
 ---
 ## Maintenance Rule
