@@ -33,6 +33,7 @@ tier0_instincts:
   - "SKULL_INTEGRATION_VERIFICATION"
   - "SKULL_VISUAL_REGRESSION"
   - "SKULL_RETRY_WITHOUT_LEARNING"
+  - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -715,6 +716,125 @@ protection_layers:
           - "Use .gitkeep for empty directories"
         
         evidence: "Temporary files pollute repository"
+  
+  # Layer 8: Git Isolation (CRITICAL)
+  - layer_id: "git_isolation"
+    name: "Git Isolation Enforcement"
+    description: "CORTEX code MUST NEVER be committed to user application repositories"
+    priority: 8
+    
+    rules:
+      - rule_id: "GIT_ISOLATION_ENFORCEMENT"
+        name: "CORTEX Code Isolation from User Repos"
+        severity: "blocked"
+        description: "CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository"
+        
+        detection:
+          path_patterns:
+            - "**/src/tier0/**"
+            - "**/src/tier1/**"
+            - "**/src/tier2/**"
+            - "**/src/tier3/**"
+            - "**/src/cortex_agents/**"
+            - "**/src/plugins/**"
+            - "**/src/crawlers/**"
+            - "**/cortex-brain/**"
+            - "**/prompts/**"
+            - "**/scripts/cortex/**"
+            - "**/CORTEX/**"
+          in_repo: "user_application"  # Detection: not in CORTEX repo
+          
+        alternatives:
+          - "Keep CORTEX as separate repository/package"
+          - "Install CORTEX via pip/npm (when distributed)"
+          - "Use git submodule if local development required"
+          - "Ensure .gitignore excludes CORTEX directories"
+        
+        evidence_template: |
+          🚨 CRITICAL VIOLATION: Git Isolation Breach
+          
+          CORTEX code detected in user application repository!
+          File: '{path}'
+          
+          CORTEX MUST remain isolated from user application code:
+          - User App Repo: Application-specific code only
+          - CORTEX Repo: Framework code (separate repository)
+          - Knowledge Sharing: Via exported YAML (team-knowledge/)
+          
+          Brain knowledge (cortex-brain/) is LOCAL ONLY - never committed anywhere.
+        
+        rationale: |
+          GIT_ISOLATION_ENFORCEMENT: Core CORTEX Principle
+          
+          CORTEX operates as a SEPARATE cognitive layer:
+          
+          ❌ NEVER DO THIS:
+          UserApp/
+          ├── src/                    # User's application code
+          ├── cortex-brain/           # ❌ WRONG - Don't commit brain!
+          ├── src/tier0/              # ❌ WRONG - Don't copy CORTEX code!
+          ├── src/cortex_agents/      # ❌ WRONG - Keep CORTEX separate!
+          └── .git/
+          
+          ✅ CORRECT SETUP:
+          UserApp/
+          ├── src/                    # User's application code
+          ├── team-knowledge/         # ✅ OK - Exported YAML patterns
+          ├── .gitignore              # ✅ Must include: cortex-brain/
+          └── .git/
+          
+          CORTEX/ (separate repo)
+          ├── src/tier0/              # ✅ CORTEX framework code
+          ├── src/cortex_agents/      # ✅ Agent system
+          ├── cortex-brain/           # ✅ Local brain (not in git)
+          └── .git/
+          
+          Why This Matters:
+          1. Separation of Concerns: Framework vs. Application
+          2. Licensing: CORTEX proprietary, user code their own license
+          3. Updates: CORTEX updates don't pollute user repos
+          4. Security: Brain knowledge stays local, never exposed
+          5. Clarity: Clear boundary between "your code" and "framework"
+          
+          Git Hooks (setup during init):
+          - pre-commit: Scans for CORTEX paths, blocks commit if found
+          - pre-push: Double-check no CORTEX code being pushed
+          
+          Exception: team-knowledge/ YAML exports allowed (knowledge sharing)
+      
+      - rule_id: "GIT_HOOKS_INSTALLATION"
+        name: "Git Hooks Must Be Installed During Setup"
+        severity: "blocked"
+        description: "Setup process must install git hooks to prevent accidental CORTEX code commits"
+        
+        detection:
+          keywords:
+            - "skip git hooks"
+            - "disable hooks"
+            - "bypass hook installation"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Run 'cortex init' to install hooks automatically"
+          - "Manually run setup script with hooks enabled"
+          - "Never bypass hook installation (critical protection)"
+        
+        evidence_template: "Git hooks are MANDATORY for CORTEX isolation protection"
+        
+        rationale: |
+          Git hooks provide automatic enforcement:
+          
+          pre-commit hook:
+          - Scans staged files for CORTEX paths
+          - Blocks commit if any CORTEX code detected
+          - Shows clear error message with alternatives
+          
+          pre-push hook:
+          - Final safety check before push
+          - Prevents accidental exposure of CORTEX code
+          
+          Installation: Automatic during 'cortex init'
+          Location: UserApp/.git/hooks/ (user's repo, not CORTEX repo)
 
 # Severity levels
 severity_levels:
