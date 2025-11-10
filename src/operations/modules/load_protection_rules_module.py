@@ -91,7 +91,7 @@ class LoadProtectionRulesModule(BaseOperationModule):
             skull_rules_count = len(rules.get("skull_rules", {}))
             tier_protections = len([k for k in rules.keys() if k.startswith("tier")])
             
-            self.log_success(
+            self.log_info(
                 f"Loaded {skull_rules_count} SKULL rules and "
                 f"{tier_protections} tier protections"
             )
@@ -113,7 +113,7 @@ class LoadProtectionRulesModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Failed to parse protection rules YAML",
-                error=str(e)
+                errors=[str(e)]
             )
         except Exception as e:
             self.log_error(f"Failed to load protection rules: {e}")
@@ -121,7 +121,7 @@ class LoadProtectionRulesModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Protection rules loading failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _validate_rules_structure(self, rules: Dict[str, Any]) -> Dict[str, Any]:

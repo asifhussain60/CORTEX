@@ -78,7 +78,7 @@ class RefreshDesignDocsModule(BaseOperationModule):
             # Add update timestamps
             updated_count = self._add_update_timestamps(design_files)
             
-            self.log_success(
+            self.log_info(
                 f"Refreshed {len(design_files)} design docs, "
                 f"updated {updated_count} timestamps"
             )
@@ -101,7 +101,7 @@ class RefreshDesignDocsModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Design documentation refresh failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _analyze_design_docs(self, design_files: List[Path]) -> Dict[str, Any]:

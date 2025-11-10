@@ -85,7 +85,7 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Documentation preview deployment failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _start_local_server(self, project_root: Path) -> OperationResult:
@@ -138,7 +138,7 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Failed to start local server",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _deploy_to_github(self, project_root: Path) -> OperationResult:
@@ -164,7 +164,7 @@ class DeployDocsPreviewModule(BaseOperationModule):
             )
             
             if result.returncode == 0:
-                self.log_success("Documentation deployed to GitHub Pages")
+                self.log_info("Documentation deployed to GitHub Pages")
                 
                 # Extract GitHub Pages URL from git config
                 gh_pages_url = self._get_github_pages_url(project_root)
@@ -198,7 +198,7 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="Failed to deploy to GitHub Pages",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _get_github_pages_url(self, project_root: Path) -> str:

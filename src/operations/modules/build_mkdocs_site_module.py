@@ -61,7 +61,7 @@ class BuildMkDocsSiteModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="mkdocs.yml not found",
-                    error=f"Configuration file not found at {mkdocs_config}"
+                    errors=[f"Configuration file not found at {mkdocs_config}"]
                 )
             
             self.log_info("Building MkDocs site...")
@@ -72,14 +72,14 @@ class BuildMkDocsSiteModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="MkDocs not installed",
-                    error="Install with: pip install mkdocs mkdocs-material"
+                    errors=["Install with: pip install mkdocs mkdocs-material"]
                 )
             
             # Build site
             build_result = self._build_site(project_root)
             
             if build_result["success"]:
-                self.log_success(f"MkDocs site built successfully")
+                self.log_info(f"MkDocs site built successfully")
                 
                 return OperationResult(
                     success=True,
@@ -98,7 +98,7 @@ class BuildMkDocsSiteModule(BaseOperationModule):
                     success=False,
                     status=OperationStatus.FAILED,
                     message="MkDocs build failed",
-                    error=build_result["error"]
+                    errors=[build_result.get("error", "Build failed")]
                 )
             
         except Exception as e:
@@ -107,7 +107,7 @@ class BuildMkDocsSiteModule(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message="MkDocs build failed",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _check_mkdocs_installed(self) -> bool:
@@ -118,6 +118,17 @@ class BuildMkDocsSiteModule(BaseOperationModule):
             True if MkDocs is available
         """
         try:
+            # Try using Python module first (more reliable)
+            result = subprocess.run(
+                ["python3", "-m", "mkdocs", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                return True
+            
+            # Fallback to command-line mkdocs
             result = subprocess.run(
                 ["mkdocs", "--version"],
                 capture_output=True,
@@ -139,9 +150,9 @@ class BuildMkDocsSiteModule(BaseOperationModule):
             Build result with success status and details
         """
         try:
-            # Run mkdocs build
+            # Run mkdocs build using Python module (more reliable)
             result = subprocess.run(
-                ["mkdocs", "build", "--strict"],
+                ["python3", "-m", "mkdocs", "build", "--strict"],
                 cwd=str(project_root),
                 capture_output=True,
                 text=True,

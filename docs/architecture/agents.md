@@ -1,5 +1,7 @@
 # Agent System
 
+**Last Updated:** 2025-11-10
+
 The Agent System in CORTEX implements the **LEFT BRAIN** tactical execution layer.
 
 ## Overview

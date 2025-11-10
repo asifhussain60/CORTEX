@@ -1,5 +1,7 @@
 # CORTEX Architecture
 
+**Last Updated:** 2025-11-10
+
 ## Overview
 
 CORTEX is an AI enhancement framework that gives GitHub Copilot long-term memory, context awareness, and strategic planning capabilities through a 4-tier brain architecture.
