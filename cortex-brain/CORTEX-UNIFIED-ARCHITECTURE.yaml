@@ -852,9 +852,89 @@ architecture_patterns:
       implementation: "Platform detection module + OS-specific paths"
       
     token_optimization:
-      pattern: "Modular documentation + YAML conversion"
-      rationale: "Reduce context costs by 97%"
-      implementation: "Load only required modules, YAML vs MD"
+      pattern: "Multi-layer optimization strategy"
+      rationale: "Reduce context costs by 50-97%"
+      implementation: "Modular docs + YAML + ML compression + cache prevention"
+      
+      strategies:
+        modular_documentation:
+          reduction: "97.2%"
+          approach: "Load only needed modules vs full monolith"
+          before: "74,047 tokens (8,701-line monolithic file)"
+          after: "2,078 tokens (300-line slim entry + focused modules)"
+          cost_savings: "$2.22 → $0.06 per request (GPT-4)"
+          
+        yaml_conversion:
+          reduction: "40-70%"
+          approach: "Structured data in YAML vs narrative markdown"
+          before: "42,143 chars (10,535 tokens) for PR review doc"
+          after: "12,250 chars (3,062 tokens) in YAML"
+          examples:
+            - "status-data.yaml: 84% reduction (2,550→400 lines)"
+            - "pr-review-guidelines.yaml: 70.9% reduction (1,401→457 lines)"
+            - "implementation-roadmap.yaml: structured data extracted"
+        
+        ml_context_compression:
+          reduction: "50-70%"
+          approach: "TF-IDF relevance scoring for conversation context"
+          before: "15,000-25,000 tokens (last 20 conversations, full)"
+          after: "4,500-12,500 tokens (relevant conversations only)"
+          quality_maintained: ">0.9 coherence score"
+          processing_time: "<50ms overhead"
+          
+        cache_explosion_prevention:
+          limits:
+            soft_limit: "40,000 tokens (warning threshold)"
+            hard_limit: "50,000 tokens (emergency trim)"
+            target_after_trim: "30,000 tokens"
+          approach: "Monitor cache size, auto-trim old conversations"
+          prevents: "API failures from runaway token growth"
+        
+        pattern_optimization:
+          reduction: "30-50%"
+          approach: "Return top N relevant patterns vs all matches"
+          before: "50-100 patterns with full content"
+          after: "10-20 patterns with summaries"
+          uses: "Cosine similarity for relevance ranking"
+      
+      combined_impact:
+        tier_1_working_memory:
+          before: "15,000-25,000 tokens"
+          after: "4,500-12,500 tokens"
+          reduction: "50-70%"
+          
+        tier_2_knowledge_graph:
+          before: "5,000-10,000 tokens"
+          after: "2,000-4,000 tokens"
+          reduction: "30-50%"
+          
+        documentation_context:
+          before: "74,047 tokens"
+          after: "2,078 tokens"
+          reduction: "97.2%"
+        
+        annual_cost_savings:
+          usage: "1,000 requests/month"
+          before: "$2.22/request × 12,000 = $26,640/year"
+          after: "$0.06/request × 12,000 = $720/year"
+          savings: "$25,920/year (97% cost reduction)"
+      
+      implementation_phases:
+        phase_1_5:
+          name: "ML Context Compression"
+          duration: "2 weeks"
+          deliverables:
+            - "MLContextOptimizer class (TF-IDF engine)"
+            - "Cache explosion prevention (CacheMonitor)"
+            - "Real-time token tracking"
+        
+        phase_2_5:
+          name: "Advanced Optimization"
+          duration: "1 week"
+          deliverables:
+            - "Pattern summarization"
+            - "Smart context selection"
+            - "Performance benchmarks"
 
 # ===========================================
 # 4. IMPLEMENTATION STATUS
