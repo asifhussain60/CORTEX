@@ -114,7 +114,15 @@ class OperationFactory:
             for module_file in module_files:
                 try:
                     module_name = module_file.stem
-                    class_name = ''.join(word.capitalize() for word in module_name.split('_'))
+                    
+                    # Convert snake_case to CamelCase, but preserve common acronyms
+                    words = module_name.split('_')
+                    # Preserve common acronyms in uppercase
+                    acronyms = {'api': 'API', 'sql': 'SQL', 'sqlite': 'SQLite', 'html': 'HTML', 'css': 'CSS', 'json': 'JSON', 'yaml': 'YAML'}
+                    class_name = ''.join(
+                        acronyms.get(word.lower(), word.capitalize()) 
+                        for word in words
+                    )
                     
                     # Dynamic import
                     import importlib

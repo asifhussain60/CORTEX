@@ -171,7 +171,7 @@ Tier 1 provides **short-term conversation memory** using a FIFO queue (last 20 c
 #### WorkingMemory
 
 ```python
-from src.tiers.tier1.working_memory import WorkingMemory
+from src.tier1.working_memory import WorkingMemory
 
 # Initialize
 memory = WorkingMemory()
@@ -349,7 +349,7 @@ Tier 2 provides **long-term memory** through pattern learning and relationship t
 #### KnowledgeGraph
 
 ```python
-from src.tiers.tier2.knowledge_graph import KnowledgeGraph
+from src.tier2.knowledge_graph import KnowledgeGraph
 
 # Initialize
 kg = KnowledgeGraph()
@@ -604,7 +604,7 @@ Tier 3 provides **development context analytics** through git analysis and sessi
 #### ContextIntelligence
 
 ```python
-from src.tiers.tier3.context_intelligence import ContextIntelligence
+from src.tier3.context_intelligence import ContextIntelligence
 
 # Initialize
 ci = ContextIntelligence()
@@ -1062,7 +1062,7 @@ exit $exitCode
 
 ```python
 import pytest
-from src.tiers.tier1.working_memory import WorkingMemory
+from src.tier1.working_memory import WorkingMemory
 
 def test_conversation_storage():
     """Test Tier 1 conversation storage"""

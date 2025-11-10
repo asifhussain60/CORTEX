@@ -20,12 +20,30 @@ import logging
 from datetime import datetime
 
 from src.cortex_agents.strategic.intent_router import IntentRouter
-from tier1.working_memory_engine import WorkingMemoryEngine
-from tier2.knowledge_graph_engine import KnowledgeGraphEngine
-from tier3.dev_context_engine import DevContextEngine
 from .session_manager import SessionManager
 from .context_injector import ContextInjector
 from .plugins.command_registry import get_command_registry
+from .cortex_help import handle_help_request
+
+# Tier imports - using correct class names from CORTEX 2.0 architecture
+try:
+    from src.tier1.working_memory import WorkingMemory
+    TIER1_AVAILABLE = True
+except ImportError:
+    TIER1_AVAILABLE = False
+    logging.getLogger(__name__).warning("Tier1 not available - working memory features disabled")
+
+try:
+    from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
+    TIER2_AVAILABLE = True
+except ImportError:
+    TIER2_AVAILABLE = False
+
+try:
+    from src.tier3.context_intelligence import ContextIntelligence
+    TIER3_AVAILABLE = True
+except ImportError:
+    TIER3_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +118,25 @@ class CortexRouter:
         # Step 0: Expand slash commands to natural language (if present)
         original_request = user_request
         command_used = None
+        
+        # Handle /help requests immediately
+        if user_request.strip().lower() in ['/help', '/h', '/?']:
+            help_text = handle_help_request(user_request)
+            return {
+                'intent': 'HELP',
+                'confidence': 1.0,
+                'workflow': 'help_display',
+                'context': {'help_text': help_text},
+                'conversation_id': conversation_id or 'help-session',
+                'routing_time_ms': 0.0,
+                'context_time_ms': 0.0,
+                'total_time_ms': (time.perf_counter() - start_time) * 1000,
+                'command_used': user_request.strip(),
+                'original_request': original_request,
+                'performance_warnings': [],
+                'next_step': 'Displaying help information',
+                'help_text': help_text  # Include help text in response
+            }
         
         if self.command_registry.is_command(user_request.strip()):
             expanded = self.command_registry.expand_command(user_request.strip())
@@ -226,12 +263,14 @@ class CortexRouter:
             intent: Detected intent
             workflow: Selected workflow
         """
-        from tier1.working_memory_engine import WorkingMemoryEngine
+        if not TIER1_AVAILABLE:
+            logger.debug("Tier1 not available - skipping interaction logging")
+            return
         
-        wm_engine = WorkingMemoryEngine(self.db_path)
+        wm = WorkingMemory(self.db_path)
         
         # Add user message
-        wm_engine.add_message(
+        wm.add_message(
             conversation_id=conversation_id,
             role='user',
             content=user_request
@@ -244,7 +283,7 @@ class CortexRouter:
             f"Context: {self._last_context_time_ms:.1f}ms"
         )
         
-        wm_engine.add_message(
+        wm.add_message(
             conversation_id=conversation_id,
             role='system',
             content=system_message

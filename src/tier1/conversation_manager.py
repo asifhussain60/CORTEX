@@ -118,12 +118,59 @@ class ConversationManager:
             )
         """)
         
+        # Interactive Planning Sessions table (CORTEX 2.1)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS planning_sessions (
+                session_id TEXT PRIMARY KEY,
+                user_request TEXT NOT NULL,
+                confidence REAL NOT NULL,
+                state TEXT NOT NULL,
+                started_at TEXT NOT NULL,
+                completed_at TEXT,
+                final_plan TEXT,
+                metadata TEXT
+            )
+        """)
+        
+        # Planning Questions table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS planning_questions (
+                question_id TEXT PRIMARY KEY,
+                session_id TEXT NOT NULL,
+                question_text TEXT NOT NULL,
+                question_type TEXT NOT NULL,
+                options TEXT,
+                default_answer TEXT,
+                priority INTEGER,
+                context TEXT,
+                FOREIGN KEY (session_id) REFERENCES planning_sessions(session_id)
+            )
+        """)
+        
+        # Planning Answers table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS planning_answers (
+                answer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                value TEXT NOT NULL,
+                skipped INTEGER DEFAULT 0,
+                timestamp TEXT NOT NULL,
+                additional_context TEXT,
+                FOREIGN KEY (session_id) REFERENCES planning_sessions(session_id),
+                FOREIGN KEY (question_id) REFERENCES planning_questions(question_id)
+            )
+        """)
+        
         # Create indices
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_conv_agent ON conversations(agent_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_conv_status ON conversations(status)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_msg_conv ON messages(conversation_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_entity_conv ON entities(conversation_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_file_conv ON files_modified(conversation_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_planning_session ON planning_sessions(session_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_planning_q_session ON planning_questions(session_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_planning_a_session ON planning_answers(session_id)")
         
         conn.commit()
     
@@ -648,4 +695,194 @@ class ConversationManager:
         
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(conv, f, ensure_ascii=False, indent=2)
+    
+    # Interactive Planning Session Management (CORTEX 2.1)
+    
+    def save_planning_session(self, session_data: Dict) -> bool:
+        """
+        Save interactive planning session to Tier 1.
+        
+        Args:
+            session_data: Session data including questions, answers, plan
+            
+        Returns:
+            True if saved successfully, False otherwise
+        """
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                # Save session
+                cursor.execute("""
+                    INSERT OR REPLACE INTO planning_sessions 
+                    (session_id, user_request, confidence, state, started_at, 
+                     completed_at, final_plan, metadata)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    session_data['session_id'],
+                    session_data['user_request'],
+                    session_data['confidence'],
+                    session_data['state'],
+                    session_data['started_at'],
+                    session_data.get('completed_at'),
+                    json.dumps(session_data.get('final_plan')) if session_data.get('final_plan') else None,
+                    json.dumps(session_data.get('metadata', {}))
+                ))
+                
+                # Save questions
+                for question in session_data.get('questions', []):
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO planning_questions
+                        (question_id, session_id, question_text, question_type,
+                         options, default_answer, priority, context)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (
+                        question['id'],
+                        session_data['session_id'],
+                        question['text'],
+                        question['type'],
+                        json.dumps(question.get('options', [])),
+                        question.get('default'),
+                        question.get('priority', 3),
+                        json.dumps(question.get('context', {}))
+                    ))
+                
+                # Save answers
+                for answer in session_data.get('answers', []):
+                    cursor.execute("""
+                        INSERT INTO planning_answers
+                        (session_id, question_id, value, skipped, timestamp, additional_context)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (
+                        session_data['session_id'],
+                        answer['question_id'],
+                        answer['value'],
+                        1 if answer.get('skipped', False) else 0,
+                        answer['timestamp'],
+                        json.dumps(answer.get('additional_context', {}))
+                    ))
+                
+                conn.commit()
+                return True
+                
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error saving planning session: {e}")
+            return False
+    
+    def load_planning_session(self, session_id: str) -> Optional[Dict]:
+        """
+        Load interactive planning session from Tier 1.
+        
+        Args:
+            session_id: Session ID to load
+            
+        Returns:
+            Session data dictionary or None if not found
+        """
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                # Load session
+                cursor.execute("""
+                    SELECT * FROM planning_sessions WHERE session_id = ?
+                """, (session_id,))
+                
+                session_row = cursor.fetchone()
+                if not session_row:
+                    return None
+                
+                session_data = dict(session_row)
+                
+                # Parse JSON fields
+                if session_data.get('final_plan'):
+                    session_data['final_plan'] = json.loads(session_data['final_plan'])
+                if session_data.get('metadata'):
+                    session_data['metadata'] = json.loads(session_data['metadata'])
+                
+                # Load questions
+                cursor.execute("""
+                    SELECT * FROM planning_questions WHERE session_id = ?
+                    ORDER BY priority DESC
+                """, (session_id,))
+                
+                questions = []
+                for q_row in cursor.fetchall():
+                    q_dict = dict(q_row)
+                    q_dict['options'] = json.loads(q_dict['options']) if q_dict.get('options') else []
+                    q_dict['context'] = json.loads(q_dict['context']) if q_dict.get('context') else {}
+                    questions.append(q_dict)
+                
+                session_data['questions'] = questions
+                
+                # Load answers
+                cursor.execute("""
+                    SELECT * FROM planning_answers WHERE session_id = ?
+                    ORDER BY timestamp ASC
+                """, (session_id,))
+                
+                answers = []
+                for a_row in cursor.fetchall():
+                    a_dict = dict(a_row)
+                    a_dict['skipped'] = bool(a_dict['skipped'])
+                    a_dict['additional_context'] = json.loads(a_dict['additional_context']) if a_dict.get('additional_context') else {}
+                    answers.append(a_dict)
+                
+                session_data['answers'] = answers
+                
+                return session_data
+                
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error loading planning session: {e}")
+            return None
+    
+    def list_planning_sessions(
+        self, 
+        state: Optional[str] = None,
+        limit: int = 20
+    ) -> List[Dict]:
+        """
+        List planning sessions.
+        
+        Args:
+            state: Filter by state (optional)
+            limit: Maximum number to return
+            
+        Returns:
+            List of session summaries
+        """
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                if state:
+                    cursor.execute("""
+                        SELECT session_id, user_request, confidence, state, 
+                               started_at, completed_at
+                        FROM planning_sessions
+                        WHERE state = ?
+                        ORDER BY started_at DESC
+                        LIMIT ?
+                    """, (state, limit))
+                else:
+                    cursor.execute("""
+                        SELECT session_id, user_request, confidence, state,
+                               started_at, completed_at
+                        FROM planning_sessions
+                        ORDER BY started_at DESC
+                        LIMIT ?
+                    """, (limit,))
+                
+                return [dict(r) for r in cursor.fetchall()]
+                
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error listing planning sessions: {e}")
+            return []
+
 

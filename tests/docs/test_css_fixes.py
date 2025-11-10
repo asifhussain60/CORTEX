@@ -9,6 +9,10 @@ Validates that:
 import subprocess
 import re
 from pathlib import Path
+import pytest
+
+# Skip all tests if playwright not installed
+playwright = pytest.importorskip("playwright.sync_api", reason="playwright not installed")
 from playwright.sync_api import sync_playwright
 
 

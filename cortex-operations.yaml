@@ -1,1292 +1,1448 @@
-# ============================================================================
-# CORTEX Universal Operations Registry
-# ============================================================================
-# 
-# This YAML file defines ALL CORTEX operations and their modular composition.
-# 
-# Every CORTEX command (setup, refresh story, cleanup, etc.) is an "operation"
-# composed of reusable modules executed in a defined order.
-#
-# Version: 2.0 (Universal Modular Architecture)
-# Author: Asif Hussain
-# ============================================================================
-
-# ============================================================================
-# OPERATIONS
-# ============================================================================
-# Each operation represents a CORTEX command that can be invoked via:
-#   - Natural language: "setup environment", "refresh the story"
-#   - Slash commands: "/setup", "/CORTEX, refresh cortex story"
-#   - Programmatic API: execute_operation("environment_setup")
-
 operations:
-  
-  # --------------------------------------------------------------------------
-  # ENVIRONMENT SETUP
-  # --------------------------------------------------------------------------
   environment_setup:
-    name: "Environment Setup"
-    description: "Configure CORTEX development environment on Mac/Windows/Linux"
+    name: Environment Setup
+    description: Configure CORTEX development environment on Mac/Windows/Linux
     natural_language:
-      - "setup"
-      - "setup environment"
-      - "configure"
-      - "configure cortex"
-      - "initialize environment"
-      - "get started"
-    slash_command: "/setup"
-    category: "environment"
+    - setup
+    - setup environment
+    - configure
+    - configure cortex
+    - initialize environment
+    - get started
+    slash_command: /setup
+    category: environment
     modules:
-      - project_validation
-      - platform_detection
-      - git_sync
-      - virtual_environment
-      - python_dependencies
-      - vision_api
-      - conversation_tracking
-      - brain_initialization
-      - brain_tests
-      - tooling_verification
-      - setup_completion
+    - project_validation
+    - platform_detection
+    - git_sync
+    - virtual_environment
+    - python_dependencies
+    - vision_api
+    - conversation_tracking
+    - brain_initialization
+    - brain_tests
+    - tooling_verification
+    - setup_completion
     profiles:
       minimal:
-        description: "Minimal setup - core functionality only"
+        description: Minimal setup - core functionality only
         modules:
-          - project_validation
-          - platform_detection
-          - virtual_environment
-          - python_dependencies
-          - brain_initialization
-          - setup_completion
+        - project_validation
+        - platform_detection
+        - virtual_environment
+        - python_dependencies
+        - brain_initialization
+        - setup_completion
       standard:
-        description: "Standard setup - recommended for most users"
+        description: Standard setup - recommended for most users
         modules:
-          - project_validation
-          - platform_detection
-          - git_sync
-          - virtual_environment
-          - python_dependencies
-          - vision_api
-          - brain_initialization
-          - brain_tests
-          - setup_completion
+        - project_validation
+        - platform_detection
+        - git_sync
+        - virtual_environment
+        - python_dependencies
+        - vision_api
+        - brain_initialization
+        - brain_tests
+        - setup_completion
       full:
-        description: "Full setup - everything enabled"
+        description: Full setup - everything enabled
         modules:
-          - project_validation
-          - platform_detection
-          - git_sync
-          - virtual_environment
-          - python_dependencies
-          - vision_api
-          - conversation_tracking
-          - brain_initialization
-          - brain_tests
-          - tooling_verification
-          - setup_completion
-  
-  # --------------------------------------------------------------------------
-  # STORY REFRESH
-  # --------------------------------------------------------------------------
+        - project_validation
+        - platform_detection
+        - git_sync
+        - virtual_environment
+        - python_dependencies
+        - vision_api
+        - conversation_tracking
+        - brain_initialization
+        - brain_tests
+        - tooling_verification
+        - setup_completion
   refresh_cortex_story:
-    name: "Refresh CORTEX Story"
-    description: "Update CORTEX story documentation with narrator voice transformation"
+    name: Refresh CORTEX Story
+    description: Update CORTEX story documentation with narrator voice transformation
     natural_language:
-      - "refresh story"
-      - "refresh cortex story"
-      - "update story"
-      - "regenerate story"
-      - "update cortex story"
-      - "transform story"
-    slash_command: "/CORTEX, refresh cortex story"
-    category: "documentation"
+    - refresh story
+    - refresh cortex story
+    - update story
+    - regenerate story
+    - update cortex story
+    - transform story
+    slash_command: /CORTEX, refresh cortex story
+    category: documentation
     modules:
-      - load_story_template
-      - apply_narrator_voice
-      - validate_story_structure
-      - save_story_markdown
-      - update_mkdocs_index
-      - build_story_preview
+    - load_story_template
+    - apply_narrator_voice
+    - validate_story_structure
+    - save_story_markdown
+    - update_mkdocs_index
+    - build_story_preview
     profiles:
       quick:
-        description: "Quick refresh - narrator voice only"
+        description: Quick refresh - narrator voice only
         modules:
-          - load_story_template
-          - apply_narrator_voice
-          - save_story_markdown
+        - load_story_template
+        - apply_narrator_voice
+        - save_story_markdown
       standard:
-        description: "Standard refresh - narrator voice + validation"
+        description: Standard refresh - narrator voice + validation
         modules:
-          - load_story_template
-          - apply_narrator_voice
-          - validate_story_structure
-          - save_story_markdown
-          - update_mkdocs_index
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
       full:
-        description: "Full refresh - everything including preview"
+        description: Full refresh - everything including preview
         modules:
-          - load_story_template
-          - apply_narrator_voice
-          - validate_story_structure
-          - save_story_markdown
-          - update_mkdocs_index
-          - build_story_preview
-  
-  # --------------------------------------------------------------------------
-  # WORKSPACE CLEANUP
-  # --------------------------------------------------------------------------
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
+        - build_story_preview
   workspace_cleanup:
-    name: "Workspace Cleanup"
-    description: "Clean temporary files, old logs, and optimize databases"
+    name: Workspace Cleanup
+    description: Clean temporary files, old logs, and optimize databases
     natural_language:
-      - "cleanup"
-      - "clean workspace"
-      - "clean up"
-      - "tidy up"
-      - "remove temporary files"
-      - "vacuum database"
-    slash_command: "/CORTEX, cleanup"
-    category: "maintenance"
+    - cleanup
+    - clean workspace
+    - clean up
+    - tidy up
+    - remove temporary files
+    - vacuum database
+    slash_command: /CORTEX, cleanup
+    category: maintenance
     modules:
-      - scan_temporary_files
-      - remove_old_logs
-      - clear_python_cache
-      - vacuum_sqlite_databases
-      - remove_orphaned_files
-      - generate_cleanup_report
+    - scan_temporary_files
+    - remove_old_logs
+    - clear_python_cache
+    - vacuum_sqlite_databases
+    - remove_orphaned_files
+    - generate_cleanup_report
     profiles:
       safe:
-        description: "Safe cleanup - only obviously temporary files"
+        description: Safe cleanup - only obviously temporary files
         modules:
-          - scan_temporary_files
-          - remove_old_logs
-          - generate_cleanup_report
+        - scan_temporary_files
+        - remove_old_logs
+        - generate_cleanup_report
       standard:
-        description: "Standard cleanup - recommended for regular maintenance"
+        description: Standard cleanup - recommended for regular maintenance
         modules:
-          - scan_temporary_files
-          - remove_old_logs
-          - clear_python_cache
-          - vacuum_sqlite_databases
-          - generate_cleanup_report
+        - scan_temporary_files
+        - remove_old_logs
+        - clear_python_cache
+        - vacuum_sqlite_databases
+        - generate_cleanup_report
       aggressive:
-        description: "Aggressive cleanup - remove everything including orphans"
+        description: Aggressive cleanup - remove everything including orphans
         modules:
-          - scan_temporary_files
-          - remove_old_logs
-          - clear_python_cache
-          - vacuum_sqlite_databases
-          - remove_orphaned_files
-          - generate_cleanup_report
-  
-  # --------------------------------------------------------------------------
-  # DOCUMENTATION UPDATE
-  # --------------------------------------------------------------------------
+        - scan_temporary_files
+        - remove_old_logs
+        - clear_python_cache
+        - vacuum_sqlite_databases
+        - remove_orphaned_files
+        - generate_cleanup_report
   update_documentation:
-    name: "Update Documentation"
-    description: "Refresh and build CORTEX documentation site"
+    name: Update Documentation
+    description: Refresh and build CORTEX documentation site
     natural_language:
-      - "update docs"
-      - "update documentation"
-      - "refresh docs"
-      - "refresh documentation"
-      - "build docs"
-      - "generate documentation"
-    slash_command: "/CORTEX, generate documentation"
-    category: "documentation"
+    - update docs
+    - update documentation
+    - refresh docs
+    - refresh documentation
+    - build docs
+    - generate documentation
+    slash_command: /CORTEX, generate documentation
+    category: documentation
     modules:
-      - scan_docstrings
-      - generate_api_docs
-      - refresh_design_docs
-      - build_mkdocs_site
-      - validate_doc_links
-      - deploy_docs_preview
+    - scan_docstrings
+    - generate_api_docs
+    - refresh_design_docs
+    - build_mkdocs_site
+    - validate_doc_links
+    - deploy_docs_preview
     profiles:
       local:
-        description: "Local build - no deployment"
+        description: Local build - no deployment
         modules:
-          - scan_docstrings
-          - generate_api_docs
-          - refresh_design_docs
-          - build_mkdocs_site
-          - validate_doc_links
+        - scan_docstrings
+        - generate_api_docs
+        - refresh_design_docs
+        - build_mkdocs_site
+        - validate_doc_links
       preview:
-        description: "Build with local preview"
+        description: Build with local preview
         modules:
-          - scan_docstrings
-          - generate_api_docs
-          - refresh_design_docs
-          - build_mkdocs_site
-          - validate_doc_links
-          - deploy_docs_preview
+        - scan_docstrings
+        - generate_api_docs
+        - refresh_design_docs
+        - build_mkdocs_site
+        - validate_doc_links
+        - deploy_docs_preview
       full:
-        description: "Full build with deployment"
+        description: Full build with deployment
         modules:
-          - scan_docstrings
-          - generate_api_docs
-          - refresh_design_docs
-          - build_mkdocs_site
-          - validate_doc_links
-          - deploy_docs_preview
-  
-  # --------------------------------------------------------------------------
-  # BRAIN PROTECTION CHECK
-  # --------------------------------------------------------------------------
+        - scan_docstrings
+        - generate_api_docs
+        - refresh_design_docs
+        - build_mkdocs_site
+        - validate_doc_links
+        - deploy_docs_preview
   brain_protection_check:
-    name: "Brain Protection Validation"
-    description: "Validate CORTEX brain protection rules and integrity"
+    name: Brain Protection Validation
+    description: Validate CORTEX brain protection rules and integrity
     natural_language:
-      - "check brain"
-      - "validate brain"
-      - "brain protection"
-      - "check brain protection"
-      - "verify brain integrity"
-    slash_command: "/CORTEX, run brain protection"
-    category: "validation"
+    - check brain
+    - validate brain
+    - brain protection
+    - check brain protection
+    - verify brain integrity
+    slash_command: /CORTEX, run brain protection
+    category: validation
     modules:
-      - load_protection_rules
-      - validate_tier0_immutability
-      - validate_tier1_structure
-      - validate_tier2_schema
-      - check_brain_integrity
-      - generate_protection_report
-  
-  # --------------------------------------------------------------------------
-  # COMPREHENSIVE SELF-REVIEW
-  # --------------------------------------------------------------------------
+    - load_protection_rules
+    - validate_tier0_immutability
+    - validate_tier1_structure
+    - validate_tier2_schema
+    - check_brain_integrity
+    - generate_protection_report
   comprehensive_self_review:
-    name: "Comprehensive Self-Review"
-    description: "Validate all brain protection layers, coding standards, and architecture integrity"
+    name: Comprehensive Self-Review
+    description: Validate all brain protection layers, coding standards, and architecture
+      integrity
     natural_language:
-      - "run self-review"
-      - "comprehensive review"
-      - "validate everything"
-      - "check all protections"
-      - "full validation"
-      - "health check"
-    slash_command: "/CORTEX, run self-review"
-    category: "validation"
+    - run self-review
+    - comprehensive review
+    - validate everything
+    - check all protections
+    - full validation
+    - health check
+    slash_command: /CORTEX, run self-review
+    category: validation
     modules:
-      - load_self_review_checklist
-      - validate_brain_protection_coverage
-      - validate_layer1_tests
-      - validate_layer2_tests
-      - validate_layer3_tests
-      - validate_layer4_tests
-      - validate_layer5_tests
-      - validate_layer6_tests
-      - validate_integration_tests
-      - check_tdd_compliance
-      - check_solid_principles
-      - check_code_quality
-      - check_documentation_completeness
-      - check_version_control_hygiene
-      - validate_tier_architecture
-      - validate_agent_system
-      - validate_plugin_architecture
-      - check_machine_configuration
-      - check_machine_work_plan
-      - generate_self_review_report
+    - load_self_review_checklist
+    - validate_brain_protection_coverage
+    - validate_layer1_tests
+    - validate_layer2_tests
+    - validate_layer3_tests
+    - validate_layer4_tests
+    - validate_layer5_tests
+    - validate_layer6_tests
+    - validate_integration_tests
+    - check_tdd_compliance
+    - check_solid_principles
+    - check_code_quality
+    - check_documentation_completeness
+    - check_version_control_hygiene
+    - validate_tier_architecture
+    - validate_agent_system
+    - validate_plugin_architecture
+    - check_machine_configuration
+    - check_machine_work_plan
+    - generate_self_review_report
     profiles:
       quick:
-        description: "Quick review - critical checks only"
+        description: Quick review - critical checks only
         modules:
-          - load_self_review_checklist
-          - validate_brain_protection_coverage
-          - check_tdd_compliance
-          - validate_tier_architecture
-          - generate_self_review_report
+        - load_self_review_checklist
+        - validate_brain_protection_coverage
+        - check_tdd_compliance
+        - validate_tier_architecture
+        - generate_self_review_report
       standard:
-        description: "Standard review - critical + high priority"
+        description: Standard review - critical + high priority
         modules:
-          - load_self_review_checklist
-          - validate_brain_protection_coverage
-          - validate_layer1_tests
-          - validate_layer2_tests
-          - validate_layer3_tests
-          - validate_layer4_tests
-          - validate_layer5_tests
-          - validate_layer6_tests
-          - check_tdd_compliance
-          - check_solid_principles
-          - validate_tier_architecture
-          - validate_agent_system
-          - generate_self_review_report
+        - load_self_review_checklist
+        - validate_brain_protection_coverage
+        - validate_layer1_tests
+        - validate_layer2_tests
+        - validate_layer3_tests
+        - validate_layer4_tests
+        - validate_layer5_tests
+        - validate_layer6_tests
+        - check_tdd_compliance
+        - check_solid_principles
+        - validate_tier_architecture
+        - validate_agent_system
+        - generate_self_review_report
       comprehensive:
-        description: "Comprehensive review - all checks"
+        description: Comprehensive review - all checks
         modules:
-          - load_self_review_checklist
-          - validate_brain_protection_coverage
-          - validate_layer1_tests
-          - validate_layer2_tests
-          - validate_layer3_tests
-          - validate_layer4_tests
-          - validate_layer5_tests
-          - validate_layer6_tests
-          - validate_integration_tests
-          - check_tdd_compliance
-          - check_solid_principles
-          - check_code_quality
-          - check_documentation_completeness
-          - check_version_control_hygiene
-          - validate_tier_architecture
-          - validate_agent_system
-          - validate_plugin_architecture
-          - check_machine_configuration
-          - check_machine_work_plan
-          - generate_self_review_report
-  
-  # --------------------------------------------------------------------------
-  # TEST EXECUTION
-  # --------------------------------------------------------------------------
+        - load_self_review_checklist
+        - validate_brain_protection_coverage
+        - validate_layer1_tests
+        - validate_layer2_tests
+        - validate_layer3_tests
+        - validate_layer4_tests
+        - validate_layer5_tests
+        - validate_layer6_tests
+        - validate_integration_tests
+        - check_tdd_compliance
+        - check_solid_principles
+        - check_code_quality
+        - check_documentation_completeness
+        - check_version_control_hygiene
+        - validate_tier_architecture
+        - validate_agent_system
+        - validate_plugin_architecture
+        - check_machine_configuration
+        - check_machine_work_plan
+        - generate_self_review_report
   run_tests:
-    name: "Test Suite Execution"
-    description: "Run CORTEX test suite with coverage reporting"
+    name: Test Suite Execution
+    description: Run CORTEX test suite with coverage reporting
     natural_language:
-      - "run tests"
-      - "test this"
-      - "execute tests"
-      - "run test suite"
-      - "check tests"
-    slash_command: "/CORTEX, run tests"
-    category: "testing"
+    - run tests
+    - test this
+    - execute tests
+    - run test suite
+    - check tests
+    slash_command: /CORTEX, run tests
+    category: testing
     modules:
-      - discover_tests
-      - run_unit_tests
-      - run_integration_tests
-      - generate_coverage_report
-      - validate_test_quality
+    - discover_tests
+    - run_unit_tests
+    - run_integration_tests
+    - generate_coverage_report
+    - validate_test_quality
     profiles:
       quick:
-        description: "Quick test - unit tests only"
+        description: Quick test - unit tests only
         modules:
-          - discover_tests
-          - run_unit_tests
+        - discover_tests
+        - run_unit_tests
       standard:
-        description: "Standard test - unit + integration"
+        description: Standard test - unit + integration
         modules:
-          - discover_tests
-          - run_unit_tests
-          - run_integration_tests
+        - discover_tests
+        - run_unit_tests
+        - run_integration_tests
       full:
-        description: "Full test - everything with coverage"
+        description: Full test - everything with coverage
         modules:
-          - discover_tests
-          - run_unit_tests
-          - run_integration_tests
-          - generate_coverage_report
-          - validate_test_quality
-  
-  # --------------------------------------------------------------------------
-  # INTERACTIVE PLANNING (CORTEX 2.1)
-  # --------------------------------------------------------------------------
+        - discover_tests
+        - run_unit_tests
+        - run_integration_tests
+        - generate_coverage_report
+        - validate_test_quality
   interactive_planning:
-    name: "Interactive Feature Planning"
-    description: "Collaborative planning with clarifying questions (CORTEX 2.1)"
+    name: Interactive Feature Planning
+    description: Collaborative planning with clarifying questions (CORTEX 2.1)
     natural_language:
-      - "let's plan a feature"
-      - "plan feature"
-      - "I want to plan"
-      - "plan this"
-      - "help me plan"
-      - "collaborative planning"
-    slash_command: "/CORTEX, let's plan a feature"
-    category: "planning"
-    status: "pending"  # CORTEX 2.1 - to be implemented
+    - let's plan a feature
+    - plan feature
+    - I want to plan
+    - plan this
+    - help me plan
+    - collaborative planning
+    slash_command: /CORTEX, let's plan a feature
+    category: planning
+    status: pending
     modules:
-      - detect_planning_ambiguity
-      - generate_clarifying_questions
-      - parse_user_answers
-      - filter_redundant_questions
-      - extract_implied_context
-      - synthesize_planning_context
-      - generate_implementation_plan
-      - present_plan_for_approval
+    - detect_planning_ambiguity
+    - generate_clarifying_questions
+    - parse_user_answers
+    - filter_redundant_questions
+    - extract_implied_context
+    - synthesize_planning_context
+    - generate_implementation_plan
+    - present_plan_for_approval
     profiles:
       quick:
-        description: "Quick planning - minimal questions (max 3)"
+        description: Quick planning - minimal questions (max 3)
         modules:
-          - detect_planning_ambiguity
-          - generate_clarifying_questions
-          - synthesize_planning_context
-          - generate_implementation_plan
+        - detect_planning_ambiguity
+        - generate_clarifying_questions
+        - synthesize_planning_context
+        - generate_implementation_plan
       standard:
-        description: "Standard planning - balanced questions (max 5)"
+        description: Standard planning - balanced questions (max 5)
         modules:
-          - detect_planning_ambiguity
-          - generate_clarifying_questions
-          - parse_user_answers
-          - filter_redundant_questions
-          - extract_implied_context
-          - synthesize_planning_context
-          - generate_implementation_plan
-          - present_plan_for_approval
+        - detect_planning_ambiguity
+        - generate_clarifying_questions
+        - parse_user_answers
+        - filter_redundant_questions
+        - extract_implied_context
+        - synthesize_planning_context
+        - generate_implementation_plan
+        - present_plan_for_approval
       collaborative:
-        description: "Collaborative planning - thorough exploration"
+        description: Collaborative planning - thorough exploration
         modules:
-          - detect_planning_ambiguity
-          - generate_clarifying_questions
-          - parse_user_answers
-          - filter_redundant_questions
-          - extract_implied_context
-          - synthesize_planning_context
-          - generate_implementation_plan
-          - present_plan_for_approval
-  
-  # --------------------------------------------------------------------------
-  # ARCHITECTURE PLANNING (CORTEX 2.1)
-  # --------------------------------------------------------------------------
+        - detect_planning_ambiguity
+        - generate_clarifying_questions
+        - parse_user_answers
+        - filter_redundant_questions
+        - extract_implied_context
+        - synthesize_planning_context
+        - generate_implementation_plan
+        - present_plan_for_approval
   architecture_planning:
-    name: "Architecture Solution Planning"
-    description: "Collaborative architecture design with guided questions"
+    name: Architecture Solution Planning
+    description: Collaborative architecture design with guided questions
     natural_language:
-      - "architect a solution"
-      - "design architecture"
-      - "plan architecture"
-      - "system design"
-    slash_command: "/CORTEX, architect a solution"
-    category: "planning"
-    status: "pending"  # CORTEX 2.1 - to be implemented
+    - architect a solution
+    - design architecture
+    - plan architecture
+    - system design
+    slash_command: /CORTEX, architect a solution
+    category: planning
+    status: pending
     modules:
-      - detect_planning_ambiguity
-      - generate_clarifying_questions
-      - parse_user_answers
-      - filter_redundant_questions
-      - synthesize_planning_context
-      - generate_architecture_plan
-      - present_plan_for_approval
-  
-  # --------------------------------------------------------------------------
-  # REFACTORING PLANNING (CORTEX 2.1)
-  # --------------------------------------------------------------------------
+    - detect_planning_ambiguity
+    - generate_clarifying_questions
+    - parse_user_answers
+    - filter_redundant_questions
+    - synthesize_planning_context
+    - generate_architecture_plan
+    - present_plan_for_approval
   refactoring_planning:
-    name: "Refactoring Module Planning"
-    description: "Interactive refactoring with clarification questions"
+    name: Refactoring Module Planning
+    description: Interactive refactoring with clarification questions
     natural_language:
-      - "refactor this module"
-      - "refactor code"
-      - "improve code quality"
-      - "clean up this"
-    slash_command: "/CORTEX, refactor this module"
-    category: "planning"
-    status: "pending"  # CORTEX 2.1 - to be implemented
+    - refactor this module
+    - refactor code
+    - improve code quality
+    - clean up this
+    slash_command: /CORTEX, refactor this module
+    category: planning
+    status: pending
     modules:
-      - detect_planning_ambiguity
-      - generate_clarifying_questions
-      - parse_user_answers
-      - synthesize_planning_context
-      - generate_refactoring_plan
-      - present_plan_for_approval
-  
-  # --------------------------------------------------------------------------
-  # COMMAND HELP (CORTEX 2.1)
-  # --------------------------------------------------------------------------
+    - detect_planning_ambiguity
+    - generate_clarifying_questions
+    - parse_user_answers
+    - synthesize_planning_context
+    - generate_refactoring_plan
+    - present_plan_for_approval
   command_help:
-    name: "Command Discovery & Help"
-    description: "Discover CORTEX commands with context-aware suggestions"
+    name: Command Discovery & Help
+    description: Discover CORTEX commands with context-aware suggestions
     natural_language:
-      - "help"
-      - "show commands"
-      - "what can you do"
-      - "available commands"
-      - "how do I"
-    slash_command: "/help"
-    category: "discovery"
-    status: "pending"  # CORTEX 2.1 - to be implemented
+    - help
+    - show commands
+    - what can you do
+    - available commands
+    - how do I
+    slash_command: /help
+    category: discovery
+    status: pending
     modules:
-      - analyze_user_context
-      - filter_relevant_commands
-      - categorize_commands
-      - generate_help_output
-      - suggest_next_actions
+    - analyze_user_context
+    - filter_relevant_commands
+    - categorize_commands
+    - generate_help_output
+    - suggest_next_actions
     profiles:
       basic:
-        description: "Basic help - most relevant commands only"
+        description: Basic help - most relevant commands only
         modules:
-          - analyze_user_context
-          - filter_relevant_commands
-          - generate_help_output
+        - analyze_user_context
+        - filter_relevant_commands
+        - generate_help_output
       detailed:
-        description: "Detailed help - all commands with categories"
+        description: Detailed help - all commands with categories
         modules:
-          - analyze_user_context
-          - categorize_commands
-          - generate_help_output
+        - analyze_user_context
+        - categorize_commands
+        - generate_help_output
       contextual:
-        description: "Context-aware help - suggestions based on work"
+        description: Context-aware help - suggestions based on work
         modules:
-          - analyze_user_context
-          - filter_relevant_commands
-          - categorize_commands
-          - generate_help_output
-          - suggest_next_actions
-  
-  # --------------------------------------------------------------------------
-  # COMMAND SEARCH (CORTEX 2.1)
-  # --------------------------------------------------------------------------
+        - analyze_user_context
+        - filter_relevant_commands
+        - categorize_commands
+        - generate_help_output
+        - suggest_next_actions
   command_search:
-    name: "Command Search"
-    description: "Search for specific CORTEX commands by keyword"
+    name: Command Search
+    description: Search for specific CORTEX commands by keyword
     natural_language:
-      - "help search"
-      - "find command"
-      - "search commands"
-    slash_command: "/help search <keyword>"
-    category: "discovery"
-    status: "pending"  # CORTEX 2.1 - to be implemented
+    - help search
+    - find command
+    - search commands
+    slash_command: /help search <keyword>
+    category: discovery
+    status: pending
     modules:
-      - parse_search_query
-      - search_command_index
-      - rank_search_results
-      - generate_search_output
-
-# ============================================================================
-# MODULES
-# ============================================================================
-# Shared module definitions used across operations.
-# 
-# Each module:
-#   - Has a unique ID
-#   - Belongs to a phase (determines execution order)
-#   - Has a priority (within phase)
-#   - May have dependencies (must execute after other modules)
-#   - Maps to a Python class implementing BaseOperationModule
-
+    - parse_search_query
+    - search_command_index
+    - rank_search_results
+    - generate_search_output
 modules:
-  
-  # --------------------------------------------------------------------------
-  # ENVIRONMENT SETUP MODULES
-  # --------------------------------------------------------------------------
-  
   project_validation:
-    name: "Project Validation"
-    description: "Validate CORTEX project structure"
+    name: Project Validation
+    description: Validate CORTEX project structure
     phase: PRE_VALIDATION
-    priority: 10
-    class: "ProjectValidationModule"
-    file: "project_validation_module.py"
+    priority: high
+    class: ProjectValidationModule
+    file: project_validation_module.py
     dependencies: []
     optional: false
-    tags: ["setup", "validation", "required"]
-  
+    tags:
+    - setup
+    - validation
+    - required
+    status: pending
+    estimated_hours: 1.5
   platform_detection:
-    name: "Platform Detection"
-    description: "Detect operating system (Mac/Windows/Linux)"
+    name: Platform Detection
+    description: Detect operating system (Mac/Windows/Linux)
     phase: ENVIRONMENT
     priority: 10
-    class: "PlatformDetectionModule"
-    file: "platform_detection_module.py"
-    dependencies: ["project_validation"]
+    class: PlatformDetectionModule
+    file: platform_detection_module.py
+    dependencies:
+    - project_validation
     optional: false
-    tags: ["setup", "environment", "required"]
-  
+    tags:
+    - setup
+    - environment
+    - required
+    status: implemented
+    tests: 15
+    implemented_date: '2025-11-09'
+    lines_of_code: 156
   git_sync:
-    name: "Git Synchronization"
-    description: "Sync with git repository"
+    name: Git Synchronization
+    description: Sync with git repository
     phase: ENVIRONMENT
-    priority: 20
-    class: "GitSyncModule"
-    file: "git_sync_module.py"
-    dependencies: ["platform_detection"]
+    priority: high
+    class: GitSyncModule
+    file: git_sync_module.py
+    dependencies:
+    - platform_detection
     optional: true
-    tags: ["setup", "git"]
-  
+    tags:
+    - setup
+    - git
+    status: pending
+    estimated_hours: 2.0
   virtual_environment:
-    name: "Virtual Environment"
-    description: "Create/activate Python virtual environment"
+    name: Virtual Environment
+    description: Create/activate Python virtual environment
     phase: DEPENDENCIES
-    priority: 10
-    class: "VirtualEnvironmentModule"
-    file: "virtual_environment_module.py"
-    dependencies: ["platform_detection"]
+    priority: high
+    class: VirtualEnvironmentModule
+    file: virtual_environment_module.py
+    dependencies:
+    - platform_detection
     optional: false
-    tags: ["setup", "python", "required"]
-  
+    tags:
+    - setup
+    - python
+    - required
+    status: pending
+    estimated_hours: 2.5
   python_dependencies:
-    name: "Python Dependencies"
-    description: "Install Python packages from requirements.txt"
+    name: Python Dependencies
+    description: Install Python packages from requirements.txt
     phase: DEPENDENCIES
     priority: 20
-    class: "PythonDependenciesModule"
-    file: "python_dependencies_module.py"
-    dependencies: ["virtual_environment"]
+    class: PythonDependenciesModule
+    file: python_dependencies_module.py
+    dependencies:
+    - virtual_environment
     optional: false
-    tags: ["setup", "python", "required"]
-  
+    tags:
+    - setup
+    - python
+    - required
+    status: implemented
+    tests: 8
+    implemented_date: '2025-11-09'
+    lines_of_code: 178
   vision_api:
-    name: "Vision API"
-    description: "Enable GitHub Copilot Vision API"
+    name: Vision API
+    description: Enable GitHub Copilot Vision API
     phase: FEATURES
     priority: 10
-    class: "VisionAPIModule"
-    file: "vision_api_module.py"
-    dependencies: ["python_dependencies"]
+    class: VisionAPIModule
+    file: vision_api_module.py
+    dependencies:
+    - python_dependencies
     optional: true
-    tags: ["setup", "features", "vision"]
-  
+    tags:
+    - setup
+    - features
+    - vision
+    status: implemented
+    tests: 12
+    implemented_date: '2025-11-09'
+    lines_of_code: 245
   conversation_tracking:
-    name: "Conversation Tracking"
-    description: "Enable ambient conversation capture"
+    name: Conversation Tracking
+    description: Enable ambient conversation capture
     phase: FEATURES
-    priority: 20
-    class: "ConversationTrackingModule"
-    file: "conversation_tracking_module.py"
-    dependencies: ["brain_initialization"]
+    priority: high
+    class: ConversationTrackingModule
+    file: conversation_tracking_module.py
+    dependencies:
+    - brain_initialization
     optional: true
-    tags: ["setup", "features", "conversation"]
-  
+    tags:
+    - setup
+    - features
+    - conversation
+    status: pending
+    estimated_hours: 3.0
   brain_initialization:
-    name: "Brain Initialization"
-    description: "Initialize CORTEX brain (Tier 1/2/3 databases)"
+    name: Brain Initialization
+    description: Initialize CORTEX brain (Tier 1/2/3 databases)
     phase: PROCESSING
     priority: 10
-    class: "BrainInitializationModule"
-    file: "brain_initialization_module.py"
-    dependencies: ["python_dependencies"]
+    class: BrainInitializationModule
+    file: brain_initialization_module.py
+    dependencies:
+    - python_dependencies
     optional: false
-    tags: ["setup", "brain", "required"]
-  
+    tags:
+    - setup
+    - brain
+    - required
+    status: implemented
+    tests: 10
+    implemented_date: '2025-11-09'
+    lines_of_code: 203
   brain_tests:
-    name: "Brain Tests"
-    description: "Validate brain initialization"
+    name: Brain Tests
+    description: Validate brain initialization
     phase: VALIDATION
-    priority: 10
-    class: "BrainTestsModule"
-    file: "brain_tests_module.py"
-    dependencies: ["brain_initialization"]
+    priority: high
+    class: BrainTestsModule
+    file: brain_tests_module.py
+    dependencies:
+    - brain_initialization
     optional: true
-    tags: ["setup", "testing", "brain"]
-  
+    tags:
+    - setup
+    - testing
+    - brain
+    status: pending
+    estimated_hours: 2.0
   tooling_verification:
-    name: "Tooling Verification"
-    description: "Verify development tools (git, python, etc.)"
+    name: Tooling Verification
+    description: Verify development tools (git, python, etc.)
     phase: VALIDATION
-    priority: 20
-    class: "ToolingVerificationModule"
-    file: "tooling_verification_module.py"
+    priority: high
+    class: ToolingVerificationModule
+    file: tooling_verification_module.py
     dependencies: []
     optional: true
-    tags: ["setup", "validation", "tools"]
-  
+    tags:
+    - setup
+    - validation
+    - tools
+    status: pending
+    estimated_hours: 1.5
   setup_completion:
-    name: "Setup Completion"
-    description: "Generate setup summary report"
+    name: Setup Completion
+    description: Generate setup summary report
     phase: FINALIZATION
-    priority: 100
-    class: "SetupCompletionModule"
-    file: "setup_completion_module.py"
+    priority: high
+    class: SetupCompletionModule
+    file: setup_completion_module.py
     dependencies: []
     optional: false
-    tags: ["setup", "reporting", "required"]
-  
-  # --------------------------------------------------------------------------
-  # STORY REFRESH MODULES
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - setup
+    - reporting
+    - required
+    status: pending
+    estimated_hours: 1.0
   load_story_template:
-    name: "Load Story Template"
-    description: "Load CORTEX story from prompts/shared/story.md"
+    name: Load Story Template
+    description: Load CORTEX story from prompts/shared/story.md
     phase: PREPARATION
     priority: 10
-    class: "LoadStoryTemplateModule"
-    file: "load_story_template_module.py"
+    class: LoadStoryTemplateModule
+    file: load_story_template_module.py
     dependencies: []
     optional: false
-    tags: ["story", "required"]
-  
+    tags:
+    - story
+    - required
+    status: implemented
+    tests: 5
+    implemented_date: '2025-11-09'
+    lines_of_code: 89
   apply_narrator_voice:
-    name: "Apply Narrator Voice"
-    description: "Transform story to narrator voice"
+    name: Apply Narrator Voice
+    description: Transform story to narrator voice
     phase: PROCESSING
     priority: 10
-    class: "ApplyNarratorVoiceModule"
-    file: "apply_narrator_voice_module.py"
-    dependencies: ["load_story_template"]
+    class: ApplyNarratorVoiceModule
+    file: apply_narrator_voice_module.py
+    dependencies:
+    - load_story_template
     optional: false
-    tags: ["story", "transformation", "required"]
-  
+    tags:
+    - story
+    - transformation
+    - required
+    status: implemented
+    tests: 8
+    implemented_date: '2025-11-09'
+    lines_of_code: 156
   validate_story_structure:
-    name: "Validate Story Structure"
-    description: "Ensure story has proper Markdown structure"
+    name: Validate Story Structure
+    description: Ensure story has proper Markdown structure
     phase: VALIDATION
     priority: 10
-    class: "ValidateStoryStructureModule"
-    file: "validate_story_structure_module.py"
-    dependencies: ["apply_narrator_voice"]
+    class: ValidateStoryStructureModule
+    file: validate_story_structure_module.py
+    dependencies:
+    - apply_narrator_voice
     optional: true
-    tags: ["story", "validation"]
-  
+    tags:
+    - story
+    - validation
+    status: implemented
+    tests: 6
+    implemented_date: '2025-11-09'
+    lines_of_code: 134
   save_story_markdown:
-    name: "Save Story Markdown"
-    description: "Write transformed story to file"
+    name: Save Story Markdown
+    description: Write transformed story to file
     phase: FINALIZATION
     priority: 10
-    class: "SaveStoryMarkdownModule"
-    file: "save_story_markdown_module.py"
-    dependencies: ["apply_narrator_voice"]
+    class: SaveStoryMarkdownModule
+    file: save_story_markdown_module.py
+    dependencies:
+    - apply_narrator_voice
     optional: false
-    tags: ["story", "required"]
-  
+    tags:
+    - story
+    - required
+    status: implemented
+    tests: 5
+    implemented_date: '2025-11-09'
+    lines_of_code: 98
   update_mkdocs_index:
-    name: "Update MkDocs Index"
-    description: "Update MkDocs navigation with story"
+    name: Update MkDocs Index
+    description: Update MkDocs navigation with story
     phase: FINALIZATION
     priority: 20
-    class: "UpdateMkDocsIndexModule"
-    file: "update_mkdocs_index_module.py"
-    dependencies: ["save_story_markdown"]
+    class: UpdateMkDocsIndexModule
+    file: update_mkdocs_index_module.py
+    dependencies:
+    - save_story_markdown
     optional: true
-    tags: ["story", "documentation"]
-  
+    tags:
+    - story
+    - documentation
+    status: implemented
+    tests: 4
+    implemented_date: '2025-11-09'
+    lines_of_code: 123
   build_story_preview:
-    name: "Build Story Preview"
-    description: "Generate HTML preview of story"
+    name: Build Story Preview
+    description: Generate HTML preview of story
     phase: FINALIZATION
     priority: 30
-    class: "BuildStoryPreviewModule"
-    file: "build_story_preview_module.py"
-    dependencies: ["save_story_markdown"]
+    class: BuildStoryPreviewModule
+    file: build_story_preview_module.py
+    dependencies:
+    - save_story_markdown
     optional: true
-    tags: ["story", "preview"]
-  
-  # --------------------------------------------------------------------------
-  # CLEANUP MODULES
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - story
+    - preview
+    status: implemented
+    tests: 3
+    implemented_date: '2025-11-09'
+    lines_of_code: 87
   scan_temporary_files:
-    name: "Scan Temporary Files"
-    description: "Find temporary files to remove"
+    name: Scan Temporary Files
+    description: Find temporary files to remove
     phase: PREPARATION
-    priority: 10
-    class: "ScanTemporaryFilesModule"
-    file: "scan_temporary_files_module.py"
+    priority: medium
+    class: ScanTemporaryFilesModule
+    file: scan_temporary_files_module.py
     dependencies: []
     optional: false
-    tags: ["cleanup", "required"]
-  
+    tags:
+    - cleanup
+    - required
+    status: pending
+    estimated_hours: 1.5
   remove_old_logs:
-    name: "Remove Old Logs"
-    description: "Delete log files older than 30 days"
+    name: Remove Old Logs
+    description: Delete log files older than 30 days
     phase: PROCESSING
-    priority: 10
-    class: "RemoveOldLogsModule"
-    file: "remove_old_logs_module.py"
-    dependencies: ["scan_temporary_files"]
+    priority: medium
+    class: RemoveOldLogsModule
+    file: remove_old_logs_module.py
+    dependencies:
+    - scan_temporary_files
     optional: false
-    tags: ["cleanup", "logs"]
-  
+    tags:
+    - cleanup
+    - logs
+    status: pending
+    estimated_hours: 1.0
   clear_python_cache:
-    name: "Clear Python Cache"
-    description: "Remove __pycache__ directories"
+    name: Clear Python Cache
+    description: Remove __pycache__ directories
     phase: PROCESSING
-    priority: 20
-    class: "ClearPythonCacheModule"
-    file: "clear_python_cache_module.py"
-    dependencies: ["scan_temporary_files"]
+    priority: medium
+    class: ClearPythonCacheModule
+    file: clear_python_cache_module.py
+    dependencies:
+    - scan_temporary_files
     optional: false
-    tags: ["cleanup", "python"]
-  
+    tags:
+    - cleanup
+    - python
+    status: pending
+    estimated_hours: 0.5
   vacuum_sqlite_databases:
-    name: "Vacuum SQLite Databases"
-    description: "Optimize SQLite databases"
+    name: Vacuum SQLite Databases
+    description: Optimize SQLite databases
     phase: PROCESSING
-    priority: 30
-    class: "VacuumSQLiteDatabasesModule"
-    file: "vacuum_sqlite_databases_module.py"
+    priority: medium
+    class: VacuumSQLiteDatabasesModule
+    file: vacuum_sqlite_databases_module.py
     dependencies: []
     optional: true
-    tags: ["cleanup", "database"]
-  
+    tags:
+    - cleanup
+    - database
+    status: pending
+    estimated_hours: 1.5
   remove_orphaned_files:
-    name: "Remove Orphaned Files"
-    description: "Remove files not referenced by git"
+    name: Remove Orphaned Files
+    description: Remove files not referenced by git
     phase: PROCESSING
-    priority: 40
-    class: "RemoveOrphanedFilesModule"
-    file: "remove_orphaned_files_module.py"
-    dependencies: ["scan_temporary_files"]
+    priority: medium
+    class: RemoveOrphanedFilesModule
+    file: remove_orphaned_files_module.py
+    dependencies:
+    - scan_temporary_files
     optional: true
-    tags: ["cleanup", "aggressive"]
-  
+    tags:
+    - cleanup
+    - aggressive
+    status: pending
+    estimated_hours: 2.0
   generate_cleanup_report:
-    name: "Generate Cleanup Report"
-    description: "Create summary of cleanup actions"
+    name: Generate Cleanup Report
+    description: Create summary of cleanup actions
     phase: FINALIZATION
-    priority: 10
-    class: "GenerateCleanupReportModule"
-    file: "generate_cleanup_report_module.py"
+    priority: medium
+    class: GenerateCleanupReportModule
+    file: generate_cleanup_report_module.py
     dependencies: []
     optional: false
-    tags: ["cleanup", "reporting", "required"]
-  
-  # --------------------------------------------------------------------------
-  # DOCUMENTATION MODULES
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - cleanup
+    - reporting
+    - required
+    status: pending
+    estimated_hours: 1.0
   scan_docstrings:
-    name: "Scan Docstrings"
-    description: "Extract docstrings from Python files"
+    name: Scan Docstrings
+    description: Extract docstrings from Python files
     phase: PREPARATION
-    priority: 10
-    class: "ScanDocstringsModule"
-    file: "scan_docstrings_module.py"
+    priority: medium
+    class: ScanDocstringsModule
+    file: scan_docstrings_module.py
     dependencies: []
     optional: false
-    tags: ["documentation", "required"]
-  
+    tags:
+    - documentation
+    - required
+    status: pending
+    estimated_hours: 2.0
   generate_api_docs:
-    name: "Generate API Documentation"
-    description: "Create API reference from docstrings"
+    name: Generate API Documentation
+    description: Create API reference from docstrings
     phase: PROCESSING
-    priority: 10
-    class: "GenerateAPIDocsModule"
-    file: "generate_api_docs_module.py"
-    dependencies: ["scan_docstrings"]
+    priority: medium
+    class: GenerateAPIDocsModule
+    file: generate_api_docs_module.py
+    dependencies:
+    - scan_docstrings
     optional: false
-    tags: ["documentation", "api"]
-  
+    tags:
+    - documentation
+    - api
+    status: pending
+    estimated_hours: 2.5
   refresh_design_docs:
-    name: "Refresh Design Documentation"
-    description: "Update design documentation"
+    name: Refresh Design Documentation
+    description: Update design documentation
     phase: PROCESSING
-    priority: 20
-    class: "RefreshDesignDocsModule"
-    file: "refresh_design_docs_module.py"
+    priority: medium
+    class: RefreshDesignDocsModule
+    file: refresh_design_docs_module.py
     dependencies: []
     optional: true
-    tags: ["documentation", "design"]
-  
+    tags:
+    - documentation
+    - design
+    status: pending
+    estimated_hours: 2.0
   build_mkdocs_site:
-    name: "Build MkDocs Site"
-    description: "Build documentation site with MkDocs"
+    name: Build MkDocs Site
+    description: Build documentation site with MkDocs
     phase: PROCESSING
-    priority: 30
-    class: "BuildMkDocsSiteModule"
-    file: "build_mkdocs_site_module.py"
-    dependencies: ["generate_api_docs"]
+    priority: medium
+    class: BuildMkDocsSiteModule
+    file: build_mkdocs_site_module.py
+    dependencies:
+    - generate_api_docs
     optional: false
-    tags: ["documentation", "mkdocs", "required"]
-  
+    tags:
+    - documentation
+    - mkdocs
+    - required
+    status: pending
+    estimated_hours: 1.5
   validate_doc_links:
-    name: "Validate Documentation Links"
-    description: "Check for broken links in documentation"
+    name: Validate Documentation Links
+    description: Check for broken links in documentation
     phase: VALIDATION
-    priority: 10
-    class: "ValidateDocLinksModule"
-    file: "validate_doc_links_module.py"
-    dependencies: ["build_mkdocs_site"]
+    priority: medium
+    class: ValidateDocLinksModule
+    file: validate_doc_links_module.py
+    dependencies:
+    - build_mkdocs_site
     optional: true
-    tags: ["documentation", "validation"]
-  
+    tags:
+    - documentation
+    - validation
+    status: pending
+    estimated_hours: 1.0
   deploy_docs_preview:
-    name: "Deploy Documentation Preview"
-    description: "Deploy documentation to preview server"
+    name: Deploy Documentation Preview
+    description: Deploy documentation to preview server
     phase: FINALIZATION
-    priority: 10
-    class: "DeployDocsPreviewModule"
-    file: "deploy_docs_preview_module.py"
-    dependencies: ["build_mkdocs_site"]
+    priority: medium
+    class: DeployDocsPreviewModule
+    file: deploy_docs_preview_module.py
+    dependencies:
+    - build_mkdocs_site
     optional: true
-    tags: ["documentation", "deployment"]
-  
-  # --------------------------------------------------------------------------
-  # BRAIN PROTECTION MODULES
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - documentation
+    - deployment
+    status: pending
+    estimated_hours: 1.5
   load_protection_rules:
-    name: "Load Protection Rules"
-    description: "Load brain-protection-rules.yaml"
+    name: Load Protection Rules
+    description: Load brain-protection-rules.yaml
     phase: PREPARATION
-    priority: 10
-    class: "LoadProtectionRulesModule"
-    file: "load_protection_rules_module.py"
+    priority: low
+    class: LoadProtectionRulesModule
+    file: load_protection_rules_module.py
     dependencies: []
     optional: false
-    tags: ["brain", "protection", "required"]
-  
+    tags:
+    - brain
+    - protection
+    - required
+    status: pending
+    estimated_hours: 1.0
   validate_tier0_immutability:
-    name: "Validate Tier 0 Immutability"
-    description: "Ensure Tier 0 rules are immutable"
+    name: Validate Tier 0 Immutability
+    description: Ensure Tier 0 rules are immutable
     phase: VALIDATION
-    priority: 10
-    class: "ValidateTier0ImmutabilityModule"
-    file: "validate_tier0_immutability_module.py"
-    dependencies: ["load_protection_rules"]
+    priority: low
+    class: ValidateTier0ImmutabilityModule
+    file: validate_tier0_immutability_module.py
+    dependencies:
+    - load_protection_rules
     optional: false
-    tags: ["brain", "tier0", "required"]
-  
+    tags:
+    - brain
+    - tier0
+    - required
+    status: pending
+    estimated_hours: 1.5
   validate_tier1_structure:
-    name: "Validate Tier 1 Structure"
-    description: "Validate Tier 1 database schema"
+    name: Validate Tier 1 Structure
+    description: Validate Tier 1 database schema
     phase: VALIDATION
-    priority: 20
-    class: "ValidateTier1StructureModule"
-    file: "validate_tier1_structure_module.py"
-    dependencies: ["load_protection_rules"]
+    priority: low
+    class: ValidateTier1StructureModule
+    file: validate_tier1_structure_module.py
+    dependencies:
+    - load_protection_rules
     optional: false
-    tags: ["brain", "tier1", "required"]
-  
+    tags:
+    - brain
+    - tier1
+    - required
+    status: pending
+    estimated_hours: 1.5
   validate_tier2_schema:
-    name: "Validate Tier 2 Schema"
-    description: "Validate Tier 2 YAML schema"
+    name: Validate Tier 2 Schema
+    description: Validate Tier 2 YAML schema
     phase: VALIDATION
-    priority: 30
-    class: "ValidateTier2SchemaModule"
-    file: "validate_tier2_schema_module.py"
-    dependencies: ["load_protection_rules"]
+    priority: low
+    class: ValidateTier2SchemaModule
+    file: validate_tier2_schema_module.py
+    dependencies:
+    - load_protection_rules
     optional: false
-    tags: ["brain", "tier2", "required"]
-  
+    tags:
+    - brain
+    - tier2
+    - required
+    status: pending
+    estimated_hours: 1.5
   check_brain_integrity:
-    name: "Check Brain Integrity"
-    description: "Comprehensive brain health check"
+    name: Check Brain Integrity
+    description: Comprehensive brain health check
     phase: VALIDATION
-    priority: 40
-    class: "CheckBrainIntegrityModule"
-    file: "check_brain_integrity_module.py"
+    priority: low
+    class: CheckBrainIntegrityModule
+    file: check_brain_integrity_module.py
     dependencies:
-      - "validate_tier0_immutability"
-      - "validate_tier1_structure"
-      - "validate_tier2_schema"
+    - validate_tier0_immutability
+    - validate_tier1_structure
+    - validate_tier2_schema
     optional: false
-    tags: ["brain", "integrity", "required"]
-  
+    tags:
+    - brain
+    - integrity
+    - required
+    status: pending
+    estimated_hours: 2.0
   generate_protection_report:
-    name: "Generate Protection Report"
-    description: "Create brain protection summary"
+    name: Generate Protection Report
+    description: Create brain protection summary
     phase: FINALIZATION
-    priority: 10
-    class: "GenerateProtectionReportModule"
-    file: "generate_protection_report_module.py"
-    dependencies: ["check_brain_integrity"]
-    optional: false
-    tags: ["brain", "reporting", "required"]
-  
-  # --------------------------------------------------------------------------
-  # TEST EXECUTION MODULES
-  # --------------------------------------------------------------------------
-  
-  discover_tests:
-    name: "Discover Tests"
-    description: "Find all test files"
-    phase: PREPARATION
-    priority: 10
-    class: "DiscoverTestsModule"
-    file: "discover_tests_module.py"
-    dependencies: []
-    optional: false
-    tags: ["testing", "required"]
-  
-  run_unit_tests:
-    name: "Run Unit Tests"
-    description: "Execute unit test suite"
-    phase: PROCESSING
-    priority: 10
-    class: "RunUnitTestsModule"
-    file: "run_unit_tests_module.py"
-    dependencies: ["discover_tests"]
-    optional: false
-    tags: ["testing", "unit", "required"]
-  
-  run_integration_tests:
-    name: "Run Integration Tests"
-    description: "Execute integration test suite"
-    phase: PROCESSING
-    priority: 20
-    class: "RunIntegrationTestsModule"
-    file: "run_integration_tests_module.py"
-    dependencies: ["discover_tests"]
-    optional: true
-    tags: ["testing", "integration"]
-  
-  generate_coverage_report:
-    name: "Generate Coverage Report"
-    description: "Create test coverage report"
-    phase: FINALIZATION
-    priority: 10
-    class: "GenerateCoverageReportModule"
-    file: "generate_coverage_report_module.py"
+    priority: low
+    class: GenerateProtectionReportModule
+    file: generate_protection_report_module.py
     dependencies:
-      - "run_unit_tests"
-      - "run_integration_tests"
+    - check_brain_integrity
+    optional: false
+    tags:
+    - brain
+    - reporting
+    - required
+    status: pending
+    estimated_hours: 1.0
+  discover_tests:
+    name: Discover Tests
+    description: Find all test files
+    phase: PREPARATION
+    priority: low
+    class: DiscoverTestsModule
+    file: discover_tests_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - testing
+    - required
+    status: pending
+    estimated_hours: 1.0
+  run_unit_tests:
+    name: Run Unit Tests
+    description: Execute unit test suite
+    phase: PROCESSING
+    priority: low
+    class: RunUnitTestsModule
+    file: run_unit_tests_module.py
+    dependencies:
+    - discover_tests
+    optional: false
+    tags:
+    - testing
+    - unit
+    - required
+    status: pending
+    estimated_hours: 1.5
+  run_integration_tests:
+    name: Run Integration Tests
+    description: Execute integration test suite
+    phase: PROCESSING
+    priority: low
+    class: RunIntegrationTestsModule
+    file: run_integration_tests_module.py
+    dependencies:
+    - discover_tests
     optional: true
-    tags: ["testing", "coverage"]
-  
+    tags:
+    - testing
+    - integration
+    status: pending
+    estimated_hours: 1.5
+  generate_coverage_report:
+    name: Generate Coverage Report
+    description: Create test coverage report
+    phase: FINALIZATION
+    priority: low
+    class: GenerateCoverageReportModule
+    file: generate_coverage_report_module.py
+    dependencies:
+    - run_unit_tests
+    - run_integration_tests
+    optional: true
+    tags:
+    - testing
+    - coverage
+    status: pending
+    estimated_hours: 1.5
   validate_test_quality:
-    name: "Validate Test Quality"
-    description: "Check test quality metrics"
+    name: Validate Test Quality
+    description: Check test quality metrics
     phase: VALIDATION
-    priority: 10
-    class: "ValidateTestQualityModule"
-    file: "validate_test_quality_module.py"
-    dependencies: ["generate_coverage_report"]
+    priority: low
+    class: ValidateTestQualityModule
+    file: validate_test_quality_module.py
+    dependencies:
+    - generate_coverage_report
     optional: true
-    tags: ["testing", "quality"]
-  
-  # --------------------------------------------------------------------------
-  # INTERACTIVE PLANNING MODULES (CORTEX 2.1)
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - testing
+    - quality
+    status: pending
+    estimated_hours: 1.0
   detect_planning_ambiguity:
-    name: "Detect Planning Ambiguity"
-    description: "Analyze user request for unclear requirements"
+    name: Detect Planning Ambiguity
+    description: Analyze user request for unclear requirements
     phase: PREPARATION
-    priority: 10
-    class: "DetectPlanningAmbiguityModule"
-    file: "detect_planning_ambiguity_module.py"
+    priority: medium
+    class: DetectPlanningAmbiguityModule
+    file: detect_planning_ambiguity_module.py
     dependencies: []
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
   generate_clarifying_questions:
-    name: "Generate Clarifying Questions"
-    description: "Create targeted questions to resolve ambiguity"
+    name: Generate Clarifying Questions
+    description: Create targeted questions to resolve ambiguity
     phase: PROCESSING
-    priority: 10
-    class: "GenerateClarifyingQuestionsModule"
-    file: "generate_clarifying_questions_module.py"
-    dependencies: ["detect_planning_ambiguity"]
+    priority: medium
+    class: GenerateClarifyingQuestionsModule
+    file: generate_clarifying_questions_module.py
+    dependencies:
+    - detect_planning_ambiguity
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 3.0
+    cortex_version: '2.1'
   parse_user_answers:
-    name: "Parse User Answers"
-    description: "Extract direct answers and implied context from responses"
+    name: Parse User Answers
+    description: Extract direct answers and implied context from responses
     phase: PROCESSING
-    priority: 20
-    class: "ParseUserAnswersModule"
-    file: "parse_user_answers_module.py"
-    dependencies: ["generate_clarifying_questions"]
+    priority: medium
+    class: ParseUserAnswersModule
+    file: parse_user_answers_module.py
+    dependencies:
+    - generate_clarifying_questions
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
   filter_redundant_questions:
-    name: "Filter Redundant Questions"
-    description: "Skip questions already answered via context"
+    name: Filter Redundant Questions
+    description: Skip questions already answered via context
     phase: PROCESSING
-    priority: 30
-    class: "FilterRedundantQuestionsModule"
-    file: "filter_redundant_questions_module.py"
-    dependencies: ["parse_user_answers"]
+    priority: medium
+    class: FilterRedundantQuestionsModule
+    file: filter_redundant_questions_module.py
+    dependencies:
+    - parse_user_answers
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   extract_implied_context:
-    name: "Extract Implied Context"
-    description: "Identify additional context from natural language"
+    name: Extract Implied Context
+    description: Identify additional context from natural language
     phase: PROCESSING
-    priority: 40
-    class: "ExtractImpliedContextModule"
-    file: "extract_implied_context_module.py"
-    dependencies: ["parse_user_answers"]
+    priority: medium
+    class: ExtractImpliedContextModule
+    file: extract_implied_context_module.py
+    dependencies:
+    - parse_user_answers
     optional: true
-    tags: ["planning", "cortex-2.1"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
   synthesize_planning_context:
-    name: "Synthesize Planning Context"
-    description: "Combine all answers and context into cohesive requirements"
+    name: Synthesize Planning Context
+    description: Combine all answers and context into cohesive requirements
     phase: PROCESSING
-    priority: 50
-    class: "SynthesizePlanningContextModule"
-    file: "synthesize_planning_context_module.py"
-    dependencies: ["filter_redundant_questions", "extract_implied_context"]
+    priority: medium
+    class: SynthesizePlanningContextModule
+    file: synthesize_planning_context_module.py
+    dependencies:
+    - filter_redundant_questions
+    - extract_implied_context
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   generate_implementation_plan:
-    name: "Generate Implementation Plan"
-    description: "Create detailed implementation plan from synthesized context"
+    name: Generate Implementation Plan
+    description: Create detailed implementation plan from synthesized context
     phase: PROCESSING
-    priority: 60
-    class: "GenerateImplementationPlanModule"
-    file: "generate_implementation_plan_module.py"
-    dependencies: ["synthesize_planning_context"]
+    priority: medium
+    class: GenerateImplementationPlanModule
+    file: generate_implementation_plan_module.py
+    dependencies:
+    - synthesize_planning_context
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
   generate_architecture_plan:
-    name: "Generate Architecture Plan"
-    description: "Create architecture design from requirements"
+    name: Generate Architecture Plan
+    description: Create architecture design from requirements
     phase: PROCESSING
-    priority: 60
-    class: "GenerateArchitecturePlanModule"
-    file: "generate_architecture_plan_module.py"
-    dependencies: ["synthesize_planning_context"]
+    priority: medium
+    class: GenerateArchitecturePlanModule
+    file: generate_architecture_plan_module.py
+    dependencies:
+    - synthesize_planning_context
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
   generate_refactoring_plan:
-    name: "Generate Refactoring Plan"
-    description: "Create refactoring plan with SOLID principles"
+    name: Generate Refactoring Plan
+    description: Create refactoring plan with SOLID principles
     phase: PROCESSING
-    priority: 60
-    class: "GenerateRefactoringPlanModule"
-    file: "generate_refactoring_plan_module.py"
-    dependencies: ["synthesize_planning_context"]
+    priority: medium
+    class: GenerateRefactoringPlanModule
+    file: generate_refactoring_plan_module.py
+    dependencies:
+    - synthesize_planning_context
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   present_plan_for_approval:
-    name: "Present Plan for Approval"
-    description: "Show plan to user and handle modifications"
+    name: Present Plan for Approval
+    description: Show plan to user and handle modifications
     phase: FINALIZATION
-    priority: 10
-    class: "PresentPlanForApprovalModule"
-    file: "present_plan_for_approval_module.py"
-    dependencies: ["generate_implementation_plan"]
+    priority: medium
+    class: PresentPlanForApprovalModule
+    file: present_plan_for_approval_module.py
+    dependencies:
+    - generate_implementation_plan
     optional: false
-    tags: ["planning", "cortex-2.1", "required"]
-    status: "pending"
-  
-  # --------------------------------------------------------------------------
-  # COMMAND DISCOVERY MODULES (CORTEX 2.1)
-  # --------------------------------------------------------------------------
-  
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
   analyze_user_context:
-    name: "Analyze User Context"
-    description: "Analyze current work context for relevant commands"
+    name: Analyze User Context
+    description: Analyze current work context for relevant commands
     phase: PREPARATION
-    priority: 10
-    class: "AnalyzeUserContextModule"
-    file: "analyze_user_context_module.py"
+    priority: medium
+    class: AnalyzeUserContextModule
+    file: analyze_user_context_module.py
     dependencies: []
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   filter_relevant_commands:
-    name: "Filter Relevant Commands"
-    description: "Select commands relevant to current context"
+    name: Filter Relevant Commands
+    description: Select commands relevant to current context
     phase: PROCESSING
-    priority: 10
-    class: "FilterRelevantCommandsModule"
-    file: "filter_relevant_commands_module.py"
-    dependencies: ["analyze_user_context"]
+    priority: medium
+    class: FilterRelevantCommandsModule
+    file: filter_relevant_commands_module.py
+    dependencies:
+    - analyze_user_context
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
   categorize_commands:
-    name: "Categorize Commands"
-    description: "Group commands by category and usage"
+    name: Categorize Commands
+    description: Group commands by category and usage
     phase: PROCESSING
-    priority: 20
-    class: "CategorizeCommandsModule"
-    file: "categorize_commands_module.py"
+    priority: medium
+    class: CategorizeCommandsModule
+    file: categorize_commands_module.py
     dependencies: []
     optional: true
-    tags: ["discovery", "cortex-2.1"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
   generate_help_output:
-    name: "Generate Help Output"
-    description: "Create formatted help text with examples"
+    name: Generate Help Output
+    description: Create formatted help text with examples
     phase: FINALIZATION
-    priority: 10
-    class: "GenerateHelpOutputModule"
-    file: "generate_help_output_module.py"
-    dependencies: ["filter_relevant_commands"]
+    priority: medium
+    class: GenerateHelpOutputModule
+    file: generate_help_output_module.py
+    dependencies:
+    - filter_relevant_commands
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
   suggest_next_actions:
-    name: "Suggest Next Actions"
-    description: "Proactively suggest relevant commands based on work"
+    name: Suggest Next Actions
+    description: Proactively suggest relevant commands based on work
     phase: FINALIZATION
-    priority: 20
-    class: "SuggestNextActionsModule"
-    file: "suggest_next_actions_module.py"
-    dependencies: ["analyze_user_context"]
+    priority: medium
+    class: SuggestNextActionsModule
+    file: suggest_next_actions_module.py
+    dependencies:
+    - analyze_user_context
     optional: true
-    tags: ["discovery", "cortex-2.1"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   parse_search_query:
-    name: "Parse Search Query"
-    description: "Extract keywords and intent from search query"
+    name: Parse Search Query
+    description: Extract keywords and intent from search query
     phase: PREPARATION
-    priority: 10
-    class: "ParseSearchQueryModule"
-    file: "parse_search_query_module.py"
+    priority: medium
+    class: ParseSearchQueryModule
+    file: parse_search_query_module.py
     dependencies: []
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
   search_command_index:
-    name: "Search Command Index"
-    description: "Search commands by keywords and synonyms"
+    name: Search Command Index
+    description: Search commands by keywords and synonyms
     phase: PROCESSING
-    priority: 10
-    class: "SearchCommandIndexModule"
-    file: "search_command_index_module.py"
-    dependencies: ["parse_search_query"]
+    priority: medium
+    class: SearchCommandIndexModule
+    file: search_command_index_module.py
+    dependencies:
+    - parse_search_query
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
   rank_search_results:
-    name: "Rank Search Results"
-    description: "Rank search results by relevance"
+    name: Rank Search Results
+    description: Rank search results by relevance
     phase: PROCESSING
-    priority: 20
-    class: "RankSearchResultsModule"
-    file: "rank_search_results_module.py"
-    dependencies: ["search_command_index"]
+    priority: medium
+    class: RankSearchResultsModule
+    file: rank_search_results_module.py
+    dependencies:
+    - search_command_index
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-  
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
   generate_search_output:
-    name: "Generate Search Output"
-    description: "Format search results with details and examples"
+    name: Generate Search Output
+    description: Format search results with details and examples
     phase: FINALIZATION
-    priority: 10
-    class: "GenerateSearchOutputModule"
-    file: "generate_search_output_module.py"
-    dependencies: ["rank_search_results"]
+    priority: medium
+    class: GenerateSearchOutputModule
+    file: generate_search_output_module.py
+    dependencies:
+    - rank_search_results
     optional: false
-    tags: ["discovery", "cortex-2.1", "required"]
-    status: "pending"
-
-# ============================================================================
-# METADATA
-# ============================================================================
-
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
 metadata:
-  version: "2.1"
-  schema_version: "1.0"
-  author: "Asif Hussain"
-  last_updated: "2025-11-09"
-  description: "Universal operations registry for CORTEX 2.0 + 2.1"
-  
+  version: '2.1'
+  schema_version: '1.0'
+  author: Asif Hussain
+  last_updated: '2025-11-09'
+  description: Universal operations registry for CORTEX 2.0 + 2.1
   changelog:
-    - version: "2.1"
-      date: "2025-11-09"
-      changes:
-        - "Added CORTEX 2.1 interactive planning operations"
-        - "Added CORTEX 2.1 command discovery operations"
-        - "Added 5 new planning-focused operations"
-        - "Added 2 new discovery-focused operations"
-        - "Added 22 new modules for 2.1 features"
-        - "All 2.1 operations marked as 'pending' implementation"
-    - version: "2.0"
-      date: "2025-11-08"
-      changes:
-        - "Initial universal operations architecture"
-        - "Migrated setup operation (4 modules functional)"
-        - "Defined 6 operations with 48 modules total"
-  
+  - version: '2.1'
+    date: '2025-11-09'
+    changes:
+    - Added CORTEX 2.1 interactive planning operations
+    - Added CORTEX 2.1 command discovery operations
+    - Added 5 new planning-focused operations
+    - Added 2 new discovery-focused operations
+    - Added 22 new modules for 2.1 features
+    - All 2.1 operations marked as 'pending' implementation
+  - version: '2.0'
+    date: '2025-11-08'
+    changes:
+    - Initial universal operations architecture
+    - Migrated setup operation (4 modules functional)
+    - Defined 6 operations with 48 modules total
 statistics:
   total_operations: 13
   total_modules: 70

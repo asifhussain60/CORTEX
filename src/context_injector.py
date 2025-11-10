@@ -14,10 +14,28 @@ Version: 1.0
 
 from typing import Dict, List, Optional
 import time
+import logging
 
-from tier1.working_memory_engine import WorkingMemoryEngine
-from tier2.knowledge_graph_engine import KnowledgeGraphEngine
-from tier3.dev_context_engine import DevContextEngine
+# Tier imports - using correct class names from CORTEX 2.0 architecture
+try:
+    from src.tier1.working_memory import WorkingMemory
+    TIER1_AVAILABLE = True
+except ImportError:
+    TIER1_AVAILABLE = False
+
+try:
+    from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
+    TIER2_AVAILABLE = True
+except ImportError:
+    TIER2_AVAILABLE = False
+
+try:
+    from src.tier3.context_intelligence import ContextIntelligence
+    TIER3_AVAILABLE = True
+except ImportError:
+    TIER3_AVAILABLE = False
+
+logger = logging.getLogger(__name__)
 
 
 class ContextInjector:
@@ -42,12 +60,17 @@ class ContextInjector:
             db_path: Path to SQLite database
         """
         self.db_path = db_path
-        self.wm_engine = WorkingMemoryEngine(db_path)
-        self.kg_engine = KnowledgeGraphEngine(db_path)
-        self.dc_engine = DevContextEngine(db_path)
+        
+        # Initialize engines only if tiers are available
+        self.wm = WorkingMemory(db_path) if TIER1_AVAILABLE else None
+        self.kg = KnowledgeGraph() if TIER2_AVAILABLE else None
+        self.ci = ContextIntelligence() if TIER3_AVAILABLE else None
         
         # Performance tracking
         self._last_injection_time_ms = 0.0
+        
+        if not any([TIER1_AVAILABLE, TIER2_AVAILABLE, TIER3_AVAILABLE]):
+            logger.warning("No tiers available - context injection will be limited")
     
     def inject_context(self, 
                       user_request: str, 
@@ -79,15 +102,15 @@ class ContextInjector:
         context = {}
         
         # Tier 1: Working Memory
-        if include_tiers.get('tier1', True):
+        if include_tiers.get('tier1', True) and self.wm:
             context['tier1'] = self._inject_tier1(conversation_id)
         
         # Tier 2: Knowledge Graph (with namespace awareness)
-        if include_tiers.get('tier2', True):
+        if include_tiers.get('tier2', True) and self.kg:
             context['tier2'] = self._inject_tier2(user_request, current_file)
         
         # Tier 3: Development Context
-        if include_tiers.get('tier3', True):
+        if include_tiers.get('tier3', True) and self.ci:
             context['tier3'] = self._inject_tier3()
         
         # Calculate injection time

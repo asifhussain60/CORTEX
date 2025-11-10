@@ -10,7 +10,16 @@ License: Proprietary
 """
 
 from typing import Dict, Any, List, Optional
-from src.operations.base_operation_module import BaseOperationModule, OperationResult, OperationModuleMetadata, OperationPhase, OperationStatus
+from src.operations.base_operation_module import (
+    BaseOperationModule, 
+    OperationResult, 
+    OperationModuleMetadata, 
+    OperationPhase, 
+    OperationStatus
+)
+
+# Alias for backward compatibility
+ModuleResult = OperationResult
 
 
 class StoryLengthManagerModule(BaseOperationModule):
@@ -48,6 +57,18 @@ class StoryLengthManagerModule(BaseOperationModule):
         self.max_acceptable = self.MAX_TARGET_WORDS + tolerance  # 4,280
         self.min_warning = self.MIN_TARGET_WORDS - extended      # 2,400
         self.max_warning = self.MAX_TARGET_WORDS + extended      # 4,800
+    
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Return module metadata."""
+        return OperationModuleMetadata(
+            module_id="story_length_manager",
+            name="Story Length Manager",
+            description="Validates story length against 15-20 minute read time target",
+            phase=OperationPhase.VALIDATION,
+            priority=20,
+            dependencies=[],
+            optional=False,
+        )
     
     def get_module_id(self) -> str:
         return "story_length_manager"
