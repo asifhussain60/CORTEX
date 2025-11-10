@@ -12,3 +12,38 @@
 2025-11-09 08:13:33 - ERROR - Error detecting pattern: KeyError
 2025-11-09 08:13:33 - ERROR - Error scoring activity: KeyError
 2025-11-09 08:13:33 - ERROR - Error summarizing event: KeyError
+2025-11-10 12:41:31 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 12:41:31 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 12:41:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 12:41:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 12:41:34 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 12:41:34 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 12:41:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 12:41:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 12:41:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 12:41:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 12:43:26 - ERROR - Error detecting pattern: KeyError
+2025-11-10 12:43:26 - ERROR - Error detecting pattern: KeyError
+2025-11-10 12:43:26 - ERROR - Error scoring activity: KeyError
+2025-11-10 12:43:26 - ERROR - Error scoring activity: KeyError
+2025-11-10 12:43:26 - ERROR - Error summarizing event: KeyError
+2025-11-10 12:43:26 - ERROR - Error summarizing event: KeyError
+2025-11-10 12:44:44 - ERROR - Error detecting pattern: KeyError
+2025-11-10 12:44:44 - ERROR - Error scoring activity: KeyError
+2025-11-10 12:44:44 - ERROR - Error summarizing event: KeyError
