@@ -18,6 +18,31 @@ class MessageStore:
             db_path: Path to SQLite database
         """
         self.db_path = Path(db_path)
+        self._ensure_schema()
+    
+    def _ensure_schema(self):
+        """Ensure database schema exists."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT name FROM sqlite_master 
+            WHERE type='table' AND name='messages'
+        """)
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            conn.commit()
+        
+        conn.close()
     
     def add_messages(
         self,

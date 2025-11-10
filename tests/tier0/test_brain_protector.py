@@ -57,7 +57,7 @@ class TestYAMLConfiguration:
         """Verify YAML rules are loaded successfully."""
         assert protector.rules_config is not None
         assert 'protection_layers' in protector.rules_config
-        assert len(protector.rules_config['protection_layers']) == 7  # Updated: now includes SKULL layer
+        assert len(protector.rules_config['protection_layers']) == 8  # Updated: includes all protection layers
     
     def test_has_all_protection_layers(self, protector):
         """Verify all 7 protection layers are configured."""

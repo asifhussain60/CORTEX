@@ -28,7 +28,7 @@ class TestCodeExecutorBasics:
         assert "create" in executor.OPERATIONS
         assert "edit" in executor.OPERATIONS
         assert "delete" in executor.OPERATIONS
-        assert ".py" in executor.SYNTAX_CHECK_EXTENSIONS
+        assert ".py" in executor.validator.SYNTAX_CHECK_EXTENSIONS
     
     def test_can_handle_execute_code(self):
         """Test can_handle for code intent."""

@@ -20,6 +20,52 @@ class QueueManager:
             db_path: Path to SQLite database
         """
         self.db_path = Path(db_path)
+        self._ensure_schema()
+    
+    def _ensure_schema(self):
+        """Ensure database schema exists."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Create conversations table if it doesn't exist
+        cursor.execute("""
+            SELECT name FROM sqlite_master 
+            WHERE type='table' AND name='conversations'
+        """)
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE conversations (
+                    conversation_id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    message_count INTEGER DEFAULT 0,
+                    tags TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    is_active INTEGER DEFAULT 1,
+                    summary TEXT
+                )
+            """)
+        
+        # Create eviction_log table if it doesn't exist
+        cursor.execute("""
+            SELECT name FROM sqlite_master 
+            WHERE type='table' AND name='eviction_log'
+        """)
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE eviction_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    details TEXT,
+                    timestamp TEXT DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+        
+        conn.commit()
+        conn.close()
     
     def enforce_fifo_limit(self) -> None:
         """

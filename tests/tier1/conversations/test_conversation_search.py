@@ -4,6 +4,7 @@ Unit tests for ConversationSearch module.
 
 import pytest
 import tempfile
+import shutil
 from pathlib import Path
 from datetime import datetime, timedelta
 from src.tier1.conversations import ConversationManager, ConversationSearch
@@ -12,11 +13,12 @@ from src.tier1.conversations import ConversationManager, ConversationSearch
 @pytest.fixture
 def temp_db():
     """Create a temporary database for testing."""
-    with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as f:
-        db_path = Path(f.name)
+    temp_dir = tempfile.mkdtemp()
+    db_path = Path(temp_dir) / "test_search.db"
     yield db_path
-    if db_path.exists():
-        db_path.unlink()
+    # Cleanup
+    if temp_dir and Path(temp_dir).exists():
+        shutil.rmtree(temp_dir)
 
 
 @pytest.fixture

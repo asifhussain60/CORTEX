@@ -21,9 +21,11 @@ class TestErrorCorrectorBasics:
         corrector = ErrorCorrector(name="TestCorrector")
         
         assert corrector.name == "TestCorrector"
-        assert corrector.pattern_store is not None
-        assert len(corrector.protected_paths) == 3
-        assert "CORTEX/tests" in corrector.protected_paths
+        assert corrector.parsers is not None and len(corrector.parsers) > 0
+        assert corrector.strategies is not None and len(corrector.strategies) > 0
+        assert corrector.path_validator is not None
+        assert len(corrector.path_validator.protected_paths) == 3
+        assert "CORTEX/tests" in corrector.path_validator.protected_paths
     
     def test_can_handle_fix_intent(self):
         """Test can_handle responds to FIX intent."""

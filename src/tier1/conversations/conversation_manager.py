@@ -34,6 +34,59 @@ class ConversationManager:
             db_path: Path to SQLite database
         """
         self.db_path = Path(db_path)
+        self._ensure_schema()
+    
+    def _ensure_schema(self):
+        """Ensure database schema exists."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if tables exist
+        cursor.execute("""
+            SELECT name FROM sqlite_master 
+            WHERE type='table' AND name='conversations'
+        """)
+        
+        if not cursor.fetchone():
+            # Create schema
+            cursor.execute("""
+                CREATE TABLE conversations (
+                    conversation_id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    message_count INTEGER DEFAULT 0,
+                    tags TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    is_active INTEGER DEFAULT 1,
+                    summary TEXT
+                )
+            """)
+            
+            cursor.execute("""
+                CREATE TABLE messages (
+                    message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id)
+                )
+            """)
+            
+            cursor.execute("""
+                CREATE TABLE entities (
+                    entity_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    entity_type TEXT NOT NULL,
+                    entity_value TEXT NOT NULL,
+                    detected_at TEXT NOT NULL,
+                    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id)
+                )
+            """)
+            
+            conn.commit()
+        
+        conn.close()
     
     def add_conversation(
         self,

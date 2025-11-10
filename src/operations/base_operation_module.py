@@ -69,6 +69,7 @@ class OperationStatus(Enum):
     SUCCESS = "success"
     FAILED = "failed"
     SKIPPED = "skipped"
+    WARNING = "warning"  # Success with warnings
 
 
 @dataclass

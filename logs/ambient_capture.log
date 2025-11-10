@@ -47,3 +47,283 @@
 2025-11-10 12:44:44 - ERROR - Error detecting pattern: KeyError
 2025-11-10 12:44:44 - ERROR - Error scoring activity: KeyError
 2025-11-10 12:44:44 - ERROR - Error summarizing event: KeyError
+2025-11-10 13:38:31 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:38:31 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:38:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:38:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:33 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:38:34 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:38:34 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:38:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:38:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:38:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 13:38:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 13:40:25 - ERROR - Error detecting pattern: KeyError
+2025-11-10 13:40:25 - ERROR - Error detecting pattern: KeyError
+2025-11-10 13:40:25 - ERROR - Error scoring activity: KeyError
+2025-11-10 13:40:25 - ERROR - Error scoring activity: KeyError
+2025-11-10 13:40:25 - ERROR - Error summarizing event: KeyError
+2025-11-10 13:40:25 - ERROR - Error summarizing event: KeyError
+2025-11-10 13:42:41 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:42:41 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:41 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:42:42 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:42 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:42:44 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:42:44 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:42:44 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:42:44 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:42:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 13:42:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 13:44:35 - ERROR - Error detecting pattern: KeyError
+2025-11-10 13:44:35 - ERROR - Error detecting pattern: KeyError
+2025-11-10 13:44:35 - ERROR - Error scoring activity: KeyError
+2025-11-10 13:44:35 - ERROR - Error scoring activity: KeyError
+2025-11-10 13:44:35 - ERROR - Error summarizing event: KeyError
+2025-11-10 13:44:35 - ERROR - Error summarizing event: KeyError
+2025-11-10 13:45:35 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:45:35 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - ERROR - Capture script not found, skipping hook install
+2025-11-10 13:45:36 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:36 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:45:37 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:37 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 13:45:38 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:45:38 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 13:45:38 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:45:38 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 13:45:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 13:45:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:01:08 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:01:08 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:01:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:09 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpyzcapcj3\scripts\cortex\capture_git_event.py
+2025-11-10 14:01:09 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpyzcapcj3\scripts\cortex\capture_git_event.py
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:10 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:01:10 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:01:11 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:01:11 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:01:11 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:01:11 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:01:15 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:01:15 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:03:11 - ERROR - Error detecting pattern: KeyError
+2025-11-10 14:03:11 - ERROR - Error detecting pattern: KeyError
+2025-11-10 14:03:11 - ERROR - Error scoring activity: KeyError
+2025-11-10 14:03:11 - ERROR - Error scoring activity: KeyError
+2025-11-10 14:03:11 - ERROR - Error summarizing event: KeyError
+2025-11-10 14:03:11 - ERROR - Error summarizing event: KeyError
+2025-11-10 14:12:09 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:12:09 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:10 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmplj2ta6ff\scripts\cortex\capture_git_event.py
+2025-11-10 14:12:10 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmplj2ta6ff\scripts\cortex\capture_git_event.py
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:11 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:11 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:11 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:12:11 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:12:11 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:11 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:12:12 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:12:12 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:12:12 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:12:12 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:14:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:14:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:17:24 - ERROR - Error detecting pattern: KeyError
+2025-11-10 14:17:24 - ERROR - Error detecting pattern: KeyError
+2025-11-10 14:17:24 - ERROR - Error scoring activity: KeyError
+2025-11-10 14:17:24 - ERROR - Error scoring activity: KeyError
+2025-11-10 14:17:24 - ERROR - Error summarizing event: KeyError
+2025-11-10 14:17:24 - ERROR - Error summarizing event: KeyError
+2025-11-10 14:19:34 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:19:34 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:36 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:19:36 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:19:36 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:36 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:19:37 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:19:37 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:19:37 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:19:37 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:22:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:22:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:27:46 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:27:46 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:27:47 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:47 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:47 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:47 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:27:48 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:48 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:27:49 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:27:49 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:27:49 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:27:49 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:30:03 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:30:03 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:31:49 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:32:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:32:29 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:33:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:33:20 - WARNING - SECURITY: Blocked access to file outside workspace: \\?\D:\PROJECTS\CORTEX\cortex-metrics-session-20251110-143320-226741.json
+2025-11-10 14:33:52 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:34:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:34:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:34:25 - ERROR - Error detecting pattern: KeyError
+2025-11-10 14:34:25 - ERROR - Error scoring activity: KeyError
+2025-11-10 14:34:25 - ERROR - Error summarizing event: KeyError
+2025-11-10 14:34:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:34:59 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:35:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:39:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:39:45 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:40:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:40:50 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:41:06 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:41:22 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:41:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:42:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:42:28 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:42:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:43:16 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:43:30 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:45:22 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:45:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:46:17 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:46:23 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:47:25 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:47:32 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:47:44 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:47:51 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:47:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:48:07 - WARNING - SECURITY: Blocked access to file outside workspace: D:\PROJECTS\CORTEX\cortex-metrics-session-20251110-144807-500216.json
+2025-11-10 14:48:40 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:48:53 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:49:06 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:49:14 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:49:32 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:49:44 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:49:45 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:49:45 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - ERROR - Capture script not found, skipping hook install
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpif01xws6\scripts\cortex\capture_git_event.py
+2025-11-10 14:49:46 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpif01xws6\scripts\cortex\capture_git_event.py
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:49:46 - INFO - Not a git repository, git monitoring disabled
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:46 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-10 14:49:48 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:49:48 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-10 14:49:48 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:49:48 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-10 14:49:52 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 14:50:53 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements

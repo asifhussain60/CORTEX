@@ -76,7 +76,7 @@ class ResponseFormatter:
         if template_file is None:
             # Default location
             from src.config import config
-            template_file = Path(config.brain_root) / "response-templates.yaml"
+            template_file = Path(config.brain_path) / "response-templates.yaml"
         
         self.template_loader = None
         self.template_renderer = None

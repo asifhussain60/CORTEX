@@ -139,7 +139,29 @@ class GitSyncModule(BaseOperationModule):
                     duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Fetch remote changes
+            # OPTIMIZATION: Check if already up-to-date before expensive fetch
+            # Use ls-remote to check remote HEAD without fetching all objects
+            remote_up_to_date = self._check_remote_up_to_date(project_root, current_branch)
+            if remote_up_to_date:
+                self.log_info("Already up to date with remote (fast check)")
+                return OperationResult(
+                    success=True,
+                    status=OperationStatus.SUCCESS,
+                    message="Repository already up to date (fast check)",
+                    data={
+                        'git_available': True,
+                        'is_git_repo': True,
+                        'current_branch': current_branch,
+                        'has_uncommitted_changes': False,
+                        'behind_count': 0,
+                        'synced': True,
+                        'up_to_date': True,
+                        'fast_check': True
+                    },
+                    duration_seconds=(datetime.now() - start_time).total_seconds()
+                )
+            
+            # Fetch remote changes (only if fast check shows we might be behind)
             fetch_success, fetch_output = self._git_fetch(project_root)
             if not fetch_success:
                 self.log_error(f"Git fetch failed: {fetch_output}")
@@ -270,6 +292,51 @@ class GitSyncModule(BaseOperationModule):
             return len(result.stdout.strip()) > 0
         except subprocess.SubprocessError:
             return True  # Assume changes if we can't check
+    
+    def _check_remote_up_to_date(self, project_root: Path, branch: str) -> bool:
+        """
+        Fast check if local is up-to-date with remote using ls-remote.
+        This avoids expensive fetch operation when already current.
+        
+        Performance: ~50-100ms vs 2-5s for full fetch
+        """
+        try:
+            # Get local HEAD commit
+            result_local = subprocess.run(
+                ['git', 'rev-parse', 'HEAD'],
+                cwd=str(project_root),
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result_local.returncode != 0:
+                return False  # Can't check, assume not up-to-date
+            
+            local_commit = result_local.stdout.strip()
+            
+            # Get remote HEAD commit without fetching
+            result_remote = subprocess.run(
+                ['git', 'ls-remote', 'origin', branch],
+                cwd=str(project_root),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result_remote.returncode != 0:
+                return False  # Can't check remote, assume not up-to-date
+            
+            # Parse remote commit (format: "commit_hash\trefs/heads/branch")
+            remote_line = result_remote.stdout.strip()
+            if not remote_line:
+                return False
+            
+            remote_commit = remote_line.split('\t')[0]
+            
+            # Compare commits
+            return local_commit == remote_commit
+            
+        except subprocess.SubprocessError:
+            return False  # Can't check, assume not up-to-date
     
     def _git_fetch(self, project_root: Path) -> Tuple[bool, str]:
         """Fetch from remote repository."""

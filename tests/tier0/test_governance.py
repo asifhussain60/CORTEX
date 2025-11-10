@@ -36,8 +36,8 @@ class TestGovernanceEngineInitialization:
         assert 'TIER_BOUNDARIES' in governance_engine.rules
     
     def test_loads_expected_rule_count(self, governance_engine):
-        """Test that all 23 governance rules are loaded."""
-        assert len(governance_engine.rules) == 23
+        """Test that all 27 governance rules are loaded."""
+        assert len(governance_engine.rules) == 27  # Updated to match current rule count
     
     def test_raises_error_for_missing_file(self):
         """Test that FileNotFoundError is raised for missing governance file."""
@@ -304,7 +304,7 @@ class TestRuleRetrieval:
     def test_gets_all_rules(self, governance_engine):
         """Test retrieving all rules."""
         rules = governance_engine.get_all_rules()
-        assert len(rules) == 23
+        assert len(rules) == 27  # Updated to match current rule count
     
     def test_filters_rules_by_severity(self, governance_engine):
         """Test filtering rules by severity level."""

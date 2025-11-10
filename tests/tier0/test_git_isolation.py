@@ -334,7 +334,7 @@ class TestBrainProtectionRuleIntegration:
         
         rules_path = Path("cortex-brain/brain-protection-rules.yaml")
         if rules_path.exists():
-            rules = yaml.safe_load(rules_path.read_text())
+            rules = yaml.safe_load(rules_path.read_text(encoding='utf-8'))
             
             assert "GIT_ISOLATION_ENFORCEMENT" in rules["tier0_instincts"]
     
@@ -345,7 +345,7 @@ class TestBrainProtectionRuleIntegration:
         
         rules_path = Path("cortex-brain/brain-protection-rules.yaml")
         if rules_path.exists():
-            rules = yaml.safe_load(rules_path.read_text())
+            rules = yaml.safe_load(rules_path.read_text(encoding='utf-8'))
             
             # Find git_isolation layer
             layers = rules.get("protection_layers", [])

@@ -43,6 +43,34 @@ class EntityExtractor:
             db_path: Path to SQLite database
         """
         self.db_path = Path(db_path)
+        self._ensure_schema()
+    
+    def _ensure_schema(self):
+        """Ensure database schema exists."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT name FROM sqlite_master 
+            WHERE type='table' AND name='entities'
+        """)
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                CREATE TABLE entities (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    entity_type TEXT NOT NULL,
+                    entity_name TEXT NOT NULL,
+                    file_path TEXT,
+                    first_seen TEXT NOT NULL,
+                    last_accessed TEXT NOT NULL,
+                    access_count INTEGER DEFAULT 1
+                )
+            """)
+            conn.commit()
+        
+        conn.close()
     
     def extract_entities(self, conversation_id: str, text: str) -> List[Entity]:
         """

@@ -1,0 +1,176 @@
+{
+  "tier_queries": {
+    "tier1": {
+      "get_recent_conversations": 0.43590000132098794,
+      "get_conversation_by_id": 0.6757999944966286,
+      "get_messages": 0.4380999889690429,
+      "get_active_conversation": 10.461400001076981
+    },
+    "tier2": {
+      "get_patterns_by_type": 10.792900022352114,
+      "search_patterns_fts": 1.0272000217810273,
+      "find_patterns_by_tag": 0.9057999996002764
+    },
+    "tier3": {
+      "get_git_metrics_30d": 0.6947000219952315,
+      "analyze_file_hotspots": 18.380200024694204,
+      "get_unstable_files": 1.199799997266382,
+      "calculate_commit_velocity": 0.6544999778270721,
+      "get_context_summary": 3.162800014251843
+    }
+  },
+  "operations": {
+    "help_command": {
+      "duration_ms": 372.66059999819845,
+      "stats_summary": "         499301 function calls (496163 primitive calls) in 0.372 seconds\n\n   Ordered by: cumulative time\n   List reduced from 605 to 20 due to restriction <20>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.000    0.000    0.372    0.372 __init__.py:48(execute_operation)\n        1    0.000    0.000    0.372    0.372 __init__.py:298(show_help)\n        1    0.000    0.000    0.371    0.371 help_command.py:269(show_help)\n        1    0.000    0.000    0.370 "
+    },
+    "cleanup_quick": {
+      "duration_ms": 12289.637800015043,
+      "stats_summary": "         718276 function calls (714463 primitive calls) in 12.290 seconds\n\n   Ordered by: cumulative time\n   List reduced from 434 to 20 due to restriction <20>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.000    0.000   12.290   12.290 __init__.py:48(execute_operation)\n        1    0.000    0.000   11.987   11.987 operations_orchestrator.py:129(execute_operation)\n        1    0.000    0.000   11.194   11.194 scan_temporary_files_module.py:83(execute)\n "
+    },
+    "story_refresh": {
+      "duration_ms": 36.59080000943504,
+      "stats_summary": "         5568 function calls (5552 primitive calls) in 0.037 seconds\n\n   Ordered by: cumulative time\n   List reduced from 173 to 20 due to restriction <20>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.000    0.000    0.037    0.037 __init__.py:48(execute_operation)\n        1    0.000    0.000    0.036    0.036 operations_orchestrator.py:129(execute_operation)\n        3    0.017    0.006    0.017    0.006 {method 'read' of '_io.TextIOWrapper' objects}\n  "
+    },
+    "demo_quick": {
+      "duration_ms": 1585.4698999901302,
+      "stats_summary": "         669154 function calls (666052 primitive calls) in 1.585 seconds\n\n   Ordered by: cumulative time\n   List reduced from 436 to 20 due to restriction <20>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n      3/1    0.000    0.000    1.585    1.585 __init__.py:48(execute_operation)\n      3/1    0.000    0.000    1.585    1.585 operations_orchestrator.py:129(execute_operation)\n        1    0.000    0.000    1.254    1.254 demo_cleanup_module.py:75(execute)\n        1 "
+    },
+    "environment_setup": {
+      "duration_ms": 3780.0041000009514,
+      "stats_summary": "         297396 function calls (295576 primitive calls) in 3.780 seconds\n\n   Ordered by: cumulative time\n   List reduced from 452 to 20 due to restriction <20>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.000    0.000    3.780    3.780 __init__.py:48(execute_operation)\n        1    0.000    0.000    3.779    3.779 operations_orchestrator.py:129(execute_operation)\n       10    0.000    0.000    3.574    0.357 subprocess.py:512(run)\n       10    0.000    "
+    }
+  },
+  "hotspots": [
+    {
+      "operation": "cleanup_quick",
+      "function": "__init__.py:48(execute_operation)",
+      "cumulative_time_s": 12.29,
+      "percentage": 100.00294719820755
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "operations_orchestrator.py:129(execute_operation)",
+      "cumulative_time_s": 11.987,
+      "percentage": 97.53745549755199
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "scan_temporary_files_module.py:83(execute)",
+      "cumulative_time_s": 11.194,
+      "percentage": 91.08486500705739
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "scan_temporary_files_module.py:208(_scan_python_cache)",
+      "cumulative_time_s": 11.103,
+      "percentage": 90.34440380323015
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "glob.py:471(select_recursive)",
+      "cumulative_time_s": 11.048,
+      "percentage": 89.89687230641148
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "glob.py:480(select_recursive_step)",
+      "cumulative_time_s": 11.027,
+      "percentage": 89.72599664398979
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "glob.py:512(select_exists)",
+      "cumulative_time_s": 7.967,
+      "percentage": 64.82697154826033
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "nt.lstat}",
+      "cumulative_time_s": 7.962,
+      "percentage": 64.78628686673137
+    },
+    {
+      "operation": "environment_setup",
+      "function": "__init__.py:48(execute_operation)",
+      "cumulative_time_s": 3.78,
+      "percentage": 99.99989153448401
+    },
+    {
+      "operation": "environment_setup",
+      "function": "operations_orchestrator.py:129(execute_operation)",
+      "cumulative_time_s": 3.779,
+      "percentage": 99.97343653672355
+    },
+    {
+      "operation": "environment_setup",
+      "function": "subprocess.py:512(run)",
+      "cumulative_time_s": 3.574,
+      "percentage": 94.55016199583224
+    },
+    {
+      "operation": "environment_setup",
+      "function": "subprocess.py:1178(communicate)",
+      "cumulative_time_s": 3.536,
+      "percentage": 93.5448720809353
+    },
+    {
+      "operation": "environment_setup",
+      "function": "subprocess.py:1619(_communicate)",
+      "cumulative_time_s": 3.534,
+      "percentage": 93.49196208541441
+    },
+    {
+      "operation": "environment_setup",
+      "function": "threading.py:1058(join)",
+      "cumulative_time_s": 3.533,
+      "percentage": 93.46550708765396
+    },
+    {
+      "operation": "environment_setup",
+      "function": "objects}",
+      "cumulative_time_s": 3.532,
+      "percentage": 93.43905208989352
+    },
+    {
+      "operation": "environment_setup",
+      "function": "threading.py:1000(_bootstrap)",
+      "cumulative_time_s": 3.528,
+      "percentage": 93.33323209885175
+    },
+    {
+      "operation": "environment_setup",
+      "function": "threading.py:1027(_bootstrap_inner)",
+      "cumulative_time_s": 3.528,
+      "percentage": 93.33323209885175
+    },
+    {
+      "operation": "demo_quick",
+      "function": "__init__.py:48(execute_operation)",
+      "cumulative_time_s": 1.585,
+      "percentage": 99.97036209958114
+    },
+    {
+      "operation": "demo_quick",
+      "function": "operations_orchestrator.py:129(execute_operation)",
+      "cumulative_time_s": 1.585,
+      "percentage": 99.97036209958114
+    },
+    {
+      "operation": "cleanup_quick",
+      "function": "nt.scandir}",
+      "cumulative_time_s": 1.336,
+      "percentage": 10.870946904540707
+    }
+  ],
+  "summary": {
+    "tier1_avg_ms": 3.0027999964659102,
+    "tier2_avg_ms": 4.241966681244473,
+    "tier3_avg_ms": 4.818400007206947,
+    "operations_avg_ms": 3612.8726400027517,
+    "tier1_target_met": true,
+    "tier2_target_met": true,
+    "tier3_target_met": true,
+    "operations_target_met": true
+  }
+}
