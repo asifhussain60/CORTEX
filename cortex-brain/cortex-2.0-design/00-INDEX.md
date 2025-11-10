@@ -151,6 +151,9 @@ Strategic documents for understanding the bigger picture:
 - **24-holistic-review-and-adjustments.md** - Comprehensive review, critical adjustments, implementation priorities
 - **25-implementation-roadmap.md** - Complete implementation roadmap with phases and timelines
 - **26-bloated-design-analysis.md** - Analysis of design bloat and mitigation strategies
+- **🆕 MAC-PARALLEL-TRACK-DESIGN.md** - ⭐ **DESIGN DOC 2** - Complete Mac parallel development track specification (Phase 5.5, CI/CD, CORTEX 2.1)
+- **MACHINE-SPECIFIC-WORK-PLAN.md** - ⭐ **ACTIVE PLANNING** - 2-machine parallel work strategy (Windows + Mac)
+- **PARALLEL-WORK-VISUAL.md** - Visual representation of parallel development timeline and efficiency gains
 
 ### 💬 Q&A & DECISION RECORDS (Critical Questions Answered)
 Documentation of key architectural decisions and strategic questions:
