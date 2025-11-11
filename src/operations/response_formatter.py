@@ -47,8 +47,14 @@ class ResponseFormatter:
         Returns:
             Formatted markdown string for Copilot Chat display
         """
-        # Determine header style
-        if is_help:
+        # Check if result has formatted header/footer (new approach)
+        formatted_header = getattr(result, 'formatted_header', None)
+        formatted_footer = getattr(result, 'formatted_footer', None)
+        
+        # Use provided headers if available (priority)
+        if formatted_header:
+            header = f"```\n{formatted_header}\n```"
+        elif is_help:
             header = ResponseFormatter._format_banner_header(operation_name, context)
         elif not ResponseFormatter._first_operation_shown:
             header = ResponseFormatter._format_full_header(operation_name, context)
@@ -59,8 +65,11 @@ class ResponseFormatter:
         # Format main content
         content = ResponseFormatter._format_content(operation_name, result, context)
         
-        # Add minimal footer (always present for copyright)
-        footer = ResponseFormatter._format_minimal_footer(operation_name, result)
+        # Use provided footer if available, otherwise generate minimal footer
+        if formatted_footer:
+            footer = f"```\n{formatted_footer}\n```"
+        else:
+            footer = ResponseFormatter._format_minimal_footer(operation_name, result)
         
         return f"{header}\n{content}\n{footer}".strip()
     

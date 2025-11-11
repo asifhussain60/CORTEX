@@ -217,14 +217,27 @@ class DesignSyncOrchestrator(BaseOperationModule):
         profile = context.get('profile', 'standard')
         dry_run = context.get('dry_run', False)
         
-        # Display minimalist header (Option C)
-        print_minimalist_header(
+        # Build purpose based on profile
+        purposes = {
+            'quick': 'Analyze design-implementation gaps (preview only, no changes)',
+            'standard': 'Synchronize design docs with implementation reality + consolidate status files',
+            'comprehensive': 'Full sync: gap analysis + optimization integration + MD→YAML conversion'
+        }
+        purpose = purposes.get(profile, 'Synchronize CORTEX design with implementation')
+        
+        # Generate formatted header (for Copilot Chat display)
+        from src.operations.header_utils import format_minimalist_header
+        formatted_header = format_minimalist_header(
             operation_name="Design Sync",
             version="1.0.0",
             profile=profile,
             mode="LIVE EXECUTION",
-            dry_run=dry_run
+            dry_run=dry_run,
+            purpose=purpose
         )
+        
+        # Also print to terminal for immediate visibility
+        print(formatted_header)
         
         logger.info(f"Design Sync Orchestrator started | Profile: {profile}")
         logger.info(f"Project: {project_root}")
@@ -292,15 +305,37 @@ class DesignSyncOrchestrator(BaseOperationModule):
             
             metrics.duration_seconds = (datetime.now() - start_time).total_seconds()
             
-            # Print completion footer
-            summary = (f"{len(metrics.git_commits)} commits, "
-                      f"{len(metrics.improvements)} improvements applied")
-            print_completion_footer(
+            # Build accomplishments list
+            accomplishments = []
+            if impl_state.total_modules > 0:
+                accomplishments.append(
+                    f"Discovered {impl_state.total_modules} modules "
+                    f"({impl_state.completion_percentage:.0f}% implemented)"
+                )
+            if metrics.gaps_analyzed > 0:
+                accomplishments.append(f"Analyzed {metrics.gaps_analyzed} design-implementation gaps")
+            if metrics.status_files_consolidated > 0:
+                accomplishments.append(
+                    f"Consolidated {metrics.status_files_consolidated} status files → 1 source of truth"
+                )
+            if metrics.md_to_yaml_converted > 0:
+                accomplishments.append(f"Converted {metrics.md_to_yaml_converted} MD docs to YAML schemas")
+            if len(metrics.git_commits) > 0:
+                accomplishments.append(f"Committed changes: {metrics.git_commits[0]}")
+            
+            # Generate formatted footer (for Copilot Chat display)
+            from src.operations.header_utils import format_completion_footer
+            summary = f"{len(metrics.improvements)} improvements applied" if metrics.improvements else None
+            formatted_footer = format_completion_footer(
                 operation_name="Design Sync",
                 success=True,
                 duration_seconds=metrics.duration_seconds,
-                summary=summary
+                summary=summary,
+                accomplishments=accomplishments if accomplishments else None
             )
+            
+            # Also print to terminal for immediate visibility
+            print(formatted_footer)
             
             logger.info(f"✅ Design synchronization complete ({profile} profile)")
             logger.info(f"Git commits: {len(metrics.git_commits)}")
@@ -316,7 +351,9 @@ class DesignSyncOrchestrator(BaseOperationModule):
                     'design_state': design_state.__dict__,
                     'gaps': gaps.__dict__,
                     'final_report': final_report
-                }
+                },
+                formatted_header=formatted_header,
+                formatted_footer=formatted_footer
             )
         
         except Exception as e:
@@ -324,20 +361,26 @@ class DesignSyncOrchestrator(BaseOperationModule):
             metrics.errors.append(str(e))
             metrics.duration_seconds = (datetime.now() - start_time).total_seconds()
             
-            # Print failure footer
-            print_completion_footer(
+            # Generate failure footer (for Copilot Chat display)
+            from src.operations.header_utils import format_completion_footer
+            formatted_footer_error = format_completion_footer(
                 operation_name="Design Sync",
                 success=False,
                 duration_seconds=metrics.duration_seconds,
                 summary=f"Error: {str(e)}"
             )
             
+            # Also print to terminal
+            print(formatted_footer_error)
+            
             return OperationResult(
                 success=False,
                 status=OperationStatus.FAILED,
                 message=f"Design synchronization failed: {e}",
                 data={'metrics': metrics.__dict__},
-                errors=[str(e)]
+                errors=[str(e)],
+                formatted_header=formatted_header if 'formatted_header' in locals() else None,
+                formatted_footer=formatted_footer_error
             )
     
     def _discover_implementation(

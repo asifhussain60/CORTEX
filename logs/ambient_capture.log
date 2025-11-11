@@ -644,3 +644,105 @@
 2025-11-11 08:31:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 08:32:14 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 08:32:27 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:32:50 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:32:57 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:33:22 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:33:50 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:34:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:41:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:41:16 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:43:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:43:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:43:56 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:44:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:44:16 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:44:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:45:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:45:20 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:46:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:46:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:47:00 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:47:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:47:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:47:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:47:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:48:02 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:48:18 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:48:55 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:49:43 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:50:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:50:24 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:51:11 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:51:36 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:51:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:52:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:52:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:52:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:56:00 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:56:25 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:56:34 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:56:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:57:34 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:57:48 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 08:57:48 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - ERROR - Capture script not found, skipping hook install
+2025-11-11 08:57:49 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:49 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmplhenmupx\scripts\cortex\capture_git_event.py
+2025-11-11 08:57:50 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmplhenmupx\scripts\cortex\capture_git_event.py
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 08:57:50 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:50 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 08:57:51 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 08:57:51 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 08:57:51 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 08:57:51 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 08:57:55 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:59:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:59:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:59:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 08:59:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:00:01 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:01:57 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:02:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:02:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 09:02:33 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:34 - ERROR - Capture script not found, skipping hook install
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpa7t1ty4a\scripts\cortex\capture_git_event.py
+2025-11-11 09:02:35 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpa7t1ty4a\scripts\cortex\capture_git_event.py
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 09:02:35 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:35 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 09:02:36 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 09:02:36 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 09:02:36 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 09:02:36 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 09:04:45 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:04:45 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:05:59 - ERROR - Tier 1 write error: OperationalError: no such column: created_at

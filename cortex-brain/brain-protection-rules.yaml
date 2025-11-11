@@ -690,6 +690,232 @@ protection_layers:
           - Integration tests MUST check before/after file state
           - CI fails if transformation claims success but git diff empty
           - Status documents distinguish architecture vs implementation
+      
+      - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE"
+        name: "Header/Footer in Copilot Response (SKULL-006)"
+        severity: "blocked"
+        description: "Operation orchestrators MUST include formatted headers/footers in Copilot Chat response"
+        
+        detection:
+          combined_keywords:
+            orchestrator_execution:
+              - "execute operation"
+              - "orchestrator.execute"
+              - "operation complete"
+            missing_header_footer:
+              - "formatted_header: None"
+              - "formatted_footer: None"
+              - "no header in response"
+          scope: ["code", "test_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "result_object_check"
+            description: "Verify OperationResult contains formatted_header/footer"
+            requirement: "result.formatted_header MUST NOT be None"
+          
+          - type: "response_formatter_check"
+            description: "Verify ResponseFormatter uses stored headers"
+            requirement: "Chat response MUST include header/footer in code blocks"
+          
+          - type: "visual_inspection"
+            description: "Verify header appears in Copilot Chat window"
+            requirement: "User MUST see copyright header + purpose + accomplishments"
+        
+        alternatives:
+          - "Use format_minimalist_header() and store in result.formatted_header"
+          - "Use format_completion_footer() and store in result.formatted_footer"
+          - "Ensure ResponseFormatter wraps headers in code blocks for display"
+          - "Add integration test verifying header presence in formatted response"
+        
+        evidence_template: |
+          Operation '{operation_name}' executed but headers not in Copilot response
+          
+          Expected in Copilot Chat:
+          ```
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            CORTEX {operation_name} Orchestrator v{version}
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          
+          Profile: {profile} │ Mode: {mode} │ Started: {timestamp}
+          
+          📋 Purpose: {purpose}
+          
+          © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          ```
+          
+          Actual: Header missing or only in terminal
+        
+        rationale: |
+          SKULL-006: Header/Footer in Copilot Response
+          
+          Real incident (2025-11-11):
+          - User: "why is header not being displayed?"
+          - Headers printing to terminal (stdout) correctly
+          - But GitHub Copilot Chat response had NO header
+          - ResponseFormatter suppressing headers after first operation
+          - User specified they want header "in the copilot response in the chat window"
+          
+          Root Cause:
+          1. Orchestrators print headers to stdout (terminal visibility)
+          2. But stdout doesn't reach Copilot Chat window
+          3. ResponseFormatter has _first_operation_shown flag (header suppression)
+          4. User sees execution in terminal, but Chat response lacks context
+          
+          Why This Matters:
+          - Copyright attribution must be visible to user
+          - Purpose/profile provides context for what operation did
+          - Accomplishments show value delivered
+          - Headers make operations feel professional and informative
+          - Chat is primary interface (terminal is secondary)
+          
+          Solution:
+          1. Orchestrators generate formatted headers/footers
+          2. Store in OperationResult.formatted_header/footer
+          3. ResponseFormatter checks for stored headers (priority)
+          4. Wraps headers in code blocks for proper display
+          5. Also prints to terminal for immediate visibility
+          
+          SKULL-006 enforces this by:
+          - Requiring formatted_header/footer in OperationResult
+          - Integration tests verify headers in formatted response
+          - Blocking completion if headers missing from Chat output
+          - Ensuring copyright/attribution always visible
+          
+          Implementation:
+          ```python
+          # In orchestrator execute():
+          formatted_header = format_minimalist_header(...)
+          print(formatted_header)  # Terminal visibility
+          
+          # ... operation logic ...
+          
+          formatted_footer = format_completion_footer(...)
+          print(formatted_footer)  # Terminal visibility
+          
+          return OperationResult(
+              success=True,
+              formatted_header=formatted_header,  # For Copilot Chat
+              formatted_footer=formatted_footer   # For Copilot Chat
+          )
+          ```
+      
+      - rule_id: "SKULL_ALL_TESTS_MUST_PASS"
+        name: "All Tests Must Pass (SKULL-007)"
+        severity: "blocked"
+        description: "Test suite MUST have 100% pass rate before claiming any work complete"
+        
+        detection:
+          keywords:
+            - "fixed ✅"
+            - "complete ✅"
+            - "done ✅"
+            - "implemented ✅"
+            - "ready for review"
+            - "PR ready"
+          with_test_failures:
+            - "failed"
+            - "FAILED"
+            - "ERROR"
+            - "test failures"
+            - "X passed, Y failed"
+          scope: ["response", "test_output"]
+        
+        verification_required:
+          - type: "full_test_suite"
+            description: "Run complete test suite (not just new tests)"
+            requirement: "pytest exit code MUST be 0 (100% pass rate)"
+          
+          - type: "no_skipped_critical_tests"
+            description: "Verify no critical tests are skipped"
+            requirement: "Core functionality tests MUST run (not skipped)"
+          
+          - type: "test_count_validation"
+            description: "Ensure test count doesn't decrease unexpectedly"
+            requirement: "Total tests should increase or stay same (not decrease)"
+        
+        alternatives:
+          - "Fix ALL failing tests before claiming completion"
+          - "Mark work as 'IN PROGRESS' until tests pass"
+          - "Revert changes if they break existing tests"
+          - "Fix pre-existing failures first (clean baseline)"
+        
+        evidence_template: |
+          Work claimed complete but tests failing!
+          
+          Test Results: {test_summary}
+          - Passed: {passed_count}
+          - Failed: {failed_count}  ❌
+          - Skipped: {skipped_count}
+          
+          SKULL-007 VIOLATION: Cannot claim "done ✅" with {failed_count} failures
+        
+        rationale: |
+          SKULL-007: All Tests Must Pass
+          
+          Real incident (2025-11-11):
+          - User: "are all tests passing?"
+          - Agent: Ran tests, found 123 failed, 337 passed
+          - Agent response: "No, not all tests are passing" (honest)
+          - BUT: Agent claimed SKULL-006 work "complete ✅" earlier
+          - Pre-existing failures create false confidence
+          
+          Why Pre-existing Failures Are Dangerous:
+          1. Mask New Regressions:
+             - Can't tell if new code broke something
+             - "Already broken" becomes acceptable
+             - Technical debt accumulates silently
+          
+          2. Create False Confidence:
+             - "My tests pass" ≠ "All tests pass"
+             - Incomplete validation of changes
+             - Integration issues hidden
+          
+          3. Compound Over Time:
+             - Each feature adds more failures
+             - "Just one more broken test" mentality
+             - Eventually unmaintainable
+          
+          4. Undermine Trust:
+             - Claims of completion ring hollow
+             - Quality standards erode
+             - Testing becomes performative
+          
+          Examples from Current Failures:
+          - 123 failed tests (51% failure rate!)
+          - Categories: Agent internals, platform issues, schema errors
+          - Some tests testing wrong APIs (implementation changed)
+          - Some tests have environmental dependencies
+          - All must be fixed before claiming ANY work complete
+          
+          SKULL-007 Enforcement:
+          1. BLOCKING severity - cannot proceed with failures
+          2. Requires full test suite run (not just new tests)
+          3. Exit code 0 mandatory (100% pass rate)
+          4. No "works on my machine" exceptions
+          5. No "will fix later" promises
+          
+          Allowed Exceptions:
+          - Known flaky tests marked with @pytest.mark.flaky
+          - Platform-specific tests properly skipped on other platforms
+          - Optional feature tests when feature disabled in config
+          
+          Not Allowed:
+          - "These failures are unrelated to my work"
+          - "I'll fix them in next PR"
+          - "Tests are broken, not my code"
+          - "Only my new tests need to pass"
+          
+          Implementation Strategy:
+          1. Fix critical blockers first (schema, imports)
+          2. Fix by category (agents, ambient, tier1)
+          3. Update tests if implementation changed
+          4. Mark truly optional tests appropriately
+          5. Achieve 100% pass rate
+          6. Maintain 100% going forward
+          
+          This is NOT optional. This is core quality engineering.
   
   # Layer 6: Knowledge Quality
   - layer_id: "knowledge_quality"

@@ -65,7 +65,7 @@ from src.operations.modules import (
     ScanDocstringsModule,
     GenerateAPIDocsModule,
     RefreshDesignDocsModule,
-    BuildMkdocsSiteModule,
+    BuildMkDocsSiteModule,
     ValidateDocLinksModule,
     DeployDocsPreviewModule,
     

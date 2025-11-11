@@ -95,6 +95,8 @@ class OperationResult:
         duration_seconds: Execution time
         timestamp: When module completed
         execution_mode: Whether this was a dry-run or live execution
+        formatted_header: Formatted header for Copilot Chat display
+        formatted_footer: Formatted footer for Copilot Chat display
     """
     success: bool
     status: OperationStatus
@@ -105,6 +107,8 @@ class OperationResult:
     duration_seconds: float = 0.0
     timestamp: Optional[datetime] = None
     execution_mode: ExecutionMode = ExecutionMode.LIVE
+    formatted_header: Optional[str] = None
+    formatted_footer: Optional[str] = None
     
     def __post_init__(self):
         """Set timestamp if not provided."""

@@ -281,7 +281,7 @@ class TestModeMixinIntegration:
 class TestRealWorldExamples:
     """Test real-world request examples."""
     
-    @pytest.mark.parametrize("request,expected_mode", [
+    @pytest.mark.parametrize("user_request,expected_mode", [
         ("cleanup workspace", ExecutionMode.LIVE),
         ("preview cleanup workspace", ExecutionMode.DRY_RUN),
         ("dry-run cleanup", ExecutionMode.DRY_RUN),
@@ -295,10 +295,10 @@ class TestRealWorldExamples:
         ("refresh story", ExecutionMode.LIVE),
         ("preview story changes", ExecutionMode.DRY_RUN),
     ])
-    def test_real_world_detection(self, request, expected_mode):
+    def test_real_world_detection(self, user_request, expected_mode):
         """Test detection on real-world requests."""
-        mode, _ = detect_execution_mode(request)
-        assert mode == expected_mode, f"Failed for request: '{request}'"
+        mode, _ = detect_execution_mode(user_request)
+        assert mode == expected_mode, f"Failed for request: '{user_request}'"
 
 
 if __name__ == '__main__':
