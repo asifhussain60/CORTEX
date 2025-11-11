@@ -28,6 +28,7 @@ from src.operations.base_operation_module import (
     ExecutionMode
 )
 from src.operations.dry_run_mixin import DryRunOrchestratorMixin
+from src.cortex_agents.learning_capture_agent import capture_operation_learning
 
 logger = logging.getLogger(__name__)
 
@@ -273,6 +274,14 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
             report.timestamp = end_time
             
             logger.info(f"Operation {self.operation_name} finished in {report.total_duration_seconds:.2f}s")
+            
+            # Capture learning from operation result
+            try:
+                learning_event = capture_operation_learning(report)
+                if learning_event:
+                    logger.info(f"Learning captured: {learning_event.problem[:60]}...")
+            except Exception as e:
+                logger.warning(f"Failed to capture learning: {e}")
         
         return report
     

@@ -25,6 +25,8 @@ import subprocess
 import json
 import yaml
 import re
+import sys
+import platform
 from collections import defaultdict
 
 from src.operations.base_operation_module import (
@@ -36,6 +38,13 @@ from src.operations.base_operation_module import (
 )
 from src.operations.header_utils import print_minimalist_header, print_completion_footer
 from src.operations.header_formatter import HeaderFormatter
+from .track_config import (
+    MultiTrackConfig,
+    MachineTrack,
+    TrackConfigManager,
+    TrackMetrics
+)
+from .track_templates import TrackDocumentTemplates
 
 logger = logging.getLogger(__name__)
 
@@ -202,6 +211,203 @@ class DesignSyncOrchestrator(BaseOperationModule):
         
         return len(issues) == 0, issues
     
+    def _safe_print(self, text: str) -> None:
+        """
+        Safely print text handling Unicode encoding issues on Windows.
+        
+        Windows PowerShell uses cp1252 encoding which cannot display Unicode
+        characters like emoji. This method detects the platform and encoding,
+        falling back to ASCII-safe alternatives when needed.
+        
+        Args:
+            text: Text to print (may contain Unicode/emoji)
+        """
+        try:
+            # Try normal print first
+            print(text)
+        except UnicodeEncodeError:
+            # Windows console can't handle Unicode - strip or replace emoji
+            # Remove emoji and fancy Unicode box chars
+            ascii_text = text
+            
+            # Replace box drawing characters
+            replacements = {
+                '━': '=', '─': '-', '│': '|', '┃': '|',
+                '┌': '+', '┐': '+', '└': '+', '┘': '+',
+                '├': '+', '┤': '+', '┬': '+', '┴': '+',
+                '┼': '+', '═': '=', '║': '|',
+                '╔': '+', '╗': '+', '╚': '+', '╝': '+',
+                '╠': '+', '╣': '+', '╦': '+', '╩': '+',
+                '╬': '+'
+            }
+            
+            for unicode_char, ascii_char in replacements.items():
+                ascii_text = ascii_text.replace(unicode_char, ascii_char)
+            
+            # Remove emoji (most are in these ranges)
+            ascii_text = ascii_text.encode('ascii', errors='ignore').decode('ascii')
+            
+            # Try again with ASCII-safe version
+            try:
+                print(ascii_text)
+            except Exception as e:
+                # Last resort: log instead of print
+                logger.warning(f"Could not print header to console: {e}")
+                logger.info(f"Header content: {text[:200]}...")
+    
+    def _load_track_config(self, project_root: Path) -> MultiTrackConfig:
+        """Load multi-track configuration from cortex.config.json."""
+        config_path = project_root / 'cortex.config.json'
+        return TrackConfigManager.load_from_config(config_path)
+    
+    def _detect_active_track(
+        self,
+        track_config: MultiTrackConfig,
+        context: Dict[str, Any]
+    ) -> Optional[MachineTrack]:
+        """
+        Detect which track is active for current machine.
+        
+        Returns:
+            MachineTrack if multi-track mode and machine has assignment, else None
+        """
+        if not track_config.is_multi_track:
+            return None
+        
+        # Check if user specified track name in context
+        if 'track_name' in context:
+            track_name = context['track_name']
+            for track in track_config.tracks.values():
+                if track.track_name.lower() == track_name.lower():
+                    return track
+        
+        # Auto-detect from machine hostname
+        import platform
+        hostname = platform.node()
+        
+        return track_config.get_track_for_machine(hostname)
+    
+    def _filter_modules_by_track(
+        self,
+        impl_state: ImplementationState,
+        track: MachineTrack
+    ) -> ImplementationState:
+        """Filter implementation state to only show track-assigned modules."""
+        filtered_state = ImplementationState()
+        
+        # Filter modules by track's assigned phases
+        for module_id, module_path in impl_state.modules.items():
+            # Check if module belongs to track phases
+            # (Need to lookup module phase from operations.yaml)
+            if module_id in track.modules:
+                filtered_state.modules[module_id] = module_path
+        
+        filtered_state.total_modules = len(filtered_state.modules)
+        filtered_state.implemented_modules = len(filtered_state.modules)
+        filtered_state.completion_percentage = (
+            100.0 if filtered_state.total_modules > 0 else 0.0
+        )
+        
+        # Copy other state (tests, plugins, agents remain global)
+        filtered_state.operations = impl_state.operations
+        filtered_state.tests = impl_state.tests
+        filtered_state.plugins = impl_state.plugins
+        filtered_state.agents = impl_state.agents
+        
+        return filtered_state
+    
+    def _generate_split_design_doc(
+        self,
+        track_config: MultiTrackConfig,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        project_root: Path
+    ) -> Path:
+        """Generate split design document with race dashboard."""
+        # Load operations.yaml for module definitions
+        operations_yaml = project_root / 'cortex-operations.yaml'
+        with open(operations_yaml) as f:
+            ops_data = yaml.safe_load(f)
+        modules = ops_data.get('modules', {})
+        
+        # Generate split document
+        split_doc = TrackDocumentTemplates.generate_split_document(
+            track_config,
+            modules,
+            design_state.version
+        )
+        
+        # Write to design directory
+        design_dir = project_root / 'cortex-brain' / f'cortex-{design_state.version}-design'
+        design_dir.mkdir(parents=True, exist_ok=True)
+        
+        split_doc_path = design_dir / 'CORTEX2-STATUS-SPLIT.MD'
+        split_doc_path.write_text(split_doc, encoding='utf-8')
+        
+        logger.info(f"Generated split design doc: {split_doc_path.name}")
+        return split_doc_path
+    
+    def _consolidate_tracks(
+        self,
+        track_config: MultiTrackConfig,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        project_root: Path,
+        metrics: SyncMetrics
+    ) -> Path:
+        """
+        Consolidate multi-track design into single unified document.
+        
+        Steps:
+        1. Merge progress from all tracks
+        2. Generate consolidated document
+        3. Archive split design docs
+        4. Reset config to single-track mode
+        5. Git commit with merge summary
+        """
+        logger.info("Consolidating multi-track design...")
+        
+        # Load operations.yaml for module definitions
+        operations_yaml = project_root / 'cortex-operations.yaml'
+        with open(operations_yaml) as f:
+            ops_data = yaml.safe_load(f)
+        modules = ops_data.get('modules', {})
+        
+        # Generate consolidated document
+        consolidated_doc = TrackDocumentTemplates.generate_consolidated_document(
+            track_config,
+            modules,
+            design_state.version
+        )
+        
+        # Write to design directory
+        design_dir = project_root / 'cortex-brain' / f'cortex-{design_state.version}-design'
+        design_dir.mkdir(parents=True, exist_ok=True)
+        
+        consolidated_path = design_dir / 'CORTEX2-STATUS.MD'
+        consolidated_path.write_text(consolidated_doc, encoding='utf-8')
+        
+        # Archive split docs
+        archive_dir = project_root / 'cortex-brain' / 'archived-tracks' / datetime.now().strftime('%Y%m%d-%H%M%S')
+        archive_dir.mkdir(parents=True, exist_ok=True)
+        
+        split_doc = design_dir / 'CORTEX2-STATUS-SPLIT.MD'
+        if split_doc.exists():
+            import shutil
+            shutil.copy(split_doc, archive_dir / 'CORTEX2-STATUS-SPLIT.MD')
+            split_doc.unlink()
+            logger.info(f"Archived split design to: {archive_dir.name}")
+        
+        # Reset config to single-track mode
+        track_config.mode = 'single'
+        config_path = project_root / 'cortex.config.json'
+        TrackConfigManager.save_to_config(track_config, config_path)
+        
+        logger.info("✅ Consolidation complete - reset to single-track mode")
+        metrics.improvements['track_consolidation'] = f"Merged {len(track_config.tracks)} tracks"
+        
+        return consolidated_path
+    
     def execute(self, context: Dict[str, Any]) -> OperationResult:
         """
         Execute design synchronization workflow.
@@ -224,6 +430,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
             'comprehensive': 'Full sync: gap analysis + optimization integration + MD→YAML conversion'
         }
         purpose = purposes.get(profile, 'Synchronize CORTEX design with implementation')
+        mode = "LIVE Execution" if not dry_run else "DRY RUN (Preview Only)"
         
         # Generate formatted header (for Copilot Chat display)
         from src.operations.header_utils import format_minimalist_header
@@ -231,13 +438,14 @@ class DesignSyncOrchestrator(BaseOperationModule):
             operation_name="Design Sync",
             version="1.0.0",
             profile=profile,
-            mode="LIVE EXECUTION",
+            mode=mode,
             dry_run=dry_run,
             purpose=purpose
         )
         
         # Also print to terminal for immediate visibility
-        print(formatted_header)
+        # Handle Unicode encoding for Windows console
+        self._safe_print(formatted_header)
         
         logger.info(f"Design Sync Orchestrator started | Profile: {profile}")
         logger.info(f"Project: {project_root}")
@@ -262,6 +470,20 @@ class DesignSyncOrchestrator(BaseOperationModule):
             logger.info(f"✅ Found: {len(design_state.design_files)} design docs, "
                        f"{len(design_state.status_files)} status files")
             
+            # Track Configuration Detection
+            track_config = self._load_track_config(project_root)
+            active_track = self._detect_active_track(track_config, context)
+            
+            if track_config.is_multi_track:
+                if active_track:
+                    logger.info(f"\n🏁 Multi-Track Mode Active: {active_track.emoji} {active_track.track_name}")
+                    logger.info(f"   Assigned Phases: {', '.join(active_track.phases)}")
+                    # Filter implementation to track-specific modules
+                    impl_state = self._filter_modules_by_track(impl_state, active_track)
+                else:
+                    logger.info("\n🏁 Multi-Track Mode: Running design sync consolidation")
+                    logger.info("   Will merge all tracks into unified status")
+            
             # Phase 3: Analyze gaps
             logger.info("\n[Phase 3/6] Analyzing design-implementation gaps...")
             gaps = self._analyze_gaps(impl_state, design_state, project_root, metrics)
@@ -278,17 +500,43 @@ class DesignSyncOrchestrator(BaseOperationModule):
             
             # Phase 5: Transform documents
             logger.info("\n[Phase 5/6] Transforming documents...")
-            transformations = self._transform_documents(
-                impl_state, 
-                design_state, 
-                gaps, 
-                optimizations,
-                project_root,
-                metrics,
-                profile
-            )
-            logger.info(f"✅ Consolidated {metrics.status_files_consolidated} status files, "
-                       f"converted {metrics.md_to_yaml_converted} MD to YAML")
+            
+            # Multi-track handling
+            if track_config.is_multi_track:
+                if active_track:
+                    # Split mode: Generate track-specific document
+                    split_doc = self._generate_split_design_doc(
+                        track_config,
+                        impl_state,
+                        design_state,
+                        project_root
+                    )
+                    transformations = {'split_document': split_doc}
+                    logger.info(f"✅ Generated split design document with race dashboard")
+                else:
+                    # Consolidation mode: Merge all tracks
+                    consolidated_doc = self._consolidate_tracks(
+                        track_config,
+                        impl_state,
+                        design_state,
+                        project_root,
+                        metrics
+                    )
+                    transformations = {'consolidated_document': consolidated_doc}
+                    logger.info(f"✅ Consolidated {len(track_config.tracks)} tracks into unified document")
+            else:
+                # Single-track mode: Standard transformation
+                transformations = self._transform_documents(
+                    impl_state, 
+                    design_state, 
+                    gaps, 
+                    optimizations,
+                    project_root,
+                    metrics,
+                    profile
+                )
+                logger.info(f"✅ Consolidated {metrics.status_files_consolidated} status files, "
+                           f"converted {metrics.md_to_yaml_converted} MD to YAML")
             
             # Phase 6: Commit and report
             logger.info("\n[Phase 6/6] Committing changes and generating report...")
@@ -335,7 +583,13 @@ class DesignSyncOrchestrator(BaseOperationModule):
             )
             
             # Also print to terminal for immediate visibility
-            print(formatted_footer)
+            # Handle Unicode encoding for Windows console
+            try:
+                print(formatted_footer)
+            except UnicodeEncodeError:
+                # Fallback: Replace Unicode box chars with ASCII
+                ascii_footer = formatted_footer.replace('━', '=').replace('│', '|')
+                print(ascii_footer)
             
             logger.info(f"✅ Design synchronization complete ({profile} profile)")
             logger.info(f"Git commits: {len(metrics.git_commits)}")
@@ -371,7 +625,13 @@ class DesignSyncOrchestrator(BaseOperationModule):
             )
             
             # Also print to terminal
-            print(formatted_footer_error)
+            # Handle Unicode encoding for Windows console
+            try:
+                print(formatted_footer_error)
+            except UnicodeEncodeError:
+                # Fallback: Replace Unicode box chars with ASCII
+                ascii_footer = formatted_footer_error.replace('━', '=').replace('│', '|')
+                print(ascii_footer)
             
             return OperationResult(
                 success=False,
@@ -707,14 +967,18 @@ class DesignSyncOrchestrator(BaseOperationModule):
         updates.append(f"Updated plugins: {len(impl_state.plugins)}")
         
         # Add sync timestamp
-        sync_note = f"\n\n*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} (design_sync)*\n"
+        sync_note = f"*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} (design_sync)*\n"
         if '*Last Synchronized:' not in content:
-            content += sync_note
+            content += f"\n\n{sync_note}"
         else:
+            # ✅ FIXED: Only match timestamp line, not surrounding content
+            # Bug was: r'\*Last Synchronized:.*?\*' matched too much (greedy through next asterisk)
+            # Fix: Only match to newline, use count=1 to avoid multiple replacements
             content = re.sub(
-                r'\*Last Synchronized:.*?\*',
-                sync_note.strip(),
-                content
+                r'\*Last Synchronized:.*?\n',
+                sync_note,
+                content,
+                count=1
             )
         updates.append("Added sync timestamp")
         
