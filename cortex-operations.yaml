@@ -477,6 +477,43 @@ operations:
       completion_percentage: 100
       notes: "Single orchestrator module coordinates SKULL tests, architecture analysis, and optimization execution. Git commits track all changes."
       estimated_hours: 12
+  
+  design_sync:
+    name: Design-Implementation Synchronization
+    description: Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas
+    natural_language:
+    - sync design
+    - design sync
+    - synchronize design
+    - align design with implementation
+    - update design docs
+    - consolidate design
+    - fix design drift
+    - resync design
+    - design implementation sync
+    category: maintenance
+    modules:
+    - design_sync_orchestrator
+    profiles:
+      quick:
+        description: Quick sync - discovery and gap analysis only (no changes)
+        modules:
+        - design_sync_orchestrator
+      standard:
+        description: Standard sync - discovery, analysis, consolidation (safe updates)
+        modules:
+        - design_sync_orchestrator
+      comprehensive:
+        description: Full sync - discovery, optimization, YAML conversion, consolidation (all changes with git tracking)
+        modules:
+        - design_sync_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Single orchestrator module coordinates: (1) Live implementation discovery, (2) Design-implementation gap analysis, (3) Optimization integration, (4) MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking. Always works on LATEST design version (currently CORTEX 2.0)."
+      estimated_hours: 14
   interactive_planning:
     name: Interactive Feature Planning
     description: Collaborative planning with clarifying questions (CORTEX 2.1)

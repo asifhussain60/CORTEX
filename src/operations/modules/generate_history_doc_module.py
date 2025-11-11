@@ -3,20 +3,20 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
-from src.operations.base_operation_module import BaseOperationModule, OperationModuleMetadata, OperationResult, OperationStatus
+from src.operations.base_operation_module import BaseOperationModule, OperationModuleMetadata, OperationResult, OperationStatus, OperationPhase
 
 logger = logging.getLogger(__name__)
 
 class GenerateHistoryDocModule(BaseOperationModule):
-    def _get_metadata(self):
+    def get_metadata(self):
         return OperationModuleMetadata(
             module_id='generate_history_doc',
             name='Generate History Doc',
             description='Update History.md',
+            phase=OperationPhase.PROCESSING,
             version='2.0',
             author='Asif Hussain',
-            dependencies=[],
-            config_schema={}
+            dependencies=[]
         )
     def validate(self, context):
         return OperationResult(success=True, status=OperationStatus.VALIDATED, message='OK')

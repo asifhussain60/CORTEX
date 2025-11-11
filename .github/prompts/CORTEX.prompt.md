@@ -292,6 +292,7 @@ what commands are available
 |-----------|--------------------------|--------|--------------|
 | **Demo** | "demo", "show capabilities", "tutorial" | ✅ READY | Interactive walkthrough of CORTEX |
 | **Setup** | "setup", "configure", "initialize" | ✅ READY | Configure development environment |
+| **Design Sync** | "sync design", "align design", "consolidate status" | ✅ READY | Synchronize design docs with implementation |
 | **Story Refresh** | "refresh story", "update story" | 🟡 VALIDATION | Validate CORTEX story structure (validation-only, see limitations) |
 | **Cleanup** | "cleanup", "clean workspace", "tidy up" | 🟡 PARTIAL | Clean temp files, optimize databases |
 | **Documentation** | "update docs", "build docs" | ⏸️ PENDING | Generate/build documentation site |
@@ -372,6 +373,23 @@ class MyPlugin(BasePlugin):
 ## ⚠️ Known Limitations
 
 ### Operations in Development
+
+**Design Sync (design_sync):**
+- **Status:** ✅ PRODUCTION READY
+- **Purpose:** Resolves design-implementation drift
+- **Capabilities:**
+  - Live implementation discovery (modules, tests, plugins, operations)
+  - Design-implementation gap analysis
+  - Optimization integration (runs optimize_cortex automatically)
+  - MD-to-YAML conversion (structured schemas from verbose docs)
+  - Status file consolidation (ONE source of truth)
+  - Git tracking (all changes committed with audit trail)
+- **Profiles:**
+  - quick: Analysis only (no changes)
+  - standard: Safe updates + consolidation
+  - comprehensive: Full sync with YAML conversion
+- **Why It Matters:** Sometimes design and implementation diverge during rapid development. This operation resynchronizes everything automatically.
+- **Use When:** Design docs show incorrect counts, multiple status files exist, implementation reality differs from documentation
 
 **Story Refresh (refresh_cortex_story):**
 - **Status:** 🟡 VALIDATION-ONLY (not transformation yet)

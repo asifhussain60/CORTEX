@@ -44,7 +44,7 @@ class GenerateImagePromptsModule(BaseOperationModule):
             module_id="generate_image_prompts",
             name="Generate Image Prompts",
             description="Generate Gemini-compatible technical diagram prompts",
-            phase=OperationPhase.EXECUTION,
+            phase=OperationPhase.PROCESSING,
             priority=40,
             dependencies=["load_story_template"],
             optional=False,

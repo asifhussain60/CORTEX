@@ -54,28 +54,16 @@ class RelocateStoryFilesModule(BaseOperationModule):
         '.'  # Root
     ]
     
-    def _get_metadata(self) -> OperationModuleMetadata:
+    def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
         return OperationModuleMetadata(
             module_id="relocate_story_files",
             name="Relocate Story Files",
             description="Move Ancient-Rules.md and CORTEX-FEATURES.md to story directory",
+            phase=OperationPhase.PROCESSING,
             version="2.0",
             author="Asif Hussain",
-            dependencies=[],
-            config_schema={
-                "output_dir": {
-                    "type": "string",
-                    "description": "Target story directory",
-                    "required": False
-                },
-                "create_backups": {
-                    "type": "boolean",
-                    "description": "Create backups before moving",
-                    "required": False,
-                    "default": True
-                }
-            }
+            dependencies=[]
         )
     
     def validate(self, context: Dict[str, Any]) -> OperationResult:

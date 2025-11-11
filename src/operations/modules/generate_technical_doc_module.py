@@ -44,7 +44,7 @@ class GenerateTechnicalDocModule(BaseOperationModule):
             module_id="generate_technical_doc",
             name="Generate Technical Documentation",
             description="Generate Technical-CORTEX.md with design specifications",
-            phase=OperationPhase.EXECUTION,
+            phase=OperationPhase.PROCESSING,
             priority=50,
             dependencies=["load_story_template"],
             optional=False,

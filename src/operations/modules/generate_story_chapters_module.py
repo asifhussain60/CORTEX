@@ -122,7 +122,7 @@ class GenerateStoryChaptersModule(BaseOperationModule):
             module_id="generate_story_chapters",
             name="Generate Story Chapters",
             description="Generate 9+ detailed story chapters with Asif Codeinstein narrative",
-            phase=OperationPhase.EXECUTION,
+            phase=OperationPhase.PROCESSING,
             priority=20,
             dependencies=["evaluate_cortex_architecture"],
             optional=False,

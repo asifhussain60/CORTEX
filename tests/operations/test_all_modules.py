@@ -50,7 +50,7 @@ from src.operations.modules import (
     ApplyNarratorVoiceModule,
     ValidateStoryStructureModule,
     SaveStoryMarkdownModule,
-    UpdateMkdocsIndexModule,
+    UpdateMkDocsIndexModule,
     BuildStoryPreviewModule,
     
     # Workspace Cleanup
@@ -466,7 +466,7 @@ class TestSaveStoryMarkdownModule:
         assert output_path.read_text() == "Backup content"
 
 
-class TestUpdateMkdocsIndexModule:
+class TestUpdateMkDocsIndexModule:
     """Tests for update_mkdocs_index_module."""
     
     def test_execute_entry_exists(self, mock_context, temp_project_dir):
@@ -479,7 +479,7 @@ class TestUpdateMkdocsIndexModule:
         content += "  - Story: 'awakening-of-cortex'\n"
         mkdocs_path.write_text(content)
         
-        module = UpdateMkdocsIndexModule()
+        module = UpdateMkDocsIndexModule()
         result = module.execute(mock_context)
         
         assert result.success
@@ -489,7 +489,7 @@ class TestUpdateMkdocsIndexModule:
         """Test adding new story entry."""
         mock_context['project_root'] = temp_project_dir
         
-        module = UpdateMkdocsIndexModule()
+        module = UpdateMkDocsIndexModule()
         result = module.execute(mock_context)
         
         assert result.success
@@ -674,7 +674,7 @@ class TestModuleIntegration:
             ApplyNarratorVoiceModule(),
             ValidateStoryStructureModule(),
             SaveStoryMarkdownModule(),
-            UpdateMkdocsIndexModule()
+            UpdateMkDocsIndexModule()
         ]
         
         for module in modules:

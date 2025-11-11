@@ -41,22 +41,16 @@ class GenerateImagePromptsDocModule(BaseOperationModule):
         4. Writes to Image-Prompts.md
     """
     
-    def _get_metadata(self) -> OperationModuleMetadata:
+    def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
         return OperationModuleMetadata(
             module_id="generate_image_prompts_doc",
             name="Generate Image Prompts Doc",
             description="Generate Image-Prompts.md with Gemini-compatible system diagrams",
+            phase=OperationPhase.PROCESSING,
             version="2.0",
             author="Asif Hussain",
-            dependencies=["evaluate_cortex_architecture"],
-            config_schema={
-                "output_dir": {
-                    "type": "string",
-                    "description": "Output directory path",
-                    "required": False
-                }
-            }
+            dependencies=["evaluate_cortex_architecture"]
         )
     
     def validate(self, context: Dict[str, Any]) -> OperationResult:

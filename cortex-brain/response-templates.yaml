@@ -32,10 +32,17 @@ templates:
     context_needed: false
     
     content: |
-      ```
-      ================================================================================
-      CORTEX COMMANDS
-      ================================================================================
+      ![CORTEX Commands](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX COMMANDS
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      📝 **Your Request:** {{user_request}}
+      
+      🎯 **Understanding:** You want to see all available CORTEX commands
+      
+      💬 **Response:** Here's your command reference:
       
       Status  Command        What It Does
       --------------------------------------------------------------------------------
@@ -59,9 +66,13 @@ templates:
         Natural language:  "setup environment" or "refresh story" or "sync design"
         Slash commands:    /setup or /CORTEX, refresh cortex story
       
-      For details: "help detailed" or "help <command>"
-      ================================================================================
-      ```
+      � **Next Steps:**
+        • Try: "help detailed" for more information
+        • Try: "help <command>" for specific command help
+        • Try: "setup environment" to get started
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ╚═══════════════════════════════════════════════════════════════════════════╝
   
   # ============================================================================
   # DETAILED HELP - Categorized with examples
@@ -77,9 +88,17 @@ templates:
     
     content: |
       
-      ==================================================================
-      CORTEX COMMANDS - DETAILED
-      ==================================================================
+      ![CORTEX Commands Detailed](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX COMMANDS - DETAILED
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      📝 **Your Request:** {{user_request}}
+      
+      🎯 **Understanding:** You want detailed information about all CORTEX capabilities
+      
+      💬 **Response:** Here's the complete breakdown organized by category:
       
       📦 ENVIRONMENT & SETUP
       ----------------------
@@ -124,7 +143,13 @@ templates:
          Examples: "plan this feature", "help me plan"
          Status: Design phase
       
-      ==================================================================
+      � **Next Steps:**
+        • Try any command: "setup environment", "sync design", "cleanup"
+        • Get command-specific help: "help setup", "help cleanup"
+        • Start working: Just tell CORTEX what you need!
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ╚═══════════════════════════════════════════════════════════════════════════╝
   
   # ============================================================================
   # QUICK START - First-time user guidance
@@ -1598,20 +1623,36 @@ templates:
       category: system
       usage: orchestrator_execution
     content: |
-      ================================================================================
-      CORTEX {{operation_name}} Orchestrator
-      ================================================================================
       
-      Version:    {{version}}
-      Profile:    {{profile}}
-      Mode:       {{mode}}  {{#if dry_run}}(DRY RUN - Preview Only){{/if}}
-      Started:    {{start_time}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX {{operation_name}} Orchestrator v{{version}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       
-      Author:     Asif Hussain
-      Copyright:  © 2024-2025 Asif Hussain. All rights reserved.
-      License:    Proprietary
+      📝 **Your Request:** {{user_request}}
       
-      ================================================================================
+      Profile: {{profile}}  │  Mode: {{mode}}{{#if dry_run}} (DRY RUN - Preview Only){{/if}}  │  Started: {{start_time}}
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      🎯 **Understanding:** {{refined_intent}}
+      
+      💬 **Response:**
+      {{response_content}}
+      
+      {{#if challenges}}
+      ⚠️ **Considerations:**
+      {{challenges}}
+      
+      ✨ **Recommendation:** {{recommendation}}
+      {{/if}}
+      
+      {{#if next_steps}}
+      🔮 **Next Steps:**
+      {{#next_steps}}
+        {{icon}} {{text}}
+      {{/next_steps}}
+      {{/if}}
   
   orchestrator_footer:
     triggers: []
@@ -1622,18 +1663,24 @@ templates:
       category: system
       usage: orchestrator_completion
     content: |
-      ================================================================================
-      CORTEX {{operation_name}} - {{status}}
-      ================================================================================
       
-      Duration:   {{duration}}
-      Modules:    {{modules_succeeded}}/{{modules_total}} succeeded
-      {{#if warnings}}Warnings:   {{warnings_count}}{{/if}}
-      {{#if errors}}Errors:     {{errors_count}}{{/if}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX {{operation_name}} - {{status}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       
-      This orchestration is powered by CORTEX - © 2024-2025 Asif Hussain
+      Duration: {{duration}}  │  Modules: {{modules_succeeded}}/{{modules_total}} succeeded
+      {{#if warnings}}⚠️  Warnings: {{warnings_count}}{{/if}}
+      {{#if errors}}❌ Errors: {{errors_count}}{{/if}}
       
-      ================================================================================
+      {{#if next_steps}}
+      💡 Next Steps:
+      {{#next_steps}}
+        • {{text}}
+      {{/next_steps}}
+      {{/if}}
+      
+      © 2024-2025 Asif Hussain │ CORTEX Orchestration
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ============================================================================
 # RESPONSE ROUTING RULES

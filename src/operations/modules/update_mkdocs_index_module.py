@@ -22,7 +22,7 @@ from src.operations.base_operation_module import (
 logger = logging.getLogger(__name__)
 
 
-class UpdateMkdocsIndexModule(BaseOperationModule):
+class UpdateMkDocsIndexModule(BaseOperationModule):
     """
     Update MkDocs navigation with story.
     
@@ -304,3 +304,8 @@ class UpdateMkdocsIndexModule(BaseOperationModule):
     def get_progress_message(self) -> str:
         """Get progress message."""
         return "Updating MkDocs navigation..."
+
+
+def register():
+    """Register the module."""
+    return UpdateMkDocsIndexModule()

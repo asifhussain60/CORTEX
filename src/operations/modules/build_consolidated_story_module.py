@@ -58,7 +58,7 @@ class BuildConsolidatedStoryModule(BaseOperationModule):
             module_id="build_consolidated_story",
             name="Build Consolidated Story",
             description="Create THE-AWAKENING-OF-CORTEX.md from all chapters",
-            phase=OperationPhase.EXECUTION,
+            phase=OperationPhase.PROCESSING,
             priority=15,
             dependencies=["load_story_template"],
             optional=False,

@@ -105,7 +105,7 @@ class OperationFactory:
         """
         Auto-register module classes from src/operations/modules/.
         
-        Discovers Python module files and registers their classes.
+        Discovers Python module files and orchestrators, registers their classes.
         """
         try:
             modules_dir = Path(__file__).parent / "modules"
@@ -113,12 +113,14 @@ class OperationFactory:
                 logger.warning(f"Modules directory not found: {modules_dir}")
                 return
             
-            # Find all module files
+            # Find all module files (both *_module.py and *_orchestrator.py)
             module_files = list(modules_dir.glob("*_module.py"))
-            logger.info(f"Found {len(module_files)} module files")
+            orchestrator_files = list(modules_dir.rglob("*_orchestrator.py"))
+            all_files = module_files + orchestrator_files
+            logger.info(f"Found {len(module_files)} module files and {len(orchestrator_files)} orchestrator files")
             
             # Import and register each module
-            for module_file in module_files:
+            for module_file in all_files:
                 try:
                     module_name = module_file.stem
                     
@@ -131,9 +133,15 @@ class OperationFactory:
                         for word in words
                     )
                     
-                    # Dynamic import
+                    # Dynamic import - handle both direct modules and subdirectory orchestrators
                     import importlib
-                    module = importlib.import_module(f"src.operations.modules.{module_name}")
+                    # Get relative path from modules/ directory
+                    rel_path = module_file.relative_to(modules_dir)
+                    # Convert path to module notation (e.g., cleanup/cleanup_orchestrator → cleanup.cleanup_orchestrator)
+                    module_parts = list(rel_path.parts[:-1]) + [module_name]
+                    import_path = "src.operations.modules." + ".".join(module_parts)
+                    
+                    module = importlib.import_module(import_path)
                     
                     # Get class
                     if hasattr(module, class_name):

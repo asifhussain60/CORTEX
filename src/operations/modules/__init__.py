@@ -41,7 +41,7 @@ from .load_story_template_module import LoadStoryTemplateModule
 from .apply_narrator_voice_module import ApplyNarratorVoiceModule
 from .validate_story_structure_module import ValidateStoryStructureModule
 from .save_story_markdown_module import SaveStoryMarkdownModule
-from .update_mkdocs_index_module import UpdateMkdocsIndexModule
+from .update_mkdocs_index_module import UpdateMkDocsIndexModule
 from .build_story_preview_module import BuildStoryPreviewModule
 
 # Cleanup modules
@@ -90,7 +90,7 @@ __all__ = [
     'ApplyNarratorVoiceModule',
     'ValidateStoryStructureModule',
     'SaveStoryMarkdownModule',
-    'UpdateMkdocsIndexModule',
+    'UpdateMkDocsIndexModule',
     'BuildStoryPreviewModule',
     
     # Cleanup modules

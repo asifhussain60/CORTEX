@@ -26,9 +26,10 @@ import json
 
 from src.operations.base_operation_module import (
     BaseOperationModule,
-    ModuleMetadata,
+    OperationModuleMetadata,
     OperationPhase,
-    OperationResult
+    OperationResult,
+    OperationStatus
 )
 
 logger = logging.getLogger(__name__)
@@ -74,18 +75,19 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         # - optimizations_applied: List of applied improvements
     """
     
-    def _get_metadata(self) -> ModuleMetadata:
+    def get_metadata(self) -> OperationModuleMetadata:
         """Module metadata."""
-        return ModuleMetadata(
+        return OperationModuleMetadata(
             module_id="optimize_cortex_orchestrator",
             name="CORTEX Optimization Orchestrator",
             description="Runs SKULL tests, analyzes architecture, and executes optimizations",
             version="1.0.0",
             author="Asif Hussain",
-            phase=OperationPhase.EXECUTION,
+            phase=OperationPhase.PROCESSING,
             priority=100,
             dependencies=[],
-            optional=False
+            optional=False,
+            tags=['optimization', 'skull', 'architecture']
         )
     
     def validate_prerequisites(self, context: Dict[str, Any]) -> tuple[bool, List[str]]:
@@ -171,6 +173,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             if not skull_result['success']:
                 return OperationResult(
                     success=False,
+                    status=OperationStatus.FAILED,
                     message="SKULL tests failed - cannot proceed with optimization",
                     data={'metrics': metrics.__dict__},
                     errors=metrics.errors
@@ -211,6 +214,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             
             return OperationResult(
                 success=True,
+                status=OperationStatus.SUCCESS,
                 message=f"CORTEX optimization complete ({metrics.optimizations_succeeded} improvements)",
                 data={
                     'metrics': metrics.__dict__,
@@ -225,6 +229,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             
             return OperationResult(
                 success=False,
+                status=OperationStatus.FAILED,
                 message=f"Optimization failed: {str(e)}",
                 data={'metrics': metrics.__dict__},
                 errors=metrics.errors

@@ -42,22 +42,16 @@ class GenerateTechnicalCortexDocModule(BaseOperationModule):
         4. Writes to Technical-CORTEX.md
     """
     
-    def _get_metadata(self) -> OperationModuleMetadata:
+    def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
         return OperationModuleMetadata(
             module_id="generate_technical_cortex_doc",
             name="Generate Technical CORTEX Doc",
             description="Generate Technical-CORTEX.md from architecture data",
+            phase=OperationPhase.PROCESSING,
             version="2.0",
             author="Asif Hussain",
-            dependencies=["evaluate_cortex_architecture"],
-            config_schema={
-                "output_dir": {
-                    "type": "string",
-                    "description": "Output directory path",
-                    "required": False
-                }
-            }
+            dependencies=["evaluate_cortex_architecture"]
         )
     
     def validate(self, context: Dict[str, Any]) -> OperationResult:

@@ -27,7 +27,8 @@ import re
 import hashlib
 from collections import defaultdict
 
-from src.operations.base_operation_module import BaseOperationModule, OperationPhase, OperationResult
+from src.operations.base_operation_module import BaseOperationModule, OperationPhase, OperationResult, OperationModuleMetadata, OperationStatus
+from src.operations.header_utils import print_minimalist_header, print_completion_footer
 
 logger = logging.getLogger(__name__)
 
@@ -133,16 +134,20 @@ class CleanupOrchestrator(BaseOperationModule):
             'modules': 2000,         # Regular modules should be < 2000 tokens
         }
     
-    @property
-    def metadata(self) -> Dict[str, Any]:
-        return {
-            'name': 'Cleanup Orchestrator',
-            'description': 'Comprehensive workspace cleanup with organization and optimization',
-            'version': '1.0.0',
-            'author': 'Asif Hussain',
-            'phase': OperationPhase.PROCESSING.value,
-            'prerequisites': []
-        }
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Module metadata."""
+        return OperationModuleMetadata(
+            module_id="cleanup_orchestrator",
+            name="Cleanup Orchestrator",
+            description="Comprehensive workspace cleanup with organization and optimization",
+            version="1.0.0",
+            author="Asif Hussain",
+            phase=OperationPhase.PROCESSING,
+            priority=100,
+            dependencies=[],
+            optional=False,
+            tags=['cleanup', 'maintenance', 'organization']
+        )
     
     def check_prerequisites(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Check if cleanup can run"""
@@ -192,6 +197,16 @@ class CleanupOrchestrator(BaseOperationModule):
             # Get profile
             profile = context.get('profile', 'standard')
             dry_run = context.get('dry_run', False)
+            start_time = datetime.now()
+            
+            # Display header
+            print_minimalist_header(
+                operation_name="Cleanup",
+                version="1.0.0",
+                profile=profile,
+                mode="LIVE EXECUTION",
+                dry_run=dry_run
+            )
             
             logger.info(f"Profile: {profile}")
             logger.info(f"Dry Run: {dry_run}")
@@ -205,6 +220,7 @@ class CleanupOrchestrator(BaseOperationModule):
             if not safety_check['safe']:
                 return OperationResult(
                     success=False,
+                    status=OperationStatus.FAILED,
                     message=f"Safety check failed: {safety_check['reason']}",
                     data={'safety_check': safety_check}
                 )
@@ -282,6 +298,7 @@ class CleanupOrchestrator(BaseOperationModule):
             
             return OperationResult(
                 success=True,
+                status=OperationStatus.SUCCESS,
                 message=f"Cleanup completed successfully: {self.metrics.backups_deleted} backups, "
                         f"{self.metrics.files_reorganized} files reorganized, "
                         f"{self.metrics.space_freed_mb:.2f}MB freed",
@@ -296,6 +313,7 @@ class CleanupOrchestrator(BaseOperationModule):
             logger.error(f"Cleanup orchestrator failed: {e}", exc_info=True)
             return OperationResult(
                 success=False,
+                status=OperationStatus.FAILED,
                 message=f"Cleanup failed: {str(e)}",
                 data={'error': str(e)}
             )

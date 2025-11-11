@@ -128,6 +128,7 @@ class OperationModuleMetadata:
         dependencies: Module IDs that must complete before this module
         optional: Whether module failure should stop operation
         version: Module version for compatibility tracking
+        author: Module author for copyright attribution
         tags: Categorization tags (e.g., ['environment', 'required'])
     """
     module_id: str
@@ -138,6 +139,7 @@ class OperationModuleMetadata:
     dependencies: List[str] = field(default_factory=list)
     optional: bool = False
     version: str = "1.0"
+    author: str = "Asif Hussain"  # Default copyright holder
     tags: List[str] = field(default_factory=list)
 
 

@@ -49,7 +49,7 @@ class EvaluateCortexArchitectureModule(BaseOperationModule):
             module_id="evaluate_cortex_architecture",
             name="Evaluate CORTEX Architecture",
             description="Extract current architecture state from CORTEX-UNIFIED-ARCHITECTURE.yaml",
-            phase=OperationPhase.INITIALIZATION,
+            phase=OperationPhase.PREPARATION,
             priority=100,
             dependencies=[],
             optional=False,
