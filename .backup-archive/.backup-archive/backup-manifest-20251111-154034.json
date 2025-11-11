@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-11-11T15:40:34.312424",
+  "backup_count": 12,
+  "total_size_bytes": 60060,
+  "files": [
+    {
+      "original_path": ".backup-archive\\backup-manifest-20251111-154008.json",
+      "archived_path": ".backup-archive\\.backup-archive\\backup-manifest-20251111-154008.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:40:08.679169"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\backup-manifest-20251111-153730.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153730.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:37:30.492830"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153706.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153706.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:37:06.437693"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153131.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153131.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:31:32.004214"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153109.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-153109.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:31:09.385091"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-152350.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-152350.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:23:50.269514"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-152325.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-152325.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:23:25.971517"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150702.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150702.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:07:02.715498"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150434.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150434.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:04:34.879771"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150355.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-150355.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T15:03:55.279694"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-135731.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-135731.json",
+      "size_bytes": 5005,
+      "modified_time": "2025-11-11T13:57:31.908501"
+    }
+  ]
+}
