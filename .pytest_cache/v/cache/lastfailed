@@ -1,0 +1,15 @@
+{
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestHealthScoring::test_score_with_critical_issues": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestHealthScoring::test_score_cannot_go_negative": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestCoverageAnalysis::test_coverage_success": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestObsoleteTestDetection::test_confidence_levels": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestBrainValidation::test_valid_brain_structure": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestCoverageAnalysis::test_coverage_failure_handled": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestObsoleteTestDetection::test_no_false_positives_on_valid_imports": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestHealthScoring::test_perfect_score": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestHealthScoring::test_score_with_mixed_issues": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestAgentValidation::test_all_agents_present": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestRecommendations::test_recommendations_for_critical_issues": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestErrorHandling::test_handles_permission_errors": true,
+  "tests/operations/modules/optimize/test_optimize_cortex_orchestrator.py::TestFullExecution::test_health_report_generated": true
+}

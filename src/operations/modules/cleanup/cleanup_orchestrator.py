@@ -273,11 +273,20 @@ class CleanupOrchestrator(BaseOperationModule):
             logger.info(f"✅ {self.metrics.bloated_files_found} bloated files detected")
             logger.info("")
             
-            # Phase 6.5: Remove obsolete tests
+            # Phase 6.5: Remove obsolete tests (marked by optimize orchestrator)
             if profile in ['standard', 'comprehensive']:
                 logger.info("Phase 6.5: Remove Obsolete Tests")
                 logger.info("-" * 70)
-                obsolete_result = self._remove_obsolete_tests(dry_run)
+                
+                # First check if optimize has marked any tests for deletion
+                obsolete_manifest = self.project_root / 'cortex-brain' / 'obsolete-tests-manifest.json'
+                if obsolete_manifest.exists():
+                    logger.info("Found obsolete tests manifest from optimize orchestrator")
+                    obsolete_result = self._remove_marked_obsolete_tests(dry_run, obsolete_manifest)
+                else:
+                    # Fallback to old detection method
+                    obsolete_result = self._remove_obsolete_tests(dry_run)
+                
                 if obsolete_result.success:
                     obsolete_count = obsolete_result.data.get('obsolete_tests_found', 0)
                     removed_count = obsolete_result.data.get('removed_count', 0)
@@ -286,6 +295,11 @@ class CleanupOrchestrator(BaseOperationModule):
                         logger.info(f"✅ Removed {removed_count} obsolete test files")
                         for test_file in obsolete_result.data.get('removed_files', []):
                             logger.info(f"   - {test_file}")
+                        
+                        # Delete manifest after successful cleanup
+                        if obsolete_manifest.exists():
+                            obsolete_manifest.unlink()
+                            logger.info("✅ Cleaned up obsolete tests manifest")
                 else:
                     logger.warning(f"⚠️  Obsolete test removal failed: {obsolete_result.message}")
                 logger.info("")
@@ -826,6 +840,141 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
         except Exception as e:
             logger.error(f"Optimization failed: {e}")
             self.metrics.errors.append(f"Optimization failed: {e}")
+    
+    def _remove_marked_obsolete_tests(self, dry_run: bool, manifest_file: Path) -> OperationResult:
+        """Remove obsolete tests marked by optimize orchestrator.
+        
+        Args:
+            dry_run: If True, only preview without deleting
+            manifest_file: Path to obsolete-tests-manifest.json
+            
+        Returns:
+            OperationResult with removal details
+        """
+        from src.operations.base_operation_module import OperationStatus
+        
+        try:
+            # Parse manifest
+            with open(manifest_file, 'r', encoding='utf-8') as f:
+                manifest = json.load(f)
+            
+            marked_tests = manifest.get('tests', [])
+            if not marked_tests:
+                return OperationResult(
+                    success=True,
+                    status=OperationStatus.COMPLETED,
+                    message="No obsolete tests marked for deletion",
+                    data={'obsolete_tests_found': 0, 'removed_count': 0, 'removed_files': []}
+                )
+            
+            logger.info(f"Found {len(marked_tests)} tests marked for deletion by optimize orchestrator")
+            logger.info(f"Manifest timestamp: {manifest.get('timestamp', 'unknown')}")
+            
+            removed_files = []
+            skipped_files = []
+            total_size_freed = 0
+            
+            for test_entry in marked_tests:
+                file_path_str = test_entry.get('file_path', '')
+                reason = test_entry.get('reason', 'Marked as obsolete')
+                confidence = test_entry.get('confidence', 'medium')
+                missing_imports = test_entry.get('missing_imports', [])
+                
+                # Resolve full path
+                test_file = self.project_root / file_path_str
+                
+                # Safety validations
+                if not test_file.exists():
+                    logger.warning(f"⚠️  Test file not found: {file_path_str}")
+                    skipped_files.append(str(test_file))
+                    continue
+                
+                if not test_file.is_file():
+                    logger.warning(f"⚠️  Path is not a file: {file_path_str}")
+                    skipped_files.append(str(test_file))
+                    continue
+                
+                if not str(test_file).startswith(str(self.project_root / 'tests')):
+                    logger.warning(f"⚠️  File outside tests directory: {file_path_str}")
+                    skipped_files.append(str(test_file))
+                    continue
+                
+                # Get file size before deletion
+                file_size = test_file.stat().st_size
+                
+                # Log details
+                logger.info(f"  📄 {file_path_str}")
+                logger.info(f"     Reason: {reason}")
+                logger.info(f"     Confidence: {confidence}")
+                if missing_imports:
+                    logger.info(f"     Missing imports: {', '.join(missing_imports)}")
+                
+                if not dry_run:
+                    try:
+                        test_file.unlink()
+                        removed_files.append(file_path_str)
+                        total_size_freed += file_size
+                        self._log_action('DELETE', test_file, f"{reason} (confidence: {confidence})")
+                        logger.info(f"     ✅ Deleted")
+                    except Exception as e:
+                        logger.error(f"     ❌ Failed to delete: {e}")
+                        skipped_files.append(str(test_file))
+                        self.metrics.errors.append(f"Failed to delete {file_path_str}: {e}")
+                else:
+                    logger.info(f"     [DRY RUN] Would delete")
+                    removed_files.append(file_path_str)  # Track for preview
+            
+            # Update metrics
+            if not dry_run and removed_files:
+                self.metrics.files_deleted += len(removed_files)
+                self.metrics.space_freed_bytes += total_size_freed
+                
+                # Clean up empty test directories
+                for test_path in removed_files:
+                    test_file = self.project_root / test_path
+                    parent_dir = test_file.parent
+                    try:
+                        if parent_dir.exists() and not any(parent_dir.iterdir()):
+                            parent_dir.rmdir()
+                            logger.info(f"     🗑️  Removed empty directory: {parent_dir.relative_to(self.project_root)}")
+                    except Exception as e:
+                        logger.debug(f"Could not remove directory {parent_dir}: {e}")
+            
+            result_message = f"Processed {len(marked_tests)} marked tests"
+            if removed_files:
+                result_message += f", removed {len(removed_files)}"
+            if skipped_files:
+                result_message += f", skipped {len(skipped_files)}"
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.COMPLETED,
+                message=result_message,
+                data={
+                    'obsolete_tests_found': len(marked_tests),
+                    'removed_count': len(removed_files),
+                    'removed_files': removed_files,
+                    'skipped_files': skipped_files,
+                    'space_freed_bytes': total_size_freed
+                }
+            )
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse manifest: {e}")
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Manifest parsing failed: {str(e)}",
+                data={'error': str(e)}
+            )
+        except Exception as e:
+            logger.error(f"Failed to remove marked obsolete tests: {e}")
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Obsolete test removal failed: {str(e)}",
+                data={'error': str(e)}
+            )
     
     def _remove_obsolete_tests(self, dry_run: bool) -> OperationResult:
         """Remove obsolete test files calling non-existent APIs."""

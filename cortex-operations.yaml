@@ -454,6 +454,7 @@ operations:
   optimize_cortex:
     name: CORTEX Optimization
     description: Holistic architecture review with SKULL tests and automated optimizations
+    deployment_tier: admin  # ❌ Admin-only (system diagnostics)
     natural_language:
     - optimize
     - optimize cortex
@@ -462,6 +463,12 @@ operations:
     - holistic review
     - architecture review
     - optimize architecture
+    - run health check
+    - health check
+    - system scan
+    - check cortex health
+    - system health
+    - check system health
     category: maintenance
     modules:
     - optimize_cortex_orchestrator
@@ -1795,7 +1802,7 @@ modules:
     phase: PROCESSING
     priority: 100
     class: CleanupOrchestrator
-    file: cleanup_orchestrator.py
+    file: cleanup/cleanup_orchestrator.py
     dependencies: []
     optional: false
     tags:
@@ -1807,27 +1814,31 @@ modules:
     status: implemented
     tests: 0
     implemented_date: '2025-11-11'
-    lines_of_code: 672
+    lines_of_code: 1120
     cortex_version: '2.0'
+  
+  optimize_cortex_orchestrator:
     name: CORTEX Optimization Orchestrator
-    description: Coordinates SKULL tests, architecture analysis, and optimization execution
+    description: Comprehensive health scanning and optimization with obsolete test detection
     phase: EXECUTION
     priority: 100
     class: OptimizeCortexOrchestrator
-    file: optimize_cortex_orchestrator.py
+    file: optimize/optimize_cortex_orchestrator.py
     dependencies: []
     optional: false
     tags:
     - optimization
-    - skull
+    - health-scan
+    - obsolete-tests
+    - coverage
+    - brain-validation
     - architecture
-    - review
-    - git-tracking
     status: implemented
     tests: 0
     implemented_date: '2025-11-11'
-    lines_of_code: 789
+    lines_of_code: 650
     cortex_version: '2.0'
+    
 metadata:
   version: '2.1'
   schema_version: '1.0'
