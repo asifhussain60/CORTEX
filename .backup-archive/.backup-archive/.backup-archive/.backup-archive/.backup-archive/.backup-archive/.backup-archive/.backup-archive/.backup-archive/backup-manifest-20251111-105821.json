@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-11-11T10:58:21.123930",
+  "backup_count": 9,
+  "total_size_bytes": 109400,
+  "files": [
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\numpy\\ma\\tests\\test_old_ma.py",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\numpy\\ma\\tests\\test_old_ma.py",
+      "size_bytes": 33960,
+      "modified_time": "2025-11-09T14:11:06.296359"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\numpy\\ma\\tests\\__pycache__\\test_old_ma.cpython-313.pyc",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\numpy\\ma\\tests\\__pycache__\\test_old_ma.cpython-313.pyc",
+      "size_bytes": 63075,
+      "modified_time": "2025-11-09T14:11:10.780921"
+    },
+    {
+      "original_path": ".backup-archive\\backup-manifest-20251111-103737.json",
+      "archived_path": ".backup-archive\\.backup-archive\\backup-manifest-20251111-103737.json",
+      "size_bytes": 3249,
+      "modified_time": "2025-11-11T10:37:37.549353"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\backup-manifest-20251111-090712.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090712.json",
+      "size_bytes": 2737,
+      "modified_time": "2025-11-11T09:07:12.829815"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090658.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090658.json",
+      "size_bytes": 2259,
+      "modified_time": "2025-11-11T09:06:58.522595"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090639.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090639.json",
+      "size_bytes": 1814,
+      "modified_time": "2025-11-11T09:06:39.979511"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090618.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251111-090618.json",
+      "size_bytes": 1404,
+      "modified_time": "2025-11-11T09:06:18.518524"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\material\\templates\\.icons\\material\\backup-restore.svg",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\material\\templates\\.icons\\material\\backup-restore.svg",
+      "size_bytes": 293,
+      "modified_time": "2025-11-10T05:20:41.800614"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\material\\templates\\.icons\\simple\\borgbackup.svg",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\.venv\\Lib\\site-packages\\material\\templates\\.icons\\simple\\borgbackup.svg",
+      "size_bytes": 609,
+      "modified_time": "2025-11-10T05:20:45.994271"
+    }
+  ]
+}
