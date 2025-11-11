@@ -232,12 +232,38 @@ cleanup
 refresh story
 ```
 
+**Execution Modes:**
+
+CORTEX automatically detects whether you want to preview changes or execute them:
+
+**Dry-Run Mode (Preview Only):**
+```
+preview cleanup
+dry-run optimization
+test cleanup before running
+what would cleanup do
+show me what would be cleaned
+simulate story refresh
+```
+
+**Live Mode (Apply Changes):**
+```
+cleanup workspace
+run optimization
+execute cleanup
+actually cleanup now
+apply changes
+```
+
+**Default:** If no mode keyword is detected, CORTEX defaults to live execution.
+
 **Why natural language?**
 - ✅ No syntax to memorize
 - ✅ Intuitive for all skill levels
 - ✅ Context-aware understanding
 - ✅ Flexible and forgiving
 - ✅ Works in conversation naturally
+- ✅ Automatic dry-run/live detection
 
 **Speed Options:**
 - **Terse:** `setup`, `demo`, `cleanup` (5-7 characters)
@@ -415,6 +441,41 @@ With tracking: ✅ Full conversation memory, ✅ "Make it purple" works
 - ✅ Easier to extend
 
 **Old file backed up:** `prompts/user/cortex-BACKUP-2025-11-08.md`
+
+---
+
+## 🎓 Copyright & Attribution
+
+**All CORTEX orchestrator entry points display a copyright header:**
+
+```
+================================================================================
+CORTEX [Operation Name] Orchestrator
+================================================================================
+
+Version:    [version]
+Profile:    [profile]
+Mode:       [LIVE | DRY RUN]
+Started:    [timestamp]
+
+Author:     Asif Hussain
+Copyright:  © 2024-2025 Asif Hussain. All rights reserved.
+License:    Proprietary
+Repository: https://github.com/asifhussain60/CORTEX
+
+================================================================================
+```
+
+This header:
+- ✅ Clearly identifies the author and copyright holder
+- ✅ Shows execution mode (LIVE vs DRY RUN)
+- ✅ Provides version and timestamp information
+- ✅ Links to official repository
+- ✅ Applies to ALL entry point orchestrators
+
+**Copyright Notice:**
+
+CORTEX is proprietary software developed by Asif Hussain. All rights reserved. Unauthorized reproduction or distribution is prohibited. See LICENSE file for full terms.
 
 ---
 

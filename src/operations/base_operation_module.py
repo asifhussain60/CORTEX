@@ -62,6 +62,12 @@ class OperationPhase(Enum):
         return order_map[self]
 
 
+class ExecutionMode(Enum):
+    """Execution mode for operations."""
+    LIVE = "live"  # Execute actual changes
+    DRY_RUN = "dry_run"  # Preview only, no changes
+
+
 class OperationStatus(Enum):
     """Status of operation module execution."""
     NOT_STARTED = "not_started"
@@ -88,6 +94,7 @@ class OperationResult:
         warnings: List of warning messages
         duration_seconds: Execution time
         timestamp: When module completed
+        execution_mode: Whether this was a dry-run or live execution
     """
     success: bool
     status: OperationStatus
@@ -97,6 +104,7 @@ class OperationResult:
     warnings: List[str] = field(default_factory=list)
     duration_seconds: float = 0.0
     timestamp: Optional[datetime] = None
+    execution_mode: ExecutionMode = ExecutionMode.LIVE
     
     def __post_init__(self):
         """Set timestamp if not provided."""
@@ -174,6 +182,7 @@ class BaseOperationModule(ABC):
         """Initialize base module with logger."""
         self._metadata = None
         self._last_result = None
+        self._execution_mode = ExecutionMode.LIVE
         # Create logger for this specific module class
         self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")
     
@@ -183,6 +192,21 @@ class BaseOperationModule(ABC):
         if self._metadata is None:
             self._metadata = self.get_metadata()
         return self._metadata
+    
+    @property
+    def execution_mode(self) -> ExecutionMode:
+        """Get current execution mode."""
+        return self._execution_mode
+    
+    @execution_mode.setter
+    def execution_mode(self, mode: ExecutionMode) -> None:
+        """Set execution mode."""
+        self._execution_mode = mode
+    
+    @property
+    def is_dry_run(self) -> bool:
+        """Check if module is in dry-run mode."""
+        return self._execution_mode == ExecutionMode.DRY_RUN
     
     @abstractmethod
     def get_metadata(self) -> OperationModuleMetadata:
