@@ -184,6 +184,9 @@ class BrainProtector:
         # Layer 6: Commit Integrity
         violations.extend(self._check_commit_integrity(request))
         
+        # Layer 7: SKULL Protection (Test Validation)
+        violations.extend(self._check_skull_protection(request))
+        
         # Determine overall severity
         if any(v.severity == Severity.BLOCKED for v in violations):
             severity = Severity.BLOCKED
@@ -436,6 +439,81 @@ class BrainProtector:
         for rule in layer.get('rules', []):
             if self._check_rule(request, rule, ProtectionLayer.KNOWLEDGE_QUALITY):
                 violations.append(self._create_violation(request, rule, ProtectionLayer.KNOWLEDGE_QUALITY))
+        
+        return violations
+    
+    def _check_skull_protection(self, request: ModificationRequest) -> List[Violation]:
+        """Check Layer 7: SKULL Protection (Test Validation) using integrated SkullProtector."""
+        violations = []
+        
+        # Detect fix claims in request
+        fix_claim_keywords = ["fixed ✅", "complete ✅", "done ✅", "implemented ✅"]
+        has_fix_claim = any(keyword.lower() in request.description.lower() for keyword in fix_claim_keywords)
+        
+        if has_fix_claim:
+            # Check if tests are mentioned
+            test_keywords = ["test passed", "test verified", "validated by test", "pytest"]
+            has_test_validation = any(keyword.lower() in request.description.lower() for keyword in test_keywords)
+            
+            if not has_test_validation:
+                violations.append(Violation(
+                    layer=ProtectionLayer.INSTINCT_IMMUTABILITY,  # SKULL is part of Tier 0 instincts
+                    rule="SKULL-001",
+                    severity=Severity.BLOCKED,
+                    description="Fix claimed complete without test validation (SKULL-001 violation)",
+                    evidence=f"Description contains fix claim but no test validation: {request.description[:100]}"
+                ))
+        
+        # Detect integration claims
+        integration_keywords = ["integration complete", "auto-engages", "components connected"]
+        has_integration_claim = any(keyword.lower() in request.description.lower() for keyword in integration_keywords)
+        
+        if has_integration_claim:
+            e2e_keywords = ["end-to-end test", "integration test", "e2e test"]
+            has_e2e_test = any(keyword.lower() in request.description.lower() for keyword in e2e_keywords)
+            
+            if not has_e2e_test:
+                violations.append(Violation(
+                    layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
+                    rule="SKULL-002",
+                    severity=Severity.BLOCKED,
+                    description="Integration claimed without end-to-end test (SKULL-002 violation)",
+                    evidence=f"Description contains integration claim but no E2E test: {request.description[:100]}"
+                ))
+        
+        # Detect CSS/UI changes
+        css_keywords = ["css fixed", "style updated", "color changed", "ui improved"]
+        has_css_change = any(keyword.lower() in request.description.lower() for keyword in css_keywords)
+        
+        if has_css_change:
+            visual_keywords = ["visual test", "computed style", "playwright", "browser test"]
+            has_visual_test = any(keyword.lower() in request.description.lower() for keyword in visual_keywords)
+            
+            if not has_visual_test:
+                violations.append(Violation(
+                    layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
+                    rule="SKULL-003",
+                    severity=Severity.WARNING,
+                    description="CSS/UI change without visual validation (SKULL-003 violation)",
+                    evidence=f"Description contains CSS change but no visual test: {request.description[:100]}"
+                ))
+        
+        # Detect retry attempts
+        retry_keywords = ["try again", "retry", "attempt 2", "attempt 3"]
+        has_retry = any(keyword.lower() in request.description.lower() for keyword in retry_keywords)
+        
+        if has_retry:
+            diagnosis_keywords = ["diagnosed", "root cause", "cache cleared", "verified"]
+            has_diagnosis = any(keyword.lower() in request.description.lower() for keyword in diagnosis_keywords)
+            
+            if not has_diagnosis:
+                violations.append(Violation(
+                    layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
+                    rule="SKULL-004",
+                    severity=Severity.WARNING,
+                    description="Retry without diagnosis (SKULL-004 violation)",
+                    evidence=f"Description contains retry but no root cause analysis: {request.description[:100]}"
+                ))
         
         return violations
     
