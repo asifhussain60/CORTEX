@@ -11,6 +11,10 @@ This test suite validates:
 """
 
 import pytest
+
+# Mark entire module as requiring sklearn
+pytestmark = pytest.mark.requires_sklearn
+
 import json
 import time
 from pathlib import Path

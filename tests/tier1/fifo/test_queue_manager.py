@@ -43,7 +43,7 @@ class TestEnforceFifoLimit:
         queue_manager.enforce_fifo_limit()
         
         status = queue_manager.get_queue_status()
-        assert status["total_conversations"] == 19
+        assert status["current_count"] == 19
         assert status["available_slots"] == 1
     
     def test_evicts_oldest_when_at_capacity(self, queue_manager, conversation_manager):
@@ -60,7 +60,7 @@ class TestEnforceFifoLimit:
         assert oldest is None
         
         status = queue_manager.get_queue_status()
-        assert status["total_conversations"] == 19
+        assert status["current_count"] == 19
     
     def test_never_evicts_active_conversation(self, queue_manager, conversation_manager):
         """Test that active conversations are protected."""
@@ -90,7 +90,7 @@ class TestEnforceFifoLimit:
         log = queue_manager.get_eviction_log()
         assert len(log) >= 1
         assert log[0]["conversation_id"] == "conv-0"
-        assert log[0]["reason"] == "fifo_limit"
+        assert log[0]["event_type"] == "conversation_evicted"
 
 
 class TestGetQueueStatus:
@@ -102,14 +102,14 @@ class TestGetQueueStatus:
             conversation_manager.add_conversation(f"conv-{i}", f"Conv {i}")
         
         status = queue_manager.get_queue_status()
-        assert status["total_conversations"] == 5
-        assert status["capacity"] == 20
+        assert status["current_count"] == 5
+        assert status["max_capacity"] == 20
         assert status["available_slots"] == 15
     
     def test_status_empty_database(self, queue_manager):
         """Test status with no conversations."""
         status = queue_manager.get_queue_status()
-        assert status["total_conversations"] == 0
+        assert status["current_count"] == 0
         assert status["available_slots"] == 20
 
 

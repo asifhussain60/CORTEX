@@ -227,21 +227,91 @@ def mock_agent(mock_tier1_api, mock_tier2_kg, mock_tier3_context):
 
 @pytest.fixture
 def temp_db() -> Generator[str, None, None]:
-    """Create a temporary database file"""
-    fd, path = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
-    yield path
-    if os.path.exists(path):
-        os.remove(path)
+    """Create a temporary database file with proper cleanup.
+    
+    Uses in-memory database for parallel tests to avoid Windows file locking.
+    Falls back to temp file for tests that require file-based DB.
+    """
+    # Check if running in parallel mode (pytest-xdist)
+    worker_id = os.environ.get('PYTEST_XDIST_WORKER', None)
+    
+    if worker_id:
+        # Use in-memory DB for parallel execution
+        path = ":memory:"
+        yield path
+    else:
+        # Use temp file for serial execution
+        fd, path = tempfile.mkstemp(suffix=".db")
+        os.close(fd)
+        try:
+            yield path
+        finally:
+            # Ensure file is closed and deleted
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+            except PermissionError:
+                # File still locked, try again after brief pause
+                import time
+                time.sleep(0.1)
+                try:
+                    if os.path.exists(path):
+                        os.remove(path)
+                except PermissionError:
+                    pass  # Best effort cleanup
 
 
 @pytest.fixture
 def db_connection(temp_db: str) -> Generator[sqlite3.Connection, None, None]:
-    """Create a SQLite database connection"""
+    """Create a SQLite database connection with proper cleanup."""
     conn = sqlite3.connect(temp_db)
     conn.row_factory = sqlite3.Row
-    yield conn
-    conn.close()
+    try:
+        yield conn
+    finally:
+        # Ensure connection is properly closed
+        try:
+            conn.close()
+        except Exception:
+            pass  # Best effort cleanup
+
+
+@pytest.fixture
+def in_memory_db() -> Generator[sqlite3.Connection, None, None]:
+    """Create an in-memory database connection.
+    
+    Preferred for unit tests to avoid file locking issues on Windows.
+    """
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+
+@pytest.fixture
+def temp_brain(tmp_path: Path) -> Generator[Path, None, None]:
+    """Create a temporary CORTEX brain directory structure.
+    
+    Provides a complete brain directory with tier0/tier1/tier2/tier3 subdirs.
+    Used by integration tests that need full brain structure.
+    """
+    brain_root = tmp_path / "cortex-brain"
+    brain_root.mkdir(parents=True)
+    
+    # Create tier directories
+    (brain_root / "tier0").mkdir()
+    (brain_root / "tier1").mkdir()
+    (brain_root / "tier2").mkdir()
+    (brain_root / "tier3").mkdir()
+    
+    yield brain_root
+    
+    # Cleanup is automatic via tmp_path fixture
 
 
 # ============================================================================

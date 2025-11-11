@@ -7,6 +7,9 @@ import pytest
 from datetime import datetime
 from src.tier1.ml_context_optimizer import MLContextOptimizer
 
+# Mark entire module as requiring sklearn
+pytestmark = pytest.mark.requires_sklearn
+
 
 class TestMLContextOptimizer:
     """Test ML Context Optimizer functionality."""

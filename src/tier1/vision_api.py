@@ -284,18 +284,20 @@ class VisionAPI:
         """
         try:
             if not PIL_AVAILABLE:
-                # Rough estimate based on data size
+                # Rough estimate based on data size when PIL not available
                 base64_match = re.search(r'base64,(.+)', image_data)
                 if base64_match:
                     base64_len = len(base64_match.group(1))
-                    # Very rough: 1MB ≈ 250 tokens
-                    return int((base64_len * 0.75) / 1_000_000 * 250)
-                return 250  # Default estimate
+                    # Very rough: 1MB image ≈ 250 tokens
+                    # Minimum 85 tokens (one 512x512 tile)
+                    estimated = max(85, int((base64_len * 0.75) / 1_000_000 * 250))
+                    return estimated
+                return 85  # Minimum estimate (one tile)
             
             # Extract and decode image
             base64_match = re.search(r'base64,(.+)', image_data)
             if not base64_match:
-                return 250
+                return 85  # Minimum fallback
             
             base64_data = base64_match.group(1)
             image_bytes = base64.b64decode(base64_data)
@@ -310,7 +312,7 @@ class VisionAPI:
             
         except Exception as e:
             self.logger.warning(f"Token estimation failed: {e}")
-            return 250  # Safe default
+            return 85  # Minimum safe default (one tile)
     
     def _call_vision_api(self, image_data: str, prompt: str) -> Dict:
         """

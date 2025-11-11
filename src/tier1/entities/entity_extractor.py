@@ -50,26 +50,32 @@ class EntityExtractor:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
+        # Create entities table
         cursor.execute("""
-            SELECT name FROM sqlite_master 
-            WHERE type='table' AND name='entities'
+            CREATE TABLE IF NOT EXISTS entities (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                entity_type TEXT NOT NULL,
+                entity_name TEXT NOT NULL,
+                file_path TEXT,
+                first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                access_count INTEGER DEFAULT 1,
+                UNIQUE(entity_type, entity_name, file_path)
+            )
         """)
         
-        if not cursor.fetchone():
-            cursor.execute("""
-                CREATE TABLE entities (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    conversation_id TEXT NOT NULL,
-                    entity_type TEXT NOT NULL,
-                    entity_name TEXT NOT NULL,
-                    file_path TEXT,
-                    first_seen TEXT NOT NULL,
-                    last_accessed TEXT NOT NULL,
-                    access_count INTEGER DEFAULT 1
-                )
-            """)
-            conn.commit()
+        # Create conversation-entity relationships table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS conversation_entities (
+                conversation_id TEXT NOT NULL,
+                entity_id INTEGER NOT NULL,
+                relevance_score REAL DEFAULT 1.0,
+                PRIMARY KEY (conversation_id, entity_id),
+                FOREIGN KEY (entity_id) REFERENCES entities(id)
+            )
+        """)
         
+        conn.commit()
         conn.close()
     
     def extract_entities(self, conversation_id: str, text: str) -> List[Entity]:

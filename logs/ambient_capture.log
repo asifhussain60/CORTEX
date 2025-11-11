@@ -1333,3 +1333,68 @@
 2025-11-11 13:31:31 - ERROR - Error summarizing event: KeyError
 2025-11-11 13:31:31 - ERROR - Error summarizing event: KeyError
 2025-11-11 13:31:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:31:57 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:33:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:34:05 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:34:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:34:16 - WARNING - SECURITY: Blocked access to file outside workspace: \\?\D:\$Extend\$Deleted\000600000002F47C05776389
+2025-11-11 13:35:18 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:36:05 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:37:37 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:38:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:38:52 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:42:43 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:44:27 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:44:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:44:41 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:47:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:47:24 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:47:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:48:11 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:48:32 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:48:52 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:49:00 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:49:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:49:25 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:49:44 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:50:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:50:19 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:50:36 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:50:43 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:51:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:51:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:55:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:55:24 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:55:50 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:56:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:56:16 - INFO - Batch summary: Batch: 1 unknown changes. Files: 1. Avg score: 0/100
+2025-11-11 13:56:16 - INFO - Batch summary: Batch: 1 unknown changes. Files: 1. Avg score: 0/100
+2025-11-11 13:56:27 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 13:56:27 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - ERROR - Capture script not found, skipping hook install
+2025-11-11 13:56:29 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:29 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:30 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:30 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:30 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpeksis4av\scripts\cortex\capture_git_event.py
+2025-11-11 13:56:30 - WARNING - SECURITY: Blocked access to file outside workspace: C:\Windows\Temp\tmpeksis4av\scripts\cortex\capture_git_event.py
+2025-11-11 13:56:31 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:31 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:31 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:31 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:32 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 13:56:32 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 13:56:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:32 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 13:56:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:56:33 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 13:56:33 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 13:56:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 13:56:34 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 13:56:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:56:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
