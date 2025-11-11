@@ -969,3 +969,16 @@
 2025-11-11 10:57:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 10:58:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 10:58:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:58:43 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:59:04 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:59:27 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:59:40 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 11:00:05 - ERROR - Error detecting pattern: KeyError
+2025-11-11 11:00:05 - ERROR - Error detecting pattern: KeyError
+2025-11-11 11:00:05 - ERROR - Error scoring activity: KeyError
+2025-11-11 11:00:05 - ERROR - Error scoring activity: KeyError
+2025-11-11 11:00:05 - ERROR - Error summarizing event: KeyError
+2025-11-11 11:00:05 - ERROR - Error summarizing event: KeyError
+2025-11-11 11:00:26 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 11:00:34 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 11:00:53 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
