@@ -1,0 +1,17 @@
+{
+  "workflow_id": "wf-20251111-154046",
+  "conversation_id": "conv-123",
+  "user_request": "Test request",
+  "context": {},
+  "stage_outputs": {
+    "stage2": {}
+  },
+  "stage_statuses": {
+    "stage1": "running",
+    "stage2": "success"
+  },
+  "start_time": "2025-11-11T15:40:46.723250",
+  "end_time": null,
+  "current_stage": "stage2",
+  "config": {}
+}
