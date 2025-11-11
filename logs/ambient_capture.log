@@ -1325,3 +1325,11 @@
 2025-11-11 13:31:07 - WARNING - SECURITY: Workspace file too large, skipping
 2025-11-11 13:31:11 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 13:31:11 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:31:31 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 13:31:31 - ERROR - Error detecting pattern: KeyError
+2025-11-11 13:31:31 - ERROR - Error detecting pattern: KeyError
+2025-11-11 13:31:31 - ERROR - Error scoring activity: KeyError
+2025-11-11 13:31:31 - ERROR - Error scoring activity: KeyError
+2025-11-11 13:31:31 - ERROR - Error summarizing event: KeyError
+2025-11-11 13:31:31 - ERROR - Error summarizing event: KeyError
+2025-11-11 13:31:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
