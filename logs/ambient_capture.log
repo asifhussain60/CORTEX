@@ -1705,3 +1705,29 @@
 2025-11-11 15:37:08 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
 2025-11-11 15:37:08 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
 2025-11-11 15:37:08 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:14 - INFO - Batch summary: Batch: 1 feature changes. Files: 1. Avg score: 97/100
+2025-11-11 15:37:14 - INFO - Batch summary: Batch: 1 feature changes. Files: 1. Avg score: 97/100
+2025-11-11 15:37:15 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:15 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:15 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:15 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:16 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:16 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:22 - INFO - Batch summary: Batch: 1 feature changes. Files: 1. Avg score: 97/100
+2025-11-11 15:37:22 - INFO - Batch summary: Batch: 1 feature changes. Files: 1. Avg score: 97/100
+2025-11-11 15:37:23 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 15:37:23 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 15:37:23 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:23 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:37:24 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 15:37:24 - ERROR - Error reading workspace JSON: JSONDecodeError
+2025-11-11 15:37:24 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 15:37:24 - WARNING - SECURITY: Workspace file too large, skipping
+2025-11-11 15:37:28 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 15:37:28 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 15:37:36 - ERROR - Error detecting pattern: KeyError
+2025-11-11 15:37:36 - ERROR - Error detecting pattern: KeyError
+2025-11-11 15:37:36 - ERROR - Error scoring activity: KeyError
+2025-11-11 15:37:36 - ERROR - Error scoring activity: KeyError
+2025-11-11 15:37:36 - ERROR - Error summarizing event: KeyError
+2025-11-11 15:37:36 - ERROR - Error summarizing event: KeyError
