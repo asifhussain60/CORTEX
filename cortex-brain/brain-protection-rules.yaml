@@ -916,6 +916,514 @@ protection_layers:
           6. Maintain 100% going forward
           
           This is NOT optional. This is core quality engineering.
+      
+      - rule_id: "SKULL_MULTI_TRACK_VALIDATION"
+        name: "Multi-Track Configuration Validation (SKULL-008)"
+        severity: "blocked"
+        description: "Multi-track mode MUST have valid configuration with proper phase distribution"
+        
+        detection:
+          keywords:
+            - "enable multi-track"
+            - "activate multi-track"
+            - "create tracks"
+            - "split tracks"
+            - "multi-machine mode"
+          scope: ["intent", "description"]
+        
+        verification_required:
+          - type: "track_balance_check"
+            description: "Verify workload balanced across tracks"
+            requirement: "Track estimated hours MUST not differ by >30%"
+          
+          - type: "dependency_isolation_check"
+            description: "Verify no cross-track dependencies"
+            requirement: "Phase groups MUST be self-contained per track"
+          
+          - type: "machine_assignment_check"
+            description: "Verify each machine assigned to exactly one track"
+            requirement: "No machine overlap, no unassigned machines"
+          
+          - type: "fun_name_uniqueness"
+            description: "Verify track names are unique and generated properly"
+            requirement: "Track names MUST be deterministic and collision-free"
+        
+        alternatives:
+          - "Run track distribution algorithm to validate balance"
+          - "Use PhaseDistributor.distribute() to check dependency isolation"
+          - "Verify machine count matches track count"
+          - "Test track name generation for collision resistance"
+        
+        evidence_template: |
+          Multi-track mode validation failed!
+          
+          Configuration Issues:
+          - Track balance: {balance_check}
+          - Dependencies: {dependency_check}
+          - Machines: {machine_check}
+          - Track names: {name_check}
+          
+          SKULL-008: Multi-track MUST be properly configured before use
+        
+        rationale: |
+          SKULL-008: Multi-Track Configuration Validation
+          
+          Multi-track mode is powerful but requires careful setup:
+          
+          1. Workload Balance:
+             - Tracks with vastly different hours → bottlenecks
+             - One machine idle while other overloaded
+             - Race metrics meaningless if unfair
+             Example: Track A (10h) vs Track B (40h) = broken
+          
+          2. Dependency Isolation:
+             - Track A waiting on Track B output → blocked
+             - Cross-dependencies defeat parallel development
+             - Must group dependent phases on same track
+             Example: "setup" phases must complete before "processing"
+          
+          3. Machine Assignment:
+             - Machine assigned to multiple tracks → confusion
+             - Unassigned machines → wasted capacity
+             - Clear 1:1 or 1:N mapping required
+             Example: AHHOME on both tracks = which context?
+          
+          4. Track Name Uniqueness:
+             - Collision-resistant generation
+             - Deterministic (same input → same name)
+             - Human-memorable for commands
+             Example: Hash collision → wrong track loaded
+          
+          Why This Matters:
+          - Prevents split-mode failures mid-development
+          - Ensures race metrics are meaningful
+          - Maintains track isolation guarantees
+          - Makes "continue implementation for [track]" reliable
+          
+          Validation Points:
+          
+          Pre-Initialization:
+          - Check machine count > 0
+          - Verify operations.yaml accessible
+          - Validate module definitions exist
+          
+          Post-Distribution:
+          - Balance check: max_hours/min_hours < 1.3 (30% tolerance)
+          - Dependency check: No phase in track requires other track's output
+          - Machine check: Each machine in exactly one track
+          - Name check: All track names unique and deterministic
+          
+          Integration Test Required:
+          ```python
+          def test_multi_track_validation():
+              # Setup
+              machines = ["AHHOME", "Mac"]
+              config = create_multi_track_config(machines, modules)
+              
+              # Balance check
+              hours = [t.estimated_hours for t in config.tracks.values()]
+              assert max(hours) / min(hours) < 1.3, "Imbalanced tracks"
+              
+              # Dependency check
+              for track in config.tracks.values():
+                  deps = get_phase_dependencies(track.phases)
+                  assert all(d in track.phases for d in deps), "Cross-track dep"
+              
+              # Machine check
+              all_machines = [m for t in config.tracks.values() for m in t.machines]
+              assert len(all_machines) == len(set(all_machines)), "Duplicate machine"
+              
+              # Name check
+              names = [t.track_name for t in config.tracks.values()]
+              assert len(names) == len(set(names)), "Duplicate track name"
+          ```
+          
+          Enforcement:
+          - CLI script validates before writing config
+          - Design sync validates before split
+          - Continue command validates track exists
+          - Consolidation validates all tracks present
+      
+      - rule_id: "SKULL_TRACK_ISOLATION"
+        name: "Track Work Isolation (SKULL-009)"
+        severity: "blocked"
+        description: "Work on Track A MUST NOT modify Track B's assigned modules"
+        
+        detection:
+          combined_keywords:
+            track_context:
+              - "continue implementation for"
+              - "working on track"
+              - "active track"
+            cross_modification:
+              - "modified module"
+              - "updated file"
+              - "changed"
+          scope: ["intent", "log_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "module_ownership_check"
+            description: "Verify modified modules belong to active track"
+            requirement: "All changed files MUST be in active track's module list"
+          
+          - type: "phase_boundary_check"
+            description: "Verify work stays within assigned phases"
+            requirement: "Modified files MUST belong to active track's phases"
+          
+          - type: "git_diff_validation"
+            description: "Verify git changes match track scope"
+            requirement: "git diff MUST only show files from active track"
+        
+        alternatives:
+          - "Filter implementation state by active track"
+          - "Validate module ownership before allowing changes"
+          - "Add pre-commit hook checking track boundaries"
+          - "Switch to correct track before making changes"
+        
+        evidence_template: |
+          Track isolation violation detected!
+          
+          Active Track: {active_track}
+          Modified Files: {modified_files}
+          Violations: {violations}
+          
+          Files belong to: {actual_track}
+          
+          SKULL-009: Tracks MUST NOT cross-modify each other's work
+        
+        rationale: |
+          SKULL-009: Track Work Isolation
+          
+          Core principle: Each track is an isolated development context.
+          
+          Why Isolation Matters:
+          
+          1. Prevents Merge Conflicts:
+             - Two machines editing same file → disaster
+             - Track A changes conflicting with Track B changes
+             - Consolidation becomes manual merge nightmare
+             Example: Both tracks fix same module differently
+          
+          2. Maintains Race Integrity:
+             - Track A can't "cheat" by doing Track B's work
+             - Progress metrics stay meaningful
+             - Velocity calculations remain accurate
+             Example: Track A does Track B's modules → unfair race
+          
+          3. Enables True Parallel Development:
+             - No coordination needed during work
+             - No "wait for Track A to finish" scenarios
+             - Maximum throughput achieved
+             Example: Both machines working simultaneously without blocking
+          
+          4. Simplifies Context Management:
+             - Each machine sees only relevant modules
+             - Copilot context smaller and focused
+             - Fewer tokens, faster responses
+             Example: Track A context excludes Track B's 50 modules
+          
+          Enforcement Mechanism:
+          
+          1. Pre-Modification Check:
+             ```python
+             def validate_module_ownership(module_id, active_track):
+                 if module_id not in active_track.modules:
+                     raise TrackIsolationError(
+                         f"Module {module_id} belongs to different track"
+                     )
+             ```
+          
+          2. Git Pre-Commit Hook:
+             ```bash
+             # Check if modified files belong to active track
+             active_track=$(get_active_track)
+             for file in $(git diff --cached --name-only); do
+                 if ! track_owns_file "$active_track" "$file"; then
+                     echo "Error: $file not in active track"
+                     exit 1
+                 fi
+             done
+             ```
+          
+          3. Design Sync Validation:
+             - Compare git log with track assignments
+             - Flag any cross-track modifications
+             - Require explicit override with justification
+          
+          Allowed Cross-Track Work:
+          - Shared files (cortex.config.json)
+          - Documentation updates (README.md)
+          - Test fixtures (tests/fixtures/)
+          
+          Not Allowed:
+          - Modifying other track's modules
+          - Changing other track's phase files
+          - Updating other track's status in design doc
+          
+          Override Process:
+          If cross-track work truly needed:
+          1. Document why isolation must break
+          2. Get explicit user approval
+          3. Log violation for consolidation review
+          4. Merge carefully during consolidation
+          
+          Integration Test:
+          ```python
+          def test_track_isolation():
+              # Setup two tracks
+              config = setup_multi_track(['AHHOME', 'Mac'])
+              track_a = config.tracks['track_1']
+              track_b = config.tracks['track_2']
+              
+              # Simulate Track A trying to modify Track B's module
+              with pytest.raises(TrackIsolationError):
+                  modify_module(track_b.modules[0], active_track=track_a)
+              
+              # Verify Track A can modify own modules
+              modify_module(track_a.modules[0], active_track=track_a)  # OK
+          ```
+      
+      - rule_id: "SKULL_CONSOLIDATION_INTEGRITY"
+        name: "Track Consolidation Integrity (SKULL-010)"
+        severity: "blocked"
+        description: "Consolidation MUST merge all track progress accurately without data loss"
+        
+        detection:
+          keywords:
+            - "consolidate tracks"
+            - "merge tracks"
+            - "reset to single-track"
+            - "design sync consolidation"
+          scope: ["intent", "operation_name"]
+        
+        verification_required:
+          - type: "progress_preservation_check"
+            description: "Verify no completed modules lost in merge"
+            requirement: "Consolidated count MUST equal sum of track counts"
+          
+          - type: "conflict_resolution_audit"
+            description: "Log all conflict resolutions with justification"
+            requirement: "Conflicts MUST be documented in archive"
+          
+          - type: "archive_completeness_check"
+            description: "Verify split docs archived before deletion"
+            requirement: "All split docs MUST exist in archive before removal"
+          
+          - type: "git_commit_validation"
+            description: "Verify consolidation tracked in git history"
+            requirement: "Git commit MUST reference both tracks and merge details"
+        
+        alternatives:
+          - "Run consolidation with --verify flag"
+          - "Review conflict resolution log before committing"
+          - "Keep split docs until archive verified"
+          - "Add integration test for consolidation accuracy"
+        
+        evidence_template: |
+          Consolidation integrity check failed!
+          
+          Pre-Consolidation:
+          - Track A: {track_a_completed}/{track_a_total} modules
+          - Track B: {track_b_completed}/{track_b_total} modules
+          - Total: {pre_total_completed} modules
+          
+          Post-Consolidation:
+          - Unified: {post_total_completed} modules
+          
+          Discrepancy: {discrepancy} modules
+          Conflicts Resolved: {conflicts}
+          Archive Status: {archive_status}
+          
+          SKULL-010: Consolidation MUST preserve all progress
+        
+        rationale: |
+          SKULL-010: Track Consolidation Integrity
+          
+          Consolidation is the critical merge operation - must be perfect.
+          
+          What Can Go Wrong:
+          
+          1. Progress Loss:
+             - Track A shows module complete
+             - Consolidation misses it
+             - User loses work (demoralizing)
+             Example: Track A completed 15 modules, only 12 appear in merge
+          
+          2. Conflict Mishandling:
+             - Both tracks modified same module
+             - Wrong version selected
+             - Work overwritten silently
+             Example: Track A's fix lost, Track B's bug remains
+          
+          3. Archive Failure:
+             - Split docs deleted before archiving
+             - No way to audit merge decisions
+             - Can't roll back if issues found
+             Example: User wants to see what Track A had, archive empty
+          
+          4. Git History Gaps:
+             - Consolidation not committed properly
+             - Can't trace what was merged when
+             - Audit trail incomplete
+             Example: Merge happened, git log says nothing
+          
+          Consolidation Algorithm:
+          
+          ```python
+          def consolidate_tracks(track_config, impl_state):
+              # Step 1: Collect all track progress
+              all_modules = {}
+              for track in track_config.tracks.values():
+                  for module_id in track.modules:
+                      status = get_module_status(module_id, impl_state)
+                      
+                      # Conflict detection
+                      if module_id in all_modules:
+                          conflict = resolve_conflict(
+                              all_modules[module_id],
+                              status,
+                              strategy='latest_timestamp'
+                          )
+                          log_conflict_resolution(module_id, conflict)
+                          all_modules[module_id] = conflict.winner
+                      else:
+                          all_modules[module_id] = status
+              
+              # Step 2: Validate counts
+              pre_count = sum(t.metrics.modules_completed for t in track_config.tracks.values())
+              post_count = sum(1 for s in all_modules.values() if s.completed)
+              
+              if pre_count != post_count:
+                  raise ConsolidationError(
+                      f"Progress mismatch: {pre_count} → {post_count}"
+                  )
+              
+              # Step 3: Archive split docs
+              archive_dir = create_archive_directory()
+              for status_file in get_split_design_docs():
+                  archive_file(status_file, archive_dir)
+              
+              # Step 4: Generate consolidated doc
+              consolidated = generate_consolidated_document(
+                  all_modules,
+                  track_config,
+                  archive_reference=archive_dir
+              )
+              
+              # Step 5: Git commit with full details
+              commit_message = f"""design: consolidate multi-track progress
+              
+              Tracks merged:
+              - {track_config.tracks['track_1'].track_name}: {track_config.tracks['track_1'].metrics.completion_percentage}%
+              - {track_config.tracks['track_2'].track_name}: {track_config.tracks['track_2'].metrics.completion_percentage}%
+              
+              Total progress: {post_count}/{len(all_modules)} modules ({post_count/len(all_modules)*100:.0f}%)
+              Conflicts resolved: {len(get_conflicts())}
+              Archive: {archive_dir.name}
+              
+              [design_sync consolidation]
+              """
+              
+              git_commit(consolidated, commit_message)
+              
+              return consolidated
+          ```
+          
+          Conflict Resolution Strategy:
+          
+          Default: Latest Timestamp Wins
+          - Simple, deterministic, predictable
+          - Assumes most recent work is correct
+          - Logged for audit
+          
+          Example:
+          ```
+          Module: platform_detection
+          - Track A: marked complete 2025-11-11 14:00
+          - Track B: marked complete 2025-11-11 15:00
+          Winner: Track B (later timestamp)
+          Logged: conflict-resolution.yaml
+          ```
+          
+          Archive Structure:
+          ```
+          cortex-brain/archived-tracks/20251111-164530/
+          ├── CORTEX2-STATUS-SPLIT.MD       # Original split doc
+          ├── track-1-history.jsonl         # Track A progress log
+          ├── track-2-history.jsonl         # Track B progress log
+          ├── conflicts-resolved.yaml       # Conflict resolution log
+          └── consolidation-report.md       # Summary of merge
+          ```
+          
+          Integration Test:
+          ```python
+          def test_consolidation_integrity():
+              # Setup: Two tracks with overlapping work
+              config = create_multi_track(['AHHOME', 'Mac'])
+              track_a_complete = mark_modules_complete(config.tracks['track_1'], [0, 1, 2])
+              track_b_complete = mark_modules_complete(config.tracks['track_2'], [3, 4, 5])
+              
+              # Introduce conflict: both complete module 2
+              mark_complete(config.tracks['track_1'], 'module_2', timestamp='14:00')
+              mark_complete(config.tracks['track_2'], 'module_2', timestamp='15:00')
+              
+              # Consolidate
+              consolidated = consolidate_tracks(config, impl_state)
+              
+              # Verify counts
+              assert consolidated.modules_completed == 6, "Progress lost"
+              
+              # Verify conflict handled
+              conflicts = get_conflict_log()
+              assert 'module_2' in conflicts, "Conflict not logged"
+              assert conflicts['module_2']['winner'] == 'track_2', "Wrong winner"
+              
+              # Verify archive
+              archive = get_latest_archive()
+              assert archive.exists(), "Archive missing"
+              assert (archive / 'CORTEX2-STATUS-SPLIT.MD').exists(), "Split doc not archived"
+              
+              # Verify git
+              commit = get_latest_commit()
+              assert 'consolidate multi-track' in commit.message
+              assert 'track_1' in commit.message
+              assert 'track_2' in commit.message
+          ```
+          
+          User Experience:
+          ```
+          $ /CORTEX design sync
+          
+          🏁 Multi-Track Mode: Running design sync consolidation
+             Will merge all tracks into unified status
+          
+          [Phase 1/6] Discovering live implementation state...
+          ✅ Track A (Blazing Phoenix): 8/15 modules (53%)
+          ✅ Track B (Swift Falcon): 12/18 modules (67%)
+          
+          [Phase 5/6] Consolidating tracks...
+          ⚙️  Merging progress from 2 tracks...
+          ⚠️  Conflict detected: platform_detection
+              Track A: complete @ 14:00
+              Track B: complete @ 15:00
+              Resolution: Track B wins (latest timestamp)
+          
+          ✅ Consolidated 2 tracks into unified document
+             Combined: 20/33 modules (61%)
+             Conflicts resolved: 1 (logged)
+             Archive: cortex-brain/archived-tracks/20251111-164530/
+          
+          [Phase 6/6] Committing changes...
+          💾 Git commit: 7a3b9c2 "design: consolidate multi-track progress"
+          
+          Design Sync ✅ COMPLETED in 4.2s
+             • Merged 2 tracks: Blazing Phoenix (53%) + Swift Falcon (67%)
+             • Combined progress: 20/33 modules (61%)
+             • Conflicts resolved: 1
+             • Archived split docs
+             • Reset to single-track mode
+          ```
   
   # Layer 6: Knowledge Quality
   - layer_id: "knowledge_quality"
