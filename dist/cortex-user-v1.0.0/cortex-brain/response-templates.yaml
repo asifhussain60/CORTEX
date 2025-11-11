@@ -1,0 +1,1709 @@
+# CORTEX Response Templates
+# 
+# Purpose: Pre-defined response templates for common CORTEX interactions
+# Design: Copilot reads these templates directly - NO Python execution needed
+# 
+# Template Structure:
+#   trigger: [list of phrases that trigger this template]
+#   response_type: table | list | detailed | narrative
+#   content: The actual response content
+#   context_needed: false | true (whether additional context loading is required)
+#   verbosity: concise | detailed | expert
+#   metadata: {category: system|agent|operation|error|plugin}
+#
+# Author: Asif Hussain
+# Version: 2.0 (Phase 5.6 - 90+ Templates)
+
+templates:
+  
+  # ============================================================================
+  # HELP COMMAND - Simple table of available commands
+  # ============================================================================
+  help_table:
+    triggers:
+      - "help"
+      - "/help"
+      - "/CORTEX help"
+      - "show commands"
+      - "what can you do"
+      - "available commands"
+    
+    response_type: table
+    context_needed: false
+    
+    content: |
+      ![CORTEX Commands](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX COMMANDS
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      📝 **Your Request:** {{user_request}}
+      
+      🎯 **Understanding:** You want to see all available CORTEX commands
+      
+      💬 **Response:** Here's your command reference:
+      
+      Status  Command        What It Does
+      --------------------------------------------------------------------------------
+      ✅      update story   Refresh CORTEX story documentation
+      🔄      setup          Setup/configure environment
+      ✅      design sync    Synchronize design with implementation
+      🔄      cleanup        Clean temporary files
+      ⏸️      build docs     Generate documentation
+      ⏸️      check brain    Validate brain protection
+      ⏸️      run tests      Execute test suite
+      🎯      plan this      Interactive planning (CORTEX 2.1)
+      --------------------------------------------------------------------------------
+      
+      Legend:
+        ✅ ready    - Fully working
+        🔄 partial  - Core working, some modules pending
+        ⏸️ pending  - Architecture ready, implementation pending
+        🎯 planned  - Design phase (CORTEX 2.1+)
+      
+      Usage:
+        Natural language:  "setup environment" or "refresh story" or "sync design"
+        Slash commands:    /setup or /CORTEX, refresh cortex story
+      
+      � **Next Steps:**
+        • Try: "help detailed" for more information
+        • Try: "help <command>" for specific command help
+        • Try: "setup environment" to get started
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ╚═══════════════════════════════════════════════════════════════════════════╝
+  
+  # ============================================================================
+  # DETAILED HELP - Categorized with examples
+  # ============================================================================
+  help_detailed:
+    triggers:
+      - "help detailed"
+      - "show all commands"
+      - "detailed help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      ![CORTEX Commands Detailed](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX COMMANDS - DETAILED
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      📝 **Your Request:** {{user_request}}
+      
+      🎯 **Understanding:** You want detailed information about all CORTEX capabilities
+      
+      💬 **Response:** Here's the complete breakdown organized by category:
+      
+      📦 ENVIRONMENT & SETUP
+      ----------------------
+      ✅ setup - Setup/configure development environment
+         Examples: "setup environment", "/setup", "configure"
+         Modules: 4 (platform detection, deps, brain init, validation)
+      
+      📚 DOCUMENTATION
+      ----------------
+      ✅ update story - Refresh CORTEX story documentation
+         Examples: "refresh story", "update story"
+         Modules: 6 (load, transform, validate, save, nav, preview)
+      
+      ✅ design sync - Synchronize design with implementation
+         Examples: "sync design", "align design", "consolidate status"
+         Modules: 1 orchestrator (6-phase workflow)
+         Profiles: quick (analysis), standard (safe updates), comprehensive (full sync)
+      
+      ⏸️ build docs - Generate and build documentation
+         Examples: "generate docs", "build documentation"
+         Status: Architecture ready, modules pending
+      
+      🧹 MAINTENANCE
+      --------------
+      🔄 cleanup - Clean temporary files and optimize databases
+         Examples: "cleanup", "clean workspace"
+         Modules: 5/6 (logs, cache, SQLite vacuum, report)
+      
+      🛡️ VALIDATION
+      -------------
+      ⏸️ check brain - Run brain protection validation
+         Examples: "check brain", "validate brain"
+         Status: Architecture ready, modules pending
+      
+      ⏸️ run tests - Execute test suite
+         Examples: "run tests", "test this"
+         Status: Architecture ready, modules pending
+      
+      🎯 PLANNING (CORTEX 2.1)
+      ------------------------
+      🎯 plan this - Interactive collaborative planning
+         Examples: "plan this feature", "help me plan"
+         Status: Design phase
+      
+      � **Next Steps:**
+        • Try any command: "setup environment", "sync design", "cleanup"
+        • Get command-specific help: "help setup", "help cleanup"
+        • Start working: Just tell CORTEX what you need!
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ╚═══════════════════════════════════════════════════════════════════════════╝
+  
+  # ============================================================================
+  # QUICK START - First-time user guidance
+  # ============================================================================
+  quick_start:
+    triggers:
+      - "how do I start"
+      - "getting started"
+      - "first time"
+      - "quick start"
+    
+    response_type: narrative
+    context_needed: false
+    
+    content: |
+      
+      🚀 **CORTEX Quick Start**
+      
+      **Just tell me what you need in plain English!**
+      
+      Examples:
+        • "Add a purple button to the dashboard"
+        • "Setup my environment"
+        • "Show me where I left off"
+        • "Create tests for this feature"
+      
+      **Optional shortcuts:**
+        • `/setup` - Configure environment
+        • `/help` - Show available commands
+        • `/resume` - Continue previous work
+      
+      **First time setup:**
+      1. Say "setup environment"
+      2. That's it! CORTEX handles the rest.
+      
+      **Want to understand CORTEX?**
+        Say "tell me the CORTEX story" for the human-friendly explanation.
+  
+  # ============================================================================
+  # STATUS CHECK - Current implementation status
+  # ============================================================================
+  status_check:
+    triggers:
+      - "status"
+      - "/status"
+      - "what's working"
+      - "implementation status"
+    
+    response_type: table
+    context_needed: false
+    
+    content: |
+      
+      📊 **CORTEX Implementation Status**
+      
+      **✅ Production Ready:**
+        • Story Refresh (6/6 modules)
+        • Environment Setup (4/4 modules core)
+      
+      **🔄 Partial (Core Working):**
+        • Workspace Cleanup (5/6 modules)
+      
+      **⏸️ Pending (Architecture Complete):**
+        • Documentation Builder
+        • Brain Protection Validator
+        • Test Suite Runner
+      
+      **🎯 Planned (CORTEX 2.1):**
+        • Interactive Planning
+        • Architecture Design Assistant
+        • Refactoring Helper
+      
+      **Architecture:** Universal Operations System ✅
+      **Token Optimization:** 97.2% reduction achieved ✅
+      **Version:** CORTEX 2.0
+  
+  # ============================================================================
+  # COMMAND-SPECIFIC HELP
+  # ============================================================================
+  help_setup:
+    triggers:
+      - "help setup"
+      - "how to setup"
+      - "setup help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🔧 **Setup Command**
+      
+      **Purpose:** Configure development environment for current platform
+      
+      **Usage:**
+        Natural: "setup environment", "configure"
+        Slash: /setup, /env, /configure
+      
+      **What it does:**
+        ✅ Detects platform (Windows/Mac/Linux)
+        ✅ Configures platform-specific paths
+        ✅ Validates dependencies
+        ✅ Initializes CORTEX brain
+      
+      **Profiles:**
+        • minimal - Quick setup, essentials only
+        • standard - Full setup (default)
+        • full - Complete with validation
+      
+      **Example:**
+        "setup environment with full profile"
+  
+  help_cleanup:
+    triggers:
+      - "help cleanup"
+      - "how to cleanup"
+      - "cleanup help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🧹 **Cleanup Command**
+      
+      **Purpose:** Remove temporary files and optimize databases
+      
+      **Usage:**
+        Natural: "cleanup", "clean workspace"
+        Slash: /CORTEX, cleanup
+      
+      **What it does:**
+        ✅ Scans for temporary files
+        ✅ Removes old logs
+        ✅ Clears Python cache
+        ✅ Vacuums SQLite databases
+        ✅ Generates cleanup report
+      
+      **Profiles:**
+        • minimal - Scan only, no deletion
+        • standard - Remove old logs, optimize DB (default)
+        • full - Complete cleanup
+      
+      **Example:**
+        "cleanup workspace with standard profile"
+  
+  help_story:
+    triggers:
+      - "help story"
+      - "help update story"
+      - "story help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      📚 **Update Story Command**
+      
+      **Purpose:** Refresh CORTEX story documentation
+      
+      **Usage:**
+        Natural: "refresh story", "update story"
+        Slash: /CORTEX, refresh cortex story
+      
+      **What it does:**
+        ✅ Loads story template
+        ✅ Applies narrator voice transformation
+        ✅ Validates content
+        ✅ Saves updated markdown
+        ✅ Updates navigation
+        ✅ Generates preview
+      
+      **Status:** ✅ All 6 modules implemented and tested
+      
+      **Example:**
+        "refresh the cortex story"
+  
+  help_design_sync:
+    triggers:
+      - "help design sync"
+      - "help sync"
+      - "design sync help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🔄 **Design Sync Command**
+      
+      **Purpose:** Synchronize CORTEX design documents with actual implementation
+      
+      **Usage:**
+        Natural: "sync design", "design sync", "align design with implementation"
+      
+      **What it does:**
+        ✅ Discovers live implementation state (modules, tests, plugins)
+        ✅ Analyzes design-implementation gaps
+        ✅ Integrates optimization recommendations
+        ✅ Converts verbose MD to YAML schemas
+        ✅ Consolidates multiple status files into ONE
+        ✅ Updates with accurate counts and progress bars
+        ✅ Commits all changes with git tracking
+      
+      **Profiles:**
+        • quick - Analysis only (no changes)
+        • standard - Consolidation + safe updates (default)
+        • comprehensive - Full sync with YAML conversion
+      
+      **Status:** ✅ All capabilities implemented and tested
+      
+      **Example:**
+        "sync design with comprehensive profile"
+  
+  # ============================================================================
+  # Additional System Templates
+  # ============================================================================
+  
+  help_list:
+    triggers:
+      - "list commands"
+      - "show list"
+      - "command list"
+    response_type: list
+    context_needed: false
+    verbosity: concise
+    metadata:
+      category: system
+    content: |
+      **CORTEX Commands:**
+      • update story - Refresh CORTEX story documentation
+      • setup - Setup/configure environment  
+      • cleanup - Clean temporary files
+      • build docs - Generate documentation (pending)
+      • check brain - Validate brain protection (pending)
+      • run tests - Execute test suite (pending)
+  
+  version_info:
+    triggers:
+      - "version"
+      - "cortex version"
+      - "what version"
+    response_type: narrative
+    context_needed: false
+    verbosity: concise
+    metadata:
+      category: system
+    content: |
+      **CORTEX Version Information**
+      
+      Version: 5.2 (Response Template Architecture)
+      Architecture: Universal Operations + Template System
+      Status: ✅ Production Ready
+      
+      Token Optimization: 97.2% reduction achieved
+      Test Coverage: 82 tests passing
+  
+  about:
+    triggers:
+      - "about cortex"
+      - "what is cortex"
+      - "tell me about cortex"
+    response_type: narrative
+    context_needed: false
+    verbosity: detailed
+    metadata:
+      category: system
+    content: |
+      **About CORTEX**
+      
+      CORTEX is a cognitive framework that gives GitHub Copilot:
+      • 🧠 Long-term memory (last 20 conversations)
+      • 📚 Accumulated knowledge (learned patterns)
+      • 🎯 Strategic planning (4-tier brain architecture)
+      • 🤝 Specialist agents (10 coordinated agents)
+      
+      Transform Copilot from an amnesiac intern into a continuously
+      improving development partner.
+      
+      Learn more: Say "tell me the CORTEX story"
+  
+  commands_by_category:
+    triggers:
+      - "commands by category"
+      - "categorized commands"
+      - "organize commands"
+    response_type: detailed
+    context_needed: false
+    verbosity: detailed
+    metadata:
+      category: system
+    content: |
+      **CORTEX Commands by Category**
+      
+      📦 Environment & Setup:
+        • setup - Configure development environment
+        • check brain - Validate brain integrity
+      
+      📚 Documentation:
+        • update story - Refresh CORTEX story
+        • build docs - Generate documentation site
+      
+      🧹 Maintenance:
+        • cleanup - Clean temporary files
+        • run tests - Execute test suite
+      
+      🎯 Planning (CORTEX 2.1):
+        • plan this - Interactive collaborative planning
+  
+  error_general:
+    triggers:
+      - "error occurred"
+      - "something went wrong"
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+    content: |
+      ❌ **An error occurred**
+      
+      {{error_message}}
+      
+      {{#if suggestion}}
+      Suggestion: {{suggestion}}
+      {{/if}}
+  
+  success_general:
+    triggers:
+      - "task complete"
+      - "operation successful"
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+    content: |
+      ✅ **Operation Successful**
+      
+      {{success_message}}
+      
+      {{#if next_steps}}
+      Next: {{next_steps}}
+      {{/if}}
+  
+  not_implemented:
+    triggers:
+      - "not implemented"
+      - "coming soon"
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+    content: |
+      ⏸️ **Feature Not Yet Implemented**
+      
+      {{feature_name}} is planned for {{release_version}}.
+      
+      Current Status: {{status}}
+      Architecture: {{architecture_status}}
+  
+  # ============================================================================
+  # Agent Response Templates (20 templates - 2 per agent)
+  # ============================================================================
+  
+  executor_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: executor
+    content: |
+      ✅ **Feature Implemented**
+      
+      Files Modified: {{files_count}}
+      {{#files}}
+      • {{path}}
+      {{/files}}
+      
+      [detailed]
+      Changes:
+      {{#changes}}
+      • {{file}}: {{description}}
+      {{/changes}}
+      [/detailed]
+      
+      Next: {{next_action}}
+  
+  executor_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: executor
+    content: |
+      ❌ **Implementation Failed**
+      
+      Error: {{error_message}}
+      
+      Suggestions:
+      {{#suggestions}}
+      • {{text}}
+      {{/suggestions}}
+  
+  tester_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: tester
+    content: |
+      ✅ **Tests Generated**
+      
+      Coverage: {{coverage_percent}}%
+      Test Files: {{test_files_count}}
+      
+      {{#test_files}}
+      • {{name}}: {{tests_count}} tests
+      {{/test_files}}
+      
+      Run: pytest {{test_paths}}
+  
+  tester_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: tester
+    content: |
+      ❌ **Test Generation Failed**
+      
+      Error: {{error_message}}
+      
+      Common issues:
+      • Missing test dependencies
+      • Invalid test file path
+      • Syntax errors in source code
+  
+  validator_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: validator
+    content: |
+      ✅ **Validation Passed**
+      
+      Checks Performed: {{checks_count}}
+      All validations successful.
+      
+      [detailed]
+      {{#checks}}
+      • {{name}}: {{status}}
+      {{/checks}}
+      [/detailed]
+  
+  validator_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: validator
+    content: |
+      ❌ **Validation Failed**
+      
+      {{#errors}}
+      • {{check}}: {{message}}
+      {{/errors}}
+      
+      Fix these issues and retry.
+  
+  work_planner_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: work_planner
+    content: |
+      ✅ **Work Plan Created**
+      
+      Tasks: {{tasks_count}}
+      Estimated Time: {{estimated_hours}}h
+      
+      {{#tasks}}
+      {{order}}. {{title}} ({{effort}})
+      {{/tasks}}
+  
+  work_planner_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: work_planner
+    content: |
+      ❌ **Planning Failed**
+      
+      Error: {{error_message}}
+      
+      Needs: More context about the task
+  
+  documenter_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: documenter
+    content: |
+      ✅ **Documentation Generated**
+      
+      Files Created: {{files_count}}
+      {{#files}}
+      • {{path}}
+      {{/files}}
+  
+  documenter_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: documenter
+    content: |
+      ❌ **Documentation Generation Failed**
+      
+      Error: {{error_message}}
+  
+  intent_detector_success:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: intent_detector
+    content: |
+      🎯 **Intent Detected**
+      
+      Type: {{intent_type}}
+      Confidence: {{confidence}}%
+      Routing to: {{target_agent}}
+  
+  intent_detector_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: intent_detector
+    content: |
+      ❓ **Intent Unclear**
+      
+      Could you clarify what you'd like me to do?
+      
+      Options: {{#options}}{{text}}, {{/options}}
+  
+  architect_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: detailed
+    metadata:
+      category: agent
+      agent: architect
+    content: |
+      ✅ **Architecture Design Complete**
+      
+      Components: {{components_count}}
+      
+      {{#components}}
+      • {{name}}: {{description}}
+      {{/components}}
+      
+      [expert]
+      Technical Details:
+      {{technical_notes}}
+      [/expert]
+  
+  architect_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: architect
+    content: |
+      ❌ **Architecture Design Failed**
+      
+      Error: {{error_message}}
+  
+  health_validator_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: health_validator
+    content: |
+      ✅ **Health Check Passed**
+      
+      All systems operational.
+      
+      {{#metrics}}
+      • {{name}}: {{value}}
+      {{/metrics}}
+  
+  health_validator_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: health_validator
+    content: |
+      ⚠️ **Health Issues Detected**
+      
+      {{#issues}}
+      • {{component}}: {{problem}}
+      {{/issues}}
+  
+  pattern_matcher_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: detailed
+    metadata:
+      category: agent
+      agent: pattern_matcher
+    content: |
+      ✅ **Similar Patterns Found**
+      
+      Matches: {{matches_count}}
+      
+      {{#matches}}
+      • {{description}} ({{similarity}}% similar)
+      {{/matches}}
+  
+  pattern_matcher_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: pattern_matcher
+    content: |
+      ℹ️ **No Patterns Found**
+      
+      This appears to be a novel problem.
+      No similar past solutions found.
+  
+  learner_success:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: learner
+    content: |
+      ✅ **Knowledge Updated**
+      
+      New patterns learned: {{patterns_count}}
+      Knowledge graph updated.
+  
+  learner_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: agent
+      agent: learner
+    content: |
+      ❌ **Learning Failed**
+      
+      Error: {{error_message}}
+  
+  # ============================================================================
+  # Operation Templates (30 templates - lifecycle for each operation)
+  # ============================================================================
+  
+  operation_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+    content: |
+      🚀 **{{operation_name}}** - Started
+      
+      Profile: {{profile}}
+      Modules: {{modules_count}}
+  
+  operation_progress:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+    content: |
+      ⏳ **{{operation_name}}** - {{percent}}%
+      
+      ✅ Completed: {{completed_modules}}
+      🔄 Running: {{current_module}}
+      ⏸️ Pending: {{pending_modules}}
+  
+  operation_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+    content: |
+      ✅ **{{operation_name}}** - Complete
+      
+      Duration: {{duration_seconds}}s
+      Modules: {{succeeded}}/{{total}} succeeded
+      
+      {{#failures}}
+      ❌ {{module_name}}: {{error}}
+      {{/failures}}
+      
+      Next: {{recommendation}}
+  
+  operation_failed:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+    content: |
+      ❌ **{{operation_name}}** - Failed
+      
+      Error: {{error_message}}
+      Module: {{failed_module}}
+      
+      Troubleshooting:
+      {{#suggestions}}
+      • {{text}}
+      {{/suggestions}}
+  
+  setup_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: setup
+    content: |
+      🔧 **Environment Setup** - Starting
+      
+      Platform: {{platform}}
+      Profile: {{profile}}
+  
+  setup_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: setup
+    content: |
+      ✅ **Environment Setup Complete**
+      
+      Platform: {{platform}}
+      Python: {{python_version}}
+      Dependencies: {{dependencies_installed}}
+      
+      You're ready to go!
+  
+  cleanup_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: cleanup
+    content: |
+      🧹 **Workspace Cleanup** - Starting
+      
+      Profile: {{profile}}
+      Scanning...
+  
+  cleanup_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: cleanup
+    content: |
+      ✅ **Cleanup Complete**
+      
+      Files Removed: {{files_count}} ({{size_mb}}MB)
+      Logs Rotated: {{logs_count}}
+      DB Optimized: {{db_savings_mb}}MB
+      
+      Total Space Freed: {{total_mb}}MB
+  
+  story_refresh_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: story_refresh
+    content: |
+      📚 **Story Refresh** - Starting
+      
+      Loading story template...
+  
+  story_refresh_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: story_refresh
+    content: |
+      ✅ **Story Refresh Complete**
+      
+      Files Updated: {{files_count}}
+      Transformations: {{transformations_count}}
+      
+      Preview: {{preview_path}}
+  
+  docs_build_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: docs_build
+    content: |
+      📖 **Documentation Build** - Starting
+      
+      Building documentation site...
+  
+  docs_build_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: docs_build
+    content: |
+      ✅ **Documentation Built**
+      
+      Pages Generated: {{pages_count}}
+      Output: {{output_dir}}
+      
+      View: {{url}}
+  
+  brain_check_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: brain_check
+    content: |
+      🛡️ **Brain Protection Check** - Starting
+      
+      Validating CORTEX brain integrity...
+  
+  brain_check_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: brain_check
+    content: |
+      ✅ **Brain Protection Validated**
+      
+      Tier 0: {{tier0_status}}
+      Tier 1: {{tier1_status}}
+      Tier 2: {{tier2_status}}
+      Tier 3: {{tier3_status}}
+      
+      All systems protected.
+  
+  tests_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: tests
+    content: |
+      🧪 **Test Suite** - Starting
+      
+      Running {{tests_count}} tests...
+  
+  tests_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: tests
+    content: |
+      ✅ **Tests Passed**
+      
+      Passed: {{passed}}/{{total}}
+      Coverage: {{coverage}}%
+      Duration: {{duration}}s
+      
+      {{#failures}}
+      ❌ {{test_name}}: {{error}}
+      {{/failures}}
+  
+  design_sync_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      🔄 **Design Synchronization** - Starting
+      
+      Profile: {{profile}}
+      Version: CORTEX {{version}}
+      Scanning implementation...
+  
+  design_sync_discovery:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      🔍 **Discovery Complete**
+      
+      Implementation:
+      • Modules: {{total_modules}} ({{implemented_modules}} implemented)
+      • Tests: {{total_tests}} tests
+      • Plugins: {{plugins_count}} operational
+      • Operations: {{operations_count}} defined
+      
+      Design:
+      • Version: CORTEX {{design_version}}
+      • Design files: {{design_files_count}}
+      • Status files: {{status_files_count}}
+      • YAML schemas: {{yaml_count}}
+  
+  design_sync_gaps:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      ⚠️ **Gaps Identified**
+      
+      {{gaps_count}} issues found:
+      
+      {{#inconsistent_counts}}
+      • {{operation}}: Claimed {{claimed}} modules, actually {{actual}}
+      {{/inconsistent_counts}}
+      
+      {{#if redundant_status}}
+      • {{redundant_status}} redundant status files
+      {{/if}}
+      
+      {{#if verbose_md}}
+      • {{verbose_md}} verbose MD documents (YAML candidates)
+      {{/if}}
+  
+  design_sync_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      ✅ **Design Synchronization Complete**
+      
+      Profile: {{profile}}
+      Duration: {{duration_seconds}}s
+      
+      Changes Applied:
+      • Status files consolidated: {{status_consolidated}}
+      • MD to YAML converted: {{md_converted}}
+      • Optimizations integrated: {{optimizations}}
+      • Gaps resolved: {{gaps_resolved}}
+      
+      Git: {{git_commits}} commit(s)
+      
+      {{#next_actions}}
+      Next: {{text}}
+      {{/next_actions}}
+  
+  # ============================================================================
+  # Error Templates (15 templates)
+  # ============================================================================
+  
+  missing_dependency:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Missing Dependency**
+      
+      Package: {{package_name}}
+      Required by: {{required_by}}
+      
+      Fix: pip install {{package_name}}
+  
+  permission_denied:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      🔒 **Permission Denied**
+      
+      {{error_message}}
+      
+      Try: Run with appropriate permissions
+  
+  validation_failed:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ⚠️ **Validation Failed**
+      
+      {{#errors}}
+      • {{field}}: {{message}}
+      {{/errors}}
+      
+      Fix these issues and retry.
+  
+  file_not_found:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **File Not Found**
+      
+      Path: {{file_path}}
+      
+      Check that the file exists and the path is correct.
+  
+  network_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Network Error**
+      
+      {{error_message}}
+      
+      Check your internet connection and retry.
+  
+  timeout_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ⏱️ **Operation Timed Out**
+      
+      {{error_message}}
+      
+      The operation took longer than {{timeout}}s.
+  
+  configuration_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ⚙️ **Configuration Error**
+      
+      {{error_message}}
+      
+      Check: {{config_file}}
+      
+      {{#suggestions}}
+      • {{text}}
+      {{/suggestions}}
+  
+  syntax_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Syntax Error**
+      
+      File: {{file_path}}
+      Line: {{line_number}}
+      
+      {{error_message}}
+  
+  import_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Import Error**
+      
+      Module: {{module_name}}
+      
+      {{error_message}}
+      
+      Fix: pip install {{required_package}}
+  
+  runtime_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Runtime Error**
+      
+      {{error_message}}
+      
+      [detailed]
+      Stack trace:
+      {{stack_trace}}
+      [/detailed]
+  
+  database_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Database Error**
+      
+      {{error_message}}
+      
+      Database: {{db_path}}
+      
+      Try: Check database integrity and permissions
+  
+  path_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Invalid Path**
+      
+      Path: {{path}}
+      
+      {{error_message}}
+  
+  type_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Type Error**
+      
+      {{error_message}}
+      
+      Expected: {{expected_type}}
+      Got: {{actual_type}}
+  
+  value_error:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Invalid Value**
+      
+      {{error_message}}
+      
+      Parameter: {{parameter}}
+  
+  unknown_error:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: error
+    content: |
+      ❌ **Unexpected Error**
+      
+      {{error_message}}
+      
+      [detailed]
+      {{error_details}}
+      [/detailed]
+      
+      Please report this issue.
+  
+  # ============================================================================
+  # Plugin Templates (10 templates)
+  # ============================================================================
+  
+  plugin_registered:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+    content: |
+      🔌 **Plugin Registered**
+      
+      Name: {{plugin_name}}
+      Version: {{version}}
+      Commands: {{commands_count}}
+  
+  plugin_execution_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+    content: |
+      🔌 **{{plugin_name}}** - Starting
+      
+      {{description}}
+  
+  plugin_execution_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+    content: |
+      ✅ **{{plugin_name}}** - Complete
+      
+      {{result_message}}
+      
+      [detailed]
+      {{#details}}
+      • {{key}}: {{value}}
+      {{/details}}
+      [/detailed]
+  
+  plugin_execution_failed:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+    content: |
+      ❌ **{{plugin_name}}** - Failed
+      
+      Error: {{error_message}}
+      
+      {{#suggestions}}
+      • {{text}}
+      {{/suggestions}}
+  
+  platform_switch_detected:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: platform_switch
+    content: |
+      🔄 **Platform Change Detected**
+      
+      From: {{old_platform}}
+      To: {{new_platform}}
+      
+      Auto-configuring...
+  
+  platform_switch_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: platform_switch
+    content: |
+      ✅ **Platform Configuration Complete**
+      
+      Platform: {{platform}}
+      Shell: {{shell}}
+      Paths configured: {{paths_count}}
+  
+  cleanup_scan_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: cleanup
+    content: |
+      🔍 **Cleanup Scan Complete**
+      
+      Temp Files: {{temp_files}} ({{temp_size}}MB)
+      Old Logs: {{log_files}} ({{log_size}}MB)
+      Cache: {{cache_size}}MB
+      
+      Proceed with cleanup?
+  
+  doc_refresh_analyzing:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: doc_refresh
+    content: |
+      📖 **Analyzing Documentation**
+      
+      Files: {{files_count}}
+      Checking for updates...
+  
+  doc_refresh_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: doc_refresh
+    content: |
+      ✅ **Documentation Refreshed**
+      
+      Files Updated: {{updated_count}}
+      Links Fixed: {{links_fixed}}
+      TOC Regenerated: {{toc_updated}}
+  
+  extension_scaffold_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: plugin
+      plugin: extension_scaffold
+    content: |
+      ✅ **VS Code Extension Scaffolded**
+      
+      Name: {{extension_name}}
+      Files Created: {{files_count}}
+      
+      Next Steps:
+      1. cd {{extension_path}}
+      2. npm install
+      3. Press F5 to debug
+
+  # ============================================================================
+  # COPYRIGHT & SIGNATURE TEMPLATES
+  # ============================================================================
+  
+  cortex_signature:
+    triggers: []
+    response_type: narrative
+    context_needed: false
+    verbosity: concise
+    metadata:
+      category: system
+      usage: orchestrator_header
+    content: |
+      ================================================================================
+      CORTEX Entry Point Orchestration
+      ================================================================================
+      
+      Author:     Asif Hussain
+      Copyright:  © 2024-2025 Asif Hussain. All rights reserved.
+      License:    Proprietary - See LICENSE file for terms
+      Repository: https://github.com/asifhussain60/CORTEX
+      
+      This software is protected by copyright law and international treaties.
+      Unauthorized reproduction or distribution of this software, or any portion
+      of it, may result in severe civil and criminal penalties.
+      
+      ================================================================================
+  
+  orchestrator_header:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+      usage: orchestrator_execution
+    content: |
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX {{operation_name}} Orchestrator v{{version}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      📝 **Your Request:** {{user_request}}
+      
+      Profile: {{profile}}  │  Mode: {{mode}}{{#if dry_run}} (DRY RUN - Preview Only){{/if}}  │  Started: {{start_time}}
+      
+      © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      🎯 **Understanding:** {{refined_intent}}
+      
+      💬 **Response:**
+      {{response_content}}
+      
+      {{#if challenges}}
+      ⚠️ **Considerations:**
+      {{challenges}}
+      
+      ✨ **Recommendation:** {{recommendation}}
+      {{/if}}
+      
+      {{#if next_steps}}
+      🔮 **Next Steps:**
+      {{#next_steps}}
+        {{icon}} {{text}}
+      {{/next_steps}}
+      {{/if}}
+  
+  orchestrator_footer:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+      usage: orchestrator_completion
+    content: |
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CORTEX {{operation_name}} - {{status}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      Duration: {{duration}}  │  Modules: {{modules_succeeded}}/{{modules_total}} succeeded
+      {{#if warnings}}⚠️  Warnings: {{warnings_count}}{{/if}}
+      {{#if errors}}❌ Errors: {{errors_count}}{{/if}}
+      
+      {{#if next_steps}}
+      💡 Next Steps:
+      {{#next_steps}}
+        • {{text}}
+      {{/next_steps}}
+      {{/if}}
+      
+      © 2024-2025 Asif Hussain │ CORTEX Orchestration
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ============================================================================
+# RESPONSE ROUTING RULES
+# ============================================================================
+routing:
+  # Default response if no trigger matches
+  default: help_table
+  
+  # Priority order (checked first to last)
+  priority:
+    - help_table
+    - help_detailed
+    - quick_start
+    - status_check
+    - help_setup
+    - help_cleanup
+    - help_story
+
+# ============================================================================
+# RESPONSE FORMATTING PREFERENCES
+# ============================================================================
+formatting:
+  max_width: 70
+  use_emojis: true
+  use_unicode_icons: true
+  condensed_mode: true  # For simple queries, use most condensed format

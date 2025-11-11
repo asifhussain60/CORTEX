@@ -1,0 +1,152 @@
+# CORTEX Single Source of Truth Registry
+# 
+# This file defines the ONE authoritative source for each domain.
+# All other references must derive from these sources.
+#
+# Rule: When in doubt, check here. If two sources conflict, THIS file wins.
+
+truth_sources:
+  architecture:
+    source: "cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml"
+    purpose: "System design, component structure, patterns"
+    derived_from: []
+    consumers:
+      - "prompts/shared/technical-reference.md"
+      - "docs/architecture/*.md"
+      - "CORTEX.prompt.md"
+    update_frequency: "After major design decisions"
+    
+  operations:
+    source: "cortex-operations.yaml"
+    purpose: "Operation definitions, module counts, implementation status"
+    derived_from: []
+    consumers:
+      - "cortex-brain/cortex-2.0-design/STATUS.md"
+      - "cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD"
+      - "CORTEX.prompt.md (operations table)"
+    update_frequency: "After module implementation or status change"
+    validation:
+      - "Module count must match src/operations/modules/*.py count (±3)"
+      - "Implementation status must reflect actual working code"
+    
+  implementation_status:
+    source: "cortex-brain/cortex-2.0-design/status-data.yaml"
+    purpose: "Phase completion, task progress, implementation metrics"
+    derived_from: []
+    consumers:
+      - "cortex-brain/cortex-2.0-design/STATUS.md (detailed prose)"
+      - "cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD (visual bars)"
+    update_frequency: "After completing any phase or task"
+    generation:
+      script: "scripts/generate_status_docs.py"
+      command: "python scripts/generate_status_docs.py"
+    validation:
+      - "All three files must be updated together"
+      - "Progress bars must match percentages"
+    
+  knowledge_patterns:
+    source: "cortex-brain/tier2/knowledge_graph.db"
+    purpose: "Learned patterns, validation insights, best practices"
+    derived_from:
+      - "cortex-brain/knowledge-graph.yaml (bootstrap patterns)"
+    consumers:
+      - "Agent routing system (pattern matching)"
+      - "Validation system (SKULL protection)"
+    update_frequency: "Continuously (after each work session)"
+    migration_status: "⚠️ PENDING - 32 YAML patterns not yet migrated"
+    
+  conversation_history:
+    source: "cortex-brain/conversation-history.jsonl"
+    purpose: "Conversation continuity, context references"
+    derived_from: []
+    consumers:
+      - "cortex-brain/tier1/conversations.db (secondary storage)"
+    update_frequency: "Real-time (after each conversation turn)"
+    
+  test_inventory:
+    source: "pytest --collect-only output"
+    purpose: "Test count, test health, coverage metrics"
+    derived_from: []
+    consumers:
+      - "cortex-brain/cortex-2.0-design/STATUS.md"
+      - "cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD"
+    update_frequency: "After test suite changes"
+    validation:
+      - "Pass rate must be >95% before claiming features complete"
+      - "Test count in docs must match actual pytest collection"
+
+# Drift Prevention Rules
+drift_prevention:
+  rule_1:
+    name: "Update Derived Sources"
+    description: "When truth source changes, update ALL consumers within same commit"
+    enforcement: "pre-commit hook checks derived file timestamps"
+    
+  rule_2:
+    name: "No Conflicting Claims"
+    description: "Only ONE source can make authoritative claims per domain"
+    enforcement: "CI checks for duplicate definitions"
+    
+  rule_3:
+    name: "Test Before Claim (SKULL-001)"
+    description: "Cannot claim feature complete without >95% test pass rate"
+    enforcement: "pre-commit hook runs smoke tests"
+    
+  rule_4:
+    name: "Sync Status Trinity"
+    description: "status-data.yaml, STATUS.md, CORTEX2-STATUS.MD must update together"
+    enforcement: "pre-commit hook checks all three modified in same commit"
+
+# Current Drift Issues (2025-11-10)
+known_drift:
+  issue_1:
+    title: "Knowledge Graph YAML→SQLite Migration"
+    severity: "HIGH"
+    description: "32 patterns in YAML, 0 in SQLite"
+    truth_source: "tier2/knowledge_graph.db"
+    current_source: "knowledge-graph.yaml"
+    remediation: "Run migration script: python scripts/migrate_patterns.py"
+    
+  issue_2:
+    title: "Test Suite Health"
+    severity: "CRITICAL"
+    description: "560 failing tests (73.6% pass rate)"
+    truth_source: "pytest actual results"
+    documented_claim: ">95% pass rate expected"
+    remediation: "Triage and fix failing tests before new features"
+    
+  issue_3:
+    title: "Module Count Documented"
+    severity: "LOW"
+    description: "Docs showed 86 modules, actual is 97"
+    truth_source: "cortex-operations.yaml (97 modules)"
+    status: "RESOLVED (2025-11-10)"
+    
+  issue_4:
+    title: "Tier 1 Dual Storage"
+    severity: "MEDIUM"
+    description: "JSONL (15 convs) and SQLite (1 conv) both active"
+    truth_source: "conversation-history.jsonl (primary)"
+    remediation: "Document hybrid strategy or consolidate to single store"
+
+# Resolution Tracking
+resolution_log:
+  - date: "2025-11-10"
+    issue: "Module count mismatch"
+    action: "Verified cortex-operations.yaml correct (97 modules)"
+    status: "Resolved"
+    
+  - date: "2025-11-10"
+    issue: "Historical doc sprawl"
+    action: "Archived 3 Phase 2-5 docs to archive/"
+    status: "Partial (more archival needed)"
+    
+  - date: "2025-11-10"
+    issue: "Knowledge Graph activation"
+    action: "Identified 32 YAML patterns need migration"
+    status: "Planned"
+    
+  - date: "2025-11-10"
+    issue: "Test suite failures"
+    action: "Discovered 560 failures, triage scheduled"
+    status: "Tracked"
