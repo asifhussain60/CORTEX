@@ -10,13 +10,11 @@ from src.tier1.conversations import ConversationManager
 
 
 @pytest.fixture
-def temp_db():
+def temp_db(tmp_path):
     """Create a temporary database for testing."""
-    with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as f:
-        db_path = Path(f.name)
+    db_path = tmp_path / "test.db"
     yield db_path
-    if db_path.exists():
-        db_path.unlink()
+    # Cleanup handled automatically by tmp_path
 
 
 @pytest.fixture

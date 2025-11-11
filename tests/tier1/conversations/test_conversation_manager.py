@@ -3,27 +3,15 @@ Unit tests for ConversationManager module.
 """
 
 import pytest
-import tempfile
-from pathlib import Path
 from datetime import datetime, timedelta
 from src.tier1.working_memory import WorkingMemory
 
 
 @pytest.fixture
-def temp_db():
-    """Create a temporary database for testing."""
-    with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as f:
-        db_path = Path(f.name)
-    yield db_path
-    # Don't delete - let OS clean up temp files
-    # if db_path.exists():
-    #     db_path.unlink()
-
-
-@pytest.fixture
-def manager(temp_db):
+def manager(tmp_path):
     """Create a WorkingMemory instance and return its conversation_manager."""
-    wm = WorkingMemory(temp_db)
+    db_path = tmp_path / "test.db"
+    wm = WorkingMemory(db_path)
     return wm.conversation_manager
 
 

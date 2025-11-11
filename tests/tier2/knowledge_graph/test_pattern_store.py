@@ -6,10 +6,6 @@ pin/unpin via update, delete, and list with filters.
 """
 
 import sqlite3
-import tempfile
-import shutil
-from pathlib import Path
-
 import pytest
 
 from src.tier2.knowledge_graph.database import ConnectionManager, DatabaseSchema
@@ -17,17 +13,11 @@ from src.tier2.knowledge_graph.patterns.pattern_store import PatternStore
 
 
 @pytest.fixture
-def temp_db_path():
-    temp_dir = tempfile.mkdtemp()
-    db_path = Path(temp_dir) / "kg_test.db"
-    yield db_path
-    shutil.rmtree(temp_dir, ignore_errors=True)
-
-
-@pytest.fixture
-def store(temp_db_path):
-    db = ConnectionManager(db_path=temp_db_path)
-    DatabaseSchema.initialize(db_path=temp_db_path)
+def store(tmp_path):
+    """Create a PatternStore with temp database."""
+    db_path = tmp_path / "kg_test.db"
+    db = ConnectionManager(db_path=db_path)
+    DatabaseSchema.initialize(db_path=db_path)
     return PatternStore(db)
 
 

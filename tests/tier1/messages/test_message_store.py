@@ -3,25 +3,14 @@ Unit tests for MessageStore module.
 """
 
 import pytest
-import tempfile
-from pathlib import Path
 from src.tier1.messages import MessageStore
 
 
 @pytest.fixture
-def temp_db():
-    """Create a temporary database for testing."""
-    with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as f:
-        db_path = Path(f.name)
-    yield db_path
-    if db_path.exists():
-        db_path.unlink()
-
-
-@pytest.fixture
-def store(temp_db):
+def store(tmp_path):
     """Create a MessageStore instance with temp database."""
-    return MessageStore(temp_db)
+    db_path = tmp_path / "test.db"
+    return MessageStore(db_path)
 
 
 class TestAddMessages:
