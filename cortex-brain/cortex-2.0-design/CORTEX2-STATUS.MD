@@ -51,19 +51,31 @@ Phase 10 - Production Hardening             [░░░░░░░░░░░�
 - **Agent System:** 10/10 agents working
 
 ### Quality Metrics
-- **Test Pass Rate:** 100% (2,088/2,088 passing)
+- **Test Pass Rate:** 85% (1,769/2,088 passing) - 🔴 **NEEDS ATTENTION**
+- **Test Execution:** 6m 40s - 🔴 **NEEDS OPTIMIZATION**
+- **Test Failures:** 205 failures, 124 errors
 - **Token Optimization:** 97.2% reduction achieved
 - **Cross-Platform:** Mac/Windows/Linux supported
+
+**Test Optimization Plan:** See `TEST-SUITE-OPTIMIZATION-PLAN.md`
 
 ---
 
 ## 🎯 Current Focus
+
+**🔴 HIGH PRIORITY: Test Suite Optimization**
+- **Issue:** Tests taking 6m 40s, 205 failures, 124 errors (85% pass rate)
+- **Target:** <30s unit tests, 100% pass rate
+- **Plan:** `cortex-brain/cortex-2.0-design/TEST-SUITE-OPTIMIZATION-PLAN.md`
+- **Estimated Effort:** 16-20 hours over 3 days
+- **Impact:** User-blocking bottleneck for development
 
 **Phase 5 (85% complete):**
 - ✅ Integration tests (100%)
 - ✅ Brain protection (100%)
 - ✅ Response templates (100%)
 - ✅ Platform switch (100%)
+- 🔴 Test suite optimization (HIGH PRIORITY - NEW)
 - ⏸️ Edge cases (deferred)
 - ⏸️ Performance tests (deferred)
 
