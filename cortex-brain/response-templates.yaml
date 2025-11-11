@@ -41,6 +41,7 @@ templates:
       --------------------------------------------------------------------------------
       ✅      update story   Refresh CORTEX story documentation
       🔄      setup          Setup/configure environment
+      ✅      design sync    Synchronize design with implementation
       🔄      cleanup        Clean temporary files
       ⏸️      build docs     Generate documentation
       ⏸️      check brain    Validate brain protection
@@ -55,7 +56,7 @@ templates:
         🎯 planned  - Design phase (CORTEX 2.1+)
       
       Usage:
-        Natural language:  "setup environment" or "refresh story"
+        Natural language:  "setup environment" or "refresh story" or "sync design"
         Slash commands:    /setup or /CORTEX, refresh cortex story
       
       For details: "help detailed" or "help <command>"
@@ -91,6 +92,11 @@ templates:
       ✅ update story - Refresh CORTEX story documentation
          Examples: "refresh story", "update story"
          Modules: 6 (load, transform, validate, save, nav, preview)
+      
+      ✅ design sync - Synchronize design with implementation
+         Examples: "sync design", "align design", "consolidate status"
+         Modules: 1 orchestrator (6-phase workflow)
+         Profiles: quick (analysis), standard (safe updates), comprehensive (full sync)
       
       ⏸️ build docs - Generate and build documentation
          Examples: "generate docs", "build documentation"
@@ -296,6 +302,43 @@ templates:
       
       **Example:**
         "refresh the cortex story"
+  
+  help_design_sync:
+    triggers:
+      - "help design sync"
+      - "help sync"
+      - "design sync help"
+    
+    response_type: detailed
+    context_needed: false
+    
+    content: |
+      
+      🔄 **Design Sync Command**
+      
+      **Purpose:** Synchronize CORTEX design documents with actual implementation
+      
+      **Usage:**
+        Natural: "sync design", "design sync", "align design with implementation"
+      
+      **What it does:**
+        ✅ Discovers live implementation state (modules, tests, plugins)
+        ✅ Analyzes design-implementation gaps
+        ✅ Integrates optimization recommendations
+        ✅ Converts verbose MD to YAML schemas
+        ✅ Consolidates multiple status files into ONE
+        ✅ Updates with accurate counts and progress bars
+        ✅ Commits all changes with git tracking
+      
+      **Profiles:**
+        • quick - Analysis only (no changes)
+        • standard - Consolidation + safe updates (default)
+        • comprehensive - Full sync with YAML conversion
+      
+      **Status:** ✅ All capabilities implemented and tested
+      
+      **Example:**
+        "sync design with comprehensive profile"
   
   # ============================================================================
   # Additional System Templates
@@ -1034,6 +1077,95 @@ templates:
       {{#failures}}
       ❌ {{test_name}}: {{error}}
       {{/failures}}
+  
+  design_sync_started:
+    triggers: []
+    response_type: narrative
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      🔄 **Design Synchronization** - Starting
+      
+      Profile: {{profile}}
+      Version: CORTEX {{version}}
+      Scanning implementation...
+  
+  design_sync_discovery:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      🔍 **Discovery Complete**
+      
+      Implementation:
+      • Modules: {{total_modules}} ({{implemented_modules}} implemented)
+      • Tests: {{total_tests}} tests
+      • Plugins: {{plugins_count}} operational
+      • Operations: {{operations_count}} defined
+      
+      Design:
+      • Version: CORTEX {{design_version}}
+      • Design files: {{design_files_count}}
+      • Status files: {{status_files_count}}
+      • YAML schemas: {{yaml_count}}
+  
+  design_sync_gaps:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      ⚠️ **Gaps Identified**
+      
+      {{gaps_count}} issues found:
+      
+      {{#inconsistent_counts}}
+      • {{operation}}: Claimed {{claimed}} modules, actually {{actual}}
+      {{/inconsistent_counts}}
+      
+      {{#if redundant_status}}
+      • {{redundant_status}} redundant status files
+      {{/if}}
+      
+      {{#if verbose_md}}
+      • {{verbose_md}} verbose MD documents (YAML candidates)
+      {{/if}}
+  
+  design_sync_complete:
+    triggers: []
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: operation
+      operation: design_sync
+    content: |
+      ✅ **Design Synchronization Complete**
+      
+      Profile: {{profile}}
+      Duration: {{duration_seconds}}s
+      
+      Changes Applied:
+      • Status files consolidated: {{status_consolidated}}
+      • MD to YAML converted: {{md_converted}}
+      • Optimizations integrated: {{optimizations}}
+      • Gaps resolved: {{gaps_resolved}}
+      
+      Git: {{git_commits}} commit(s)
+      
+      {{#next_actions}}
+      Next: {{text}}
+      {{/next_actions}}
   
   # ============================================================================
   # Error Templates (15 templates)
