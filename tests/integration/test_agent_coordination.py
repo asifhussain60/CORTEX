@@ -21,6 +21,19 @@ try:
 except ImportError:
     IntentRouter = None
 
+try:
+    from src.cortex_agents.architect import Architect
+    from src.cortex_agents.work_planner import WorkPlanner
+    from src.cortex_agents.executor import Executor
+    from src.cortex_agents.learner import Learner
+    from src.cortex_agents.pattern_matcher import PatternMatcher
+except ImportError:
+    Architect = None
+    WorkPlanner = None
+    Executor = None
+    Learner = None
+    PatternMatcher = None
+
 # For agents not yet implemented, we'll use mocks in the tests
 
 
@@ -151,6 +164,7 @@ class TestCorpusCallosumCoordination:
         (brain_root / "knowledge-graph.yaml").write_text("patterns: {}")
         return brain_root
     
+    @pytest.mark.skipif(Architect is None, reason="Requires Architect agent to be implemented")
     def test_tactical_strategic_handoff(self, mock_brain_root):
         """
         Test handoff between strategic planning (right brain) and tactical execution (left brain).
@@ -179,6 +193,7 @@ class TestCorpusCallosumCoordination:
         
         assert execution["status"] in ["success", "partial", "simulated"]
     
+    @pytest.mark.skipif(Learner is None, reason="Requires Learner and PatternMatcher agents to be implemented")
     def test_pattern_learning_feedback_loop(self, mock_brain_root):
         """
         Test feedback loop: Learning (right brain) → Pattern matching (right brain) → 

@@ -75,7 +75,7 @@ class TestAmbientCaptureDaemon:
         hook_files = list(hooks_dir.glob("post-*"))
         assert len(hook_files) > 0
     
-    @patch('auto_capture_daemon.WorkingMemory')
+    @patch('src.tier1.working_memory.WorkingMemory')
     def test_captures_file_changes(self, mock_wm_class, temp_workspace):
         """Should capture file changes to Tier 1."""
         # Mock WorkingMemory
@@ -189,7 +189,7 @@ class TestVSCodeTasksIntegration:
 class TestEndToEndCapture:
     """Test end-to-end capture scenarios."""
     
-    @patch('auto_capture_daemon.WorkingMemory')
+    @patch('src.tier1.working_memory.WorkingMemory')
     def test_full_development_workflow_capture(self, mock_wm_class, tmp_path):
         """Should capture multiple event types in realistic workflow."""
         # Setup

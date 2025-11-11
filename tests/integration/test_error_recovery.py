@@ -444,11 +444,12 @@ class TestValidationRules:
         brain_root.mkdir()
         
         rules_path = brain_root / "brain-protection-rules.yaml"
+        # Use raw string or escape properly - YAML doesn't need escaped backslashes in quoted strings
         rules_path.write_text("""
 validation_rules:
   code_quality:
     - name: No hardcoded credentials
-      pattern: "(password|api_key|secret)\\s*=\\s*['\"]\\w+"
+      pattern: "(password|api_key|secret)\\\\s*=\\\\s*['\\\"]\\\\w+"
       severity: BLOCKING
       
   test_quality:
@@ -465,7 +466,9 @@ validation_rules:
     
     @pytest.fixture
     def brain_protector(self, temp_brain_root):
-        return BrainProtector(brain_root=str(temp_brain_root))
+        # BrainProtector takes rules_path, not brain_root
+        rules_path = temp_brain_root / "brain-protection-rules.yaml"
+        return BrainProtector(rules_path=rules_path)
     
     def test_hardcoded_credentials_blocked(self, brain_protector):
         """Test that hardcoded credentials are blocked."""

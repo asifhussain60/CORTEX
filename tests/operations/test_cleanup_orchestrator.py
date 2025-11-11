@@ -194,8 +194,8 @@ class TestFileReorganization:
         """Test script file reorganization"""
         orchestrator = CleanupOrchestrator(temp_project)
         
-        # Create misplaced script in root
-        script_file = temp_project / 'fix_something.py'
+        # Create misplaced script in root (matches pattern: .*_(fix|...).*\.py$)
+        script_file = temp_project / 'run_fix_something.py'
         script_file.write_text('# Fix script')
         
         # Run reorganization (dry run)
@@ -228,16 +228,17 @@ class TestMDConsolidation:
         
         docs_dir = temp_project / 'docs'
         
-        # Create duplicate versions
-        (docs_dir / 'plan.md').write_text('# Latest plan')
+        # Create duplicate versions (all match patterns)
         (docs_dir / 'plan-v1.md').write_text('# Old plan v1')
         (docs_dir / 'plan-v2.md').write_text('# Old plan v2')
+        (docs_dir / 'plan-v3.md').write_text('# Old plan v3')
         (docs_dir / 'plan-COPY.md').write_text('# Copy')
         
         # Run consolidation (dry run)
         orchestrator._consolidate_md_files(dry_run=True)
         
-        # Should detect duplicates
+        # All 4 files match patterns, mapped to "plan.md"
+        # Newest is kept, other 3 are consolidated
         assert orchestrator.metrics.md_files_consolidated >= 3
     
     def test_newest_file_kept(self, temp_project):

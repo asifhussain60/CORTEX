@@ -64,7 +64,7 @@ class DryRunOrchestratorMixin:
         if cls._templates is None:
             template_file = Path(__file__).parent.parent.parent / 'cortex-brain' / 'response-templates.yaml'
             if template_file.exists():
-                with open(template_file) as f:
+                with open(template_file, encoding='utf-8') as f:
                     data = yaml.safe_load(f)
                     cls._templates = data.get('templates', {})
             else:
