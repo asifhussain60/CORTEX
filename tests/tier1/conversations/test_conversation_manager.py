@@ -188,7 +188,7 @@ class TestUpdateConversation:
     def test_update_message_count(self, manager):
         """Test updating message count."""
         manager.add_conversation("update-4", "Test")
-        manager.update_conversation("update-4", message_count=5)
+        manager.increment_message_count("update-4", count=5)
         
         conv = manager.get_conversation("update-4")
         assert conv.message_count == 5

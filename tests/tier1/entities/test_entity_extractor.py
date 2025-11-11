@@ -29,7 +29,7 @@ class TestExtractEntities:
     
     def test_extract_file_entities(self, extractor):
         """Test extracting file paths."""
-        content = "Check the file src/main.py for the implementation."
+        content = "Check the file `src/main.py` for the implementation."
         entities = extractor.extract_entities("conv-1", content)
         
         file_entities = [e for e in entities if e.entity_type == EntityType.FILE]
@@ -38,7 +38,7 @@ class TestExtractEntities:
     
     def test_extract_class_entities(self, extractor):
         """Test extracting class names."""
-        content = "The UserManager class handles authentication."
+        content = "The `UserManager` class handles authentication."
         entities = extractor.extract_entities("conv-1", content)
         
         class_entities = [e for e in entities if e.entity_type == EntityType.CLASS]
@@ -47,7 +47,7 @@ class TestExtractEntities:
     
     def test_extract_method_entities(self, extractor):
         """Test extracting method names."""
-        content = "Call the calculate_total() method to get the sum."
+        content = "Call the `calculate_total()` method to get the sum."
         entities = extractor.extract_entities("conv-1", content)
         
         method_entities = [e for e in entities if e.entity_type == EntityType.METHOD]
@@ -57,8 +57,8 @@ class TestExtractEntities:
     def test_extract_multiple_entity_types(self, extractor):
         """Test extracting mixed entity types."""
         content = """
-        In the file src/models/user.py, the UserModel class 
-        has a validate() method that checks inputs.
+        In the file `src/models/user.py`, the `UserModel` class 
+        has a `validate()` method that checks inputs.
         """
         entities = extractor.extract_entities("conv-1", content)
         

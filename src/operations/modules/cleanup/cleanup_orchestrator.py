@@ -29,6 +29,7 @@ from collections import defaultdict
 
 from src.operations.base_operation_module import BaseOperationModule, OperationPhase, OperationResult, OperationModuleMetadata, OperationStatus
 from src.operations.header_utils import print_minimalist_header, print_completion_footer
+from .remove_obsolete_tests_module import RemoveObsoleteTestsModule
 
 logger = logging.getLogger(__name__)
 
@@ -264,6 +265,23 @@ class CleanupOrchestrator(BaseOperationModule):
             self._detect_bloat()
             logger.info(f"✅ {self.metrics.bloated_files_found} bloated files detected")
             logger.info("")
+            
+            # Phase 6.5: Remove obsolete tests
+            if profile in ['standard', 'comprehensive']:
+                logger.info("Phase 6.5: Remove Obsolete Tests")
+                logger.info("-" * 70)
+                obsolete_result = self._remove_obsolete_tests(dry_run)
+                if obsolete_result.success:
+                    obsolete_count = obsolete_result.data.get('obsolete_tests_found', 0)
+                    removed_count = obsolete_result.data.get('removed_count', 0)
+                    logger.info(f"✅ Found {obsolete_count} obsolete tests")
+                    if not dry_run and removed_count > 0:
+                        logger.info(f"✅ Removed {removed_count} obsolete test files")
+                        for test_file in obsolete_result.data.get('removed_files', []):
+                            logger.info(f"   - {test_file}")
+                else:
+                    logger.warning(f"⚠️  Obsolete test removal failed: {obsolete_result.message}")
+                logger.info("")
             
             # Phase 7: Git commit
             if not dry_run and self.metrics.backups_deleted > 0:
@@ -679,6 +697,22 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
         except Exception as e:
             logger.error(f"Optimization failed: {e}")
             self.metrics.errors.append(f"Optimization failed: {e}")
+    
+    def _remove_obsolete_tests(self, dry_run: bool) -> OperationResult:
+        """Remove obsolete test files calling non-existent APIs."""
+        from src.operations.base_operation_module import OperationStatus
+        
+        try:
+            module = RemoveObsoleteTestsModule(self.project_root)
+            return module.execute({'dry_run': dry_run})
+        except Exception as e:
+            logger.error(f"Failed to remove obsolete tests: {e}")
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED, 
+                message=f"Obsolete test removal failed: {str(e)}", 
+                data={'error': str(e)}
+            )
     
     def _archive_backups_to_github(self, backup_files: List[Path]) -> Dict[str, Any]:
         """Archive backup files to GitHub before deletion"""

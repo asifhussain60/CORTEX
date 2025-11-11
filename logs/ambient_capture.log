@@ -750,3 +750,53 @@
 2025-11-11 09:06:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 09:06:45 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-11 09:07:03 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:07:17 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:07:35 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:08:09 - WARNING - SECURITY: Blocked access to file outside workspace: \\?\D:\PROJECTS\CORTEX\cortex-metrics-session-20251111-090809-124567.json
+2025-11-11 09:08:40 - ERROR - Error detecting pattern: KeyError
+2025-11-11 09:08:40 - ERROR - Error detecting pattern: KeyError
+2025-11-11 09:08:40 - ERROR - Error scoring activity: KeyError
+2025-11-11 09:08:40 - ERROR - Error scoring activity: KeyError
+2025-11-11 09:08:40 - ERROR - Error summarizing event: KeyError
+2025-11-11 09:08:40 - ERROR - Error summarizing event: KeyError
+2025-11-11 09:09:03 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:11:08 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:11:19 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:12:53 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:20:14 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:20:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:20:42 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:20:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:21:00 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:21:07 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:21:08 - WARNING - SECURITY: Blocked access to file outside workspace: \\?\D:\$Extend\$Deleted\002C00000001EA363DA42AD5
+2025-11-11 09:21:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:21:19 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:21:37 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:22:44 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:22:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:23:06 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:23:14 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:24:13 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:24:21 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:26:18 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:26:30 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:29:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:29:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:30:20 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:30:48 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:31:08 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:31:33 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:31:57 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:32:24 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:32:38 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:32:54 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:33:10 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:34:09 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:34:41 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 09:36:29 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:20:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:22:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:34:47 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:35:29 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 10:37:37 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
