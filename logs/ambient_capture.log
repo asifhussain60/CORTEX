@@ -1731,3 +1731,21 @@
 2025-11-11 15:37:36 - ERROR - Error scoring activity: KeyError
 2025-11-11 15:37:36 - ERROR - Error summarizing event: KeyError
 2025-11-11 15:37:36 - ERROR - Error summarizing event: KeyError
+2025-11-11 15:40:02 - INFO - Batch summary: Batch: 1 unknown changes. Files: 1. Avg score: 0/100
+2025-11-11 15:40:02 - INFO - Batch summary: Batch: 1 unknown changes. Files: 1. Avg score: 0/100
+2025-11-11 15:40:07 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 15:40:07 - INFO - Not a git repository, git monitoring disabled
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - ERROR - Capture script not found, skipping hook install
+2025-11-11 15:40:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:40:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:40:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:40:09 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:40:09 - ERROR - Error processing file event: ValueError
+2025-11-11 15:40:09 - ERROR - Error processing file event: ValueError
+2025-11-11 15:40:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 15:40:10 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
