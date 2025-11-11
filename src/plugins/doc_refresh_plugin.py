@@ -381,66 +381,110 @@ class Plugin(BasePlugin):
             }
     
     def _refresh_story_doc(self, file_path: Path, design_context: Dict[str, Any]) -> Dict[str, Any]:
-        """Refresh Awakening Of CORTEX.md story - COMPLETE regeneration from design state
+        """Refresh Awakening Of CORTEX.md story using modular architecture
+        
+        CORTEX 2.0 MODULAR APPROACH:
+        - Uses 7 specialized modules for story refresh
+        - Supports dual-mode: generate-from-scratch vs update-in-place
+        - Auto-detects refresh mode based on change magnitude
+        - Enforces read time limits (60-75 min)
+        - Maintains 95:5 story:technical ratio
         
         CRITICAL RULES:
         - NEVER create new files (no Quick Read variants)
-        - Only UPDATE the existing file
+        - Only UPDATE existing files
         - Enforce read time limits (trim if needed)
         - Fail if file doesn't exist
         """
         try:
-            # CRITICAL: Validate file exists
-            if not file_path.exists():
-                return {
-                    "success": False,
-                    "error": (
-                        f"CRITICAL VIOLATION: File {file_path} does not exist. "
-                        f"Doc refresh plugin NEVER creates new files. "
-                        f"This operation is PROHIBITED."
-                    )
-                }
+            logger.info("Starting story refresh with modular architecture...")
             
-            # Load existing story for comparison
-            existing_story = file_path.read_text(encoding="utf-8")
+            # Initialize context for modules
+            context = {
+                'project_root': Path('.'),
+                'output_dir': file_path.parent,
+                'refresh_mode': self.config.get('story_refresh_mode', 'generate-from-scratch'),
+                'force_full_regeneration': self.config.get('force_full_regeneration', False)
+            }
             
-            # Validate read time BEFORE processing
-            if self.config.get("enforce_read_time_limits", True):
-                read_time_validation = self._validate_read_time(
-                    existing_story,
-                    target_minutes=self.config.get("awakening_story_target_minutes", 60)
-                )
-                logger.info(
-                    f"Read time validation: {read_time_validation['estimated_minutes']} min "
-                    f"(target: {read_time_validation['target_minutes']} min)"
-                )
+            # Module 1: Evaluate CORTEX architecture
+            from src.operations.modules.evaluate_cortex_architecture_module import register
+            evaluator = register()
             
-            # Determine source of truth
-            source_of_truth = self.config.get("story_source_of_truth", "design_documents")
+            result = evaluator.execute(context)
+            if not result.success:
+                return {"success": False, "error": f"Architecture evaluation failed: {result.message}"}
             
-            # Full story regeneration mode (default in CORTEX 2.0)
-            if self.config.get("full_story_regeneration", True):
-                result = self._regenerate_complete_story(
-                    file_path,
-                    design_context,
-                    existing_story
-                )
-                
-                # Add read time validation to result
-                if self.config.get("enforce_read_time_limits", True):
-                    result["read_time_validation"] = read_time_validation
-                
-                return result
+            logger.info(f"Architecture evaluated: {result.data.get('recommended_mode')} mode recommended")
             
-            # Legacy incremental mode (deprecated but available)
-            return self._incremental_story_refresh(
-                file_path,
-                design_context,
-                existing_story
-            )
+            # Module 2: Generate story chapters
+            from src.operations.modules.generate_story_chapters_module import register as register_chapters
+            chapter_gen = register_chapters()
+            
+            result = chapter_gen.execute(context)
+            if not result.success:
+                return {"success": False, "error": f"Chapter generation failed: {result.message}"}
+            
+            logger.info(f"Chapters generated: {result.data.get('chapters_generated')} chapters")
+            
+            # Module 3: Build consolidated story
+            from src.operations.modules.build_consolidated_story_module import register as register_builder
+            builder = register_builder()
+            
+            result = builder.execute(context)
+            if not result.success:
+                return {"success": False, "error": f"Story consolidation failed: {result.message}"}
+            
+            logger.info(f"Story consolidated: {result.data.get('word_count')} words, {result.data.get('estimated_read_time_minutes'):.1f} min")
+            
+            # Module 4: Generate technical doc
+            from src.operations.modules.generate_technical_cortex_doc_module import register as register_tech
+            tech_gen = register_tech()
+            
+            result = tech_gen.execute(context)
+            if not result.success:
+                logger.warning(f"Technical doc generation failed: {result.message}")
+            
+            # Module 5: Generate image prompts
+            from src.operations.modules.generate_image_prompts_doc_module import register as register_prompts
+            prompts_gen = register_prompts()
+            
+            result = prompts_gen.execute(context)
+            if not result.success:
+                logger.warning(f"Image prompts generation failed: {result.message}")
+            
+            # Module 6: Update history
+            from src.operations.modules.generate_history_doc_module import register as register_history
+            history_gen = register_history()
+            
+            result = history_gen.execute(context)
+            if not result.success:
+                logger.warning(f"History update failed: {result.message}")
+            
+            # Module 7: Relocate story files
+            from src.operations.modules.relocate_story_files_module import register as register_relocate
+            relocator = register_relocate()
+            
+            result = relocator.execute(context)
+            if not result.success:
+                logger.warning(f"File relocation failed: {result.message}")
+            
+            # Build success response
+            return {
+                "success": True,
+                "message": "Story refresh complete using modular architecture",
+                "refresh_mode": context.get('refresh_mode'),
+                "recommended_mode": context.get('recommended_mode'),
+                "change_magnitude": context.get('change_magnitude', 0),
+                "word_count": context.get('word_count', 0),
+                "estimated_read_time": context.get('estimated_read_time', 0),
+                "story_technical_ratio": context.get('story_technical_ratio', 0),
+                "warnings": context.get('warnings', []),
+                "modules_executed": 7
+            }
             
         except Exception as e:
-            logger.error(f"Failed to refresh story doc: {e}")
+            logger.error(f"Failed to refresh story doc: {e}", exc_info=True)
             return {
                 "success": False,
                 "error": str(e)

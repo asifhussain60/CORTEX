@@ -23,6 +23,27 @@
 - `help <command>` → Command-specific help
 - `quick start` → First-time user guide
 
+### 🧠 Contextual Intelligence (Architecture Utilization)
+
+**CORTEX automatically adapts based on work context:**
+
+| Work Type | Response Focus | Agents Activated | Template Style |
+|-----------|---------------|------------------|----------------|
+| **Feature Implementation** | Code + tests | Executor, Tester, Validator | Technical detail |
+| **Debugging/Issues** | Root cause analysis | Health Validator, Pattern Matcher | Diagnostic focus |
+| **Testing/Validation** | Coverage + edge cases | Tester, Validator | Validation-centric |
+| **Architecture/Design** | System impact | Architect, Work Planner | Strategic overview |
+| **Documentation** | Clarity + examples | Documenter | User-friendly |
+| **General Questions** | Concise answers | Intent Detector | Minimal detail |
+
+**How it works:**
+- Tier 2 Knowledge Graph learns from past interactions
+- Pattern Matcher detects work context automatically
+- Response templates adapt (but you can override anytime)
+- All 10 agents coordinate via Corpus Callosum when needed
+
+**User control:** Say "be more [concise/detailed/technical]" to adjust on the fly
+
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Proprietary - See LICENSE file for terms  

@@ -4,11 +4,16 @@ Build Consolidated Story Module - Story Refresh Operation
 This module creates THE-AWAKENING-OF-CORTEX.md by merging all 9 chapter files
 with the original introduction from the "Awakening Of CORTEX.md" file.
 
+Mode-aware:
+- generate-from-scratch: Regenerates entire consolidated story
+- update-in-place: Updates only changed sections
+
 Author: Asif Hussain
-Version: 1.0 (Universal Operations Architecture)
+Version: 2.0 (Mode-aware with read-time optimization)
 """
 
 import logging
+import re
 from pathlib import Path
 from typing import Dict, Any, List
 from src.operations.base_operation_module import (
@@ -31,13 +36,21 @@ class BuildConsolidatedStoryModule(BaseOperationModule):
        basement lab, Copilot as physical machine, and Wizard of Oz inspiration
     2. Merging all 9 individual chapter files in sequence
     3. Adding proper navigation and flow
+    4. Optimizing for read time (60-75 minutes target)
+    5. Enforcing 95% story / 5% technical ratio
     
     What it does:
-        1. Reads the original Awakening Of CORTEX.md intro (up to Chapter 1)
+        1. Reads intro or generates it
         2. Reads all 9 chapter files (01-amnesia-problem.md through 09-awakening.md)
         3. Combines them into a single consolidated story
-        4. Writes to THE-AWAKENING-OF-CORTEX.md
+        4. Calculates read time and story:technical ratio
+        5. Writes to THE-AWAKENING-OF-CORTEX.md
     """
+    
+    # Average reading speed
+    WORDS_PER_MINUTE = 250
+    TARGET_READ_TIME_MIN = 60
+    TARGET_READ_TIME_MAX = 75
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Return module metadata."""
@@ -247,6 +260,12 @@ And so began a journey of logic, madness, broken builds, questionable commits, a
             
             total_chars += len(footer)
             
+            # Step 4: Calculate metrics
+            full_story = output_path.read_text(encoding='utf-8')
+            total_words = self._calculate_word_count(full_story)
+            read_time_minutes = total_words / self.WORDS_PER_MINUTE
+            story_ratio = self._estimate_story_technical_ratio(full_story)
+            
             # Verify file exists and has content
             if not output_path.exists():
                 return OperationResult(
@@ -261,24 +280,47 @@ And so began a journey of logic, madness, broken builds, questionable commits, a
                 lines = len(f.readlines())
             
             logger.info(
-                f"Consolidated story created: {lines} lines, {file_size} bytes"
+                f"Consolidated story created: {lines} lines, {total_words} words, "
+                f"{read_time_minutes:.1f} min read, {story_ratio:.0%} story"
             )
             
-            # Store in context
-            with open(output_path, 'r', encoding='utf-8') as f:
-                context['consolidated_story'] = f.read()
+            # Store consolidated story and metrics in context
+            context['consolidated_story'] = full_story
             context['consolidated_path'] = output_path
+            context['word_count'] = total_words
+            context['estimated_read_time'] = read_time_minutes
+            context['story_technical_ratio'] = story_ratio
+            
+            # Warn if outside target range
+            warnings = []
+            if read_time_minutes < self.TARGET_READ_TIME_MIN:
+                warnings.append(f"Read time ({read_time_minutes:.1f} min) below target ({self.TARGET_READ_TIME_MIN} min)")
+            elif read_time_minutes > self.TARGET_READ_TIME_MAX:
+                warnings.append(f"Read time ({read_time_minutes:.1f} min) above target ({self.TARGET_READ_TIME_MAX} min)")
+            
+            if story_ratio < 0.90:
+                warnings.append(f"Story ratio ({story_ratio:.1%}) below 95% target - too technical")
+            
+            message = f"Consolidated story: {total_words} words, {read_time_minutes:.1f} min read"
+            if warnings:
+                message += f" (Warnings: {', '.join(warnings)})"
             
             return OperationResult(
                 success=True,
                 status=OperationStatus.SUCCESS,
-                message=f"Consolidated story created: {output_path.name}",
+                message=message,
                 data={
                     'output_path': str(output_path),
                     'line_count': lines,
-                    'character_count': total_chars,
+                    'word_count': total_words,
+                    'character_count': file_size,
                     'file_size_bytes': file_size,
-                    'chapters_included': len(chapter_files)
+                    'chapters_included': len(chapter_files),
+                    'estimated_read_time_minutes': read_time_minutes,
+                    'story_technical_ratio': story_ratio,
+                    'target_read_time_min': self.TARGET_READ_TIME_MIN,
+                    'target_read_time_max': self.TARGET_READ_TIME_MAX,
+                    'warnings': warnings
                 }
             )
         
@@ -332,4 +374,56 @@ And so began a journey of logic, madness, broken builds, questionable commits, a
     
     def get_progress_message(self) -> str:
         """Get progress message."""
+        return False
+    
+    def get_progress_message(self) -> str:
+        """Get progress message."""
         return "Building consolidated story from chapters..."
+    
+    def _calculate_word_count(self, text: str) -> int:
+        """Calculate word count from text."""
+        # Remove markdown formatting
+        text = re.sub(r'#+\s+', '', text)  # Remove headers
+        text = re.sub(r'\*\*([^\*]+)\*\*', r'\1', text)  # Remove bold
+        text = re.sub(r'\*([^\*]+)\*', r'\1', text)  # Remove italic
+        text = re.sub(r'```[^`]+```', '', text, flags=re.DOTALL)  # Remove code blocks
+        text = re.sub(r'`[^`]+`', '', text)  # Remove inline code
+        
+        # Count words
+        words = text.split()
+        return len(words)
+    
+    def _estimate_story_technical_ratio(self, text: str) -> float:
+        """
+        Estimate story:technical ratio.
+        
+        Heuristic: Count technical keywords vs narrative keywords.
+        """
+        # Technical indicators
+        technical_patterns = [
+            r'\bsqlite\b', r'\bpython\b', r'\bapi\b', r'\bclass\b', r'\bfunction\b',
+            r'\btier\s+\d\b', r'\bmodule\b', r'\bimplementation\b', r'\barchitecture\b',
+            r'\btests?\s+passing\b', r'\bmetrics?\b', r'\bperformance\b'
+        ]
+        
+        # Narrative indicators
+        narrative_patterns = [
+            r'\bAsif\b', r'\bCodeinstein\b', r'\bCopilot\b', r'\bbasement\b',
+            r'\bcoffee\b', r'\bwizard\b', r'\bmoldy\b', r'\bbagel\b',
+            r'\b2\s*AM\b', r'\bscreamed?\b', r'\bmuttered?\b'
+        ]
+        
+        technical_count = sum(len(re.findall(pattern, text, re.IGNORECASE)) for pattern in technical_patterns)
+        narrative_count = sum(len(re.findall(pattern, text, re.IGNORECASE)) for pattern in narrative_patterns)
+        
+        total = technical_count + narrative_count
+        if total == 0:
+            return 0.5  # Default if no indicators found
+        
+        story_ratio = narrative_count / total
+        return story_ratio
+
+
+def register() -> BaseOperationModule:
+    """Register this module."""
+    return BuildConsolidatedStoryModule()

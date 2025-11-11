@@ -450,6 +450,41 @@ operations:
         - run_integration_tests
         - generate_coverage_report
         - validate_test_quality
+  
+  optimize_cortex:
+    name: CORTEX Optimization
+    description: Holistic architecture review with SKULL tests and automated optimizations
+    natural_language:
+    - optimize
+    - optimize cortex
+    - run optimization
+    - improve cortex
+    - holistic review
+    - architecture review
+    - optimize architecture
+    category: maintenance
+    modules:
+    - optimize_cortex_orchestrator
+    profiles:
+      quick:
+        description: Quick optimization - SKULL tests + analysis only
+        modules:
+        - optimize_cortex_orchestrator
+      standard:
+        description: Standard optimization - tests + analysis + safe optimizations
+        modules:
+        - optimize_cortex_orchestrator
+      comprehensive:
+        description: Full optimization - all improvements with git tracking
+        modules:
+        - optimize_cortex_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Single orchestrator module coordinates SKULL tests, architecture analysis, and optimization execution. Git commits track all changes."
+      estimated_hours: 12
   interactive_planning:
     name: Interactive Feature Planning
     description: Collaborative planning with clarifying questions (CORTEX 2.1)
@@ -1657,6 +1692,27 @@ modules:
     estimated_hours: 0.5
     token_cost: 100
     cortex_version: '2.0'
+  
+  optimize_cortex_orchestrator:
+    name: CORTEX Optimization Orchestrator
+    description: Coordinates SKULL tests, architecture analysis, and optimization execution
+    phase: EXECUTION
+    priority: 100
+    class: OptimizeCortexOrchestrator
+    file: optimize_cortex_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - optimization
+    - skull
+    - architecture
+    - review
+    - git-tracking
+    status: implemented
+    tests: 0
+    implemented_date: '2025-11-11'
+    lines_of_code: 789
+    cortex_version: '2.0'
 metadata:
   version: '2.1'
   schema_version: '1.0'
@@ -1694,13 +1750,13 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 14
-  total_modules: 97
+  total_operations: 15
+  total_modules: 98
   total_phases: 9
-  cortex_2_0_operations: 8
+  cortex_2_0_operations: 9
   cortex_2_1_operations: 6
-  cortex_2_0_modules: 65
+  cortex_2_0_modules: 66
   cortex_2_1_modules: 22
-  modules_implemented: 37
+  modules_implemented: 38
   modules_pending: 60
-  implementation_percentage: 38
+  implementation_percentage: 39

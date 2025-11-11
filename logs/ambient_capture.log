@@ -556,3 +556,11 @@
 2025-11-10 17:56:46 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:57:12 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
 2025-11-10 17:57:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:58:49 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-10 17:58:58 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 03:25:30 - INFO - Ambient Capture Daemon initialized with Phase 4.4 enhancements
+2025-11-11 03:25:30 - ERROR - Failed to backup hook: FileExistsError
+2025-11-11 03:25:30 - ERROR - Failed to backup hook: FileExistsError
+2025-11-11 03:25:30 - ERROR - Failed to backup hook: FileExistsError
+2025-11-11 03:25:51 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
+2025-11-11 03:25:56 - ERROR - Tier 1 write error: OperationalError: no such column: created_at
