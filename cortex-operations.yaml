@@ -155,46 +155,38 @@ operations:
         - build_story_preview
   workspace_cleanup:
     name: Workspace Cleanup
-    description: Clean temporary files, old logs, and optimize databases
+    description: Comprehensive cleanup with backup management, file organization, MD consolidation, bloat detection, and optimization
     natural_language:
     - cleanup
     - clean workspace
     - clean up
     - tidy up
-    - remove temporary files
-    - vacuum database
+    - organize workspace
+    - remove backups
+    - consolidate files
     category: maintenance
     modules:
-    - scan_temporary_files
-    - remove_old_logs
-    - clear_python_cache
-    - vacuum_sqlite_databases
-    - remove_orphaned_files
-    - generate_cleanup_report
+    - cleanup_orchestrator
     profiles:
-      safe:
-        description: Safe cleanup - only obviously temporary files
+      quick:
+        description: Quick cleanup - backups and root folder only
         modules:
-        - scan_temporary_files
-        - remove_old_logs
-        - generate_cleanup_report
+        - cleanup_orchestrator
       standard:
-        description: Standard cleanup - recommended for regular maintenance
+        description: Standard cleanup - backups, root, and file reorganization
         modules:
-        - scan_temporary_files
-        - remove_old_logs
-        - clear_python_cache
-        - vacuum_sqlite_databases
-        - generate_cleanup_report
-      aggressive:
-        description: Aggressive cleanup - remove everything including orphans
+        - cleanup_orchestrator
+      comprehensive:
+        description: Full cleanup - backups, organization, MD consolidation, bloat detection, and optimization
         modules:
-        - scan_temporary_files
-        - remove_old_logs
-        - clear_python_cache
-        - vacuum_sqlite_databases
-        - remove_orphaned_files
-        - generate_cleanup_report
+        - cleanup_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Single orchestrator module coordinates backup management, file organization, MD consolidation, bloat detection, and automatic optimization trigger."
+      estimated_hours: 10
   update_documentation:
     name: Update Documentation
     description: Refresh and build CORTEX documentation site
@@ -1693,7 +1685,26 @@ modules:
     token_cost: 100
     cortex_version: '2.0'
   
-  optimize_cortex_orchestrator:
+  cleanup_orchestrator:
+    name: Cleanup Orchestrator
+    description: Orchestrates comprehensive workspace cleanup with backup management, organization, and optimization
+    phase: PROCESSING
+    priority: 100
+    class: CleanupOrchestrator
+    file: cleanup_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - cleanup
+    - maintenance
+    - organization
+    - optimization
+    - git-tracking
+    status: implemented
+    tests: 0
+    implemented_date: '2025-11-11'
+    lines_of_code: 672
+    cortex_version: '2.0'
     name: CORTEX Optimization Orchestrator
     description: Coordinates SKULL tests, architecture analysis, and optimization execution
     phase: EXECUTION
@@ -1751,12 +1762,12 @@ metadata:
     - Defined 6 operations with 48 modules total
 statistics:
   total_operations: 15
-  total_modules: 98
+  total_modules: 99
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
-  cortex_2_0_modules: 66
+  cortex_2_0_modules: 67
   cortex_2_1_modules: 22
-  modules_implemented: 38
+  modules_implemented: 39
   modules_pending: 60
   implementation_percentage: 39
