@@ -10,16 +10,16 @@ class SyntaxErrorParser(BaseErrorParser):
     
     def can_parse(self, output: str) -> bool:
         """Check if output is syntax error."""
-        return "SyntaxError" in output
+        return any(err in output for err in ["SyntaxError", "IndentationError", "TabError"])
     
     def parse(self, output: str) -> Dict[str, Any]:
         """
         Parse Python syntax error.
         
         Returns:
-            Dict with file, line, category, message, code_snippet
+            Dict with type, file, line, category, message, code_snippet
         """
-        result = {"category": "syntax"}
+        result = {"type": "syntax", "category": "syntax"}
         
         # Look for: "File "file.py", line 123"
         file_match = re.search(r'File "([^"]+)", line (\d+)', output)

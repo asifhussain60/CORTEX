@@ -59,23 +59,40 @@ class TestDatabaseValidator:
         """Test check with oversized database."""
         validator = DatabaseValidator(max_size_mb=0.001)  # Very small threshold
         
+        # Create a proper SQLite database first
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
             db_path = tmp.name
-            # Write some data to make it exceed threshold
-            tmp.write(b"x" * 10000)
         
+        conn = None
         try:
+            # Create and populate a real database
             conn = sqlite3.connect(db_path)
-            conn.execute("CREATE TABLE test (id INTEGER)")
+            conn.execute("CREATE TABLE test (id INTEGER, data TEXT)")
+            # Insert enough data to exceed 0.001MB (1KB) threshold
+            for i in range(100):
+                conn.execute("INSERT INTO test VALUES (?, ?)", (i, "x" * 100))
             conn.commit()
             conn.close()
+            conn = None
             
             result = validator._check_single_database(db_path, "Test")
             
             assert result["status"] == "warn"
             assert "exceeds threshold" in result["error"]
         finally:
-            os.unlink(db_path)
+            # Ensure connection is closed before deletion
+            if conn is not None:
+                try:
+                    conn.close()
+                except:
+                    pass
+            # Give Windows time to release the file handle
+            import time
+            time.sleep(0.1)
+            try:
+                os.unlink(db_path)
+            except (PermissionError, FileNotFoundError):
+                pass  # File may still be locked on Windows or already deleted
     
     def test_check_all_databases(self):
         """Test checking all tier databases."""

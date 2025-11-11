@@ -17,9 +17,9 @@ class PytestErrorParser(BaseErrorParser):
         Parse pytest error output.
         
         Returns:
-            Dict with file, test_name, line, category, message, traceback
+            Dict with type, file, test_name, line, category, message, traceback
         """
-        result = {}
+        result = {"type": "pytest"}
         
         # Look for test failure line: "test_file.py::test_name FAILED"
         failed_match = re.search(r"([\w/]+\.py)::([\w_]+)\s+FAILED", output)
@@ -30,8 +30,8 @@ class PytestErrorParser(BaseErrorParser):
         # Look for assertion error
         if "AssertionError" in output:
             result["category"] = "assertion"
-            # Extract assertion line
-            assert_match = re.search(r"assert (.+)", output)
+            # Extract assertion line (include the "assert" keyword)
+            assert_match = re.search(r"(assert .+)", output)
             if assert_match:
                 result["code_snippet"] = assert_match.group(1)
         

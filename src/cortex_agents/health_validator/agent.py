@@ -123,7 +123,7 @@ class HealthValidator(BaseAgent):
                 )
             
             response = AgentResponse(
-                success=(status == "healthy"),
+                success=(status in ["healthy", "degraded"]),  # degraded is operational with warnings
                 result={
                     "status": status,
                     "checks": check_results,

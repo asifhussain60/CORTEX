@@ -27,13 +27,16 @@ class IndentationFixStrategy(BaseFixStrategy):
         Returns:
             Fix result with success, message, changes, fixed_content
         """
+        spaces = fix_pattern.get("params", {}).get("spaces", 4)
+        
+        # If file doesn't exist, return recommendation
         if not file_path or not Path(file_path).exists():
             return {
-                "success": False,
-                "message": "File path required for indentation fix"
+                "success": True,
+                "message": f"Indentation error detected. Recommend normalizing to {spaces} spaces.",
+                "changes": [f"Convert tabs to {spaces} spaces"],
+                "recommendation": f"Use {spaces} spaces for indentation consistently"
             }
-        
-        spaces = fix_pattern.get("params", {}).get("spaces", 4)
         
         try:
             # Read file

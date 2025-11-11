@@ -94,11 +94,10 @@ class ReportFormatter:
                     suggestions.append("📝 Consider committing changes (>100 uncommitted files)")
         
         # Disk-specific suggestions
-        if "disk" in check_results:
-            disk_result = check_results["disk"]
-            if disk_result.get("status") == "fail":
-                free_gb = disk_result.get("free_gb", 0)
-                suggestions.append(f"💾 Free up disk space (only {free_gb}GB available)")
+        disk_result = check_results.get("disk") or check_results.get("disk_space")
+        if disk_result and disk_result.get("status") == "fail":
+            free_gb = disk_result.get("free_gb", 0)
+            suggestions.append(f"💾 Free up disk space (only {free_gb}GB available)")
         
         # Performance-specific suggestions
         if "performance" in check_results:

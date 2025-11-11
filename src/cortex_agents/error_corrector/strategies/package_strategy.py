@@ -10,7 +10,7 @@ class PackageFixStrategy(BaseFixStrategy):
     def can_fix(self, parsed_error: Dict[str, Any], fix_pattern: Dict[str, Any]) -> bool:
         """Check if this is a missing package error."""
         return (
-            parsed_error.get("missing_module") or
+            "missing_module" in parsed_error or
             fix_pattern.get("action") == "install_package"
         )
     

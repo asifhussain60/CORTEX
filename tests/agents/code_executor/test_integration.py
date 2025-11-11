@@ -90,7 +90,7 @@ class TestCodeExecutorIntegration:
                 context={
                     "operation": "edit",
                     "file_path": file_path,
-                    "content": "new content"
+                    "content": "# new content\nprint('Hello, World!')\n"
                 },
                 user_message="Edit file"
             )
@@ -98,7 +98,7 @@ class TestCodeExecutorIntegration:
             response = agent.execute(request)
             
             assert response.success is True
-            assert Path(file_path).read_text() == "new content"
+            assert Path(file_path).read_text() == "# new content\nprint('Hello, World!')\n"
     
     def test_execute_delete_operation(self):
         """Test executing delete operation."""

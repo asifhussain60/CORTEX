@@ -17,9 +17,9 @@ class ImportErrorParser(BaseErrorParser):
         Parse import error.
         
         Returns:
-            Dict with file, line, category, message, missing_module, missing_name
+            Dict with type, file, line, category, message, missing_module, missing_name
         """
-        result = {"category": "import"}
+        result = {"type": "import", "category": "import"}
         
         # Look for: "ModuleNotFoundError: No module named 'xyz'"
         module_match = re.search(r"No module named ['\"]([^'\"]+)['\"]", output)
