@@ -90,22 +90,24 @@ class TestMalformedData:
             
             # Create a valid database first
             conn = sqlite3.connect(str(db_path))
-            conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, data TEXT)")
-            conn.execute("INSERT INTO test VALUES (1, 'data')")
-            conn.commit()
-            conn.close()
+            try:
+                conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, data TEXT)")
+                conn.execute("INSERT INTO test VALUES (1, 'data')")
+                conn.commit()
+            finally:
+                conn.close()
             
             # Truncate the database file to simulate corruption
             with open(db_path, 'r+b') as f:
                 f.truncate(50)  # Truncate to 50 bytes (corrupted)
             
             # Try to open corrupted database
+            conn = None
             try:
                 conn = sqlite3.connect(str(db_path))
                 cursor = conn.cursor()
                 cursor.execute("SELECT * FROM test")
                 cursor.fetchall()
-                conn.close()
             except sqlite3.DatabaseError:
                 # Expected - database is corrupted
                 assert True
@@ -113,6 +115,9 @@ class TestMalformedData:
                 # Other exceptions might occur (file I/O errors, etc.)
                 # This is acceptable as long as it doesn't crash
                 assert True
+            finally:
+                if conn:
+                    conn.close()
 
     def test_invalid_operation_name(self):
         """Should reject invalid operation names with clear error"""

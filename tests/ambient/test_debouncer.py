@@ -141,7 +141,7 @@ class TestDebouncer:
         if debouncer.timer:
             debouncer.timer.cancel()
     
-    @patch('auto_capture_daemon.WorkingMemory')
+    @patch('src.tier1.working_memory.WorkingMemory')
     def test_writes_to_tier1_on_flush(self, mock_wm_class):
         """Should write events to Tier 1 on flush."""
         # Create mock working memory instance

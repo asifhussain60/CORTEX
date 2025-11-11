@@ -2,8 +2,11 @@
 Pytest Configuration and Shared Fixtures
 
 Provides common test fixtures for all CORTEX tests.
+
+Copyright © 2024-2025 Asif Hussain. All rights reserved.
 """
 
+import sys
 import pytest
 import sqlite3
 import tempfile
@@ -15,6 +18,48 @@ from typing import Generator
 # Import agent framework
 from src.cortex_agents.base_agent import AgentRequest, AgentResponse, BaseAgent
 from src.cortex_agents.agent_types import IntentType, Priority
+
+# ============================================================================
+# DEPENDENCY DETECTION
+# ============================================================================
+
+# Check for optional dependencies
+try:
+    import sklearn
+    HAS_SKLEARN = True
+except ImportError:
+    HAS_SKLEARN = False
+
+try:
+    import torch
+    HAS_PYTORCH = True
+except ImportError:
+    HAS_PYTORCH = False
+
+
+# ============================================================================
+# PYTEST HOOKS FOR AUTO-CONFIGURATION
+# ============================================================================
+
+def pytest_configure(config):
+    """Configure pytest with custom markers."""
+    config.addinivalue_line("markers", "unit: Fast unit tests (<100ms)")
+    config.addinivalue_line("markers", "integration: Integration tests (100ms-1s)")
+    config.addinivalue_line("markers", "slow: Slow tests (>1s)")
+    config.addinivalue_line("markers", "requires_sklearn: Tests requiring scikit-learn")
+    config.addinivalue_line("markers", "requires_pytorch: Tests requiring PyTorch")
+
+
+def pytest_collection_modifyitems(config, items):
+    """Auto-skip tests based on missing dependencies."""
+    skip_sklearn = pytest.mark.skip(reason="scikit-learn not installed")
+    skip_pytorch = pytest.mark.skip(reason="PyTorch not installed")
+    
+    for item in items:
+        if "requires_sklearn" in item.keywords and not HAS_SKLEARN:
+            item.add_marker(skip_sklearn)
+        if "requires_pytorch" in item.keywords and not HAS_PYTORCH:
+            item.add_marker(skip_pytorch)
 
 
 # ============================================================================
@@ -225,3 +270,21 @@ def sample_files(temp_workspace: Path):
         file_path.write_text(content)
     
     return temp_workspace
+
+
+# ============================================================================
+# PERFORMANCE MONITORING (Added 2025-11-11)
+# ============================================================================
+
+@pytest.fixture(autouse=True)
+def monitor_test_performance(request):
+    '''Monitor test execution time and warn on slow tests.'''
+    import time
+    start_time = time.time()
+    yield
+    duration = time.time() - start_time
+    markers = [mark.name for mark in request.node.iter_markers()]
+    if 'unit' in markers and duration > 0.1:
+        print(f'\n⚠️  SLOW UNIT TEST: {request.node.name} took {duration:.3f}s')
+    elif 'integration' in markers and duration > 1.0:
+        print(f'\n⚠️  SLOW INTEGRATION: {request.node.name} took {duration:.3f}s')

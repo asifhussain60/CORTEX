@@ -112,18 +112,11 @@ class TestAgentResponse:
 class TestBaseAgent:
     """Test BaseAgent abstract class"""
     
-    def test_agent_initialization(self, mock_tier_apis):
+    def test_agent_initialization(self, mock_tier_apis, mock_agent):
         """Test agent initialization with tier APIs"""
-        from CORTEX.tests.conftest import MockAgent
+        agent = mock_agent
         
-        agent = MockAgent(
-            name="TestAgent",
-            tier1_api=mock_tier_apis["tier1_api"],
-            tier2_kg=mock_tier_apis["tier2_kg"],
-            tier3_context=mock_tier_apis["tier3_context"]
-        )
-        
-        assert agent.name == "TestAgent"
+        assert agent.name == "MockAgent"
         assert agent.tier1 is not None
         assert agent.tier2 is not None
         assert agent.tier3 is not None
