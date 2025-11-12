@@ -300,6 +300,7 @@ setup environment
 show me where I left off
 demo
 cleanup
+sweep workspace
 refresh story
 ```
 
@@ -320,6 +321,8 @@ simulate story refresh
 **Live Mode (Apply Changes):**
 ```
 cleanup workspace
+sweep files
+run sweeper
 run optimization
 execute cleanup
 actually cleanup now

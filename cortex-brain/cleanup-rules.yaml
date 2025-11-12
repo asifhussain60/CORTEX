@@ -285,6 +285,95 @@ categories:
     safety:
       require_confirmation: false  # Safe - Git history available
       create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 12: Aggressive Sweeper (RECYCLE BIN MODE)
+  # --------------------------------------------------------------------------
+  sweeper:
+    enabled: true
+    priority: high
+    risk_level: low  # Low risk - files go to Recycle Bin (reversible)
+    
+    # Sweeper uses dynamic scanning - no static paths
+    # It scans entire workspace for patterns
+    
+    target_extensions:
+      - "*.md"    # Markdown (reference docs, sessions, backups)
+      - "*.log"   # Log files
+      - "*.bak"   # Backup files
+      - "*.backup"
+      - "*.tmp"   # Temporary files
+      - "*.temp"
+      - "*.pyc"   # Python cache
+      - "*.pyo"
+      - "*.cache"
+      - "*.old"   # Old files
+      - "*.orig"  # Original files
+    
+    backup_patterns:
+      - "*-BACKUP-*"
+      - "*-backup-*"
+      - "*.backup.*"
+      - "*-OLD-*"
+      - "*-old-*"
+      - "*.old.*"
+    
+    session_patterns:
+      - "SESSION-*.md"
+      - "*-SESSION.md"
+      - "*-REPORT-*.md"
+      - "*-PROGRESS.md"
+      - "PHASE-*-PROGRESS.md"
+      - "*-CONTINUED-*.md"
+    
+    reference_doc_patterns:
+      - "*-REFERENCE.md"
+      - "*-reference.md"
+      - "*-IMPLEMENTATION.md"
+      - "*-implementation.md"
+      - "*-QUICK-REFERENCE.md"
+      - "*-quick-reference.md"
+      - "*-GUIDE.md"
+      - "*-guide.md"
+      - "*-INSTRUCTIONS.md"
+      - "*-instructions.md"
+      - "*-MANUAL.md"
+      - "*-manual.md"
+      - "*-SUMMARY.md"
+      - "*-summary.md"
+    
+    dated_duplicate_patterns:
+      - "*.202[0-9]-[0-1][0-9]-[0-3][0-9].*"  # file.2024-11-10.ext
+      - "*.[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9].*"  # file.20241110.ext
+    
+    age_policies:
+      session_reports_days: 30  # Delete session reports older than 30 days
+      log_files_days: 30  # Delete logs older than 30 days
+      reference_docs_days: 60  # Delete old reference docs after 60 days
+    
+    action: recycle_bin  # OS-native Recycle Bin (reversible!)
+    reason: "Moves clutter to Recycle Bin - fully reversible via OS"
+    
+    scan_rules:
+      recursion_limit: 20
+      include_hidden: false
+      follow_symlinks: false
+      respect_gitignore: true
+    
+    safety:
+      # RECYCLE BIN MODE - Fully reversible!
+      require_confirmation: false
+      create_manifest: false  # NO manifests (they create clutter)
+      create_backup: false  # NO backups (Recycle Bin IS the backup)
+      use_recycle_bin: true  # OS-native reversibility
+      
+      # Only safety: audit log (minimal JSON for tracking)
+      create_audit_log: true
+      audit_log_location: "cortex-brain/sweeper-logs"
+      
+      # Whitelist protection still applies
+      respect_protected_dirs: true
+      respect_protected_patterns: true
 
 # ============================================================================
 # PROTECTED DIRECTORIES (NEVER DELETE)
