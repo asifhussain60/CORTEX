@@ -19,7 +19,7 @@ Design Philosophy:
 Example Usage:
     from src.brain.tier1.request_logger import RequestLogger
     
-    logger = RequestLogger(db_path="cortex-brain/cortex-brain.db")
+    logger = RequestLogger()  # Uses ConfigManager for tier-specific path
     
     # Log raw request/response
     logger.log_raw_request(
@@ -37,6 +37,7 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 import logging
+from src.config import ConfigManager
 
 
 logger = logging.getLogger(__name__)
@@ -80,13 +81,18 @@ class RequestLogger:
         (re.compile(r'-----BEGIN (?:RSA |DSA |EC |OPENSSH )?PRIVATE KEY-----.*?-----END (?:RSA |DSA |EC |OPENSSH )?PRIVATE KEY-----', re.DOTALL), '[REDACTED_PRIVATE_KEY]'),
     ]
     
-    def __init__(self, db_path: str = "cortex-brain/cortex-brain.db"):
+    def __init__(self, db_path: str = None):
         """
         Initialize request logger.
         
         Args:
-            db_path: Path to SQLite database
+            db_path: Path to SQLite database (deprecated - use ConfigManager)
         """
+        # Use ConfigManager for tier-specific paths (CORTEX 2.0 distributed architecture)
+        if db_path is None:
+            config = ConfigManager()
+            db_path = config.get_tier1_conversations_path()
+        
         self.db_path = Path(db_path)
         self._ensure_table_exists()
     
@@ -380,12 +386,12 @@ class RequestLogger:
 
 
 # Convenience function
-def get_request_logger(db_path: str = "cortex-brain/cortex-brain.db") -> RequestLogger:
+def get_request_logger(db_path: str = None) -> RequestLogger:
     """
     Convenience function to get a RequestLogger instance.
     
     Args:
-        db_path: Path to SQLite database
+        db_path: Path to SQLite database (deprecated - use ConfigManager)
     
     Returns:
         Initialized RequestLogger instance

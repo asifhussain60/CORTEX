@@ -24,6 +24,7 @@ from .session_manager import SessionManager
 from .context_injector import ContextInjector
 from .plugins.command_registry import get_command_registry
 from .cortex_help import handle_help_request
+from .config import ConfigManager
 
 # Tier imports - using correct class names from CORTEX 2.0 architecture
 try:
@@ -65,13 +66,19 @@ class CortexRouter:
     - Total routing: <300ms
     """
     
-    def __init__(self, db_path: str = "cortex-brain.db"):
+    def __init__(self, db_path: str = None):
         """
         Initialize router with database connection
         
         Args:
-            db_path: Path to SQLite database
+            db_path: Path to SQLite database (deprecated - use ConfigManager)
         """
+        # Use ConfigManager for tier-specific paths (CORTEX 2.0 distributed architecture)
+        if db_path is None:
+            config = ConfigManager()
+            # Router primarily uses Tier 1 for conversations
+            db_path = config.get_tier1_conversations_path()
+        
         self.db_path = db_path
         self.intent_router = IntentRouter(db_path)
         self.session_manager = SessionManager(db_path)

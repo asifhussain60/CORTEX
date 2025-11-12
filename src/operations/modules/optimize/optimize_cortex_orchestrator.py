@@ -400,29 +400,91 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 )
                 self.report.issues.append(issue)
         
-        # Check brain database
-        brain_db = brain_dir / 'cortex-brain.db'
-        if brain_db.exists():
-            size_mb = brain_db.stat().st_size / (1024 * 1024)
-            self.report.statistics['brain_db_size_mb'] = size_mb
-            
-            if size_mb > 100:
-                issue = HealthIssue(
-                    severity='medium',
-                    category='brain',
-                    title="Large brain database",
-                    description=f"Brain database is {size_mb:.1f} MB",
-                    file_path=brain_db,
-                    recommendation="Consider vacuuming or archiving old conversations"
-                )
-                self.report.issues.append(issue)
-        else:
+        # SKULL-011: Validate distributed database architecture
+        # Check for monolithic database references (should not exist)
+        monolithic_db_path = brain_dir / 'cortex-brain.db'
+        if monolithic_db_path.exists():
             issue = HealthIssue(
-                severity='high',
+                severity='critical',
                 category='brain',
-                title="Missing brain database",
-                description="Brain database file not found",
-                recommendation="Initialize brain database"
+                title="Monolithic database detected (SKULL-011 violation)",
+                description=f"Found cortex-brain.db - CORTEX 2.0 uses distributed architecture",
+                file_path=monolithic_db_path,
+                recommendation="Migrate to distributed architecture: tier1/conversations.db, tier2/knowledge_graph.db, tier3/context.db",
+                auto_fixable=False
+            )
+            self.report.issues.append(issue)
+        
+        # Scan source code for monolithic database references
+        src_dir = self.project_root / 'src'
+        if src_dir.exists():
+            monolithic_refs = []
+            for py_file in src_dir.rglob('*.py'):
+                # Skip test files
+                if 'test' in py_file.name.lower() or 'tests' in str(py_file):
+                    continue
+                
+                try:
+                    content = py_file.read_text(encoding='utf-8')
+                    if 'cortex-brain.db' in content or 'cortex-brain/cortex-brain.db' in content:
+                        # Find line numbers
+                        for line_num, line in enumerate(content.splitlines(), 1):
+                            if 'cortex-brain.db' in line:
+                                monolithic_refs.append((py_file, line_num, line.strip()))
+                except Exception as e:
+                    logger.warning(f"Could not scan {py_file}: {e}")
+            
+            if monolithic_refs:
+                for file_path, line_num, line_content in monolithic_refs:
+                    issue = HealthIssue(
+                        severity='high',
+                        category='brain',
+                        title="Monolithic database reference in code (SKULL-011)",
+                        description=f"Line {line_num}: {line_content[:80]}",
+                        file_path=file_path,
+                        line_number=line_num,
+                        recommendation="Use ConfigManager.get_tier1_conversations_path() or tier-specific paths",
+                        auto_fixable=True
+                    )
+                    self.report.issues.append(issue)
+                
+                self.report.statistics['monolithic_db_refs'] = len(monolithic_refs)
+        
+        # Check tier-specific brain databases
+        tier_dbs = {
+            'tier1': ['conversations.db', 'working_memory.db'],
+            'tier2': ['knowledge_graph.db'],
+            'tier3': ['context.db']
+        }
+        
+        total_size_mb = 0
+        for tier, db_names in tier_dbs.items():
+            tier_path = brain_dir / tier
+            if tier_path.exists():
+                for db_name in db_names:
+                    db_path = tier_path / db_name
+                    if db_path.exists():
+                        size_mb = db_path.stat().st_size / (1024 * 1024)
+                        total_size_mb += size_mb
+                    else:
+                        issue = HealthIssue(
+                            severity='medium',
+                            category='brain',
+                            title=f"Missing {tier} database",
+                            description=f"Database file not found: {db_name}",
+                            recommendation=f"Initialize {tier} brain tier"
+                        )
+                        self.report.issues.append(issue)
+        
+        self.report.statistics['brain_db_size_mb'] = total_size_mb
+        
+        if total_size_mb > 100:
+            issue = HealthIssue(
+                severity='medium',
+                category='brain',
+                title="Large brain databases",
+                description=f"Total brain database size is {total_size_mb:.1f} MB",
+                recommendation="Consider vacuuming or archiving old conversations"
             )
             self.report.issues.append(issue)
     

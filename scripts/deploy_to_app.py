@@ -287,41 +287,40 @@ def initialize_target_brain(
     dry_run: bool = False
 ) -> bool:
     """Initialize CORTEX brain database for target application."""
-    logger.info("Initializing CORTEX brain database...")
+    logger.info("Initializing CORTEX brain tier databases...")
     
     brain_dir = target_root / 'cortex' / 'cortex-brain'
-    brain_db = brain_dir / 'cortex-brain.db'
+    
+    # Define tier-specific databases
+    tier_dbs = {
+        'tier1': ['conversations.db', 'working_memory.db'],
+        'tier2': ['knowledge_graph.db'],
+        'tier3': ['context.db']
+    }
     
     if dry_run:
-        logger.info(f"[DRY RUN] Would initialize brain at {brain_db}")
+        logger.info(f"[DRY RUN] Would initialize brain tiers at {brain_dir}")
+        for tier, dbs in tier_dbs.items():
+            logger.info(f"  - {tier}: {', '.join(dbs)}")
         return True
     
-    # Check if brain already exists
-    if brain_db.exists():
-        logger.warning("Brain database already exists. Skipping initialization.")
+    # Check if any tier databases already exist
+    all_exist = True
+    for tier, db_names in tier_dbs.items():
+        tier_path = brain_dir / tier
+        for db_name in db_names:
+            db_path = tier_path / db_name
+            if not db_path.exists():
+                all_exist = False
+                break
+    
+    if all_exist:
+        logger.warning("Brain tier databases already exist. Skipping initialization.")
         return True
     
-    # Run brain initialization
-    init_script = target_root / 'cortex' / 'src' / 'tier1' / 'conversation_manager.py'
-    
-    if not init_script.exists():
-        logger.error("Brain initialization script not found")
-        return False
-    
-    try:
-        # Initialize with Python (creates empty database)
-        import sys
-        sys.path.insert(0, str(target_root / 'cortex'))
-        
-        from src.tier1.conversation_manager import ConversationManager
-        
-        manager = ConversationManager(brain_path=str(brain_dir))
-        logger.info(f"Brain initialized: {brain_db}")
-        return True
-    except Exception as e:
-        logger.error(f"Brain initialization failed: {e}")
-        logger.info("Brain will be auto-created on first use.")
-        return True  # Non-fatal
+    # Initialize will happen automatically on first use of each tier
+    logger.info("Brain tier databases will be auto-created on first use.")
+    return True
 
 
 def run_target_crawlers(

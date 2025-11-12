@@ -35,4 +35,22 @@ site/
 
 # Archived documentation cleanup
 docs/_archive-docs-cleanup/
+
+# Coverage files
 .coverage
+.coverage.*
+
+# Optimization and cleanup logs
+cortex-optimization.log
+logs/cleanup/
+scripts/temp/cortex-optimization.log
+
+# Pytest cache (state files)
+.pytest_cache/v/cache/lastfailed
+
+# Database files (working state, not configuration)
+cortex-brain/tier1/conversations.db
+cortex-brain/tier1/working_memory.db
+
+# Ambient capture logs (runtime state)
+logs/ambient_capture.log

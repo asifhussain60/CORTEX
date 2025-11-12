@@ -42,6 +42,7 @@ from .conversation_manager import ConversationManager
 from .entity_extractor import EntityExtractor
 from .file_tracker import FileTracker
 from .request_logger import RequestLogger
+from src.config import ConfigManager
 
 
 logger = logging.getLogger(__name__)
@@ -65,14 +66,19 @@ class Tier1API:
         request_logger: Logs raw requests with privacy-aware redaction
     """
     
-    def __init__(self, db_path: str = "cortex-brain/cortex-brain.db", enable_raw_logging: bool = True):
+    def __init__(self, db_path: str = None, enable_raw_logging: bool = True):
         """
         Initialize Tier 1 API with all components.
         
         Args:
-            db_path: Path to SQLite database (created if doesn't exist)
+            db_path: Path to SQLite database (deprecated - use ConfigManager)
             enable_raw_logging: Whether to log raw requests (default True)
         """
+        # Use ConfigManager for tier-specific paths (CORTEX 2.0 distributed architecture)
+        if db_path is None:
+            config = ConfigManager()
+            db_path = config.get_tier1_conversations_path()
+        
         self.db_path = Path(db_path)
         self.conversation_manager = ConversationManager(str(self.db_path))
         self.entity_extractor = EntityExtractor()
@@ -552,12 +558,12 @@ class Tier1API:
 
 
 # Convenience function for quick initialization
-def get_tier1_api(db_path: str = "cortex-brain/cortex-brain.db") -> Tier1API:
+def get_tier1_api(db_path: str = None) -> Tier1API:
     """
     Convenience function to get a Tier1API instance.
     
     Args:
-        db_path: Path to SQLite database
+        db_path: Path to SQLite database (deprecated - use ConfigManager)
     
     Returns:
         Initialized Tier1API instance

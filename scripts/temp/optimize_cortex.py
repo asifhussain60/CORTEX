@@ -19,9 +19,10 @@ import logging
 from pathlib import Path
 
 # Add src to Python path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from src.operations.modules.optimization import OptimizeCortexOrchestrator
+from src.operations.modules.optimize import OptimizeCortexOrchestrator
 
 
 def setup_logging(verbose: bool = False):
@@ -62,7 +63,7 @@ Examples:
     parser.add_argument(
         '--project-root',
         type=Path,
-        default=Path(__file__).parent.parent,
+        default=Path(__file__).parent.parent.parent,
         help='CORTEX project root directory (default: auto-detect)'
     )
     

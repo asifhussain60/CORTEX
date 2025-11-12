@@ -17,7 +17,7 @@ Components:
 Recommended Usage:
     from src.brain.tier1 import Tier1API
     
-    api = Tier1API("cortex-brain/cortex-brain.db")
+    api = Tier1API()  # Uses ConfigManager for tier-specific path
     conv_id = api.log_conversation(
         agent_name="copilot",
         request="Fix bug in auth.py",

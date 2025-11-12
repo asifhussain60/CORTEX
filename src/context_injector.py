@@ -17,6 +17,8 @@ import time
 import logging
 
 # Tier imports - using correct class names from CORTEX 2.0 architecture
+from src.config import ConfigManager
+
 try:
     from src.tier1.working_memory import WorkingMemory
     TIER1_AVAILABLE = True
@@ -52,13 +54,19 @@ class ContextInjector:
     Performance Target: <200ms total
     """
     
-    def __init__(self, db_path: str = "cortex-brain.db"):
+    def __init__(self, db_path: str = None):
         """
         Initialize context injector
         
         Args:
-            db_path: Path to SQLite database
+            db_path: Path to SQLite database (deprecated - use ConfigManager)
         """
+        # Use ConfigManager for tier-specific paths (CORTEX 2.0 distributed architecture)
+        if db_path is None:
+            config = ConfigManager()
+            # Context injector uses Tier 1 for conversations
+            db_path = config.get_tier1_conversations_path()
+        
         self.db_path = db_path
         
         # Initialize engines only if tiers are available
