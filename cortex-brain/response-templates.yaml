@@ -6,9 +6,13 @@
 # MANDATORY RESPONSE FORMAT (All Copilot responses):
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🧠 CORTEX [Operation Type]
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 
+# Version: {{version}} | Profile: {{profile}} | Mode: {{mode}}
+# Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 # 
 # 📝 Your Request: [Echo user's request in concise, refined manner]
-# 🎯 Understanding: [State what you understand they want to achieve]
+# 🎯 MY Understanding: [State what you understand they want to achieve]
 # ⚠️ Challenge: [✓ Accept with rationale OR ⚡ Challenge with alternatives]
 # 💬 Response: [Natural language explanation - NO code snippets unless requested]
 # 🔍 Next Steps: [2-4 numbered actionable recommendations]
@@ -56,6 +60,9 @@ templates:
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         CORTEX COMMANDS
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      Version: {{version}} | Profile: {{profile}} | Mode: {{mode}}
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
       
       📝 **Your Request:** {{user_request}}
       
@@ -112,6 +119,9 @@ templates:
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         CORTEX COMMANDS - DETAILED
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      Version: {{version}} | Profile: {{profile}} | Mode: {{mode}}
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
       
       📝 **Your Request:** {{user_request}}
       
