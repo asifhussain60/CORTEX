@@ -584,12 +584,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
             
             # Also print to terminal for immediate visibility
             # Handle Unicode encoding for Windows console
-            try:
-                print(formatted_footer)
-            except UnicodeEncodeError:
-                # Fallback: Replace Unicode box chars with ASCII
-                ascii_footer = formatted_footer.replace('━', '=').replace('│', '|')
-                print(ascii_footer)
+            self._safe_print(formatted_footer)
             
             logger.info(f"✅ Design synchronization complete ({profile} profile)")
             logger.info(f"Git commits: {len(metrics.git_commits)}")
@@ -626,12 +621,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
             
             # Also print to terminal
             # Handle Unicode encoding for Windows console
-            try:
-                print(formatted_footer_error)
-            except UnicodeEncodeError:
-                # Fallback: Replace Unicode box chars with ASCII
-                ascii_footer = formatted_footer_error.replace('━', '=').replace('│', '|')
-                print(ascii_footer)
+            self._safe_print(formatted_footer_error)
             
             return OperationResult(
                 success=False,
