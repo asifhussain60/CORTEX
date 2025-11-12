@@ -47,20 +47,17 @@ class TestYAMLLoading:
         with open(rules_file, 'r', encoding='utf-8') as f:
             rules = yaml.safe_load(f)
         
-        # Check top-level keys
-        assert 'metadata' in rules, "Missing 'metadata' section"
-        assert 'rules' in rules, "Missing 'rules' section"
+        # Check top-level keys (actual structure used by brain_protector.py)
+        assert 'version' in rules, "Missing 'version' field"
+        assert 'protection_layers' in rules, "Missing 'protection_layers' section"
         
-        # Check metadata
-        metadata = rules['metadata']
-        assert 'version' in metadata
-        assert 'created' in metadata
-        assert 'description' in metadata
+        # Check version format
+        assert isinstance(rules['version'], str), "Version should be a string"
         
-        # Check rules structure
-        rules_section = rules['rules']
-        assert isinstance(rules_section, dict), "Rules should be a dictionary"
-        assert len(rules_section) > 0, "Rules section should not be empty"
+        # Check protection_layers structure
+        layers = rules['protection_layers']
+        assert isinstance(layers, list), "Protection layers should be a list"
+        assert len(layers) > 0, "Protection layers should not be empty"
     
     def test_brain_protection_rules_content(self, cortex_root: Path):
         """Test brain protection rules have valid content."""
@@ -69,16 +66,16 @@ class TestYAMLLoading:
         with open(rules_file, 'r', encoding='utf-8') as f:
             rules = yaml.safe_load(f)
         
-        # Verify each rule has required fields
-        for rule_id, rule in rules['rules'].items():
-            assert 'name' in rule, f"Rule {rule_id} missing 'name'"
-            assert 'severity' in rule, f"Rule {rule_id} missing 'severity'"
-            assert 'description' in rule, f"Rule {rule_id} missing 'description'"
-            assert 'checks' in rule, f"Rule {rule_id} missing 'checks'"
+        # Verify each protection layer has required fields
+        for layer in rules['protection_layers']:
+            assert 'layer_id' in layer, f"Layer missing 'layer_id'"
+            assert 'name' in layer, f"Layer {layer.get('layer_id', 'unknown')} missing 'name'"
+            assert 'description' in layer, f"Layer {layer.get('layer_id', 'unknown')} missing 'description'"
+            assert 'priority' in layer, f"Layer {layer.get('layer_id', 'unknown')} missing 'priority'"
             
-            # Verify severity is valid
-            assert rule['severity'] in ['BLOCKING', 'WARNING'], \
-                f"Invalid severity for {rule_id}: {rule['severity']}"
+            # Verify priority is a number
+            assert isinstance(layer['priority'], int), \
+                f"Invalid priority for {layer.get('layer_id', 'unknown')}: {layer['priority']}"
     
     # ==========================================================================
     # OPERATIONS CONFIG TESTS

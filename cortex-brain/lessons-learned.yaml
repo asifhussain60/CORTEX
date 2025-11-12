@@ -1,6 +1,6 @@
 version: '1.0'
-last_updated: '2025-11-12T14:39:55.908481'
-total_lessons: 11
+last_updated: '2025-11-12T17:50:46.757010'
+total_lessons: 12
 lessons:
 - id: wpf-tdd-001
   title: WPF implementation without TDD causes runtime crashes
@@ -379,6 +379,20 @@ lessons:
   tags:
   - operation-failure
   - workspace-cleanup
+- id: orchestration-general-002
+  title: Operation 'Refresh CORTEX Story' had 1 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-11-12'
+  problem: Operation 'Refresh CORTEX Story' had 1 failed modules
+  symptoms:
+  - 'apply_narrator_voice: Story transformation failed: ''ApplyNarratorVoiceModule''
+    object has no attribute ''_validate_read_time'''
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - refresh-cortex-story
 patterns:
 - pattern_id: wpf_icon_validation_pattern
   name: Material Design Icon Validation

@@ -82,6 +82,9 @@ class BrainMetricsCollector:
         
         Returns:
             Dict with token savings analysis for template rendering
+            
+        Schema Compatibility:
+            - Includes 'schema_version' key for template validation
         """
         # Get base metrics
         base = self._get_token_base_metrics()
@@ -92,7 +95,12 @@ class BrainMetricsCollector:
         # Add optimization breakdown
         breakdown = self._get_optimization_breakdown(base)
         
-        return {**base, **savings, **breakdown}
+        return {
+            'schema_version': self.SCHEMA_VERSION,  # For template compatibility
+            **base,
+            **savings,
+            **breakdown
+        }
     
     def get_brain_health_diagnostics(self) -> Dict[str, Any]:
         """

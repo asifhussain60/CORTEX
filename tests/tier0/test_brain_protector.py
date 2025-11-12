@@ -57,20 +57,22 @@ class TestYAMLConfiguration:
         """Verify YAML rules are loaded successfully."""
         assert protector.rules_config is not None
         assert 'protection_layers' in protector.rules_config
-        assert len(protector.rules_config['protection_layers']) == 8  # Updated: includes all protection layers (SKULL + git_isolation)
+        assert len(protector.rules_config['protection_layers']) == 10  # Updated: includes all protection layers (namespace_protection + database_architecture added)
     
     def test_has_all_protection_layers(self, protector):
-        """Verify all 8 protection layers are configured."""
+        """Verify all 10 protection layers are configured."""
         layer_ids = [layer['layer_id'] for layer in protector.protection_layers]
         expected_layers = [
             'instinct_immutability',
             'tier_boundary',
             'solid_compliance',
             'hemisphere_specialization',
-            'skull_protection',  # Added: SKULL protection layer
+            'skull_protection',
             'knowledge_quality',
             'commit_integrity',
-            'git_isolation'  # Added: Git isolation layer
+            'git_isolation',
+            'namespace_protection',  # Added: Namespace protection layer
+            'database_architecture'  # Added: Database architecture layer
         ]
         for expected in expected_layers:
             assert expected in layer_ids

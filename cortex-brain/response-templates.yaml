@@ -3,10 +3,21 @@
 # Purpose: Pre-defined response templates for common CORTEX interactions
 # Design: Copilot reads these templates directly - NO Python execution needed
 # 
-# Template Structure:
+# MANDATORY RESPONSE FORMAT (All Copilot responses):
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🧠 CORTEX [Operation Type]
+# 
+# 📝 Your Request: [Echo user's request in concise, refined manner]
+# 🎯 Understanding: [State what you understand they want to achieve]
+# ⚠️ Challenge: [✓ Accept with rationale OR ⚡ Challenge with alternatives]
+# 💬 Response: [Natural language explanation - NO code snippets unless requested]
+# 🔍 Next Steps: [2-4 numbered actionable recommendations]
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+# Template Structure (for pre-formatted responses):
 #   trigger: [list of phrases that trigger this template]
 #   response_type: table | list | detailed | narrative
-#   content: The actual response content
+#   content: The actual response content (follows mandatory format above)
 #   context_needed: false | true (whether additional context loading is required)
 #   verbosity: concise | detailed | expert
 #   metadata: {category: system|agent|operation|error|plugin}

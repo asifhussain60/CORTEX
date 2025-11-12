@@ -211,6 +211,21 @@ class CortexConfig:
         return self._hostname
     
     @property
+    def tier1_db_path(self) -> Path:
+        """Get Tier 1 (Working Memory) database path."""
+        return self._brain_path / "tier1-working-memory.db"
+    
+    @property
+    def tier2_db_path(self) -> Path:
+        """Get Tier 2 (Knowledge Graph) database path."""
+        return self._brain_path / "tier2-knowledge-graph.db"
+    
+    @property
+    def tier3_db_path(self) -> Path:
+        """Get Tier 3 (Development Context) database path."""
+        return self._brain_path / "tier3-development-context.db"
+    
+    @property
     def is_development(self) -> bool:
         """Check if running in development mode."""
         return not self._config.get("portability", {}).get("setupCompleted", False)

@@ -485,7 +485,7 @@ class TestIntegrationWithExistingTests:
     
     def test_all_protection_layers_active(self, protector):
         """Verify all protection layers are active."""
-        assert len(protector.protection_layers) == 9  # Updated: includes skull, knowledge_quality, commit_integrity, git_isolation, database_architecture
+        assert len(protector.protection_layers) == 10  # Updated: includes all 10 layers (added namespace_protection)
         layer_ids = [layer['layer_id'] for layer in protector.protection_layers]
         
         expected_layers = [
@@ -497,6 +497,7 @@ class TestIntegrationWithExistingTests:
             'knowledge_quality',
             'commit_integrity',
             'git_isolation',
+            'namespace_protection',  # Added
             'database_architecture'
         ]
         

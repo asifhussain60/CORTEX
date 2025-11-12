@@ -263,6 +263,28 @@ categories:
     
     safety:
       require_confirmation: false
+  
+  # --------------------------------------------------------------------------
+  # Category 11: Docs Awakening-of-Cortex Backups (NEW!)
+  # --------------------------------------------------------------------------
+  docs_awakening_backups:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      - "docs/awakening-of-cortex.backup.*.md"
+    
+    action: delete_all
+    reason: "Redundant backup files (20 files from Nov 11-12) - Git history provides versioning"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: false  # Safe - Git history available
+      create_manifest: true
 
 # ============================================================================
 # PROTECTED DIRECTORIES (NEVER DELETE)

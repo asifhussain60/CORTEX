@@ -12,11 +12,11 @@
 metadata:
   version: "1.0"
   created: "2025-11-10"
-  last_updated: "2025-11-10"
-  total_modules: 74
-  modules_implemented: 37
+  last_updated: "2025-11-12"
+  total_modules: 75
+  modules_implemented: 38
   modules_pending: 37
-  completion_percentage: 50.0
+  completion_percentage: 50.7
 
 # Module categories for organization
 categories:
@@ -521,6 +521,23 @@ modules:
     actual_hours: 1.3
     test_coverage: 92
     notes: "Validates story structure"
+    
+  load_story_template:
+    name: "Load Story Template"
+    category: story
+    phase: preparation
+    priority: 3
+    description: "Load story template for transformation"
+    file_path: "src/operations/modules/load_story_template_module.py"
+    class_name: "LoadStoryTemplateModule"
+    dependencies: ["load_story_source"]
+    optional: false
+    status: ready
+    implementation_date: "2025-11-09"
+    estimated_hours: 1.5
+    actual_hours: 1.5
+    test_coverage: 85
+    notes: "Template loading for narrator voice transformation"
     
   validate_story_structure:
     name: "Validate Story Structure"
