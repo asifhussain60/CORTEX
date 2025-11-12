@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CORTEX Branch Publisher
+CORTEX Branch Publisher - Fault Tolerant Edition
 
 Builds CORTEX deployment package and publishes to a dedicated 'cortex-publish' branch.
 This allows users to clone ONLY the publish branch for a clean installation.
@@ -9,6 +9,7 @@ Usage:
     python scripts/publish_to_branch.py
     python scripts/publish_to_branch.py --dry-run
     python scripts/publish_to_branch.py --branch custom-publish-branch
+    python scripts/publish_to_branch.py --resume  # Resume from last checkpoint
 
 Features:
     - Creates orphan branch (no commit history from main)
@@ -17,6 +18,8 @@ Features:
     - Includes comprehensive setup guide
     - Minimal file size (excludes tests, dev tools, docs)
     - Users can clone with: git clone -b cortex-publish --single-branch <repo>
+    - FAULT TOLERANT: Saves checkpoints, can resume from interruption
+    - Automatic cleanup on success
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -29,10 +32,11 @@ import subprocess
 import sys
 import yaml
 from pathlib import Path
-from typing import Set, Dict, List
+from typing import Set, Dict, List, Optional
 import json
 import logging
 from datetime import datetime
+import traceback
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
@@ -40,6 +44,9 @@ logger = logging.getLogger(__name__)
 # Package metadata
 PACKAGE_VERSION = "5.2.0"  # Updated for CORTEX 2.0 Response Template Architecture
 PUBLISH_BRANCH = "cortex-publish"
+
+# Checkpoint file for fault tolerance
+CHECKPOINT_FILE = ".publish-checkpoint.json"
 
 # Core files that MUST be included
 CORE_FILES = {
@@ -103,6 +110,102 @@ EXCLUDED_PATTERNS = {
     '.coverage',
     'htmlcov',
 }
+
+
+# Publishing stages for checkpoint tracking
+class PublishStage:
+    """Publishing stage enumeration."""
+    VALIDATION = "validation"
+    BUILD_CONTENT = "build_content"
+    BRANCH_SETUP = "branch_setup"
+    CONTENT_COPY = "content_copy"
+    GIT_COMMIT = "git_commit"
+    GIT_PUSH = "git_push"
+    CLEANUP = "cleanup"
+    COMPLETE = "complete"
+
+
+class CheckpointManager:
+    """Manages publish checkpoints for fault tolerance."""
+    
+    def __init__(self, project_root: Path):
+        self.project_root = project_root
+        self.checkpoint_file = project_root / CHECKPOINT_FILE
+        self.checkpoint_data = self._load()
+    
+    def _load(self) -> Dict:
+        """Load checkpoint data from file."""
+        if self.checkpoint_file.exists():
+            try:
+                with open(self.checkpoint_file, 'r') as f:
+                    data = json.load(f)
+                    logger.info(f"📍 Checkpoint found: Last stage was '{data.get('last_stage')}'")
+                    return data
+            except Exception as e:
+                logger.warning(f"Failed to load checkpoint: {e}")
+        return {}
+    
+    def save(self, stage: str, data: Dict = None):
+        """Save checkpoint."""
+        self.checkpoint_data = {
+            'last_stage': stage,
+            'timestamp': datetime.now().isoformat(),
+            'data': data or {},
+            'version': PACKAGE_VERSION
+        }
+        
+        try:
+            with open(self.checkpoint_file, 'w') as f:
+                json.dump(self.checkpoint_data, f, indent=2)
+            logger.debug(f"💾 Checkpoint saved: {stage}")
+        except Exception as e:
+            logger.warning(f"Failed to save checkpoint: {e}")
+    
+    def get_last_stage(self) -> Optional[str]:
+        """Get last completed stage."""
+        return self.checkpoint_data.get('last_stage')
+    
+    def get_data(self, key: str = None):
+        """Get checkpoint data."""
+        data = self.checkpoint_data.get('data', {})
+        if key:
+            return data.get(key)
+        return data
+    
+    def should_skip_stage(self, stage: str) -> bool:
+        """Check if stage should be skipped (already completed)."""
+        last_stage = self.get_last_stage()
+        if not last_stage:
+            return False
+        
+        # Define stage order
+        stage_order = [
+            PublishStage.VALIDATION,
+            PublishStage.BUILD_CONTENT,
+            PublishStage.BRANCH_SETUP,
+            PublishStage.CONTENT_COPY,
+            PublishStage.GIT_COMMIT,
+            PublishStage.GIT_PUSH,
+            PublishStage.CLEANUP,
+            PublishStage.COMPLETE
+        ]
+        
+        try:
+            last_idx = stage_order.index(last_stage)
+            current_idx = stage_order.index(stage)
+            return current_idx <= last_idx
+        except ValueError:
+            return False
+    
+    def clear(self):
+        """Clear checkpoint file."""
+        if self.checkpoint_file.exists():
+            self.checkpoint_file.unlink()
+            logger.debug("🗑️  Checkpoint cleared")
+    
+    def exists(self) -> bool:
+        """Check if checkpoint exists."""
+        return self.checkpoint_file.exists()
 
 
 def run_git_command(cmd: List[str], cwd: Path, check: bool = True) -> subprocess.CompletedProcess:
@@ -610,76 +713,153 @@ cp cortex.config.template.json cortex.config.json
 def publish_to_branch(
     project_root: Path,
     branch_name: str = PUBLISH_BRANCH,
-    dry_run: bool = False
+    dry_run: bool = False,
+    resume: bool = False
 ) -> bool:
-    """Publish CORTEX to dedicated branch."""
+    """Publish CORTEX to dedicated branch with fault tolerance.
+    
+    Args:
+        project_root: Root directory of CORTEX project
+        branch_name: Name of publish branch
+        dry_run: Preview mode (no git changes)
+        resume: Resume from last checkpoint
+        
+    Returns:
+        True if successful, False otherwise
+    """
     logger.info("=" * 80)
-    logger.info("CORTEX Branch Publisher")
+    logger.info("CORTEX Branch Publisher - Fault Tolerant Edition")
     logger.info("=" * 80)
     logger.info(f"Version: {PACKAGE_VERSION}")
     logger.info(f"Target branch: {branch_name}")
     logger.info(f"Project root: {project_root}")
     logger.info(f"Dry run: {dry_run}")
+    logger.info(f"Resume mode: {resume}")
     logger.info("")
     
-    # Get current branch
-    original_branch = get_current_branch(project_root)
-    logger.info(f"Current branch: {original_branch}")
+    # Initialize checkpoint manager
+    checkpoint = CheckpointManager(project_root)
     
-    # Check for uncommitted changes
-    result = run_git_command(['git', 'status', '--porcelain'], project_root)
-    if result.stdout.strip():
-        logger.error("❌ You have uncommitted changes. Please commit or stash them first.")
-        return False
+    # Check if resuming
+    if resume and not checkpoint.exists():
+        logger.warning("⚠️  Resume requested but no checkpoint found. Starting fresh.")
+        resume = False
+    
+    if resume:
+        logger.info(f"🔄 Resuming from checkpoint: {checkpoint.get_last_stage()}")
+    
+    # Get current branch
+    original_branch = checkpoint.get_data('original_branch')
+    if not original_branch:
+        original_branch = get_current_branch(project_root)
+        checkpoint.save(PublishStage.VALIDATION, {'original_branch': original_branch})
+    
+    logger.info(f"Current branch: {original_branch}")
     
     # Create temp directory for build
     temp_dir = project_root / '.temp-publish'
     
     try:
-        # Build package content
-        stats = build_publish_content(project_root, temp_dir)
-        logger.info(f"\n✅ Build complete:")
-        logger.info(f"   Files: {stats['files_copied']}")
-        logger.info(f"   Size: {stats['total_size'] / 1024 / 1024:.2f} MB")
+        # STAGE 1: Validation
+        if not checkpoint.should_skip_stage(PublishStage.VALIDATION):
+            logger.info("\n📋 STAGE 1: Validation")
+            
+            # Check for uncommitted changes
+            result = run_git_command(['git', 'status', '--porcelain'], project_root)
+            if result.stdout.strip():
+                logger.error("❌ You have uncommitted changes. Please commit or stash them first.")
+                return False
+            
+            checkpoint.save(PublishStage.VALIDATION, {
+                'original_branch': original_branch,
+                'branch_name': branch_name
+            })
+            logger.info("✅ Validation complete")
+        else:
+            logger.info("⏩ Skipping validation (already completed)")
+        
+        # STAGE 2: Build Content
+        # STAGE 2: Build Content
+        stats = None
+        if not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT):
+            logger.info("\n🔨 STAGE 2: Building Package Content")
+            
+            # Build package content
+            stats = build_publish_content(project_root, temp_dir)
+            logger.info(f"✅ Build complete:")
+            logger.info(f"   Files: {stats['files_copied']}")
+            logger.info(f"   Size: {stats['total_size'] / 1024 / 1024:.2f} MB")
+            
+            checkpoint.save(PublishStage.BUILD_CONTENT, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+        else:
+            logger.info("⏩ Skipping build (already completed)")
+            stats = checkpoint.get_data('stats')
         
         if dry_run:
             logger.info("\n🔍 DRY RUN - No git operations performed")
             logger.info(f"Preview content in: {temp_dir}")
+            checkpoint.clear()
             return True
         
-        # Git operations
-        logger.info("\n📝 Creating/updating publish branch...")
-        
-        # Check if branch exists
-        if branch_exists(branch_name, project_root):
-            logger.info(f"Branch '{branch_name}' exists - switching to it")
-            run_git_command(['git', 'checkout', branch_name], project_root)
+        # STAGE 3: Branch Setup
+        if not checkpoint.should_skip_stage(PublishStage.BRANCH_SETUP):
+            logger.info("\n🌿 STAGE 3: Setting Up Publish Branch")
             
-            # Remove all files except .git
-            logger.info("Cleaning existing branch content...")
-            for item in project_root.iterdir():
-                if item.name == '.git':
-                    continue
-                if item.is_dir():
-                    shutil.rmtree(item)
-                else:
-                    item.unlink()
-        else:
-            logger.info(f"Creating new orphan branch '{branch_name}'")
-            run_git_command(['git', 'checkout', '--orphan', branch_name], project_root)
-            run_git_command(['git', 'rm', '-rf', '.'], project_root, check=False)
-        
-        # Copy new content
-        logger.info("Copying new content to publish branch...")
-        for item in temp_dir.iterdir():
-            dest = project_root / item.name
-            if item.is_dir():
-                shutil.copytree(item, dest)
+            # Check if branch exists
+            if branch_exists(branch_name, project_root):
+                logger.info(f"Branch '{branch_name}' exists - switching to it")
+                run_git_command(['git', 'checkout', branch_name], project_root)
+                
+                # Remove all files except .git
+                logger.info("Cleaning existing branch content...")
+                for item in project_root.iterdir():
+                    if item.name == '.git' or item.name == CHECKPOINT_FILE:
+                        continue
+                    try:
+                        if item.is_dir():
+                            shutil.rmtree(item)
+                        else:
+                            item.unlink()
+                    except Exception as e:
+                        logger.warning(f"Failed to remove {item}: {e}")
             else:
-                shutil.copy2(item, dest)
+                logger.info(f"Creating new orphan branch '{branch_name}'")
+                run_git_command(['git', 'checkout', '--orphan', branch_name], project_root)
+                run_git_command(['git', 'rm', '-rf', '.'], project_root, check=False)
+            
+            checkpoint.save(PublishStage.BRANCH_SETUP, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+            logger.info("✅ Branch setup complete")
+        else:
+            logger.info("⏩ Skipping branch setup (already completed)")
         
-        # Create .gitignore
-        gitignore_content = """# CORTEX Publish Branch .gitignore
+        # STAGE 4: Content Copy
+        if not checkpoint.should_skip_stage(PublishStage.CONTENT_COPY):
+            logger.info("\n📂 STAGE 4: Copying Content to Branch")
+            
+            # Copy new content
+            for item in temp_dir.iterdir():
+                dest = project_root / item.name
+                try:
+                    if item.is_dir():
+                        if dest.exists():
+                            shutil.rmtree(dest)
+                        shutil.copytree(item, dest)
+                    else:
+                        shutil.copy2(item, dest)
+                except Exception as e:
+                    logger.warning(f"Failed to copy {item.name}: {e}")
+                    raise
+            
+            # Create .gitignore
+            gitignore_content = """# CORTEX Publish Branch .gitignore
 __pycache__/
 *.py[cod]
 *$py.class
@@ -713,17 +893,34 @@ env/
 .DS_Store
 Thumbs.db
 cortex.config.json
+.publish-checkpoint.json
 """
-        gitignore_file = project_root / '.gitignore'
-        with open(gitignore_file, 'w', encoding='utf-8') as f:
-            f.write(gitignore_content)
+            gitignore_file = project_root / '.gitignore'
+            with open(gitignore_file, 'w', encoding='utf-8') as f:
+                f.write(gitignore_content)
+            
+            checkpoint.save(PublishStage.CONTENT_COPY, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+            logger.info("✅ Content copy complete")
+        else:
+            logger.info("⏩ Skipping content copy (already completed)")
         
-        # Stage all files
-        logger.info("Staging files...")
-        run_git_command(['git', 'add', '-A'], project_root)
-        
-        # Commit
-        commit_msg = f"""CORTEX {PACKAGE_VERSION} - Production Release
+        # STAGE 5: Git Commit
+        if not checkpoint.should_skip_stage(PublishStage.GIT_COMMIT):
+            logger.info("\n💾 STAGE 5: Committing Changes")
+            
+            # Stage all files
+            run_git_command(['git', 'add', '-A'], project_root)
+            
+            # Get stats if not available
+            if not stats:
+                stats = checkpoint.get_data('stats')
+            
+            # Commit
+            commit_msg = f"""CORTEX {PACKAGE_VERSION} - Production Release
 
 Published: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -735,59 +932,151 @@ Package Statistics:
 This is a production-ready deployment package.
 Clone with: git clone -b {branch_name} --single-branch <repo>
 """
-        
-        logger.info("Committing changes...")
-        run_git_command(['git', 'commit', '-m', commit_msg], project_root)
-        
-        # Push to remote
-        logger.info(f"Pushing to origin/{branch_name}...")
-        result = run_git_command(
-            ['git', 'push', '-f', 'origin', branch_name],
-            project_root,
-            check=False
-        )
-        
-        if result.returncode != 0:
-            logger.warning(f"⚠️  Push failed: {result.stderr}")
-            logger.warning("You may need to push manually later")
+            
+            run_git_command(['git', 'commit', '-m', commit_msg], project_root)
+            
+            checkpoint.save(PublishStage.GIT_COMMIT, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+            logger.info("✅ Commit complete")
         else:
-            logger.info("✅ Push successful")
+            logger.info("⏩ Skipping commit (already completed)")
         
-        # Return to original branch
-        logger.info(f"\nReturning to original branch: {original_branch}")
-        run_git_command(['git', 'checkout', original_branch], project_root)
+        # STAGE 6: Git Push
+        if not checkpoint.should_skip_stage(PublishStage.GIT_PUSH):
+            logger.info(f"\n📤 STAGE 6: Pushing to origin/{branch_name}")
+            
+            result = run_git_command(
+                ['git', 'push', '-f', 'origin', branch_name],
+                project_root,
+                check=False
+            )
+            
+            if result.returncode != 0:
+                logger.error(f"❌ Push failed: {result.stderr}")
+                logger.error("⚠️  Checkpoint saved. You can:")
+                logger.error("   1. Fix network/auth issues")
+                logger.error("   2. Run with --resume to continue from here")
+                logger.error("   3. Or manually push later with:")
+                logger.error(f"      git push -f origin {branch_name}")
+                return False
+            
+            checkpoint.save(PublishStage.GIT_PUSH, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+            logger.info("✅ Push successful")
+        else:
+            logger.info("⏩ Skipping push (already completed)")
+        
+        # STAGE 7: Cleanup and Return
+        if not checkpoint.should_skip_stage(PublishStage.CLEANUP):
+            logger.info("\n🧹 STAGE 7: Cleanup")
+            
+            # Return to original branch
+            logger.info(f"Returning to original branch: {original_branch}")
+            run_git_command(['git', 'checkout', original_branch], project_root)
+            
+            checkpoint.save(PublishStage.CLEANUP, {
+                'original_branch': original_branch,
+                'branch_name': branch_name,
+                'stats': stats
+            })
+            logger.info("✅ Cleanup complete")
+        else:
+            logger.info("⏩ Skipping cleanup (already completed)")
+        
+        # Mark as complete
+        checkpoint.save(PublishStage.COMPLETE, {
+            'original_branch': original_branch,
+            'branch_name': branch_name,
+            'stats': stats
+        })
+        
+        # Get final stats
+        if not stats:
+            stats = checkpoint.get_data('stats')
         
         logger.info("\n" + "=" * 80)
-        logger.info("✅ CORTEX published successfully!")
+        logger.info("✅ CORTEX PUBLISHED SUCCESSFULLY!")
         logger.info("=" * 80)
         logger.info(f"\n📦 Users can now clone with:")
         logger.info(f"   git clone -b {branch_name} --single-branch https://github.com/asifhussain60/CORTEX.git")
         logger.info("")
         
+        # Clear checkpoint on success
+        checkpoint.clear()
+        
         return True
         
+    except KeyboardInterrupt:
+        logger.warning("\n⚠️  Interrupted by user")
+        logger.info(f"💾 Progress saved. Run with --resume to continue:")
+        logger.info(f"   python scripts/publish_to_branch.py --resume")
+        return False
+        
     except Exception as e:
-        logger.error(f"\n❌ Publish failed: {e}", exc_info=True)
+        logger.error(f"\n❌ Publish failed at stage: {checkpoint.get_last_stage()}")
+        logger.error(f"Error: {e}")
+        logger.error(f"\n{traceback.format_exc()}")
+        
+        logger.info(f"\n💾 Progress saved. You can:")
+        logger.info("   1. Fix the issue")
+        logger.info("   2. Run with --resume to continue:")
+        logger.info(f"      python scripts/publish_to_branch.py --resume")
+        logger.info("   3. Or start fresh (will lose progress)")
         
         # Try to return to original branch
-        try:
-            run_git_command(['git', 'checkout', original_branch], project_root, check=False)
-        except:
-            pass
+        if original_branch:
+            try:
+                current = get_current_branch(project_root)
+                if current != original_branch:
+                    logger.info(f"\n🔄 Attempting to return to {original_branch}...")
+                    run_git_command(['git', 'checkout', original_branch], project_root, check=False)
+                    logger.info("✅ Returned to original branch")
+            except Exception as branch_err:
+                logger.warning(f"⚠️  Could not return to original branch: {branch_err}")
         
         return False
         
     finally:
-        # Clean up temp directory
-        if temp_dir.exists():
-            shutil.rmtree(temp_dir)
-            logger.debug(f"Cleaned up temp directory: {temp_dir}")
+        # Clean up temp directory only if publish completed
+        if checkpoint.get_last_stage() == PublishStage.COMPLETE:
+            if temp_dir.exists():
+                shutil.rmtree(temp_dir)
+                logger.debug(f"🗑️  Cleaned up temp directory: {temp_dir}")
+        elif temp_dir.exists():
+            logger.debug(f"💾 Keeping temp directory for resume: {temp_dir}")
 
 
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Publish CORTEX to dedicated branch for user deployment'
+        description='Publish CORTEX to dedicated branch for user deployment (Fault Tolerant)',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python scripts/publish_to_branch.py                    # Normal publish
+  python scripts/publish_to_branch.py --dry-run          # Preview only
+  python scripts/publish_to_branch.py --resume           # Resume from checkpoint
+  python scripts/publish_to_branch.py --branch custom    # Custom branch name
+  
+Fault Tolerance:
+  If publish fails or is interrupted, progress is saved automatically.
+  Run with --resume to continue from where it left off.
+  
+  Checkpoints are saved at each stage:
+    1. Validation
+    2. Build Content
+    3. Branch Setup
+    4. Content Copy
+    5. Git Commit
+    6. Git Push
+    7. Cleanup
+"""
     )
     parser.add_argument(
         '--branch',
@@ -806,6 +1095,11 @@ def main():
         action='store_true',
         help='Preview what would be published without making changes'
     )
+    parser.add_argument(
+        '--resume',
+        action='store_true',
+        help='Resume from last checkpoint (if publish was interrupted)'
+    )
     
     args = parser.parse_args()
     
@@ -813,11 +1107,13 @@ def main():
         success = publish_to_branch(
             project_root=args.project_root,
             branch_name=args.branch,
-            dry_run=args.dry_run
+            dry_run=args.dry_run,
+            resume=args.resume
         )
         return 0 if success else 1
     except KeyboardInterrupt:
         logger.warning("\n⚠️  Interrupted by user")
+        logger.info("💾 Progress saved. Run with --resume to continue")
         return 130
     except Exception as e:
         logger.error(f"\n❌ Fatal error: {e}", exc_info=True)
