@@ -22,7 +22,7 @@ class TestTemplateSchemaValidation:
     def templates(self) -> Dict:
         """Load response templates."""
         template_file = Path('cortex-brain/response-templates.yaml')
-        with open(template_file) as f:
+        with open(template_file, encoding='utf-8') as f:
             data = yaml.safe_load(f)
         return data['templates']
     
@@ -34,7 +34,7 @@ class TestTemplateSchemaValidation:
     def test_schema_version_matches(self, templates):
         """Verify global schema version is defined."""
         template_file = Path('cortex-brain/response-templates.yaml')
-        with open(template_file) as f:
+        with open(template_file, encoding='utf-8') as f:
             data = yaml.safe_load(f)
         
         assert 'schema_version' in data, "Templates must declare schema_version"
@@ -159,7 +159,7 @@ class TestDocumentationStaleness:
         """Verify entry point mentions current schema version."""
         
         entry_point = Path('.github/prompts/CORTEX.prompt.md')
-        content = entry_point.read_text()
+        content = entry_point.read_text(encoding='utf-8')
         
         # Entry point should mention schema versioning
         assert 'schema' in content.lower() or 'version' in content.lower(), \
@@ -169,7 +169,7 @@ class TestDocumentationStaleness:
         """Verify templates have been updated recently (within 90 days)."""
         
         template_file = Path('cortex-brain/response-templates.yaml')
-        with open(template_file) as f:
+        with open(template_file, encoding='utf-8') as f:
             data = yaml.safe_load(f)
         
         if 'last_updated' in data:
