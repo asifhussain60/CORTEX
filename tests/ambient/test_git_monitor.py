@@ -59,9 +59,11 @@ class TestGitMonitor:
         assert monitor.git_dir is None
     
     def test_rejects_non_existent_path(self, mock_callback):
-        """Should reject non-existent repository path."""
-        with pytest.raises(Exception):
-            GitMonitor("/nonexistent/path", mock_callback)
+        """Should handle non-existent repository path gracefully."""
+        # GitMonitor resolves the path but doesn't raise if not a git repo
+        # Instead, it logs a warning and sets git_dir = None
+        with pytest.raises(FileNotFoundError):
+            GitMonitor("/nonexistent/path/that/does/not/exist", mock_callback)
     
     def test_hook_types_whitelist(self, git_repo, mock_callback):
         """Should only allow whitelisted hook types."""

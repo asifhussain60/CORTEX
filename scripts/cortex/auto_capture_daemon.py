@@ -1189,16 +1189,18 @@ class TerminalMonitor:
         """Identify command type."""
         command_lower = command.lower()
         
-        if "pytest" in command_lower or "test" in command_lower:
-            return "test_execution"
-        elif "build" in command_lower:
-            return "build"
-        elif "git commit" in command_lower:
+        # Check git commands FIRST (more specific patterns)
+        if "git commit" in command_lower:
             return "git_commit"
         elif "git push" in command_lower:
             return "git_push"
         elif "git pull" in command_lower:
             return "git_pull"
+        # Then check generic patterns
+        elif "pytest" in command_lower or "test" in command_lower:
+            return "test_execution"
+        elif "build" in command_lower:
+            return "build"
         elif "python" in command_lower or "node" in command_lower:
             return "code_execution"
         else:

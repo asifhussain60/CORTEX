@@ -62,6 +62,7 @@ Central chronological append-only register (top = newest). Never delete entries;
 
 | ID | Date | Category | Summary | Status | Related Tasks | Supersedes | Metrics Targets |
 |----|------|----------|---------|--------|---------------|------------|-----------------|
+| E-2025-11-12-FILE-DEPENDENCY | 2025-11-12 | Architecture | File Dependency Tracking System - Track file-to-file dependencies (imports, calls, inheritance) with transitive graph traversal (A→B→C). Enable impact analysis ("what breaks if I change X?"), circular dependency detection, intelligent task ordering. 3-phase implementation: Foundation (2h), Graph Analysis (3h), Agent Integration (4h). Uses Python AST (85-90% accuracy), SQLite recursive CTEs, Pylance MCP. Architect/Health/Work Planner agent integration. | APPROVED-PENDING-IMPLEMENTATION | Phase 13 (new) | — | Query <1s; 85%+ accuracy; Circular deps detection; Architect/Health/Planner integration; Python (future: multi-language) |
 | E-2025-11-12-DEPLOYMENT-PACKAGE | 2025-11-12 | Deployment | Production Deployment Package - Two-tier distribution (user vs admin), automated packaging (20-25 MB compressed), one-click installer (Windows/Mac/Linux), performance metrics dashboard for senior leadership. Phase 8.1-8.5 complete design. Estimated 9 hours (8 hours deployment + 1 hour metrics). Priority: CRITICAL - enables clean distribution + leadership ROI visibility. | APPROVED-PENDING-IMPLEMENTATION | Phase 8 (new) | — | Package <30 MB; Setup <2 min; 87.5% size reduction; Zero admin files; Metrics <200ms; Demo integration |
 | E-2025-11-11-TEST-REMEDIATION | 2025-11-11 | Test Quality | Test Suite Remediation Plan - Created comprehensive plan to achieve 100% pass rate (currently 86%, 2,791 tests). Identified 4 failure categories: schema mismatches (10), API contracts (5), missing deps (33), file locking (16). Decision tree: Delete orphaned 1.0 tests, fix schema alignment, apply markers, enhance fixtures. Estimated 8-12 hours over 2 days. Phase 1: Quick wins (95%), Phase 2: Schema (98%), Phase 3: Audit (100%), Phase 4: Docs. | IN-PROGRESS | Task 5.10 (Phase 5) | TEST-REMEDIATION-PLAN.md | 86% → 100% pass rate; <30s unit tests; Zero orphaned tests; Design alignment |
 | E-2025-11-11-IMPLEMENTATION-AUDIT | 2025-11-11 | Status Accuracy | Implementation Reality Audit - Discovered massive underreporting: 97 modules (not 24), 2,203 tests (not 82), 8 plugins, 14 operations (not 6), 37 modules implemented (38%). Status documents corrected. Created IMPLEMENTATION-REALITY-ANALYSIS.md with reconciliation plan. | COMPLETED | Task 5.9 (Phase 5) | — | 100% status accuracy; All docs reflect reality; Plugin/demo systems documented; Test count corrected (2,203); Module count corrected (97) |
@@ -136,6 +137,7 @@ High-level features built on the foundation:
 Testing and migration from 1.0:
 
 - **13-testing-strategy.md** - Test coverage for new features
+- **🆕 13-file-dependency-tracking.md** - ⭐ **NEW** - Track file-to-file dependencies (A→B→C) with transitive graph traversal (9 hours, Phase 13)
 - **🆕 34-brain-protection-test-enhancements.md** - ⭐ **NEW** - 6 additional tests for Rules 3, 5, 26, 27, 28, 31 (4-6 hours)
 - **12-migration-strategy.md** - Step-by-step migration from 1.0 to 2.0
 - **15-api-changes.md** - Agent interface updates, new abstractions
@@ -323,6 +325,7 @@ Documentation of key architectural decisions and strategic questions:
 | 🆕 QA-CRITICAL-QUESTIONS-2025-11-09.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 33-yaml-conversion-strategy.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 34-brain-protection-test-enhancements.md | ✅ Complete | 100% | 2025-11-09 |
+| 🆕 13-file-dependency-tracking.md | ✅ Complete | 100% | 2025-11-12 |
 | 🆕 35-unified-architecture-analysis.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 36-unified-orchestration-model.md | ✅ Complete | 100% | 2025-11-09 |
 | 🆕 37-documentation-architecture.md | ✅ Complete | 100% | 2025-11-09 |

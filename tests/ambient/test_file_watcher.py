@@ -51,8 +51,8 @@ class TestFileSystemWatcher:
     
     def test_rejects_invalid_workspace(self, mock_callback):
         """Should reject non-existent workspace path."""
-        with pytest.raises(Exception):
-            FileSystemWatcher("/nonexistent/path", mock_callback)
+        with pytest.raises(FileNotFoundError):
+            FileSystemWatcher("/nonexistent/path/that/does/not/exist", mock_callback)
     
     def test_rejects_file_as_workspace(self, temp_workspace, mock_callback):
         """Should reject file path (must be directory)."""
