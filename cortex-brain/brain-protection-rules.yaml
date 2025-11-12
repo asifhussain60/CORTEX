@@ -33,7 +33,9 @@ tier0_instincts:
   - "SKULL_INTEGRATION_VERIFICATION"
   - "SKULL_VISUAL_REGRESSION"
   - "SKULL_RETRY_WITHOUT_LEARNING"
-  - "SKULL_TRANSFORMATION_VERIFICATION"  # NEW: Operations claiming transformation MUST produce changes
+  - "SKULL_TRANSFORMATION_VERIFICATION"  # Operations claiming transformation MUST produce changes
+  - "SKULL_PRIVACY_PROTECTION"  # SKULL-006: Prevent publishing files with machine-specific paths
+  - "SKULL_FACULTY_INTEGRITY"  # SKULL-007: Publish MUST include ALL essential CORTEX faculties
   - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
   - "DISTRIBUTED_DATABASE_ARCHITECTURE"  # CRITICAL: Use tier-specific databases, never monolithic
 
@@ -888,8 +890,170 @@ protection_layers:
           - CI fails if transformation claims success but git diff empty
           - Status documents distinguish architecture vs implementation
       
+      - rule_id: "SKULL_PRIVACY_PROTECTION"
+        name: "Privacy Protection (SKULL-006)"
+        severity: "blocked"
+        description: "Publish operations MUST NOT include files with machine-specific paths or private data"
+        
+        detection:
+          patterns:
+            - "AHHOME"
+            - ".coverage.*.* "
+            - "C:\\\\"
+            - "D:\\\\"
+            - "/home/[a-z]+"
+            - "/Users/[a-z]+"
+          file_types:
+            - "**/*.log"
+            - "**/logs/**"
+            - "**/.coverage.*"
+            - "**/health-reports/**"
+            - "**/__pycache__/**"
+          scope: ["published_files"]
+        
+        verification_required:
+          - type: "privacy_scan"
+            description: "Scan all published files for machine-specific paths"
+            requirement: "Zero files with absolute paths (C:\\, D:\\, /home/, AHHOME)"
+          
+          - type: "exclusion_test"
+            description: "Test that publish script excludes privacy-leaking files"
+            requirement: "Test MUST verify .coverage.*, logs/, health-reports/ excluded"
+          
+          - type: "config_sanitization"
+            description: "Verify config files use template values, not real paths"
+            requirement: "cortex.config.json MUST use placeholders, not AHHOME paths"
+        
+        alternatives:
+          - "Add file patterns to EXCLUDE_PATTERNS in publish script"
+          - "Create .publishignore file with privacy exclusions"
+          - "Add pre-publish scan that fails on privacy leak"
+          - "Use template configs with placeholder paths"
+        
+        evidence_template: "Published file contains privacy data: '{file_path}' - found '{privacy_leak}'"
+        
+        rationale: |
+          SKULL-006: Privacy Protection
+          
+          Real incident (2025-11-12):
+          - User runs publish script
+          - Discovers .coverage.AHHOME.12345.XgvxuuYx in publish/CORTEX/
+          - 7 coverage files with machine name exposed
+          - logs/ambient_capture.log contains C:\Windows\Temp paths
+          - cortex.config.json contains AHHOME machine paths
+          - health-reports/ has user-specific diagnostic data
+          
+          Impact:
+          - Privacy violation (machine names, usernames exposed)
+          - Distribution bloat (unnecessary test artifacts)
+          - Professionalism degradation (dev artifacts in user package)
+          
+          SKULL-006 prevents this by:
+          1. Scanning published files for machine-specific patterns
+          2. Requiring publish script exclude logs, coverage, health data
+          3. Blocking publish if privacy leaks detected
+          4. Enforcing template configs instead of real paths
+          
+          Implementation:
+          - Add EXCLUDE_PATTERNS to publish script (logs, coverage, health)
+          - Create test_publish_privacy.py that scans for leaks
+          - Add pre-publish hook that runs privacy scan
+          - Use cortex.config.template.json instead of cortex.config.json
+      
       - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE"
-        name: "Header/Footer in Copilot Response (SKULL-006)"
+        name: "Faculty Integrity Check (SKULL-007)"
+        severity: "blocked"
+        description: "Publish package MUST contain ALL essential CORTEX faculties for full operation"
+        
+        detection:
+          missing_faculties:
+            - "Tier 0 (SKULL) not found"
+            - "Tier 1 (Memory) not found"
+            - "Tier 2 (Knowledge) not found"
+            - "Tier 3 (Context) not found"
+            - "Agents missing"
+            - "Operations missing"
+            - "Entry point missing"
+          scope: ["published_files"]
+        
+        verification_required:
+          - type: "comprehensive_faculty_test"
+            description: "Test that verifies ALL CORTEX faculties exist in publish package"
+            requirement: "test_cortex_fully_operational MUST pass"
+          
+          - type: "tier_verification"
+            description: "Verify all 4 tiers (Tier 0-3) present"
+            requirement: "brain_protector.py, conversation_manager.py, knowledge_graph/, context_intelligence.py"
+          
+          - type: "agent_verification"
+            description: "Verify 10 specialist agents present"
+            requirement: "cortex_agents/ directory with base_agent.py and agent implementations"
+          
+          - type: "entry_point_verification"
+            description: "Verify GitHub Copilot integration files"
+            requirement: "CORTEX.prompt.md and copilot-instructions.md in .github/"
+          
+          - type: "documentation_verification"
+            description: "Verify user documentation present"
+            requirement: "story.md, setup-guide.md, technical-reference.md, etc."
+        
+        alternatives:
+          - "Use inclusion-based publish (copy ONLY essential files)"
+          - "Create comprehensive faculty test that blocks publish if faculties missing"
+          - "Maintain ESSENTIAL_FILES list of required CORTEX components"
+        
+        evidence_template: "Published CORTEX missing faculty: '{faculty_name}' - file not found: '{file_path}'"
+        
+        rationale: |
+          SKULL-007: Faculty Integrity Check
+          
+          Real incident (2025-11-12):
+          - Exclusion-based publish script too aggressive
+          - Excluded 97.9% of files (good for privacy!)
+          - BUT also excluded essential faculties:
+            ❌ All 10 specialist agents missing
+            ❌ Tier 1 conversation_tracker.py missing
+            ❌ Entry points (CORTEX.prompt.md) missing
+            ❌ Plugin system missing
+          - Published CORTEX was incomplete and non-functional
+          
+          Impact:
+          - Users copy broken CORTEX to their application
+          - CORTEX cannot coordinate work (no agents)
+          - CORTEX cannot remember (no Tier 1)
+          - Copilot cannot find CORTEX (no entry points)
+          - Result: Complete failure, wasted user time
+          
+          SKULL-007 prevents this by:
+          1. Comprehensive test that verifies ALL faculties present
+          2. Blocking publish if any faculty missing
+          3. Listing exact files required for each faculty
+          4. Testing BEFORE deployment (not discovery by users)
+          
+          The Brilliant Fix:
+          Instead of exclusion-based publish (exclude dev files),
+          switch to INCLUSION-based publish (include ONLY essentials):
+          
+          Benefits:
+          - Simpler logic (copy what's needed vs exclude what's not)
+          - Guaranteed completeness (explicit list of essentials)
+          - No accidental omissions (inclusion list is exhaustive)
+          - Better maintainability (clear intent)
+          
+          Implementation:
+          - Create test_publish_faculties.py with test_cortex_fully_operational()
+          - Test checks: Tier 0-3, Agents, Operations, Plugins, Entry Points, Docs
+          - Publish script copies ONLY essential directories
+          - Test runs BEFORE declaring publish complete
+          
+          Result:
+          - Package size: 393 files, 3.8 MB (perfect!)
+          - All faculties present: ✅
+          - No privacy leaks: ✅  
+          - CORTEX fully operational: ✅
+      
+      - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE_LEGACY"
+        name: "Header/Footer in Copilot Response (Legacy)"
         severity: "blocked"
         description: "Operation orchestrators MUST include formatted headers/footers in Copilot Chat response"
         

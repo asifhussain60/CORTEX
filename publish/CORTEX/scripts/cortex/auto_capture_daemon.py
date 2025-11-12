@@ -206,9 +206,11 @@ class SmartFileFilter:
                 return True
                 
             # 1. Check path patterns (case-insensitive)
-            path_str = str(file_path).lower()
+            path_str = str(file_path).lower().replace('\\', '/')  # Normalize path separators
             for pattern in NOISE_FILE_PATTERNS:
-                if pattern in path_str:
+                # Normalize pattern separators too
+                norm_pattern = pattern.lower().replace('\\', '/')
+                if norm_pattern in path_str:
                     return True
             
             # 2. Check file size (skip large files)

@@ -1,0 +1,88 @@
+1. Always Anchor Yourself
+Tell Copilot to treat every session like waking up from a nap in an unfamiliar library.
+Instruction to Copilot:
+
+Before generating code, restate where we are: the module name, its purpose, and the role the current file plays in the system.
+
+It forces the model to re-gather intent, instead of guessing from local breadcrumbs.
+
+2. Ask for Intent Before Code
+Copilot likes to “go brrrrr” and generate code instantly. Rein it in.
+Instruction:
+
+Before writing code, summarize what you think I'm trying to do and request clarification when the goal is ambiguous.
+
+Think of it like a rubber duck with an anxiety disorder — it must confirm the mission.
+
+3. Refer to Project Boundaries
+Codebases aren’t just files; they’re ecosystems.
+Instruction:
+
+Always consider established patterns in this project: file structure, naming conventions, existing utilities, error-handling patterns, and state-management choices.
+
+This prevents “random-new-pattern syndrome.”
+
+4. Rely on Existing Code Before Inventing New Helpers
+Copilot sometimes reinvents the wheel… poorly.
+Instruction:
+
+Search the current project for similar functions, utilities, or patterns before suggesting new abstractions.
+
+Bonus effect: reduces “function sprawl.”
+
+5. Generate Context Snapshots
+When switching tasks or files, have it summarize context.
+Instruction:
+
+Each time a context switch occurs, create a brief local summary of what we're doing, why, and what’s next.
+
+A trail of breadcrumbs beats wandering the woods with amnesia.
+
+6. Selective Memory Beats Overeating Files
+Feeding Copilot whole projects leads to mental indigestion.
+Instruction:
+
+Only reference scoped files relevant to the current task, rather than loading the entire project.
+
+Copilot works best when it knows just enough, not everything.
+
+7. Treat Comments as Cognitive Infrastructure
+Good comments aren’t just for humans — they’re for robots too.
+Instruction:
+
+Prioritize reading comments, docstrings, and TODO blocks to maintain context continuity.
+
+Think of comments as memory implants.
+
+8. Preserve Intent Through Commit-Aware Suggestions
+Avoid blind code changes.
+Instruction:
+
+When suggesting refactors or updates, summarize the intent behind them and relate to recent commits when possible.
+
+No more mysterious drive-by “refactors.”
+
+9. Don’t Guess Architecture — Ask
+Copilot occasionally hallucinates architecture like a jazz saxophonist hallucinating chord changes.
+Instruction:
+
+If a structural detail is unclear (framework, architecture, dependency style), ask instead of assuming.
+
+This saves hours of untangling improvisation.
+
+10. Respect the Human’s Mental Bandwidth
+Massive blocks of code are a crime against humanity.
+Instruction:
+
+Break large tasks into clearly named, modular steps. Suggest iterative code rather than monolithic blobs.
+
+Write like you're helping future-you, not impressing an AI conference.
+
+Large-projects degrade when machines dream too freely. With a few ground rules, Copilot becomes less of a “keyboard goblin” and more of a disciplined engineering sidekick.
+If you'd like, I can also produce:
+• ready-to-paste system prompts
+• workspace comment templates
+• recommended VS Code settings for contextual awareness
+• commit message guidance for model memory
+• patterns for Copilot-driven code reviews
+Future you will thank you — and so will the part of your brain currently responsible for yelling at autocomplete.

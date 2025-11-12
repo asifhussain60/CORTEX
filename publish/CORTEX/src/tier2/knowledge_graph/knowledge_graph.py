@@ -52,6 +52,55 @@ class KnowledgeGraph:
     # ---------------------- Pattern CRUD ----------------------
     def store_pattern(self, **kwargs) -> Dict[str, Any]:
         return self.pattern_store.store_pattern(**kwargs)
+    
+    def learn_pattern(self, pattern: Dict[str, Any], namespace: str, is_cortex_internal: bool = False) -> Dict[str, Any]:
+        """
+        Learn a new pattern with namespace protection.
+        
+        Wrapper for store_pattern that accepts pattern dict and namespace separately.
+        Useful for cleaner test syntax.
+        """
+        import uuid
+        
+        # Validate namespace is provided
+        if namespace is None or namespace == "":
+            raise ValueError(
+                "namespace is required. Use 'cortex.*' for framework patterns "
+                "or 'workspace.*' for application patterns."
+            )
+        
+        pattern_id = pattern.get("pattern_id", str(uuid.uuid4()))
+        return self.pattern_store.store_pattern(
+            pattern_id=pattern_id,
+            title=pattern.get("title", "Untitled Pattern"),
+            content=pattern.get("content", ""),
+            pattern_type=pattern.get("pattern_type", "workflow"),
+            confidence=pattern.get("confidence", 1.0),
+            source=pattern.get("source"),
+            metadata=pattern.get("metadata"),
+            is_pinned=pattern.get("is_pinned", False),
+            scope=pattern.get("scope", "cortex" if namespace.startswith("cortex.") else "application"),
+            namespaces=[namespace],
+            is_cortex_internal=is_cortex_internal
+        )
+    
+    def query(self, namespace_filter: str = "*", **kwargs) -> List[Dict[str, Any]]:
+        """
+        Query patterns with namespace filtering.
+        
+        Wrapper that provides namespace-based filtering on top of search.
+        """
+        import fnmatch
+        
+        # Get all patterns (TODO: optimize with DB-level filtering)
+        all_patterns = self.pattern_store.list_patterns(**kwargs)
+        
+        # Filter by namespace
+        if namespace_filter == "*":
+            return all_patterns
+        
+        # Use _namespace field for filtering (primary namespace)
+        return [p for p in all_patterns if fnmatch.fnmatch(p.get("_namespace", ""), namespace_filter)]
 
     def get_pattern(self, pattern_id: str) -> Optional[Dict[str, Any]]:
         return self.pattern_store.get_pattern(pattern_id)
