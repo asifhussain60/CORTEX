@@ -303,6 +303,83 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             metrics.errors.append(f"Test execution error: {str(e)}")
             return {'success': False, 'error': str(e)}
     
+    def _analyze_hardcoded_data(self, project_root: Path) -> Dict[str, Any]:
+        """
+        AGGRESSIVE hardcoded data detection.
+        
+        Scans for:
+        - Hardcoded file paths (absolute paths, platform-specific)
+        - Mock data in production code
+        - Fallback mechanisms returning fake values
+        - Test fixtures with hardcoded values
+        - Placeholder data masquerading as real data
+        
+        Args:
+            project_root: Project root directory
+        
+        Returns:
+            Dict with hardcoded data violations
+        """
+        logger.info("Running AGGRESSIVE hardcoded data scan...")
+        
+        try:
+            from .hardcoded_data_cleaner_module import HardcodedDataCleanerModule
+            
+            cleaner = HardcodedDataCleanerModule(project_root=project_root)
+            result = cleaner.execute({
+                'project_root': project_root,
+                'scan_paths': ['src', 'tests'],
+                'exclude_patterns': ['__pycache__', '.git', 'dist', '.venv', 'node_modules'],
+                'fail_on_critical': False  # Don't fail optimization, just report
+            })
+            
+            if result.success or result.status.name == 'FAILED':  # Both success and fail states have data
+                metrics_data = result.data.get('metrics', {})
+                violations = result.data.get('violations', [])
+                
+                insights = []
+                issues = []
+                
+                # Summarize findings
+                total_violations = metrics_data.get('violations_found', 0)
+                critical = metrics_data.get('critical_violations', 0)
+                high = metrics_data.get('high_violations', 0)
+                
+                if total_violations == 0:
+                    insights.append("✅ No hardcoded data violations found!")
+                else:
+                    if critical > 0:
+                        issues.append(f"CRITICAL: {critical} hardcoded paths or mock data in production")
+                    if high > 0:
+                        issues.append(f"HIGH: {high} fallback values or hardcoded returns")
+                    
+                    insights.append(f"Scanned {metrics_data.get('files_scanned', 0)} files")
+                    insights.append(f"Found {total_violations} violations")
+                    
+                    # Top violation types
+                    violations_by_type = metrics_data.get('violations_by_type', {})
+                    for v_type, count in sorted(violations_by_type.items(), key=lambda x: x[1], reverse=True)[:3]:
+                        insights.append(f"  - {v_type}: {count}")
+                
+                logger.info(f"Hardcoded data scan complete: {total_violations} violations")
+                
+                return {
+                    'insights': insights,
+                    'issues': issues,
+                    'stats': metrics_data,
+                    'violations': violations[:10],  # Top 10 violations for context
+                    'full_report': result.data.get('report', '')
+                }
+            else:
+                return {'issues': ['Hardcoded data scan failed']}
+        
+        except ImportError as e:
+            logger.warning(f"Hardcoded data cleaner module not available: {e}")
+            return {'issues': ['Hardcoded data cleaner not installed']}
+        except Exception as e:
+            logger.error(f"Error during hardcoded data scan: {e}")
+            return {'issues': [f'Hardcoded data scan error: {str(e)}']}
+    
     def _analyze_architecture(
         self,
         project_root: Path,
@@ -312,6 +389,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         Perform holistic architecture analysis.
         
         Analyzes:
+        - Hardcoded data (AGGRESSIVE - paths, mocks, fallbacks)
         - Knowledge graph patterns (lessons learned)
         - Operation module structure
         - Brain protection rules
@@ -329,6 +407,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         logger.info("Analyzing CORTEX architecture...")
         
         analysis = {
+            'hardcoded_data': self._analyze_hardcoded_data(project_root),
             'knowledge_graph': self._analyze_knowledge_graph(project_root),
             'operations': self._analyze_operations(project_root),
             'brain_protection': self._analyze_brain_protection(project_root),

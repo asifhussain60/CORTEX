@@ -265,18 +265,14 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
         
         if issues:
             return OperationResult(
-                module_id=self.metadata.module_id,
-                phase=OperationPhase.PRE_VALIDATION,
                 status=OperationStatus.FAILED,
                 success=False,
                 message=f"Prerequisites validation failed: {', '.join(issues)}",
-                error="\n".join(issues)
+                errors=["\n".join(issues)]
             )
         
         logger.info("✅ Prerequisites validated successfully")
         return OperationResult(
-            module_id=self.metadata.module_id,
-            phase=OperationPhase.PRE_VALIDATION,
             status=OperationStatus.SUCCESS,
             success=True,
             message="Prerequisites validated"
@@ -377,8 +373,6 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
             logger.info(f"✅ System optimization complete | Score: {report.health_score:.1f}/100")
             
             return OperationResult(
-                module_id=self.metadata.module_id,
-                phase=OperationPhase.FINALIZATION,
                 status=OperationStatus.SUCCESS,
                 success=True,
                 message=f"System optimization complete ({profile} profile)",
@@ -397,12 +391,10 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
             self.metrics.errors_encountered.append(str(e))
             
             return OperationResult(
-                module_id=self.metadata.module_id,
-                phase=OperationPhase.PROCESSING,
                 status=OperationStatus.FAILED,
                 success=False,
                 message=f"System optimization failed: {e}",
-                error=str(e),
+                errors=[str(e)],
                 data={'metrics': self.metrics}
             )
     

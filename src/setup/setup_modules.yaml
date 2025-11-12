@@ -121,6 +121,23 @@ modules:
         - opencv-python  # Advanced image analysis
         - playwright  # Browser automation
   
+  - module_id: refactoring_tools
+    name: Refactoring Tools Detection
+    description: Detect and optionally install refactoring tools for user's tech stack (C#, JavaScript, SQL, Python)
+    phase: DEPENDENCIES
+    priority: 30
+    dependencies: [platform_detection]
+    optional: true
+    enabled_by_default: false
+    config:
+      detect_only: true  # Detection mode by default (zero-footprint)
+      auto_install: false  # Never install without consent
+      tech_stacks:
+        - csharp  # .NET, C# (Roslyn, dotnet format)
+        - javascript  # Angular, React (ESLint, Prettier)
+        - sql  # SQL Server, Oracle (sqlfluff)
+        - python  # CORTEX dev only (rope, black, flake8, mypy)
+  
   # ============================================
   # Phase 4: FEATURES
   # ============================================
@@ -167,6 +184,19 @@ modules:
       tier3_context: cortex-brain/development-context.yaml
       create_if_missing: true
       run_migrations: true
+  
+  - module_id: smart_refactoring_recommender
+    name: Smart Refactoring Tool Recommender
+    description: Analyze codebase and recommend relevant refactoring tools based on detected languages
+    phase: FEATURES
+    priority: 35
+    dependencies: [brain_initialization]
+    optional: true
+    enabled_by_default: true
+    config:
+      min_relevance_threshold: 1.0  # Only recommend if language is >1% of codebase
+      auto_install: false  # Never auto-install, only recommend
+      interactive: true  # Display recommendations
   
   - module_id: mkdocs_setup
     name: Documentation Site Setup
@@ -258,6 +288,7 @@ profiles:
       - virtual_environment
       - python_dependencies
       - brain_initialization
+      - smart_refactoring_recommender
       - brain_tests
       - tooling_verification
       - setup_completion
@@ -274,6 +305,7 @@ profiles:
       - vision_api
       - conversation_tracking
       - brain_initialization
+      - smart_refactoring_recommender
       - mkdocs_setup
       - brain_tests
       - tooling_verification

@@ -133,7 +133,11 @@ class PlatformSwitchPlugin(BasePlugin):
         )
         self.triggers = [
             "setup environment", "configure platform", "switch platform",
-            "setup", "configure environment"
+            "setup", "configure environment",
+            # Platform-specific triggers
+            "switched to mac", "working on mac", "using mac",
+            "switched to windows", "working on windows", "using windows", 
+            "switched to linux", "working on linux", "using linux"
         ]
         self.project_root = self._find_project_root()
         self.current_platform = Platform.current()
@@ -353,6 +357,34 @@ class PlatformSwitchPlugin(BasePlugin):
         """Check if this plugin should handle the request."""
         request_lower = request.lower()
         return any(trigger in request_lower for trigger in self.triggers)
+    
+    def _detect_target_platform(self, request: str) -> Optional[Platform]:
+        """Detect target platform from user request.
+        
+        Args:
+            request: User's request string
+            
+        Returns:
+            Platform enum if detected, None otherwise
+        """
+        request_lower = request.lower()
+        
+        # Mac detection
+        mac_keywords = ["mac", "macos", "darwin", "osx"]
+        if any(keyword in request_lower for keyword in mac_keywords):
+            return Platform.MAC
+        
+        # Windows detection
+        windows_keywords = ["windows", "win", "win32"]
+        if any(keyword in request_lower for keyword in windows_keywords):
+            return Platform.WINDOWS
+        
+        # Linux detection
+        linux_keywords = ["linux", "ubuntu", "debian"]
+        if any(keyword in request_lower for keyword in linux_keywords):
+            return Platform.LINUX
+        
+        return None
     
     def execute(self, request: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -772,10 +804,40 @@ class PlatformSwitchPlugin(BasePlugin):
             
             output = test_result.stdout + test_result.stderr
             
-            # Parse results
-            passed = output.count(" PASSED")
-            failed = output.count(" FAILED")
-            errors = output.count(" ERROR")
+            # Parse results - handle multiple formats
+            # Format 1: "82 passed in 1.14s" 
+            # Format 2: "10 failed, 50 passed in 2.5s"
+            # Format 3: "10 PASSED" (pytest -v)
+            passed = 0
+            failed = 0
+            errors = 0
+            
+            # Try to find counts in output
+            import re
+            
+            # Look for "N passed" pattern
+            passed_match = re.search(r'(\d+)\s+passed', output, re.IGNORECASE)
+            if passed_match:
+                passed = int(passed_match.group(1))
+            else:
+                # Count " PASSED" occurrences (pytest -v format)
+                passed = output.count(" PASSED")
+            
+            # Look for "N failed" pattern
+            failed_match = re.search(r'(\d+)\s+failed', output, re.IGNORECASE)
+            if failed_match:
+                failed = int(failed_match.group(1))
+            else:
+                # Count " FAILED" occurrences
+                failed = output.count(" FAILED")
+            
+            # Look for "N error" pattern
+            error_match = re.search(r'(\d+)\s+error', output, re.IGNORECASE)
+            if error_match:
+                errors = int(error_match.group(1))
+            else:
+                # Count " ERROR" occurrences
+                errors = output.count(" ERROR")
             
             success = test_result.returncode == 0
             

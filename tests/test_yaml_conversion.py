@@ -30,21 +30,21 @@ class TestYAMLConversion:
     def operations_config(self, brain_path):
         """Load operations-config.yaml"""
         yaml_path = brain_path / "operations-config.yaml"
-        with open(yaml_path, 'r') as f:
+        with open(yaml_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
     @pytest.fixture
     def slash_commands_guide(self, brain_path):
         """Load slash-commands-guide.yaml"""
         yaml_path = brain_path / "slash-commands-guide.yaml"
-        with open(yaml_path, 'r') as f:
+        with open(yaml_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
     @pytest.fixture
     def cortex_operations(self, root_path):
         """Load cortex-operations.yaml (in root directory)"""
         yaml_path = root_path / "cortex-operations.yaml"
-        with open(yaml_path, 'r') as f:
+        with open(yaml_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
     # ============================================================

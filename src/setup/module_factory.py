@@ -138,6 +138,18 @@ def _auto_register_modules():
         register_module_class('brain_initialization', BrainInitializationModule)
     except ImportError as e:
         logger.warning(f"Could not load BrainInitializationModule: {e}")
+    
+    try:
+        from .modules.refactoring_tools_module import RefactoringToolsModule
+        register_module_class('refactoring_tools', RefactoringToolsModule)
+    except ImportError as e:
+        logger.warning(f"Could not load RefactoringToolsModule: {e}")
+    
+    try:
+        from .modules.smart_refactoring_recommender import SmartRefactoringRecommender
+        register_module_class('smart_refactoring_recommender', SmartRefactoringRecommender)
+    except ImportError as e:
+        logger.warning(f"Could not load SmartRefactoringRecommender: {e}")
 
 
 # Run auto-registration on module load

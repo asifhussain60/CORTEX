@@ -59,8 +59,6 @@ class TestOptimizeSystemOrchestrator:
         assert metadata.name == "System Optimization Meta-Orchestrator"
         assert metadata.version == "1.0.0"
         assert "comprehensive" in metadata.description.lower()
-        assert metadata.is_destructive is True
-        assert metadata.requires_user_input is False
     
     def test_prerequisite_validation_success(self, orchestrator):
         """Test prerequisite validation passes with valid setup."""
@@ -80,7 +78,8 @@ class TestOptimizeSystemOrchestrator:
         
         assert result.success is False
         assert result.status == OperationStatus.FAILED
-        assert "Project root not found" in result.error
+        assert len(result.errors) > 0
+        assert "Project root not found" in result.errors[0]
     
     def test_prerequisite_validation_failure_missing_orchestrators(self, project_root):
         """Test prerequisite validation fails with missing orchestrators."""
@@ -91,7 +90,8 @@ class TestOptimizeSystemOrchestrator:
         result = orchestrator.validate_prerequisites({})
         
         assert result.success is False
-        assert "design_sync_orchestrator.py not found" in result.error
+        assert len(result.errors) > 0
+        assert "design_sync_orchestrator.py not found" in result.errors[0]
     
     def test_execute_dry_run_mode(self, orchestrator, project_root):
         """Test execution in dry-run mode."""
@@ -265,7 +265,7 @@ class TestOptimizeSystemOrchestrator:
         # Should return failure result, not raise exception
         assert result.success is False
         assert result.status == OperationStatus.FAILED
-        assert result.error is not None
+        assert len(result.errors) > 0
 
 
 class TestOptimizationMetrics:

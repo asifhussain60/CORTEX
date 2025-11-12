@@ -63,6 +63,9 @@ from .deploy_docs_preview_module import DeployDocsPreviewModule
 # Brain protection modules
 from .load_protection_rules_module import LoadProtectionRulesModule
 
+# Optimization modules
+from .optimization.hardcoded_data_cleaner_module import HardcodedDataCleanerModule
+
 __all__ = [
     # Setup modules
     'ProjectValidationModule',
@@ -111,4 +114,7 @@ __all__ = [
     
     # Brain protection modules
     'LoadProtectionRulesModule',
+    
+    # Optimization modules
+    'HardcodedDataCleanerModule',
 ]
