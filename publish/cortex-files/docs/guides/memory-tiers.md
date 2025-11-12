@@ -1,3 +1,0 @@
-# Memory Tiers
-
-Coming soon.

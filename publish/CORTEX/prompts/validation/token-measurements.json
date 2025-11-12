@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-11-08T16:53:01.879292",
+  "baseline": {
+    "approach": "baseline",
+    "file": "prompts\\user\\cortex.md",
+    "lines": 8701,
+    "tokens": 74047,
+    "reduction_percent": 0.0,
+    "description": "Full monolithic cortex.md"
+  },
+  "modular": {
+    "story": {
+      "approach": "modular",
+      "module": "story",
+      "slim_file": "prompts\\user\\cortex-slim-test.md",
+      "module_file": "prompts\\shared\\test\\story-excerpt.md",
+      "slim_lines": 227,
+      "slim_tokens": 1565,
+      "module_lines": 165,
+      "module_tokens": 2045,
+      "total_lines": 392,
+      "total_tokens": 3610,
+      "reduction_percent": 87.1,
+      "description": "Slim entry point + story excerpt"
+    },
+    "setup": {
+      "approach": "modular",
+      "module": "setup",
+      "slim_file": "prompts\\user\\cortex-slim-test.md",
+      "module_file": "prompts\\shared\\test\\setup-excerpt.md",
+      "slim_lines": 227,
+      "slim_tokens": 1565,
+      "module_lines": 268,
+      "module_tokens": 1651,
+      "total_lines": 495,
+      "total_tokens": 3216,
+      "reduction_percent": 88.5,
+      "description": "Slim entry point + setup excerpt"
+    },
+    "technical": {
+      "approach": "modular",
+      "module": "technical",
+      "slim_file": "prompts\\user\\cortex-slim-test.md",
+      "module_file": "prompts\\shared\\test\\technical-excerpt.md",
+      "slim_lines": 227,
+      "slim_tokens": 1565,
+      "module_lines": 420,
+      "module_tokens": 2538,
+      "total_lines": 647,
+      "total_tokens": 4103,
+      "reduction_percent": 85.3,
+      "description": "Slim entry point + technical excerpt"
+    }
+  },
+  "direct_module": {
+    "story": {
+      "approach": "direct_module",
+      "module": "story",
+      "file": "prompts\\shared\\test\\story-excerpt.md",
+      "lines": 165,
+      "tokens": 2045,
+      "reduction_percent": 92.7,
+      "description": "Direct reference to story excerpt only"
+    },
+    "setup": {
+      "approach": "direct_module",
+      "module": "setup",
+      "file": "prompts\\shared\\test\\setup-excerpt.md",
+      "lines": 268,
+      "tokens": 1651,
+      "reduction_percent": 94.1,
+      "description": "Direct reference to setup excerpt only"
+    },
+    "technical": {
+      "approach": "direct_module",
+      "module": "technical",
+      "file": "prompts\\shared\\test\\technical-excerpt.md",
+      "lines": 420,
+      "tokens": 2538,
+      "reduction_percent": 90.9,
+      "description": "Direct reference to technical excerpt only"
+    }
+  },
+  "summary": {
+    "baseline_tokens": 74047,
+    "avg_modular_tokens": 3643.0,
+    "avg_direct_tokens": 2078.0,
+    "avg_modular_reduction_percent": 95.1,
+    "avg_direct_reduction_percent": 97.2,
+    "best_approach": "direct_module",
+    "best_reduction_percent": 97.2
+  }
+}

@@ -1,0 +1,711 @@
+# CORTEX 2.0 Path Management System
+
+**Document:** 04-path-management.md  
+**Version:** 2.0.0-alpha  
+**Date:** 2025-11-07
+
+---
+
+## 🎯 Purpose
+
+Enable CORTEX to work across different environments without hardcoded paths:
+- Cross-platform compatibility (Windows, macOS, Linux)
+- Portable between machines
+- Environment-specific configuration
+- Relative path storage in databases
+- Zero hardcoded absolute paths
+
+---
+
+## ❌ Current Pain Points (CORTEX 1.0)
+
+### Problem 1: Hardcoded Paths
+```python
+# ❌ Current approach (hardcoded)
+brain_path = "d:\\PROJECTS\\CORTEX\\cortex-brain"
+workspace_path = "d:\\PROJECTS\\KSESSIONS"
+
+# Issues:
+# - Won't work on other machines
+# - Won't work on macOS/Linux (different path separators)
+# - Can't move CORTEX to different directory
+```
+
+### Problem 2: Database Path Storage
+```sql
+-- ❌ Stored as absolute paths
+INSERT INTO file_relationships 
+VALUES ('d:\PROJECTS\KSESSIONS\src\main.py', ...)
+
+-- Issues:
+# - Database not portable
+# - Must update all paths if project moves
+# - Cross-platform incompatible
+```
+
+### Problem 3: Manual Configuration
+```python
+# ❌ Each developer must manually configure
+config = {
+    "brain_path": "C:\\Users\\Dev1\\CORTEX\\cortex-brain"  # Dev 1
+    # vs
+    "brain_path": "/home/dev2/cortex/cortex-brain"         # Dev 2
+}
+```
+
+### Problem 4: Multiple Path Bases
+```
+Current paths reference:
+  - d:\PROJECTS\CORTEX (CORTEX installation)
+  - d:\PROJECTS\KSESSIONS (target workspace)
+  - Relative paths in some places
+  - Absolute paths in others
+  - No consistent system
+```
+
+---
+
+## ✅ CORTEX 2.0 Solution
+
+### Architecture Overview
+
+```
+┌────────────────────────────────────────────────────────┐
+│           Environment Configuration Layer               │
+├────────────────────────────────────────────────────────┤
+│  • cortex.config.json (template with ${VARS})          │
+│  • Environment variables                               │
+│  • Auto-detection (workspace root, CORTEX root)        │
+└─────────────────────┬──────────────────────────────────┘
+                      │
+         ┌────────────┴────────────┐
+         │   Path Resolver (NEW)   │
+         ├─────────────────────────┤
+         │ • Resolve ${VARS}       │
+         │ • Convert to absolute   │
+         │ • Make relative         │
+         │ • Cross-platform paths  │
+         └────────────┬────────────┘
+                      │
+         ┌────────────┴────────────────────┐
+         │                                 │
+    ┌────▼─────────┐              ┌──────▼──────────┐
+    │ Brain Paths   │              │ Workspace Paths │
+    ├───────────────┤              ├─────────────────┤
+    │ • Tier 1-3 DB │              │ • Source code   │
+    │ • Plugins     │              │ • Tests         │
+    │ • Docs        │              │ • Build output  │
+    │ • Events      │              │ • Git repo      │
+    └───────────────┘              └─────────────────┘
+             │                              │
+             └──────────┬───────────────────┘
+                        │
+            ┌───────────▼──────────────┐
+            │   Storage (Relative)     │
+            │  All paths stored as     │
+            │  relative in databases   │
+            └──────────────────────────┘
+```
+
+---
+
+## 🔧 Configuration System
+
+### cortex.config.json (Template)
+
+```json
+{
+  "version": "2.0",
+  "environment": {
+    "workspace_root": "${WORKSPACE_ROOT}",
+    "cortex_root": "${CORTEX_ROOT}",
+    "python_executable": "${PYTHON_EXECUTABLE}"
+  },
+  "paths": {
+    "brain": {
+      "root": "${CORTEX_ROOT}/cortex-brain",
+      "tier1": "${CORTEX_ROOT}/cortex-brain/tier1",
+      "tier2": "${CORTEX_ROOT}/cortex-brain/tier2",
+      "tier3": "${CORTEX_ROOT}/cortex-brain/tier3",
+      "plugins": "${CORTEX_ROOT}/cortex-brain/plugins",
+      "schemas": "${CORTEX_ROOT}/cortex-brain/schemas"
+    },
+    "workspace": {
+      "root": "${WORKSPACE_ROOT}",
+      "src": "${WORKSPACE_ROOT}/src",
+      "tests": "${WORKSPACE_ROOT}/tests",
+      "docs": "${WORKSPACE_ROOT}/docs"
+    },
+    "output": {
+      "logs": "${CORTEX_ROOT}/logs",
+      "temp": "${CORTEX_ROOT}/temp"
+    }
+  },
+  "database": {
+    "tier1_db": "${CORTEX_ROOT}/cortex-brain/tier1/conversation_manager.db",
+    "tier2_db": "${CORTEX_ROOT}/cortex-brain/tier2/knowledge_graph.db",
+    "tier3_db": "${CORTEX_ROOT}/cortex-brain/tier3/development_context.db",
+    "state_db": "${CORTEX_ROOT}/cortex-brain/tier1/conversation_state.db"
+  }
+}
+```
+
+### Environment Variable Resolution
+
+```python
+# src/config/env_resolver.py
+
+import os
+from pathlib import Path
+from typing import Dict, Any, Optional
+
+class EnvironmentResolver:
+    """Resolves environment variables in configuration"""
+    
+    def __init__(self):
+        self._detected_roots: Dict[str, Path] = {}
+        self._detect_roots()
+    
+    def _detect_roots(self):
+        """Auto-detect workspace and CORTEX roots"""
+        
+        # Detect CORTEX root (where CORTEX is installed)
+        # Look for marker files: src/cortex_agents, cortex-brain
+        current = Path.cwd()
+        while current != current.parent:
+            if (current / "src" / "cortex_agents").exists():
+                self._detected_roots["CORTEX_ROOT"] = current
+                break
+            current = current.parent
+        
+        # Detect workspace root (target project)
+        # Could be same as CORTEX (working on CORTEX itself)
+        # Or different (CORTEX working on another project)
+        # Look for: .git, src/, tests/, or explicit marker
+        workspace = os.environ.get("WORKSPACE_ROOT")
+        if workspace:
+            self._detected_roots["WORKSPACE_ROOT"] = Path(workspace)
+        else:
+            # Default: same as CORTEX_ROOT
+            self._detected_roots["WORKSPACE_ROOT"] = self._detected_roots.get(
+                "CORTEX_ROOT", 
+                Path.cwd()
+            )
+    
+    def resolve(self, value: str) -> str:
+        """
+        Resolve environment variables in a string
+        
+        Args:
+            value: String possibly containing ${VAR} references
+        
+        Returns:
+            Resolved string with variables replaced
+        
+        Example:
+            resolve("${CORTEX_ROOT}/cortex-brain") 
+            -> "d:/PROJECTS/CORTEX/cortex-brain"
+        """
+        if not isinstance(value, str):
+            return value
+        
+        # Replace ${VAR} with environment variable or detected root
+        for var_name, var_value in self._detected_roots.items():
+            placeholder = f"${{{var_name}}}"
+            if placeholder in value:
+                value = value.replace(placeholder, str(var_value))
+        
+        # Also check actual environment variables
+        for var_name, var_value in os.environ.items():
+            placeholder = f"${{{var_name}}}"
+            if placeholder in value:
+                value = value.replace(placeholder, var_value)
+        
+        return value
+    
+    def resolve_dict(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Recursively resolve all variables in a config dict
+        
+        Args:
+            config: Configuration dictionary
+        
+        Returns:
+            Dictionary with all ${VAR} replaced
+        """
+        resolved = {}
+        for key, value in config.items():
+            if isinstance(value, dict):
+                resolved[key] = self.resolve_dict(value)
+            elif isinstance(value, str):
+                resolved[key] = self.resolve(value)
+            else:
+                resolved[key] = value
+        return resolved
+    
+    def get_detected_root(self, name: str) -> Optional[Path]:
+        """Get a detected root path"""
+        return self._detected_roots.get(name)
+```
+
+---
+
+## 🗺️ Path Resolver
+
+```python
+# src/config/path_resolver.py
+
+from pathlib import Path
+from typing import Union, Optional
+import os
+
+class PathResolver:
+    """Central path resolution system for CORTEX"""
+    
+    def __init__(self, config: Dict[str, Any], env_resolver: EnvironmentResolver):
+        """
+        Initialize path resolver
+        
+        Args:
+            config: Resolved configuration dictionary
+            env_resolver: Environment variable resolver
+        """
+        self.config = config
+        self.env_resolver = env_resolver
+        
+        # Core roots
+        self.cortex_root = Path(config["environment"]["cortex_root"])
+        self.workspace_root = Path(config["environment"]["workspace_root"])
+        
+        # Brain paths
+        self.brain_root = Path(config["paths"]["brain"]["root"])
+        self.tier1_path = Path(config["paths"]["brain"]["tier1"])
+        self.tier2_path = Path(config["paths"]["brain"]["tier2"])
+        self.tier3_path = Path(config["paths"]["brain"]["tier3"])
+        self.plugins_path = Path(config["paths"]["brain"]["plugins"])
+        
+        # Database paths
+        self.tier1_db = Path(config["database"]["tier1_db"])
+        self.tier2_db = Path(config["database"]["tier2_db"])
+        self.tier3_db = Path(config["database"]["tier3_db"])
+        self.state_db = Path(config["database"]["state_db"])
+    
+    def resolve_brain_path(self, relative: Union[str, Path]) -> Path:
+        """
+        Resolve a path relative to brain root
+        
+        Args:
+            relative: Relative path (e.g., "tier1/conversations.jsonl")
+        
+        Returns:
+            Absolute path (e.g., "d:/PROJECTS/CORTEX/cortex-brain/tier1/conversations.jsonl")
+        
+        Example:
+            >>> resolver.resolve_brain_path("tier2/patterns.yaml")
+            Path("d:/PROJECTS/CORTEX/cortex-brain/tier2/patterns.yaml")
+        """
+        return self.brain_root / relative
+    
+    def resolve_workspace_path(self, relative: Union[str, Path]) -> Path:
+        """
+        Resolve a path relative to workspace root
+        
+        Args:
+            relative: Relative path (e.g., "src/main.py")
+        
+        Returns:
+            Absolute path (e.g., "d:/PROJECTS/KSESSIONS/src/main.py")
+        """
+        return self.workspace_root / relative
+    
+    def make_relative_to_brain(self, absolute: Union[str, Path]) -> str:
+        """
+        Convert absolute path to relative (from brain root)
+        
+        Args:
+            absolute: Absolute path
+        
+        Returns:
+            Relative path as string (for storage in database)
+        
+        Example:
+            >>> resolver.make_relative_to_brain("d:/PROJECTS/CORTEX/cortex-brain/tier2/patterns.yaml")
+            "tier2/patterns.yaml"
+        """
+        absolute = Path(absolute)
+        try:
+            relative = absolute.relative_to(self.brain_root)
+            return str(relative).replace("\\", "/")  # Always use forward slashes
+        except ValueError:
+            # Not relative to brain root, return as-is
+            return str(absolute).replace("\\", "/")
+    
+    def make_relative_to_workspace(self, absolute: Union[str, Path]) -> str:
+        """
+        Convert absolute path to relative (from workspace root)
+        
+        Args:
+            absolute: Absolute path
+        
+        Returns:
+            Relative path as string (for storage in database)
+        
+        Example:
+            >>> resolver.make_relative_to_workspace("d:/PROJECTS/KSESSIONS/src/main.py")
+            "src/main.py"
+        """
+        absolute = Path(absolute)
+        try:
+            relative = absolute.relative_to(self.workspace_root)
+            return str(relative).replace("\\", "/")  # Always use forward slashes
+        except ValueError:
+            # Not relative to workspace, return as-is
+            return str(absolute).replace("\\", "/")
+    
+    def normalize_path(self, path: Union[str, Path]) -> str:
+        """
+        Normalize path for cross-platform compatibility
+        
+        Args:
+            path: Any path
+        
+        Returns:
+            Normalized path string (forward slashes, no trailing slash)
+        
+        Example:
+            >>> resolver.normalize_path("d:\\PROJECTS\\CORTEX\\")
+            "d:/PROJECTS/CORTEX"
+        """
+        path = Path(path)
+        normalized = str(path.resolve()).replace("\\", "/")
+        # Remove trailing slash
+        if normalized.endswith("/"):
+            normalized = normalized[:-1]
+        return normalized
+    
+    def is_brain_path(self, path: Union[str, Path]) -> bool:
+        """Check if path is within brain directory"""
+        path = Path(path).resolve()
+        return self.brain_root in path.parents or path == self.brain_root
+    
+    def is_workspace_path(self, path: Union[str, Path]) -> bool:
+        """Check if path is within workspace directory"""
+        path = Path(path).resolve()
+        return self.workspace_root in path.parents or path == self.workspace_root
+    
+    def get_path_type(self, path: Union[str, Path]) -> str:
+        """
+        Determine path type (brain, workspace, external)
+        
+        Returns:
+            "brain", "workspace", or "external"
+        """
+        if self.is_brain_path(path):
+            return "brain"
+        elif self.is_workspace_path(path):
+            return "workspace"
+        else:
+            return "external"
+```
+
+---
+
+## 💾 Database Path Storage
+
+### Migration Helper
+
+```python
+# src/config/path_migration.py
+
+class PathMigration:
+    """Migrate databases from absolute to relative paths"""
+    
+    def __init__(self, path_resolver: PathResolver):
+        self.resolver = path_resolver
+    
+    def migrate_tier2_db(self):
+        """Migrate Tier 2 knowledge graph to relative paths"""
+        
+        with sqlite3.connect(self.resolver.tier2_db) as conn:
+            # Update file_relationships table
+            conn.execute("""
+                UPDATE file_relationships
+                SET file_path_1 = ?,
+                    file_path_2 = ?
+                WHERE ...
+            """)
+            
+            # Update patterns table (if it stores paths)
+            # ... similar updates for other tables
+    
+    def migrate_tier3_db(self):
+        """Migrate Tier 3 development context to relative paths"""
+        
+        with sqlite3.connect(self.resolver.tier3_db) as conn:
+            # Update file_metrics table
+            conn.execute("""
+                UPDATE file_metrics
+                SET file_path = ?
+                WHERE ...
+            """)
+    
+    def verify_migration(self) -> Dict[str, bool]:
+        """Verify all paths are relative"""
+        results = {}
+        
+        # Check Tier 2
+        results["tier2"] = self._verify_tier2()
+        
+        # Check Tier 3
+        results["tier3"] = self._verify_tier3()
+        
+        return results
+```
+
+### Updated Database Access
+
+```python
+# All database operations use path resolver
+
+# ✅ CORRECT: Store relative, resolve on read
+def save_file_relationship(file1: str, file2: str):
+    """Save file relationship with relative paths"""
+    
+    # Convert to relative before storing
+    rel_file1 = path_resolver.make_relative_to_workspace(file1)
+    rel_file2 = path_resolver.make_relative_to_workspace(file2)
+    
+    conn.execute("""
+        INSERT INTO file_relationships (file_path_1, file_path_2, ...)
+        VALUES (?, ?, ...)
+    """, (rel_file1, rel_file2, ...))
+
+def get_file_relationship(file_path: str) -> List[str]:
+    """Get related files (resolves relative paths)"""
+    
+    # Store as relative
+    rel_path = path_resolver.make_relative_to_workspace(file_path)
+    
+    cursor = conn.execute("""
+        SELECT file_path_2 FROM file_relationships
+        WHERE file_path_1 = ?
+    """, (rel_path,))
+    
+    # Resolve back to absolute for use
+    related = []
+    for row in cursor:
+        abs_path = path_resolver.resolve_workspace_path(row[0])
+        related.append(str(abs_path))
+    
+    return related
+```
+
+---
+
+## 🔄 Cross-Platform Compatibility
+
+### Path Separator Handling
+
+```python
+# Always use Path objects internally
+from pathlib import Path
+
+# ✅ CORRECT: Path handles separators automatically
+path = Path("cortex-brain") / "tier2" / "patterns.yaml"
+# Windows: cortex-brain\tier2\patterns.yaml
+# Linux:   cortex-brain/tier2/patterns.yaml
+
+# ✅ CORRECT: Store with forward slashes
+stored_path = str(path).replace("\\", "/")
+# Always: cortex-brain/tier2/patterns.yaml
+
+# ✅ CORRECT: Convert back to Path on read
+loaded_path = Path(stored_path)
+# Automatically uses correct separator for OS
+```
+
+### Platform-Specific Defaults
+
+```python
+# src/config/platform.py
+
+import platform
+from pathlib import Path
+
+class PlatformConfig:
+    """Platform-specific configuration defaults"""
+    
+    @staticmethod
+    def get_default_cortex_root() -> Path:
+        """Get default CORTEX installation location"""
+        system = platform.system()
+        
+        if system == "Windows":
+            return Path("C:/CORTEX")
+        elif system == "Darwin":  # macOS
+            return Path.home() / "CORTEX"
+        else:  # Linux
+            return Path.home() / ".cortex"
+    
+    @staticmethod
+    def get_temp_dir() -> Path:
+        """Get platform temp directory"""
+        system = platform.system()
+        
+        if system == "Windows":
+            return Path(os.environ.get("TEMP", "C:/Temp"))
+        else:
+            return Path("/tmp")
+```
+
+---
+
+## 📝 Usage Examples
+
+### Basic Path Resolution
+
+```python
+from src.config.env_resolver import EnvironmentResolver
+from src.config.path_resolver import PathResolver
+from src.config import load_config
+
+# Load and resolve configuration
+env_resolver = EnvironmentResolver()
+raw_config = load_config("cortex.config.json")
+resolved_config = env_resolver.resolve_dict(raw_config)
+
+# Create path resolver
+path_resolver = PathResolver(resolved_config, env_resolver)
+
+# Resolve brain paths
+tier2_patterns = path_resolver.resolve_brain_path("tier2/patterns.yaml")
+# Result: d:/PROJECTS/CORTEX/cortex-brain/tier2/patterns.yaml
+
+# Resolve workspace paths
+main_file = path_resolver.resolve_workspace_path("src/main.py")
+# Result: d:/PROJECTS/KSESSIONS/src/main.py
+
+# Make relative for storage
+rel_path = path_resolver.make_relative_to_workspace(main_file)
+# Result: "src/main.py" (stored in database)
+
+# Restore absolute on read
+abs_path = path_resolver.resolve_workspace_path(rel_path)
+# Result: d:/PROJECTS/KSESSIONS/src/main.py
+```
+
+### Agent Integration
+
+```python
+# All agents use path resolver
+
+class CodeExecutor:
+    def __init__(self, path_resolver: PathResolver):
+        self.paths = path_resolver
+    
+    def edit_file(self, file_path: str, content: str):
+        """Edit a file (handles path resolution)"""
+        
+        # Determine path type
+        path_type = self.paths.get_path_type(file_path)
+        
+        if path_type == "workspace":
+            # Workspace file - safe to edit
+            abs_path = self.paths.resolve_workspace_path(file_path)
+            abs_path.write_text(content)
+        elif path_type == "brain":
+            # Brain file - requires Brain Protector challenge
+            raise BrainProtectorChallenge("Attempting to modify brain file")
+        else:
+            # External file - warn user
+            raise ValueError("File outside workspace/brain")
+```
+
+---
+
+## ✅ Benefits
+
+### 1. Portability
+```
+CORTEX on Machine 1 (Windows):
+  cortex_root: "d:/PROJECTS/CORTEX"
+  workspace_root: "d:/PROJECTS/KSESSIONS"
+
+CORTEX on Machine 2 (macOS):
+  cortex_root: "/Users/dev/CORTEX"
+  workspace_root: "/Users/dev/projects/KSESSIONS"
+
+Same database files work on both! 📦
+```
+
+### 2. Cross-Platform
+```
+Database stores: "src/main.py"
+Windows resolves: "d:\PROJECTS\KSESSIONS\src\main.py"
+macOS resolves: "/Users/dev/projects/KSESSIONS/src/main.py"
+Linux resolves: "/home/dev/projects/KSESSIONS/src/main.py"
+```
+
+### 3. Environment Flexibility
+```bash
+# Developer 1
+export WORKSPACE_ROOT=/home/dev/project1
+
+# Developer 2
+export WORKSPACE_ROOT=/home/dev/project2
+
+# Same CORTEX, different workspaces ✅
+```
+
+### 4. Zero Hardcoded Paths
+```python
+# ❌ OLD: Hardcoded
+brain_path = "d:\\PROJECTS\\CORTEX\\cortex-brain"
+
+# ✅ NEW: Resolved
+brain_path = path_resolver.resolve_brain_path("")
+```
+
+---
+
+## 🔧 Migration Steps
+
+### 1. Update Configuration
+
+```bash
+# Create cortex.config.json from template
+python scripts/init-cortex-config.py
+
+# Auto-detect roots
+# Generates environment-specific config
+```
+
+### 2. Migrate Databases
+
+```bash
+# Migrate all databases to relative paths
+python scripts/migrate-to-relative-paths.py
+
+# Verify migration
+python scripts/verify-path-migration.py
+```
+
+### 3. Update Code
+
+```python
+# Replace all hardcoded paths with path_resolver
+# Search for: "d:\\" or "C:\\" or hardcoded strings
+# Replace with: path_resolver.resolve_*
+```
+
+### 4. Test Cross-Platform
+
+```bash
+# Copy CORTEX to different OS
+# Run verification tests
+pytest tests/test_path_resolution.py
+```
+
+---
+
+**Next:** 05-knowledge-boundaries.md (Core vs project knowledge separation)

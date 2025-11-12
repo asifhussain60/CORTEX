@@ -20,7 +20,7 @@ import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Set
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 import subprocess
 import json
 import yaml
@@ -135,6 +135,8 @@ class DesignSyncOrchestrator(BaseOperationModule):
     Phase 5: Document Transformation
         - Convert verbose MD to YAML schemas (preserving critical info)
         - Update status files with accurate counts
+        - **Auto-generate "Recent Updates" from git commit history**
+        - **Add contextual timestamps (e.g., "design_sync + deployment updates")**
         - Consolidate multiple status files into ONE source of truth
         - Generate visual progress bars based on reality
         - Apply consistent formatting
@@ -959,6 +961,166 @@ class DesignSyncOrchestrator(BaseOperationModule):
         remaining = width - filled
         return f"[{'█' * filled}{'░' * remaining}]"
     
+    def _generate_recent_updates(
+        self,
+        project_root: Path,
+        lookback_days: int = 1
+    ) -> List[str]:
+        """
+        Generate recent updates list from git commit history.
+        
+        Parses git log for the last N days and extracts meaningful updates
+        to auto-generate the "Recent Updates" section in status documents.
+        
+        Args:
+            project_root: Project root directory
+            lookback_days: Number of days to look back in git history
+            
+        Returns:
+            List of update strings with emoji prefixes
+            
+        Example output:
+            [
+                "✅ Build script updated with critical files manifest",
+                "✅ Verification script created (350 lines)",
+                "✅ LICENSE file added (proprietary)"
+            ]
+        """
+        updates = []
+        
+        try:
+            # Get commits from last N days
+            since_date = (datetime.now() - timedelta(days=lookback_days)).strftime('%Y-%m-%d')
+            
+            result = subprocess.run(
+                ['git', 'log', f'--since={since_date}', '--oneline', '--no-merges'],
+                cwd=project_root,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            # Parse commit messages
+            for line in result.stdout.strip().split('\n'):
+                if not line:
+                    continue
+                
+                # Extract commit message (after hash)
+                parts = line.split(' ', 1)
+                if len(parts) < 2:
+                    continue
+                
+                commit_msg = parts[1].strip()
+                
+                # Skip internal/noise commits
+                if any(skip in commit_msg.lower() for skip in ['wip', 'temp', 'fixup', 'test commit']):
+                    continue
+                
+                # Categorize and format update
+                update = self._format_commit_as_update(commit_msg, project_root)
+                if update and update not in updates:  # Deduplicate
+                    updates.append(update)
+            
+            # Limit to most recent 10 updates
+            return updates[:10]
+        
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Could not parse git history: {e}")
+            return []
+        except Exception as e:
+            logger.warning(f"Error generating recent updates: {e}")
+            return []
+    
+    def _format_commit_as_update(self, commit_msg: str, project_root: Path) -> Optional[str]:
+        """
+        Format git commit message as status update with appropriate emoji.
+        
+        Args:
+            commit_msg: Raw commit message
+            project_root: Project root (for file checks)
+            
+        Returns:
+            Formatted update string or None if should be skipped
+        """
+        # Detect completion/creation keywords
+        if any(word in commit_msg.lower() for word in ['complete', 'done', 'finish', 'implement']):
+            emoji = '✅'
+        elif any(word in commit_msg.lower() for word in ['add', 'create', 'new']):
+            emoji = '✅'
+        elif any(word in commit_msg.lower() for word in ['update', 'improve', 'enhance']):
+            emoji = '✅'
+        elif any(word in commit_msg.lower() for word in ['fix', 'bugfix', 'resolve']):
+            emoji = '🔧'
+        elif any(word in commit_msg.lower() for word in ['pending', 'progress', 'wip']):
+            emoji = '⏸️'
+        else:
+            emoji = '✅'  # Default to checkmark
+        
+        # Clean up commit message (remove prefixes like "feat:", "fix:", etc.)
+        clean_msg = re.sub(r'^(feat|fix|docs|style|refactor|test|chore):\s*', '', commit_msg, flags=re.IGNORECASE)
+        
+        # Capitalize first letter
+        clean_msg = clean_msg[0].upper() + clean_msg[1:] if clean_msg else clean_msg
+        
+        # Add period if missing
+        if clean_msg and not clean_msg.endswith(('.', '!', '?')):
+            clean_msg += ''
+        
+        return f"{emoji} {clean_msg}"
+    
+    def _add_sync_context(
+        self,
+        updates: List[str],
+        impl_state: ImplementationState,
+        transformations: Dict[str, Any]
+    ) -> str:
+        """
+        Add contextual suffix to sync timestamp based on what changed.
+        
+        Analyzes the updates and transformations to generate a meaningful
+        description like "(design_sync + deployment updates)" instead of
+        just generic "(design_sync)".
+        
+        Args:
+            updates: Recent updates list
+            impl_state: Implementation state
+            transformations: Transformations applied
+            
+        Returns:
+            Contextual suffix string
+        """
+        context_keywords = []
+        
+        # Analyze recent updates for themes
+        update_text = ' '.join(updates).lower()
+        
+        if 'deploy' in update_text or 'package' in update_text:
+            context_keywords.append('deployment updates')
+        
+        if 'build' in update_text or 'script' in update_text:
+            context_keywords.append('build automation')
+        
+        if 'test' in update_text and 'fix' in update_text:
+            context_keywords.append('test fixes')
+        
+        if 'doc' in update_text or 'documentation' in update_text:
+            context_keywords.append('documentation')
+        
+        # Check transformations
+        if transformations.get('md_to_yaml_converted', 0) > 0:
+            context_keywords.append('YAML conversion')
+        
+        if transformations.get('status_files_consolidated', 0) > 1:
+            context_keywords.append('status consolidation')
+        
+        # Build context string
+        if context_keywords:
+            # Use first 2 most relevant keywords
+            context = ' + '.join(context_keywords[:2])
+            return f"(design_sync + {context})"
+        else:
+            return "(design_sync)"
+    
     def _consolidate_status_files(
         self,
         status_files: List[Path],
@@ -1030,6 +1192,41 @@ class DesignSyncOrchestrator(BaseOperationModule):
         )
         updates.append(f"Updated plugins: {len(impl_state.plugins)}")
         
+        # Generate recent updates from git history
+        recent_updates = self._generate_recent_updates(project_root, lookback_days=1)
+        
+        # Insert "Recent Updates" section if not present
+        if recent_updates and '**Recent Updates' not in content:
+            # Find where to insert (after first header section)
+            insert_pattern = r'(\*\*Last Synchronized:.*?\*\n)'
+            recent_section = f"\n**Recent Updates ({datetime.now().strftime('%Y-%m-%d %H:%M')}):**\n"
+            for update in recent_updates[:10]:  # Limit to 10 most recent
+                recent_section += f"- {update}\n"
+            recent_section += "\n"
+            
+            content = re.sub(
+                insert_pattern,
+                r'\1' + recent_section,
+                content,
+                count=1
+            )
+            updates.append(f"Added recent updates section ({len(recent_updates)} updates)")
+        elif recent_updates and '**Recent Updates' in content:
+            # Update existing Recent Updates section
+            recent_section = f"**Recent Updates ({datetime.now().strftime('%Y-%m-%d %H:%M')}):**\n"
+            for update in recent_updates[:10]:
+                recent_section += f"- {update}\n"
+            
+            # Replace entire Recent Updates block
+            pattern = r'\*\*Recent Updates.*?\n(?:- .*?\n)*'
+            content = re.sub(
+                pattern,
+                recent_section,
+                content,
+                count=1
+            )
+            updates.append(f"Updated recent updates section ({len(recent_updates)} updates)")
+        
         # Update visual progress bars (with user-specified execution order)
         phase_progress, execution_order = self._calculate_phase_progress(content)
         progress_section_lines = []
@@ -1059,8 +1256,14 @@ class DesignSyncOrchestrator(BaseOperationModule):
             )
             updates.append(f"Updated visual progress bars for {len(phase_progress)} phases")
         
-        # Add sync timestamp
-        sync_note = f"*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} (design_sync)*\n"
+        # Add sync timestamp with contextual suffix
+        transformations_context = {
+            'md_to_yaml_converted': metrics.md_to_yaml_converted,
+            'status_files_consolidated': metrics.status_files_consolidated
+        }
+        context_suffix = self._add_sync_context(recent_updates, impl_state, transformations_context)
+        sync_note = f"*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} {context_suffix}*\n"
+        
         if '*Last Synchronized:' not in content:
             content += f"\n\n{sync_note}"
         else:
@@ -1073,7 +1276,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
                 content,
                 count=1
             )
-        updates.append("Added sync timestamp")
+        updates.append(f"Added sync timestamp with context: {context_suffix}")
         
         # Write back with proper encoding
         try:
