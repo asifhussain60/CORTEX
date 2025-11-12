@@ -1,0 +1,191 @@
+# CORTEX Govern Plugin
+# Review and validate changes to CORTEX system itself
+
+version: "2.0"
+type: "workflow"
+name: "Govern"
+description: "Change governance for CORTEX system modifications"
+author: "CORTEX"
+created: "2025-01-15"
+
+# Target constraints
+targets:
+  - identifier: "cortex_system"
+    path: "src/**/*.py"
+    constraints:
+      - type: "must_align_with_design"
+        message: "Changes must align with CORTEX design principles"
+      - type: "no_breaking_changes"
+        message: "Breaking changes require migration plan"
+      - type: "must_document_decisions"
+        message: "Design decisions must be documented"
+
+  - identifier: "cortex_plugins"
+    path: "prompts/**/*.yaml"
+    constraints:
+      - type: "must_validate_schema"
+        message: "Plugin YAML must validate against schema"
+      - type: "must_follow_conventions"
+        message: "Must follow naming and structure conventions"
+
+  - identifier: "cortex_architecture"
+    path: "cortex-brain/tier*/**/*.py"
+    constraints:
+      - type: "must_maintain_tier_separation"
+        message: "Tier boundaries must be respected"
+
+# Workflow steps
+workflow:
+  - step: "detect_changes"
+    action: "analyze"
+    params:
+      scan_git_diff: true
+      identify_modified_files: true
+      categorize_changes: true
+      categories: ["plugins", "core", "tiers", "docs", "config"]
+
+  - step: "load_design_docs"
+    action: "load"
+    params:
+      files:
+        - "cortex-brain/cortex-2.0-design/00-INDEX.md"
+        - "cortex-brain/architectural-patterns.yaml"
+        - "cortex-brain/industry-standards.yaml"
+
+  - step: "review_against_design"
+    action: "validate"
+    params:
+      check_design_alignment: true
+      check_tier_separation: true
+      check_plugin_schema: true
+      check_anti_bloat_rules: true
+
+  - step: "check_breaking_changes"
+    action: "validate"
+    params:
+      detect_api_changes: true
+      detect_schema_changes: true
+      detect_contract_violations: true
+
+  - step: "validate_tier_boundaries"
+    action: "validate"
+    condition: "tier_changes_detected"
+    params:
+      check_tier1_isolation: true
+      check_tier2_isolation: true
+      check_tier3_isolation: true
+      check_corpus_callosum_only: true
+
+  - step: "validate_plugin_schema"
+    action: "validate"
+    condition: "plugin_changes_detected"
+    params:
+      run_json_schema_validation: true
+      check_workflow_validity: true
+      check_parameter_consistency: true
+
+  - step: "decision_logic"
+    action: "analyze"
+    params:
+      classify_change: ["beneficial", "harmful", "needs_improvement"]
+      extract_rationale: true
+      suggest_alternatives: "${harmful_or_needs_work}"
+
+  - step: "approve_change"
+    action: "notify"
+    condition: "change_beneficial"
+    params:
+      status: "APPROVED"
+      show_files_modified: true
+      show_alignment_checks: true
+      show_next_steps: true
+
+  - step: "reject_change"
+    action: "notify"
+    condition: "change_harmful"
+    params:
+      status: "REJECTED"
+      show_issues: true
+      show_rationale: true
+      suggest_alternatives: true
+      block_execution: true
+
+  - step: "suggest_improvements"
+    action: "notify"
+    condition: "change_needs_work"
+    params:
+      status: "NEEDS_IMPROVEMENT"
+      show_issues: true
+      show_suggestions: true
+      offer_auto_fix: true
+
+  - step: "update_design_docs"
+    action: "execute"
+    condition: "change_approved"
+    params:
+      update_phase_docs: true
+      add_design_decision: true
+      update_version: true
+      record_rationale: true
+
+  - step: "log_override"
+    action: "execute"
+    condition: "user_override"
+    params:
+      log_to_file: "cortex-brain/governance-overrides.log"
+      include_rationale: true
+      include_timestamp: true
+      include_warnings: true
+
+# Validation rules
+validation:
+  - check: "design_alignment"
+    scope: "all_changes"
+    required: true
+    params:
+      aligns_with_cortex_principles: true
+      maintains_three_tier_architecture: true
+      follows_plugin_conventions: true
+
+  - check: "no_breaking_changes"
+    scope: "all_changes"
+    required: true
+    params:
+      backward_compatible: true
+      migration_plan_if_breaking: true
+
+  - check: "documented_decisions"
+    scope: "approved_changes"
+    required: true
+    params:
+      added_to_phase_docs: true
+      rationale_provided: true
+
+  - check: "tier_separation"
+    scope: "tier_changes"
+    required: true
+    params:
+      no_tier_violations: true
+      corpus_callosum_only: true
+
+# Parameters
+parameters:
+  - name: "change_description"
+    type: "string"
+    required: true
+    description: "Description of changes made to CORTEX"
+
+  - name: "allow_override"
+    type: "bool"
+    default: true
+    description: "Allow user override of rejection"
+
+  - name: "strict_mode"
+    type: "bool"
+    default: true
+    description: "Strict governance enforcement"
+
+  - name: "auto_document"
+    type: "bool"
+    default: true
+    description: "Automatically update design docs on approval"

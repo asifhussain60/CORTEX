@@ -1,0 +1,38 @@
+{
+  "statistics": {
+    "total_interfaces": 2,
+    "total_services": 2,
+    "total_di_registrations": 0
+  },
+  "scan_time": "2025-11-04T10:26:40Z",
+  "area": "Services",
+  "services": [
+    {
+      "path": "backups/pre-independence-migration/tests/fixtures/mock-project/src/MyApp/Services/UserService.cs",
+      "di_lifetime": "Scoped",
+      "implementation": "UserService",
+      "patterns": [
+        "service"
+      ],
+      "interface": "IUserService",
+      "dependencies": null
+    },
+    {
+      "path": "tests/fixtures/mock-project/src/MyApp/Services/UserService.cs",
+      "di_lifetime": "Scoped",
+      "implementation": "UserService",
+      "patterns": [
+        "service"
+      ],
+      "interface": "IUserService",
+      "dependencies": null
+    }
+  ],
+  "duration_seconds": 0,
+  "workspace_root": "D:\\PROJECTS\\KDS",
+  "patterns": {
+    "di_registration": "Program.cs",
+    "layering": "service-only",
+    "naming": "I{Name} interface"
+  }
+}

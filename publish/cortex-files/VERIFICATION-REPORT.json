@@ -1,0 +1,94 @@
+{
+  "package_dir": "d:\\PROJECTS\\CORTEX\\publish\\cortex-files",
+  "timestamp": "2025-11-12",
+  "verification": {
+    "bootstrap_installers": {
+      "passed": true,
+      "missing": []
+    },
+    "critical_files": {
+      "passed": true,
+      "total": 18,
+      "missing": []
+    },
+    "core_modules": {
+      "passed": true,
+      "total": 6,
+      "missing": []
+    },
+    "forbidden_files": {
+      "passed": true,
+      "found": []
+    }
+  },
+  "statistics": {
+    "total_files": 830,
+    "total_dirs": 138,
+    "total_size_mb": 26.783650398254395,
+    "file_types": {
+      "no_extension": 11,
+      ".yaml": 59,
+      ".json": 31,
+      ".ini": 1,
+      ".md": 214,
+      ".txt": 2,
+      ".py": 364,
+      ".jsonl": 6,
+      ".sql": 1,
+      ".ps1": 107,
+      ".sh": 2,
+      ".backup": 4,
+      ".j2": 1,
+      ".bash": 1,
+      ".design": 1,
+      ".png": 16,
+      ".jpg": 4,
+      ".css": 3,
+      ".MD": 1,
+      ".log": 1
+    },
+    "largest_files": [
+      [
+        "docs\\images\\Token Optimization.png",
+        2017352
+      ],
+      [
+        "prompts\\user\\Images\\Prompt 2.1 The Monolithic Disaster.png",
+        1747396
+      ],
+      [
+        "prompts\\user\\Images\\Prompt 2.2 The Napkin Sketch - Two Hemispheres.png",
+        1544631
+      ],
+      [
+        "docs\\images\\Gemini_Generated_Image_y4u4pay4u4pay4u4 (2).png",
+        1172215
+      ],
+      [
+        "docs\\images\\Gemini_Generated_Image_y4u4pay4u4pay4u4 (4).png",
+        1112499
+      ],
+      [
+        "docs\\images\\Entry Point Modularization system.png",
+        1091488
+      ],
+      [
+        "docs\\images\\Gemini_Generated_Image_y4u4pay4u4pay4u4 (1).png",
+        1081533
+      ],
+      [
+        "docs\\images\\cortex-help-banner.png",
+        1054662
+      ],
+      [
+        "docs\\images\\Gemini_Generated_Image_y4u4pay4u4pay4u4.png",
+        1054662
+      ],
+      [
+        "docs\\images\\Gemini_Generated_Image_y4u4pay4u4pay4u4 (3).png",
+        948950
+      ]
+    ]
+  },
+  "overall_pass": true
+}

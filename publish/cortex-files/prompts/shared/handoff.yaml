@@ -1,0 +1,130 @@
+# CORTEX Handoff Plugin
+# Transfer context between agents or sessions
+
+version: "2.0"
+type: "workflow"
+name: "Handoff"
+description: "Context transfer with validation and continuity"
+author: "CORTEX"
+created: "2025-11-08"
+
+# Target constraints
+targets:
+  - identifier: "handoff_package"
+    constraints:
+      - type: "must_be_complete"
+        message: "Handoff must include all required context"
+      - type: "must_be_valid"
+        message: "Handoff data must be valid"
+
+# Workflow steps
+workflow:
+  - step: "capture_current_context"
+    action: "analyze"
+    params:
+      capture_session_state: true
+      capture_conversation_history: true
+      capture_goals: true
+      capture_next_steps: true
+      capture_working_memory: true
+      capture_file_references: true
+
+  - step: "package_context"
+    action: "transform"
+    params:
+      create_handoff_package: true
+      include_metadata: true
+      include_timestamps: true
+      compress_if_large: true
+
+  - step: "validate_completeness"
+    action: "validate"
+    params:
+      check_required_fields: true
+      check_session_continuity: true
+      check_goal_clarity: true
+      check_next_steps_defined: true
+
+  - step: "save_handoff"
+    action: "execute"
+    params:
+      tier: 1
+      save_to_database: true
+      generate_handoff_id: true
+
+  - step: "generate_summary"
+    action: "transform"
+    params:
+      create_human_readable_summary: true
+      include_key_decisions: true
+      include_blockers: true
+      include_context_links: true
+
+  - step: "notify_recipient"
+    action: "notify"
+    condition: "recipient_specified"
+    params:
+      send_notification: true
+      include_handoff_id: true
+      include_summary: true
+
+  - step: "display_handoff"
+    action: "notify"
+    params:
+      show_handoff_id: true
+      show_summary: true
+      show_next_steps: true
+      show_recipient: "${recipient}"
+
+# Validation rules
+validation:
+  - check: "context_complete"
+    scope: "handoff_package"
+    required: true
+    params:
+      has_session_state: true
+      has_goals: true
+      has_next_steps: true
+
+  - check: "continuity_possible"
+    scope: "handoff_package"
+    required: true
+    params:
+      enough_context: true
+      clear_instructions: true
+
+  - check: "saved_successfully"
+    scope: "persistence"
+    required: true
+    params:
+      database_saved: true
+      retrievable: true
+
+# Parameters
+parameters:
+  - name: "recipient"
+    type: "string"
+    required: false
+    description: "Recipient agent or session ID"
+
+  - name: "handoff_type"
+    type: "enum"
+    values: ["session_transfer", "agent_transfer", "pause_resume"]
+    default: "session_transfer"
+    description: "Type of handoff"
+
+  - name: "include_full_history"
+    type: "bool"
+    default: true
+    description: "Include complete conversation history"
+
+  - name: "priority"
+    type: "enum"
+    values: ["low", "normal", "high", "urgent"]
+    default: "normal"
+    description: "Handoff priority"
+
+  - name: "expiry_hours"
+    type: "int"
+    default: 72
+    description: "Hours until handoff expires"

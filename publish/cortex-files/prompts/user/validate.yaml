@@ -1,0 +1,123 @@
+# CORTEX Validate Command Plugin
+# Run comprehensive validation checks on completed work
+
+version: "2.0"
+type: "workflow"
+name: "Validate Work"
+description: "Final validation before commit - tests, quality, compliance"
+author: "CORTEX"
+created: "2025-11-08"
+
+# No specific targets - validates entire session
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "load_health_validator"
+    action: "query"
+    params:
+      agent: "health_validator"
+      module: "prompts/internal/health-validator.md"
+
+  - step: "load_session"
+    action: "query"
+    params:
+      path: "sessions/current-session.json"
+      validate_exists: true
+
+  - step: "run_all_tests"
+    action: "validate"
+    params:
+      run_unit_tests: true
+      run_integration_tests: true
+      run_visual_tests: true
+      require_all_passing: true
+
+  - step: "check_build"
+    action: "validate"
+    params:
+      run_build: true
+      check_warnings: true
+      check_errors: true
+
+  - step: "check_code_quality"
+    action: "validate"
+    params:
+      run_linter: true
+      check_formatting: true
+      check_complexity: true
+      check_duplication: true
+
+  - step: "check_rule_compliance"
+    action: "validate"
+    params:
+      validate_27_rules: true
+      check_test_first: true
+      check_brain_protection: true
+      check_knowledge_boundaries: true
+
+  - step: "check_documentation"
+    action: "validate"
+    params:
+      verify_comments: true
+      verify_docstrings: true
+      verify_readme_updated: true
+
+  - step: "prepare_commit"
+    action: "execute"
+    condition: "all_checks_pass"
+    params:
+      suggest_commit_message: true
+      list_files_to_commit: true
+      show_git_status: true
+
+  - step: "report_validation"
+    action: "notify"
+    params:
+      show_test_summary: true
+      show_quality_score: true
+      show_compliance_status: true
+      show_ready_to_commit: true
+
+# Validation rules
+validation:
+  - check: "all_tests_passing"
+    scope: "test_results"
+    required: true
+
+  - check: "build_successful"
+    scope: "build_status"
+    required: true
+
+  - check: "quality_threshold_met"
+    scope: "code_quality"
+    required: true
+    params:
+      min_score: 80
+
+  - check: "rules_compliant"
+    scope: "governance"
+    required: true
+    params:
+      check_all_27_rules: true
+
+  - check: "no_critical_issues"
+    scope: "overall"
+    required: true
+
+# Parameters
+parameters:
+  - name: "skip_tests"
+    type: "bool"
+    default: false
+    description: "Skip test execution (not recommended)"
+
+  - name: "skip_quality"
+    type: "bool"
+    default: false
+    description: "Skip code quality checks (not recommended)"
+
+  - name: "verbose"
+    type: "bool"
+    default: false
+    description: "Show detailed validation output"
