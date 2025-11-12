@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-11-12T14:35:38.016350",
+  "backup_count": 13,
+  "total_size_bytes": 199467,
+  "files": [
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor.py.backup",
+      "size_bytes": 22317,
+      "modified_time": "2025-11-06T12:00:38.502385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\health_validator.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\health_validator.py.backup",
+      "size_bytes": 23093,
+      "modified_time": "2025-11-06T12:00:38.504385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\test_generator.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\test_generator.py.backup",
+      "size_bytes": 22320,
+      "modified_time": "2025-11-06T12:00:38.505385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\work_planner.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\work_planner.py.backup",
+      "size_bytes": 21703,
+      "modified_time": "2025-11-06T12:00:38.506384"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\operations\\modules\\remove_old_logs_module.py",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\operations\\modules\\remove_old_logs_module.py",
+      "size_bytes": 5945,
+      "modified_time": "2025-11-10T05:34:31.720562"
+    },
+    {
+      "original_path": ".backup-archive\\backup-manifest-20251112-143508.json",
+      "archived_path": ".backup-archive\\.backup-archive\\backup-manifest-20251112-143508.json",
+      "size_bytes": 4334,
+      "modified_time": "2025-11-12T14:35:08.692257"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\backup-manifest-20251112-142647.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251112-142647.json",
+      "size_bytes": 3686,
+      "modified_time": "2025-11-12T14:26:47.126780"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251112-142614.json",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\backup-manifest-20251112-142614.json",
+      "size_bytes": 3072,
+      "modified_time": "2025-11-12T14:26:14.808370"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor.py.backup",
+      "size_bytes": 22317,
+      "modified_time": "2025-11-06T12:00:38.502385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\health_validator.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\health_validator.py.backup",
+      "size_bytes": 23093,
+      "modified_time": "2025-11-06T12:00:38.504385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\test_generator.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\test_generator.py.backup",
+      "size_bytes": 22320,
+      "modified_time": "2025-11-06T12:00:38.505385"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\work_planner.py.backup",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\work_planner.py.backup",
+      "size_bytes": 21703,
+      "modified_time": "2025-11-06T12:00:38.506384"
+    },
+    {
+      "original_path": ".backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor\\backup\\backup_manager.py",
+      "archived_path": ".backup-archive\\.backup-archive\\.backup-archive\\.backup-archive\\publish\\CORTEX\\src\\cortex_agents\\code_executor\\backup\\backup_manager.py",
+      "size_bytes": 3564,
+      "modified_time": "2025-11-08T10:33:05.813770"
+    }
+  ]
+}
