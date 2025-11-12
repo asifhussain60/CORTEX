@@ -885,13 +885,16 @@ class DesignSyncOrchestrator(BaseOperationModule):
         
         return transformations
     
-    def _calculate_phase_progress(self, content: str) -> Dict[str, int]:
+    def _calculate_phase_progress(self, content: str) -> tuple[Dict[str, int], List[str]]:
         """
-        Calculate phase completion percentages by parsing the Current Focus section.
+        Calculate phase completion percentages AND execution order by parsing Current Focus.
         
         Returns:
-            Dictionary mapping phase names to completion percentages (0-100)
+            Tuple of (phase_progress_dict, execution_order_list)
+            - phase_progress_dict: Maps phase names to completion percentages (0-100)
+            - execution_order_list: List of phase names in user-specified execution order
         """
+        # Default percentages (fallback if parsing fails)
         phase_progress = {
             'Phase 0 - Quick Wins': 100,
             'Phase 1 - Core Modularization': 100,
@@ -901,13 +904,16 @@ class DesignSyncOrchestrator(BaseOperationModule):
             'Phase 5 - Risk Mitigation & Testing': 85,
             'Phase 6 - Performance Optimization': 100,
             'Phase 7 - Documentation & Polish': 70,
-            'Phase 8 - Migration & Deployment': 0,
+            'Phase 8 - Migration & Deployment': 25,
             'Phase 9 - Advanced Capabilities': 0,
             'Phase 10 - Production Hardening': 0,
             'Phase 11 - Context Helper Plugin': 0,
         }
         
-        # Try to extract percentages from Current Focus section
+        # Track execution order (phases mentioned in Current Focus)
+        execution_order = []
+        
+        # Try to extract percentages AND order from Current Focus section
         focus_match = re.search(r'## 🎯 Current Focus(.*?)(?=##|$)', content, re.DOTALL)
         if focus_match:
             focus_section = focus_match.group(1)
@@ -922,9 +928,19 @@ class DesignSyncOrchestrator(BaseOperationModule):
                 for phase_name in phase_progress.keys():
                     if phase_name.startswith(f'Phase {phase_num} -'):
                         phase_progress[phase_name] = percentage
+                        execution_order.append(phase_name)
                         break
         
-        return phase_progress
+        # If no execution order found, fall back to numerical order
+        if not execution_order:
+            execution_order = list(phase_progress.keys())
+        else:
+            # Add remaining phases (not in Current Focus) at the end in numerical order
+            for phase_name in phase_progress.keys():
+                if phase_name not in execution_order:
+                    execution_order.append(phase_name)
+        
+        return phase_progress, execution_order
     
     def _generate_progress_bar(self, percentage: int, width: int = 32) -> str:
         """
@@ -1012,11 +1028,14 @@ class DesignSyncOrchestrator(BaseOperationModule):
         )
         updates.append(f"Updated plugins: {len(impl_state.plugins)}")
         
-        # Update visual progress bars
-        phase_progress = self._calculate_phase_progress(content)
+        # Update visual progress bars (with user-specified execution order)
+        phase_progress, execution_order = self._calculate_phase_progress(content)
         progress_section_lines = []
         progress_section_lines.append("```")
-        for phase_name, percentage in phase_progress.items():
+        
+        # Display phases in execution order (not numerical order)
+        for phase_name in execution_order:
+            percentage = phase_progress[phase_name]
             bar = self._generate_progress_bar(percentage)
             # Pad phase name to align bars
             padded_name = phase_name.ljust(40)
