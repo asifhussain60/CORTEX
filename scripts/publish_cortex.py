@@ -123,20 +123,18 @@ CRITICAL_FILES = {
     'prompts/shared/plugin-system.md',
     'prompts/shared/operations-reference.md',
     
-    # Response Templates
+    # Response Templates (NEW - 2025-11-12: 13 intelligent question routing templates)
     'cortex-brain/response-templates.yaml',
     
     # User Tools (ESSENTIAL for conversation tracking & setup)
     'scripts/cortex/auto_capture_daemon.py',  # ⭐⭐⭐⭐⭐ tracking method
     'scripts/cortex/cortex_cli.py',  # Manual tracking
     'scripts/cortex/migrate-all-tiers.py',  # Database setup
-    'setup-cortex-alpha.ps1',  # Windows setup
     'run-cortex.sh',  # Unix/Mac setup
     
     # Legal & README
     'README.md',
-    'LICENSE',
-    'setup.py'
+    'LICENSE'
 }
 
 # Directories to include (allowlist)
@@ -524,6 +522,7 @@ def copy_essential_directories(
     # Exclude specific files with privacy leaks (example paths in documentation)
     privacy_leak_files = [
         '.github/CORTEX 2.0.md',  # Contains D:\\ and /Users/asif paths  
+        '.github/CopilotChats.md',  # Contains AHHOME, D:\PROJECTS paths
         'src/migrations/README.md',  # Contains /Users/asifhussain
         'prompts/shared/test',  # Test excerpts with example paths
     ]

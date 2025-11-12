@@ -1,6 +1,6 @@
 version: '1.0'
-last_updated: '2025-11-11T12:02:16.486953'
-total_lessons: 10
+last_updated: '2025-11-12T14:39:55.908481'
+total_lessons: 11
 lessons:
 - id: wpf-tdd-001
   title: WPF implementation without TDD causes runtime crashes
@@ -365,6 +365,20 @@ lessons:
   - Test on all supported platforms (Windows, macOS, Linux)
   - Use platform-aware code paths
   error_type: UnicodeEncodeError
+- id: orchestration-general-001
+  title: Operation 'Workspace Cleanup' had 1 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-11-12'
+  problem: Operation 'Workspace Cleanup' had 1 failed modules
+  symptoms:
+  - 'cleanup_orchestrator: Cleanup failed: ''charmap'' codec can''t encode characters
+    in position 2-81: character maps to <undefined>'
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - workspace-cleanup
 patterns:
 - pattern_id: wpf_icon_validation_pattern
   name: Material Design Icon Validation

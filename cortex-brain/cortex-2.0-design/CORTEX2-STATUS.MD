@@ -165,6 +165,37 @@ Phase 10 - Production Hardening         [░░░░░░░░░░░░░
 - ⏸️ Dynamic context plugin (optional extension)
 - ⏸️ Integration with existing systems
 
+**🎯 Foundation for CORTEX 3.0: Intelligent Question Routing (2025-11-12)**
+- **Status:** 📋 DESIGN COMPLETE (Implementation pending 3.0)
+- **CORTEX 2.0 Foundation (✅ IMPLEMENTED TODAY):**
+  - ✅ 13 new question routing templates in `response-templates.yaml`
+  - ✅ `context_needed: true` mechanism for fresh data collection
+  - ✅ `data_collectors` metadata for collector specification
+  - ✅ Namespace-aware templates (cortex.* vs workspace.*)
+  - ✅ Template types: cortex_status, workspace_health, learning_rate, test_coverage, capability_check
+- **CORTEX 3.0 Enhancement (📋 FUTURE):**
+  - 📋 Full QuestionRouter module for dynamic classification
+  - 📋 CollectorOrchestrator for parallel data gathering
+  - 📋 8+ data collectors (brain_metrics, workspace_health, test_coverage, git_metrics, etc.)
+  - 📋 Intelligent namespace detection (beyond file path)
+  - 📋 Dynamic template selection (beyond static triggers)
+- **Design Document:** `cortex-brain/cortex-3.0-design/intelligent-question-routing.md`
+- **Estimated Effort (3.0):** 20 hours (2.5 days) - 5 implementation phases
+- **Value Delivered:**
+  - **2.0:** 80% value with minimal work (static templates + collector specs)
+  - **3.0:** Full dynamic routing with real-time context analysis
+- **Key Questions Now Handled (2.0 templates):**
+  - "How is the brain doing?" → CORTEX framework status with fresh metrics
+  - "What's my code quality?" → Workspace health metrics
+  - "What did CORTEX learn?" → Learned patterns analysis
+  - "How much am I saving?" → Token optimization metrics
+  - "Can CORTEX do X?" → Capability checking
+  - "CORTEX vs Copilot?" → Comparison explanation
+  - "How does CORTEX work?" → Architecture explanation
+  - "Test coverage?" → Real-time coverage metrics
+  - "Learning rate?" → Pattern acquisition speed
+  - "Which namespace?" → Current namespace status
+
 ---
 
 ## 🚨 Known Gaps (Identified by design_sync + SKULL-005)

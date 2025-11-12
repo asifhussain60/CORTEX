@@ -277,9 +277,17 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
             
             # Capture learning from operation result
             try:
-                learning_event = capture_operation_learning(report)
+                learning_event = capture_operation_learning(
+                    operation_name=self.operation_name,
+                    result=report,
+                    context={
+                        'operation_id': self.operation_id,
+                        'execution_mode': self.execution_mode.value if hasattr(self, 'execution_mode') else 'live',
+                        'modules_count': len(self.modules)
+                    }
+                )
                 if learning_event:
-                    logger.info(f"Learning captured: {learning_event.problem[:60]}...")
+                    logger.info(f"Learning captured from {self.operation_name}")
             except Exception as e:
                 logger.warning(f"Failed to capture learning: {e}")
         
