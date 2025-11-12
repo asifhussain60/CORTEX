@@ -62,6 +62,7 @@ Central chronological append-only register (top = newest). Never delete entries;
 
 | ID | Date | Category | Summary | Status | Related Tasks | Supersedes | Metrics Targets |
 |----|------|----------|---------|--------|---------------|------------|-----------------|
+| E-2025-11-12-DEPLOYMENT-PACKAGE | 2025-11-12 | Deployment | Production Deployment Package - Two-tier distribution (user vs admin), automated packaging (20-25 MB compressed), one-click installer (Windows/Mac/Linux), performance metrics dashboard for senior leadership. Phase 8.1-8.5 complete design. Estimated 9 hours (8 hours deployment + 1 hour metrics). Priority: CRITICAL - enables clean distribution + leadership ROI visibility. | APPROVED-PENDING-IMPLEMENTATION | Phase 8 (new) | — | Package <30 MB; Setup <2 min; 87.5% size reduction; Zero admin files; Metrics <200ms; Demo integration |
 | E-2025-11-11-TEST-REMEDIATION | 2025-11-11 | Test Quality | Test Suite Remediation Plan - Created comprehensive plan to achieve 100% pass rate (currently 86%, 2,791 tests). Identified 4 failure categories: schema mismatches (10), API contracts (5), missing deps (33), file locking (16). Decision tree: Delete orphaned 1.0 tests, fix schema alignment, apply markers, enhance fixtures. Estimated 8-12 hours over 2 days. Phase 1: Quick wins (95%), Phase 2: Schema (98%), Phase 3: Audit (100%), Phase 4: Docs. | IN-PROGRESS | Task 5.10 (Phase 5) | TEST-REMEDIATION-PLAN.md | 86% → 100% pass rate; <30s unit tests; Zero orphaned tests; Design alignment |
 | E-2025-11-11-IMPLEMENTATION-AUDIT | 2025-11-11 | Status Accuracy | Implementation Reality Audit - Discovered massive underreporting: 97 modules (not 24), 2,203 tests (not 82), 8 plugins, 14 operations (not 6), 37 modules implemented (38%). Status documents corrected. Created IMPLEMENTATION-REALITY-ANALYSIS.md with reconciliation plan. | COMPLETED | Task 5.9 (Phase 5) | — | 100% status accuracy; All docs reflect reality; Plugin/demo systems documented; Test count corrected (2,203); Module count corrected (97) |
 | E-2025-11-10-INTERACTIVE-DEMO | 2025-11-10 | User Experience | Interactive Demo System - Hybrid onboarding approach combining /demo operation (6 modules, 700 tokens), guided setup prompts (+150 tokens), and enhanced story with runnable examples (+300 tokens). Total overhead 1,150 tokens (23% less than rejected tutorial approach). Demo optional, showcases CORTEX capabilities after setup completes. Design doc: 42-interactive-demo-system.md | IMPLEMENTED | Task 5.8 (Phase 5) | — | Demo completion rate >70%; User confidence +50%; Token overhead <800 tokens (actual: 700); User retention +25% |
@@ -139,6 +140,28 @@ Testing and migration from 1.0:
 - **12-migration-strategy.md** - Step-by-step migration from 1.0 to 2.0
 - **15-api-changes.md** - Agent interface updates, new abstractions
 - **🆕 33-yaml-conversion-strategy.md** - Convert 10-12 design docs to YAML (30% size reduction, 10-15 hours) [Note: Numbering moved to 38 to accommodate vision-api at 31]
+
+### 📦 DEPLOYMENT & DISTRIBUTION (Phase 8 - CRITICAL)
+Production packaging and distribution to end users:
+
+- **🆕 DEPLOYMENT-PRIORITIES-2025-11-12.md** - ⭐ **EXECUTIVE SUMMARY** - Strategic priorities for deployment (9 hours total)
+  - Priority 1: Deployment package with performance metrics (senior leadership visibility)
+  - Priority 2: Demo/tutorial showcasing CORTEX capabilities
+  - Timeline: 14 hours over 2 weeks
+  - **Status:** ✅ DESIGN COMPLETE - Ready for execution
+- **🆕 PHASE-8-DEPLOYMENT-PACKAGE.md** - ⭐ **COMPREHENSIVE DESIGN** - Complete deployment package specification (5,000+ lines)
+  - Two-tier distribution (user 20-25 MB vs admin 200 MB)
+  - Automated build script + cross-platform installers
+  - Phase 8.1-8.4 complete design (8 hours)
+  - **Status:** ✅ DESIGN COMPLETE - Implementation ready
+- **🆕 PHASE-8-SUMMARY.md** - ⭐ **CONCISE OVERVIEW** - Quick summary of deployment package
+  - Package structure and metrics
+  - Implementation timeline
+  - Success criteria
+- **🆕 PHASE-8-QUICK-REFERENCE.md** - ⭐ **QUICK REFERENCE** - TL;DR deployment guide
+  - Command reference
+  - Phase breakdown
+  - Acceptance criteria
 
 ### 🔧 ARCHITECTURAL REFINEMENTS (Critical Updates)
 Analysis and improvements to unify the architecture:
