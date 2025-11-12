@@ -928,7 +928,9 @@ class DesignSyncOrchestrator(BaseOperationModule):
                 for phase_name in phase_progress.keys():
                     if phase_name.startswith(f'Phase {phase_num} -'):
                         phase_progress[phase_name] = percentage
-                        execution_order.append(phase_name)
+                        # Only add if not already in execution order (prevent duplicates)
+                        if phase_name not in execution_order:
+                            execution_order.append(phase_name)
                         break
         
         # If no execution order found, fall back to numerical order

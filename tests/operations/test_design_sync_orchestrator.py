@@ -261,16 +261,16 @@ class TestProgressBarGeneration:
 - ✅ Doc refresh complete
 - ⏸️ Command discovery UX (pending)
 
-**Phase 8 (0% complete - Design Ready):**
-- 🟡 Production deployment package design complete
+**Phase 8 (25% complete - Implementation Started):**
+- ✅ Build script (create clean package)
 """
         
         orchestrator = DesignSyncOrchestrator()
-        phase_progress = orchestrator._calculate_phase_progress(content)
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
         
         assert phase_progress['Phase 5 - Risk Mitigation & Testing'] == 85
         assert phase_progress['Phase 7 - Documentation & Polish'] == 70
-        assert phase_progress['Phase 8 - Migration & Deployment'] == 0
+        assert phase_progress['Phase 8 - Migration & Deployment'] == 25
     
     def test_generate_progress_bar_full(self):
         """Test progress bar generation at 100%."""
@@ -305,6 +305,323 @@ class TestProgressBarGeneration:
         assert bar == '[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]'
         assert '█' not in bar
         assert bar.count('░') == 32
+
+
+class TestExecutionOrderAndVisualGraphSync:
+    """
+    CRITICAL: Tests to prevent visual progress graph from going out of sync.
+    
+    This test suite enforces:
+    1. Visual graph percentages must match Current Focus percentages
+    2. Visual graph order must match Current Focus execution order
+    3. Active phases (mentioned in Current Focus) appear first
+    4. Completed phases (100%, not in Current Focus) appear next
+    5. Future phases (0%, not in Current Focus) appear last
+    
+    SKULL-001: These tests MUST pass before claiming design_sync is production-ready.
+    """
+    
+    def test_execution_order_extraction_from_current_focus(self):
+        """Test that execution order is correctly extracted from Current Focus section."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 5 (85% complete):**
+- ✅ Integration tests
+
+**Phase 7 (70% complete):**
+- ✅ Doc refresh
+
+**Phase 8 (25% complete):**
+- ✅ Build script
+
+**Phase 11 (0% complete):**
+- 🟡 Design ready
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Verify execution order: active phases first (5, 7, 8, 11)
+        assert execution_order[0] == 'Phase 5 - Risk Mitigation & Testing'
+        assert execution_order[1] == 'Phase 7 - Documentation & Polish'
+        assert execution_order[2] == 'Phase 8 - Migration & Deployment'
+        assert execution_order[3] == 'Phase 11 - Context Helper Plugin'
+        
+        # Verify remaining phases appear after active ones
+        remaining_phases = execution_order[4:]
+        assert 'Phase 0 - Quick Wins' in remaining_phases
+        assert 'Phase 1 - Core Modularization' in remaining_phases
+        assert 'Phase 2 - Ambient + Workflow' in remaining_phases
+    
+    def test_execution_order_completed_phases_grouped(self):
+        """Test that completed phases (100%) are grouped together after active phases."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 8 (25% complete):**
+- ✅ Build script
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Find indices of completed phases (100%)
+        completed_indices = [
+            i for i, phase in enumerate(execution_order)
+            if phase_progress[phase] == 100
+        ]
+        
+        # Find indices of future phases (0%)
+        future_indices = [
+            i for i, phase in enumerate(execution_order)
+            if phase_progress[phase] == 0 and phase != 'Phase 8 - Migration & Deployment'
+        ]
+        
+        # Verify completed phases come before future phases
+        if completed_indices and future_indices:
+            assert max(completed_indices) < min(future_indices), \
+                "Completed phases should appear before future phases"
+    
+    def test_visual_graph_percentages_match_current_focus(self):
+        """
+        CRITICAL: Ensure visual graph percentages exactly match Current Focus.
+        
+        This test prevents the bug where hardcoded percentages override actual values.
+        """
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 5 (85% complete):**
+- Work in progress
+
+**Phase 7 (70% complete):**
+- Work in progress
+
+**Phase 8 (25% complete):**
+- Work in progress
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # These MUST match Current Focus, not hardcoded defaults
+        assert phase_progress['Phase 5 - Risk Mitigation & Testing'] == 85, \
+            "Phase 5 percentage must match Current Focus (85%)"
+        assert phase_progress['Phase 7 - Documentation & Polish'] == 70, \
+            "Phase 7 percentage must match Current Focus (70%)"
+        assert phase_progress['Phase 8 - Migration & Deployment'] == 25, \
+            "Phase 8 percentage must match Current Focus (25%)"
+    
+    def test_visual_graph_order_matches_current_focus_order(self):
+        """
+        CRITICAL: Ensure visual graph shows phases in Current Focus order, not numerical.
+        
+        This test prevents the bug where graph showed 0-11 regardless of execution sequence.
+        """
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 11 (5% complete):**
+- Started first (out of numerical order)
+
+**Phase 2 (95% complete):**
+- Almost done
+
+**Phase 7 (50% complete):**
+- Mid-way
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Verify execution order matches Current Focus appearance order
+        assert execution_order[0] == 'Phase 11 - Context Helper Plugin', \
+            "First phase in graph should be Phase 11 (first in Current Focus)"
+        assert execution_order[1] == 'Phase 2 - Ambient + Workflow', \
+            "Second phase in graph should be Phase 2 (second in Current Focus)"
+        assert execution_order[2] == 'Phase 7 - Documentation & Polish', \
+            "Third phase in graph should be Phase 7 (third in Current Focus)"
+    
+    def test_visual_graph_sync_with_actual_file(self, tmp_path):
+        """
+        INTEGRATION TEST: Verify visual graph stays in sync after consolidation.
+        
+        This test simulates the full workflow:
+        1. Read CORTEX2-STATUS.MD with Current Focus
+        2. Extract percentages and execution order
+        3. Generate new visual progress bars
+        4. Verify bars match Current Focus exactly
+        """
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        import re
+        
+        # Given: A realistic CORTEX2-STATUS.MD file
+        status_file = tmp_path / "CORTEX2-STATUS.MD"
+        original_content = """# CORTEX 2.0 Compact Status Overview
+
+## 📊 Visual Progress (Phases & Tasks)
+
+```
+Phase 0 - Quick Wins                    [████████████████████████████████] 100%
+Phase 1 - Core Modularization           [████████████████████████████████] 100%
+Phase 5 - Risk Mitigation & Testing     [███████████████████████████░░░░░]  85%
+```
+
+## 🎯 Current Focus
+
+**Phase 5 (90% complete):**
+- ✅ Integration tests (updated!)
+
+**Phase 8 (30% complete):**
+- ✅ Build script progress
+"""
+        status_file.write_text(original_content, encoding='utf-8')
+        
+        # When: Consolidation runs
+        content = status_file.read_text(encoding='utf-8')
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Generate new progress section
+        progress_section_lines = ['```']
+        for phase_name in execution_order:
+            percentage = phase_progress[phase_name]
+            bar = orchestrator._generate_progress_bar(percentage)
+            padded_name = phase_name.ljust(40)
+            progress_section_lines.append(f"{padded_name}{bar} {percentage:3d}%")
+        progress_section_lines.append('```')
+        new_progress_section = '\n'.join(progress_section_lines)
+        
+        # Replace visual progress bars
+        updated_content = re.sub(
+            r'```\nPhase.*?```',
+            new_progress_section,
+            content,
+            flags=re.DOTALL,
+            count=1
+        )
+        
+        # Then: Visual graph should reflect Current Focus
+        assert 'Phase 5 - Risk Mitigation & Testing' in updated_content
+        assert 'Phase 8 - Migration & Deployment' in updated_content
+        
+        # Verify Phase 5 appears first (active phase)
+        phase5_pos = updated_content.find('Phase 5 - Risk Mitigation & Testing')
+        phase0_pos = updated_content.find('Phase 0 - Quick Wins')
+        assert phase5_pos < phase0_pos, "Active Phase 5 should appear before completed Phase 0"
+        
+        # Verify Phase 5 shows 90% (from Current Focus), not 85% (old value)
+        assert ' 90%' in updated_content
+        assert updated_content.count(' 85%') == 0, "Old Phase 5 percentage (85%) should be updated"
+        
+        # Verify Phase 8 shows 30% (from Current Focus)
+        assert ' 30%' in updated_content
+    
+    def test_fallback_to_numerical_order_when_no_current_focus(self):
+        """Test that graph falls back to numerical order when Current Focus is missing."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """# CORTEX 2.0 Compact Status Overview
+
+## Statistics
+- Total Modules: 57
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Should fall back to numerical order (Phase 0, 1, 2, ...)
+        assert execution_order[0] == 'Phase 0 - Quick Wins'
+        assert execution_order[1] == 'Phase 1 - Core Modularization'
+        assert execution_order[2] == 'Phase 2 - Ambient + Workflow'
+    
+    def test_prevents_duplicate_phases_in_execution_order(self):
+        """Test that execution order doesn't contain duplicate phases."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 5 (85% complete):**
+- Work in progress
+
+**Phase 5 (90% complete):**
+- Duplicate entry (should be handled gracefully)
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # Verify no duplicates in execution order
+        assert len(execution_order) == len(set(execution_order)), \
+            "Execution order should not contain duplicate phases"
+        
+        # Verify Phase 5 appears only once
+        phase5_count = sum(1 for phase in execution_order 
+                          if phase == 'Phase 5 - Risk Mitigation & Testing')
+        assert phase5_count == 1, "Phase 5 should appear exactly once"
+    
+    def test_regression_phase_8_percentage_not_hardcoded_to_zero(self):
+        """
+        REGRESSION TEST: Prevent Phase 8 from being hardcoded to 0%.
+        
+        Original bug: _calculate_phase_progress had Phase 8 hardcoded to 0%,
+        which overrode the actual 25% from Current Focus.
+        """
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 8 (25% complete - Implementation Started):**
+- ✅ Build script (create clean package)
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # CRITICAL: Phase 8 must show 25%, not 0%
+        assert phase_progress['Phase 8 - Migration & Deployment'] == 25, \
+            "Phase 8 percentage must not be hardcoded to 0% (regression from bug fix)"
+    
+    def test_active_phases_always_appear_first_in_visual_graph(self):
+        """
+        CRITICAL: Ensure active phases (in Current Focus) always appear first.
+        
+        This is the core feature: visual graph should show what you're working on
+        at the top, not buried in numerical order.
+        """
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 8 (25% complete):**
+- Active work
+
+**Phase 11 (5% complete):**
+- Active work
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress, execution_order = orchestrator._calculate_phase_progress(content)
+        
+        # First 2 phases in execution order should be Phase 8 and 11 (active)
+        assert execution_order[0] == 'Phase 8 - Migration & Deployment'
+        assert execution_order[1] == 'Phase 11 - Context Helper Plugin'
+        
+        # Completed phases should come after active phases
+        phase0_index = execution_order.index('Phase 0 - Quick Wins')
+        assert phase0_index > 1, "Completed Phase 0 should appear after active phases"
 
 
 if __name__ == '__main__':
