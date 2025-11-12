@@ -87,10 +87,11 @@ class PatternStore:
         metadata: Optional[Dict[str, Any]] = None,
         is_pinned: bool = False,
         scope: str = "cortex",
-        namespaces: Optional[List[str]] = None
+        namespaces: Optional[List[str]] = None,
+        is_cortex_internal: bool = False
     ) -> Dict[str, Any]:
         """
-        Store a new pattern in the Knowledge Graph.
+        Store a new pattern in the Knowledge Graph with namespace protection.
         
         Args:
             pattern_id: Unique identifier for the pattern
@@ -103,12 +104,13 @@ class PatternStore:
             is_pinned: Whether pattern is pinned (immune to decay)
             scope: 'cortex' or 'application' (boundary enforcement)
             namespaces: List of namespace tags (default: ["CORTEX-core"])
+            is_cortex_internal: True if called from CORTEX framework code
         
         Returns:
             Dictionary with stored pattern data including generated ID
         
         Raises:
-            ValueError: If validation fails
+            ValueError: If validation fails or namespace protection violated
             sqlite3.IntegrityError: If pattern_id already exists
         
         Performance: ~20ms
@@ -123,6 +125,15 @@ class PatternStore:
         # Default namespaces
         if namespaces is None:
             namespaces = ["CORTEX-core"]
+        
+        # NAMESPACE PROTECTION: Block user code from writing to cortex.* namespace
+        for namespace in namespaces:
+            if namespace.startswith("cortex.") and not is_cortex_internal:
+                raise ValueError(
+                    f"cortex.* namespace is protected. "
+                    f"Only CORTEX framework can write to '{namespace}'. "
+                    f"Use workspace.* namespace for application patterns."
+                )
         
         # Convert metadata and namespaces to JSON
         metadata_json = json.dumps(metadata) if metadata else None
@@ -162,7 +173,8 @@ class PatternStore:
                 "metadata": metadata,
                 "is_pinned": is_pinned,
                 "scope": scope,
-                "namespaces": namespaces
+                "namespaces": namespaces,
+                "_namespace": namespaces[0] if namespaces else None  # Primary namespace
             }
         except Exception as e:
             conn.rollback()
@@ -393,7 +405,8 @@ class PatternStore:
                 "metadata": metadata,
                 "is_pinned": bool(row[10]),
                 "scope": row[11] if row[11] else "cortex",
-                "namespaces": namespaces
+                "namespaces": namespaces,
+                "_namespace": namespaces[0] if namespaces else None  # Primary namespace
             })
         
         return patterns
