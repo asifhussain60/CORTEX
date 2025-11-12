@@ -42,9 +42,9 @@ Phase 10 - Production Hardening         [░░░░░░░░░░░░░
 ## 📈 Implementation Statistics
 
 ### Universal Operations System
-- **Total Modules:** 64 modules (includes new application_onboarding)
-- **Modules Implemented:** 57 modules (89% complete)
-- **Operations Ready:** 3/13 operations fully operational
+- **Total Modules:** 65 modules (includes application_onboarding)
+- **Modules Implemented:** 58 modules (89% complete)
+- **Operations Ready:** 4/13 operations fully operational
 - **Test Coverage:** 2,088 tests passing + **10/10 publish tests ✅**
 
 ### Operations Status
@@ -53,9 +53,9 @@ Phase 10 - Production Hardening         [░░░░░░░░░░░░░
 | **Demo** | ✅ READY | 6/6 |
 | **Setup** | ✅ READY | 11/11 |
 | **Design Sync** | ✅ READY (admin) | 1/1 |
+| **Application Onboarding** | ✅ READY (design) | 7/7 |
 | **Story Refresh** | 🟡 VALIDATION | 6/6 |
 | **Cleanup** | 🟡 PARTIAL | 1/1 |
-| **Application Onboarding** | 🔄 IN PROGRESS | 0/7 |
 | **Documentation** | ⏸️ PENDING | 0/6 |
 | **Brain Protection** | ⏸️ PENDING | 1/6 |
 | **Run Tests** | ⏸️ PENDING | 0/5 |
@@ -202,23 +202,61 @@ Phase 10 - Production Hardening         [░░░░░░░░░░░░░
 
 ## 🆕 Phase 8: Production Deployment Package (UPDATED - 2025-11-12)
 
-**Purpose:** Create clean, production-ready distribution separating user features from admin/dev tools
+**Purpose:** Create clean, production-ready distribution with isolated CORTEX folder structure
 
-**Status:** 🟡 IN PROGRESS - Critical Files Package + Verification Complete
+**Status:** ✅ COMPLETE - Deployment strategy finalized + documentation updated
 
-**Priority:** 🔴 CRITICAL - Enables senior leadership ROI visibility + clean end-user distribution
+**Priority:** 🔴 CRITICAL - Enables clean end-user onboarding without repo contamination
 
 **Recent Updates (2025-11-12):**
-- ✅ **Build script updated** with critical files manifest (`scripts/build_user_deployment.py`)
-- ✅ **Verification script created** (`scripts/verify_deployment_package.py`)
+- ✅ **Deployment strategy finalized** (CORTEX stays in isolated subfolder)
+- ✅ **CopilotChats.md updated** with clean onboarding instructions
+- ✅ **Merge option designed** (user chooses baseline merge vs fully isolated)
+- ✅ **File structure documented** (clear separation, no contamination)
+- ✅ **Build script updated** with critical files manifest (`scripts/publish_cortex.py`)
+- ✅ **Verification script created** (10/10 publish tests passing)
 - ✅ **Version bumped** to 2.0.0 (matches CORTEX 2.0 architecture)
 - ✅ **Critical files list** enforced (24 essential files: brain protection, schemas, entry points)
 - ✅ **Documentation inclusion** refined (8 essential user guides only)
 - ✅ **LICENSE file added** (proprietary license, copyright Asif Hussain)
 - ✅ **setup.py created** (Python package metadata and entry points)
-- ✅ **Deployment package updates documented** (`DEPLOYMENT-PACKAGE-UPDATES-2025-11-12.md`)
-- ⏸️ **Setup installers** pending (Windows/Mac/Linux)
-- ⏸️ **Performance metrics dashboard** pending
+- ✅ **Deployment package updates documented** (`.github/CopilotChats.md`)
+- ✅ **Application onboarding operation** (design complete, 7/7 modules)
+- ⏸️ **Setup installers** pending (Windows/Mac/Linux - optional enhancement)
+- ⏸️ **Performance metrics dashboard** pending (optional enhancement)
+
+**Deployment Architecture:**
+
+### User Repository Structure (After Deployment):
+```
+D:\MyApp\                        ← User's application (clean!)
+├── .github\
+│   ├── copilot-instructions.md  ← Optional: CORTEX baseline (if merged)
+│   └── workflows\               ← User's CI/CD
+├── src\                         ← User's code
+├── package.json                 ← User's config
+│
+└── CORTEX\                      ← CORTEX isolated here
+    ├── .github\
+    │   ├── copilot-instructions.md  ← CORTEX baseline
+    │   └── prompts\CORTEX.prompt.md ← Entry point
+    ├── cortex-brain\            ← Brain databases
+    ├── src\                     ← CORTEX source
+    └── ...                      ← Other CORTEX files
+```
+
+**Benefits:**
+- ✅ **Clean separation** - No repo contamination
+- ✅ **Easy removal** - Delete CORTEX/ folder
+- ✅ **Version control** - CORTEX changes isolated
+- ✅ **User choice** - Merge baseline OR stay fully isolated
+
+### Onboarding Flow:
+1. User copies `publish/CORTEX` to `MyApp/CORTEX`
+2. User opens VS Code in `MyApp`
+3. User says: `#file:CORTEX/.github/prompts/CORTEX.prompt.md onboard this application`
+4. CORTEX offers merge choice (baseline to workspace root)
+5. CORTEX initializes brain, analyzes codebase, ready to work!
 
 **Components:**
 
