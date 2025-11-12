@@ -500,4 +500,280 @@ operations:
 
 ---
 
+## 🆕 Phase 11: Context Helper Plugin (NEW - 2025-11-12)
+
+### Status: 🟡 DESIGN COMPLETE - Implementation Pending
+
+**Purpose:** Developer utility for instant context delivery via "Tell me how/what/why" requests in VS Code Copilot Chat.
+
+**Key Innovation:** Not a documentation generator - a developer speed tool that returns formatted answers directly in Chat without creating files.
+
+---
+
+### Architecture Overview
+
+**Three-Phase Implementation:**
+
+#### Phase 11.1: Response Templates (1 hour - RECOMMENDED START)
+**Approach:** Add templates to existing `response-templates.yaml`
+**Dependencies:** Zero new dependencies
+**Deliverables:**
+- [ ] 10 response templates for common contexts:
+  - `explain_token_optimization`
+  - `explain_skull_protection`
+  - `explain_agent_system`
+  - `explain_entry_point_modularization`
+  - `diagram_token_optimization`
+  - `diagram_skull_protection`
+  - `diagram_entry_point_architecture`
+  - `explain_layman_token_optimization`
+  - `explain_technical_token_optimization`
+  - `quickstart_cortex`
+- [ ] Updated entry point documentation
+- [ ] Test via Copilot Chat
+
+**Use Cases:**
+```
+User: "explain token optimization"
+CORTEX: [Returns formatted markdown in Chat]
+
+User: "create diagram for token optimization"
+CORTEX: [Returns Gemini prompt ready to copy/paste]
+```
+
+---
+
+#### Phase 11.2: Dynamic Context Plugin (2-3 hours - OPTIONAL)
+**When to implement:** If real-time data needed (current module count, test status, user app analysis)
+**Dependencies:** Zero new dependencies (Python `string.Template` built-in)
+
+**File Structure:**
+```
+src/plugins/context_helper_plugin/
+├── __init__.py
+├── context_helper_plugin.py (200 lines)
+├── templates/
+│   ├── explanations/ (5 templates)
+│   └── diagrams/ (5 templates)
+└── context_gatherers/
+    ├── cortex_metrics.py (live module count, test stats)
+    └── user_code_analyzer.py (analyze user's application)
+```
+
+**Deliverables:**
+- [ ] ContextHelperPlugin class (extends BasePlugin)
+- [ ] 10 template files (explanations + diagrams)
+- [ ] 2 context gatherer utilities
+- [ ] Command registration ("explain X", "diagram X")
+- [ ] Test suite (20+ tests)
+
+**Use Cases:**
+```
+User: "how many modules are implemented?"
+CORTEX: [Live count: 24/54 modules (44.4%)]
+
+User: "explain my application architecture"
+CORTEX: [Analyzes user's code, returns structure]
+```
+
+---
+
+#### Phase 11.3: Integration (1 hour - OPTIONAL)
+**When to implement:** After Phase 11.2 complete
+**Goal:** Refactor existing hardcoded prompts to use templates
+
+**Refactoring Targets:**
+- [ ] `GenerateImagePromptsModule` (hardcoded diagram prompts → templates)
+- [ ] `DocGenerator` workflow (hardcoded explanations → templates)
+- [ ] Updated tests
+- [ ] End-to-end validation
+
+**Benefits:**
+- Cleaner, more maintainable code
+- Consistent formatting across all documentation
+- No more hardcoded strings
+
+---
+
+### Integration with Existing Systems
+
+**Reusable Components:**
+
+1. **GenerateImagePromptsModule** (`src/operations/modules/generate_image_prompts_module.py`)
+   - Current: Hardcoded diagram prompts (10 diagrams, single paragraph each)
+   - Opportunity: Use Context Helper templates instead
+   - Benefit: Maintain prompts in one place, not scattered in code
+
+2. **DocGenerator Workflow** (`src/workflows/stages/doc_generator.py`)
+   - Current: Individual generator methods for each doc section
+   - Opportunity: Use Context Helper for consistent formatting
+   - Benefit: Template-driven documentation generation
+
+3. **Response Templates** (`cortex-brain/response-templates.yaml`)
+   - Already working! Context Helper templates integrate seamlessly
+   - No code changes needed, just add templates
+
+---
+
+### Success Metrics
+
+**Phase 11.1 (Response Templates):**
+- ✅ 10 templates added to YAML
+- ✅ Template loading < 50ms
+- ✅ Developer can get context without navigating docs
+- ✅ Gemini prompts copy/paste ready
+- ✅ Zero new dependencies
+
+**Phase 11.2 (Dynamic Plugin):**
+- ✅ Plugin loads in < 200ms
+- ✅ Live module count accurate
+- ✅ User application analysis working
+- ✅ 20+ tests passing
+- ✅ Zero new dependencies
+
+**Phase 11.3 (Integration):**
+- ✅ GenerateImagePromptsModule refactored
+- ✅ DocGenerator refactored
+- ✅ No hardcoded prompts remain
+- ✅ All tests passing
+
+---
+
+### Example Interactions
+
+**Example 1: Quick Explanation**
+```
+User: "explain token optimization in simple terms"
+
+CORTEX:
+# 🎯 Token Optimization (Layman's Explanation)
+
+Imagine CORTEX 1.0 was like bringing an entire encyclopedia 
+to answer one question. Token optimization teaches CORTEX 
+to bring only the relevant chapter.
+
+**Before:** 74,047 words loaded every time ($2.22 cost)
+**After:** 2,078 words on average ($0.06 cost)
+**Savings:** 97% fewer words = 97% lower cost
+
+**How?** 4 smart tricks:
+1. Only load the chapter you need (modular architecture)
+2. Keep only relevant paragraphs (AI compression)
+3. Forget old stuff after a while (cache management)
+4. Don't load anything for simple questions (smart selection)
+
+**Result:** $25,920 saved per year for typical usage
+
+---
+© 2024-2025 Asif Hussain │ CORTEX Developer Utility
+```
+
+**Example 2: Diagram Generation**
+```
+User: "create diagram showing SKULL protection"
+
+CORTEX:
+# 🎨 SKULL Protection Layer - Gemini Prompt
+
+**Copy this entire block to Gemini Image Generator:**
+
+```
+Create professional technical diagram showing SKULL 
+protection layer with 7 rules as shield icons...
+[... complete Gemini prompt ...]
+```
+
+## Human-Readable Description
+
+This diagram illustrates CORTEX's SKULL protection layer,
+a defensive system preventing code quality degradation...
+[... explanation ...]
+```
+
+**Example 3: Real-Time Metrics (Phase 11.2 only)**
+```
+User: "how many modules are implemented?"
+
+CORTEX:
+# 📊 CORTEX Module Status (Live)
+
+**Total Modules Defined:** 54
+**Modules Implemented:** 24
+**Completion:** 44.4%
+
+**Breakdown by Operation:**
+| Operation          | Implemented | Total | Progress |
+|--------------------|-------------|-------|----------|
+| Setup              | 11          | 11    | 100%     |
+| Story Refresh      | 6           | 6     | 100%     |
+| Cleanup            | 6           | 6     | 100%     |
+| Documentation      | 1           | 6     | 17%      |
+| Brain Protection   | 0           | 6     | 0%       |
+| Test Execution     | 0           | 5     | 0%       |
+
+**Last Updated:** 2025-11-12 14:45:23
+
+---
+*Real-time data from CORTEX implementation*
+```
+
+---
+
+### Implementation Timeline
+
+**Phase 11.1 (Minimum Viable Product):**
+- Estimated effort: 1 hour
+- Dependencies: None
+- When to do: Immediately (high value, low effort)
+
+**Phase 11.2 (Dynamic Extension):**
+- Estimated effort: 2-3 hours
+- Dependencies: Phase 11.1 complete
+- When to do: If real-time data needed
+
+**Phase 11.3 (Integration):**
+- Estimated effort: 1 hour
+- Dependencies: Phase 11.2 complete
+- When to do: As cleanup/refactoring task
+
+**Total Effort:** 1 hour (minimum) to 5 hours (complete with dynamic data)
+
+---
+
+### Design Document
+
+**Full Design:** `cortex-brain/cortex-2.0-design/PHASE-11-CONTEXT-HELPER-PLUGIN.md`
+
+**Contents:**
+- Problem statement
+- Architecture options (Response Templates vs Plugin)
+- Integration with existing systems
+- Use cases and examples
+- Implementation plan
+- Acceptance criteria
+- Footprint analysis (zero new dependencies!)
+
+---
+
+### Recommendation
+
+**Start with Phase 11.1 (Response Templates):**
+- 1 hour implementation
+- Zero dependencies
+- Immediate developer value
+- Can be extended later with Phase 11.2 if needed
+
+**Skip Phase 11.2 unless:**
+- You need real-time module counts
+- You want user application analysis
+- You require dynamic data injection
+
+---
+
+**Status:** 🟡 DESIGN APPROVED - Ready for Phase 11.1 implementation
+
+**Next Step:** Add 10 response templates to `cortex-brain/response-templates.yaml`
+
+---
+
 *Last Updated: 2025-11-10 | CORTEX 2.0 Universal Operations*

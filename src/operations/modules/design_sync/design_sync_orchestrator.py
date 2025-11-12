@@ -326,7 +326,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
         """Generate split design document with race dashboard."""
         # Load operations.yaml for module definitions
         operations_yaml = project_root / 'cortex-operations.yaml'
-        with open(operations_yaml) as f:
+        with open(operations_yaml, encoding='utf-8') as f:
             ops_data = yaml.safe_load(f)
         modules = ops_data.get('modules', {})
         
@@ -369,7 +369,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
         
         # Load operations.yaml for module definitions
         operations_yaml = project_root / 'cortex-operations.yaml'
-        with open(operations_yaml) as f:
+        with open(operations_yaml, encoding='utf-8') as f:
             ops_data = yaml.safe_load(f)
         modules = ops_data.get('modules', {})
         
@@ -659,7 +659,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
         # Discover operations from YAML
         operations_yaml = project_root / 'cortex-operations.yaml'
         if operations_yaml.exists():
-            with open(operations_yaml) as f:
+            with open(operations_yaml, encoding='utf-8') as f:
                 ops_data = yaml.safe_load(f)
                 if 'operations' in ops_data:
                     state.operations = ops_data['operations']
@@ -895,6 +895,62 @@ class DesignSyncOrchestrator(BaseOperationModule):
         
         return transformations
     
+    def _calculate_phase_progress(self, content: str) -> Dict[str, int]:
+        """
+        Calculate phase completion percentages by parsing the Current Focus section.
+        
+        Returns:
+            Dictionary mapping phase names to completion percentages (0-100)
+        """
+        phase_progress = {
+            'Phase 0 - Quick Wins': 100,
+            'Phase 1 - Core Modularization': 100,
+            'Phase 2 - Ambient + Workflow': 100,
+            'Phase 3 - Modular Entry Validation': 100,
+            'Phase 4 - Advanced CLI & Integration': 100,
+            'Phase 5 - Risk Mitigation & Testing': 85,
+            'Phase 6 - Performance Optimization': 100,
+            'Phase 7 - Documentation & Polish': 70,
+            'Phase 8 - Migration & Deployment': 0,
+            'Phase 9 - Advanced Capabilities': 0,
+            'Phase 10 - Production Hardening': 0,
+            'Phase 11 - Context Helper Plugin': 0,
+        }
+        
+        # Try to extract percentages from Current Focus section
+        focus_match = re.search(r'## 🎯 Current Focus(.*?)(?=##|$)', content, re.DOTALL)
+        if focus_match:
+            focus_section = focus_match.group(1)
+            
+            # Look for "\*\*Phase X (YY% complete" patterns (must start a line with **)
+            # This prevents matching "Phase 2 Reality Check:" style headers
+            for match in re.finditer(r'\*\*Phase (\d+) \((\d+)%\s+complete', focus_section):
+                phase_num = int(match.group(1))
+                percentage = int(match.group(2))
+                
+                # Map phase number to full phase name
+                for phase_name in phase_progress.keys():
+                    if phase_name.startswith(f'Phase {phase_num} -'):
+                        phase_progress[phase_name] = percentage
+                        break
+        
+        return phase_progress
+    
+    def _generate_progress_bar(self, percentage: int, width: int = 32) -> str:
+        """
+        Generate visual progress bar with █ (complete) and ░ (remaining).
+        
+        Args:
+            percentage: Completion percentage (0-100)
+            width: Total width of progress bar in characters
+            
+        Returns:
+            Progress bar string like "[████████████████████░░░░░░░░]"
+        """
+        filled = int(width * percentage / 100)
+        remaining = width - filled
+        return f"[{'█' * filled}{'░' * remaining}]"
+    
     def _consolidate_status_files(
         self,
         status_files: List[Path],
@@ -965,6 +1021,32 @@ class DesignSyncOrchestrator(BaseOperationModule):
             content
         )
         updates.append(f"Updated plugins: {len(impl_state.plugins)}")
+        
+        # Update visual progress bars
+        phase_progress = self._calculate_phase_progress(content)
+        progress_section_lines = []
+        progress_section_lines.append("```")
+        for phase_name, percentage in phase_progress.items():
+            bar = self._generate_progress_bar(percentage)
+            # Pad phase name to align bars
+            padded_name = phase_name.ljust(40)
+            progress_section_lines.append(f"{padded_name}{bar} {percentage:3d}%")
+        progress_section_lines.append("```")
+        
+        new_progress_section = "\n".join(progress_section_lines)
+        
+        # Replace the entire progress bars code block
+        # Match from opening ``` to closing ``` after the last phase line
+        progress_pattern = r'```\nPhase 0.*?```'
+        if re.search(progress_pattern, content, re.DOTALL):
+            content = re.sub(
+                progress_pattern,
+                new_progress_section,
+                content,
+                flags=re.DOTALL,
+                count=1
+            )
+            updates.append(f"Updated visual progress bars for {len(phase_progress)} phases")
         
         # Add sync timestamp
         sync_note = f"*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} (design_sync)*\n"

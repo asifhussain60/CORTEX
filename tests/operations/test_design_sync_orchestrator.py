@@ -243,5 +243,69 @@ class TestDesignSyncIntegration:
         pass
 
 
+class TestProgressBarGeneration:
+    """Test visual progress bar generation - NEW FEATURE."""
+    
+    def test_calculate_phase_progress_from_content(self):
+        """Test extraction of phase percentages from Current Focus section."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        content = """
+## 🎯 Current Focus
+
+**Phase 5 (85% complete):**
+- ✅ Integration tests (100%)
+- 🔴 Test suite optimization (HIGH PRIORITY)
+
+**Phase 7 (70% complete):**
+- ✅ Doc refresh complete
+- ⏸️ Command discovery UX (pending)
+
+**Phase 8 (0% complete - Design Ready):**
+- 🟡 Production deployment package design complete
+"""
+        
+        orchestrator = DesignSyncOrchestrator()
+        phase_progress = orchestrator._calculate_phase_progress(content)
+        
+        assert phase_progress['Phase 5 - Risk Mitigation & Testing'] == 85
+        assert phase_progress['Phase 7 - Documentation & Polish'] == 70
+        assert phase_progress['Phase 8 - Migration & Deployment'] == 0
+    
+    def test_generate_progress_bar_full(self):
+        """Test progress bar generation at 100%."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        orchestrator = DesignSyncOrchestrator()
+        bar = orchestrator._generate_progress_bar(100, width=32)
+        
+        assert bar == '[████████████████████████████████]'
+        assert bar.count('█') == 32
+        assert '░' not in bar
+    
+    def test_generate_progress_bar_partial(self):
+        """Test progress bar generation at 50%."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        orchestrator = DesignSyncOrchestrator()
+        bar = orchestrator._generate_progress_bar(50, width=32)
+        
+        assert bar.startswith('[████████████████')
+        assert bar.endswith('░░░░░░░░░░░░░░░░]')
+        assert bar.count('█') == 16
+        assert bar.count('░') == 16
+    
+    def test_generate_progress_bar_empty(self):
+        """Test progress bar generation at 0%."""
+        from src.operations.modules.design_sync.design_sync_orchestrator import DesignSyncOrchestrator
+        
+        orchestrator = DesignSyncOrchestrator()
+        bar = orchestrator._generate_progress_bar(0, width=32)
+        
+        assert bar == '[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]'
+        assert '█' not in bar
+        assert bar.count('░') == 32
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v', '--tb=short'])
