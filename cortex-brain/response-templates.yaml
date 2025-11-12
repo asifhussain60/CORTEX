@@ -13,6 +13,14 @@
 #
 # Author: Asif Hussain
 # Version: 2.0 (Phase 5.6 - 90+ Templates)
+#
+# SCHEMA VERSIONING (Added 2025-11-12):
+# - Templates declare schema_version to ensure placeholder compatibility
+# - Collectors must match or provide fallback data
+# - Prevents staleness when database schema evolves
+#
+schema_version: "2.0.0"
+last_updated: "2025-11-12"
 
 templates:
   
@@ -1585,6 +1593,211 @@ templates:
       1. cd {{extension_path}}
       2. npm install
       3. Press F5 to debug
+
+  # ============================================================================
+  # BRAIN PERFORMANCE & METRICS - User Session Insights
+  # ============================================================================
+  
+  brain_performance_session:
+    triggers:
+      - "how did the brain do"
+      - "how is the brain doing"
+      - "brain performance"
+      - "what did the brain learn"
+      - "show brain stats"
+      - "brain metrics"
+      - "how much has the brain learned"
+    
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    schema_version: "2.0.0"
+    required_fields:
+      - tier1_conversations_count
+      - tier2_patterns_count
+      - tier3_commits_count
+    metadata:
+      category: system
+      tier: metrics
+    
+    content: |
+      🧠 **Brain Performance - Current Session**
+      
+      **Tier 1: Working Memory (Last 20 Conversations)**
+      • Conversations stored: {{tier1_conversations_count}}/20
+      • Messages tracked: {{tier1_messages_count}}
+      • Session duration: {{session_duration_hours}}h
+      • Active session: {{has_active_session}}
+      
+      **Tier 2: Knowledge Graph (Learned Patterns)**
+      • Patterns learned: {{tier2_patterns_count}}
+      • File relationships: {{tier2_relationships_count}}
+      • Anti-patterns identified: {{tier2_antipatterns_count}}
+      • Average confidence: {{tier2_avg_confidence}}%
+      • Most used pattern: "{{tier2_top_pattern}}" ({{tier2_top_usage}}x)
+      
+      **Tier 3: Development Context**
+      • Git commits analyzed: {{tier3_commits_count}}
+      • Files tracked: {{tier3_files_count}}
+      • Test coverage: {{tier3_test_coverage}}%
+      • Velocity trend: {{tier3_velocity_trend}}
+      
+      **Learning Rate**
+      • Patterns/hour: {{patterns_per_hour}}
+      • Context retention: {{context_retention_percent}}%
+      • Pattern reuse rate: {{pattern_reuse_rate}}%
+      
+      [detailed]
+      **Recent Learning:**
+      {{#recent_patterns}}
+      • {{timestamp}}: {{pattern_title}} (confidence: {{confidence}}%)
+      {{/recent_patterns}}
+      [/detailed]
+      
+      💡 **Insight:** {{brain_health_insight}}
+  
+  # Fallback template for schema version mismatch
+  brain_performance_legacy:
+    triggers: []
+    response_type: narrative
+    context_needed: false
+    verbosity: concise
+    schema_version: "1.0.0"
+    metadata:
+      category: system
+      tier: fallback
+    
+    content: |
+      ⚠️ **Brain Metrics Unavailable**
+      
+      The brain metrics system has been updated and requires a newer
+      version of CORTEX to display detailed statistics.
+      
+      **What you can do:**
+      1. Update CORTEX to the latest version
+      2. Or use: "brain health" for basic diagnostics
+      
+      **Technical Details:**
+      • Template schema: {{template_schema_version}}
+      • Your CORTEX schema: {{collector_schema_version}}
+      • Compatibility: {{compatibility_status}}
+  
+  token_optimization_session:
+    triggers:
+      - "is token optimization working"
+      - "how much am I saving"
+      - "token savings"
+      - "cortex vs copilot tokens"
+      - "show token metrics"
+      - "token cost savings"
+    
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    schema_version: "2.0.0"
+    required_fields:
+      - session_requests
+      - session_tokens_saved
+      - per_request_savings
+    metadata:
+      category: system
+      tier: metrics
+    
+    content: |
+      💰 **Token Optimization - Your Savings**
+      
+      **This Session:**
+      • Total requests: {{session_requests}}
+      • Tokens with CORTEX: {{session_tokens_with_cortex}} tokens
+      • Tokens without CORTEX: {{session_tokens_without_cortex}} tokens
+      • You saved: {{session_tokens_saved}} tokens ({{session_savings_percent}}%)
+      • Cost savings: ${{session_cost_saved}} (GPT-4 pricing)
+      
+      **How CORTEX Saves Tokens:**
+      ✅ Context caching ({{context_cache_hits}} hits, {{context_cache_savings}} tokens)
+      ✅ Pattern reuse ({{pattern_reuse_count}}x, {{pattern_reuse_savings}} tokens)
+      ✅ Smart summarization ({{summary_operations}}, {{summary_savings}} tokens)
+      ✅ ML optimization ({{ml_optimizations}}, {{ml_savings}} tokens)
+      
+      **Without CORTEX (Raw Copilot):**
+      • Would load full context every time: ~{{avg_full_context_tokens}} tokens/request
+      • No pattern reuse: +{{no_pattern_reuse_overhead}} tokens/request
+      • No conversation memory: +{{no_memory_overhead}} tokens/request
+      • **Total overhead: {{raw_copilot_overhead}} tokens/request**
+      
+      **With CORTEX:**
+      • Smart context loading: ~{{avg_cortex_context_tokens}} tokens/request
+      • Pattern injection: +{{pattern_injection_tokens}} tokens/request
+      • Memory overhead: +{{cortex_memory_overhead}} tokens/request
+      • **Total overhead: {{cortex_overhead}} tokens/request**
+      
+      **Net Benefit:**
+      • Per request: {{per_request_savings}} tokens saved
+      • This session: {{session_total_savings}} tokens saved
+      • Estimated monthly: {{monthly_savings}} tokens (~${{monthly_cost_saved}})
+      
+      [detailed]
+      **Optimization Breakdown:**
+      {{#optimization_details}}
+      • {{technique}}: {{tokens_saved}} tokens ({{percent}}% of total)
+      {{/optimization_details}}
+      
+      **Top Token Consumers:**
+      {{#top_consumers}}
+      • {{operation}}: {{tokens}} tokens ({{percent}}%)
+      {{/top_consumers}}
+      [/detailed]
+      
+      💡 **Efficiency:** CORTEX overhead is {{cortex_overhead}} tokens but saves {{per_request_savings}} tokens per request ({{roi_multiplier}}x ROI)
+  
+  brain_health_check:
+    triggers:
+      - "brain health"
+      - "is the brain healthy"
+      - "check brain status"
+      - "brain diagnostics"
+    
+    response_type: detailed
+    context_needed: true
+    verbosity: concise
+    metadata:
+      category: system
+      tier: diagnostics
+    
+    content: |
+      🏥 **Brain Health Diagnostics**
+      
+      **Tier 0: Protection Layer**
+      • Status: {{tier0_status}}
+      • Rules active: {{tier0_rules_count}}/7 SKULL rules
+      • Last validation: {{tier0_last_check}}
+      
+      **Tier 1: Working Memory**
+      • Status: {{tier1_status}}
+      • Memory usage: {{tier1_memory_usage_mb}}MB / {{tier1_memory_limit_mb}}MB
+      • FIFO enforcement: {{tier1_fifo_status}}
+      • Cache health: {{tier1_cache_health}}
+      
+      **Tier 2: Knowledge Graph**
+      • Status: {{tier2_status}}
+      • Database size: {{tier2_db_size_mb}}MB
+      • Index health: {{tier2_index_health}}
+      • Pattern decay active: {{tier2_decay_active}}
+      
+      **Tier 3: Development Context**
+      • Status: {{tier3_status}}
+      • Git tracking: {{tier3_git_status}}
+      • Metrics freshness: {{tier3_metrics_age}}
+      
+      **Overall Health: {{overall_health_score}}/100**
+      
+      {{#warnings}}
+      ⚠️ {{warning_message}}
+      {{/warnings}}
+      
+      {{#recommendations}}
+      💡 {{recommendation}}
+      {{/recommendations}}
 
   # ============================================================================
   # COPYRIGHT & SIGNATURE TEMPLATES
