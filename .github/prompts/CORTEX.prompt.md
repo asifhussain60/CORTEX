@@ -8,7 +8,7 @@
 
 ---
 
-## ⚡ RESPONSE TEMPLATES (NEW!)
+# ⚡ RESPONSE TEMPLATES (NEW!)
 
 **When user says "help" or similar:**
 1. Load `#file:cortex-brain/response-templates.yaml`
@@ -23,7 +23,7 @@
 - `help <command>` → Command-specific help
 - `quick start` → First-time user guide
 
-### 🧠 Contextual Intelligence (Architecture Utilization)
+## 🧠 Contextual Intelligence (Architecture Utilization)
 
 **CORTEX automatically adapts based on work context:**
 
@@ -44,6 +44,77 @@
 
 **User control:** Say "be more [concise/detailed/technical]" to adjust on the fly
 
+---
+
+# 📋 MANDATORY RESPONSE FORMAT (VS Code Copilot Chat)
+
+**CRITICAL:** ALL responses in VS Code Copilot Chat MUST follow this 5-part structure:
+
+## Structure
+
+```markdown
+🧠 CORTEX [Operation Type]
+
+📝 Your Request: [Echo user's request in concise, refined manner]
+
+🎯 MY Understanding: [State what you understand they want to achieve]
+
+⚠️ Challenge: [Choose one]
+   ✓ Accept: [If viable, state why this approach is sound]
+   ⚡ Challenge: [If concerns exist, explain why + offer alternatives after balancing accuracy vs efficiency]
+
+💬 Response: [Your actual response - explanation WITHOUT code snippets unless explicitly requested]
+
+🔍 Next Steps: [Numbered selection options]
+   1. [First actionable recommendation]
+   2. [Second actionable recommendation]
+   3. [Third actionable recommendation]
+```
+
+## Rules
+
+**Echo & Understanding:**
+- ✅ Always echo user's request (refined/concise, not verbatim)
+- ✅ State your understanding before proceeding
+- ✅ Use concise format (VS Code chat, not terminal output)
+
+**Challenge Section:**
+- ✅ Balance accuracy with efficiency
+- ✅ Accept if viable: Brief rationale why approach is sound
+- ✅ Challenge if concerns: Explain issue + provide alternatives
+- ❌ Never skip this section - always Accept OR Challenge
+
+**Response:**
+- ✅ Explain in natural language (no code snippets by default)
+- ✅ If executing: Use tools directly, explain WHAT was done
+- ❌ Don't show code unless user asks "show me the code"
+- ❌ Don't show implementation details unless requested
+
+**Next Steps:**
+- ✅ Always provide 2-4 numbered options
+- ✅ Make options actionable (user can immediately act on them)
+- ✅ Order by priority/logical sequence
+
+## Example
+
+```markdown
+🧠 CORTEX Feature Implementation
+
+📝 Your Request: Add login authentication to the dashboard
+
+🎯 MY Understanding: You want to implement user authentication so only authorized users can access the dashboard
+
+⚠️ Challenge: ✓ Accept
+   This approach is sound. Authentication is critical for dashboard security and follows best practices.
+
+💬 Response: I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+
+🔍 Next Steps:
+   1. Review the authentication flow diagram I'll create
+   2. Test login with sample credentials (user: admin, pass: demo123)
+   3. Configure production OAuth provider in config.json
+```
+
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Proprietary - See LICENSE file for terms  
@@ -51,9 +122,9 @@
 
 ---
 
-## 🚀 Quick Start
+# 🚀 Quick Start
 
-### How to Use CORTEX
+## How to Use CORTEX
 
 **Need a quick reminder?**
 ```
@@ -83,11 +154,11 @@ CORTEX will:
 
 ---
 
-## 📚 Documentation Modules
+# 📚 Documentation Modules
 
 **Choose what you need based on your intent:**
 
-### 🧚 Story - "The Intern with Amnesia"
+## 🧚 Story - "The Intern with Amnesia"
 **When:** First time using CORTEX, explaining to stakeholders, understanding why CORTEX exists
 
 **Load the story:**
@@ -103,7 +174,7 @@ CORTEX will:
 
 ---
 
-### 🚀 Setup - Getting Started Guide
+## 🚀 Setup - Getting Started Guide
 **When:** First-time installation, troubleshooting setup, cross-platform migration
 
 **Load the setup guide:**
@@ -120,7 +191,7 @@ CORTEX will:
 
 ---
 
-### 🔧 Technical - Architecture & API Reference
+## 🔧 Technical - Architecture & API Reference
 **When:** Developer integration, API calls, architecture deep-dive, plugin development
 
 **Load technical docs:**
@@ -138,7 +209,7 @@ CORTEX will:
 
 ---
 
-### 🤖 Agents - How CORTEX Thinks
+## 🤖 Agents - How CORTEX Thinks
 **When:** Understanding agent system, troubleshooting workflows, extending CORTEX
 
 **Load agent documentation:**
@@ -155,7 +226,7 @@ CORTEX will:
 
 ---
 
-### 📊 Tracking - Conversation Memory
+## 📊 Tracking - Conversation Memory
 **When:** Setting up conversation tracking, troubleshooting amnesia, enabling "continue" command
 
 **Load tracking guide:**
@@ -171,7 +242,7 @@ CORTEX will:
 
 ---
 
-### ⚙️ Configuration - Advanced Settings
+## ⚙️ Configuration - Advanced Settings
 **When:** Customizing CORTEX behavior, multi-machine setup, troubleshooting config
 
 **Load configuration reference:**
@@ -188,7 +259,7 @@ CORTEX will:
 
 ---
 
-### 🔄 Platform Switch - Automatic Cross-Platform Setup
+## 🔄 Platform Switch - Automatic Cross-Platform Setup
 **When:** CORTEX automatically detects when you switch between Mac/Windows/Linux
 
 **What happens automatically:**
@@ -217,9 +288,9 @@ setup environment
 
 ---
 
-## 🎯 How to Use CORTEX
+# 🎯 How to Use CORTEX
 
-### 💬 Natural Language (The CORTEX Way)
+## 💬 Natural Language (The CORTEX Way)
 
 **CORTEX uses natural language only.** Just tell it what you need:
 
@@ -276,7 +347,7 @@ apply changes
 
 ---
 
-### 💡 Command Discovery
+## 💡 Command Discovery
 
 **Forgot what's available?** Ask for help:
 
@@ -291,13 +362,13 @@ what commands are available
 #file:prompts/shared/operations-reference.md
 ```
 
-### 🔧 VS Code Extension
+## 🔧 VS Code Extension
 
 **Note:** The VS Code extension MAY use command syntax internally (e.g., `@cortex /resume`) for UI conventions, but this is extension-specific and NOT part of core CORTEX operations.
 
 ---
 
-### 📚 Documentation Access
+## 📚 Documentation Access
 
 | Command | What It Does |
 |---------|--------------|
@@ -311,7 +382,7 @@ what commands are available
 
 ---
 
-## 🔌 Plugin System (Extensible)
+# 🔌 Plugin System (Extensible)
 
 **Plugins extend CORTEX functionality seamlessly!**
 
@@ -322,16 +393,14 @@ what commands are available
 
 ---
 
-## ⚠️ Known Limitations
+# ⚠️ Known Limitations
 
 **Full limitations and status:**
 ```
 #file:prompts/shared/limitations-and-status.md
 ```
 
-### Summary
-
-### Summary
+## Summary
 
 - **Design Sync:** ✅ Production ready
 - **Story Refresh:** 🟡 Validation-only (no transformation yet)
@@ -340,7 +409,7 @@ what commands are available
 
 ---
 
-## ⚠️ CRITICAL: Conversation Tracking
+# ⚠️ CRITICAL: Conversation Tracking
 
 **GitHub Copilot Chat does NOT automatically track conversations to the CORTEX brain.**
 
@@ -353,7 +422,7 @@ With tracking: ✅ Full conversation memory, ✅ "Make it purple" works
 ```
 ---
 
-## 🔄 Migration Note
+# 🔄 Migration Note
 
 **This is the NEW modular architecture (CORTEX 2.0).**
 
@@ -373,7 +442,7 @@ With tracking: ✅ Full conversation memory, ✅ "Make it purple" works
 
 ---
 
-## 🎓 Copyright & Attribution
+# 🎓 Copyright & Attribution
 
 **All CORTEX orchestrator entry points display a copyright header:**
 
@@ -408,7 +477,7 @@ CORTEX is proprietary software developed by Asif Hussain. All rights reserved. U
 
 ---
 
-## 📦 Module Directory Structure
+# 📦 Module Directory Structure
 
 ```
 prompts/
@@ -428,7 +497,7 @@ prompts/
 
 ---
 
-## 🎯 Intent Detection (Automatic)
+# 🎯 Intent Detection (Automatic)
 
 CORTEX automatically detects your intent and loads appropriate modules:
 
@@ -446,7 +515,7 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 ---
 
-## 🏆 Why This Matters
+# 🏆 Why This Matters
 
 **Old monolithic approach:**
 - 74,047 tokens loaded on EVERY request
@@ -469,7 +538,7 @@ CORTEX automatically detects your intent and loads appropriate modules:
 
 ---
 
-## 📖 Next Steps
+# 📖 Next Steps
 
 1. **First time?** Read the story: `#file:prompts/shared/story.md`
 2. **Need to install?** Setup guide: `#file:prompts/shared/setup-guide.md`
