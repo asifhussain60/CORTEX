@@ -114,8 +114,9 @@ class SweeperPlugin(BasePlugin):
     # Session/report patterns
     SESSION_PATTERNS = [
         'SESSION-*.md', '*-SESSION.md',
-        '*-REPORT-*.md', '*-PROGRESS.md',
-        'PHASE-*-PROGRESS.md', '*-CONTINUED-*.md'
+        '*-REPORT-*.md', '*-REPORT.md', '*REPORT*.md',
+        '*-PROGRESS.md', 'PHASE-*-PROGRESS.md',
+        '*-CONTINUED-*.md'
     ]
     
     # Reference documentation patterns (NEW!)

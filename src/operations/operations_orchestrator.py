@@ -27,7 +27,6 @@ from src.operations.base_operation_module import (
     OperationResult,
     ExecutionMode
 )
-from src.operations.dry_run_mixin import DryRunOrchestratorMixin
 from src.cortex_agents.learning_capture_agent import capture_operation_learning
 
 logger = logging.getLogger(__name__)
@@ -73,7 +72,7 @@ class OperationExecutionReport:
             self.timestamp = datetime.now()
 
 
-class OperationsOrchestrator(DryRunOrchestratorMixin):
+class OperationsOrchestrator:
     """
     Universal orchestrator for ALL CORTEX operations.
     
@@ -90,28 +89,25 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         - Priority ordering within phases
         - Error handling with rollback
         - Comprehensive reporting
-        - Dry-run support (preview mode)
         - Copyright header rendering
     
     Example Usage:
-        # Setup operation (live mode)
+        # Setup operation
         orchestrator = OperationsOrchestrator(
             operation_id="environment_setup",
             modules=[platform_mod, vision_mod, brain_mod]
         )
         report = orchestrator.execute_operation(
-            context={'project_root': Path('...')},
-            execution_mode=ExecutionMode.LIVE
+            context={'project_root': Path('...')}
         )
         
-        # Cleanup operation (dry-run mode)
+        # Cleanup operation
         orchestrator = OperationsOrchestrator(
             operation_id="workspace_cleanup",
             modules=[scan_mod, cleanup_mod]
         )
         report = orchestrator.execute_operation(
-            context={'project_root': Path('...')},
-            execution_mode=ExecutionMode.DRY_RUN  # Preview only
+            context={'project_root': Path('...')}
         )
     """
     
@@ -139,15 +135,13 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
     
     def execute_operation(
         self,
-        context: Optional[Dict[str, Any]] = None,
-        execution_mode: ExecutionMode = ExecutionMode.LIVE
+        context: Optional[Dict[str, Any]] = None
     ) -> OperationExecutionReport:
         """
         Execute the operation by running all modules in dependency-resolved order.
         
         Args:
             context: Additional context to merge with initialization context
-            execution_mode: LIVE (apply changes) or DRY_RUN (preview only)
         
         Returns:
             OperationExecutionReport with execution details
@@ -158,14 +152,10 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         if context:
             self.context.update(context)
         
-        # Store execution mode in context
-        self.context['execution_mode'] = execution_mode
+        # Store execution mode in context (always LIVE)
+        self.context['execution_mode'] = ExecutionMode.LIVE
         
-        # Apply execution mode to all modules
-        self.apply_mode_to_modules(self.modules, execution_mode)
-        
-        mode_str = "DRY RUN" if execution_mode == ExecutionMode.DRY_RUN else "LIVE"
-        logger.info(f"Starting operation: {self.operation_name} ({self.operation_id}) - {mode_str} mode")
+        logger.info(f"Starting operation: {self.operation_name} ({self.operation_id}) - LIVE mode")
         logger.info(f"Modules to execute: {len(self.modules)}")
         
         # Initialize report

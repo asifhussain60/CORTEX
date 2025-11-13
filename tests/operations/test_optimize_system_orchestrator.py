@@ -42,12 +42,12 @@ class TestOptimizeSystemOrchestrator:
     @pytest.fixture
     def orchestrator(self, project_root):
         """Create orchestrator instance."""
-        return OptimizeSystemOrchestrator(project_root=project_root, mode=ExecutionMode.DRY_RUN)
+        return OptimizeSystemOrchestrator(project_root=project_root, mode=ExecutionMode.LIVE)
     
     def test_orchestrator_initialization(self, orchestrator, project_root):
         """Test orchestrator initializes correctly."""
         assert orchestrator.project_root == project_root
-        assert orchestrator.mode == ExecutionMode.DRY_RUN
+        assert orchestrator.mode == ExecutionMode.LIVE
         assert isinstance(orchestrator.metrics, OptimizationMetrics)
         assert orchestrator.VERSION == "1.0.0"
     
@@ -93,25 +93,8 @@ class TestOptimizeSystemOrchestrator:
         assert len(result.errors) > 0
         assert "design_sync_orchestrator.py not found" in result.errors[0]
     
-    def test_execute_dry_run_mode(self, orchestrator, project_root):
-        """Test execution in dry-run mode."""
-        context = {
-            'profile': 'minimal',
-            'mode': 'dry_run',
-            'skip_phases': ['design_sync', 'code_health', 'brain_tuning', 'entry_point_alignment', 'test_suite']
-        }
-        
-        result = orchestrator.execute(context)
-        
-        assert result.success is True
-        assert result.status == OperationStatus.SUCCESS
-        assert orchestrator.mode == ExecutionMode.DRY_RUN
-        assert "complete" in result.message.lower()
-    
     def test_execute_live_mode(self, orchestrator, project_root):
         """Test execution in live mode."""
-        orchestrator.mode = ExecutionMode.LIVE
-        
         context = {
             'profile': 'minimal',
             'mode': 'live',
@@ -119,6 +102,11 @@ class TestOptimizeSystemOrchestrator:
         }
         
         result = orchestrator.execute(context)
+        
+        assert result.success is True
+        assert result.status == OperationStatus.SUCCESS
+        assert orchestrator.mode == ExecutionMode.LIVE
+        assert "complete" in result.message.lower()
         
         assert result.success is True
         assert orchestrator.mode == ExecutionMode.LIVE
@@ -203,7 +191,7 @@ class TestOptimizeSystemOrchestrator:
         """Test skipping specific phases."""
         context = {
             'profile': 'focused',
-            'mode': 'dry_run',
+            'mode': 'live',
             'skip_phases': ['brain_tuning', 'entry_point_alignment']
         }
         
@@ -216,7 +204,7 @@ class TestOptimizeSystemOrchestrator:
         """Test execution time is tracked."""
         context = {
             'profile': 'minimal',
-            'mode': 'dry_run',
+            'mode': 'live',
             'skip_phases': ['design_sync', 'code_health', 'brain_tuning', 'entry_point_alignment', 'test_suite']
         }
         
@@ -228,7 +216,7 @@ class TestOptimizeSystemOrchestrator:
         """Test formatted header is included in result (SKULL-006 compliance)."""
         context = {
             'profile': 'minimal',
-            'mode': 'dry_run',
+            'mode': 'live',
             'skip_phases': ['design_sync', 'code_health', 'brain_tuning', 'entry_point_alignment', 'test_suite']
         }
         
@@ -242,7 +230,7 @@ class TestOptimizeSystemOrchestrator:
         """Test formatted footer is included in result (SKULL-006 compliance)."""
         context = {
             'profile': 'minimal',
-            'mode': 'dry_run',
+            'mode': 'live',
             'skip_phases': ['design_sync', 'code_health', 'brain_tuning', 'entry_point_alignment', 'test_suite']
         }
         
@@ -258,7 +246,7 @@ class TestOptimizeSystemOrchestrator:
         import shutil
         shutil.rmtree(project_root / "cortex-brain")
         
-        context = {'profile': 'comprehensive', 'mode': 'dry_run'}
+        context = {'profile': 'comprehensive', 'mode': 'live'}
         
         result = orchestrator.execute(context)
         

@@ -37,8 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class CleanupMode(Enum):
-    """Cleanup execution modes"""
-    DRY_RUN = "dry_run"
+    """Cleanup execution mode - always live"""
     LIVE = "live"
 
 
@@ -98,7 +97,7 @@ class DynamicCleanupOrchestrator:
     
     Usage:
         orchestrator = DynamicCleanupOrchestrator(workspace_root)
-        results = orchestrator.execute(mode=CleanupMode.DRY_RUN)
+        results = orchestrator.execute()
     """
     
     def __init__(self, workspace_root: Path, rules_file: Optional[Path] = None):
@@ -147,7 +146,6 @@ class DynamicCleanupOrchestrator:
             "protected_directories": [],
             "protected_patterns": [],
             "safety": {
-                "dry_run_default": True,
                 "max_recursion_depth": 15
             }
         }
@@ -362,12 +360,12 @@ class DynamicCleanupOrchestrator:
         else:
             return []
     
-    def execute(self, mode: CleanupMode = CleanupMode.DRY_RUN) -> Dict[str, Any]:
+    def execute(self, mode: CleanupMode = CleanupMode.LIVE) -> Dict[str, Any]:
         """
         Execute cleanup with fresh workspace scan.
         
         Args:
-            mode: Execution mode (DRY_RUN or LIVE)
+            mode: Execution mode (LIVE only)
         
         Returns:
             Dictionary with execution results and statistics
@@ -566,13 +564,9 @@ if __name__ == "__main__":
     # Get workspace root
     workspace = Path(__file__).parent.parent.parent
     
-    # Determine mode from arguments
-    mode = CleanupMode.DRY_RUN
-    if len(sys.argv) > 1 and sys.argv[1].lower() in ('live', 'execute', 'run'):
-        mode = CleanupMode.LIVE
-        print("⚠️  LIVE MODE - Changes will be applied!")
-    else:
-        print("ℹ️  DRY-RUN MODE - No changes will be made")
+    # Always run in live mode
+    mode = CleanupMode.LIVE
+    print("✅ LIVE MODE - Executing cleanup operations")
     
     # Execute cleanup
     orchestrator = DynamicCleanupOrchestrator(workspace)

@@ -322,6 +322,8 @@ categories:
       - "SESSION-*.md"
       - "*-SESSION.md"
       - "*-REPORT-*.md"
+      - "*-REPORT.md"
+      - "*REPORT*.md"
       - "*-PROGRESS.md"
       - "PHASE-*-PROGRESS.md"
       - "*-CONTINUED-*.md"
