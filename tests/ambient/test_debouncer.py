@@ -148,10 +148,13 @@ class TestDebouncer:
         mock_wm = MagicMock()
         mock_wm_class.return_value = mock_wm
         
-        # Mock session creation
-        mock_wm.start_conversation.return_value = "test-session-id"
+        # Mock CORTEX 3.0 session-ambient API
+        mock_session = MagicMock()
+        mock_session.session_id = "test-session-id"
+        mock_wm.session_manager.get_active_session.return_value = mock_session
+        mock_wm.conversation_manager.get_active_conversations.return_value = []
         
-        debouncer = Debouncer(delay_seconds=0.5)
+        debouncer = Debouncer(delay_seconds=0.5, workspace_path="/test/workspace")
         
         # Add event
         debouncer.add_event({
@@ -163,8 +166,8 @@ class TestDebouncer:
         # Wait for flush
         time.sleep(1)
         
-        # WorkingMemory should have been called
-        assert mock_wm.store_message.called
+        # WorkingMemory.log_ambient_event should have been called (CORTEX 3.0)
+        assert mock_wm.log_ambient_event.called
     
     def test_concurrent_event_handling(self):
         """Should handle concurrent events safely."""

@@ -770,12 +770,13 @@ class AutoSummarizer:
 class Debouncer:
     """Debounces context capture events to prevent excessive writes."""
     
-    def __init__(self, delay_seconds: int = 5, summarizer: Optional['AutoSummarizer'] = None):
+    def __init__(self, delay_seconds: int = 5, summarizer: Optional['AutoSummarizer'] = None, workspace_path: Optional[str] = None):
         self.delay = delay_seconds
         self.buffer = []
         self.lock = threading.Lock()
         self.timer = None
         self.summarizer = summarizer or AutoSummarizer()  # NEW Phase 4.4
+        self.workspace_path = workspace_path or os.getcwd()  # Default to current working directory
         
     def add_event(self, context: Dict[str, Any]):
         """Add event to buffer."""
