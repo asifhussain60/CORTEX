@@ -62,7 +62,11 @@ class IntentRouter(BaseAgent):
         
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
-            IntentType.PLAN: ["plan", "feature", "breakdown", "design", "architect"],
+            IntentType.PLAN: [
+                "plan", "feature", "breakdown", "design", "architect",
+                "let's plan", "plan a feature", "plan this", "help me plan",
+                "planning", "interactive planning", "create plan"
+            ],
             IntentType.CODE: ["create", "implement", "build", "add", "make"],
             IntentType.EDIT_FILE: ["edit", "modify", "update", "change", "refactor"],
             IntentType.TEST: ["test", "tdd", "testing", "verify"],

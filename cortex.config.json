@@ -53,6 +53,32 @@
     "quality_threshold": 0.9,
     "cache_check_frequency": 5
   },
+  "tier1": {
+    "conversation_boundaries": {
+      "mode": "session-based",
+      "idle_gap_threshold_seconds": 7200,
+      "auto_close_on_workflow_complete": true,
+      "explicit_commands": {
+        "new_conversation": [
+          "new conversation",
+          "start fresh",
+          "new topic",
+          "fresh start"
+        ],
+        "continue_conversation": [
+          "continue",
+          "keep going",
+          "next",
+          "resume"
+        ]
+      }
+    },
+    "session_cleanup": {
+      "enabled": true,
+      "retention_days": 90,
+      "auto_cleanup_on_startup": false
+    }
+  },
   "portability": {
     "version": "5.0.0",
     "lastUpdated": "2025-11-06",

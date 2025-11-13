@@ -167,7 +167,7 @@ class PlatformSwitchPlugin(BasePlugin):
         Returns:
             List of CommandMetadata objects
         """
-        from .command_registry import CommandMetadata, CommandCategory
+        from src.plugins.command_registry import CommandMetadata, CommandCategory
         
         return [
             # Manual setup/reconfiguration command

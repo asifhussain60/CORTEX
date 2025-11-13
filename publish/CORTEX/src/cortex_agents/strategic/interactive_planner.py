@@ -286,27 +286,27 @@ class InteractivePlannerAgent(BaseAgent):
         # Check for vague terms (reduce confidence)
         vague_terms = ["refactor", "improve", "update", "change", "fix", "enhance"]
         vague_count = sum(1 for term in vague_terms if term in request_lower)
-        confidence -= vague_count * 0.15
+        confidence -= vague_count * 0.25  # Increased penalty from 0.15
         
         # Check for specific technical terms (increase confidence)
         specific_terms = ["jwt", "oauth", "session", "authentication", "api", "endpoint"]
         specific_count = sum(1 for term in specific_terms if term in request_lower)
-        confidence += specific_count * 0.10
+        confidence += specific_count * 0.08  # Decreased boost from 0.10
         
         # Check request length (very short = ambiguous)
         word_count = len(request.split())
         if word_count < 5:
-            confidence -= 0.20
+            confidence -= 0.30  # Increased penalty from 0.20
         elif word_count > 15:
             confidence += 0.10
         
         # Check for implementation details (increase confidence)
         detail_indicators = ["using", "with", "implement", "create", "add"]
         detail_count = sum(1 for term in detail_indicators if term in request_lower)
-        confidence += detail_count * 0.05
+        confidence += detail_count * 0.04  # Decreased from 0.05
         
         # Check Tier 2 for similar past requests
-        if self.tier2_kg:
+        if self.tier2:
             similar_patterns = self._find_similar_patterns(request)
             if similar_patterns:
                 # Higher confidence if we've done this before
@@ -464,8 +464,8 @@ class InteractivePlannerAgent(BaseAgent):
         """
         Build implementation plan from collected answers.
         
-        Creates a detailed, phased plan incorporating all user preferences
-        from the interactive questioning session.
+        Delegates to WorkPlanner for proper task breakdown after enriching
+        the request with collected answers and context.
         
         Args:
             session: Planning session with answers
@@ -473,94 +473,157 @@ class InteractivePlannerAgent(BaseAgent):
         Returns:
             Implementation plan dictionary with phases and tasks
         """
+        # Build enriched request for WorkPlanner
+        enriched_request = self._build_enriched_request(session)
+        
+        # Import WorkPlanner here to avoid circular dependency
+        try:
+            from src.cortex_agents.work_planner.agent import WorkPlanner
+            
+            # Create WorkPlanner instance
+            work_planner = WorkPlanner(
+                name="WorkPlanner",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+            
+            # Create request for WorkPlanner
+            from src.cortex_agents.base_agent import AgentRequest
+            planner_request = AgentRequest(
+                intent="plan",
+                context=enriched_request["context"],
+                user_message=enriched_request["refined_message"],
+                conversation_id=session.session_id,
+                priority="normal"
+            )
+            
+            # Get task breakdown from WorkPlanner
+            planner_response = work_planner.execute(planner_request)
+            
+            if planner_response.success:
+                # Extract tasks and build structured plan
+                tasks = planner_response.result.get("tasks", [])
+                total_hours = planner_response.result.get("total_hours", 0)
+                
+                # Organize tasks into phases
+                plan = {
+                    "title": f"Implementation Plan: {session.user_request}",
+                    "created_at": datetime.now().isoformat(),
+                    "session_id": session.session_id,
+                    "phases": self._organize_tasks_into_phases(tasks),
+                    "total_estimate_hours": total_hours,
+                    "considerations": [
+                        f"Decision: {answer.value}" 
+                        for answer in session.answers
+                    ],
+                    "complexity": planner_response.result.get("complexity", "medium"),
+                    "risks": planner_response.result.get("risks", [])
+                }
+                
+                return plan
+            else:
+                # Fallback to basic plan if WorkPlanner fails
+                self.logger.warning(f"WorkPlanner failed, using fallback plan: {planner_response.message}")
+                return self._create_fallback_plan(session)
+                
+        except ImportError as e:
+            self.logger.error(f"Failed to import WorkPlanner: {e}")
+            return self._create_fallback_plan(session)
+        except Exception as e:
+            self.logger.error(f"Error delegating to WorkPlanner: {e}")
+            return self._create_fallback_plan(session)
+    
+    def _build_enriched_request(self, session: PlanningSession) -> Dict[str, Any]:
+        """
+        Build enriched request with all collected context for WorkPlanner.
+        
+        Transforms user answers into structured context that WorkPlanner
+        can use for better task breakdown and estimation.
+        """
+        # Extract key decisions from answers
+        context = {
+            "original_request": session.user_request,
+            "interactive_session": True,
+            "confidence": session.confidence,
+            "answers": {}
+        }
+        
+        # Map answers to context
+        for answer in session.answers:
+            context["answers"][answer.question_id] = {
+                "value": answer.value,
+                "skipped": answer.skipped,
+                "context": answer.additional_context
+            }
+        
+        # Build refined message incorporating answers
+        refined_parts = [session.user_request]
+        
+        for answer in session.answers:
+            if not answer.skipped and answer.value:
+                refined_parts.append(f"• {answer.value}")
+        
+        refined_message = " | ".join(refined_parts)
+        
+        return {
+            "context": context,
+            "refined_message": refined_message
+        }
+    
+    def _organize_tasks_into_phases(self, tasks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """
+        Organize flat task list into logical phases.
+        
+        Groups related tasks into phases for better presentation.
+        """
+        if not tasks:
+            return []
+        
+        # Simple phase organization: group tasks by prefix or create single phase
+        phases = []
+        current_phase = {
+            "phase": 1,
+            "name": "Implementation",
+            "tasks": [],
+            "estimated_hours": 0
+        }
+        
+        for task in tasks:
+            task_name = task.get("name", "Task")
+            task_hours = task.get("estimated_hours", 1)
+            
+            current_phase["tasks"].append(task_name)
+            current_phase["estimated_hours"] += task_hours
+        
+        phases.append(current_phase)
+        return phases
+    
+    def _create_fallback_plan(self, session: PlanningSession) -> Dict[str, Any]:
+        """
+        Create fallback plan if WorkPlanner integration fails.
+        
+        Uses simple heuristics based on collected answers.
+        """
         plan = {
             "title": f"Implementation Plan: {session.user_request}",
             "created_at": datetime.now().isoformat(),
             "session_id": session.session_id,
-            "phases": [],
-            "total_estimate_hours": 0,
-            "considerations": []
+            "phases": [
+                {
+                    "phase": 1,
+                    "name": "Implementation",
+                    "tasks": [session.user_request],
+                    "estimated_hours": 2
+                }
+            ],
+            "total_estimate_hours": 2,
+            "considerations": [
+                f"Decision: {answer.value}" 
+                for answer in session.answers
+            ],
+            "fallback": True
         }
-        
-        # Extract key decisions from answers
-        decisions = {
-            answer.question_id: answer.value
-            for answer in session.answers
-        }
-        
-        # Build phases based on decisions
-        # Phase 1: Setup/Infrastructure
-        phase1_tasks = ["Set up project structure", "Install dependencies"]
-        phase1_hours = 1
-        
-        # Add auth-specific tasks if applicable
-        for answer in session.answers:
-            if "jwt" in answer.value.lower():
-                phase1_tasks.append("Install JWT library")
-                phase1_tasks.append("Create token generation service")
-                phase1_hours += 2
-            elif "oauth" in answer.value.lower():
-                phase1_tasks.append("Install OAuth library")
-                phase1_tasks.append("Set up OAuth provider integration")
-                phase1_hours += 3
-        
-        plan["phases"].append({
-            "phase": 1,
-            "name": "Infrastructure Setup",
-            "tasks": phase1_tasks,
-            "estimated_hours": phase1_hours
-        })
-        
-        # Phase 2: Implementation
-        phase2_tasks = ["Implement core functionality"]
-        phase2_hours = 3
-        
-        # Add backward compatibility tasks if needed
-        for answer in session.answers:
-            if "backward compatibility" in answer.value.lower() or "yes" in answer.value.lower():
-                phase2_tasks.append("Add backward compatibility layer")
-                phase2_hours += 1
-        
-        plan["phases"].append({
-            "phase": 2,
-            "name": "Core Implementation",
-            "tasks": phase2_tasks,
-            "estimated_hours": phase2_hours
-        })
-        
-        # Phase 3: Testing (if requested)
-        for answer in session.answers:
-            if "test" in answer.value.lower() and "no test" not in answer.value.lower():
-                phase3_tasks = []
-                phase3_hours = 0
-                
-                if "unit" in answer.value.lower():
-                    phase3_tasks.append("Create unit tests")
-                    phase3_hours += 1
-                
-                if "integration" in answer.value.lower():
-                    phase3_tasks.append("Create integration tests")
-                    phase3_hours += 2
-                
-                if phase3_tasks:
-                    plan["phases"].append({
-                        "phase": 3,
-                        "name": "Testing",
-                        "tasks": phase3_tasks,
-                        "estimated_hours": phase3_hours
-                    })
-                    break
-        
-        # Calculate total
-        plan["total_estimate_hours"] = sum(
-            phase["estimated_hours"] for phase in plan["phases"]
-        )
-        
-        # Add considerations
-        plan["considerations"] = [
-            f"Decision: {answer.value}" 
-            for answer in session.answers
-        ]
         
         return plan
     

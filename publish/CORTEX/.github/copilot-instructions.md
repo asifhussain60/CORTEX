@@ -10,20 +10,38 @@ This is the **CORTEX** cognitive framework repository - an AI enhancement system
 
 ### 🧠 CORTEX [Operation Type]
 
-**1. Echo Request:** Concisely restate what the user asked  
-**2. Understanding:** Explain what you understand they want to achieve  
-**3. Challenge:** Either Accept (with rationale) OR Challenge (with alternatives) after balancing accuracy vs efficiency  
-**4. Response:** Natural language explanation (no code snippets unless requested)  
-**5. Next Steps:** 2-4 numbered actionable recommendations  
+```markdown
+🎯 **My Understanding Of Your Request:** 
+   [State what you understand they want to achieve]
+
+⚠️ **Challenge:** [Choose one]
+   ✓ **Accept:** [If viable, state why this approach is sound]
+   ⚡ **Challenge:** [If concerns exist, explain why + offer alternatives]
+
+💬 **Response:** [Your actual response - explanation WITHOUT code snippets unless explicitly requested]
+
+📝 **Your Request:** [Echo user's request in concise, refined manner]
+
+🔍 Next Steps: [Numbered selection options]
+   1. [First actionable recommendation]
+   2. [Second actionable recommendation]
+   3. [Third actionable recommendation]
+```
 
 **Example:**
-```
+```markdown
 🧠 CORTEX Feature Implementation
 
-📝 Your Request: Add authentication to dashboard
-🎯 Understanding: Implement user auth for dashboard access control
-⚠️ Challenge: ✓ Accept - Sound approach, follows security best practices
-💬 Response: I'll use existing user service + route guards
+🎯 **My Understanding Of Your Request:** 
+   You want to implement user authentication so only authorized users can access the dashboard
+
+⚠️ **Challenge:** ✓ **Accept**
+   This approach is sound. Authentication is critical for dashboard security and follows best practices.
+
+💬 **Response:** I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+
+📝 **Your Request:** Add login authentication to the dashboard
+
 🔍 Next Steps:
    1. Review auth flow diagram
    2. Test with sample credentials
@@ -203,15 +221,16 @@ CORTEX/
 
 **Version:** 5.0 (CORTEX 2.0 - Modular Architecture)  
 **Phase:** Production Ready  
-**Token Optimization:** 97.2% reduction achieved  
+**Token Optimization:** 97.2% input reduction, 93.4% cost reduction (GitHub Copilot pricing)  
 **Test Coverage:** 82 tests passing
 
 **Recent Enhancements:**
-- ✅ Modular entry point (97% token reduction)
+- ✅ Modular entry point (97.2% input token reduction, 93.4% cost reduction)
 - ✅ Platform auto-detection (Mac/Windows/Linux)
 - ✅ Plugin command registry
 - ✅ YAML-based brain protection rules
 - ✅ GitHub Copilot integration (this file!)
+- ✅ Accurate cost metrics (GitHub token-unit formula)
 
 ---
 

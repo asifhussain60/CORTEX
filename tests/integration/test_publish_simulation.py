@@ -279,6 +279,9 @@ class TestPublishSimulationALIST:
             # Brain protection rules contain path patterns for detection
             ('cortex-brain/brain-protection-rules.yaml', 'AHHOME'),
             ('cortex-brain/brain-protection-rules.yaml', '/home/'),
+            # Publish config contains forbidden pattern examples (documentation)
+            ('cortex-brain/publish-config.yaml', 'AHHOME'),
+            ('cortex-brain/publish-config.yaml', 'asifhussain'),
             # Hardcoded data cleaner shows examples of what to clean
             ('src/operations/modules/optimization/hardcoded_data_cleaner_module.py', '/home/'),
         ]

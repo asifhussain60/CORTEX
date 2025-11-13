@@ -85,13 +85,6 @@ class ConversationImportPlugin(BasePlugin):
                 parameters={
                     "file_path": "Path to conversation markdown file"
                 }
-            ),
-            CommandMetadata(
-                command="/capture-conversation",
-                natural_language_equivalent="capture conversation",
-                plugin_id=self.metadata.plugin_id,
-                description="Capture current conversation to vault for future import",
-                parameters={}
             )
         ]
     
@@ -104,10 +97,6 @@ class ConversationImportPlugin(BasePlugin):
             self.brain_path = Path(self.get_brain_path())
             self.imported_conversations_dir = self.brain_path / "imported-conversations"
             self.imported_conversations_dir.mkdir(exist_ok=True, parents=True)
-            
-            # Initialize conversation vault for CORTEX 3.0
-            self.vault_dir = self.brain_path / "conversation-vault"
-            self.vault_dir.mkdir(exist_ok=True, parents=True)
             
             # Initialize Tier 1 connection
             self.tier1_db = self.brain_path / "tier1" / "conversations.db"
@@ -136,16 +125,14 @@ class ConversationImportPlugin(BasePlugin):
         """
         try:
             # Parse request intent
-            if "capture" in request.lower():
-                return self._handle_capture(context)
-            elif "import" in request.lower():
+            if "import" in request.lower():
                 return self._handle_import(context)
             elif "analyze" in request.lower():
                 return self._handle_analyze(context)
             else:
                 return {
                     "status": "error",
-                    "message": "Unknown operation. Use 'capture', 'import', or 'analyze'."
+                    "message": "Unknown operation. Use 'import' or 'analyze'."
                 }
                 
         except Exception as e:
@@ -153,40 +140,6 @@ class ConversationImportPlugin(BasePlugin):
             return {
                 "status": "error",
                 "message": str(e)
-            }
-    
-    def _handle_capture(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Capture current conversation to vault using CORTEX 3.0 smart hint system."""
-        try:
-            # Import smart hint system
-            from src.tier1.smart_hint_integration import capture_current_conversation
-            
-            # Get conversation from context
-            user_prompt = context.get("user_prompt", "")
-            assistant_response = context.get("assistant_response", "")
-            
-            if not user_prompt or not assistant_response:
-                return {
-                    "status": "error",
-                    "message": "Missing conversation context. Please provide user_prompt and assistant_response."
-                }
-            
-            # Capture using smart hint system
-            confirmation = capture_current_conversation(user_prompt, assistant_response)
-            
-            return {
-                "status": "success",
-                "message": confirmation,
-                "data": {
-                    "vault_path": str(self.vault_dir)
-                }
-            }
-            
-        except Exception as e:
-            self.logger.error(f"Capture error: {e}")
-            return {
-                "status": "error",
-                "message": f"Failed to capture conversation: {str(e)}"
             }
     
     def _handle_import(self, context: Dict[str, Any]) -> Dict[str, Any]:

@@ -50,6 +50,12 @@
     "warn_threshold_tokens": 400,
     "comment": "Phase 1.6: Vision API Integration - Enables screenshot analysis with token budgets (<2% token increase)"
   },
+  "smart_hints": {
+    "enabled": true,
+    "hint_threshold": "GOOD",
+    "vault_path": "cortex-brain/conversation-vault",
+    "comment": "CORTEX 3.0: Smart Hint System - Automatically detects valuable conversations and suggests capture"
+  },
   "portability": {
     "version": "5.0.0",
     "lastUpdated": "{{TIMESTAMP:YYYY-MM-DD}}",

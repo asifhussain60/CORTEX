@@ -47,7 +47,7 @@ from src.operations.base_operation_module import (
     OperationStatus,
     ExecutionMode
 )
-from src.operations.header_formatter import HeaderFormatter
+from src.operations.operation_header_formatter import OperationHeaderFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -300,7 +300,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         
         # Print header
         mode_display = "LIVE" if self.mode == ExecutionMode.LIVE else "DRY RUN"
-        header = HeaderFormatter.format_minimalist(
+        header = OperationHeaderFormatter.format_minimalist(
             operation_name="System Optimization",
             version=self.VERSION,
             profile=profile,

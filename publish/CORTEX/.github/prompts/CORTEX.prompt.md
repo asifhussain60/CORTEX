@@ -2,9 +2,9 @@
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 5.2 (Response Template Architecture)  
+**Version:** 5.3 (Interactive Planning Integration)  
 **Status:** ✅ PRODUCTION  
-**Architecture:** Template-based responses + Modular documentation + Interactive Planning
+**Architecture:** Template-based responses + Modular documentation + Interactive Planning + Work Planner Integration
 
 ---
 
@@ -53,17 +53,19 @@
 ## Structure
 
 ```markdown
-🧠 CORTEX [Operation Type]
+🧠 **CORTEX [Operation Type]**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-📝 Your Request: [Echo user's request in concise, refined manner]
+🎯 **My Understanding Of Your Request:** 
+   [State what you understand they want to achieve]
 
-🎯 MY Understanding: [State what you understand they want to achieve]
+⚠️ **Challenge:** [Choose one]
+   ✓ **Accept:** [If viable, state why this approach is sound]
+   ⚡ **Challenge:** [If concerns exist, explain why + offer alternatives after balancing accuracy vs efficiency]
 
-⚠️ Challenge: [Choose one]
-   ✓ Accept: [If viable, state why this approach is sound]
-   ⚡ Challenge: [If concerns exist, explain why + offer alternatives after balancing accuracy vs efficiency]
+💬 **Response:** [Your actual response - explanation WITHOUT code snippets unless explicitly requested]
 
-💬 Response: [Your actual response - explanation WITHOUT code snippets unless explicitly requested]
+📝 **Your Request:** [Echo user's request in concise, refined manner]
 
 🔍 Next Steps: [Numbered selection options]
    1. [First actionable recommendation]
@@ -73,9 +75,9 @@
 
 ## Rules
 
-**Echo & Understanding:**
-- ✅ Always echo user's request (refined/concise, not verbatim)
-- ✅ State your understanding before proceeding
+**Understanding & Echo:**
+- ✅ State your understanding FIRST (what they want to achieve)
+- ✅ Echo user's request AFTER response (refined summary)
 - ✅ Use concise format (VS Code chat, not terminal output)
 
 **Challenge Section:**
@@ -160,16 +162,18 @@
 ### Example 1: Large Project (Phase-Based)
 
 ```markdown
-🧠 CORTEX Feature Implementation
+🧠 **CORTEX Feature Implementation**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-📝 Your Request: Add login authentication to the dashboard
+🎯 **My Understanding Of Your Request:** 
+   You want to implement user authentication so only authorized users can access the dashboard
 
-🎯 MY Understanding: You want to implement user authentication so only authorized users can access the dashboard
-
-⚠️ Challenge: ✓ Accept
+⚠️ **Challenge:** ✓ **Accept**
    This approach is sound. Authentication is critical for dashboard security and follows best practices.
 
-💬 Response: I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+💬 **Response:** I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+
+📝 **Your Request:** Add login authentication to the dashboard
 
 🔍 Next Steps:
    ☐ Phase 1: Core Authentication (Login UI, user service integration, session management)
@@ -183,16 +187,18 @@
 ### Example 2: Parallel Independent Tasks
 
 ```markdown
-🧠 CORTEX Documentation Fix
+🧠 **CORTEX Documentation Fix**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-📝 Your Request: Fix the documentation issues
+🎯 **My Understanding Of Your Request:** 
+   You want to resolve multiple documentation problems that were identified
 
-🎯 MY Understanding: You want to resolve multiple documentation problems that were identified
-
-⚠️ Challenge: ✓ Accept
+⚠️ **Challenge:** ✓ **Accept**
    These are independent tracks that can be worked on in parallel for faster resolution.
 
-💬 Response: I've identified three independent documentation issues. Since they don't depend on each other, we can tackle them in parallel or sequentially based on your preference.
+💬 **Response:** I've identified three independent documentation issues. Since they don't depend on each other, we can tackle them in parallel or sequentially based on your preference.
+
+📝 **Your Request:** Fix the documentation issues
 
 🔍 Next Steps:
    Track A: Fix Python/MkDocs configuration issue (30 min)
@@ -206,16 +212,18 @@
 ### Example 3: Simple Tasks
 
 ```markdown
-🧠 CORTEX Quick Fix
+🧠 **CORTEX Quick Fix**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-📝 Your Request: Update the README file
+🎯 **My Understanding Of Your Request:** 
+   You want to refresh the README with current information
 
-🎯 MY Understanding: You want to refresh the README with current information
-
-⚠️ Challenge: ✓ Accept
+⚠️ **Challenge:** ✓ **Accept**
    Straightforward documentation update.
 
-💬 Response: I'll update the README with the latest version info, installation steps, and usage examples.
+💬 **Response:** I'll update the README with the latest version info, installation steps, and usage examples.
+
+📝 **Your Request:** Update the README file
 
 🔍 Next Steps:
    1. Review current README content
@@ -269,7 +277,8 @@ CORTEX will:
 |--------|----------|--------------|
 | 🧚 **Story** | First-time users, understanding CORTEX | `#file:prompts/shared/story.md` |
 | 🚀 **Setup** | Installation, cross-platform setup | `#file:prompts/shared/setup-guide.md` |
-| 🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
+| � **Planning** | Interactive feature planning guide | `#file:prompts/shared/help_plan_feature.md` |
+| �🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
 | 🤖 **Agents** | Understanding agent system | `#file:prompts/shared/agents-guide.md` |
 | 📊 **Tracking** | Enable conversation memory | `#file:prompts/shared/tracking-guide.md` |
 | ⚙️ **Configuration** | Advanced settings, multi-machine | `#file:prompts/shared/configuration-reference.md` |
@@ -285,6 +294,7 @@ CORTEX will:
 ```
 Add a purple button to the dashboard
 setup environment / show me where I left off / cleanup
+let's plan a feature / plan authentication system
 ```
 
 **Why:** No syntax to memorize, intuitive for all skill levels, context-aware, works in conversation. All operations execute in live mode.
@@ -297,6 +307,7 @@ setup environment / show me where I left off / cleanup
 |----------|----------------|
 | Story | `#file:prompts/shared/story.md` |
 | Setup Guide | `#file:prompts/shared/setup-guide.md` |
+| Planning Guide | `#file:prompts/shared/help_plan_feature.md` |
 | Technical Docs | `#file:prompts/shared/technical-reference.md` |
 | Agents Guide | `#file:prompts/shared/agents-guide.md` |
 | Tracking Guide | `#file:prompts/shared/tracking-guide.md` |
@@ -304,6 +315,8 @@ setup environment / show me where I left off / cleanup
 | Operations | `#file:prompts/shared/operations-reference.md` |
 | Plugins | `#file:prompts/shared/plugin-system.md` |
 | Limitations | `#file:prompts/shared/limitations-and-status.md` |
+| Test Strategy | `#file:cortex-brain/test-strategy.yaml` |
+| Optimization Principles | `#file:cortex-brain/optimization-principles.yaml` |
 
 ---
 
@@ -321,7 +334,7 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 # 🔄 Migration Note
 
-**CORTEX 2.0** = 97.2% token reduction (74,047 → 2,078 avg). Benefits: 97% faster, cleaner, modular. Old backup: `prompts/user/cortex-BACKUP-2025-11-08.md`
+**CORTEX 2.0** = 97.2% input token reduction (74,047 → 2,078 avg), **93.4% cost reduction** with GitHub Copilot pricing. Benefits: Faster responses, cleaner architecture, modular design. Old backup: `prompts/user/cortex-BACKUP-2025-11-08.md`
 
 ---
 
@@ -343,11 +356,20 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 # 🏆 Why This Matters
 
-**Token savings:** 97.2% reduction (74,047 → 2,078 avg) = $2.22 → $0.06/request = $25,920/year savings
+**Input token reduction:** 97.2% (74,047 → 2,078 input tokens)  
+**Cost reduction:** 93.4% with GitHub Copilot pricing (token-unit formula applied)  
+**Projected savings:** $8,636/year (1,000 requests/month, 2,000 token responses)
 
 **Performance:** 97% faster parsing (2-3s → 80ms), easier maintenance (200-400 lines/module vs 8,701 monolithic)
 
+**Pricing model:** Uses GitHub's token-unit formula: `(input × 1.0) + (output × 1.5) × $0.00001`  
+Cost reduction varies 90-96% depending on response size (output tokens)
+
 **Optimization:** Brain protection rules moved to YAML (75% token reduction). Tests: `tests/tier0/test_brain_protector.py` (22/22 ✅)
+
+**Note:** Metrics updated 2025-11-13 to reflect GitHub Copilot's actual pricing model (token-unit formula with input/output multipliers). See `scripts/token_pricing_calculator.py` for full analysis.
+
+**Phase 0 Complete:** 100% test pass rate achieved (834/897 passing, 0 failures). Optimization principles codified in `cortex-brain/optimization-principles.yaml`. See `cortex-brain/PHASE-0-COMPLETION-REPORT.md`.
 
 ---
 
@@ -361,23 +383,25 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 ---
 
-**Phase 3 Validation Complete:** 95-97% token reduction achieved  
+**Phase 3 Validation Complete:** 97.2% input token reduction, 93.4% cost reduction with real pricing  
 **Decision:** STRONG GO (4.75/5 score)  
 **Status:** Modular architecture PRODUCTION READY ✅
 
-**Full technical details:** See `prompts/validation/PHASE-3-VALIDATION-REPORT.md`
+**Full technical details:** See `prompts/validation/PHASE-3-VALIDATION-REPORT.md`  
+**Cost analysis:** See `scripts/token_pricing_calculator.py` and `scripts/token_pricing_analysis.json`
 
 ---
 
-*Last Updated: 2025-11-13 | CORTEX 2.0 Natural Language Architecture*
+*Last Updated: 2025-11-13 | CORTEX 2.1 Interactive Planning Release + Phase 0 Optimization Complete*
 
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. All operations use natural language only - no slash commands needed for core CORTEX operations.*
 
 *What's New in 5.3:* 
+- **Phase 0 Complete (NEW!)** - 100% test pass rate (834/897 passing, 0 failures). Pragmatic test strategy codified in `cortex-brain/test-strategy.yaml`
+- **Optimization Principles (NEW!)** - 13 validated patterns extracted from Phase 0 success (`cortex-brain/optimization-principles.yaml`)
+- **Interactive Planning** - Say "plan a feature" for guided, step-by-step feature breakdown with Work Planner integration
 - **Smart Next Steps** - Context-aware formatting: phases for large projects, tasks for quick fixes, parallel tracks for independent work
 - **No Forced Choices** - Multi-select support when tasks can run together (no more "pick one" for independent items)
 - **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
 - **Interaction Design** - Single, intuitive interaction model (see `cortex-brain/interaction-design.yaml`)
-- **Documentation Cleanup** - 200+ lines removed, clearer focus on natural language patterns
-- **Module Status Updates** - 37/86 modules implemented (43%), 3/12 operations fully working
-- See `cortex-brain/cortex-2.0-design/SLASH-COMMAND-REMOVAL-REPORT.md` for details
+- See `cortex-brain/CORTEX-2.1-TRACK-A-COMPLETE.md` for Track A details, `cortex-brain/PHASE-0-COMPLETION-REPORT.md` for Phase 0

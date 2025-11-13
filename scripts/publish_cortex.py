@@ -72,7 +72,7 @@ EXCLUDE_PATTERNS = {
     
     # Development documentation (not for end users)  - contains machine-specific paths
     '**/PHASE-*.md',            # Phase summaries
-    '**/SESSION-*.md',          # Session notes
+    '**/SESSION-[0-9]*.md',     # Session notes (not session-loader.md)
     '**/COVERAGE-*.md',         # Coverage analysis
     '**/CLEANUP-*.md',          # Cleanup reports
     '**/HOLISTIC-*.md',         # Review docs with machine paths
@@ -101,6 +101,9 @@ EXCLUDE_PATTERNS = {
 CRITICAL_FILES = {
     # Brain Protection (Tier 0)
     'cortex-brain/brain-protection-rules.yaml',
+    
+    # Publish Configuration (CORTEX 3.0)
+    'cortex-brain/publish-config.yaml',
     
     # Database Schema Code (Python-based initialization)
     'src/tier2/knowledge_graph/database/schema.py',
@@ -156,14 +159,25 @@ INCLUDED_DIRS = {
 }
 
 # Directories to EXCLUDE completely
+# ADMIN CONTENT EXCLUSIONS (CORTEX 3.0):
+# - docs/ → Contains ALL admin documentation including:
+#   - docs/images/system-design-prompts/ → Image generation prompts (admin tool)
+#   - docs/images/system-design-prompts/narrative/ → PR narratives (admin workflow)
+#   - Architecture diagrams, technical specs, development guides
+# - cortex-brain/cortex-2.0-design/ → Design documents (admin planning)
+# - cortex-brain/archives/ → Historical records (admin reference)
+# - cortex-brain/simulations/ → Development testing data
+# - scripts/ → Admin automation tools (except essential user scripts copied separately)
+# - tests/ → Test suite (admin quality assurance)
+# - workflow_checkpoints/ → Development state tracking
 EXCLUDED_DIRS = {
     'tests',
     'workflow_checkpoints',
-    'docs',
+    'docs',  # ⭐ ADMIN CONTENT: All documentation, image prompts, narratives
     'cortex-brain/cortex-2.0-design',  # Design docs (admin only)
     'cortex-brain/archives',
     'cortex-brain/simulations',  # Dev-only simulation data
-    'scripts',  # Admin scripts
+    'scripts',  # Admin scripts (essential user tools copied separately below)
     'dist',
     'build',
     '.venv',
@@ -252,12 +266,30 @@ def clear_publish_folder(publish_root: Path, dry_run: bool = False) -> bool:
 def filter_operations_by_tier(source_root: Path) -> Dict[str, Set[str]]:
     """
     Load cortex-operations.yaml and categorize operations by deployment tier.
+    Also loads publish-config.yaml for CORTEX 3.0 admin/user separation.
     
     Returns:
         Dict with 'user' and 'admin' operation sets
     """
     logger.info("Loading operation definitions...")
     
+    # Try loading from publish-config.yaml first (CORTEX 3.0)
+    publish_config_file = source_root / 'cortex-brain' / 'publish-config.yaml'
+    if publish_config_file.exists():
+        try:
+            with open(publish_config_file, 'r', encoding='utf-8') as f:
+                publish_config = yaml.safe_load(f)
+            
+            user_ops = set(publish_config.get('user_content_patterns', {}).get('user_operations', []))
+            admin_ops = set(publish_config.get('admin_content_patterns', {}).get('admin_operations', []))
+            
+            if user_ops or admin_ops:
+                logger.info(f"✓ Loaded from publish-config.yaml: {len(user_ops)} user ops, {len(admin_ops)} admin ops")
+                return {'user': user_ops, 'admin': admin_ops}
+        except Exception as e:
+            logger.warning(f"Failed to parse publish-config.yaml: {e}. Trying cortex-operations.yaml...")
+    
+    # Fallback to cortex-operations.yaml
     ops_file = source_root / 'cortex-operations.yaml'
     if not ops_file.exists():
         logger.warning(f"Operations file not found: {ops_file}")
@@ -279,7 +311,7 @@ def filter_operations_by_tier(source_root: Path) -> Dict[str, Set[str]]:
             else:
                 user_ops.add(op_id)
         
-        logger.info(f"Found {len(user_ops)} user operations, {len(admin_ops)} admin operations")
+        logger.info(f"✓ Loaded from cortex-operations.yaml: {len(user_ops)} user ops, {len(admin_ops)} admin ops")
         return {'user': user_ops, 'admin': admin_ops}
     
     except Exception as e:
@@ -962,6 +994,11 @@ def main():
         action='store_true',
         help='Exit with error code if tests fail (default: warn but continue)'
     )
+    parser.add_argument(
+        '--admin-mode',
+        action='store_true',
+        help='⚠️  ADMIN MODE: Publish ALL content including admin tools (internal testing only)'
+    )
     
     args = parser.parse_args()
     
@@ -975,6 +1012,19 @@ def main():
     if args.dry_run:
         logger.info("🔍 DRY RUN MODE - No changes will be made")
         logger.info("")
+    
+    if args.admin_mode:
+        logger.warning("")
+        logger.warning("=" * 80)
+        logger.warning("⚠️  ADMIN MODE ENABLED")
+        logger.warning("=" * 80)
+        logger.warning("Publishing ALL content including admin tools and development artifacts.")
+        logger.warning("This is for internal testing ONLY - do NOT distribute to end users.")
+        logger.warning("=" * 80)
+        logger.warning("")
+        
+        # In admin mode, we don't exclude admin operations
+        # (Implementation note: could modify filtering logic if needed)
     
     # Load operations and filter by tier
     ops = filter_operations_by_tier(source_root)

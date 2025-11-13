@@ -10,12 +10,16 @@ from pathlib import Path
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import json
+import sqlite3
 
 # Import modular components
 from .conversations import ConversationManager, ConversationSearch, Conversation
 from .messages import MessageStore
 from .entities import EntityExtractor, EntityType, Entity
 from .fifo import QueueManager
+from .sessions import SessionManager, Session
+from .lifecycle import ConversationLifecycleManager, WorkflowState
+from .session_correlation import SessionAmbientCorrelator
 
 # Import Phase 1.5: Token Optimization System
 from .ml_context_optimizer import MLContextOptimizer
@@ -59,14 +63,25 @@ class WorkingMemory:
         self.entity_extractor = EntityExtractor(self.db_path)
         self.queue_manager = QueueManager(self.db_path)
         
+        # Load configuration first (needed for session manager)
+        self.config = self._load_config()
+        
+        # Initialize session manager (CORTEX 3.0)
+        idle_threshold = self.config.get('tier1', {}).get('conversation_boundaries', {}).get('idle_gap_threshold_seconds', 7200)
+        self.session_manager = SessionManager(self.db_path, idle_threshold_seconds=idle_threshold)
+        
+        # Initialize lifecycle manager (CORTEX 3.0)
+        self.lifecycle_manager = ConversationLifecycleManager(self.db_path)
+        
+        # Initialize session-ambient correlator (CORTEX 3.0 Phase 3)
+        self.session_correlator = SessionAmbientCorrelator(self.db_path)
+        
         # Initialize Phase 1.5: Token Optimization System
         # Note: target_reduction is set via config at optimization time
         self.ml_optimizer = None  # Will be created with config params when needed
         self.cache_monitor = CacheMonitor(self)  # Pass WorkingMemory instance
         self.token_metrics = TokenMetricsCollector(self)  # Pass WorkingMemory instance
         
-        # Load configuration
-        self.config = self._load_config()
         self.optimization_enabled = self.config.get('token_optimization', {}).get('enabled', True)
     
     def _init_database(self) -> None:
@@ -87,7 +102,10 @@ class WorkingMemory:
                 message_count INTEGER DEFAULT 0,
                 is_active BOOLEAN DEFAULT 0,
                 summary TEXT,
-                tags TEXT
+                tags TEXT,
+                session_id TEXT,
+                last_activity TIMESTAMP,
+                workflow_state TEXT
             )
         """)
         
@@ -149,6 +167,16 @@ class WorkingMemory:
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_conversations_active 
             ON conversations(is_active)
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_conversations_session 
+            ON conversations(session_id)
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_conversations_last_activity 
+            ON conversations(last_activity DESC)
         """)
         
         cursor.execute("""
@@ -489,6 +517,335 @@ class WorkingMemory:
     def get_conversation_count(self) -> int:
         """Get the total number of conversations in working memory."""
         return self.conversation_manager.get_conversation_count()
+    
+    # ========== Session Management (CORTEX 3.0) ==========
+    
+    def detect_or_create_session(self, workspace_path: str) -> Session:
+        """
+        Detect or create workspace session (CORTEX 3.0).
+        
+        Creates new session if:
+        - No active session for workspace
+        - Idle gap exceeds threshold (default 2 hours)
+        - Previous session ended
+        
+        Args:
+            workspace_path: Absolute path to workspace
+        
+        Returns:
+            Active Session object
+        """
+        return self.session_manager.detect_or_create_session(workspace_path)
+    
+    def get_active_session(self, workspace_path: str) -> Optional[Session]:
+        """Get active session for workspace."""
+        return self.session_manager.get_active_session(workspace_path)
+    
+    def end_session(self, session_id: str, reason: str = "manual") -> None:
+        """
+        End a workspace session.
+        
+        Args:
+            session_id: Session to end
+            reason: Reason for ending (manual, idle_timeout, workspace_close)
+        """
+        self.session_manager.end_session(session_id, reason)
+    
+    def get_session(self, session_id: str) -> Optional[Session]:
+        """Get session by ID."""
+        return self.session_manager.get_session(session_id)
+    
+    def get_recent_sessions(self, workspace_path: Optional[str] = None, limit: int = 10) -> List[Session]:
+        """Get recent sessions, optionally filtered by workspace."""
+        return self.session_manager.get_recent_sessions(workspace_path, limit)
+    
+    # ========== Lifecycle Management (CORTEX 3.0) ==========
+    
+    def handle_user_request(
+        self,
+        user_request: str,
+        workspace_path: str,
+        assistant_response: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Handle user request with full session-based lifecycle management.
+        
+        This is the primary entry point for CORTEX 3.0 session-based conversations.
+        Automatically:
+        - Detects or creates session
+        - Creates new conversation or continues existing
+        - Tracks workflow state progression
+        - Closes conversations when workflow complete
+        - Respects explicit user commands ("new conversation", "continue")
+        
+        Args:
+            user_request: User's message
+            workspace_path: Absolute path to workspace
+            assistant_response: Optional assistant's response
+            context: Optional additional context
+        
+        Returns:
+            Dict with:
+                - session_id: Active session ID
+                - conversation_id: Active conversation ID
+                - is_new_conversation: Whether conversation was just created
+                - is_new_session: Whether session was just created
+                - workflow_state: Current workflow state
+                - lifecycle_event: Lifecycle event that occurred
+        """
+        # Step 1: Detect or create session
+        session = self.session_manager.detect_or_create_session(workspace_path)
+        is_new_session = session.conversation_count == 0
+        
+        # Step 2: Get active conversation for session (if any)
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT conversation_id, workflow_state
+            FROM conversations
+            WHERE session_id = ? AND is_active = 1
+            ORDER BY created_at DESC
+            LIMIT 1
+        """, (session.session_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        active_conversation_id = row[0] if row else None
+        current_workflow_state = WorkflowState(row[1]) if row and row[1] else None
+        
+        # Step 3: Determine if new conversation should be created
+        should_create, create_reason = self.lifecycle_manager.should_create_conversation(
+            session_id=session.session_id,
+            user_request=user_request,
+            has_active_conversation=active_conversation_id is not None
+        )
+        
+        # Step 4: Close current conversation if needed
+        if active_conversation_id and should_create and create_reason == "new_conversation_requested":
+            self.lifecycle_manager.close_conversation(
+                conversation_id=active_conversation_id,
+                session_id=session.session_id,
+                reason="new_conversation_requested",
+                final_state=current_workflow_state or WorkflowState.ABANDONED
+            )
+            active_conversation_id = None
+        
+        # Step 5: Create new conversation if needed
+        is_new_conversation = False
+        if should_create or not active_conversation_id:
+            # Generate conversation ID
+            from datetime import datetime
+            now = datetime.now()
+            import hashlib
+            hash_suffix = hashlib.md5(user_request.encode()).hexdigest()[:6]
+            conversation_id = f"conv_{now.strftime('%Y%m%d_%H%M%S')}_{hash_suffix}"
+            
+            # Infer initial workflow state
+            initial_state = self.lifecycle_manager.infer_workflow_state(user_request)
+            
+            # Create conversation
+            conversation = self.add_conversation(
+                conversation_id=conversation_id,
+                title=user_request[:100],  # First 100 chars as title
+                messages=[{"role": "user", "content": user_request}],
+                tags=[]
+            )
+            
+            # Link to session and set workflow state
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE conversations
+                SET session_id = ?,
+                    workflow_state = ?,
+                    last_activity = ?,
+                    is_active = 1
+                WHERE conversation_id = ?
+            """, (
+                session.session_id,
+                initial_state.value,
+                datetime.now().isoformat(),
+                conversation_id
+            ))
+            conn.commit()
+            conn.close()
+            
+            # Log creation
+            self.lifecycle_manager.log_conversation_created(
+                conversation_id=conversation_id,
+                session_id=session.session_id,
+                trigger=create_reason,
+                initial_state=initial_state
+            )
+            
+            # Update session conversation count
+            self.session_manager.increment_conversation_count(session.session_id)
+            
+            active_conversation_id = conversation_id
+            current_workflow_state = initial_state
+            is_new_conversation = True
+        
+        else:
+            # Step 6: Continue existing conversation
+            # Add message to existing conversation
+            self.message_store.add_messages(
+                active_conversation_id,
+                [{"role": "user", "content": user_request}]
+            )
+            
+            # Infer and update workflow state
+            new_state = self.lifecycle_manager.infer_workflow_state(
+                user_request,
+                current_state=current_workflow_state
+            )
+            
+            if new_state != current_workflow_state:
+                self.lifecycle_manager.update_workflow_state(
+                    conversation_id=active_conversation_id,
+                    session_id=session.session_id,
+                    new_state=new_state,
+                    trigger="auto"
+                )
+                current_workflow_state = new_state
+        
+        # Step 7: Add assistant response if provided
+        if assistant_response:
+            self.message_store.add_messages(
+                active_conversation_id,
+                [{"role": "assistant", "content": assistant_response}]
+            )
+        
+        # Step 8: Check if conversation should close
+        should_close, close_reason = self.lifecycle_manager.should_close_conversation(
+            conversation_id=active_conversation_id,
+            current_state=current_workflow_state,
+            user_request=user_request
+        )
+        
+        if should_close:
+            self.lifecycle_manager.close_conversation(
+                conversation_id=active_conversation_id,
+                session_id=session.session_id,
+                reason=close_reason,
+                final_state=current_workflow_state
+            )
+        
+        return {
+            "session_id": session.session_id,
+            "conversation_id": active_conversation_id,
+            "is_new_conversation": is_new_conversation,
+            "is_new_session": is_new_session,
+            "workflow_state": current_workflow_state.value,
+            "lifecycle_event": create_reason if is_new_conversation else "continuation",
+            "conversation_closed": should_close
+        }
+    
+    def get_conversation_lifecycle_history(self, conversation_id: str):
+        """Get lifecycle history for a conversation."""
+        return self.lifecycle_manager.get_conversation_history(conversation_id)
+    
+    def get_session_lifecycle_history(self, session_id: str):
+        """Get all conversation lifecycle events for a session."""
+        return self.lifecycle_manager.get_session_conversation_history(session_id)
+    
+    # ========== Session-Ambient Correlation (CORTEX 3.0 Phase 3) ==========
+    
+    def log_ambient_event(
+        self,
+        session_id: str,
+        event_type: str,
+        file_path: Optional[str] = None,
+        pattern: Optional[str] = None,
+        score: Optional[int] = None,
+        summary: Optional[str] = None,
+        conversation_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> int:
+        """
+        Log ambient capture event linked to session.
+        
+        Use this to record file changes, terminal commands, git operations
+        that occur during a development session.
+        
+        Args:
+            session_id: Active workspace session ID
+            event_type: Type of event (file_change, terminal_command, git_operation)
+            file_path: Path to affected file
+            pattern: Detected pattern (FEATURE, BUGFIX, REFACTOR, etc.)
+            score: Activity score (0-100)
+            summary: Natural language summary
+            conversation_id: Optional active conversation ID
+            metadata: Additional event metadata
+            
+        Returns:
+            Event ID
+        """
+        return self.session_correlator.log_ambient_event(
+            session_id=session_id,
+            event_type=event_type,
+            file_path=file_path,
+            pattern=pattern,
+            score=score,
+            summary=summary,
+            conversation_id=conversation_id,
+            metadata=metadata
+        )
+    
+    def get_session_events(
+        self,
+        session_id: str,
+        event_type: Optional[str] = None,
+        min_score: Optional[int] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Get all ambient events for a session.
+        
+        Args:
+            session_id: Session ID to query
+            event_type: Optional filter by event type
+            min_score: Optional minimum activity score
+            
+        Returns:
+            List of events with metadata
+        """
+        return self.session_correlator.get_session_events(
+            session_id=session_id,
+            event_type=event_type,
+            min_score=min_score
+        )
+    
+    def get_conversation_events(self, conversation_id: str) -> List[Dict[str, Any]]:
+        """
+        Get all ambient events that occurred during a conversation.
+        
+        This shows what actually happened (file changes, commands, git ops)
+        while the conversation was active.
+        
+        Args:
+            conversation_id: Conversation ID to query
+            
+        Returns:
+            List of events with metadata
+        """
+        return self.session_correlator.get_conversation_events(conversation_id)
+    
+    def generate_session_narrative(self, session_id: str) -> str:
+        """
+        Generate complete development narrative for a session.
+        
+        Combines conversations + ambient events into a coherent story
+        of what happened during the development session.
+        
+        Args:
+            session_id: Session ID to narrate
+            
+        Returns:
+            Natural language narrative (Markdown format)
+        """
+        return self.session_correlator.generate_session_narrative(session_id)
     
     # ========== Message Management (Delegated) ==========
     

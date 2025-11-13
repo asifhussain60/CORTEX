@@ -823,12 +823,16 @@ class Debouncer:
         return list(merged.values())
         
     def _write_to_tier1(self, events: List[Dict], batch_summary: str = ""):
-        """Write events to Tier 1 with enhanced context (Phase 4.4)."""
+        """
+        Write events to Tier 1 with session-ambient correlation (CORTEX 3.0 Phase 3).
+        
+        Automatically detects active session and links ambient events to it.
+        """
         try:
             from src.tier1.working_memory import WorkingMemory
             
             brain_path = os.environ.get("CORTEX_BRAIN_PATH", str(CORTEX_ROOT / "cortex-brain"))
-            db_path = Path(brain_path) / "tier1" / "conversations.db"
+            db_path = Path(brain_path) / "tier1-working-memory.db"
             
             if not db_path.exists():
                 print(f"[CORTEX] WARNING: Tier 1 database not found: {db_path}")
@@ -836,65 +840,72 @@ class Debouncer:
             
             wm = WorkingMemory(str(db_path))
             
-            # Get or create ambient session
-            session_id = self._get_ambient_session(wm)
+            # CORTEX 3.0: Detect or create workspace session
+            workspace_path = str(self.workspace_path)
             
-            # NEW Phase 4.4: Store batch summary first
-            if batch_summary:
-                wm.store_message(
-                    conversation_id=session_id,
-                    message={
-                        "role": "system",
-                        "content": f"[Ambient Batch Summary] {batch_summary}",
-                        "timestamp": datetime.now().isoformat()
-                    }
-                )
+            # Get active session for this workspace
+            active_session = wm.session_manager.get_active_session(workspace_path)
             
-            # Store individual events with enriched context
+            if not active_session:
+                # No active session - create one for ambient capture
+                session_id = wm.session_manager.create_session(workspace_path)
+                logger.info(f"Created ambient session: {session_id}")
+            else:
+                session_id = active_session.session_id
+                logger.debug(f"Using active session: {session_id}")
+            
+            # Get active conversation (if any) - for precise event tagging
+            conversation_id = None
+            active_conversations = wm.conversation_manager.get_active_conversations()
+            
+            # Filter to conversations in this session
+            for conv in active_conversations:
+                conv_obj = wm.conversation_manager.get_conversation(conv)
+                if conv_obj and hasattr(conv_obj, 'session_id') and conv_obj.session_id == session_id:
+                    conversation_id = conv
+                    break
+            
+            # Log each ambient event with session correlation
             for event in events:
-                # Include summary, pattern, and score in content
-                content = f"[Ambient Capture] {event.get('summary', event['type'])}"
-                content += f" | Pattern: {event.get('pattern', 'UNKNOWN')}"
-                content += f" | Score: {event.get('score', 0)}/100"
+                event_type = self._classify_event_type(event)
                 
-                wm.store_message(
-                    conversation_id=session_id,
-                    message={
-                        "role": "system",
-                        "content": content,
-                        "timestamp": event["timestamp"],
-                        "metadata": {
-                            "file": event.get('file'),
-                            "pattern": event.get('pattern'),
-                            "score": event.get('score')
-                        }
+                wm.log_ambient_event(
+                    session_id=session_id,
+                    conversation_id=conversation_id,  # May be None if no active conversation
+                    event_type=event_type,
+                    file_path=event.get('file'),
+                    pattern=event.get('pattern', 'UNKNOWN'),
+                    score=event.get('score', 50),
+                    summary=event.get('summary', event.get('type', 'Unknown event')),
+                    metadata={
+                        'timestamp': event.get('timestamp'),
+                        'event': event.get('event'),  # created, modified, deleted
+                        'batch_summary': batch_summary if batch_summary else None
                     }
                 )
-                
-            print(f"[CORTEX] Captured {len(events)} enriched events to Tier 1")
-            logger.info(f"Batch summary: {batch_summary}")
+            
+            logger.info(f"Logged {len(events)} ambient events to session {session_id}")
+            if conversation_id:
+                logger.debug(f"Events tagged with conversation: {conversation_id}")
             
         except Exception as e:
             print(f"[CORTEX] ERROR writing to Tier 1: {e}")
             logger.error(f"Tier 1 write error: {type(e).__name__}: {e}")
-            
-    def _get_ambient_session(self, wm) -> str:
-        """Get or create ambient capture session."""
-        # Check for today's ambient session
-        from datetime import date
-        today = date.today().isoformat()
+    
+    def _classify_event_type(self, event: Dict[str, Any]) -> str:
+        """Classify event type for ambient correlation."""
+        event_type_key = event.get('type', '').lower()
         
-        # Create new ambient session for today
-        session_id = wm.start_conversation(
-            user_id="ambient_daemon",
-            metadata={
-                "type": "ambient",
-                "date": today,
-                "description": "Automatic background context capture"
-            }
-        )
-        
-        return session_id
+        if 'file' in event_type_key or 'modified' in event_type_key or 'created' in event_type_key:
+            return 'file_change'
+        elif 'terminal' in event_type_key or 'command' in event_type_key:
+            return 'terminal_command'
+        elif 'git' in event_type_key:
+            return 'git_operation'
+        elif 'vscode' in event_type_key:
+            return 'vscode_state'
+        else:
+            return 'other'
 
 
 # ============================================================================

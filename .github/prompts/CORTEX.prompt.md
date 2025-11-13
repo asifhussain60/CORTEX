@@ -92,6 +92,13 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 - ❌ Don't show code unless user asks "show me the code"
 - ❌ Don't show implementation details unless requested
 
+**Smart Hint (Optional - CORTEX 3.0):**
+- ✅ AFTER Response section, BEFORE Next Steps
+- ✅ Show ONLY if conversation quality ≥ GOOD threshold
+- ✅ Use conditional display (don't show for low-quality responses)
+- ✅ Provide one-click capture suggestion
+- ❌ Don't interrupt flow - optional enhancement only
+
 **Next Steps (Context-Aware):**
 
 **CRITICAL RULES:**
@@ -172,6 +179,24 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
    This approach is sound. Authentication is critical for dashboard security and follows best practices.
 
 💬 **Response:** I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 **CORTEX LEARNING OPPORTUNITY**
+
+This conversation has excellent strategic value:
+  • Multi-phase planning: 4 phases
+  • Challenge/Accept reasoning
+  • Design decisions
+  • File references: 3
+
+📸 **Capture for future reference?**
+   → Say: **"capture conversation"**
+   → I'll save this discussion automatically
+   → File will be created: `cortex-brain/conversation-vault/2025-11-13-add-login-authentication.md`
+   → Review now or import to brain later
+
+Quality Score: 12/10 (EXCELLENT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📝 **Your Request:** Add login authentication to the dashboard
 

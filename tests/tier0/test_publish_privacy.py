@@ -227,6 +227,7 @@ class TestPublishPrivacy:
         # Files that legitimately contain example paths (documentation/governance)
         allowed_example_files = {
             'brain-protection-rules.yaml',  # Contains SKULL-006 example with AHHOME
+            'publish-config.yaml',  # Contains forbidden pattern examples (documentation)
             'self-review-checklist.yaml',   # Contains verification examples
             'setup-guide.md',  # Installation guide with example paths like /Users/you and D:\\
             'technical-reference.md',  # May contain example configurations
@@ -297,3 +298,142 @@ class TestPublishPrivacy:
             assert hasattr(publish_cortex, 'EXCLUDE_PATTERNS')
         except ImportError as e:
             pytest.fail(f"Cannot import publish script: {e}")
+    
+    def test_no_admin_documentation_published(self, publish_cortex_path: Path):
+        """
+        SKULL-006 (CORTEX 3.0): Verify no admin documentation in publish package
+        
+        Admin content that should be excluded:
+        - docs/images/system-design-prompts/ → Image generation prompts
+        - docs/images/system-design-prompts/narrative/ → PR narratives
+        - docs/architecture/ → Architecture diagrams
+        - docs/development/ → Development guides
+        """
+        if not publish_cortex_path.exists():
+            pytest.skip("No publish folder found - run publish script first")
+        
+        # Check for entire docs/ folder (should not exist)
+        docs_dir = publish_cortex_path / 'docs'
+        
+        assert not docs_dir.exists(), (
+            "SKULL-006 VIOLATION: docs/ directory found in publish package. "
+            "This contains admin-only content (image prompts, narratives, architecture docs)."
+        )
+    
+    def test_no_image_prompt_narratives_published(self, publish_cortex_path: Path):
+        """
+        SKULL-006 (CORTEX 3.0): Verify no image prompt narratives in publish
+        
+        Specifically checks for:
+        - docs/images/system-design-prompts/narrative/*.md
+        - Any files matching *-narrative.md pattern
+        """
+        if not publish_cortex_path.exists():
+            pytest.skip("No publish folder found - run publish script first")
+        
+        # Search for narrative files
+        narrative_files = list(publish_cortex_path.rglob('*-narrative.md'))
+        
+        assert len(narrative_files) == 0, (
+            f"SKULL-006 VIOLATION: Found {len(narrative_files)} narrative files in publish:\n" +
+            "\n".join(f"  - {f.relative_to(publish_cortex_path)}" for f in narrative_files)
+        )
+    
+    def test_no_design_documents_published(self, publish_cortex_path: Path):
+        """
+        SKULL-006 (CORTEX 3.0): Verify no design documents in publish
+        
+        Checks for:
+        - cortex-brain/cortex-2.0-design/
+        - cortex-brain/cortex-3.0-design/
+        - Any PHASE-*.md, SESSION-*.md files
+        """
+        if not publish_cortex_path.exists():
+            pytest.skip("No publish folder found - run publish script first")
+        
+        # Check for design directories
+        design_dirs = [
+            publish_cortex_path / 'cortex-brain' / 'cortex-2.0-design',
+            publish_cortex_path / 'cortex-brain' / 'cortex-3.0-design',
+        ]
+        
+        found_dirs = [d for d in design_dirs if d.exists()]
+        
+        assert len(found_dirs) == 0, (
+            f"SKULL-006 VIOLATION: Found {len(found_dirs)} design directories in publish:\n" +
+            "\n".join(f"  - {d.relative_to(publish_cortex_path)}" for d in found_dirs)
+        )
+        
+        # Check for development documentation patterns
+        # Note: session-loader.md is a legitimate user doc (not a dev session log)
+        dev_doc_patterns = ['PHASE-*.md', 'SESSION-[0-9]*.md', 'COVERAGE-*.md', 'CLEANUP-*.md']
+        found_dev_docs = []
+        
+        for pattern in dev_doc_patterns:
+            matches = list(publish_cortex_path.rglob(pattern))
+            found_dev_docs.extend(matches)
+        
+        assert len(found_dev_docs) == 0, (
+            f"SKULL-006 VIOLATION: Found {len(found_dev_docs)} development docs in publish:\n" +
+            "\n".join(f"  - {f.relative_to(publish_cortex_path)}" for f in found_dev_docs[:10])
+        )
+    
+    def test_publish_config_yaml_exists(self, publish_cortex_path: Path):
+        """
+        SKULL-006 (CORTEX 3.0): Verify publish-config.yaml exists and is valid
+        """
+        if not publish_cortex_path.exists():
+            pytest.skip("No publish folder found - run publish script first")
+        
+        config_file = publish_cortex_path / 'cortex-brain' / 'publish-config.yaml'
+        
+        assert config_file.exists(), (
+            "SKULL-006 VIOLATION: publish-config.yaml not found in publish package. "
+            "This file defines admin/user tier separation."
+        )
+        
+        # Verify it's valid YAML
+        import yaml
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config_data = yaml.safe_load(f)
+            
+            # Check for required keys
+            required_keys = ['version', 'deployment_tiers', 'admin_content_patterns', 'user_content_patterns']
+            missing_keys = [key for key in required_keys if key not in config_data]
+            
+            assert len(missing_keys) == 0, (
+                f"SKULL-006 VIOLATION: publish-config.yaml missing required keys: {missing_keys}"
+            )
+        
+        except yaml.YAMLError as e:
+            pytest.fail(f"SKULL-006 VIOLATION: publish-config.yaml is invalid YAML: {e}")
+    
+    def test_no_admin_operations_published(self, publish_cortex_path: Path):
+        """
+        SKULL-006 (CORTEX 3.0): Verify no admin operation modules in publish
+        
+        Admin operations that should be excluded:
+        - design_sync
+        - interactive_planning (if implemented)
+        - system_refactor
+        """
+        if not publish_cortex_path.exists():
+            pytest.skip("No publish folder found - run publish script first")
+        
+        admin_operation_files = [
+            'design_sync.py',
+            'design_sync_orchestrator.py',
+            'system_refactor_plugin.py',
+            'interactive_planning.py',
+        ]
+        
+        found_admin_ops = []
+        for admin_file in admin_operation_files:
+            matches = list(publish_cortex_path.rglob(admin_file))
+            found_admin_ops.extend(matches)
+        
+        assert len(found_admin_ops) == 0, (
+            f"SKULL-006 VIOLATION: Found {len(found_admin_ops)} admin operation files in publish:\n" +
+            "\n".join(f"  - {f.relative_to(publish_cortex_path)}" for f in found_admin_ops)
+        )

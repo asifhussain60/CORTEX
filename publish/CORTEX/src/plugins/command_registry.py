@@ -359,6 +359,10 @@ class PluginCommandRegistry:
         }
 
 
+# Backward compatibility alias
+CommandRegistry = PluginCommandRegistry
+
+
 # Global singleton instance
 _registry_instance: Optional[PluginCommandRegistry] = None
 

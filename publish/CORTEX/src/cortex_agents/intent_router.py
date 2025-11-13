@@ -59,13 +59,37 @@ class IntentRouter(BaseAgent):
         """Initialize IntentRouter with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.routing_history = []  # Track routing decisions for learning
+        self.agents = {}  # Registry of available agents for routing
+        self._initialize_agent_registry()
         
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
-            IntentType.PLAN: ["plan", "feature", "breakdown", "design", "architect"],
+            IntentType.PLAN: [
+                # Core planning triggers
+                "plan", "planning", "feature", "breakdown", "design", "architect",
+                # Direct requests
+                "plan a feature", "plan this", "plan this feature", "lets plan",
+                "let's plan", "help me plan", "need help planning", "can you help me plan",
+                "i want to plan", "i need to plan", "start planning", "begin planning",
+                "create a plan", "make a plan", "build a plan",
+                # Collaborative
+                "plan together", "lets plan together", "let's plan together",
+                "work with me to plan", "collaborate on planning",
+                "help me break this down", "break this down for me", "break this down",
+                "help me structure this",
+                # Question forms
+                "how do i plan", "how should i plan", "how to plan this",
+                "what's the best way to plan", "whats the best way to plan",
+                "help planning this", "help planning this out",
+                # Implicit planning
+                "i need a roadmap", "create a roadmap", "build a roadmap", "roadmap",
+                "help me organize this work", "how should i approach this",
+                "what's the best approach", "whats the best approach",
+                "how do i tackle this"
+            ],
             IntentType.CODE: ["create", "implement", "build", "add", "make"],
             IntentType.EDIT_FILE: ["edit", "modify", "update", "change", "refactor"],
-            IntentType.TEST: ["test", "tdd", "testing", "verify"],
+            IntentType.TEST: ["test", "tdd", "verify"],  # Removed "testing" to avoid conflict with "plan testing"
             IntentType.RUN_TESTS: ["run test", "execute test", "test run"],
             IntentType.FIX: ["fix", "bug", "error", "issue", "problem"],
             IntentType.DEBUG: ["debug", "investigate", "trace", "diagnose"],
@@ -76,6 +100,19 @@ class IntentRouter(BaseAgent):
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
         }
 
+    def _initialize_agent_registry(self):
+        """Initialize agent registry with available agent types."""
+        # Register all available agent types from the mapping
+        from .agent_types import INTENT_AGENT_MAP
+        
+        # Extract unique agent types from intent mapping
+        for intent_type, agent_type in INTENT_AGENT_MAP.items():
+            if agent_type not in self.agents:
+                self.agents[agent_type] = {
+                    'type': agent_type,
+                    'intents': []
+                }
+            self.agents[agent_type]['intents'].append(intent_type)
     
     def can_handle(self, request: AgentRequest) -> bool:
         """
