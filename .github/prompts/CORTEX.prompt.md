@@ -192,22 +192,20 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 > 
 > **Quality Score: 12/10 (EXCELLENT)**
 > 
-> � **Conversation captured and ready for review:**  
-> → [Open: cortex-brain/conversation-vault/2025-11-13-add-login-authentication.md](file:///d:/PROJECTS/CORTEX/cortex-brain/conversation-vault/2025-11-13-add-login-authentication.md)
+> 📁 **Ready to capture:**  
+> → [Open: cortex-brain/conversation-captures/2025-11-13-authentication-system.md](file:///d:/PROJECTS/CORTEX/cortex-brain/conversation-captures/2025-11-13-authentication-system.md)
 > 
-> *You can import this to CORTEX brain later for pattern learning.*
+> *Copy this conversation, paste into the file, then say "import conversation"*
 
 ---
 
 📝 **Your Request:** Add login authentication to the dashboard
 
 🔍 Next Steps:
-   ☐ Phase 1: Core Authentication (Login UI, user service integration, session management)
-   ☐ Phase 2: Route Protection (Guards, middleware, redirect logic)
-   ☐ Phase 3: Testing & Validation (Unit tests, integration tests, security audit)
-   ☐ Phase 4: Production Readiness (Error handling, logging, documentation)
-   
-   Ready to proceed with all phases, or would you like to focus on a specific phase first?
+   1. Import this conversation to CORTEX brain (for pattern learning)
+   2. Begin Phase 1: Core Authentication (Login UI, user service integration)
+   3. Review security best practices before implementation
+   4. Set up test environment for authentication testing
 ```
 
 ### Example 2: Parallel Independent Tasks
