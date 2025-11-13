@@ -23,6 +23,6 @@ class PriorityCalculator:
         if task_index < total_tasks * 0.3:
             return Priority.HIGH
         elif task_index < total_tasks * 0.7:
-            return Priority.MEDIUM
+            return Priority.NORMAL  # Fixed: was Priority.MEDIUM (doesn't exist)
         else:
             return Priority.LOW

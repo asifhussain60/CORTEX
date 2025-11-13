@@ -2,9 +2,9 @@
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 5.2 (Response Template Architecture)  
+**Version:** 5.3 (Interactive Planning Integration)  
 **Status:** ✅ PRODUCTION  
-**Architecture:** Template-based responses + Modular documentation + Interactive Planning
+**Architecture:** Template-based responses + Modular documentation + Interactive Planning + Work Planner Integration
 
 ---
 
@@ -53,7 +53,8 @@
 ## Structure
 
 ```markdown
-🧠 CORTEX [Operation Type]
+🧠 **CORTEX [Operation Type]**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
    [State what you understand they want to achieve]
@@ -161,7 +162,8 @@
 ### Example 1: Large Project (Phase-Based)
 
 ```markdown
-🧠 CORTEX Feature Implementation
+🧠 **CORTEX Feature Implementation**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
    You want to implement user authentication so only authorized users can access the dashboard
@@ -185,7 +187,8 @@
 ### Example 2: Parallel Independent Tasks
 
 ```markdown
-🧠 CORTEX Documentation Fix
+🧠 **CORTEX Documentation Fix**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
    You want to resolve multiple documentation problems that were identified
@@ -209,7 +212,8 @@
 ### Example 3: Simple Tasks
 
 ```markdown
-🧠 CORTEX Quick Fix
+🧠 **CORTEX Quick Fix**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
    You want to refresh the README with current information
@@ -273,7 +277,8 @@ CORTEX will:
 |--------|----------|--------------|
 | 🧚 **Story** | First-time users, understanding CORTEX | `#file:prompts/shared/story.md` |
 | 🚀 **Setup** | Installation, cross-platform setup | `#file:prompts/shared/setup-guide.md` |
-| 🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
+| � **Planning** | Interactive feature planning guide | `#file:prompts/shared/help_plan_feature.md` |
+| �🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
 | 🤖 **Agents** | Understanding agent system | `#file:prompts/shared/agents-guide.md` |
 | 📊 **Tracking** | Enable conversation memory | `#file:prompts/shared/tracking-guide.md` |
 | ⚙️ **Configuration** | Advanced settings, multi-machine | `#file:prompts/shared/configuration-reference.md` |
@@ -302,6 +307,7 @@ let's plan a feature / plan authentication system
 |----------|----------------|
 | Story | `#file:prompts/shared/story.md` |
 | Setup Guide | `#file:prompts/shared/setup-guide.md` |
+| Planning Guide | `#file:prompts/shared/help_plan_feature.md` |
 | Technical Docs | `#file:prompts/shared/technical-reference.md` |
 | Agents Guide | `#file:prompts/shared/agents-guide.md` |
 | Tracking Guide | `#file:prompts/shared/tracking-guide.md` |
@@ -374,15 +380,15 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 ---
 
-*Last Updated: 2025-11-13 | CORTEX 2.0 Natural Language Architecture*
+*Last Updated: 2025-11-13 | CORTEX 2.1 Interactive Planning Release*
 
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. All operations use natural language only - no slash commands needed for core CORTEX operations.*
 
 *What's New in 5.3:* 
+- **Interactive Planning (NEW!)** - Say "plan a feature" for guided, step-by-step feature breakdown with Work Planner integration
 - **Smart Next Steps** - Context-aware formatting: phases for large projects, tasks for quick fixes, parallel tracks for independent work
 - **No Forced Choices** - Multi-select support when tasks can run together (no more "pick one" for independent items)
 - **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
 - **Interaction Design** - Single, intuitive interaction model (see `cortex-brain/interaction-design.yaml`)
-- **Documentation Cleanup** - 200+ lines removed, clearer focus on natural language patterns
-- **Module Status Updates** - 37/86 modules implemented (43%), 3/12 operations fully working
-- See `cortex-brain/cortex-2.0-design/SLASH-COMMAND-REMOVAL-REPORT.md` for details
+- **Module Status Updates** - 58/65 modules implemented (89%), 5/13 operations fully working (including Interactive Planning)
+- See `cortex-brain/CORTEX-2.1-TRACK-A-COMPLETE.md` for Track A completion details

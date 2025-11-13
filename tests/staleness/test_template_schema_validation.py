@@ -155,6 +155,14 @@ class TestTemplateSchemaValidation:
 class TestDocumentationStaleness:
     """Detect stale documentation that doesn't match implementation."""
     
+    @pytest.fixture
+    def templates(self) -> Dict:
+        """Load response templates."""
+        template_file = Path('cortex-brain/response-templates.yaml')
+        with open(template_file, encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        return data['templates']
+    
     def test_entry_point_schema_version(self):
         """Verify entry point mentions current schema version."""
         

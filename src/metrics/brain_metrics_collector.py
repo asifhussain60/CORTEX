@@ -3,8 +3,8 @@ Brain Metrics Collector
 
 Aggregates metrics from Tier 1, 2, 3 for user-facing brain performance reports.
 
-Schema Version: 2.0.0 (must match response-templates.yaml)
-Last Updated: 2025-11-12
+Schema Version: 2.1.0 (must match response-templates.yaml)
+Last Updated: 2025-11-13
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -34,13 +34,13 @@ class BrainMetricsCollector:
     - Token optimization: Savings, overhead, efficiency
     """
     
-    SCHEMA_VERSION = "2.0.0"  # Must match response-templates.yaml
+    SCHEMA_VERSION = "2.1.0"  # Must match response-templates.yaml
     
     def __init__(self):
         """Initialize metrics collector."""
         self.tier1_db = Path(config.tier1_db_path)
         self.tier2_db = Path(config.tier2_db_path)
-        self.tier3_db = Path(config.tier3_db_path) if hasattr(config, 'tier3_db_path') else None
+        self.tier3_db = Path(config.tier3_db_path) if hasattr(config, 'tier3_db_path') and config.tier3_db_path else None
     
     def get_brain_performance_metrics(self) -> Dict[str, Any]:
         """
@@ -54,21 +54,28 @@ class BrainMetricsCollector:
             - All keys match template placeholders in response-templates.yaml
             - Missing tiers return safe defaults (0, 'Unknown', etc.)
         """
+        # Get nested tier metrics
+        tier1_metrics = self._get_tier1_metrics()
+        tier2_metrics = self._get_tier2_metrics()
+        tier3_metrics = self._get_tier3_metrics()
+        derived_metrics = self._calculate_derived_metrics()
+        
+        # Build nested structure for tests AND flat structure for templates
         metrics = {
             # Schema version (for template compatibility checking)
             'schema_version': self.SCHEMA_VERSION,
             
-            # Tier 1 metrics
-            **self._get_tier1_metrics(),
+            # Nested structure (for tests and programmatic access)
+            'tier1': tier1_metrics,
+            'tier2': tier2_metrics,
+            'tier3': tier3_metrics,
+            'derived': derived_metrics,
             
-            # Tier 2 metrics
-            **self._get_tier2_metrics(),
-            
-            # Tier 3 metrics
-            **self._get_tier3_metrics(),
-            
-            # Derived metrics
-            **self._calculate_derived_metrics(),
+            # Flat structure (for template placeholders - backward compatibility)
+            **{f'tier1_{k}': v for k, v in tier1_metrics.items()},
+            **{f'tier2_{k}': v for k, v in tier2_metrics.items()},
+            **{f'tier3_{k}': v for k, v in tier3_metrics.items()},
+            **derived_metrics,
         }
         
         # Add health insight
@@ -90,16 +97,36 @@ class BrainMetricsCollector:
         base = self._get_token_base_metrics()
         
         # Calculate savings
-        savings = self._calculate_token_savings(base)
+        savings_data = self._calculate_token_savings(base)
         
         # Add optimization breakdown
-        breakdown = self._get_optimization_breakdown(base)
+        breakdown_data = self._get_optimization_breakdown(base)
         
+        # Build nested structure for tests
         return {
             'schema_version': self.SCHEMA_VERSION,  # For template compatibility
+            
+            # Nested structure (for tests)
+            'baseline': {
+                'vanilla_copilot_tokens': base['session_tokens_without_cortex'],
+                'cortex_tokens': base['session_tokens_with_cortex'],
+            },
+            'current': {
+                'requests': base['session_requests'],
+                'avg_tokens_per_request': savings_data.get('avg_cortex_context_tokens', 0),
+            },
+            'savings': {
+                'token_reduction_percent': savings_data['session_savings_percent'],
+                'tokens_saved': base['session_tokens_saved'],
+                'monthly_savings_usd': savings_data['monthly_cost_saved'],
+                'cost_per_request': savings_data['session_cost_saved'] / max(base['session_requests'], 1),
+            },
+            'breakdown': breakdown_data,
+            
+            # Flat structure (for template placeholders - backward compatibility)
             **base,
-            **savings,
-            **breakdown
+            **savings_data,
+            **breakdown_data,
         }
     
     def get_brain_health_diagnostics(self) -> Dict[str, Any]:
@@ -109,20 +136,25 @@ class BrainMetricsCollector:
         Returns:
             Dict with health status for all tiers
         """
+        tier1_health = self._check_tier1_health()
+        tier2_health = self._check_tier2_health()
+        tier3_health = self._check_tier3_health()
+        
         return {
             # Tier 0 protection
             'tier0_status': self._check_tier0_health(),
             'tier0_rules_count': 7,  # SKULL rules
             'tier0_last_check': datetime.now().strftime('%Y-%m-%d %H:%M'),
             
-            # Tier 1 working memory
-            **self._check_tier1_health(),
+            # Nested tier health objects (for tests)
+            'tier1_health': tier1_health,
+            'tier2_health': tier2_health,
+            'tier3_health': tier3_health,
             
-            # Tier 2 knowledge graph
-            **self._check_tier2_health(),
-            
-            # Tier 3 dev context
-            **self._check_tier3_health(),
+            # Flat tier health (for template placeholders - backward compatibility)
+            **tier1_health,
+            **tier2_health,
+            **tier3_health,
             
             # Overall health score
             'overall_health_score': self._calculate_overall_health(),
@@ -166,15 +198,15 @@ class BrainMetricsCollector:
             conn.close()
             
             return {
-                'tier1_conversations_count': conv_count,
-                'tier1_messages_count': msg_count,
+                'conversations_count': conv_count,
+                'messages_count': msg_count,
                 'session_duration_hours': round(avg_duration, 1),
                 'has_active_session': '✅' if has_active else '❌',
             }
         except Exception as e:
             return {
-                'tier1_conversations_count': 0,
-                'tier1_messages_count': 0,
+                'conversations_count': 0,
+                'messages_count': 0,
                 'session_duration_hours': 0,
                 'has_active_session': '❌',
             }
@@ -220,21 +252,21 @@ class BrainMetricsCollector:
             conn.close()
             
             return {
-                'tier2_patterns_count': pattern_count,
-                'tier2_relationships_count': rel_count,
-                'tier2_antipatterns_count': antipattern_count,
-                'tier2_avg_confidence': round(avg_conf, 1),
-                'tier2_top_pattern': top_pattern[:50],  # Truncate
-                'tier2_top_usage': top_usage,
+                'patterns_count': pattern_count,
+                'relationships_count': rel_count,
+                'antipatterns_count': antipattern_count,
+                'avg_confidence': round(avg_conf, 1),
+                'top_pattern': top_pattern[:50],  # Truncate
+                'top_usage': top_usage,
             }
         except Exception as e:
             return {
-                'tier2_patterns_count': 0,
-                'tier2_relationships_count': 0,
-                'tier2_antipatterns_count': 0,
-                'tier2_avg_confidence': 0,
-                'tier2_top_pattern': 'Unknown',
-                'tier2_top_usage': 0,
+                'patterns_count': 0,
+                'relationships_count': 0,
+                'antipatterns_count': 0,
+                'avg_confidence': 0,
+                'top_pattern': 'Unknown',
+                'top_usage': 0,
             }
     
     # ========== Tier 3 Metrics ==========
@@ -243,10 +275,10 @@ class BrainMetricsCollector:
         """Get Tier 3 development context metrics."""
         if not self.tier3_db or not self.tier3_db.exists():
             return {
-                'tier3_commits_count': 0,
-                'tier3_files_count': 0,
-                'tier3_test_coverage': 0,
-                'tier3_velocity_trend': 'Unknown',
+                'commits_count': 0,
+                'files_count': 0,
+                'test_coverage': 0,
+                'velocity_trend': 'Unknown',
             }
         
         try:
@@ -270,17 +302,17 @@ class BrainMetricsCollector:
             conn.close()
             
             return {
-                'tier3_commits_count': commits,
-                'tier3_files_count': files,
-                'tier3_test_coverage': 82,  # From pytest results (hardcoded for now)
-                'tier3_velocity_trend': '📈 Improving',
+                'commits_count': commits,
+                'files_count': files,
+                'test_coverage': 82,  # From pytest results (hardcoded for now)
+                'velocity_trend': '📈 Improving',
             }
         except Exception:
             return {
-                'tier3_commits_count': 0,
-                'tier3_files_count': 0,
-                'tier3_test_coverage': 0,
-                'tier3_velocity_trend': 'Unknown',
+                'commits_count': 0,
+                'files_count': 0,
+                'test_coverage': 0,
+                'velocity_trend': 'Unknown',
             }
     
     # ========== Derived Metrics ==========
@@ -293,13 +325,13 @@ class BrainMetricsCollector:
         
         # Calculate learning rate
         if tier1['session_duration_hours'] > 0:
-            patterns_per_hour = tier2['tier2_patterns_count'] / tier1['session_duration_hours']
+            patterns_per_hour = tier2['patterns_count'] / tier1['session_duration_hours']
         else:
             patterns_per_hour = 0
         
         # Pattern reuse rate (occurrence_count / pattern_count)
-        if tier2['tier2_patterns_count'] > 0:
-            reuse_rate = (tier2['tier2_top_usage'] / tier2['tier2_patterns_count']) * 100
+        if tier2['patterns_count'] > 0:
+            reuse_rate = (tier2['top_usage'] / tier2['patterns_count']) * 100
         else:
             reuse_rate = 0
         
@@ -531,17 +563,22 @@ class BrainMetricsCollector:
         recommendations = []
         
         tier2_metrics = self._get_tier2_metrics()
-        if tier2_metrics['tier2_patterns_count'] < 10:
+        if tier2_metrics['patterns_count'] < 10:
             recommendations.append({
-                'recommendation': 'Brain is still learning. Continue working to build knowledge graph.'
+                'recommendation': 'Brain is still learning. Continue working to build knowledge graph.',
+                'priority': 'medium'
             })
         
         return recommendations
     
     def _generate_health_insight(self, metrics: Dict[str, Any]) -> str:
         """Generate a health insight based on metrics."""
-        patterns = metrics.get('tier2_patterns_count', 0)
-        conversations = metrics.get('tier1_conversations_count', 0)
+        # Access nested tier2 metrics
+        tier2 = metrics.get('tier2', {})
+        tier1 = metrics.get('tier1', {})
+        
+        patterns = tier2.get('patterns_count', 0)
+        conversations = tier1.get('conversations_count', 0)
         
         if patterns == 0 and conversations == 0:
             return "Brain is freshly initialized. Start working to build memory!"

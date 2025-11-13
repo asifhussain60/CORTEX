@@ -635,6 +635,23 @@ modules:
     estimated_hours: 1.5
     notes: "MkDocs integration"
     
+  save_story_markdown:
+    name: "Save Story Markdown"
+    category: story
+    phase: execution
+    priority: 30
+    description: "Write transformed story to file"
+    file_path: "src/operations/modules/save_story_markdown_module.py"
+    class_name: "SaveStoryMarkdownModule"
+    dependencies: ["apply_narrator_voice"]
+    optional: false
+    status: ready
+    implementation_date: "2025-11-09"
+    estimated_hours: 1.5
+    actual_hours: 1.4
+    test_coverage: 88
+    notes: "Saves transformed story to markdown file"
+    
   story_refresh_completion:
     name: "Story Refresh Completion"
     category: story

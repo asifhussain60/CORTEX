@@ -28,7 +28,7 @@ import hashlib
 from collections import defaultdict
 
 from src.operations.base_operation_module import BaseOperationModule, OperationPhase, OperationResult, OperationModuleMetadata, OperationStatus
-from src.operations.header_utils import print_minimalist_header, print_completion_footer
+from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
 from .remove_obsolete_tests_module import RemoveObsoleteTestsModule
 
 logger = logging.getLogger(__name__)

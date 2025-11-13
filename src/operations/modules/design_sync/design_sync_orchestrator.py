@@ -36,8 +36,8 @@ from src.operations.base_operation_module import (
     OperationResult,
     OperationStatus
 )
-from src.operations.header_utils import print_minimalist_header, print_completion_footer
-from src.operations.header_formatter import HeaderFormatter
+from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
+from src.operations.operation_header_formatter import OperationHeaderFormatter
 from .track_config import (
     MultiTrackConfig,
     MachineTrack,
@@ -435,7 +435,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
         mode = "LIVE Execution" if not dry_run else "DRY RUN (Preview Only)"
         
         # Generate formatted header (for Copilot Chat display)
-        from src.operations.header_utils import format_minimalist_header
+        from src.operations.operation_header_formatter import format_minimalist_header
         formatted_header = format_minimalist_header(
             operation_name="Design Sync",
             version="1.0.0",
@@ -574,7 +574,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
                 accomplishments.append(f"Committed changes: {metrics.git_commits[0]}")
             
             # Generate formatted footer (for Copilot Chat display)
-            from src.operations.header_utils import format_completion_footer
+            from src.operations.operation_header_formatter import format_completion_footer
             summary = f"{len(metrics.improvements)} improvements applied" if metrics.improvements else None
             formatted_footer = format_completion_footer(
                 operation_name="Design Sync",
@@ -613,7 +613,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
             metrics.duration_seconds = (datetime.now() - start_time).total_seconds()
             
             # Generate failure footer (for Copilot Chat display)
-            from src.operations.header_utils import format_completion_footer
+            from src.operations.operation_header_formatter import format_completion_footer
             formatted_footer_error = format_completion_footer(
                 operation_name="Design Sync",
                 success=False,
