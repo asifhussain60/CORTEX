@@ -65,7 +65,18 @@ cortex-operations.yaml               # Universal registry of ALL operations
 
 ---
 
-### 4. **Documentation Update** (NEW!)
+### 4. **Feature Planning** (NEW!)
+```bash
+/CORTEX, let's plan a feature
+# or
+"plan a feature"
+```
+
+**Modules:** gather_requirements → search_similar_features → break_down_phases → identify_dependencies → analyze_risks → generate_roadmap → save_feature_plan → create_execution_context
+
+---
+
+### 5. **Documentation Update** (Planned)
 ```bash
 /CORTEX, generate documentation
 # or
@@ -85,11 +96,12 @@ All operations defined in **`cortex-operations.yaml`**:
 | `environment_setup` | `/setup` | Environment | 11 modules |
 | `refresh_cortex_story` | `/CORTEX, refresh cortex story` | Documentation | 6 modules |
 | `workspace_cleanup` | `/CORTEX, cleanup` | Maintenance | 6 modules |
+| `feature_planning` | `/CORTEX, let's plan a feature` | Planning | 8 modules |
 | `update_documentation` | `/CORTEX, generate documentation` | Documentation | 6 modules |
 | `brain_protection_check` | `/CORTEX, run brain protection` | Validation | 6 modules |
 | `run_tests` | `/CORTEX, run tests` | Testing | 5 modules |
 
-**Total:** 7 operations, 48 modules
+**Total:** 8 operations, 56 modules
 
 ---
 
@@ -217,6 +229,16 @@ result = execute_operation("do amazing thing")
 - [ ] `vacuum_sqlite_databases_module.py`
 - [ ] `remove_orphaned_files_module.py`
 - [ ] `generate_cleanup_report_module.py`
+
+**Feature Planning:**
+- [ ] `gather_requirements_module.py`
+- [ ] `search_similar_features_module.py`
+- [ ] `break_down_phases_module.py`
+- [ ] `identify_dependencies_module.py`
+- [ ] `analyze_risks_module.py`
+- [ ] `generate_roadmap_module.py`
+- [ ] `save_feature_plan_module.py`
+- [ ] `create_execution_context_module.py`
 
 **Documentation:**
 - [ ] `scan_docstrings_module.py`

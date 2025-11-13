@@ -120,6 +120,25 @@
 
 ---
 
+#### Feature Planning - ⏸️ PENDING (0%) **NEW in 2.1!**
+**Status:** Designed, no modules implemented yet  
+**Command:** `/CORTEX let's plan a feature`, "plan a feature", "help me plan"  
+**Specification:** `cortex-brain/CORTEX-2.0-FEATURE-PLANNING.md`  
+**Missing:**
+- [ ] `feature_discovery_module.py` - Interactive requirement gathering (what, why, who, constraints)
+- [ ] `pattern_search_module.py` - Find similar past features in Knowledge Graph
+- [ ] `requirement_breakdown_module.py` - Decompose into phases/tasks
+- [ ] `dependency_analysis_module.py` - Identify dependencies and constraints
+- [ ] `risk_identification_module.py` - Detect risks and suggest mitigations
+- [ ] `roadmap_generation_module.py` - Create phase-based roadmap with acceptance criteria
+- [ ] `plan_storage_module.py` - Save to Tier 1 + cortex-brain/feature-plans/
+
+**Agents Used:** Work Planner (lead), Pattern Matcher (insights), Architect (feasibility)  
+**Storage:** Tier 1 SQLite (feature_plans, feature_phases, feature_risks tables) + Markdown files  
+**Timeline:** 4 weeks implementation
+
+---
+
 #### Test Execution - ⏸️ PENDING (0%)
 **Status:** Defined in YAML, no modules implemented  
 **Command:** `/CORTEX, run tests`, "run tests"  
@@ -183,8 +202,9 @@ execute_operation('run tests')  # ⏸️ 0/5 modules
 | Workspace Cleanup | 6 | 6 | 100% | ✅ |
 | Documentation Update | 1 | 6 | 17% | 🔄 |
 | Brain Protection | 0 | 6 | 0% | ⏸️ |
+| Feature Planning | 0 | 7 | 0% | ⏸️ |
 | Test Execution | 0 | 5 | 0% | ⏸️ |
-| **TOTAL** | **24** | **40** | **60%** | **3/6** |
+| **TOTAL** | **24** | **47** | **51%** | **3/7** |
 
 ---
 

@@ -191,6 +191,61 @@ operations:
       completion_percentage: 100
       notes: "Single orchestrator module coordinates backup management, file organization, MD consolidation, bloat detection, and automatic optimization trigger."
       estimated_hours: 10
+  feature_planning:
+    name: Feature Planning
+    description: Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
+    deployment_tier: user  # ✅ Include in user deployment package
+    natural_language:
+    - plan a feature
+    - let's plan a feature
+    - help me plan
+    - plan feature
+    - create feature plan
+    - start planning
+    - feature planning
+    category: planning
+    modules:
+    - feature_discovery
+    - pattern_search
+    - requirement_breakdown
+    - dependency_analysis
+    - risk_identification
+    - roadmap_generation
+    - plan_storage
+    profiles:
+      quick:
+        description: Quick planning - essential breakdown only
+        modules:
+        - feature_discovery
+        - requirement_breakdown
+        - roadmap_generation
+        - plan_storage
+      standard:
+        description: Standard planning - with pattern insights and risks
+        modules:
+        - feature_discovery
+        - pattern_search
+        - requirement_breakdown
+        - risk_identification
+        - roadmap_generation
+        - plan_storage
+      comprehensive:
+        description: Full planning - complete analysis with dependencies
+        modules:
+        - feature_discovery
+        - pattern_search
+        - requirement_breakdown
+        - dependency_analysis
+        - risk_identification
+        - roadmap_generation
+        - plan_storage
+    implementation_status:
+      status: designed
+      modules_implemented: 0
+      modules_total: 7
+      completion_percentage: 0
+      notes: "Complete specification exists in CORTEX-2.0-FEATURE-PLANNING.md. Uses existing Work Planner, Pattern Matcher, and Architect agents. Estimated 4 weeks implementation."
+      estimated_hours: 160
   update_documentation:
     name: Update Documentation
     description: Refresh and build CORTEX documentation site
@@ -1900,11 +1955,138 @@ modules:
     lines_of_code: 650
     cortex_version: '2.0'
     
+  # Feature Planning Modules (CORTEX 2.0 Enhancement)
+  feature_discovery:
+    name: Feature Discovery
+    description: Interactive questioning to understand feature requirements (what, why, who, constraints)
+    phase: PRE_VALIDATION
+    priority: 10
+    class: FeatureDiscoveryModule
+    file: planning/feature_discovery_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - planning
+    - interactive
+    - requirements
+    status: designed
+    estimated_hours: 8
+    cortex_version: '2.1'
+    
+  pattern_search:
+    name: Pattern Search
+    description: Search Tier 2 Knowledge Graph for similar past features and proven approaches
+    phase: PREPARATION
+    priority: 20
+    class: PatternSearchModule
+    file: planning/pattern_search_module.py
+    dependencies:
+    - feature_discovery
+    optional: false
+    tags:
+    - planning
+    - pattern-matching
+    - tier2
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  requirement_breakdown:
+    name: Requirement Breakdown
+    description: Decompose feature into phases, tasks, and acceptance criteria
+    phase: PROCESSING
+    priority: 30
+    class: RequirementBreakdownModule
+    file: planning/requirement_breakdown_module.py
+    dependencies:
+    - feature_discovery
+    optional: false
+    tags:
+    - planning
+    - breakdown
+    - work-planner
+    status: designed
+    estimated_hours: 16
+    cortex_version: '2.1'
+    
+  dependency_analysis:
+    name: Dependency Analysis
+    description: Identify phase dependencies, external dependencies, and technical constraints
+    phase: PROCESSING
+    priority: 40
+    class: DependencyAnalysisModule
+    file: planning/dependency_analysis_module.py
+    dependencies:
+    - requirement_breakdown
+    optional: true
+    tags:
+    - planning
+    - dependencies
+    - architecture
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  risk_identification:
+    name: Risk Identification
+    description: Identify technical risks, suggest mitigations, flag unknown unknowns
+    phase: VALIDATION
+    priority: 50
+    class: RiskIdentificationModule
+    file: planning/risk_identification_module.py
+    dependencies:
+    - requirement_breakdown
+    optional: false
+    tags:
+    - planning
+    - risk-analysis
+    - architect
+    status: designed
+    estimated_hours: 10
+    cortex_version: '2.1'
+    
+  roadmap_generation:
+    name: Roadmap Generation
+    description: Generate phase-based roadmap with timeline, acceptance criteria, and markdown document
+    phase: FINALIZATION
+    priority: 60
+    class: RoadmapGenerationModule
+    file: planning/roadmap_generation_module.py
+    dependencies:
+    - requirement_breakdown
+    - risk_identification
+    optional: false
+    tags:
+    - planning
+    - roadmap
+    - documentation
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  plan_storage:
+    name: Plan Storage
+    description: Save feature plan to Tier 1 database and cortex-brain/feature-plans/ markdown file
+    phase: FINALIZATION
+    priority: 70
+    class: PlanStorageModule
+    file: planning/plan_storage_module.py
+    dependencies:
+    - roadmap_generation
+    optional: false
+    tags:
+    - planning
+    - storage
+    - tier1
+    status: designed
+    estimated_hours: 8
+    cortex_version: '2.1'
+    
 metadata:
   version: '2.1'
   schema_version: '1.0'
   author: Asif Hussain
-  last_updated: '2025-11-10'
+  last_updated: '2025-11-13'
   description: Universal operations registry for CORTEX 2.0 + 2.1
   changelog:
   - version: '2.1'

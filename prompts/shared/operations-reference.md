@@ -9,6 +9,7 @@
 | **Design Sync** | "sync design", "align design", "consolidate status" | ✅ READY | Synchronize design docs with implementation |
 | **Story Refresh** | "refresh story", "update story" | 🟡 VALIDATION | Validate CORTEX story structure (validation-only, see limitations) |
 | **Cleanup** | "cleanup", "clean workspace", "tidy up" | 🟡 PARTIAL | Clean temp files, optimize databases |
+| **Optimize** | "optimize codebase", "analyze quality", "check health" | ✅ READY | Run CORTEX optimizer (token analysis, YAML validation, plugin health, DB optimization) |
 | **Documentation** | "update docs", "build docs" | ⏸️ PENDING | Generate/build documentation site |
 | **Brain Protection** | "check brain", "validate protection" | ⏸️ PENDING | Validate brain integrity |
 | **Run Tests** | "run tests", "test suite" | ⏸️ PENDING | Execute test suite with coverage |
@@ -28,4 +29,5 @@ from src.operations import execute_operation
 report = execute_operation('setup')  # Works!
 report = execute_operation('refresh story')  # Works!
 report = execute_operation('cleanup', profile='standard')  # Works!
+report = execute_operation('optimize codebase')  # Works! (runs admin optimizer)
 ```

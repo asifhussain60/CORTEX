@@ -1,5 +1,7 @@
 # CORTEX Structured Response Format
 
+**Last Updated:** 2025-11-13
+
 **Version:** 1.0  
 **Status:** ✅ IMPLEMENTED  
 **SKULL Protection:** SKULL-008

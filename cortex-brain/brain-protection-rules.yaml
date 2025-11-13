@@ -4,11 +4,17 @@
 # Implements 6 protection layers to prevent degradation of CORTEX intelligence
 # Replaces hardcoded rules in brain_protector.py for easier maintenance
 #
-# Version: 2.0
+# Version: 2.1
+# Last Updated: 2025-11-13
 # Created: 2025-11-08
 # Author: CORTEX Team
+# 
+# Latest Change: Added CODE_STYLE_CONSISTENCY to Tier 0 instincts
+#   - Copilot will match user's coding style (naming, formatting, etc.)
+#   - BUT never compromise on SOLID principles, OOP best practices, security
+#   - Hierarchy: Best practices > Style preferences
 
-version: "2.0"
+version: "2.1"
 type: "governance"
 name: "Brain Protection Rules"
 description: "Automated architectural protection challenges"
@@ -26,6 +32,7 @@ tier0_instincts:
   - "DEFINITION_OF_READY"
   - "DEFINITION_OF_DONE"
   - "SOLID_PRINCIPLES"
+  - "CODE_STYLE_CONSISTENCY"  # Adopt user's code style while maintaining best practices
   - "LOCAL_FIRST"
   - "BRAIN_PROTECTION_TESTS_MANDATORY"
   - "MACHINE_READABLE_FORMATS"
@@ -453,11 +460,67 @@ protection_layers:
         rationale: |
           CODE_STYLE_CONSISTENCY: Developer Experience Principle
           
+          **CRITICAL HIERARCHY: Best Practices > Style Preferences**
+          
+          When generating code, CORTEX MUST:
+          1. ✅ ALWAYS follow SOLID principles (non-negotiable)
+          2. ✅ ALWAYS follow proper OOP design (non-negotiable)
+          3. ✅ ALWAYS follow security best practices (non-negotiable)
+          4. ✅ ALWAYS follow DRY, KISS, YAGNI principles (non-negotiable)
+          5. ✅ THEN adapt to user's style preferences (adaptive layer)
+          
+          This means: If user's style conflicts with best practices, 
+          CORTEX follows best practices and explains why.
+          
+          Example Scenarios:
+          
+          ✅ ADAPT TO USER STYLE (No conflict with best practices):
+          User's code:
+          ```python
+          def calculate_total(items):  # No type hints
+              total = 0
+              for item in items:
+                  total += item['price']
+              return total
+          ```
+          
+          CORTEX generates (matching style):
+          ```python
+          def calculate_tax(total, rate):  # Match: No type hints
+              return total * rate          # Match: Simple style
+          ```
+          
+          ⚡ OVERRIDE USER STYLE (Conflicts with best practices):
+          User's code:
+          ```python
+          def do_everything(data):  # God method violating SRP
+              process(data)
+              validate(data)
+              save(data)
+              email(data)
+              log(data)
+          ```
+          
+          CORTEX generates (SOLID over style):
+          ```python
+          # CORTEX: I noticed your code has a God method pattern.
+          # I'll demonstrate Single Responsibility Principle instead:
+          
+          def process_data(data):
+              return processor.process(data)
+          
+          def save_processed_data(processed_data):
+              return repository.save(processed_data)
+          
+          # Explanation: Each function has one clear responsibility.
+          # This makes testing easier and code more maintainable.
+          ```
+          
           When CORTEX generates code, it should feel like the user wrote it,
           not like a foreign AI dropped it in. Consistency builds trust and
           reduces cognitive friction.
           
-          What to Match:
+          What to Match (When No Conflict with Best Practices):
           
           1. Indentation:
              - Tabs vs spaces

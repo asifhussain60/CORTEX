@@ -29,3 +29,8 @@ numpy>=1.24.0  # Required by scikit-learn
 black>=23.0.0
 flake8>=6.0.0
 mypy>=1.0.0
+
+# Admin Tools (Code Analysis & Optimization)
+radon>=6.0.1  # Complexity metrics (cyclomatic, maintainability)
+pylint>=3.0.0  # Comprehensive code quality analysis
+vulture>=2.10  # Dead code detection

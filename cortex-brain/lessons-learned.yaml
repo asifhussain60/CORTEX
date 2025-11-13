@@ -1,6 +1,6 @@
 version: '1.0'
-last_updated: '2025-11-12T20:02:00.276909'
-total_lessons: 14
+last_updated: '2025-11-13T05:07:56.385688'
+total_lessons: 15
 lessons:
 - id: wpf-tdd-001
   title: WPF implementation without TDD causes runtime crashes
@@ -419,6 +419,20 @@ lessons:
   tags:
   - operation-failure
   - test-failure-handling
+- id: orchestration-general-005
+  title: Operation 'Update Documentation' had 2 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-11-13'
+  problem: Operation 'Update Documentation' had 2 failed modules
+  symptoms:
+  - 'generate_api_docs: No docstring index found in context'
+  - 'build_mkdocs_site: MkDocs build failed'
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - update-documentation
 patterns:
 - pattern_id: wpf_icon_validation_pattern
   name: Material Design Icon Validation
