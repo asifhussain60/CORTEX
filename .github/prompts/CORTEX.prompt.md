@@ -11,7 +11,7 @@
 # ⚡ RESPONSE TEMPLATES (NEW!)
 
 **When user says "help" or similar:**
-1. Load `#file:cortex-brain/response-templates.yaml`
+1. Load #file:../../cortex-brain/response-templates.yaml
 2. Find matching trigger
 3. Return pre-formatted response
 4. **NO Python execution needed!**
@@ -193,9 +193,9 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 > **Quality Score: 12/10 (EXCELLENT)**
 > 
 > 📁 **Ready to capture:**  
-> → [Open: cortex-brain/conversation-captures/2025-11-13-authentication-system.md](file:///d:/PROJECTS/CORTEX/cortex-brain/conversation-captures/2025-11-13-authentication-system.md)
+> → Copy this conversation to `cortex-brain/conversation-captures/YYYY-MM-DD-description.md`
 > 
-> *Copy this conversation, paste into the file, then say "import conversation"*
+> *Then say "import conversation" to add to CORTEX brain*
 
 ---
 
@@ -299,15 +299,15 @@ CORTEX will:
 
 | Module | Use Case | Load Command |
 |--------|----------|--------------|
-| 🧚 **Story** | First-time users, understanding CORTEX | `#file:prompts/shared/story.md` |
-| 🚀 **Setup** | Installation, cross-platform setup | `#file:prompts/shared/setup-guide.md` |
-| � **Planning** | Interactive feature planning guide | `#file:prompts/shared/help_plan_feature.md` |
-| �🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
-| 🤖 **Agents** | Understanding agent system | `#file:prompts/shared/agents-guide.md` |
-| 📊 **Tracking** | Enable conversation memory | `#file:prompts/shared/tracking-guide.md` |
-| ⚙️ **Configuration** | Advanced settings, multi-machine | `#file:prompts/shared/configuration-reference.md` |
+| 🧚 **Story** | First-time users, understanding CORTEX | #file:../../prompts/shared/story.md |
+| 🚀 **Setup** | Installation, cross-platform setup | #file:../../prompts/shared/setup-guide.md |
+| � **Planning** | Interactive feature planning guide | #file:../../prompts/shared/help_plan_feature.md |
+| �🔧 **Technical** | API reference, plugin development | #file:../../prompts/shared/technical-reference.md |
+| 🤖 **Agents** | Understanding agent system | #file:../../prompts/shared/agents-guide.md |
+| 📊 **Tracking** | Enable conversation memory | #file:../../prompts/shared/tracking-guide.md |
+| ⚙️ **Configuration** | Advanced settings, multi-machine | #file:../../prompts/shared/configuration-reference.md |
 
-**Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Manual: `setup environment` or `#file:docs/plugins/platform-switch-plugin.md`
+**Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Manual: `setup environment` or #file:../../docs/plugins/platform-switch-plugin.md
 
 ---
 
@@ -329,30 +329,30 @@ let's plan a feature / plan authentication system
 
 | Resource | File Reference |
 |----------|----------------|
-| Story | `#file:prompts/shared/story.md` |
-| Setup Guide | `#file:prompts/shared/setup-guide.md` |
-| Planning Guide | `#file:prompts/shared/help_plan_feature.md` |
-| Technical Docs | `#file:prompts/shared/technical-reference.md` |
-| Agents Guide | `#file:prompts/shared/agents-guide.md` |
-| Tracking Guide | `#file:prompts/shared/tracking-guide.md` |
-| Configuration | `#file:prompts/shared/configuration-reference.md` |
-| Operations | `#file:prompts/shared/operations-reference.md` |
-| Plugins | `#file:prompts/shared/plugin-system.md` |
-| Limitations | `#file:prompts/shared/limitations-and-status.md` |
-| Test Strategy | `#file:cortex-brain/test-strategy.yaml` |
-| Optimization Principles | `#file:cortex-brain/optimization-principles.yaml` |
+| Story | #file:../../prompts/shared/story.md |
+| Setup Guide | #file:../../prompts/shared/setup-guide.md |
+| Planning Guide | #file:../../prompts/shared/help_plan_feature.md |
+| Technical Docs | #file:../../prompts/shared/technical-reference.md |
+| Agents Guide | #file:../../prompts/shared/agents-guide.md |
+| Tracking Guide | #file:../../prompts/shared/tracking-guide.md |
+| Configuration | #file:../../prompts/shared/configuration-reference.md |
+| Operations | #file:../../prompts/shared/operations-reference.md |
+| Plugins | #file:../../prompts/shared/plugin-system.md |
+| Limitations | #file:../../prompts/shared/limitations-and-status.md |
+| Test Strategy | #file:../../cortex-brain/test-strategy.yaml |
+| Optimization Principles | #file:../../cortex-brain/optimization-principles.yaml |
 
 ---
 
 # ⚠️ Known Limitations
 
-Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) | Details: `#file:prompts/shared/limitations-and-status.md`
+Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) | Details: #file:../../prompts/shared/limitations-and-status.md
 
 ---
 
 # ⚠️ CRITICAL: Conversation Tracking
 
-**GitHub Copilot Chat does NOT auto-track conversations.** Without tracking: ❌ No memory. With tracking: ✅ Full memory. Setup: `#file:prompts/shared/tracking-guide.md`
+**GitHub Copilot Chat does NOT auto-track conversations.** Without tracking: ❌ No memory. With tracking: ✅ Full memory. Setup: #file:../../prompts/shared/tracking-guide.md
 
 ---
 
@@ -399,10 +399,10 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 # 📖 Next Steps
 
-1. **First time?** Read the story: `#file:prompts/shared/story.md`
-2. **Need to install?** Setup guide: `#file:prompts/shared/setup-guide.md`
-3. **Developer?** Technical docs: `#file:prompts/shared/technical-reference.md`
-4. **Enable tracking:** Tracking guide: `#file:prompts/shared/tracking-guide.md`
+1. **First time?** Read the story: #file:../../prompts/shared/story.md
+2. **Need to install?** Setup guide: #file:../../prompts/shared/setup-guide.md
+3. **Developer?** Technical docs: #file:../../prompts/shared/technical-reference.md
+4. **Enable tracking:** Tracking guide: #file:../../prompts/shared/tracking-guide.md
 5. **Start working:** Just tell CORTEX what you need!
 
 ---
@@ -421,11 +421,11 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. All operations use natural language only - no slash commands needed for core CORTEX operations.*
 
 *What's New in 5.3:* 
-- **Phase 0 Complete (NEW!)** - 100% test pass rate (834/897 passing, 0 failures). Pragmatic test strategy codified in `cortex-brain/test-strategy.yaml`
-- **Optimization Principles (NEW!)** - 13 validated patterns extracted from Phase 0 success (`cortex-brain/optimization-principles.yaml`)
+- **Phase 0 Complete (NEW!)** - 100% non-skipped test pass rate achieved. Pragmatic test strategy in test-strategy.yaml
+- **Optimization Principles (NEW!)** - 13 validated patterns extracted from Phase 0 success (see optimization-principles.yaml)
 - **Interactive Planning** - Say "plan a feature" for guided, step-by-step feature breakdown with Work Planner integration
 - **Smart Next Steps** - Context-aware formatting: phases for large projects, tasks for quick fixes, parallel tracks for independent work
 - **No Forced Choices** - Multi-select support when tasks can run together (no more "pick one" for independent items)
 - **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
-- **Interaction Design** - Single, intuitive interaction model (see `cortex-brain/interaction-design.yaml`)
-- See `cortex-brain/CORTEX-2.1-TRACK-A-COMPLETE.md` for Track A details, `cortex-brain/PHASE-0-COMPLETION-REPORT.md` for Phase 0
+- **Interaction Design** - Single, intuitive interaction model (see interaction-design.yaml)
+- See CORTEX-2.1-TRACK-A-COMPLETE.md for Track A details, PHASE-0-COMPLETION-REPORT.md for Phase 0
