@@ -905,44 +905,34 @@ class WorkingMemory:
                 session_id = new_session.session_id
         
         # Create conversation with import metadata
-        conversation_id = self.conversation_manager.create_conversation(
-            agent_id="manual_import",
-            goal=f"Imported from {Path(import_source).name}",
-            context={
-                'conversation_type': 'imported',
-                'import_source': import_source,
-                'import_date': import_date.isoformat(),
-                'quality_score': quality_score.total_score,
-                'quality_level': quality_score.level,
-                'semantic_elements': {
-                    'multi_phase_planning': quality_score.elements.multi_phase_planning,
-                    'phase_count': quality_score.elements.phase_count,
-                    'challenge_accept_flow': quality_score.elements.challenge_accept_flow,
-                    'design_decisions': quality_score.elements.design_decisions,
-                    'file_references': quality_score.elements.file_references,
-                    'next_steps_provided': quality_score.elements.next_steps_provided,
-                    'code_implementation': quality_score.elements.code_implementation,
-                    'architectural_discussion': quality_score.elements.architectural_discussion
-                }
-            },
-            session_id=session_id
+        # Generate conversation ID (modular ConversationManager expects us to provide it)
+        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        import random
+        conversation_id = f"imported-conv-{timestamp}-{random.randint(1000, 9999)}"
+        
+        # Use add_conversation (modular API uses 'add' instead of 'create')
+        self.conversation_manager.add_conversation(
+            conversation_id=conversation_id,
+            title=f"Imported from {Path(import_source).name}",
+            message_count=len(conversation_turns),
+            tags=['imported', quality_score.level]
         )
         
         # Store conversation turns as messages
+        # Build message list for bulk insert (modular API)
+        messages_to_add = []
         for turn in conversation_turns:
             # User message
             if 'user' in turn:
-                self.message_store.store_message(
-                    conversation_id,
-                    {'role': 'user', 'content': turn['user']}
-                )
+                messages_to_add.append({'role': 'user', 'content': turn['user']})
             
             # Assistant message
             if 'assistant' in turn:
-                self.message_store.store_message(
-                    conversation_id,
-                    {'role': 'assistant', 'content': turn['assistant']}
-                )
+                messages_to_add.append({'role': 'assistant', 'content': turn['assistant']})
+        
+        # Add all messages at once (modular API uses add_messages with list)
+        if messages_to_add:
+            self.message_store.add_messages(conversation_id, messages_to_add)
         
         # Update conversation metadata with new columns (via SQL directly)
         import sqlite3

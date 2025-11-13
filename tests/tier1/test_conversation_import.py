@@ -23,6 +23,14 @@ class TestConversationImport:
         """Create temporary database for testing."""
         db_path = tmp_path / "test_import.db"
         wm = WorkingMemory(db_path)
+        
+        # Apply migration to add conversation import columns
+        from src.tier1.migration_add_conversation_import import migrate_add_conversation_import
+        success = migrate_add_conversation_import(str(db_path))
+        
+        if not success:
+            pytest.fail("Migration failed in test setup")
+        
         yield wm
         # Cleanup handled by tmp_path
     
@@ -61,7 +69,7 @@ class TestConversationImport:
                 
                 🎯 My Understanding: You want to design an authentication system
                 
-                ⚠️ Challenge: ✓ Accept - Good approach for security
+                ⚠️ **Challenge:** ✓ **Accept** - Good approach for security
                 
                 💬 Response: I recommend a multi-phase implementation:
                 
@@ -232,6 +240,13 @@ class TestImportedConversationRetrieval:
         """Create database with pre-imported conversations."""
         db_path = tmp_path / "test_retrieval.db"
         wm = WorkingMemory(db_path)
+        
+        # Apply migration to add conversation import columns
+        from src.tier1.migration_add_conversation_import import migrate_add_conversation_import
+        success = migrate_add_conversation_import(str(db_path))
+        
+        if not success:
+            pytest.fail("Migration failed in test setup")
         
         # Import several conversations
         result_a = wm.import_conversation(
