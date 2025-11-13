@@ -60,6 +60,7 @@ class IntentRouter(BaseAgent):
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.routing_history = []  # Track routing decisions for learning
         self.agents = {}  # Registry of available agents for routing
+        self._initialize_agent_registry()
         
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
@@ -99,6 +100,19 @@ class IntentRouter(BaseAgent):
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
         }
 
+    def _initialize_agent_registry(self):
+        """Initialize agent registry with available agent types."""
+        # Register all available agent types from the mapping
+        from .agent_types import INTENT_AGENT_MAP
+        
+        # Extract unique agent types from intent mapping
+        for intent_type, agent_type in INTENT_AGENT_MAP.items():
+            if agent_type not in self.agents:
+                self.agents[agent_type] = {
+                    'type': agent_type,
+                    'intents': []
+                }
+            self.agents[agent_type]['intents'].append(intent_type)
     
     def can_handle(self, request: AgentRequest) -> bool:
         """

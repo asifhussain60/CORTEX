@@ -192,12 +192,16 @@ CORTEX is an AI enhancement framework that gives GitHub Copilot long-term memory
 **Solution:** Modular architecture + YAML configuration
 
 **Results:**
-- Entry point: 74,047 → 2,078 tokens (97.2% reduction)
+- Input tokens: 74,047 → 2,078 (97.2% reduction)
+- Cost reduction: 93.4% (GitHub Copilot token-unit pricing)
 - Brain rules: YAML format (75% reduction vs Python)
 - Module loading: On-demand vs always-loaded
-- Annual savings: $25,920 (at typical usage)
+- Projected savings: $8,636/year (1,000 requests/month, 2,000 token responses)
 
-**Details:** See `cortex-brain/CORTEX-TOKEN-OPTIMIZER-COMPARISON.md`
+**Pricing Model:** GitHub's formula: `(input × 1.0) + (output × 1.5) × $0.00001`  
+Cost reduction varies 90-96% depending on response size
+
+**Details:** See `scripts/token_pricing_calculator.py` and `scripts/token_pricing_analysis.json`
 
 ---
 
@@ -307,9 +311,16 @@ Tier 3: Real-time, project metrics (Git/Files)
 ## Performance Benchmarks
 
 **Token Usage:**
-- Entry point: 2,078 tokens avg (97% reduction)
-- Full context: 15,000 tokens avg (with history)
-- Per-request: ~$0.06 (GPT-4 pricing)
+- Input tokens: 2,078 avg (97.2% reduction from 74,047)
+- Full context: 15,000 tokens avg (with conversation history)
+- Token units: ~5,078 (with 2,000 token responses)
+- Per-request cost: ~$0.05 (GitHub Copilot pricing)
+
+**Cost Analysis:**
+- Old architecture: $0.77/request
+- New architecture: $0.05/request
+- Cost reduction: 93.4%
+- Annual savings: $8,636 (1,000 requests/month)
 
 **Response Times:**
 - Intent detection: <100ms

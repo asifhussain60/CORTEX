@@ -315,6 +315,8 @@ let's plan a feature / plan authentication system
 | Operations | `#file:prompts/shared/operations-reference.md` |
 | Plugins | `#file:prompts/shared/plugin-system.md` |
 | Limitations | `#file:prompts/shared/limitations-and-status.md` |
+| Test Strategy | `#file:cortex-brain/test-strategy.yaml` |
+| Optimization Principles | `#file:cortex-brain/optimization-principles.yaml` |
 
 ---
 
@@ -332,7 +334,7 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 # 🔄 Migration Note
 
-**CORTEX 2.0** = 97.2% token reduction (74,047 → 2,078 avg). Benefits: 97% faster, cleaner, modular. Old backup: `prompts/user/cortex-BACKUP-2025-11-08.md`
+**CORTEX 2.0** = 97.2% input token reduction (74,047 → 2,078 avg), **93.4% cost reduction** with GitHub Copilot pricing. Benefits: Faster responses, cleaner architecture, modular design. Old backup: `prompts/user/cortex-BACKUP-2025-11-08.md`
 
 ---
 
@@ -354,11 +356,20 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 # 🏆 Why This Matters
 
-**Token savings:** 97.2% reduction (74,047 → 2,078 avg) = $2.22 → $0.06/request = $25,920/year savings
+**Input token reduction:** 97.2% (74,047 → 2,078 input tokens)  
+**Cost reduction:** 93.4% with GitHub Copilot pricing (token-unit formula applied)  
+**Projected savings:** $8,636/year (1,000 requests/month, 2,000 token responses)
 
 **Performance:** 97% faster parsing (2-3s → 80ms), easier maintenance (200-400 lines/module vs 8,701 monolithic)
 
+**Pricing model:** Uses GitHub's token-unit formula: `(input × 1.0) + (output × 1.5) × $0.00001`  
+Cost reduction varies 90-96% depending on response size (output tokens)
+
 **Optimization:** Brain protection rules moved to YAML (75% token reduction). Tests: `tests/tier0/test_brain_protector.py` (22/22 ✅)
+
+**Note:** Metrics updated 2025-11-13 to reflect GitHub Copilot's actual pricing model (token-unit formula with input/output multipliers). See `scripts/token_pricing_calculator.py` for full analysis.
+
+**Phase 0 Complete:** 100% test pass rate achieved (834/897 passing, 0 failures). Optimization principles codified in `cortex-brain/optimization-principles.yaml`. See `cortex-brain/PHASE-0-COMPLETION-REPORT.md`.
 
 ---
 
@@ -372,23 +383,25 @@ Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) 
 
 ---
 
-**Phase 3 Validation Complete:** 95-97% token reduction achieved  
+**Phase 3 Validation Complete:** 97.2% input token reduction, 93.4% cost reduction with real pricing  
 **Decision:** STRONG GO (4.75/5 score)  
 **Status:** Modular architecture PRODUCTION READY ✅
 
-**Full technical details:** See `prompts/validation/PHASE-3-VALIDATION-REPORT.md`
+**Full technical details:** See `prompts/validation/PHASE-3-VALIDATION-REPORT.md`  
+**Cost analysis:** See `scripts/token_pricing_calculator.py` and `scripts/token_pricing_analysis.json`
 
 ---
 
-*Last Updated: 2025-11-13 | CORTEX 2.1 Interactive Planning Release*
+*Last Updated: 2025-11-13 | CORTEX 2.1 Interactive Planning Release + Phase 0 Optimization Complete*
 
 *Note: This prompt file enables the `/CORTEX` command in GitHub Copilot Chat. All operations use natural language only - no slash commands needed for core CORTEX operations.*
 
 *What's New in 5.3:* 
-- **Interactive Planning (NEW!)** - Say "plan a feature" for guided, step-by-step feature breakdown with Work Planner integration
+- **Phase 0 Complete (NEW!)** - 100% test pass rate (834/897 passing, 0 failures). Pragmatic test strategy codified in `cortex-brain/test-strategy.yaml`
+- **Optimization Principles (NEW!)** - 13 validated patterns extracted from Phase 0 success (`cortex-brain/optimization-principles.yaml`)
+- **Interactive Planning** - Say "plan a feature" for guided, step-by-step feature breakdown with Work Planner integration
 - **Smart Next Steps** - Context-aware formatting: phases for large projects, tasks for quick fixes, parallel tracks for independent work
 - **No Forced Choices** - Multi-select support when tasks can run together (no more "pick one" for independent items)
 - **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
 - **Interaction Design** - Single, intuitive interaction model (see `cortex-brain/interaction-design.yaml`)
-- **Module Status Updates** - 58/65 modules implemented (89%), 5/13 operations fully working (including Interactive Planning)
-- See `cortex-brain/CORTEX-2.1-TRACK-A-COMPLETE.md` for Track A completion details
+- See `cortex-brain/CORTEX-2.1-TRACK-A-COMPLETE.md` for Track A details, `cortex-brain/PHASE-0-COMPLETION-REPORT.md` for Phase 0

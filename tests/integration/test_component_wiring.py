@@ -22,6 +22,7 @@ class TestPluginWiring:
         from src.plugins.plugin_registry import PluginRegistry
         
         registry = PluginRegistry()
+        registry.discover_plugins()  # Discover plugins before getting them
         plugins = registry.get_all_plugins()
         
         # Should have plugins registered
@@ -39,6 +40,7 @@ class TestPluginWiring:
         from src.plugins.command_registry import CommandRegistry
         
         plugin_registry = PluginRegistry()
+        plugin_registry.discover_plugins()  # Discover plugins first
         command_registry = CommandRegistry()
         
         # Plugins should register commands

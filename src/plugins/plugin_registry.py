@@ -111,6 +111,15 @@ class PluginRegistry:
         """
         return list(self._metadata.values())
     
+    def get_all_plugins(self) -> List[BasePlugin]:
+        """
+        Get all registered plugin instances.
+        
+        Returns:
+            List of plugin instances
+        """
+        return list(self._plugins.values())
+    
     def get_plugin_by_natural_language(self, text: str) -> Optional[BasePlugin]:
         """
         Find plugin that handles a natural language request.

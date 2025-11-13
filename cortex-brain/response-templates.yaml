@@ -92,14 +92,16 @@ templates:
     content: |
       ![CORTEX Commands](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
       
-      📝 *Your Request:* {{user_request}}
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       
-      🎯 *Understanding:* You want to see all available CORTEX commands
+      📝 **Your Request:** {{user_request}}
       
-      💬 *Response:* Here's your command reference:
+      🎯 **Understanding:** You want to see all available CORTEX commands
+      
+      💬 **Response:** Here's your command reference:
       
       Status  Command        What It Does
-      --------------------------------------------------------------------------------
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ✅      update story   Refresh CORTEX story documentation
       🔄      setup          Setup/configure environment
       ✅      design sync    Synchronize design with implementation
@@ -108,7 +110,7 @@ templates:
       ⏸️      check brain    Validate brain protection
       ⏸️      run tests      Execute test suite
       🎯      plan this      Interactive planning (CORTEX 2.1)
-      --------------------------------------------------------------------------------
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       
       Legend:
         ✅ ready    - Fully working
@@ -120,7 +122,7 @@ templates:
         Natural language:  "setup environment" or "refresh story" or "sync design"
         Slash commands:    /setup or /CORTEX, refresh cortex story
       
-      � **Next Steps:**
+      🔮 **Next Steps:**
         • Try: "help detailed" for more information
         • Try: "help <command>" for specific command help
         • Try: "setup environment" to get started
@@ -144,6 +146,8 @@ templates:
       
       ![CORTEX Commands Detailed](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
       
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
       📝 **Your Request:** {{user_request}}
       
       🎯 **Understanding:** You want detailed information about all CORTEX capabilities
@@ -151,7 +155,7 @@ templates:
       💬 **Response:** Here's the complete breakdown organized by category:
       
       📦 ENVIRONMENT & SETUP
-      ----------------------
+      ━━━━━━━━━━━━━━━━━━━━━━
       ✅ setup - Setup/configure development environment
          Examples: "setup environment", "/setup", "configure"
          Modules: 4 (platform detection, deps, brain init, validation)
@@ -256,11 +260,11 @@ templates:
       📊 **CORTEX Implementation Status**
       
       **✅ Production Ready:**
-        • Story Refresh (6/6 modules)
-        • Environment Setup (4/4 modules core)
+        • Story Refresh (complete)
+        • Environment Setup (core modules operational)
       
       **🔄 Partial (Core Working):**
-        • Workspace Cleanup (5/6 modules)
+        • Workspace Cleanup (core functionality ready)
       
       **⏸️ Pending (Architecture Complete):**
         • Documentation Builder
@@ -495,7 +499,7 @@ templates:
       Status: ✅ Production Ready
       
       Token Optimization: 97.2% reduction achieved
-      Test Coverage: 82 tests passing
+      Test Coverage: Comprehensive suite operational
   
   about:
     triggers:
