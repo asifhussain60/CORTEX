@@ -847,6 +847,136 @@ class WorkingMemory:
         """
         return self.session_correlator.generate_session_narrative(session_id)
     
+    # ========== Conversation Import (CORTEX 3.0 Dual-Channel Memory) ==========
+    
+    def import_conversation(
+        self,
+        conversation_turns: List[Dict[str, str]],
+        import_source: str,
+        workspace_path: Optional[str] = None,
+        import_date: Optional[datetime] = None
+    ) -> Dict[str, Any]:
+        """
+        Import a manually captured conversation to CORTEX brain.
+        
+        Part of CORTEX 3.0's dual-channel memory system:
+        - Channel 1: Ambient daemon (execution-focused, automatic)
+        - Channel 2: Manual import (strategy-focused, user-driven)
+        
+        Args:
+            conversation_turns: List of conversation turns with 'user' and 'assistant' keys
+            import_source: Source file path or identifier
+            workspace_path: Optional workspace path to link conversation to session
+            import_date: Optional import timestamp (defaults to now)
+            
+        Returns:
+            Dict with import results: {
+                'conversation_id': str,
+                'session_id': str,
+                'quality_score': int,
+                'quality_level': str,
+                'semantic_elements': dict,
+                'turns_imported': int
+            }
+        """
+        import_date = import_date or datetime.now()
+        
+        # Quality analysis using CORTEX 3.0 analyzer
+        from .conversation_quality import ConversationQualityAnalyzer
+        
+        analyzer = ConversationQualityAnalyzer(show_hint_threshold="GOOD")
+        
+        # Analyze all turns
+        turns_for_analysis = [
+            (turn.get('user', ''), turn.get('assistant', ''))
+            for turn in conversation_turns
+        ]
+        quality_score = analyzer.analyze_multi_turn_conversation(turns_for_analysis)
+        
+        # Get or create session if workspace provided
+        session_id = None
+        if workspace_path:
+            active_session = self.session_manager.get_active_session(workspace_path)
+            if active_session:
+                session_id = active_session.session_id
+            else:
+                # Create import session using detect_or_create
+                new_session = self.session_manager.detect_or_create_session(workspace_path)
+                session_id = new_session.session_id
+        
+        # Create conversation with import metadata
+        conversation_id = self.conversation_manager.create_conversation(
+            agent_id="manual_import",
+            goal=f"Imported from {Path(import_source).name}",
+            context={
+                'conversation_type': 'imported',
+                'import_source': import_source,
+                'import_date': import_date.isoformat(),
+                'quality_score': quality_score.total_score,
+                'quality_level': quality_score.level,
+                'semantic_elements': {
+                    'multi_phase_planning': quality_score.elements.multi_phase_planning,
+                    'phase_count': quality_score.elements.phase_count,
+                    'challenge_accept_flow': quality_score.elements.challenge_accept_flow,
+                    'design_decisions': quality_score.elements.design_decisions,
+                    'file_references': quality_score.elements.file_references,
+                    'next_steps_provided': quality_score.elements.next_steps_provided,
+                    'code_implementation': quality_score.elements.code_implementation,
+                    'architectural_discussion': quality_score.elements.architectural_discussion
+                }
+            },
+            session_id=session_id
+        )
+        
+        # Store conversation turns as messages
+        for turn in conversation_turns:
+            # User message
+            if 'user' in turn:
+                self.message_store.store_message(
+                    conversation_id,
+                    {'role': 'user', 'content': turn['user']}
+                )
+            
+            # Assistant message
+            if 'assistant' in turn:
+                self.message_store.store_message(
+                    conversation_id,
+                    {'role': 'assistant', 'content': turn['assistant']}
+                )
+        
+        # Update conversation metadata with new columns (via SQL directly)
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            UPDATE conversations 
+            SET conversation_type = ?,
+                import_source = ?,
+                quality_score = ?,
+                semantic_elements = ?
+            WHERE conversation_id = ?
+        """, (
+            'imported',
+            import_source,
+            quality_score.total_score,
+            json.dumps(quality_score.elements.__dict__),
+            conversation_id
+        ))
+        
+        conn.commit()
+        conn.close()
+        
+        return {
+            'conversation_id': conversation_id,
+            'session_id': session_id,
+            'quality_score': quality_score.total_score,
+            'quality_level': quality_score.level,
+            'semantic_elements': quality_score.elements.__dict__,
+            'reasoning': quality_score.reasoning,
+            'turns_imported': len(conversation_turns)
+        }
+    
     # ========== Message Management (Delegated) ==========
     
     def get_messages(self, conversation_id: str) -> List[Dict[str, Any]]:
