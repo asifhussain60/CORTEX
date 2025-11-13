@@ -65,7 +65,6 @@ class OperationPhase(Enum):
 class ExecutionMode(Enum):
     """Execution mode for operations."""
     LIVE = "live"  # Execute actual changes
-    DRY_RUN = "dry_run"  # Preview only, no changes
 
 
 class OperationStatus(Enum):
@@ -211,8 +210,8 @@ class BaseOperationModule(ABC):
     
     @property
     def is_dry_run(self) -> bool:
-        """Check if module is in dry-run mode."""
-        return self._execution_mode == ExecutionMode.DRY_RUN
+        """Check if module is in dry-run mode (deprecated - always returns False)."""
+        return False
     
     @abstractmethod
     def get_metadata(self) -> OperationModuleMetadata:

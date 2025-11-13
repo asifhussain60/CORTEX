@@ -24,8 +24,10 @@ import shutil
 import yaml
 import json
 import argparse
+import subprocess
+import sys
 from pathlib import Path
-from typing import Set, List, Dict
+from typing import Set, List, Dict, Tuple
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -780,10 +782,110 @@ And it remembers everything from past conversations! 🧠
         return False
 
 
+def run_validation_tests(source_root: Path) -> Tuple[bool, int, int]:
+    """
+    Run publish validation tests to ensure package integrity.
+    
+    Args:
+        source_root: CORTEX repository root
+    
+    Returns:
+        Tuple of (success, passed_count, total_count)
+    """
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("Step 5/6: Running Validation Tests")
+    logger.info("=" * 80)
+    logger.info("")
+    
+    test_files = [
+        'tests/tier0/test_publish_privacy.py',
+        'tests/tier0/test_publish_faculties.py',
+        'tests/integration/test_publish_simulation.py',
+    ]
+    
+    # Build pytest command
+    cmd = [
+        sys.executable,
+        '-m',
+        'pytest',
+        *test_files,
+        '-v',
+        '--tb=line',
+        '-q',  # Quiet mode for cleaner output
+    ]
+    
+    logger.info("Running publish validation tests...")
+    logger.info("")
+    
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=source_root,
+            capture_output=True,
+            text=True,
+            timeout=120  # 2 minute timeout
+        )
+        
+        # Parse output for test counts
+        output_lines = result.stdout.split('\n')
+        
+        # Print test output
+        for line in output_lines:
+            if line.strip():
+                logger.info(f"  {line}")
+        
+        # Check if tests passed
+        if result.returncode == 0:
+            # Extract test counts from pytest output
+            for line in output_lines:
+                if 'passed' in line.lower():
+                    # Parse format like "43 passed in 4.75s"
+                    parts = line.split()
+                    for i, part in enumerate(parts):
+                        if 'passed' in part and i > 0:
+                            try:
+                                passed = int(parts[i-1])
+                                logger.info("")
+                                logger.info(f"✅ All {passed} validation tests PASSED!")
+                                return True, passed, passed
+                            except (ValueError, IndexError):
+                                pass
+            
+            logger.info("")
+            logger.info("✅ All validation tests PASSED!")
+            return True, 0, 0
+        else:
+            logger.error("")
+            logger.error("❌ Validation tests FAILED!")
+            logger.error("Review test output above for details.")
+            
+            # Show stderr if available
+            if result.stderr:
+                logger.error("")
+                logger.error("Error output:")
+                for line in result.stderr.split('\n'):
+                    if line.strip():
+                        logger.error(f"  {line}")
+            
+            return False, 0, 0
+            
+    except subprocess.TimeoutExpired:
+        logger.error("")
+        logger.error("❌ Validation tests TIMED OUT (>2 minutes)")
+        return False, 0, 0
+    except Exception as e:
+        logger.error("")
+        logger.error(f"❌ Failed to run validation tests: {e}")
+        return False, 0, 0
+
+
 def generate_report(
     publish_root: Path,
     user_ops: Set[str],
-    admin_ops: Set[str]
+    admin_ops: Set[str],
+    tests_passed: bool = False,
+    test_count: int = 0
 ) -> None:
     """
     Generate publish summary report.
@@ -792,8 +894,14 @@ def generate_report(
         publish_root: Path to publish/ directory
         user_ops: Set of user operation IDs
         admin_ops: Set of admin operation IDs
+        tests_passed: Whether validation tests passed
+        test_count: Number of tests that passed
     """
-    logger.info("Step 5/5: Generating summary report...")
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("Step 6/6: Generating Summary Report")
+    logger.info("=" * 80)
+    logger.info("")
     
     publish_cortex = publish_root / 'CORTEX'
     
@@ -806,12 +914,18 @@ def generate_report(
     
     logger.info("")
     logger.info("=" * 80)
-    logger.info("✅ PUBLISH COMPLETE!")
+    logger.info("✅ PUBLISH COMPLETE!" if tests_passed else "⚠️  PUBLISH COMPLETE (with warnings)")
     logger.info("=" * 80)
     logger.info("")
     logger.info(f"📦 Package Location: {publish_cortex}")
     logger.info(f"📊 Total Files: {total_files}")
     logger.info(f"💾 Package Size: {size_mb:.1f} MB")
+    
+    if tests_passed and test_count > 0:
+        logger.info(f"✅ Validation: {test_count} tests passed")
+    elif not tests_passed:
+        logger.warning("⚠️  Validation: Some tests failed - review output above")
+    
     logger.info("")
     logger.info(f"✅ User Operations Included ({len(user_ops)}):")
     for op in sorted(user_ops):
@@ -823,7 +937,7 @@ def generate_report(
     logger.info("")
     logger.info("📋 Next Steps:")
     logger.info("1. Manually copy publish/CORTEX to your target application")
-    logger.info("2. Follow instructions in publish/SETUP-FOR-COPILOT.md")
+    logger.info("2. Follow instructions in publish/CORTEX/SETUP-FOR-COPILOT.md")
     logger.info("3. In Copilot Chat: 'onboard this application'")
     logger.info("")
 
@@ -837,6 +951,16 @@ def main():
         '--dry-run',
         action='store_true',
         help='Preview changes without making them'
+    )
+    parser.add_argument(
+        '--skip-tests',
+        action='store_true',
+        help='Skip validation tests (not recommended)'
+    )
+    parser.add_argument(
+        '--fail-on-test-error',
+        action='store_true',
+        help='Exit with error code if tests fail (default: warn but continue)'
     )
     
     args = parser.parse_args()
@@ -874,8 +998,21 @@ def main():
         logger.error("Failed to create setup file")
         return 1
     
+    # Run validation tests (unless dry-run or explicitly skipped)
+    tests_passed = False
+    test_count = 0
+    
+    if not args.dry_run and not args.skip_tests:
+        tests_passed, test_count, _ = run_validation_tests(source_root)
+        
+        if not tests_passed and args.fail_on_test_error:
+            logger.error("")
+            logger.error("❌ PUBLISH FAILED: Validation tests did not pass")
+            logger.error("Fix test failures or use --skip-tests to bypass (not recommended)")
+            return 1
+    
     if not args.dry_run:
-        generate_report(publish_root, user_ops, admin_ops)
+        generate_report(publish_root, user_ops, admin_ops, tests_passed, test_count)
     else:
         logger.info("")
         logger.info("🔍 DRY RUN COMPLETE - No changes made")

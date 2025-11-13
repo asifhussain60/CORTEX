@@ -47,7 +47,6 @@ from src.operations.base_operation_module import (
     OperationStatus,
     ExecutionMode
 )
-from src.operations.dry_run_mixin import DryRunOrchestratorMixin
 from src.operations.header_formatter import HeaderFormatter
 
 logger = logging.getLogger(__name__)
@@ -144,7 +143,7 @@ class SystemHealthReport:
         }
 
 
-class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
+class OptimizeSystemOrchestrator(BaseOperationModule):
     """
     Meta-level orchestrator for comprehensive CORTEX system optimization.
     
@@ -199,7 +198,7 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
         
         Args:
             project_root: CORTEX project root directory
-            mode: Execution mode (LIVE or DRY_RUN)
+            mode: Execution mode (LIVE only)
         """
         super().__init__()
         self.project_root = project_root
@@ -285,7 +284,7 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
         Args:
             context: Execution context with keys:
                 - profile: Optimization profile ('comprehensive', 'focused', 'minimal')
-                - mode: Execution mode ('live' or 'dry_run')
+                - mode: Execution mode (always 'live')
                 - skip_phases: Optional list of phases to skip
         
         Returns:
@@ -296,7 +295,7 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
         # Extract context
         profile = context.get('profile', 'comprehensive')
         mode_str = context.get('mode', 'live')
-        self.mode = ExecutionMode.LIVE if mode_str == 'live' else ExecutionMode.DRY_RUN
+        self.mode = ExecutionMode.LIVE  # Always use live mode
         skip_phases = context.get('skip_phases', [])
         
         # Print header
@@ -411,7 +410,7 @@ class OptimizeSystemOrchestrator(DryRunOrchestratorMixin, BaseOperationModule):
             # Execute with current mode
             sync_context = {
                 'profile': context.get('profile', 'standard'),
-                'mode': 'dry_run' if self.mode == ExecutionMode.DRY_RUN else 'live'
+                'mode': 'live'  # Always use live mode
             }
             
             result = design_sync.execute(sync_context)

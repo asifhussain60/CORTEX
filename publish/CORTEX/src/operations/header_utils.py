@@ -16,7 +16,6 @@ def format_minimalist_header(
     version: str,
     profile: str,
     mode: str,
-    dry_run: bool = False,
     purpose: Optional[str] = None
 ) -> str:
     """
@@ -28,14 +27,12 @@ def format_minimalist_header(
         operation_name: Name of the operation (e.g., "Design Sync")
         version: Version number (e.g., "1.0.0")
         profile: Execution profile (e.g., "comprehensive")
-        mode: Execution mode description
-        dry_run: Whether in dry-run mode
+        mode: Execution mode description (always "LIVE EXECUTION")
         purpose: Optional 1-2 line description of what will be accomplished
     
     Returns:
         Formatted header string
     """
-    mode_str = "DRY RUN (Preview Only)" if dry_run else mode
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     lines = [
@@ -44,7 +41,7 @@ def format_minimalist_header(
         f"  CORTEX {operation_name} Orchestrator v{version}",
         "━" * 80,
         "",
-        f"Profile: {profile}  │  Mode: {mode_str}  │  Started: {timestamp}"
+        f"Profile: {profile}  │  Mode: {mode}  │  Started: {timestamp}"
     ]
     
     # Add purpose if provided
@@ -67,7 +64,6 @@ def print_minimalist_header(
     version: str,
     profile: str,
     mode: str,
-    dry_run: bool = False,
     purpose: Optional[str] = None
 ) -> None:
     """
@@ -77,12 +73,11 @@ def print_minimalist_header(
         operation_name: Name of the operation (e.g., "Design Sync")
         version: Version number (e.g., "1.0.0")
         profile: Execution profile (e.g., "comprehensive")
-        mode: Execution mode description
-        dry_run: Whether in dry-run mode
+        mode: Execution mode description (always "LIVE EXECUTION")
         purpose: Optional 1-2 line description of what will be accomplished
     """
     header = format_minimalist_header(
-        operation_name, version, profile, mode, dry_run, purpose
+        operation_name, version, profile, mode, purpose
     )
     print(header)
 
@@ -90,9 +85,7 @@ def print_minimalist_header(
 def print_banner_header(
     operation_name: str,
     version: str,
-    profile: str,
-    mode: str,
-    dry_run: bool = False
+    profile: str
 ) -> None:
     """
     Print banner-style header (Option D) for help module.
@@ -101,10 +94,7 @@ def print_banner_header(
         operation_name: Name of the operation (e.g., "Help System")
         version: Version number (e.g., "1.0.0")
         profile: Execution profile
-        mode: Execution mode description
-        dry_run: Whether in dry-run mode
     """
-    mode_str = "DRY RUN" if dry_run else "LIVE"
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     print("\n╔═══════════════════════════════════════════════════════════════════════════╗")
@@ -116,7 +106,7 @@ def print_banner_header(
     print("║  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝                       ║")
     print(f"║                    {operation_name} v{version:<39} ║")
     print("╠═══════════════════════════════════════════════════════════════════════════╣")
-    print(f"║  Profile: {profile:<15} │  Mode: {mode_str:<6} │  Started: {timestamp}  ║")
+    print(f"║  Profile: {profile:<15} │  Mode: LIVE    │  Started: {timestamp}  ║")
     print("╠═══════════════════════════════════════════════════════════════════════════╣")
     print("║  © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX ║")
     print("╚═══════════════════════════════════════════════════════════════════════════╝")

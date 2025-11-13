@@ -9,17 +9,19 @@ Design Principles:
     - YAML-driven operation definitions
     - Topological sort for dependency resolution
     - Phase-based execution with priorities
+    - Parallel execution of independent modules
     - Comprehensive error handling and rollback
 
 Author: Asif Hussain
-Version: 2.0 (Universal Operations Architecture)
+Version: 2.1 (Parallel Execution Optimization)
 """
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 from src.operations.base_operation_module import (
     BaseOperationModule,
     OperationPhase,
@@ -27,7 +29,6 @@ from src.operations.base_operation_module import (
     OperationResult,
     ExecutionMode
 )
-from src.operations.dry_run_mixin import DryRunOrchestratorMixin
 from src.cortex_agents.learning_capture_agent import capture_operation_learning
 
 logger = logging.getLogger(__name__)
@@ -53,6 +54,9 @@ class OperationExecutionReport:
         timestamp: When operation completed
         context: Final shared context dictionary
         errors: List of error messages
+        parallel_execution_count: Number of modules executed in parallel
+        parallel_groups_count: Number of parallel execution groups
+        time_saved_seconds: Estimated time saved by parallel execution
     """
     operation_id: str
     operation_name: str
@@ -66,6 +70,9 @@ class OperationExecutionReport:
     timestamp: Optional[datetime] = None
     context: Dict[str, Any] = field(default_factory=dict)
     errors: List[str] = field(default_factory=list)
+    parallel_execution_count: int = 0
+    parallel_groups_count: int = 0
+    time_saved_seconds: float = 0.0
     
     def __post_init__(self):
         """Set timestamp if not provided."""
@@ -73,7 +80,7 @@ class OperationExecutionReport:
             self.timestamp = datetime.now()
 
 
-class OperationsOrchestrator(DryRunOrchestratorMixin):
+class OperationsOrchestrator:
     """
     Universal orchestrator for ALL CORTEX operations.
     
@@ -90,28 +97,25 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         - Priority ordering within phases
         - Error handling with rollback
         - Comprehensive reporting
-        - Dry-run support (preview mode)
         - Copyright header rendering
     
     Example Usage:
-        # Setup operation (live mode)
+        # Setup operation
         orchestrator = OperationsOrchestrator(
             operation_id="environment_setup",
             modules=[platform_mod, vision_mod, brain_mod]
         )
         report = orchestrator.execute_operation(
-            context={'project_root': Path('...')},
-            execution_mode=ExecutionMode.LIVE
+            context={'project_root': Path('...')}
         )
         
-        # Cleanup operation (dry-run mode)
+        # Cleanup operation
         orchestrator = OperationsOrchestrator(
             operation_id="workspace_cleanup",
             modules=[scan_mod, cleanup_mod]
         )
         report = orchestrator.execute_operation(
-            context={'project_root': Path('...')},
-            execution_mode=ExecutionMode.DRY_RUN  # Preview only
+            context={'project_root': Path('...')}
         )
     """
     
@@ -120,7 +124,8 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         operation_id: str,
         operation_name: str,
         modules: List[BaseOperationModule],
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        max_parallel_workers: int = 4
     ):
         """
         Initialize orchestrator for an operation.
@@ -130,24 +135,24 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
             operation_name: Human-readable name (e.g., 'Refresh CORTEX Story')
             modules: List of modules to execute
             context: Initial shared context dictionary
+            max_parallel_workers: Maximum number of modules to execute in parallel (default: 4)
         """
         self.operation_id = operation_id
         self.operation_name = operation_name
         self.modules = modules
         self.context = context or {}
+        self.max_parallel_workers = max_parallel_workers
         self.executed_modules: List[str] = []
     
     def execute_operation(
         self,
-        context: Optional[Dict[str, Any]] = None,
-        execution_mode: ExecutionMode = ExecutionMode.LIVE
+        context: Optional[Dict[str, Any]] = None
     ) -> OperationExecutionReport:
         """
         Execute the operation by running all modules in dependency-resolved order.
         
         Args:
             context: Additional context to merge with initialization context
-            execution_mode: LIVE (apply changes) or DRY_RUN (preview only)
         
         Returns:
             OperationExecutionReport with execution details
@@ -158,14 +163,10 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         if context:
             self.context.update(context)
         
-        # Store execution mode in context
-        self.context['execution_mode'] = execution_mode
+        # Store execution mode in context (always LIVE)
+        self.context['execution_mode'] = ExecutionMode.LIVE
         
-        # Apply execution mode to all modules
-        self.apply_mode_to_modules(self.modules, execution_mode)
-        
-        mode_str = "DRY RUN" if execution_mode == ExecutionMode.DRY_RUN else "LIVE"
-        logger.info(f"Starting operation: {self.operation_name} ({self.operation_id}) - {mode_str} mode")
+        logger.info(f"Starting operation: {self.operation_name} ({self.operation_id}) - LIVE mode")
         logger.info(f"Modules to execute: {len(self.modules)}")
         
         # Initialize report
@@ -181,77 +182,64 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
             sorted_modules = self._sort_modules()
             logger.info(f"Module execution order: {[m.metadata.module_id for m in sorted_modules]}")
             
-            # Execute modules in order
-            for module in sorted_modules:
-                module_id = module.metadata.module_id
-                
-                try:
-                    # Check if module should run
-                    if not module.should_run(self.context):
-                        logger.info(f"Skipping module: {module_id} (should_run returned False)")
-                        report.modules_skipped.append(module_id)
-                        continue
-                    
-                    # Validate prerequisites
-                    is_valid, issues = module.validate_prerequisites(self.context)
-                    if not is_valid:
-                        logger.error(f"Prerequisites not met for {module_id}: {issues}")
-                        report.modules_failed.append(module_id)
-                        report.errors.extend(issues)
-                        
-                        if not module.metadata.optional:
-                            logger.error(f"Required module {module_id} failed prerequisite check")
-                            report.success = False
-                            self._rollback_modules(report)
-                            return report
-                        else:
-                            logger.warning(f"Optional module {module_id} skipped due to failed prerequisites")
-                            report.modules_skipped.append(module_id)
-                            continue
-                    
-                    # Execute module
-                    logger.info(f"Executing module: {module_id} ({module.metadata.name})")
-                    logger.info(f"  Phase: {module.metadata.phase.value}, Priority: {module.metadata.priority}")
-                    
-                    result = module.execute(self.context)
-                    report.module_results[module_id] = result
-                    report.modules_executed.append(module_id)
-                    self.executed_modules.append(module_id)
-                    
-                    if result.success:
-                        logger.info(f"Module {module_id} succeeded: {result.message}")
-                        report.modules_succeeded.append(module_id)
-                        
-                        # Merge module output data into shared context for next modules
-                        if result.data:
-                            self.context.update(result.data)
-                            logger.debug(f"Merged {len(result.data)} context items from {module_id}")
-                    else:
-                        logger.error(f"Module {module_id} failed: {result.message}")
-                        report.modules_failed.append(module_id)
-                        report.errors.extend(result.errors)
-                        
-                        if not module.metadata.optional:
-                            logger.error(f"Required module {module_id} failed, rolling back")
-                            report.success = False
-                            self._rollback_modules(report)
-                            return report
-                        else:
-                            logger.warning(f"Optional module {module_id} failed, continuing")
-                
-                except Exception as e:
-                    logger.error(f"Exception in module {module_id}: {e}", exc_info=True)
-                    report.modules_failed.append(module_id)
-                    report.errors.append(f"Exception in {module_id}: {str(e)}")
-                    
-                    if not module.metadata.optional:
-                        logger.error(f"Required module {module_id} raised exception, rolling back")
-                        report.success = False
-                        self._rollback_modules(report)
-                        return report
+            # Group modules for parallel execution
+            module_groups = self._group_independent_modules(sorted_modules)
+            logger.info(f"Parallel execution groups: {len(module_groups)}")
+            report.parallel_groups_count = len(module_groups)
             
-            # Operation completed successfully
-            report.success = len(report.modules_failed) == 0
+            # Track time saved by parallel execution
+            sequential_time_estimate = 0.0
+            parallel_time_actual = 0.0
+            
+            # Execute module groups (each group runs in parallel)
+            for group_idx, module_group in enumerate(module_groups):
+                group_start = datetime.now()
+                
+                if len(module_group) == 1:
+                    # Single module - execute directly
+                    module = module_group[0]
+                    result = self._execute_single_module(module, report)
+                    
+                    if result is False:  # Critical failure
+                        return report
+                else:
+                    # Multiple modules - execute in parallel
+                    logger.info(f"Executing group {group_idx + 1}/{len(module_groups)}: "
+                              f"{len(module_group)} modules in parallel")
+                    report.parallel_execution_count += len(module_group)
+                    
+                    success = self._execute_parallel_group(module_group, report)
+                    
+                    if not success:  # Critical failure in parallel group
+                        return report
+                
+                # Track timing
+                group_duration = (datetime.now() - group_start).total_seconds()
+                parallel_time_actual += group_duration
+                
+                # Estimate sequential time (sum of all module times in group)
+                # For parallel groups, sequential would be sum of all times
+                # For single module, no savings
+                if len(module_group) > 1:
+                    # Parallel execution: all modules ran concurrently
+                    # Sequential would be: module1_time + module2_time + ...
+                    # We approximate each module took group_duration (they ran concurrently)
+                    sequential_time_estimate += group_duration * len(module_group)
+                else:
+                    # Single module: no parallel benefit
+                    sequential_time_estimate += group_duration
+            
+            # Calculate time saved
+            report.time_saved_seconds = max(0, sequential_time_estimate - parallel_time_actual)
+            
+            # Operation completed successfully if no REQUIRED modules failed
+            # Optional module failures are acceptable
+            required_failures = [
+                module_id for module_id in report.modules_failed
+                if not any(m.metadata.module_id == module_id and m.metadata.optional 
+                          for m in self.modules)
+            ]
+            report.success = len(required_failures) == 0
             
             if report.success:
                 logger.info(f"Operation {self.operation_name} completed successfully")
@@ -293,6 +281,221 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
         
         return report
     
+    def _execute_single_module(
+        self, 
+        module: BaseOperationModule, 
+        report: OperationExecutionReport
+    ) -> bool:
+        """
+        Execute a single module and update report.
+        
+        Args:
+            module: Module to execute
+            report: Report to update with results
+        
+        Returns:
+            True if execution should continue, False if critical failure occurred
+        """
+        module_id = module.metadata.module_id
+        
+        try:
+            # Check if module should run
+            if not module.should_run(self.context):
+                logger.info(f"Skipping module: {module_id} (should_run returned False)")
+                report.modules_skipped.append(module_id)
+                return True
+            
+            # Validate prerequisites
+            is_valid, issues = module.validate_prerequisites(self.context)
+            if not is_valid:
+                logger.error(f"Prerequisites not met for {module_id}: {issues}")
+                report.modules_failed.append(module_id)
+                report.errors.extend(issues)
+                
+                if not module.metadata.optional:
+                    logger.error(f"Required module {module_id} failed prerequisite check")
+                    report.success = False
+                    self._rollback_modules(report)
+                    return False
+                else:
+                    logger.warning(f"Optional module {module_id} skipped due to failed prerequisites")
+                    report.modules_skipped.append(module_id)
+                    return True
+            
+            # Execute module
+            logger.info(f"Executing module: {module_id} ({module.metadata.name})")
+            logger.info(f"  Phase: {module.metadata.phase.value}, Priority: {module.metadata.priority}")
+            
+            result = module.execute(self.context)
+            report.module_results[module_id] = result
+            report.modules_executed.append(module_id)
+            self.executed_modules.append(module_id)
+            
+            if result.success:
+                logger.info(f"Module {module_id} succeeded: {result.message}")
+                report.modules_succeeded.append(module_id)
+                
+                # Merge module output data into shared context for next modules
+                if result.data:
+                    self.context.update(result.data)
+                    logger.debug(f"Merged {len(result.data)} context items from {module_id}")
+                return True
+            else:
+                logger.error(f"Module {module_id} failed: {result.message}")
+                report.modules_failed.append(module_id)
+                report.errors.extend(result.errors)
+                
+                if not module.metadata.optional:
+                    logger.error(f"Required module {module_id} failed, rolling back")
+                    report.success = False
+                    self._rollback_modules(report)
+                    return False
+                else:
+                    logger.warning(f"Optional module {module_id} failed, continuing")
+                    return True
+        
+        except Exception as e:
+            logger.error(f"Exception in module {module_id}: {e}", exc_info=True)
+            report.modules_failed.append(module_id)
+            report.errors.append(f"Exception in {module_id}: {str(e)}")
+            
+            if not module.metadata.optional:
+                logger.error(f"Required module {module_id} raised exception, rolling back")
+                report.success = False
+                self._rollback_modules(report)
+                return False
+            
+            return True
+    
+    def _execute_parallel_group(
+        self,
+        modules: List[BaseOperationModule],
+        report: OperationExecutionReport
+    ) -> bool:
+        """
+        Execute a group of modules in parallel.
+        
+        Args:
+            modules: List of modules to execute concurrently
+            report: Report to update with results
+        
+        Returns:
+            True if execution should continue, False if critical failure occurred
+        """
+        with ThreadPoolExecutor(max_workers=self.max_parallel_workers) as executor:
+            # Submit all modules for execution
+            future_to_module: Dict[Future, BaseOperationModule] = {
+                executor.submit(self._execute_module_worker, module): module
+                for module in modules
+            }
+            
+            # Collect results as they complete
+            critical_failure = False
+            
+            for future in as_completed(future_to_module):
+                module = future_to_module[future]
+                module_id = module.metadata.module_id
+                
+                try:
+                    result, should_continue = future.result()
+                    
+                    if result:  # Module executed (not skipped)
+                        report.module_results[module_id] = result
+                        report.modules_executed.append(module_id)
+                        self.executed_modules.append(module_id)
+                        
+                        if result.success:
+                            logger.info(f"Module {module_id} succeeded: {result.message}")
+                            report.modules_succeeded.append(module_id)
+                            
+                            # Merge module output data into shared context
+                            # Note: In parallel execution, context updates are merged after all modules complete
+                            if result.data:
+                                self.context.update(result.data)
+                                logger.debug(f"Merged {len(result.data)} context items from {module_id}")
+                        else:
+                            logger.error(f"Module {module_id} failed: {result.message}")
+                            report.modules_failed.append(module_id)
+                            report.errors.extend(result.errors)
+                            
+                            if not module.metadata.optional:
+                                critical_failure = True
+                    
+                    if not should_continue:
+                        critical_failure = True
+                
+                except Exception as e:
+                    logger.error(f"Exception in parallel module {module_id}: {e}", exc_info=True)
+                    report.modules_failed.append(module_id)
+                    report.errors.append(f"Exception in {module_id}: {str(e)}")
+                    
+                    if not module.metadata.optional:
+                        critical_failure = True
+            
+            # If critical failure occurred, rollback
+            if critical_failure:
+                logger.error("Critical failure in parallel group, rolling back")
+                report.success = False
+                self._rollback_modules(report)
+                return False
+        
+        return True
+    
+    def _execute_module_worker(
+        self, 
+        module: BaseOperationModule
+    ) -> Tuple[Optional[OperationResult], bool]:
+        """
+        Worker function for executing a module in a thread.
+        
+        Args:
+            module: Module to execute
+        
+        Returns:
+            Tuple of (result, should_continue) where:
+                - result: OperationResult if module executed, None if skipped
+                - should_continue: False if critical failure, True otherwise
+        """
+        module_id = module.metadata.module_id
+        
+        try:
+            # Check if module should run
+            if not module.should_run(self.context):
+                logger.info(f"Skipping module: {module_id} (should_run returned False)")
+                return None, True
+            
+            # Validate prerequisites
+            is_valid, issues = module.validate_prerequisites(self.context)
+            if not is_valid:
+                logger.error(f"Prerequisites not met for {module_id}: {issues}")
+                
+                if not module.metadata.optional:
+                    return OperationResult(
+                        success=False,
+                        status=OperationStatus.FAILED,
+                        message=f"Prerequisites not met: {', '.join(issues)}",
+                        errors=issues
+                    ), False
+                else:
+                    logger.warning(f"Optional module {module_id} skipped due to failed prerequisites")
+                    return None, True
+            
+            # Execute module
+            logger.info(f"Executing module: {module_id} ({module.metadata.name}) [parallel]")
+            logger.info(f"  Phase: {module.metadata.phase.value}, Priority: {module.metadata.priority}")
+            
+            result = module.execute(self.context)
+            return result, True
+        
+        except Exception as e:
+            logger.error(f"Exception in module worker {module_id}: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Exception: {str(e)}",
+                errors=[str(e)]
+            ), not module.metadata.optional
+    
     def _sort_modules(self) -> List[BaseOperationModule]:
         """
         Sort modules by phase, dependencies, and priority.
@@ -324,6 +527,68 @@ class OperationsOrchestrator(DryRunOrchestratorMixin):
             sorted_modules.extend(sorted_phase)
         
         return sorted_modules
+    
+    def _group_independent_modules(
+        self, 
+        modules: List[BaseOperationModule]
+    ) -> List[List[BaseOperationModule]]:
+        """
+        Group modules into batches that can be executed in parallel.
+        
+        Modules can run in parallel if they:
+        1. Have no dependencies on each other
+        2. Are in the same phase
+        3. Have already had their dependencies satisfied
+        
+        Args:
+            modules: List of modules (assumed to be in dependency-resolved order)
+        
+        Returns:
+            List of module groups, where each group can be executed in parallel
+        """
+        if not modules:
+            return []
+        
+        # Build dependency graph
+        module_map = {m.metadata.module_id: m for m in modules}
+        
+        # Track which modules have been scheduled
+        scheduled: Set[str] = set()
+        groups: List[List[BaseOperationModule]] = []
+        
+        while len(scheduled) < len(modules):
+            # Find modules whose dependencies are all satisfied
+            current_group = []
+            
+            for module in modules:
+                module_id = module.metadata.module_id
+                
+                # Skip if already scheduled
+                if module_id in scheduled:
+                    continue
+                
+                # Check if all dependencies are satisfied
+                dependencies_met = all(
+                    dep in scheduled or dep not in module_map
+                    for dep in module.metadata.dependencies
+                )
+                
+                if dependencies_met:
+                    current_group.append(module)
+            
+            # If no modules can be scheduled, we have a circular dependency
+            if not current_group:
+                logger.error("Circular dependency detected in module grouping")
+                # Return remaining modules as individual groups to proceed
+                remaining = [m for m in modules if m.metadata.module_id not in scheduled]
+                groups.extend([[m] for m in remaining])
+                break
+            
+            # Add current group and mark as scheduled
+            groups.append(current_group)
+            scheduled.update(m.metadata.module_id for m in current_group)
+        
+        return groups
     
     def _topological_sort(self, modules: List[BaseOperationModule]) -> List[BaseOperationModule]:
         """

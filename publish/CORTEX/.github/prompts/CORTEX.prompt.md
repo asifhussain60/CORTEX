@@ -8,7 +8,7 @@
 
 ---
 
-## ⚡ RESPONSE TEMPLATES (NEW!)
+# ⚡ RESPONSE TEMPLATES (NEW!)
 
 **When user says "help" or similar:**
 1. Load `#file:cortex-brain/response-templates.yaml`
@@ -23,7 +23,7 @@
 - `help <command>` → Command-specific help
 - `quick start` → First-time user guide
 
-### 🧠 Contextual Intelligence (Architecture Utilization)
+## 🧠 Contextual Intelligence (Architecture Utilization)
 
 **CORTEX automatically adapts based on work context:**
 
@@ -43,6 +43,77 @@
 - All 10 agents coordinate via Corpus Callosum when needed
 
 **User control:** Say "be more [concise/detailed/technical]" to adjust on the fly
+
+---
+
+# 📋 MANDATORY RESPONSE FORMAT (VS Code Copilot Chat)
+
+**CRITICAL:** ALL responses in VS Code Copilot Chat MUST follow this 5-part structure:
+
+## Structure
+
+```markdown
+🧠 CORTEX [Operation Type]
+
+📝 Your Request: [Echo user's request in concise, refined manner]
+
+🎯 MY Understanding: [State what you understand they want to achieve]
+
+⚠️ Challenge: [Choose one]
+   ✓ Accept: [If viable, state why this approach is sound]
+   ⚡ Challenge: [If concerns exist, explain why + offer alternatives after balancing accuracy vs efficiency]
+
+💬 Response: [Your actual response - explanation WITHOUT code snippets unless explicitly requested]
+
+🔍 Next Steps: [Numbered selection options]
+   1. [First actionable recommendation]
+   2. [Second actionable recommendation]
+   3. [Third actionable recommendation]
+```
+
+## Rules
+
+**Echo & Understanding:**
+- ✅ Always echo user's request (refined/concise, not verbatim)
+- ✅ State your understanding before proceeding
+- ✅ Use concise format (VS Code chat, not terminal output)
+
+**Challenge Section:**
+- ✅ Balance accuracy with efficiency
+- ✅ Accept if viable: Brief rationale why approach is sound
+- ✅ Challenge if concerns: Explain issue + provide alternatives
+- ❌ Never skip this section - always Accept OR Challenge
+
+**Response:**
+- ✅ Explain in natural language (no code snippets by default)
+- ✅ If executing: Use tools directly, explain WHAT was done
+- ❌ Don't show code unless user asks "show me the code"
+- ❌ Don't show implementation details unless requested
+
+**Next Steps:**
+- ✅ Always provide 2-4 numbered options
+- ✅ Make options actionable (user can immediately act on them)
+- ✅ Order by priority/logical sequence
+
+## Example
+
+```markdown
+🧠 CORTEX Feature Implementation
+
+📝 Your Request: Add login authentication to the dashboard
+
+🎯 MY Understanding: You want to implement user authentication so only authorized users can access the dashboard
+
+⚠️ Challenge: ✓ Accept
+   This approach is sound. Authentication is critical for dashboard security and follows best practices.
+
+💬 Response: I'll implement authentication using the existing user service, add login UI to the dashboard entry point, and create route guards to protect dashboard pages. This integrates with your current architecture without breaking existing functionality.
+
+🔍 Next Steps:
+   1. Review the authentication flow diagram I'll create
+   2. Test login with sample credentials (user: admin, pass: demo123)
+   3. Configure production OAuth provider in config.json
+```
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
@@ -83,393 +154,95 @@ CORTEX will:
 
 ---
 
-## 📚 Documentation Modules
+# 📚 Documentation Modules
 
-**Choose what you need based on your intent:**
+| Module | Use Case | Load Command |
+|--------|----------|--------------|
+| 🧚 **Story** | First-time users, understanding CORTEX | `#file:prompts/shared/story.md` |
+| 🚀 **Setup** | Installation, cross-platform setup | `#file:prompts/shared/setup-guide.md` |
+| 🔧 **Technical** | API reference, plugin development | `#file:prompts/shared/technical-reference.md` |
+| 🤖 **Agents** | Understanding agent system | `#file:prompts/shared/agents-guide.md` |
+| 📊 **Tracking** | Enable conversation memory | `#file:prompts/shared/tracking-guide.md` |
+| ⚙️ **Configuration** | Advanced settings, multi-machine | `#file:prompts/shared/configuration-reference.md` |
 
-### 🧚 Story - "The Intern with Amnesia"
-**When:** First time using CORTEX, explaining to stakeholders, understanding why CORTEX exists
-
-**Load the story:**
-```
-#file:prompts/shared/story.md
-```
-
-**What you'll learn:**
-- Human-centered explanation of CORTEX
-- The dual-hemisphere brain architecture
-- How Tier 1, 2, 3 solve amnesia problem
-- How agents coordinate work
+**Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Manual: `setup environment` or `#file:docs/plugins/platform-switch-plugin.md`
 
 ---
 
-### 🚀 Setup - Getting Started Guide
-**When:** First-time installation, troubleshooting setup, cross-platform migration
+# 🎯 How to Use CORTEX
 
-**Load the setup guide:**
-```
-#file:prompts/shared/setup-guide.md
-```
-
-**What you'll learn:**
-- Environment setup (Windows, macOS, Linux)
-- Dependency installation
-- Brain initialization
-- Configuration options
-- Conversation tracking setup
-
----
-
-### 🔧 Technical - Architecture & API Reference
-**When:** Developer integration, API calls, architecture deep-dive, plugin development
-
-**Load technical docs:**
-```
-#file:prompts/shared/technical-reference.md
-```
-
-**What you'll learn:**
-- Tier 1, 2, 3 API reference
-- Agent system architecture
-- Plugin development
-- Configuration reference
-- Testing protocols
-- Performance benchmarks
-
----
-
-### 🤖 Agents - How CORTEX Thinks
-**When:** Understanding agent system, troubleshooting workflows, extending CORTEX
-
-**Load agent documentation:**
-```
-#file:prompts/shared/agents-guide.md
-```
-
-**What you'll learn:**
-- Intent routing system
-- 10 specialist agents (left + right brain)
-- Corpus callosum coordination
-- Workflow orchestration
-- Agent responsibilities
-
----
-
-### 📊 Tracking - Conversation Memory
-**When:** Setting up conversation tracking, troubleshooting amnesia, enabling "continue" command
-
-**Load tracking guide:**
-```
-#file:prompts/shared/tracking-guide.md
-```
-
-**What you'll learn:**
-- Why tracking is needed
-- 3 tracking methods (PowerShell, Python CLI, Ambient Daemon)
-- How to enable auto-tracking
-- Troubleshooting conversation amnesia
-
----
-
-### ⚙️ Configuration - Advanced Settings
-**When:** Customizing CORTEX behavior, multi-machine setup, troubleshooting config
-
-**Load configuration reference:**
-```
-#file:prompts/shared/configuration-reference.md
-```
-
-**What you'll learn:**
-- cortex.config.json structure
-- Tier 1, 2, 3 configuration options
-- Machine-specific settings
-- Feature flags
-- Path configuration
-
----
-
-### 🔄 Platform Switch - Automatic Cross-Platform Setup
-**When:** CORTEX automatically detects when you switch between Mac/Windows/Linux
-
-**What happens automatically:**
-- ✅ **Platform detection** on startup (Mac, Windows, or Linux)
-- ✅ **Auto-configuration** when platform changes detected
-- ✅ Git pull latest code
-- ✅ Configure platform-specific paths and environment
-- ✅ Quick dependency check
-- ✅ Validate tooling (Git, Python, etc.)
-
-**Manual override:**
-```
-setup environment
-/setup
-```
-
-**Documentation:**
-```
-#file:docs/plugins/platform-switch-plugin.md
-```
-
-**Supported Platforms:**
-- 🍎 macOS (Darwin) - zsh, Unix paths
-- 🪟 Windows - PowerShell, Windows paths
-- 🐧 Linux - bash, Unix paths
-
----
-
-## 🎯 How to Use CORTEX
-
-### 💬 Natural Language (The CORTEX Way)
-
-**CORTEX uses natural language only.** Just tell it what you need:
+**Natural language only.** Just tell CORTEX what you need:
 
 ```
 Add a purple button to the dashboard
-setup environment
-show me where I left off
-demo
-cleanup
-refresh story
+setup environment / show me where I left off / cleanup
 ```
 
-**Execution Modes:**
+**Why:** No syntax to memorize, intuitive for all skill levels, context-aware, works in conversation. All operations execute in live mode.
 
-CORTEX automatically detects whether you want to preview changes or execute them:
+**Help:** `help` or `what can cortex do` • **Docs:** See table below • **Extension:** VS Code extension may use `@cortex /command` syntax for UI
 
-**Dry-Run Mode (Preview Only):**
-```
-preview cleanup
-dry-run optimization
-test cleanup before running
-what would cleanup do
-show me what would be cleaned
-simulate story refresh
-```
+## 📚 Quick Reference
 
-**Live Mode (Apply Changes):**
-```
-cleanup workspace
-run optimization
-execute cleanup
-actually cleanup now
-apply changes
-```
-
-**Default:** If no mode keyword is detected, CORTEX defaults to live execution.
-
-**Why natural language?**
-- ✅ No syntax to memorize
-- ✅ Intuitive for all skill levels
-- ✅ Context-aware understanding
-- ✅ Flexible and forgiving
-- ✅ Works in conversation naturally
-- ✅ Automatic dry-run/live detection
-
-**Speed Options:**
-- **Terse:** `setup`, `demo`, `cleanup` (5-7 characters)
-- **Clear:** `setup environment`, `clean workspace` (recommended)
-- **Conversational:** `I want to set up my environment` (most flexible)
-
-**All three styles work equally well!** Choose what feels natural.
-
-**Note:** Platform detection is automatic! CORTEX detects Mac/Windows/Linux on startup.
+| Resource | File Reference |
+|----------|----------------|
+| Story | `#file:prompts/shared/story.md` |
+| Setup Guide | `#file:prompts/shared/setup-guide.md` |
+| Technical Docs | `#file:prompts/shared/technical-reference.md` |
+| Agents Guide | `#file:prompts/shared/agents-guide.md` |
+| Tracking Guide | `#file:prompts/shared/tracking-guide.md` |
+| Configuration | `#file:prompts/shared/configuration-reference.md` |
+| Operations | `#file:prompts/shared/operations-reference.md` |
+| Plugins | `#file:prompts/shared/plugin-system.md` |
+| Limitations | `#file:prompts/shared/limitations-and-status.md` |
 
 ---
 
-### 💡 Command Discovery
+# ⚠️ Known Limitations
 
-**Forgot what's available?** Ask for help:
-
-```
-help
-show me what cortex can do
-what commands are available
-```
-
-**Full Operations Reference:**
-```
-#file:prompts/shared/operations-reference.md
-```
-
-### 🔧 VS Code Extension
-
-**Note:** The VS Code extension MAY use command syntax internally (e.g., `@cortex /resume`) for UI conventions, but this is extension-specific and NOT part of core CORTEX operations.
+Design Sync ✅ | Story Refresh 🟡 (validation-only) | Vision API 🟡 (mock) | Details: `#file:prompts/shared/limitations-and-status.md`
 
 ---
 
-### 📚 Documentation Access
+# ⚠️ CRITICAL: Conversation Tracking
 
-| Command | What It Does |
-|---------|--------------|
-| `#file:prompts/shared/story.md` | Read "The Intern with Amnesia" story |
-| `#file:prompts/shared/setup-guide.md` | View installation and setup guide |
-| `#file:prompts/shared/technical-reference.md` | Access API and architecture docs |
-| `#file:prompts/shared/agents-guide.md` | Learn about agent system |
-| `#file:prompts/shared/tracking-guide.md` | Enable conversation memory |
-| `#file:prompts/shared/configuration-reference.md` | Configure CORTEX settings |
-| `#file:cortex-brain/cortex-2.0-design/CORTEX2-STATUS.MD` | Compact phase/task status snapshot (visual bars) |
+**GitHub Copilot Chat does NOT auto-track conversations.** Without tracking: ❌ No memory. With tracking: ✅ Full memory. Setup: `#file:prompts/shared/tracking-guide.md`
 
 ---
 
-## 🔌 Plugin System (Extensible)
+# 🔄 Migration Note
 
-**Plugins extend CORTEX functionality seamlessly!**
-
-**Full plugin documentation:**
-```
-#file:prompts/shared/plugin-system.md
-```
+**CORTEX 2.0** = 97.2% token reduction (74,047 → 2,078 avg). Benefits: 97% faster, cleaner, modular. Old backup: `prompts/user/cortex-BACKUP-2025-11-08.md`
 
 ---
 
-## ⚠️ Known Limitations
+# 🎓 Copyright & Attribution
 
-**Full limitations and status:**
-```
-#file:prompts/shared/limitations-and-status.md
-```
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved. Proprietary software. See LICENSE.
 
-### Summary
-
-### Summary
-
-- **Design Sync:** ✅ Production ready
-- **Story Refresh:** 🟡 Validation-only (no transformation yet)
-- **Vision API:** 🟡 Mock implementation  
-- **Two-tier status system:** Distinguishes architecture vs implementation completion
+**Orchestrator Header Format:** All entry points show: Version, Profile, Mode (LIVE), Timestamp, Author, Copyright, License, Repository
 
 ---
 
-## ⚠️ CRITICAL: Conversation Tracking
+# 🎯 Intent Detection & Module Structure
 
-**GitHub Copilot Chat does NOT automatically track conversations to the CORTEX brain.**
+**Auto-routing:** "Tell me CORTEX story" → story.md | "How do I install?" → setup-guide.md | "Show Tier 1 API" → technical-reference.md
 
-Without tracking: ❌ No memory across chats, ❌ "Make it purple" fails  
-With tracking: ✅ Full conversation memory, ✅ "Make it purple" works
-
-**See tracking guide for setup:**
-```
-#file:prompts/shared/tracking-guide.md
-```
----
-
-## 🔄 Migration Note
-
-**This is the NEW modular architecture (CORTEX 2.0).**
-
-**Token Reduction:** 97.2% smaller than old monolithic file (74,047 → 2,078 tokens avg)
-
-**What changed:**
-- ❌ **OLD:** 8,701-line monolithic file (bloated)
-- ✅ **NEW:** 300-line slim entry + focused modules (unbloated)
-
-**Benefits:**
-- ✅ 97% faster loading
-- ✅ Cleaner, more maintainable
-- ✅ Load only what you need
-- ✅ Easier to extend
-
-**Old file backed up:** `prompts/user/cortex-BACKUP-2025-11-08.md`
+**Module tree:** `prompts/user/cortex.md` (this file) + `prompts/shared/` (story, setup, technical, agents, tracking, config guides)
 
 ---
 
-## 🎓 Copyright & Attribution
+# 🏆 Why This Matters
 
-**All CORTEX orchestrator entry points display a copyright header:**
+**Token savings:** 97.2% reduction (74,047 → 2,078 avg) = $2.22 → $0.06/request = $25,920/year savings
 
-```
-================================================================================
-CORTEX [Operation Name] Orchestrator
-================================================================================
+**Performance:** 97% faster parsing (2-3s → 80ms), easier maintenance (200-400 lines/module vs 8,701 monolithic)
 
-Version:    [version]
-Profile:    [profile]
-Mode:       [LIVE | DRY RUN]
-Started:    [timestamp]
-
-Author:     Asif Hussain
-Copyright:  © 2024-2025 Asif Hussain. All rights reserved.
-License:    Proprietary
-Repository: https://github.com/asifhussain60/CORTEX
-
-================================================================================
-```
-
-This header:
-- ✅ Clearly identifies the author and copyright holder
-- ✅ Shows execution mode (LIVE vs DRY RUN)
-- ✅ Provides version and timestamp information
-- ✅ Links to official repository
-- ✅ Applies to ALL entry point orchestrators
-
-**Copyright Notice:**
-
-CORTEX is proprietary software developed by Asif Hussain. All rights reserved. Unauthorized reproduction or distribution is prohibited. See LICENSE file for full terms.
+**Optimization:** Brain protection rules moved to YAML (75% token reduction). Tests: `tests/tier0/test_brain_protector.py` (22/22 ✅)
 
 ---
 
-## 📦 Module Directory Structure
-
-```
-prompts/
-├── user/
-│   └── cortex.md (THIS FILE - slim entry point)
-│
-└── shared/
-    ├── story.md (The Intern with Amnesia)
-    ├── setup-guide.md (Installation & configuration)
-    ├── technical-reference.md (API & architecture)
-    ├── agents-guide.md (Agent system explained)
-    ├── tracking-guide.md (Conversation memory setup)
-    └── configuration-reference.md (Advanced settings)
-```
-
-**All modules available for direct reference or through this entry point.**
-
----
-
-## 🎯 Intent Detection (Automatic)
-
-CORTEX automatically detects your intent and loads appropriate modules:
-
-| Your Request | Detected Intent | Module Loaded |
-|--------------|----------------|---------------|
-| "Tell me the CORTEX story" | STORY | story.md |
-| "How do I install CORTEX?" | SETUP | setup-guide.md |
-| "Show me the Tier 1 API" | TECHNICAL | technical-reference.md |
-| "How do agents work?" | AGENTS | agents-guide.md |
-| "Enable conversation tracking" | TRACKING | tracking-guide.md |
-| "Add a purple button" | EXECUTE | (uses knowledge graph) |
-| "Create a test plan" | PLAN | (uses knowledge graph) |
-
-**No need to manually reference modules - CORTEX routes intelligently.**
-
----
-
-## 🏆 Why This Matters
-
-**Old monolithic approach:**
-- 74,047 tokens loaded on EVERY request
-- $2.22 per request (GPT-4 pricing)
-- 2-3 seconds to parse
-- Difficult to maintain (8,701 lines)
-
-**New modular approach:**
-- 2,078 tokens average (97.2% reduction)
-- $0.06 per request (97% cost savings)
-- 80ms to parse (97% faster)
-- Easy to maintain (200-400 lines per module)
-
-**Annual savings:** $25,920/year for typical usage (1,000 requests/month)
-
-**Additional optimization:**
-- Brain protection rules moved to YAML (75% token reduction)
-- Configuration file: `cortex-brain/brain-protection-rules.yaml`
-- Tests: `tests/tier0/test_brain_protector.py` (22/22 passing ✅)
-
----
-
-## 📖 Next Steps
+# 📖 Next Steps
 
 1. **First time?** Read the story: `#file:prompts/shared/story.md`
 2. **Need to install?** Setup guide: `#file:prompts/shared/setup-guide.md`

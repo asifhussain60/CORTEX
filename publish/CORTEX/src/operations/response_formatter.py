@@ -77,7 +77,6 @@ class ResponseFormatter:
     def _format_banner_header(operation_name: str, context: Dict[str, Any]) -> str:
         """Format banner-style header (Option D) for help commands."""
         profile = context.get('profile', 'standard')
-        mode = "LIVE" if not context.get('dry_run', False) else "DRY RUN"
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         version = context.get('version', '1.0.0')
         
@@ -91,7 +90,7 @@ class ResponseFormatter:
 ║  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝                       ║
 ║                    {operation_name} v{version:<39} ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
-║  Profile: {profile:<15} │  Mode: {mode:<6} │  Started: {timestamp}  ║
+║  Profile: {profile:<15} │  Mode: LIVE    │  Started: {timestamp}  ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
 ║  © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
@@ -101,7 +100,6 @@ class ResponseFormatter:
     def _format_full_header(operation_name: str, context: Dict[str, Any]) -> str:
         """Format full header (Option C) for first operation."""
         profile = context.get('profile', 'standard')
-        mode = "DRY RUN (Preview Only)" if context.get('dry_run', False) else "LIVE EXECUTION"
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         version = context.get('version', '1.0.0')
         
@@ -110,7 +108,7 @@ class ResponseFormatter:
   CORTEX {operation_name} Orchestrator v{version}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Profile: {profile}  │  Mode: {mode}  │  Started: {timestamp}
+Profile: {profile}  │  Mode: LIVE EXECUTION  │  Started: {timestamp}
 
 © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

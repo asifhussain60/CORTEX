@@ -7,7 +7,6 @@ Each module handles ONE specific operation responsibility (SOLID Single Responsi
 Covers:
     - Setup operations (platform detection, dependencies, etc.)
     - Story refresh operations (load, transform, save, etc.)
-    - Demo operations (tutorial, help, etc.)
     - Cleanup operations (temp files, logs, etc.)
     - Documentation operations (API docs, design docs, etc.)
 
@@ -27,14 +26,6 @@ from .brain_initialization_module import BrainInitializationModule
 from .brain_tests_module import BrainTestsModule
 from .tooling_verification_module import ToolingVerificationModule
 from .setup_completion_module import SetupCompletionModule
-
-# Demo/Tutorial modules
-from .demo_introduction_module import DemoIntroductionModule
-from .demo_help_system_module import DemoHelpSystemModule
-from .demo_story_refresh_module import DemoStoryRefreshModule
-from .demo_conversation_module import DemoConversationModule
-from .demo_cleanup_module import DemoCleanupModule
-from .demo_completion_module import DemoCompletionModule
 
 # Story refresh modules
 from .load_story_template_module import LoadStoryTemplateModule
@@ -79,14 +70,6 @@ __all__ = [
     'BrainTestsModule',
     'ToolingVerificationModule',
     'SetupCompletionModule',
-    
-    # Demo/Tutorial modules
-    'DemoIntroductionModule',
-    'DemoHelpSystemModule',
-    'DemoStoryRefreshModule',
-    'DemoConversationModule',
-    'DemoCleanupModule',
-    'DemoCompletionModule',
     
     # Story refresh modules
     'LoadStoryTemplateModule',

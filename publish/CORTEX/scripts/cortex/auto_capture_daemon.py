@@ -87,16 +87,18 @@ MAX_HISTORY_SIZE = 10 * 1024 * 1024  # 10MB limit for history files
 # Dangerous command patterns to block
 DANGEROUS_PATTERNS = [
     'rm -rf /',
-    'rm -rf *',
+    'rm -rf /*',
+    'rm -rf ~/',
+    'rm -rf ~/*',
     'sudo rm',
     'dd if=',
     'mkfs.',
     '>()',  # Fork bomb
     ':|:',  # Fork bomb pattern
-    'wget | sh',
-    'wget | bash',
-    'curl | sh',
-    'curl | bash',
+    '| sh',  # Pipe to shell
+    '| bash',  # Pipe to bash
+    '|sh',  # Pipe to shell without space
+    '|bash',  # Pipe to bash without space
     'eval',
     '__import__',
     'os.system',
@@ -1174,14 +1176,15 @@ class TerminalMonitor:
         command = re.sub(r'(-p|--password)[\s=]+\S+', r'\1 [REDACTED]', command, flags=re.IGNORECASE)
         command = re.sub(r'(password|passwd|pwd)[\s=]+\S+', r'\1=[REDACTED]', command, flags=re.IGNORECASE)
         
-        # Redact GitHub tokens (ghp_, ghs_)
-        command = re.sub(r'gh[ps]_[a-zA-Z0-9]{36,}', '[REDACTED]', command)
+        # Redact GitHub tokens (ghp_, ghs_) - must be at least 30 chars after prefix
+        command = re.sub(r'gh[ps]_[a-zA-Z0-9]{30,}', '[REDACTED]', command)
         
         # Redact tokens and API keys
-        command = re.sub(r'(token|api_key|secret)[\s=:]+\S+', r'\1=[REDACTED]', command, flags=re.IGNORECASE)
+        command = re.sub(r'(token|api_key|secret_key)[\s=:]+\S+', r'\1=[REDACTED]', command, flags=re.IGNORECASE)
         
         # Redact credentials in URLs
-        command = re.sub(r'(https?://)[^:]+:[^@]+@', r'\1[REDACTED]:[REDACTED]@', command)
+        command = re.sub(r'(https?://)[^:@]+:[^@]+@', r'\1[REDACTED]:[REDACTED]@', command)
+        command = re.sub(r'(https?://)gh[ps]_[a-zA-Z0-9]{30,}@', r'\1[REDACTED]@', command)
         
         return command
         
@@ -1189,16 +1192,18 @@ class TerminalMonitor:
         """Identify command type."""
         command_lower = command.lower()
         
-        if "pytest" in command_lower or "test" in command_lower:
-            return "test_execution"
-        elif "build" in command_lower:
-            return "build"
-        elif "git commit" in command_lower:
+        # Check git commands FIRST (more specific patterns)
+        if "git commit" in command_lower:
             return "git_commit"
         elif "git push" in command_lower:
             return "git_push"
         elif "git pull" in command_lower:
             return "git_pull"
+        # Then check generic patterns
+        elif "pytest" in command_lower or "test" in command_lower:
+            return "test_execution"
+        elif "build" in command_lower:
+            return "build"
         elif "python" in command_lower or "node" in command_lower:
             return "code_execution"
         else:
