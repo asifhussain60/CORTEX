@@ -37,7 +37,7 @@ class MessageStore:
                     conversation_id TEXT NOT NULL,
                     role TEXT NOT NULL,
                     content TEXT NOT NULL,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                    timestamp TEXT DEFAULT CURRENT_TIMESTAMP
                 )
             """)
             conn.commit()

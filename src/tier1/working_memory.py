@@ -105,7 +105,11 @@ class WorkingMemory:
                 tags TEXT,
                 session_id TEXT,
                 last_activity TIMESTAMP,
-                workflow_state TEXT
+                workflow_state TEXT,
+                conversation_type TEXT DEFAULT 'interactive',
+                import_source TEXT,
+                quality_score REAL DEFAULT 0.0,
+                semantic_elements TEXT DEFAULT '{}'
             )
         """)
         
@@ -146,6 +150,22 @@ class WorkingMemory:
                 FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id)
             )
         """)
+        
+        # Migrate existing databases to add missing columns
+        # Check if columns exist and add them if they don't
+        cursor.execute("PRAGMA table_info(conversations)")
+        existing_columns = {row[1] for row in cursor.fetchall()}
+        
+        migrations = [
+            ("conversation_type", "ALTER TABLE conversations ADD COLUMN conversation_type TEXT DEFAULT 'interactive'"),
+            ("import_source", "ALTER TABLE conversations ADD COLUMN import_source TEXT"),
+            ("quality_score", "ALTER TABLE conversations ADD COLUMN quality_score REAL DEFAULT 0.0"),
+            ("semantic_elements", "ALTER TABLE conversations ADD COLUMN semantic_elements TEXT DEFAULT '{}'")
+        ]
+        
+        for column_name, alter_sql in migrations:
+            if column_name not in existing_columns:
+                cursor.execute(alter_sql)
         
         # Create eviction log table
         cursor.execute("""

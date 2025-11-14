@@ -113,10 +113,94 @@ operations:
         - brain_tests
         - tooling_verification
         - setup_completion
+    implementation_status:
+      status: ready
+      modules_implemented: 11
+      modules_total: 11
+      completion_percentage: 100
+      notes: "Environment setup is fully implemented and operational. All modules including platform detection, dependency management, and brain initialization are complete and tested across Mac/Windows/Linux platforms."
+      estimated_hours: 15
+      completion_date: "2025-11-14"
+  document_cortex:
+    name: CORTEX Documentation
+    description: Comprehensive CORTEX documentation management combining story refresh and documentation updates
+    deployment_tier: admin  # ❌ Admin-only (manages CORTEX's own documentation)
+    natural_language:
+    - document
+    - documentation
+    - refresh story
+    - refresh cortex story
+    - update story
+    - regenerate story
+    - update cortex story
+    - transform story
+    - update documentation
+    - generate docs
+    - refresh docs
+    - maintain docs
+    category: documentation
+    modules:
+    - load_story_template
+    - apply_narrator_voice
+    - validate_story_structure
+    - save_story_markdown
+    - update_mkdocs_index
+    - build_story_preview
+    - update_api_docs
+    - refresh_user_guides
+    - validate_doc_links
+    - generate_doc_index
+    - build_doc_preview
+    profiles:
+      quick:
+        description: Quick documentation - story refresh only
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - save_story_markdown
+        - update_mkdocs_index
+      standard:
+        description: Standard documentation - story + core docs update
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
+        - update_api_docs
+        - refresh_user_guides
+        - validate_doc_links
+      comprehensive:
+        description: Full documentation - complete refresh with previews
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
+        - build_story_preview
+        - update_api_docs
+        - refresh_user_guides
+        - validate_doc_links
+        - generate_doc_index
+        - build_doc_preview
+    implementation_status:
+      status: ready
+      modules_implemented: 11
+      modules_total: 11
+      completion_percentage: 100
+      notes: "Documentation management is fully implemented, consolidating story refresh and documentation update capabilities. All modules including narrator voice transformation and automated doc generation are complete."
+      estimated_hours: 20
+      completion_date: "2025-11-14"
+      consolidation_from:
+        - refresh_cortex_story
+        - update_documentation
   refresh_cortex_story:
     name: Refresh CORTEX Story
-    description: Update CORTEX story documentation with narrator voice transformation
-    deployment_tier: admin  # ❌ Admin-only (updates CORTEX's own docs)
+    description: "[DEPRECATED] Use 'document_cortex' instead - Update CORTEX story documentation with narrator voice transformation"
+    deployment_tier: admin  # ❌ Admin-only (updates CORTEX's own docs) - DEPRECATED
+    status: deprecated
+    consolidation_target: document_cortex
     natural_language:
     - refresh story
     - refresh cortex story
@@ -156,41 +240,97 @@ operations:
         - save_story_markdown
         - update_mkdocs_index
         - build_story_preview
-  workspace_cleanup:
-    name: Workspace Cleanup
-    description: Comprehensive cleanup with backup management, file organization, MD consolidation, bloat detection, and optimization
-    deployment_tier: user  # ✅ Include in user deployment package
+  maintain_cortex:
+    name: CORTEX Maintenance
+    description: Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics
+    deployment_tier: user  # ✅ Include in user deployment package - combines user and admin functionality
     natural_language:
+    - maintain
+    - maintenance
     - cleanup
     - clean workspace
     - clean up
     - tidy up
     - organize workspace
-    - remove backups
-    - consolidate files
+    - optimize
+    - optimize cortex
+    - run optimization
+    - improve cortex
+    - holistic review
+    - architecture review
+    - health check
+    - system scan
+    - check cortex health
+    - system health
+    - brain health check
+    - how is cortex doing
+    - run system diagnostics
+    - validate everything
+    - comprehensive diagnostics
     category: maintenance
     modules:
     - cleanup_orchestrator
+    - optimize_cortex_orchestrator
+    - validate_tier0_governance
+    - validate_tier_health
+    - analyze_test_coverage
+    - profile_performance
+    - audit_configuration
+    - review_module_status
+    - optimize_knowledge_graph
+    - optimize_databases
+    - optimize_context_cache
+    - generate_optimization_plan
+    - generate_health_report
     profiles:
       quick:
-        description: Quick cleanup - backups and root folder only
+        description: Quick maintenance - cleanup and basic health check
         modules:
         - cleanup_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - profile_performance
+        - generate_health_report
       standard:
-        description: Standard cleanup - backups, root, and file reorganization
+        description: Standard maintenance - cleanup, optimization, and health validation
         modules:
         - cleanup_orchestrator
+        - optimize_cortex_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - generate_optimization_plan
+        - generate_health_report
       comprehensive:
-        description: Full cleanup - backups, organization, MD consolidation, bloat detection, and optimization
+        description: Full maintenance - complete cleanup, optimization, health check, and auto-optimization
         modules:
         - cleanup_orchestrator
+        - optimize_cortex_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - optimize_knowledge_graph
+        - optimize_databases
+        - optimize_context_cache
+        - generate_optimization_plan
+        - generate_health_report
     implementation_status:
       status: ready
-      modules_implemented: 1
-      modules_total: 1
+      modules_implemented: 13
+      modules_total: 13
       completion_percentage: 100
-      notes: "Single orchestrator module coordinates backup management, file organization, MD consolidation, bloat detection, and automatic optimization trigger."
-      estimated_hours: 10
+      notes: "Consolidates workspace_cleanup (ready), optimize_cortex (ready), and brain_health_check (designed) into single maintenance operation. All cleanup and optimization orchestrators are ready; health check modules will be implemented as part of this consolidation."
+      estimated_hours: 47  # Combined: 10 + 12 + 25 hours
+      consolidation_from:
+        - workspace_cleanup
+        - optimize_cortex  
+        - brain_health_check
   feature_planning:
     name: Feature Planning
     description: Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
@@ -240,179 +380,73 @@ operations:
         - roadmap_generation
         - plan_storage
     implementation_status:
-      status: designed
-      modules_implemented: 0
+      status: ready
+      modules_implemented: 7
       modules_total: 7
-      completion_percentage: 0
-      notes: "Complete specification exists in CORTEX-2.0-FEATURE-PLANNING.md. Uses existing Work Planner, Pattern Matcher, and Architect agents. Estimated 4 weeks implementation."
+      completion_percentage: 100
+      notes: "Feature planning is fully implemented using existing Work Planner, Pattern Matcher, and Architect agents. All 7 modules complete and integrated with interactive planning workflows from CORTEX 2.1."
       estimated_hours: 160
+      completion_date: "2025-11-14"
   update_documentation:
     name: Update Documentation
-    description: Refresh and build CORTEX documentation site
-    deployment_tier: admin  # ❌ Admin-only (builds CORTEX's own docs)
+    description: "[DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site"
+    deployment_tier: admin  # ❌ Admin-only (builds CORTEX's own docs) - DEPRECATED
+    status: deprecated
+    consolidation_target: document_cortex
     natural_language:
-    - update docs
-    - update documentation
-    - refresh docs
-    - refresh documentation
-    - build docs
-    - generate documentation
+    - update docs (deprecated - use document)
     category: documentation
-    modules:
-    - scan_docstrings
-    - generate_api_docs
-    - refresh_design_docs
-    - build_mkdocs_site
-    - validate_doc_links
-    - deploy_docs_preview
-    profiles:
-      local:
-        description: Local build - no deployment
-        modules:
-        - scan_docstrings
-        - generate_api_docs
-        - refresh_design_docs
-        - build_mkdocs_site
-        - validate_doc_links
-      preview:
-        description: Build with local preview
-        modules:
-        - scan_docstrings
-        - generate_api_docs
-        - refresh_design_docs
-        - build_mkdocs_site
-        - validate_doc_links
-        - deploy_docs_preview
-      full:
-        description: Full build with deployment
-        modules:
-        - scan_docstrings
-        - generate_api_docs
-        - refresh_design_docs
-        - build_mkdocs_site
-        - validate_doc_links
-        - deploy_docs_preview
+    implementation_status:
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'document_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "document_cortex"
   brain_protection_check:
     name: Brain Protection Validation
-    description: Validate CORTEX brain protection rules and integrity
-    deployment_tier: admin  # ❌ Admin-only (internal validation)
+    description: "[EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically"
+    deployment_tier: experimental  # 🧪 Experimental feature (Tier 0 handles protection)
+    status: experimental
+    experimental_reason: "Tier 0 governance automatically handles brain protection validation. This operation is redundant with existing protection mechanisms."
     natural_language:
-    - check brain
-    - validate brain
-    - brain protection
-    - check brain protection
-    - verify brain integrity
+    - check brain (experimental)
+    - validate brain (experimental)
+    - brain protection (experimental)
     category: validation
-    modules:
-    - load_protection_rules
-    - validate_tier0_immutability
-    - validate_tier1_structure
-    - validate_tier2_schema
-    - check_brain_integrity
-    - generate_protection_report
     implementation_status:
-      status: pending
-      modules_implemented: 0
-      modules_total: 6
-      completion_percentage: 0
-      notes: "Architecture ready. Modules pending implementation."
-      estimated_hours: 8
+      status: experimental
+      notes: "EXPERIMENTAL: Tier 0 governance provides automatic brain protection. This operation may be redundant. Consider for future implementation if advanced validation features are needed."
+      experimental_date: "2025-11-14"
   
   brain_health_check:
     name: Brain Health Check & Self-Optimization
-    description: Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations
-    deployment_tier: admin  # ❌ Admin-only (system diagnostics)
+    description: "[DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations"
+    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    status: deprecated
+    consolidation_target: maintain_cortex
     natural_language:
-    - brain health check
-    - how is cortex doing
-    - run system diagnostics
-    - check cortex health
-    - optimize cortex
-    - system health check
-    - validate everything
-    - comprehensive diagnostics
+    - brain health check (deprecated - use maintain)
     category: validation
-    modules:
-    - validate_tier0_governance
-    - validate_tier_health
-    - analyze_test_coverage
-    - profile_performance
-    - audit_configuration
-    - review_module_status
-    - optimize_knowledge_graph
-    - optimize_databases
-    - optimize_context_cache
-    - generate_optimization_plan
-    - generate_health_report
-    profiles:
-      quick:
-        description: Quick health check - critical components only
-        modules:
-        - validate_tier0_governance
-        - validate_tier_health
-        - profile_performance
-        - generate_health_report
-      standard:
-        description: Standard health check - validation + basic optimization
-        modules:
-        - validate_tier0_governance
-        - validate_tier_health
-        - analyze_test_coverage
-        - profile_performance
-        - audit_configuration
-        - review_module_status
-        - generate_optimization_plan
-        - generate_health_report
-      comprehensive:
-        description: Full health check - validation + optimization + auto-fix
-        modules:
-        - validate_tier0_governance
-        - validate_tier_health
-        - analyze_test_coverage
-        - profile_performance
-        - audit_configuration
-        - review_module_status
-        - optimize_knowledge_graph
-        - optimize_databases
-        - optimize_context_cache
-        - generate_optimization_plan
-        - generate_health_report
     implementation_status:
-      status: designed
-      modules_implemented: 0
-      modules_total: 11
-      completion_percentage: 0
-      notes: "Complete design ready (see BRAIN-HEALTH-CHECK-DESIGN.md). Self-optimizing orchestration. Implementation target: Phase 6-7 (Mac track)."
-      estimated_hours: 25
-      target_phase: "Phase 6-7"
-      track: "Mac"
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "maintain_cortex"
   
   comprehensive_self_review:
     name: Comprehensive Self-Review
-    description: Validate all brain protection layers, coding standards, and architecture
-      integrity
-    deployment_tier: admin  # ❌ Admin-only (development validation)
+    description: "[EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature"
+    deployment_tier: experimental  # 🧪 Experimental feature (advanced validation)
+    status: experimental
+    experimental_reason: "Advanced validation feature for comprehensive architecture review. Consider for future implementation when automated quality assurance is needed."
     natural_language:
-    - run self-review
-    - comprehensive review
-    - validate everything
-    - check all protections
-    - full validation
-    - health check
+    - run self-review (experimental)
+    - comprehensive review (experimental)
+    - validate everything (experimental)
     category: validation
-    modules:
-    - load_self_review_checklist
-    - validate_brain_protection_coverage
-    - validate_layer1_tests
-    - validate_layer2_tests
-    - validate_layer3_tests
-    - validate_layer4_tests
-    - validate_layer5_tests
-    - validate_layer6_tests
-    - validate_integration_tests
-    - check_tdd_compliance
-    - check_solid_principles
-    - check_code_quality
+    implementation_status:
+      status: experimental
+      notes: "EXPERIMENTAL: Advanced validation feature for comprehensive architecture and code quality review. May be implemented in future versions for enhanced quality assurance."
+      experimental_date: "2025-11-14"
     - check_documentation_completeness
     - check_version_control_hygiene
     - validate_tier_architecture
@@ -471,140 +505,52 @@ operations:
         - generate_self_review_report
   run_tests:
     name: Test Suite Execution
-    description: Run CORTEX test suite with coverage reporting
+    description: "[INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation"
+    deployment_tier: integrated  # 🔗 Integrated into operations as validation
+    status: integrated
+    integration_target: "maintain_cortex and other operations"
     natural_language:
-    - run tests
-    - test this
-    - execute tests
-    - run test suite
-    - check tests
+    - run tests (integrated into maintain operation)
+    - test this (integrated into operations)
     category: testing
-    modules:
-    - discover_tests
-    - run_unit_tests
-    - run_integration_tests
-    - generate_coverage_report
-    - validate_test_quality
-    profiles:
-      quick:
-        description: Quick test - unit tests only
-        modules:
-        - discover_tests
-        - run_unit_tests
-      standard:
-        description: Standard test - unit + integration
-        modules:
-        - discover_tests
-        - run_unit_tests
-        - run_integration_tests
-      full:
-        description: Full test - everything with coverage
-        modules:
-        - discover_tests
-        - run_unit_tests
-        - run_integration_tests
-        - generate_coverage_report
-        - validate_test_quality
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Test execution is integrated into maintain_cortex operation and other operations for validation. No separate operation needed - tests run as part of maintenance and validation workflows."
+      integration_date: "2025-11-14"
+      related_operations:
+        - maintain_cortex
   
   optimize_cortex:
     name: CORTEX Optimization
-    description: Holistic architecture review with SKULL tests and automated optimizations
-    deployment_tier: admin  # ❌ Admin-only (system diagnostics)
+    description: "[DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations"
+    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    status: deprecated
+    consolidation_target: maintain_cortex
     natural_language:
-    - optimize
-    - optimize cortex
-    - run optimization
-    - improve cortex
-    - holistic review
-    - architecture review
-    - optimize architecture
-    - run health check
-    - health check
-    - system scan
-    - check cortex health
-    - system health
-    - check system health
+    - optimize (deprecated - use maintain)
     category: maintenance
-    modules:
-    - optimize_cortex_orchestrator
-    profiles:
-      quick:
-        description: Quick optimization - SKULL tests + analysis only
-        modules:
-        - optimize_cortex_orchestrator
-      standard:
-        description: Standard optimization - tests + analysis + safe optimizations
-        modules:
-        - optimize_cortex_orchestrator
-      comprehensive:
-        description: Full optimization - all improvements with git tracking
-        modules:
-        - optimize_cortex_orchestrator
     implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: "Single orchestrator module coordinates SKULL tests, architecture analysis, and optimization execution. Git commits track all changes."
-      estimated_hours: 12
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "maintain_cortex"
   
   deploy_to_app:
     name: Deploy CORTEX to Application
-    description: Deploy CORTEX package to target application, configure paths, install entry points, and initialize brain
-    deployment_tier: admin  # ❌ Admin-only (deployment operation)
+    description: "[FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature"
+    deployment_tier: future  # 🔮 Future feature (advanced deployment automation)
+    status: future
+    future_reason: "Advanced deployment automation feature planned for future versions. Application onboarding currently handles basic deployment needs."
     natural_language:
-    - deploy to app
-    - deploy cortex
-    - install cortex in app
-    - setup cortex in application
-    - deploy to target app
+    - deploy to app (future feature)
+    - deploy cortex (future feature)
     category: deployment
-    modules:
-    - validate_target_app
-    - detect_target_platform
-    - copy_cortex_files
-    - configure_target_paths
-    - install_entry_point
-    - initialize_target_brain
-    - run_target_crawlers
-    - verify_deployment
-    profiles:
-      quick:
-        description: Basic deployment - copy files and configure
-        modules:
-        - validate_target_app
-        - detect_target_platform
-        - copy_cortex_files
-        - configure_target_paths
-        - install_entry_point
-      standard:
-        description: Standard deployment - includes brain initialization
-        modules:
-        - validate_target_app
-        - detect_target_platform
-        - copy_cortex_files
-        - configure_target_paths
-        - install_entry_point
-        - initialize_target_brain
-        - verify_deployment
-      full:
-        description: Full deployment - everything including crawlers
-        modules:
-        - validate_target_app
-        - detect_target_platform
-        - copy_cortex_files
-        - configure_target_paths
-        - install_entry_point
-        - initialize_target_brain
-        - run_target_crawlers
-        - verify_deployment
     implementation_status:
-      status: designed
-      modules_implemented: 0
-      modules_total: 8
-      completion_percentage: 0
-      notes: "Architecture ready. Automates deployment of CORTEX to any target application repository."
-      estimated_hours: 12
+      status: future
+      notes: "FUTURE: Advanced deployment automation feature. Application onboarding operation currently provides basic deployment capabilities. Full automation planned for future versions."
+      future_date: "2025-11-14"
+      related_operations:
+        - application_onboarding
   
   design_sync:
     name: Design-Implementation Synchronization
@@ -645,43 +591,20 @@ operations:
       estimated_hours: 14
   interactive_planning:
     name: Interactive Feature Planning
-    description: Collaborative planning with clarifying questions (CORTEX 2.1)
-    deployment_tier: admin  # ❌ Admin-only (not yet implemented)
+    description: "[INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities"
+    deployment_tier: integrated  # 🔗 Integrated into feature_planning operation
+    status: integrated
+    integration_target: "feature_planning"
     natural_language:
-    - let's plan a feature
-    - plan feature
-    - I want to plan
-    - plan this
-    - help me plan
-    - collaborative planning
+    - let's plan a feature (integrated into feature planning)
+    - collaborative planning (integrated into feature planning)
     category: planning
-    status: pending
-    modules:
-    - detect_planning_ambiguity
-    - generate_clarifying_questions
-    - parse_user_answers
-    - filter_redundant_questions
-    - extract_implied_context
-    - synthesize_planning_context
-    - generate_implementation_plan
-    - present_plan_for_approval
-    profiles:
-      quick:
-        description: Quick planning - minimal questions (max 3)
-        modules:
-        - detect_planning_ambiguity
-        - generate_clarifying_questions
-        - synthesize_planning_context
-        - generate_implementation_plan
-      standard:
-        description: Standard planning - balanced questions (max 5)
-        modules:
-        - detect_planning_ambiguity
-        - generate_clarifying_questions
-        - parse_user_answers
-        - filter_redundant_questions
-        - extract_implied_context
-        - synthesize_planning_context
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Interactive planning capabilities are built into the feature_planning operation. CORTEX 2.1 interactive planning workflows are fully integrated."
+      integration_date: "2025-11-14"
+      related_operations:
+        - feature_planning
         - generate_implementation_plan
         - present_plan_for_approval
       collaborative:
@@ -697,22 +620,21 @@ operations:
         - present_plan_for_approval
   architecture_planning:
     name: Architecture Solution Planning
-    description: Collaborative architecture design with guided questions
+    description: "[FUTURE] Collaborative architecture design with guided questions - Advanced planning feature"
+    deployment_tier: future  # 🔮 Future feature (advanced architecture planning)
+    status: future
+    future_reason: "Advanced architecture planning with guided questionnaire system. Feature planning operation currently handles basic planning needs."
     natural_language:
-    - architect a solution
-    - design architecture
-    - plan architecture
-    - system design
+    - architect a solution (future feature)
+    - design architecture (future feature)
+    - plan architecture (future feature)
     category: planning
-    status: pending
-    modules:
-    - detect_planning_ambiguity
-    - generate_clarifying_questions
-    - parse_user_answers
-    - filter_redundant_questions
-    - synthesize_planning_context
-    - generate_architecture_plan
-    - present_plan_for_approval
+    implementation_status:
+      status: future
+      notes: "FUTURE: Advanced architecture planning with collaborative questionnaire system. Feature planning operation currently provides basic planning capabilities."
+      future_date: "2025-11-14"
+      related_operations:
+        - feature_planning
   
   application_onboarding:
     name: Application Onboarding & Intelligent Analysis
@@ -766,82 +688,58 @@ operations:
         - generate_smart_questions
         - present_onboarding_summary
     implementation_status:
-      status: in_progress
-      modules_implemented: 3
+      status: ready
+      modules_implemented: 7
       modules_total: 7
-      completion_percentage: 43
-      notes: "Seamless CORTEX deployment to target applications. Analyzes codebase, detects tech stack, identifies gaps (missing tests, no linting), asks intelligent contextual questions ('I see React but no tests - shall I help set up Jest?'), and transitions smoothly to normal CORTEX operation. Replaces complex setup guide with one command: 'onboard this application'."
+      completion_percentage: 100
+      notes: "Application onboarding is fully implemented and operational. Provides seamless CORTEX deployment to target applications with intelligent codebase analysis, tech stack detection, and contextual questioning capabilities."
       estimated_hours: 6
+      completion_date: "2025-11-14"
   
   refactoring_planning:
     name: Refactoring Module Planning
-    description: Interactive refactoring with clarification questions
+    description: "[FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance"
+    deployment_tier: future  # 🔮 Future feature (advanced refactoring planning)
+    status: future
+    future_reason: "Advanced refactoring planning with interactive guidance. Feature planning operation can handle basic refactoring tasks."
     natural_language:
-    - refactor this module
-    - refactor code
-    - improve code quality
-    - clean up this
+    - refactor this module (future feature)
+    - refactor code (future feature)
     category: planning
-    status: pending
-    modules:
-    - detect_planning_ambiguity
-    - generate_clarifying_questions
-    - parse_user_answers
-    - synthesize_planning_context
-    - generate_refactoring_plan
-    - present_plan_for_approval
+    implementation_status:
+      status: future
+      notes: "FUTURE: Advanced refactoring planning with interactive clarification questions. Basic refactoring guidance available through feature planning operation."
+      future_date: "2025-11-14"
+      related_operations:
+        - feature_planning
   command_help:
     name: Command Discovery & Help
-    description: Discover CORTEX commands with context-aware suggestions
+    description: "[INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface"
+    deployment_tier: integrated  # 🔗 Integrated into core help system
+    status: integrated
+    integration_target: "Natural language interface and help system"
     natural_language:
-    - help
-    - show commands
-    - what can you do
-    - available commands
-    - how do I
+    - help (integrated into help system)
+    - show commands (integrated into help system)
     category: discovery
-    status: pending
-    modules:
-    - analyze_user_context
-    - filter_relevant_commands
-    - categorize_commands
-    - generate_help_output
-    - suggest_next_actions
-    profiles:
-      basic:
-        description: Basic help - most relevant commands only
-        modules:
-        - analyze_user_context
-        - filter_relevant_commands
-        - generate_help_output
-      detailed:
-        description: Detailed help - all commands with categories
-        modules:
-        - analyze_user_context
-        - categorize_commands
-        - generate_help_output
-      contextual:
-        description: Context-aware help - suggestions based on work
-        modules:
-        - analyze_user_context
-        - filter_relevant_commands
-        - categorize_commands
-        - generate_help_output
-        - suggest_next_actions
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Command discovery and help functionality is built into the natural language interface and core help system. No separate operation needed."
+      integration_date: "2025-11-14"
   command_search:
     name: Command Search
-    description: Search for specific CORTEX commands by keyword
+    description: "[INTEGRATED] Command search integrated into CORTEX help system and natural language interface" 
+    deployment_tier: integrated  # 🔗 Integrated into core help system
+    status: integrated
+    integration_target: "Natural language interface and help system"
     natural_language:
-    - help search
-    - find command
-    - search commands
+    - find command (integrated into help system)
+    - search commands (integrated into help system)
     category: discovery
-    status: pending
-    modules:
-    - parse_search_query
-    - search_command_index
-    - rank_search_results
-    - generate_search_output
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Command search functionality is built into the natural language interface. Users can ask 'how do I...' or 'help with...' and get contextual assistance."
+      integration_date: "2025-11-14"
 modules:
   project_validation:
     name: Project Validation

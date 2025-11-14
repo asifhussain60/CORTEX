@@ -90,13 +90,13 @@ Phase 2: Security Features
         conn = sqlite3.connect(temp_db)
         cursor = conn.cursor()
         
-        # Get the actual conversation timestamp to correlate properly
-        cursor.execute("SELECT created_at FROM conversations WHERE conversation_id = ?", (conversation_id,))
+        # Get the actual message timestamp to correlate properly (TemporalCorrelator uses message timestamps)
+        cursor.execute("SELECT timestamp FROM messages WHERE conversation_id = ? ORDER BY id LIMIT 1", (conversation_id,))
         conv_row = cursor.fetchone()
         if conv_row:
-            # Use the conversation creation time as base
+            # Use the first message time as base (TemporalCorrelator correlates based on message timestamps)
             from datetime import datetime
-            conv_time = datetime.fromisoformat(conv_row[0])
+            conv_time = datetime.fromisoformat(conv_row[0].replace(' ', 'T'))
         else:
             conv_time = datetime.now()
         

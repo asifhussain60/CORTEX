@@ -2487,6 +2487,143 @@ challenge_template: |
   
   Your choice:
 
+  # Layer 10: Implementation Velocity Protection (Anti-Inefficiency Patterns)
+  # Based on Phase 0 conversation analysis - prevent time waste patterns that caused 3x development time
+  layer_10_efficiency_protection:
+    layer_name: "Implementation Velocity Protection"
+    description: "Prevent inefficiency patterns that waste development time"
+    scope: "implementation_approach"
+    
+    rules:
+      - rule_id: "EFFICIENCY_REALITY_CHECK_FIRST"
+        name: "Reality Check Before Documentation Trust (Anti-Pattern #1)"
+        severity: "warning"
+        description: "Prevent trusting status documents without verifying current reality"
+        
+        detection:
+          keywords:
+            - "according to documentation"
+            - "status document says" 
+            - "documented as complete"
+            - "based on the specs"
+          scope: ["intent", "description", "approach"]
+        
+        acceleration_pattern: "Check current reality → Update understanding → Take action"
+        time_saved_per_instance: "10-15 minutes of incorrect baseline"
+        
+        alternatives:
+          - "Check actual current state first"
+          - "Verify implementation reality before planning"
+          - "Update documentation after reality check"
+        
+        evidence_template: "Documentation trust pattern: '{description}'"
+      
+      - rule_id: "EFFICIENCY_BATCH_FIXES_OVER_MICRO_CYCLES"
+        name: "Batch Operations Over Micro-Cycles (Anti-Pattern #2)"
+        severity: "warning"
+        description: "Prevent inefficient micro-cycles of fix→test→fix→test"
+        
+        detection:
+          keywords:
+            - "fix one test"
+            - "run full suite"
+            - "individual test fix"
+            - "micro-optimization"
+          scope: ["intent", "description", "approach"]
+        
+        acceleration_pattern: "Group related operations → Execute batch → Verify once"
+        time_saved_per_instance: "30-60 seconds per micro-cycle overhead"
+        
+        alternatives:
+          - "Fix all integration tests → Run integration suite"
+          - "Fix all template tests → Run template suite"
+          - "Batch related fixes by category"
+        
+        evidence_template: "Micro-cycle pattern detected: '{intent}'"
+      
+      - rule_id: "EFFICIENCY_ROOT_CAUSE_BEFORE_SYMPTOMS"
+        name: "Systematic Debugging (Anti-Pattern #3)"
+        severity: "warning"
+        description: "Prevent symptom-chasing when root cause analysis would be faster"
+        
+        detection:
+          keywords:
+            - "debug individual"
+            - "investigate symptoms"
+            - "try different approach"
+            - "troubleshoot each"
+          scope: ["intent", "description", "approach"]
+        
+        acceleration_pattern: "Check fundamental assumptions → Fix root cause → Validate fix"
+        time_saved_per_instance: "15-45 minutes of symptom investigation"
+        
+        systematic_checks:
+          - "UTC vs local time assumptions"
+          - "Schema/column name mismatches"  
+          - "Relative vs absolute imports"
+          - "Test expectations vs implementation reality"
+        
+        alternatives:
+          - "Check UTC timestamp handling first"
+          - "Verify schema consistency first"
+          - "Validate fundamental assumptions first"
+        
+        evidence_template: "Symptom debugging pattern: '{description}'"
+      
+      - rule_id: "EFFICIENCY_EXISTING_TOOLS_DURING_CRISIS"
+        name: "Use Existing Tools During Active Work (Anti-Pattern #4)"
+        severity: "warning"
+        description: "Prevent creating debug tools during active troubleshooting"
+        
+        detection:
+          keywords:
+            - "create debug script"
+            - "write tool to"
+            - "build utility for"
+            - "make script to analyze"
+          context_indicators:
+            - "failing tests"
+            - "active debugging"
+            - "urgent fix"
+          scope: ["intent", "description", "approach"]
+        
+        acceleration_pattern: "Use existing methods → Create tools for future use only"
+        time_saved_per_instance: "5-10 minutes per debug tool creation"
+        
+        alternatives:
+          - "Use existing debugging methods for now"
+          - "Create optimization tools after crisis resolved"
+          - "Focus on immediate problem resolution"
+        
+        evidence_template: "Tool creation during crisis: '{intent}'"
+      
+      - rule_id: "EFFICIENCY_ACTION_OVER_EXCESSIVE_SEARCH"
+        name: "Direct Action Over Search-Driven Development (Anti-Pattern #5)"
+        severity: "warning"
+        description: "Prevent excessive searching when direct action would be faster"
+        
+        detection:
+          keywords:
+            - "search for existing"
+            - "look for similar"
+            - "find reference implementation"
+            - "research how others"
+          threshold_indicators:
+            - "simple implementation request"
+            - "straightforward task"
+            - "basic functionality"
+          scope: ["intent", "description", "approach"]
+        
+        acceleration_pattern: "Check if X exists → Create X if not → No extended search required"
+        time_saved_per_instance: "5-10 minutes per search session"
+        
+        alternatives:
+          - "Implement directly if task is clear"
+          - "Search only for complex architectural decisions"
+          - "Use existing patterns for simple tasks"
+        
+        evidence_template: "Excessive search pattern: '{intent}'"
+
 # Logging configuration
 logging:
   enabled: true

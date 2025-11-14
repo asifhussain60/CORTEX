@@ -104,26 +104,27 @@ Phase 2: Security Integration
         conn = sqlite3.connect(temp_db)
         cursor = conn.cursor()
         
-        base_time = datetime(2025, 11, 14, 10, 0, 0)
+        # Use UTC time to match SQLite CURRENT_TIMESTAMP behavior
+        base_time = datetime.utcnow() - timedelta(minutes=5)  # Just 5 minutes ago (UTC)
         
         events = [
             # File creation events (should correlate with file mentions)
             (
                 'test-session-123', 'file_change', 'auth/login.py',
                 'FEATURE', 85, 'Created authentication login module',
-                (base_time + timedelta(minutes=15)).isoformat(),
+                (base_time + timedelta(minutes=1)).isoformat(),
                 '{"lines_added": 45, "complexity": "moderate"}'
             ),
             (
                 'test-session-123', 'file_change', 'config/database.py', 
                 'FEATURE', 90, 'Updated database configuration for users',
-                (base_time + timedelta(minutes=30)).isoformat(),
+                (base_time + timedelta(minutes=2)).isoformat(),
                 '{"lines_modified": 12, "tables_added": ["users"]}'
             ),
             (
                 'test-session-123', 'file_change', 'middleware/auth.py',
                 'FEATURE', 88, 'Implemented authentication middleware',
-                (base_time + timedelta(minutes=45)).isoformat(),
+                (base_time + timedelta(minutes=3)).isoformat(),
                 '{"lines_added": 67, "security_level": "high"}'
             ),
             # Non-matching event (should not correlate)
@@ -137,7 +138,7 @@ Phase 2: Security Integration
             (
                 'test-session-123', 'file_change', 'utils/encryption.py',
                 'FEATURE', 92, 'Implemented password encryption utilities',
-                (base_time + timedelta(hours=1, minutes=10)).isoformat(),
+                (base_time + timedelta(minutes=4)).isoformat(),
                 '{"algorithm": "bcrypt", "security_audit": "passed"}'
             )
         ]
@@ -234,7 +235,7 @@ Phase 2: Security Integration
     
     def test_get_ambient_events_in_window(self, correlator, sample_events):
         """Test ambient event retrieval within time window."""
-        base_time = datetime(2025, 11, 14, 10, 0, 0)
+        base_time = datetime.utcnow()  # Use current UTC time to match sample_events
         
         # Get events within 1 hour of base time
         events = correlator._get_ambient_events_in_window(base_time, 3600)
@@ -531,7 +532,7 @@ class TestIntegrationWithWorkingMemory:
             'FEATURE',
             85,
             'Created authentication login module',
-            datetime.now().isoformat(),
+            datetime.utcnow().isoformat(),  # Use UTC to match message timestamps
             '{}'
         ))
         

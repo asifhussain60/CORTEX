@@ -285,6 +285,173 @@ cortex_30_optimization:
     - "Add performance budgets for new YAML files"
     - "Maintain backward compatibility with aliasing pattern"
 
+# Implementation Velocity Acceleration (From Conversation Analysis)
+
+velocity_acceleration:
+  
+  pattern_1_reality_first:
+    name: "Reality Check Before Documentation Trust"
+    description: "Check current state before trusting status documents"
+    benefit: "Prevents 10-15 minutes of work based on incorrect baseline"
+    trigger_warning: "Keywords like 'according to documentation', 'status document says'"
+    application: "verify_current_state() → update_understanding() → take_action()"
+    evidence: "Phase 0 UTC timestamp issue - docs said complete, reality was broken"
+  
+  pattern_2_batch_operations:
+    name: "Batch Related Fixes"
+    description: "Group similar operations instead of micro-cycles"
+    benefit: "40-60% reduction in test overhead, maintains momentum"
+    trigger_warning: "Patterns like 'fix one test', 'run full suite'"
+    application: "fix_all_integration_tests() → run_integration_suite()"
+    evidence: "Integration wiring phase fixed 3 tests together vs individually"
+  
+  pattern_3_root_cause_focus:
+    name: "Systematic Debugging Protocol"
+    description: "Check fundamental assumptions before investigating symptoms"
+    benefit: "15-45 minutes saved per debugging session"
+    systematic_checks:
+      - "UTC vs local time assumptions"
+      - "Schema/column name mismatches"
+      - "Relative vs absolute imports"
+      - "Test expectations vs implementation reality"
+    evidence: "UTC fix resolved 4 tests with single conceptual change"
+  
+  pattern_4_existing_tools_priority:
+    name: "Use Existing Tools During Crisis"
+    description: "Avoid creating debug tools during active troubleshooting"
+    benefit: "5-10 minutes saved per tool creation, maintains focus"
+    trigger_warning: "Keywords like 'create debug script', 'write tool to'"
+    application: "use_existing_methods() → create_tools_for_future_only()"
+    evidence: "Phase 0 avoided creating custom debug scripts during test fixing"
+  
+  pattern_5_action_over_search:
+    name: "Direct Action Over Search-Driven Development"
+    description: "Implement directly for simple tasks instead of researching"
+    benefit: "5-10 minutes saved per search session"
+    trigger_warning: "Keywords like 'search for existing', 'find reference implementation'"
+    decision_tree:
+      simple_task: "Check if exists → Create if not → No extended search"
+      complex_architecture: "Research thoroughly before implementing"
+    evidence: "Direct implementation faster for obvious missing functionality"
+
+# Anti-Patterns (Time Waste Patterns to Avoid)
+
+anti_patterns:
+  
+  anti_pattern_1:
+    name: "Documentation First, Reality Second"
+    description: "Trusting status documents without checking current implementation"
+    time_waste: "10-15 minutes per instance"
+    detection: "Planning based on stale documentation"
+    prevention: "Always reality-check before planning"
+    phase_0_example: "Design docs showed modules complete, but implementation had gaps"
+  
+  anti_pattern_2:
+    name: "Search-Driven Development"
+    description: "Researching solutions before understanding if task is simple"
+    time_waste: "5-10 minutes per search session"
+    detection: "Searching for patterns for straightforward tasks"
+    prevention: "Assess complexity first, search only for complex problems"
+    phase_0_example: "Time spent searching for test categorization when direct approach worked"
+  
+  anti_pattern_3:
+    name: "Micro-Optimization Rabbit Holes"
+    description: "Perfect individual fixes instead of batch fixes"
+    time_waste: "30-60 seconds per micro-cycle"
+    detection: "Fix → test → fix → test pattern"
+    prevention: "Group related fixes, batch execute, verify once"
+    phase_0_example: "Initial attempt to fix tests individually vs by category"
+  
+  anti_pattern_4:
+    name: "Tool Creation During Crisis"
+    description: "Building debug utilities while actively troubleshooting"
+    time_waste: "5-10 minutes per tool creation"
+    detection: "Creating scripts during urgent debugging"
+    prevention: "Use existing tools, create optimizations later"
+    phase_0_example: "Avoided creating custom analysis scripts during test failures"
+  
+  anti_pattern_5:
+    name: "Symptom Chasing Over Root Cause"
+    description: "Debugging individual failures instead of systematic analysis"
+    time_waste: "15-45 minutes per debugging session"
+    detection: "Investigating each symptom separately"
+    prevention: "Check fundamental assumptions first"
+    phase_0_example: "UTC timestamp fix resolved multiple test failures at once"
+
+# Velocity Metrics (Phase 0 Baseline)
+
+velocity_metrics:
+  
+  baseline_performance:
+    phase_0_duration: 6  # hours for 18 test failures
+    expected_with_patterns: 2  # hours (3x improvement target)
+    acceleration_factor: 3
+  
+  time_breakdown_phase_0:
+    productive_work: 3      # hours (50%)
+    analysis_paralysis: 1.5  # hours (25%) 
+    micro_optimization: 1    # hours (17%)
+    context_switching: 0.5   # hours (8%)
+  
+  target_breakdown_future:
+    productive_work: 1.5     # hours (75%)
+    systematic_analysis: 0.3  # hours (15%)
+    batch_optimization: 0.1   # hours (5%) 
+    context_switching: 0.1    # hours (5%)
+  
+  acceleration_indicators:
+    - "Reduced analysis-to-action ratio (25% → 15%)"
+    - "Increased batch operation usage"
+    - "Faster root cause identification"
+    - "Less tool creation during active work"
+    - "More reality-checking before planning"
+
+# Application Guidelines (Updated with Velocity Focus)
+
+when_to_apply_acceleration:
+  
+  new_implementation:
+    step_1: "Reality check (2 minutes) - Current state vs documented state"
+    step_2: "Categorize issues (3 minutes) - BLOCKING/WARNING/PRAGMATIC"
+    step_3: "Batch planning (5 minutes) - Group related issues into logical phases"
+    step_4: "Execute phases - Complete one phase entirely before next"
+    
+  during_debugging:
+    step_1: "Check fundamental assumptions first (UTC, schema, imports)"
+    step_2: "Use existing debugging tools"
+    step_3: "Fix root cause not symptoms"
+    step_4: "Create debug tools only after crisis resolved"
+    
+  during_optimization:
+    step_1: "Batch related optimizations"
+    step_2: "Use pragmatic thresholds during MVP"
+    step_3: "Perfect later, ship working software first"
+    step_4: "Measure impact before further optimization"
+
+# Success Metrics for Future Work
+
+future_success_metrics:
+  
+  implementation_velocity:
+    target_improvement: "2-3x faster than Phase 0 baseline"
+    measurement: "Hours per complexity-adjusted story point"
+    tracking: "Phase completion time, context switch frequency"
+    
+  debugging_efficiency:
+    target_improvement: "Root cause identification in <30% of time"
+    measurement: "Time to root cause vs total debugging time"
+    tracking: "Symptom investigation vs systematic analysis ratio"
+    
+  batch_operation_adoption:
+    target_improvement: ">80% of fixes done in batches"
+    measurement: "Batch fixes vs individual fixes ratio"
+    tracking: "Test run frequency during fix sessions"
+    
+  documentation_accuracy:
+    target_improvement: ">90% reality-documentation alignment"
+    measurement: "Discrepancy detection rate"
+    tracking: "Reality checks performed before planning"
+
 # References & Evidence
 
 evidence_trail:

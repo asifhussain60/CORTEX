@@ -2,7 +2,7 @@
 
 **Date:** 2025-11-14  
 **Status:** 🚀 APPROVED - Ready to Begin  
-**Timeline:** 30 weeks (~7.5 months) with parallel execution  
+**Timeline:** 33 weeks (~8.25 months) with parallel execution + architecture documentation  
 **Decision Score:** 4.20/5.00 (84%) - STRONG GO
 
 **Author:** Asif Hussain  
@@ -1281,6 +1281,195 @@ task_6:
 
 ---
 
+### Phase 6: Architecture Documentation & Automated Crawlers (3 weeks)
+
+**Objective:** Automated architecture documentation generation with intelligent visual diagrams
+
+#### Milestone 6.1: Architecture Crawler Development (1.5 weeks)
+
+**Week 1: Core Architecture Crawler**
+```yaml
+task_1:
+  description: "Architecture crawler engine development"
+  functionality:
+    - "Scan codebase for architectural patterns"
+    - "Extract component relationships (imports, dependencies, inheritance)"
+    - "Detect architectural layers (agents, plugins, operations, tiers)"
+    - "Parse existing documentation for architecture references"
+    - "Version control integration (track architectural changes)"
+  output: "Structured architecture data (JSON/YAML format)"
+  
+task_2:
+  description: "Mermaid diagram generation engine"
+  diagram_types:
+    - "System architecture (high-level component view)"
+    - "Agent interaction diagrams (workflow sequences)"
+    - "Memory tier relationships (data flow)"
+    - "Plugin architecture (registration and execution)"
+    - "Operation orchestration (phase execution flows)"
+  templates: "Standardized Mermaid templates for consistency"
+  printable_format:
+    - "Letter page format (8.5\" x 11\") optimization"
+    - "Print-friendly color schemes (high contrast, grayscale compatible)"
+    - "Font sizing for 150-300 DPI printing"
+    - "Diagram scaling to fit Letter format margins"
+    - "Multi-page support for complex diagrams"
+    - "Page headers/footers with diagram metadata"
+  export_formats:
+    - "SVG (scalable for any print resolution)"
+    - "PNG (high-resolution for document embedding)"
+    - "PDF (direct print-ready format)"
+  
+task_3:
+  description: "Intelligent documentation detection"
+  capabilities:
+    - "Scan existing documentation for architecture diagrams"
+    - "Detect outdated/redundant documentation"
+    - "Version comparison (implementation vs documented)"
+    - "Identify documentation gaps"
+    - "Suggest consolidation opportunities"
+  smart_features:
+    - "Parse existing Mermaid diagrams for reuse"
+    - "Detect deprecated component references"
+    - "Flag inconsistencies between code and docs"
+```
+
+**Week 2: Documentation Organization & Structure**
+```yaml
+task_1:
+  description: "Dedicated architecture documentation folder structure"
+  structure:
+    - "docs/architecture/"
+    - "docs/architecture/diagrams/"
+    - "docs/architecture/diagrams/system/"      # High-level system views
+    - "docs/architecture/diagrams/agents/"      # Agent interaction flows  
+    - "docs/architecture/diagrams/operations/"  # Operation workflows
+    - "docs/architecture/diagrams/memory/"      # Tier relationships
+    - "docs/architecture/diagrams/plugins/"     # Plugin architecture
+    - "docs/architecture/legacy/"               # Archived outdated docs
+    - "docs/architecture/generated/"            # Auto-generated content
+  
+task_2:
+  description: "Architecture documentation templates"
+  templates:
+    - "Component overview template (standardized structure)"
+    - "Integration guide template (how components connect)"
+    - "Workflow documentation template (step-by-step processes)"
+    - "API documentation template (interface contracts)"
+  automation: "Auto-populate templates with crawler data"
+  
+task_3:
+  description: "Documentation lifecycle management"
+  features:
+    - "Automated archival of outdated documentation"
+    - "Version tracking for architecture changes"
+    - "Dependency impact analysis (what docs need updates)"
+    - "Automated cross-reference validation"
+    - "Broken link detection and repair suggestions"
+```
+
+#### Milestone 6.2: Intelligent Documentation Update System (1 week)
+
+```yaml
+task_1:
+  description: "Redundancy detection and elimination"
+  algorithm:
+    - "Content similarity analysis (detect duplicate information)"
+    - "Version conflict resolution (choose most recent/accurate)"
+    - "Consolidation recommendations (merge similar docs)"
+    - "Safe archival process (preserve historical context)"
+  safety_measures:
+    - "Manual review step for critical documentation changes"
+    - "Backup creation before automated updates"
+    - "Change log generation for all modifications"
+  
+task_2:
+  description: "Smart documentation updates"
+  capabilities:
+    - "Auto-update diagrams when architecture changes"
+    - "Regenerate outdated Mermaid diagrams"
+    - "Update component descriptions based on code analysis"
+    - "Refresh API documentation from code comments/docstrings"
+    - "Synchronize implementation status with actual code"
+  validation:
+    - "Code-documentation consistency checks"
+    - "Diagram accuracy validation against implementation"
+    - "Link integrity verification"
+  
+task_3:
+  description: "Documentation quality metrics"
+  metrics:
+    - "Architecture coverage (% of components documented)"
+    - "Diagram freshness (days since last update)"
+    - "Documentation accuracy (implementation vs docs alignment)"
+    - "Cross-reference completeness (broken link ratio)"
+  reporting:
+    - "Weekly documentation health reports"
+    - "Architecture drift detection alerts"
+    - "Documentation gap identification"
+```
+
+#### Milestone 6.3: Integration & Automation (0.5 weeks)
+
+```yaml
+task_1:
+  description: "CI/CD integration"
+  automation:
+    - "Run architecture crawler on every commit"
+    - "Auto-update diagrams when architectural changes detected"
+    - "Generate documentation diff reports for PR reviews"
+    - "Fail builds if critical documentation becomes outdated"
+  triggers:
+    - "New component additions"
+    - "Agent workflow modifications"
+    - "Operation structure changes"
+    - "Memory tier updates"
+  
+task_2:
+  description: "CORTEX operation integration"
+  commands:
+    - "'refresh architecture docs' - manual trigger"
+    - "'validate documentation' - consistency check"
+    - "'archive outdated docs' - cleanup operation"
+  natural_language:
+    - "update architecture diagrams"
+    - "check documentation health"
+    - "clean up old documentation"
+  
+task_3:
+  description: "User interface for documentation management"
+  features:
+    - "Architecture dashboard (visual overview)"
+    - "Documentation health metrics display"
+    - "Interactive diagram viewer"
+    - "Bulk operations (approve/archive multiple documents)"
+    - "Documentation search and navigation"
+```
+
+**Deliverables:**
+- ✅ Architecture crawler engine (scans code, extracts relationships)
+- ✅ Mermaid diagram generator (5+ diagram types)
+- ✅ Intelligent documentation update system
+- ✅ Organized documentation folder structure
+- ✅ CI/CD integration (automated documentation updates)
+- ✅ CORTEX operation integration (natural language commands)
+
+**Success Criteria:**
+- ✅ 95%+ architecture components documented with diagrams
+- ✅ Zero redundant or conflicting documentation
+- ✅ Automated documentation updates working reliably
+- ✅ Documentation freshness <7 days for active components
+- ✅ All diagrams render correctly in documentation site
+
+**Benefits:**
+- **Always-current documentation:** Architecture docs stay synchronized with code
+- **Visual clarity:** Mermaid diagrams provide clear visual understanding
+- **Reduced maintenance overhead:** Automated updates eliminate manual documentation debt
+- **Improved onboarding:** New contributors can understand architecture quickly
+- **Quality assurance:** Consistency checks prevent documentation drift
+
+---
+
 ## 📊 Timeline Summary
 
 | Phase | Description | Duration | Start Week | End Week |
@@ -1293,8 +1482,9 @@ task_6:
 | **Phase 3** | Intelligent Context | 6 weeks | Week 9 | Week 14 |
 | **Phase 4** | Enhanced Agents | 4 weeks | Week 23 | Week 26 |
 | **Phase 5** | Polish & Release | 4 weeks | Week 27 | Week 30 |
+| **Phase 6** | Architecture Documentation & Crawlers | 3 weeks | Week 31 | Week 33 |
 
-**Total Duration:** 30 weeks (~7.5 months)
+**Total Duration:** 33 weeks (~8.25 months)
 
 **Parallel Execution:**
 - Phase 2 + Phase 3 run in parallel (Weeks 9-22, but Phase 3 ends Week 14)
@@ -1347,6 +1537,13 @@ task_6:
 - ✅ User acceptance testing >90% satisfaction
 - ✅ Performance benchmarks met
 - ✅ Security audit clean
+
+**Phase 6:**
+- ✅ Architecture crawler operational (95%+ component coverage)
+- ✅ All Mermaid diagrams printable in Letter format
+- ✅ Zero redundant documentation detected
+- ✅ Automated documentation updates working
+- ✅ Documentation freshness <7 days for active components
 
 ---
 
@@ -1451,7 +1648,16 @@ task_6:
    - User documentation
    - Performance optimization
    - Final testing
-   - CORTEX 3.0 RELEASE! 🎉
+   - Initial CORTEX 3.0 feature release
+
+### Week 31-33 (Phase 6)
+
+☐ **Architecture Documentation & Crawlers**
+   - Architecture crawler development
+   - Automated Mermaid diagram generation (Letter format)
+   - Intelligent documentation update system
+   - Documentation organization and cleanup
+   - CORTEX 3.0 COMPLETE RELEASE! 🎉📊
 
 ---
 
@@ -1462,10 +1668,11 @@ task_6:
 **Approval Date:** [Pending]
 
 **Decision Points:**
-- ☐ Approve 30-week timeline with parallel execution
+- ☐ Approve 33-week timeline with parallel execution + architecture documentation
 - ☐ Approve Phase 0 as BLOCKING prerequisite
 - ☐ Approve simplified operations approach (monolithic-then-modular)
 - ☐ Approve dual-channel memory as highest priority
+- ☐ Approve automated architecture documentation phase (Phase 6)
 - ☐ Approve resource allocation (developer time, tools, infrastructure)
 
 **Next Action:** Begin Phase 0 (Test Stabilization) immediately upon approval.
@@ -1475,9 +1682,9 @@ task_6:
 **Implementation Plan Date:** 2025-11-14  
 **CORTEX Version:** 3.0.0-plan  
 **Status:** Awaiting Approval  
-**Timeline:** 30 weeks (~7.5 months)  
-**Estimated Completion:** July 2026
+**Timeline:** 33 weeks (~8.25 months)  
+**Estimated Completion:** August 2026
 
 ---
 
-*"From vision to reality: The roadmap to CORTEX 3.0"*
+*"From vision to reality: The roadmap to CORTEX 3.0 with comprehensive architecture documentation"*

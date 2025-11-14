@@ -87,6 +87,21 @@ class TemporalCorrelator:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
+        # Ambient events table to store ambient daemon events
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ambient_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT NOT NULL,
+                event_type TEXT NOT NULL,
+                file_path TEXT,
+                pattern TEXT,
+                score INTEGER,
+                summary TEXT,
+                timestamp TEXT NOT NULL,
+                metadata TEXT
+            )
+        """)
+        
         # Correlations table to store temporal matches
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS temporal_correlations (
@@ -117,6 +132,17 @@ class TemporalCorrelator:
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_correlation_type 
             ON temporal_correlations(correlation_type)
+        """)
+        
+        # Indexes for ambient events
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_ambient_timestamp 
+            ON ambient_events(timestamp)
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_ambient_file 
+            ON ambient_events(file_path)
         """)
         
         conn.commit()
@@ -171,15 +197,19 @@ class TemporalCorrelator:
         return all_correlations
     
     def _get_conversation_turns(self, conversation_id: str) -> List[ConversationTurn]:
-        """Extract conversation turns from imported conversation."""
+        """Extract conversation turns from imported conversation.
+        
+        Only returns assistant messages as they contain implementation details
+        and file mentions that are relevant for temporal correlation.
+        """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get conversation messages
+        # Get only assistant messages (they contain implementation details)
         cursor.execute("""
             SELECT id, role, content, timestamp
             FROM messages
-            WHERE conversation_id = ?
+            WHERE conversation_id = ? AND role = 'assistant'
             ORDER BY timestamp ASC
         """, (conversation_id,))
         
@@ -449,23 +479,45 @@ class TemporalCorrelator:
         )
     
     def _extract_file_mentions(self, content: str) -> List[str]:
-        """Extract file paths mentioned in conversation content (backtick format)."""
-        # Match backtick file paths: `path/to/file.ext` or `file.ext`
-        pattern = r'`([^`]+\.[a-zA-Z0-9]{1,6})`'
-        matches = re.findall(pattern, content)
-        
-        # Filter out obvious non-file paths
-        file_extensions = {
-            '.py', '.js', '.ts', '.html', '.css', '.md', '.yaml', '.yml', 
-            '.json', '.txt', '.sh', '.sql', '.xml', '.log', '.conf'
-        }
-        
+        """Extract file paths mentioned in conversation content."""
         files = []
-        for match in matches:
-            if any(match.endswith(ext) for ext in file_extensions):
+        
+        # Pattern 1: Backtick file paths: `path/to/file.ext`
+        pattern1 = r'`([^`]+\.[a-zA-Z0-9]{1,6})`'
+        matches1 = re.findall(pattern1, content)
+        files.extend(matches1)
+        
+        # Pattern 2: List items with file paths: - Create path/to/file.ext
+        pattern2 = r'[-•*]\s*(?:Create|Update|Modify|Add|Delete)?\s*([a-zA-Z0-9_/-]+\.[a-zA-Z0-9]{1,6})'
+        matches2 = re.findall(pattern2, content, re.IGNORECASE)
+        files.extend(matches2)
+        
+        # Pattern 3: Plain file paths in text: path/to/file.ext (but not URLs)
+        pattern3 = r'\b([a-zA-Z0-9_/-]+\.[a-zA-Z0-9]{1,6})\b'
+        matches3 = re.findall(pattern3, content)
+        # Filter out URLs and overly generic matches
+        for match in matches3:
+            # Skip if it's part of a URL
+            if 'http://' + match in content or 'https://' + match in content:
+                continue
+            if '/' in match or any(match.endswith(ext) for ext in ['.py', '.js', '.ts', '.html', '.css']):
                 files.append(match)
         
-        return files
+        # Filter by valid file extensions
+        file_extensions = {
+            '.py', '.js', '.ts', '.html', '.css', '.md', '.yaml', '.yml', 
+            '.json', '.txt', '.sh', '.sql', '.xml', '.log', '.conf', '.cs'
+        }
+        
+        valid_files = []
+        for file_path in files:
+            if any(file_path.endswith(ext) for ext in file_extensions):
+                # Clean up the path (remove leading spaces/dashes)
+                clean_path = file_path.strip(' -•*')
+                if clean_path and clean_path not in valid_files:
+                    valid_files.append(clean_path)
+        
+        return valid_files
     
     def _extract_phase_mentions(self, content: str) -> List[str]:
         """Extract phase mentions from conversation content."""
@@ -553,55 +605,16 @@ class TemporalCorrelator:
         Returns:
             Timeline data with conversation turns and correlated events
         """
+        # Get conversation turns (always include these)
+        turns = self._get_conversation_turns(conversation_id)
+        
         # Get correlations for this conversation
         correlations = self.correlate_conversation(conversation_id)
         
-        if not correlations:
-            return {
-                'conversation_id': conversation_id,
-                'timeline': [],
-                'summary': 'No correlations found'
-            }
-        
-        # Get conversation turns
-        turns = self._get_conversation_turns(conversation_id)
-        
-        # Get correlated events
-        event_ids = [c.event_id for c in correlations]
-        events_by_id = {}
-        
-        if event_ids:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            placeholders = ','.join('?' * len(event_ids))
-            cursor.execute(f"""
-                SELECT id, session_id, event_type, file_path, pattern, score,
-                       summary, timestamp, metadata
-                FROM ambient_events
-                WHERE id IN ({placeholders})
-            """, event_ids)
-            
-            for row in cursor.fetchall():
-                event_id = row[0]
-                events_by_id[event_id] = AmbientEvent(
-                    event_id=row[0],
-                    session_id=row[1],
-                    event_type=row[2],
-                    file_path=row[3],
-                    timestamp=datetime.fromisoformat(row[7]),
-                    pattern=row[4],
-                    score=row[5],
-                    summary=row[6],
-                    metadata=json.loads(row[8]) if row[8] else {}
-                )
-            
-            conn.close()
-        
-        # Build unified timeline
+        # Build timeline starting with conversation turns
         timeline = []
         
-        # Add conversation turns
+        # Add conversation turns (always present)
         for turn in turns:
             timeline.append({
                 'type': 'conversation_turn',
@@ -610,34 +623,71 @@ class TemporalCorrelator:
                 'files_mentioned': turn.files_mentioned,
                 'phases_mentioned': turn.phases_mentioned
             })
-        
-        # Add correlated events
-        for correlation in correlations:
-            event = events_by_id.get(correlation.event_id)
-            if event:
-                timeline.append({
-                    'type': 'ambient_event',
-                    'timestamp': event.timestamp,
-                    'event_type': event.event_type,
-                    'file_path': event.file_path,
-                    'summary': event.summary,
-                    'pattern': event.pattern,
-                    'score': event.score,
-                    'correlation_type': correlation.correlation_type,
-                    'confidence_score': correlation.confidence_score
-                })
+
+        # Add correlated events if any exist
+        if correlations:
+            # Get correlated events
+            event_ids = [c.event_id for c in correlations]
+            events_by_id = {}
+            
+            if event_ids:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                placeholders = ','.join('?' * len(event_ids))
+                cursor.execute(f"""
+                    SELECT id, session_id, event_type, file_path, pattern, score,
+                           summary, timestamp, metadata
+                    FROM ambient_events
+                    WHERE id IN ({placeholders})
+                """, event_ids)
+                
+                for row in cursor.fetchall():
+                    event_id = row[0]
+                    events_by_id[event_id] = AmbientEvent(
+                        event_id=row[0],
+                        session_id=row[1],
+                        event_type=row[2],
+                        file_path=row[3],
+                        timestamp=datetime.fromisoformat(row[7]),
+                        pattern=row[4],
+                        score=row[5],
+                        summary=row[6],
+                        metadata=json.loads(row[8]) if row[8] else {}
+                    )
+                
+                conn.close()
+
+            # Add correlated events to timeline
+            for correlation in correlations:
+                event = events_by_id.get(correlation.event_id)
+                if event:
+                    timeline.append({
+                        'type': 'ambient_event',
+                        'timestamp': event.timestamp,
+                        'event_type': event.event_type,
+                        'file_path': event.file_path,
+                        'summary': event.summary,
+                        'pattern': event.pattern,
+                        'score': event.score,
+                        'correlation_type': correlation.correlation_type,
+                        'confidence_score': correlation.confidence_score
+                    })
         
         # Sort by timestamp
         timeline.sort(key=lambda x: x['timestamp'])
         
         # Generate summary
-        high_confidence = [c for c in correlations if c.confidence_score > 0.7]
-        summary = f"Found {len(correlations)} correlations ({len(high_confidence)} high-confidence)"
-        
+        if correlations:
+            high_confidence = [c for c in correlations if c.confidence_score > 0.7]
+            summary = f"Found {len(correlations)} correlations ({len(high_confidence)} high-confidence)"
+        else:
+            summary = 'No correlations found, showing conversation only'
+
         return {
             'conversation_id': conversation_id,
             'timeline': timeline,
             'correlations_count': len(correlations),
-            'high_confidence_count': len(high_confidence),
+            'high_confidence_count': len([c for c in correlations if c.confidence_score > 0.7]),
             'summary': summary
         }
