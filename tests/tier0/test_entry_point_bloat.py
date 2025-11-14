@@ -108,11 +108,13 @@ class TestEntryPointBloat:
         pattern = r'#file:([^\s\)`\)]+)'
         references = re.findall(pattern, entry_point_content)
         
-        cortex_root = entry_point_path.parent.parent.parent
+        # Paths in entry point are relative to .github/prompts/ directory
+        entry_point_dir = entry_point_path.parent
         missing_files = []
         
         for ref in references:
-            file_path = cortex_root / ref
+            # Resolve the path relative to entry point directory
+            file_path = (entry_point_dir / ref).resolve()
             if not file_path.exists():
                 missing_files.append(ref)
         
