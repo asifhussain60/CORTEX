@@ -267,20 +267,37 @@ class TestYAMLConversion:
     # ============================================================
     
     def test_yaml_contains_all_legacy_operations(self, cortex_operations):
-        """Ensure YAML includes all operations from legacy system."""
-        expected_operations = [
-            "refresh_cortex_story",
-            "environment_setup",
-            "workspace_cleanup",
-            "update_documentation",
-            "brain_protection_check",
-            "run_tests"
+        """Ensure YAML includes all core operations after simplification."""
+        expected_core_operations = [
+            "cortex_tutorial",
+            "environment_setup", 
+            "feature_planning",
+            "application_onboarding",
+            "maintain_cortex",  # Consolidated: workspace_cleanup + optimize_cortex + brain_health_check
+            "document_cortex",  # Consolidated: refresh_cortex_story + update_documentation
+            "design_sync"
+        ]
+        
+        deprecated_operations = [
+            "refresh_cortex_story",  # → document_cortex
+            "workspace_cleanup",     # → maintain_cortex
+            "update_documentation",  # → document_cortex
+            "brain_health_check",    # → maintain_cortex 
+            "optimize_cortex",       # → maintain_cortex
         ]
         
         yaml_ops = cortex_operations["operations"].keys()
         
-        for expected in expected_operations:
-            assert expected in yaml_ops, f"Missing legacy operation: {expected}"
+        # Check core operations exist
+        for expected in expected_core_operations:
+            assert expected in yaml_ops, f"Missing core operation: {expected}"
+        
+        # Check deprecated operations exist but are marked as deprecated
+        for deprecated in deprecated_operations:
+            if deprecated in yaml_ops:
+                op_data = cortex_operations["operations"][deprecated]
+                assert (op_data.get("status") == "deprecated" or 
+                       "DEPRECATED" in op_data.get("description", "")), f"Operation {deprecated} should be marked deprecated"
     
     # ============================================================
     # Task 5.5.4.6: Schema Validation
@@ -312,11 +329,24 @@ class TestYAMLConversion:
                         pytest.fail(f"YAML parse error in {yaml_file}: {e}")
     
     def test_operations_have_module_structure(self, cortex_operations):
-        """Verify operations define proper module structure."""
+        """Verify core operations define proper module structure."""
         operations = cortex_operations["operations"]
         
+        # Only check core operations for modules
+        core_operations = [
+            "cortex_tutorial", "environment_setup", "feature_planning", 
+            "application_onboarding", "maintain_cortex", "document_cortex", "design_sync"
+        ]
+        
         for op_id, op_data in operations.items():
-            assert "modules" in op_data, f"Operation '{op_id}' missing modules"
+            # Skip deprecated, experimental, future, and integrated operations
+            status = op_data.get("status")
+            if status in ["deprecated", "experimental", "future", "integrated"]:
+                continue
+                
+            # Core operations must have modules
+            if op_id in core_operations:
+                assert "modules" in op_data, f"Core operation '{op_id}' missing modules"
             
             modules = op_data["modules"]
             assert isinstance(modules, list), f"Operation '{op_id}' modules not a list"

@@ -316,68 +316,83 @@ templates:
       **Example:**
         "setup environment with full profile"
   
-  help_cleanup:
+  help_maintain:
     triggers:
+      - "help maintain"
+      - "help maintenance"
+      - "maintain help"
       - "help cleanup"
       - "how to cleanup"
       - "cleanup help"
+      - "help optimize"
+      - "optimize help"
     
     response_type: detailed
     context_needed: false
     
     content: |
       
-      🧹 **Cleanup Command**
+      🛠️ **Maintain Command**
       
-      **Purpose:** Remove temporary files and optimize databases
+      **Purpose:** Comprehensive CORTEX maintenance (cleanup + optimization + health check)
       
       **Usage:**
-        Natural: "cleanup", "clean workspace"
-        Slash: /CORTEX, cleanup
+        Natural: "maintain", "maintenance", "cleanup", "optimize"
+        Slash: /CORTEX, maintain
       
       **What it does:**
-        ✅ Scans for temporary files
-        ✅ Removes old logs
-        ✅ Clears Python cache
-        ✅ Vacuums SQLite databases
-        ✅ Generates cleanup report
+        ✅ Cleans workspace and removes temporary files
+        ✅ Optimizes system performance and databases
+        ✅ Runs comprehensive health diagnostics
+        ✅ Validates brain tier integrity
+        ✅ Generates maintenance report
       
       **Profiles:**
-        • minimal - Scan only, no deletion
-        • standard - Remove old logs, optimize DB (default)
-        • full - Complete cleanup
+        • quick - Basic cleanup and health check
+        • standard - Cleanup + optimization + validation (default)
+        • comprehensive - Full maintenance with auto-optimization
       
       **Example:**
-        "cleanup workspace with standard profile"
+        "maintain cortex with comprehensive profile"
   
-  help_story:
+  help_document:
     triggers:
+      - "help document"
+      - "help documentation"
+      - "document help"
       - "help story"
       - "help update story"
       - "story help"
+      - "help docs"
     
     response_type: detailed
     context_needed: false
     
     content: |
       
-      📚 **Update Story Command**
+      📚 **Document Command**
       
-      **Purpose:** Refresh CORTEX story documentation
+      **Purpose:** Comprehensive CORTEX documentation management (story refresh + docs update)
       
       **Usage:**
-        Natural: "refresh story", "update story"
-        Slash: /CORTEX, refresh cortex story
+        Natural: "document", "documentation", "refresh story", "update docs"
+        Slash: /CORTEX, document
       
       **What it does:**
-        ✅ Loads story template
-        ✅ Applies narrator voice transformation
-        ✅ Validates content
-        ✅ Saves updated markdown
-        ✅ Updates navigation
-        ✅ Generates preview
+        ✅ Refreshes CORTEX story with narrator voice
+        ✅ Updates API documentation
+        ✅ Refreshes user guides
+        ✅ Validates documentation links
+        ✅ Generates documentation index
+        ✅ Builds documentation preview
       
-      **Status:** ✅ All 6 modules implemented and tested
+      **Profiles:**
+        • quick - Story refresh only
+        • standard - Story + core docs update (default)
+        • comprehensive - Complete documentation refresh with previews
+      
+      **Example:**
+        "document cortex with standard profile"
       
       **Example:**
         "refresh the cortex story"
@@ -2070,7 +2085,7 @@ templates:
     triggers:
       - "brain health"
       - "is the brain healthy"
-      - "check brain status"
+      - "check brain status" 
       - "brain diagnostics"
     
     response_type: detailed
@@ -2083,6 +2098,12 @@ templates:
     content: |
       🏥 **Brain Health Diagnostics**
       
+      **Note:** Brain health checking is now integrated into the **maintain** operation.
+      
+      Use: "maintain cortex" for comprehensive brain health diagnostics.
+      
+      **Quick Health Check:**
+      
       **Tier 0: Protection Layer**
       • Status: {{tier0_status}}
       • Rules active: {{tier0_rules_count}}/7 SKULL rules
@@ -2091,18 +2112,12 @@ templates:
       **Tier 1: Working Memory**
       • Status: {{tier1_status}}
       • Memory usage: {{tier1_memory_usage_mb}}MB / {{tier1_memory_limit_mb}}MB
-      • FIFO enforcement: {{tier1_fifo_status}}
-      • Cache health: {{tier1_cache_health}}
       
-      **Tier 2: Knowledge Graph**
+      **Tier 2: Knowledge Graph**  
       • Status: {{tier2_status}}
       • Database size: {{tier2_db_size_mb}}MB
-      • Index health: {{tier2_index_health}}
-      • Pattern decay active: {{tier2_decay_active}}
       
-      **Tier 3: Development Context**
-      • Status: {{tier3_status}}
-      • Git tracking: {{tier3_git_status}}
+      **For comprehensive diagnostics:** Use "maintain cortex with comprehensive profile"
       • Metrics freshness: {{tier3_metrics_age}}
       
       **Overall Health: {{overall_health_score}}/100**
