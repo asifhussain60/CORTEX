@@ -25,6 +25,8 @@ import threading
 import subprocess
 import logging
 import re
+import fcntl
+import socket
 from pathlib import Path
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
@@ -41,6 +43,111 @@ except ImportError:
     print("[CORTEX] ERROR: watchdog library not installed")
     print("[CORTEX] Install with: pip install watchdog")
     sys.exit(1)
+
+
+# ============================================================================
+# Daemon Singleton Management
+# ============================================================================
+
+class DaemonLockManager:
+    """Manages daemon singleton behavior with PID files and socket communication."""
+    
+    def __init__(self, workspace_path: str):
+        self.workspace_path = Path(workspace_path)
+        self.lock_dir = self.workspace_path / ".cortex" / "daemon"
+        self.lock_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.pid_file = self.lock_dir / "ambient_capture.pid"
+        self.socket_file = self.lock_dir / "ambient_capture.sock"
+        
+    def is_daemon_running(self) -> bool:
+        """Check if daemon is already running."""
+        if not self.pid_file.exists():
+            return False
+            
+        try:
+            with open(self.pid_file, 'r') as f:
+                pid = int(f.read().strip())
+                
+            # Check if process exists
+            os.kill(pid, 0)  # Sends null signal, raises OSError if process doesn't exist
+            return True
+            
+        except (OSError, ValueError, FileNotFoundError):
+            # PID file exists but process is dead, clean up stale file
+            self._cleanup_stale_files()
+            return False
+    
+    def create_pid_file(self) -> bool:
+        """Create PID file for current process."""
+        try:
+            with open(self.pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            return True
+        except OSError as e:
+            logger.error(f"Failed to create PID file: {e}")
+            return False
+    
+    def remove_pid_file(self):
+        """Remove PID file on shutdown."""
+        try:
+            if self.pid_file.exists():
+                self.pid_file.unlink()
+        except OSError:
+            pass
+    
+    def _cleanup_stale_files(self):
+        """Clean up stale PID and socket files."""
+        try:
+            if self.pid_file.exists():
+                self.pid_file.unlink()
+            if self.socket_file.exists():
+                self.socket_file.unlink()
+        except OSError:
+            pass
+    
+    def cleanup(self):
+        """Clean up daemon lock files on shutdown."""
+        self.remove_pid_file()
+        try:
+            socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
+            if os.path.exists(socket_path):
+                os.unlink(socket_path)
+        except OSError:
+            pass
+
+
+class DaemonCommunicator:
+    """Handles communication with existing daemon instances."""
+    
+    def __init__(self, workspace_path: str):
+        self.workspace_path = Path(workspace_path)
+        self.socket_file = self.workspace_path / ".cortex" / "daemon" / "ambient_capture.sock"
+        
+    def send_command(self, command: str) -> Optional[str]:
+        """Send command to existing daemon."""
+        try:
+            client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            client_socket.connect(str(self.socket_file))
+            
+            client_socket.send(command.encode())
+            response = client_socket.recv(1024).decode()
+            
+            client_socket.close()
+            return response
+            
+        except (OSError, ConnectionRefusedError, FileNotFoundError):
+            return None
+    
+    def get_daemon_status(self) -> Optional[Dict[str, Any]]:
+        """Get status from existing daemon."""
+        response = self.send_command("status")
+        if response:
+            try:
+                return json.loads(response)
+            except json.JSONDecodeError:
+                return None
+        return None
 
 
 # ============================================================================
@@ -1319,6 +1426,12 @@ class AmbientCaptureDaemon:
     def __init__(self, workspace_path: str):
         self.workspace_path = Path(workspace_path)
         self.running = False
+        self.start_time = time.time()  # Track daemon startup time
+        
+        # Singleton management
+        self.lock_manager = DaemonLockManager(workspace_path)
+        self.communicator = DaemonCommunicator(workspace_path)
+        self.server_socket = None
         
         # NEW Phase 4.4: Enhanced intelligence components
         self.pattern_detector = ChangePatternDetector(workspace_path)
@@ -1369,31 +1482,112 @@ class AmbientCaptureDaemon:
             self.debouncer.add_event(context)
         
     def start(self):
-        """Start ambient capture daemon."""
+        """Start ambient capture daemon with singleton behavior."""
         print("=" * 60)
         print("[CORTEX] Starting Ambient Capture Daemon...")
         print("=" * 60)
         
-        # Install git hooks
-        self.git_monitor.install_hooks()
+        # Check if daemon is already running
+        if self.lock_manager.is_daemon_running():
+            print("[CORTEX] Daemon already running!")
+            status = self.communicator.get_daemon_status()
+            print(f"[CORTEX] Existing daemon status: {status}")
+            print("[CORTEX] Connecting to existing instance...")
+            return  # Connect to existing daemon instead of starting new one
         
-        # Start monitoring components
-        self.file_watcher.start()
-        self.terminal_monitor.start()
+        # Create PID file to claim singleton status
+        pid_created = self.lock_manager.create_pid_file()
+        if not pid_created:
+            print("[CORTEX] ERROR: Failed to create PID file - another daemon may be starting")
+            print("[CORTEX] Please wait a moment and try again")
+            sys.exit(1)
         
-        self.running = True
+        try:
+            # Start Unix socket server for IPC
+            self._start_socket_server()
+            
+            # Install git hooks
+            self.git_monitor.install_hooks()
+            
+            # Start monitoring components
+            self.file_watcher.start()
+            self.terminal_monitor.start()
+            
+            self.running = True
+            
+            # Periodic VS Code state capture
+            threading.Thread(target=self._periodic_vscode_capture, daemon=True).start()
+            
+            print("[CORTEX] Ambient Capture Daemon started successfully")
+            print("[CORTEX] Monitoring workspace:", self.workspace_path)
+            print(f"[CORTEX] PID: {os.getpid()}")
+            print("[CORTEX] Press Ctrl+C to stop")
+            print("=" * 60)
+            
+            # Keep alive
+            self._keep_alive()
+            
+        except Exception as e:
+            print(f"[CORTEX] ERROR: Failed to start daemon: {e}")
+            self.lock_manager.cleanup()
+            sys.exit(1)
         
-        # Periodic VS Code state capture
-        threading.Thread(target=self._periodic_vscode_capture, daemon=True).start()
-        
-        print("[CORTEX] Ambient Capture Daemon started successfully")
-        print("[CORTEX] Monitoring workspace:", self.workspace_path)
-        print("[CORTEX] Press Ctrl+C to stop")
-        print("=" * 60)
-        
-        # Keep alive
-        self._keep_alive()
-        
+    def _start_socket_server(self):
+        """Start Unix socket server for IPC."""
+        try:
+            socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
+            
+            # Remove existing socket file if it exists
+            if os.path.exists(socket_path):
+                os.unlink(socket_path)
+            
+            self.server_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            self.server_socket.bind(socket_path)
+            self.server_socket.listen(5)
+            
+            # Set permissions so only user can connect
+            os.chmod(socket_path, 0o600)
+            
+            # Start server thread
+            threading.Thread(target=self._socket_server_loop, daemon=True).start()
+            
+            print(f"[CORTEX] Socket server started: {socket_path}")
+            
+        except Exception as e:
+            print(f"[CORTEX] WARNING: Failed to start socket server: {e}")
+            print("[CORTEX] Daemon will run without IPC capability")
+    
+    def _socket_server_loop(self):
+        """Handle incoming socket connections."""
+        while self.running:
+            try:
+                conn, addr = self.server_socket.accept()
+                threading.Thread(target=self._handle_socket_connection, args=(conn,), daemon=True).start()
+            except Exception as e:
+                if self.running:  # Only log if we're not shutting down
+                    print(f"[CORTEX] Socket server error: {e}")
+                break
+    
+    def _handle_socket_connection(self, conn):
+        """Handle individual socket connection."""
+        try:
+            data = conn.recv(1024).decode('utf-8')
+            command = json.loads(data)
+            
+            if command.get('action') == 'status':
+                response = {
+                    'status': 'running',
+                    'pid': os.getpid(),
+                    'workspace': str(self.workspace_path),
+                    'uptime': time.time() - self.start_time if hasattr(self, 'start_time') else 0
+                }
+                conn.send(json.dumps(response).encode('utf-8'))
+            
+        except Exception as e:
+            print(f"[CORTEX] Error handling socket connection: {e}")
+        finally:
+            conn.close()
+
     def _periodic_vscode_capture(self):
         """Periodically capture VS Code state."""
         while self.running:
@@ -1442,7 +1636,23 @@ class AmbientCaptureDaemon:
         # Stop terminal monitor
         if hasattr(self, 'terminal_monitor'):
             self.terminal_monitor.monitoring = False
-            
+        
+        # Close socket server
+        if hasattr(self, 'server_socket'):
+            try:
+                self.server_socket.close()
+                socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
+                if os.path.exists(socket_path):
+                    os.unlink(socket_path)
+                print("[CORTEX] Socket server stopped")
+            except Exception as e:
+                print(f"[CORTEX] Error closing socket server: {e}")
+        
+        # Clean up PID file
+        if hasattr(self, 'lock_manager'):
+            self.lock_manager.cleanup()
+            print("[CORTEX] PID file cleaned up")
+        
         print("[CORTEX] Daemon stopped")
         sys.exit(0)
 
