@@ -1,6 +1,6 @@
 # CORTEX API Reference
 
-**Auto-generated:** 2025-11-14 07:18:41
+**Auto-generated:** 2025-11-14 10:58:51
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
@@ -2380,6 +2380,19 @@ Returns:
 
 ---
 
+## src.cortex_agents.health_validator.enhanced_validator
+
+### EnhancedHealthValidator
+
+Enhanced HealthValidator with investigation support for the Guided Deep Dive pattern.
+
+Extends the existing HealthValidator with methods specifically for investigation
+scenarios, providing detailed health analysis for entities under investigation.
+
+**Methods:**
+
+---
+
 ## src.cortex_agents.health_validator.reporting.__init__
 
 Health report generation and analysis.
@@ -2659,6 +2672,44 @@ Returns:
 
 ---
 
+## src.cortex_agents.investigation_router
+
+### InvestigationPhase
+
+Investigation phases with token budgets
+
+### TokenBudget
+
+Token budget allocation for investigation phases
+
+**Methods:**
+
+#### `is_exhausted(self)`
+
+#### `consume(self, tokens)`
+
+Consume tokens from budget. Returns True if budget allows.
+
+### InvestigationContext
+
+Context for investigation including target, relationships, and findings
+
+**Methods:**
+
+### InvestigationRouter
+
+Routes and manages investigation commands with guided deep dive pattern.
+
+Handles "Investigate why this view..." type requests by:
+1. Intelligent scope detection from query
+2. Phased investigation with token budgets
+3. User checkpoints between phases
+4. Relationship confidence scoring
+
+**Methods:**
+
+---
+
 ## src.cortex_agents.learning_capture_agent
 
 CORTEX Learning Capture Agent
@@ -2924,10 +2975,90 @@ Returns:
 
 Strategic Agents Package
 
-Contains agents responsible for strategic planning and routing:
+Contains agents responsible for strategic planning, architectural analysis, and routing:
 - IntentRouter: Determines user intent and routes to appropriate workflow
+- ArchitectAgent: Deep architectural analysis with automatic brain saving (CORTEX-BRAIN-001 fix)
 - WorkPlanner: Creates multi-phase strategic plans
 - ChangeGovernor: Protects system integrity
+
+Key CORTEX-BRAIN-001 Fix:
+- ArchitectAgent automatically saves architectural analysis to Tier 2 Knowledge Graph
+- Namespace detection (e.g., ksessions_architecture, ksessions_features.etymology)
+- User confirmation of brain saves to build confidence in memory system
+
+---
+
+## src.cortex_agents.strategic.architect
+
+Architect Agent - Strategic architectural analysis with automatic brain saving.
+
+Handles:
+- System architecture analysis
+- Routing system investigation  
+- Component structure mapping
+- View injection pattern analysis
+- Feature architecture documentation
+- Automatic saving of analysis to Tier 2 Knowledge Graph
+
+This agent addresses CORTEX-BRAIN-001 incident by ensuring architectural
+analysis is automatically persisted across sessions.
+
+### ArchitectAgent
+
+Strategic agent for architectural analysis with automatic brain saving.
+
+Performs deep architectural analysis including:
+- Shell structure analysis (layout, navigation, panels)
+- Routing system mapping (states, URLs, templates)
+- View injection pattern documentation
+- Feature directory structure analysis
+- Component interaction flows
+
+Key Features:
+- Automatic namespace detection (e.g., ksessions_architecture)
+- Structured analysis data persistence
+- Cross-session memory via Tier 2 Knowledge Graph
+- User confirmation of brain saves
+
+Example:
+    architect = ArchitectAgent("Architect", tier1_api, tier2_kg, tier3_context)
+    
+    request = AgentRequest(
+        intent="analyze_architecture",
+        context={"workspace_path": "/path/to/KSESSIONS"},
+        user_message="crawl shell.html to understand KSESSIONS architecture"
+    )
+    
+    response = architect.execute(request)
+    # Analysis automatically saved to brain with namespace: ksessions_architecture
+
+**Methods:**
+
+#### `can_handle(self, request)`
+
+Check if this agent can handle the request.
+
+Handles architectural analysis requests including:
+- Architecture analysis ("understand", "analyze", "crawl")
+- Routing analysis ("routing", "navigation", "flow")
+- Structure analysis ("structure", "layout", "components")
+- Feature analysis ("feature", "directory", "organization")
+
+Args:
+    request: The agent request
+
+Returns:
+    True if intent matches architectural analysis patterns
+
+#### `execute(self, request)`
+
+Perform architectural analysis with automatic brain saving.
+
+Args:
+    request: The agent request
+
+Returns:
+    AgentResponse with analysis results and brain save confirmation
 
 ---
 
@@ -4404,6 +4535,38 @@ Usage:
     cortex = CortexEntry()
     response = cortex.process("Add tests for auth.py")
     print(response)
+
+---
+
+## src.entry_point.agent_executor
+
+Agent Executor - Executes specific agents based on routing decisions
+
+This module handles the actual execution of specialist agents after
+the IntentRouter has determined which agents should handle a request.
+
+Addresses CORTEX-BRAIN-001 incident by ensuring architectural analysis
+requests are properly routed to and executed by the ArchitectAgent.
+
+### AgentExecutor
+
+Executes specific agents based on routing decisions.
+
+This class takes routing decisions from IntentRouter and actually
+instantiates and executes the appropriate specialist agents.
+
+**Methods:**
+
+#### `execute_routing_decision(self, routing_decision, request)`
+
+Execute agents based on routing decision.
+
+Args:
+    routing_decision: Decision from IntentRouter
+    request: Original user request
+    
+Returns:
+    AgentResponse from executed agent(s)
 
 ---
 
@@ -10436,6 +10599,8 @@ Lifecycle hooks for plugin execution
 
 Standardized metadata for all plugins
 
+**Methods:**
+
 ### BasePlugin
 
 Abstract base class for all CORTEX plugins.
@@ -11677,6 +11842,331 @@ Args:
 
 Returns:
     True if successful, False otherwise
+
+---
+
+## src.plugins.investigation_html_id_mapping_plugin
+
+Investigation HTML ID Mapping Plugin for CORTEX 3.0
+
+Dedicated plugin for HTML element analysis, ID mapping, and accessibility improvements
+during investigation phases.
+
+Features:
+- Element-to-ID mapping analysis
+- Missing ID detection with intelligent suggestions
+- Accessibility compliance checking
+- Testability improvements
+- Button caption to ID mapping (e.g., "Submit" → btnSubmit)
+- Semantic element analysis
+- ARIA attribute recommendations
+
+Integration with InvestigationRouter:
+- Token-efficient HTML parsing
+- Actionable ID generation suggestions
+- Accessibility recommendations
+- Testing-friendly element identification
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### ElementType
+
+HTML element types for ID mapping
+
+### AccessibilityIssueType
+
+Types of accessibility issues
+
+### IdMappingPriority
+
+Priority levels for ID mapping suggestions
+
+### ElementAnalysis
+
+Analysis of an HTML element
+
+**Methods:**
+
+#### `to_dict(self)`
+
+Convert to dictionary for investigation router
+
+### IdMappingResult
+
+Result of HTML ID mapping analysis
+
+**Methods:**
+
+#### `id_coverage_percentage(self)`
+
+Calculate percentage of elements that have IDs
+
+#### `to_dict(self)`
+
+Convert to dictionary for investigation router
+
+### IdGenerator
+
+Intelligent ID generator for HTML elements
+
+**Methods:**
+
+#### `generate_id(self, element_analysis, context)`
+
+Generate intelligent ID for an element
+
+Args:
+    element_analysis: Analysis of the element
+    context: Additional context (page name, section, etc.)
+    
+Returns:
+    Suggested ID
+
+### HTMLElementAnalyzer
+
+Analyzes HTML elements for ID mapping and accessibility
+
+**Methods:**
+
+#### `analyze_html_file(self, file_path, content)`
+
+Comprehensive analysis of HTML file for ID mapping
+
+Args:
+    file_path: Path to HTML file
+    content: HTML content
+    
+Returns:
+    Complete ID mapping analysis
+
+### InvestigationHtmlIdMappingPlugin
+
+HTML element ID mapping plugin for investigation router
+
+**Methods:**
+
+#### `initialize(self)`
+
+Initialize HTML ID mapping plugin
+
+#### `execute(self, context)`
+
+Execute HTML ID mapping analysis during investigation
+
+Args:
+    context: Investigation context
+    
+Returns:
+    HTML analysis results
+
+#### `cleanup(self)`
+
+Cleanup HTML mapping plugin
+
+### `register()`
+
+Register the investigation HTML ID mapping plugin
+
+---
+
+## src.plugins.investigation_refactoring_plugin
+
+Investigation Refactoring Plugin for CORTEX 3.0
+
+Intelligent refactoring analysis plugin that integrates with InvestigationRouter
+to identify code improvement opportunities without heavy AST parsing.
+
+Features:
+- SOLID principle violation detection
+- Design pattern recommendations
+- Code smell identification
+- Complexity reduction suggestions
+- Maintainability improvements
+- Performance optimization opportunities
+- Token-budget efficient analysis
+
+Integration with InvestigationRouter:
+- Lightweight pattern-based analysis
+- Respects token budget constraints
+- Provides actionable refactoring suggestions
+- Prioritizes improvements by impact
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### RefactoringType
+
+Types of refactoring opportunities
+
+### RefactoringPriority
+
+Priority levels for refactoring suggestions
+
+### CodeSmell
+
+Common code smells that indicate refactoring opportunities
+
+### RefactoringSuggestion
+
+A specific refactoring suggestion
+
+**Methods:**
+
+#### `to_dict(self)`
+
+Convert to dictionary for investigation router
+
+### CodeMetrics
+
+Lightweight code metrics calculator
+
+**Methods:**
+
+#### `calculate_method_length(lines, start_line)`
+
+Calculate method length starting from given line
+
+#### `calculate_class_metrics(content, class_name)`
+
+Calculate basic class metrics
+
+#### `count_parameters(method_signature)`
+
+Count parameters in method signature
+
+### RefactoringPatternAnalyzer
+
+Analyzes code patterns for refactoring opportunities
+
+**Methods:**
+
+#### `analyze_file(self, file_path, content)`
+
+Analyze file for refactoring opportunities
+
+### InvestigationRefactoringPlugin
+
+Refactoring analysis plugin for investigation router
+
+**Methods:**
+
+#### `initialize(self)`
+
+Initialize refactoring plugin
+
+#### `execute(self, context)`
+
+Execute refactoring analysis during investigation
+
+Args:
+    context: Investigation context
+    
+Returns:
+    Refactoring analysis results
+
+#### `cleanup(self)`
+
+Cleanup refactoring plugin
+
+### `register()`
+
+Register the investigation refactoring plugin
+
+---
+
+## src.plugins.investigation_security_plugin
+
+Investigation Security Plugin for CORTEX 3.0
+
+Specialized security analysis plugin that integrates with InvestigationRouter
+to provide security vulnerability detection during investigation phases.
+
+Features:
+- Vulnerability pattern scanning (OWASP Top 10)
+- Dependency security analysis
+- Code security best practices validation
+- HTML security analysis (XSS, CSRF, etc.)
+- Token-budget aware security scanning
+
+Integration with InvestigationRouter:
+- Hooks into analysis phase for detailed security scanning
+- Respects token budget constraints
+- Provides security-specific findings
+- Generates actionable security recommendations
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### SecurityVulnerabilityType
+
+OWASP Top 10 and common security vulnerabilities
+
+### SecuritySeverity
+
+Security vulnerability severity levels
+
+### SecurityFinding
+
+Security vulnerability finding
+
+**Methods:**
+
+#### `to_dict(self)`
+
+Convert to dictionary for investigation router
+
+### SecurityPatternDatabase
+
+Database of security vulnerability patterns
+
+**Methods:**
+
+#### `get_patterns_for_language(self, language)`
+
+Get security patterns for specific programming language
+
+### HTMLSecurityAnalyzer
+
+Analyzes HTML for security vulnerabilities and ID mapping
+
+**Methods:**
+
+#### `analyze_html_security(self, file_path, content)`
+
+Analyze HTML content for security vulnerabilities
+
+#### `analyze_html_id_mapping(self, file_path, content)`
+
+Analyze HTML for element ID mapping and missing IDs
+
+### InvestigationSecurityPlugin
+
+Security analysis plugin for investigation router
+
+**Methods:**
+
+#### `initialize(self)`
+
+Initialize security plugin
+
+#### `execute(self, context)`
+
+Execute security analysis during investigation
+
+Args:
+    context: Investigation context with target entity and budget info
+    
+Returns:
+    Security analysis results
+
+#### `cleanup(self)`
+
+Cleanup security plugin
+
+### `register()`
+
+Register the investigation security plugin
 
 ---
 
@@ -15258,6 +15748,68 @@ Returns:
 
 ---
 
+## src.tier1.fusion_manager
+
+CORTEX 3.0 Milestone 2 - Fusion Integration API
+
+Simple integration layer that makes temporal correlation features
+accessible through WorkingMemory and provides higher-level fusion
+operations for the dual-channel memory system.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### FusionManager
+
+High-level API for CORTEX 3.0 dual-channel memory fusion operations.
+
+Provides simple methods to correlate conversations with ambient events,
+generate development narratives, and create unified timelines.
+
+**Methods:**
+
+#### `correlate_imported_conversation(self, conversation_id, auto_correlate)`
+
+Correlate an imported conversation with ambient events.
+
+Args:
+    conversation_id: ID of imported conversation
+    auto_correlate: If True, run correlation automatically
+    
+Returns:
+    Correlation summary with results and statistics
+
+#### `get_conversation_development_story(self, conversation_id)`
+
+Generate complete development story for a conversation.
+
+Combines conversation content with correlated ambient events
+to create a narrative that shows both the planning (WHY) and
+execution (WHAT) sides of development.
+
+Args:
+    conversation_id: ID of conversation to narrate
+    
+Returns:
+    Development story with timeline and narrative
+
+#### `get_fusion_insights(self, conversation_id, include_recommendations)`
+
+Generate fusion insights for a conversation.
+
+Analyzes correlation patterns to provide insights about
+development effectiveness, plan execution, and areas for improvement.
+
+Args:
+    conversation_id: ID of conversation to analyze
+    include_recommendations: If True, include actionable recommendations
+    
+Returns:
+    Fusion insights and recommendations
+
+---
+
 ## src.tier1.lifecycle.__init__
 
 Conversation lifecycle management for CORTEX Tier 1.
@@ -15623,6 +16175,158 @@ Get optimizer statistics.
 
 Returns:
     Dict with optimization statistics
+
+---
+
+## src.tier1.narrative_intelligence
+
+CORTEX 3.0 Narrative Intelligence Module
+Advanced Fusion - Milestone 3
+
+Enhanced story generation with contextual reasoning and development flow analysis.
+Generates coherent narratives about development progress using conversation patterns.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Repository: https://github.com/asifhussain60/CORTEX
+
+### StoryType
+
+Types of stories the narrative intelligence can generate
+
+### NarrativeStyle
+
+Narrative styles for different audiences
+
+### StoryElement
+
+A single element or event in a development story
+
+**Methods:**
+
+### DevelopmentNarrative
+
+A coherent narrative about development progress
+
+**Methods:**
+
+### NarrativeIntelligence
+
+CORTEX 3.0 Narrative Intelligence Module
+
+Generates coherent stories about development progress by analyzing conversation patterns,
+file changes, and learning evolution. Provides contextual insights about project development.
+
+**Methods:**
+
+#### `add_story_element(self, element)`
+
+Add a story element to the narrative database
+
+#### `generate_development_story(self, time_range, story_type, narrative_style, focus_files)`
+
+Generate a coherent narrative about development progress.
+
+Args:
+    time_range: Tuple of (start_time, end_time) for story scope
+    story_type: Type of story to generate
+    narrative_style: Style/audience for the narrative
+    focus_files: Optional list of files to focus the story on
+    
+Returns:
+    DevelopmentNarrative with generated story
+
+#### `get_recent_narratives(self, limit)`
+
+Get recently generated narratives
+
+#### `get_narrative_statistics(self)`
+
+Get statistics about narrative generation
+
+#### `import_conversation_data(self, conversation_data)`
+
+Import conversation data and create story elements
+
+---
+
+## src.tier1.pattern_learning_engine
+
+CORTEX 3.0 Pattern Learning Engine
+Advanced Fusion - Milestone 3
+
+Learns from successful temporal correlations to improve future suggestions.
+Core component of CORTEX's adaptive fusion layer.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Repository: https://github.com/asifhussain60/CORTEX
+
+### PatternType
+
+Types of patterns the learning engine can recognize and learn from
+
+### CorrelationPattern
+
+A learned pattern from successful correlations
+
+**Methods:**
+
+### LearningSession
+
+A session where patterns were learned from correlations
+
+**Methods:**
+
+### PatternLearningEngine
+
+CORTEX 3.0 Pattern Learning Engine
+
+Learns from successful temporal correlations to improve future suggestions.
+Builds patterns that help predict files, sequences, and optimal correlation windows.
+
+**Methods:**
+
+#### `learn_from_correlation(self, correlation_result)`
+
+Learn patterns from a successful temporal correlation result.
+
+Args:
+    correlation_result: Result from TemporalCorrelator with correlation data
+    
+Returns:
+    LearningSession with details of what was learned
+
+#### `suggest_files_for_conversation(self, conversation_text, conversation_metadata)`
+
+Predict likely implementation files based on conversation content using learned patterns.
+
+Args:
+    conversation_text: Text content of the conversation
+    conversation_metadata: Optional metadata (timestamp, participants, etc.)
+    
+Returns:
+    List of file suggestions with confidence scores
+
+#### `boost_confidence_from_patterns(self, correlation_candidates)`
+
+Use learned patterns to boost correlation confidence scores.
+
+Args:
+    correlation_candidates: List of potential correlations with base confidence
+    
+Returns:
+    Same list with updated confidence scores based on patterns
+
+#### `get_learning_statistics(self)`
+
+Get statistics about pattern learning progress
+
+#### `export_patterns(self, output_file)`
+
+Export learned patterns to a JSON file for backup or analysis
 
 ---
 
@@ -16261,6 +16965,138 @@ Args:
     
 Returns:
     Confirmation message with filepath
+
+---
+
+## src.tier1.smart_recommendations
+
+CORTEX 3.0 - Smart Recommendations API
+Advanced Fusion Features - Milestone 3
+
+Intelligent file prediction service that leverages learned patterns from the Pattern Learning Engine
+to suggest relevant files based on conversation content and development context.
+
+Features:
+- Context-aware file suggestions based on conversation analysis
+- Pattern-driven recommendations using learned correlations
+- File grouping by relevance and development phase
+- Adaptive learning from user interaction feedback
+- Integration with both conversational and traditional memories
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Version: 3.0.0
+
+### FileRecommendation
+
+A recommended file with confidence score and reasoning
+
+**Methods:**
+
+### RecommendationContext
+
+Context information for generating recommendations
+
+**Methods:**
+
+### RecommendationFeedback
+
+User feedback on recommendation quality
+
+### SmartRecommendations
+
+Advanced file recommendation engine using pattern learning and context analysis.
+
+This system learns from conversation patterns, file access history, and user feedback
+to provide intelligent file suggestions that improve development workflow efficiency.
+
+**Methods:**
+
+#### `get_recommendations(self, context, max_results)`
+
+Generate intelligent file recommendations based on conversation context.
+
+Args:
+    context: RecommendationContext with conversation details
+    max_results: Maximum number of recommendations to return
+    
+Returns:
+    List of FileRecommendation objects sorted by confidence score
+
+#### `record_file_access(self, file_path, conversation_id, access_type, context)`
+
+Record file access for learning and recommendations
+
+#### `record_feedback(self, feedback)`
+
+Record user feedback on recommendation quality
+
+#### `get_recommendation_analytics(self, days)`
+
+Get analytics on recommendation effectiveness and patterns
+
+#### `optimize_recommendations(self)`
+
+Optimize recommendation system based on collected data and feedback
+
+---
+
+## src.tier1.temporal_correlator
+
+CORTEX 3.0 Milestone 2 - Temporal Correlation Layer
+
+Implements the fusion layer that cross-references conversations with daemon events
+to create complete development narratives. This is the core component of
+dual-channel memory that links strategic discussions with tactical execution.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### CorrelationResult
+
+Result of temporal correlation between conversation and event.
+
+### ConversationTurn
+
+Represents a single conversation turn for correlation.
+
+### AmbientEvent
+
+Represents an ambient daemon event for correlation.
+
+### TemporalCorrelator
+
+Core temporal correlation algorithm for CORTEX 3.0 dual-channel memory.
+
+Matches conversation turns with ambient daemon events using:
+1. Temporal proximity (±1 hour window)
+2. File mention matching (backtick paths in conversations)
+3. Plan verification (multi-phase tracking)
+
+**Methods:**
+
+#### `correlate_conversation(self, conversation_id, force_recalculate)`
+
+Find temporal correlations for a conversation with ambient events.
+
+Args:
+    conversation_id: ID of imported conversation to correlate
+    force_recalculate: If True, recalculate even if correlations exist
+    
+Returns:
+    List of correlation results ordered by confidence score
+
+#### `get_conversation_timeline(self, conversation_id)`
+
+Generate a unified timeline of conversation turns and correlated events.
+
+Args:
+    conversation_id: ID of conversation to analyze
+    
+Returns:
+    Timeline data with conversation turns and correlated events
 
 ---
 
@@ -17878,6 +18714,29 @@ Wrapper that provides namespace-based filtering on top of search.
 #### `get_patterns_by_tag(self, tag)`
 
 #### `list_all_tags(self)`
+
+#### `detect_analysis_namespace(self, request, context)`
+
+Detect appropriate namespace for analysis based on request and context.
+
+Args:
+    request: User's request text
+    context: Analysis context (files analyzed, workspace, etc.)
+
+Returns:
+    Namespace string (e.g., 'ksessions_architecture', 'workspace.features.etymology')
+
+#### `save_architectural_analysis(self, namespace, analysis_data, metadata)`
+
+Save architectural analysis to knowledge graph with proper namespace.
+
+Args:
+    namespace: Detected namespace for this analysis
+    analysis_data: Structured analysis results
+    metadata: Optional metadata about the analysis
+    
+Returns:
+    Dict with save results and confirmation data
 
 #### `health_check(self)`
 
@@ -21575,6 +22434,191 @@ Test that agent rejects non-PLAN intents.
 #### `test_execute_returns_agent_response(self)`
 
 Test that execute returns proper AgentResponse.
+
+---
+
+## tests.cortex_brain_001.demo_fix_working
+
+CORTEX-BRAIN-001 Fix Demo
+
+Demonstrates the architectural analysis brain saving fix working end-to-end.
+This simulates the KSESSIONS architecture analysis that was lost in the incident.
+
+### `demonstrate_cortex_brain_001_fix()`
+
+Demonstrate the CORTEX-BRAIN-001 architectural analysis brain saving fix.
+
+---
+
+## tests.cortex_brain_001.test_architecture_analysis_brain_saving
+
+Test suite for CORTEX-BRAIN-001 fix: Architecture Analysis Brain Saving
+
+Tests the complete workflow of architectural analysis with automatic brain saving:
+1. Namespace detection logic
+2. Automatic saving after analysis
+3. User confirmation display
+4. Cross-session recall
+
+This addresses the critical incident where 30+ minutes of KSESSIONS architectural
+analysis was lost due to missing automatic brain saving functionality.
+
+### TestNamespaceDetection
+
+Test namespace detection logic for architectural analysis.
+
+**Methods:**
+
+#### `knowledge_graph(self)`
+
+Create a mock knowledge graph for testing.
+
+#### `test_ksessions_architecture_detection(self, knowledge_graph)`
+
+Test detection of KSESSIONS architecture namespace.
+
+#### `test_ksessions_feature_detection(self, knowledge_graph)`
+
+Test detection of KSESSIONS feature namespace.
+
+#### `test_architectural_file_patterns(self, knowledge_graph)`
+
+Test namespace detection based on architectural file patterns.
+
+#### `test_generic_workspace_detection(self, knowledge_graph)`
+
+Test detection for generic workspace (non-KSESSIONS).
+
+#### `test_fallback_to_validation_insights(self, knowledge_graph)`
+
+Test fallback to validation_insights when workspace unknown.
+
+### TestArchitecturalAnalysisSaving
+
+Test automatic saving of architectural analysis.
+
+**Methods:**
+
+#### `mock_kg(self)`
+
+Create a mock knowledge graph with save functionality.
+
+#### `architect_agent(self, mock_kg)`
+
+Create ArchitectAgent with mocked dependencies.
+
+#### `test_can_handle_architectural_requests(self, architect_agent)`
+
+Test that ArchitectAgent recognizes architectural analysis requests.
+
+#### `test_rejects_non_architectural_requests(self, architect_agent)`
+
+Test that ArchitectAgent rejects non-architectural requests.
+
+#### `test_automatic_brain_saving(self, architect_agent, mock_kg)`
+
+Test that architectural analysis is automatically saved to brain.
+
+#### `test_save_metadata_includes_request_context(self, architect_agent, mock_kg)`
+
+Test that save metadata includes request context.
+
+#### `test_handles_save_failure_gracefully(self, architect_agent, mock_kg)`
+
+Test graceful handling when brain save fails.
+
+### TestIntentRouting
+
+Test that architectural analysis requests are properly routed.
+
+**Methods:**
+
+#### `test_architectural_keywords_route_to_architect(self)`
+
+Test that architectural keywords route to ArchitectAgent.
+
+### TestAgentExecutor
+
+Test the AgentExecutor properly handles ArchitectAgent execution.
+
+**Methods:**
+
+#### `mock_tier2_kg(self)`
+
+Mock Tier 2 Knowledge Graph.
+
+#### `agent_executor(self, mock_tier2_kg)`
+
+Create AgentExecutor with mocked dependencies.
+
+#### `test_creates_architect_agent_on_demand(self, agent_executor)`
+
+Test that AgentExecutor creates ArchitectAgent when needed.
+
+#### `test_executes_architect_for_routing_decision(self, agent_executor, mock_tier2_kg)`
+
+Test execution of ArchitectAgent based on routing decision.
+
+### TestCrossSessionRecall
+
+Test that architectural analysis can be recalled across sessions.
+
+**Methods:**
+
+#### `test_analysis_persisted_in_knowledge_graph(self)`
+
+Test that analysis is properly stored for cross-session recall.
+
+### TestEndToEndWorkflow
+
+Integration tests for the complete CORTEX-BRAIN-001 fix workflow.
+
+**Methods:**
+
+#### `test_complete_architectural_analysis_workflow(self)`
+
+Test the complete workflow from request to brain save.
+
+#### `test_ksessions_specific_analysis(self)`
+
+Test analysis of actual KSESSIONS architecture.
+
+---
+
+## tests.cortex_brain_001.test_namespace_detection
+
+Unit tests for namespace detection functionality
+
+Tests the core namespace detection logic added to fix CORTEX-BRAIN-001
+without requiring full integration setup.
+
+### TestNamespaceDetectionLogic
+
+Test the namespace detection logic in isolation.
+
+**Methods:**
+
+#### `test_ksessions_architecture_patterns(self)`
+
+Test KSESSIONS architecture detection patterns.
+
+#### `test_file_pattern_detection(self)`
+
+Test that architectural files trigger architecture namespace.
+
+### TestSaveConfirmationFormatting
+
+Test the save confirmation message formatting.
+
+**Methods:**
+
+#### `test_confirmation_message_structure(self)`
+
+Test that confirmation messages have the right structure.
+
+#### `test_different_namespace_formats(self)`
+
+Test confirmation for different namespace formats.
 
 ---
 
@@ -26935,6 +27979,95 @@ Validates that quality scoring correctly identifies quick fixes.
 
 ---
 
+## tests.tier1.test_fusion_manager
+
+CORTEX 3.0 Milestone 2 - Fusion Manager Tests
+
+Test suite for the FusionManager integration API that provides
+high-level fusion operations for dual-channel memory.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### TestFusionManager
+
+Test the FusionManager integration API.
+
+**Methods:**
+
+#### `temp_db(self)`
+
+Create temporary database for testing.
+
+#### `fusion_manager(self, temp_db)`
+
+Create FusionManager instance.
+
+#### `sample_conversation_with_events(self, temp_db)`
+
+Create sample conversation and correlated ambient events.
+
+#### `test_fusion_manager_initialization(self, temp_db)`
+
+Test FusionManager initialization.
+
+#### `test_correlate_imported_conversation_success(self, fusion_manager, sample_conversation_with_events)`
+
+Test successful conversation correlation.
+
+#### `test_correlate_imported_conversation_disabled(self, fusion_manager, sample_conversation_with_events)`
+
+Test correlation with auto_correlate disabled.
+
+#### `test_get_conversation_development_story(self, fusion_manager, sample_conversation_with_events)`
+
+Test development story generation.
+
+#### `test_get_fusion_insights_with_correlations(self, fusion_manager, sample_conversation_with_events)`
+
+Test fusion insights generation with good correlations.
+
+#### `test_get_fusion_insights_no_recommendations(self, fusion_manager, sample_conversation_with_events)`
+
+Test fusion insights without recommendations.
+
+#### `test_empty_conversation_correlation(self, fusion_manager, temp_db)`
+
+Test correlation with conversation that has no correlations.
+
+#### `test_empty_conversation_story(self, fusion_manager, temp_db)`
+
+Test story generation for conversation with no events.
+
+#### `test_empty_conversation_insights(self, fusion_manager, temp_db)`
+
+Test insights for conversation with no correlations.
+
+#### `test_correlation_statistics_calculation(self, fusion_manager)`
+
+Test internal correlation statistics calculation.
+
+#### `test_correlation_summary_generation(self, fusion_manager)`
+
+Test correlation summary text generation.
+
+### TestFusionManagerIntegration
+
+Test FusionManager integration with WorkingMemory.
+
+**Methods:**
+
+#### `temp_db(self)`
+
+Create temporary database.
+
+#### `test_end_to_end_fusion_workflow(self, temp_db)`
+
+Test complete fusion workflow from import to insights.
+
+---
+
 ## tests.tier1.test_lifecycle_manager
 
 Tests for ConversationLifecycleManager - CORTEX 3.0 conversation lifecycle.
@@ -27030,6 +28163,219 @@ Create ConversationLifecycleManager instance.
 ### `working_memory(temp_db)`
 
 Create WorkingMemory instance for integration tests.
+
+---
+
+## tests.tier1.test_narrative_intelligence
+
+Tests for CORTEX 3.0 Narrative Intelligence Module
+Advanced Fusion - Milestone 3
+
+Tests story generation, contextual reasoning, and development flow analysis capabilities.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Repository: https://github.com/asifhussain60/CORTEX
+
+### TestNarrativeIntelligence
+
+Test suite for Narrative Intelligence module
+
+**Methods:**
+
+#### `setUp(self)`
+
+Set up test environment with temporary database
+
+#### `tearDown(self)`
+
+Clean up test environment
+
+#### `test_initialization(self)`
+
+Test NarrativeIntelligence initialization and database setup
+
+#### `test_add_story_element(self)`
+
+Test adding story elements to the database
+
+#### `test_add_multiple_story_elements(self)`
+
+Test adding multiple story elements
+
+#### `test_gather_story_elements_time_range(self)`
+
+Test gathering story elements within a time range
+
+#### `test_gather_story_elements_file_filter(self)`
+
+Test gathering story elements with file filtering
+
+#### `test_analyze_story_elements(self)`
+
+Test story element analysis functionality
+
+#### `test_extract_themes(self)`
+
+Test theme extraction from content
+
+#### `test_identify_development_phases(self)`
+
+Test development phase identification
+
+#### `test_classify_development_phase(self)`
+
+Test development phase classification
+
+#### `test_detect_complexity_indicators(self)`
+
+Test complexity indicator detection
+
+#### `test_detect_collaboration_signals(self)`
+
+Test collaboration signal detection
+
+#### `test_identify_technical_discoveries(self)`
+
+Test technical discovery identification
+
+#### `test_generate_development_story_technical_style(self)`
+
+Test development story generation with technical narrative style
+
+#### `test_generate_development_story_executive_style(self)`
+
+Test development story generation with executive narrative style
+
+#### `test_generate_development_story_storytelling_style(self)`
+
+Test development story generation with storytelling narrative style
+
+#### `test_generate_story_title(self)`
+
+Test story title generation
+
+#### `test_calculate_narrative_confidence(self)`
+
+Test narrative confidence calculation
+
+#### `test_create_empty_narrative(self)`
+
+Test empty narrative creation when no elements found
+
+#### `test_store_and_retrieve_narrative(self)`
+
+Test storing and retrieving narratives
+
+#### `test_get_narrative_statistics(self)`
+
+Test narrative statistics collection
+
+#### `test_import_conversation_data(self)`
+
+Test importing conversation data to create story elements
+
+#### `test_extract_files_from_content(self)`
+
+Test file extraction from conversation content
+
+#### `test_extract_context_tags_from_content(self)`
+
+Test context tag extraction from conversation content
+
+#### `test_generate_story_with_focus_files(self)`
+
+Test generating story with focus on specific files
+
+---
+
+## tests.tier1.test_pattern_learning_engine
+
+Tests for CORTEX 3.0 Pattern Learning Engine
+Advanced Fusion - Milestone 3
+
+Tests pattern learning capabilities, file suggestion algorithms,
+confidence boosting, and learning session management.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Repository: https://github.com/asifhussain60/CORTEX
+
+### TestPatternLearningEngine
+
+Test suite for Pattern Learning Engine
+
+**Methods:**
+
+#### `setUp(self)`
+
+Set up test environment with temporary database
+
+#### `tearDown(self)`
+
+Clean up temporary database
+
+#### `test_initialization(self)`
+
+Test pattern learning engine initialization
+
+#### `test_file_mention_pattern_learning(self)`
+
+Test learning patterns from file mentions
+
+#### `test_context_pattern_learning(self)`
+
+Test learning patterns from conversation context
+
+#### `test_temporal_pattern_learning(self)`
+
+Test learning temporal patterns from correlations
+
+#### `test_plan_sequence_pattern_learning(self)`
+
+Test learning patterns from plan sequences
+
+#### `test_file_suggestion_based_on_patterns(self)`
+
+Test file suggestion using learned patterns
+
+#### `test_file_mention_suggestions(self)`
+
+Test file suggestions based on file mention patterns
+
+#### `test_confidence_boosting_from_patterns(self)`
+
+Test correlation confidence boosting using patterns
+
+#### `test_learning_statistics(self)`
+
+Test learning statistics collection
+
+#### `test_pattern_export(self)`
+
+Test exporting learned patterns to JSON
+
+#### `test_keyword_extraction(self)`
+
+Test keyword extraction from conversation text
+
+#### `test_file_mention_extraction(self)`
+
+Test file mention extraction from text
+
+#### `test_pattern_merging_and_similarity(self)`
+
+Test that similar patterns get merged instead of duplicated
+
+#### `test_empty_correlation_handling(self)`
+
+Test handling of empty or minimal correlation data
+
+#### `test_pattern_confidence_evolution(self)`
+
+Test that pattern confidence evolves with usage
 
 ---
 
@@ -27152,6 +28498,236 @@ Create temporary database for testing.
 ### `session_manager(temp_db)`
 
 Create SessionManager instance with temp database.
+
+---
+
+## tests.tier1.test_smart_recommendations
+
+Test Suite for Smart Recommendations API
+CORTEX 3.0 - Advanced Fusion Features
+
+Comprehensive testing of intelligent file prediction service with pattern-based
+recommendations, context analysis, and user feedback integration.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Version: 3.0.0
+
+### TestSmartRecommendations
+
+Test suite for Smart Recommendations API
+
+**Methods:**
+
+#### `setUp(self)`
+
+Set up test fixtures
+
+#### `tearDown(self)`
+
+Clean up test fixtures
+
+#### `test_database_initialization(self)`
+
+Test that database tables are created correctly
+
+#### `test_file_recommendation_creation(self)`
+
+Test FileRecommendation dataclass creation and serialization
+
+#### `test_recommendation_context_creation(self)`
+
+Test RecommendationContext dataclass creation
+
+#### `test_pattern_based_recommendations(self)`
+
+Test pattern-based recommendation generation
+
+#### `test_context_similarity_recommendations(self)`
+
+Test context-based similarity recommendations
+
+#### `test_development_flow_recommendations(self)`
+
+Test development phase-aware recommendations
+
+#### `test_frequency_based_recommendations(self)`
+
+Test frequency-based recommendations
+
+#### `test_recency_based_recommendations(self)`
+
+Test recency-based recommendations
+
+#### `test_recommendation_merging(self)`
+
+Test merging multiple recommendations for same file
+
+#### `test_intent_boost_calculation(self)`
+
+Test intent-based confidence boosting
+
+#### `test_phase_boost_calculation(self)`
+
+Test development phase-based confidence boosting
+
+#### `test_keyword_extraction(self)`
+
+Test keyword extraction from conversation text
+
+#### `test_context_similarity_calculation(self)`
+
+Test context similarity calculation
+
+#### `test_file_type_scoring(self)`
+
+Test file type appropriateness scoring
+
+#### `test_get_recommendations_integration(self)`
+
+Test complete recommendation generation flow
+
+#### `test_file_access_recording(self)`
+
+Test recording file access for learning
+
+#### `test_feedback_recording(self)`
+
+Test recording user feedback on recommendations
+
+#### `test_analytics_generation(self)`
+
+Test recommendation analytics generation
+
+#### `test_optimization(self)`
+
+Test recommendation system optimization
+
+#### `test_cache_refresh(self)`
+
+Test pattern cache refresh functionality
+
+#### `test_file_types_for_phase(self)`
+
+Test getting appropriate file types for development phase
+
+#### `test_development_flow_score(self)`
+
+Test development flow appropriateness scoring
+
+---
+
+## tests.tier1.test_temporal_correlator
+
+CORTEX 3.0 Milestone 2 - Temporal Correlation Tests
+
+Comprehensive test suite for the temporal correlation layer that verifies
+all fusion capabilities: temporal matching, file mention correlation,
+plan verification, and timeline generation.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### TestTemporalCorrelator
+
+Test the temporal correlation algorithm.
+
+**Methods:**
+
+#### `temp_db(self)`
+
+Create temporary database for testing.
+
+#### `correlator(self, temp_db)`
+
+Create TemporalCorrelator instance.
+
+#### `sample_conversation(self, temp_db)`
+
+Create sample conversation for testing.
+
+#### `sample_events(self, temp_db)`
+
+Create sample ambient events for testing.
+
+#### `test_correlator_initialization(self, temp_db)`
+
+Test correlator initialization and schema setup.
+
+#### `test_extract_file_mentions(self, correlator)`
+
+Test file mention extraction from conversation content.
+
+#### `test_extract_phase_mentions(self, correlator)`
+
+Test phase mention extraction from conversation content.
+
+#### `test_get_conversation_turns(self, correlator, sample_conversation)`
+
+Test conversation turn extraction.
+
+#### `test_get_ambient_events_in_window(self, correlator, sample_events)`
+
+Test ambient event retrieval within time window.
+
+#### `test_temporal_correlation_calculation(self, correlator)`
+
+Test temporal correlation scoring algorithm.
+
+#### `test_file_mention_correlation_exact_match(self, correlator)`
+
+Test file mention correlation with exact path match.
+
+#### `test_file_mention_correlation_filename_match(self, correlator)`
+
+Test file mention correlation with filename-only match.
+
+#### `test_plan_verification_correlation(self, correlator)`
+
+Test plan verification correlation scoring.
+
+#### `test_full_conversation_correlation(self, correlator, sample_conversation, sample_events)`
+
+Test complete conversation correlation workflow.
+
+#### `test_correlation_persistence(self, correlator, sample_conversation, sample_events)`
+
+Test that correlations are stored and retrieved correctly.
+
+#### `test_force_recalculation(self, correlator, sample_conversation, sample_events)`
+
+Test force recalculation of existing correlations.
+
+#### `test_conversation_timeline_generation(self, correlator, sample_conversation, sample_events)`
+
+Test unified timeline generation.
+
+#### `test_custom_time_window(self, temp_db)`
+
+Test correlator with custom time window.
+
+#### `test_no_correlations_case(self, correlator, temp_db)`
+
+Test behavior when no correlations are found.
+
+### TestIntegrationWithWorkingMemory
+
+Test integration between TemporalCorrelator and WorkingMemory.
+
+**Methods:**
+
+#### `temp_db(self)`
+
+Create temporary database.
+
+#### `test_working_memory_temporal_correlation_integration(self, temp_db)`
+
+Test that WorkingMemory can use temporal correlation features.
+
+#### `test_temporal_correlation_api_extension(self, temp_db)`
+
+Test potential API extension for WorkingMemory temporal features.
 
 ---
 

@@ -13,6 +13,7 @@ analysis was lost due to missing automatic brain saving functionality.
 
 import pytest
 from unittest.mock import Mock, patch, MagicMock
+from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
 from pathlib import Path
 from datetime import datetime
 
@@ -93,6 +94,7 @@ class TestArchitecturalAnalysisSaving:
     @pytest.fixture
     def mock_kg(self):
         """Create a mock knowledge graph with save functionality."""
+        from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
         kg = Mock(spec=KnowledgeGraph)
         kg.detect_analysis_namespace.return_value = 'ksessions_architecture'
         kg.save_architectural_analysis.return_value = {

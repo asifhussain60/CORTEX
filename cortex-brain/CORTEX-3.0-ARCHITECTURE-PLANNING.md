@@ -150,20 +150,82 @@
 
 **CORTEX 3.0 Recommendation:** **PRESERVE** - Industry-leading achievement, maintain and extend
 
-### 4. Plugin Architecture ⭐⭐⭐⭐
+### 4. Plugin Architecture ⭐⭐⭐⭐⭐
 
 **Why it works:**
 - BasePlugin interface provides clean extensibility
 - Command registry auto-discovers new commands
 - Plugins isolated from each other (no conflicts)
 - 12 plugins operational (system_refactor, platform_switch, doc_refresh, etc.)
+- **Zero-footprint design:** Plugins don't increase tool dependency overhead
 
 **Evidence:**
 - 62/82 plugin tests passing (75.6% - some failures need fixes)
 - Successful plugins: doc_refresh, system_refactor, platform_switch
 - No circular dependencies
+- Zero Copilot tool footprint increase demonstrated
 
-**CORTEX 3.0 Recommendation:** **PRESERVE & FIX** - Fix failing tests, enhance plugin lifecycle
+**CORTEX 3.0 Recommendation:** **PRESERVE & ENHANCE** - Fix failing tests, expand with reference implementations
+
+#### Option 1: Recommendation API Plugin (Pure CORTEX Implementation)
+
+**Vision:** Demonstrate zero-footprint plugin architecture with intelligent code recommendations
+
+**Implementation Strategy:**
+```yaml
+recommendation_api_plugin:
+  inheritance: "BasePlugin (src/plugins/base_plugin.py)"
+  footprint: "Zero - no additional tool dependencies required"
+  
+  natural_language_patterns:
+    - "recommend improvements"
+    - "suggest optimizations"
+    - "analyze code quality"
+    - "what should I refactor?"
+  
+  capabilities:
+    tier_2_analysis:
+      - "Query learned patterns from knowledge graph"
+      - "Identify successful workflow templates"
+      - "Suggest proven architectural patterns"
+      
+    tier_3_intelligence:
+      - "Analyze file stability (churn rate, hotspots)"
+      - "Recommend refactoring candidates"
+      - "Predict change impact from historical data"
+      
+    contextual_recommendations:
+      - "File-specific suggestions based on analysis"
+      - "Workflow optimizations from pattern matching"
+      - "Architecture improvements from accumulated wisdom"
+  
+  plugin_implementation:
+    class_name: "RecommendationAPIPlugin"
+    file_location: "src/plugins/recommendation_api_plugin.py"
+    command_registration: "Automatic via PluginCommandRegistry"
+    
+  zero_footprint_benefits:
+    no_external_apis: "Uses only CORTEX brain tiers for intelligence"
+    no_new_tools: "Leverages existing git analysis and pattern storage"
+    optional_activation: "Pay-as-you-go - only loads when requested"
+    graceful_degradation: "Works with minimal data, improves with usage"
+    
+  example_usage:
+    user_request: "What should I refactor in AuthService.cs?"
+    plugin_response:
+      tier_3_analysis: "High churn rate (28% of commits) - refactoring candidate"
+      tier_2_patterns: "Similar auth services benefited from Extract Method pattern"
+      specific_recommendations:
+        - "Extract password validation logic (used 3x)"
+        - "Split user creation from authentication (SRP violation)"
+        - "Add comprehensive unit tests (current coverage: 45%)"
+```
+
+**Benefits:**
+- **Proves plugin architecture value:** Complex AI-like capabilities with zero tool overhead
+- **Reference implementation:** Shows best practices for plugin development
+- **User value:** Provides intelligent recommendations without external dependencies
+- **Architectural validation:** Demonstrates Tier 2/3 integration in real plugin
 
 ---
 
@@ -1523,37 +1585,78 @@ tasks:
 
 ---
 
-## 🔍 Next Steps
+## 🔍 CORTEX 3.0 Build-Ready Strategy (UPDATED 2025-11-14)
 
-### Immediate (This Week)
+### ⚡ NEW APPROACH: Build Once Core Requirements Met
 
-☐ **Review this planning document** - Validate architecture, timeline, priorities
-☐ **Approve CORTEX 3.0 vision** - Green light to proceed or request changes
-☐ **Decide: 2.0 Feature Planning vs 3.0** - Which to prioritize first?
-☐ **Confirm parallel execution strategy** - Phase 2 + 3 overlap acceptable?
+**Previous Strategy:** Complete 30-week roadmap → Release
+**New Strategy:** Ship MVP build for user testing → Iterate based on feedback
 
-### Short-Term (Next 2 Weeks - BLOCKING)
+**Rationale:** Get CORTEX 3.0 into users' hands faster to validate architecture and gather real usage patterns before investing in advanced features.
 
-☐ **Milestone 0: Achieve 100% test pass rate**
-   - Week 1: Fix YAML loading (26) + plugin tests (20) → 90.7% pass rate
-   - Week 2: Fix ambient (11) + smart filtering (6) → 100% pass rate
-   - ✅ SKULL-007 compliance achieved
-   - ✅ Green CI/CD pipeline
+### 🎯 Core Build Requirements (MUST HAVE)
 
-### Medium-Term (Weeks 3-6)
+**Phase 0: Test Stabilization (BLOCKING)**
+☐ **100% test pass rate** - Currently 89.5% (1083/1210), need 100%
+☐ **Zero test errors** - Currently 13 errors, target 0
+☐ **SKULL-007 compliance** - No status inflation
 
-☐ **Phase 1: Foundation**
-   - Ship all 7 operations as working MVPs (3 weeks)
-   - Integrate response templates with entry point + agents (1 week)
-   - ✅ Users have access to cleanup, tests, docs, brain checks
+**Phase 1: Core Operations (MVP)**
+☐ **7 working operations** - setup, cleanup, docs, brain check, tests, story refresh, design sync
+☐ **Template system integration** - Instant help responses (<10ms)
+☐ **Entry point stability** - Natural language routing works reliably
 
-### Long-Term (Weeks 9-30)
+**Phase 2: User Feedback System**
+☐ **Issue Management operation** - Report/review/track user issues
+☐ **Build validation tools** - Health checks, performance monitoring
+☐ **User documentation** - Getting started, troubleshooting
 
-☐ **Phase 2: Dual-Channel Memory** (14 weeks, parallel with Phase 3)
-☐ **Phase 3: Intelligent Context** (6 weeks, parallel with Phase 2)
-☐ **Phase 4: Enhanced Agents** (4 weeks)
-☐ **Phase 5: Polish & Release** (4 weeks)
-☐ **🎉 CORTEX 3.0 RELEASE** (Week 30)
+### 🚀 Build Timeline (6-8 Weeks)
+
+**Week 1-2: Test Stabilization**
+- Fix 23 test failures + 13 errors
+- Achieve 100% pass rate (non-skipped)
+- Green CI/CD pipeline
+
+**Week 3-5: Core Operations**
+- Ship 7 operations using monolithic-then-modular approach
+- Integrate response template system
+- End-to-end testing
+
+**Week 6: Issue Management System**
+- Build unified Issue Management operation
+- User feedback collection tools
+- Beta documentation
+
+**Week 7-8: Build & Deploy**
+- Publish build creation
+- Distribution setup
+- Initial user testing begins
+
+### 🎯 Success Criteria for Build Release
+
+**Technical:**
+- ✅ 100% test pass rate maintained
+- ✅ All 7 core operations functional
+- ✅ Template system integrated
+- ✅ Performance targets met (<2s operation execution)
+
+**User Experience:**
+- ✅ Natural language interface works for all operations
+- ✅ Help system responds instantly
+- ✅ Error messages are clear and actionable
+- ✅ Issue reporting works end-to-end
+
+### 🔄 Post-Build Iteration Strategy
+
+**Build 3.0-MVP** → User Testing (2-4 weeks) → **Build 3.0-Beta** → More Testing → **Build 3.0-Release**
+
+**Advanced Features Deferred:**
+- Dual-Channel Memory (Plan for 3.1)
+- Intelligent Context (Plan for 3.1)
+- Enhanced Agents (Plan for 3.2)
+
+This approach gets CORTEX 3.0 into your development environment ~8 weeks instead of 30, with opportunity to course-correct based on real usage.
 
 ---
 

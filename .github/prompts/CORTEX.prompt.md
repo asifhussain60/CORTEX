@@ -192,8 +192,10 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 > 
 > **Quality Score: 12/10 (EXCELLENT)**
 > 
-> 📁 **Ready to capture:**  
-> → Copy this conversation to `cortex-brain/conversation-captures/YYYY-MM-DD-description.md`
+> 📁 **One-click capture:**  
+> → [Click here to create conversation-capture-2025-11-14.md](command:workbench.action.files.newUntitledFile?%7B%22languageId%22:%22markdown%22,%22content%22:%22%23%20Strategic%20Conversation%20Capture%5Cn%5Cn**Date:**%20{{current_date}}%5Cn**Quality%20Score:**%20{{quality_score}}%5Cn**Participants:**%20{{participants}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Conversation%20Summary%5Cn%5Cn{{conversation_summary}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Full%20Transcript%5Cn%5Cn{{full_conversation}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Learning%20Value%5Cn%5Cn{{strategic_patterns}}%5Cn%5Cn**Captured:**%20{{timestamp}}%5Cn**Status:**%20Ready%20for%20import%20to%20CORTEX%20brain%22%7D)
+> 
+> ⚡ **Alternative:** Copy this conversation to `cortex-brain/documents/conversation-captures/YYYY-MM-DD-description.md`
 > 
 > *Then say "import conversation" to add to CORTEX brain*
 
@@ -308,6 +310,48 @@ CORTEX will:
 | ⚙️ **Configuration** | Advanced settings, multi-machine | #file:../../prompts/shared/configuration-reference.md |
 
 **Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Manual: `setup environment` or #file:../../docs/plugins/platform-switch-plugin.md
+
+---
+
+# 📁 Document Organization (MANDATORY)
+
+**CRITICAL:** All informational documents MUST be created in organized folder structure within CORTEX brain.
+
+## Document Creation Rules
+
+**✅ ALWAYS USE:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
+
+**❌ NEVER CREATE:** Documents in repository root or unorganized locations
+
+## Categories & Usage
+
+| Category | Path | When to Use | Example |
+|----------|------|-------------|---------|
+| **Reports** | `/documents/reports/` | Implementation completion, status reports | `CORTEX-3.0-FINAL-REPORT.md` |
+| **Analysis** | `/documents/analysis/` | Deep investigations, performance analysis | `ROUTER-PERFORMANCE-ANALYSIS.md` |
+| **Summaries** | `/documents/summaries/` | Quick overviews, daily progress | `TIER3-IMPLEMENTATION-SUMMARY.md` |
+| **Investigations** | `/documents/investigations/` | Research, architecture investigations | `AUTH-FEATURE-INVESTIGATION.md` |
+| **Planning** | `/documents/planning/` | Roadmaps, implementation plans | `CORTEX-4.0-PLANNING.md` |
+| **Conversations** | `/documents/conversation-captures/` | Strategic conversation captures | `CONVERSATION-CAPTURE-2025-11-14.md` |
+| **Guides** | `/documents/implementation-guides/` | How-to guides, integration docs | `CORTEX-SETUP-GUIDE.md` |
+
+## Examples of Proper Document Creation
+
+```markdown
+# Instead of this (WRONG):
+/Users/asifhussain/PROJECTS/CORTEX/INVESTIGATION-ANALYSIS-REPORT.md
+
+# Use this (CORRECT):
+/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/analysis/INVESTIGATION-ANALYSIS-REPORT.md
+
+# For conversation captures:
+/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/conversation-captures/CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
+
+# For implementation reports:
+/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/reports/CORTEX-3.0-IMPLEMENTATION-REPORT.md
+```
+
+**Reference Guide:** See `cortex-brain/documents/README.md` for complete organization structure and naming conventions.
 
 ---
 
@@ -429,3 +473,16 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 - **Natural Language Only** - Removed all slash commands for simpler, cleaner architecture
 - **Interaction Design** - Single, intuitive interaction model (see interaction-design.yaml)
 - See CORTEX-2.1-TRACK-A-COMPLETE.md for Track A details, PHASE-0-COMPLETION-REPORT.md for Phase 0
+
+## ⚠️ CRITICAL ENFORCEMENT
+
+**DOCUMENT ORGANIZATION IS MANDATORY:**
+- ALL informational documents MUST use `cortex-brain/documents/[category]/` structure
+- NEVER create .md files in repository root (except README.md, LICENSE, etc.)
+- When referencing existing root documents, note they should be migrated to organized structure
+- Template documents and VS Code Quick Actions should default to organized paths
+
+**Violation Prevention:**
+- Check file paths before creation
+- Use absolute paths with proper categorization  
+- Reference `cortex-brain/documents/README.md` for guidelines
