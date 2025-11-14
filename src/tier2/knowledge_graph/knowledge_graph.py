@@ -169,6 +169,166 @@ class KnowledgeGraph:
     def list_all_tags(self) -> List[Dict[str, int]]:
         return self.tags.list_all_tags()
 
+    # ---------------------- Architectural Analysis Saving ----------------------
+    def detect_analysis_namespace(self, request: str, context: Dict[str, Any]) -> str:
+        """
+        Detect appropriate namespace for analysis based on request and context.
+        
+        Args:
+            request: User's request text
+            context: Analysis context (files analyzed, workspace, etc.)
+        
+        Returns:
+            Namespace string (e.g., 'ksessions_architecture', 'workspace.features.etymology')
+        """
+        import re
+        
+        # Extract workspace name from context
+        workspace_path = context.get('workspace_path', '')
+        workspace_name = None
+        
+        # Try to extract workspace name from common patterns
+        if 'KSESSIONS' in workspace_path.upper():
+            workspace_name = 'ksessions'
+        elif workspace_path:
+            # Extract last folder name as workspace
+            workspace_name = Path(workspace_path).name.lower()
+        
+        # Check analysis type based on request and context
+        request_lower = request.lower()
+        files_analyzed = context.get('files_analyzed', [])
+        
+        if workspace_name:
+            # Architecture-level analysis patterns
+            architecture_patterns = [
+                'architecture', 'routing', 'shell', 'structure', 'crawl', 'understand',
+                'layout', 'navigation', 'view injection', 'component system'
+            ]
+            
+            feature_patterns = [
+                'feature', 'etymology', 'quran', 'ahadees', 'admin', 'album', 
+                'session', 'manage', 'registration'
+            ]
+            
+            # Check for architectural analysis
+            if any(pattern in request_lower for pattern in architecture_patterns):
+                return f'{workspace_name}_architecture'
+            
+            # Check for feature-specific analysis
+            for pattern in feature_patterns:
+                if pattern in request_lower:
+                    # Extract the specific feature name, not just the word "feature"
+                    if pattern == 'feature':
+                        # Look for specific feature names after "feature"
+                        for specific_feature in ['etymology', 'quran', 'ahadees', 'admin', 'album', 'session', 'manage', 'registration']:
+                            if specific_feature in request_lower:
+                                return f'{workspace_name}_features.{specific_feature}'
+                    else:
+                        return f'{workspace_name}_features.{pattern}'
+                    
+            # Check file patterns for architectural indicators
+            architectural_files = [
+                'shell.html', 'config.route.js', 'app.js', 'layout', 'topnav'
+            ]
+            if any(any(arch_file in analyzed_file for arch_file in architectural_files) 
+                   for analyzed_file in files_analyzed):
+                return f'{workspace_name}_architecture'
+                
+            # Default workspace namespace
+            return f'{workspace_name}_general'
+        
+        # Fallback to general validation insights
+        return 'validation_insights'
+
+    def save_architectural_analysis(self, namespace: str, analysis_data: Dict[str, Any], 
+                                  metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Save architectural analysis to knowledge graph with proper namespace.
+        
+        Args:
+            namespace: Detected namespace for this analysis
+            analysis_data: Structured analysis results
+            metadata: Optional metadata about the analysis
+            
+        Returns:
+            Dict with save results and confirmation data
+        """
+        from datetime import datetime
+        import uuid
+        
+        # Generate pattern ID based on namespace and timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        pattern_id = f"{namespace}_{timestamp}_{str(uuid.uuid4())[:8]}"
+        
+        # Prepare metadata
+        if metadata is None:
+            metadata = {}
+            
+        analysis_metadata = {
+            'analyzed_date': datetime.now().isoformat(),
+            'analyzed_by': 'CORTEX (GitHub Copilot)',
+            'namespace': namespace,
+            'analysis_type': 'architectural',
+            'confidence': 1.0,
+            **metadata
+        }
+        
+        # Create pattern content from analysis data
+        content = self._format_analysis_content(analysis_data, namespace)
+        
+        # Store pattern in knowledge graph
+        pattern_result = self.store_pattern(
+            pattern_id=pattern_id,
+            title=f"Architecture Analysis: {namespace}",
+            content=content,
+            pattern_type="architectural",
+            confidence=1.0,
+            source="cortex_analysis",
+            metadata=analysis_metadata,
+            is_pinned=True,  # Important analysis should be pinned
+            scope="application",
+            namespaces=[namespace],
+            is_cortex_internal=False
+        )
+        
+        return {
+            'saved': pattern_result.get('success', False),
+            'pattern_id': pattern_id,
+            'namespace': namespace,
+            'items_saved': len(analysis_data) if isinstance(analysis_data, dict) else 1,
+            'save_confirmation': self._generate_save_confirmation(namespace, analysis_data)
+        }
+    
+    def _format_analysis_content(self, analysis_data: Dict[str, Any], namespace: str) -> str:
+        """Format analysis data into readable content for pattern storage."""
+        import yaml
+        from datetime import datetime
+        
+        content_parts = [
+            f"# {namespace.replace('_', ' ').title()} Analysis",
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "",
+            "## Analysis Results:",
+            "",
+            "```yaml",
+            yaml.dump(analysis_data, default_flow_style=False, indent=2),
+            "```"
+        ]
+        
+        return "\n".join(content_parts)
+    
+    def _generate_save_confirmation(self, namespace: str, analysis_data: Dict[str, Any]) -> str:
+        """Generate user-visible confirmation message."""
+        items_count = len(analysis_data) if isinstance(analysis_data, dict) else 1
+        
+        return f"""✅ **Architecture Analysis Saved to Brain**
+
+Namespace: {namespace}
+File: CORTEX/cortex-brain/knowledge-graph.yaml
+Items Saved: {items_count} components
+
+This analysis will persist across sessions and can be referenced in future conversations."""
+
     # ---------------------- Maintenance ----------------------
     def health_check(self) -> Dict[str, Any]:
         return self.connection_manager.health_check()

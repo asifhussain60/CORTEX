@@ -28,6 +28,7 @@ from src.cortex_agents.intent_router import IntentRouter
 from .request_parser import RequestParser
 from .response_formatter import ResponseFormatter
 from .setup_command import CortexSetup
+from .agent_executor import AgentExecutor
 from src.session_manager import SessionManager
 from src.tier1.tier1_api import Tier1API
 from src.tier2.knowledge_graph import KnowledgeGraph
@@ -105,6 +106,13 @@ class CortexEntry:
             tier3_context=self.tier3
         )
         
+        # Initialize agent executor for CORTEX-BRAIN-001 fix
+        self.agent_executor = AgentExecutor(
+            tier1_api=self.tier1,
+            tier2_kg=self.tier2,
+            tier3_context=self.tier3
+        )
+        
         self.logger.info("CORTEX entry point initialized")
     
     def process(
@@ -167,7 +175,16 @@ class CortexEntry:
                     pass
             
             # Route to appropriate agent(s)
-            response = self.router.execute(request)
+            routing_response = self.router.execute(request)
+            
+            # Execute the actual agents based on routing decision
+            if routing_response.success and routing_response.result:
+                response = self.agent_executor.execute_routing_decision(
+                    routing_response.result, request
+                )
+            else:
+                # Fallback if routing failed
+                response = routing_response
             
             # Log response to Tier 1
             self.tier1.process_message(

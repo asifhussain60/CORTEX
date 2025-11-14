@@ -21,6 +21,7 @@ from .utils import (
     parse_priority_keywords,
     normalize_intent
 )
+from .investigation_router import InvestigationRouter
 
 
 class IntentRouter(BaseAgent):
@@ -87,6 +88,22 @@ class IntentRouter(BaseAgent):
                 "what's the best approach", "whats the best approach",
                 "how do i tackle this"
             ],
+            IntentType.ARCHITECTURE: [
+                # Core architectural analysis triggers (NEW for CORTEX-BRAIN-001 fix)
+                "architecture", "architectural", "analyze", "analysis", "crawl", "understand",
+                "routing", "navigation", "structure", "layout", "components", "shell",
+                "view", "injection", "feature", "directory", "organization", "system",
+                "design", "pattern", "flow", "mapping",
+                # Direct architecture requests
+                "analyze architecture", "understand architecture", "crawl system",
+                "analyze structure", "understand structure", "map structure",
+                "analyze routing", "understand routing", "map routing",
+                "crawl shell", "analyze shell", "understand shell",
+                # Investigation patterns  
+                "how does this work", "how does", "what is the structure",
+                "show me the structure", "explain the architecture",
+                "document the architecture", "map the system"
+            ],
             IntentType.CODE: ["create", "implement", "build", "add", "make"],
             IntentType.EDIT_FILE: ["edit", "modify", "update", "change", "refactor"],
             IntentType.TEST: ["test", "tdd", "verify"],  # Removed "testing" to avoid conflict with "plan testing"
@@ -113,6 +130,15 @@ class IntentRouter(BaseAgent):
                     'intents': []
                 }
             self.agents[agent_type]['intents'].append(intent_type)
+        
+        # Initialize investigation router for deep dive analysis
+        from src.cortex_agents.health_validator.agent import HealthValidator
+        try:
+            health_validator = HealthValidator("health-validator", self.tier1_api, self.tier2_kg, self.tier3_context)
+            self.investigation_router = InvestigationRouter(self, health_validator, self.tier2_kg)
+        except Exception as e:
+            self.logger.warning(f"Could not initialize investigation router: {e}")
+            self.investigation_router = None
     
     def can_handle(self, request: AgentRequest) -> bool:
         """
@@ -140,6 +166,10 @@ class IntentRouter(BaseAgent):
         start_time = self.logger.info("Starting intent routing")
         
         try:
+            # Check for investigation commands first
+            if self._is_investigation_request(request.message):
+                return self._handle_investigation_request(request)
+            
             # Step 1: Classify intent if not already classified
             classified_intent = self._classify_intent(request)
             
@@ -484,3 +514,112 @@ class IntentRouter(BaseAgent):
             msg += f", also involving: {', '.join(secondary)}"
         
         return msg
+    
+    def _is_investigation_request(self, message: str) -> bool:
+        """Check if message is an investigation request requiring deep analysis"""
+        investigation_patterns = [
+            r'investigate\s+(?:why\s+)?(?:this\s+)?(?:the\s+)?',
+            r'analyze\s+(?:why\s+)?(?:this\s+)?(?:the\s+)?',
+            r'find\s+out\s+why',
+            r'look\s+into\s+(?:why\s+)?(?:this\s+)?(?:the\s+)?',
+            r'debug\s+(?:why\s+)?(?:this\s+)?(?:the\s+)?',
+            r'trace\s+(?:why\s+)?(?:this\s+)?(?:the\s+)?'
+        ]
+        
+        message_lower = message.lower()
+        import re
+        
+        for pattern in investigation_patterns:
+            if re.search(pattern, message_lower):
+                return True
+        
+        return False
+    
+    def _handle_investigation_request(self, request: AgentRequest) -> AgentResponse:
+        """Handle investigation requests using InvestigationRouter"""
+        if not self.investigation_router:
+            # Fallback to regular routing if investigation router not available
+            self.logger.warning("Investigation router not available, falling back to regular routing")
+            return self._handle_regular_routing(request)
+        
+        try:
+            # Extract context from request
+            context = {
+                'current_file': request.metadata.get('current_file'),
+                'workspace_root': request.metadata.get('workspace_root', '/Users/asifhussain/PROJECTS/CORTEX'),
+                'conversation_id': request.conversation_id
+            }
+            
+            # Use asyncio to handle the async investigation
+            import asyncio
+            investigation_result = asyncio.run(
+                self.investigation_router.handle_investigation(request.message, context)
+            )
+            
+            return AgentResponse(
+                success=investigation_result.get('success', True),
+                result=investigation_result,
+                message=self._format_investigation_response(investigation_result),
+                agent_name=self.name,
+                metadata={
+                    "intent_type": "INVESTIGATE",
+                    "investigation_phase": investigation_result.get('phase', 'unknown'),
+                    "findings_count": investigation_result.get('total_findings', 0)
+                },
+                context=request.context
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Investigation routing failed: {e}")
+            # Fallback to regular routing
+            return self._handle_regular_routing(request)
+    
+    def _handle_regular_routing(self, request: AgentRequest) -> AgentResponse:
+        """Handle regular (non-investigation) routing"""
+        # Original routing logic
+        classified_intent = self._classify_intent(request)
+        similar_patterns = self._find_similar_intents(request)
+        routing_decision = self._make_routing_decision(classified_intent, similar_patterns, request)
+        
+        if request.conversation_id and self.tier1:
+            self._log_to_conversation(request, routing_decision)
+        
+        if self.tier2:
+            self._store_routing_pattern(request, routing_decision)
+        
+        return AgentResponse(
+            success=True,
+            result=routing_decision,
+            message=self._format_routing_message(routing_decision),
+            agent_name=self.name,
+            metadata={
+                "classified_intent": classified_intent.value,
+                "similar_patterns_found": len(similar_patterns),
+                "confidence": routing_decision["confidence"]
+            },
+            context=request.context
+        )
+    
+    def _format_investigation_response(self, investigation_result: Dict[str, Any]) -> str:
+        """Format investigation result as human-readable message"""
+        if not investigation_result.get('success', True):
+            return f"Investigation failed: {investigation_result.get('error', 'Unknown error')}"
+        
+        phase = investigation_result.get('phase', 'unknown')
+        target = investigation_result.get('target_entity', 'unknown entity')
+        
+        if phase == 'discovery':
+            relationships = investigation_result.get('relationships_found', 0)
+            return f"Discovery phase complete for {target}. Found {relationships} relationships. Ready for deep analysis."
+        
+        elif phase == 'analysis':
+            findings = investigation_result.get('findings_count', 0)
+            return f"Analysis phase complete for {target}. Generated {findings} findings. Ready for synthesis."
+        
+        elif phase == 'complete':
+            total_findings = investigation_result.get('total_findings', 0)
+            summary = investigation_result.get('investigation_summary', 'Investigation completed.')
+            return f"Investigation complete: {summary} Total findings: {total_findings}."
+        
+        else:
+            return f"Investigation in progress for {target} (phase: {phase})"

@@ -67,6 +67,9 @@ class HookPoint(Enum):
     ON_EXTENSION_SCAFFOLD = "on_extension_scaffold"
     ON_WORKFLOW_START = "on_workflow_start"
     ON_WORKFLOW_END = "on_workflow_end"
+    ON_INVESTIGATION_ANALYSIS = "on_investigation_analysis"
+    ON_INVESTIGATION_DISCOVERY = "on_investigation_discovery"
+    ON_INVESTIGATION_SYNTHESIS = "on_investigation_synthesis"
 
 
 @dataclass
@@ -81,7 +84,14 @@ class PluginMetadata:
     author: str
     dependencies: List[str]
     hooks: List[str]
-    config_schema: Dict[str, Any]
+    config_schema: Dict[str, Any] = None
+    natural_language_patterns: List[str] = None
+    
+    def __post_init__(self):
+        if self.config_schema is None:
+            self.config_schema = {}
+        if self.natural_language_patterns is None:
+            self.natural_language_patterns = []
 
 
 class BasePlugin(ABC):

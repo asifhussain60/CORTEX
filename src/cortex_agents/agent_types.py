@@ -11,6 +11,7 @@ from typing import List
 class AgentType(Enum):
     """Categories of specialist agents"""
     ROUTER = auto()          # IntentRouter
+    ARCHITECT = auto()       # ArchitectAgent (NEW - Strategic architectural analysis)
     PLANNER = auto()         # WorkPlanner
     EXECUTOR = auto()        # CodeExecutor
     TESTER = auto()          # TestGenerator
@@ -28,6 +29,11 @@ class IntentType(Enum):
     PLAN = "plan"
     FEATURE = "feature"
     TASK_BREAKDOWN = "task_breakdown"
+    
+    # Architectural analysis intents (NEW)
+    ARCHITECTURE = "architecture"
+    ANALYZE_STRUCTURE = "analyze_structure" 
+    CRAWL_SYSTEM = "crawl_system"
     
     # Execution intents
     CODE = "code"
@@ -102,6 +108,11 @@ INTENT_AGENT_MAP = {
     IntentType.PLAN: AgentType.PLANNER,
     IntentType.FEATURE: AgentType.PLANNER,
     IntentType.TASK_BREAKDOWN: AgentType.PLANNER,
+    
+    # Architectural analysis mapping (NEW)
+    IntentType.ARCHITECTURE: AgentType.ARCHITECT,
+    IntentType.ANALYZE_STRUCTURE: AgentType.ARCHITECT,
+    IntentType.CRAWL_SYSTEM: AgentType.ARCHITECT,
     
     IntentType.CODE: AgentType.EXECUTOR,
     IntentType.IMPLEMENT: AgentType.EXECUTOR,

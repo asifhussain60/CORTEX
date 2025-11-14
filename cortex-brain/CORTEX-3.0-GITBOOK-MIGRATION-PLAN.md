@@ -1,9 +1,9 @@
 # CORTEX 3.0: GitBook Migration Plan
 
 **Author:** Asif Hussain  
-**Version:** 1.0  
-**Date:** 2025-11-13  
-**Status:** 🎯 PLANNING PHASE  
+**Version:** 1.1  
+**Date:** 2025-11-13 (Updated: 2025-11-14)  
+**Status:** 🎯 PLANNING PHASE + Investigation Architecture Analysis  
 **Target:** CORTEX 3.0 Release
 
 ---
@@ -231,7 +231,12 @@ CORTEX Documentation (Root Space)
 │   ├── Agent Coordination
 │   ├── Memory System
 │   ├── Protection Layer (SKULL)
-│   └── Token Optimization
+│   ├── Token Optimization
+│   └── Investigation Patterns
+│       ├── Guided Deep Dive Architecture
+│       ├── Context Injection Strategy
+│       ├── Token Budget Management
+│       └── Phase-Based Analysis
 │
 ├── 🧪 Testing & Quality
 │   ├── Test Strategy
@@ -274,6 +279,8 @@ Main Space: CORTEX 3.0 (current/latest)
 | `docs/awakening-of-cortex.md` | `the-story/complete.md` | Move |
 | `docs/plugins/*` | `plugin-development/*` | Restructure |
 | `docs/architecture/*` | `architecture/*` | Direct copy |
+| `cortex-brain/GUIDED-DEEP-DIVE-PATTERN.md` | `architecture/investigation-patterns/guided-deep-dive.md` | Move + format |
+| `cortex-brain/GUIDED-DEEP-DIVE-INTEGRATION-POINTS.md` | `architecture/investigation-patterns/integration-points.md` | Move + format |
 | `docs/guides/*` | `user-guides/*` | Merge |
 | `docs/reference/*` | `api-reference/tiers/*` | Restructure |
 | `docs/performance/*` | `performance/*` | Direct copy |
@@ -294,6 +301,40 @@ Main Space: CORTEX 3.0 (current/latest)
 - `prompts/shared/` files remain for CORTEX entry point (Copilot Chat)
 - GitBook versions optimized for web reading (longer, more examples)
 - Allows independent evolution of prompt context vs web docs
+
+### 2.2.1 NEW: Investigation Architecture Documentation
+
+**Added 2025-11-14: Guided Deep Dive Pattern Analysis**
+
+Based on architectural analysis of CORTEX 3.0's selective context injection system, the following new documentation sections will be added:
+
+**Investigation Patterns Section:**
+```
+architecture/investigation-patterns/
+├── guided-deep-dive.md               # Phased investigation architecture
+├── integration-points.md             # Health Validator, Intent Router integration  
+├── token-budget-management.md        # 5K token limits, efficiency controls
+├── context-injection-strategy.md     # Current selective vs proposed guided approach
+├── phase-based-analysis.md           # 3-phase investigation workflow
+└── pattern-learning-system.md        # Tier 2 Knowledge Graph integration
+```
+
+**Key Documentation Additions:**
+1. **Guided Deep Dive Architecture** - Complete pattern design for "investigate why this view..." commands
+2. **Token Budget Management** - 5,000 token limits with phase allocation (1,500/2,000/1,500)
+3. **Integration Mapping** - Exact hooks into Intent Router, Health Validator, Pattern Matcher
+4. **User Experience Design** - Phase prompts, choice points, efficiency transparency
+5. **Pattern Learning System** - Investigation result storage and retrieval from Tier 2
+
+**Content Sources:**
+- Analysis findings: Current CORTEX 3.0 selective context injection limitations
+- Proposed solution: Phased investigation with user guidance and token budgets  
+- Integration requirements: File relationship mapping, pattern storage
+- Implementation roadmap: 8-hour development plan with validation metrics
+
+**Documentation Priority:** HIGH - Critical for CORTEX 3.0 investigation capabilities
+
+This analysis demonstrates CORTEX's ability to challenge architectural assumptions, propose efficiency-balanced solutions, and create comprehensive implementation plans.
 
 ### 2.3 Brand & Styling
 
@@ -394,6 +435,11 @@ Week 2:
     - Awakening story (complete)
     - Plugin development guides (7 files)
     - Architecture docs (5 files)
+    - Investigation patterns (NEW: 6 files)
+      ├── Guided Deep Dive architecture
+      ├── Integration points mapping
+      ├── Token budget management
+      └── Context injection strategy
   
   Day 10: Testing & Performance
     - Test strategy
@@ -947,6 +993,7 @@ Week 8: Buffer & Launch
 ### Phase 1: Discovery ✅ (IN PROGRESS)
 
 - [x] Content inventory (708 files)
+- [x] Investigation architecture analysis (NEW: 2025-11-14)
 - [ ] MkDocs dependency map
 - [ ] GitBook account setup
 - [ ] Gap analysis
@@ -1048,6 +1095,8 @@ Week 8: Buffer & Launch
 - `cortex-brain/CORTEX-2.0-PRODUCTION-READINESS-REPORT.md` - Architecture context
 - `prompts/validation/PHASE-3-VALIDATION-REPORT.md` - Modular architecture validation
 - `.github/copilot-instructions.md` - Baseline context for Copilot
+- `cortex-brain/GUIDED-DEEP-DIVE-PATTERN.md` - Investigation architecture analysis (NEW: 2025-11-14)
+- `cortex-brain/GUIDED-DEEP-DIVE-INTEGRATION-POINTS.md` - Integration mapping analysis (NEW: 2025-11-14)
 
 ---
 
