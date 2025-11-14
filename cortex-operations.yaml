@@ -447,62 +447,7 @@ operations:
       status: experimental
       notes: "EXPERIMENTAL: Advanced validation feature for comprehensive architecture and code quality review. May be implemented in future versions for enhanced quality assurance."
       experimental_date: "2025-11-14"
-    - check_documentation_completeness
-    - check_version_control_hygiene
-    - validate_tier_architecture
-    - validate_agent_system
-    - validate_plugin_architecture
-    - check_machine_configuration
-    - check_machine_work_plan
-    - generate_self_review_report
-    profiles:
-      quick:
-        description: Quick review - critical checks only
-        modules:
-        - load_self_review_checklist
-        - validate_brain_protection_coverage
-        - check_tdd_compliance
-        - validate_tier_architecture
-        - generate_self_review_report
-      standard:
-        description: Standard review - critical + high priority
-        modules:
-        - load_self_review_checklist
-        - validate_brain_protection_coverage
-        - validate_layer1_tests
-        - validate_layer2_tests
-        - validate_layer3_tests
-        - validate_layer4_tests
-        - validate_layer5_tests
-        - validate_layer6_tests
-        - check_tdd_compliance
-        - check_solid_principles
-        - validate_tier_architecture
-        - validate_agent_system
-        - generate_self_review_report
-      comprehensive:
-        description: Comprehensive review - all checks
-        modules:
-        - load_self_review_checklist
-        - validate_brain_protection_coverage
-        - validate_layer1_tests
-        - validate_layer2_tests
-        - validate_layer3_tests
-        - validate_layer4_tests
-        - validate_layer5_tests
-        - validate_layer6_tests
-        - validate_integration_tests
-        - check_tdd_compliance
-        - check_solid_principles
-        - check_code_quality
-        - check_documentation_completeness
-        - check_version_control_hygiene
-        - validate_tier_architecture
-        - validate_agent_system
-        - validate_plugin_architecture
-        - check_machine_configuration
-        - check_machine_work_plan
-        - generate_self_review_report
+  
   run_tests:
     name: Test Suite Execution
     description: "[INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation"
