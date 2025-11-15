@@ -6,6 +6,8 @@ Tests activity scoring and summarization components.
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary - See LICENSE file for terms
+
+NOTE: These tests are skipped - ambient daemon removed from CORTEX 3.0
 """
 
 import pytest
@@ -17,12 +19,10 @@ import sys
 CORTEX_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
-# Import after path setup
-from scripts.cortex.auto_capture_daemon import ActivityScorer, AutoSummarizer
 
-
+@pytest.mark.skip(reason="Ambient daemon removed from CORTEX 3.0 - manual capture hints used instead")
 class TestActivityScorer:
-    """Test suite for ActivityScorer."""
+    """Test suite for ActivityScorer (DEPRECATED)."""
     
     def setup_method(self):
         """Set up test fixtures."""

@@ -448,6 +448,24 @@ class ConversationManager:
             
             return self.get_conversation(row['conversation_id'])
     
+    def get_active_conversations(self) -> List[str]:
+        """
+        Get all currently active conversation IDs
+        
+        Returns:
+            List of active conversation IDs
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT conversation_id FROM conversations
+                WHERE status = 'active'
+                ORDER BY start_time DESC
+            """)
+            
+            return [row['conversation_id'] for row in cursor.fetchall()]
+    
     def get_messages(self, conversation_id: str) -> List[Dict]:
         """
         Get all messages for a conversation

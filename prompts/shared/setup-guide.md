@@ -458,31 +458,6 @@ python scripts/cortex_cli.py --recent 5
 
 ---
 
-### Option 3: Ambient Capture Daemon (Automatic - Advanced)
-
-Best for: Continuous background tracking (Phase 2 feature)
-
-```powershell
-# Start background capture daemon
-python scripts/cortex/auto_capture_daemon.py
-
-# Daemon will:
-# - Watch for file changes in workspace
-# - Capture git commits automatically
-# - Track coding sessions
-# - Monitor Copilot activity (experimental)
-
-# Check daemon status
-python scripts/cortex/auto_capture_daemon.py --status
-
-# Stop daemon
-python scripts/cortex/auto_capture_daemon.py --stop
-```
-
-**When to use:** For seamless, always-on conversation tracking
-
----
-
 ### Why Tracking Is Essential
 
 **Without tracking:**
@@ -617,9 +592,7 @@ CORTEX/
 ├── scripts/
 │   ├── cortex_setup.py              # Setup wizard
 │   ├── cortex_cli.py                # Command-line interface
-│   ├── cortex-capture.ps1           # PowerShell tracking script
-│   └── cortex/
-│       └── auto_capture_daemon.py   # Background capture daemon
+│   └── cortex-capture.ps1           # PowerShell tracking script
 │
 └── prompts/
     ├── user/

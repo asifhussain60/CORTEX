@@ -552,71 +552,10 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             self.report.issues.append(issue)
     
     def _check_ambient_daemon_status(self) -> None:
-        """Check ambient capture daemon status"""
-        try:
-            # Try to import psutil for better process checking
-            try:
-                import psutil
-                has_psutil = True
-            except ImportError:
-                has_psutil = False
-                logger.warning("psutil not available, using basic daemon check")
-            
-            # Check for PID file
-            lock_dir = self.project_root / ".cortex" / "daemon"
-            pid_file = lock_dir / "ambient_capture.pid"
-            
-            daemon_running = False
-            daemon_pid = None
-            
-            if pid_file.exists():
-                try:
-                    with open(pid_file, 'r') as f:
-                        daemon_pid = int(f.read().strip())
-                    
-                    # Check if process is actually running
-                    if has_psutil:
-                        if psutil.pid_exists(daemon_pid):
-                            process = psutil.Process(daemon_pid)
-                            if 'auto_capture_daemon' in ' '.join(process.cmdline()):
-                                daemon_running = True
-                    else:
-                        # Basic check without psutil
-                        try:
-                            os.kill(daemon_pid, 0)
-                            daemon_running = True
-                        except OSError:
-                            pass
-                            
-                except (ValueError, FileNotFoundError) as e:
-                    logger.debug(f"Error reading PID file: {e}")
-                except Exception as e:
-                    if has_psutil:
-                        # psutil.NoSuchProcess or other psutil errors
-                        logger.debug(f"Process check failed: {e}")
-            
-            # Record status
-            self.report.statistics['ambient_daemon_running'] = daemon_running
-            if daemon_pid:
-                self.report.statistics['ambient_daemon_pid'] = daemon_pid
-            
-            # Add issue if daemon is not running
-            if not daemon_running:
-                issue = HealthIssue(
-                    severity='medium',
-                    category='daemon',
-                    title="Ambient capture daemon not running",
-                    description="Automatic conversation capture is disabled",
-                    recommendation="Start daemon: python scripts/cortex/auto_capture_daemon.py",
-                    auto_fixable=True
-                )
-                self.report.issues.append(issue)
-            else:
-                logger.info(f"  Ambient daemon running (PID: {daemon_pid})")
-                
-        except Exception as e:
-            logger.warning(f"Failed to check ambient daemon status: {e}")
-            self.report.statistics['ambient_daemon_running'] = 'unknown'
+        """Check ambient capture daemon status (DEPRECATED - removed in CORTEX 3.0)"""
+        # Ambient daemon removed - manual conversation capture hints used instead
+        self.report.statistics['ambient_daemon_running'] = 'removed'
+        logger.info("  Ambient daemon: Not applicable (manual capture hints used)")
     
     def _calculate_health_score(self) -> None:
         """Calculate overall health score based on issues"""

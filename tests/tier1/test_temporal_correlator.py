@@ -517,7 +517,8 @@ class TestIntegrationWithWorkingMemory:
         
         conversation_id = result['conversation_id']
         
-        # Add some ambient events (simulating daemon)
+        # NOTE: Ambient events section removed - ambient daemon deprecated in CORTEX 3.0
+        # Manual capture hints used instead
         conn = sqlite3.connect(temp_db)
         cursor = conn.cursor()
         
