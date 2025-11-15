@@ -1,6 +1,6 @@
 # CORTEX API Reference
 
-**Auto-generated:** 2025-11-14 12:46:58
+**Auto-generated:** 2025-11-15 03:35:42
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
@@ -7278,6 +7278,10 @@ Args:
 Returns:
     OperationResult with deployment status
 
+### `get_github_config()`
+
+Get GitHub configuration to avoid hardcoded URL patterns.
+
 ### `register()`
 
 Register module for discovery.
@@ -9507,6 +9511,10 @@ Install Vision API dependencies.
 
 Configure Vision API credentials.
 
+### `get_download_urls()`
+
+Get tool download URLs with proper URL construction.
+
 ### `execute(context)`
 
 Execute tooling installation.
@@ -11319,7 +11327,7 @@ Database connection configuration.
 
 REST API endpoint configuration.
 
-### Plugin
+### ConfigurationWizardPlugin
 
 Configuration Wizard Plugin
 
@@ -11334,6 +11342,10 @@ Architecture:
 - Phase 5: Save to cortex.config.json
 
 **Methods:**
+
+#### `get_natural_language_patterns(self)`
+
+Return natural language patterns this plugin handles.
 
 #### `initialize(self)`
 
@@ -11352,6 +11364,14 @@ Args:
         
 Returns:
     Result dictionary with discovered/configured items
+
+#### `cleanup(self)`
+
+Clean up plugin resources.
+
+### `register()`
+
+Register the Configuration Wizard plugin.
 
 ---
 
@@ -24758,6 +24778,78 @@ Test that platform commands are available.
 
 ---
 
+## tests.plugins.test_configuration_wizard_plugin
+
+Tests for ConfigurationWizardPlugin.
+
+### TestConfigurationWizardPlugin
+
+Test ConfigurationWizardPlugin functionality.
+
+**Methods:**
+
+#### `plugin(self)`
+
+Create plugin instance.
+
+#### `temp_config(self)`
+
+Create temporary config file.
+
+#### `test_plugin_metadata(self, plugin)`
+
+Test plugin metadata.
+
+#### `test_natural_language_patterns(self, plugin)`
+
+Test natural language patterns.
+
+#### `test_initialize(self, plugin)`
+
+Test plugin initialization.
+
+#### `test_cleanup(self, plugin)`
+
+Test plugin cleanup.
+
+#### `test_database_connection_creation(self)`
+
+Test DatabaseConnection dataclass.
+
+#### `test_api_endpoint_creation(self)`
+
+Test APIEndpoint dataclass.
+
+#### `test_execute_auto_discovery_only(self, mock_input, plugin, temp_config)`
+
+Test auto-discovery mode execution.
+
+#### `test_execute_full_wizard_early_exit(self, mock_input, plugin, temp_config)`
+
+Test full wizard with early exit.
+
+#### `test_oracle_discovery(self, plugin, temp_config)`
+
+Test Oracle database discovery.
+
+#### `test_api_discovery_from_code(self, plugin, temp_config)`
+
+Test API discovery from source code.
+
+#### `test_connection_testing(self, plugin)`
+
+Test database connection testing.
+
+#### `test_config_saving(self, plugin, temp_config)`
+
+Test configuration saving.
+
+### `test_plugin_registration()`
+
+Test plugin registration function.
+
+---
+
 ## tests.plugins.test_narrative_flow_implicit_parts
 
 Test Narrative Flow Detection - Implicit Part 1 Handling
@@ -26034,7 +26126,7 @@ Verify slash commands map to operations.
 
 #### `test_yaml_contains_all_legacy_operations(self, cortex_operations)`
 
-Ensure YAML includes all operations from legacy system.
+Ensure YAML includes all core operations after simplification.
 
 #### `test_yaml_files_are_valid_yaml(self, brain_path, root_path)`
 
@@ -26042,7 +26134,7 @@ Verify all YAML files parse without errors.
 
 #### `test_operations_have_module_structure(self, cortex_operations)`
 
-Verify operations define proper module structure.
+Verify core operations define proper module structure.
 
 ### TestTokenReductionPreliminary
 
@@ -28393,31 +28485,35 @@ Test session-ambient event correlation.
 
 Create temporary working memory instance.
 
-#### `test_log_ambient_event(self, memory)`
+#### `test_workspace(self, tmp_path)`
+
+Create a temporary test workspace.
+
+#### `test_log_ambient_event(self, memory, tmp_path)`
 
 Test logging ambient events linked to sessions.
 
-#### `test_get_session_events(self, memory)`
+#### `test_get_session_events(self, memory, test_workspace)`
 
 Test retrieving all events for a session.
 
-#### `test_filter_events_by_type(self, memory)`
+#### `test_filter_events_by_type(self, memory, test_workspace)`
 
 Test filtering session events by type.
 
-#### `test_filter_events_by_score(self, memory)`
+#### `test_filter_events_by_score(self, memory, test_workspace)`
 
 Test filtering session events by minimum score.
 
-#### `test_get_conversation_events(self, memory)`
+#### `test_get_conversation_events(self, memory, test_workspace)`
 
 Test getting events that occurred during a specific conversation.
 
-#### `test_generate_session_narrative(self, memory)`
+#### `test_generate_session_narrative(self, memory, test_workspace)`
 
 Test generating complete session narrative.
 
-#### `test_narrative_groups_by_pattern(self, memory)`
+#### `test_narrative_groups_by_pattern(self, memory, test_workspace)`
 
 Test that narrative groups events by pattern.
 
@@ -28431,7 +28527,7 @@ Integration tests for session correlation with handle_user_request.
 
 Create temporary working memory instance.
 
-#### `test_workflow_with_ambient_events(self, memory)`
+#### `test_workflow_with_ambient_events(self, memory, test_workspace)`
 
 Test complete workflow: conversation + ambient events + narrative.
 

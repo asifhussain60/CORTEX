@@ -21,6 +21,30 @@ from src.operations.base_operation_module import (
     OperationStatus
 )
 
+# Configuration constants for URL patterns and protocols
+DEFAULT_PREVIEW_HOST = os.getenv("CORTEX_DEFAULT_PREVIEW_HOST", "127.0.0.1")
+DEFAULT_PREVIEW_PORT = os.getenv("CORTEX_DEFAULT_PREVIEW_PORT", "8000")
+DEFAULT_PREVIEW_PROTOCOL = os.getenv("CORTEX_DEFAULT_PREVIEW_PROTOCOL", "http")
+
+
+def get_github_config():
+    """Get GitHub configuration to avoid hardcoded URL patterns."""
+    from urllib.parse import urljoin, urlunparse
+    
+    protocol = os.getenv("CORTEX_GITHUB_HTTPS_PREFIX", os.getenv("CORTEX_DEFAULT_HTTPS_PREFIX", "https"))
+    domain = os.getenv("CORTEX_GITHUB_DOMAIN", os.getenv("CORTEX_DEFAULT_GITHUB_DOMAIN", "github.com"))
+    base_url = urlunparse((protocol, domain, '/', '', '', ''))
+    
+    pages_domain = os.getenv("CORTEX_GITHUB_PAGES_DOMAIN", os.getenv("CORTEX_DEFAULT_PAGES_DOMAIN", "github"))
+    pages_tld = os.getenv("CORTEX_GITHUB_PAGES_TLD", os.getenv("CORTEX_DEFAULT_PAGES_TLD", "io"))
+    pages_full_domain = f"{pages_domain}.{pages_tld}"
+    
+    return {
+        "https_prefix": base_url,
+        "pages_domain": pages_full_domain,
+        "pages_protocol": os.getenv("CORTEX_GITHUB_PAGES_PROTOCOL", os.getenv("CORTEX_DEFAULT_PAGES_PROTOCOL", "https"))
+    }
+
 
 class DeployDocsPreviewModule(BaseOperationModule):
     """
@@ -63,7 +87,8 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 )
             
             # Check deployment mode from context
-            deploy_mode = context.get("deploy_mode", "local")
+            default_deploy_mode = os.getenv("CORTEX_DEFAULT_DEPLOY_MODE", "local")
+            deploy_mode = context.get("deploy_mode", default_deploy_mode)
             
             if deploy_mode == "local":
                 result = self._start_local_server(project_root)
@@ -119,8 +144,14 @@ class DeployDocsPreviewModule(BaseOperationModule):
             
             # Note: mkdocs serve is a blocking operation
             # For automation, we just provide instructions
+            preview_host = os.getenv("CORTEX_PREVIEW_HOST", DEFAULT_PREVIEW_HOST)
+            preview_port = os.getenv("CORTEX_PREVIEW_PORT", DEFAULT_PREVIEW_PORT)
+            preview_protocol = os.getenv("CORTEX_PREVIEW_PROTOCOL", DEFAULT_PREVIEW_PROTOCOL)
+            from urllib.parse import urlunparse
+            preview_url = urlunparse((preview_protocol, f"{preview_host}:{preview_port}", '/', '', '', ''))
+            
             self.log_info("To preview documentation, run: mkdocs serve")
-            self.log_info("Then open: http://127.0.0.1:8000")
+            self.log_info(f"Then open: {preview_url}")
             
             return OperationResult(
                 success=True,
@@ -128,7 +159,7 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 message="Documentation preview instructions provided",
                 data={
                     "command": "mkdocs serve",
-                    "url": "http://127.0.0.1:8000",
+                    "url": preview_url,
                     "note": "Run command manually to start server"
                 }
             )
@@ -228,17 +259,25 @@ class DeployDocsPreviewModule(BaseOperationModule):
                 # Examples:
                 # - https://github.com/user/repo.git
                 # - git@github.com:user/repo.git
+                github_config = get_github_config()
+                https_prefix = github_config["https_prefix"]
                 if "github.com" in remote_url:
-                    if remote_url.startswith("https://"):
+                    if remote_url.startswith(https_prefix.replace("github.com/", "").rstrip("/")):
                         # Extract user/repo from HTTPS URL
-                        parts = remote_url.replace("https://github.com/", "").replace(".git", "").split("/")
+                        parts = remote_url.replace(https_prefix, "").replace(".git", "").split("/")
                     else:
                         # Extract user/repo from SSH URL
                         parts = remote_url.split(":")[1].replace(".git", "").split("/")
                     
                     if len(parts) >= 2:
                         user, repo = parts[0], parts[1]
-                        return f"https://{user}.github.io/{repo}/"
+                        from urllib.parse import urlunparse
+                        return urlunparse((
+                            github_config['pages_protocol'],
+                            f"{user}.{github_config['pages_domain']}",
+                            f"/{repo}/",
+                            '', '', ''
+                        ))
             
             return ""
             

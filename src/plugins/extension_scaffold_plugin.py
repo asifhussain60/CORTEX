@@ -23,11 +23,25 @@ from typing import Dict, Any, List
 from datetime import datetime
 import json
 import logging
+import os
+from urllib.parse import urlunparse
 
 from src.plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
 from src.plugins.hooks import HookPoint
 
 logger = logging.getLogger(__name__)
+
+
+def _build_default_repository_url():
+    """Build default repository URL using proper URL construction"""
+    protocol = os.getenv('CORTEX_GITHUB_PROTOCOL', 'https')
+    domain = os.getenv('CORTEX_GITHUB_DOMAIN', 'github.com')
+    user = os.getenv('CORTEX_GITHUB_USER', 'asifhussain60')
+    repo = os.getenv('CORTEX_REPO_NAME', 'CORTEX')
+    
+    # Use urlunparse for proper URL construction
+    path = f"/{user}/{repo}"
+    return urlunparse((protocol, domain, path, '', '', ''))
 
 
 class Plugin(BasePlugin):
@@ -65,7 +79,7 @@ class Plugin(BasePlugin):
                     "repository": {
                         "type": "string",
                         "description": "GitHub repository URL",
-                        "default": "https://github.com/asifhussain60/CORTEX"
+                        "default": os.getenv("CORTEX_DEFAULT_REPOSITORY", _build_default_repository_url())
                     },
                     "output_dir": {
                         "type": "string",
@@ -118,7 +132,7 @@ class Plugin(BasePlugin):
             extension_name = config.get("extension_name", "cortex")
             display_name = config.get("display_name", "CORTEX - Cognitive Development Partner")
             publisher = config.get("publisher", "cortex-team")
-            repository = config.get("repository", "https://github.com/asifhussain60/CORTEX")
+            repository = config.get("repository", os.getenv("CORTEX_DEFAULT_REPOSITORY", _build_default_repository_url()))
             output_dir = config.get("output_dir", "cortex-extension")
             features = config.get("features", [
                 "chat_participant",

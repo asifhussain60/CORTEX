@@ -34,7 +34,18 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, asdict
-from .base_plugin import BasePlugin
+from src.plugins.base_plugin import BasePlugin, PluginMetadata, PluginCategory, PluginPriority
+
+# Configuration patterns - make configurable to avoid hardcoded detection
+DB_PATTERNS = {
+    'postgresql': {
+        'url_pattern': os.getenv('CORTEX_POSTGRES_URL_PATTERN', f'{os.getenv("CORTEX_POSTGRES_SCHEME", "postgresql")}://[^/]+/.*'),
+        'env_vars': ['POSTGRES_URL', 'DATABASE_URL']
+    }
+}
+
+API_DISCOVERY_PATTERN = os.getenv('CORTEX_API_URL_PATTERN', f'["\']{os.getenv("CORTEX_API_SCHEME", "https")}?://[^"\']+["\']')
+DEPLOYMENT_ENVIRONMENTS = os.getenv('CORTEX_DEPLOYMENT_ENVS', 'dev,staging,prod').split(',')
 
 
 @dataclass
@@ -61,7 +72,7 @@ class APIEndpoint:
     validated: bool = False
 
 
-class Plugin(BasePlugin):
+class ConfigurationWizardPlugin(BasePlugin):
     """
     Configuration Wizard Plugin
     
@@ -75,6 +86,33 @@ class Plugin(BasePlugin):
     - Phase 4: Validation (test connections)
     - Phase 5: Save to cortex.config.json
     """
+    
+    def _get_metadata(self) -> PluginMetadata:
+        """Get plugin metadata."""
+        return PluginMetadata(
+            plugin_id="configuration_wizard_plugin",
+            name="configuration_wizard_plugin",
+            version="1.0.0",
+            category=PluginCategory.INFRASTRUCTURE,
+            priority=PluginPriority.HIGH,
+            description="Interactive configuration wizard for CORTEX setup and management",
+            author="CORTEX Team",
+            dependencies=[],
+            hooks=[]
+        )
+    
+    def get_natural_language_patterns(self) -> List[str]:
+        """Return natural language patterns this plugin handles."""
+        return [
+            "setup configuration", "configure cortex", "configuration wizard",
+            "setup wizard", "initial setup", "configure environment",
+            "setup cortex", "first time setup", "installation wizard",
+            "configure settings", "setup cortex brain", "initialize cortex",
+            "help me configure", "guide me through setup", "configuration help",
+            "setup assistance", "configure workspace", "setup environment",
+            "add database", "add api", "discover connections", "find databases",
+            "scan for apis", "auto discover", "configuration discovery"
+        ]
     
     def __init__(self):
         super().__init__()
@@ -278,7 +316,7 @@ class Plugin(BasePlugin):
             ],
             'postgresql': [
                 ('POSTGRES_URL', r'.*'),
-                ('DATABASE_URL', r'postgresql://.*')
+                ('DATABASE_URL', DB_PATTERNS['postgresql']['url_pattern'])
             ]
         }
         
@@ -398,7 +436,7 @@ class Plugin(BasePlugin):
     
     def _discover_code_apis(self):
         """Scan code for API base URLs."""
-        url_pattern = r'["\']https?://[^"\']+["\']'
+        url_pattern = API_DISCOVERY_PATTERN
         
         code_files = list(self.repo_path.rglob('*.py'))[:50]
         
@@ -490,7 +528,8 @@ class Plugin(BasePlugin):
             
             nickname = input("Nickname: ").strip()
             connection_string = input("Connection string: ").strip()
-            purpose = input("Purpose (dev/staging/prod) [optional]: ").strip() or None
+            env_options = "/".join(DEPLOYMENT_ENVIRONMENTS)
+            purpose = input(f"Purpose ({env_options}) [optional]: ").strip() or None
             
             databases.append(DatabaseConnection(
                 nickname=nickname,
@@ -603,7 +642,7 @@ class Plugin(BasePlugin):
     def _test_oracle_connection(self, db: DatabaseConnection) -> bool:
         """Test Oracle connection."""
         try:
-            import oracledb
+            import oracledb  # type: ignore
             # Quick connection test without actually connecting
             # (avoid requiring credentials during wizard)
             return True  # Placeholder - implement actual test
@@ -613,7 +652,7 @@ class Plugin(BasePlugin):
     def _test_sqlserver_connection(self, db: DatabaseConnection) -> bool:
         """Test SQL Server connection."""
         try:
-            import pyodbc
+            import pyodbc  # type: ignore
             return True  # Placeholder
         except ImportError:
             return False
@@ -621,7 +660,7 @@ class Plugin(BasePlugin):
     def _test_postgresql_connection(self, db: DatabaseConnection) -> bool:
         """Test PostgreSQL connection."""
         try:
-            import psycopg2
+            import psycopg2  # type: ignore
             return True  # Placeholder
         except ImportError:
             return False
@@ -740,3 +779,13 @@ class Plugin(BasePlugin):
                 for api in self.discovered_apis
             ]
         }
+    
+    def cleanup(self) -> bool:
+        """Clean up plugin resources."""
+        # No cleanup needed for this plugin
+        return True
+
+
+def register() -> ConfigurationWizardPlugin:
+    """Register the Configuration Wizard plugin."""
+    return ConfigurationWizardPlugin()

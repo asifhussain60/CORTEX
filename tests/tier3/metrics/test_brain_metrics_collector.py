@@ -405,9 +405,16 @@ class TestOperationHeaderFormatter:
     def test_operation_header_formatter_exists(self):
         """Test that operation_header_formatter.py exists"""
         from pathlib import Path
+        import os
         
-        formatter_file = Path("d:/PROJECTS/CORTEX/src/operations/operation_header_formatter.py")
-        assert formatter_file.exists(), "operation_header_formatter.py should exist"
+        # Get the project root dynamically
+        test_dir = Path(__file__).parent
+        project_root = test_dir
+        while project_root.parent != project_root and not (project_root / "src").exists():
+            project_root = project_root.parent
+        
+        formatter_file = project_root / "src/operations/operation_header_formatter.py"
+        assert formatter_file.exists(), f"operation_header_formatter.py should exist at {formatter_file}"
     
     def test_can_import_operation_header_formatter(self):
         """Test that OperationHeaderFormatter can be imported"""

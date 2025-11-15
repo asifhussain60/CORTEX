@@ -81,10 +81,12 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 - ✅ Use concise format (VS Code chat, not terminal output)
 
 **Challenge Section:**
-- ✅ Balance accuracy with efficiency
-- ✅ Accept if viable: Brief rationale why approach is sound
-- ✅ Challenge if concerns: Explain issue + provide alternatives
+- ✅ **Validate user assumptions FIRST** - Check if referenced elements/files/components actually exist
+- ✅ Accept if viable: Brief rationale why approach is sound AND assumptions verified
+- ✅ Challenge if concerns: Explain issue + provide alternatives after validating assumptions  
+- ✅ Challenge if assumptions wrong: "I need to verify that [element] exists before proceeding"
 - ❌ Never skip this section - always Accept OR Challenge
+- ❌ Never assume user's referenced code/files exist without verification
 
 **Response:**
 - ✅ Explain in natural language (no code snippets by default)

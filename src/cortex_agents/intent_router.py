@@ -167,7 +167,7 @@ class IntentRouter(BaseAgent):
         
         try:
             # Check for investigation commands first
-            if self._is_investigation_request(request.message):
+            if self._is_investigation_request(request.user_message):
                 return self._handle_investigation_request(request)
             
             # Step 1: Classify intent if not already classified
@@ -553,7 +553,7 @@ class IntentRouter(BaseAgent):
             # Use asyncio to handle the async investigation
             import asyncio
             investigation_result = asyncio.run(
-                self.investigation_router.handle_investigation(request.message, context)
+                self.investigation_router.handle_investigation(request.user_message, context)
             )
             
             return AgentResponse(

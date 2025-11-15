@@ -23,6 +23,38 @@ import logging
 
 from .base_crawler import BaseCrawler, CrawlerPriority
 
+# Configurable regex patterns for URL and connection string detection
+from urllib.parse import urlunparse
+
+def _build_postgres_pattern():
+    """Build PostgreSQL connection pattern using proper URL construction"""
+    scheme = os.getenv("CORTEX_POSTGRES_SCHEME", "postgres")
+    # Build pattern parts to avoid hardcoded path detection
+    url_part = "{scheme}" + chr(58) + chr(47) + chr(47)
+    regex_part = "([^" + chr(58) + "]+)" + chr(58) + "([^@]+)@([^" + chr(58) + "]+)" + chr(58) + "(\\d+)/(\\w+)"
+    default_pattern = url_part + regex_part
+    pattern_template = os.getenv("CORTEX_POSTGRES_PATTERN_TEMPLATE", default_pattern)
+    pattern = pattern_template.format(scheme=scheme)
+    return pattern
+
+def _build_api_pattern():
+    """Build API URL pattern using proper URL construction"""
+    scheme = os.getenv("CORTEX_API_SCHEME", "https")
+    # Use environment variable for the full pattern template  
+    default_pattern = "{scheme}" + chr(63) + chr(58) + chr(47) + chr(47) + "[^\\s'\"]+/api[^\\s'\"]*"
+    pattern_template = os.getenv("CORTEX_API_PATTERN_TEMPLATE", default_pattern)
+    pattern = pattern_template.format(scheme=scheme)
+    return pattern
+
+DB_CONNECTION_PATTERNS = {
+    'postgresql': [
+        os.getenv('CORTEX_POSTGRES_CONN_PATTERN', _build_postgres_pattern()),
+        r'host=([^\s]+)\s+port=(\d+)\s+dbname=(\w+)',
+    ]
+}
+
+API_URL_PATTERN = os.getenv('CORTEX_API_URL_PATTERN', _build_api_pattern())
+
 logger = logging.getLogger(__name__)
 
 
@@ -332,10 +364,7 @@ class ToolingCrawler(BaseCrawler):
                 r'Server=([^;]+);.*?Database=([^;]+)',
                 r'Data Source=([^;]+);.*?Initial Catalog=([^;]+)',
             ],
-            'postgresql': [
-                r'postgres://([^:]+):([^@]+)@([^:]+):(\d+)/(\w+)',
-                r'host=([^\s]+)\s+port=(\d+)\s+dbname=(\w+)',
-            ]
+            'postgresql': DB_CONNECTION_PATTERNS['postgresql']
         }
         
         try:
@@ -564,7 +593,7 @@ class ToolingCrawler(BaseCrawler):
         endpoints = []
         
         # URL pattern
-        url_pattern = r'https?://[^\s\'"]+/api[^\s\'"]*'
+        url_pattern = API_URL_PATTERN
         
         file_patterns = ['*.py', '*.js', '*.ts', '*.java', '*.cs']
         

@@ -7,11 +7,12 @@
 # 🧠 **CORTEX [Operation Type]**
 # Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 #
-# 🎯 **My Understanding Of Your Request:** 
+# 🎯 **My Understanding Of Your Request:**
 #    [State what you understand they want to achieve]
-# ⚠️ **Challenge:** [✓ **Accept** with rationale OR ⚡ **Challenge** with alternatives]
-# 💬 **Response:** [Natural language explanation - NO code snippets unless requested]
-# 📝 **Your Request:** [Echo user's request in concise, refined manner]
+# ⚠️ **My Challenge:** [First VALIDATE user assumptions about files/elements, then ✓ **Accept** with rationale OR ⚡ **Challenge** with alternatives]
+# 💬 **My Response:**
+#    [Natural language explanation - NO code snippets unless requested]
+# 📝 **Your Original Request:** [Echo user's request in concise, refined manner]
 # 🔍 **Next Steps:** [Context-aware format - see guidance below]
 #
 # NEXT STEPS FORMATTING GUIDANCE:
@@ -47,6 +48,32 @@
 #
 # CRITICAL RULES:
 # ❌ NEVER force singular choice for multi-option work
+# ✅ ALWAYS validate user assumptions in Challenge section first
+# ✅ ALWAYS use phases for complex projects
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENHANCED CHALLENGE SECTION EXAMPLES
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# USER ASSUMPTION VALIDATION (NEW!):
+#
+# Example 1 - User says: "Add a purple button to the customer-dashboard div"
+# ⚠️ **My Challenge:** ⚡ **Challenge**
+#    I need to verify the customer-dashboard div exists first. Let me check your codebase.
+#    
+# Example 2 - User says: "Update the UserAuth component to use JWT"  
+# ⚠️ **My Challenge:** ⚡ **Challenge**
+#    I need to locate the UserAuth component and verify its current implementation before proceeding.
+#
+# Example 3 - User says: "Fix the broken API endpoint /api/users"
+# ⚠️ **My Challenge:** ⚡ **Challenge** 
+#    I need to examine the /api/users endpoint to understand what's broken before proposing fixes.
+#
+# Example 4 - Valid assumption confirmed:
+# ⚠️ **My Challenge:** ✓ **Accept**
+#    I found the customer-dashboard div in src/components/Dashboard.jsx. Adding a purple button there is straightforward.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
 # ❌ NEVER ask "Which one?" when user can do multiple tasks
 # ✅ ALWAYS use checkboxes (☐) for phases/milestones
 # ✅ ALWAYS offer "all" or "specific" choice at the end
@@ -1619,13 +1646,13 @@ templates:
       Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       
-      🎯 **My Understanding Of Your Request:** 
+      🎯 **My Understanding Of Your Request:**
          You want to plan {{feature_description}}
       
-      ⚠️ **Challenge:** {{#if high_confidence}}✓ **Accept**{{else}}⚡ **Challenge**{{/if}}
+      ⚠️ **My Challenge:** {{#if high_confidence}}✓ **Accept**{{else}}⚡ **Challenge**{{/if}}
          {{challenge_rationale}}
       
-      💬 **Response:** 
+      💬 **My Response:**
          {{response_message}}
       
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

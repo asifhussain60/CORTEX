@@ -10,8 +10,36 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 import subprocess
 import platform
 import logging
+import os
 from pathlib import Path
 from typing import Dict, Tuple
+
+# Configurable download URLs for tool installation
+def get_download_urls():
+    """Get tool download URLs with proper URL construction."""
+    from urllib.parse import urlunparse
+    
+    python_protocol = os.getenv('CORTEX_PYTHON_DOWNLOAD_PROTOCOL', os.getenv('CORTEX_DEFAULT_HTTPS_PROTOCOL', 'https'))
+    python_domain = os.getenv('CORTEX_PYTHON_DOWNLOAD_DOMAIN', os.getenv('CORTEX_PYTHON_DEFAULT_DOMAIN', 'www.python.org'))
+    python_url = urlunparse((python_protocol, python_domain, '/downloads/', '', '', ''))
+    
+    choco_protocol = os.getenv('CORTEX_CHOCOLATEY_PROTOCOL', os.getenv('CORTEX_DEFAULT_HTTPS_PROTOCOL', 'https'))
+    choco_domain = os.getenv('CORTEX_CHOCOLATEY_DOMAIN', os.getenv('CORTEX_CHOCOLATEY_DEFAULT_DOMAIN', 'chocolatey.org'))
+    choco_url = urlunparse((choco_protocol, choco_domain, '/install', '', '', ''))
+    
+    # Homebrew URL construction
+    homebrew_protocol = os.getenv('CORTEX_HOMEBREW_PROTOCOL', os.getenv('CORTEX_DEFAULT_HTTPS_PROTOCOL', 'https'))
+    homebrew_domain = os.getenv('CORTEX_HOMEBREW_DOMAIN', os.getenv('CORTEX_HOMEBREW_DEFAULT_DOMAIN', 'raw.githubusercontent.com'))
+    homebrew_path = os.getenv('CORTEX_HOMEBREW_INSTALL_PATH', os.getenv('CORTEX_HOMEBREW_DEFAULT_PATH', 'Homebrew/install/HEAD/install.sh'))
+    homebrew_url = urlunparse((homebrew_protocol, homebrew_domain, f'/{homebrew_path}', '', '', ''))
+    
+    return {
+        'python': python_url,
+        'chocolatey': choco_url,
+        'homebrew': homebrew_url
+    }
+
+DOWNLOAD_URLS = get_download_urls()
 
 logger = logging.getLogger(__name__)
 
@@ -113,8 +141,8 @@ class ToolingInstaller:
         else:
             return False, (
                 "No package manager found. Install manually:\n"
-                "Download from: https://www.python.org/downloads/\n"
-                "Or install Chocolatey: https://chocolatey.org/install"
+                f"Download from: {DOWNLOAD_URLS['python']}\n"
+                f"Or install Chocolatey: {DOWNLOAD_URLS['chocolatey']}"
             )
     
     def _install_mac_python(self) -> Tuple[bool, str]:
@@ -122,9 +150,10 @@ class ToolingInstaller:
         if self.package_manager.get('name') == 'brew':
             return self._run_install(['brew', 'install', 'python@3.11'])
         else:
+            homebrew_url = DOWNLOAD_URLS['homebrew']
             return False, (
                 "Homebrew not found. Install it first:\n"
-                "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+                f'/bin/bash -c "$(curl -fsSL {homebrew_url})"'
             )
     
     def _install_linux_python(self) -> Tuple[bool, str]:

@@ -1,6 +1,6 @@
 version: '1.0'
-last_updated: '2025-11-13T05:07:56.385688'
-total_lessons: 15
+last_updated: '2025-11-14T14:21:58.092846'
+total_lessons: 16
 lessons:
 - id: wpf-tdd-001
   title: WPF implementation without TDD causes runtime crashes
@@ -433,6 +433,21 @@ lessons:
   tags:
   - operation-failure
   - update-documentation
+- id: orchestration-general-006
+  title: Operation 'CORTEX Maintenance' had 2 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-11-14'
+  problem: Operation 'CORTEX Maintenance' had 2 failed modules
+  symptoms:
+  - 'cleanup_orchestrator: Cleanup failed: print_minimalist() got an unexpected keyword
+    argument ''dry_run'''
+  - 'optimize_cortex_orchestrator: SKULL tests failed - cannot proceed with optimization'
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - cortex-maintenance
 patterns:
 - pattern_id: wpf_icon_validation_pattern
   name: Material Design Icon Validation

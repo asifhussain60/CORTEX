@@ -144,11 +144,13 @@ class CortexConfig:
                             windows_path = Path(current_drive) / Path(*parts[idx:])
                             if windows_path.exists():
                                 return windows_path
-                        # Fallback: try common drives
-                        for drive in ['C:\\', 'D:\\', 'E:\\']:
-                            windows_path = Path(drive) / Path(*parts[idx:])
-                            if windows_path.exists():
-                                return windows_path
+                        # Fallback: try available drives dynamically
+                        for drive_letter in 'CDEFGHIJKLMNOPQRSTUVWXYZ':
+                            drive = f'{drive_letter}:\\'
+                            if os.path.exists(drive):
+                                windows_path = Path(drive) / Path(*parts[idx:])
+                                if windows_path.exists():
+                                    return windows_path
                 
                 # Use as-is if exists
                 if path.exists():

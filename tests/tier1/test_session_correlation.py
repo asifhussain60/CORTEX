@@ -24,12 +24,28 @@ class TestSessionAmbientCorrelation:
         # Cleanup
         Path(db_path).unlink(missing_ok=True)
     
-    def test_log_ambient_event(self, memory):
+    @pytest.fixture
+    def test_workspace(self, tmp_path):
+        """Create a temporary test workspace."""
+        workspace = tmp_path / "test_workspace"
+        workspace.mkdir()
+        
+        # Create some test files
+        (workspace / "src").mkdir()
+        (workspace / "src" / "auth.py").write_text("# Auth module")
+        (workspace / "dashboard.tsx").write_text("// Dashboard component")
+        
+        return str(workspace)
+    
+    def test_log_ambient_event(self, memory, tmp_path):
         """Test logging ambient events linked to sessions."""
         # Create session first
+        workspace_path = tmp_path / "test_workspace"
+        workspace_path.mkdir()
+        
         result = memory.handle_user_request(
             user_request="add authentication system",
-            workspace_path="/projects/myapp"
+            workspace_path=str(workspace_path)
         )
         
         session_id = result['session_id']
@@ -40,7 +56,7 @@ class TestSessionAmbientCorrelation:
             session_id=session_id,
             conversation_id=conversation_id,
             event_type="file_change",
-            file_path="/projects/myapp/src/auth.py",
+            file_path=f"{workspace_path}/src/auth.py",
             pattern="FEATURE",
             score=85,
             summary="Created auth.py with login logic",
@@ -49,12 +65,12 @@ class TestSessionAmbientCorrelation:
         
         assert event_id > 0
     
-    def test_get_session_events(self, memory):
+    def test_get_session_events(self, memory, test_workspace):
         """Test retrieving all events for a session."""
         # Create session
         result = memory.handle_user_request(
             user_request="implement dashboard",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result['session_id']
@@ -63,7 +79,7 @@ class TestSessionAmbientCorrelation:
         memory.log_ambient_event(
             session_id=session_id,
             event_type="file_change",
-            file_path="/projects/myapp/dashboard.tsx",
+            file_path=f"{test_workspace}/dashboard.tsx",
             pattern="FEATURE",
             score=90,
             summary="Created dashboard component"
@@ -93,11 +109,11 @@ class TestSessionAmbientCorrelation:
         assert events[1]['event_type'] == "terminal_command"
         assert events[2]['event_type'] == "git_operation"
     
-    def test_filter_events_by_type(self, memory):
+    def test_filter_events_by_type(self, memory, test_workspace):
         """Test filtering session events by type."""
         result = memory.handle_user_request(
             user_request="add tests",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result['session_id']
@@ -127,11 +143,11 @@ class TestSessionAmbientCorrelation:
         assert len(file_events) == 2
         assert all(e['event_type'] == "file_change" for e in file_events)
     
-    def test_filter_events_by_score(self, memory):
+    def test_filter_events_by_score(self, memory, test_workspace):
         """Test filtering session events by minimum score."""
         result = memory.handle_user_request(
             user_request="optimize performance",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result['session_id']
@@ -164,12 +180,12 @@ class TestSessionAmbientCorrelation:
         assert len(high_priority) == 2
         assert all(e['score'] >= 80 for e in high_priority)
     
-    def test_get_conversation_events(self, memory):
+    def test_get_conversation_events(self, memory, test_workspace):
         """Test getting events that occurred during a specific conversation."""
         # Create first conversation
         result1 = memory.handle_user_request(
             user_request="add login page",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result1['session_id']
@@ -195,7 +211,7 @@ class TestSessionAmbientCorrelation:
         # Start new conversation
         result2 = memory.handle_user_request(
             user_request="new conversation - add dashboard",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         conv2_id = result2['conversation_id']
@@ -215,12 +231,12 @@ class TestSessionAmbientCorrelation:
         assert len(conv1_events) == 2
         assert all("login" in e['summary'].lower() for e in conv1_events)
     
-    def test_generate_session_narrative(self, memory):
+    def test_generate_session_narrative(self, memory, test_workspace):
         """Test generating complete session narrative."""
         # Create comprehensive session
         result = memory.handle_user_request(
             user_request="implement authentication system",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result['session_id']
@@ -270,7 +286,7 @@ class TestSessionAmbientCorrelation:
         
         # Verify narrative contains key information
         assert session_id in narrative
-        assert "/projects/myapp" in narrative
+        assert str(test_workspace) in narrative
         assert "Conversations:" in narrative or "conversation" in narrative.lower()
         assert "Activity" in narrative or "events" in narrative.lower()
         
@@ -278,11 +294,11 @@ class TestSessionAmbientCorrelation:
         assert "authentication module" in narrative
         assert "auth tests" in narrative
     
-    def test_narrative_groups_by_pattern(self, memory):
+    def test_narrative_groups_by_pattern(self, memory, test_workspace):
         """Test that narrative groups events by pattern."""
         result = memory.handle_user_request(
             user_request="comprehensive update",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result['session_id']
@@ -342,12 +358,12 @@ class TestSessionCorrelationIntegration:
         
         Path(db_path).unlink(missing_ok=True)
     
-    def test_workflow_with_ambient_events(self, memory):
+    def test_workflow_with_ambient_events(self, memory, test_workspace):
         """Test complete workflow: conversation + ambient events + narrative."""
         # Step 1: Start development work
         result1 = memory.handle_user_request(
             user_request="let's implement a purple button",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         session_id = result1['session_id']
@@ -367,7 +383,7 @@ class TestSessionCorrelationIntegration:
         # Step 3: Continue conversation
         result2 = memory.handle_user_request(
             user_request="test the button functionality",
-            workspace_path="/projects/myapp"
+            workspace_path=test_workspace
         )
         
         # Should be same conversation (workflow progression)

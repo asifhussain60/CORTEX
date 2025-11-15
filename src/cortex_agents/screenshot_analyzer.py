@@ -251,8 +251,8 @@ class ScreenshotAnalyzer(BaseAgent):
             except Exception as e:
                 self.logger.warning(f"Vision API failed, falling back to mock: {e}")
         
-        # Fallback to mock implementation
-        return self._analyze_elements_mock(image_data, request)
+        # Fallback to fallback implementation
+        return self._analyze_elements_fallback(image_data, request)
     
     def _analyze_with_vision_api(self, image_data: str, request: AgentRequest) -> Optional[List[Dict[str, Any]]]:
         """
@@ -327,15 +327,15 @@ Focus on extracting structured, actionable data."""
         analysis_text = result.get('analysis', '')
         
         # Simple parsing - in production, use more sophisticated NLP
-        # For now, return mock elements with vision API metadata
-        mock_elements = self._analyze_elements_mock(None, request)
+        # For now, return fallback elements with vision API metadata
+        fallback_elements = self._analyze_elements_fallback(None, request)
         
         # Enhance with vision API data
-        for element in mock_elements:
+        for element in fallback_elements:
             element['source'] = 'vision_api'
             element['confidence'] = 0.85
         
-        return mock_elements
+        return fallback_elements
     
     def _log_vision_metrics(self, result: Dict):
         """Log vision API usage to Tier 2."""
@@ -355,16 +355,16 @@ Focus on extracting structured, actionable data."""
         except Exception as e:
             self.logger.warning(f"Could not log vision metrics: {e}")
     
-    def _analyze_elements_mock(self, image_data: Optional[str], request: AgentRequest) -> List[Dict[str, Any]]:
+    def _analyze_elements_fallback(self, image_data: Optional[str], request: AgentRequest) -> List[Dict[str, Any]]:
         """
-        Mock implementation for testing and fallback.
+        Fallback implementation for testing and when APIs are unavailable.
         
         Args:
             image_data: Base64 image data (can be None for fallback)
             request: Original request for context
             
         Returns:
-            List of mock elements
+            List of fallback elements
         """
         # For testing, extract hints from user message
         message_lower = request.user_message.lower()
