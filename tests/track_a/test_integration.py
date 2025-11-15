@@ -232,8 +232,8 @@ Thanks! This is exactly what I needed.
         parsed = parser.parse(sample_conversation_markdown)
         semantic_data = extractor.extract(parsed)
         
-        # Verify intents extracted
-        intents = semantic_data["intents"]
+        # Verify intents extracted (use detailed version for structure checks)
+        intents = semantic_data["intents_detailed"]
         assert len(intents) > 0
         
         # Should detect EXECUTE intent (implement, create)

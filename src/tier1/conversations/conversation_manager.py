@@ -21,6 +21,7 @@ class Conversation:
     is_active: bool
     summary: Optional[str] = None
     tags: Optional[List[str]] = None
+    semantic_elements: Optional[str] = None  # JSON string containing semantic data
 
 
 class ConversationManager:
@@ -181,7 +182,7 @@ class ConversationManager:
         
         cursor.execute("""
             SELECT conversation_id, title, created_at, updated_at,
-                   message_count, is_active, summary, tags
+                   message_count, is_active, summary, tags, semantic_elements
             FROM conversations
             ORDER BY created_at DESC
             LIMIT ?
@@ -200,7 +201,8 @@ class ConversationManager:
                 message_count=row[4],
                 is_active=bool(row[5]),
                 summary=row[6],
-                tags=json.loads(row[7]) if row[7] else None
+                tags=json.loads(row[7]) if row[7] else None,
+                semantic_elements=row[8] if len(row) > 8 else None
             ))
         
         return conversations

@@ -46,9 +46,9 @@
 
 ---
 
-# 📋 MANDATORY RESPONSE FORMAT (VS Code Copilot Chat)
+# 📋 MANDATORY RESPONSE FORMAT (GitHub Copilot Chat)
 
-**CRITICAL:** ALL responses in VS Code Copilot Chat MUST follow this 5-part structure:
+**CRITICAL:** ALL responses in GitHub Copilot Chat MUST follow this 5-part structure:
 
 ## Structure
 
@@ -78,12 +78,12 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 **CRITICAL FORMATTING:**
 ❌ **NEVER use separator lines** (━━━, ═══, ───, ___, -----, or ANY repeated characters forming horizontal lines)
 ✅ **Use section headers with emojis only** to separate content
-✅ **Keep responses clean** - separators break into multiple lines in VS Code Copilot Chat
+✅ **Keep responses clean** - separators break into multiple lines in GitHub Copilot Chat
 
 **Understanding & Echo:**
 - ✅ State your understanding FIRST (what they want to achieve)
 - ✅ Echo user's request AFTER response (refined summary)
-- ✅ Use concise format (VS Code chat, not terminal output)
+- ✅ Use concise format (GitHub Copilot Chat, not terminal output)
 
 **Challenge Section:**
 - ✅ **Validate user assumptions FIRST** - Check if referenced elements/files/components actually exist
@@ -374,7 +374,7 @@ let's plan a feature / plan authentication system
 
 **Why:** No syntax to memorize, intuitive for all skill levels, context-aware, works in conversation. All operations execute in live mode.
 
-**Help:** `help` or `what can cortex do` • **Docs:** See table below • **Extension:** VS Code extension may use `@cortex /command` syntax for UI
+**Help:** `help` or `what can cortex do` • **Docs:** See table below
 
 ## 📚 Quick Reference
 
@@ -487,7 +487,7 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 - ALL informational documents MUST use `cortex-brain/documents/[category]/` structure
 - NEVER create .md files in repository root (except README.md, LICENSE, etc.)
 - When referencing existing root documents, note they should be migrated to organized structure
-- Template documents and VS Code Quick Actions should default to organized paths
+- Template documents should default to organized paths
 
 **Violation Prevention:**
 - Check file paths before creation

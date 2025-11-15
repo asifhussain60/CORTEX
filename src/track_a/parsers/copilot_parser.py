@@ -57,16 +57,23 @@ class CopilotParser:
     def __init__(self):
         """Initialize CopilotParser."""
         # Regex patterns for different conversation markers
+        # Support both plain and markdown bold format (**User:** or User:)
         self.user_patterns = [
+            r"^\*\*User:\*\*",  # Markdown bold
             r"^User:",
+            r"^\*\*You:\*\*",
             r"^You:",
+            r"^\*\*Human:\*\*",
             r"^Human:",
             r"^👤",  # User emoji
         ]
         
         self.assistant_patterns = [
+            r"^\*\*Assistant:\*\*",  # Markdown bold
             r"^Assistant:",
+            r"^\*\*Copilot:\*\*",
             r"^Copilot:",
+            r"^\*\*CORTEX:\*\*",
             r"^CORTEX:",
             r"^🧠",  # Brain emoji (CORTEX)
             r"^🤖",  # Robot emoji
@@ -88,7 +95,17 @@ class CopilotParser:
             CopilotParserError: If parsing fails
         """
         if not content or not content.strip():
-            raise CopilotParserError("Empty content")
+            # Return empty result for empty content (edge case)
+            return {
+                "format": "text",
+                "messages": [],
+                "metadata": {
+                    "source": "copilot_chat",
+                    "parsed_at": datetime.now().isoformat(),
+                    "message_count": 0,
+                    "has_code_blocks": False
+                }
+            }
         
         # Detect format
         format_type = self._detect_format(content)
@@ -123,8 +140,8 @@ class CopilotParser:
             except:
                 pass
         
-        # Check Markdown (has code blocks or headers)
-        if "```" in content or re.search(r"^#+\s", content, re.MULTILINE):
+        # Check Markdown (has ** bold markers or code blocks or headers)
+        if "**" in content or "```" in content or re.search(r"^#+\s", content, re.MULTILINE):
             return "markdown"
         
         # Default to plain text
@@ -210,9 +227,9 @@ class CopilotParser:
                 current_role = "user" if is_user else "assistant"
                 current_content = []
                 
-                # Extract content after marker
+                # Extract content after marker (handle both markdown bold and plain)
                 content_after_marker = re.sub(
-                    r"^(User:|You:|Human:|Assistant:|Copilot:|CORTEX:|👤|🧠|🤖)\s*",
+                    r"^(\*\*)?(User:|You:|Human:|Assistant:|Copilot:|CORTEX:|👤|🧠|🤖)(\*\*)?\s*",
                     "",
                     line,
                     flags=re.IGNORECASE
@@ -235,7 +252,18 @@ class CopilotParser:
             })
         
         if not messages:
-            raise CopilotParserError("No messages found in Markdown")
+            # Return empty result for content without role markers (edge case)
+            return {
+                "format": "markdown",
+                "messages": [],
+                "metadata": {
+                    "source": "copilot_chat",
+                    "parsed_at": datetime.now().isoformat(),
+                    "message_count": 0,
+                    "has_code_blocks": False,
+                    "format": "markdown"
+                }
+            }
         
         return {
             "format": "markdown",
@@ -244,7 +272,8 @@ class CopilotParser:
                 "source": "copilot_chat",
                 "parsed_at": datetime.now().isoformat(),
                 "message_count": len(messages),
-                "has_code_blocks": any("```" in m["content"] for m in messages)
+                "has_code_blocks": any("```" in m["content"] for m in messages),
+                "format": "markdown"
             }
         }
     

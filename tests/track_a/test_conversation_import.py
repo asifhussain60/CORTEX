@@ -171,7 +171,8 @@ class TestConversationImportErrorHandling:
         
         assert result["success"] is False
         assert "error" in result
-        assert "parser" in result["error"].lower() or "parse" in result["error"].lower()
+        # Error message now uses "validation" format instead of "parser"
+        assert "validation" in result["error"].lower() or "parser" in result["error"].lower() or "parse" in result["error"].lower()
     
     def test_import_extractor_error_recovery(self, importer):
         """Test import handles extractor errors gracefully."""
@@ -266,8 +267,9 @@ class TestConcurrentImports:
     
     def test_sequential_imports_dont_interfere(self, importer):
         """Test sequential imports maintain isolation."""
-        conv1 = "**User:** Test 1\n**Assistant:** Response 1"
-        conv2 = "**User:** Test 2\n**Assistant:** Response 2"
+        # Create longer conversations to meet 50-character minimum validation
+        conv1 = "**User:** Test 1 with enough content to pass validation\n**Assistant:** Response 1 with enough content"
+        conv2 = "**User:** Test 2 with enough content to pass validation\n**Assistant:** Response 2 with enough content"
         
         result1 = importer.import_conversation(conv1, source="test1")
         result2 = importer.import_conversation(conv2, source="test2")
@@ -278,7 +280,8 @@ class TestConcurrentImports:
     
     def test_import_idempotency(self, importer):
         """Test importing same conversation twice creates separate entries."""
-        conv = "**User:** Test\n**Assistant:** Response"
+        # Create longer conversation to meet 50-character minimum validation
+        conv = "**User:** Test question with enough content\n**Assistant:** Response with enough content to pass validation"
         
         result1 = importer.import_conversation(conv, source="test")
         result2 = importer.import_conversation(conv, source="test")

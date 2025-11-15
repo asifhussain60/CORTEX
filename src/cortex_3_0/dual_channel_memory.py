@@ -21,6 +21,7 @@ import logging
 from pathlib import Path
 
 from ..tier1.working_memory import WorkingMemory
+from ..track_a.integrations.conversational_channel_adapter import ConversationalChannelAdapter
 
 
 class ChannelType(Enum):
@@ -82,63 +83,154 @@ class TraditionalEvent(MemoryEvent):
 
 
 class ConversationalChannel:
-    """Manages conversational interactions (GitHub Copilot Chat)"""
+    """
+    Manages conversational interactions (GitHub Copilot Chat)
+    
+    Phase 2 Update: Now uses ConversationalChannelAdapter for enhanced storage
+    with quality filtering, semantic metadata, and better error handling.
+    """
     
     def __init__(self, working_memory: WorkingMemory):
         self.working_memory = working_memory
+        self.adapter = ConversationalChannelAdapter(working_memory)
         self.logger = logging.getLogger(__name__)
         
     def store_conversation(self, user_message: str, assistant_response: str, 
                          intent: str, entities: List[str] = None,
                          context_references: List[str] = None,
                          session_id: str = None) -> str:
-        """Store a conversational interaction"""
+        """
+        Store a conversational interaction using ConversationalChannelAdapter.
         
-        event = ConversationalEvent(
-            timestamp=datetime.now(),
-            channel=ChannelType.CONVERSATIONAL,
-            content={
-                "user_message": user_message,
-                "assistant_response": assistant_response,
+        Phase 2: Enhanced with semantic metadata and quality assessment.
+        """
+        
+        # Build conversation structure for adapter
+        conversation = {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": user_message,
+                    "timestamp": datetime.now().isoformat()
+                },
+                {
+                    "role": "assistant",
+                    "content": assistant_response,
+                    "timestamp": datetime.now().isoformat()
+                }
+            ],
+            "semantic_data": {
                 "intent": intent,
                 "entities": entities or [],
-                "context_references": context_references or []
-            },
-            user_message=user_message,
-            assistant_response=assistant_response,
-            intent=intent,
-            entities=entities or [],
-            context_references=context_references or [],
-            session_id=session_id
-        )
-        
-        # Store in Tier 1 working memory
-        conversation_id = self.working_memory.store_conversation(
-            user_message=user_message,
-            assistant_response=assistant_response,
-            intent=intent,
-            context={
-                "channel": "conversational",
-                "entities": entities or [],
                 "context_references": context_references or [],
-                "session_id": session_id
+                "quality_score": self._assess_quality(user_message, assistant_response)
+            },
+            "metadata": {
+                "session_id": session_id,
+                "channel": "conversational"
             }
+        }
+        
+        # Store via adapter
+        result = self.adapter.store_conversation(
+            conversation=conversation,
+            source="dual_channel_memory"
         )
         
-        self.logger.info(f"Stored conversational event: {conversation_id}")
-        return conversation_id
+        if result.get("success"):
+            conversation_id = result["conversation_id"]
+            self.logger.info(f"Stored conversational event: {conversation_id}")
+            return conversation_id
+        else:
+            self.logger.error(f"Failed to store conversation: {result.get('reason', 'unknown')}")
+            raise RuntimeError(f"Conversation storage failed: {result.get('reason', 'unknown')}")
+    
+    def _assess_quality(self, user_message: str, assistant_response: str) -> float:
+        """
+        Simple quality assessment based on message characteristics.
+        
+        Returns score 0-10 based on:
+        - Message length (more detail = higher quality)
+        - Response structure (code blocks, lists = higher quality)
+        - Completeness (both user and assistant present)
+        """
+        quality = 5.0  # Base quality
+        
+        # Bonus for detailed user message
+        if len(user_message) > 100:
+            quality += 1.0
+        if len(user_message) > 300:
+            quality += 1.0
+        
+        # Bonus for comprehensive assistant response
+        if len(assistant_response) > 200:
+            quality += 1.0
+        if len(assistant_response) > 500:
+            quality += 1.0
+        
+        # Bonus for code blocks
+        if "```" in assistant_response:
+            quality += 1.0
+        
+        return min(quality, 10.0)
         
     def get_conversation_context(self, conversation_id: str) -> Optional[Dict]:
-        """Retrieve conversation context for continuity"""
-        return self.working_memory.get_conversation_context(conversation_id)
+        """
+        Retrieve conversation context for continuity.
+        
+        Phase 2: Uses adapter's enhanced retrieval with semantic data.
+        """
+        result = self.adapter.retrieve_conversation(conversation_id)
+        
+        if result and result.get("success"):
+            return result
+        
+        return None
         
     def search_conversations(self, query: str, limit: int = 10) -> List[Dict]:
-        """Search conversational interactions"""
-        return self.working_memory.search_conversations(
-            query=query,
-            filters={"channel": "conversational"},
-            limit=limit
-        )
+        """
+        Search conversational interactions.
+        
+        Phase 2: Uses adapter's entity-based search capabilities.
+        """
+        # Use adapter for better search functionality
+        # For now, use simple approach - TODO: enhance with full-text search
+        conversations_orm = self.working_memory.get_recent_conversations(limit * 2)
+        
+        results = []
+        for conv in conversations_orm:
+            # Simple search: check if query is in title, intent, or messages
+            title = getattr(conv, 'title', '')
+            intent = getattr(conv, 'intent', '')
+            
+            # Check title and intent first
+            title_match = query.lower() in title.lower()
+            intent_match = intent and query.lower() in intent.lower()
+            
+            # Also check message content
+            message_match = False
+            if not title_match and not intent_match:
+                messages = self.working_memory.get_messages(conv.conversation_id)
+                for msg in messages:
+                    if query.lower() in msg["content"].lower():
+                        message_match = True
+                        break
+            
+            if title_match or intent_match or message_match:
+                
+                # Get full conversation details via adapter
+                conv_data = self.adapter.retrieve_conversation(conv.conversation_id)
+                if conv_data and conv_data.get("success"):
+                    results.append(conv_data["conversation"])
+                    
+                if len(results) >= limit:
+                    break
+        
+        return results
+    
+    def get_statistics(self) -> Dict:
+        """Get conversation statistics via adapter."""
+        return self.adapter.get_statistics()
 
 
 class TraditionalChannel:
@@ -229,13 +321,51 @@ class IntelligentFusion:
     def correlate_channels(self, time_window_minutes: int = 30) -> List[Dict]:
         """Correlate events across channels within time window"""
         
-        # Get recent events from both channels
-        conversations = self.conversational_channel.working_memory.get_recent_conversations(20)
+        # Get recent events from both channels (ORM objects)
+        conversations_orm = self.conversational_channel.working_memory.get_recent_conversations(20)
         executions = self.traditional_channel.get_recent_executions(20)
         
         correlated_narratives = []
         
-        for conversation in conversations:
+        for conv_orm in conversations_orm:
+            # Convert ORM object to dict for processing
+            # Use getattr with defaults for optional fields
+            
+            # Fetch first user message for user_request
+            messages = self.conversational_channel.working_memory.get_messages(conv_orm.conversation_id)
+            user_message = ""
+            assistant_response = ""
+            if messages:
+                for msg in messages:
+                    if msg["role"] == "user" and not user_message:
+                        user_message = msg["content"]
+                    elif msg["role"] == "assistant" and not assistant_response:
+                        assistant_response = msg["content"]
+            
+            # Extract intent from semantic_elements JSON if available
+            intent = ''
+            semantic_elements_str = getattr(conv_orm, 'semantic_elements', None)
+            if semantic_elements_str:
+                try:
+                    semantic_data = json.loads(semantic_elements_str)
+                    intent = semantic_data.get('intent', '')
+                    self.logger.debug(f"Extracted intent '{intent}' from semantic_data: {semantic_data}")
+                except (json.JSONDecodeError, TypeError) as e:
+                    self.logger.warning(f"Failed to parse semantic_elements: {e}")
+                    intent = ''
+            else:
+                self.logger.debug(f"No semantic_elements found for conversation {conv_orm.conversation_id}")
+            
+            conversation = {
+                "conversation_id": conv_orm.conversation_id,
+                "timestamp": conv_orm.created_at.isoformat() if hasattr(conv_orm.created_at, 'isoformat') else str(conv_orm.created_at),
+                "title": getattr(conv_orm, 'title', 'Untitled'),
+                "intent": intent,
+                "user_message": user_message,
+                "assistant_response": assistant_response,
+                "workflow_state": getattr(conv_orm, 'workflow_state', '')
+            }
+            
             # Find executions within time window
             conv_time = datetime.fromisoformat(conversation["timestamp"])
             related_executions = []

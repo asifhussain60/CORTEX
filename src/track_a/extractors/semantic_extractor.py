@@ -64,6 +64,7 @@ class SemanticExtractor:
         "FIX": ["fix", "bug", "error", "broken", "issue", "problem"],
         "REFACTOR": ["refactor", "clean", "optimize", "improve", "restructure"],
         "ANALYZE": ["analyze", "investigate", "examine", "review", "assess"],
+        "STATUS": ["status", "progress", "current state", "where are we", "what's the"],
         "EXPLAIN": ["explain", "how does", "what is", "why", "help me understand"]
     }
     
@@ -89,24 +90,29 @@ class SemanticExtractor:
         
         # Extract components
         entities = self._extract_entities(messages)
-        intents = self._extract_intents(messages)
+        intents_detailed = self._extract_intents(messages)
         patterns = self._extract_patterns(messages)
         quality_score, quality_factors = self._assess_quality(
-            messages, entities, intents, patterns
+            messages, entities, intents_detailed, patterns
         )
+        
+        # Create backward-compatible intents list (simple strings)
+        intents_simple = list(set(intent["intent"] for intent in intents_detailed))
         
         result = {
             "entities": entities,
-            "intents": intents,
+            "intents": intents_simple,  # Backward-compatible: ["EXECUTE", "PLAN"]
+            "intents_detailed": intents_detailed,  # Detailed version with confidence
             "patterns": patterns,
-            "quality_score": quality_score,
+            "quality": quality_score,  # Backward-compatible field name
+            "quality_score": quality_score,  # Also keep new name for consistency
             "quality_factors": quality_factors,
             "extracted_at": datetime.now().isoformat()
         }
         
         logger.info(
             f"Extraction complete: {len(entities)} entities, "
-            f"{len(intents)} intents, quality={quality_score:.1f}"
+            f"{len(intents_simple)} intents, quality={quality_score:.1f}"
         )
         
         return result
@@ -141,7 +147,35 @@ class SemanticExtractor:
                     })
                     seen.add(file_name)
             
-            # Extract class names (PascalCase)
+            # Extract method names FIRST (PascalCase or camelCase with parens - C#, Java, etc.)
+            # Must check BEFORE class extraction to avoid false positives
+            # Handles both MethodName( and MethodName (with space)
+            method_pattern = r'\b[A-Z][a-zA-Z0-9]*\s*\('
+            for match in re.finditer(method_pattern, content):
+                method_name = match.group(0).split('(')[0].strip()
+                if method_name not in seen and method_name not in ["I", "API", "HTTP", "JSON", "URL"]:
+                    entities.append({
+                        "type": "method",
+                        "value": method_name,
+                        "confidence": 0.75,
+                        "message_index": msg_idx
+                    })
+                    seen.add(method_name)
+            
+            # Extract function names (snake_case with parens or following patterns)
+            func_pattern = r'\b[a-z_][a-z0-9_]*\s*\('
+            for match in re.finditer(func_pattern, content):
+                func_name = match.group(0).split('(')[0].strip()
+                if func_name not in seen and not func_name.startswith("_"):
+                    entities.append({
+                        "type": "function",
+                        "value": func_name,
+                        "confidence": 0.75,
+                        "message_index": msg_idx
+                    })
+                    seen.add(func_name)
+            
+            # Extract class names (PascalCase) - AFTER method extraction
             class_pattern = r'\b[A-Z][a-zA-Z0-9]*(?:[A-Z][a-zA-Z0-9]*)+\b'
             for match in re.finditer(class_pattern, content):
                 class_name = match.group(0)
@@ -154,19 +188,6 @@ class SemanticExtractor:
                         "message_index": msg_idx
                     })
                     seen.add(class_name)
-            
-            # Extract function names (snake_case with parens)
-            func_pattern = r'\b[a-z_][a-z0-9_]*\('
-            for match in re.finditer(func_pattern, content):
-                func_name = match.group(0)[:-1]  # Remove trailing (
-                if func_name not in seen and not func_name.startswith("_"):
-                    entities.append({
-                        "type": "function",
-                        "value": func_name,
-                        "confidence": 0.75,
-                        "message_index": msg_idx
-                    })
-                    seen.add(func_name)
         
         return entities
     
@@ -338,12 +359,14 @@ class SemanticExtractor:
         return score, factors
     
     def _empty_result(self) -> Dict:
-        """Return empty extraction result."""
+        """Return empty result structure."""
         return {
             "entities": [],
-            "intents": [],
+            "intents": [],  # Backward-compatible: simple list
+            "intents_detailed": [],  # Detailed version
             "patterns": [],
-            "quality_score": 0.0,
+            "quality": 0.0,  # Backward-compatible field name
+            "quality_score": 0.0,  # Also keep new name
             "quality_factors": {},
             "extracted_at": datetime.now().isoformat()
         }

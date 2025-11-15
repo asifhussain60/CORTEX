@@ -13,29 +13,36 @@ Date: 2025-11-15
 """
 
 import pytest
+import tempfile
+import shutil
+from pathlib import Path
 from unittest.mock import Mock, patch
-from src.track_a.adapters.conversational_channel_adapter import ConversationalChannelAdapter
+from src.track_a.integrations.conversational_channel_adapter import ConversationalChannelAdapter
+from src.tier1.working_memory import WorkingMemory
 
 
 class TestAdapterBasics:
     """Test basic ConversationalChannelAdapter functionality."""
     
     @pytest.fixture
-    def mock_working_memory(self):
-        """Create mock WorkingMemory instance."""
-        mock = Mock()
-        mock.store_conversation.return_value = "conv_test_123"
-        mock.get_conversation.return_value = {
-            "success": True,
-            "conversation_id": "conv_test_123",
-            "conversation": {"messages": []}
-        }
-        return mock
+    def temp_db(self, tmp_path):
+        """Create a temporary database directory."""
+        db_dir = tmp_path / "cortex_test"
+        db_dir.mkdir(parents=True, exist_ok=True)
+        yield db_dir
+        # Cleanup after test
+        shutil.rmtree(db_dir, ignore_errors=True)
     
     @pytest.fixture
-    def adapter(self, mock_working_memory):
-        """Create ConversationalChannelAdapter with mock WorkingMemory."""
-        return ConversationalChannelAdapter(working_memory=mock_working_memory)
+    def working_memory(self, temp_db):
+        """Create real WorkingMemory instance with temporary database."""
+        db_path = temp_db / "working_memory.db"
+        return WorkingMemory(db_path=str(db_path))
+    
+    @pytest.fixture
+    def adapter(self, working_memory):
+        """Create ConversationalChannelAdapter with real WorkingMemory."""
+        return ConversationalChannelAdapter(working_memory=working_memory)
     
     def test_adapter_initialization(self, adapter):
         """Test adapter initializes successfully."""
@@ -54,14 +61,23 @@ class TestStorageOperations:
     """Test conversation storage operations."""
     
     @pytest.fixture
-    def mock_working_memory(self):
-        mock = Mock()
-        mock.store_conversation.return_value = "conv_stored_456"
-        return mock
+    def temp_db(self, tmp_path):
+        """Create a temporary database directory."""
+        db_dir = tmp_path / "cortex_test"
+        db_dir.mkdir(parents=True, exist_ok=True)
+        yield db_dir
+        # Cleanup after test
+        shutil.rmtree(db_dir, ignore_errors=True)
     
     @pytest.fixture
-    def adapter(self, mock_working_memory):
-        return ConversationalChannelAdapter(working_memory=mock_working_memory)
+    def working_memory(self, temp_db):
+        """Create real WorkingMemory instance with temporary database."""
+        db_path = temp_db / "working_memory.db"
+        return WorkingMemory(db_path=str(db_path))
+    
+    @pytest.fixture
+    def adapter(self, working_memory):
+        return ConversationalChannelAdapter(working_memory=working_memory)
     
     @pytest.fixture
     def sample_conversation(self):
@@ -85,42 +101,28 @@ class TestStorageOperations:
             }
         }
     
-    def test_store_conversation(self, adapter, sample_conversation, mock_working_memory):
+    def test_store_conversation(self, adapter, sample_conversation):
         """Test storing a conversation."""
         result = adapter.store(sample_conversation, source="copilot_chat")
         
         assert result["success"] is True
         assert "conversation_id" in result
-        
-        # Verify WorkingMemory.store_conversation was called
-        mock_working_memory.store_conversation.assert_called_once()
     
-    def test_retrieve_conversation(self, adapter, mock_working_memory):
+    def test_retrieve_conversation(self, adapter, sample_conversation):
         """Test retrieving a conversation by ID."""
-        conversation_id = "conv_test_789"
+        # First store a conversation
+        store_result = adapter.store(sample_conversation, source="test")
+        conversation_id = store_result["conversation_id"]
         
-        mock_working_memory.get_conversation.return_value = {
-            "success": True,
-            "conversation_id": conversation_id,
-            "conversation": {"messages": [{"role": "user", "content": "Test"}]}
-        }
-        
+        # Then retrieve it
         result = adapter.retrieve(conversation_id)
         
         assert result["success"] is True
         assert result["conversation_id"] == conversation_id
         assert "conversation" in result
-        
-        # Verify WorkingMemory.get_conversation was called
-        mock_working_memory.get_conversation.assert_called_once_with(conversation_id)
     
-    def test_retrieve_nonexistent_conversation(self, adapter, mock_working_memory):
+    def test_retrieve_nonexistent_conversation(self, adapter):
         """Test retrieving a conversation that doesn't exist."""
-        mock_working_memory.get_conversation.return_value = {
-            "success": False,
-            "error": "Conversation not found"
-        }
-        
         result = adapter.retrieve("nonexistent_id")
         
         assert result["success"] is False
@@ -131,63 +133,69 @@ class TestQualityFiltering:
     """Test quality-based conversation filtering."""
     
     @pytest.fixture
-    def mock_working_memory(self):
-        mock = Mock()
-        mock.store_conversation.return_value = "conv_quality_test"
-        return mock
+    def temp_db(self, tmp_path):
+        """Create a temporary database directory."""
+        db_dir = tmp_path / "cortex_test"
+        db_dir.mkdir(parents=True, exist_ok=True)
+        yield db_dir
+        # Cleanup after test
+        shutil.rmtree(db_dir, ignore_errors=True)
     
     @pytest.fixture
-    def adapter(self, mock_working_memory):
+    def working_memory(self, temp_db):
+        """Create real WorkingMemory instance with temporary database."""
+        db_path = temp_db / "working_memory.db"
+        return WorkingMemory(db_path=str(db_path))
+    
+    @pytest.fixture
+    def adapter(self, working_memory):
         return ConversationalChannelAdapter(
-            working_memory=mock_working_memory,
+            working_memory=working_memory,
             min_quality_threshold=5  # Only accept quality >= 5
         )
     
-    def test_accept_high_quality_conversation(self, adapter, mock_working_memory):
+    def test_accept_high_quality_conversation(self, adapter):
         """Test high-quality conversations are accepted."""
         high_quality = {
             "messages": [{"role": "user", "content": "Detailed question"}],
-            "metadata": {"quality": 8}
+            "semantic_data": {"quality_score": 8.0}  # Use semantic_data instead of metadata
         }
         
         result = adapter.store(high_quality, source="copilot")
         
         assert result["success"] is True
-        mock_working_memory.store_conversation.assert_called_once()
     
-    def test_reject_low_quality_conversation(self, adapter, mock_working_memory):
+    def test_reject_low_quality_conversation(self, adapter):
         """Test low-quality conversations are rejected."""
         low_quality = {
             "messages": [{"role": "user", "content": "ok"}],
-            "metadata": {"quality": 2}
+            "semantic_data": {"quality_score": 2.0}  # Use semantic_data instead of metadata
         }
         
         result = adapter.store(low_quality, source="copilot")
         
-        # Should be rejected due to low quality
-        if result["success"] is False:
-            assert "quality" in result.get("error", "").lower()
-        else:
-            # If stored, verify storage was called
-            mock_working_memory.store_conversation.assert_called()
+        # Should be rejected due to low quality (threshold is 5)
+        assert result["success"] is False
+        assert "quality" in result.get("reason", "").lower()
     
-    def test_configurable_quality_threshold(self, mock_working_memory):
+    def test_configurable_quality_threshold(self, working_memory):
         """Test quality threshold is configurable."""
         strict_adapter = ConversationalChannelAdapter(
-            working_memory=mock_working_memory,
+            working_memory=working_memory,
             min_quality_threshold=8  # Very strict
         )
         
         medium_quality = {
             "messages": [{"role": "user", "content": "Test"}],
-            "metadata": {"quality": 6}
+            "semantic_data": {"quality_score": 6.0}  # Use semantic_data instead of metadata
         }
         
         # Should fail strict threshold
         result = strict_adapter.store(medium_quality, source="copilot")
         
-        # Depending on implementation, may reject or store
-        assert "success" in result
+        # Should be rejected
+        assert result["success"] is False
+        assert "quality" in result.get("reason", "").lower()
 
 
 class TestStatistics:
@@ -195,20 +203,37 @@ class TestStatistics:
     
     @pytest.fixture
     def mock_working_memory(self):
-        """Create mock with predefined statistics."""
+        """Create mock with db_path for statistics queries."""
+        import tempfile
+        import sqlite3
+        
+        # Create temp database with schema
+        db_file = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
+        db_path = db_file.name
+        db_file.close()
+        
+        # Create schema
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE conversations (
+                conversation_id TEXT PRIMARY KEY,
+                conversation_type TEXT DEFAULT 'imported',
+                quality_score REAL DEFAULT 0.0,
+                message_count INTEGER DEFAULT 0,
+                semantic_elements TEXT DEFAULT '{}'
+            )
+        """)
+        # Insert test data
+        cursor.execute("""
+            INSERT INTO conversations (conversation_id, conversation_type, quality_score, message_count, semantic_elements)
+            VALUES ('test1', 'imported', 7.5, 10, '{"entities": [], "intents": []}')
+        """)
+        conn.commit()
+        conn.close()
+        
         mock = Mock()
-        
-        # Mock get_statistics to return sample data
-        mock.get_statistics.return_value = {
-            "total_conversations": 42,
-            "total_messages": 156,
-            "average_quality": 7.5,
-            "sources": {
-                "copilot_chat": 30,
-                "github_comments": 12
-            }
-        }
-        
+        mock.db_path = db_path
         return mock
     
     @pytest.fixture
@@ -251,7 +276,7 @@ class TestErrorHandling:
     def failing_working_memory(self):
         """Create WorkingMemory that raises exceptions."""
         mock = Mock()
-        mock.store_conversation.side_effect = Exception("Database error")
+        mock.import_conversation.side_effect = Exception("Database error")
         mock.get_conversation.side_effect = Exception("Connection lost")
         return mock
     
@@ -263,16 +288,15 @@ class TestErrorHandling:
         """Test graceful handling of storage failures."""
         conversation = {
             "messages": [{"role": "user", "content": "Test"}],
-            "metadata": {"quality": 5}
+            "semantic_data": {"quality_score": 5.0}  # Use semantic_data
         }
         
         result = adapter.store(conversation, source="test")
         
         # Should return error response, not crash
         assert result is not None
-        assert "success" in result
-        if result["success"] is False:
-            assert "error" in result
+        assert result["success"] is False
+        assert "reason" in result or "error" in result
     
     def test_handle_retrieval_failure(self, adapter):
         """Test graceful handling of retrieval failures."""

@@ -43,12 +43,13 @@ class ConversationalChannelAdapter:
     Integration: Uses WorkingMemory.import_conversation() for real persistence.
     """
     
-    def __init__(self, working_memory=None):
+    def __init__(self, working_memory=None, min_quality_threshold=None):
         """
         Initialize ConversationalChannelAdapter with real Tier 1 storage.
         
         Args:
             working_memory: Optional WorkingMemory instance. If None, creates default instance.
+            min_quality_threshold: Optional minimum quality score (0-10). If None, accepts all.
         
         Phase 2: Now uses real SQLite storage instead of mock list.
         """
@@ -58,6 +59,7 @@ class ConversationalChannelAdapter:
             working_memory = WorkingMemory()
         
         self.working_memory = working_memory
+        self.min_quality_threshold = min_quality_threshold
         logger.info("ConversationalChannelAdapter initialized (Tier 1 storage mode)")
     
     def store_conversation(
@@ -82,12 +84,17 @@ class ConversationalChannelAdapter:
         # Quality filtering
         quality_score = conversation.get("semantic_data", {}).get("quality_score", 0)
         
+        # Use instance threshold if quality_threshold not provided
+        if quality_threshold is None and self.min_quality_threshold is not None:
+            quality_threshold = self.min_quality_threshold
+        
         if quality_threshold and quality_score < quality_threshold:
             logger.info(
                 f"Conversation below quality threshold "
                 f"({quality_score:.1f} < {quality_threshold:.1f}), skipping"
             )
             return {
+                "success": False,  # Add for test compatibility
                 "conversation_id": None,
                 "stored": False,
                 "reason": "below_quality_threshold"
@@ -118,6 +125,9 @@ class ConversationalChannelAdapter:
         
         # Use WorkingMemory.import_conversation() for real persistence
         try:
+            # Store semantic data for later retrieval
+            semantic_data = conversation.get("semantic_data", {})
+            
             result = self.working_memory.import_conversation(
                 conversation_turns=conversation_turns,
                 import_source=source,
@@ -125,22 +135,44 @@ class ConversationalChannelAdapter:
                 import_date=datetime.now()
             )
             
+            # Update conversation with semantic elements and quality score (stored as JSON)
+            conn = sqlite3.connect(self.working_memory.db_path)
+            cursor = conn.cursor()
+            
+            if semantic_data:
+                logger.debug(f"Storing semantic data for {result['conversation_id']}: {semantic_data}")
+                cursor.execute("""
+                    UPDATE conversations
+                    SET semantic_elements = ?, quality_score = ?
+                    WHERE conversation_id = ?
+                """, (json.dumps(semantic_data), semantic_data.get('quality_score', result['quality_score']), result['conversation_id']))
+                affected_rows = cursor.rowcount
+                logger.debug(f"Updated semantic_elements and quality_score, affected rows: {affected_rows}")
+            
+            conn.commit()
+            conn.close()
+            
+            # Use the quality score from semantic_data if available
+            final_quality_score = semantic_data.get('quality_score', result['quality_score']) if semantic_data else result['quality_score']
+            
             logger.info(
                 f"Conversation stored in Tier 1: {result['conversation_id']} "
-                f"(quality={result['quality_score']:.1f}, source={source})"
+                f"(quality={final_quality_score:.1f}, source={source})"
             )
             
             return {
-                "conversation_id": result["conversation_id"],
+                "success": True,  # Add for test compatibility
                 "stored": True,
+                "conversation_id": result["conversation_id"],
                 "storage_location": "tier1_working_memory",
                 "message_count": len(messages),
-                "quality_score": result["quality_score"]
+                "quality_score": final_quality_score
             }
         
         except Exception as e:
             logger.error(f"Failed to store conversation: {e}", exc_info=True)
             return {
+                "success": False,  # Add for test compatibility
                 "conversation_id": None,
                 "stored": False,
                 "reason": f"storage_error: {str(e)}"
@@ -159,10 +191,27 @@ class ConversationalChannelAdapter:
         Phase 2: Queries WorkingMemory SQLite database.
         """
         try:
-            # Get conversation metadata
-            conv = self.working_memory.get_conversation(conversation_id)
-            if not conv:
-                return None
+            # Query database directly to avoid ORM issues
+            conn = sqlite3.connect(self.working_memory.db_path)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT * FROM conversations
+                WHERE conversation_id = ?
+            """, (conversation_id,))
+            
+            row = cursor.fetchone()
+            if not row:
+                conn.close()
+                return {
+                    "success": False,
+                    "error": "Conversation not found",
+                    "conversation_id": conversation_id
+                }
+            
+            conv = dict(row)
+            conn.close()
             
             # Get messages
             messages = self.working_memory.get_messages(conversation_id)
@@ -187,33 +236,39 @@ class ConversationalChannelAdapter:
                 
                 normalized_messages.append(normalized_msg)
             
-            # Parse semantic elements from JSON
+            # Parse semantic elements from JSON (conv is a Dict)
             semantic_elements = {}
-            if hasattr(conv, 'semantic_elements') and conv.semantic_elements:
+            if conv.get('semantic_elements'):
                 try:
-                    semantic_elements = json.loads(conv.semantic_elements)
+                    semantic_elements = json.loads(conv['semantic_elements'])
                 except json.JSONDecodeError:
+                    logger.warning(f"Failed to parse semantic_elements for {conversation_id}")
                     semantic_elements = {}
             
             # Reconstruct format for backward compatibility
             return {
+                "success": True,  # Add for test compatibility
                 "conversation_id": conversation_id,
-                "source": conv.import_source if hasattr(conv, 'import_source') else "unknown",
-                "stored_at": conv.created_at.isoformat() if hasattr(conv.created_at, 'isoformat') else str(conv.created_at),
+                "source": conv.get('import_source', 'unknown'),
+                "stored_at": conv.get('created_at', ''),
                 "conversation": {
                     "messages": normalized_messages,
                     "semantic_data": semantic_elements,
                     "metadata": {
                         "message_count": len(normalized_messages),
-                        "title": conv.title
+                        "title": conv.get('title', 'Untitled')
                     }
                 },
-                "quality_score": conv.quality_score if hasattr(conv, 'quality_score') else 0.0
+                "quality_score": conv.get('quality_score', 0.0)
             }
         
         except Exception as e:
             logger.error(f"Failed to retrieve conversation {conversation_id}: {e}", exc_info=True)
-            return None
+            return {
+                "success": False,
+                "error": f"Retrieval failed: {str(e)}",
+                "conversation_id": conversation_id
+            }
     
     def query_by_quality(
         self,
@@ -380,7 +435,8 @@ class ConversationalChannelAdapter:
             
             return {
                 "total_conversations": total_conversations,
-                "avg_quality_score": avg_quality,
+                "average_quality": avg_quality,  # Match test expectations
+                "avg_quality_score": avg_quality,  # Keep for compatibility
                 "total_messages": total_messages,
                 "total_entities": total_entities,
                 "quality_distribution": {
@@ -388,13 +444,15 @@ class ConversationalChannelAdapter:
                     "good (7-9)": sum(1 for q in quality_scores if 7 <= q < 9),
                     "fair (5-7)": sum(1 for q in quality_scores if 5 <= q < 7),
                     "poor (<5)": sum(1 for q in quality_scores if q < 5)
-                }
+                },
+                "sources": {}  # Placeholder for source statistics
             }
         
         except Exception as e:
             logger.error(f"Failed to get statistics: {e}", exc_info=True)
             return {
                 "total_conversations": 0,
+                "average_quality": 0.0,  # Match test expectations
                 "avg_quality_score": 0.0,
                 "total_messages": 0,
                 "total_entities": 0,
@@ -403,7 +461,8 @@ class ConversationalChannelAdapter:
                     "good (7-9)": 0,
                     "fair (5-7)": 0,
                     "poor (<5)": 0
-                }
+                },
+                "sources": {}
             }
     
     def _generate_conversation_id(self, conversation: Dict) -> str:
@@ -425,3 +484,13 @@ class ConversationalChannelAdapter:
             return f"conv_{timestamp}_{hash_val:04d}"
         
         return f"conv_{timestamp}_0000"
+    
+    # ========== Backward Compatibility Aliases ==========
+    
+    def store(self, conversation: Dict, source: str, quality_threshold: Optional[float] = None) -> Dict:
+        """Alias for store_conversation() - backward compatibility."""
+        return self.store_conversation(conversation, source, quality_threshold)
+    
+    def retrieve(self, conversation_id: str) -> Optional[Dict]:
+        """Alias for retrieve_conversation() - backward compatibility."""
+        return self.retrieve_conversation(conversation_id)

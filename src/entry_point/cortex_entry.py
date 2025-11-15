@@ -162,17 +162,12 @@ class CortexEntry:
                 f"conv_id={conversation_id}"
             )
 
-            # Handle continuation requests before heavy routing
-            if request.intent == "resume":
-                try:
-                    from .pagination import PaginationManager
-                    pm = PaginationManager()
-                    next_page = pm.get_next(conversation_id)
-                    if next_page:
-                        return next_page
-                except Exception as _e:
-                    # Fall through to normal routing if pagination fails or nothing to continue
-                    pass
+            # Handle continuation requests with smart context loading
+            if request.intent == "resume" or self._is_continue_request(user_message):
+                resume_result = self._handle_smart_continue(conversation_id, user_message)
+                if resume_result:
+                    return resume_result
+                # Fall through to normal routing if no context to resume
             
             # Route to appropriate agent(s)
             routing_response = self.router.execute(request)
@@ -192,6 +187,10 @@ class CortexEntry:
                 role="assistant",
                 content=response.message
             )
+            
+            # Mark conversation as active for "continue" functionality
+            # This allows resuming across chat sessions
+            self._mark_conversation_active(conversation_id, request.intent, response.success)
             
             # Check if work was completed (triggers checklist reminder)
             if self._is_implementation_work(request.intent, user_message):
@@ -516,6 +515,173 @@ class CortexEntry:
             verbose=verbose
         )
         return setup.run()
+    
+    def _is_continue_request(self, message: str) -> bool:
+        """
+        Check if message is a continue/resume request.
+        
+        Args:
+            message: User message
+            
+        Returns:
+            True if this is a continuation request
+        """
+        message_lower = message.lower().strip()
+        continue_keywords = [
+            "continue", "resume", "keep going", "go on", 
+            "carry on", "pick up where", "where were we",
+            "what were we doing", "where did we leave off"
+        ]
+        return any(keyword in message_lower for keyword in continue_keywords)
+    
+    def _handle_smart_continue(self, conversation_id: str, user_message: str) -> Optional[str]:
+        """
+        Smart continue handler with context loading.
+        
+        Priority:
+        1. Check for active conversation (marked from previous session)
+        2. Check recent conversation (within 2 hours)
+        3. Load conversation context and provide summary
+        
+        Args:
+            conversation_id: Current conversation ID
+            user_message: User's continue request
+            
+        Returns:
+            Continue response with context, or None if no context available
+        """
+        from datetime import datetime, timedelta
+        from pathlib import Path
+        from src.tier1.working_memory import WorkingMemory
+        
+        try:
+            # Get working memory instance
+            wm = WorkingMemory(self.brain_path / "tier1" / "working_memory.db")
+            
+            # Priority 1: Active conversation
+            active_conv = wm.get_active_conversation()
+            if active_conv and active_conv.conversation_id != conversation_id:
+                # Load messages from active conversation
+                messages = wm.get_messages(active_conv.conversation_id)
+                recent_messages = messages[-5:] if len(messages) > 5 else messages
+                
+                # Build context summary
+                context_summary = self._build_context_summary(active_conv, recent_messages)
+                
+                # Link current conversation to active one
+                self.tier1.process_message(
+                    conversation_id,
+                    role="system",
+                    content=f"Resuming from conversation: {active_conv.conversation_id}"
+                )
+                
+                return f"""🧠 **CORTEX Context Loaded**
+
+**Previous Conversation:** {active_conv.title}
+**Started:** {active_conv.created_at.strftime('%Y-%m-%d %H:%M')}
+**Messages:** {active_conv.message_count}
+
+**Context:**
+{context_summary}
+
+**Ready to continue!** What would you like to do next?
+"""
+            
+            # Priority 2: Recent conversation (within 2 hours)
+            recent_convs = wm.get_recent_conversations(limit=5)
+            if recent_convs:
+                most_recent = recent_convs[0]
+                time_diff = datetime.now() - most_recent.created_at
+                
+                if time_diff < timedelta(hours=2):
+                    messages = wm.get_messages(most_recent.conversation_id)
+                    recent_messages = messages[-5:] if len(messages) > 5 else messages
+                    context_summary = self._build_context_summary(most_recent, recent_messages)
+                    
+                    # Mark as active for future resumes
+                    wm.set_active_conversation(most_recent.conversation_id)
+                    
+                    return f"""🧠 **CORTEX Context Loaded**
+
+**Previous Conversation:** {most_recent.title}
+**Time:** {time_diff.seconds // 60} minutes ago
+**Messages:** {most_recent.message_count}
+
+**Context:**
+{context_summary}
+
+**Ready to continue!** What would you like to do next?
+"""
+            
+            # Priority 3: No recent context
+            return None
+            
+        except Exception as e:
+            self.logger.warning(f"Failed to load continue context: {e}")
+            return None
+    
+    def _build_context_summary(self, conversation, recent_messages: list) -> str:
+        """
+        Build a context summary from conversation and messages.
+        
+        Args:
+            conversation: Conversation object
+            recent_messages: List of recent message dicts
+            
+        Returns:
+            Formatted context summary
+        """
+        summary_lines = []
+        
+        # Show last few exchanges
+        for msg in recent_messages:
+            role = msg.get('role', 'unknown')
+            content = msg.get('content', '')
+            
+            # Truncate long messages
+            if len(content) > 150:
+                content = content[:150] + "..."
+            
+            if role == 'user':
+                summary_lines.append(f"**User:** {content}")
+            elif role == 'assistant':
+                summary_lines.append(f"**Assistant:** {content}")
+        
+        return "\n\n".join(summary_lines)
+    
+    def _mark_conversation_active(
+        self, 
+        conversation_id: str, 
+        intent: str, 
+        was_successful: bool
+    ) -> None:
+        """
+        Mark conversation as active if work is incomplete.
+        
+        This allows "continue" to resume the conversation in future sessions.
+        
+        Args:
+            conversation_id: Conversation to potentially mark active
+            intent: Request intent
+            was_successful: Whether the operation succeeded
+        """
+        from pathlib import Path
+        from src.tier1.working_memory import WorkingMemory
+        
+        # Incomplete intents that should allow resume
+        incomplete_intents = [
+            "PLAN", "EXECUTE", "TEST", "REFACTOR", 
+            "DEBUG", "IMPLEMENT", "DESIGN"
+        ]
+        
+        # Mark active if this is ongoing work
+        if intent in incomplete_intents:
+            try:
+                wm = WorkingMemory(self.brain_path / "tier1" / "working_memory.db")
+                wm.set_active_conversation(conversation_id)
+                self.logger.info(f"Marked conversation as active for resume: {conversation_id}")
+            except Exception as e:
+                self.logger.warning(f"Failed to mark conversation active: {e}")
     
     def _setup_logging(self, enable: bool) -> logging.Logger:
         """Setup logging for entry point."""

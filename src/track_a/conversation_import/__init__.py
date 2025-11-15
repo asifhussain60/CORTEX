@@ -13,4 +13,6 @@ Components:
 Status: Phase 1.2 (Week 1-2)
 """
 
-__all__ = []
+from .conversation_importer import ConversationImporter
+
+__all__ = ["ConversationImporter"]

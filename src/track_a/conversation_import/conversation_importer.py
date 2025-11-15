@@ -251,7 +251,9 @@ class ConversationImporter:
             
             # Create nested import_report for test compatibility
             import_report = {
+                "total_imported": 1,  # Each call imports 1 conversation
                 "total_messages": len(parsed_conversation.get("messages", [])),
+                "messages_imported": len(parsed_conversation.get("messages", [])),  # Alias for compatibility
                 "entities_extracted": len(
                     parsed_conversation.get("semantic_data", {}).get("entities", [])
                 ) if extract_semantics else 0,
@@ -345,10 +347,16 @@ class ConversationImporter:
             )
         
         # Check 4: Format detection (Markdown or JSON)
-        is_markdown = "```" in content or "#" in content
+        # Markdown indicators: code blocks, headers, or conversation markers with bold
+        is_markdown = ("```" in content or 
+                      "#" in content or 
+                      "**User:**" in content or 
+                      "**Assistant:**" in content or
+                      "*User:*" in content or
+                      "*Assistant:*" in content)
         is_json = content.strip().startswith("{") and content.strip().endswith("}")
         
-        if not (is_markdown or is_json):
+        if not (is_markdown or is_json or has_user or has_assistant):
             errors.append(
                 "Unrecognized format (expected Markdown or JSON)"
             )
@@ -366,6 +374,27 @@ class ConversationImporter:
             Statistics dictionary from ConversationalChannelAdapter
         """
         return self.channel_adapter.get_statistics()
+    
+    def import_conversation(
+        self,
+        content: str,
+        source: str = "manual_text",
+        validate: bool = True,
+        extract_semantics: bool = True
+    ) -> Dict:
+        """
+        Alias for import_from_text() - backward compatibility.
+        
+        Args:
+            content: Conversation text (Markdown or JSON format)
+            source: Source identifier
+            validate: Whether to validate conversation structure
+            extract_semantics: Whether to extract entities/intents
+        
+        Returns:
+            Import report dictionary
+        """
+        return self.import_from_text(content, source, validate, extract_semantics)
 
 
 # Convenience function for quick imports
