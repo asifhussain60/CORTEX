@@ -20,7 +20,7 @@ import logging
 
 from .mock_data import DualChannelMockData, MockConversation, MockDaemonCapture
 from .narrative_engine import (
-    NarrativeEngine, StoryTemplateSystem, ContextWeavingEngine, 
+    EnhancedNarrativeEngine, StoryTemplateSystem, ContextWeavingEngine, 
     TemporalContextAnalyzer, DecisionRationaleExtractor,
     StoryTemplate, ContextElement
 )
@@ -44,7 +44,7 @@ class MockDataIntegrationSystem:
         
         # Initialize components
         self.mock_data = DualChannelMockData()
-        self.narrative_engine = NarrativeEngine()
+        self.narrative_engine = EnhancedNarrativeEngine()
         self.template_system = StoryTemplateSystem()
         self.context_weaver = ContextWeavingEngine()
         self.temporal_analyzer = TemporalContextAnalyzer()
