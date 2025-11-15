@@ -241,11 +241,11 @@ validation_insights:
     confidence: 0.9
     impact: medium
     last_seen: '2025-11-15'
-    lesson: 'Support conversational commands ("let\'s plan", "optimize", "proceed with") alongside programmatic APIs'
+    lesson: 'Support conversational commands (lets plan, optimize, proceed with) alongside programmatic APIs'
     examples:
-      - 'YAML Phase Tracker: "let\'s plan" entry point'
-      - 'Optimize Orchestrator: "optimize" command'
-      - 'General workflows: "proceed with" command'
+      - 'YAML Phase Tracker: lets plan entry point'
+      - 'Optimize Orchestrator: optimize command'
+      - 'General workflows: proceed with command'
     source: 'CopilotChats.md throughout, natural language command usage'
   
   feature_viability_reassessment:
