@@ -221,9 +221,9 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 logger.info("\nPhase 5: Validating plugin system...")
                 self._check_plugin_health()
             
-            # Phase 6: Check ambient daemon status
-            logger.info("\nPhase 6: Checking ambient capture daemon...")
-            self._check_ambient_daemon_status()
+            # Phase 6: Comprehensive brain health diagnostics
+            logger.info("\nPhase 6: Running brain health diagnostics...")
+            self._check_brain_health()
             
             # Phase 7: Calculate health score
             logger.info("\nCalculating system health score...")
@@ -551,11 +551,116 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             )
             self.report.issues.append(issue)
     
-    def _check_ambient_daemon_status(self) -> None:
-        """Check ambient capture daemon status (DEPRECATED - removed in CORTEX 3.0)"""
-        # Ambient daemon removed - manual conversation capture hints used instead
-        self.report.statistics['ambient_daemon_running'] = 'removed'
-        logger.info("  Ambient daemon: Not applicable (manual capture hints used)")
+    def _check_brain_health(self) -> None:
+        """Comprehensive brain health diagnostics (Tier 0-3 + Agents)"""
+        brain_health = {
+            'tier0_protection': False,
+            'tier1_memory': False,
+            'tier2_knowledge': False,
+            'tier3_context': False,
+            'agent_coordination': False,
+            'entry_points': False
+        }
+        
+        # Tier 0: Brain Protection Rules
+        try:
+            from src.tier0.brain_protector import BrainProtector
+            bp = BrainProtector()
+            protection_layers = bp.protection_layers
+            tier0_instincts = bp.TIER0_INSTINCTS
+            skull_count = sum(1 for instinct in tier0_instincts if instinct.startswith("SKULL"))
+            
+            logger.info(f"  Tier 0: {len(protection_layers)} layers, {len(tier0_instincts)} instincts, {skull_count} SKULL rules")
+            self.report.statistics['tier0_protection_layers'] = len(protection_layers)
+            self.report.statistics['tier0_skull_rules'] = skull_count
+            brain_health['tier0_protection'] = True
+        except Exception as e:
+            logger.warning(f"  Tier 0: Failed to load brain protector - {e}")
+            issue = HealthIssue(
+                severity='high',
+                category='brain',
+                title="Tier 0 brain protection unavailable",
+                description=str(e)
+            )
+            self.report.issues.append(issue)
+        
+        # Tier 1: Working Memory
+        db_path = self.project_root / 'cortex-brain' / 'tier1' / 'working_memory.db'
+        if db_path.exists():
+            try:
+                import sqlite3
+                conn = sqlite3.connect(db_path)
+                cur = conn.cursor()
+                
+                cur.execute("SELECT COUNT(*) FROM conversations")
+                conv_count = cur.fetchone()[0]
+                cur.execute("SELECT COUNT(*) FROM messages")
+                msg_count = cur.fetchone()[0]
+                
+                logger.info(f"  Tier 1: {conv_count} conversations, {msg_count} messages")
+                self.report.statistics['tier1_conversations'] = conv_count
+                self.report.statistics['tier1_messages'] = msg_count
+                brain_health['tier1_memory'] = True
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"  Tier 1: Database error - {e}")
+        else:
+            logger.warning("  Tier 1: Working memory database not initialized")
+        
+        # Tier 2: Knowledge Graph
+        kg_path = self.project_root / 'cortex-brain' / 'knowledge-graph.yaml'
+        if kg_path.exists():
+            try:
+                import yaml
+                with open(kg_path, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                patterns = data.get('patterns', {})
+                lessons = data.get('lessons_learned', {})
+                
+                logger.info(f"  Tier 2: {len(patterns)} patterns, {len(lessons)} lessons")
+                self.report.statistics['tier2_patterns'] = len(patterns)
+                self.report.statistics['tier2_lessons'] = len(lessons)
+                brain_health['tier2_knowledge'] = True
+            except Exception as e:
+                logger.warning(f"  Tier 2: Failed to load knowledge graph - {e}")
+        else:
+            logger.warning("  Tier 2: Knowledge graph not initialized")
+        
+        # Tier 3: Development Context
+        dev_ctx_path = self.project_root / 'cortex-brain' / 'development-context.yaml'
+        if dev_ctx_path.exists():
+            logger.info("  Tier 3: Development context tracking active")
+            self.report.statistics['tier3_active'] = True
+            brain_health['tier3_context'] = True
+        else:
+            logger.warning("  Tier 3: Development context not initialized")
+        
+        # Agent Coordination
+        try:
+            from src.cortex_agents.intent_router import IntentRouter
+            logger.info("  Agents: Intent & Investigation routers operational")
+            self.report.statistics['agent_coordination'] = True
+            brain_health['agent_coordination'] = True
+        except ImportError as e:
+            logger.warning(f"  Agents: Router import failed - {e}")
+        
+        # Entry Points
+        cortex_prompt = self.project_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        if cortex_prompt.exists():
+            logger.info("  Entry Points: CORTEX.prompt.md present")
+            brain_health['entry_points'] = True
+        else:
+            logger.warning("  Entry Points: CORTEX.prompt.md not found")
+        
+        # Store overall brain health status
+        healthy_components = sum(brain_health.values())
+        total_components = len(brain_health)
+        health_percentage = (healthy_components / total_components) * 100
+        
+        self.report.statistics['brain_health_percentage'] = health_percentage
+        logger.info(f"  Brain Health: {healthy_components}/{total_components} components operational ({health_percentage:.1f}%)")
     
     def _calculate_health_score(self) -> None:
         """Calculate overall health score based on issues"""

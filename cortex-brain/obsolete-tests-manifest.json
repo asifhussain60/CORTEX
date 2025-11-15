@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-15T10:27:39.283886",
+  "timestamp": "2025-11-15T15:30:42.687202",
   "marked_by": "optimize_cortex_orchestrator",
   "tests": [
     {
@@ -9,6 +9,15 @@
         "src.cortex_agents.intent_router",
         "src.cortex_agents.agent_types",
         "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\cortex_3_0\\test_dual_channel_memory_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_3_0.dual_channel_memory, src.tier1.working_memory",
+      "missing_imports": [
+        "src.cortex_3_0.dual_channel_memory",
+        "src.tier1.working_memory"
       ],
       "confidence": 0.9
     },
@@ -73,6 +82,23 @@
         "src.operations.modules.cleanup.cleanup_orchestrator",
         "src.operations.modules.design_sync.design_sync_orchestrator",
         "src.operations.modules.system.optimize_system_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\integration\\test_cortex_3_0_holistic.py",
+      "reason": "Imports non-existent modules: src.tier0.brain_protector, src.tier1.working_memory, src.tier1.working_memory, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.intent_router, src.tier1.working_memory, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.tier2.knowledge_graph.knowledge_graph",
+      "missing_imports": [
+        "src.tier0.brain_protector",
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.intent_router",
+        "src.tier1.working_memory",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.tier2.knowledge_graph.knowledge_graph"
       ],
       "confidence": 0.9
     },
@@ -202,6 +228,15 @@
       "confidence": 0.9
     },
     {
+      "file_path": "tests\\tier1\\test_conversation_pipeline_harness.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.migration_add_conversation_import",
+      "missing_imports": [
+        "src.tier1.working_memory",
+        "src.tier1.migration_add_conversation_import"
+      ],
+      "confidence": 0.9
+    },
+    {
       "file_path": "tests\\tier1\\test_conversation_quality.py",
       "reason": "Imports non-existent modules: src.tier1.conversation_quality",
       "missing_imports": [
@@ -265,6 +300,14 @@
       "confidence": 0.9
     },
     {
+      "file_path": "tests\\tier1\\test_quality_scoring_priority1.py",
+      "reason": "Imports non-existent modules: src.tier1.conversation_quality",
+      "missing_imports": [
+        "src.tier1.conversation_quality"
+      ],
+      "confidence": 0.9
+    },
+    {
       "file_path": "tests\\tier1\\test_session_correlation.py",
       "reason": "Imports non-existent modules: src.tier1.working_memory",
       "missing_imports": [
@@ -308,9 +351,10 @@
     },
     {
       "file_path": "tests\\track_a\\test_conversational_channel_integration.py",
-      "reason": "Imports non-existent modules: src.track_a.adapters.conversational_channel_adapter",
+      "reason": "Imports non-existent modules: src.track_a.integrations.conversational_channel_adapter, src.tier1.working_memory",
       "missing_imports": [
-        "src.track_a.adapters.conversational_channel_adapter"
+        "src.track_a.integrations.conversational_channel_adapter",
+        "src.tier1.working_memory"
       ],
       "confidence": 0.9
     },

@@ -15,6 +15,9 @@ from pathlib import Path
 from datetime import datetime
 import json
 
+# Disable parallel execution for these tests due to timing-sensitive operations
+pytestmark = pytest.mark.no_parallel
+
 from src.cortex_3_0.dual_channel_memory import (
     DualChannelMemory,
     ConversationalChannel,
@@ -24,7 +27,7 @@ from src.cortex_3_0.dual_channel_memory import (
 from src.tier1.working_memory import WorkingMemory
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def temp_cortex_brain():
     """Create temporary CORTEX brain directory"""
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -33,7 +36,7 @@ def temp_cortex_brain():
         yield brain_path
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def dual_channel_memory(temp_cortex_brain):
     """Create DualChannelMemory instance for testing"""
     return DualChannelMemory(temp_cortex_brain)

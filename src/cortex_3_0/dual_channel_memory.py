@@ -443,8 +443,10 @@ class DualChannelMemory:
     def __init__(self, cortex_brain_path: Union[str, Path]):
         self.cortex_brain_path = Path(cortex_brain_path)
         
-        # Initialize channels
-        working_memory = WorkingMemory()
+        # Initialize channels with proper isolated storage
+        # Use cortex_brain_path for database to ensure test isolation
+        db_path = self.cortex_brain_path / "tier1" / "working_memory.db"
+        working_memory = WorkingMemory(db_path)
         self.conversational_channel = ConversationalChannel(working_memory)
         self.traditional_channel = TraditionalChannel(self.cortex_brain_path / "tier1" / "dual_channel")
         self.fusion_layer = IntelligentFusion(

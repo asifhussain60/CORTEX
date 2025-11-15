@@ -23,6 +23,7 @@ class SemanticElements:
     challenge_accept_flow: bool = False
     design_decisions: bool = False
     file_references: int = 0
+    code_blocks: int = 0
     next_steps_provided: bool = False
     code_implementation: bool = False
     architectural_discussion: bool = False
@@ -78,6 +79,8 @@ class ConversationQualityAnalyzer:
                 re.IGNORECASE
             ),
             'file_path': re.compile(r'`[^`]*\.[a-zA-Z]{2,4}`'),
+            # Also match file paths without backticks (e.g., "auth_service.py", "src/config.json")
+            'file_path_unquoted': re.compile(r'\b[\w/.-]+\.(py|js|ts|java|cpp|h|json|yaml|yml|md|txt|sql|html|css|tsx|jsx)\b', re.IGNORECASE),
             'next_steps': re.compile(r'🔍\s*Next Steps:', re.IGNORECASE),
             'code_block': re.compile(r'```(?:python|typescript|javascript|java|c#)', re.IGNORECASE),
             'architectural': re.compile(
@@ -138,15 +141,21 @@ class ConversationQualityAnalyzer:
         design_matches = self.patterns['design_decision'].findall(combined_text)
         design_decisions = len(design_matches) >= 2
         
-        # Count file references
+        # Count file references (both quoted and unquoted)
         file_matches = self.patterns['file_path'].findall(combined_text)
-        file_count = min(len(file_matches), 3)  # Cap at 3 for scoring
+        file_matches_unquoted = self.patterns['file_path_unquoted'].findall(combined_text)
+        total_file_matches = len(file_matches) + len(file_matches_unquoted)
+        file_count = min(total_file_matches, 3)  # Cap at 3 for scoring
+        
+        # Count code blocks
+        code_block_matches = self.patterns['code_block'].findall(assistant_response)
+        code_blocks_count = len(code_block_matches)
         
         # Detect next steps
         next_steps = bool(self.patterns['next_steps'].search(assistant_response))
         
-        # Detect code implementation
-        code_impl = bool(self.patterns['code_block'].search(assistant_response))
+        # Detect code implementation (boolean - whether any code exists)
+        code_impl = code_blocks_count > 0
         
         # Detect architectural discussion
         arch_matches = self.patterns['architectural'].findall(combined_text)
@@ -158,6 +167,7 @@ class ConversationQualityAnalyzer:
             challenge_accept_flow=challenge_accept,
             design_decisions=design_decisions,
             file_references=file_count,
+            code_blocks=code_blocks_count,
             next_steps_provided=next_steps,
             code_implementation=code_impl,
             architectural_discussion=architectural
@@ -186,9 +196,9 @@ class ConversationQualityAnalyzer:
         if elements.next_steps_provided:
             score += 2
         
-        # Code implementation: 1 point
+        # Code implementation: 2 points (increased from 1 to value normal conversations)
         if elements.code_implementation:
-            score += 1
+            score += 2
         
         # Architectural discussion: 2 points
         if elements.architectural_discussion:
@@ -202,7 +212,7 @@ class ConversationQualityAnalyzer:
             return "EXCELLENT"
         elif score >= 6:
             return "GOOD"
-        elif score >= 3:
+        elif score >= 2:  # Lowered from 3 to 2 - code implementation alone is FAIR
             return "FAIR"
         else:
             return "LOW"
@@ -277,12 +287,23 @@ class ConversationQualityAnalyzer:
             aggregated.challenge_accept_flow |= elem.challenge_accept_flow
             aggregated.design_decisions |= elem.design_decisions
             aggregated.file_references += elem.file_references
+            aggregated.code_blocks += elem.code_blocks
             aggregated.next_steps_provided |= elem.next_steps_provided
             aggregated.code_implementation |= elem.code_implementation
             aggregated.architectural_discussion |= elem.architectural_discussion
         
         # Cap file references at 3 for scoring
         aggregated.file_references = min(aggregated.file_references, 3)
+        
+        # Award bonus points for multi-turn engagement
+        # This recognizes sustained work/debugging/implementation as valuable
+        turn_count = len(turns)
+        if turn_count >= 3:
+            # 3+ turns = sustained conversation, add 2 bonus points
+            total_score += 2
+        if turn_count >= 7:
+            # 7+ turns = extended session, add additional 2 points (4 total)
+            total_score += 2
         
         level = self._determine_quality_level(total_score)
         reasoning = self._generate_reasoning(aggregated, total_score)

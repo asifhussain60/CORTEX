@@ -930,11 +930,14 @@ class WorkingMemory:
         import random
         conversation_id = f"imported-conv-{timestamp}-{random.randint(1000, 9999)}"
         
+        # Count actual messages (each turn has user + assistant message)
+        total_messages = len(conversation_turns) * 2
+        
         # Use add_conversation (modular API uses 'add' instead of 'create')
         self.conversation_manager.add_conversation(
             conversation_id=conversation_id,
             title=f"Imported from {Path(import_source).name}",
-            message_count=len(conversation_turns),
+            message_count=total_messages,
             tags=['imported', quality_score.level]
         )
         
