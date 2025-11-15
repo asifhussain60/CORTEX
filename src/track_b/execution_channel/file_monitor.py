@@ -20,6 +20,7 @@ License: Proprietary - See LICENSE file for terms
 import asyncio
 import os
 import hashlib
+import json
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -222,7 +223,7 @@ class FileMonitor:
             self.logger.error(f"Error handling file event: {e}")
     
     async def _process_file_change(self, file_path: Path, event):
-        """Process a file change event."""
+        """Process a file change event with enhanced intelligence."""
         try:
             change_type = self._get_change_type(event)
             timestamp = datetime.now()
@@ -245,6 +246,9 @@ class FileMonitor:
             if change_type == 'modified' and content_hash == old_hash:
                 # Content didn't actually change, skip
                 return
+            
+            # Enhanced Intelligence: Analyze content changes
+            content_analysis = await self._analyze_content_changes(file_path, change_type)
             
             # Update hash cache
             if content_hash:
@@ -302,6 +306,204 @@ class FileMonitor:
         except Exception as e:
             self.logger.error(f"Error generating diff summary: {e}")
             return None
+    
+    async def _analyze_content_changes(self, file_path: Path, change_type: str) -> Dict[str, Any]:
+        """Enhanced Intelligence: Analyze content changes for semantic understanding."""
+        analysis = {
+            'file_type': self._detect_file_type(file_path),
+            'complexity_score': 0,
+            'semantic_changes': [],
+            'potential_impact': 'low',
+            'recommendations': []
+        }
+        
+        try:
+            if not file_path.exists() or file_path.stat().st_size > self.max_file_size:
+                return analysis
+            
+            # Read file content for analysis
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
+            
+            # Analyze file type and content
+            analysis['line_count'] = len(lines)
+            analysis['complexity_score'] = self._calculate_complexity_score(content, file_path.suffix)
+            
+            # Detect semantic changes based on file type
+            if file_path.suffix in ['.py', '.js', '.ts', '.java', '.cpp', '.c']:
+                analysis['semantic_changes'] = self._analyze_code_changes(content, file_path)
+            elif file_path.suffix in ['.md', '.txt', '.rst']:
+                analysis['semantic_changes'] = self._analyze_documentation_changes(content, file_path)
+            elif file_path.suffix in ['.json', '.yaml', '.yml', '.xml']:
+                analysis['semantic_changes'] = self._analyze_config_changes(content, file_path)
+            
+            # Assess potential impact
+            analysis['potential_impact'] = self._assess_impact_level(analysis, file_path)
+            
+            # Generate recommendations
+            analysis['recommendations'] = self._generate_recommendations(analysis, file_path)
+            
+            self.logger.debug(f"Content analysis for {file_path.name}: {analysis['potential_impact']} impact")
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing content changes for {file_path}: {e}")
+        
+        return analysis
+    
+    def _detect_file_type(self, file_path: Path) -> str:
+        """Detect the type of file for appropriate analysis."""
+        suffix = file_path.suffix.lower()
+        
+        if suffix in ['.py']:
+            return 'python_code'
+        elif suffix in ['.js', '.ts']:
+            return 'javascript_code'
+        elif suffix in ['.java']:
+            return 'java_code'
+        elif suffix in ['.cpp', '.c', '.h']:
+            return 'c_cpp_code'
+        elif suffix in ['.md', '.rst']:
+            return 'documentation'
+        elif suffix in ['.json', '.yaml', '.yml']:
+            return 'configuration'
+        elif suffix in ['.html', '.css']:
+            return 'web_frontend'
+        elif suffix in ['.sql']:
+            return 'database'
+        else:
+            return 'generic_text'
+    
+    def _calculate_complexity_score(self, content: str, file_suffix: str) -> int:
+        """Calculate a complexity score for the file content."""
+        lines = content.split('\n')
+        non_empty_lines = [line for line in lines if line.strip()]
+        
+        # Basic complexity metrics
+        complexity = len(non_empty_lines)
+        
+        if file_suffix in ['.py', '.js', '.ts', '.java']:
+            # Code-specific complexity
+            complexity += content.count('def ') * 2  # Functions
+            complexity += content.count('class ') * 3  # Classes
+            complexity += content.count('if ') + content.count('while ') + content.count('for ')  # Control flow
+            complexity += content.count('import ') + content.count('from ')  # Dependencies
+        
+        return min(complexity, 1000)  # Cap at 1000
+    
+    def _analyze_code_changes(self, content: str, file_path: Path) -> List[str]:
+        """Analyze semantic changes in code files."""
+        changes = []
+        
+        # Function definitions
+        function_count = content.count('def ') + content.count('function ')
+        if function_count > 0:
+            changes.append(f"functions_detected: {function_count}")
+        
+        # Class definitions
+        class_count = content.count('class ')
+        if class_count > 0:
+            changes.append(f"classes_detected: {class_count}")
+        
+        # Import statements
+        import_count = content.count('import ') + content.count('from ')
+        if import_count > 0:
+            changes.append(f"imports_detected: {import_count}")
+        
+        # Test-related content
+        if any(test_keyword in content.lower() for test_keyword in ['test_', 'def test', 'it(', 'describe(']):
+            changes.append("test_code_detected")
+        
+        # Error handling
+        if any(error_keyword in content for error_keyword in ['try:', 'except:', 'catch(', 'throw ']):
+            changes.append("error_handling_detected")
+        
+        return changes
+    
+    def _analyze_documentation_changes(self, content: str, file_path: Path) -> List[str]:
+        """Analyze semantic changes in documentation files."""
+        changes = []
+        
+        lines = content.split('\n')
+        
+        # Headers
+        header_count = sum(1 for line in lines if line.strip().startswith('#'))
+        if header_count > 0:
+            changes.append(f"headers_detected: {header_count}")
+        
+        # Code blocks
+        code_block_count = content.count('```')
+        if code_block_count > 0:
+            changes.append(f"code_blocks_detected: {code_block_count // 2}")
+        
+        # Links
+        link_count = content.count('[') + content.count('](')
+        if link_count > 0:
+            changes.append(f"links_detected: {link_count}")
+        
+        return changes
+    
+    def _analyze_config_changes(self, content: str, file_path: Path) -> List[str]:
+        """Analyze semantic changes in configuration files."""
+        changes = []
+        
+        try:
+            if file_path.suffix.lower() == '.json':
+                data = json.loads(content)
+                changes.append(f"json_keys: {len(data) if isinstance(data, dict) else 'array'}")
+            elif file_path.suffix.lower() in ['.yml', '.yaml']:
+                # Basic YAML analysis without importing yaml
+                lines = [line for line in content.split('\n') if line.strip() and not line.strip().startswith('#')]
+                root_keys = sum(1 for line in lines if not line.startswith(' ') and ':' in line)
+                changes.append(f"yaml_root_keys: {root_keys}")
+        except Exception:
+            changes.append("config_parsing_error")
+        
+        return changes
+    
+    def _assess_impact_level(self, analysis: Dict[str, Any], file_path: Path) -> str:
+        """Assess the potential impact level of file changes."""
+        
+        # High impact indicators
+        if any(change.startswith('classes_detected') for change in analysis['semantic_changes']):
+            return 'high'
+        
+        if analysis['complexity_score'] > 500:
+            return 'high'
+        
+        if 'test_code_detected' in analysis['semantic_changes']:
+            return 'medium'
+        
+        if file_path.name in ['requirements.txt', 'package.json', 'Dockerfile', 'docker-compose.yml']:
+            return 'high'
+        
+        if file_path.suffix in ['.yaml', '.yml', '.json'] and 'config' in file_path.name.lower():
+            return 'medium'
+        
+        # Default to low impact
+        return 'low'
+    
+    def _generate_recommendations(self, analysis: Dict[str, Any], file_path: Path) -> List[str]:
+        """Generate intelligent recommendations based on file analysis."""
+        recommendations = []
+        
+        if analysis['potential_impact'] == 'high':
+            recommendations.append("Consider running tests after this change")
+            recommendations.append("Review for potential breaking changes")
+        
+        if analysis['complexity_score'] > 300:
+            recommendations.append("Consider refactoring for maintainability")
+        
+        if 'error_handling_detected' in analysis['semantic_changes']:
+            recommendations.append("Verify error handling edge cases")
+        
+        if analysis['file_type'] == 'configuration':
+            recommendations.append("Validate configuration syntax")
+            recommendations.append("Check for security implications")
+        
+        if 'test_code_detected' in analysis['semantic_changes']:
+            recommendations.append("Run test suite to verify functionality")
+        
+        return recommendations
     
     async def get_events(self) -> List[Dict[str, Any]]:
         """Get all pending file change events."""

@@ -221,11 +221,32 @@ task_2:
     - "User experience consistent across CORTEX"
 ```
 
+**Template Optimization (Based on Knowledge Graph Analysis):**
+```yaml
+optimization_task:
+  description: "Template compression implementation"
+  rationale: "response-templates.yaml at 3,064 lines identified for 30-40% size reduction"
+  approach:
+    - "Template inheritance system (shared headers/footers)"
+    - "Placeholder standardization across similar templates"
+    - "Remove redundant template structures"
+  benefits:
+    - "30-40% file size reduction (low risk)"
+    - "Faster template loading (<10ms target)"
+    - "Improved maintainability"
+  implementation:
+    - "Create base_template.yaml with shared elements"
+    - "Refactor 86+ templates to inherit from base"
+    - "Validate: All templates render correctly"
+    - "Benchmark: Template loading performance"
+```
+
 **Success Criteria:**
 - ✅ 'help' command zero-execution (<10ms)
 - ✅ All agents use templates for responses
 - ✅ Consistent UX across CORTEX
 - ✅ Comprehensive tests (template rendering, edge cases)
+- ✅ **Template compression: 30-40% size reduction achieved**
 
 #### Milestone 1.3: Interactive Tutorial System (2 weeks)
 
@@ -1211,6 +1232,22 @@ task_4:
     - "Conversation import (background task)"
     - "Fusion layer correlation (background task)"
     - "Context layer analysis (background task)"
+    
+storage_optimization:
+  description: "Automatic archive rotation (Based on Knowledge Graph Analysis)"
+  rationale: "FIFO conversation queue needs automated archiving for long-term storage efficiency"
+  approach:
+    - "Implement monthly archive automation for conversations >30 days"
+    - "Reduce active storage by 60% through intelligent archiving"
+    - "Maintain data integrity with archive validation"
+  implementation:
+    - "Create archive_scheduler.py for automated rotation"
+    - "Add archive validation and restoration capabilities"
+    - "Configure retention policies (active: 20 conversations, archive: 6 months)"
+  benefits:
+    - "Reduced active storage footprint"
+    - "Improved query performance (smaller active datasets)"
+    - "Preserved historical data for pattern learning"
 ```
 
 **Success Criteria:**
@@ -1218,6 +1255,7 @@ task_4:
 - ✅ Database queries optimized (50%+ faster)
 - ✅ Large workspaces handled efficiently
 - ✅ Non-blocking UI (responsive)
+- ✅ **Automatic archive rotation: 60% active storage reduction achieved**
 
 #### Milestone 5.3: Final Testing & Release (1 week)
 
@@ -1658,6 +1696,29 @@ task_3:
    - Intelligent documentation update system
    - Documentation organization and cleanup
    - CORTEX 3.0 COMPLETE RELEASE! 🎉📊
+
+---
+
+## 📚 Supporting Documentation
+
+### Analysis & Research
+
+- **Knowledge Graph Efficiency Analysis:** `cortex-brain/knowledge-graph-efficiency-analysis.yaml`  
+  *Phase 0 optimization analysis identifying template compression (30-40% reduction) and archive rotation (60% storage reduction) opportunities integrated into this implementation plan.*
+
+- **Phase 0 Test Completion Report:** `cortex-brain/PHASE-0-COMPLETION-REPORT.md`  
+  *Baseline test stabilization results (97.4% pass rate) establishing foundation for CORTEX 3.0 development.*
+
+- **Optimization Principles:** `cortex-brain/optimization-principles.yaml`  
+  *Codified optimization patterns from Phase 0 completion guiding performance improvements throughout implementation.*
+
+### Architecture Foundations
+
+- **CORTEX 3.0 Architecture Investigation:** `CORTEX-3.0-INVESTIGATION-ARCHITECTURE-COMPLETE.md`  
+  *Complete dual-channel memory architecture design and integration patterns.*
+
+- **Router Enhancement Analysis:** `INVESTIGATION-ROUTER-ENHANCEMENT-COMPLETE.md`  
+  *Natural language routing improvements integrated into template system design.*
 
 ---
 

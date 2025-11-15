@@ -109,15 +109,394 @@ class TerminalTracker:
             return False
     
     def _classify_command(self, command: str) -> str:
-        """Classify a command based on patterns."""
+        """Enhanced Intelligence: Classify a command with intelligent pattern recognition."""
         command_lower = command.lower().strip()
         
+        # Enhanced command classification with context awareness
+        classification = self._basic_command_classification(command_lower)
+        
+        # Apply intelligent context analysis
+        enhanced_classification = self._enhance_classification_with_context(command, classification)
+        
+        return enhanced_classification
+    
+    def _basic_command_classification(self, command: str) -> str:
+        """Basic pattern matching for command classification."""
         for category, patterns in self.command_patterns.items():
             for pattern in patterns:
-                if pattern in command_lower:
+                if pattern in command:
                     return category
-        
         return 'other'
+    
+    def _enhance_classification_with_context(self, command: str, basic_classification: str) -> str:
+        """Enhanced Intelligence: Add context-aware classification enhancement."""
+        # Workflow context enhancement
+        workflow_context = self._analyze_workflow_context(command)
+        
+        if workflow_context['is_workflow_command']:
+            return f"{basic_classification}_workflow"
+        
+        # Productivity impact analysis
+        productivity_impact = self._assess_productivity_impact(command, basic_classification)
+        
+        if productivity_impact == 'high':
+            return f"{basic_classification}_high_impact"
+        elif productivity_impact == 'disruptive':
+            return f"{basic_classification}_disruptive"
+        
+        return basic_classification
+    
+    def _analyze_workflow_context(self, command: str) -> Dict[str, Any]:
+        """Enhanced Intelligence: Analyze workflow context for command."""
+        context = {
+            'is_workflow_command': False,
+            'workflow_type': 'unknown',
+            'sequence_position': 'standalone',
+            'common_followup': None
+        }
+        
+        # Check for common workflow patterns
+        workflow_indicators = {
+            'ci_cd': ['pip install', 'npm ci', 'yarn install', 'pytest', 'npm test', 'docker build'],
+            'deployment': ['docker push', 'kubectl apply', 'terraform apply', 'git push origin'],
+            'debugging': ['grep -r', 'tail -f', 'less', 'cat', 'python -c', 'node -e'],
+            'development_cycle': ['git add', 'git commit', 'git push', 'npm run dev', 'python manage.py'],
+            'setup': ['mkdir', 'cd', 'virtualenv', 'source', 'export', 'pip install -r']
+        }
+        
+        command_lower = command.lower()
+        for workflow_type, indicators in workflow_indicators.items():
+            if any(indicator in command_lower for indicator in indicators):
+                context['is_workflow_command'] = True
+                context['workflow_type'] = workflow_type
+                break
+        
+        # Analyze command sequence position
+        if len(self.command_history) > 0:
+            recent_commands = [event.command.lower() for event in self.command_history[-3:]]
+            context['sequence_position'] = self._determine_sequence_position(command_lower, recent_commands)
+        
+        return context
+    
+    def _determine_sequence_position(self, command: str, recent_commands: List[str]) -> str:
+        """Enhanced Intelligence: Determine position in command sequence."""
+        # Common command sequences
+        sequences = {
+            'git_workflow': ['git add', 'git commit', 'git push'],
+            'test_workflow': ['pip install', 'pytest', 'coverage report'],
+            'build_workflow': ['make clean', 'make', 'make install'],
+            'docker_workflow': ['docker build', 'docker tag', 'docker push']
+        }
+        
+        for sequence_name, sequence in sequences.items():
+            for i, seq_command in enumerate(sequence):
+                if seq_command in command:
+                    # Check if previous commands match the sequence
+                    if i > 0 and len(recent_commands) >= i:
+                        if all(sequence[j] in recent_commands[-(i-j)] for j in range(i)):
+                            if i == len(sequence) - 1:
+                                return 'sequence_end'
+                            else:
+                                return 'sequence_middle'
+                    elif i == 0:
+                        return 'sequence_start'
+        
+        return 'standalone'
+    
+    def _assess_productivity_impact(self, command: str, command_type: str) -> str:
+        """Enhanced Intelligence: Assess productivity impact of command."""
+        command_lower = command.lower()
+        
+        # High productivity commands
+        high_productivity = [
+            'pytest', 'npm test', 'make test',  # Testing
+            'git commit', 'git push',  # Version control
+            'python -m', 'node', 'npm run',  # Execution
+        ]
+        
+        # Potentially disruptive commands
+        disruptive_patterns = [
+            'rm -rf', 'sudo', 'chmod 777', 'kill -9',  # Dangerous operations
+            'pip uninstall', 'npm uninstall',  # Dependency removal
+            'git reset --hard', 'git clean -fd'  # Destructive git operations
+        ]
+        
+        if any(pattern in command_lower for pattern in high_productivity):
+            return 'high'
+        elif any(pattern in command_lower for pattern in disruptive_patterns):
+            return 'disruptive'
+        elif command_type in ['test', 'build', 'git']:
+            return 'medium'
+        else:
+            return 'low'
+    
+    async def analyze_workflow_patterns(self) -> Dict[str, Any]:
+        """Enhanced Intelligence: Analyze workflow patterns and productivity metrics."""
+        analysis = {
+            'workflow_efficiency': 'unknown',
+            'common_workflows': {},
+            'productivity_metrics': {},
+            'time_patterns': {},
+            'recommendations': []
+        }
+        
+        try:
+            if len(self.command_history) < 5:
+                analysis['workflow_efficiency'] = 'insufficient_data'
+                return analysis
+            
+            # Analyze common workflows
+            analysis['common_workflows'] = self._identify_common_workflows()
+            
+            # Calculate productivity metrics
+            analysis['productivity_metrics'] = self._calculate_productivity_metrics()
+            
+            # Analyze time patterns
+            analysis['time_patterns'] = self._analyze_time_patterns()
+            
+            # Generate recommendations
+            analysis['recommendations'] = self._generate_workflow_recommendations(analysis)
+            
+            # Determine overall efficiency
+            analysis['workflow_efficiency'] = self._calculate_workflow_efficiency(analysis)
+            
+            self.logger.debug(f"Workflow analysis complete: {analysis['workflow_efficiency']}")
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing workflow patterns: {e}")
+            analysis['workflow_efficiency'] = 'analysis_error'
+        
+        return analysis
+    
+    def _identify_common_workflows(self) -> Dict[str, Any]:
+        """Enhanced Intelligence: Identify recurring workflow patterns."""
+        workflows = {}
+        
+        # Group commands by time windows (1-hour windows)
+        command_groups = []
+        current_group = []
+        
+        for i, event in enumerate(self.command_history):
+            if not current_group:
+                current_group = [event]
+            else:
+                time_diff = event.timestamp - current_group[-1].timestamp
+                if time_diff.total_seconds() <= 3600:  # 1 hour
+                    current_group.append(event)
+                else:
+                    if len(current_group) > 2:
+                        command_groups.append(current_group)
+                    current_group = [event]
+        
+        # Add final group
+        if len(current_group) > 2:
+            command_groups.append(current_group)
+        
+        # Identify patterns
+        workflow_patterns = {}
+        for group in command_groups:
+            command_sequence = [self._classify_command(event.command) for event in group]
+            pattern_key = ' -> '.join(command_sequence[:5])  # First 5 commands
+            
+            if pattern_key not in workflow_patterns:
+                workflow_patterns[pattern_key] = {
+                    'count': 0,
+                    'avg_duration': timedelta(),
+                    'success_rate': 0.0
+                }
+            
+            workflow_patterns[pattern_key]['count'] += 1
+            
+            # Calculate duration and success rate
+            total_duration = group[-1].timestamp - group[0].timestamp
+            success_count = sum(1 for event in group if event.exit_code == 0)
+            
+            patterns = workflow_patterns[pattern_key]
+            patterns['avg_duration'] = (
+                patterns['avg_duration'] * (patterns['count'] - 1) + total_duration
+            ) / patterns['count']
+            patterns['success_rate'] = success_count / len(group)
+        
+        # Return top 5 most common workflows
+        sorted_workflows = sorted(
+            workflow_patterns.items(),
+            key=lambda x: x[1]['count'],
+            reverse=True
+        )
+        
+        workflows['top_workflows'] = sorted_workflows[:5]
+        workflows['total_unique_workflows'] = len(workflow_patterns)
+        
+        return workflows
+    
+    def _calculate_productivity_metrics(self) -> Dict[str, Any]:
+        """Enhanced Intelligence: Calculate productivity and efficiency metrics."""
+        metrics = {
+            'commands_per_hour': 0.0,
+            'success_rate': 0.0,
+            'avg_command_duration': timedelta(),
+            'most_productive_hours': [],
+            'workflow_completion_rate': 0.0
+        }
+        
+        if not self.command_history:
+            return metrics
+        
+        # Calculate basic metrics
+        total_commands = len(self.command_history)
+        successful_commands = sum(1 for event in self.command_history if event.exit_code == 0)
+        
+        metrics['success_rate'] = successful_commands / total_commands if total_commands > 0 else 0
+        
+        # Calculate time-based metrics
+        if len(self.command_history) > 1:
+            time_span = self.command_history[-1].timestamp - self.command_history[0].timestamp
+            hours = time_span.total_seconds() / 3600
+            metrics['commands_per_hour'] = total_commands / hours if hours > 0 else 0
+        
+        # Average duration
+        durations = [event.duration_ms for event in self.command_history if event.duration_ms > 0]
+        if durations:
+            avg_duration_ms = sum(durations) / len(durations)
+            metrics['avg_command_duration'] = timedelta(milliseconds=avg_duration_ms)
+        
+        # Most productive hours
+        hour_productivity = {}
+        for event in self.command_history:
+            hour = event.timestamp.hour
+            if hour not in hour_productivity:
+                hour_productivity[hour] = {'commands': 0, 'success': 0}
+            
+            hour_productivity[hour]['commands'] += 1
+            if event.exit_code == 0:
+                hour_productivity[hour]['success'] += 1
+        
+        # Sort by success rate * command count
+        productive_hours = []
+        for hour, stats in hour_productivity.items():
+            if stats['commands'] > 0:
+                success_rate = stats['success'] / stats['commands']
+                productivity_score = success_rate * stats['commands']
+                productive_hours.append((hour, productivity_score, stats))
+        
+        metrics['most_productive_hours'] = sorted(
+            productive_hours,
+            key=lambda x: x[1],
+            reverse=True
+        )[:3]
+        
+        return metrics
+    
+    def _analyze_time_patterns(self) -> Dict[str, Any]:
+        """Enhanced Intelligence: Analyze temporal patterns in command usage."""
+        patterns = {
+            'peak_hours': [],
+            'workflow_timing': {},
+            'session_patterns': {},
+            'day_of_week_patterns': {}
+        }
+        
+        if not self.command_history:
+            return patterns
+        
+        # Analyze hourly distribution
+        hourly_counts = {}
+        for event in self.command_history:
+            hour = event.timestamp.hour
+            hourly_counts[hour] = hourly_counts.get(hour, 0) + 1
+        
+        # Find peak hours (top 3)
+        sorted_hours = sorted(hourly_counts.items(), key=lambda x: x[1], reverse=True)
+        patterns['peak_hours'] = sorted_hours[:3]
+        
+        # Analyze workflow timing preferences
+        workflow_times = {}
+        for event in self.command_history:
+            command_type = self._classify_command(event.command)
+            hour = event.timestamp.hour
+            
+            if command_type not in workflow_times:
+                workflow_times[command_type] = {}
+            
+            workflow_times[command_type][hour] = workflow_times[command_type].get(hour, 0) + 1
+        
+        patterns['workflow_timing'] = workflow_times
+        
+        return patterns
+    
+    def _generate_workflow_recommendations(self, analysis: Dict[str, Any]) -> List[str]:
+        """Enhanced Intelligence: Generate workflow improvement recommendations."""
+        recommendations = []
+        
+        try:
+            # Productivity recommendations
+            productivity = analysis.get('productivity_metrics', {})
+            success_rate = productivity.get('success_rate', 0)
+            
+            if success_rate < 0.8:
+                recommendations.append(f"Command success rate is {success_rate:.1%}. Consider reviewing failed commands for patterns.")
+            
+            # Workflow efficiency recommendations
+            workflows = analysis.get('common_workflows', {})
+            top_workflows = workflows.get('top_workflows', [])
+            
+            for workflow_pattern, stats in top_workflows:
+                if stats['success_rate'] < 0.7:
+                    recommendations.append(f"Workflow '{workflow_pattern}' has low success rate ({stats['success_rate']:.1%}). Consider optimization.")
+            
+            # Time pattern recommendations
+            time_patterns = analysis.get('time_patterns', {})
+            peak_hours = time_patterns.get('peak_hours', [])
+            
+            if peak_hours:
+                most_productive_hour = peak_hours[0][0]
+                recommendations.append(f"You're most active at {most_productive_hour}:00. Consider scheduling complex tasks during peak hours.")
+            
+            # Commands per hour recommendation
+            commands_per_hour = productivity.get('commands_per_hour', 0)
+            if commands_per_hour > 20:
+                recommendations.append("High command frequency detected. Consider batching operations or using scripts for repetitive tasks.")
+            
+        except Exception as e:
+            self.logger.error(f"Error generating workflow recommendations: {e}")
+        
+        return recommendations
+    
+    def _calculate_workflow_efficiency(self, analysis: Dict[str, Any]) -> str:
+        """Enhanced Intelligence: Calculate overall workflow efficiency score."""
+        try:
+            score = 100  # Start with perfect score
+            
+            # Deduct for low success rate
+            productivity = analysis.get('productivity_metrics', {})
+            success_rate = productivity.get('success_rate', 0)
+            if success_rate < 0.8:
+                score -= (0.8 - success_rate) * 50  # Up to 10 points deduction
+            
+            # Deduct for inefficient workflows
+            workflows = analysis.get('common_workflows', {})
+            top_workflows = workflows.get('top_workflows', [])
+            
+            inefficient_workflows = sum(1 for _, stats in top_workflows if stats['success_rate'] < 0.7)
+            score -= inefficient_workflows * 10
+            
+            # Bonus for consistent patterns
+            if len(top_workflows) > 0 and top_workflows[0][1]['count'] > 3:
+                score += 10  # Bonus for consistent workflow usage
+            
+            # Categorize efficiency
+            if score >= 85:
+                return 'excellent'
+            elif score >= 70:
+                return 'good'
+            elif score >= 50:
+                return 'fair'
+            else:
+                return 'poor'
+        
+        except Exception as e:
+            self.logger.error(f"Error calculating workflow efficiency: {e}")
+            return 'unknown'
     
     def _is_development_command(self, command: str) -> bool:
         """Check if a command is related to development work."""

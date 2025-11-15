@@ -21,7 +21,7 @@ import asyncio
 import subprocess
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
@@ -396,6 +396,331 @@ echo "$(date -Iseconds) post-merge $(git rev-parse HEAD)" >> "{self.git_dir}/cor
             self.logger.error(f"Error getting git events: {e}")
         
         return events
+    
+    async def analyze_repository_health(self) -> Dict[str, Any]:
+        """Enhanced Intelligence: Analyze repository health and provide insights."""
+        health_analysis = {
+            'overall_health': 'unknown',
+            'commit_patterns': {},
+            'branch_analysis': {},
+            'file_hotspots': [],
+            'productivity_metrics': {},
+            'recommendations': []
+        }
+        
+        try:
+            if not self.is_git_repo:
+                health_analysis['overall_health'] = 'no_git_repo'
+                return health_analysis
+            
+            # Analyze commit patterns (last 30 days)
+            health_analysis['commit_patterns'] = await self._analyze_commit_patterns()
+            
+            # Analyze branch structure
+            health_analysis['branch_analysis'] = await self._analyze_branch_structure()
+            
+            # Identify file hotspots
+            health_analysis['file_hotspots'] = await self._identify_file_hotspots()
+            
+            # Calculate productivity metrics
+            health_analysis['productivity_metrics'] = await self._calculate_productivity_metrics()
+            
+            # Generate health recommendations
+            health_analysis['recommendations'] = self._generate_health_recommendations(health_analysis)
+            
+            # Determine overall health score
+            health_analysis['overall_health'] = self._calculate_overall_health_score(health_analysis)
+            
+            self.logger.debug(f"Repository health analysis complete: {health_analysis['overall_health']}")
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing repository health: {e}")
+            health_analysis['overall_health'] = 'analysis_error'
+        
+        return health_analysis
+    
+    async def _analyze_commit_patterns(self) -> Dict[str, Any]:
+        """Analyze commit patterns to understand development rhythm."""
+        patterns = {
+            'total_commits_30_days': 0,
+            'avg_commits_per_day': 0.0,
+            'commit_sizes': {'small': 0, 'medium': 0, 'large': 0},
+            'commit_times': [],
+            'most_active_days': [],
+            'commit_message_quality': 'unknown'
+        }
+        
+        try:
+            # Get commits from last 30 days
+            since_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+            commits_output = await self._run_git_command([
+                'log', '--since', since_date, '--pretty=format:%H|%ad|%s', '--date=iso'
+            ])
+            
+            if not commits_output:
+                return patterns
+            
+            commits = commits_output.strip().split('\n')
+            patterns['total_commits_30_days'] = len(commits)
+            patterns['avg_commits_per_day'] = len(commits) / 30.0
+            
+            # Analyze commit characteristics
+            commit_hours = []
+            for commit_line in commits:
+                if '|' not in commit_line:
+                    continue
+                    
+                parts = commit_line.split('|')
+                if len(parts) < 3:
+                    continue
+                    
+                commit_hash, date_str, message = parts[0], parts[1], '|'.join(parts[2:])
+                
+                # Extract hour from date
+                try:
+                    commit_date = datetime.fromisoformat(date_str.replace(' +', '+'))
+                    commit_hours.append(commit_date.hour)
+                except:
+                    pass
+                
+                # Analyze commit message quality
+                if len(message) < 10:
+                    continue
+                elif message.startswith(('feat:', 'fix:', 'refactor:', 'docs:')):
+                    # Conventional commits format - good quality
+                    pass
+            
+            # Calculate most active hours
+            if commit_hours:
+                hour_counts = {}
+                for hour in commit_hours:
+                    hour_counts[hour] = hour_counts.get(hour, 0) + 1
+                
+                patterns['most_active_hours'] = sorted(
+                    hour_counts.items(), 
+                    key=lambda x: x[1], 
+                    reverse=True
+                )[:3]
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing commit patterns: {e}")
+        
+        return patterns
+    
+    async def _analyze_branch_structure(self) -> Dict[str, Any]:
+        """Analyze branch structure and workflow patterns."""
+        branch_analysis = {
+            'total_branches': 0,
+            'active_branches': [],
+            'stale_branches': [],
+            'default_branch': 'main',
+            'workflow_pattern': 'unknown'
+        }
+        
+        try:
+            # Get all branches
+            branches_output = await self._run_git_command(['branch', '-a'])
+            if branches_output:
+                lines = branches_output.strip().split('\n')
+                branch_analysis['total_branches'] = len([l for l in lines if l.strip()])
+                
+                # Identify current/default branch
+                for line in lines:
+                    if line.strip().startswith('*'):
+                        branch_analysis['default_branch'] = line.strip()[2:].strip()
+                        break
+            
+            # Analyze branch activity (last 30 days)
+            recent_branches = await self._run_git_command([
+                'for-each-ref', '--format=%(refname:short) %(committerdate:relative)', 
+                '--sort=-committerdate', 'refs/heads/'
+            ])
+            
+            if recent_branches:
+                for line in recent_branches.strip().split('\n'):
+                    if not line.strip():
+                        continue
+                    parts = line.rsplit(' ', 1)
+                    if len(parts) == 2:
+                        branch_name, last_activity = parts
+                        if any(recent in last_activity for recent in ['hours', 'days']) and not any(old in last_activity for old in ['weeks', 'months', 'years']):
+                            branch_analysis['active_branches'].append({
+                                'name': branch_name,
+                                'last_activity': last_activity
+                            })
+                        else:
+                            branch_analysis['stale_branches'].append({
+                                'name': branch_name,
+                                'last_activity': last_activity
+                            })
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing branch structure: {e}")
+        
+        return branch_analysis
+    
+    async def _identify_file_hotspots(self) -> List[Dict[str, Any]]:
+        """Identify files that are changed frequently (potential hotspots)."""
+        hotspots = []
+        
+        try:
+            # Get file change frequency over last 30 days
+            since_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+            file_stats = await self._run_git_command([
+                'log', '--since', since_date, '--name-only', '--pretty=format:'
+            ])
+            
+            if not file_stats:
+                return hotspots
+            
+            # Count file modifications
+            file_counts = {}
+            for line in file_stats.strip().split('\n'):
+                if line.strip():
+                    file_counts[line.strip()] = file_counts.get(line.strip(), 0) + 1
+            
+            # Sort by frequency and take top hotspots
+            sorted_files = sorted(file_counts.items(), key=lambda x: x[1], reverse=True)
+            
+            for file_path, change_count in sorted_files[:10]:  # Top 10 hotspots
+                if change_count > 2:  # Only consider files changed more than twice
+                    hotspots.append({
+                        'file_path': file_path,
+                        'change_count': change_count,
+                        'risk_level': self._assess_hotspot_risk(change_count)
+                    })
+        
+        except Exception as e:
+            self.logger.error(f"Error identifying file hotspots: {e}")
+        
+        return hotspots
+    
+    def _assess_hotspot_risk(self, change_count: int) -> str:
+        """Assess risk level based on file change frequency."""
+        if change_count > 15:
+            return 'high'
+        elif change_count > 8:
+            return 'medium'
+        else:
+            return 'low'
+    
+    async def _calculate_productivity_metrics(self) -> Dict[str, Any]:
+        """Calculate productivity and development velocity metrics."""
+        metrics = {
+            'lines_of_code_trend': 'stable',
+            'commit_velocity': 0.0,
+            'average_commit_size': 0,
+            'code_churn_rate': 0.0,
+            'development_efficiency': 'unknown'
+        }
+        
+        try:
+            # Analyze code changes over time
+            recent_stats = await self._run_git_command([
+                'log', '--since=30.days.ago', '--numstat', '--pretty=format:'
+            ])
+            
+            if recent_stats:
+                lines_added_total = 0
+                lines_deleted_total = 0
+                total_commits = 0
+                
+                for line in recent_stats.strip().split('\n'):
+                    if line.strip() and '\t' in line:
+                        parts = line.split('\t')
+                        if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
+                            lines_added_total += int(parts[0])
+                            lines_deleted_total += int(parts[1])
+                            total_commits += 1
+                
+                if total_commits > 0:
+                    metrics['commit_velocity'] = total_commits / 30.0  # commits per day
+                    metrics['average_commit_size'] = (lines_added_total + lines_deleted_total) / total_commits
+                    metrics['code_churn_rate'] = lines_deleted_total / max(lines_added_total, 1)
+                    
+                    # Determine trend
+                    if lines_added_total > lines_deleted_total * 1.5:
+                        metrics['lines_of_code_trend'] = 'growing'
+                    elif lines_deleted_total > lines_added_total * 1.2:
+                        metrics['lines_of_code_trend'] = 'shrinking'
+                    else:
+                        metrics['lines_of_code_trend'] = 'stable'
+        
+        except Exception as e:
+            self.logger.error(f"Error calculating productivity metrics: {e}")
+        
+        return metrics
+    
+    def _generate_health_recommendations(self, analysis: Dict[str, Any]) -> List[str]:
+        """Generate recommendations based on repository health analysis."""
+        recommendations = []
+        
+        try:
+            # Commit pattern recommendations
+            commit_patterns = analysis.get('commit_patterns', {})
+            if commit_patterns.get('avg_commits_per_day', 0) < 0.5:
+                recommendations.append("Consider more frequent, smaller commits for better tracking")
+            
+            # Branch recommendations
+            branch_analysis = analysis.get('branch_analysis', {})
+            if len(branch_analysis.get('stale_branches', [])) > 5:
+                recommendations.append("Clean up stale branches to reduce repository clutter")
+            
+            # Hotspot recommendations
+            file_hotspots = analysis.get('file_hotspots', [])
+            high_risk_hotspots = [h for h in file_hotspots if h.get('risk_level') == 'high']
+            if high_risk_hotspots:
+                recommendations.append(f"Consider refactoring {len(high_risk_hotspots)} high-risk hotspot files")
+            
+            # Productivity recommendations
+            productivity = analysis.get('productivity_metrics', {})
+            if productivity.get('average_commit_size', 0) > 500:
+                recommendations.append("Consider breaking down large commits into smaller, focused changes")
+            
+            if productivity.get('code_churn_rate', 0) > 0.3:
+                recommendations.append("High code churn detected - review deleted code patterns")
+        
+        except Exception as e:
+            self.logger.error(f"Error generating health recommendations: {e}")
+        
+        return recommendations
+    
+    def _calculate_overall_health_score(self, analysis: Dict[str, Any]) -> str:
+        """Calculate overall repository health score."""
+        try:
+            score = 100  # Start with perfect score
+            
+            # Deduct points for issues
+            commit_patterns = analysis.get('commit_patterns', {})
+            if commit_patterns.get('avg_commits_per_day', 0) < 0.3:
+                score -= 20  # Low commit frequency
+            
+            branch_analysis = analysis.get('branch_analysis', {})
+            stale_branches = len(branch_analysis.get('stale_branches', []))
+            if stale_branches > 10:
+                score -= 15  # Too many stale branches
+            
+            file_hotspots = analysis.get('file_hotspots', [])
+            high_risk_hotspots = len([h for h in file_hotspots if h.get('risk_level') == 'high'])
+            score -= high_risk_hotspots * 5  # High-risk hotspots
+            
+            productivity = analysis.get('productivity_metrics', {})
+            if productivity.get('code_churn_rate', 0) > 0.4:
+                score -= 10  # High code churn
+            
+            # Categorize health
+            if score >= 85:
+                return 'excellent'
+            elif score >= 70:
+                return 'good'
+            elif score >= 50:
+                return 'fair'
+            else:
+                return 'poor'
+        
+        except Exception as e:
+            self.logger.error(f"Error calculating health score: {e}")
+            return 'unknown'
     
     def get_status(self) -> Dict[str, Any]:
         """Get git monitor status."""
