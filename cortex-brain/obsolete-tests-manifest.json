@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-11-14T19:26:46.888615",
+  "timestamp": "2025-11-15T10:27:39.283886",
   "marked_by": "optimize_cortex_orchestrator",
   "tests": [
     {
-      "file_path": "tests/test_planning_triggers.py",
+      "file_path": "tests\\test_planning_triggers.py",
       "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.agent_types, src.cortex_agents.base_agent",
       "missing_imports": [
         "src.cortex_agents.intent_router",
@@ -13,43 +13,38 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/staleness/test_template_schema_validation.py",
-      "reason": "Imports non-existent modules: src.metrics.brain_metrics_collector",
+      "file_path": "tests\\cortex_3_0\\test_phase_1_foundation.py",
+      "reason": "Imports non-existent modules: src.cortex_3_0.unified_interface, src.cortex_3_0.dual_channel_memory, src.cortex_3_0.enhanced_agents, src.cortex_3_0.smart_context_intelligence, src.cortex_3_0.dual_channel_memory, src.cortex_3_0.enhanced_agents, src.cortex_3_0.smart_context_intelligence, src.cortex_3_0.unified_interface",
       "missing_imports": [
-        "src.metrics.brain_metrics_collector"
+        "src.cortex_3_0.unified_interface",
+        "src.cortex_3_0.dual_channel_memory",
+        "src.cortex_3_0.enhanced_agents",
+        "src.cortex_3_0.smart_context_intelligence",
+        "src.cortex_3_0.dual_channel_memory",
+        "src.cortex_3_0.enhanced_agents",
+        "src.cortex_3_0.smart_context_intelligence",
+        "src.cortex_3_0.unified_interface"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/plugins/test_cleanup_protection.py",
-      "reason": "Imports non-existent modules: src.plugins.cleanup_plugin",
+      "file_path": "tests\\cortex_brain_001\\test_architecture_analysis_brain_saving.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.knowledge_graph, src.tier2.knowledge_graph, src.cortex_agents.strategic.architect, src.cortex_agents.base_agent, src.entry_point.agent_executor, src.cortex_agents.agent_types, src.tier2.knowledge_graph.knowledge_graph, src.cortex_agents.intent_router, src.cortex_agents.agent_types",
       "missing_imports": [
-        "src.plugins.cleanup_plugin"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/plugins/test_sweeper_plugin.py",
-      "reason": "Imports non-existent modules: src.plugins.sweeper_plugin, src.plugins.sweeper_plugin",
-      "missing_imports": [
-        "src.plugins.sweeper_plugin",
-        "src.plugins.sweeper_plugin"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/integration/test_planning_integration.py",
-      "reason": "Imports non-existent modules: src.cortex_agents.strategic.interactive_planner, src.cortex_agents.base_agent, src.cortex_agents.strategic.intent_router, src.cortex_agents.agent_types",
-      "missing_imports": [
-        "src.cortex_agents.strategic.interactive_planner",
+        "src.tier2.knowledge_graph.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.cortex_agents.strategic.architect",
         "src.cortex_agents.base_agent",
-        "src.cortex_agents.strategic.intent_router",
+        "src.entry_point.agent_executor",
+        "src.cortex_agents.agent_types",
+        "src.tier2.knowledge_graph.knowledge_graph",
+        "src.cortex_agents.intent_router",
         "src.cortex_agents.agent_types"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/integration/test_component_wiring.py",
+      "file_path": "tests\\integration\\test_component_wiring.py",
       "reason": "Imports non-existent modules: src.plugins.plugin_registry, src.plugins.plugin_registry, src.plugins.command_registry, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.metrics.brain_metrics_collector, src.operations.operation_header_formatter, src.operations.operation_header_formatter, src.config, src.config, src.config, src.config, src.config, src.config, src.config, src.plugins.platform_switch_plugin, src.cortex_agents.intent_router, src.cortex_agents.work_planner, src.cortex_agents.code_executor, src.tier0.brain_protector, src.tier1.conversation_manager, src.tier2.knowledge_graph, src.operations.operation_factory, src.operations.modules.cleanup.cleanup_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.system.optimize_system_orchestrator",
       "missing_imports": [
         "src.plugins.plugin_registry",
@@ -82,31 +77,18 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/operations/test_update_documentation.py",
-      "reason": "Imports non-existent modules: src.operations.update_documentation",
+      "file_path": "tests\\integration\\test_planning_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.strategic.interactive_planner, src.cortex_agents.base_agent, src.cortex_agents.strategic.intent_router, src.cortex_agents.agent_types",
       "missing_imports": [
-        "src.operations.update_documentation"
+        "src.cortex_agents.strategic.interactive_planner",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.strategic.intent_router",
+        "src.cortex_agents.agent_types"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/operations/test_setup.py",
-      "reason": "Imports non-existent modules: src.operations.setup",
-      "missing_imports": [
-        "src.operations.setup"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/operations/test_environment_setup.py",
-      "reason": "Imports non-existent modules: src.operations.environment_setup",
-      "missing_imports": [
-        "src.operations.environment_setup"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/operations/test_cleanup.py",
+      "file_path": "tests\\operations\\test_cleanup.py",
       "reason": "Imports non-existent modules: src.operations.cleanup",
       "missing_imports": [
         "src.operations.cleanup"
@@ -114,25 +96,7 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/operations/test_parallel_execution.py",
-      "reason": "Imports non-existent modules: src.operations.operations_orchestrator, src.operations.base_operation_module",
-      "missing_imports": [
-        "src.operations.operations_orchestrator",
-        "src.operations.base_operation_module"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/operations/test_optimize_system_orchestrator.py",
-      "reason": "Imports non-existent modules: src.operations.modules.system.optimize_system_orchestrator, src.operations.base_operation_module",
-      "missing_imports": [
-        "src.operations.modules.system.optimize_system_orchestrator",
-        "src.operations.base_operation_module"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/operations/test_design_sync_orchestrator.py",
+      "file_path": "tests\\operations\\test_design_sync_orchestrator.py",
       "reason": "Imports non-existent modules: src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator, src.operations.modules.design_sync.design_sync_orchestrator",
       "missing_imports": [
         "src.operations.modules.design_sync.design_sync_orchestrator",
@@ -152,24 +116,101 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py",
-      "reason": "Imports non-existent modules: src.operations.modules.optimization.hardcoded_data_cleaner_module, src.operations.base_operation_module",
+      "file_path": "tests\\operations\\test_environment_setup.py",
+      "reason": "Imports non-existent modules: src.operations.environment_setup",
       "missing_imports": [
-        "src.operations.modules.optimization.hardcoded_data_cleaner_module",
+        "src.operations.environment_setup"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\operations\\test_optimize_system_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.system.optimize_system_orchestrator, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.system.optimize_system_orchestrator",
         "src.operations.base_operation_module"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_pattern_learning_engine.py",
-      "reason": "Imports non-existent modules: src.tier1.pattern_learning_engine",
+      "file_path": "tests\\operations\\test_parallel_execution.py",
+      "reason": "Imports non-existent modules: src.operations.operations_orchestrator, src.operations.base_operation_module",
       "missing_imports": [
-        "src.tier1.pattern_learning_engine"
+        "src.operations.operations_orchestrator",
+        "src.operations.base_operation_module"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_conversation_vault.py",
+      "file_path": "tests\\operations\\test_setup.py",
+      "reason": "Imports non-existent modules: src.operations.setup",
+      "missing_imports": [
+        "src.operations.setup"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\operations\\test_update_documentation.py",
+      "reason": "Imports non-existent modules: src.operations.update_documentation",
+      "missing_imports": [
+        "src.operations.update_documentation"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\plugins\\test_cleanup_protection.py",
+      "reason": "Imports non-existent modules: src.plugins.cleanup_plugin",
+      "missing_imports": [
+        "src.plugins.cleanup_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\plugins\\test_configuration_wizard_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.configuration_wizard_plugin, src.plugins.configuration_wizard_plugin",
+      "missing_imports": [
+        "src.plugins.configuration_wizard_plugin",
+        "src.plugins.configuration_wizard_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\plugins\\test_sweeper_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.sweeper_plugin, src.plugins.sweeper_plugin",
+      "missing_imports": [
+        "src.plugins.sweeper_plugin",
+        "src.plugins.sweeper_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\staleness\\test_template_schema_validation.py",
+      "reason": "Imports non-existent modules: src.metrics.brain_metrics_collector",
+      "missing_imports": [
+        "src.metrics.brain_metrics_collector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_conversation_import.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.migration_add_conversation_import, src.tier1.migration_add_conversation_import",
+      "missing_imports": [
+        "src.tier1.working_memory",
+        "src.tier1.migration_add_conversation_import",
+        "src.tier1.migration_add_conversation_import"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_conversation_quality.py",
+      "reason": "Imports non-existent modules: src.tier1.conversation_quality",
+      "missing_imports": [
+        "src.tier1.conversation_quality"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_conversation_vault.py",
       "reason": "Imports non-existent modules: src.tier1.conversation_vault",
       "missing_imports": [
         "src.tier1.conversation_vault"
@@ -177,15 +218,16 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_narrative_intelligence.py",
-      "reason": "Imports non-existent modules: src.tier1.narrative_intelligence",
+      "file_path": "tests\\tier1\\test_e2e_conversation_import.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.migration_add_conversation_import",
       "missing_imports": [
-        "src.tier1.narrative_intelligence"
+        "src.tier1.working_memory",
+        "src.tier1.migration_add_conversation_import"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_fusion_manager.py",
+      "file_path": "tests\\tier1\\test_fusion_manager.py",
       "reason": "Imports non-existent modules: src.tier1.fusion_manager, src.tier1.working_memory, src.tier1.migration_add_conversation_import, src.tier1.temporal_correlator, src.tier1.temporal_correlator, src.tier1.migration_add_conversation_import",
       "missing_imports": [
         "src.tier1.fusion_manager",
@@ -198,58 +240,7 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_conversation_quality.py",
-      "reason": "Imports non-existent modules: src.tier1.conversation_quality",
-      "missing_imports": [
-        "src.tier1.conversation_quality"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_smart_recommendations.py",
-      "reason": "Imports non-existent modules: src.tier1.smart_recommendations",
-      "missing_imports": [
-        "src.tier1.smart_recommendations"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_e2e_conversation_import.py",
-      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.migration_add_conversation_import",
-      "missing_imports": [
-        "src.tier1.working_memory",
-        "src.tier1.migration_add_conversation_import"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_conversation_import.py",
-      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.migration_add_conversation_import, src.tier1.migration_add_conversation_import",
-      "missing_imports": [
-        "src.tier1.working_memory",
-        "src.tier1.migration_add_conversation_import",
-        "src.tier1.migration_add_conversation_import"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_session_manager.py",
-      "reason": "Imports non-existent modules: src.tier1.sessions",
-      "missing_imports": [
-        "src.tier1.sessions"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_session_correlation.py",
-      "reason": "Imports non-existent modules: src.tier1.working_memory",
-      "missing_imports": [
-        "src.tier1.working_memory"
-      ],
-      "confidence": 0.9
-    },
-    {
-      "file_path": "tests/tier1/test_lifecycle_manager.py",
+      "file_path": "tests\\tier1\\test_lifecycle_manager.py",
       "reason": "Imports non-existent modules: src.tier1.lifecycle, src.tier1.working_memory",
       "missing_imports": [
         "src.tier1.lifecycle",
@@ -258,7 +249,47 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier1/test_temporal_correlator.py",
+      "file_path": "tests\\tier1\\test_narrative_intelligence.py",
+      "reason": "Imports non-existent modules: src.tier1.narrative_intelligence",
+      "missing_imports": [
+        "src.tier1.narrative_intelligence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_pattern_learning_engine.py",
+      "reason": "Imports non-existent modules: src.tier1.pattern_learning_engine",
+      "missing_imports": [
+        "src.tier1.pattern_learning_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_session_correlation.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory",
+      "missing_imports": [
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_session_manager.py",
+      "reason": "Imports non-existent modules: src.tier1.sessions",
+      "missing_imports": [
+        "src.tier1.sessions"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_smart_recommendations.py",
+      "reason": "Imports non-existent modules: src.tier1.smart_recommendations",
+      "missing_imports": [
+        "src.tier1.smart_recommendations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier1\\test_temporal_correlator.py",
       "reason": "Imports non-existent modules: src.tier1.temporal_correlator, src.tier1.working_memory",
       "missing_imports": [
         "src.tier1.temporal_correlator",
@@ -267,32 +298,62 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/cortex_brain_001/test_architecture_analysis_brain_saving.py",
-      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.knowledge_graph, src.tier2.knowledge_graph, src.cortex_agents.strategic.architect, src.cortex_agents.base_agent, src.entry_point.agent_executor, src.cortex_agents.agent_types, src.tier2.knowledge_graph.knowledge_graph, src.cortex_agents.intent_router, src.cortex_agents.agent_types",
+      "file_path": "tests\\tier2\\test_namespace_protection.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.knowledge_graph, src.tier2.knowledge_graph_legacy",
       "missing_imports": [
         "src.tier2.knowledge_graph.knowledge_graph",
-        "src.tier2.knowledge_graph",
-        "src.cortex_agents.strategic.architect",
-        "src.cortex_agents.base_agent",
-        "src.entry_point.agent_executor",
-        "src.cortex_agents.agent_types",
-        "src.tier2.knowledge_graph.knowledge_graph",
-        "src.cortex_agents.intent_router",
-        "src.cortex_agents.agent_types"
+        "src.tier2.knowledge_graph_legacy"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/cortex_agents/strategic/test_interactive_planner.py",
-      "reason": "Imports non-existent modules: src.cortex_agents.strategic.interactive_planner, src.cortex_agents.base_agent",
+      "file_path": "tests\\track_a\\test_conversational_channel_integration.py",
+      "reason": "Imports non-existent modules: src.track_a.adapters.conversational_channel_adapter",
       "missing_imports": [
-        "src.cortex_agents.strategic.interactive_planner",
-        "src.cortex_agents.base_agent"
+        "src.track_a.adapters.conversational_channel_adapter"
       ],
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier3/metrics/test_brain_metrics_collector.py",
+      "file_path": "tests\\track_a\\test_conversation_import.py",
+      "reason": "Imports non-existent modules: src.track_a.conversation_import, src.track_a.parsers.copilot_parser, src.track_a.extractors.semantic_extractor, src.track_a.integrations.conversational_channel_adapter",
+      "missing_imports": [
+        "src.track_a.conversation_import",
+        "src.track_a.parsers.copilot_parser",
+        "src.track_a.extractors.semantic_extractor",
+        "src.track_a.integrations.conversational_channel_adapter"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\track_a\\test_copilot_parser.py",
+      "reason": "Imports non-existent modules: src.track_a.parsers.copilot_parser",
+      "missing_imports": [
+        "src.track_a.parsers.copilot_parser"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\track_a\\test_integration.py",
+      "reason": "Imports non-existent modules: src.track_a.conversation_import.conversation_importer, src.track_a.parsers.copilot_parser, src.track_a.extractors.semantic_extractor, src.track_a.integrations.conversational_channel_adapter",
+      "missing_imports": [
+        "src.track_a.conversation_import.conversation_importer",
+        "src.track_a.parsers.copilot_parser",
+        "src.track_a.extractors.semantic_extractor",
+        "src.track_a.integrations.conversational_channel_adapter"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\track_a\\test_semantic_extractor.py",
+      "reason": "Imports non-existent modules: src.track_a.extractors.semantic_extractor",
+      "missing_imports": [
+        "src.track_a.extractors.semantic_extractor"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\tier3\\metrics\\test_brain_metrics_collector.py",
       "reason": "Imports non-existent modules: src.metrics.brain_metrics_collector, src.config, src.config, src.operations.operation_header_formatter, src.operations.operation_header_formatter, src.operations.operation_header_formatter, src.operations.operation_header_formatter",
       "missing_imports": [
         "src.metrics.brain_metrics_collector",
@@ -306,11 +367,20 @@
       "confidence": 0.9
     },
     {
-      "file_path": "tests/tier2/test_namespace_protection.py",
-      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.knowledge_graph, src.tier2.knowledge_graph_legacy",
+      "file_path": "tests\\operations\\modules\\optimization\\test_hardcoded_data_cleaner_module.py",
+      "reason": "Imports non-existent modules: src.operations.modules.optimization.hardcoded_data_cleaner_module, src.operations.base_operation_module",
       "missing_imports": [
-        "src.tier2.knowledge_graph.knowledge_graph",
-        "src.tier2.knowledge_graph_legacy"
+        "src.operations.modules.optimization.hardcoded_data_cleaner_module",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests\\cortex_agents\\strategic\\test_interactive_planner.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.strategic.interactive_planner, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.strategic.interactive_planner",
+        "src.cortex_agents.base_agent"
       ],
       "confidence": 0.9
     }

@@ -2,7 +2,6 @@
 
 This is the **CORTEX** cognitive framework repository - an AI enhancement system that gives GitHub Copilot long-term memory, context awareness, and strategic planning capabilities.
 
----
 
 ## 💬 Response Style (NEW!)
 
@@ -59,7 +58,6 @@ This is the **CORTEX** cognitive framework repository - an AI enhancement system
 
 Your preference persists across the conversation.
 
----
 
 ## 🧠 What is CORTEX?
 
@@ -70,7 +68,6 @@ CORTEX transforms GitHub Copilot from an amnesiac intern into a continuously imp
 - **Intelligence** - 4-tier brain architecture (Instinct, Memory, Knowledge, Context)
 - **Coordination** - 10 specialist agents working together
 
----
 
 ## 🏗️ Architecture
 
@@ -113,7 +110,6 @@ CORTEX uses an extensible plugin architecture. All plugins:
 
 - **platform_switch:** `/setup` (aliases: /env, /environment, /configure) - Setup/reconfigure development environment
 
----
 
 ## 🚀 Quick Commands
 
@@ -125,7 +121,6 @@ Use `/CORTEX` for full entry point, or use natural language:
 - "Make it purple" → Remembers earlier context
 - "Setup environment" → Platform-specific configuration
 
----
 
 ## 📦 Project Structure
 
@@ -147,7 +142,6 @@ CORTEX/
 └── docs/                   # Human-readable documentation
 ```
 
----
 
 ## 🔧 Development Guidelines
 
@@ -163,7 +157,6 @@ CORTEX/
 
 **Quick Reference:** `.github/SKULL-QUICK-REFERENCE.md`
 
----
 
 ### Adding New Plugins
 
@@ -219,7 +212,6 @@ CORTEX/
 - Update plugin list in `.github/copilot-instructions.md` (this file) via `python scripts/sync_plugin_commands.py`
 - Run doc refresh: `python scripts/refresh_docs.py`
 
----
 
 ## 🎯 Current Status
 
@@ -239,7 +231,6 @@ CORTEX/
 - ✅ Interactive planning workflows
 - ✅ Smart Next Steps (context-aware formatting)
 
----
 
 ## 🔌 Plugin Extensibility
 
@@ -258,7 +249,6 @@ When plugins register commands via `register_commands()`, they automatically bec
 3. Commands immediately available in `/CORTEX` and natural language
 4. Entry point auto-discovers new commands
 
----
 
 ## 📚 Key Files
 
@@ -270,7 +260,6 @@ When plugins register commands via `register_commands()`, they automatically bec
 - **Knowledge Graph:** `cortex-brain/knowledge-graph.yaml` - Learned patterns
 - **Config:** `cortex.config.json` - Multi-machine paths
 
----
 
 ## 💡 Usage Tips
 
@@ -280,7 +269,6 @@ When plugins register commands via `register_commands()`, they automatically bec
 - **Follow BasePlugin contract** for compatibility
 - **Use command registry** for slash commands
 
----
 
 ## 🆘 Troubleshooting
 
@@ -299,7 +287,6 @@ When plugins register commands via `register_commands()`, they automatically bec
 - Verify `CORTEX_ROOT` environment variable
 - Use `config.py` for path resolution
 
----
 
 ## 🎯 Next Steps for Contributors
 
@@ -310,7 +297,6 @@ When plugins register commands via `register_commands()`, they automatically bec
 5. **Test thoroughly:** `pytest tests/plugins/test_your_plugin.py`
 6. **Update docs:** Entry point auto-discovers commands!
 
----
 
 *This file provides baseline context for all GitHub Copilot interactions in the CORTEX repository. Use `/CORTEX` for full capabilities.*
 

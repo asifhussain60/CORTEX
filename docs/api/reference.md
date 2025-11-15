@@ -1,11 +1,11 @@
 # CORTEX API Reference
 
-**Auto-generated:** 2025-11-15 03:35:42
+**Auto-generated:** 2025-11-15 10:21:10
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.__init__
+## src\__init__
 
 CORTEX Source Package
 
@@ -19,7 +19,7 @@ Version: 1.0
 
 ---
 
-## src.brain.tier1.__init__
+## src\brain\tier1\__init__
 
 CORTEX Brain - Tier 1 Package
 
@@ -48,7 +48,7 @@ Recommended Usage:
 
 ---
 
-## src.brain.tier1.conversation_manager
+## src\brain\tier1\conversation_manager
 
 CORTEX Brain - Tier 1: ConversationManager
 
@@ -228,7 +228,7 @@ Returns:
 
 ---
 
-## src.brain.tier1.entity_extractor
+## src\brain\tier1\entity_extractor
 
 CORTEX Brain - Tier 1: EntityExtractor
 
@@ -355,7 +355,7 @@ Returns:
 
 ---
 
-## src.brain.tier1.file_tracker
+## src\brain\tier1\file_tracker
 
 CORTEX Brain - Tier 1: FileTracker
 
@@ -497,7 +497,7 @@ Returns:
 
 ---
 
-## src.brain.tier1.request_logger
+## src\brain\tier1\request_logger
 
 Raw Request Logger
 -----------------
@@ -644,7 +644,7 @@ Example:
 
 ---
 
-## src.brain.tier1.tier1_api
+## src\brain\tier1\tier1_api
 
 Tier 1 Unified API
 -----------------
@@ -893,7 +893,7 @@ Example:
 
 ---
 
-## src.config
+## src\config
 
 CORTEX Configuration Management
 
@@ -1008,7 +1008,7 @@ Get CORTEX root path for current machine.
 
 ---
 
-## src.context_injector
+## src\context_injector
 
 CORTEX Context Injector
 
@@ -1068,7 +1068,7 @@ Returns:
 
 ---
 
-## src.core.plugin_processor
+## src\core\plugin_processor
 
 CORTEX 2.0 YAML Plugin Processor
 Loads, validates, and executes machine-readable YAML plugins
@@ -1106,7 +1106,7 @@ Get plugin metadata and structure
 
 ---
 
-## src.core.plugin_schema
+## src\core\plugin_schema
 
 CORTEX 2.0 Plugin Schema Definitions
 Machine-readable plugin system using YAML with strict validation
@@ -1148,7 +1148,348 @@ Returns:
 
 ---
 
-## src.cortex_agents.__init__
+## src\cortex_3_0\dual_channel_memory
+
+CORTEX 3.0 Dual-Channel Memory System
+=====================================
+
+Architecture: Two-channel memory with intelligent fusion layer
+- Channel 1: Conversational (GitHub Copilot Chat interactions)
+- Channel 2: Traditional (Direct programmatic execution)
+- Fusion Layer: Unified narrative creation and intelligent routing
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### ChannelType
+
+Types of memory channels
+
+### MemoryEvent
+
+Base class for memory events across channels
+
+**Methods:**
+
+### ConversationalEvent
+
+Conversational channel event (GitHub Copilot Chat)
+
+**Methods:**
+
+### TraditionalEvent
+
+Traditional channel event (direct execution)
+
+**Methods:**
+
+### ConversationalChannel
+
+Manages conversational interactions (GitHub Copilot Chat)
+
+**Methods:**
+
+#### `store_conversation(self, user_message, assistant_response, intent, entities, context_references, session_id)`
+
+Store a conversational interaction
+
+#### `get_conversation_context(self, conversation_id)`
+
+Retrieve conversation context for continuity
+
+#### `search_conversations(self, query, limit)`
+
+Search conversational interactions
+
+### TraditionalChannel
+
+Manages traditional direct execution events
+
+**Methods:**
+
+#### `store_execution(self, operation, parameters, result, execution_time_ms, success, session_id)`
+
+Store a traditional execution event
+
+#### `get_recent_executions(self, limit)`
+
+Get recent execution events
+
+### IntelligentFusion
+
+Fusion layer that creates unified narratives from both channels
+
+**Methods:**
+
+#### `correlate_channels(self, time_window_minutes)`
+
+Correlate events across channels within time window
+
+### DualChannelMemory
+
+Main dual-channel memory system for CORTEX 3.0
+
+**Methods:**
+
+#### `store_conversation(self, user_message, assistant_response, intent)`
+
+Store a conversational interaction
+
+#### `store_execution(self, operation, parameters, result)`
+
+Store a traditional execution event
+
+#### `get_unified_narrative(self, time_window_minutes)`
+
+Get unified development narratives
+
+#### `search_memory(self, query, channel)`
+
+Search across both channels or specific channel
+
+#### `get_development_context(self, conversation_id)`
+
+Get complete development context for continuity
+
+---
+
+## src\cortex_3_0\enhanced_agents
+
+CORTEX 3.0 Enhanced Agent Coordination System
+============================================
+
+Multi-tier agent hierarchy with real-time collaboration:
+- Primary Agents: Original 10 specialist agents (2.0)
+- Sub-Agents: Specialized helpers for complex tasks (3.0)
+- Multi-Agent Orchestrator: Coordination layer (3.0)
+- Enhanced Corpus Callosum: Real-time communication (3.0)
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### AgentTier
+
+Agent hierarchy tiers
+
+### AgentRole
+
+Enhanced agent roles for 3.0
+
+### AgentTask
+
+Task for agent execution
+
+### WorkflowPlan
+
+Multi-agent workflow plan
+
+### EnhancedCorpusCallosum
+
+Real-time communication system between agents
+
+**Methods:**
+
+### SubAgent
+
+Base class for specialized sub-agents
+
+**Methods:**
+
+### CodeReviewerAgent
+
+Specialized agent for code quality analysis
+
+**Methods:**
+
+### DependencyAnalyzerAgent
+
+Specialized agent for dependency analysis
+
+**Methods:**
+
+### MultiAgentOrchestrator
+
+Orchestrates multi-agent workflows
+
+**Methods:**
+
+#### `register_primary_agent(self, role, agent)`
+
+Register a primary agent
+
+#### `register_sub_agent(self, role, agent)`
+
+Register a sub-agent
+
+### EnhancedAgentSystem
+
+Main enhanced agent system for CORTEX 3.0
+
+**Methods:**
+
+---
+
+## src\cortex_3_0\smart_context_intelligence
+
+CORTEX 3.0 Smart Context Intelligence System
+===========================================
+
+Intelligent context management with ML-based insights:
+- Predictive Context Loading: Anticipate what context will be needed
+- Adaptive Memory Management: Learn from usage patterns
+- Cross-Session Context Continuity: Maintain context across sessions
+- Intelligent Pattern Recognition: ML-enhanced pattern matching
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### ContextType
+
+Types of context for intelligent management
+
+### PredictionConfidence
+
+Confidence levels for context predictions
+
+### ContextItem
+
+Individual context item with metadata
+
+### ContextPrediction
+
+Prediction about what context will be needed
+
+### SessionContext
+
+Context maintained across a user session
+
+### ContextUsagePattern
+
+Tracks and learns from context usage patterns
+
+**Methods:**
+
+#### `record_access(self, context_id, timestamp)`
+
+Record context access for pattern learning
+
+#### `predict_next_context(self, current_context, current_time)`
+
+Predict what context might be needed next
+
+### AdaptiveMemoryManager
+
+Manages memory allocation based on context usage patterns
+
+**Methods:**
+
+#### `cache_context(self, context, predicted)`
+
+Add context to cache with adaptive management
+
+#### `get_context(self, context_id)`
+
+Retrieve context from cache
+
+#### `predict_and_preload(self, current_context)`
+
+Predict and preload likely needed contexts
+
+### CrossSessionContextManager
+
+Manages context continuity across user sessions
+
+**Methods:**
+
+#### `start_session(self, user_request)`
+
+Start a new session with context continuity
+
+#### `update_session_context(self, session_id, update)`
+
+Update session context with new information
+
+#### `end_session(self, session_id)`
+
+End session and save context for future use
+
+### SmartContextIntelligence
+
+Main smart context intelligence system for CORTEX 3.0
+
+**Methods:**
+
+---
+
+## src\cortex_3_0\unified_interface
+
+CORTEX 3.0 Unified Interface
+============================
+
+Central coordination point for all CORTEX 3.0 capabilities:
+- Dual-Channel Memory coordination
+- Enhanced Agent orchestration  
+- Smart Context Intelligence integration
+- Backward compatibility with 2.0 operations
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### CortexMode
+
+CORTEX operation modes
+
+### RequestComplexity
+
+Request complexity levels for routing decisions
+
+### CortexRequest
+
+Unified request structure for CORTEX 3.0
+
+**Methods:**
+
+### CortexResponse
+
+Unified response structure for CORTEX 3.0
+
+**Methods:**
+
+### RequestAnalyzer
+
+Analyzes requests to determine optimal processing strategy
+
+**Methods:**
+
+#### `analyze_request(self, request)`
+
+Analyze request to determine complexity and routing strategy
+
+### CortexUnifiedInterface
+
+Main unified interface for CORTEX 3.0
+
+**Methods:**
+
+#### `get_system_status(self)`
+
+Get comprehensive system status for all CORTEX components
+
+### UniversalOperationsSystem
+
+**Methods:**
+
+#### `execute_operation(self, operation, params)`
+
+### IntentRouter
+
+**Methods:**
+
+#### `route_request(self, message)`
+
+---
+
+## src\cortex_agents\__init__
 
 CORTEX Agents Package
 
@@ -1170,7 +1511,7 @@ Usage:
 
 ---
 
-## src.cortex_agents.agent_types
+## src\cortex_agents\agent_types
 
 Agent Type Definitions and Enums
 
@@ -1206,7 +1547,7 @@ Get all intents handled by an agent type
 
 ---
 
-## src.cortex_agents.base_agent
+## src\cortex_agents\base_agent
 
 Base Agent Class and Core Data Structures
 
@@ -1346,7 +1687,7 @@ Log outgoing response (for debugging/auditing)
 
 ---
 
-## src.cortex_agents.change_governor
+## src\cortex_agents\change_governor
 
 ChangeGovernor Agent
 
@@ -1417,13 +1758,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.__init__
+## src\cortex_agents\code_executor\__init__
 
 CodeExecutor agent for safe code execution.
 
 ---
 
-## src.cortex_agents.code_executor.agent
+## src\cortex_agents\code_executor\agent
 
 CodeExecutor Agent - Coordinator.
 
@@ -1484,13 +1825,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.backup.__init__
+## src\cortex_agents\code_executor\backup\__init__
 
 Backup management for CodeExecutor.
 
 ---
 
-## src.cortex_agents.code_executor.backup.backup_manager
+## src\cortex_agents\code_executor\backup\backup_manager
 
 Backup manager for file operations.
 
@@ -1551,13 +1892,13 @@ Clean up backup directory.
 
 ---
 
-## src.cortex_agents.code_executor.operations.__init__
+## src\cortex_agents\code_executor\operations\__init__
 
 File operations for CodeExecutor.
 
 ---
 
-## src.cortex_agents.code_executor.operations.base_operation
+## src\cortex_agents\code_executor\operations\base_operation
 
 Base operation interface for file operations.
 
@@ -1592,7 +1933,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.operations.batch_operation
+## src\cortex_agents\code_executor\operations\batch_operation
 
 Batch file operations.
 
@@ -1619,7 +1960,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.operations.create_operation
+## src\cortex_agents\code_executor\operations\create_operation
 
 Create file operation.
 
@@ -1646,7 +1987,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.operations.delete_operation
+## src\cortex_agents\code_executor\operations\delete_operation
 
 Delete file operation.
 
@@ -1673,7 +2014,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.operations.edit_operation
+## src\cortex_agents\code_executor\operations\edit_operation
 
 Edit file operation.
 
@@ -1700,13 +2041,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.code_executor.validators.__init__
+## src\cortex_agents\code_executor\validators\__init__
 
 Code validators for CodeExecutor.
 
 ---
 
-## src.cortex_agents.code_executor.validators.syntax_validator
+## src\cortex_agents\code_executor\validators\syntax_validator
 
 Syntax validation for code files.
 
@@ -1739,7 +2080,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.commit_handler
+## src\cortex_agents\commit_handler
 
 CommitHandler Agent
 
@@ -1811,7 +2152,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector
+## src\cortex_agents\error_corrector
 
 ErrorCorrector Agent
 
@@ -1867,7 +2208,7 @@ Context expected:
 
 ---
 
-## src.cortex_agents.error_corrector.__init__
+## src\cortex_agents\error_corrector\__init__
 
 ErrorCorrector Agent - Modular error correction with specialized parsers and strategies.
 
@@ -1882,7 +2223,7 @@ The agent only fixes TARGET APPLICATION code and never modifies CORTEX system fi
 
 ---
 
-## src.cortex_agents.error_corrector.agent
+## src\cortex_agents\error_corrector\agent
 
 ErrorCorrector Agent - Modular Version
 
@@ -1913,13 +2254,13 @@ Execute error correction.
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.__init__
+## src\cortex_agents\error_corrector\parsers\__init__
 
 Error parsers for ErrorCorrector agent.
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.base_parser
+## src\cortex_agents\error_corrector\parsers\base_parser
 
 Base error parser interface.
 
@@ -1958,7 +2299,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.import_parser
+## src\cortex_agents\error_corrector\parsers\import_parser
 
 Parse import errors.
 
@@ -1981,7 +2322,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.linter_parser
+## src\cortex_agents\error_corrector\parsers\linter_parser
 
 Parse linter errors (pylint, flake8, etc).
 
@@ -2004,7 +2345,30 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.runtime_parser
+## src\cortex_agents\error_corrector\parsers\pytest_parser
+
+Parse pytest error output.
+
+### PytestErrorParser
+
+Parser for pytest test failures.
+
+**Methods:**
+
+#### `can_parse(self, output)`
+
+Check if output is pytest error.
+
+#### `parse(self, output)`
+
+Parse pytest error output.
+
+Returns:
+    Dict with type, file, test_name, line, category, message, traceback
+
+---
+
+## src\cortex_agents\error_corrector\parsers\runtime_parser
 
 Parse runtime errors (NameError, AttributeError, TypeError, etc).
 
@@ -2028,7 +2392,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.parsers.syntax_parser
+## src\cortex_agents\error_corrector\parsers\syntax_parser
 
 Parse Python syntax errors.
 
@@ -2051,36 +2415,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.parserstest_parser
-
-Parse pytest error output.
-
-### PytestErrorParser
-
-Parser for pytest test failures.
-
-**Methods:**
-
-#### `can_parse(self, output)`
-
-Check if output is pytest error.
-
-#### `parse(self, output)`
-
-Parse pytest error output.
-
-Returns:
-    Dict with type, file, test_name, line, category, message, traceback
-
----
-
-## src.cortex_agents.error_corrector.strategies.__init__
+## src\cortex_agents\error_corrector\strategies\__init__
 
 Error fix strategies for ErrorCorrector agent.
 
 ---
 
-## src.cortex_agents.error_corrector.strategies.base_strategy
+## src\cortex_agents\error_corrector\strategies\base_strategy
 
 Base fix strategy interface.
 
@@ -2119,7 +2460,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.strategies.import_strategy
+## src\cortex_agents\error_corrector\strategies\import_strategy
 
 Fix import-related errors.
 
@@ -2142,7 +2483,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.strategies.indentation_strategy
+## src\cortex_agents\error_corrector\strategies\indentation_strategy
 
 Fix indentation errors.
 
@@ -2165,7 +2506,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.strategies.package_strategy
+## src\cortex_agents\error_corrector\strategies\package_strategy
 
 Fix package-related errors.
 
@@ -2188,7 +2529,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.strategies.syntax_strategy
+## src\cortex_agents\error_corrector\strategies\syntax_strategy
 
 Fix syntax errors.
 
@@ -2211,13 +2552,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.validators.__init__
+## src\cortex_agents\error_corrector\validators\__init__
 
 Validators for ErrorCorrector agent.
 
 ---
 
-## src.cortex_agents.error_corrector.validators.fix_validator
+## src\cortex_agents\error_corrector\validators\fix_validator
 
 Validate error fixes before applying.
 
@@ -2250,7 +2591,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.error_corrector.validators.path_validator
+## src\cortex_agents\error_corrector\validators\path_validator
 
 Validate file paths for error correction.
 
@@ -2277,7 +2618,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.exceptions
+## src\cortex_agents\exceptions
 
 Custom Exceptions for CORTEX Agents
 
@@ -2317,13 +2658,13 @@ Raised when an operation would violate governance rules
 
 ---
 
-## src.cortex_agents.health_validator.__init__
+## src\cortex_agents\health_validator\__init__
 
 HealthValidator agent for system health checks.
 
 ---
 
-## src.cortex_agents.health_validator.agent
+## src\cortex_agents\health_validator\agent
 
 HealthValidator Agent - Coordinator.
 
@@ -2380,7 +2721,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.health_validator.enhanced_validator
+## src\cortex_agents\health_validator\enhanced_validator
 
 ### EnhancedHealthValidator
 
@@ -2393,13 +2734,13 @@ scenarios, providing detailed health analysis for entities under investigation.
 
 ---
 
-## src.cortex_agents.health_validator.reporting.__init__
+## src\cortex_agents\health_validator\reporting\__init__
 
 Health report generation and analysis.
 
 ---
 
-## src.cortex_agents.health_validator.reporting.analyzer
+## src\cortex_agents\health_validator\reporting\analyzer
 
 Health check result analyzer.
 
@@ -2432,7 +2773,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.health_validator.reporting.formatter
+## src\cortex_agents\health_validator\reporting\formatter
 
 Health check report formatter.
 
@@ -2468,13 +2809,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.health_validator.validators.__init__
+## src\cortex_agents\health_validator\validators\__init__
 
 Health check validators for HealthValidator agent.
 
 ---
 
-## src.cortex_agents.health_validator.validators.base_validator
+## src\cortex_agents\health_validator\validators\base_validator
 
 Base health validator interface.
 
@@ -2504,7 +2845,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.health_validator.validators.database_validator
+## src\cortex_agents\health_validator\validators\database_validator
 
 Database health validator.
 
@@ -2524,7 +2865,7 @@ Check all tier databases for integrity.
 
 ---
 
-## src.cortex_agents.health_validator.validators.disk_validator
+## src\cortex_agents\health_validator\validators\disk_validator
 
 Disk space health validator.
 
@@ -2544,7 +2885,7 @@ Check available disk space (cross-platform).
 
 ---
 
-## src.cortex_agents.health_validator.validators.git_validator
+## src\cortex_agents\health_validator\validators\git_validator
 
 Git repository health validator.
 
@@ -2564,7 +2905,7 @@ Check git repository status.
 
 ---
 
-## src.cortex_agents.health_validator.validators.performance_validator
+## src\cortex_agents\health_validator\validators\performance_validator
 
 Performance metrics health validator.
 
@@ -2584,7 +2925,7 @@ Check performance metrics from Tier 3.
 
 ---
 
-## src.cortex_agents.health_validator.validators.test_validator
+## src\cortex_agents\health_validator\validators\test_validator
 
 Test suite health validator.
 
@@ -2607,7 +2948,7 @@ application's tests. Runs from CORTEX root with isolated environment.
 
 ---
 
-## src.cortex_agents.intent_router
+## src\cortex_agents\intent_router
 
 IntentRouter Agent
 
@@ -2672,7 +3013,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.investigation_router
+## src\cortex_agents\investigation_router
 
 ### InvestigationPhase
 
@@ -2710,7 +3051,7 @@ Handles "Investigate why this view..." type requests by:
 
 ---
 
-## src.cortex_agents.learning_capture_agent
+## src\cortex_agents\learning_capture_agent
 
 CORTEX Learning Capture Agent
 
@@ -2832,7 +3173,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.screenshot_analyzer
+## src\cortex_agents\screenshot_analyzer
 
 ScreenshotAnalyzer Agent
 
@@ -2903,7 +3244,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.session_resumer
+## src\cortex_agents\session_resumer
 
 SessionResumer Agent
 
@@ -2971,7 +3312,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.strategic.__init__
+## src\cortex_agents\strategic\__init__
 
 Strategic Agents Package
 
@@ -2988,7 +3329,7 @@ Key CORTEX-BRAIN-001 Fix:
 
 ---
 
-## src.cortex_agents.strategic.architect
+## src\cortex_agents\strategic\architect
 
 Architect Agent - Strategic architectural analysis with automatic brain saving.
 
@@ -3062,7 +3403,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.strategic.intent_router
+## src\cortex_agents\strategic\intent_router
 
 IntentRouter Agent
 
@@ -3127,7 +3468,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.strategic.interactive_planner
+## src\cortex_agents\strategic\interactive_planner
 
 Interactive Planner Agent (CORTEX 2.1)
 
@@ -3313,7 +3654,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.strategic.question_generator
+## src\cortex_agents\strategic\question_generator
 
 Question Generator Utility (CORTEX 2.1)
 
@@ -3394,7 +3735,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.tactical.__init__
+## src\cortex_agents\tactical\__init__
 
 Tactical Agents Package
 
@@ -3407,7 +3748,7 @@ Contains agents responsible for tactical execution:
 
 ---
 
-## src.cortex_agents.test_generator.__init__
+## src\cortex_agents\test_generator\__init__
 
 TestGenerator - Modular test generation agent.
 
@@ -3415,7 +3756,7 @@ Exports the main TestGenerator agent class.
 
 ---
 
-## src.cortex_agents.test_generator.agent
+## src\cortex_agents\test_generator\agent
 
 TestGenerator Agent - Modular Version
 
@@ -3445,13 +3786,13 @@ Generate test cases for code.
 
 ---
 
-## src.cortex_agents.test_generator.analyzers.__init__
+## src\cortex_agents\test_generator\analyzers\__init__
 
 Analyzers for code analysis.
 
 ---
 
-## src.cortex_agents.test_generator.analyzers.class_analyzer
+## src\cortex_agents\test_generator\analyzers\class_analyzer
 
 Class analysis for test generation.
 
@@ -3473,7 +3814,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.test_generator.analyzers.code_analyzer
+## src\cortex_agents\test_generator\analyzers\code_analyzer
 
 Code analysis for test generation.
 
@@ -3496,7 +3837,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.test_generator.analyzers.function_analyzer
+## src\cortex_agents\test_generator\analyzers\function_analyzer
 
 Function analysis for test generation.
 
@@ -3518,13 +3859,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.test_generator.generators.__init__
+## src\cortex_agents\test_generator\generators\__init__
 
 Test generators.
 
 ---
 
-## src.cortex_agents.test_generator.generators.class_test_generator
+## src\cortex_agents\test_generator\generators\class_test_generator
 
 Class test generation.
 
@@ -3540,7 +3881,7 @@ Generate tests for a class.
 
 ---
 
-## src.cortex_agents.test_generator.generators.function_test_generator
+## src\cortex_agents\test_generator\generators\function_test_generator
 
 Function test generation.
 
@@ -3556,7 +3897,7 @@ Generate tests for a function.
 
 ---
 
-## src.cortex_agents.test_generator.pattern_learner
+## src\cortex_agents\test_generator\pattern_learner
 
 Pattern learning for test generation.
 
@@ -3587,13 +3928,13 @@ Args:
 
 ---
 
-## src.cortex_agents.test_generator.templates.__init__
+## src\cortex_agents\test_generator\templates\__init__
 
 Templates for test generation.
 
 ---
 
-## src.cortex_agents.test_generator.templates.template_manager
+## src\cortex_agents\test_generator\templates\template_manager
 
 Test code templates.
 
@@ -3629,7 +3970,7 @@ Generate pytest fixtures for classes.
 
 ---
 
-## src.cortex_agents.test_generator.test_counter
+## src\cortex_agents\test_generator\test_counter
 
 Test counting utilities.
 
@@ -3651,7 +3992,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.utils
+## src\cortex_agents\utils
 
 Utility Functions for CORTEX Agents
 
@@ -3792,7 +4133,7 @@ Example:
 
 ---
 
-## src.cortex_agents.work_planner.__init__
+## src\cortex_agents\work_planner\__init__
 
 WorkPlanner - Modular work planning agent.
 
@@ -3800,7 +4141,7 @@ Exports the main WorkPlanner agent class.
 
 ---
 
-## src.cortex_agents.work_planner.agent
+## src\cortex_agents\work_planner\agent
 
 WorkPlanner Agent - Modular Version
 
@@ -3831,7 +4172,7 @@ Generate task breakdown with time estimates.
 
 ---
 
-## src.cortex_agents.work_planner.complexity_analyzer
+## src\cortex_agents\work_planner\complexity_analyzer
 
 Complexity analysis for work planning.
 
@@ -3850,7 +4191,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.dependency_manager
+## src\cortex_agents\work_planner\dependency_manager
 
 Task dependency identification.
 
@@ -3872,7 +4213,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.estimator
+## src\cortex_agents\work_planner\estimator
 
 Time estimation adjuster.
 
@@ -3896,7 +4237,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.pattern_storage
+## src\cortex_agents\work_planner\pattern_storage
 
 Pattern storage for workflow learning.
 
@@ -3918,7 +4259,7 @@ Args:
 
 ---
 
-## src.cortex_agents.work_planner.priority_calculator
+## src\cortex_agents\work_planner\priority_calculator
 
 Task priority calculation.
 
@@ -3942,7 +4283,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.risk_assessor
+## src\cortex_agents\work_planner\risk_assessor
 
 Risk assessment for tasks.
 
@@ -3966,13 +4307,13 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.strategies.__init__
+## src\cortex_agents\work_planner\strategies\__init__
 
 Task generation strategies.
 
 ---
 
-## src.cortex_agents.work_planner.strategies.task_generator
+## src\cortex_agents\work_planner\strategies\task_generator
 
 Task templates and generation strategies.
 
@@ -3992,7 +4333,7 @@ Create generic task breakdown based on complexity.
 
 ---
 
-## src.cortex_agents.work_planner.velocity_tracker
+## src\cortex_agents\work_planner\velocity_tracker
 
 Velocity metrics tracker from Tier 3.
 
@@ -4011,7 +4352,7 @@ Returns:
 
 ---
 
-## src.cortex_agents.work_planner.workflow_finder
+## src\cortex_agents\work_planner\workflow_finder
 
 Workflow pattern finder and extractor.
 
@@ -4044,7 +4385,7 @@ Returns:
 
 ---
 
-## src.cortex_help
+## src\cortex_help
 
 CORTEX Help System
 
@@ -4105,7 +4446,7 @@ Quick access to concise help.
 
 ---
 
-## src.crawlers.__init__
+## src\crawlers\__init__
 
 CORTEX Crawler System
 
@@ -4125,7 +4466,7 @@ Copyright: © 2024-2025 Syed Asif Hussain. All rights reserved.
 
 ---
 
-## src.crawlers.base_crawler
+## src\crawlers\base_crawler
 
 Base Crawler Class for CORTEX
 
@@ -4275,7 +4616,7 @@ Returns:
 
 ---
 
-## src.crawlers.orchestrator
+## src\crawlers\orchestrator
 
 Crawler Orchestrator for CORTEX
 
@@ -4375,7 +4716,7 @@ Returns:
 
 ---
 
-## src.crawlers.tooling_crawler
+## src\crawlers\tooling_crawler
 
 Tooling Crawler for CORTEX
 
@@ -4448,7 +4789,7 @@ Returns:
 
 ---
 
-## src.crawlers.ui_crawler
+## src\crawlers\ui_crawler
 
 UI Crawler for CORTEX
 
@@ -4518,7 +4859,7 @@ Returns:
 
 ---
 
-## src.entry_point.__init__
+## src\entry_point\__init__
 
 CORTEX Entry Point Package
 
@@ -4538,7 +4879,7 @@ Usage:
 
 ---
 
-## src.entry_point.agent_executor
+## src\entry_point\agent_executor
 
 Agent Executor - Executes specific agents based on routing decisions
 
@@ -4570,7 +4911,7 @@ Returns:
 
 ---
 
-## src.entry_point.cortex_entry
+## src\entry_point\cortex_entry
 
 CORTEX Main Entry Point
 
@@ -4689,7 +5030,7 @@ Example:
 
 ---
 
-## src.entry_point.cortex_entry_workflows
+## src\entry_point\cortex_entry_workflows
 
 CORTEX Entry Point Integration with Workflow Pipeline
 
@@ -4745,7 +5086,7 @@ Example:
 
 ---
 
-## src.entry_point.pagination
+## src\entry_point\pagination
 
 Pagination Manager for Chat Output
 
@@ -4786,7 +5127,7 @@ Return the next page content for a conversation, or None if no more.
 
 ---
 
-## src.entry_point.request_parser
+## src\entry_point\request_parser
 
 Request Parser for CORTEX Entry Point
 
@@ -4878,7 +5219,7 @@ Returns:
 
 ---
 
-## src.entry_point.response_formatter
+## src\entry_point\response_formatter
 
 Response Formatter for CORTEX Entry Point
 
@@ -5036,7 +5377,7 @@ Returns:
 
 ---
 
-## src.entry_point.setup_command
+## src\entry_point\setup_command
 
 CORTEX Setup Command
 
@@ -5087,15 +5428,15 @@ Returns:
 
 ---
 
-## src.llm.__init__
+## src\llm\__init__
 
 ---
 
-## src.llm.adapters.__init__
+## src\llm\adapters\__init__
 
 ---
 
-## src.llm.adapters.anthropic_adapter
+## src\llm\adapters\anthropic_adapter
 
 ### AnthropicAdapter
 
@@ -5107,7 +5448,7 @@ Returns:
 
 ---
 
-## src.llm.adapters.base
+## src\llm\adapters\base
 
 ### LLMProviderAdapter
 
@@ -5125,7 +5466,7 @@ Generate a response for the given prompt and settings.
 
 ---
 
-## src.llm.adapters.local_adapter
+## src\llm\adapters\local_adapter
 
 ### LocalAdapter
 
@@ -5137,7 +5478,7 @@ Generate a response for the given prompt and settings.
 
 ---
 
-## src.llm.adapters.openai_adapter
+## src\llm\adapters\openai_adapter
 
 ### OpenAIAdapter
 
@@ -5149,7 +5490,7 @@ Generate a response for the given prompt and settings.
 
 ---
 
-## src.llm.fallback_manager
+## src\llm\fallback_manager
 
 ### `resolve_fallback_chain(primary)`
 
@@ -5158,7 +5499,7 @@ Simple heuristic: if primary is openai -> anthropic -> local; if anthropic -> op
 
 ---
 
-## src.llm.memory_injector
+## src\llm\memory_injector
 
 ### `build_memory_context(user_query, namespace, include_generic, limit)`
 
@@ -5169,7 +5510,7 @@ This is a stub; wire to Tier 2 KnowledgeGraph later.
 
 ---
 
-## src.llm.orchestrator
+## src\llm\orchestrator
 
 ### LLMOrchestrator
 
@@ -5183,7 +5524,7 @@ Selects appropriate adapter and applies fallback strategy.
 
 ---
 
-## src.llm.types
+## src\llm\types
 
 ### SafetyLevel
 
@@ -5211,7 +5552,7 @@ Selects appropriate adapter and applies fallback strategy.
 
 ---
 
-## src.metrics.__init__
+## src\metrics\__init__
 
 CORTEX Metrics Module
 
@@ -5223,7 +5564,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.metrics.brain_metrics_collector
+## src\metrics\brain_metrics_collector
 
 Brain Metrics Collector
 
@@ -5283,7 +5624,7 @@ Returns:
 
 ---
 
-## src.migrations.run_all_migrations
+## src\migrations\run_all_migrations
 
 CORTEX Master Migration Runner
 Orchestrates all three tier migrations in sequence
@@ -5305,7 +5646,7 @@ Returns:
 
 ---
 
-## src.migrations.test_migration
+## src\migrations\test_migration
 
 CORTEX End-to-End Migration Test
 Tests all three tier migrations and validates results
@@ -5339,7 +5680,7 @@ Run all tier validations
 
 ---
 
-## src.operations.__init__
+## src\operations\__init__
 
 CORTEX Operations Package - Universal Command Execution
 
@@ -5479,7 +5820,7 @@ Example:
 
 ---
 
-## src.operations.base_operation_module
+## src\operations\base_operation_module
 
 Base Operation Module - Universal Abstract Interface
 
@@ -5774,7 +6115,7 @@ Log debug message (convenience wrapper).
 
 ---
 
-## src.operations.cleanup
+## src\operations\cleanup
 
 Workspace Cleanup Operation
 CORTEX 3.0 Phase 1.1 Week 3 - Monolithic MVP
@@ -5906,7 +6247,7 @@ CLI entry point for cleanup operation.
 
 ---
 
-## src.operations.crawlers.__init__
+## src\operations\crawlers\__init__
 
 CORTEX Discovery Report Crawlers
 
@@ -5924,7 +6265,7 @@ Available Crawlers:
 
 ---
 
-## src.operations.crawlers.base_crawler
+## src\operations\crawlers\base_crawler
 
 Base Crawler Class for Discovery Report System
 
@@ -6005,7 +6346,7 @@ Log an error message.
 
 ---
 
-## src.operations.crawlers.brain_inspector
+## src\operations\crawlers\brain_inspector
 
 Brain Inspector Crawler
 
@@ -6032,7 +6373,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.doc_mapper
+## src\operations\crawlers\doc_mapper
 
 Documentation Mapper Crawler
 
@@ -6060,7 +6401,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.file_scanner
+## src\operations\crawlers\file_scanner
 
 File Scanner Crawler
 
@@ -6087,7 +6428,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.git_analyzer
+## src\operations\crawlers\git_analyzer
 
 Git Analyzer Crawler
 
@@ -6114,7 +6455,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.health_assessor
+## src\operations\crawlers\health_assessor
 
 Health Assessor Crawler
 
@@ -6142,7 +6483,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.plugin_registry
+## src\operations\crawlers\plugin_registry
 
 Plugin Registry Crawler
 
@@ -6169,7 +6510,7 @@ Returns:
 
 ---
 
-## src.operations.crawlers.test_parser
+## src\operations\crawlers\test_parser
 
 Test Parser Crawler
 
@@ -6196,7 +6537,7 @@ Returns:
 
 ---
 
-## src.operations.demo_discovery
+## src\operations\demo_discovery
 
 Discovery Report Generator
 
@@ -6237,7 +6578,7 @@ Returns:
 
 ---
 
-## src.operations.environment_setup
+## src\operations\environment_setup
 
 CORTEX Environment Setup - Monolithic Script
 
@@ -6305,7 +6646,7 @@ Returns:
 
 ---
 
-## src.operations.environment_setup_module
+## src\operations\environment_setup_module
 
 Environment Setup Operation - Module Wrapper
 Integrates monolithic setup.py with CORTEX 2.0 operations system
@@ -6355,7 +6696,7 @@ Register environment setup module with operations system.
 
 ---
 
-## src.operations.header_formatter
+## src\operations\header_formatter
 
 CORTEX Orchestrator Header Formatter
 
@@ -6417,7 +6758,7 @@ Returns:
 
 ---
 
-## src.operations.header_utils
+## src\operations\header_utils
 
 CORTEX Orchestrator Header Utilities
 
@@ -6491,7 +6832,7 @@ Args:
 
 ---
 
-## src.operations.help_command
+## src\operations\help_command
 
 CORTEX Help Command - Display Available Operations
 
@@ -6566,7 +6907,7 @@ Example:
 
 ---
 
-## src.operations.modules.__init__
+## src\operations\modules\__init__
 
 Operation Modules Package
 
@@ -6584,7 +6925,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.operations.modules.apply_narrator_voice_module
+## src\operations\modules\apply_narrator_voice_module
 
 Apply Narrator Voice Module - Story Refresh Operation
 
@@ -6682,7 +7023,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.brain_initialization_module
+## src\operations\modules\brain_initialization_module
 
 Brain Initialization Setup Module
 
@@ -6735,7 +7076,7 @@ Steps:
 
 ---
 
-## src.operations.modules.brain_tests_module
+## src\operations\modules\brain_tests_module
 
 Brain Tests Setup Module
 
@@ -6786,7 +7127,7 @@ Steps:
 
 ---
 
-## src.operations.modules.build_consolidated_story_module
+## src\operations\modules\build_consolidated_story_module
 
 Build Consolidated Story Module - Story Refresh Operation
 
@@ -6881,7 +7222,7 @@ Register this module.
 
 ---
 
-## src.operations.modules.build_documentation_module
+## src\operations\modules\build_documentation_module
 
 Build documentation module for documentation generation.
 
@@ -6921,7 +7262,7 @@ Returns:
 
 ---
 
-## src.operations.modules.build_mkdocs_site_module
+## src\operations\modules\build_mkdocs_site_module
 
 Build MkDocs site module for automated documentation.
 
@@ -6961,7 +7302,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.build_story_preview_module
+## src\operations\modules\build_story_preview_module
 
 Build Story Preview Module - Story Refresh Operation
 
@@ -7037,7 +7378,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.cleanup.__init__
+## src\operations\modules\cleanup\__init__
 
 Cleanup module for CORTEX operations.
 
@@ -7055,7 +7396,7 @@ License: Proprietary - See LICENSE file for terms
 
 ---
 
-## src.operations.modules.cleanup.cleanup_orchestrator
+## src\operations\modules\cleanup\cleanup_orchestrator
 
 Cleanup Orchestrator for CORTEX 2.0
 
@@ -7110,7 +7451,7 @@ Execute comprehensive cleanup workflow
 
 ---
 
-## src.operations.modules.cleanup.remove_obsolete_tests_module
+## src\operations\modules\cleanup\remove_obsolete_tests_module
 
 Remove Obsolete Tests Module
 
@@ -7146,7 +7487,7 @@ Returns:
 
 ---
 
-## src.operations.modules.clear_python_cache_module
+## src\operations\modules\clear_python_cache_module
 
 Clear Python Cache Module
 
@@ -7195,7 +7536,7 @@ Steps:
 
 ---
 
-## src.operations.modules.conversation_tracking_module
+## src\operations\modules\conversation_tracking_module
 
 Conversation Tracking Setup Module
 
@@ -7245,7 +7586,7 @@ Steps:
 
 ---
 
-## src.operations.modules.deploy_docs_preview_module
+## src\operations\modules\deploy_docs_preview_module
 
 Deploy documentation preview module.
 
@@ -7288,7 +7629,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.design_sync.__init__
+## src\operations\modules\design_sync\__init__
 
 Design Sync Module
 
@@ -7300,7 +7641,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.operations.modules.design_sync.design_sync_orchestrator
+## src\operations\modules\design_sync\design_sync_orchestrator
 
 CORTEX Design Synchronization Orchestrator
 
@@ -7425,7 +7766,7 @@ Returns:
 
 ---
 
-## src.operations.modules.design_sync.track_config
+## src\operations\modules\design_sync\track_config
 
 CORTEX Multi-Track Configuration Module
 
@@ -7542,7 +7883,7 @@ Returns:
 
 ---
 
-## src.operations.modules.design_sync.track_templates
+## src\operations\modules\design_sync\track_templates
 
 CORTEX Multi-Track Design Document Templates
 
@@ -7605,7 +7946,7 @@ Returns:
 
 ---
 
-## src.operations.modules.evaluate_cortex_architecture_module
+## src\operations\modules\evaluate_cortex_architecture_module
 
 Evaluate CORTEX Architecture Module - Story Refresh Operation
 
@@ -7668,7 +8009,7 @@ Register module with operation system.
 
 ---
 
-## src.operations.modules.generate_api_docs_module
+## src\operations\modules\generate_api_docs_module
 
 Generate API documentation module for automated documentation.
 
@@ -7708,7 +8049,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.generate_cleanup_report_module
+## src\operations\modules\generate_cleanup_report_module
 
 Generate Cleanup Report Module
 
@@ -7757,7 +8098,7 @@ Steps:
 
 ---
 
-## src.operations.modules.generate_history_doc_module
+## src\operations\modules\generate_history_doc_module
 
 Generate History Doc Module
 
@@ -7781,7 +8122,7 @@ Generate History Doc Module
 
 ---
 
-## src.operations.modules.generate_image_prompts_doc_module
+## src\operations\modules\generate_image_prompts_doc_module
 
 Generate Image Prompts Doc Module - Story Refresh Operation
 
@@ -7840,7 +8181,7 @@ Register this module.
 
 ---
 
-## src.operations.modules.generate_image_prompts_module
+## src\operations\modules\generate_image_prompts_module
 
 Generate Image Prompts Module - Story Refresh Operation
 
@@ -7897,7 +8238,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.generate_story_chapters_module
+## src\operations\modules\generate_story_chapters_module
 
 Generate Story Chapters Module - Story Refresh Operation
 
@@ -7964,7 +8305,7 @@ Register module with operation system.
 
 ---
 
-## src.operations.modules.generate_technical_cortex_doc_module
+## src\operations\modules\generate_technical_cortex_doc_module
 
 Generate Technical CORTEX Doc Module - Story Refresh Operation
 
@@ -8048,7 +8389,7 @@ Register this module.
 
 ---
 
-## src.operations.modules.generate_technical_doc_module
+## src\operations\modules\generate_technical_doc_module
 
 Generate Technical Documentation Module - Story Refresh Operation
 
@@ -8105,7 +8446,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.git_sync_module
+## src\operations\modules\git_sync_module
 
 Git Synchronization Setup Module
 
@@ -8157,7 +8498,7 @@ Steps:
 
 ---
 
-## src.operations.modules.load_protection_rules_module
+## src\operations\modules\load_protection_rules_module
 
 Load protection rules module for brain protection validation.
 
@@ -8196,7 +8537,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.load_story_template_module
+## src\operations\modules\load_story_template_module
 
 Load Story Template Module - Story Refresh Operation
 
@@ -8283,7 +8624,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.optimization.__init__
+## src\operations\modules\optimization\__init__
 
 CORTEX Optimization Operation Modules
 
@@ -8298,7 +8639,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.operations.modules.optimization.hardcoded_data_cleaner_module
+## src\operations\modules\optimization\hardcoded_data_cleaner_module
 
 Hardcoded Data Cleaner Module
 
@@ -8423,7 +8764,7 @@ Register module with operation factory.
 
 ---
 
-## src.operations.modules.optimization.optimize_cortex_orchestrator
+## src\operations\modules\optimization\optimize_cortex_orchestrator
 
 CORTEX Optimization Orchestrator
 
@@ -8524,7 +8865,7 @@ Register module with operation factory.
 
 ---
 
-## src.operations.modules.optimize.__init__
+## src\operations\modules\optimize\__init__
 
 CORTEX Optimization Module
 
@@ -8535,7 +8876,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.operations.modules.optimize.optimize_cortex_orchestrator
+## src\operations\modules\optimize\optimize_cortex_orchestrator
 
 CORTEX Optimize Entry Point Orchestrator
 
@@ -8621,7 +8962,7 @@ Register the optimize orchestrator module
 
 ---
 
-## src.operations.modules.platform_detection_module
+## src\operations\modules\platform_detection_module
 
 Platform Detection Setup Module
 
@@ -8672,7 +9013,7 @@ Steps:
 
 ---
 
-## src.operations.modules.project_validation_module
+## src\operations\modules\project_validation_module
 
 Project Validation Setup Module
 
@@ -8723,7 +9064,7 @@ Steps:
 
 ---
 
-## src.operations.modules.publish_documentation_module
+## src\operations\modules\publish_documentation_module
 
 Publish documentation module for documentation deployment.
 
@@ -8761,7 +9102,59 @@ Returns:
 
 ---
 
-## src.operations.modules.refresh_design_docs_module
+## src\operations\modules\python_dependencies_module
+
+Python Dependencies Setup Module
+
+Installs required Python packages from requirements.txt.
+
+SOLID Principles:
+- Single Responsibility: Only handles Python package installation
+- Open/Closed: Extends BaseOperationModule without modifying it
+- Dependency Inversion: Depends on BaseOperationModule abstraction
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### PythonDependenciesModule
+
+Setup module for installing Python dependencies.
+
+Responsibilities:
+1. Verify requirements.txt exists
+2. Upgrade pip to latest version
+3. Install packages from requirements.txt
+4. Verify installations
+5. Update context with installed packages
+
+**Methods:**
+
+#### `get_metadata(self)`
+
+Return module metadata.
+
+#### `validate_prerequisites(self, context)`
+
+Validate prerequisites for dependency installation.
+
+Checks:
+1. Project root exists
+2. requirements.txt exists
+3. Python command available
+
+#### `execute(self, context)`
+
+Execute Python dependency installation.
+
+Steps:
+1. Upgrade pip
+2. Install from requirements.txt
+3. Verify installations
+4. Update context
+
+---
+
+## src\operations\modules\refresh_design_docs_module
 
 Refresh design documentation module.
 
@@ -8800,7 +9193,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.relocate_story_files_module
+## src\operations\modules\relocate_story_files_module
 
 Relocate Story Files Module - Story Refresh Operation
 
@@ -8869,7 +9262,7 @@ Register this module.
 
 ---
 
-## src.operations.modules.remove_old_logs_module
+## src\operations\modules\remove_old_logs_module
 
 Remove Old Logs Module
 
@@ -8918,7 +9311,7 @@ Steps:
 
 ---
 
-## src.operations.modules.remove_orphaned_files_module
+## src\operations\modules\remove_orphaned_files_module
 
 Remove Orphaned Files Module
 
@@ -8968,7 +9361,7 @@ Steps:
 
 ---
 
-## src.operations.modules.save_story_markdown_module
+## src\operations\modules\save_story_markdown_module
 
 Save Story Markdown Module - Story Refresh Operation
 
@@ -9044,7 +9437,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.scan_docstrings_module
+## src\operations\modules\scan_docstrings_module
 
 Scan Python docstrings module for documentation generation.
 
@@ -9092,7 +9485,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.scan_temporary_files_module
+## src\operations\modules\scan_temporary_files_module
 
 Scan Temporary Files Module
 
@@ -9143,7 +9536,7 @@ Steps:
 
 ---
 
-## src.operations.modules.setup_completion_module
+## src\operations\modules\setup_completion_module
 
 Setup Completion Module
 
@@ -9192,7 +9585,7 @@ Steps:
 
 ---
 
-## src.operations.modules.story_length_manager_module
+## src\operations\modules\story_length_manager_module
 
 Story Length Manager Module
 
@@ -9247,7 +9640,7 @@ Factory function for module creation.
 
 ---
 
-## src.operations.modules.system.__init__
+## src\operations\modules\system\__init__
 
 System-level optimization modules for CORTEX.
 
@@ -9256,7 +9649,7 @@ multiple optimization operations across different system aspects.
 
 ---
 
-## src.operations.modules.system.optimize_system_orchestrator
+## src\operations\modules\system\optimize_system_orchestrator
 
 CORTEX System Optimizer - Meta-Level Orchestrator
 
@@ -9393,7 +9786,7 @@ Returns:
 
 ---
 
-## src.operations.modules.tooling_detection_module
+## src\operations\modules\tooling_detection_module
 
 Tooling Detection Module
 
@@ -9454,7 +9847,7 @@ Execute tooling detection.
 
 ---
 
-## src.operations.modules.tooling_installer_module
+## src\operations\modules\tooling_installer_module
 
 Tooling Installer Module
 
@@ -9521,7 +9914,7 @@ Execute tooling installation.
 
 ---
 
-## src.operations.modules.tooling_verification_module
+## src\operations\modules\tooling_verification_module
 
 Tooling Verification Setup Module
 
@@ -9570,7 +9963,7 @@ Steps:
 
 ---
 
-## src.operations.modules.update_mkdocs_index_module
+## src\operations\modules\update_mkdocs_index_module
 
 Update MkDocs Index Module - Story Refresh Operation
 
@@ -9653,7 +10046,7 @@ Register the module.
 
 ---
 
-## src.operations.modules.vacuum_sqlite_databases_module
+## src\operations\modules\vacuum_sqlite_databases_module
 
 Vacuum SQLite Databases Module
 
@@ -9702,7 +10095,7 @@ Steps:
 
 ---
 
-## src.operations.modules.validate_doc_links_module
+## src\operations\modules\validate_doc_links_module
 
 Validate documentation links module.
 
@@ -9745,7 +10138,7 @@ Register module for discovery.
 
 ---
 
-## src.operations.modules.validate_story_structure_module
+## src\operations\modules\validate_story_structure_module
 
 Validate Story Structure Module - Story Refresh Operation
 
@@ -9822,7 +10215,7 @@ Get progress message.
 
 ---
 
-## src.operations.modules.virtual_environment_module
+## src\operations\modules\virtual_environment_module
 
 Virtual Environment Setup Module
 
@@ -9875,7 +10268,7 @@ Steps:
 
 ---
 
-## src.operations.modules.vision_api_module
+## src\operations\modules\vision_api_module
 
 Vision API Setup Module
 
@@ -9949,59 +10342,7 @@ Runs if:
 
 ---
 
-## src.operations.modulesthon_dependencies_module
-
-Python Dependencies Setup Module
-
-Installs required Python packages from requirements.txt.
-
-SOLID Principles:
-- Single Responsibility: Only handles Python package installation
-- Open/Closed: Extends BaseOperationModule without modifying it
-- Dependency Inversion: Depends on BaseOperationModule abstraction
-
-Author: Asif Hussain
-Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-
-### PythonDependenciesModule
-
-Setup module for installing Python dependencies.
-
-Responsibilities:
-1. Verify requirements.txt exists
-2. Upgrade pip to latest version
-3. Install packages from requirements.txt
-4. Verify installations
-5. Update context with installed packages
-
-**Methods:**
-
-#### `get_metadata(self)`
-
-Return module metadata.
-
-#### `validate_prerequisites(self, context)`
-
-Validate prerequisites for dependency installation.
-
-Checks:
-1. Project root exists
-2. requirements.txt exists
-3. Python command available
-
-#### `execute(self, context)`
-
-Execute Python dependency installation.
-
-Steps:
-1. Upgrade pip
-2. Install from requirements.txt
-3. Verify installations
-4. Update context
-
----
-
-## src.operations.operation_factory
+## src\operations\operation_factory
 
 Operation Factory - Load and Create Operations from YAML
 
@@ -10113,7 +10454,7 @@ Example:
 
 ---
 
-## src.operations.operation_header_formatter
+## src\operations\operation_header_formatter
 
 CORTEX Operation Header Formatter
 
@@ -10192,7 +10533,7 @@ Print completion footer directly to console.
 
 ---
 
-## src.operations.operations_orchestrator
+## src\operations\operations_orchestrator
 
 Universal Operations Orchestrator - CORTEX 2.0
 
@@ -10294,7 +10635,7 @@ Returns:
 
 ---
 
-## src.operations.response_formatter
+## src\operations\response_formatter
 
 CORTEX Response Formatter
 
@@ -10348,7 +10689,7 @@ Returns:
 
 ---
 
-## src.operations.setup
+## src\operations\setup
 
 Environment Setup Operation - CORTEX 3.0 Phase 1.1
 Monolithic MVP Implementation (~350 lines)
@@ -10466,7 +10807,7 @@ Returns:
 
 ---
 
-## src.operations.update_documentation
+## src\operations\update_documentation
 
 CORTEX Documentation Generator - Monolithic Script
 
@@ -10575,7 +10916,7 @@ Main entry point for documentation generator.
 
 ---
 
-## src.plugins.base_plugin
+## src\plugins\base_plugin
 
 Base Plugin System for CORTEX 2.0
 
@@ -10790,7 +11131,7 @@ Cleanup all plugins
 
 ---
 
-## src.plugins.cleanup_orchestrator
+## src\plugins\cleanup_orchestrator
 
 Dynamic Cleanup Orchestrator for CORTEX 2.0
 
@@ -10886,7 +11227,7 @@ Print formatted cleanup report to console
 
 ---
 
-## src.plugins.cleanup_plugin
+## src\plugins\cleanup_plugin
 
 Cleanup Plugin for CORTEX 2.0
 
@@ -10971,7 +11312,7 @@ Cleanup plugin resources
 
 ---
 
-## src.plugins.code_review_plugin
+## src\plugins\code_review_plugin
 
 Code Review Plugin for CORTEX 2.0
 
@@ -11123,7 +11464,7 @@ Cleanup plugin resources
 
 ---
 
-## src.plugins.command_registry
+## src\plugins\command_registry
 
 CORTEX Plugin Command Registry
 
@@ -11289,7 +11630,7 @@ Returns:
 
 ---
 
-## src.plugins.configuration_wizard_plugin
+## src\plugins\configuration_wizard_plugin
 
 Configuration Wizard Plugin
 
@@ -11375,7 +11716,7 @@ Register the Configuration Wizard plugin.
 
 ---
 
-## src.plugins.conversation_import_plugin
+## src\plugins\conversation_import_plugin
 
 CORTEX 2.0 - Conversation Import Plugin
 
@@ -11453,7 +11794,7 @@ Plugin registration function.
 
 ---
 
-## src.plugins.doc_refresh_plugin
+## src\plugins\doc_refresh_plugin
 
 Documentation Refresh Plugin
 
@@ -11526,7 +11867,7 @@ Cleanup plugin resources
 
 ---
 
-## src.plugins.extension_scaffold_plugin
+## src\plugins\extension_scaffold_plugin
 
 Extension Scaffold Plugin for CORTEX 2.0
 
@@ -11566,7 +11907,7 @@ Cleanup plugin resources
 
 ---
 
-## src.plugins.hooks
+## src\plugins\hooks
 
 Plugin Hook Definitions for CORTEX 2.0
 
@@ -11584,7 +11925,7 @@ in the CORTEX lifecycle.
 
 ---
 
-## src.plugins.integrations.__init__
+## src\plugins\integrations\__init__
 
 Integration modules for Code Review Plugin
 
@@ -11599,7 +11940,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.plugins.integrations.azure_devops_integration
+## src\plugins\integrations\azure_devops_integration
 
 Azure DevOps Integration for Code Review Plugin
 
@@ -11729,7 +12070,7 @@ Returns:
 
 ---
 
-## src.plugins.integrations.github_integration
+## src\plugins\integrations\github_integration
 
 GitHub Integration for Code Review Plugin
 
@@ -11865,7 +12206,7 @@ Returns:
 
 ---
 
-## src.plugins.investigation_html_id_mapping_plugin
+## src\plugins\investigation_html_id_mapping_plugin
 
 Investigation HTML ID Mapping Plugin for CORTEX 3.0
 
@@ -11990,7 +12331,7 @@ Register the investigation HTML ID mapping plugin
 
 ---
 
-## src.plugins.investigation_refactoring_plugin
+## src\plugins\investigation_refactoring_plugin
 
 Investigation Refactoring Plugin for CORTEX 3.0
 
@@ -12095,7 +12436,7 @@ Register the investigation refactoring plugin
 
 ---
 
-## src.plugins.investigation_security_plugin
+## src\plugins\investigation_security_plugin
 
 Investigation Security Plugin for CORTEX 3.0
 
@@ -12190,7 +12531,7 @@ Register the investigation security plugin
 
 ---
 
-## src.plugins.performance_telemetry_plugin
+## src\plugins\performance_telemetry_plugin
 
 CORTEX Performance Telemetry Plugin
 
@@ -12333,7 +12674,132 @@ Register plugin with CORTEX
 
 ---
 
-## src.plugins.platform_switch_plugin
+## src\plugins\phase_tracker_plugin
+
+CORTEX Phase Tracker Plugin
+
+Extensible phase tracking system for work planning, multi-track development,
+and progress monitoring.
+
+Architecture:
+- Tracks work phases with dependencies, estimates, and acceptance criteria
+- Supports multi-track development (parallel work on multiple machines)
+- Integrates with Work Planner, Design Sync, Conversation Vault
+- YAML-based persistence with JSON Schema validation
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### PhaseTrackerPlugin
+
+Phase tracking plugin for CORTEX workflow management.
+
+Features:
+- Create and manage phase tracking for projects
+- Track progress, blockers, time estimates
+- Support multi-track development
+- Integration with CORTEX agents and operations
+
+**Methods:**
+
+#### `register_commands(self)`
+
+Register plugin commands.
+
+#### `initialize(self)`
+
+Initialize plugin resources.
+
+#### `execute(self, context)`
+
+Execute phase tracking operation.
+
+Args:
+    context: Execution context
+        - action: "create", "update", "status", "complete"
+        - project_name: Name of project
+        - Additional context-specific parameters
+
+Returns:
+    Execution results
+
+#### `cleanup(self)`
+
+Cleanup plugin resources.
+
+#### `create_tracking(self, project_name, description, phases, metadata)`
+
+Create new phase tracking file.
+
+Args:
+    project_name: Name of project
+    description: Project description
+    phases: List of phase definitions
+    metadata: Optional metadata
+
+Returns:
+    Tracking ID (filename without extension)
+
+#### `update_phase_status(self, tracking_id, phase_id, status, notes)`
+
+Update phase status.
+
+Args:
+    tracking_id: Tracking file ID
+    phase_id: Phase ID to update
+    status: New status
+    notes: Optional notes
+
+Returns:
+    True if successful
+
+#### `get_status(self, tracking_id)`
+
+Get phase tracking status.
+
+Args:
+    tracking_id: Tracking file ID
+
+Returns:
+    Status information
+
+#### `validate_dependencies(self, phases)`
+
+Validate phase dependencies.
+
+Args:
+    phases: List of phases
+
+Returns:
+    List of validation errors (empty if valid)
+
+#### `calculate_completion_percentage(self, phases)`
+
+Calculate overall completion percentage.
+
+Args:
+    phases: List of phases
+
+Returns:
+    Completion percentage (0-100)
+
+#### `detect_blockers(self, phases)`
+
+Detect active blockers across phases.
+
+Args:
+    phases: List of phases
+
+Returns:
+    List of active blockers
+
+### `register()`
+
+Register plugin with CORTEX.
+
+---
+
+## src\plugins\platform_switch_plugin
 
 CORTEX Platform Switch Plugin
 
@@ -12434,7 +12900,7 @@ Register the platform switch plugin.
 
 ---
 
-## src.plugins.plugin_registry
+## src\plugins\plugin_registry
 
 Plugin Registry
 
@@ -12535,7 +13001,7 @@ Get global plugin registry instance.
 
 ---
 
-## src.plugins.sweeper_plugin
+## src\plugins\sweeper_plugin
 
 Aggressive File Sweeper Plugin for CORTEX 2.0
 
@@ -12614,7 +13080,7 @@ Register sweeper plugin
 
 ---
 
-## src.plugins.system_refactor_plugin
+## src\plugins\system_refactor_plugin
 
 System Refactor Plugin - CORTEX Self-Review and Optimization
 
@@ -12688,7 +13154,7 @@ Register plugin with CORTEX plugin system.
 
 ---
 
-## src.response_templates.__init__
+## src\response_templates\__init__
 
 Response Template System for CORTEX.
 
@@ -12703,7 +13169,7 @@ Version: 1.0
 
 ---
 
-## src.response_templates.template_loader
+## src\response_templates\template_loader
 
 Template data structures and loader for CORTEX response templates.
 
@@ -12772,7 +13238,7 @@ Returns:
 
 ---
 
-## src.response_templates.template_registry
+## src\response_templates\template_registry
 
 Template registry for CORTEX response templates.
 
@@ -12873,7 +13339,7 @@ Clear all registered templates.
 
 ---
 
-## src.response_templates.template_renderer
+## src\response_templates\template_renderer
 
 Template renderer for CORTEX response templates.
 
@@ -12940,7 +13406,7 @@ Returns:
 
 ---
 
-## src.router
+## src\router
 
 CORTEX Universal Router
 
@@ -13017,7 +13483,7 @@ Returns:
 
 ---
 
-## src.session_manager
+## src\session_manager
 
 CORTEX Session Manager
 
@@ -13105,7 +13571,7 @@ Returns:
 
 ---
 
-## src.setup.__init__
+## src\setup\__init__
 
 CORTEX Setup System
 
@@ -13171,7 +13637,7 @@ Example:
 
 ---
 
-## src.setup.base_setup_module
+## src\setup\base_setup_module
 
 Base Setup Module Interface
 
@@ -13363,7 +13829,7 @@ Log error message.
 
 ---
 
-## src.setup.module_factory
+## src\setup\module_factory
 
 Setup Module Factory
 
@@ -13404,7 +13870,7 @@ Returns:
 
 ---
 
-## src.setup.modules.__init__
+## src\setup\modules\__init__
 
 Setup Modules Package
 
@@ -13416,7 +13882,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## src.setup.modules.brain_initialization_module
+## src\setup\modules\brain_initialization_module
 
 Brain Initialization Setup Module
 
@@ -13469,7 +13935,7 @@ Steps:
 
 ---
 
-## src.setup.modules.platform_detection_module
+## src\setup\modules\platform_detection_module
 
 Platform Detection Setup Module
 
@@ -13520,7 +13986,59 @@ Steps:
 
 ---
 
-## src.setup.modules.refactoring_tools_module
+## src\setup\modules\python_dependencies_module
+
+Python Dependencies Setup Module
+
+Installs required Python packages from requirements.txt.
+
+SOLID Principles:
+- Single Responsibility: Only handles Python package installation
+- Open/Closed: Extends BaseSetupModule without modifying it
+- Dependency Inversion: Depends on BaseSetupModule abstraction
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### PythonDependenciesModule
+
+Setup module for installing Python dependencies.
+
+Responsibilities:
+1. Verify requirements.txt exists
+2. Upgrade pip to latest version
+3. Install packages from requirements.txt
+4. Verify installations
+5. Update context with installed packages
+
+**Methods:**
+
+#### `get_metadata(self)`
+
+Return module metadata.
+
+#### `validate_prerequisites(self, context)`
+
+Validate prerequisites for dependency installation.
+
+Checks:
+1. Project root exists
+2. requirements.txt exists
+3. Python command available
+
+#### `execute(self, context)`
+
+Execute Python dependency installation.
+
+Steps:
+1. Upgrade pip
+2. Install from requirements.txt
+3. Verify installations
+4. Update context
+
+---
+
+## src\setup\modules\refactoring_tools_module
 
 Refactoring Tools Setup Module
 
@@ -13597,7 +14115,7 @@ Steps:
 
 ---
 
-## src.setup.modules.smart_refactoring_recommender
+## src\setup\modules\smart_refactoring_recommender
 
 Smart Refactoring Tool Recommender Module
 
@@ -13672,7 +14190,7 @@ Register the smart refactoring recommender module.
 
 ---
 
-## src.setup.modules.vision_api_module
+## src\setup\modules\vision_api_module
 
 Vision API Setup Module
 
@@ -13746,59 +14264,7 @@ Runs if:
 
 ---
 
-## src.setup.modulesthon_dependencies_module
-
-Python Dependencies Setup Module
-
-Installs required Python packages from requirements.txt.
-
-SOLID Principles:
-- Single Responsibility: Only handles Python package installation
-- Open/Closed: Extends BaseSetupModule without modifying it
-- Dependency Inversion: Depends on BaseSetupModule abstraction
-
-Author: Asif Hussain
-Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-
-### PythonDependenciesModule
-
-Setup module for installing Python dependencies.
-
-Responsibilities:
-1. Verify requirements.txt exists
-2. Upgrade pip to latest version
-3. Install packages from requirements.txt
-4. Verify installations
-5. Update context with installed packages
-
-**Methods:**
-
-#### `get_metadata(self)`
-
-Return module metadata.
-
-#### `validate_prerequisites(self, context)`
-
-Validate prerequisites for dependency installation.
-
-Checks:
-1. Project root exists
-2. requirements.txt exists
-3. Python command available
-
-#### `execute(self, context)`
-
-Execute Python dependency installation.
-
-Steps:
-1. Upgrade pip
-2. Install from requirements.txt
-3. Verify installations
-4. Update context
-
----
-
-## src.setup.setup_orchestrator
+## src\setup\setup_orchestrator
 
 Setup Orchestrator - Coordinates all setup modules
 
@@ -13927,13 +14393,13 @@ Convert report to dictionary.
 
 ---
 
-## src.tier0.__init__
+## src\tier0\__init__
 
 CORTEX Tier 0: Instinct Layer - Immutable Governance
 
 ---
 
-## src.tier0.brain_protector
+## src\tier0\brain_protector
 
 CORTEX Brain Protector - Architectural Integrity Guardian
 
@@ -14021,7 +14487,7 @@ Args:
 
 ---
 
-## src.tier0.cleanup_hook
+## src\tier0\cleanup_hook
 
 Tier 0: Smart Cleanup Hook (skeleton)
 
@@ -14054,7 +14520,7 @@ Detect and propose actions; do not execute destructive operations here.
 
 ---
 
-## src.tier0.context_optimizer
+## src\tier0\context_optimizer
 
 CORTEX Context Optimizer
 
@@ -14144,7 +14610,7 @@ Returns:
 
 ---
 
-## src.tier0.coverage_reporter
+## src\tier0\coverage_reporter
 
 CORTEX Test Coverage Reporter
 
@@ -14213,7 +14679,7 @@ Returns:
 
 ---
 
-## src.tier0.git_isolation
+## src\tier0\git_isolation
 
 CORTEX Git Isolation Enforcement
 Prevents CORTEX source code from being committed to user application repositories.
@@ -14284,7 +14750,7 @@ Returns:
 
 ---
 
-## src.tier0.governance_engine
+## src\tier0\governance_engine
 
 CORTEX Tier 0: Governance Engine
 Enforces immutable governance rules and protects system integrity.
@@ -14400,7 +14866,7 @@ Clear the violations log.
 
 ---
 
-## src.tier0.integrity_checker
+## src\tier0\integrity_checker
 
 CORTEX Brain Integrity Checker
 
@@ -14469,7 +14935,7 @@ Returns:
 
 ---
 
-## src.tier0.optimized_context_loader
+## src\tier0\optimized_context_loader
 
 Optimized Context Loader
 
@@ -14528,7 +14994,7 @@ Reset performance metrics
 
 ---
 
-## src.tier0.skull_protector
+## src\tier0\skull_protector
 
 SKULL Protection Layer - Safety, Knowledge, Validation & Learning Layer
 
@@ -14596,7 +15062,7 @@ Raises:
 
 ---
 
-## src.tier0.test_analyzer
+## src\tier0\test_analyzer
 
 CORTEX Test Analyzer
 =====================
@@ -14697,7 +15163,7 @@ CLI entry point for test analyzer.
 
 ---
 
-## src.tier0.test_discovery
+## src\tier0\test_discovery
 
 CORTEX Test Discovery System
 
@@ -14785,7 +15251,7 @@ Returns:
 
 ---
 
-## src.tier0.tier_validator
+## src\tier0\tier_validator
 
 CORTEX Tier Validator - Validates Brain Tier Integrity
 
@@ -14865,7 +15331,7 @@ Returns:
 
 ---
 
-## src.tier1.__init__
+## src\tier1\__init__
 
 CORTEX Tier 1: Working Memory
 Short-term storage for active conversations
@@ -14882,7 +15348,7 @@ Components:
 
 ---
 
-## src.tier1.cache_monitor
+## src\tier1\cache_monitor
 
 CORTEX Tier 1: Cache Explosion Monitor
 Monitor and prevent cache explosion in conversation history.
@@ -14963,7 +15429,7 @@ Returns:
 
 ---
 
-## src.tier1.conversation_manager
+## src\tier1\conversation_manager
 
 CORTEX Tier 1: Conversation Manager
 Manages conversation storage and retrieval in SQLite
@@ -15181,7 +15647,7 @@ Returns:
 
 ---
 
-## src.tier1.conversation_quality
+## src\tier1\conversation_quality
 
 CORTEX 3.0 - Conversation Quality Analyzer
 
@@ -15254,7 +15720,7 @@ Returns:
 
 ---
 
-## src.tier1.conversation_vault
+## src\tier1\conversation_vault
 
 CORTEX 3.0 - Conversation Vault Manager
 
@@ -15344,13 +15810,13 @@ Returns:
 
 ---
 
-## src.tier1.conversations.__init__
+## src\tier1\conversations\__init__
 
 Conversation management module.
 
 ---
 
-## src.tier1.conversations.conversation_manager
+## src\tier1\conversations\conversation_manager
 
 Conversation Manager - Handles conversation CRUD and lifecycle operations.
 
@@ -15439,7 +15905,7 @@ Args:
 
 ---
 
-## src.tier1.conversations.conversation_search
+## src\tier1\conversations\conversation_search
 
 Conversation Search - Handles conversation search operations.
 
@@ -15483,13 +15949,13 @@ Returns:
 
 ---
 
-## src.tier1.entities.__init__
+## src\tier1\entities\__init__
 
 Entity extraction module.
 
 ---
 
-## src.tier1.entities.entity_extractor
+## src\tier1\entities\entity_extractor
 
 Entity Extractor - Handles entity extraction from conversation content.
 
@@ -15528,7 +15994,7 @@ Get statistics on entity usage.
 
 ---
 
-## src.tier1.entity_extractor
+## src\tier1\entity_extractor
 
 CORTEX Tier 1: Entity Extractor
 Extracts entities from conversation text
@@ -15650,13 +16116,13 @@ Returns:
 
 ---
 
-## src.tier1.fifo.__init__
+## src\tier1\fifo\__init__
 
 FIFO queue management module.
 
 ---
 
-## src.tier1.fifo.queue_manager
+## src\tier1\fifo\queue_manager
 
 Queue Manager - Handles FIFO queue enforcement for conversations.
 
@@ -15684,7 +16150,7 @@ Returns:
 
 ---
 
-## src.tier1.file_tracker
+## src\tier1\file_tracker
 
 CORTEX Tier 1: File Tracker
 Tracks file modifications during conversations
@@ -15768,7 +16234,7 @@ Returns:
 
 ---
 
-## src.tier1.fusion_manager
+## src\tier1\fusion_manager
 
 CORTEX 3.0 Milestone 2 - Fusion Integration API
 
@@ -15830,7 +16296,7 @@ Returns:
 
 ---
 
-## src.tier1.lifecycle.__init__
+## src\tier1\lifecycle\__init__
 
 Conversation lifecycle management for CORTEX Tier 1.
 
@@ -15838,7 +16304,7 @@ Handles conversation creation, workflow state tracking, and closure.
 
 ---
 
-## src.tier1.lifecycle.conversation_lifecycle_manager
+## src\tier1\lifecycle\conversation_lifecycle_manager
 
 Conversation Lifecycle Manager - Handles conversation creation, workflow tracking, and closure.
 
@@ -15961,13 +16427,13 @@ Returns:
 
 ---
 
-## src.tier1.messages.__init__
+## src\tier1\messages\__init__
 
 Message storage module.
 
 ---
 
-## src.tier1.messages.message_store
+## src\tier1\messages\message_store
 
 Message Store - Handles message storage and retrieval operations.
 
@@ -16014,7 +16480,7 @@ Args:
 
 ---
 
-## src.tier1.migrate_tier1
+## src\tier1\migrate_tier1
 
 CORTEX Tier 1 Migration Script
 Migrates conversation data from JSONL to SQLite
@@ -16054,7 +16520,7 @@ Returns:
 
 ---
 
-## src.tier1.migration_add_conversation_import
+## src\tier1\migration_add_conversation_import
 
 CORTEX 3.0 - Tier 1 Migration: Add Conversation Import Support
 
@@ -16091,7 +16557,7 @@ Returns:
 
 ---
 
-## src.tier1.migration_add_sessions
+## src\tier1\migration_add_sessions
 
 Database migration: Add session support to Tier 1.
 
@@ -16120,7 +16586,7 @@ Run migration from command line.
 
 ---
 
-## src.tier1.ml_context_optimizer
+## src\tier1\ml_context_optimizer
 
 CORTEX Tier 1: ML Context Optimizer
 ML-powered context compression using TF-IDF relevance scoring.
@@ -16198,7 +16664,7 @@ Returns:
 
 ---
 
-## src.tier1.narrative_intelligence
+## src\tier1\narrative_intelligence
 
 CORTEX 3.0 Narrative Intelligence Module
 Advanced Fusion - Milestone 3
@@ -16271,7 +16737,7 @@ Import conversation data and create story elements
 
 ---
 
-## src.tier1.pattern_learning_engine
+## src\tier1\pattern_learning_engine
 
 CORTEX 3.0 Pattern Learning Engine
 Advanced Fusion - Milestone 3
@@ -16350,7 +16816,7 @@ Export learned patterns to a JSON file for backup or analysis
 
 ---
 
-## src.tier1.request_logger
+## src\tier1\request_logger
 
 CORTEX Tier 1: Request Logger
 Logs raw requests and responses
@@ -16444,7 +16910,7 @@ Returns:
 
 ---
 
-## src.tier1.session_correlation
+## src\tier1\session_correlation
 
 CORTEX 3.0 - Session-Ambient Correlation Layer
 
@@ -16514,7 +16980,7 @@ Returns:
 
 ---
 
-## src.tier1.session_token
+## src\tier1\session_token
 
 CORTEX Tier 1: Session Token Manager
 Provides persistent conversation IDs across chat restarts.
@@ -16709,7 +17175,7 @@ Returns:
 
 ---
 
-## src.tier1.sessions.__init__
+## src\tier1\sessions\__init__
 
 Session management for CORTEX Tier 1 Working Memory.
 
@@ -16717,7 +17183,7 @@ Provides workspace session tracking and conversation boundary detection.
 
 ---
 
-## src.tier1.sessions.session_manager
+## src\tier1\sessions\session_manager
 
 Session Manager - Handles workspace session lifecycle and boundary detection.
 
@@ -16807,7 +17273,7 @@ Returns:
 
 ---
 
-## src.tier1.smart_hint_generator
+## src\tier1\smart_hint_generator
 
 CORTEX 3.0 - Smart Hint Generator
 
@@ -16867,7 +17333,7 @@ Returns:
 
 ---
 
-## src.tier1.smart_hint_integration
+## src\tier1\smart_hint_integration
 
 CORTEX 3.0 - Smart Hint Integration
 
@@ -16988,7 +17454,7 @@ Returns:
 
 ---
 
-## src.tier1.smart_recommendations
+## src\tier1\smart_recommendations
 
 CORTEX 3.0 - Smart Recommendations API
 Advanced Fusion Features - Milestone 3
@@ -17062,7 +17528,7 @@ Optimize recommendation system based on collected data and feedback
 
 ---
 
-## src.tier1.temporal_correlator
+## src\tier1\temporal_correlator
 
 CORTEX 3.0 Milestone 2 - Temporal Correlation Layer
 
@@ -17120,7 +17586,7 @@ Returns:
 
 ---
 
-## src.tier1.test_tier1
+## src\tier1\test_tier1
 
 CORTEX Tier 1: Unit Tests
 Comprehensive test suite for Tier 1 Working Memory
@@ -17227,7 +17693,7 @@ Test complete conversation workflow
 
 ---
 
-## src.tier1.tier1_api
+## src\tier1\tier1_api
 
 CORTEX Tier 1: API Wrapper
 Unified API for Tier 1 Working Memory operations
@@ -17406,7 +17872,7 @@ Returns:
 
 ---
 
-## src.tier1.token_metrics
+## src\tier1\token_metrics
 
 CORTEX Tier 1: Token Metrics Collector
 Collect and track token usage metrics for cost monitoring and optimization analysis.
@@ -17560,7 +18026,7 @@ Returns:
 
 ---
 
-## src.tier1.vision_api
+## src\tier1\vision_api
 
 Vision API Integration for CORTEX
 
@@ -17622,7 +18088,7 @@ Clear cached results.
 
 ---
 
-## src.tier1.work_state_manager
+## src\tier1\work_state_manager
 
 CORTEX Tier 1: Work State Manager
 Tracks in-progress work to enable seamless "continue" functionality.
@@ -17798,7 +18264,7 @@ Returns:
 
 ---
 
-## src.tier1.working_memory
+## src\tier1\working_memory
 
 CORTEX Tier 1: Working Memory (Modularized)
 Short-term memory storage with FIFO queue (20 conversation limit).
@@ -18082,7 +18548,7 @@ Close any open connections (for cleanup in tests).
 
 ---
 
-## src.tier1.working_memory_legacy
+## src\tier1\working_memory_legacy
 
 CORTEX Tier 1: Working Memory
 Short-term memory storage with FIFO queue (20 conversation limit).
@@ -18247,7 +18713,7 @@ Close any open connections (for cleanup in tests).
 
 ---
 
-## src.tier2.__init__
+## src\tier2\__init__
 
 CORTEX Tier 2: Knowledge Graph
 
@@ -18255,7 +18721,7 @@ Backward compatibility layer during Phase 1 modularization.
 
 ---
 
-## src.tier2.amnesia
+## src\tier2\amnesia
 
 CORTEX Tier 2: Enhanced Amnesia System
 Scope-aware selective memory deletion with safety protections.
@@ -18381,7 +18847,7 @@ Returns:
 
 ---
 
-## src.tier2.knowledge_graph.__init__
+## src\tier2\knowledge_graph\__init__
 
 CORTEX Tier 2: Knowledge Graph (Modular Architecture)
 
@@ -18401,7 +18867,7 @@ Once modularization is complete, this will import from the new coordinator.
 
 ---
 
-## src.tier2.knowledge_graph.database
+## src\tier2\knowledge_graph\database
 
 Knowledge Graph Database Module
 
@@ -18528,7 +18994,7 @@ Example:
 
 ---
 
-## src.tier2.knowledge_graph.database.__init__
+## src\tier2\knowledge_graph\database\__init__
 
 Knowledge Graph Database Package
 
@@ -18536,7 +19002,7 @@ Handles database schema and connections.
 
 ---
 
-## src.tier2.knowledge_graph.database.connection
+## src\tier2\knowledge_graph\database\connection
 
 Knowledge Graph Database Connection
 
@@ -18623,7 +19089,7 @@ Returns:
 
 ---
 
-## src.tier2.knowledge_graph.database.schema
+## src\tier2\knowledge_graph\database\schema
 
 Knowledge Graph Database Schema
 
@@ -18650,7 +19116,7 @@ Args:
 
 ---
 
-## src.tier2.knowledge_graph.knowledge_graph
+## src\tier2\knowledge_graph\knowledge_graph
 
 KnowledgeGraph Facade (Coordinator)
 
@@ -18766,13 +19232,13 @@ Returns:
 
 ---
 
-## src.tier2.knowledge_graph.patterns.__init__
+## src\tier2\knowledge_graph\patterns\__init__
 
 Pattern management modules for Knowledge Graph.
 
 ---
 
-## src.tier2.knowledge_graph.patterns.pattern_decay
+## src\tier2\knowledge_graph\patterns\pattern_decay
 
 Pattern Decay Module
 
@@ -18901,7 +19367,7 @@ Performance: <30ms
 
 ---
 
-## src.tier2.knowledge_graph.patterns.pattern_search
+## src\tier2\knowledge_graph\patterns\pattern_search
 
 Pattern Search Module
 
@@ -19018,7 +19484,7 @@ Returns:
 
 ---
 
-## src.tier2.knowledge_graph.patterns.pattern_store
+## src\tier2\knowledge_graph\patterns\pattern_store
 
 Pattern Store Module
 
@@ -19171,13 +19637,13 @@ Performance: ~30ms for 100 patterns
 
 ---
 
-## src.tier2.knowledge_graph.relationships.__init__
+## src\tier2\knowledge_graph\relationships\__init__
 
 Relationship management modules for Knowledge Graph.
 
 ---
 
-## src.tier2.knowledge_graph.relationships.relationship_manager
+## src\tier2\knowledge_graph\relationships\relationship_manager
 
 Relationship Manager Module
 
@@ -19280,13 +19746,13 @@ Performance: <150ms for depth=3
 
 ---
 
-## src.tier2.knowledge_graph.tags.__init__
+## src\tier2\knowledge_graph\tags\__init__
 
 Tag management modules for Knowledge Graph.
 
 ---
 
-## src.tier2.knowledge_graph.tags.tag_manager
+## src\tier2\knowledge_graph\tags\tag_manager
 
 Tag Manager Module
 
@@ -19397,7 +19863,7 @@ Performance: <30ms
 
 ---
 
-## src.tier2.knowledge_graph.types
+## src\tier2\knowledge_graph\types
 
 Knowledge Graph Shared Types
 
@@ -19417,7 +19883,7 @@ Pattern data structure.
 
 ---
 
-## src.tier2.knowledge_graph_legacy
+## src\tier2\knowledge_graph_legacy
 
 CORTEX Tier 2: Knowledge Graph
 Long-term memory with FTS5 semantic search and pattern relationships.
@@ -19654,7 +20120,7 @@ Close any open database connections.
 
 ---
 
-## src.tier2.migrate_add_boundaries
+## src\tier2\migrate_add_boundaries
 
 CORTEX Tier 2: Schema Migration - Add Namespace/Scope Boundaries
 
@@ -19735,7 +20201,7 @@ Main migration entry point.
 
 ---
 
-## src.tier2.migrate_tier2
+## src\tier2\migrate_tier2
 
 CORTEX Tier 2 Migration Script
 Migrates knowledge graph data from YAML to SQLite with FTS5
@@ -19780,7 +20246,7 @@ Returns:
 
 ---
 
-## src.tier2.oracle_crawler
+## src\tier2\oracle_crawler
 
 Oracle Database Schema Crawler for CORTEX Knowledge Extraction
 
@@ -19870,7 +20336,7 @@ Returns:
 
 ---
 
-## src.tier2.pattern_cleanup
+## src\tier2\pattern_cleanup
 
 CORTEX Tier 2: Pattern Cleanup System
 Automated maintenance for knowledge graph patterns.
@@ -19967,7 +20433,7 @@ Returns:
 
 ---
 
-## src.tier2.personal_knowledge_archive
+## src\tier2\personal_knowledge_archive
 
 CORTEX Knowledge Archive - Personal Cross-Project Learning System
 
@@ -20048,7 +20514,7 @@ Update project statistics
 
 ---
 
-## src.tier2.plan_models
+## src\tier2\plan_models
 
 ### Meta
 
@@ -20094,7 +20560,7 @@ Update project statistics
 
 ---
 
-## src.tier3.__init__
+## src\tier3\__init__
 
 CORTEX Tier 3: Development Context Intelligence
 
@@ -20102,13 +20568,13 @@ Real-time project intelligence providing data-driven planning and proactive warn
 
 ---
 
-## src.tier3.analysis.__init__
+## src\tier3\analysis\__init__
 
 CORTEX Tier 3: Analysis Modules
 
 ---
 
-## src.tier3.analysis.insight_generator
+## src\tier3\analysis\insight_generator
 
 CORTEX Tier 3: Insight Generation
 Generates actionable insights from collected metrics.
@@ -20165,7 +20631,7 @@ Returns:
 
 ---
 
-## src.tier3.analysis.velocity_analyzer
+## src\tier3\analysis\velocity_analyzer
 
 CORTEX Tier 3: Velocity Analysis
 Analyzes commit velocity trends and detects productivity patterns.
@@ -20214,7 +20680,7 @@ Returns:
 
 ---
 
-## src.tier3.context_intelligence
+## src\tier3\context_intelligence
 
 CORTEX Tier 3: Development Context Intelligence
 Part 1: Imports, Enums, and Data Classes
@@ -20385,7 +20851,7 @@ Args:
 
 ---
 
-## src.tier3.context_intelligence_legacy
+## src\tier3\context_intelligence_legacy
 
 CORTEX Tier 3: Development Context Intelligence
 Part 1: Imports, Enums, and Data Classes
@@ -20554,13 +21020,13 @@ Args:
 
 ---
 
-## src.tier3.metrics.__init__
+## src\tier3\metrics\__init__
 
 CORTEX Tier 3: Metrics Collection Modules
 
 ---
 
-## src.tier3.metrics.file_metrics
+## src\tier3\metrics\file_metrics
 
 CORTEX Tier 3: File Metrics Analysis
 Handles file hotspot detection and churn analysis.
@@ -20637,7 +21103,7 @@ Returns:
 
 ---
 
-## src.tier3.metrics.git_metrics
+## src\tier3\metrics\git_metrics
 
 CORTEX Tier 3: Git Metrics Collection
 Handles git activity tracking and commit velocity analysis.
@@ -20690,7 +21156,7 @@ Returns:
 
 ---
 
-## src.tier3.migrate_tier3
+## src\tier3\migrate_tier3
 
 CORTEX Tier 3 Migration Script
 Migrates development context from YAML to JSON (optimized structure)
@@ -20715,13 +21181,13 @@ Returns:
 
 ---
 
-## src.tier3.storage.__init__
+## src\tier3\storage\__init__
 
 CORTEX Tier 3: Storage Module
 
 ---
 
-## src.tier3.storage.context_store
+## src\tier3\storage\context_store
 
 CORTEX Tier 3: Context Store
 Handles database initialization and schema management.
@@ -20769,7 +21235,2000 @@ Returns:
 
 ---
 
-## src.utils.incremental_test_runner
+## src\track_a\__init__
+
+CORTEX Track A: Dual-Channel Memory Architecture - Conversational Channel
+========================================================================
+
+Purpose: Enables import and processing of GitHub Copilot Chat conversations
+into CORTEX brain for long-term learning and pattern recognition.
+
+Architecture:
+- Conversation Import: Manual capture interface
+- Parsers: Format-specific conversation parsers (Copilot, Slack, etc.)
+- Extractors: Semantic analysis (entities, intents, patterns)
+- Integrations: ConversationalChannel integration with Tier 1/2
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+Repository: https://github.com/asifhussain60/CORTEX
+
+---
+
+## src\track_a\conversation_import\__init__
+
+Conversation Import Module
+=========================
+
+Purpose: Manual conversation capture and import interface.
+Provides user-facing functionality for importing captured conversations.
+
+Components:
+- ConversationImporter: Main import orchestrator
+- ValidationRules: Conversation structure validation
+- ImportReport: Import status and analytics
+
+Status: Phase 1.2 (Week 1-2)
+
+---
+
+## src\track_a\conversation_import\conversation_importer
+
+Conversation Importer
+====================
+
+Purpose: Main orchestrator for manual conversation import into CORTEX brain.
+Coordinates parsing, extraction, and storage of captured conversations.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### ConversationImportError
+
+Raised when conversation import fails.
+
+### ValidationError
+
+Raised when conversation validation fails.
+
+### ConversationImporter
+
+Main orchestrator for importing captured conversations into CORTEX brain.
+
+Workflow:
+1. Accept input (file path, text content, or clipboard)
+2. Validate conversation structure
+3. Parse with appropriate parser (CopilotParser, etc.)
+4. Extract semantic information (entities, intents, patterns)
+5. Route to ConversationalChannel for storage
+6. Return import report with statistics
+
+Example:
+    ```python
+    importer = ConversationImporter()
+    
+    # Import from file
+    report = importer.import_from_file("conversation-capture-2025-11-15.md")
+    
+    # Import from text
+    report = importer.import_from_text(conversation_text)
+    
+    # Import from clipboard
+    report = importer.import_from_clipboard()
+    ```
+
+**Methods:**
+
+#### `import_from_file(self, file_path, validate, extract_semantics)`
+
+Import conversation from a file.
+
+Args:
+    file_path: Path to conversation file (Markdown, JSON, or text)
+    validate: Whether to validate conversation structure
+    extract_semantics: Whether to extract entities/intents
+
+Returns:
+    Import report dictionary with statistics and status
+
+Raises:
+    ConversationImportError: If import fails
+    ValidationError: If validation fails
+    FileNotFoundError: If file doesn't exist
+
+#### `import_from_text(self, content, source, validate, extract_semantics)`
+
+Import conversation from text content.
+
+Args:
+    content: Conversation text (Markdown or JSON format)
+    source: Source identifier (e.g., "manual_text", "clipboard")
+    validate: Whether to validate conversation structure
+    extract_semantics: Whether to extract entities/intents
+
+Returns:
+    Import report dictionary with statistics and status
+
+Raises:
+    ConversationImportError: If import fails
+    ValidationError: If validation fails
+
+#### `import_from_clipboard(self, validate, extract_semantics)`
+
+Import conversation from clipboard.
+
+Args:
+    validate: Whether to validate conversation structure
+    extract_semantics: Whether to extract entities/intents
+
+Returns:
+    Import report dictionary with statistics and status
+
+Raises:
+    ConversationImportError: If import fails
+    ValidationError: If validation fails
+
+Note:
+    Requires pyperclip or similar clipboard access library.
+    Falls back to manual text input if clipboard unavailable.
+
+#### `get_import_statistics(self)`
+
+Get statistics about imported conversations.
+
+Returns:
+    Statistics dictionary from ConversationalChannelAdapter
+
+### `quick_import(file_path)`
+
+Quick import helper function.
+
+Args:
+    file_path: Path to conversation file
+
+Returns:
+    Import report dictionary
+
+Example:
+    ```python
+    from track_a.conversation_import import quick_import
+    
+    report = quick_import("conversation-capture-2025-11-15.md")
+    print(f"Imported {report['messages_imported']} messages")
+    ```
+
+---
+
+## src\track_a\extractors\__init__
+
+Semantic Extractors Module
+==========================
+
+Purpose: Extract semantic information from conversations.
+Identifies entities, intents, patterns, and learning opportunities.
+
+Extractors:
+- EntityExtractor: Files, classes, functions, variables
+- IntentExtractor: User intents (PLAN, EXECUTE, TEST, etc.)
+- PatternExtractor: Workflow patterns and anti-patterns
+- QualityScorer: Conversation quality assessment
+
+Status: Phase 1.2 (Week 1-2)
+
+---
+
+## src\track_a\extractors\semantic_extractor
+
+Semantic Extractor
+==================
+
+Purpose: Extract semantic information from parsed conversations including
+entities, intents, patterns, and quality assessment.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### SemanticExtractor
+
+Extract semantic information from conversations for CORTEX learning.
+
+Extractions:
+1. Entities: Files, classes, functions, variables mentioned
+2. Intents: User intent patterns (PLAN, EXECUTE, TEST, VALIDATE, etc.)
+3. Patterns: Workflow patterns, problem-solution pairs
+4. Quality Score: Strategic value assessment (1-10 scale)
+
+Output format:
+{
+    "entities": [
+        {"type": "file", "value": "conversation_importer.py", "confidence": 0.9},
+        {"type": "class", "value": "ConversationImporter", "confidence": 0.95}
+    ],
+    "intents": [
+        {"intent": "EXECUTE", "confidence": 0.85, "message_index": 0}
+    ],
+    "patterns": [
+        {
+            "type": "workflow",
+            "name": "conversation_import_workflow",
+            "steps": ["validate", "parse", "extract", "store"],
+            "confidence": 0.8
+        }
+    ],
+    "quality_score": 8.5,
+    "quality_factors": {
+        "has_code_examples": true,
+        "has_problem_solution": true,
+        "multi_turn": true,
+        "technical_depth": "high"
+    }
+}
+
+**Methods:**
+
+#### `extract(self, conversation)`
+
+Extract all semantic information from conversation.
+
+Args:
+    conversation: Parsed conversation from CopilotParser
+
+Returns:
+    Semantic data dictionary
+
+---
+
+## src\track_a\integrations\__init__
+
+Integration Module
+=================
+
+Purpose: Integration with CORTEX core systems (Tier 1, Tier 2, ConversationalChannel).
+Bridges Track A functionality with existing CORTEX architecture.
+
+Integrations:
+- ConversationalChannelAdapter: Dual-channel memory integration
+- Tier1Connector: Working memory storage
+- Tier2Connector: Knowledge graph pattern learning
+- HealthMonitor: Track A health metrics
+
+Status: Phase 1.2 (Week 1-2)
+
+---
+
+## src\track_a\integrations\conversational_channel_adapter
+
+Conversational Channel Adapter
+===============================
+
+Purpose: Adapter for integrating with dual_channel_memory.py ConversationalChannel.
+Provides clean interface for storing and retrieving conversations in Tier 1.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+Phase 2: Real Tier 1 Storage Integration
+- Replaced mock list storage with WorkingMemory persistence
+- SQLite-backed storage with ACID guarantees
+- Cross-session persistence support
+- Backward-compatible API (all existing tests pass)
+
+### ConversationalChannelAdapter
+
+Adapter for ConversationalChannel from dual_channel_memory.py.
+
+Phase 2: Real Tier 1 storage integration complete.
+
+Responsibilities:
+- Store parsed conversations in Tier 1 via WorkingMemory
+- Preserve semantic metadata (entities, intents, patterns)
+- Support quality-based filtering
+- Provide retrieval interface for imported conversations
+- Persist conversations across sessions (SQLite)
+
+Integration: Uses WorkingMemory.import_conversation() for real persistence.
+
+**Methods:**
+
+#### `store_conversation(self, conversation, source, quality_threshold)`
+
+Store conversation via WorkingMemory (real Tier 1 persistence).
+
+Args:
+    conversation: Parsed conversation with semantic data
+    source: Source identifier (e.g., "manual_import", "clipboard")
+    quality_threshold: Minimum quality score (optional filter)
+
+Returns:
+    Storage result dictionary with conversation_id
+
+Phase 2: Now uses WorkingMemory.import_conversation() for real persistence.
+
+#### `retrieve_conversation(self, conversation_id)`
+
+Retrieve conversation by ID from Tier 1 storage.
+
+Args:
+    conversation_id: Conversation identifier
+
+Returns:
+    Full conversation record with conversation_id and conversation, or None if not found
+
+Phase 2: Queries WorkingMemory SQLite database.
+
+#### `query_by_quality(self, min_quality, max_quality, limit)`
+
+Query conversations by quality score range from Tier 1 storage.
+
+Args:
+    min_quality: Minimum quality score
+    max_quality: Maximum quality score
+    limit: Maximum results to return
+
+Returns:
+    List of conversation dictionaries
+
+Phase 2: Queries WorkingMemory SQLite with quality filters.
+
+#### `query_by_entities(self, entity_type, entity_value, limit)`
+
+Query conversations mentioning specific entities from Tier 1 storage.
+
+Args:
+    entity_type: Entity type (file, class, function)
+    entity_value: Entity value to search for
+    limit: Maximum results
+
+Returns:
+    List of matching conversations
+
+Phase 2: Queries WorkingMemory SQLite with entity filters.
+
+#### `get_statistics(self)`
+
+Get statistics about stored conversations from Tier 1 storage.
+
+Returns:
+    Statistics dictionary with conversation counts and quality distribution
+
+Phase 2: Queries WorkingMemory SQLite for real statistics.
+
+---
+
+## src\track_a\parsers\__init__
+
+Conversation Parsers Module
+===========================
+
+Purpose: Format-specific parsers for different conversation sources.
+Converts raw conversation data into normalized CORTEX format.
+
+Supported Formats:
+- GitHub Copilot Chat (primary)
+- Markdown conversation captures
+- JSON conversation exports
+- Future: Slack, Discord, etc.
+
+Status: Phase 1.2 (Week 1-2)
+
+---
+
+## src\track_a\parsers\copilot_parser
+
+GitHub Copilot Chat Parser
+==========================
+
+Purpose: Parse GitHub Copilot Chat conversations into normalized CORTEX format.
+Handles both Markdown and JSON conversation formats.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### CopilotParserError
+
+Raised when parsing fails.
+
+### CopilotParser
+
+Parser for GitHub Copilot Chat conversation formats.
+
+Supported formats:
+- Markdown conversation captures (most common)
+- JSON exports from VS Code Copilot Chat
+- Plain text with conversation markers
+
+Output format:
+{
+    "format": "markdown" | "json" | "text",
+    "messages": [
+        {
+            "role": "user" | "assistant",
+            "content": "message text",
+            "timestamp": "ISO 8601 timestamp",
+            "metadata": {}
+        }
+    ],
+    "metadata": {
+        "source": "copilot_chat",
+        "parsed_at": "ISO 8601 timestamp",
+        "message_count": int,
+        "has_code_blocks": bool
+    }
+}
+
+**Methods:**
+
+#### `parse(self, content)`
+
+Parse conversation content into normalized format.
+
+Args:
+    content: Raw conversation content
+
+Returns:
+    Parsed conversation dictionary
+
+Raises:
+    CopilotParserError: If parsing fails
+
+#### `extract_code_blocks(self, conversation)`
+
+Extract code blocks from conversation messages.
+
+Args:
+    conversation: Parsed conversation dictionary
+
+Returns:
+    List of code blocks with language and content
+
+---
+
+## src\track_b\__init__
+
+CORTEX 3.0 Track B (Mac) Implementation
+=====================================
+
+Track B focuses on:
+- Execution Channel: Ambient daemon, file monitoring, git hooks, terminal tracking
+- Intelligent Context: ML code analysis, proactive warnings, pattern detection
+- Template Integration: Zero-execution help responses
+- macOS Platform Optimization: Zsh integration, Xcode compatibility
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Repository: https://github.com/asifhussain60/CORTEX
+
+---
+
+## src\track_b\execution_channel\__init__
+
+CORTEX 3.0 Track B: Execution Channel
+=====================================
+
+The Execution Channel captures real-time development activity through:
+- Ambient Daemon: Central coordination and orchestration
+- File Monitor: Filesystem change detection and analysis  
+- Git Monitor: Repository operation tracking
+- Terminal Tracker: Command execution monitoring
+
+This module provides automatic context capture without user intervention,
+feeding development intelligence to the CORTEX brain system.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+---
+
+## src\track_b\execution_channel\ambient_daemon
+
+CORTEX 3.0 Track B: Ambient Daemon
+=================================
+
+The Ambient Daemon is the central coordination component for Track B's execution channel.
+It orchestrates file monitoring, git monitoring, and terminal tracking to capture
+development context automatically without user intervention.
+
+Key Features:
+- Background process that runs continuously
+- Coordinates multiple monitoring components
+- Feeds captured data to Tier 1 memory system
+- Handles macOS-specific optimizations
+- Provides execution trace generation
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### DaemonConfig
+
+Configuration for the Ambient Daemon.
+
+**Methods:**
+
+### ExecutionEvent
+
+Represents a captured execution event.
+
+### AmbientDaemon
+
+Ambient Daemon for CORTEX Track B Execution Channel
+
+Continuously monitors development activity and feeds context
+to CORTEX brain without user intervention.
+
+**Methods:**
+
+#### `get_status(self)`
+
+Get current daemon status.
+
+#### `get_health(self)`
+
+Get health status for component interface compliance.
+
+#### `initialize(self)`
+
+Initialize the daemon for operation interface compliance.
+
+#### `cleanup(self)`
+
+Cleanup daemon resources for operation interface compliance.
+
+---
+
+## src\track_b\execution_channel\file_monitor
+
+CORTEX 3.0 Track B: File Monitor
+===============================
+
+File monitoring component for capturing filesystem changes in real-time.
+Optimized for macOS with FSEvents integration and intelligent filtering.
+
+Key Features:
+- Real-time file system monitoring using FSEvents (macOS optimized)
+- Intelligent filtering to avoid noise
+- Content change detection and analysis
+- Integration with CORTEX brain for context capture
+- Performance optimized for large codebases
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### FileChangeEvent
+
+Represents a file change event.
+
+### FileMonitor
+
+File monitoring component for CORTEX Track B
+
+Monitors filesystem changes and provides intelligent filtering
+and content analysis for development context capture.
+
+**Methods:**
+
+#### `get_status(self)`
+
+Get file monitor status.
+
+#### `get_health(self)`
+
+Get health status for component interface compliance.
+
+#### `initialize(self)`
+
+Initialize the file monitor for operation interface compliance.
+
+#### `cleanup(self)`
+
+Cleanup file monitor resources for operation interface compliance.
+
+---
+
+## src\track_b\execution_channel\git_monitor
+
+CORTEX 3.0 Track B: Git Monitor
+==============================
+
+Git monitoring component for capturing repository changes and developer workflow.
+Integrates with git hooks and provides intelligent commit analysis.
+
+Key Features:
+- Git hook integration for real-time change detection
+- Commit analysis and pattern recognition
+- Branch workflow tracking
+- Integration with CORTEX brain for project evolution tracking
+- macOS git optimization
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### GitEvent
+
+Represents a git operation event.
+
+### GitMonitor
+
+Git monitoring component for CORTEX Track B
+
+Monitors git operations and analyzes repository evolution
+for development context capture.
+
+**Methods:**
+
+#### `get_status(self)`
+
+Get git monitor status.
+
+---
+
+## src\track_b\execution_channel\terminal_tracker
+
+CORTEX 3.0 Track B: Terminal Tracker
+====================================
+
+Terminal monitoring component for capturing command execution and developer workflow.
+Optimized for macOS with intelligent command analysis and context extraction.
+
+Key Features:
+- Terminal session monitoring
+- Command execution tracking  
+- Output analysis and error detection
+- Developer workflow pattern recognition
+- Integration with CORTEX brain for process context
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### TerminalEvent
+
+Represents a terminal command event.
+
+### TerminalTracker
+
+Terminal tracking component for CORTEX Track B
+
+Monitors terminal activity and command execution to capture
+development workflow and process context.
+
+**Methods:**
+
+#### `get_status(self)`
+
+Get terminal tracker status.
+
+---
+
+## src\track_b\integration\__init__
+
+Track B Integration Package
+
+Handles integration planning and execution between Track A and Track B.
+
+Author: Asif Hussain  
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+---
+
+## src\track_b\integration\format_converter
+
+Track A/B Data Format Converter
+===============================
+
+Provides conversion layer between Track A and Track B data formats
+to ensure compatibility during integration.
+
+Key Features:
+- Converts between Track A 'result' and Track B 'data' response fields
+- Maintains backward compatibility
+- Transparent conversion during runtime
+- Preserves all data integrity
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### FormatConverter
+
+Converts data formats between Track A and Track B for compatibility.
+
+Track A Format: {"status": str, "result": Any, ...}
+Track B Format: {"status": str, "data": Any, ...}
+
+**Methods:**
+
+#### `convert_track_a_to_track_b(self, track_a_response)`
+
+Convert Track A response format to Track B format.
+
+Converts 'result' field to 'data' field while preserving all other fields.
+
+Args:
+    track_a_response: Response in Track A format {"status": ..., "result": ...}
+    
+Returns:
+    Response in Track B format {"status": ..., "data": ...}
+
+#### `convert_track_b_to_track_a(self, track_b_response)`
+
+Convert Track B response format to Track A format.
+
+Converts 'data' field to 'result' field while preserving all other fields.
+
+Args:
+    track_b_response: Response in Track B format {"status": ..., "data": ...}
+    
+Returns:
+    Response in Track A format {"status": ..., "result": ...}
+
+#### `auto_convert_response(self, response, target_format)`
+
+Automatically convert response to target format.
+
+Args:
+    response: Response dictionary in any format
+    target_format: 'track_a' or 'track_b'
+    
+Returns:
+    Response converted to target format
+
+#### `detect_response_format(self, response)`
+
+Detect whether response is in Track A or Track B format.
+
+Args:
+    response: Response dictionary
+    
+Returns:
+    'track_a', 'track_b', or 'unknown'
+
+#### `is_conversion_needed(self, response, target_format)`
+
+Check if conversion is needed for the response.
+
+Args:
+    response: Response dictionary
+    target_format: 'track_a' or 'track_b'
+    
+Returns:
+    True if conversion is needed, False otherwise
+
+#### `create_compatible_response(self, status, data, format_type)`
+
+Create a response compatible with both Track A and Track B.
+
+Args:
+    status: Response status
+    data: Response data/result
+    format_type: 'track_a', 'track_b', or 'universal'
+    **kwargs: Additional response fields
+    
+Returns:
+    Response dictionary in specified format
+
+#### `get_conversion_stats(self)`
+
+Get conversion statistics.
+
+#### `clear_stats(self)`
+
+Clear conversion statistics.
+
+### `convert_to_track_a(response)`
+
+Convenience function to convert response to Track A format.
+
+### `convert_to_track_b(response)`
+
+Convenience function to convert response to Track B format.
+
+### `auto_convert(response, target_format)`
+
+Convenience function to auto-convert response to target format.
+
+### `create_universal_response(status, data)`
+
+Convenience function to create universally compatible response.
+
+---
+
+## src\track_b\integration\track_a_analysis
+
+Track A Integration Planning - CORTEX 3.0
+
+Comprehensive analysis of Track A architecture and planning for seamless
+integration with Track B systems.
+
+Generated: November 15, 2025
+Author: Asif Hussain  
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### ArchitecturalComponent
+
+Represents a Track A architectural component
+
+### IntegrationChallenge
+
+Represents an integration challenge between tracks
+
+### IntegrationStrategy
+
+Strategy for integrating specific components
+
+### IntegrationPlan
+
+Comprehensive integration plan
+
+### TrackAAnalyzer
+
+Analyzes Track A architecture for integration planning.
+
+Discovers:
+- Core components and their responsibilities
+- API surfaces and integration points
+- Dependency relationships
+- Configuration patterns
+- Plugin architecture
+
+**Methods:**
+
+### IntegrationPlanner
+
+Plans integration strategy between Track A and Track B.
+
+Analyzes:
+- Component overlaps and conflicts
+- API compatibility
+- Data structure alignment  
+- Integration approaches
+- Risk assessment
+
+**Methods:**
+
+---
+
+## src\track_b\intelligent_context\__init__
+
+CORTEX 3.0 Track B: Intelligent Context System
+==============================================
+
+The Intelligent Context System provides ML-powered analysis and understanding
+of development activity through:
+- ML Code Analyzer: Semantic code analysis and quality assessment
+- Proactive Warnings: Real-time issue detection and prevention
+- Pattern Detector: Development pattern recognition and learning
+- Context Inference: Multi-source context understanding and prediction
+
+This module enables CORTEX to understand and anticipate developer needs
+through intelligent analysis of code, patterns, and development workflows.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+---
+
+## src\track_b\intelligent_context\context_inference
+
+CORTEX 3.0 Track B: Context Inference Engine
+============================================
+
+Advanced context inference system that builds understanding of development
+context from multiple sources and provides intelligent insights.
+
+Key Features:
+- Multi-source context fusion
+- Semantic understanding of development activity
+- Intent prediction and recommendation
+- Contextual memory and learning
+- Integration with CORTEX brain tiers
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### ContextType
+
+Types of development context.
+
+### ConfidenceLevel
+
+Confidence levels for context inference.
+
+### ContextSignal
+
+Individual signal contributing to context inference.
+
+### InferredContext
+
+Represents inferred development context.
+
+### DevelopmentSession
+
+Represents a development session context.
+
+### ContextInference
+
+Context inference engine for CORTEX Track B
+
+Analyzes multiple streams of development activity to infer
+current context, predict next actions, and provide recommendations.
+
+**Methods:**
+
+#### `add_signal(self, signal)`
+
+Add a new context signal for processing.
+
+#### `get_current_context(self)`
+
+Get the most relevant current context.
+
+#### `get_context_summary(self)`
+
+Get summary of current context state.
+
+---
+
+## src\track_b\intelligent_context\ml_code_analyzer
+
+CORTEX 3.0 Track B: ML Code Analyzer
+====================================
+
+Machine Learning powered code analysis component for intelligent context extraction.
+Provides semantic understanding of code changes and development patterns.
+
+Key Features:
+- Code semantic analysis using AST and pattern recognition
+- Change impact analysis
+- Code quality assessment
+- Architectural pattern detection
+- Integration with CORTEX brain for learning
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### CodeChangeType
+
+Types of code changes detected.
+
+### CodeAnalysis
+
+Results of code analysis.
+
+### CodeElement
+
+Represents a code element (function, class, etc.).
+
+### MLCodeAnalyzer
+
+ML-powered code analyzer for CORTEX Track B
+
+Provides intelligent analysis of code changes and development patterns
+using abstract syntax trees and pattern recognition algorithms.
+
+**Methods:**
+
+#### `get_language(self, file_path)`
+
+Determine the programming language of a file.
+
+#### `is_supported_file(self, file_path)`
+
+Check if file type is supported for analysis.
+
+#### `analyze_file(self, file_path)`
+
+Perform comprehensive analysis of a code file.
+
+#### `compare_files(self, old_content, new_content, language)`
+
+Compare two versions of a file and identify change types.
+
+#### `get_supported_languages(self)`
+
+Get list of supported programming languages.
+
+### PythonASTAnalyzer
+
+AST visitor for analyzing Python code semantics.
+
+**Methods:**
+
+#### `visit_FunctionDef(self, node)`
+
+#### `visit_ClassDef(self, node)`
+
+#### `visit_Import(self, node)`
+
+#### `visit_ImportFrom(self, node)`
+
+#### `visit_If(self, node)`
+
+#### `visit_While(self, node)`
+
+#### `visit_For(self, node)`
+
+#### `generic_visit(self, node)`
+
+---
+
+## src\track_b\intelligent_context\pattern_detector
+
+CORTEX 3.0 Track B: Pattern Detector
+====================================
+
+Advanced pattern detection system that learns from development workflows
+and identifies recurring patterns, anti-patterns, and optimization opportunities.
+
+Key Features:
+- Workflow pattern recognition
+- Code pattern analysis
+- Performance bottleneck detection
+- Development habit analysis
+- Adaptive pattern learning
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### PatternType
+
+Types of patterns that can be detected.
+
+### PatternConfidence
+
+Confidence levels for pattern detection.
+
+### DetectedPattern
+
+Represents a detected development pattern.
+
+**Methods:**
+
+### PatternContext
+
+Context information for pattern analysis.
+
+### PatternDetector
+
+Advanced pattern detection system for CORTEX Track B
+
+Analyzes development activity to identify patterns, anti-patterns,
+and opportunities for optimization and improvement.
+
+**Methods:**
+
+#### `add_event(self, event)`
+
+Add a development event for pattern analysis.
+
+#### `analyze_patterns(self, context)`
+
+Perform comprehensive pattern analysis.
+
+#### `get_patterns_by_type(self, pattern_type)`
+
+Get patterns filtered by type.
+
+#### `get_high_impact_patterns(self)`
+
+Get patterns with high impact on development.
+
+#### `export_patterns(self)`
+
+Export patterns for analysis or storage.
+
+### PatternCache
+
+Cache for pattern analysis to improve performance.
+
+**Methods:**
+
+#### `update_file_frequency(self, file_path, count)`
+
+Update file modification frequency.
+
+#### `increment_late_night_activity(self)`
+
+Increment late night activity counter.
+
+---
+
+## src\track_b\intelligent_context\proactive_warnings
+
+CORTEX 3.0 Track B: Proactive Warnings
+======================================
+
+Proactive warning system that analyzes development patterns and provides
+real-time alerts about potential issues before they become problems.
+
+Key Features:
+- Real-time code quality monitoring
+- Pattern-based issue detection
+- Integration with file monitoring for immediate feedback
+- Learning from past issues to improve predictions
+- macOS-optimized notifications
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### WarningSeverity
+
+Warning severity levels.
+
+### WarningCategory
+
+Categories of warnings.
+
+### ProactiveWarning
+
+Represents a proactive warning.
+
+**Methods:**
+
+### ProactiveWarnings
+
+Proactive warning system for CORTEX Track B
+
+Monitors development activity and provides real-time warnings
+about potential issues and code quality concerns.
+
+**Methods:**
+
+#### `analyze_file_change(self, file_path, content)`
+
+Analyze a file change and generate proactive warnings.
+
+#### `mark_false_positive(self, warning_id)`
+
+Mark a warning as a false positive to prevent future occurrences.
+
+#### `resolve_warning(self, warning_id)`
+
+Mark a warning as resolved.
+
+#### `get_active_warnings(self, severity)`
+
+Get currently active warnings, optionally filtered by severity.
+
+#### `get_warning_stats(self)`
+
+Get statistics about warnings.
+
+---
+
+## src\track_b\platform\__init__
+
+CORTEX 3.0 Track B: Platform Package
+====================================
+
+macOS platform optimization package for CORTEX Track B.
+Provides comprehensive macOS integration and optimization capabilities.
+
+Key Components:
+- MacOSOptimizer: System-level macOS optimizations and performance tuning
+- ZshIntegration: Advanced Zsh shell integration and command enhancement
+- XcodeCompatibility: Comprehensive Xcode integration and build system support
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+---
+
+## src\track_b\platform\macos_optimizer
+
+CORTEX 3.0 Track B: macOS Platform Optimizer
+============================================
+
+macOS-specific optimizations for CORTEX Track B development environment.
+Provides deep integration with macOS systems, file operations, and development tools.
+
+Key Features:
+- macOS system integration and optimization
+- File system performance enhancements
+- Memory and CPU optimization for Mac hardware
+- macOS-specific development tool integration
+- System monitoring and health checks
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### MacOSVersion
+
+macOS version identifiers.
+
+### OptimizationLevel
+
+Optimization levels for macOS.
+
+### MacOSSystemInfo
+
+macOS system information.
+
+### OptimizationResult
+
+Result of an optimization operation.
+
+### MacOSOptimizer
+
+macOS Platform Optimizer for CORTEX Track B
+
+Provides comprehensive macOS system optimizations including:
+- File system performance tuning
+- Memory and CPU optimization
+- Development tool integration
+- System monitoring and health checks
+
+**Methods:**
+
+#### `run_full_optimization(self)`
+
+Run comprehensive macOS optimization.
+
+#### `optimize_file_system_cache(self)`
+
+Optimize file system cache settings.
+
+#### `optimize_file_system_performance(self)`
+
+Optimize file system performance settings.
+
+#### `optimize_memory_usage(self)`
+
+Optimize memory usage and allocation.
+
+#### `optimize_memory_pressure(self)`
+
+Optimize memory pressure handling.
+
+#### `optimize_cpu_scheduling(self)`
+
+Optimize CPU scheduling and performance.
+
+#### `optimize_process_priority(self)`
+
+Optimize process priority for CORTEX.
+
+#### `optimize_development_tools(self)`
+
+Optimize development tools performance.
+
+#### `optimize_git_performance(self)`
+
+Optimize Git performance for macOS.
+
+#### `clean_temporary_files(self)`
+
+Clean temporary files and caches.
+
+#### `clean_system_caches(self)`
+
+Clean system caches safely.
+
+#### `optimize_network_settings(self)`
+
+Optimize network settings for development.
+
+#### `get_optimization_status(self)`
+
+Get current optimization status.
+
+---
+
+## src\track_b\platform\xcode_compat
+
+CORTEX 3.0 Track B: Xcode Integration & Compatibility
+=====================================================
+
+Comprehensive Xcode integration for CORTEX Track B on macOS.
+Provides deep integration with Xcode development workflows, build systems, and debugging tools.
+
+Key Features:
+- Xcode project analysis and optimization
+- Build system integration
+- Simulator management and testing
+- Debugging workflow enhancement
+- iOS/macOS development support
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### XcodeVersion
+
+Supported Xcode versions.
+
+### ProjectType
+
+Xcode project types.
+
+### BuildConfiguration
+
+Build configurations.
+
+### XcodeInstallation
+
+Xcode installation information.
+
+### XcodeProject
+
+Xcode project information.
+
+### BuildResult
+
+Xcode build result.
+
+### XcodeCompatibility
+
+Xcode Integration & Compatibility for CORTEX Track B
+
+Provides comprehensive Xcode integration including:
+- Project analysis and optimization
+- Build system integration
+- Simulator management
+- Debugging workflow enhancement
+- Performance monitoring
+
+**Methods:**
+
+#### `build_project(self, scheme, configuration, platform)`
+
+Build the current Xcode project.
+
+#### `list_simulators(self)`
+
+List available simulators.
+
+#### `launch_simulator(self, simulator_name)`
+
+Launch a simulator.
+
+#### `install_app_to_simulator(self, app_path, simulator_udid)`
+
+Install an app to a simulator.
+
+#### `get_xcode_status(self)`
+
+Get comprehensive Xcode status information.
+
+#### `optimize_xcode_performance(self)`
+
+Apply Xcode performance optimizations.
+
+#### `clean_derived_data(self)`
+
+Clean Xcode DerivedData cache.
+
+---
+
+## src\track_b\platform\zsh_integration
+
+CORTEX 3.0 Track B: Zsh Shell Integration
+=========================================
+
+Advanced Zsh shell integration for CORTEX Track B on macOS.
+Provides deep shell integration, command enhancement, and intelligent command execution.
+
+Key Features:
+- Zsh configuration optimization
+- Custom CORTEX functions and aliases
+- Command history integration with CORTEX brain
+- Intelligent command suggestions
+- Shell performance optimization
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### ZshFeature
+
+Available Zsh integration features.
+
+### IntegrationLevel
+
+Zsh integration levels.
+
+### ZshConfig
+
+Zsh configuration settings.
+
+### ZshInstallationResult
+
+Result of Zsh integration installation.
+
+### ZshIntegration
+
+Zsh Shell Integration for CORTEX Track B
+
+Provides comprehensive Zsh shell integration including:
+- Custom CORTEX commands and aliases
+- Intelligent command completion
+- Shell history integration with CORTEX brain
+- Performance optimizations for macOS
+
+**Methods:**
+
+#### `install_integration(self, force)`
+
+Install CORTEX Zsh integration.
+
+#### `uninstall_integration(self)`
+
+Uninstall CORTEX Zsh integration.
+
+#### `get_integration_status(self)`
+
+Get current integration status.
+
+#### `test_integration(self)`
+
+Test the Zsh integration functionality.
+
+---
+
+## src\track_b\template_system\__init__
+
+CORTEX 3.0 Track B: Template System Package
+===========================================
+
+Complete template system for zero-execution help responses and dynamic content generation.
+Integrates template engine, response generator, and template optimizer for intelligent,
+context-aware responses without requiring code execution.
+
+Key Components:
+- TemplateEngine: Advanced template management and rendering
+- ResponseGenerator: Intelligent response generation with context analysis
+- TemplateOptimizer: Performance analysis and optimization recommendations
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+---
+
+## src\track_b\template_system\response_generator
+
+CORTEX 3.0 Track B: Response Generator
+=====================================
+
+Intelligent response generation system that combines templates with dynamic content
+to create contextual, helpful responses without code execution.
+
+Key Features:
+- Zero-execution response generation
+- Context-aware content assembly
+- Multi-format output support
+- Response optimization and caching
+- Integration with CORTEX brain for learning
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### ResponseType
+
+Types of responses.
+
+### ResponsePriority
+
+Response priority levels.
+
+### ResponseContext
+
+Extended context for response generation.
+
+### GeneratedResponse
+
+A generated response with metadata.
+
+### ResponseCache
+
+Cache entry for responses.
+
+### ResponseGenerator
+
+Advanced response generator for CORTEX Track B
+
+Combines template engine with intelligent context analysis to generate
+helpful, contextual responses without requiring code execution.
+
+**Methods:**
+
+#### `generate_response(self, user_request, context)`
+
+Generate a response for the user request.
+
+#### `get_generation_stats(self)`
+
+Get response generation statistics.
+
+---
+
+## src\track_b\template_system\template_engine
+
+CORTEX 3.0 Track B: Template Engine
+===================================
+
+Advanced template engine for zero-execution help responses and dynamic content generation.
+Provides intelligent template selection, variable substitution, and contextual adaptation.
+
+Key Features:
+- Zero-execution response generation
+- Dynamic template selection based on context
+- Variable substitution and content adaptation
+- Template performance optimization
+- Integration with CORTEX brain for learning
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### TemplateType
+
+Types of templates.
+
+### TemplateFormat
+
+Template output formats.
+
+### TemplateVariable
+
+Template variable definition.
+
+### Template
+
+Template definition.
+
+### TemplateContext
+
+Context for template rendering.
+
+### RenderedTemplate
+
+Result of template rendering.
+
+### TemplateEngine
+
+Advanced template engine for CORTEX Track B
+
+Provides intelligent template selection, rendering, and optimization
+for zero-execution help responses and dynamic content generation.
+
+**Methods:**
+
+#### `select_template(self, context)`
+
+Select the best template for the given context.
+
+#### `render_template(self, template, context)`
+
+Render a template with the given context.
+
+#### `render_response(self, user_request, context_vars)`
+
+High-level method to render a response for a user request.
+
+#### `get_template_stats(self)`
+
+Get statistics about template usage and performance.
+
+---
+
+## src\track_b\template_system\template_optimizer
+
+CORTEX 3.0 Track B: Template Optimizer
+======================================
+
+Advanced template optimization system that analyzes template performance,
+optimizes template selection, and improves response generation efficiency.
+
+Key Features:
+- Template performance analysis
+- Automatic template optimization
+- Response time improvement
+- Template usage pattern learning
+- Cache optimization strategies
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+
+### OptimizationStrategy
+
+Template optimization strategies.
+
+### AnalysisType
+
+Types of analysis.
+
+### TemplatePerformanceMetrics
+
+Performance metrics for a template.
+
+### UsagePattern
+
+Usage pattern for templates.
+
+### OptimizationRecommendation
+
+Optimization recommendation.
+
+### TemplateOptimizer
+
+Advanced template optimizer for CORTEX Track B
+
+Analyzes template and response performance to provide optimization
+recommendations and automatically improve system efficiency.
+
+**Methods:**
+
+#### `run_optimization_analysis(self, strategy)`
+
+Run comprehensive optimization analysis.
+
+#### `apply_recommendation(self, recommendation_id)`
+
+Apply a specific optimization recommendation.
+
+#### `get_optimization_status(self)`
+
+Get current optimization status and recommendations.
+
+---
+
+## src\track_b\test_phase_1
+
+CORTEX 3.0 Track B Phase 1 Validation Script
+===========================================
+
+Quick validation script to test Track B foundational components.
+Validates that ambient daemon, file monitor, git monitor, and terminal tracker
+are properly initialized and can start/stop correctly.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+---
+
+## src\track_b\validation\__init__
+
+Track B Validation Framework
+
+Comprehensive testing and validation system for CORTEX 3.0 Track B components.
+Provides macOS-specific testing infrastructure, component validators, and integration testing.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+---
+
+## src\track_b\validation\component_validator
+
+Component Validator for Track B
+
+Validates individual CORTEX Track B components including execution channel,
+intelligent context system, template integration, and platform optimization.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### ComponentValidationResult
+
+Result of component validation
+
+### ComponentMetrics
+
+Metrics for component health assessment
+
+### ComponentValidator
+
+Validates Track B components for correctness, completeness, and performance.
+
+Provides:
+- Import validation
+- API contract validation  
+- Performance assessment
+- Dependency analysis
+- Code quality metrics
+
+**Methods:**
+
+#### `get_component_health_report(self)`
+
+Get comprehensive component health report
+
+---
+
+## src\track_b\validation\integration_tester
+
+Integration Tester for Track B
+
+Tests integration and interaction between CORTEX Track B components.
+Validates data flow, error handling, and system-level behavior.
+
+Author: Asif Hussain  
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### IntegrationTestCase
+
+Definition of an integration test case
+
+### IntegrationTestResult
+
+Result of an integration test
+
+### IntegrationTester
+
+Tests integration between Track B components.
+
+Validates:
+- Component communication
+- Data flow integrity
+- Error propagation
+- Performance under load
+- System-level behavior
+
+**Methods:**
+
+---
+
+## src\track_b\validation\merge_validator
+
+Merge Validator for Track B
+
+Validates Track B components for compatibility with Track A before integration.
+Ensures seamless merge without breaking existing functionality.
+
+Author: Asif Hussain  
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### CompatibilityIssue
+
+Represents a compatibility issue found during validation
+
+### MergeAssessment
+
+Assessment of Track B readiness for merge
+
+### MergeValidator
+
+Validates Track B for compatibility with Track A.
+
+Checks:
+- API compatibility
+- Interface contracts
+- Dependency conflicts  
+- Performance impact
+- Data structure compatibility
+- Integration points
+
+**Methods:**
+
+---
+
+## src\track_b\validation\test_framework
+
+macOS Testing Framework for Track B
+
+Provides comprehensive testing infrastructure specifically designed for macOS development
+environments, including system integration, performance monitoring, and compatibility validation.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### TestResult
+
+Result of a test execution
+
+### SystemInfo
+
+macOS system information for testing context
+
+### MacOSTestFramework
+
+Core testing framework for CORTEX Track B on macOS.
+
+Provides:
+- System compatibility validation
+- Performance benchmarking
+- Component isolation testing
+- Integration test orchestration
+- Resource monitoring
+
+**Methods:**
+
+#### `export_results(self, output_path)`
+
+Export test results to file
+
+#### `get_health_score(self)`
+
+Calculate overall health score for Track B on macOS
+
+---
+
+## src\track_b_narrative\__init__
+
+CORTEX 3.0 Track B (Enhanced Features) - Phase 4: Narrative Generation
+
+Track B focuses on enhanced user-facing features:
+- Phase 4: Narrative Generation (story templates, context weaving, enhanced continue)
+- Phase 5: VS Code Manual Import Extension
+
+This implementation follows the CORTEX 3.0 Parallel Track Plan and uses
+mock dual-channel data during development phase (Weeks 8-15).
+
+Author: Asif Hussain
+Copyright: © 2025 Asif Hussain. All rights reserved.
+
+---
+
+## src\track_b_narrative\mock_data
+
+CORTEX 3.0 Track B - Mock Dual-Channel Data
+
+Mock data generator for Track B Phase 4 development.
+Creates realistic conversation and daemon capture YAML files following
+the dual-channel schema defined in Phase 0.5.
+
+Author: Asif Hussain
+Copyright: © 2025 Asif Hussain. All rights reserved.
+
+### MockConversation
+
+Mock conversation data structure
+
+### MockDaemonCapture
+
+Mock daemon capture data structure
+
+### DualChannelMockData
+
+Mock data generator for dual-channel development.
+
+Provides realistic mock data that follows the dual-channel schema
+for narrative generation development during Track B Phase 4.
+
+**Methods:**
+
+#### `generate_mock_conversations(self, count)`
+
+Generate realistic mock conversations
+
+#### `generate_mock_daemon_captures(self, count)`
+
+Generate realistic mock daemon captures
+
+#### `save_mock_data_as_yaml(self, conversations, captures)`
+
+Save mock data as YAML files
+
+#### `load_mock_conversations(self)`
+
+Load mock conversations from YAML file
+
+#### `load_mock_captures(self)`
+
+Load mock daemon captures from YAML file
+
+### `create_track_b_mock_data()`
+
+Convenience function to create Track B mock data
+
+---
+
+## src\track_b_narrative\narrative_engine
+
+CORTEX 3.0 Track B Phase 4 - Narrative Engine
+
+Core narrative generation engine with story templates, context weaving,
+and decision rationale extraction. Works with mock dual-channel data
+during development phase (Weeks 8-15).
+
+Key Features:
+- Story template system for coherent narratives
+- Context weaving algorithm for connecting development events  
+- Decision rationale extraction from conversation patterns
+- Integration with existing narrative_intelligence.py
+
+Author: Asif Hussain
+Copyright: © 2025 Asif Hussain. All rights reserved.
+
+### StoryTemplate
+
+Template for generating consistent story structures
+
+### ContextElement
+
+Contextual element extracted from dual-channel data
+
+### DecisionRationale
+
+Extracted decision rationale from development flow
+
+### StoryTemplateSystem
+
+Advanced story template system for narrative generation.
+
+Provides structured templates for different types of development stories,
+ensuring consistent and coherent narrative output.
+
+**Methods:**
+
+#### `get_template(self, template_id)`
+
+Get story template by ID
+
+#### `get_templates_by_type(self, story_type)`
+
+Get all templates for a story type
+
+#### `generate_story_structure(self, template_id, context_data)`
+
+Generate story structure using template and context
+
+### ContextWeavingEngine
+
+Advanced context weaving algorithm for narrative generation.
+
+Analyzes dual-channel data to identify relationships, patterns,
+and narrative threads that connect development events into coherent stories.
+
+**Methods:**
+
+#### `extract_context_elements(self, conversations, captures)`
+
+Extract contextual elements from dual-channel data
+
+#### `weave_context_narrative(self, elements, time_window)`
+
+Weave context elements into narrative threads
+
+### DecisionRationaleExtractor
+
+Extracts decision rationales from development conversations and code changes.
+
+Identifies moments where decisions were made, options considered,
+and reasoning behind choices for inclusion in narrative generation.
+
+**Methods:**
+
+#### `extract_decisions(self, conversations, captures)`
+
+Extract decision rationales from dual-channel data
+
+### `enhance_narrative_intelligence_with_track_b(narrative_intelligence, mock_data)`
+
+Enhance existing narrative intelligence with Track B Phase 4 capabilities.
+
+This function bridges the new Track B narrative engine with the existing
+tier1/narrative_intelligence.py system.
+
+---
+
+## src\utils\incremental_test_runner
 
 Incremental Test Runner for Large Test Suites
 
@@ -20839,7 +23298,7 @@ CLI entry point for incremental test runner.
 
 ---
 
-## src.utils.user_dictionary
+## src\utils\user_dictionary
 
 CORTEX User Dictionary - Personalized Shortcut Management
 
@@ -20960,7 +23419,7 @@ CLI entry point for testing.
 
 ---
 
-## src.workflows.__init__
+## src\workflows\__init__
 
 CORTEX Workflows Package
 
@@ -20974,7 +23433,7 @@ Version: 1.0
 
 ---
 
-## src.workflows.checkpoint
+## src\workflows\checkpoint
 
 CORTEX Workflow Checkpoint System
 
@@ -21079,7 +23538,7 @@ Returns:
 
 ---
 
-## src.workflows.feature_workflow
+## src\workflows\feature_workflow
 
 Feature Creation Workflow
 
@@ -21138,7 +23597,7 @@ Returns:
 
 ---
 
-## src.workflows.stages.__init__
+## src\workflows\stages\__init__
 
 CORTEX Workflow Stages
 
@@ -21146,7 +23605,7 @@ Example stage implementations for testing and demonstration.
 
 ---
 
-## src.workflows.stages.code_cleanup
+## src\workflows\stages\code_cleanup
 
 Code Cleanup Stage
 
@@ -21181,7 +23640,7 @@ Validate input files or context available
 
 ---
 
-## src.workflows.stages.doc_generator
+## src\workflows\stages\doc_generator
 
 Documentation Generator Stage
 
@@ -21215,7 +23674,7 @@ Validate required inputs available
 
 ---
 
-## src.workflows.stages.dod_dor_clarifier
+## src\workflows\stages\dod_dor_clarifier
 
 DoD/DoR Clarification Stage
 
@@ -21268,7 +23727,7 @@ Create DoD/DoR clarifier stage instance
 
 ---
 
-## src.workflows.stages.threat_modeler
+## src\workflows\stages\threat_modeler
 
 Threat Modeling Stage
 
@@ -21329,7 +23788,7 @@ Create threat modeler stage instance
 
 ---
 
-## src.workflows.tdd_workflow
+## src\workflows\tdd_workflow
 
 TDD Workflow Orchestrator
 
@@ -21390,7 +23849,7 @@ Returns:
 
 ---
 
-## src.workflows.workflow_engine
+## src\workflows\workflow_engine
 
 CORTEX Workflow Engine - DAG-based Workflow Orchestration
 
@@ -21514,7 +23973,7 @@ Default: Log error. Override if needed.
 
 ---
 
-## src.workflows.workflow_pipeline
+## src\workflows\workflow_pipeline
 
 CORTEX Workflow Pipeline System
 
@@ -21646,31 +24105,31 @@ Returns:
 
 ---
 
-## tests.__init__
+## tests\__init__
 
 CORTEX Tests
 
 ---
 
-## tests.agents.code_executor.__init__
+## tests\agents\code_executor\__init__
 
 Test package for code_executor modular components.
 
 ---
 
-## tests.agents.error_corrector.__init__
+## tests\agents\error_corrector\__init__
 
 Test package for modular ErrorCorrector agent.
 
 ---
 
-## tests.agents.health_validator.__init__
+## tests\agents\health_validator\__init__
 
 Test package for health_validator modular components.
 
 ---
 
-## tests.ambient.__init__
+## tests\ambient\__init__
 
 CORTEX 2.0 - Ambient Capture Tests
 
@@ -21689,7 +24148,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## tests.ambient.test_debouncer
+## tests\ambient\test_debouncer
 
 CORTEX 2.0 - Debouncer Tests
 
@@ -21746,7 +24205,7 @@ Should clear buffer after successful flush.
 
 ---
 
-## tests.ambient.test_file_watcher
+## tests\ambient\test_file_watcher
 
 CORTEX 2.0 - FileSystemWatcher Tests
 
@@ -21829,7 +24288,7 @@ Should ignore build artifacts and dependencies.
 
 ---
 
-## tests.ambient.test_git_monitor
+## tests\ambient\test_git_monitor
 
 CORTEX 2.0 - GitMonitor Tests
 
@@ -21900,7 +24359,7 @@ Should not use environment variables in hook script.
 
 ---
 
-## tests.ambient.test_integration
+## tests\ambient\test_integration
 
 CORTEX 2.0 - Ambient Capture Integration Tests
 
@@ -21983,7 +24442,7 @@ Should have minimal performance overhead.
 
 ---
 
-## tests.ambient.test_terminal_monitor
+## tests\ambient\test_terminal_monitor
 
 CORTEX 2.0 - TerminalMonitor Tests
 
@@ -22078,7 +24537,7 @@ Should reject history files exceeding MAX_HISTORY_SIZE.
 
 ---
 
-## tests.ambient.test_vscode_monitor
+## tests\ambient\test_vscode_monitor
 
 CORTEX 2.0 - VSCodeMonitor Tests
 
@@ -22149,7 +24608,7 @@ Should validate folder entries have 'path' property.
 
 ---
 
-## tests.conftest
+## tests\conftest
 
 Pytest Configuration and Shared Fixtures
 
@@ -22271,7 +24730,7 @@ Monitor test execution time and warn on slow tests.
 
 ---
 
-## tests.cortex-performance.generate-test-data
+## tests\cortex-performance\generate-test-data
 
 Generate realistic test data for sql.js performance benchmarking.
 
@@ -22304,7 +24763,75 @@ Generate test database for sql.js benchmarking.
 
 ---
 
-## tests.cortex_agents.strategic.test_interactive_planner
+## tests\cortex_3_0\test_phase_1_foundation
+
+CORTEX 3.0 Phase 1 Foundation Integration Test
+==============================================
+
+Validates that all core 3.0 components work together correctly:
+- Dual-Channel Memory system
+- Enhanced Agent orchestration
+- Smart Context Intelligence
+- Unified Interface coordination
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+### TestCORTEX30Foundation
+
+Test suite for CORTEX 3.0 foundation components
+
+**Methods:**
+
+#### `temp_brain_path(self)`
+
+Create temporary brain directory for testing
+
+#### `cortex_interface(self, temp_brain_path)`
+
+Create CORTEX 3.0 unified interface for testing
+
+#### `test_request_analyzer_complexity_detection(self)`
+
+Test that request analyzer correctly detects complexity levels
+
+#### `test_mode_selection_logic(self)`
+
+Test that optimal mode is selected based on complexity
+
+#### `test_capability_identification(self)`
+
+Test that required capabilities are correctly identified
+
+#### `test_system_status_reporting(self, cortex_interface)`
+
+Test comprehensive system status reporting
+
+### TestPhase1Completion
+
+Verify Phase 1 foundation completion criteria
+
+**Methods:**
+
+#### `test_all_core_components_exist(self)`
+
+Verify all core 3.0 components are implemented
+
+#### `test_unified_interface_coordinates_all_systems(self, temp_brain_path)`
+
+Verify unified interface properly coordinates all systems
+
+#### `test_backward_compatibility_maintained(self, temp_brain_path)`
+
+Verify 2.0 compatibility is maintained
+
+#### `temp_brain_path(self)`
+
+Create temporary brain directory for testing
+
+---
+
+## tests\cortex_agents\strategic\test_interactive_planner
 
 Unit Tests: Interactive Planner Agent Methods
 
@@ -22457,7 +24984,7 @@ Test that execute returns proper AgentResponse.
 
 ---
 
-## tests.cortex_brain_001.demo_fix_working
+## tests\cortex_brain_001\demo_fix_working
 
 CORTEX-BRAIN-001 Fix Demo
 
@@ -22470,7 +24997,7 @@ Demonstrate the CORTEX-BRAIN-001 architectural analysis brain saving fix.
 
 ---
 
-## tests.cortex_brain_001.test_architecture_analysis_brain_saving
+## tests\cortex_brain_001\test_architecture_analysis_brain_saving
 
 Test suite for CORTEX-BRAIN-001 fix: Architecture Analysis Brain Saving
 
@@ -22605,7 +25132,7 @@ Test analysis of actual KSESSIONS architecture.
 
 ---
 
-## tests.cortex_brain_001.test_namespace_detection
+## tests\cortex_brain_001\test_namespace_detection
 
 Unit tests for namespace detection functionality
 
@@ -22642,7 +25169,7 @@ Test confirmation for different namespace formats.
 
 ---
 
-## tests.docs.test_css_fixes
+## tests\docs\test_css_fixes
 
 Tests for CSS styling fixes on documentation site.
 
@@ -22679,7 +25206,7 @@ Verify custom.css contains the required style rules.
 
 ---
 
-## tests.edge_cases.__init__
+## tests\edge_cases\__init__
 
 Edge case tests package
 
@@ -22694,7 +25221,7 @@ Categories:
 
 ---
 
-## tests.edge_cases.test_empty_inputs
+## tests\edge_cases\test_empty_inputs
 
 Test edge cases for empty and missing inputs
 
@@ -22747,7 +25274,7 @@ Should reject empty file paths with clear error
 
 ---
 
-## tests.edge_cases.test_malformed_data
+## tests\edge_cases\test_malformed_data
 
 Test edge cases for malformed and corrupted data
 
@@ -22804,7 +25331,7 @@ Should handle extremely long inputs without buffer overflow
 
 ---
 
-## tests.integration.test_component_wiring
+## tests\integration\test_component_wiring
 
 CORTEX Component Wiring Integration Tests
 
@@ -22976,7 +25503,7 @@ Test complete operation execution flow
 
 ---
 
-## tests.integration.test_planning_integration
+## tests\integration\test_planning_integration
 
 Integration Test: Interactive Planning Flow
 
@@ -23035,7 +25562,7 @@ Test that various planning keywords are recognized.
 
 ---
 
-## tests.integration.test_publish_simulation
+## tests\integration\test_publish_simulation
 
 Integration Test: CORTEX Publish Simulation on ALIST Repository
 
@@ -23163,7 +25690,7 @@ Verify brain-protection-rules.yaml is valid YAML
 
 ---
 
-## tests.integration.test_session_management
+## tests\integration\test_session_management
 
 Integration tests for CORTEX session management and conversation tracking.
 
@@ -23325,7 +25852,7 @@ Test that context window is in chronological order.
 
 ---
 
-## tests.operations.modules.optimization.test_hardcoded_data_cleaner_module
+## tests\operations\modules\optimization\test_hardcoded_data_cleaner_module
 
 Tests for Hardcoded Data Cleaner Module
 
@@ -23466,13 +25993,13 @@ Test handling of nonexistent scan paths.
 
 ---
 
-## tests.operations.modules.optimize.__init__
+## tests\operations\modules\optimize\__init__
 
 Tests for CORTEX Optimization Module
 
 ---
 
-## tests.operations.test_cleanup
+## tests\operations\test_cleanup
 
 Tests for Workspace Cleanup Operation
 CORTEX 3.0 Phase 1.1 - BLOCKING Tests
@@ -23624,7 +26151,7 @@ Test --no-confirm flag skips confirmation.
 
 ---
 
-## tests.operations.test_design_sync_orchestrator
+## tests\operations\test_design_sync_orchestrator
 
 Tests for design_sync_orchestrator module.
 
@@ -23764,7 +26291,7 @@ at the top, not buried in numerical order.
 
 ---
 
-## tests.operations.test_environment_setup
+## tests\operations\test_environment_setup
 
 Tests for environment_setup.py monolithic script.
 
@@ -23925,7 +26452,7 @@ Test platform detection on real system.
 
 ---
 
-## tests.operations.test_optimize_system_orchestrator
+## tests\operations\test_optimize_system_orchestrator
 
 Tests for System Optimization Meta-Orchestrator.
 
@@ -24042,7 +26569,7 @@ Test report can be serialized to dict.
 
 ---
 
-## tests.operations.test_parallel_execution
+## tests\operations\test_parallel_execution
 
 Tests for parallel module execution in operations orchestrator.
 
@@ -24138,7 +26665,7 @@ Circular dependencies should be detected and handled.
 
 ---
 
-## tests.operations.test_setup
+## tests\operations\test_setup
 
 Tests for Environment Setup Operation
 CORTEX 3.0 Phase 1.1 - BLOCKING Tests
@@ -24284,7 +26811,7 @@ Test platform-specific venv creation.
 
 ---
 
-## tests.operations.test_update_documentation
+## tests\operations\test_update_documentation
 
 Tests for CORTEX Documentation Generator
 
@@ -24412,7 +26939,7 @@ Create temporary CORTEX structure for testing.
 
 ---
 
-## tests.platform.__init__
+## tests\platform\__init__
 
 Platform-specific tests package
 
@@ -24427,7 +26954,7 @@ Test files:
 
 ---
 
-## tests.plugins.test_cleanup_protection
+## tests\plugins\test_cleanup_protection
 
 Test cleanup plugin protection rules
 
@@ -24525,7 +27052,7 @@ Create a cleanup plugin instance for testing
 
 ---
 
-## tests.plugins.test_command_expansion
+## tests\plugins\test_command_expansion
 
 CORTEX Router Command Expansion Tests
 
@@ -24622,7 +27149,7 @@ Test that commands are case-sensitive.
 
 ---
 
-## tests.plugins.test_command_registry
+## tests\plugins\test_command_registry
 
 CORTEX Plugin Command Registry Tests
 
@@ -24778,7 +27305,7 @@ Test that platform commands are available.
 
 ---
 
-## tests.plugins.test_configuration_wizard_plugin
+## tests\plugins\test_configuration_wizard_plugin
 
 Tests for ConfigurationWizardPlugin.
 
@@ -24850,7 +27377,7 @@ Test plugin registration function.
 
 ---
 
-## tests.plugins.test_narrative_flow_implicit_parts
+## tests\plugins\test_narrative_flow_implicit_parts
 
 Test Narrative Flow Detection - Implicit Part 1 Handling
 Tests for the "Awakening of CORTEX" structure detection issue discovered during validation.
@@ -24987,7 +27514,7 @@ Algorithm:
 
 ---
 
-## tests.plugins.test_platform_auto_detection
+## tests\plugins\test_platform_auto_detection
 
 CORTEX Platform Auto-Detection Tests
 
@@ -25102,7 +27629,7 @@ Test quick dependency check.
 
 ---
 
-## tests.plugins.test_platform_switch_plugin
+## tests\plugins\test_platform_switch_plugin
 
 Tests for Platform Switch Plugin
 
@@ -25282,7 +27809,7 @@ Test summary generation.
 
 ---
 
-## tests.plugins.test_sweeper_plugin
+## tests\plugins\test_sweeper_plugin
 
 Tests for Aggressive File Sweeper Plugin (Recycle Bin Mode)
 
@@ -25382,7 +27909,7 @@ Test plugin cleanup
 
 ---
 
-## tests.plugins.test_system_refactor_plugin
+## tests\plugins\test_system_refactor_plugin
 
 Tests for System Refactor Plugin
 
@@ -25548,19 +28075,19 @@ Test plugin command registration.
 
 ---
 
-## tests.response_templates.__init__
+## tests\response_templates\__init__
 
 Tests for CORTEX Response Template System.
 
 ---
 
-## tests.scripts.test_plan_cli
+## tests\scripts\test_plan_cli
 
 ### `test_create_feature_plan_creates_yaml_file()`
 
 ---
 
-## tests.staleness.__init__
+## tests\staleness\__init__
 
 Staleness Test Suite
 
@@ -25572,7 +28099,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 
 ---
 
-## tests.staleness.test_template_schema_validation
+## tests\staleness\test_template_schema_validation
 
 Template Schema Validation Tests
 
@@ -25647,7 +28174,7 @@ Verify templates don't contain hardcoded module counts.
 
 ---
 
-## tests.test_ambient_security
+## tests\test_ambient_security
 
 CORTEX 2.0 - Ambient Capture Security Tests
 
@@ -25821,7 +28348,7 @@ DANGEROUS_PATTERNS should contain common attack patterns.
 
 ---
 
-## tests.test_css_browser_loading
+## tests\test_css_browser_loading
 
 Test to verify CSS can be loaded in a browser and renders correctly.
 
@@ -25857,7 +28384,7 @@ Generate a CSS snippet to test in browser DevTools.
 
 ---
 
-## tests.test_css_styles
+## tests\test_css_styles
 
 Tests to verify CSS styles are correctly applied to the documentation site.
 
@@ -25972,7 +28499,7 @@ Verify CSS color variables are actually used.
 
 ---
 
-## tests.test_planning_triggers
+## tests\test_planning_triggers
 
 Test Planning Trigger Detection
 
@@ -26038,7 +28565,7 @@ Test confidence scoring for planning requests
 
 ---
 
-## tests.test_yaml_conversion
+## tests\test_yaml_conversion
 
 YAML Conversion Tests - Phase 5.5.4
 
@@ -26164,7 +28691,7 @@ Configure pytest markers.
 
 ---
 
-## tests.test_yaml_loading
+## tests\test_yaml_loading
 
 YAML Loading Tests
 
@@ -26280,13 +28807,13 @@ Test YAML token count estimation.
 
 ---
 
-## tests.tier0.__init__
+## tests\tier0\__init__
 
 CORTEX Tier 0 Tests
 
 ---
 
-## tests.tier0.test_active_narrator_voice
+## tests\tier0\test_active_narrator_voice
 
 Tests for Active Narrator Voice Enforcement
 
@@ -26462,7 +28989,7 @@ Should suggest replacement for deprecated terms
 
 ---
 
-## tests.tier0.test_brain_protector
+## tests\tier0\test_brain_protector
 
 CORTEX Brain Protector Tests
 Phase 3 Task 3.4: Testing
@@ -26673,7 +29200,7 @@ Get cortex-brain directory path.
 
 ---
 
-## tests.tier0.test_brain_protector_conversation_tracking
+## tests\tier0\test_brain_protector_conversation_tracking
 
 CORTEX Brain Protector: Conversation Tracking Validation
 
@@ -26759,7 +29286,7 @@ Initialize CortexEntry with temp brain
 
 ---
 
-## tests.tier0.test_brain_protector_new_rules
+## tests\tier0\test_brain_protector_new_rules
 
 Brain Protection Tests - New Rules Coverage
 
@@ -26989,7 +29516,7 @@ Verify new tests don't break existing workflow.
 
 ---
 
-## tests.tier0.test_conversation_tracking_integration
+## tests\tier0\test_conversation_tracking_integration
 
 CORTEX Brain Protector: Conversation Tracking Integration Test
 
@@ -27023,7 +29550,7 @@ Run all integration tests
 
 ---
 
-## tests.tier0.test_entry_point_bloat
+## tests\tier0\test_entry_point_bloat
 
 CORTEX Entry Point Bloat Prevention Test Harness
 
@@ -27162,7 +29689,7 @@ Entry point must reference brain tier architecture.
 
 ---
 
-## tests.tier0.test_publish_faculties
+## tests\tier0\test_publish_faculties
 
 SKULL-007: CORTEX Faculty Integrity Test
 
@@ -27256,7 +29783,7 @@ Comprehensive check: all faculties present.
 
 ---
 
-## tests.tier0.test_publish_privacy
+## tests\tier0\test_publish_privacy
 
 Tests for SKULL-006: Privacy Protection
 
@@ -27389,7 +29916,7 @@ Admin operations that should be excluded:
 
 ---
 
-## tests.tier0.test_skull_ascii_headers
+## tests\tier0\test_skull_ascii_headers
 
 SKULL Protection Test: Banner Images and Headers in Response Templates
 
@@ -27486,7 +30013,7 @@ SKULL-006: Banner must include version, mode, timestamp placeholders
 
 ---
 
-## tests.tier0.test_test_analyzer
+## tests\tier0\test_test_analyzer
 
 CORTEX Test Analyzer Tests
 ===========================
@@ -27669,7 +30196,7 @@ Create a temporary test project structure.
 
 ---
 
-## tests.tier0.test_tier_validator
+## tests\tier0\test_tier_validator
 
 Tests for Tier Validator
 
@@ -27789,37 +30316,37 @@ Create TierValidator with temp brain directory.
 
 ---
 
-## tests.tier1.__init__
+## tests\tier1\__init__
 
 CORTEX Tier 1: Working Memory (STM) Tests
 
 ---
 
-## tests.tier1.conversations.__init__
+## tests\tier1\conversations\__init__
 
 Tests for conversation modules.
 
 ---
 
-## tests.tier1.entities.__init__
+## tests\tier1\entities\__init__
 
 Tests for entity modules.
 
 ---
 
-## tests.tier1.fifo.__init__
+## tests\tier1\fifo\__init__
 
 Tests for FIFO modules.
 
 ---
 
-## tests.tier1.messages.__init__
+## tests\tier1\messages\__init__
 
 Tests for message modules.
 
 ---
 
-## tests.tier1.test_conversation_import
+## tests\tier1\test_conversation_import
 
 Tests for CORTEX 3.0 Conversation Import Feature
 
@@ -27890,7 +30417,7 @@ Should filter conversations by quality score.
 
 ---
 
-## tests.tier1.test_conversation_quality
+## tests\tier1\test_conversation_quality
 
 Tests for CORTEX 3.0 Conversation Quality Analyzer
 
@@ -27985,7 +30512,7 @@ Test QualityScore contains expected fields.
 
 ---
 
-## tests.tier1.test_conversation_vault
+## tests\tier1\test_conversation_vault
 
 Tests for CORTEX 3.0 Conversation Vault
 
@@ -28048,7 +30575,7 @@ Should handle complete capture → import → archive workflow.
 
 ---
 
-## tests.tier1.test_e2e_conversation_import
+## tests\tier1\test_e2e_conversation_import
 
 End-to-End Validation: Real Conversation Import
 
@@ -28071,7 +30598,7 @@ Validates that quality scoring correctly identifies quick fixes.
 
 ---
 
-## tests.tier1.test_fusion_manager
+## tests\tier1\test_fusion_manager
 
 CORTEX 3.0 Milestone 2 - Fusion Manager Tests
 
@@ -28160,7 +30687,7 @@ Test complete fusion workflow from import to insights.
 
 ---
 
-## tests.tier1.test_lifecycle_manager
+## tests\tier1\test_lifecycle_manager
 
 Tests for ConversationLifecycleManager - CORTEX 3.0 conversation lifecycle.
 
@@ -28258,7 +30785,7 @@ Create WorkingMemory instance for integration tests.
 
 ---
 
-## tests.tier1.test_narrative_intelligence
+## tests\tier1\test_narrative_intelligence
 
 Tests for CORTEX 3.0 Narrative Intelligence Module
 Advanced Fusion - Milestone 3
@@ -28382,7 +30909,7 @@ Test generating story with focus on specific files
 
 ---
 
-## tests.tier1.test_pattern_learning_engine
+## tests\tier1\test_pattern_learning_engine
 
 Tests for CORTEX 3.0 Pattern Learning Engine
 Advanced Fusion - Milestone 3
@@ -28471,7 +30998,7 @@ Test that pattern confidence evolves with usage
 
 ---
 
-## tests.tier1.test_session_correlation
+## tests\tier1\test_session_correlation
 
 Tests for Session-Ambient Correlation (CORTEX 3.0 Phase 3)
 
@@ -28533,7 +31060,7 @@ Test complete workflow: conversation + ambient events + narrative.
 
 ---
 
-## tests.tier1.test_session_manager
+## tests\tier1\test_session_manager
 
 Tests for SessionManager - CORTEX 3.0 session-based conversation boundaries.
 
@@ -28597,7 +31124,7 @@ Create SessionManager instance with temp database.
 
 ---
 
-## tests.tier1.test_smart_recommendations
+## tests\tier1\test_smart_recommendations
 
 Test Suite for Smart Recommendations API
 CORTEX 3.0 - Advanced Fusion Features
@@ -28713,7 +31240,7 @@ Test development flow appropriateness scoring
 
 ---
 
-## tests.tier1.test_temporal_correlator
+## tests\tier1\test_temporal_correlator
 
 CORTEX 3.0 Milestone 2 - Temporal Correlation Tests
 
@@ -28827,19 +31354,19 @@ Test potential API extension for WorkingMemory temporal features.
 
 ---
 
-## tests.tier2.__init__
+## tests\tier2\__init__
 
 CORTEX Tier 2 Tests Package
 
 ---
 
-## tests.tier2.knowledge_graph.__init__
+## tests\tier2\knowledge_graph\__init__
 
 Tests for Knowledge Graph modular components.
 
 ---
 
-## tests.tier2.test_namespace_protection
+## tests\tier2\test_namespace_protection
 
 Comprehensive tests for namespace-based knowledge boundary protection.
 
@@ -29019,7 +31546,7 @@ This is the ultimate validation of namespace-based boundaries.
 
 ---
 
-## tests.tier2.test_oracle_crawler
+## tests\tier2\test_oracle_crawler
 
 Tests for Oracle Database Schema Crawler
 
@@ -29152,7 +31679,7 @@ Test with actual Oracle instance.
 
 ---
 
-## tests.tier2.test_pattern_detector
+## tests\tier2\test_pattern_detector
 
 Tests for Change Pattern Detector (Phase 4.4)
 
@@ -29260,7 +31787,7 @@ All pattern constants should be strings.
 
 ---
 
-## tests.tier2.test_scorer_summarizer
+## tests\tier2\test_scorer_summarizer
 
 Tests for Activity Scorer and Auto-Summarizer (Phase 4.4)
 
@@ -29434,7 +31961,7 @@ Should score and summarize events in sequence.
 
 ---
 
-## tests.tier2.test_smart_filter
+## tests\tier2\test_smart_filter
 
 Tests for Smart File Filter (Phase 4.4)
 
@@ -29578,25 +32105,25 @@ Should return filter statistics.
 
 ---
 
-## tests.tier3.__init__
+## tests\tier3\__init__
 
 CORTEX Tier 3 Tests Initialization
 
 ---
 
-## tests.tier3.analysis.__init__
+## tests\tier3\analysis\__init__
 
 Tier 3 analysis tests.
 
 ---
 
-## tests.tier3.metrics.__init__
+## tests\tier3\metrics\__init__
 
 Tier 3 metrics tests.
 
 ---
 
-## tests.tier3.metrics.test_brain_metrics_collector
+## tests\tier3\metrics\test_brain_metrics_collector
 
 Tests for Brain Metrics Collector
 
@@ -29738,13 +32265,715 @@ Test completion footer formatting
 
 ---
 
-## tests.tier3.storage.__init__
+## tests\tier3\storage\__init__
 
 Tier 3 storage tests.
 
 ---
 
-## tests.workflows.__init__
+## tests\track_a\__init__
+
+Track A Test Suite
+=================
+
+Purpose: Comprehensive testing for conversation import system.
+Follows CORTEX test strategy (BLOCKING/WARNING/PRAGMATIC categorization).
+
+Test Coverage:
+- Conversation import workflows
+- Parser format handling
+- Semantic extraction accuracy
+- Integration with dual-channel memory
+- Error handling and recovery
+
+Test Strategy: See cortex-brain/test-strategy.yaml
+Target: 100% test pass rate for completed modules
+
+Status: Phase 1.3 (Week 1-2)
+
+---
+
+## tests\track_a\test_conversation_import
+
+Track A Phase 2: Comprehensive Unit Tests for ConversationImporter
+
+Tests the high-level import orchestration including:
+- Import workflow coordination
+- Source detection and parsing
+- Error handling and recovery
+- Import statistics and reporting
+- Concurrent import scenarios
+
+Author: CORTEX Team
+Date: 2025-11-15
+
+### TestConversationImporterBasics
+
+Test basic ConversationImporter functionality.
+
+**Methods:**
+
+#### `importer(self)`
+
+Create ConversationImporter instance.
+
+#### `test_importer_initialization(self, importer)`
+
+Test importer initializes with all required components.
+
+#### `test_importer_has_import_method(self, importer)`
+
+Test importer has import_conversation method.
+
+#### `test_importer_component_defaults(self, importer)`
+
+Test importer creates default components if none provided.
+
+### TestConversationImportWorkflow
+
+Test complete import workflow orchestration.
+
+**Methods:**
+
+#### `importer(self)`
+
+#### `sample_markdown(self)`
+
+Sample markdown conversation for testing.
+
+#### `test_import_markdown_conversation(self, importer, sample_markdown)`
+
+Test importing a markdown conversation.
+
+#### `test_import_assigns_conversation_id(self, importer, sample_markdown)`
+
+Test import generates unique conversation ID.
+
+#### `test_import_preserves_source(self, importer, sample_markdown)`
+
+Test import preserves conversation source metadata.
+
+#### `test_import_workflow_steps(self, importer, sample_markdown)`
+
+Test import executes all workflow steps: parse → extract → store.
+
+### TestConversationImportErrorHandling
+
+Test error handling during import.
+
+**Methods:**
+
+#### `importer(self)`
+
+#### `test_import_empty_text(self, importer)`
+
+Test importing empty text returns error.
+
+#### `test_import_none_text(self, importer)`
+
+Test importing None text returns error.
+
+#### `test_import_invalid_format(self, importer)`
+
+Test importing invalid format returns error.
+
+#### `test_import_parser_error_recovery(self, importer)`
+
+Test import handles parser errors gracefully.
+
+#### `test_import_extractor_error_recovery(self, importer)`
+
+Test import handles extractor errors gracefully.
+
+#### `test_import_storage_error_recovery(self, importer)`
+
+Test import handles storage errors gracefully.
+
+### TestConversationImportStatistics
+
+Test import statistics and reporting.
+
+**Methods:**
+
+#### `importer(self)`
+
+#### `sample_conversation(self)`
+
+#### `test_import_report_includes_message_count(self, importer, sample_conversation)`
+
+Test import report includes message count.
+
+#### `test_import_report_includes_entity_count(self, importer, sample_conversation)`
+
+Test import report includes entity count.
+
+#### `test_import_report_includes_quality_score(self, importer, sample_conversation)`
+
+Test import report includes quality score.
+
+### TestConcurrentImports
+
+Test concurrent import scenarios.
+
+**Methods:**
+
+#### `importer(self)`
+
+#### `test_sequential_imports_dont_interfere(self, importer)`
+
+Test sequential imports maintain isolation.
+
+#### `test_import_idempotency(self, importer)`
+
+Test importing same conversation twice creates separate entries.
+
+---
+
+## tests\track_a\test_conversational_channel_integration
+
+Track A Phase 2: Comprehensive Unit Tests for ConversationalChannelAdapter
+
+Tests Tier 1 integration including:
+- Storage and retrieval operations
+- Quality filtering
+- Statistics calculation
+- WorkingMemory integration
+- Error handling
+
+Author: CORTEX Team
+Date: 2025-11-15
+
+### TestAdapterBasics
+
+Test basic ConversationalChannelAdapter functionality.
+
+**Methods:**
+
+#### `mock_working_memory(self)`
+
+Create mock WorkingMemory instance.
+
+#### `adapter(self, mock_working_memory)`
+
+Create ConversationalChannelAdapter with mock WorkingMemory.
+
+#### `test_adapter_initialization(self, adapter)`
+
+Test adapter initializes successfully.
+
+#### `test_adapter_has_required_methods(self, adapter)`
+
+Test adapter has all required methods.
+
+### TestStorageOperations
+
+Test conversation storage operations.
+
+**Methods:**
+
+#### `mock_working_memory(self)`
+
+#### `adapter(self, mock_working_memory)`
+
+#### `sample_conversation(self)`
+
+#### `test_store_conversation(self, adapter, sample_conversation, mock_working_memory)`
+
+Test storing a conversation.
+
+#### `test_retrieve_conversation(self, adapter, mock_working_memory)`
+
+Test retrieving a conversation by ID.
+
+#### `test_retrieve_nonexistent_conversation(self, adapter, mock_working_memory)`
+
+Test retrieving a conversation that doesn't exist.
+
+### TestQualityFiltering
+
+Test quality-based conversation filtering.
+
+**Methods:**
+
+#### `mock_working_memory(self)`
+
+#### `adapter(self, mock_working_memory)`
+
+#### `test_accept_high_quality_conversation(self, adapter, mock_working_memory)`
+
+Test high-quality conversations are accepted.
+
+#### `test_reject_low_quality_conversation(self, adapter, mock_working_memory)`
+
+Test low-quality conversations are rejected.
+
+#### `test_configurable_quality_threshold(self, mock_working_memory)`
+
+Test quality threshold is configurable.
+
+### TestStatistics
+
+Test statistics calculation.
+
+**Methods:**
+
+#### `mock_working_memory(self)`
+
+Create mock with predefined statistics.
+
+#### `adapter(self, mock_working_memory)`
+
+#### `test_get_conversation_count(self, adapter)`
+
+Test getting total conversation count.
+
+#### `test_get_average_quality(self, adapter)`
+
+Test getting average quality score.
+
+#### `test_get_statistics_by_source(self, adapter)`
+
+Test getting statistics grouped by source.
+
+#### `test_statistics_includes_message_count(self, adapter)`
+
+Test statistics include total message count.
+
+### TestErrorHandling
+
+Test adapter error handling.
+
+**Methods:**
+
+#### `failing_working_memory(self)`
+
+Create WorkingMemory that raises exceptions.
+
+#### `adapter(self, failing_working_memory)`
+
+#### `test_handle_storage_failure(self, adapter)`
+
+Test graceful handling of storage failures.
+
+#### `test_handle_retrieval_failure(self, adapter)`
+
+Test graceful handling of retrieval failures.
+
+---
+
+## tests\track_a\test_copilot_parser
+
+Track A Phase 2: Comprehensive Unit Tests for CopilotParser
+
+Tests markdown/text conversation parsing including:
+- Format detection (markdown vs plain text)
+- Message extraction and role detection
+- Timestamp parsing and normalization
+- Multi-turn conversation handling
+- Edge cases and error handling
+
+Author: CORTEX Team
+Date: 2025-11-15
+
+### TestCopilotParserBasics
+
+Test basic CopilotParser functionality.
+
+**Methods:**
+
+#### `parser(self)`
+
+Create CopilotParser instance.
+
+#### `test_parser_initialization(self, parser)`
+
+Test parser initializes successfully.
+
+#### `test_parser_has_detect_format_method(self, parser)`
+
+Test parser has format detection capability.
+
+### TestMarkdownFormatParsing
+
+Test parsing markdown conversation format.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `simple_markdown(self)`
+
+Simple two-message conversation.
+
+#### `complex_markdown(self)`
+
+Multi-turn conversation with code blocks.
+
+#### `test_parse_simple_markdown(self, parser, simple_markdown)`
+
+Test parsing simple two-message conversation.
+
+#### `test_parse_multi_turn_markdown(self, parser, complex_markdown)`
+
+Test parsing multi-turn conversation.
+
+#### `test_parse_preserves_code_blocks(self, parser, complex_markdown)`
+
+Test code blocks are preserved in content.
+
+#### `test_parse_extracts_timestamps(self, parser, simple_markdown)`
+
+Test timestamps are extracted for each message.
+
+#### `test_parse_markdown_format_detection(self, parser, simple_markdown)`
+
+Test parser detects markdown format.
+
+### TestPlainTextFormatParsing
+
+Test parsing plain text conversation format.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `plain_text_conversation(self)`
+
+Plain text conversation without markdown.
+
+#### `test_parse_plain_text(self, parser, plain_text_conversation)`
+
+Test parsing plain text format.
+
+#### `test_parse_plain_text_detects_roles(self, parser, plain_text_conversation)`
+
+Test role detection in plain text.
+
+### TestEdgeCases
+
+Test edge cases and error handling.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `test_parse_empty_string(self, parser)`
+
+Test parsing empty string.
+
+#### `test_parse_whitespace_only(self, parser)`
+
+Test parsing whitespace-only string.
+
+#### `test_parse_single_message(self, parser)`
+
+Test parsing single message (no conversation).
+
+#### `test_parse_missing_role_markers(self, parser)`
+
+Test parsing text without clear role markers.
+
+#### `test_parse_mixed_format(self, parser)`
+
+Test parsing mixed markdown and plain text.
+
+### TestTimestampHandling
+
+Test timestamp extraction and normalization.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `test_timestamp_format_consistency(self, parser)`
+
+Test all timestamps use consistent format.
+
+#### `test_timestamp_parseable_as_datetime(self, parser)`
+
+Test timestamps can be parsed as datetime objects.
+
+#### `test_timestamp_ordering(self, parser)`
+
+Test timestamps maintain chronological order.
+
+### TestMetadataExtraction
+
+Test metadata extraction from conversations.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `test_parse_returns_metadata(self, parser)`
+
+Test parse result includes metadata.
+
+#### `test_metadata_includes_message_count(self, parser)`
+
+Test metadata includes message count.
+
+### TestSpecialCharacterHandling
+
+Test handling of special characters and unicode.
+
+**Methods:**
+
+#### `parser(self)`
+
+#### `test_parse_unicode_content(self, parser)`
+
+Test parsing content with unicode characters.
+
+#### `test_parse_special_markdown_chars(self, parser)`
+
+Test parsing markdown with special characters.
+
+#### `test_parse_code_with_backticks(self, parser)`
+
+Test parsing code blocks with backticks.
+
+---
+
+## tests\track_a\test_integration
+
+CORTEX Track A - Integration Test Suite
+Phase 1.3: Conversation Import Pipeline Integration Tests
+
+Purpose: End-to-end validation of the conversation import pipeline
+Validates: Parse → Extract → Store → Retrieve workflow
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file
+
+### TestConversationImportIntegration
+
+Integration tests for complete conversation import pipeline.
+
+**Methods:**
+
+#### `sample_conversation_markdown(self)`
+
+Sample GitHub Copilot Chat conversation in Markdown format.
+
+#### `importer(self)`
+
+Create ConversationImporter instance.
+
+#### `parser(self)`
+
+Create CopilotParser instance.
+
+#### `extractor(self)`
+
+Create SemanticExtractor instance.
+
+#### `adapter(self)`
+
+Create ConversationalChannelAdapter instance.
+
+#### `test_end_to_end_pipeline(self, sample_conversation_markdown, importer)`
+
+Test complete pipeline: import → parse → extract → store → retrieve.
+
+#### `test_parser_markdown_format(self, sample_conversation_markdown, parser)`
+
+Test parser correctly handles Markdown format.
+
+#### `test_extractor_entity_detection(self, sample_conversation_markdown, parser, extractor)`
+
+Test semantic extractor correctly identifies entities.
+
+#### `test_extractor_intent_detection(self, sample_conversation_markdown, parser, extractor)`
+
+Test semantic extractor correctly identifies intents.
+
+#### `test_extractor_quality_scoring(self, sample_conversation_markdown, parser, extractor)`
+
+Test quality scoring algorithm.
+
+#### `test_adapter_storage_and_retrieval(self, sample_conversation_markdown, importer)`
+
+Test conversation storage and retrieval through adapter.
+
+#### `test_adapter_quality_filtering(self, sample_conversation_markdown, parser, extractor, adapter)`
+
+Test quality-based filtering during storage.
+
+#### `test_adapter_statistics(self, sample_conversation_markdown, importer)`
+
+Test statistics generation.
+
+#### `test_error_handling_empty_input(self, importer)`
+
+Test error handling for empty input.
+
+#### `test_error_handling_invalid_format(self, importer)`
+
+Test error handling for invalid conversation format.
+
+---
+
+## tests\track_a\test_semantic_extractor
+
+Track A Phase 2: Comprehensive Unit Tests for SemanticExtractor
+
+Tests semantic analysis of conversations including:
+- Entity extraction (files, classes, functions, variables)
+- Intent detection (EXECUTE, PLAN, TEST, FIX, etc.)
+- Quality scoring (0-10 scale)
+- Conversation depth analysis
+- Multi-turn pattern recognition
+
+Author: CORTEX Team
+Date: 2025-11-15
+
+### TestSemanticExtractorBasics
+
+Test basic SemanticExtractor functionality.
+
+**Methods:**
+
+#### `extractor(self)`
+
+Create SemanticExtractor instance.
+
+#### `test_extractor_initialization(self, extractor)`
+
+Test extractor initializes successfully.
+
+#### `test_extractor_has_required_methods(self, extractor)`
+
+Test extractor has all required analysis methods.
+
+### TestEntityExtraction
+
+Test entity extraction from conversations.
+
+**Methods:**
+
+#### `extractor(self)`
+
+#### `conversation_with_code(self)`
+
+Conversation containing code entities.
+
+#### `test_extract_file_entities(self, extractor, conversation_with_code)`
+
+Test extraction of file names.
+
+#### `test_extract_class_entities(self, extractor, conversation_with_code)`
+
+Test extraction of class names.
+
+#### `test_extract_method_entities(self, extractor, conversation_with_code)`
+
+Test extraction of method/function names.
+
+#### `test_extract_entities_from_natural_language(self, extractor)`
+
+Test entity extraction from natural language (no code).
+
+#### `test_entity_deduplication(self, extractor)`
+
+Test entities are deduplicated.
+
+### TestIntentDetection
+
+Test intent detection from conversations.
+
+**Methods:**
+
+#### `extractor(self)`
+
+#### `test_detect_execute_intent(self, extractor)`
+
+Test detection of EXECUTE intent.
+
+#### `test_detect_plan_intent(self, extractor)`
+
+Test detection of PLAN intent.
+
+#### `test_detect_test_intent(self, extractor)`
+
+Test detection of TEST intent.
+
+#### `test_detect_fix_intent(self, extractor)`
+
+Test detection of FIX intent.
+
+#### `test_detect_multiple_intents(self, extractor)`
+
+Test detection of multiple intents in conversation.
+
+#### `test_detect_status_intent(self, extractor)`
+
+Test detection of STATUS intent.
+
+### TestQualityScoring
+
+Test conversation quality scoring.
+
+**Methods:**
+
+#### `extractor(self)`
+
+#### `test_quality_score_in_range(self, extractor)`
+
+Test quality score is in 0-10 range.
+
+#### `test_quality_score_short_conversation(self, extractor)`
+
+Test quality score for short conversation.
+
+#### `test_quality_score_detailed_conversation(self, extractor)`
+
+Test quality score for detailed conversation.
+
+#### `test_quality_score_with_code(self, extractor)`
+
+Test quality score considers code presence.
+
+### TestMultiTurnAnalysis
+
+Test analysis of multi-turn conversations.
+
+**Methods:**
+
+#### `extractor(self)`
+
+#### `test_extract_from_multi_turn_conversation(self, extractor)`
+
+Test extraction handles multiple turns correctly.
+
+#### `test_quality_increases_with_turns(self, extractor)`
+
+Test quality score tends to increase with more turns.
+
+### TestEdgeCases
+
+Test edge cases and error handling.
+
+**Methods:**
+
+#### `extractor(self)`
+
+#### `test_extract_empty_conversation(self, extractor)`
+
+Test extraction from empty conversation.
+
+#### `test_extract_minimal_content(self, extractor)`
+
+Test extraction from minimal content.
+
+#### `test_extract_without_timestamp(self, extractor)`
+
+Test extraction when timestamps are missing.
+
+---
+
+## tests\workflows\__init__
 
 CORTEX Workflow Tests
 

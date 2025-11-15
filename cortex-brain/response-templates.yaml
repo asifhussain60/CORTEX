@@ -51,9 +51,7 @@
 # ✅ ALWAYS validate user assumptions in Challenge section first
 # ✅ ALWAYS use phases for complex projects
 #
-# ═══════════════════════════════════════════════════════════════════════════════
 # ENHANCED CHALLENGE SECTION EXAMPLES
-# ═══════════════════════════════════════════════════════════════════════════════
 #
 # USER ASSUMPTION VALIDATION (NEW!):
 #
@@ -73,7 +71,6 @@
 # ⚠️ **My Challenge:** ✓ **Accept**
 #    I found the customer-dashboard div in src/components/Dashboard.jsx. Adding a purple button there is straightforward.
 #
-# ═══════════════════════════════════════════════════════════════════════════════
 # ❌ NEVER ask "Which one?" when user can do multiple tasks
 # ✅ ALWAYS use checkboxes (☐) for phases/milestones
 # ✅ ALWAYS offer "all" or "specific" choice at the end
@@ -152,7 +149,6 @@ templates:
         • Try: "setup environment" to get started
       
       © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
-      ╚═══════════════════════════════════════════════════════════════════════════╝
   
   # ============================================================================
   # DETAILED HELP - Categorized with examples
@@ -183,7 +179,6 @@ templates:
          Modules: 4 (platform detection, deps, brain init, validation)
       
       📚 DOCUMENTATION
-      ----------------
       ✅ update story - Refresh CORTEX story documentation
          Examples: "refresh story", "update story"
          Modules: 6 (load, transform, validate, save, nav, preview)
@@ -198,13 +193,11 @@ templates:
          Status: Architecture ready, modules pending
       
       🧹 MAINTENANCE
-      --------------
       🔄 cleanup - Clean temporary files and optimize databases
          Examples: "cleanup", "clean workspace"
          Modules: 5/6 (logs, cache, SQLite vacuum, report)
       
       🛡️ VALIDATION
-      -------------
       ⏸️ check brain - Run brain protection validation
          Examples: "check brain", "validate brain"
          Status: Architecture ready, modules pending
@@ -214,7 +207,6 @@ templates:
          Status: Architecture ready, modules pending
       
       🎯 PLANNING (CORTEX 2.1)
-      ------------------------
       🎯 plan this - Interactive collaborative planning
          Examples: "plan this feature", "help me plan"
          Status: Design phase
@@ -225,7 +217,6 @@ templates:
         • Start working: Just tell CORTEX what you need!
       
       © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
-      ╚═══════════════════════════════════════════════════════════════════════════╝
   
   # ============================================================================
   # QUICK START - First-time user guidance
