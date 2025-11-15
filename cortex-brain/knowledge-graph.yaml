@@ -194,6 +194,59 @@ validation_insights:
     last_seen: '2025-11-05'
     resolution: Retroactive TDD - created comprehensive test suite (53 tests)
     commitment: Will enforce TDD for ALL WPF/UI implementations
+  
+  windows_platform_compatibility:
+    issue: Unix-only functions (fcntl, os.getuid) cause ModuleNotFoundError/AttributeError on Windows
+    validation_approach: Conditional imports with try/except, platform checks before calling OS-specific functions
+    rationale: Python standard library has Unix-specific modules unavailable on Windows
+    frequency: 2
+    confidence: 1.0
+    impact: high
+    last_seen: '2025-11-15'
+    lesson: 'Always check platform compatibility for Unix-specific modules; use hasattr() for os functions like getuid()'
+    examples:
+      fcntl_import: 'try: import fcntl; HAS_FCNTL=True except ImportError: HAS_FCNTL=False'
+      os_getuid_check: 'if hasattr(os, "getuid"): uid = os.getuid() else: uid = None'
+    source: 'CopilotChats.md lines 2400-3100, ambient daemon Windows compatibility fixes'
+  
+  architecture_level_integration:
+    issue: Ad-hoc feature additions create fragmented systems without central visibility
+    validation_approach: Integrate new system components into existing orchestrators/routers
+    rationale: Centralized integration provides visibility, consistency, maintainability
+    frequency: 1
+    confidence: 0.9
+    impact: medium-high
+    last_seen: '2025-11-15'
+    lesson: 'New system components should integrate into existing orchestration workflows, not as standalone scripts'
+    example: 'Ambient daemon health check added to optimize orchestrator Phase 6 (lines 556-618) instead of separate monitoring script'
+    source: 'CopilotChats.md lines 2900-3100, optimize orchestrator integration'
+  
+  iterative_user_feedback_refinement:
+    issue: Initial implementations may miss edge cases or misunderstand requirements
+    validation_approach: Responsive iteration based on clarifying user feedback
+    rationale: User feedback exposes edge cases and requirements misunderstandings early
+    frequency: 1
+    confidence: 1.0
+    impact: medium
+    last_seen: '2025-11-15'
+    lesson: 'Implement initial solution quickly, then refine based on user clarification rather than over-analyzing upfront'
+    example: 'Separator line removal: "remove all lines" → user clarifies "tables OK" → refine to "remove only conversational separators"'
+    source: 'CopilotChats.md lines 2001-2400, response template cleanup'
+  
+  natural_language_entry_points:
+    issue: Programmatic APIs create cognitive load and require documentation lookup
+    validation_approach: Design feature entry points as natural language commands
+    rationale: Natural language reduces cognitive load, aligns with AI-assisted development
+    frequency: 3
+    confidence: 0.9
+    impact: medium
+    last_seen: '2025-11-15'
+    lesson: 'Support conversational commands ("let\'s plan", "optimize", "proceed with") alongside programmatic APIs'
+    examples:
+      - 'YAML Phase Tracker: "let\'s plan" entry point'
+      - 'Optimize Orchestrator: "optimize" command'
+      - 'General workflows: "proceed with" command'
+    source: 'CopilotChats.md throughout, natural language command usage'
 version: 6.0.0
 last_updated: 2025-11-05 15:00:00+00:00
 workflow_patterns:
@@ -343,6 +396,39 @@ workflow_patterns:
     confidence: 0.92
     last_used: '2025-11-05'
     time_saved: 10-15 minutes per broken deployment
+  
+  systematic_multi_stage_debugging:
+    pattern: systematic_debugging
+    description: '5-stage debugging approach for complex system issues with validation at each stage'
+    steps:
+    - 'Stage 1: Identify error symptoms (logs, exceptions, stack traces)'
+    - 'Stage 2: Fix data layer issues (database schema, migrations)'
+    - 'Stage 3: Fix API layer issues (method names, signatures, contracts)'
+    - 'Stage 4: Fix platform layer issues (OS-specific functions, cross-platform compatibility)'
+    - 'Stage 5: Integrate fixes into system health checks (orchestrators, monitoring)'
+    - 'Validation: Test at each stage before proceeding to next'
+    rationale: 'Layered debugging prevents cascading failures and ensures fixes are validated incrementally'
+    success_rate: 1.0
+    confidence: 0.95
+    last_used: '2025-11-15'
+    example: 'Ambient daemon fix: schema (created_at column) → API (detect_or_create_session) → platform (fcntl import) → platform (os.getuid) → integration (optimize orchestrator health check)'
+    source: 'CopilotChats.md lines 2400-3100, ambient daemon 5-stage debugging'
+  
+  user_feedback_iteration_workflow:
+    pattern: user_feedback_refinement
+    description: 'Responsive iteration based on clarifying user feedback'
+    steps:
+    - 'Step 1: User reports issue or requests feature'
+    - 'Step 2: Agent implements initial solution based on understanding'
+    - 'Step 3: User provides clarifying feedback or identifies edge cases'
+    - 'Step 4: Agent refines solution addressing specific feedback'
+    - 'Step 5: Validate refinement meets updated requirements'
+    success_rate: 1.0
+    confidence: 1.0
+    last_used: '2025-11-15'
+    rationale: 'User feedback exposes edge cases and requirements misunderstandings early, avoiding over-analysis upfront'
+    example: 'Separator line removal: initial "remove all lines" → user clarifies "tables OK" → refined to "remove only conversational separators, preserve table structures"'
+    source: 'CopilotChats.md lines 2001-2400, iterative template cleanup'
 architectural_patterns:
   api_auth: none
   service_naming: I{Name} interface
