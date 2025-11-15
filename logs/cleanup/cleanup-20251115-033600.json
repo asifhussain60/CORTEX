@@ -1,0 +1,3522 @@
+{
+  "timestamp": "2025-11-15T03:36:00.810126",
+  "dry_run": true,
+  "stats": {
+    "files_scanned": 0,
+    "files_deleted": 0,
+    "files_archived": 0,
+    "files_compressed": 0,
+    "files_moved": 0,
+    "directories_removed": 26,
+    "duplicates_found": 538,
+    "space_freed_bytes": 1660,
+    "warnings": [],
+    "errors": [],
+    "space_freed_mb": 0.001583099365234375,
+    "space_freed_gb": 1.5459954738616943e-06
+  },
+  "actions_taken": [
+    {
+      "action": "delete",
+      "path": ".pytest_cache",
+      "reason": ".pytest_cache cache directory",
+      "timestamp": "2025-11-15T03:35:55.391858"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/normalize-package-data/node_modules/lru-cache/dist/commonjs/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/normalize-package-data/node_modules/lru-cache/dist/esm/index.d.ts",
+      "timestamp": "2025-11-15T03:35:56.924913"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/normalize-package-data/node_modules/lru-cache/dist/commonjs/index.d.ts.map",
+      "reason": "Duplicate of cortex-extension/node_modules/normalize-package-data/node_modules/lru-cache/dist/esm/index.d.ts.map",
+      "timestamp": "2025-11-15T03:35:56.924929"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/ts-api-utils/lib/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/ts-api-utils/lib/index.d.cts",
+      "timestamp": "2025-11-15T03:35:56.924936"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@vscode/vsce-sign/bin/vsce-sign",
+      "reason": "Duplicate of cortex-extension/node_modules/@vscode/vsce-sign-darwin-arm64/bin/vsce-sign",
+      "timestamp": "2025-11-15T03:35:56.924942"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/config-array/node_modules/minimatch/minimatch.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@vscode/vsce/node_modules/minimatch/minimatch.js",
+      "timestamp": "2025-11-15T03:35:56.924949"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/minimatch/minimatch.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@vscode/vsce/node_modules/minimatch/minimatch.js",
+      "timestamp": "2025-11-15T03:35:56.924955"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/minimatch/minimatch.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@vscode/vsce/node_modules/minimatch/minimatch.js",
+      "timestamp": "2025-11-15T03:35:56.924960"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-common/lib/types/cache/CacheManager.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-common/dist/cache/CacheManager.d.ts",
+      "timestamp": "2025-11-15T03:35:56.924967"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-common/lib/types/utils/Constants.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-common/dist/utils/Constants.d.ts",
+      "timestamp": "2025-11-15T03:35:56.924973"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-common/lib/types/telemetry/performance/PerformanceEvent.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-common/dist/telemetry/performance/PerformanceEvent.d.ts",
+      "timestamp": "2025-11-15T03:35:56.924979"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/utils.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/utils.js.map",
+      "timestamp": "2025-11-15T03:35:56.924986"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/utils.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/utils.js.map",
+      "timestamp": "2025-11-15T03:35:56.924991"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/browserFlows/msalBrowserCommon.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/browserFlows/msalBrowserCommon.js.map",
+      "timestamp": "2025-11-15T03:35:56.924997"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/browserFlows/msalBrowserCommon.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/browserFlows/msalBrowserCommon.js.map",
+      "timestamp": "2025-11-15T03:35:56.925003"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/browserFlows/msalBrowserCommon.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/browserFlows/msalBrowserCommon.js",
+      "timestamp": "2025-11-15T03:35:56.925009"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/browserFlows/msalBrowserCommon.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/browserFlows/msalBrowserCommon.js",
+      "timestamp": "2025-11-15T03:35:56.925014"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/nodeFlows/msalPlugins.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalPlugins.js.map",
+      "timestamp": "2025-11-15T03:35:56.925019"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/nodeFlows/msalPlugins.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalPlugins.js.map",
+      "timestamp": "2025-11-15T03:35:56.925025"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/nodeFlows/msalClient.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925030"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/nodeFlows/msalClient.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925035"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/commonjs/msal/nodeFlows/msalClient.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925040"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/nodeFlows/msalClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.js",
+      "timestamp": "2025-11-15T03:35:56.925046"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/nodeFlows/msalClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.js",
+      "timestamp": "2025-11-15T03:35:56.925051"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/msal/nodeFlows/msalClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925057"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/msal/nodeFlows/msalClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/msal/nodeFlows/msalClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925062"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/client/identityClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/client/identityClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925068"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/client/identityClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/client/identityClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925073"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/client/identityClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/client/identityClient.js",
+      "timestamp": "2025-11-15T03:35:56.925079"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/client/identityClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/client/identityClient.js",
+      "timestamp": "2025-11-15T03:35:56.925084"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/onBehalfOfCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/onBehalfOfCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925090"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/clientCertificateCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/clientCertificateCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925096"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/environmentCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/environmentCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925101"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/azurePipelinesCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/azurePipelinesCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925107"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/azurePowerShellCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/azurePowerShellCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925112"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/defaultAzureCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/defaultAzureCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925118"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/azurePowerShellCredential.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/azurePowerShellCredential.js",
+      "timestamp": "2025-11-15T03:35:56.925124"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/visualStudioCodeCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/visualStudioCodeCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925129"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/defaultAzureCredentialFunctions.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/defaultAzureCredentialFunctions.js.map",
+      "timestamp": "2025-11-15T03:35:56.925135"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/browser/credentials/defaultAzureCredentialFunctions.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/defaultAzureCredentialFunctions.js.map",
+      "timestamp": "2025-11-15T03:35:56.925140"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/workloadIdentityCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/workloadIdentityCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925146"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/azureDeveloperCliCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/azureDeveloperCliCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925151"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/azureCliCredential.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/azureCliCredential.js.map",
+      "timestamp": "2025-11-15T03:35:56.925157"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/managedIdentityCredential/index.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/managedIdentityCredential/index.js",
+      "timestamp": "2025-11-15T03:35:56.925162"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/identity/dist/esm/credentials/managedIdentityCredential/index.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/identity/dist/workerd/credentials/managedIdentityCredential/index.js.map",
+      "timestamp": "2025-11-15T03:35:56.925168"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/serializer.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializer.js.map",
+      "timestamp": "2025-11-15T03:35:56.925174"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/serializer.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializer.js.map",
+      "timestamp": "2025-11-15T03:35:56.925180"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/deserializationPolicy.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/deserializationPolicy.js",
+      "timestamp": "2025-11-15T03:35:56.925185"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/deserializationPolicy.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/deserializationPolicy.js",
+      "timestamp": "2025-11-15T03:35:56.925190"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/urlHelpers.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/urlHelpers.js.map",
+      "timestamp": "2025-11-15T03:35:56.925196"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/urlHelpers.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/urlHelpers.js.map",
+      "timestamp": "2025-11-15T03:35:56.925201"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/serializationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925206"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/serializationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925212"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/serviceClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serviceClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925218"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/serviceClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serviceClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925223"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925228"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925233"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/deserializationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/deserializationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925239"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/deserializationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/deserializationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925244"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925249"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925255"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/commonjs/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925260"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/esm/serializer.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializer.js",
+      "timestamp": "2025-11-15T03:35:56.925266"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-client/dist/browser/serializer.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-client/dist/react-native/serializer.js",
+      "timestamp": "2025-11-15T03:35:56.925271"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-tracing/dist/esm/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-tracing/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925278"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-tracing/dist/browser/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-tracing/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925286"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-tracing/dist/esm/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-tracing/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925292"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-tracing/dist/browser/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-tracing/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925297"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-tracing/dist/commonjs/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-tracing/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925303"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/esm/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925308"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/browser/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925313"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/esm/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925319"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/browser/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925324"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/commonjs/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925329"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/esm/util/tokenCycler.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/util/tokenCycler.js.map",
+      "timestamp": "2025-11-15T03:35:56.925334"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/browser/util/tokenCycler.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/util/tokenCycler.js.map",
+      "timestamp": "2025-11-15T03:35:56.925339"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/esm/policies/bearerTokenAuthenticationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/policies/bearerTokenAuthenticationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925345"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/browser/policies/bearerTokenAuthenticationPolicy.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/policies/bearerTokenAuthenticationPolicy.js.map",
+      "timestamp": "2025-11-15T03:35:56.925354"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/esm/policies/bearerTokenAuthenticationPolicy.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/policies/bearerTokenAuthenticationPolicy.js",
+      "timestamp": "2025-11-15T03:35:56.925359"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/core-rest-pipeline/dist/browser/policies/bearerTokenAuthenticationPolicy.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/core-rest-pipeline/dist/react-native/policies/bearerTokenAuthenticationPolicy.js",
+      "timestamp": "2025-11-15T03:35:56.925364"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/crypto/BrowserCrypto.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/crypto/BrowserCrypto.mjs",
+      "timestamp": "2025-11-15T03:35:56.925370"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/broker/nativeBroker/PlatformAuthExtensionHandler.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/broker/nativeBroker/PlatformAuthExtensionHandler.mjs",
+      "timestamp": "2025-11-15T03:35:56.925376"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/app/PublicClientNext.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientNext.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925383"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/types/app/PublicClientNext.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientNext.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925388"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/custom-auth-path/types/app/PublicClientNext.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientNext.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925393"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/app/PublicClientApplication.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientApplication.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925399"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/types/app/PublicClientApplication.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientApplication.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925404"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/custom-auth-path/types/app/PublicClientApplication.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/app/PublicClientApplication.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925409"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/cache/LocalStorage.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/LocalStorage.mjs",
+      "timestamp": "2025-11-15T03:35:56.925414"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/cache/BrowserCacheManager.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/BrowserCacheManager.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925420"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/types/cache/BrowserCacheManager.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/BrowserCacheManager.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925426"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/custom-auth-path/types/cache/BrowserCacheManager.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/BrowserCacheManager.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925431"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/cache/BrowserCacheManager.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/BrowserCacheManager.mjs",
+      "timestamp": "2025-11-15T03:35:56.925436"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/cache/TokenCache.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/cache/TokenCache.mjs",
+      "timestamp": "2025-11-15T03:35:56.925445"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/protocol/Authorize.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/protocol/Authorize.mjs",
+      "timestamp": "2025-11-15T03:35:56.925450"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/interaction_client/SilentIframeClient.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/interaction_client/SilentIframeClient.mjs",
+      "timestamp": "2025-11-15T03:35:56.925457"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/interaction_client/PopupClient.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/interaction_client/PopupClient.mjs",
+      "timestamp": "2025-11-15T03:35:56.925463"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/interaction_client/StandardInteractionClient.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/interaction_client/StandardInteractionClient.mjs",
+      "timestamp": "2025-11-15T03:35:56.925468"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/interaction_client/PlatformAuthInteractionClient.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/interaction_client/PlatformAuthInteractionClient.mjs",
+      "timestamp": "2025-11-15T03:35:56.925474"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/interaction_client/RedirectClient.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/interaction_client/RedirectClient.mjs",
+      "timestamp": "2025-11-15T03:35:56.925480"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/controllers/StandardController.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/controllers/StandardController.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925487"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/types/controllers/StandardController.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/controllers/StandardController.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925493"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/lib/custom-auth-path/types/controllers/StandardController.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/controllers/StandardController.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925498"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@azure/msal-browser/dist/controllers/StandardController.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/@azure/msal-browser/dist/custom-auth-path/controllers/StandardController.mjs",
+      "timestamp": "2025-11-15T03:35:56.925504"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/argparse/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925513"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/argparse/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925519"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/markdown-it/node_modules/argparse/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925525"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/argparse/argparse.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/argparse.js",
+      "timestamp": "2025-11-15T03:35:56.925531"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/argparse/argparse.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/argparse.js",
+      "timestamp": "2025-11-15T03:35:56.925537"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/markdown-it/node_modules/argparse/argparse.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/argparse.js",
+      "timestamp": "2025-11-15T03:35:56.925543"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/argparse/lib/textwrap.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/lib/textwrap.js",
+      "timestamp": "2025-11-15T03:35:56.925550"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/argparse/lib/textwrap.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/lib/textwrap.js",
+      "timestamp": "2025-11-15T03:35:56.925556"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/markdown-it/node_modules/argparse/lib/textwrap.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/argparse/lib/textwrap.js",
+      "timestamp": "2025-11-15T03:35:56.925562"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/CHANGELOG.md",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/CHANGELOG.md",
+      "timestamp": "2025-11-15T03:35:56.925568"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/CHANGELOG.md",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/CHANGELOG.md",
+      "timestamp": "2025-11-15T03:35:56.925574"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/dist/js-yaml.min.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.min.js",
+      "timestamp": "2025-11-15T03:35:56.925580"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/dist/js-yaml.min.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.min.js",
+      "timestamp": "2025-11-15T03:35:56.925586"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/dist/js-yaml.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.js",
+      "timestamp": "2025-11-15T03:35:56.925592"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/dist/js-yaml.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.js",
+      "timestamp": "2025-11-15T03:35:56.925598"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/dist/js-yaml.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.mjs",
+      "timestamp": "2025-11-15T03:35:56.925604"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/dist/js-yaml.mjs",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/dist/js-yaml.mjs",
+      "timestamp": "2025-11-15T03:35:56.925610"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/lib/dumper.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/lib/dumper.js",
+      "timestamp": "2025-11-15T03:35:56.925616"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/lib/dumper.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/lib/dumper.js",
+      "timestamp": "2025-11-15T03:35:56.925622"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/eslintrc/node_modules/js-yaml/lib/loader.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/lib/loader.js",
+      "timestamp": "2025-11-15T03:35:56.925628"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/rc-config-loader/node_modules/js-yaml/lib/loader.js",
+      "reason": "Duplicate of cortex-extension/node_modules/mocha/node_modules/js-yaml/lib/loader.js",
+      "timestamp": "2025-11-15T03:35:56.925634"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/esm/decode.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/esm/decode.js",
+      "timestamp": "2025-11-15T03:35:56.925643"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/esm/decode.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/esm/decode.js.map",
+      "timestamp": "2025-11-15T03:35:56.925649"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/esm/generated/encode-html.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/esm/generated/encode-html.js.map",
+      "timestamp": "2025-11-15T03:35:56.925655"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/esm/generated/decode-data-html.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/esm/generated/decode-data-html.js",
+      "timestamp": "2025-11-15T03:35:56.925661"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/esm/generated/encode-html.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/esm/generated/encode-html.js",
+      "timestamp": "2025-11-15T03:35:56.925670"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/commonjs/decode.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/commonjs/decode.js",
+      "timestamp": "2025-11-15T03:35:56.925676"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/commonjs/decode.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/commonjs/decode.js.map",
+      "timestamp": "2025-11-15T03:35:56.925682"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/commonjs/generated/encode-html.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/commonjs/generated/encode-html.js.map",
+      "timestamp": "2025-11-15T03:35:56.925688"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/commonjs/generated/decode-data-html.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/commonjs/generated/decode-data-html.js",
+      "timestamp": "2025-11-15T03:35:56.925694"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/dist/commonjs/generated/encode-html.js",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/dist/commonjs/generated/encode-html.js",
+      "timestamp": "2025-11-15T03:35:56.925700"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/src/decode.spec.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/src/decode.spec.ts",
+      "timestamp": "2025-11-15T03:35:56.925706"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/src/decode.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/src/decode.ts",
+      "timestamp": "2025-11-15T03:35:56.925712"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/src/generated/decode-data-html.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/src/generated/decode-data-html.ts",
+      "timestamp": "2025-11-15T03:35:56.925718"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/node_modules/entities/src/generated/encode-html.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/htmlparser2/node_modules/entities/src/generated/encode-html.ts",
+      "timestamp": "2025-11-15T03:35:56.925724"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/tar-stream/node_modules/readable-stream/lib/_stream_readable.js",
+      "reason": "Duplicate of cortex-extension/node_modules/bl/node_modules/readable-stream/lib/_stream_readable.js",
+      "timestamp": "2025-11-15T03:35:56.925731"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/tar-stream/node_modules/readable-stream/lib/_stream_writable.js",
+      "reason": "Duplicate of cortex-extension/node_modules/bl/node_modules/readable-stream/lib/_stream_writable.js",
+      "timestamp": "2025-11-15T03:35:56.925737"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/punycode.js/punycode.es6.js",
+      "reason": "Duplicate of cortex-extension/node_modules/punycode/punycode.es6.js",
+      "timestamp": "2025-11-15T03:35:56.925744"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/punycode.js/punycode.js",
+      "reason": "Duplicate of cortex-extension/node_modules/punycode/punycode.js",
+      "timestamp": "2025-11-15T03:35:56.925750"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/config-helpers/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925757"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/core/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925763"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/object-schema/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925768"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/plugin-kit/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925774"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@humanwhocodes/retry/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925780"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@humanwhocodes/module-importer/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925785"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@humanfs/core/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925791"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@humanfs/node/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/config-array/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.925797"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@eslint/core/dist/cjs/types.d.cts",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/core/dist/esm/types.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925804"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ignore/index.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ignore/index.js",
+      "timestamp": "2025-11-15T03:35:56.925811"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ignore/legacy.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ignore/legacy.js",
+      "timestamp": "2025-11-15T03:35:56.925817"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ignore/README.md",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ignore/README.md",
+      "timestamp": "2025-11-15T03:35:56.925823"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/README.md",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/README.md",
+      "timestamp": "2025-11-15T03:35:56.925829"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/dist/ajv.min.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/dist/ajv.min.js",
+      "timestamp": "2025-11-15T03:35:56.925835"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/dist/ajv.bundle.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/dist/ajv.bundle.js",
+      "timestamp": "2025-11-15T03:35:56.925841"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/dist/ajv.min.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/dist/ajv.min.js.map",
+      "timestamp": "2025-11-15T03:35:56.925846"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/ajv.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/ajv.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925853"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/ajv.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/ajv.js",
+      "timestamp": "2025-11-15T03:35:56.925858"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/compile/index.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/compile/index.js",
+      "timestamp": "2025-11-15T03:35:56.925865"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/compile/formats.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/compile/formats.js",
+      "timestamp": "2025-11-15T03:35:56.925871"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/dotjs/required.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/dotjs/required.js",
+      "timestamp": "2025-11-15T03:35:56.925878"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/dotjs/properties.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/dotjs/properties.js",
+      "timestamp": "2025-11-15T03:35:56.925884"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/ajv/lib/dotjs/validate.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@eslint/eslintrc/node_modules/ajv/lib/dotjs/validate.js",
+      "timestamp": "2025-11-15T03:35:56.925890"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/acorn/dist/acorn.d.mts",
+      "reason": "Duplicate of cortex-extension/node_modules/acorn/dist/acorn.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925896"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/nodeHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/nodeHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925903"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/nodeHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/nodeHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925908"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/nodeHttpClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/nodeHttpClient.js",
+      "timestamp": "2025-11-15T03:35:56.925914"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/nodeHttpClient.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/nodeHttpClient.js",
+      "timestamp": "2025-11-15T03:35:56.925920"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925926"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/interfaces.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/interfaces.js.map",
+      "timestamp": "2025-11-15T03:35:56.925932"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/fetchHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/fetchHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925938"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/fetchHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/fetchHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925944"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925950"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925955"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/commonjs/interfaces.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/interfaces.d.ts",
+      "timestamp": "2025-11-15T03:35:56.925961"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/pipeline.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/pipeline.js.map",
+      "timestamp": "2025-11-15T03:35:56.925967"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/pipeline.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/pipeline.js.map",
+      "timestamp": "2025-11-15T03:35:56.925973"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/xhrHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/xhrHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925979"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/xhrHttpClient.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/xhrHttpClient.js.map",
+      "timestamp": "2025-11-15T03:35:56.925984"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/pipeline.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/pipeline.js",
+      "timestamp": "2025-11-15T03:35:56.925989"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/pipeline.js",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/pipeline.js",
+      "timestamp": "2025-11-15T03:35:56.925994"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/logger/debug.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/logger/debug.js.map",
+      "timestamp": "2025-11-15T03:35:56.926000"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/logger/debug.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/logger/debug.js.map",
+      "timestamp": "2025-11-15T03:35:56.926005"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/logger/logger.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/logger/logger.js.map",
+      "timestamp": "2025-11-15T03:35:56.926011"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/logger/logger.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/logger/logger.js.map",
+      "timestamp": "2025-11-15T03:35:56.926016"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/client/multipart.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/multipart.js.map",
+      "timestamp": "2025-11-15T03:35:56.926021"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/client/multipart.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/multipart.js.map",
+      "timestamp": "2025-11-15T03:35:56.926027"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/client/common.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/common.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926032"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/client/common.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/common.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926038"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/commonjs/client/common.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/common.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926044"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/client/urlHelpers.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/urlHelpers.js.map",
+      "timestamp": "2025-11-15T03:35:56.926050"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/client/urlHelpers.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/urlHelpers.js.map",
+      "timestamp": "2025-11-15T03:35:56.926056"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/client/sendRequest.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/sendRequest.js.map",
+      "timestamp": "2025-11-15T03:35:56.926062"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/client/sendRequest.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/sendRequest.js.map",
+      "timestamp": "2025-11-15T03:35:56.926068"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/esm/client/common.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/common.js.map",
+      "timestamp": "2025-11-15T03:35:56.926074"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@typespec/ts-http-runtime/dist/browser/client/common.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/@typespec/ts-http-runtime/dist/react-native/client/common.js.map",
+      "timestamp": "2025-11-15T03:35:56.926079"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/index.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/index.js",
+      "timestamp": "2025-11-15T03:35:56.926087"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/text.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/text.js",
+      "timestamp": "2025-11-15T03:35:56.926093"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/RGI_Emoji.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/RGI_Emoji.js",
+      "timestamp": "2025-11-15T03:35:56.926099"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/es2015/index.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/es2015/index.js",
+      "timestamp": "2025-11-15T03:35:56.926105"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/es2015/text.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/es2015/text.js",
+      "timestamp": "2025-11-15T03:35:56.926111"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@isaacs/cliui/node_modules/emoji-regex/es2015/RGI_Emoji.js",
+      "reason": "Duplicate of cortex-extension/node_modules/wrap-ansi/node_modules/emoji-regex/es2015/RGI_Emoji.js",
+      "timestamp": "2025-11-15T03:35:56.926117"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/validate-npm-package-license/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/spdx-correct/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926123"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/importlib_metadata-8.7.0.dist-info/licenses/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/spdx-correct/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926129"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/watchdog-6.0.0.dist-info/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/spdx-correct/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926135"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/safe-buffer/README.md",
+      "reason": "Duplicate of cortex-extension/node_modules/string_decoder/node_modules/safe-buffer/README.md",
+      "timestamp": "2025-11-15T03:35:56.926141"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/readable-stream/node_modules/safe-buffer/README.md",
+      "reason": "Duplicate of cortex-extension/node_modules/string_decoder/node_modules/safe-buffer/README.md",
+      "timestamp": "2025-11-15T03:35:56.926146"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/@secretlint/formatter/node_modules/chalk/readme.md",
+      "reason": "Duplicate of cortex-extension/node_modules/ora/node_modules/chalk/readme.md",
+      "timestamp": "2025-11-15T03:35:56.926155"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint-visitor-keys/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926169"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/espree/node_modules/eslint-visitor-keys/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926174"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/eslint/node_modules/eslint-visitor-keys/LICENSE",
+      "reason": "Duplicate of cortex-extension/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.926180"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/jackspeak/dist/commonjs/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/jackspeak/dist/esm/index.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926188"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/diff/lib/index.es6.js",
+      "reason": "Duplicate of cortex-extension/node_modules/diff/lib/index.mjs",
+      "timestamp": "2025-11-15T03:35:56.926195"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/underscore/underscore-min.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/underscore/underscore-umd-min.js.map",
+      "timestamp": "2025-11-15T03:35:56.926202"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/underscore/underscore-umd.js",
+      "reason": "Duplicate of cortex-extension/node_modules/underscore/underscore.js",
+      "timestamp": "2025-11-15T03:35:56.926208"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/underscore/underscore-umd-min.js",
+      "reason": "Duplicate of cortex-extension/node_modules/underscore/underscore-min.js",
+      "timestamp": "2025-11-15T03:35:56.926214"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cockatiel/dist/esm/Policy.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cockatiel/dist/Policy.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926221"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/glob/dist/commonjs/glob.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/glob/dist/esm/glob.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926237"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/jsonc-parser/lib/umd/main.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/jsonc-parser/lib/esm/main.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926245"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/parse5/dist/cjs/tokenizer/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/parse5/dist/tokenizer/index.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926253"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/attributes.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/attributes.js.map",
+      "timestamp": "2025-11-15T03:35:56.926265"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/manipulation.js",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/manipulation.js",
+      "timestamp": "2025-11-15T03:35:56.926271"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/attributes.js",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/attributes.js",
+      "timestamp": "2025-11-15T03:35:56.926278"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/traversing.js",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/traversing.js",
+      "timestamp": "2025-11-15T03:35:56.926283"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/traversing.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/traversing.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926289"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/commonjs/api/traversing.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/traversing.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926295"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/manipulation.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/manipulation.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926301"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/commonjs/api/manipulation.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/manipulation.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926307"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/manipulation.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/manipulation.js.map",
+      "timestamp": "2025-11-15T03:35:56.926313"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/traversing.js.map",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/traversing.js.map",
+      "timestamp": "2025-11-15T03:35:56.926319"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/browser/api/attributes.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/attributes.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926325"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/cheerio/dist/commonjs/api/attributes.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/cheerio/dist/esm/api/attributes.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926331"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/path-scurry/dist/commonjs/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/path-scurry/dist/esm/index.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926340"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/path-scurry/dist/commonjs/index.d.ts.map",
+      "reason": "Duplicate of cortex-extension/node_modules/path-scurry/dist/esm/index.d.ts.map",
+      "timestamp": "2025-11-15T03:35:56.926346"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/path-scurry/node_modules/lru-cache/dist/commonjs/index.d.ts",
+      "reason": "Duplicate of cortex-extension/node_modules/path-scurry/node_modules/lru-cache/dist/esm/index.d.ts",
+      "timestamp": "2025-11-15T03:35:56.926353"
+    },
+    {
+      "action": "report",
+      "path": "cortex-extension/node_modules/path-scurry/node_modules/lru-cache/dist/commonjs/index.d.ts.map",
+      "reason": "Duplicate of cortex-extension/node_modules/path-scurry/node_modules/lru-cache/dist/esm/index.d.ts.map",
+      "timestamp": "2025-11-15T03:35:56.926359"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-operations.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-operations.yaml",
+      "timestamp": "2025-11-15T03:35:56.926366"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/industry-standards.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/industry-standards.yaml",
+      "timestamp": "2025-11-15T03:35:56.926372"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/self-review-checklist.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/self-review-checklist.yaml",
+      "timestamp": "2025-11-15T03:35:56.926378"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/slash-commands-guide.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/slash-commands-guide.yaml",
+      "timestamp": "2025-11-15T03:35:56.926384"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/response-templates.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/response-templates.yaml",
+      "timestamp": "2025-11-15T03:35:56.926390"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml",
+      "timestamp": "2025-11-15T03:35:56.926396"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/mkdocs-refresh-config.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/mkdocs-refresh-config.yaml",
+      "timestamp": "2025-11-15T03:35:56.926403"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/operations-config.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/operations-config.yaml",
+      "timestamp": "2025-11-15T03:35:56.926409"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/lessons-learned.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/lessons-learned.yaml",
+      "timestamp": "2025-11-15T03:35:56.926415"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/brain-protection-rules.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/brain-protection-rules.yaml",
+      "timestamp": "2025-11-15T03:35:56.926421"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/module-definitions.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/module-definitions.yaml",
+      "timestamp": "2025-11-15T03:35:56.926427"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/knowledge-graph.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/knowledge-graph.yaml",
+      "timestamp": "2025-11-15T03:35:56.926433"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/cortex-brain/knowledge-graph.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/knowledge-graph.yaml",
+      "timestamp": "2025-11-15T03:35:56.926438"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/YAML-CONVERSION-ROADMAP.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/YAML-CONVERSION-ROADMAP.yaml",
+      "timestamp": "2025-11-15T03:35:56.926445"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/03-conversation-state.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/03-conversation-state.yaml",
+      "timestamp": "2025-11-15T03:35:56.926451"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/implementation-roadmap.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/implementation-roadmap.yaml",
+      "timestamp": "2025-11-15T03:35:56.926457"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/design-metadata.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/design-metadata.yaml",
+      "timestamp": "2025-11-15T03:35:56.926463"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/pr-review-guidelines.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/pr-review-guidelines.yaml",
+      "timestamp": "2025-11-15T03:35:56.926469"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/02-plugin-system.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/02-plugin-system.yaml",
+      "timestamp": "2025-11-15T03:35:56.926475"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/04-path-management.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/04-path-management.yaml",
+      "timestamp": "2025-11-15T03:35:56.926481"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/cortex-2.0-design/status-data.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/cortex-2.0-design/status-data.yaml",
+      "timestamp": "2025-11-15T03:35:56.926486"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/schemas/pr-intelligence-schema.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/schemas/pr-intelligence-schema.yaml",
+      "timestamp": "2025-11-15T03:35:56.926492"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/simulations/ksessions/file-relationships.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/simulations/ksessions/file-relationships.yaml",
+      "timestamp": "2025-11-15T03:35:56.926498"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/simulations/ksessions/test-patterns.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/simulations/ksessions/test-patterns.yaml",
+      "timestamp": "2025-11-15T03:35:56.926503"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/simulations/ksessions/knowledge-graph.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/simulations/ksessions/knowledge-graph.yaml",
+      "timestamp": "2025-11-15T03:35:56.926509"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/inventory-v1/02-architecture.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/inventory-v1/02-architecture.yaml",
+      "timestamp": "2025-11-15T03:35:56.926515"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/inventory-v1/01-rulebook.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/inventory-v1/01-rulebook.yaml",
+      "timestamp": "2025-11-15T03:35:56.926520"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/cortex-brain/right-hemisphere/active-plan.yaml",
+      "reason": "Duplicate of dist/cortex-test/cortex-brain/right-hemisphere/active-plan.yaml",
+      "timestamp": "2025-11-15T03:35:56.926525"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_help.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_help.py",
+      "timestamp": "2025-11-15T03:35:56.926531"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/session_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/session_manager.py",
+      "timestamp": "2025-11-15T03:35:56.926537"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/router.py",
+      "reason": "Duplicate of dist/cortex-test/src/router.py",
+      "timestamp": "2025-11-15T03:35:56.926544"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/migrations/test_migration.py",
+      "reason": "Duplicate of dist/cortex-test/src/migrations/test_migration.py",
+      "timestamp": "2025-11-15T03:35:56.926550"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/migrations/test_migration.py",
+      "reason": "Duplicate of dist/cortex-test/src/migrations/test_migration.py",
+      "timestamp": "2025-11-15T03:35:56.926556"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/migrations/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/migrations/README.md",
+      "timestamp": "2025-11-15T03:35:56.926562"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/core/plugin_processor.py",
+      "reason": "Duplicate of dist/cortex-test/src/core/plugin_processor.py",
+      "timestamp": "2025-11-15T03:35:56.926568"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/core/plugin_processor.py",
+      "reason": "Duplicate of dist/cortex-test/src/core/plugin_processor.py",
+      "timestamp": "2025-11-15T03:35:56.926573"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/entry_point/cortex_entry.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/cortex_entry.py",
+      "timestamp": "2025-11-15T03:35:56.926580"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/entry_point/cortex_entry.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/cortex_entry.py",
+      "timestamp": "2025-11-15T03:35:56.926585"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/entry_point/cortex_entry_workflows.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/cortex_entry_workflows.py",
+      "timestamp": "2025-11-15T03:35:56.926591"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/entry_point/cortex_entry_workflows.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/cortex_entry_workflows.py",
+      "timestamp": "2025-11-15T03:35:56.926597"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/entry_point/response_formatter.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/response_formatter.py",
+      "timestamp": "2025-11-15T03:35:56.926603"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/entry_point/response_formatter.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/response_formatter.py",
+      "timestamp": "2025-11-15T03:35:56.926608"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/entry_point/setup_command.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/setup_command.py",
+      "timestamp": "2025-11-15T03:35:56.926614"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/entry_point/setup_command.py",
+      "reason": "Duplicate of dist/cortex-test/src/entry_point/setup_command.py",
+      "timestamp": "2025-11-15T03:35:56.926620"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/crawlers/ui_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/ui_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.926627"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/crawlers/ui_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/ui_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.926632"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/crawlers/orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.926638"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/crawlers/orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.926644"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/crawlers/tooling_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/tooling_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.926650"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/crawlers/tooling_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/crawlers/tooling_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.926656"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/extension_scaffold_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/extension_scaffold_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926662"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/extension_scaffold_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/extension_scaffold_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926667"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/configuration_wizard_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/configuration_wizard_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926673"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/configuration_wizard_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/configuration_wizard_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926678"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/cleanup_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/cleanup_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926684"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/cleanup_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/cleanup_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926690"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/doc_refresh_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/doc_refresh_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926696"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/doc_refresh_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/doc_refresh_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926702"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/system_refactor_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/system_refactor_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926708"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/platform_switch_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/platform_switch_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926714"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/base_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/base_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926720"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/base_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/base_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926726"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/command_registry.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/command_registry.py",
+      "timestamp": "2025-11-15T03:35:56.926732"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/code_review_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/code_review_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926738"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/code_review_plugin.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/code_review_plugin.py",
+      "timestamp": "2025-11-15T03:35:56.926744"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/integrations/github_integration.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/integrations/github_integration.py",
+      "timestamp": "2025-11-15T03:35:56.926750"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/integrations/github_integration.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/integrations/github_integration.py",
+      "timestamp": "2025-11-15T03:35:56.926756"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/plugins/integrations/azure_devops_integration.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/integrations/azure_devops_integration.py",
+      "timestamp": "2025-11-15T03:35:56.926762"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/plugins/integrations/azure_devops_integration.py",
+      "reason": "Duplicate of dist/cortex-test/src/plugins/integrations/azure_devops_integration.py",
+      "timestamp": "2025-11-15T03:35:56.926768"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/setup/setup_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/setup/setup_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.926773"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/setup/setup_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/setup/setup_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.926779"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/setup/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/setup/README.md",
+      "timestamp": "2025-11-15T03:35:56.926785"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/setup/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/setup/README.md",
+      "timestamp": "2025-11-15T03:35:56.926791"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/setup/modules/brain_initialization_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/setup/modules/brain_initialization_module.py",
+      "timestamp": "2025-11-15T03:35:56.926797"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/setup/modules/brain_initialization_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/setup/modules/brain_initialization_module.py",
+      "timestamp": "2025-11-15T03:35:56.926803"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/workflows/workflow_engine.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/workflow_engine.py",
+      "timestamp": "2025-11-15T03:35:56.926809"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/workflows/workflow_engine.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/workflow_engine.py",
+      "timestamp": "2025-11-15T03:35:56.926814"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/workflows/workflow_pipeline.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/workflow_pipeline.py",
+      "timestamp": "2025-11-15T03:35:56.926820"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/workflows/workflow_pipeline.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/workflow_pipeline.py",
+      "timestamp": "2025-11-15T03:35:56.926826"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/workflows/tdd_workflow.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/tdd_workflow.py",
+      "timestamp": "2025-11-15T03:35:56.926832"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/workflows/tdd_workflow.py",
+      "reason": "Duplicate of dist/cortex-test/src/workflows/tdd_workflow.py",
+      "timestamp": "2025-11-15T03:35:56.926838"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/test_analyzer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/test_analyzer.py",
+      "timestamp": "2025-11-15T03:35:56.926844"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/test_analyzer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/test_analyzer.py",
+      "timestamp": "2025-11-15T03:35:56.926849"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/governance_engine.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/governance_engine.py",
+      "timestamp": "2025-11-15T03:35:56.926856"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/governance_engine.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/governance_engine.py",
+      "timestamp": "2025-11-15T03:35:56.926861"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/git_isolation.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/git_isolation.py",
+      "timestamp": "2025-11-15T03:35:56.926867"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/git_isolation.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/git_isolation.py",
+      "timestamp": "2025-11-15T03:35:56.926873"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/brain_protector.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/brain_protector.py",
+      "timestamp": "2025-11-15T03:35:56.926879"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/brain_protector.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/brain_protector.py",
+      "timestamp": "2025-11-15T03:35:56.926884"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/skull_protector.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/skull_protector.py",
+      "timestamp": "2025-11-15T03:35:56.926890"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/skull_protector.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/skull_protector.py",
+      "timestamp": "2025-11-15T03:35:56.926896"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/coverage_reporter.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/coverage_reporter.py",
+      "timestamp": "2025-11-15T03:35:56.926902"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/coverage_reporter.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/coverage_reporter.py",
+      "timestamp": "2025-11-15T03:35:56.926907"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/test_discovery.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/test_discovery.py",
+      "timestamp": "2025-11-15T03:35:56.926913"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/test_discovery.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/test_discovery.py",
+      "timestamp": "2025-11-15T03:35:56.926919"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/integrity_checker.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/integrity_checker.py",
+      "timestamp": "2025-11-15T03:35:56.926925"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/integrity_checker.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/integrity_checker.py",
+      "timestamp": "2025-11-15T03:35:56.926930"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/context_optimizer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/context_optimizer.py",
+      "timestamp": "2025-11-15T03:35:56.926936"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/context_optimizer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/context_optimizer.py",
+      "timestamp": "2025-11-15T03:35:56.926941"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/tier_validator.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/tier_validator.py",
+      "timestamp": "2025-11-15T03:35:56.926947"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/tier_validator.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/tier_validator.py",
+      "timestamp": "2025-11-15T03:35:56.926953"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/governance.yaml",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/governance.yaml",
+      "timestamp": "2025-11-15T03:35:56.926959"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/governance.yaml",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/governance.yaml",
+      "timestamp": "2025-11-15T03:35:56.926964"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier0/optimized_context_loader.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/optimized_context_loader.py",
+      "timestamp": "2025-11-15T03:35:56.926970"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier0/optimized_context_loader.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier0/optimized_context_loader.py",
+      "timestamp": "2025-11-15T03:35:56.926976"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/operations_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/operations_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.926981"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/demo_discovery.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/demo_discovery.py",
+      "timestamp": "2025-11-15T03:35:56.926986"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/demo_discovery.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/demo_discovery.py",
+      "timestamp": "2025-11-15T03:35:56.926992"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/base_operation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/base_operation_module.py",
+      "timestamp": "2025-11-15T03:35:56.926997"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/__init__.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/__init__.py",
+      "timestamp": "2025-11-15T03:35:56.927002"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/__init__.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/__init__.py",
+      "timestamp": "2025-11-15T03:35:56.927008"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/operation_factory.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/operation_factory.py",
+      "timestamp": "2025-11-15T03:35:56.927013"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/operation_factory.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/operation_factory.py",
+      "timestamp": "2025-11-15T03:35:56.927018"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/operations/README.md",
+      "timestamp": "2025-11-15T03:35:56.927024"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/operations/README.md",
+      "timestamp": "2025-11-15T03:35:56.927030"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/dry_run_mixin.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/dry_run_mixin.py",
+      "timestamp": "2025-11-15T03:35:56.927036"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/response_formatter.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/response_formatter.py",
+      "timestamp": "2025-11-15T03:35:56.927042"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/crawlers/health_assessor.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/crawlers/health_assessor.py",
+      "timestamp": "2025-11-15T03:35:56.927048"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/crawlers/health_assessor.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/crawlers/health_assessor.py",
+      "timestamp": "2025-11-15T03:35:56.927054"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/generate_story_chapters_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_story_chapters_module.py",
+      "timestamp": "2025-11-15T03:35:56.927060"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/generate_story_chapters_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_story_chapters_module.py",
+      "timestamp": "2025-11-15T03:35:56.927066"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/build_consolidated_story_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/build_consolidated_story_module.py",
+      "timestamp": "2025-11-15T03:35:56.927072"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/build_consolidated_story_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/build_consolidated_story_module.py",
+      "timestamp": "2025-11-15T03:35:56.927077"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/build_documentation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/build_documentation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927083"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/build_documentation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/build_documentation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927089"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/generate_image_prompts_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_image_prompts_module.py",
+      "timestamp": "2025-11-15T03:35:56.927095"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/generate_image_prompts_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_image_prompts_module.py",
+      "timestamp": "2025-11-15T03:35:56.927101"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/update_mkdocs_index_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/update_mkdocs_index_module.py",
+      "timestamp": "2025-11-15T03:35:56.927107"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/update_mkdocs_index_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/update_mkdocs_index_module.py",
+      "timestamp": "2025-11-15T03:35:56.927113"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/relocate_story_files_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/relocate_story_files_module.py",
+      "timestamp": "2025-11-15T03:35:56.927119"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/relocate_story_files_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/relocate_story_files_module.py",
+      "timestamp": "2025-11-15T03:35:56.927124"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/virtual_environment_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/virtual_environment_module.py",
+      "timestamp": "2025-11-15T03:35:56.927130"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/virtual_environment_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/virtual_environment_module.py",
+      "timestamp": "2025-11-15T03:35:56.927135"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/generate_image_prompts_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_image_prompts_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927141"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/generate_image_prompts_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_image_prompts_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927147"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/evaluate_cortex_architecture_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/evaluate_cortex_architecture_module.py",
+      "timestamp": "2025-11-15T03:35:56.927153"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/evaluate_cortex_architecture_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/evaluate_cortex_architecture_module.py",
+      "timestamp": "2025-11-15T03:35:56.927159"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/publish_documentation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/publish_documentation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927165"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/publish_documentation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/publish_documentation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927170"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/tooling_detection_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/tooling_detection_module.py",
+      "timestamp": "2025-11-15T03:35:56.927176"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/tooling_detection_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/tooling_detection_module.py",
+      "timestamp": "2025-11-15T03:35:56.927182"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/project_validation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/project_validation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927188"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/project_validation_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/project_validation_module.py",
+      "timestamp": "2025-11-15T03:35:56.927194"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/git_sync_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/git_sync_module.py",
+      "timestamp": "2025-11-15T03:35:56.927200"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/git_sync_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/git_sync_module.py",
+      "timestamp": "2025-11-15T03:35:56.927205"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/generate_technical_cortex_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_technical_cortex_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927211"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/generate_technical_cortex_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_technical_cortex_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927217"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/setup_completion_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/setup_completion_module.py",
+      "timestamp": "2025-11-15T03:35:56.927222"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/setup_completion_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/setup_completion_module.py",
+      "timestamp": "2025-11-15T03:35:56.927228"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/brain_initialization_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/brain_initialization_module.py",
+      "timestamp": "2025-11-15T03:35:56.927234"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/brain_initialization_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/brain_initialization_module.py",
+      "timestamp": "2025-11-15T03:35:56.927239"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/generate_technical_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_technical_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927245"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/generate_technical_doc_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/generate_technical_doc_module.py",
+      "timestamp": "2025-11-15T03:35:56.927251"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/tooling_installer_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/tooling_installer_module.py",
+      "timestamp": "2025-11-15T03:35:56.927257"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/tooling_installer_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/tooling_installer_module.py",
+      "timestamp": "2025-11-15T03:35:56.927262"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/story_length_manager_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/story_length_manager_module.py",
+      "timestamp": "2025-11-15T03:35:56.927269"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/operations/modules/story_length_manager_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/story_length_manager_module.py",
+      "timestamp": "2025-11-15T03:35:56.927274"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/apply_narrator_voice_module.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/apply_narrator_voice_module.py",
+      "timestamp": "2025-11-15T03:35:56.927280"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/optimization/optimize_cortex_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/optimization/optimize_cortex_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.927286"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/cleanup/cleanup_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/cleanup/cleanup_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.927292"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/design_sync/design_sync_orchestrator.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/design_sync/design_sync_orchestrator.py",
+      "timestamp": "2025-11-15T03:35:56.927298"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/design_sync/track_templates.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/design_sync/track_templates.py",
+      "timestamp": "2025-11-15T03:35:56.927304"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/operations/modules/design_sync/track_config.py",
+      "reason": "Duplicate of dist/cortex-test/src/operations/modules/design_sync/track_config.py",
+      "timestamp": "2025-11-15T03:35:56.927310"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/working_memory.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/working_memory.py",
+      "timestamp": "2025-11-15T03:35:56.927316"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/working_memory.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/working_memory.py",
+      "timestamp": "2025-11-15T03:35:56.927322"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/tier1_api.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/tier1_api.py",
+      "timestamp": "2025-11-15T03:35:56.927328"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/tier1_api.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/tier1_api.py",
+      "timestamp": "2025-11-15T03:35:56.927333"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/working_memory_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/working_memory_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927339"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/working_memory_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/working_memory_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927345"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/vision_api.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/vision_api.py",
+      "timestamp": "2025-11-15T03:35:56.927351"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/vision_api.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/vision_api.py",
+      "timestamp": "2025-11-15T03:35:56.927357"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/work_state_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/work_state_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927363"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/work_state_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/work_state_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927368"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/migrate_tier1.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/migrate_tier1.py",
+      "timestamp": "2025-11-15T03:35:56.927375"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/migrate_tier1.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/migrate_tier1.py",
+      "timestamp": "2025-11-15T03:35:56.927380"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/ml_context_optimizer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/ml_context_optimizer.py",
+      "timestamp": "2025-11-15T03:35:56.927386"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/ml_context_optimizer.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/ml_context_optimizer.py",
+      "timestamp": "2025-11-15T03:35:56.927392"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/token_metrics.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/token_metrics.py",
+      "timestamp": "2025-11-15T03:35:56.927398"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/token_metrics.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/token_metrics.py",
+      "timestamp": "2025-11-15T03:35:56.927404"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/test_tier1.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/test_tier1.py",
+      "timestamp": "2025-11-15T03:35:56.927410"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/test_tier1.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/test_tier1.py",
+      "timestamp": "2025-11-15T03:35:56.927416"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927422"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927427"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/session_token.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/session_token.py",
+      "timestamp": "2025-11-15T03:35:56.927433"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/session_token.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/session_token.py",
+      "timestamp": "2025-11-15T03:35:56.927439"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/cache_monitor.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/cache_monitor.py",
+      "timestamp": "2025-11-15T03:35:56.927445"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/cache_monitor.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/cache_monitor.py",
+      "timestamp": "2025-11-15T03:35:56.927451"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier1/conversations/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/conversations/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927457"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier1/conversations/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier1/conversations/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927463"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/brain/tier1/tier1_api.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/tier1_api.py",
+      "timestamp": "2025-11-15T03:35:56.927469"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/brain/tier1/request_logger.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/request_logger.py",
+      "timestamp": "2025-11-15T03:35:56.927475"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/brain/tier1/entity_extractor.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/entity_extractor.py",
+      "timestamp": "2025-11-15T03:35:56.927480"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/brain/tier1/entity_extractor.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/entity_extractor.py",
+      "timestamp": "2025-11-15T03:35:56.927486"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/brain/tier1/file_tracker.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/file_tracker.py",
+      "timestamp": "2025-11-15T03:35:56.927492"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/brain/tier1/file_tracker.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/file_tracker.py",
+      "timestamp": "2025-11-15T03:35:56.927498"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/brain/tier1/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927503"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/brain/tier1/conversation_manager.py",
+      "reason": "Duplicate of dist/cortex-test/src/brain/tier1/conversation_manager.py",
+      "timestamp": "2025-11-15T03:35:56.927509"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/screenshot_analyzer.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/screenshot_analyzer.py",
+      "timestamp": "2025-11-15T03:35:56.927515"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/screenshot_analyzer.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/screenshot_analyzer.py",
+      "timestamp": "2025-11-15T03:35:56.927521"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/intent_router.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/intent_router.py",
+      "timestamp": "2025-11-15T03:35:56.927526"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/change_governor.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/change_governor.py",
+      "timestamp": "2025-11-15T03:35:56.927532"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/change_governor.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/change_governor.py",
+      "timestamp": "2025-11-15T03:35:56.927538"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/learning_capture_agent.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/learning_capture_agent.py",
+      "timestamp": "2025-11-15T03:35:56.927544"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/learning_capture_agent.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/learning_capture_agent.py",
+      "timestamp": "2025-11-15T03:35:56.927550"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/README.md",
+      "timestamp": "2025-11-15T03:35:56.927556"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/README.md",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/README.md",
+      "timestamp": "2025-11-15T03:35:56.927561"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/commit_handler.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/commit_handler.py",
+      "timestamp": "2025-11-15T03:35:56.927567"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/commit_handler.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/commit_handler.py",
+      "timestamp": "2025-11-15T03:35:56.927572"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/error_corrector.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/error_corrector.py",
+      "timestamp": "2025-11-15T03:35:56.927578"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/error_corrector.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/error_corrector.py",
+      "timestamp": "2025-11-15T03:35:56.927584"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/strategic/interactive_planner.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/strategic/interactive_planner.py",
+      "timestamp": "2025-11-15T03:35:56.927590"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/strategic/intent_router.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/strategic/intent_router.py",
+      "timestamp": "2025-11-15T03:35:56.927596"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/cortex_agents/strategic/question_generator.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/strategic/question_generator.py",
+      "timestamp": "2025-11-15T03:35:56.927602"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/cortex_agents/strategic/question_generator.py",
+      "reason": "Duplicate of dist/cortex-test/src/cortex_agents/strategic/question_generator.py",
+      "timestamp": "2025-11-15T03:35:56.927607"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier3/context_intelligence.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier3/context_intelligence.py",
+      "timestamp": "2025-11-15T03:35:56.927613"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier3/context_intelligence.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier3/context_intelligence.py",
+      "timestamp": "2025-11-15T03:35:56.927619"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier3/context_intelligence_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier3/context_intelligence_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927625"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier3/context_intelligence_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier3/context_intelligence_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927631"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/pattern_cleanup.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/pattern_cleanup.py",
+      "timestamp": "2025-11-15T03:35:56.927637"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/pattern_cleanup.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/pattern_cleanup.py",
+      "timestamp": "2025-11-15T03:35:56.927643"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/knowledge_graph_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927648"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/knowledge_graph_legacy.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph_legacy.py",
+      "timestamp": "2025-11-15T03:35:56.927654"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/migrate_tier2.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/migrate_tier2.py",
+      "timestamp": "2025-11-15T03:35:56.927660"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/migrate_tier2.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/migrate_tier2.py",
+      "timestamp": "2025-11-15T03:35:56.927666"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/oracle_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/oracle_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.927671"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/oracle_crawler.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/oracle_crawler.py",
+      "timestamp": "2025-11-15T03:35:56.927677"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/personal_knowledge_archive.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/personal_knowledge_archive.py",
+      "timestamp": "2025-11-15T03:35:56.927683"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/personal_knowledge_archive.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/personal_knowledge_archive.py",
+      "timestamp": "2025-11-15T03:35:56.927689"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/migrate_add_boundaries.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/migrate_add_boundaries.py",
+      "timestamp": "2025-11-15T03:35:56.927695"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/migrate_add_boundaries.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/migrate_add_boundaries.py",
+      "timestamp": "2025-11-15T03:35:56.927700"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/amnesia.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/amnesia.py",
+      "timestamp": "2025-11-15T03:35:56.927706"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/amnesia.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/amnesia.py",
+      "timestamp": "2025-11-15T03:35:56.927712"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/knowledge_graph/patterns/pattern_store.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph/patterns/pattern_store.py",
+      "timestamp": "2025-11-15T03:35:56.927718"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/knowledge_graph/patterns/pattern_decay.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph/patterns/pattern_decay.py",
+      "timestamp": "2025-11-15T03:35:56.927724"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/knowledge_graph/patterns/pattern_decay.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph/patterns/pattern_decay.py",
+      "timestamp": "2025-11-15T03:35:56.927730"
+    },
+    {
+      "action": "report",
+      "path": "dist/cortex-user-v1.0.0/src/tier2/knowledge_graph/patterns/pattern_search.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph/patterns/pattern_search.py",
+      "timestamp": "2025-11-15T03:35:56.927736"
+    },
+    {
+      "action": "report",
+      "path": "publish/CORTEX/src/tier2/knowledge_graph/patterns/pattern_search.py",
+      "reason": "Duplicate of dist/cortex-test/src/tier2/knowledge_graph/patterns/pattern_search.py",
+      "timestamp": "2025-11-15T03:35:56.927741"
+    },
+    {
+      "action": "report",
+      "path": ".venv/bin/python",
+      "reason": "Duplicate of .venv/bin/python3",
+      "timestamp": "2025-11-15T03:35:56.927754"
+    },
+    {
+      "action": "report",
+      "path": ".venv/bin/python3.9",
+      "reason": "Duplicate of .venv/bin/python3",
+      "timestamp": "2025-11-15T03:35:56.927760"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/packaging/tags.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/packaging/tags.py",
+      "timestamp": "2025-11-15T03:35:56.927768"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/packaging/metadata.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/packaging/metadata.py",
+      "timestamp": "2025-11-15T03:35:56.927774"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/packaging/markers.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/packaging/markers.py",
+      "timestamp": "2025-11-15T03:35:56.927780"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/packaging/licenses/_spdx.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/packaging/licenses/_spdx.py",
+      "timestamp": "2025-11-15T03:35:56.927787"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/pygments/unistring.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pygments/unistring.py",
+      "timestamp": "2025-11-15T03:35:56.927802"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/distlib/LICENSE.txt",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt",
+      "timestamp": "2025-11-15T03:35:56.927816"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/distro/LICENSE",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/distro/LICENSE",
+      "timestamp": "2025-11-15T03:35:56.927822"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/requests/cookies.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/requests/cookies.py",
+      "timestamp": "2025-11-15T03:35:56.927846"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pip/_vendor/requests/sessions.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/requests/sessions.py",
+      "timestamp": "2025-11-15T03:35:56.927852"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/tomli/_parser.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pip/_vendor/tomli/_parser.py",
+      "timestamp": "2025-11-15T03:35:56.927862"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/certifi/cacert.pem",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem",
+      "timestamp": "2025-11-15T03:35:56.927869"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/platformdirs/unix.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/pip/_vendor/platformdirs/unix.py",
+      "timestamp": "2025-11-15T03:35:56.927877"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/tinyseg.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/mkdocs/contrib/search/lunr-language/tinyseg.js",
+      "timestamp": "2025-11-15T03:35:56.927934"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/tinyseg.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/mkdocs/contrib/search/lunr-language/tinyseg.js",
+      "timestamp": "2025-11-15T03:35:56.927940"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/setuptools/cli-32.exe",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/cli.exe",
+      "timestamp": "2025-11-15T03:35:56.927950"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/setuptools/gui.exe",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/gui-32.exe",
+      "timestamp": "2025-11-15T03:35:56.927956"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pkg_resources/_vendor/pyparsing.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/_vendor/pyparsing.py",
+      "timestamp": "2025-11-15T03:35:56.927963"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pkg_resources/_vendor/packaging/tags.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/_vendor/packaging/tags.py",
+      "timestamp": "2025-11-15T03:35:56.927969"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pkg_resources/_vendor/packaging/version.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/_vendor/packaging/version.py",
+      "timestamp": "2025-11-15T03:35:56.927975"
+    },
+    {
+      "action": "report",
+      "path": ".venv/lib/python3.9/site-packages/pkg_resources/_vendor/packaging/specifiers.py",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/setuptools/_vendor/packaging/specifiers.py",
+      "timestamp": "2025-11-15T03:35:56.927981"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/bundle.f55a23d4.min.js.map",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/bundle.f55a23d4.min.js.map",
+      "timestamp": "2025-11-15T03:35:56.928017"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/bundle.f55a23d4.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/bundle.f55a23d4.min.js",
+      "timestamp": "2025-11-15T03:35:56.928023"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/wordcut.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/wordcut.js",
+      "timestamp": "2025-11-15T03:35:56.928028"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.el.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.el.min.js",
+      "timestamp": "2025-11-15T03:35:56.928034"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.fr.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.fr.min.js",
+      "timestamp": "2025-11-15T03:35:56.928039"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.ar.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.ar.min.js",
+      "timestamp": "2025-11-15T03:35:56.928044"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.tr.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.tr.min.js",
+      "timestamp": "2025-11-15T03:35:56.928050"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.es.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.es.min.js",
+      "timestamp": "2025-11-15T03:35:56.928055"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.ro.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.ro.min.js",
+      "timestamp": "2025-11-15T03:35:56.928061"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.it.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.it.min.js",
+      "timestamp": "2025-11-15T03:35:56.928066"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/lunr/min/lunr.ru.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/lunr/min/lunr.ru.min.js",
+      "timestamp": "2025-11-15T03:35:56.928071"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/workers/search.973d3a69.min.js",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/workers/search.973d3a69.min.js",
+      "timestamp": "2025-11-15T03:35:56.928077"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/javascripts/workers/search.973d3a69.min.js.map",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/javascripts/workers/search.973d3a69.min.js.map",
+      "timestamp": "2025-11-15T03:35:56.928083"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/stylesheets/palette.06af60db.min.css",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/stylesheets/palette.06af60db.min.css",
+      "timestamp": "2025-11-15T03:35:56.928089"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/stylesheets/main.84d31ad4.min.css.map",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/stylesheets/main.84d31ad4.min.css.map",
+      "timestamp": "2025-11-15T03:35:56.928095"
+    },
+    {
+      "action": "report",
+      "path": "site/assets/stylesheets/main.84d31ad4.min.css",
+      "reason": "Duplicate of .venv/lib/python3.9/site-packages/material/templates/assets/stylesheets/main.84d31ad4.min.css",
+      "timestamp": "2025-11-15T03:35:56.928101"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065654/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928110"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_093548/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928116"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_182012/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928121"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065655/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928127"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065630/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928132"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_093513/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928138"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_060554/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928143"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_181225/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928149"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065444/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928155"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_102545/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928160"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_182519/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928165"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_093632/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928171"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_060409/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928177"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_093633/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928182"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_180805/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928187"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_100714/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928193"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_181036/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928199"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_100708/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928204"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065448/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928210"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_180901/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928215"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_093533/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928221"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_065628/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928226"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251109_180829/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928232"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_102546/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928237"
+    },
+    {
+      "action": "report",
+      "path": "site/awakening-of-cortex.backup.20251110_061159/index.html",
+      "reason": "Duplicate of site/awakening-of-cortex.backup.20251110_094413/index.html",
+      "timestamp": "2025-11-15T03:35:56.928243"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/agents",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.412704"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier3",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.412714"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier2",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.412718"
+    },
+    {
+      "action": "delete",
+      "path": ".cortex/daemon",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.412721"
+    },
+    {
+      "action": "delete",
+      "path": ".venv/include",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.412724"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/agents",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.893318"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier3",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.893331"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier2",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.893335"
+    },
+    {
+      "action": "delete",
+      "path": ".cortex/daemon",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.893338"
+    },
+    {
+      "action": "delete",
+      "path": ".venv/include",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:57.893341"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/agents",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.375204"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier3",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.375216"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier2",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.375220"
+    },
+    {
+      "action": "delete",
+      "path": ".cortex/daemon",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.375223"
+    },
+    {
+      "action": "delete",
+      "path": ".venv/include",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.375226"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/agents",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.853450"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier3",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.853462"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier2",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.853466"
+    },
+    {
+      "action": "delete",
+      "path": ".cortex/daemon",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.853470"
+    },
+    {
+      "action": "delete",
+      "path": ".venv/include",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:58.853473"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/agents",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:59.332867"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier3",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:59.332879"
+    },
+    {
+      "action": "delete",
+      "path": "CORTEX/src/brain/tier2",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:59.332883"
+    },
+    {
+      "action": "delete",
+      "path": ".cortex/daemon",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:59.332886"
+    },
+    {
+      "action": "delete",
+      "path": ".venv/include",
+      "reason": "Empty directory",
+      "timestamp": "2025-11-15T03:35:59.332889"
+    },
+    {
+      "action": "report",
+      "path": "mkdocs.yml",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805582"
+    },
+    {
+      "action": "report",
+      "path": "CORTEX-3.0-INVESTIGATION-ARCHITECTURE-COMPLETE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805593"
+    },
+    {
+      "action": "report",
+      "path": "cortex-operations.yaml",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805597"
+    },
+    {
+      "action": "report",
+      "path": "INVESTIGATION-QUICK-REFERENCE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805601"
+    },
+    {
+      "action": "report",
+      "path": "pattern_analysis.json",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805604"
+    },
+    {
+      "action": "report",
+      "path": "cortex-optimization.log",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805608"
+    },
+    {
+      "action": "report",
+      "path": "INTEGRATION-GUIDE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805611"
+    },
+    {
+      "action": "report",
+      "path": "run-cortex.sh",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805615"
+    },
+    {
+      "action": "report",
+      "path": "demo_investigation_plugins.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805618"
+    },
+    {
+      "action": "report",
+      "path": "temp_file_scan.json",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805622"
+    },
+    {
+      "action": "report",
+      "path": "NOOR-CANVAS-INVESTIGATION-GUIDE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805625"
+    },
+    {
+      "action": "report",
+      "path": "setup.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805629"
+    },
+    {
+      "action": "report",
+      "path": "package-lock.json",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805632"
+    },
+    {
+      "action": "report",
+      "path": "check_brain_health.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805636"
+    },
+    {
+      "action": "report",
+      "path": "RELEASE-COMPLETE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805640"
+    },
+    {
+      "action": "report",
+      "path": "fix_response_headers.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805643"
+    },
+    {
+      "action": "report",
+      "path": "INVESTIGATION-ROUTER-ENHANCEMENT-COMPLETE.md",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805654"
+    },
+    {
+      "action": "report",
+      "path": "test_investigation_integration.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805658"
+    },
+    {
+      "action": "report",
+      "path": "demo_investigation_architecture.py",
+      "reason": "Misplaced file in root directory",
+      "timestamp": "2025-11-15T03:36:00.805662"
+    }
+  ],
+  "recommendations": [
+    "Found 538 duplicate files. Review and remove to save space.",
+    "Removed 26 empty directories. Consider reviewing project structure."
+  ]
+}

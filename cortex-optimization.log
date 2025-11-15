@@ -1,0 +1,38 @@
+2025-11-14 19:26:46,783 - __main__ - INFO - ================================================================================
+2025-11-14 19:26:46,783 - __main__ - INFO - CORTEX OPTIMIZATION ORCHESTRATOR
+2025-11-14 19:26:46,783 - __main__ - INFO - ================================================================================
+2025-11-14 19:26:46,783 - __main__ - INFO - Profile: comprehensive
+2025-11-14 19:26:46,783 - __main__ - INFO - Project Root: /Users/asifhussain/PROJECTS/CORTEX
+2025-11-14 19:26:46,783 - __main__ - INFO - Dry Run: False
+2025-11-14 19:26:46,783 - __main__ - INFO - 
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - ================================================================================
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - CORTEX OPTIMIZE ORCHESTRATOR
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - ================================================================================
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Profile: comprehensive
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Project Root: /Users/asifhussain/PROJECTS/CORTEX
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - 
+2025-11-14 19:26:46,783 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Phase 1: Scanning test files...
+2025-11-14 19:26:46,871 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO -   Found 30 obsolete tests
+2025-11-14 19:26:46,871 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - 
+Phase 3: Validating brain integrity...
+2025-11-14 19:26:46,888 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - 
+Calculating system health score...
+2025-11-14 19:26:46,888 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Generating recommendations...
+2025-11-14 19:26:46,888 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - 
+Marking 30 obsolete tests for cleanup...
+2025-11-14 19:26:46,890 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Created obsolete tests manifest: /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/obsolete-tests-manifest.json
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - 
+================================================================================
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - OPTIMIZATION COMPLETE
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - ================================================================================
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Overall Health: CRITICAL
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Health Score: 0.0/100
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Issues Found: 36
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Obsolete Tests: 30
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Duration: 0.11s
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - Report: /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/health-reports/health-report-20251114_192646.json
+2025-11-14 19:26:46,891 - src.operations.modules.optimize.optimize_cortex_orchestrator - INFO - ================================================================================
+2025-11-14 19:26:46,892 - __main__ - INFO - 
+================================================================================
+2025-11-14 19:26:46,892 - __main__ - INFO - OPTIMIZATION SUCCESSFUL
+2025-11-14 19:26:46,892 - __main__ - INFO - ================================================================================
