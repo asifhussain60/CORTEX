@@ -39,6 +39,14 @@ except ImportError:
     FileSystemEvent = None
     WATCHDOG_AVAILABLE = False
 
+# Import format converter for Track A/B compatibility
+try:
+    from ..integration.format_converter import create_universal_response
+except ImportError:
+    # Fallback if converter not available
+    def create_universal_response(status: str, data: Any, **kwargs) -> Dict[str, Any]:
+        return {"status": status, "result": data, "data": data, **kwargs}
+
 # Type alias for optional use
 if WATCHDOG_AVAILABLE:
     EventType = FileSystemEvent
@@ -540,3 +548,104 @@ class FileMonitor:
             'pending_events': self.event_queue.qsize(),
             'watchdog_available': Observer is not None
         }
+
+    def get_health(self) -> Dict[str, Any]:
+        """Get health status for component interface compliance."""
+        errors = []
+        
+        # Check workspace accessibility
+        if not self.workspace_path.exists():
+            errors.append("Workspace path does not exist")
+        elif not self.workspace_path.is_dir():
+            errors.append("Workspace path is not a directory")
+        
+        # Check watchdog availability
+        if not Observer:
+            errors.append("Watchdog library not available")
+        
+        # Check if running state is consistent
+        if self.is_running and Observer and hasattr(self, 'observer') and not self.observer.is_alive():
+            errors.append("Observer process not running despite is_running=True")
+        
+        health_status = "healthy" if len(errors) == 0 else "unhealthy"
+        
+        return {
+            "overall_health": health_status,
+            "errors": errors,
+            "metrics": {
+                "tracked_files": len(self.file_hashes),
+                "pending_events": self.event_queue.qsize(),
+                "is_running": self.is_running
+            },
+            "timestamp": datetime.now().isoformat()
+        }
+
+    def initialize(self) -> bool:
+        """Initialize the file monitor for operation interface compliance."""
+        try:
+            # Initialization is handled in __init__, just validate setup
+            if not self.workspace_path.exists():
+                self.logger.error(f"Workspace path does not exist: {self.workspace_path}")
+                return False
+                
+            if not Observer:
+                self.logger.warning("Watchdog not available, file monitoring will be limited")
+                
+            self.logger.info("File monitor initialized successfully")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to initialize file monitor: {e}")
+            return False
+
+    async def execute(self, request: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Execute file monitor operation for operation interface compliance."""
+        if context is None:
+            context = {}
+            
+        self.logger.debug(f"Executing request: {request}")
+        
+        try:
+            if request == "start":
+                await self.start()
+                return create_universal_response("success", {"message": "File monitor started successfully"})
+            elif request == "stop":
+                await self.stop()
+                return create_universal_response("success", {"message": "File monitor stopped successfully"})
+            elif request == "status":
+                status = self.get_status()
+                return create_universal_response("success", status)
+            elif request == "health":
+                health = self.get_health()
+                return create_universal_response("success", health)
+            elif request == "get_events":
+                events = await self.get_events()
+                return create_universal_response("success", {"events": events})
+            else:
+                return create_universal_response("error", {"message": f"Unknown request: {request}"})
+        except Exception as e:
+            self.logger.error(f"Failed to execute request {request}: {e}")
+            return create_universal_response("error", {"message": str(e)})
+
+    def cleanup(self) -> bool:
+        """Cleanup file monitor resources for operation interface compliance."""
+        try:
+            self.logger.info("Cleaning up file monitor resources")
+            
+            # Stop monitoring if running
+            if self.is_running:
+                asyncio.create_task(self.stop())
+            
+            # Clear file hashes
+            self.file_hashes.clear()
+            
+            # Clear event queue
+            while not self.event_queue.empty():
+                try:
+                    self.event_queue.get_nowait()
+                except:
+                    break
+                    
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to cleanup file monitor: {e}")
+            return False

@@ -31,6 +31,14 @@ from .file_monitor import FileMonitor
 from .git_monitor import GitMonitor 
 from .terminal_tracker import TerminalTracker
 
+# Import format converter for Track A/B compatibility
+try:
+    from ..integration.format_converter import create_universal_response
+except ImportError:
+    # Fallback if converter not available
+    def create_universal_response(status: str, data: Any, **kwargs) -> Dict[str, Any]:
+        return {"status": status, "result": data, "data": data, **kwargs}
+
 
 @dataclass
 class DaemonConfig:
@@ -291,6 +299,97 @@ class AmbientDaemon:
             "event_queue_size": self.event_queue.qsize(),
             "uptime": datetime.now() if self.is_running else None
         }
+
+    def get_health(self) -> Dict[str, Any]:
+        """Get health status for component interface compliance."""
+        components_healthy = True
+        component_statuses = {}
+        
+        # Check file monitor health
+        if self.file_monitor:
+            file_monitor_healthy = hasattr(self.file_monitor, 'is_running') and self.file_monitor.is_running
+            component_statuses["file_monitor"] = "healthy" if file_monitor_healthy else "unhealthy"
+            components_healthy = components_healthy and file_monitor_healthy
+        
+        # Check git monitor health  
+        if self.git_monitor:
+            git_monitor_healthy = hasattr(self.git_monitor, 'is_running') and self.git_monitor.is_running
+            component_statuses["git_monitor"] = "healthy" if git_monitor_healthy else "unhealthy"
+            components_healthy = components_healthy and git_monitor_healthy
+        
+        # Check terminal tracker health
+        if self.terminal_tracker:
+            terminal_tracker_healthy = hasattr(self.terminal_tracker, 'is_running') and self.terminal_tracker.is_running
+            component_statuses["terminal_tracker"] = "healthy" if terminal_tracker_healthy else "unhealthy"
+            components_healthy = components_healthy and terminal_tracker_healthy
+        
+        return {
+            "overall_health": "healthy" if components_healthy else "degraded",
+            "components": component_statuses,
+            "errors": [],
+            "timestamp": datetime.now().isoformat()
+        }
+
+    def initialize(self) -> bool:
+        """Initialize the daemon for operation interface compliance."""
+        try:
+            if self.is_running:
+                self.logger.warning("Daemon already initialized")
+                return True
+                
+            self.logger.info("Initializing CORTEX Track B Ambient Daemon")
+            # Initialization is handled in __init__, just return success
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to initialize daemon: {e}")
+            return False
+
+    async def execute(self, request: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Execute daemon operation for operation interface compliance."""
+        if context is None:
+            context = {}
+            
+        self.logger.debug(f"Executing request: {request}")
+        
+        try:
+            if request == "start":
+                await self.start()
+                return create_universal_response("success", {"message": "Daemon started successfully"})
+            elif request == "stop":
+                await self.stop()
+                return create_universal_response("success", {"message": "Daemon stopped successfully"})
+            elif request == "status":
+                status = self.get_status()
+                return create_universal_response("success", status)
+            elif request == "health":
+                health = self.get_health()
+                return create_universal_response("success", health)
+            else:
+                return create_universal_response("error", {"message": f"Unknown request: {request}"})
+        except Exception as e:
+            self.logger.error(f"Failed to execute request {request}: {e}")
+            return create_universal_response("error", {"message": str(e)})
+
+    def cleanup(self) -> bool:
+        """Cleanup daemon resources for operation interface compliance."""
+        try:
+            self.logger.info("Cleaning up daemon resources")
+            
+            # Stop if running
+            if self.is_running:
+                asyncio.create_task(self.stop())
+            
+            # Clear event queue
+            while not self.event_queue.empty():
+                try:
+                    self.event_queue.get_nowait()
+                except:
+                    break
+                    
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to cleanup daemon: {e}")
+            return False
 
 
 # CLI entry point for running the daemon standalone
