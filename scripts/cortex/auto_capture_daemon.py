@@ -25,12 +25,17 @@ import threading
 import subprocess
 import logging
 import re
-import fcntl
 import socket
 from pathlib import Path
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from typing import Dict, Any, List, Callable, Optional, Set
+
+# Platform-specific imports
+try:
+    import fcntl  # Unix/Linux/Mac file locking
+except ImportError:
+    fcntl = None  # Windows - will use alternative locking mechanism
 
 # Add src to path for imports
 CORTEX_ROOT = Path(__file__).parent.parent.parent
@@ -110,9 +115,12 @@ class DaemonLockManager:
         """Clean up daemon lock files on shutdown."""
         self.remove_pid_file()
         try:
-            socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
-            if os.path.exists(socket_path):
-                os.unlink(socket_path)
+            # Platform-specific socket cleanup
+            if hasattr(os, 'getuid'):  # Unix/Linux/Mac
+                socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
+                if os.path.exists(socket_path):
+                    os.unlink(socket_path)
+            # On Windows, socket file is handled differently (workspace-local)
         except OSError:
             pass
 
@@ -951,15 +959,13 @@ class Debouncer:
             # CORTEX 3.0: Detect or create workspace session
             workspace_path = str(self.workspace_path)
             
-            # Get active session for this workspace
-            active_session = wm.session_manager.get_active_session(workspace_path)
+            # Get or create session for this workspace (handles idle detection)
+            session = wm.session_manager.detect_or_create_session(workspace_path)
+            session_id = session.session_id
             
-            if not active_session:
-                # No active session - create one for ambient capture
-                session_id = wm.session_manager.create_session(workspace_path)
-                logger.info(f"Created ambient session: {session_id}")
+            if session.conversation_count == 0:
+                logger.info(f"Created new ambient session: {session_id}")
             else:
-                session_id = active_session.session_id
                 logger.debug(f"Using active session: {session_id}")
             
             # Get active conversation (if any) - for precise event tagging
@@ -1533,8 +1539,13 @@ class AmbientCaptureDaemon:
             sys.exit(1)
         
     def _start_socket_server(self):
-        """Start Unix socket server for IPC."""
+        """Start Unix socket server for IPC (Unix/Linux/Mac only)."""
         try:
+            # Socket server only available on Unix-like systems
+            if not hasattr(os, 'getuid'):
+                print("[CORTEX] IPC socket server not available on Windows")
+                return
+                
             socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
             
             # Remove existing socket file if it exists
@@ -1638,12 +1649,13 @@ class AmbientCaptureDaemon:
             self.terminal_monitor.monitoring = False
         
         # Close socket server
-        if hasattr(self, 'server_socket'):
+        if hasattr(self, 'server_socket') and self.server_socket:
             try:
                 self.server_socket.close()
-                socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
-                if os.path.exists(socket_path):
-                    os.unlink(socket_path)
+                if hasattr(os, 'getuid'):  # Unix/Linux/Mac only
+                    socket_path = f"/tmp/cortex_daemon_{os.getuid()}.sock"
+                    if os.path.exists(socket_path):
+                        os.unlink(socket_path)
                 print("[CORTEX] Socket server stopped")
             except Exception as e:
                 print(f"[CORTEX] Error closing socket server: {e}")
