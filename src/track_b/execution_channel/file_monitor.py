@@ -1,0 +1,340 @@
+"""
+CORTEX 3.0 Track B: File Monitor
+===============================
+
+File monitoring component for capturing filesystem changes in real-time.
+Optimized for macOS with FSEvents integration and intelligent filtering.
+
+Key Features:
+- Real-time file system monitoring using FSEvents (macOS optimized)
+- Intelligent filtering to avoid noise
+- Content change detection and analysis
+- Integration with CORTEX brain for context capture
+- Performance optimized for large codebases
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+"""
+
+import asyncio
+import os
+import hashlib
+import logging
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Any, Set
+from dataclasses import dataclass
+import fnmatch
+
+try:
+    from watchdog.observers import Observer
+    from watchdog.events import FileSystemEventHandler, FileSystemEvent
+    WATCHDOG_AVAILABLE = True
+except ImportError:
+    # Fallback for environments without watchdog
+    Observer = None
+    FileSystemEventHandler = None
+    FileSystemEvent = None
+    WATCHDOG_AVAILABLE = False
+
+# Type alias for optional use
+if WATCHDOG_AVAILABLE:
+    EventType = FileSystemEvent
+else:
+    from typing import Any
+    EventType = Any
+
+
+@dataclass
+class FileChangeEvent:
+    """Represents a file change event."""
+    file_path: Path
+    change_type: str  # 'created', 'modified', 'deleted', 'moved'
+    timestamp: datetime
+    file_size: int
+    content_hash: Optional[str] = None
+    diff_summary: Optional[str] = None
+    
+
+class FileMonitor:
+    """
+    File monitoring component for CORTEX Track B
+    
+    Monitors filesystem changes and provides intelligent filtering
+    and content analysis for development context capture.
+    """
+    
+    def __init__(self, workspace_path: Path, excluded_patterns: List[str], max_file_size: int):
+        self.workspace_path = workspace_path
+        self.excluded_patterns = excluded_patterns or []
+        self.max_file_size = max_file_size
+        self.logger = logging.getLogger("cortex.track_b.file_monitor")
+        
+        self.is_running = False
+        self.observer = None
+        self.event_handler = None
+        self.event_queue = asyncio.Queue()
+        
+        # Cache for file hashes to detect content changes
+        self.file_hashes: Dict[str, str] = {}
+        
+        # Recently processed files to avoid duplicate processing
+        self.recent_files: Set[str] = set()
+        
+        self._validate_setup()
+    
+    def _validate_setup(self):
+        """Validate the monitoring setup."""
+        if not self.workspace_path.exists():
+            raise ValueError(f"Workspace path does not exist: {self.workspace_path}")
+        
+        if not self.workspace_path.is_dir():
+            raise ValueError(f"Workspace path is not a directory: {self.workspace_path}")
+        
+        if Observer is None:
+            self.logger.warning("Watchdog not available, file monitoring will be limited")
+    
+    def _should_monitor_file(self, file_path: Path) -> bool:
+        """Check if a file should be monitored based on exclusion patterns."""
+        relative_path = file_path.relative_to(self.workspace_path)
+        
+        # Check against exclusion patterns
+        for pattern in self.excluded_patterns:
+            if fnmatch.fnmatch(str(relative_path), pattern) or fnmatch.fnmatch(file_path.name, pattern):
+                return False
+        
+        # Skip if file is too large
+        try:
+            if file_path.is_file() and file_path.stat().st_size > self.max_file_size:
+                self.logger.debug(f"Skipping large file: {relative_path}")
+                return False
+        except (OSError, PermissionError):
+            return False
+        
+        # Skip hidden files unless they're important config files
+        if file_path.name.startswith('.') and file_path.name not in ['.env', '.gitignore', '.cortex.config']:
+            return False
+        
+        return True
+    
+    def _calculate_file_hash(self, file_path: Path) -> Optional[str]:
+        """Calculate hash of file content for change detection."""
+        try:
+            with open(file_path, 'rb') as f:
+                content = f.read()
+                return hashlib.md5(content).hexdigest()
+        except (OSError, PermissionError, UnicodeDecodeError):
+            return None
+    
+    def _get_change_type(self, event) -> str:
+        """Determine the type of file system change."""
+        if hasattr(event, 'event_type'):
+            event_type_map = {
+                'created': 'created',
+                'modified': 'modified', 
+                'deleted': 'deleted',
+                'moved': 'moved'
+            }
+            return event_type_map.get(event.event_type, 'modified')
+        return 'modified'
+    
+    async def start(self):
+        """Start file monitoring."""
+        if self.is_running:
+            self.logger.warning("File monitor is already running")
+            return
+        
+        self.logger.info(f"Starting file monitor for: {self.workspace_path}")
+        
+        if Observer is None:
+            self.logger.warning("File monitoring disabled: watchdog not available")
+            return
+        
+        # Create event handler
+        self.event_handler = FileSystemEventHandler()
+        self.event_handler.on_any_event = self._on_file_event
+        
+        # Setup observer
+        self.observer = Observer()
+        self.observer.schedule(
+            self.event_handler, 
+            str(self.workspace_path), 
+            recursive=True
+        )
+        
+        # Start monitoring
+        self.observer.start()
+        self.is_running = True
+        
+        self.logger.info("File monitor started successfully")
+    
+    async def stop(self):
+        """Stop file monitoring."""
+        if not self.is_running:
+            return
+        
+        self.logger.info("Stopping file monitor...")
+        
+        if self.observer:
+            self.observer.stop()
+            self.observer.join()
+        
+        self.is_running = False
+        self.logger.info("File monitor stopped")
+    
+    def _on_file_event(self, event):
+        """Handle file system events."""
+        try:
+            if event.is_directory:
+                return
+            
+            file_path = Path(event.src_path)
+            
+            # Check if we should monitor this file
+            if not self._should_monitor_file(file_path):
+                return
+            
+            # Avoid processing the same file multiple times rapidly
+            file_key = str(file_path)
+            if file_key in self.recent_files:
+                return
+            
+            self.recent_files.add(file_key)
+            
+            # Process the file change - use thread-safe method
+            try:
+                loop = asyncio.get_event_loop()
+                if loop and loop.is_running():
+                    asyncio.create_task(self._process_file_change(file_path, event))
+                else:
+                    # If no event loop is running, we'll queue it for later
+                    asyncio.ensure_future(self._process_file_change(file_path, event))
+            except RuntimeError:
+                # No event loop available, skip for now
+                pass
+            
+            # Clean up recent files set periodically
+            if len(self.recent_files) > 1000:
+                self.recent_files.clear()
+                
+        except Exception as e:
+            self.logger.error(f"Error handling file event: {e}")
+    
+    async def _process_file_change(self, file_path: Path, event):
+        """Process a file change event."""
+        try:
+            change_type = self._get_change_type(event)
+            timestamp = datetime.now()
+            
+            # Calculate file info
+            file_size = 0
+            content_hash = None
+            
+            if file_path.exists() and file_path.is_file():
+                try:
+                    file_size = file_path.stat().st_size
+                    content_hash = self._calculate_file_hash(file_path)
+                except (OSError, PermissionError):
+                    pass
+            
+            # Check if content actually changed
+            file_key = str(file_path)
+            old_hash = self.file_hashes.get(file_key)
+            
+            if change_type == 'modified' and content_hash == old_hash:
+                # Content didn't actually change, skip
+                return
+            
+            # Update hash cache
+            if content_hash:
+                self.file_hashes[file_key] = content_hash
+            elif change_type == 'deleted':
+                self.file_hashes.pop(file_key, None)
+            
+            # Create file change event
+            change_event = FileChangeEvent(
+                file_path=file_path,
+                change_type=change_type,
+                timestamp=timestamp,
+                file_size=file_size,
+                content_hash=content_hash,
+                diff_summary=await self._generate_diff_summary(file_path, change_type)
+            )
+            
+            # Queue the event for processing
+            await self.event_queue.put(change_event)
+            
+            self.logger.debug(f"Processed file change: {change_type} - {file_path.name}")
+            
+        except Exception as e:
+            self.logger.error(f"Error processing file change: {e}")
+        finally:
+            # Remove from recent files after processing
+            self.recent_files.discard(str(file_path))
+    
+    async def _generate_diff_summary(self, file_path: Path, change_type: str) -> Optional[str]:
+        """Generate a summary of file changes."""
+        try:
+            if change_type == 'deleted':
+                return f"File deleted: {file_path.name}"
+            elif change_type == 'created':
+                if file_path.suffix in ['.py', '.js', '.ts', '.java', '.cpp', '.c', '.go', '.rs']:
+                    return f"New {file_path.suffix[1:].upper()} file: {file_path.name}"
+                else:
+                    return f"New file: {file_path.name}"
+            elif change_type == 'modified':
+                # For text files, we could analyze the diff
+                if file_path.suffix in ['.py', '.js', '.ts', '.md', '.txt', '.json', '.yaml', '.yml']:
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            lines = content.count('\n') + 1
+                            chars = len(content)
+                            return f"Modified {file_path.name}: {lines} lines, {chars} chars"
+                    except (OSError, UnicodeDecodeError):
+                        pass
+                
+                return f"Modified: {file_path.name}"
+            
+            return None
+            
+        except Exception as e:
+            self.logger.error(f"Error generating diff summary: {e}")
+            return None
+    
+    async def get_events(self) -> List[Dict[str, Any]]:
+        """Get all pending file change events."""
+        events = []
+        
+        try:
+            # Collect all queued events
+            while not self.event_queue.empty():
+                event = await self.event_queue.get()
+                events.append({
+                    'type': 'file_change',
+                    'file_path': str(event.file_path),
+                    'relative_path': str(event.file_path.relative_to(self.workspace_path)),
+                    'change_type': event.change_type,
+                    'timestamp': event.timestamp.isoformat(),
+                    'file_size': event.file_size,
+                    'content_hash': event.content_hash,
+                    'diff_summary': event.diff_summary,
+                    'summary': f"{event.change_type.capitalize()}: {event.file_path.name}"
+                })
+        except Exception as e:
+            self.logger.error(f"Error getting events: {e}")
+        
+        return events
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get file monitor status."""
+        return {
+            'is_running': self.is_running,
+            'workspace_path': str(self.workspace_path),
+            'excluded_patterns': self.excluded_patterns,
+            'max_file_size': self.max_file_size,
+            'tracked_files': len(self.file_hashes),
+            'pending_events': self.event_queue.qsize(),
+            'watchdog_available': Observer is not None
+        }
