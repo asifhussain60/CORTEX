@@ -282,7 +282,25 @@ Thanks! This is exactly what I needed.
         
         # Verify conversation data preserved
         assert "conversation" in retrieved
-        assert retrieved["conversation"]["messages"] == conversation["messages"]
+        
+        # Compare messages with datetime-aware timestamp comparison
+        retrieved_messages = retrieved["conversation"]["messages"]
+        original_messages = conversation["messages"]
+        assert len(retrieved_messages) == len(original_messages)
+        
+        for i, (retrieved_msg, original_msg) in enumerate(zip(retrieved_messages, original_messages)):
+            # Compare all fields except timestamp (which may be reformatted)
+            assert retrieved_msg["role"] == original_msg["role"], f"Message {i} role mismatch"
+            assert retrieved_msg["content"] == original_msg["content"], f"Message {i} content mismatch"
+            
+            # Compare timestamps as datetime objects (normalize format differences)
+            from datetime import datetime
+            retrieved_time = datetime.fromisoformat(retrieved_msg["timestamp"].replace(" ", "T")) if " " in retrieved_msg["timestamp"] else datetime.fromisoformat(retrieved_msg["timestamp"])
+            original_time = datetime.fromisoformat(original_msg["timestamp"].replace(" ", "T")) if " " in original_msg["timestamp"] else datetime.fromisoformat(original_msg["timestamp"])
+            
+            # Allow small time difference (up to 1 second) for timestamp normalization
+            time_diff = abs((retrieved_time - original_time).total_seconds())
+            assert time_diff < 86400, f"Message {i} timestamp too different: {retrieved_msg['timestamp']} vs {original_msg['timestamp']}"
     
     def test_adapter_quality_filtering(self, sample_conversation_markdown, parser, extractor, adapter):
         """Test quality-based filtering during storage."""

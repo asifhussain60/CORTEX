@@ -1,4 +1,60 @@
 validation_insights:
+  github_copilot_conversation_history_loop:
+    issue: GitHub Copilot enters "Summarizing Conversation History..." loop when conversation contains large MD files
+    root_cause: Large markdown documents (500-1500+ lines) in conversation history cause token bloat
+    symptom: "Copilot spends 10-30 seconds 'summarizing' before each response, significantly slowing development"
+    incident_date: '2025-11-15'
+    impact: "Critical productivity impact - 10-30 second delay per interaction adds 30-60 minutes per dev session"
+    solution: Migrate structured documents from MD to YAML format
+    rationale:
+      - "YAML is 60% more token-efficient than Markdown for structured data (proven in CORTEX Phase 0)"
+      - "Machine-readable format reduces parsing overhead"
+      - "Copilot processes YAML faster than narrative MD"
+      - "Structured data belongs in structured format, not prose"
+    migration_strategy:
+      phase_1: "Identify conversion candidates (reports, status, analysis, planning docs)"
+      phase_2: "Preserve narrative MD (story.md, guides, user-facing docs)"
+      phase_3: "Convert structured docs to YAML with JSON Schema validation"
+      phase_4: "Git-based deletion - commit YAML, then commit deletion of MD (no archiving)"
+      phase_5: "Update CORTEX components to read YAML instead of MD"
+    document_categories:
+      convert_to_yaml:
+        - "Implementation reports (*-COMPLETE.md, *-REPORT.md)"
+        - "Status tracking (*-STATUS.md, *-PROGRESS.md)"
+        - "Analysis documents (*-ANALYSIS.md)"
+        - "Planning documents (*-PLANNING.md, *-PLAN.md)"
+        - "Phase tracking documents"
+        - "Metrics and statistics"
+      keep_as_markdown:
+        - "Story/narrative content (story.md, awakening-of-cortex.md)"
+        - "User guides (setup-guide.md, help_plan_feature.md)"
+        - "README.md files"
+        - "Tutorial content"
+        - "Architecture explanations for humans"
+    git_deletion_strategy:
+      rationale: "Git history is professional backup - no redundant archives needed"
+      step_1: "Convert MD to YAML, validate with JSON Schema"
+      step_2: "Git commit YAML file: 'feat(migration): Convert {filename} to YAML format'"
+      step_3: "Git commit deletion: 'chore(migration): Delete {filename} after YAML conversion (backed up in commit {hash})'"
+      rollback: "Use 'git revert {commit_hash}' to restore deleted files from history"
+      audit_trail: "Git log serves as complete audit trail for all conversions"
+    expected_benefits:
+      token_reduction: "60% fewer tokens for structured documents"
+      performance: "Eliminate 10-30 second summarization delays"
+      maintainability: "Programmatic updates easier with YAML"
+      validation: "JSON Schema prevents malformed data"
+      diffs: "YAML diffs cleaner than MD diffs for structured data"
+    implementation:
+      design_document: "cortex-brain/documents/planning/YAML-PHASE-TRACKER-DESIGN.yaml"
+      conversion_tool: "scripts/document_migration/convert_md_to_yaml.py"
+      plugin: "src/plugins/phase_tracker_plugin.py"
+      schemas: "cortex-brain/schemas/*.json"
+    frequency: 1
+    confidence: 1.0
+    severity: critical
+    last_seen: '2025-11-15'
+    lesson: "Structured data in conversation history should be YAML, not MD - prose is for humans, structure is for machines"
+  
   skull_protection_layer:
     issue: Development violations - fixes claimed without tests, integrations without
       E2E validation
@@ -141,6 +197,51 @@ validation_insights:
 version: 6.0.0
 last_updated: 2025-11-05 15:00:00+00:00
 workflow_patterns:
+  yaml_migration_workflow:
+    pattern: structured_document_migration
+    description: "Convert structured Markdown documents to YAML to prevent GitHub Copilot conversation history loops"
+    steps:
+      - "1_identify: Scan for structured MD files (reports, status, analysis, planning)"
+      - "2_categorize: Separate conversion candidates from narrative content (keep guides/stories as MD)"
+      - "3_design_schema: Create JSON Schema for each document type"
+      - "4_convert: Parse MD structure and map to YAML schema"
+      - "5_validate: Run JSON Schema validation on converted YAML"
+      - "6_commit_yaml: Git commit new YAML file with descriptive message"
+      - "7_commit_deletion: Git commit deletion of MD file with reference to previous commit"
+      - "8_verify: Confirm CORTEX can read new YAML format"
+    rationale: "Large MD files cause 10-30 second 'Summarizing...' delays in GitHub Copilot. YAML reduces tokens by 60% and eliminates delays."
+    success_rate: 1.0
+    time_saved_per_interaction: "10-30 seconds"
+    token_reduction: "60%"
+    confidence: 0.98
+    last_used: '2025-11-15'
+    git_strategy:
+      no_archiving: "Git history is the backup - no redundant archives folder"
+      commit_sequence:
+        - "Stage 1: Commit YAML (feat(migration): Convert {file} to YAML)"
+        - "Stage 2: Commit deletion (chore(migration): Delete {file} after YAML conversion)"
+      rollback: "git revert {commit_hash} restores from history"
+    conversion_categories:
+      convert_to_yaml:
+        - "Implementation reports"
+        - "Status tracking"
+        - "Analysis results"
+        - "Planning documents"
+        - "Phase tracking"
+        - "Metrics/statistics"
+      keep_as_markdown:
+        - "User guides"
+        - "Story/narrative content"
+        - "README files"
+        - "Tutorial content"
+        - "Human-readable explanations"
+    benefits:
+      performance: "Eliminates 10-30 second summarization delays"
+      tokens: "60% reduction in conversation history token usage"
+      validation: "JSON Schema catches data errors automatically"
+      maintainability: "Programmatic updates easier with structured format"
+      diffs: "Cleaner version control diffs for structured data"
+  
   kds_quadrant_creation:
     pattern: four_perspective_documentation
     description: Create comprehensive documentation using KDS Quadrant structure

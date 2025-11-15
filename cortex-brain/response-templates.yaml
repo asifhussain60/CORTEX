@@ -118,9 +118,7 @@ templates:
     
     content: |
       ![CORTEX Commands](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
-      
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      
+
       📝 **Your Request:** {{user_request}}
       
       🎯 **Understanding:** You want to see all available CORTEX commands
@@ -128,7 +126,7 @@ templates:
       💬 **Response:** Here's your command reference:
       
       Status  Command        What It Does
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
       ✅      update story   Refresh CORTEX story documentation
       🔄      setup          Setup/configure environment
       ✅      design sync    Synchronize design with implementation
@@ -137,8 +135,7 @@ templates:
       ⏸️      check brain    Validate brain protection
       ⏸️      run tests      Execute test suite
       🎯      plan this      Interactive planning (CORTEX 2.1)
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      
+
       Legend:
         ✅ ready    - Fully working
         🔄 partial  - Core working, some modules pending
@@ -172,9 +169,7 @@ templates:
     content: |
       
       ![CORTEX Commands Detailed](file:///d:/PROJECTS/CORTEX/docs/images/cortex-help-banner.png)
-      
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      
+
       📝 **Your Request:** {{user_request}}
       
       🎯 **Understanding:** You want detailed information about all CORTEX capabilities
@@ -182,7 +177,7 @@ templates:
       💬 **Response:** Here's the complete breakdown organized by category:
       
       📦 ENVIRONMENT & SETUP
-      ━━━━━━━━━━━━━━━━━━━━━━
+
       ✅ setup - Setup/configure development environment
          Examples: "setup environment", "/setup", "configure"
          Modules: 4 (platform detection, deps, brain init, validation)
@@ -2788,8 +2783,7 @@ templates:
       category: system
       usage: orchestrator_execution
     content: |
-      
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
         CORTEX {{operation_name}} Orchestrator v{{version}}
 
       📝 **Your Request:** {{user_request}}
@@ -2826,8 +2820,7 @@ templates:
       category: system
       usage: orchestrator_completion
     content: |
-      
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
         CORTEX {{operation_name}} - {{status}}
 
       Duration: {{duration}}  │  Modules: {{modules_succeeded}}/{{modules_total}} succeeded
@@ -2842,7 +2835,6 @@ templates:
       {{/if}}
       
       © 2024-2025 Asif Hussain │ CORTEX Orchestration
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ============================================================================
 # EFFICIENCY METRICS & ROI - Instant Value Demonstration
@@ -2868,9 +2860,9 @@ templates:
       usage: value_demonstration
     
     content: |
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
       🧠 CORTEX Efficiency Metrics & ROI
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
       Version: CORTEX 2.0 │ Baseline: Nov 13, 2025 │ All Targets Exceeded ✅
       © 2024-2025 Asif Hussain │ github.com/asifhussain60/CORTEX
 
@@ -3034,7 +3026,6 @@ templates:
       • "Show tier 3 tracking data"
       
       © 2024-2025 Asif Hussain │ CORTEX Value Demonstration
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ============================================================================
 # RESPONSE ROUTING RULES

@@ -1,0 +1,1232 @@
+# CORTEX YAML Phase Tracker System Design
+# =====================================
+# Extensible plugin-based phase tracking system with comprehensive document migration
+
+version: "1.0"
+type: "design_specification"
+created: "2025-11-15"
+author: "Asif Hussain"
+status: "planned"
+
+metadata:
+  purpose: "Design comprehensive YAML-based phase tracking system as CORTEX plugin"
+  scope: 
+    - "Phase tracking plugin architecture"
+    - "Document migration from MD to YAML"
+    - "Integration with existing CORTEX components"
+  principles:
+    - "Plugin extensibility (follows BasePlugin pattern)"
+    - "Machine-readable over human-readable for structured data"
+    - "Preserve all existing document content"
+    - "Clean folder organization"
+    - "Backward compatibility during migration"
+
+# ============================================================================
+# PART 1: PHASE TRACKER PLUGIN ARCHITECTURE
+# ============================================================================
+
+phase_tracker_plugin:
+  plugin_metadata:
+    plugin_id: "phase_tracker"
+    name: "CORTEX Phase Tracker"
+    version: "1.0.0"
+    category: "WORKFLOW"
+    priority: "HIGH"
+    description: "Extensible phase tracking system for work planning, multi-track development, and progress monitoring"
+    author: "Asif Hussain"
+    dependencies:
+      - "yaml"
+      - "jsonschema"
+      - "datetime"
+    hooks:
+      - "ON_WORKFLOW_START"
+      - "ON_WORKFLOW_END"
+      - "ON_BRAIN_UPDATE"
+      - "ON_DOC_REFRESH"
+
+  registered_commands:
+    - command: "/track"
+      natural_language: "track progress"
+      description: "Create or update phase tracking for current work"
+      category: "WORKFLOW"
+      aliases: ["/progress", "/phases"]
+      examples:
+        - "@cortex /track"
+        - "track progress on implementation"
+    
+    - command: "/track-status"
+      natural_language: "show phase status"
+      description: "Display current phase tracking status"
+      category: "WORKFLOW"
+      aliases: ["/phases-status"]
+      examples:
+        - "@cortex /track-status"
+        - "show phase status"
+    
+    - command: "/track-init"
+      natural_language: "initialize phase tracking"
+      description: "Set up new phase tracking for a project/feature"
+      category: "WORKFLOW"
+      examples:
+        - "@cortex /track-init authentication feature"
+        - "initialize phase tracking for new dashboard"
+
+  core_features:
+    - name: "Phase Definition"
+      description: "Define work phases with dependencies, estimates, acceptance criteria"
+      capabilities:
+        - "Hierarchical phase structure (phases, sub-phases, tasks)"
+        - "Phase dependencies and prerequisites"
+        - "Time estimates and deadlines"
+        - "Acceptance criteria per phase"
+        - "Phase tags and categories"
+    
+    - name: "Progress Tracking"
+      description: "Track completion status, time spent, blockers"
+      capabilities:
+        - "Status tracking (not-started, in-progress, blocked, completed)"
+        - "Time tracking (estimated vs actual)"
+        - "Blocker documentation"
+        - "Milestone tracking"
+        - "Completion percentage calculation"
+    
+    - name: "Multi-Track Support"
+      description: "Support parallel development on multiple machines/contexts"
+      capabilities:
+        - "Track isolation (each track independent)"
+        - "Track consolidation (merge progress)"
+        - "Cross-track dependency detection"
+        - "Track-specific context filtering"
+        - "Fun track naming (Blazing Phoenix, Swift Falcon, etc.)"
+    
+    - name: "Integration Points"
+      description: "Hook into existing CORTEX components"
+      capabilities:
+        - "Work Planner integration (auto-create phases)"
+        - "Design Sync integration (track implementation progress)"
+        - "Conversation memory integration (link phases to conversations)"
+        - "Knowledge Graph integration (learn phase patterns)"
+        - "Smart Hints integration (suggest next phase based on history)"
+
+# ============================================================================
+# PART 2: YAML SCHEMA DEFINITIONS
+# ============================================================================
+
+yaml_schemas:
+  phase_tracking_schema:
+    description: "Schema for tracking work phases"
+    file_pattern: "*-phase-tracking.yaml"
+    location: "cortex-brain/documents/tracking/"
+    schema:
+      $schema: "http://json-schema.org/draft-07/schema#"
+      type: "object"
+      required: ["version", "project", "phases"]
+      properties:
+        version:
+          type: "string"
+          description: "Schema version"
+        project:
+          type: "object"
+          required: ["name", "description"]
+          properties:
+            name: {type: "string"}
+            description: {type: "string"}
+            started: {type: "string", format: "date-time"}
+            target_completion: {type: "string", format: "date-time"}
+            tags: {type: "array", items: {type: "string"}}
+        phases:
+          type: "array"
+          items:
+            type: "object"
+            required: ["phase_id", "name", "status"]
+            properties:
+              phase_id: {type: "string"}
+              name: {type: "string"}
+              description: {type: "string"}
+              status:
+                type: "string"
+                enum: ["not-started", "in-progress", "blocked", "completed", "skipped"]
+              priority:
+                type: "string"
+                enum: ["critical", "high", "medium", "low"]
+              estimated_hours: {type: "number"}
+              actual_hours: {type: "number"}
+              started: {type: "string", format: "date-time"}
+              completed: {type: "string", format: "date-time"}
+              dependencies: {type: "array", items: {type: "string"}}
+              acceptance_criteria: {type: "array", items: {type: "string"}}
+              blockers: {type: "array", items: {type: "object"}}
+              tasks: {type: "array", items: {type: "object"}}
+              track: {type: "string", description: "For multi-track mode"}
+              notes: {type: "string"}
+    
+    example:
+      version: "1.0"
+      project:
+        name: "Authentication Feature"
+        description: "Implement user authentication system"
+        started: "2025-11-15T10:00:00Z"
+        target_completion: "2025-11-20T17:00:00Z"
+        tags: ["security", "user-facing", "high-priority"]
+      phases:
+        - phase_id: "auth_001"
+          name: "Design Authentication Architecture"
+          description: "Design OAuth2 flow and database schema"
+          status: "completed"
+          priority: "critical"
+          estimated_hours: 8
+          actual_hours: 6.5
+          started: "2025-11-15T10:00:00Z"
+          completed: "2025-11-15T16:30:00Z"
+          dependencies: []
+          acceptance_criteria:
+            - "Architecture diagram created"
+            - "Database schema designed"
+            - "Security review passed"
+          tasks:
+            - task_id: "auth_001_01"
+              name: "Create architecture diagram"
+              status: "completed"
+            - task_id: "auth_001_02"
+              name: "Design database schema"
+              status: "completed"
+          notes: "OAuth2 chosen over custom JWT for better security"
+        
+        - phase_id: "auth_002"
+          name: "Implement Login API"
+          description: "Create login endpoint with OAuth2"
+          status: "in-progress"
+          priority: "critical"
+          estimated_hours: 12
+          actual_hours: 4
+          started: "2025-11-16T09:00:00Z"
+          dependencies: ["auth_001"]
+          acceptance_criteria:
+            - "Login endpoint returns JWT token"
+            - "Integration tests pass"
+            - "Security tests pass"
+          blockers:
+            - blocker_id: "auth_002_block_01"
+              description: "OAuth2 library version conflict"
+              created: "2025-11-16T11:00:00Z"
+              resolution: "Upgrade to latest library version"
+              resolved: null
+          tasks:
+            - task_id: "auth_002_01"
+              name: "Create login endpoint"
+              status: "completed"
+            - task_id: "auth_002_02"
+              name: "Write integration tests"
+              status: "in-progress"
+
+  report_schema:
+    description: "Schema for completion reports, status updates, summaries"
+    file_pattern: "*-report.yaml"
+    location: "cortex-brain/documents/reports/"
+    schema:
+      $schema: "http://json-schema.org/draft-07/schema#"
+      type: "object"
+      required: ["version", "type", "title", "created", "summary"]
+      properties:
+        version: {type: "string"}
+        type:
+          type: "string"
+          enum: ["completion", "status", "progress", "milestone"]
+        title: {type: "string"}
+        created: {type: "string", format: "date-time"}
+        project: {type: "string"}
+        phase: {type: "string"}
+        summary: {type: "string"}
+        accomplishments: {type: "array", items: {type: "object"}}
+        metrics: {type: "object"}
+        next_steps: {type: "array", items: {type: "string"}}
+        attachments: {type: "array", items: {type: "object"}}
+    
+    example:
+      version: "1.0"
+      type: "completion"
+      title: "CORTEX 2.1 Track A Complete"
+      created: "2025-11-13T18:00:00Z"
+      project: "CORTEX 2.1"
+      phase: "Track A - Core Planning Features"
+      summary: "Completed all Track A modules for CORTEX 2.1 interactive planning release"
+      accomplishments:
+        - module: "work_planner_agent"
+          description: "Implemented interactive planning workflow"
+          tests_added: 15
+          coverage: "92%"
+        - module: "smart_hints"
+          description: "Smart next steps generation"
+          tests_added: 8
+          coverage: "88%"
+      metrics:
+        modules_completed: 12
+        total_modules: 12
+        tests_added: 45
+        test_pass_rate: "100%"
+        time_spent_hours: 28
+        estimated_hours: 30
+      next_steps:
+        - "Begin Track B - Multi-track support"
+        - "Integration testing with existing features"
+        - "Update documentation"
+
+  analysis_schema:
+    description: "Schema for deep analysis, investigations, performance analysis"
+    file_pattern: "*-analysis.yaml"
+    location: "cortex-brain/documents/analysis/"
+    schema:
+      $schema: "http://json-schema.org/draft-07/schema#"
+      type: "object"
+      required: ["version", "type", "title", "created", "findings"]
+      properties:
+        version: {type: "string"}
+        type:
+          type: "string"
+          enum: ["performance", "architecture", "root-cause", "pattern", "security"]
+        title: {type: "string"}
+        created: {type: "string", format: "date-time"}
+        scope: {type: "string"}
+        methodology: {type: "string"}
+        findings: {type: "array", items: {type: "object"}}
+        recommendations: {type: "array", items: {type: "object"}}
+        metrics: {type: "object"}
+        visualizations: {type: "array", items: {type: "object"}}
+
+  planning_schema:
+    description: "Schema for roadmaps, implementation plans, architecture plans"
+    file_pattern: "*-plan.yaml"
+    location: "cortex-brain/documents/planning/"
+    schema:
+      $schema: "http://json-schema.org/draft-07/schema#"
+      type: "object"
+      required: ["version", "type", "title", "created", "phases"]
+      properties:
+        version: {type: "string"}
+        type:
+          type: "string"
+          enum: ["roadmap", "implementation", "architecture", "migration"]
+        title: {type: "string"}
+        created: {type: "string", format: "date-time"}
+        scope: {type: "string"}
+        timeline: {type: "object"}
+        phases: {type: "array", items: {type: "object"}}
+        risks: {type: "array", items: {type: "object"}}
+        dependencies: {type: "array", items: {type: "object"}}
+        success_criteria: {type: "array", items: {type: "string"}}
+
+# ============================================================================
+# PART 3: DOCUMENT MIGRATION STRATEGY
+# ============================================================================
+
+document_migration:
+  current_state:
+    location: "cortex-brain/"
+    total_md_files: 150+
+    categories_detected:
+      - "Implementation reports (COMPLETE.md, REPORT.md)"
+      - "Status updates (STATUS.md, PROGRESS.md)"
+      - "Analysis documents (ANALYSIS.md)"
+      - "Planning documents (PLANNING.md, PLAN.md, ROADMAP.md)"
+      - "Summaries (SUMMARY.md)"
+      - "Investigations (INVESTIGATION.md)"
+      - "Design documents (DESIGN.md)"
+      - "User guides (kept as MD)"
+      - "Story/narrative docs (kept as MD)"
+    
+    preservation_rules:
+      keep_as_markdown:
+        - "README.md files"
+        - "User-facing guides (setup-guide.md, etc.)"
+        - "Story/narrative content (story.md, awakening-of-cortex.md)"
+        - "Architecture explanations (for humans)"
+        - "Tutorial content"
+        - "Migration logs"
+      
+      convert_to_yaml:
+        - "Status tracking documents"
+        - "Implementation reports"
+        - "Completion reports"
+        - "Progress tracking"
+        - "Metrics and statistics"
+        - "Structured planning documents"
+        - "Analysis results"
+        - "Phase tracking documents"
+
+  migration_phases:
+    phase_1_analysis:
+      name: "Document Discovery & Categorization"
+      tasks:
+        - "Scan cortex-brain/ for all .md files"
+        - "Categorize by content type (report, analysis, planning, etc.)"
+        - "Identify conversion candidates vs preserve-as-MD"
+        - "Map MD content to YAML schemas"
+        - "Generate migration manifest (which files, which schema)"
+      output: "cortex-brain/documents/migration-manifest.yaml"
+    
+    phase_2_schema_design:
+      name: "YAML Schema Definition"
+      tasks:
+        - "Design schemas for each document type"
+        - "Create JSON Schema validation files"
+        - "Build schema registry for validation"
+        - "Test schema coverage with sample documents"
+      output: "cortex-brain/schemas/*.json"
+    
+    phase_3_conversion_tools:
+      name: "Build Conversion Utilities"
+      tasks:
+        - "Implement MD → YAML converter (structure-aware)"
+        - "Build YAML validator (JSON Schema based)"
+        - "Implement Git commit strategy (commit before deletion)"
+        - "Add deletion utility (delete converted MD files after Git commit)"
+        - "Implement rollback capability (restore from Git history)"
+        - "Add conversion verification (content integrity check)"
+      output: "scripts/document_migration/"
+      notes: "NO archiving - commit to Git then delete. Git history IS the backup."
+    
+    phase_4_folder_reorganization:
+      name: "Create Clean Folder Structure"
+      tasks:
+        - "Create cortex-brain/documents/ hierarchy"
+        - "Set up subdirectories (reports/, analysis/, planning/, etc.)"
+        - "Move existing organized documents"
+        - "Update .gitignore for new structure"
+      output: "cortex-brain/documents/README.md"
+    
+    phase_5_migration_execution:
+      name: "Execute Document Migration"
+      tasks:
+        - "Convert documents category by category"
+        - "Validate converted YAML against schemas"
+        - "Move converted files to organized folders"
+        - "Update references in codebase"
+        - "Git commit YAML files with descriptive message"
+        - "Git commit deletion of original MD files with clear message"
+        - "Verify Git history contains all converted content"
+      output: "cortex-brain/documents/{category}/*.yaml"
+      deletion_strategy:
+        commit_message_format: "chore(migration): Delete MD files after YAML conversion\n\nConverted to YAML in commit {previous_commit}\nFiles deleted: {file_list}\nBackup available in Git history"
+        safety_checks:
+          - "Verify YAML file exists and validates"
+          - "Verify Git commit successful"
+          - "Verify content integrity between MD and YAML"
+        rollback: "git revert {commit_hash} to restore deleted MD files"
+    
+    phase_6_integration_update:
+      name: "Update CORTEX Integration Points"
+      tasks:
+        - "Update router to use YAML documents"
+        - "Update agents to read YAML instead of MD"
+        - "Update operations to output YAML"
+        - "Update entry points (CORTEX.prompt.md references)"
+        - "Update documentation"
+        - "Add backward compatibility layer (read old MD format from Git history if needed)"
+      output: "Updated src/, prompts/, docs/"
+    
+    phase_7_testing:
+      name: "Comprehensive Testing"
+      tasks:
+        - "Test YAML validation"
+        - "Test conversion accuracy"
+        - "Test phase tracker plugin"
+        - "Test integration with agents/operations"
+        - "Test Git-based rollback capability"
+        - "Performance testing (YAML vs MD parsing)"
+      output: "tests/document_migration/"
+
+  folder_structure_target:
+    cortex-brain:
+      documents:
+        reports:
+          - "CORTEX-2.1-TRACK-A-COMPLETE-report.yaml"
+          - "PHASE-0-COMPLETION-report.yaml"
+          - "MILESTONE-0-COMPLETE-report.yaml"
+        
+        analysis:
+          - "TIER1-CAPTURE-GAP-analysis.yaml"
+          - "FILE-DEPENDENCY-analysis.yaml"
+          - "PATTERN-CUSTOMIZATION-analysis.yaml"
+        
+        planning:
+          - "CORTEX-3.0-ARCHITECTURE-plan.yaml"
+          - "YAML-PHASE-TRACKER-DESIGN.yaml"
+          - "ROADMAP-RESTRUCTURE-plan.yaml"
+        
+        summaries:
+          - "SESSION-2025-11-13-summary.yaml"
+          - "PHASE-5.1-SESSION-summary.yaml"
+        
+        tracking:
+          - "cortex-2.1-implementation-tracking.yaml"
+          - "multi-track-development-tracking.yaml"
+        
+        conversation-captures:
+          - "2025-11-13-authentication-feature.md"  # Keep as MD (narrative)
+        
+        implementation-guides:
+          - "CLEANUP-QUICK-START.md"  # Keep as MD (user guide)
+          - "INVESTIGATION-QUICK-REFERENCE.md"  # Keep as MD (reference)
+        
+        README.md: "Document organization guide"
+        MIGRATION-LOG.md: "Migration history and decisions"
+      
+      notes:
+        - "NO archives/ folder - deleted MD files backed up in Git history only"
+        - "Git commit log serves as audit trail for all conversions and deletions"
+        - "Use 'git log --follow' to track file history across renames/conversions"
+
+  conversion_utilities:
+    md_to_yaml_converter:
+      location: "scripts/document_migration/convert_md_to_yaml.py"
+      features:
+        - "Parse Markdown structure (headings, lists, code blocks)"
+        - "Extract metadata (title, date, version, etc.)"
+        - "Map content to YAML schema"
+        - "Preserve formatting where needed"
+        - "Handle special cases (tables, diagrams, code)"
+        - "Generate unique IDs for items"
+        - "Validate against JSON Schema"
+        - "Git commit converted YAML file"
+        - "Git commit deletion of source MD file"
+      
+      usage:
+        cli: "python scripts/document_migration/convert_md_to_yaml.py --input FILE.md --schema report --output FILE.yaml --commit-and-delete"
+        api: |
+          from scripts.document_migration.convert_md_to_yaml import MDToYAMLConverter
+          
+          converter = MDToYAMLConverter(schema_type='report')
+          yaml_content = converter.convert('FILE.md')
+          converter.validate(yaml_content)
+          converter.write('FILE.yaml', yaml_content)
+          converter.commit_yaml('FILE.yaml', 'Convert FILE.md to YAML')
+          converter.commit_deletion('FILE.md', 'Delete FILE.md after YAML conversion')
+    
+    yaml_validator:
+      location: "scripts/document_migration/validate_yaml.py"
+      features:
+        - "JSON Schema validation"
+        - "Custom validation rules"
+        - "Detailed error reporting"
+        - "Batch validation"
+      
+      usage:
+        cli: "python scripts/document_migration/validate_yaml.py --file FILE.yaml --schema report"
+    
+    migration_orchestrator:
+      location: "scripts/document_migration/migrate_documents.py"
+      features:
+        - "Read migration manifest"
+        - "Execute migration in phases"
+        - "Progress reporting"
+        - "Git-based rollback capability"
+        - "Dry-run mode"
+        - "Commit strategy: YAML first, then delete MD"
+      
+      usage:
+        cli: "python scripts/document_migration/migrate_documents.py --manifest migration-manifest.yaml --dry-run"
+      
+      commit_strategy:
+        step_1: "Convert MD to YAML, validate, commit YAML with message: 'feat(migration): Convert {filename} to YAML format'"
+        step_2: "After successful commit, delete MD file and commit with message: 'chore(migration): Delete {filename} after YAML conversion (backed up in previous commit)'"
+        step_3: "If any step fails, rollback previous commits and report error"
+        rollback: "git revert {commit_range} to restore deleted files from history"
+
+# ============================================================================
+# PART 4: PLUGIN IMPLEMENTATION DETAILS
+# ============================================================================
+
+plugin_implementation:
+  class_structure:
+    PhaseTrackerPlugin:
+      inherits: "BasePlugin"
+      location: "src/plugins/phase_tracker_plugin.py"
+      methods:
+        - "_get_metadata() -> PluginMetadata"
+        - "initialize() -> bool"
+        - "execute(request: str, context: Dict) -> Dict"
+        - "cleanup() -> bool"
+        - "register_commands() -> List[CommandMetadata]"
+        - "create_phase_tracking(project_name: str, phases: List[Dict]) -> str"
+        - "update_phase_status(phase_id: str, status: str, notes: str) -> bool"
+        - "get_phase_status(project_name: str) -> Dict"
+        - "consolidate_tracks(track_names: List[str]) -> Dict"
+        - "generate_progress_report(project_name: str) -> str"
+        - "validate_phase_dependencies(phases: List[Dict]) -> List[str]"
+        - "calculate_completion_percentage(phases: List[Dict]) -> float"
+        - "detect_blockers(phases: List[Dict]) -> List[Dict]"
+        - "suggest_next_phase(current_phase: str, history: Dict) -> str"
+  
+  state_management:
+    phase_tracking_files:
+      location: "cortex-brain/documents/tracking/"
+      format: "YAML"
+      naming: "{project_slug}-phase-tracking.yaml"
+      schema: "phase_tracking_schema"
+    
+    progress_cache:
+      location: "In-memory cache with TTL"
+      persistence: "Save to YAML on updates"
+      invalidation: "On phase status change or consolidation"
+  
+  integration_hooks:
+    work_planner_integration:
+      hook: "ON_WORKFLOW_START"
+      action: "Auto-create phase tracking from work plan"
+      data_flow: "WorkPlanner → PhaseTracker (create phases)"
+    
+    design_sync_integration:
+      hook: "ON_DOC_REFRESH"
+      action: "Update phase status from implementation state"
+      data_flow: "DesignSync → PhaseTracker (update status)"
+    
+    conversation_vault_integration:
+      hook: "ON_CONVERSATION_END"
+      action: "Link conversation to relevant phase"
+      data_flow: "ConversationVault → PhaseTracker (add conversation reference)"
+    
+    knowledge_graph_integration:
+      hook: "ON_BRAIN_UPDATE"
+      action: "Learn phase patterns (typical duration, common blockers)"
+      data_flow: "PhaseTracker → KnowledgeGraph (add patterns)"
+
+# ============================================================================
+# PART 5: TESTING STRATEGY
+# ============================================================================
+
+testing_strategy:
+  unit_tests:
+    location: "tests/plugins/test_phase_tracker_plugin.py"
+    coverage_target: "95%"
+    test_cases:
+      - "test_plugin_initialization"
+      - "test_create_phase_tracking"
+      - "test_update_phase_status"
+      - "test_phase_dependency_validation"
+      - "test_completion_percentage_calculation"
+      - "test_multi_track_consolidation"
+      - "test_blocker_detection"
+      - "test_yaml_schema_validation"
+      - "test_command_registration"
+  
+  integration_tests:
+    location: "tests/integration/test_phase_tracker_integration.py"
+    test_cases:
+      - "test_work_planner_integration"
+      - "test_design_sync_integration"
+      - "test_conversation_vault_linking"
+      - "test_knowledge_graph_pattern_learning"
+      - "test_end_to_end_phase_tracking_workflow"
+  
+  migration_tests:
+    location: "tests/document_migration/"
+    test_cases:
+      - "test_md_to_yaml_conversion_accuracy"
+      - "test_yaml_validation"
+      - "test_content_integrity_preservation"
+      - "test_rollback_capability"
+      - "test_reference_updates"
+      - "test_backward_compatibility"
+
+# ============================================================================
+# PART 6: ROLLOUT PLAN
+# ============================================================================
+
+rollout_plan:
+  phase_1_plugin_development:
+    duration: "3-5 days"
+    deliverables:
+      - "PhaseTrackerPlugin implementation"
+      - "Command registration"
+      - "Unit tests (95% coverage)"
+      - "Plugin documentation"
+  
+  phase_2_schema_design:
+    duration: "2-3 days"
+    deliverables:
+      - "JSON Schema definitions"
+      - "Schema validation utilities"
+      - "Example YAML documents"
+      - "Schema documentation"
+  
+  phase_3_conversion_tools:
+    duration: "3-4 days"
+    deliverables:
+      - "MD → YAML converter"
+      - "YAML validator"
+      - "Migration orchestrator"
+      - "Conversion tests"
+  
+  phase_4_pilot_migration:
+    duration: "2 days"
+    scope: "Migrate 10 sample documents"
+    validation:
+      - "Content integrity check"
+      - "Schema validation"
+      - "Reference updates work"
+      - "CORTEX can read new format"
+  
+  phase_5_full_migration:
+    duration: "3-4 days"
+    scope: "Migrate all 150+ documents"
+    steps:
+      - "Backup all MD files"
+      - "Migrate by category"
+      - "Validate each batch"
+      - "Update references"
+      - "Archive originals"
+  
+  phase_6_integration_update:
+    duration: "3-4 days"
+    scope: "Update all CORTEX components"
+    areas:
+      - "Router"
+      - "Agents"
+      - "Operations"
+      - "Entry points"
+      - "Documentation"
+  
+  phase_7_testing_validation:
+    duration: "2-3 days"
+    scope: "Comprehensive testing"
+    validation:
+      - "All tests pass"
+      - "No regression"
+      - "Performance acceptable"
+      - "User workflow unchanged"
+
+# ============================================================================
+# PART 7: SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  plugin_functionality:
+    - "PhaseTrackerPlugin registers successfully"
+    - "Commands work (/track, /track-status, /track-init)"
+    - "Phase tracking YAML created correctly"
+    - "Status updates persist accurately"
+    - "Multi-track consolidation works"
+    - "Integration hooks function properly"
+  
+  document_migration:
+    - "All eligible MD files converted to YAML"
+    - "100% content integrity (no data loss)"
+    - "YAML validates against schemas"
+    - "References updated across codebase"
+    - "Organized folder structure in place"
+    - "Original MD files archived safely"
+  
+  system_integration:
+    - "CORTEX can read/write new YAML format"
+    - "No regression in existing features"
+    - "Backward compatibility maintained"
+    - "Performance meets/exceeds MD parsing"
+    - "All tests pass (100% non-skipped)"
+  
+  documentation:
+    - "Plugin documented in technical-reference.md"
+    - "YAML schemas documented"
+    - "Migration guide created"
+    - "Examples provided for each schema"
+    - "Update entry point (CORTEX.prompt.md)"
+
+# ============================================================================
+# PART 8: BENEFITS & IMPACT
+# ============================================================================
+
+benefits:
+  efficiency:
+    - "Machine-readable formats reduce token usage by 60%"
+    - "Faster parsing (YAML vs MD)"
+    - "Direct schema validation (catch errors early)"
+    - "Better version control diffs"
+  
+  maintainability:
+    - "Structured data easier to update programmatically"
+    - "Schema evolution via versioning"
+    - "No documentation drift"
+    - "Cleaner folder organization"
+  
+  extensibility:
+    - "Plugin architecture allows easy feature additions"
+    - "Other components can use phase tracking"
+    - "YAML schemas reusable across projects"
+    - "Standard format for future features"
+  
+  quality:
+    - "JSON Schema validation prevents malformed data"
+    - "Consistent document structure"
+    - "Machine-verifiable completeness"
+    - "Automated content checks"
+
+# ============================================================================
+# PART 10: ARCHITECTURE-LEVEL INTEGRATION
+# ============================================================================
+# User requirement: "Implement this at the architecture level so that the entry 
+# point module 'let's plan' uses this when designing plans for users as well."
+
+architecture_integration:
+  
+  design_philosophy:
+    principle: "Phase tracking is not just a plugin feature - it's a core workflow capability"
+    goal: "Every complex planning operation automatically generates and uses phase tracking"
+    user_experience: "Transparent, automatic phase tracking during 'let's plan' interactions"
+    
+  integration_points:
+    
+    1_entry_point_cortex_prompt:
+      file: ".github/prompts/CORTEX.prompt.md"
+      current_behavior: "Universal entry point routes to operations and agents"
+      enhanced_behavior: "Detect planning intent → Initialize phase tracker → Route with tracking context"
+      
+      detection_triggers:
+        - "User says: 'let's plan', 'plan a feature', 'help me plan', 'create a roadmap'"
+        - "Intent detected: PLAN"
+        - "Operation: interactive_planning or work_planner agent"
+      
+      workflow_enhancement:
+        step_1: "Intent Router detects PLAN intent"
+        step_2: "Initialize PhaseTrackerPlugin automatically"
+        step_3: "Pass tracker instance to Work Planner agent"
+        step_4: "Work Planner generates plan with phase tracking structure"
+        step_5: "Tracker monitors progress as user executes phases"
+        step_6: "Updates stored in Tier 1 (conversation context) + YAML file"
+      
+      code_integration_point: |
+        # In CORTEX.prompt.md processing (Python backend):
+        
+        if intent == "PLAN":
+            # Automatic phase tracker initialization
+            tracker = phase_tracker_plugin.initialize_tracking(
+                plan_title=extracted_feature_name,
+                context={
+                    "user_request": user_message,
+                    "conversation_id": conversation_id,
+                    "timestamp": datetime.now()
+                }
+            )
+            
+            # Pass to Work Planner
+            plan = work_planner_agent.create_plan(
+                request=user_message,
+                phase_tracker=tracker  # NEW: Tracker injected
+            )
+            
+            # Plan now has phase tracking built-in
+            return plan  # Includes tracking_id, phase structure, dependencies
+    
+    2_help_plan_feature_module:
+      file: "prompts/shared/help_plan_feature.md"
+      current_behavior: "Interactive planning guide with examples"
+      enhanced_behavior: "Examples show phase tracking output, users see tracking UI"
+      
+      changes_needed:
+        - "Add 'Phase Tracking' section explaining automatic tracking"
+        - "Update examples to show phase tracking YAML output"
+        - "Add commands: 'show progress', 'mark phase complete', 'update status'"
+      
+      example_output_update: |
+        # Before (current):
+        ## Phase 1: Foundation (Week 1)
+        ☐ Task 1.1: Design authentication architecture
+        ☐ Task 1.2: Select JWT library
+        
+        # After (with phase tracking):
+        ## Phase 1: Foundation (Week 1) [TRACKED: plan-auth-001]
+        ☐ Task 1.1: Design authentication architecture (not_started)
+        ☐ Task 1.2: Select JWT library (not_started)
+        
+        📊 Phase Tracking Active:
+           - Progress file: cortex-brain/documents/planning/plan-auth-001.yaml
+           - Update status: "mark phase 1 complete" or "update task 1.1 in_progress"
+           - View progress: "show my plan progress"
+    
+    3_work_planner_agent:
+      file: "src/cortex_agents/work_planner.py"
+      current_behavior: "Creates strategic plans, breaks into phases"
+      enhanced_behavior: "Creates plans WITH phase tracking structure automatically"
+      
+      implementation_changes:
+        add_parameter: "phase_tracker: Optional[PhaseTrackerPlugin] = None"
+        
+        enhanced_create_plan_method: |
+          def create_plan(self, request: str, phase_tracker: Optional[PhaseTrackerPlugin] = None) -> Dict:
+              # Existing planning logic
+              plan = self._analyze_and_break_down(request)
+              
+              # NEW: If phase_tracker provided, initialize tracking
+              if phase_tracker:
+                  tracking_id = phase_tracker.create_tracking(
+                      plan_title=plan['title'],
+                      phases=[
+                          {
+                              'phase_id': f"phase_{i+1}",
+                              'name': phase['name'],
+                              'tasks': [
+                                  {
+                                      'task_id': f"task_{i+1}_{j+1}",
+                                      'description': task,
+                                      'status': 'not_started'
+                                  }
+                                  for j, task in enumerate(phase['tasks'])
+                              ],
+                              'status': 'not_started'
+                          }
+                          for i, phase in enumerate(plan['phases'])
+                      ],
+                      metadata={
+                          'created_by': 'work_planner_agent',
+                          'complexity': plan['complexity'],
+                          'estimated_hours': plan['estimated_hours']
+                      }
+                  )
+                  
+                  # Add tracking info to plan
+                  plan['tracking'] = {
+                      'enabled': True,
+                      'tracking_id': tracking_id,
+                      'yaml_file': f"cortex-brain/documents/planning/{tracking_id}.yaml",
+                      'commands': {
+                          'view_progress': f"show progress {tracking_id}",
+                          'update_task': f"update task {tracking_id} task_id status",
+                          'mark_complete': f"mark phase {tracking_id} phase_id complete"
+                      }
+                  }
+              
+              return plan
+      
+      benefits:
+        - "Zero user action required - tracking is automatic"
+        - "Plans are self-documenting with progress tracking"
+        - "Users can resume work seamlessly across sessions"
+        - "CORTEX learns from completed plans (Tier 2 integration)"
+    
+    4_intent_router_enhancement:
+      file: "src/agents/intent_router.py"
+      current_behavior: "Routes user requests to appropriate agents"
+      enhanced_behavior: "Detects planning intent and prepares phase tracker"
+      
+      implementation_changes:
+        add_import: "from src.plugins.phase_tracker_plugin import PhaseTrackerPlugin"
+        
+        enhanced_parse_method: |
+          def parse(self, user_message: str, context_hints: Dict = None) -> Dict:
+              # Existing intent detection
+              result = self._detect_intent(user_message)
+              
+              # NEW: If PLAN intent, prepare phase tracker
+              if result['intent'] == 'PLAN':
+                  # Initialize tracker (lazy loading)
+                  if not hasattr(self, 'phase_tracker'):
+                      self.phase_tracker = PhaseTrackerPlugin()
+                      self.phase_tracker.initialize()
+                  
+                  # Add tracker to result
+                  result['phase_tracker'] = self.phase_tracker
+                  result['tracking_enabled'] = True
+              
+              return result
+      
+      routing_flow: |
+        User: "Let's plan authentication system"
+              ↓
+        Intent Router: Detects PLAN intent
+              ↓
+        Intent Router: Initializes PhaseTrackerPlugin
+              ↓
+        Routes to: work_planner_agent WITH phase_tracker instance
+              ↓
+        Work Planner: Creates plan with tracking structure
+              ↓
+        Response: Plan + tracking info + progress commands
+              ↓
+        User sees: "Phase tracking active: plan-auth-001.yaml"
+    
+    5_copilot_chat_integration:
+      user_experience: "Natural language commands for phase tracking"
+      
+      natural_language_commands:
+        view_progress:
+          triggers: ["show my progress", "where am I", "what's the status"]
+          handler: "phase_tracker_plugin.get_progress(tracking_id)"
+          output: "Phase-by-phase breakdown with completion percentages"
+        
+        update_task:
+          triggers: ["task 1.1 is done", "mark task 1.1 complete", "started task 1.2"]
+          handler: "phase_tracker_plugin.update_task_status(tracking_id, task_id, status)"
+          output: "Task updated + progress recalculated"
+        
+        mark_phase_complete:
+          triggers: ["phase 1 done", "completed phase 1", "finished foundation phase"]
+          handler: "phase_tracker_plugin.mark_phase_complete(tracking_id, phase_id)"
+          output: "Phase marked complete + next phase suggested"
+        
+        continue_plan:
+          triggers: ["continue my plan", "what's next", "resume work"]
+          handler: "phase_tracker_plugin.get_next_actions(tracking_id)"
+          output: "Next incomplete tasks + recommendations"
+      
+      example_interaction: |
+        User: "Let's plan user authentication"
+        CORTEX: [Creates plan with phase tracking]
+                "✅ Plan created: 'User Authentication System'
+                 📊 Phase tracking active: plan-auth-20251115-001.yaml
+                 
+                 ## Phase 1: Foundation (Week 1)
+                 ☐ Task 1.1: Design auth architecture (not_started)
+                 ☐ Task 1.2: Select JWT library (not_started)
+                 ..."
+        
+        [2 hours later, same conversation]
+        User: "Task 1.1 is done"
+        CORTEX: [Updates tracking]
+                "✅ Task 1.1 marked complete
+                 📈 Progress: Phase 1 (17% complete, 1/6 tasks done)
+                 💡 Next: Task 1.2 - Select JWT library"
+        
+        [Next day, new conversation]
+        User: "Continue my authentication plan"
+        CORTEX: [Loads tracking from YAML]
+                "📋 Resuming: User Authentication System
+                 📊 Overall progress: 17% (1/6 tasks complete)
+                 🎯 Currently: Phase 1 - Foundation
+                 ⏭️  Next: Task 1.2 - Select JWT library
+                 
+                 Ready to proceed?"
+  
+  technical_architecture:
+    
+    component_interaction:
+      layer_1_entry_point: "CORTEX.prompt.md + Intent Router"
+      layer_2_agent: "Work Planner Agent"
+      layer_3_plugin: "PhaseTrackerPlugin"
+      layer_4_storage: "Tier 1 (conversation context) + YAML files"
+      
+      data_flow: |
+        User Request ("Let's plan authentication")
+                ↓
+        Intent Router (detects PLAN intent)
+                ↓
+        Initialize PhaseTrackerPlugin
+                ↓
+        Work Planner Agent (creates plan with tracker)
+                ↓
+        PhaseTrackerPlugin (generates tracking structure)
+                ↓
+        Storage:
+          - Tier 1: Conversation metadata (tracking_id, plan_title)
+          - YAML: Full phase tracking file (cortex-brain/documents/planning/)
+                ↓
+        Response to User (plan + tracking commands)
+                ↓
+        [User continues work in future conversations]
+                ↓
+        "Continue my plan" → Loads tracking from YAML → Resumes where left off
+    
+    tier_integration:
+      tier_1_working_memory:
+        stores: "tracking_id, plan_title, last_updated, current_phase"
+        purpose: "Quick lookup - which plan is user working on?"
+        query: "conversation.get_active_plan_tracking() → tracking_id"
+      
+      tier_2_knowledge_graph:
+        stores: "Completed plans as workflow templates"
+        purpose: "Learn from successful patterns"
+        example: |
+          After completing "User Authentication" plan:
+          - Extract: Phase structure, task breakdown, time estimates
+          - Store as: "authentication_workflow" template
+          - Reuse: When user says "plan authentication" next time,
+                   suggest proven template from past success
+      
+      yaml_files:
+        stores: "Complete phase tracking state (phases, tasks, progress, metadata)"
+        purpose: "Detailed tracking, persistence, Git history"
+        location: "cortex-brain/documents/planning/{tracking_id}.yaml"
+    
+    backward_compatibility:
+      existing_planning: "Still works without phase tracking (opt-in, not mandatory)"
+      migration_path: "Existing 'let's plan' users see new tracking features automatically"
+      override: "Users can say 'plan without tracking' to disable if desired"
+  
+  implementation_phases:
+    
+    phase_1_plugin_foundation:
+      duration: "3-5 days"
+      tasks:
+        - "Implement PhaseTrackerPlugin (Part 4 of this design)"
+        - "Add phase tracking YAML schema"
+        - "Build core tracking methods (create, update, load)"
+        - "Write unit tests (95% coverage)"
+      output: "Working plugin, not yet integrated with entry points"
+    
+    phase_2_entry_point_integration:
+      duration: "2-3 days"
+      tasks:
+        - "Update Intent Router to detect PLAN intent and initialize tracker"
+        - "Modify Work Planner Agent to accept phase_tracker parameter"
+        - "Enhance create_plan() method to generate tracking structure"
+        - "Update CORTEX.prompt.md documentation with tracking examples"
+      output: "Architecture-level integration complete - tracking automatic"
+    
+    phase_3_natural_language_commands:
+      duration: "2 days"
+      tasks:
+        - "Add natural language command detection for tracking operations"
+        - "Implement handlers: view_progress, update_task, mark_phase_complete"
+        - "Create user-friendly progress visualization"
+        - "Add 'continue plan' conversation resumption"
+      output: "Users can interact with tracking via natural language"
+    
+    phase_4_help_documentation:
+      duration: "1 day"
+      tasks:
+        - "Update prompts/shared/help_plan_feature.md with tracking examples"
+        - "Add phase tracking section to operations-reference.md"
+        - "Create quick reference guide for tracking commands"
+        - "Update CORTEX story with phase tracking narrative"
+      output: "Complete user documentation"
+    
+    phase_5_tier_integration:
+      duration: "2 days"
+      tasks:
+        - "Integrate with Tier 1 for conversation context storage"
+        - "Integrate with Tier 2 for workflow template learning"
+        - "Test cross-session plan resumption"
+        - "Validate Git history tracking of plan evolution"
+      output: "Full CORTEX brain integration"
+    
+    total_timeline: "10-13 days (after plugin implementation complete)"
+  
+  success_criteria:
+    
+    automatic_activation:
+      - "User says 'let's plan' → tracking initializes automatically"
+      - "No explicit /track command needed"
+      - "Works seamlessly for first-time planning users"
+    
+    natural_interaction:
+      - "Users can say 'task 1.1 is done' → tracking updates"
+      - "Users can say 'show my progress' → sees phase breakdown"
+      - "Users can say 'continue my plan' → resumes where left off"
+    
+    persistence:
+      - "Plan tracking survives across conversations"
+      - "YAML files persist in Git history"
+      - "Tier 1 metadata enables quick lookup"
+    
+    learning:
+      - "Completed plans stored in Tier 2 as templates"
+      - "Similar future plans suggest proven structures"
+      - "CORTEX gets smarter with each completed plan"
+    
+    transparency:
+      - "Users see tracking status in plan output"
+      - "Progress commands clearly documented"
+      - "Can opt-out if desired ('plan without tracking')"
+  
+  benefits_of_architecture_integration:
+    
+    for_users:
+      - "Zero friction - tracking just works"
+      - "Plans are automatically organized and tracked"
+      - "Can resume work seamlessly across days/weeks"
+      - "Visual progress motivates continued effort"
+    
+    for_cortex:
+      - "Learns from completed plans (Tier 2 templates)"
+      - "Better understands user workflows"
+      - "Can provide more relevant suggestions"
+      - "Improves planning quality over time"
+    
+    for_development:
+      - "Phase tracking becomes core capability, not addon"
+      - "Consistent tracking across all planning operations"
+      - "Foundation for future enhancements (team collaboration, time tracking)"
+  
+  risks_and_mitigations:
+    
+    risk_1_performance_overhead:
+      concern: "Automatic tracking initialization adds latency"
+      mitigation:
+        - "Lazy loading: tracker only initialized on PLAN intent"
+        - "Async YAML writes: don't block user response"
+        - "Cache tracker instance for conversation duration"
+      acceptable_overhead: "<200ms for tracking initialization"
+    
+    risk_2_user_confusion:
+      concern: "Users might not understand automatic tracking"
+      mitigation:
+        - "Clear explanation in first plan response"
+        - "Optional: 'What is phase tracking?' explanation on first use"
+        - "Opt-out command available: 'plan without tracking'"
+        - "Help documentation with examples"
+    
+    risk_3_backward_compatibility:
+      concern: "Existing planning users might see unexpected behavior"
+      mitigation:
+        - "Tracking is additive, doesn't change plan structure"
+        - "Existing plans still work exactly as before"
+        - "New tracking info clearly marked as [TRACKED: ...]"
+        - "No breaking changes to agent APIs"
+
+# End of Part 10
+
+risks:
+  content_loss_during_migration:
+    severity: "HIGH"
+    probability: "LOW"
+    mitigation:
+      - "Comprehensive backup before migration"
+      - "Content integrity checks after conversion"
+      - "Rollback capability"
+      - "Pilot migration first (10 docs)"
+  
+  broken_references:
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation:
+      - "Reference scanner before migration"
+      - "Automated reference updates"
+      - "Validation tests for all references"
+      - "Backward compatibility layer"
+  
+  schema_evolution_complexity:
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation:
+      - "Schema versioning from day 1"
+      - "Migration scripts for schema updates"
+      - "Backward compatibility guaranteed"
+  
+  user_adoption_resistance:
+    severity: "LOW"
+    probability: "LOW"
+    mitigation:
+      - "User workflow unchanged (natural language still works)"
+      - "Benefits clearly communicated"
+      - "Gradual rollout (plugin optional initially)"
+      - "Comprehensive documentation"
+
+# ============================================================================
+# NEXT STEPS
+# ============================================================================
+
+next_steps:
+  immediate:
+    - "Review and approve this design document"
+    - "Create development branch (yaml-phase-tracker)"
+    - "Set up plugin boilerplate"
+    - "Begin schema design"
+  
+  short_term:
+    - "Implement PhaseTrackerPlugin MVP"
+    - "Build MD → YAML converter"
+    - "Pilot migration (10 documents)"
+    - "Integration testing"
+  
+  long_term:
+    - "Full document migration"
+    - "Update all CORTEX components"
+    - "Comprehensive testing"
+    - "Documentation and release"

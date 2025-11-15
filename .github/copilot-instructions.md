@@ -28,6 +28,10 @@ This is the **CORTEX** cognitive framework repository - an AI enhancement system
    3. [Third actionable recommendation]
 ```
 
+**CRITICAL FORMATTING RULE:**
+❌ **NEVER use separator lines** (━━━, ═══, ───, ___, or similar) - they break into multiple lines in VS Code
+✅ **Use section headers only** (with emojis if needed) to separate content
+
 **Example:**
 ```markdown
 🧠 CORTEX Feature Implementation

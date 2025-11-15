@@ -75,6 +75,11 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 ## Rules
 
+**CRITICAL FORMATTING:**
+❌ **NEVER use separator lines** (━━━, ═══, ───, ___, -----, or ANY repeated characters forming horizontal lines)
+✅ **Use section headers with emojis only** to separate content
+✅ **Keep responses clean** - separators break into multiple lines in VS Code Copilot Chat
+
 **Understanding & Echo:**
 - ✅ State your understanding FIRST (what they want to achieve)
 - ✅ Echo user's request AFTER response (refined summary)
