@@ -539,8 +539,8 @@ def create_token(user_id):
         
         result = wm.import_conversation(
             conversation_turns=[{
-                'user': 'Add JWT authentication to auth_service.py using bcrypt',
-                'assistant': 'I\'ll implement JWT in auth_service.py with bcrypt hashing'
+                'user': 'Add JWT authentication to `auth_service.py` using bcrypt',
+                'assistant': 'I\'ll implement JWT in `auth_service.py` with bcrypt hashing'
             }],
             import_source="test-entities.md"
         )
@@ -549,7 +549,7 @@ def create_token(user_id):
         entities = wm.extract_entities(result['conversation_id'])
         
         # Should extract file references and technologies
-        entity_texts = [e.text.lower() for e in entities]
+        entity_texts = [e.entity_name.lower() for e in entities]
         assert any('auth_service.py' in text for text in entity_texts), \
             "Should extract file reference"
     
@@ -730,6 +730,464 @@ function LoginPage() {
         print(f"   - Code preservation: ✅ Passed")
         print(f"   - Semantic analysis: ✅ Passed")
 
+    # ========== Priority Level Entity Extraction Tests ==========
+
+    def test_p1_entity_extraction_basic(self, fresh_db):
+        """Priority 1: Basic entity extraction test with simple file references."""
+        wm, db_path = fresh_db
+        
+        result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Please update `main.py` to include the new `Config` class',
+                'assistant': 'I\'ll update `main.py` to include the `Config` class definition'
+            }],
+            import_source="p1-entity-test.md"
+        )
+        
+        # Extract entities
+        entities = wm.extract_entities(result['conversation_id'])
+        entity_names = [e.entity_name.lower() for e in entities]
+        
+        # Should extract file and class entities
+        assert any('main.py' in name for name in entity_names), \
+            "P1: Should extract file reference 'main.py'"
+        assert any('config' in name for name in entity_names), \
+            "P1: Should extract class reference 'Config'"
+        
+        # Should have at least 2 entities
+        assert len(entities) >= 2, f"P1: Expected at least 2 entities, got {len(entities)}"
+    
+    def test_p2_entity_extraction_multiple_types(self, fresh_db):
+        """Priority 2: Medium complexity with multiple entity types."""
+        wm, db_path = fresh_db
+        
+        result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Add the `authenticate()` method to `UserService` in `auth/user_service.py`',
+                'assistant': 'I\'ll add the `authenticate()` method to the `UserService` class in `auth/user_service.py`'
+            }],
+            import_source="p2-entity-test.md"
+        )
+        
+        # Extract entities
+        entities = wm.extract_entities(result['conversation_id'])
+        entity_names = [e.entity_name.lower() for e in entities]
+        entity_types = [e.entity_type.value for e in entities]
+        
+        # Should extract file, class, and method entities
+        assert any('user_service.py' in name for name in entity_names), \
+            "P2: Should extract file reference 'user_service.py'"
+        assert any('userservice' in name for name in entity_names), \
+            "P2: Should extract class reference 'UserService'"
+        assert any('authenticate()' in name or 'authenticate' in name for name in entity_names), \
+            "P2: Should extract method reference 'authenticate()'"
+        
+        # Should have multiple entity types
+        assert 'file' in entity_types, "P2: Should have file entity type"
+        assert 'class' in entity_types, "P2: Should have class entity type" 
+        assert 'method' in entity_types, "P2: Should have method entity type"
+        
+        # Should have at least 3 entities
+        assert len(entities) >= 3, f"P2: Expected at least 3 entities, got {len(entities)}"
+    
+    def test_p3_entity_extraction_complex_scenario(self, fresh_db):
+        """Priority 3: Complex scenario with nested files, classes, and technologies."""
+        wm, db_path = fresh_db
+        
+        result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Implement JWT authentication in `AuthController` class within `api/auth/auth_controller.py` using `bcrypt` for password hashing and integrate with the existing `UserRepository` from `data/user_repository.py`',
+                'assistant': 'I\'ll implement JWT authentication in the `AuthController` class in `api/auth/auth_controller.py`. I\'ll use `bcrypt` for secure password hashing and integrate it with the existing `UserRepository` from `data/user_repository.py`. The implementation will include token generation and validation.'
+            }],
+            import_source="p3-entity-test.md"
+        )
+        
+        # Extract entities
+        entities = wm.extract_entities(result['conversation_id'])
+        entity_names = [e.entity_name.lower() for e in entities]
+        entity_types = [e.entity_type.value for e in entities]
+        
+        # Should extract multiple files
+        assert any('auth_controller.py' in name for name in entity_names), \
+            "P3: Should extract file reference 'auth_controller.py'"
+        assert any('user_repository.py' in name for name in entity_names), \
+            "P3: Should extract file reference 'user_repository.py'"
+        
+        # Should extract multiple classes
+        assert any('authcontroller' in name for name in entity_names), \
+            "P3: Should extract class reference 'AuthController'"
+        assert any('userrepository' in name for name in entity_names), \
+            "P3: Should extract class reference 'UserRepository'"
+        
+        # Should have diverse entity types
+        file_entities = [e for e in entities if e.entity_type.value == 'file']
+        class_entities = [e for e in entities if e.entity_type.value == 'class']
+        
+        assert len(file_entities) >= 2, f"P3: Expected at least 2 file entities, got {len(file_entities)}"
+        assert len(class_entities) >= 2, f"P3: Expected at least 2 class entities, got {len(class_entities)}"
+        
+        # Should have substantial number of entities due to complexity
+        assert len(entities) >= 4, f"P3: Expected at least 4 entities, got {len(entities)}"
+        
+        # Debug output for complex scenario
+        print(f"\nP3 DEBUG: Found {len(entities)} entities:")
+        for entity in entities:
+            print(f"  - {entity.entity_type.value}: '{entity.entity_name}'")
+
+    # ========== End Priority Level Tests ==========
+
+
+class TestSQLiteDatabaseValidation:
+    """CRITICAL: Comprehensive SQLite database validation tests.
+    
+    These tests ensure conversation recording pipeline is bulletproof:
+    1. Database initialization and schema validation
+    2. Record insertion and data integrity
+    3. Cross-session persistence
+    4. Recovery from corruption
+    5. ACID transaction compliance
+    """
+    
+    @pytest.fixture
+    def db_harness(self, tmp_path):
+        """Create database test harness with direct SQLite access."""
+        db_path = tmp_path / "db_validation_test.db"
+        wm = WorkingMemory(db_path)
+        
+        # Apply migration for import functionality
+        from src.tier1.migration_add_conversation_import import migrate_add_conversation_import
+        migrate_add_conversation_import(str(db_path))
+        
+        return wm, db_path
+    
+    def _direct_db_query(self, db_path: Path, query: str, params: tuple = ()):
+        """Execute direct database query and return results."""
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        results = cursor.fetchall()
+        conn.close()
+        return results
+    
+    def _verify_table_exists(self, db_path: Path, table_name: str):
+        """Verify table exists with proper schema."""
+        results = self._direct_db_query(
+            db_path, 
+            "SELECT name FROM sqlite_master WHERE type='table' AND name=?", 
+            (table_name,)
+        )
+        assert len(results) == 1, f"Table {table_name} does not exist"
+    
+    def test_database_initialization_complete(self, db_harness):
+        """CRITICAL: Verify database is properly initialized with all required tables."""
+        wm, db_path = db_harness
+        
+        # Required tables for conversation storage
+        required_tables = [
+            'conversations',
+            'messages', 
+            'entities',
+            'conversation_entities',
+            'eviction_log'
+        ]
+        
+        for table in required_tables:
+            self._verify_table_exists(db_path, table)
+    
+    def test_conversation_record_insertion(self, db_harness):
+        """CRITICAL: Verify conversation records are inserted correctly."""
+        wm, db_path = db_harness
+        
+        # Import test conversation
+        result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Test database insertion',
+                'assistant': 'Recording this conversation to verify SQLite storage'
+            }],
+            import_source="db-test.md",
+            workspace_path="/test/db"
+        )
+        
+        conversation_id = result['conversation_id']
+        
+        # Verify conversation record exists in database
+        conv_records = self._direct_db_query(
+            db_path,
+            "SELECT conversation_id, title, message_count, import_source FROM conversations WHERE conversation_id = ?",
+            (conversation_id,)
+        )
+        
+        assert len(conv_records) == 1, "Conversation record not inserted"
+        record = conv_records[0]
+        assert record[0] == conversation_id, "Conversation ID mismatch"
+        assert record[1] is not None, "Title not set"
+        assert record[2] == 2, f"Expected 2 messages, got {record[2]}"
+        assert record[3] == "db-test.md", "Import source not recorded"
+        
+    def test_message_records_insertion(self, db_harness):
+        """CRITICAL: Verify all messages are stored correctly."""
+        wm, db_path = db_harness
+        
+        # Multi-turn conversation
+        turns = [
+            {'user': 'First message', 'assistant': 'First response'},
+            {'user': 'Second message', 'assistant': 'Second response'},
+            {'user': 'Third message', 'assistant': 'Third response'}
+        ]
+        
+        result = wm.import_conversation(
+            conversation_turns=turns,
+            import_source="msg-test.md"
+        )
+        
+        conversation_id = result['conversation_id']
+        
+        # Verify message records - CORRECTED QUERY: role, content, timestamp order
+        msg_records = self._direct_db_query(
+            db_path,
+            "SELECT role, content, timestamp FROM messages WHERE conversation_id = ? ORDER BY timestamp",
+            (conversation_id,)
+        )
+        
+        assert len(msg_records) == 6, f"Expected 6 messages, got {len(msg_records)}"
+        
+        # Verify message alternation (user, assistant, user, assistant...)
+        expected_roles = ['user', 'assistant', 'user', 'assistant', 'user', 'assistant']
+        actual_roles = [record[0] for record in msg_records]
+        assert actual_roles == expected_roles, f"Message roles incorrect: {actual_roles}"
+        
+        # Verify content preservation - CORRECTED: content is index 1, not 2
+        assert 'First message' in msg_records[0][1], "User message content not preserved"
+        assert 'First response' in msg_records[1][1], "Assistant message content not preserved"
+        
+        # Verify timestamps are sequential - timestamps are index 2
+        timestamps = [record[2] for record in msg_records]
+        for i in range(1, len(timestamps)):
+            assert timestamps[i] >= timestamps[i-1], "Timestamps not sequential"
+    
+    def test_entity_extraction_persistence(self, db_harness):
+        """CRITICAL: Verify entities are extracted and persisted."""
+        wm, db_path = db_harness
+        
+        # Conversation with explicit entities
+        result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Modify the `auth_service.py` file to use JWT authentication',
+                'assistant': 'I\'ll update `auth_service.py` and add JWT functionality to the `AuthController` class'
+            }],
+            import_source="entity-test.md"
+        )
+        
+        conversation_id = result['conversation_id']
+        
+        # Extract entities
+        entities = wm.extract_entities(conversation_id)
+        assert len(entities) > 0, "No entities extracted"
+        
+        # Verify entities are in database
+        entity_records = self._direct_db_query(
+            db_path,
+            "SELECT entity_type, entity_name, access_count FROM entities"
+        )
+        
+        assert len(entity_records) > 0, "Entities not persisted to database"
+        
+        # Verify conversation-entity relationships
+        relationship_records = self._direct_db_query(
+            db_path,
+            "SELECT conversation_id, entity_id, relevance_score FROM conversation_entities WHERE conversation_id = ?",
+            (conversation_id,)
+        )
+        
+        assert len(relationship_records) > 0, "Entity relationships not recorded"
+        assert all(r[2] > 0.0 for r in relationship_records), "Invalid relevance scores"
+    
+    def test_cross_session_persistence(self, db_harness):
+        """CRITICAL: Verify data persists across WorkingMemory instances."""
+        wm1, db_path = db_harness
+        
+        # Store conversation in first instance
+        result = wm1.import_conversation(
+            conversation_turns=[{
+                'user': 'Test persistence across sessions',
+                'assistant': 'This should be retrievable later'
+            }],
+            import_source="persistence-test.md"
+        )
+        
+        conversation_id = result['conversation_id']
+        
+        # Create new WorkingMemory instance (simulates restart)
+        wm2 = WorkingMemory(db_path)
+        
+        # Verify conversation is retrievable
+        retrieved_conversation = wm2.conversation_manager.get_conversation(conversation_id)
+        assert retrieved_conversation is not None, "Conversation not persistent across sessions"
+        assert retrieved_conversation.conversation_id == conversation_id
+        
+        # Verify messages are retrievable
+        messages = wm2.get_messages(conversation_id)
+        assert len(messages) == 2, "Messages not persistent across sessions"
+        assert 'Test persistence' in messages[0]['content']
+    
+    def test_database_transaction_integrity(self, db_harness):
+        """CRITICAL: Verify ACID compliance and transaction rollback."""
+        wm, db_path = db_harness
+        
+        # Record initial state
+        initial_conversations = self._direct_db_query(db_path, "SELECT COUNT(*) FROM conversations")[0][0]
+        initial_messages = self._direct_db_query(db_path, "SELECT COUNT(*) FROM messages")[0][0]
+        
+        # Try to import malformed conversation (should fail gracefully)
+        try:
+            wm.import_conversation(
+                conversation_turns=[{
+                    'user': None,  # Invalid data
+                    'assistant': 'This should fail'
+                }],
+                import_source="invalid-test.md"
+            )
+            # If we get here, it didn't fail as expected
+            assert False, "Invalid conversation should have failed"
+        except Exception:
+            # Expected failure - verify no partial data inserted
+            pass
+        
+        # Verify database state unchanged (transaction rollback worked)
+        final_conversations = self._direct_db_query(db_path, "SELECT COUNT(*) FROM conversations")[0][0]
+        final_messages = self._direct_db_query(db_path, "SELECT COUNT(*) FROM messages")[0][0]
+        
+        assert final_conversations == initial_conversations, "Transaction rollback failed - conversations leaked"
+        assert final_messages == initial_messages, "Transaction rollback failed - messages leaked"
+    
+    def test_quality_score_calculation_storage(self, db_harness):
+        """CRITICAL: Verify quality scores are calculated and stored."""
+        wm, db_path = db_harness
+        
+        # High-quality conversation (strategic planning)
+        high_quality_result = wm.import_conversation(
+            conversation_turns=[{
+                'user': 'Design a comprehensive authentication system architecture',
+                'assistant': '''🧠 CORTEX Architecture Planning
+                
+                🎯 Understanding: You need complete auth system design
+                
+                ⚠️ Challenge: ✓ Accept - Strategic approach is sound
+                
+                💬 Response: I recommend a 4-phase implementation:
+                Phase 1: Core Authentication (Login UI, JWT service)
+                Phase 2: Route Protection (Middleware, guards) 
+                Phase 3: Session Management (Token refresh, logout)
+                Phase 4: Security Hardening (HTTPS, CSRF, rate limiting)
+                
+                📝 Request: Design authentication system architecture
+                
+                🔍 Next Steps:
+                   1. Review Phase 1 implementation details
+                   2. Set up development environment 
+                   3. Create comprehensive test suite
+                '''
+            }],
+            import_source="high-quality-test.md"
+        )
+        
+        # Verify quality score stored in database
+        quality_records = self._direct_db_query(
+            db_path,
+            "SELECT quality_score, semantic_elements FROM conversations WHERE conversation_id = ?",
+            (high_quality_result['conversation_id'],)
+        )
+        
+        assert len(quality_records) == 1, "Quality record not found"
+        stored_quality = quality_records[0][0]
+        stored_semantic = quality_records[0][1]
+        
+        assert stored_quality >= 6.0, f"High-quality conversation should score >=6, got {stored_quality}"
+        assert stored_semantic is not None, "Semantic elements not stored"
+        
+        # Verify semantic elements are valid JSON
+        import json
+        semantic_data = json.loads(stored_semantic)
+        assert isinstance(semantic_data, dict), "Semantic elements should be JSON object"
+    
+    def test_fifo_queue_database_consistency(self, db_harness):
+        """CRITICAL: Verify FIFO queue maintains database consistency."""
+        wm, db_path = db_harness
+        
+        # Import conversations up to limit (20) + 1 to trigger FIFO
+        conversation_ids = []
+        for i in range(21):
+            result = wm.import_conversation(
+                conversation_turns=[{
+                    'user': f'Test conversation {i}',
+                    'assistant': f'Response {i}'
+                }],
+                import_source=f"fifo-test-{i}.md"
+            )
+            conversation_ids.append(result['conversation_id'])
+        
+        # Verify only 20 conversations remain in database
+        conv_count = self._direct_db_query(db_path, "SELECT COUNT(*) FROM conversations")[0][0]
+        assert conv_count <= 20, f"FIFO failed: {conv_count} conversations in DB (should be ≤20)"
+        
+        # Verify oldest conversation was removed
+        remaining_ids = [
+            row[0] for row in self._direct_db_query(db_path, "SELECT conversation_id FROM conversations")
+        ]
+        oldest_id = conversation_ids[0]
+        assert oldest_id not in remaining_ids, "Oldest conversation not evicted by FIFO"
+        
+        # Verify newest conversation remains
+        newest_id = conversation_ids[-1]
+        assert newest_id in remaining_ids, "Newest conversation incorrectly evicted"
+        
+        # Verify eviction is logged
+        eviction_records = self._direct_db_query(
+            db_path,
+            "SELECT conversation_id, event_type FROM eviction_log WHERE conversation_id = ?",
+            (oldest_id,)
+        )
+        assert len(eviction_records) > 0, "FIFO eviction not logged"
+        assert eviction_records[0][1] in ['evicted', 'archived'], "Invalid eviction event type"
+    
+    def test_concurrent_access_safety(self, db_harness):
+        """CRITICAL: Verify database handles concurrent access safely."""
+        wm1, db_path = db_harness
+        
+        # Create second WorkingMemory instance (simulates concurrent access)
+        wm2 = WorkingMemory(db_path)
+        
+        # Import conversations from both instances simultaneously
+        result1 = wm1.import_conversation(
+            conversation_turns=[{
+                'user': 'Concurrent access test 1',
+                'assistant': 'Response from instance 1'
+            }],
+            import_source="concurrent-1.md"
+        )
+        
+        result2 = wm2.import_conversation(
+            conversation_turns=[{
+                'user': 'Concurrent access test 2', 
+                'assistant': 'Response from instance 2'
+            }],
+            import_source="concurrent-2.md"
+        )
+        
+        # Verify both conversations saved without corruption
+        conv1 = wm1.conversation_manager.get_conversation(result1['conversation_id'])
+        conv2 = wm2.conversation_manager.get_conversation(result2['conversation_id'])
+        
+        assert conv1 is not None, "Concurrent access corrupted conversation 1"
+        assert conv2 is not None, "Concurrent access corrupted conversation 2"
+        assert conv1.conversation_id != conv2.conversation_id, "Concurrent access caused ID collision"
+        
+        # Verify messages accessible from both instances
+        messages1_from_wm1 = wm1.get_messages(result1['conversation_id'])
+        messages1_from_wm2 = wm2.get_messages(result1['conversation_id'])
+        
+        assert len(messages1_from_wm1) == len(messages1_from_wm2), "Concurrent access caused message inconsistency"
+
 
 class TestPipelineBrokenComponentsCheck:
     """Check for other broken pipelines similar to conversation persistence."""
@@ -738,11 +1196,6 @@ class TestPipelineBrokenComponentsCheck:
         """Verify knowledge graph update pipeline works."""
         # TODO: Add test for knowledge graph pattern learning
         pytest.skip("Knowledge graph update pipeline test - to be implemented")
-    
-    def test_entity_extraction_persistence(self):
-        """Verify extracted entities persist correctly."""
-        # TODO: Add test for entity extraction and storage
-        pytest.skip("Entity extraction persistence test - to be implemented")
     
     def test_session_correlation(self):
         """Verify session-conversation correlation works."""

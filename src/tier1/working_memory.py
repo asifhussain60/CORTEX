@@ -891,6 +891,7 @@ class WorkingMemory:
             
         Returns:
             Dict with import results: {
+                'success': bool,
                 'conversation_id': str,
                 'session_id': str,
                 'quality_score': int,
@@ -900,6 +901,46 @@ class WorkingMemory:
             }
         """
         import_date = import_date or datetime.now()
+        
+        # VALIDATION: Check for valid conversation turns
+        if not conversation_turns or not isinstance(conversation_turns, list):
+            return {
+                'success': False,
+                'error': 'conversation_turns must be a non-empty list',
+                'conversation_id': None,
+                'session_id': None,
+                'quality_score': 0,
+                'quality_level': 'INVALID',
+                'semantic_elements': {},
+                'turns_imported': 0
+            }
+        
+        # VALIDATION: Check each turn has valid structure
+        for i, turn in enumerate(conversation_turns):
+            if not isinstance(turn, dict):
+                return {
+                    'success': False,
+                    'error': f'Turn {i} is not a dictionary',
+                    'conversation_id': None,
+                    'session_id': None,
+                    'quality_score': 0,
+                    'quality_level': 'INVALID',
+                    'semantic_elements': {},
+                    'turns_imported': 0
+                }
+            
+            # Check for required keys and non-empty values
+            if not turn.get('user') or not turn.get('assistant'):
+                return {
+                    'success': False,
+                    'error': f'Turn {i} missing valid user or assistant message',
+                    'conversation_id': None,
+                    'session_id': None,
+                    'quality_score': 0,
+                    'quality_level': 'INVALID',
+                    'semantic_elements': {},
+                    'turns_imported': 0
+                }
         
         # Quality analysis using CORTEX 3.0 analyzer
         from .conversation_quality import ConversationQualityAnalyzer
@@ -924,71 +965,108 @@ class WorkingMemory:
                 new_session = self.session_manager.detect_or_create_session(workspace_path)
                 session_id = new_session.session_id
         
-        # Create conversation with import metadata
-        # Generate conversation ID (modular ConversationManager expects us to provide it)
-        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-        import random
-        conversation_id = f"imported-conv-{timestamp}-{random.randint(1000, 9999)}"
-        
-        # Count actual messages (each turn has user + assistant message)
-        total_messages = len(conversation_turns) * 2
-        
-        # Use add_conversation (modular API uses 'add' instead of 'create')
-        self.conversation_manager.add_conversation(
-            conversation_id=conversation_id,
-            title=f"Imported from {Path(import_source).name}",
-            message_count=total_messages,
-            tags=['imported', quality_score.level]
-        )
-        
-        # Store conversation turns as messages
-        # Build message list for bulk insert (modular API)
-        messages_to_add = []
-        for turn in conversation_turns:
-            # User message
-            if 'user' in turn:
-                messages_to_add.append({'role': 'user', 'content': turn['user']})
-            
-            # Assistant message
-            if 'assistant' in turn:
-                messages_to_add.append({'role': 'assistant', 'content': turn['assistant']})
-        
-        # Add all messages at once (modular API uses add_messages with list)
-        if messages_to_add:
-            self.message_store.add_messages(conversation_id, messages_to_add)
-        
-        # Update conversation metadata with new columns (via SQL directly)
-        import sqlite3
+        # START TRANSACTION for ACID compliance
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute("""
-            UPDATE conversations 
-            SET conversation_type = ?,
-                import_source = ?,
-                quality_score = ?,
-                semantic_elements = ?
-            WHERE conversation_id = ?
-        """, (
-            'imported',
-            import_source,
-            quality_score.total_score,
-            json.dumps(quality_score.elements.__dict__),
-            conversation_id
-        ))
-        
-        conn.commit()
-        conn.close()
-        
-        return {
-            'conversation_id': conversation_id,
-            'session_id': session_id,
-            'quality_score': quality_score.total_score,
-            'quality_level': quality_score.level,
-            'semantic_elements': quality_score.elements.__dict__,
-            'reasoning': quality_score.reasoning,
-            'turns_imported': len(conversation_turns)
-        }
+        try:
+            # Generate conversation ID (modular ConversationManager expects us to provide it)
+            timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+            import random
+            conversation_id = f"imported-conv-{timestamp}-{random.randint(1000, 9999)}"
+            
+            # Count actual messages (each turn has user + assistant message)
+            total_messages = len(conversation_turns) * 2
+            
+            # Add conversation to database
+            now = datetime.now().isoformat()
+            cursor.execute("""
+                INSERT INTO conversations 
+                (conversation_id, title, message_count, tags, created_at, updated_at,
+                 conversation_type, import_source, quality_score, semantic_elements)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                conversation_id,
+                f"Imported from {Path(import_source).name}",
+                total_messages,
+                json.dumps(['imported', quality_score.level]),
+                now,
+                now,
+                'imported',
+                import_source,
+                quality_score.total_score,
+                json.dumps(quality_score.elements.__dict__)
+            ))
+            
+            # CRITICAL: Enforce FIFO limit BEFORE adding messages
+            # This ensures we maintain exactly 20 conversations maximum
+            conv_count = cursor.execute("SELECT COUNT(*) FROM conversations").fetchone()[0]
+            if conv_count >= self.MAX_CONVERSATIONS:
+                # Remove oldest conversation(s) to make room
+                conversations_to_remove = conv_count - self.MAX_CONVERSATIONS + 1
+                oldest_convos = cursor.execute("""
+                    SELECT conversation_id FROM conversations 
+                    ORDER BY created_at ASC 
+                    LIMIT ?
+                """, (conversations_to_remove,)).fetchall()
+                
+                for (old_conv_id,) in oldest_convos:
+                    # Log eviction
+                    cursor.execute("""
+                        INSERT INTO eviction_log (conversation_id, event_type, details)
+                        VALUES (?, 'evicted', 'fifo_limit')
+                    """, (old_conv_id,))
+                    
+                    # Remove conversation and cascade delete messages/entities
+                    cursor.execute("DELETE FROM conversation_entities WHERE conversation_id = ?", (old_conv_id,))
+                    cursor.execute("DELETE FROM messages WHERE conversation_id = ?", (old_conv_id,))
+                    cursor.execute("DELETE FROM conversations WHERE conversation_id = ?", (old_conv_id,))
+            
+            # Store conversation turns as messages
+            for turn in conversation_turns:
+                # User message
+                if 'user' in turn:
+                    cursor.execute("""
+                        INSERT INTO messages (conversation_id, role, content, timestamp)
+                        VALUES (?, ?, ?, ?)
+                    """, (conversation_id, 'user', turn['user'], now))
+                
+                # Assistant message  
+                if 'assistant' in turn:
+                    cursor.execute("""
+                        INSERT INTO messages (conversation_id, role, content, timestamp)
+                        VALUES (?, ?, ?, ?)
+                    """, (conversation_id, 'assistant', turn['assistant'], now))
+            
+            # COMMIT transaction - all operations succeeded
+            conn.commit()
+            
+            return {
+                'success': True,
+                'conversation_id': conversation_id,
+                'session_id': session_id,
+                'quality_score': quality_score.total_score,
+                'quality_level': quality_score.level,
+                'semantic_elements': quality_score.elements.__dict__,
+                'reasoning': quality_score.reasoning,
+                'turns_imported': len(conversation_turns)
+            }
+            
+        except Exception as e:
+            # ROLLBACK transaction on any error
+            conn.rollback()
+            return {
+                'success': False,
+                'error': f'Transaction failed: {str(e)}',
+                'conversation_id': None,
+                'session_id': None,
+                'quality_score': 0,
+                'quality_level': 'ERROR',
+                'semantic_elements': {},
+                'turns_imported': 0
+            }
+        finally:
+            conn.close()
     
     # ========== Message Management (Delegated) ==========
     
