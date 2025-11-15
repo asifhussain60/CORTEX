@@ -34,3 +34,6 @@ mypy>=1.0.0
 radon>=6.0.1  # Complexity metrics (cyclomatic, maintainability)
 pylint>=3.0.0  # Comprehensive code quality analysis
 vulture>=2.10  # Dead code detection
+
+# Track A: Conversation Import (CORTEX 3.0)
+pyperclip>=1.8.2  # Optional: Clipboard support for conversation import
