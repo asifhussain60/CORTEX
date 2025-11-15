@@ -6,6 +6,7 @@
 |-----------|--------------------------|--------|--------------|
 | **Demo** | "demo", "show capabilities", "tutorial" | ✅ READY | Interactive walkthrough of CORTEX |
 | **Setup** | "setup", "configure", "initialize" | ✅ READY | Configure development environment |
+| **User Onboarding** | "onboard me", "getting started", "cortex introduction" | ✅ READY | Guided new user experience with EPM orchestrator |
 | **Feature Planning** | "plan a feature", "let's plan", "interactive planning" | ✅ READY | Interactive feature breakdown with Work Planner agent (see `#file:prompts/shared/help_plan_feature.md`) |
 | **Design Sync** | "sync design", "align design", "consolidate status" | ✅ READY | Synchronize design docs with implementation |
 | **Story Refresh** | "refresh story", "update story" | 🟡 VALIDATION | Validate CORTEX story structure (validation-only, see limitations) |

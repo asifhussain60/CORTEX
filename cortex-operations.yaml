@@ -641,6 +641,74 @@ operations:
       estimated_hours: 6
       completion_date: "2025-11-14"
   
+  user_onboarding:
+    name: User Onboarding & CORTEX Introduction
+    description: Guided new user experience with interactive learning and hands-on validation
+    deployment_tier: user  # ✅ User-facing operation (included in publish package)
+    natural_language:
+    - onboard me
+    - new user setup
+    - cortex introduction
+    - getting started
+    - first time user
+    - help me get started
+    - show me around
+    - cortex tutorial
+    - guide me through cortex
+    - onboarding wizard
+    category: onboarding
+    status: ready
+    modules:
+    - present_cortex_introduction
+    - detect_user_environment
+    - validate_cortex_installation
+    - demonstrate_memory_capabilities
+    - guide_first_interaction
+    - setup_conversation_tracking
+    - present_graduation_summary
+    profiles:
+      quick:
+        description: Essential introduction - 5-7 minutes (understand value + basic setup)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - present_graduation_summary
+        estimated_duration: 420  # 7 minutes
+      standard:
+        description: Complete onboarding - 10-15 minutes (full guided experience)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - demonstrate_memory_capabilities
+        - guide_first_interaction
+        - setup_conversation_tracking
+        - present_graduation_summary
+        estimated_duration: 900  # 15 minutes
+      comprehensive:
+        description: Deep dive onboarding - 20-30 minutes (includes advanced features)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - demonstrate_memory_capabilities
+        - guide_first_interaction
+        - setup_conversation_tracking
+        - present_graduation_summary
+        estimated_duration: 1800  # 30 minutes
+    implementation_status:
+      status: ready
+      modules_implemented: 7
+      modules_total: 7
+      completion_percentage: 100
+      notes: "User onboarding operation implemented with EPM orchestrator integration. Provides comprehensive guided experience from first contact to productive CORTEX usage with memory validation."
+      estimated_hours: 4
+      completion_date: "2025-11-15"
+      epm_integration: true
+      orchestrator_class: "OnboardingOrchestrator"
+      step_registry: "UserOnboardingSteps"
+  
   refactoring_planning:
     name: Refactoring Module Planning
     description: "[FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance"
