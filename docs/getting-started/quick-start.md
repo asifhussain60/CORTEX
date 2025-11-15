@@ -110,7 +110,7 @@ cortex
 cdcortex
 
 # Run the launcher (displays help)
-./run-cortex.sh
+./scripts/launchers/run-cortex.sh
 
 # Show CORTEX invocation help
 cortex-invoke

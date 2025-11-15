@@ -377,6 +377,114 @@ categories:
       respect_protected_dirs: true
       respect_protected_patterns: true
 
+  # --------------------------------------------------------------------------
+  # Category 13: CORTEX 2.0 Legacy Files (NEW!)
+  # --------------------------------------------------------------------------
+  cortex_2_0_legacy:
+    enabled: true
+    priority: high
+    risk_level: medium  # Medium risk - archival documentation
+    
+    paths:
+      - "cortex-brain/cortex-2.0-design"  # Entire CORTEX 2.0 design folder
+      - "cortex-brain/CORTEX-2.0-*.md"  # All CORTEX 2.0 root documents
+      - "cortex-brain/archives/converted-to-yaml-2025-11-09/CORTEX-2.0-*.md"
+    
+    action: archive
+    archive_to: "cortex-brain/archives/cortex-2.0-legacy"
+    
+    reason: "CORTEX 2.0 legacy documentation (archive for historical reference)"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+      recursive: true
+    
+    safety:
+      require_confirmation: true  # Medium risk - ask before archiving
+      create_manifest: true
+      allow_rollback: true
+  
+  # --------------------------------------------------------------------------
+  # Category 14: Root Folder Clutter (NEW!)
+  # --------------------------------------------------------------------------
+  root_clutter:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      # Test coverage artifacts
+      - ".coverage.*"
+      
+      # Demo scripts (move to scripts/demos/)
+      - "demo_*.py"
+      
+      # Test scripts in root (move to tests/integration/)
+      - "test_*_3_0_*.py"
+      - "test_investigation_*.py"
+      - "test_knowledge_graph_*.py"
+      
+      # Validation scripts (move to scripts/temp/)
+      - "final_*_validation.py"
+      - "process_conversations_*.py"
+      
+      # Temporary files
+      - "temp_*.json"
+      - "pattern_analysis.json"
+      
+      # Investigation docs (move to docs/investigation/)
+      - "CORTEX-3.0-INVESTIGATION-*.md"
+      - "INVESTIGATION-*.md"
+      - "NOOR-CANVAS-INVESTIGATION-*.md"
+    
+    # Define where each type of file should go
+    relocate_rules:
+      demo_scripts:
+        pattern: "demo_*.py"
+        destination: "scripts/demos"
+      
+      test_scripts:
+        pattern: "test_*.py"
+        destination: "tests/integration"
+      
+      validation_scripts:
+        pattern: "*_validation.py"
+        destination: "scripts/temp"
+        
+      process_scripts:
+        pattern: "process_*.py"
+        destination: "scripts/temp"
+      
+      investigation_docs:
+        pattern: "*INVESTIGATION*.md"
+        destination: "docs/investigation"
+      
+      temp_files:
+        pattern: "temp_*.json"
+        destination: "scripts/temp"
+        
+      pattern_files:
+        pattern: "pattern_*.json"
+        destination: "scripts/temp"
+    
+    action: relocate  # Move files to appropriate locations
+    
+    # Coverage files just get deleted
+    delete_patterns:
+      - ".coverage.*"
+    
+    reason: "Root folder organization - move misplaced files to proper locations"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: true  # Include .coverage files
+      recursive: false  # Only root level
+    
+    safety:
+      require_confirmation: false  # Low risk - just organizing
+      create_manifest: true
+
 # ============================================================================
 # PROTECTED DIRECTORIES (NEVER DELETE)
 # ============================================================================
@@ -391,6 +499,7 @@ protected_directories:
   - "cortex-brain/tier2"
   - "cortex-brain/tier3"
   - "cortex-brain/schemas"
+  - "cortex-brain/cortex-3.0-design"  # Protect CORTEX 3.0 design
   - "src"
   - "tests"
   - ".git"

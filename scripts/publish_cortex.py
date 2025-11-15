@@ -135,7 +135,7 @@ CRITICAL_FILES = {
     'scripts/cortex/auto_capture_daemon.py',  # ⭐⭐⭐⭐⭐ tracking method
     'scripts/cortex/cortex_cli.py',  # Manual tracking
     'scripts/cortex/migrate-all-tiers.py',  # Database setup
-    'run-cortex.sh',  # Unix/Mac setup
+    'scripts/launchers/run-cortex.sh',  # Unix/Mac setup
     
     # Legal & README
     'README.md',
@@ -532,7 +532,7 @@ def copy_essential_directories(
         
         # Setup Scripts (easy installation)
         'setup-cortex-alpha.ps1',  # Windows
-        'run-cortex.sh',  # Unix/Mac
+        'scripts/launchers/run-cortex.sh',  # Unix/Mac
     ]
     
     for script_file in essential_scripts:

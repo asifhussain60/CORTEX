@@ -465,8 +465,7 @@ class CleanupOrchestrator(BaseOperationModule):
             'package.json', 'package-lock.json', 'tsconfig.json',
             'requirements.txt', 'pytest.ini', 'mkdocs.yml',
             'cortex.config.json', 'cortex.config.template.json',
-            'cortex.config.example.json', 'cortex-operations.yaml',
-            'run-cortex.sh'
+            'cortex.config.example.json', 'cortex-operations.yaml'
         }
         
         root_files = [f for f in self.project_root.iterdir() if f.is_file()]

@@ -237,7 +237,7 @@ lessons:
 
     '
   related_files:
-  - run-cortex.sh
+  - scripts/launchers/run-cortex.sh
   - src/config.py
   tags:
   - cross-platform

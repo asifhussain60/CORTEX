@@ -55,7 +55,7 @@ In GitHub Copilot Chat, use the simple entry point:
 cortex
 
 # Or use the launcher script
-./run-cortex.sh
+./scripts/launchers/run-cortex.sh
 
 # Navigate to CORTEX directory
 cdcortex
@@ -91,10 +91,12 @@ CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhance
 ```
 CORTEX/
 ├── README.md                           # This file - system overview
-├── run-cortex.sh                       # Quick launcher for CORTEX entry point
 ├── .github/
 │   ├── copilot-instructions.md         # Auto-loaded baseline context
 │   └── prompts/CORTEX.prompt.md        # 🎯 UNIVERSAL ENTRY POINT - Use /CORTEX
+├── scripts/
+│   ├── launchers/run-cortex.sh         # Quick launcher for CORTEX entry point
+│   └── maintenance/                    # Maintenance utilities
 ├── cortex-brain/                       # The cognitive storage system
 │   ├── tier0/                          # Instinct (immutable rules)
 │   ├── tier1/                          # Working memory (last 20 conversations)

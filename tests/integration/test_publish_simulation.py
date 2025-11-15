@@ -105,7 +105,7 @@ class TestPublishSimulationALIST:
             'scripts/cortex/migrate-all-tiers.py',
             
             # Setup
-            'run-cortex.sh',
+            'scripts/launchers/run-cortex.sh',
             'SETUP-FOR-COPILOT.md',
             
             # Legal

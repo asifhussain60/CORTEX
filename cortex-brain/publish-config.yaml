@@ -178,7 +178,7 @@ user_content_patterns:
     
     # Setup Scripts
     - "setup-cortex-alpha.ps1"  # Windows
-    - "run-cortex.sh"  # Unix/Mac
+    - "scripts/launchers/run-cortex.sh"  # Unix/Mac
     
     # Legal & README
     - "README.md"
