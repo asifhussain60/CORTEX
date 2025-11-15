@@ -1,0 +1,276 @@
+metadata:
+  schema_version: '1.0'
+  generated_at: '2025-11-15T09:35:31.481348'
+  source: Track B Phase 4 Mock Data
+  count: 30
+captures:
+- capture_id: capture_f2409a80
+  timestamp: 2025-11-14 06:35:31.473746
+  event_type: git_commit
+  file_path: src/api/endpoints.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc386679
+    author: Developer
+    message: Fix feature in endpoints
+    files_changed:
+    - src/api/endpoints.py
+- capture_id: capture_63d4f5a3
+  timestamp: 2025-11-15 02:35:31.473760
+  event_type: terminal_command
+  file_path: src/database/schema.sql
+  change_type: created
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_0fab3a26
+  timestamp: 2025-11-14 14:35:31.473765
+  event_type: git_commit
+  file_path: tests/test_main.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc276315
+    author: Developer
+    message: Fix bug in test_main
+    files_changed:
+    - tests/test_main.py
+- capture_id: capture_b7e39fc8
+  timestamp: 2025-11-14 18:35:31.473774
+  event_type: git_commit
+  file_path: src/models/user.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc370714
+    author: Developer
+    message: Fix bug in user
+    files_changed:
+    - src/models/user.py
+- capture_id: capture_962acf3e
+  timestamp: 2025-11-15 06:35:31.473781
+  event_type: terminal_command
+  file_path: src/database/schema.sql
+  change_type: created
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_8227290a
+  timestamp: 2025-11-13 16:35:31.473786
+  event_type: git_commit
+  file_path: requirements.txt
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc389568
+    author: Developer
+    message: Fix feature in requirements
+    files_changed:
+    - requirements.txt
+- capture_id: capture_ec2ea21a
+  timestamp: 2025-11-14 21:35:31.473793
+  event_type: git_commit
+  file_path: src/main.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc903145
+    author: Developer
+    message: Fix feature in main
+    files_changed:
+    - src/main.py
+- capture_id: capture_a80c0d6a
+  timestamp: 2025-11-14 03:35:31.473800
+  event_type: file_change
+  file_path: src/database/schema.sql
+  change_type: created
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_e25d4c2c
+  timestamp: 2025-11-13 18:35:31.473805
+  event_type: file_change
+  file_path: src/api/endpoints.py
+  change_type: deleted
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_a04f3fe0
+  timestamp: 2025-11-13 10:35:31.473809
+  event_type: git_commit
+  file_path: src/main.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc174928
+    author: Developer
+    message: Fix feature in main
+    files_changed:
+    - src/main.py
+- capture_id: capture_e818e523
+  timestamp: 2025-11-14 17:35:31.473817
+  event_type: git_commit
+  file_path: src/main.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc939694
+    author: Developer
+    message: Fix feature in main
+    files_changed:
+    - src/main.py
+- capture_id: capture_dda49cc3
+  timestamp: 2025-11-14 13:35:31.473824
+  event_type: file_change
+  file_path: requirements.txt
+  change_type: modified
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_2a9eb356
+  timestamp: 2025-11-14 09:35:31.473828
+  event_type: git_commit
+  file_path: README.md
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc286244
+    author: Developer
+    message: Fix test in README
+    files_changed:
+    - README.md
+- capture_id: capture_70115061
+  timestamp: 2025-11-15 01:35:31.473835
+  event_type: terminal_command
+  file_path: src/utils.py
+  change_type: modified
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_87eac500
+  timestamp: 2025-11-14 17:35:31.473840
+  event_type: terminal_command
+  file_path: src/main.py
+  change_type: modified
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_324ff6d4
+  timestamp: 2025-11-14 00:35:31.473844
+  event_type: file_change
+  file_path: requirements.txt
+  change_type: deleted
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_6ce61eb1
+  timestamp: 2025-11-14 16:35:31.473849
+  event_type: git_commit
+  file_path: src/models/user.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc666874
+    author: Developer
+    message: Fix bug in user
+    files_changed:
+    - src/models/user.py
+- capture_id: capture_d6386fa0
+  timestamp: 2025-11-14 21:35:31.473856
+  event_type: file_change
+  file_path: src/utils.py
+  change_type: created
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_a8867e70
+  timestamp: 2025-11-14 14:35:31.473861
+  event_type: file_change
+  file_path: src/api/endpoints.py
+  change_type: modified
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_4498a826
+  timestamp: 2025-11-14 17:35:31.473866
+  event_type: terminal_command
+  file_path: requirements.txt
+  change_type: modified
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_a07d3c02
+  timestamp: 2025-11-13 17:35:31.473871
+  event_type: terminal_command
+  file_path: src/api/endpoints.py
+  change_type: deleted
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_750267a2
+  timestamp: 2025-11-13 17:35:31.473875
+  event_type: file_change
+  file_path: tests/test_main.py
+  change_type: modified
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_3b34930c
+  timestamp: 2025-11-15 00:35:31.473880
+  event_type: file_change
+  file_path: src/main.py
+  change_type: modified
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_015a327b
+  timestamp: 2025-11-14 08:35:31.473884
+  event_type: file_change
+  file_path: src/database/schema.sql
+  change_type: modified
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_48836283
+  timestamp: 2025-11-14 07:35:31.473888
+  event_type: file_change
+  file_path: src/models/user.py
+  change_type: created
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_6121ee94
+  timestamp: 2025-11-14 23:35:31.473893
+  event_type: git_commit
+  file_path: src/utils.py
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc465797
+    author: Developer
+    message: Fix test in utils
+    files_changed:
+    - src/utils.py
+- capture_id: capture_e2ac2098
+  timestamp: 2025-11-14 07:35:31.473900
+  event_type: git_commit
+  file_path: README.md
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc808887
+    author: Developer
+    message: Fix feature in README
+    files_changed:
+    - README.md
+- capture_id: capture_65279c88
+  timestamp: 2025-11-15 05:35:31.473907
+  event_type: terminal_command
+  file_path: src/database/schema.sql
+  change_type: modified
+  content_delta: null
+  git_metadata: null
+- capture_id: capture_be40c276
+  timestamp: 2025-11-13 22:35:31.473911
+  event_type: file_change
+  file_path: requirements.txt
+  change_type: created
+  content_delta: '+    def new_function():\n+        return True\n-    # TODO: implement'
+  git_metadata: null
+- capture_id: capture_6b99ebe7
+  timestamp: 2025-11-15 08:35:31.473916
+  event_type: git_commit
+  file_path: requirements.txt
+  change_type: modified
+  content_delta: null
+  git_metadata:
+    commit_hash: abc172709
+    author: Developer
+    message: Fix feature in requirements
+    files_changed:
+    - requirements.txt

@@ -1,0 +1,319 @@
+metadata:
+  schema_version: '1.0'
+  generated_at: '2025-11-15T09:35:31.473922'
+  source: Track B Phase 4 Mock Data
+  count: 15
+conversations:
+- conversation_id: conv_a8a40111
+  timestamp: 2025-11-07 09:35:31.473621
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with refactor in src/utils.py
+    timestamp: '2025-11-15T09:35:31.473627'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc5771
+    files_in_project: 8
+  files_mentioned:
+  - src/utils.py
+  entities_extracted:
+  - class_API
+  - method_validate
+  - variable_config
+- conversation_id: conv_b7d1c8bb
+  timestamp: 2025-10-22 09:35:31.473639
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with refactor in src/utils.py
+    timestamp: '2025-11-15T09:35:31.473641'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc9469
+    files_in_project: 8
+  files_mentioned:
+  - src/utils.py
+  entities_extracted:
+  - class_Utils
+  - method_transform
+  - variable_config
+- conversation_id: conv_94bd480d
+  timestamp: 2025-11-14 09:35:31.473648
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with refactor in src/utils.py
+    timestamp: '2025-11-15T09:35:31.473649'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc6475
+    files_in_project: 8
+  files_mentioned:
+  - src/utils.py
+  entities_extracted:
+  - class_API
+  - method_transform
+  - variable_response
+- conversation_id: conv_bcfff374
+  timestamp: 2025-11-04 09:35:31.473655
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: I need to add a new API endpoint for file upload
+    timestamp: '2025-11-15T09:35:31.473657'
+  - role: assistant
+    content: I'll help you create that endpoint. Let me examine the current API structure
+      and suggest the implementation approach.
+    timestamp: '2025-11-15T09:36:01.473658'
+  - role: user
+    content: Great! Can you show me how to implement it with proper error handling?
+    timestamp: '2025-11-15T09:37:31.473659'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc6133
+    files_in_project: 8
+  files_mentioned:
+  - src/api/endpoints.py
+  entities_extracted:
+  - class_Database
+  - method_save
+  - variable_config
+- conversation_id: conv_08860fdd
+  timestamp: 2025-10-19 09:35:31.473665
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with refactor in src/utils.py
+    timestamp: '2025-11-15T09:35:31.473667'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc4539
+    files_in_project: 8
+  files_mentioned:
+  - src/utils.py
+  entities_extracted:
+  - class_API
+  - method_transform
+  - variable_config
+- conversation_id: conv_8c5cbe93
+  timestamp: 2025-11-04 09:35:31.473672
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: There's a bug in src/main.py causing validation error
+    timestamp: '2025-11-15T09:35:31.473674'
+  - role: assistant
+    content: Let me analyze the code and identify the root cause of this issue.
+    timestamp: '2025-11-15T09:36:16.473675'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc5072
+    files_in_project: 8
+  files_mentioned:
+  - src/main.py
+  - tests/test_main.py
+  entities_extracted:
+  - class_User
+  - method_save
+  - variable_result
+- conversation_id: conv_33fa5ec8
+  timestamp: 2025-11-05 09:35:31.473680
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: I need to add a new API endpoint for file upload
+    timestamp: '2025-11-15T09:35:31.473682'
+  - role: assistant
+    content: I'll help you create that endpoint. Let me examine the current API structure
+      and suggest the implementation approach.
+    timestamp: '2025-11-15T09:36:01.473682'
+  - role: user
+    content: Great! Can you show me how to implement it with proper error handling?
+    timestamp: '2025-11-15T09:37:31.473683'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc6062
+    files_in_project: 8
+  files_mentioned:
+  - src/api/endpoints.py
+  entities_extracted:
+  - class_Database
+  - method_transform
+  - variable_response
+- conversation_id: conv_a38de710
+  timestamp: 2025-11-12 09:35:31.473689
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with documentation in README.md
+    timestamp: '2025-11-15T09:35:31.473690'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc9588
+    files_in_project: 8
+  files_mentioned:
+  - README.md
+  entities_extracted:
+  - class_API
+  - method_validate
+  - variable_result
+- conversation_id: conv_3d52fc00
+  timestamp: 2025-10-26 09:35:31.473696
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with documentation in README.md
+    timestamp: '2025-11-15T09:35:31.473697'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc4795
+    files_in_project: 8
+  files_mentioned:
+  - README.md
+  entities_extracted:
+  - class_API
+  - method_transform
+  - variable_result
+- conversation_id: conv_9c7feec4
+  timestamp: 2025-11-07 09:35:31.473702
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: There's a bug in src/main.py causing timeout issue
+    timestamp: '2025-11-15T09:35:31.473704'
+  - role: assistant
+    content: Let me analyze the code and identify the root cause of this issue.
+    timestamp: '2025-11-15T09:36:16.473704'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc7763
+    files_in_project: 8
+  files_mentioned:
+  - src/main.py
+  - tests/test_main.py
+  entities_extracted:
+  - class_API
+  - method_transform
+  - variable_result
+- conversation_id: conv_c6b61081
+  timestamp: 2025-10-21 09:35:31.473709
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: I need to add a new API endpoint for file upload
+    timestamp: '2025-11-15T09:35:31.473711'
+  - role: assistant
+    content: I'll help you create that endpoint. Let me examine the current API structure
+      and suggest the implementation approach.
+    timestamp: '2025-11-15T09:36:01.473711'
+  - role: user
+    content: Great! Can you show me how to implement it with proper error handling?
+    timestamp: '2025-11-15T09:37:31.473712'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc3585
+    files_in_project: 8
+  files_mentioned:
+  - src/api/endpoints.py
+  entities_extracted:
+  - class_API
+  - method_transform
+  - variable_result
+- conversation_id: conv_171ba3e9
+  timestamp: 2025-10-31 09:35:31.473717
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with documentation in README.md
+    timestamp: '2025-11-15T09:35:31.473718'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc1635
+    files_in_project: 8
+  files_mentioned:
+  - README.md
+  entities_extracted:
+  - class_Utils
+  - method_validate
+  - variable_response
+- conversation_id: conv_c0e3ab1e
+  timestamp: 2025-10-18 09:35:31.473724
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: I need to add a new API endpoint for data processing
+    timestamp: '2025-11-15T09:35:31.473725'
+  - role: assistant
+    content: I'll help you create that endpoint. Let me examine the current API structure
+      and suggest the implementation approach.
+    timestamp: '2025-11-15T09:36:01.473725'
+  - role: user
+    content: Great! Can you show me how to implement it with proper error handling?
+    timestamp: '2025-11-15T09:37:31.473726'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc6130
+    files_in_project: 8
+  files_mentioned:
+  - src/api/endpoints.py
+  entities_extracted:
+  - class_User
+  - method_save
+  - variable_data
+- conversation_id: conv_5a26e300
+  timestamp: 2025-11-08 09:35:31.473732
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: Help me with documentation in README.md
+    timestamp: '2025-11-15T09:35:31.473733'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc6876
+    files_in_project: 8
+  files_mentioned:
+  - README.md
+  entities_extracted:
+  - class_Database
+  - method_process
+  - variable_result
+- conversation_id: conv_357bff60
+  timestamp: 2025-10-19 09:35:31.473738
+  session_type: copilot_chat
+  messages:
+  - role: user
+    content: I need to add a new API endpoint for user management
+    timestamp: '2025-11-15T09:35:31.473739'
+  - role: assistant
+    content: I'll help you create that endpoint. Let me examine the current API structure
+      and suggest the implementation approach.
+    timestamp: '2025-11-15T09:36:01.473739'
+  - role: user
+    content: Great! Can you show me how to implement it with proper error handling?
+    timestamp: '2025-11-15T09:37:31.473740'
+  project_context:
+    project_name: CORTEX
+    branch: main
+    last_commit: abc2182
+    files_in_project: 8
+  files_mentioned:
+  - src/api/endpoints.py
+  entities_extracted:
+  - class_User
+  - method_validate
+  - variable_config
