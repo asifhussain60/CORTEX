@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-11-16T14:38:22.032097",
+  "epmo_path": "src/epmo",
+  "health_report": {
+    "epmo_name": "epmo",
+    "epmo_path": "src/epmo",
+    "overall_score": 78.05922003543145,
+    "overall_grade": "C",
+    "dimension_scores": {
+      

@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2025-11-16T14:38:21.923473",
+    "overall_score": 78.05922003543145,
+    "dimension_scores": {
+      "code_quality": 100.0,
+      "documentation": 100.0,
+      "test_coverage": 40.0,
+      "performance": 100.0,
+      "architecture": 67.45098039215686,
+      "maintainability": 65.69023957000074
+    }
+  },
+  {
+    "timestamp": "2025-11-16T14:40:46.255887",
+    "overall_score": 78.062288073124,
+    "dimension_scores": {
+      "code_quality": 100.0,
+      "documentation": 100.0,
+      "test_coverage": 40.0,
+      "performance": 100.0,
+      "architecture": 67.45098039215686,
+      "maintainability": 65.72091994692614
+    }
+  }
+]

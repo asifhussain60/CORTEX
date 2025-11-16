@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 3.0 - EPMO Health Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f5f7fa; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #2c3e50; margin-bottom: 5px; }
+        .header p { color: #7f8c8d; margin: 0; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .score-card { text-align: center; }
+        .score-number { font-size: 3em; font-weight: bold; color: #f39c12; }
+        .score-grade { font-size: 1.5em; color: #7f8c8d; }
+        .dimension { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #ecf0f1; }
+        .dimension:last-child { border-bottom: none; }
+        .dimension-name { font-weight: 500; }
+        .dimension-score { font-weight: bold; color: #2c3e50; }
+        .remediation-item { padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 4px; border-left: 4px solid #3498db; }
+        .auto-fix { border-left-color: #27ae60; }
+        .insights { grid-column: 1 / -1; }
+        .insight { padding: 10px; margin: 5px 0; background: #e8f4fd; border-radius: 4px; border-left: 4px solid #3498db; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CORTEX 3.0 - EPMO Health Dashboard</h1>
+        <p>Generated on 2025-11-16T14:38:22 for src/epmo</p>
+    </div>
+    
+    <div class="dashboard">
+        <div class="card score-card">
+            <h2>Overall Health Score</h2>
+            <div class="score-number">78.1</div>
+            <div class="score-grade">Grade: C</div>
+        </div>
+        
+        <div class="card">
+            <h2>Dimension Breakdown</h2>
+            <div class="dimension"><span class="dimension-name">code_quality</span><span class="dimension-score">100.0</span></div><div class="dimension"><span class="dimension-name">documentation</span><span class="dimension-score">100.0</span></div><div class="dimension"><span class="dimension-name">architecture</span><span class="dimension-score">67.5</span></div><div class="dimension"><span class="dimension-name">performance</span><span class="dimension-score">100.0</span></div><div class="dimension"><span class="dimension-name">test_coverage</span><span class="dimension-score">40.0</span></div><div class="dimension"><span class="dimension-name">maintainability</span><span class="dimension-score">65.7</span></div>
+        </div>
+        
+        <div class="card">
+            <h2>Remediation Plan</h2>
+            <p><strong>Total Actions:</strong> 1</p>
+            <p><strong>Estimated Effort:</strong> 1.0 hours</p>
+            <div class="remediation-item "><strong>Medium Priority:</strong> Address validation issue: Test coverage: 1/13 files tested (7.7%) <em>(1.0h)</em></div>
+        </div>
+        
+        <div class="card">
+            <h2>Effort Breakdown</h2>
+            <p><strong>Auto-fixable:</strong> 0 actions</p>
+            <p><strong>Manual:</strong> 1 actions</p>
+            <p><strong>Estimated Completion:</strong> 1.0 hours</p>
+        </div>
+        
+        <div class="card insights">
+            <h2>Actionable Insights</h2>
+            <div class="insight">✅ Good EPMO health with room for targeted improvements.</div><div class="insight">🎯 Primary focus area: maintainability (score: 65.7)</div><div class="insight">📊 Estimated remediation effort: 1.0 hours across 1 actions.</div>
+        </div>
+    </div>
+</body>
+</html>
