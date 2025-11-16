@@ -448,6 +448,89 @@ lessons:
   tags:
   - operation-failure
   - cortex-maintenance
+- id: roadmap-status-001
+  title: Planning document status fields do not reflect actual implementation
+  category: project-management
+  subcategory: status-tracking
+  severity: high
+  date: '2025-11-16'
+  problem: 'CORTEX-3.0-ROADMAP.yaml showed "Track 2: NOT STARTED, 0% implementation"
+    but Track B was actually 100% complete with 97.5% token reduction achieved. Git
+    history showed completion commit (e14a4a5) with 824 files changed.'
+  root_cause: Roadmap YAML is a planning document with manually updated status fields,
+    not a live progress tracker
+  symptoms:
+  - Status fields showing NOT STARTED for completed work
+  - Planning document and git history out of sync
+  - Completion reports exist but roadmap not updated
+  - User awareness of completion but agent reports 0%
+  solution: Always validate planning documents against git history and completion
+    reports before providing status updates
+  prevention_rules:
+  - Check git log for completion commits FIRST
+  - Review final reports (TRACK-B-FINAL-REPORT.md)
+  - Cross-reference work session summaries
+  - Compare planning YAML status LAST (often outdated)
+  - Source of truth order - 1. Git commits, 2. Test results, 3. Completion reports,
+    4. Planning YAML
+  validation_workflow:
+  - 'Step 1: git log --oneline --graph --all -20 (check for "Complete" commits)'
+  - 'Step 2: git log <commit> --stat (verify scope with file changes)'
+  - 'Step 3: Search for *FINAL-REPORT*.md or *COMPLETE*.md files'
+  - 'Step 4: Read work session summaries (*WORK-SESSION*.md)'
+  - 'Step 5: Compare to roadmap YAML status fields'
+  - 'Step 6: Note discrepancies and report actual progress'
+  time_cost:
+    incorrect_summary_minutes: 5
+    user_correction_minutes: 2
+    investigation_minutes: 10
+    corrected_summary_minutes: 5
+    total_minutes: 22
+  related_files:
+  - cortex-brain/cortex-3.0-design/CORTEX-3.0-ROADMAP.yaml
+  - cortex-brain/documents/reports/CORTEX-3.0-TRACK-B-FINAL-REPORT.md
+  - cortex-brain/documents/reports/WORK-SESSION-SUMMARY-2025-11-16.md
+  tags:
+  - status-tracking
+  - git-history
+  - planning
+  - validation
+  - project-management
+  pattern_id: status_validation_pattern
+  confidence: 0.98
+patterns:
+- pattern_id: status_validation_pattern
+  name: Status Validation Against Git History
+  confidence: 0.98
+  applies_to:
+  - project-management
+  - status-reporting
+  - roadmap-tracking
+  - dual-track-development
+  validation_sequence:
+  - 'Step 1: Check git history for completion indicators'
+  - 'Step 2: Examine commit details (scope, files changed)'
+  - 'Step 3: Locate completion reports and summaries'
+  - 'Step 4: Cross-reference multiple sources'
+  - 'Step 5: Compare to planning document status'
+  - 'Step 6: Report actual progress with discrepancies noted'
+  benefits:
+  - Prevents incorrect status reports
+  - Validates planning docs against implementation
+  - Discovers completed work not reflected in roadmaps
+  - Establishes source-of-truth hierarchy
+  - Documents git investigation methodology
+  related_lessons:
+  - roadmap-status-001
+  git_commands:
+    search_completions: git log --oneline --grep="Complete" --grep="feat"
+    view_commit_details: git log <commit> --oneline -1 --stat
+    graph_history: git log --oneline --graph --all -20
+  source_of_truth_hierarchy:
+  - '1. Git commit history (primary - what was actually done)'
+  - '2. Test results (validation - what works)'
+  - '3. Completion reports (documentation - comprehensive summaries)'
+  - '4. Planning YAML status (metadata - often outdated)'
 patterns:
 - pattern_id: wpf_icon_validation_pattern
   name: Material Design Icon Validation
@@ -516,7 +599,7 @@ patterns:
   related_lessons:
   - cross-platform-001
 statistics:
-  total_lessons: 8
+  total_lessons: 17
   by_category:
     testing: 3
     validation: 1
@@ -533,11 +616,11 @@ statistics:
     0.90-1.00: 8
     0.70-0.89: 0
     below_0.70: 0
-  total_patterns: 3
-  avg_confidence: 0.93
+  total_patterns: 4
+  avg_confidence: 0.94
 maintenance:
   review_frequency: quarterly
-  last_reviewed: '2025-11-09'
+  last_reviewed: '2025-11-16'
   next_review: '2026-02-09'
   archival_policy: Archive lessons older than 6 months with confidence < 0.80
   update_policy: Increment confidence when lesson prevents an issue
