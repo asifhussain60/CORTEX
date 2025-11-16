@@ -83,6 +83,31 @@ class WorkingMemory:
         self.token_metrics = TokenMetricsCollector(self)  # Pass WorkingMemory instance
         
         self.optimization_enabled = self.config.get('token_optimization', {}).get('enabled', True)
+        
+        # Initialize database on creation
+        self._init_database()
+    
+    def initialize(self) -> bool:
+        """
+        Initialize the working memory system.
+        
+        Returns:
+            True if initialization successful, False otherwise
+        """
+        try:
+            # Database already initialized in __init__
+            
+            # Verify database is accessible
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM conversations")
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to initialize working memory: {e}")
+            return False
     
     def _init_database(self) -> None:
         """Initialize database schema."""
@@ -1208,6 +1233,77 @@ class WorkingMemory:
         self.queue_manager.enforce_fifo_limit()
     
     # ========== Utility Methods ==========
+    
+    def store_conversation(
+        self,
+        user_message: str,
+        assistant_response: str,
+        intent: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """
+        Store a conversation with user message and assistant response.
+        Convenience method for external integrations (like conversation capture).
+        
+        Args:
+            user_message: User's message content
+            assistant_response: Assistant's response content
+            intent: Detected intent (EXECUTE, PLAN, FIX, etc.)
+            context: Optional context metadata
+            
+        Returns:
+            Generated conversation ID
+        """
+        # Generate conversation ID
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        conversation_id = f"conv_{timestamp}_{hash(user_message + assistant_response) & 0xfff:03x}"
+        
+        # Create title from user message (first 50 chars)
+        title = user_message[:50] + "..." if len(user_message) > 50 else user_message
+        
+        # Format messages
+        messages = [
+            {
+                'role': 'user',
+                'content': user_message,
+                'timestamp': datetime.now().isoformat()
+            },
+            {
+                'role': 'assistant', 
+                'content': assistant_response,
+                'timestamp': datetime.now().isoformat()
+            }
+        ]
+        
+        # Create tags from intent and context
+        tags = [intent.lower()]
+        if context:
+            if context.get('manual_import'):
+                tags.append('manual_import')
+            if context.get('entities'):
+                tags.append(f"entities_{len(context['entities'])}")
+        
+        # Store conversation
+        conversation = self.add_conversation(
+            conversation_id=conversation_id,
+            title=title,
+            messages=messages,
+            tags=tags
+        )
+        
+        # Store context as metadata if provided
+        if context:
+            # Store entities if available
+            if context.get('entities'):
+                for entity in context['entities']:
+                    self.entity_extractor.add_entity(
+                        conversation_id=conversation_id,
+                        entity_type=EntityType.FILE if entity['type'] == 'file' else EntityType.VARIABLE,
+                        value=entity['value'],
+                        context=entity.get('context', 'captured from conversation')
+                    )
+        
+        return conversation_id
     
     def close(self) -> None:
         """Close any open connections (for cleanup in tests)."""
