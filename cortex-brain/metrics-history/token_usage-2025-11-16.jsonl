@@ -18,3 +18,13 @@
 {"name": "total_optimization_savings", "value": 0.0, "timestamp": "2025-11-16T17:23:16.527044+00:00", "tags": {"type": "optimization", "currency": "USD"}, "metadata": {}}
 {"name": "optimization_count", "value": 0, "timestamp": "2025-11-16T17:23:16.527044+00:00", "tags": {"type": "optimization", "unit": "count"}, "metadata": {}}
 {"name": "daily_usage_summary", "value": {"input": 0, "output": 0, "cost": 0.0}, "timestamp": "2025-11-16T17:23:16.527044+00:00", "tags": {"type": "trend", "scope": "daily", "date": "2025-11-16"}, "metadata": {}}
+{"name": "session_total_tokens", "value": {"input": 0, "output": 0, "combined": 0}, "timestamp": "2025-11-16T22:33:26.804328+00:00", "tags": {"type": "usage", "scope": "session"}, "metadata": {}}
+{"name": "session_total_cost", "value": 0.0, "timestamp": "2025-11-16T22:33:26.804328+00:00", "tags": {"type": "cost", "currency": "USD", "scope": "session"}, "metadata": {}}
+{"name": "total_optimization_savings", "value": 0.0, "timestamp": "2025-11-16T22:33:26.804328+00:00", "tags": {"type": "optimization", "currency": "USD"}, "metadata": {}}
+{"name": "optimization_count", "value": 0, "timestamp": "2025-11-16T22:33:26.804328+00:00", "tags": {"type": "optimization", "unit": "count"}, "metadata": {}}
+{"name": "daily_usage_summary", "value": {"input": 0, "output": 0, "cost": 0.0}, "timestamp": "2025-11-16T22:33:26.804328+00:00", "tags": {"type": "trend", "scope": "daily", "date": "2025-11-16"}, "metadata": {}}
+{"name": "session_total_tokens", "value": {"input": 0, "output": 0, "combined": 0}, "timestamp": "2025-11-16T22:37:08.478173+00:00", "tags": {"type": "usage", "scope": "session"}, "metadata": {}}
+{"name": "session_total_cost", "value": 0.0, "timestamp": "2025-11-16T22:37:08.478173+00:00", "tags": {"type": "cost", "currency": "USD", "scope": "session"}, "metadata": {}}
+{"name": "total_optimization_savings", "value": 0.0, "timestamp": "2025-11-16T22:37:08.478173+00:00", "tags": {"type": "optimization", "currency": "USD"}, "metadata": {}}
+{"name": "optimization_count", "value": 0, "timestamp": "2025-11-16T22:37:08.478173+00:00", "tags": {"type": "optimization", "unit": "count"}, "metadata": {}}
+{"name": "daily_usage_summary", "value": {"input": 0, "output": 0, "cost": 0.0}, "timestamp": "2025-11-16T22:37:08.478173+00:00", "tags": {"type": "trend", "scope": "daily", "date": "2025-11-16"}, "metadata": {}}

@@ -197,6 +197,22 @@ class CollectorManager:
         
         return all_metrics
     
+    def get_collector_names(self) -> List[str]:
+        """Get list of registered collector names"""
+        return list(self.collectors.keys())
+    
+    def get_collector(self, collector_name: str) -> Optional['BaseCollector']:
+        """
+        Get a specific collector by name.
+        
+        Args:
+            collector_name: Name of the collector to retrieve
+            
+        Returns:
+            Collector instance or None if not found
+        """
+        return self.collectors.get(collector_name)
+    
     def get_collector_health(self) -> Dict[str, CollectorHealth]:
         """Get health status of all collectors"""
         health_status = {}
