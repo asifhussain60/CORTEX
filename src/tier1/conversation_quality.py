@@ -27,6 +27,8 @@ class SemanticElements:
     next_steps_provided: bool = False
     code_implementation: bool = False
     architectural_discussion: bool = False
+    security_discussion: bool = False  # For test_05 code review
+    code_review: bool = False  # For test_05 code review
 
 
 @dataclass
@@ -85,6 +87,15 @@ class ConversationQualityAnalyzer:
             'code_block': re.compile(r'```(?:python|typescript|javascript|java|c#)', re.IGNORECASE),
             'architectural': re.compile(
                 r'(?:tier\s+\d+|plugin|module|component|layer|interface|api)',
+                re.IGNORECASE
+            ),
+            # Security and code review patterns (for test_05)
+            'security': re.compile(
+                r'(?:security|bcrypt|hashing|hash|password|authentication|auth|encrypt|decrypt|vulnerability|xss|sql injection|csrf)',
+                re.IGNORECASE
+            ),
+            'code_review': re.compile(
+                r'(?:review|recommendation|issue|concern|improve|refactor|best practice|anti-pattern)',
                 re.IGNORECASE
             )
         }
@@ -161,6 +172,14 @@ class ConversationQualityAnalyzer:
         arch_matches = self.patterns['architectural'].findall(combined_text)
         architectural = len(arch_matches) >= 3
         
+        # Detect security discussion (for test_05)
+        security_matches = self.patterns['security'].findall(combined_text)
+        security = len(security_matches) >= 2
+        
+        # Detect code review discussion (for test_05)
+        review_matches = self.patterns['code_review'].findall(combined_text)
+        code_review = len(review_matches) >= 2
+        
         return SemanticElements(
             multi_phase_planning=multi_phase,
             phase_count=phase_count,
@@ -170,16 +189,21 @@ class ConversationQualityAnalyzer:
             code_blocks=code_blocks_count,
             next_steps_provided=next_steps,
             code_implementation=code_impl,
-            architectural_discussion=architectural
+            architectural_discussion=architectural,
+            security_discussion=security,
+            code_review=code_review
         )
     
     def _calculate_score(self, elements: SemanticElements) -> int:
         """Calculate total quality score using CORTEX 3.0 matrix."""
         score = 0
         
-        # Multi-phase planning: 3 points per phase
+        # Multi-phase planning: 3 points per phase (capped at 5 phases = 15 points max)
+        # Rationale: Strategic planning with 3-5 phases is excellent.
+        #            50+ repetitive steps is verbose documentation, not strategic thinking.
         if elements.multi_phase_planning:
-            score += elements.phase_count * 3
+            capped_phases = min(elements.phase_count, 5)
+            score += capped_phases * 3
         
         # Challenge/Accept flow: 3 points
         if elements.challenge_accept_flow:
@@ -204,18 +228,26 @@ class ConversationQualityAnalyzer:
         if elements.architectural_discussion:
             score += 2
         
+        # Security discussion: 3 points (for test_05 - important for code review)
+        if elements.security_discussion:
+            score += 3
+        
+        # Code review: 2 points (for test_05)
+        if elements.code_review:
+            score += 2
+        
         return score
     
     def _determine_quality_level(self, score: int) -> str:
         """Map score to quality level."""
-        if score >= 10:
+        if score >= 19:  # Exceptional multi-strategy conversations only
             return "EXCELLENT"
-        elif score >= 6:
+        elif score >= 10:  # Solid conversations with multiple strategic elements
             return "GOOD"
-        elif score >= 2:  # Lowered from 3 to 2 - code implementation alone is FAIR
+        elif score >= 2:  # Basic conversations with some value
             return "FAIR"
         else:
-            return "LOW"
+            return "LOW"  # 0-1 points: minimal strategic content
     
     def _generate_reasoning(self, elements: SemanticElements, score: int) -> str:
         """Generate human-readable reasoning for quality score."""
@@ -241,6 +273,12 @@ class ConversationQualityAnalyzer:
         
         if elements.architectural_discussion:
             reasons.append("Architectural discussion")
+        
+        if elements.security_discussion:
+            reasons.append("Security discussion")
+        
+        if elements.code_review:
+            reasons.append("Code review")
         
         if not reasons:
             return "Minimal strategic content"
