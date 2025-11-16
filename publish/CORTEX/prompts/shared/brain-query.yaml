@@ -1,0 +1,114 @@
+# CORTEX Brain Query Plugin
+# Query knowledge graph and working memory
+
+version: "2.0"
+type: "workflow"
+name: "Brain Query"
+description: "Search patterns, relationships, and conversation history"
+author: "CORTEX"
+created: "2025-11-08"
+
+# No specific targets - queries brain storage
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "parse_query"
+    action: "analyze"
+    params:
+      extract_keywords: true
+      extract_entities: true
+      detect_query_type: true
+      types: ["pattern", "relationship", "conversation", "context"]
+
+  - step: "query_tier2"
+    action: "query"
+    condition: "query_type_pattern_or_relationship"
+    params:
+      tier: 2
+      use_fts5: true
+      include_relationships: true
+      relevance_scoring: true
+      max_results: "${max_results}"
+
+  - step: "query_tier1"
+    action: "query"
+    condition: "query_type_conversation"
+    params:
+      tier: 1
+      search_conversations: true
+      search_messages: true
+      date_range: "${date_range}"
+
+  - step: "query_tier3"
+    action: "query"
+    condition: "query_type_context"
+    params:
+      tier: 3
+      get_git_metrics: true
+      get_file_hotspots: true
+      get_insights: true
+
+  - step: "aggregate_results"
+    action: "transform"
+    params:
+      merge_results: true
+      deduplicate: true
+      sort_by_relevance: true
+
+  - step: "format_response"
+    action: "transform"
+    params:
+      format: "${output_format}"
+      include_metadata: true
+      include_confidence: true
+
+  - step: "return_results"
+    action: "notify"
+    params:
+      show_count: true
+      show_results: true
+      show_query_time: true
+
+# Validation rules
+validation:
+  - check: "results_found"
+    scope: "query_results"
+    required: false
+    params:
+      warn_if_empty: true
+
+  - check: "query_time_acceptable"
+    scope: "performance"
+    required: true
+    params:
+      max_ms: 150  # Tier 2 FTS5 target
+
+# Parameters
+parameters:
+  - name: "query"
+    type: "string"
+    required: true
+    description: "Search query or natural language question"
+
+  - name: "scope"
+    type: "enum"
+    values: ["cortex", "application", "all"]
+    default: "all"
+    description: "Knowledge scope to search"
+
+  - name: "max_results"
+    type: "int"
+    default: 10
+    description: "Maximum number of results"
+
+  - name: "output_format"
+    type: "enum"
+    values: ["text", "json", "markdown"]
+    default: "markdown"
+    description: "Output format"
+
+  - name: "date_range"
+    type: "string"
+    default: "all"
+    description: "Date range for conversation queries (e.g., 'last_7_days')"

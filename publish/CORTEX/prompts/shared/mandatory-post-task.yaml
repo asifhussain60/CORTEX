@@ -1,0 +1,132 @@
+# CORTEX Mandatory Post-Task Plugin
+# Enforce session state updates after task completion
+
+version: "2.0"
+type: "workflow"
+name: "Mandatory Post-Task"
+description: "Required workflow after every task completion"
+author: "CORTEX"
+created: "2025-11-08"
+
+# Target constraints
+targets:
+  - identifier: "session_state"
+    constraints:
+      - type: "must_update"
+        message: "Session state must be updated after task"
+      - type: "must_validate"
+        message: "Changes must be validated"
+
+  - identifier: "tier1_conversation"
+    constraints:
+      - type: "must_record"
+        message: "Conversation must be recorded in Tier 1"
+
+# Workflow steps
+workflow:
+  - step: "capture_changes"
+    action: "analyze"
+    params:
+      detect_file_changes: true
+      detect_git_changes: true
+      capture_output: true
+      capture_errors: true
+
+  - step: "validate_completion"
+    action: "validate"
+    params:
+      verify_tests_pass: true
+      verify_build_success: true
+      verify_no_errors: true
+
+  - step: "update_session_goals"
+    action: "execute"
+    params:
+      check_completed_goals: true
+      update_goal_status: true
+      identify_new_goals: false
+
+  - step: "update_next_steps"
+    action: "execute"
+    params:
+      remove_completed_steps: true
+      add_new_steps: true
+      prioritize_steps: true
+
+  - step: "record_conversation"
+    action: "execute"
+    params:
+      tier: 1
+      record_user_message: true
+      record_assistant_response: true
+      record_tool_calls: true
+      record_outcomes: true
+
+  - step: "update_patterns"
+    action: "execute"
+    condition: "significant_change"
+    params:
+      tier: 2
+      extract_patterns: true
+      update_relationships: true
+      update_knowledge_graph: true
+
+  - step: "update_tier3"
+    action: "execute"
+    condition: "code_changes_detected"
+    params:
+      tier: 3
+      update_git_metrics: true
+      update_file_hotspots: true
+      update_insights: true
+
+  - step: "notify_completion"
+    action: "notify"
+    params:
+      show_updated_fields: true
+      show_next_steps: true
+      confirm_state_saved: true
+
+# Validation rules
+validation:
+  - check: "session_updated"
+    scope: "tier1"
+    required: true
+    params:
+      conversation_recorded: true
+      state_updated: true
+
+  - check: "no_errors"
+    scope: "validation"
+    required: true
+    params:
+      tests_pass: true
+      build_success: true
+
+  - check: "next_steps_defined"
+    scope: "session"
+    required: true
+    params:
+      at_least_one_step: true
+
+# Parameters
+parameters:
+  - name: "session_id"
+    type: "string"
+    required: true
+    description: "Current session ID"
+
+  - name: "task_description"
+    type: "string"
+    required: true
+    description: "Completed task description"
+
+  - name: "update_tier2"
+    type: "bool"
+    default: true
+    description: "Update patterns and knowledge graph"
+
+  - name: "update_tier3"
+    type: "bool"
+    default: true
+    description: "Update code metrics and insights"

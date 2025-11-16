@@ -174,6 +174,46 @@ class MermaidDiagram:
 
 
 @dataclass
+class ImagePrompt:
+    """AI image generation prompt specification."""
+    prompt_id: str
+    title: str
+    prompt_text: str
+    style_guidance: Optional[str] = None
+    aspect_ratio: str = "16:9"  # "16:9", "1:1", "9:16"
+    complexity_level: str = "medium"  # "low", "medium", "high"
+    color_palette: List[str] = field(default_factory=list)
+    narrative_description: Optional[str] = None
+    generated_image_path: Optional[str] = None
+    prompt_file_path: Optional[str] = None
+
+
+@dataclass
+class MultiModalDiagram:
+    """Combined Mermaid diagram and AI image prompt for comprehensive visualization."""
+    diagram_id: str
+    title: str
+    diagram_type: DiagramType
+    mermaid_diagram: Optional[MermaidDiagram] = None
+    image_prompt: Optional[ImagePrompt] = None
+    description: Optional[str] = None
+    use_case: str = "architecture"  # "architecture", "flow", "class", "sequence"
+    priority: int = 1  # 1=high, 2=medium, 3=low
+    
+    def has_mermaid(self) -> bool:
+        """Check if this diagram includes Mermaid visualization."""
+        return self.mermaid_diagram is not None
+    
+    def has_image_prompt(self) -> bool:
+        """Check if this diagram includes AI image generation."""
+        return self.image_prompt is not None
+    
+    def is_complete(self) -> bool:
+        """Check if this diagram has at least one visualization method."""
+        return self.has_mermaid() or self.has_image_prompt()
+
+
+@dataclass
 class DocumentationSection:
     """Individual documentation section."""
     section_id: str
@@ -182,9 +222,14 @@ class DocumentationSection:
     section_type: str  # 'overview', 'api', 'health', 'architecture', 'usage'
     order: int = 0
     include_in_toc: bool = True
-    diagrams: List[MermaidDiagram] = field(default_factory=list)
+    diagrams: List[MermaidDiagram] = field(default_factory=list)  # Legacy support
+    multi_modal_diagrams: List[MultiModalDiagram] = field(default_factory=list)  # Enhanced support
     code_examples: List[str] = field(default_factory=list)
     cross_references: List[str] = field(default_factory=list)
+    
+    def get_all_diagrams(self) -> List[Union[MermaidDiagram, MultiModalDiagram]]:
+        """Get all diagrams (legacy Mermaid + new multi-modal)."""
+        return self.diagrams + self.multi_modal_diagrams
 
 
 @dataclass
@@ -213,7 +258,9 @@ class EPMDocumentationModel:
     health: HealthMetrics = None
     dependencies: List[DependencyRelation] = field(default_factory=list)
     sections: List[DocumentationSection] = field(default_factory=list)
-    diagrams: List[MermaidDiagram] = field(default_factory=list)
+    diagrams: List[MermaidDiagram] = field(default_factory=list)  # Legacy support
+    multi_modal_diagrams: List[MultiModalDiagram] = field(default_factory=list)  # Enhanced support
+    image_prompts: List[ImagePrompt] = field(default_factory=list)  # AI generation prompts
     remediation: List[RemediationItem] = field(default_factory=list)
     quality_badges: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
@@ -224,6 +271,7 @@ class EPMDocumentationModel:
     
     def get_summary_stats(self) -> Dict[str, Any]:
         """Get high-level summary statistics."""
+        visual_stats = self.get_visual_stats()
         return {
             'total_files': len(self.files),
             'total_classes': sum(len(f.classes) for f in self.files),
@@ -233,7 +281,11 @@ class EPMDocumentationModel:
             'health_score': self.health.overall_score if self.health else 0.0,
             'remediation_items': len(self.remediation),
             'auto_fixable_items': len([r for r in self.remediation if r.auto_fixable]),
-            'total_diagrams': len(self.diagrams),
+            'total_diagrams': visual_stats['total_diagrams'],
+            'mermaid_diagrams': visual_stats['mermaid_diagrams'],
+            'image_prompts': visual_stats['image_prompts'],
+            'multi_modal_diagrams': visual_stats['multi_modal_diagrams'],
+            'has_visual_content': self.has_visual_content(),
             'external_dependencies': len(self.architecture.external_dependencies) if self.architecture else 0
         }
     
@@ -248,6 +300,39 @@ class EPMDocumentationModel:
     def get_auto_fixable_items(self) -> List[RemediationItem]:
         """Get items that can be automatically fixed."""
         return [item for item in self.remediation if item.auto_fixable]
+    
+    def get_all_diagrams(self) -> List[Union[MermaidDiagram, MultiModalDiagram]]:
+        """Get all diagrams (legacy Mermaid + new multi-modal)."""
+        return self.diagrams + self.multi_modal_diagrams
+    
+    def get_mermaid_diagrams(self) -> List[MermaidDiagram]:
+        """Get all Mermaid diagrams (legacy + from multi-modal)."""
+        mermaid_diagrams = self.diagrams.copy()
+        for multi_diagram in self.multi_modal_diagrams:
+            if multi_diagram.mermaid_diagram:
+                mermaid_diagrams.append(multi_diagram.mermaid_diagram)
+        return mermaid_diagrams
+    
+    def get_image_prompts_all(self) -> List[ImagePrompt]:
+        """Get all image prompts (standalone + from multi-modal)."""
+        image_prompts = self.image_prompts.copy()
+        for multi_diagram in self.multi_modal_diagrams:
+            if multi_diagram.image_prompt:
+                image_prompts.append(multi_diagram.image_prompt)
+        return image_prompts
+    
+    def has_visual_content(self) -> bool:
+        """Check if this model has visual content (diagrams or images)."""
+        return bool(self.diagrams or self.multi_modal_diagrams or self.image_prompts)
+    
+    def get_visual_stats(self) -> Dict[str, int]:
+        """Get statistics about visual content."""
+        return {
+            'total_diagrams': len(self.get_all_diagrams()),
+            'mermaid_diagrams': len(self.get_mermaid_diagrams()),
+            'image_prompts': len(self.get_image_prompts_all()),
+            'multi_modal_diagrams': len(self.multi_modal_diagrams)
+        }
 
 
 @dataclass
@@ -282,6 +367,17 @@ class GenerationConfig:
     file_naming_pattern: str = "{epmo_name}_documentation.md"
     diagram_output_directory: str = "diagrams"
     max_diagram_complexity: int = 50  # Maximum nodes in diagrams
+
+
+@dataclass
+class DiagramConfig:
+    """Configuration for diagram generation."""
+    max_nodes: int = 50
+    max_edges: int = 100
+    include_private: bool = False
+    color_by_complexity: bool = True
+    group_by_module: bool = True
+    show_external_deps: bool = True
     
 
 def create_epmo_model(

@@ -1,0 +1,234 @@
+#######################################################
+# CORTEX Publish Configuration
+# 
+# Defines what gets published to users vs admin-only content
+# Version: 3.0.0 (CORTEX 3.0 admin/user separation)
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+#######################################################
+
+version: "3.0.0"
+last_updated: "2025-11-13"
+
+# Deployment Tiers
+# - user: Included in publish package (core CORTEX operations)
+# - admin: Excluded from publish (development tools, design docs)
+deployment_tiers:
+  user:
+    description: "Core CORTEX functionality for end users"
+    include_in_publish: true
+  
+  admin:
+    description: "Development tools, design docs, internal workflows"
+    include_in_publish: false
+
+# Admin Content Patterns (EXCLUDED from publish)
+# These patterns identify files/folders that should NEVER be published
+admin_content_patterns:
+  directories:
+    # Documentation (admin-only architecture, design, development guides)
+    - "docs/"
+    - "docs/images/"
+    - "docs/images/system-design-prompts/"
+    - "docs/images/system-design-prompts/narrative/"
+    - "docs/architecture/"
+    - "docs/development/"
+    
+    # Design & Planning (admin development artifacts)
+    - "cortex-brain/cortex-2.0-design/"
+    - "cortex-brain/cortex-3.0-design/"
+    - "cortex-brain/archives/"
+    - "cortex-brain/simulations/"
+    
+    # Development Tools
+    - "tests/"
+    - "workflow_checkpoints/"
+    - "scripts/"  # Note: Essential user scripts copied separately
+    
+    # Build Artifacts
+    - "dist/"
+    - "build/"
+    - ".venv/"
+    - "venv/"
+    - "__pycache__/"
+    - ".pytest_cache/"
+    - "node_modules/"
+    - "publish/"  # Don't copy into itself
+  
+  file_patterns:
+    # Privacy Leaks (machine-specific paths, usernames, hostnames)
+    - "**/.coverage.*"  # Coverage with machine names
+    - "**/coverage.*.xml"
+    - "**/*.log"
+    - "**/.platform_state.json"
+    - "**/cortex.config.json"  # Machine-specific paths
+    - "**/cortex.config.example.json"
+    
+    # Development Documentation
+    - "**/PHASE-*.md"
+    - "**/SESSION-[0-9]*.md"  # Session logs (not session-loader.md which is user doc)
+    - "**/COVERAGE-*.md"
+    - "**/CLEANUP-*.md"
+    - "**/HOLISTIC-*.md"
+    - "**/MACOS-*.md"
+    - "**/NEXT-*.md"
+    - "**/HARDCODED-*.md"
+    
+    # Test Artifacts
+    - "**/*.pyc"
+    - "**/*.pyo"
+    
+    # Root-level Admin Files
+    - "ALPHA-READY-SUMMARY.md"
+    - "ALPHA-TESTER-GUIDE.md"
+    - "CHANGELOG.md"
+    - "KNOWN-ISSUES.md"
+    - "PHASE-*.md"
+    - "TEST-COVERAGE-*.md"
+    - "package.json"  # Dev dependency
+    - "tsconfig.json"
+    - "mkdocs.yml"
+    - "pytest.ini"
+  
+  admin_operations:
+    # Operations that are admin-only (not for end users)
+    - "design_sync"  # System design orchestrator
+    - "interactive_planning"  # Not yet implemented
+    - "system_refactor"  # Code refactoring tool
+    - "token_optimizer"  # Performance analysis
+    - "doc_sync"  # Documentation sync
+
+# User Content Patterns (INCLUDED in publish)
+user_content_patterns:
+  directories:
+    # Core Intelligence (4-tier brain)
+    - "src/tier0/"
+    - "src/tier1/"
+    - "src/tier2/"
+    - "src/tier3/"
+    
+    # Specialist Agents
+    - "src/cortex_agents/"
+    
+    # Operations & Workflows
+    - "src/operations/"
+    - "src/workflows/"
+    
+    # Plugin System
+    - "src/plugins/"
+    
+    # Core Utilities
+    - "src/core/"
+    - "src/utils/"
+    - "src/brain/"
+    - "src/crawlers/"
+    - "src/llm/"
+    - "src/response_templates/"
+    - "src/setup/"
+    - "src/entry_point/"
+    - "src/migrations/"
+    
+    # Entry Points & Config
+    - ".github/"
+    - ".github/prompts/"
+    
+    # User Documentation (essential guides only)
+    - "prompts/shared/"
+    
+    # Brain Configuration (YAML configs, no dev docs)
+    - "cortex-brain/schemas/"
+  
+  critical_files:
+    # Brain Protection (Tier 0)
+    - "cortex-brain/brain-protection-rules.yaml"
+    - "cortex-brain/response-templates.yaml"
+    - "cortex-brain/knowledge-graph.yaml"
+    - "cortex-brain/development-context.yaml"
+    - "cortex-brain/capabilities.yaml"
+    - "cortex-brain/migrate_brain_db.py"
+    
+    # Entry Points
+    - ".github/prompts/CORTEX.prompt.md"
+    - ".github/copilot-instructions.md"
+    
+    # Configuration Templates
+    - "cortex.config.template.json"
+    - "cortex-operations.yaml"
+    - "requirements.txt"
+    
+    # User Documentation
+    - "prompts/shared/story.md"
+    - "prompts/shared/setup-guide.md"
+    - "prompts/shared/tracking-guide.md"
+    - "prompts/shared/technical-reference.md"
+    - "prompts/shared/agents-guide.md"
+    - "prompts/shared/configuration-reference.md"
+    - "prompts/shared/plugin-system.md"
+    - "prompts/shared/operations-reference.md"
+    
+    # Essential User Tools
+    - "scripts/cortex/auto_capture_daemon.py"  # ⭐ Ambient tracking
+    - "scripts/cortex/capture_git_event.py"
+    - "scripts/cortex/cortex_cli.py"
+    - "scripts/cortex/migrate-all-tiers.py"
+    - "scripts/cortex/migrate-tier1-to-sqlite.py"
+    - "scripts/cortex/migrate-tier2-to-sqlite.py"
+    - "scripts/cortex/migrate-tier3-to-sqlite.py"
+    - "scripts/cortex/validate-migrations.py"
+    
+    # Setup Scripts
+    - "setup-cortex-alpha.ps1"  # Windows
+    - "scripts/launchers/run-cortex.sh"  # Unix/Mac
+    
+    # Legal & README
+    - "README.md"
+    - "LICENSE"
+  
+  user_operations:
+    # Operations included in user deployment
+    - "environment_setup"
+    - "workspace_cleanup"
+    - "cortex_demo"
+    - "refresh_cortex_story"
+    - "cortex_tutorial"
+    - "application_onboarding"
+
+# Publish Validation Rules
+validation:
+  # Patterns that MUST be absent in publish package
+  forbidden_patterns:
+    - "**/.coverage.*"
+    - "**/logs/**"
+    - "**/docs/images/**"
+    - "**/narrative/*.md"
+    - "**/system-design-prompts/**"
+    - "**/*<HOSTNAME>*"  # Hostname leak (example: AHHOME)
+    - "**/*<USERNAME>*"  # Username leak (example: asifhussain)
+  
+  # Files that MUST be present in publish package
+  required_files:
+    - ".github/prompts/CORTEX.prompt.md"
+    - "cortex-brain/brain-protection-rules.yaml"
+    - "src/tier0/__init__.py"
+    - "src/cortex_agents/__init__.py"
+    - "requirements.txt"
+    - "LICENSE"
+  
+  # Size constraints
+  max_package_size_mb: 50
+  min_package_size_mb: 1
+  
+  # Quality gates
+  require_validation_tests: true
+  min_test_pass_rate: 1.0  # 100% tests must pass
+
+# Admin Mode (internal testing only)
+# When --admin-mode flag is used, ALL content is published
+# This is for internal deployment testing, not for end users
+admin_mode:
+  enabled_via_flag: true
+  flag_name: "--admin-mode"
+  warning_message: |
+    ⚠️  ADMIN MODE ENABLED
+    Publishing ALL content including admin tools and development artifacts.
+    This is for internal testing ONLY - do NOT distribute to end users.

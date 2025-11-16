@@ -1,0 +1,60 @@
+# CORTEX Bug Fix Workflow
+# Streamlined workflow for fixing bugs with root cause analysis and verification
+
+workflow_id: "bug_fix"
+name: "Bug Fix Workflow"
+description: "Streamlined workflow for diagnosing and fixing bugs"
+version: "1.0.0"
+
+stages:
+  # Stage 1: Reproduce and understand the bug
+  - id: "reproduce"
+    script: "bug_reproducer"
+    description: "Reproduce the bug and capture symptoms"
+    required: true
+    depends_on: []
+    timeout_seconds: 600
+  
+  # Stage 2: Root cause analysis
+  - id: "root_cause_analysis"
+    script: "root_cause_analyzer"
+    description: "Identify root cause of the bug"
+    required: true
+    depends_on: ["reproduce"]
+    timeout_seconds: 600
+  
+  # Stage 3: Plan the fix
+  - id: "plan_fix"
+    script: "fix_planner"
+    description: "Plan the bug fix approach"
+    required: true
+    depends_on: ["root_cause_analysis"]
+    timeout_seconds: 300
+  
+  # Stage 4: Implement fix with TDD
+  - id: "implement_fix"
+    script: "tdd_workflow"
+    description: "Implement fix using TDD"
+    required: true
+    depends_on: ["plan_fix"]
+    retryable: true
+    max_retries: 3
+    timeout_seconds: 1200
+  
+  # Stage 5: Verify bug is fixed
+  - id: "verify_fix"
+    script: "test_runner"
+    description: "Verify bug no longer occurs"
+    required: true
+    depends_on: ["implement_fix"]
+    retryable: true
+    max_retries: 2
+    timeout_seconds: 600
+  
+  # Stage 6: Document the fix (optional)
+  - id: "document_fix"
+    script: "bug_doc_generator"
+    description: "Document root cause and fix"
+    required: false
+    depends_on: ["verify_fix"]
+    timeout_seconds: 300
