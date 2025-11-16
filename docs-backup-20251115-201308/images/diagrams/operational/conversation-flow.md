@@ -1,0 +1,12 @@
+```mermaid
+graph LR
+    S1[Intent Capture]
+    S2[Context Enrichment]
+    S1 --> S2
+    S3[Agent Routing]
+    S2 --> S3
+    S4[Execution]
+    S3 --> S4
+    S5[Response Generation]
+    S4 --> S5
+```

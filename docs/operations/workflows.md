@@ -1,0 +1,99 @@
+---
+title: Workflow Management
+description: CORTEX workflow orchestration and management
+author: 
+generated: true
+version: ""
+last_updated: 
+---
+
+# Workflow Management
+
+**Purpose:** Documentation of workflow orchestration and management  
+**Audience:** Operations teams, developers  
+**Version:**   
+**Last Updated:** 
+
+---
+
+## Overview
+
+CORTEX workflows orchestrate multi-step operations through coordinated agent execution. Workflows ensure consistent, repeatable processes.
+
+---
+
+## Workflow Architecture
+
+```
+User Request
+    ↓
+Intent Router (detect intent)
+    ↓
+Work Planner (create phases)
+    ↓
+Corpus Callosum (coordinate agents)
+    ↓
+Left Brain Agents (execute)
+    ↓
+Right Brain Agents (validate & learn)
+    ↓
+Result + Knowledge Update
+```
+
+---
+
+## Common Workflows
+
+### Feature Development Workflow
+
+**Phases:**
+1. Requirements Analysis (Work Planner)
+2. Test Creation - RED (Test Generator)
+3. Implementation - GREEN (Code Executor)
+4. Refactoring - REFACTOR (Code Executor)
+5. Validation (Health Validator)
+6. Commit (Commit Handler)
+
+### Bug Fix Workflow
+
+**Phases:**
+1. Error Detection (Error Corrector)
+2. Root Cause Analysis (Pattern Matcher)
+3. Test Creation (Test Generator)
+4. Fix Implementation (Code Executor)
+5. Regression Testing (Test Generator)
+6. Validation (Health Validator)
+
+---
+
+## Workflow Configuration
+
+Edit `cortex-brain/operations-config.yaml`:
+
+```yaml
+workflows:
+  feature_development:
+    enabled: true
+    phases: 6
+    enforce_tdd: true
+    
+  bug_fix:
+    enabled: true
+    phases: 6
+    require_tests: true
+```
+
+---
+
+## Related Documentation
+
+- **Operations Overview:** [Overview](overview.md)
+- **Agent Architecture:** [Agents](../architecture/agents.md)
+- **EPM Guide:** [Entry Point Modules](entry-point-modules.md)
+
+---
+
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Proprietary - See LICENSE file  
+**Version:**   
+**Generated:** 

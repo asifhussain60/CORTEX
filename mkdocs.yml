@@ -1,171 +1,145 @@
-# MkDocs Configuration for CORTEX - The Awakening
-site_name: "CORTEX - AI Enhancement Framework"
-site_description: "Long-term memory and strategic planning for GitHub Copilot"
-site_author: "Asif Hussain"
-copyright: "© 2024-2025 Asif Hussain. All rights reserved."
-repo_url: "https://github.com/asifhussain60/CORTEX"
-repo_name: "asifhussain60/CORTEX"
-
-# Theme configuration
+site_name: CORTEX - AI Enhancement Framework
+site_description: Long-term memory and strategic planning for GitHub Copilot
+site_author: Asif Hussain
+copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
+repo_url: https://github.com/asifhussain60/CORTEX
+repo_name: asifhussain60/CORTEX
 theme:
   name: material
-  
-  # Color palette
   palette:
-    # Light mode (default)
-    - scheme: default
-      primary: deep purple
-      accent: purple
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    
-    # Dark mode
-    - scheme: slate
-      primary: deep purple
-      accent: purple
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-  
-  # Features
+  - scheme: default
+    primary: deep purple
+    accent: purple
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - scheme: slate
+    primary: deep purple
+    accent: purple
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
   features:
-    - navigation.instant        # Instant loading
-    - navigation.tracking       # URL tracks scroll position
-    - navigation.tabs          # Top-level sections as tabs
-    - navigation.sections      # Expand sections in sidebar
-    - navigation.expand        # Expand all sections by default
-    - navigation.top           # Back to top button
-    - search.suggest           # Search suggestions
-    - search.highlight         # Highlight search terms
-    - toc.integrate            # TOC integrated in sidebar
-    - content.code.copy        # Copy code button
-    - content.tabs.link        # Linked content tabs
-  
-  # Fonts - Google Fonts integration
+  - navigation.instant
+  - navigation.tracking
+  - navigation.tabs
+  - navigation.sections
+  - navigation.expand
+  - navigation.top
+  - search.suggest
+  - search.highlight
+  - toc.integrate
+  - content.code.copy
+  - content.tabs.link
   font:
     text: Roboto
     code: Roboto Mono
-  
-  # Icon
   icon:
     repo: fontawesome/brands/github
-
-# Custom CSS
 extra_css:
-  - stylesheets/custom.css
-  - stylesheets/story.css
-  - stylesheets/technical.css
-  - https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
-
-# Navigation
+- stylesheets/custom.css
+- stylesheets/story.css
+- stylesheets/technical.css
+- https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
 nav:
-  - Home:
-      - Welcome: index.md
-  
-  - Getting Started:
-      - Quick Start: getting-started/quick-start.md
-      - Installation: getting-started/installation.md
-      - Configuration: getting-started/configuration.md
-      - First Task: getting-started/first-task.md
-  
-  - Operations:
-      - Overview: operations/index.md
-      - CORTEX Demo: operations/cortex-tutorial.md
-      - Environment Setup: operations/environment-setup.md
-      - Refresh Story: operations/refresh-cortex-story.md
-      - Help Command: operations/help-command.md
-  
-  - API Reference:
-      - Overview: api/index.md
-      - Entry Point: api/entry-point.md
-      - Brain System: api/brain-system.md
-      - Plugins:
-          - Base Plugin: api/plugins/base.md
-          - Plugin Registry: api/plugins/registry.md
-          - Command Registry: api/plugins/command-registry.md
-          - Hooks: api/plugins/hooks.md
-      - Agents:
-          - Agent Base: api/agents/base.md
-          - Executor: api/agents/executor.md
-          - Tester: api/agents/tester.md
-          - Validator: api/agents/validator.md
-          - Architect: api/agents/architect.md
-      - Tiers:
-          - Tier 0 Governance: api/tier0-governance.md
-          - Tier 1 Memory: api/tier1-memory.md
-          - Tier 2 Knowledge: api/tier2-knowledge.md
-          - Tier 3 Context: api/tier3-context.md
-  
-  - The Story:
-      - The Awakening of CORTEX (Complete): awakening-of-cortex.md
-      - Chapter Navigation: story/index.md
-  
-  - Plugins:
-      - Overview: plugins/README.md
-      - Documentation Refresh: plugins/doc-refresh-plugin-enhancements.md
-      - Platform Switch: plugins/platform-switch-plugin.md
-      - Code Review: plugins/code-review-plugin.md
-      - Command System: plugins/command-system.md
-  
-  - Architecture:
-      - Overview: architecture/README.md
-      - Agents System: architecture/agents.md
-      - Five-Tier Memory: architecture/five-tier-memory.md
-      - Dual Hemispheres: architecture/dual-hemispheres.md
-      - Protection System: architecture/protection-system.md
-  
-  - Guides:
-      - Setup Guide: guides/setup-guide.md
-      - Brain System: guides/brain-system.md
-      - Memory Tiers: guides/memory-tiers.md
-      - Agent Workflows: guides/agent-workflows.md
-      - Plugin Development: guides/cleanup-plugin-guide.md
-  
-  - About:
-      - Repository: https://github.com/asifhussain60/CORTEX
-
-# Markdown extensions
+- Architectural:
+  - Brain Protection: images\diagrams\architectural\brain-protection.md
+  - Epm Doc Generator Pipeline: images\diagrams\architectural\epm-doc-generator-pipeline.md
+  - Module Structure: images\diagrams\architectural\module-structure.md
+- Architecture:
+  - Agents: architecture\agents.md
+  - Brain Protection: architecture\brain-protection.md
+  - Overview: architecture\overview.md
+  - Tier System: architecture\tier-system.md
+- Getting Started:
+  - Configuration: getting-started\configuration.md
+  - Installation: getting-started\installation.md
+  - Quick Start: getting-started\quick-start.md
+- Guides:
+  - Admin Guide: guides\admin-guide.md
+  - Best Practices: guides\best-practices.md
+  - Developer Guide: guides\developer-guide.md
+  - Troubleshooting: guides\troubleshooting.md
+- Integration:
+  - Git Integration: images\diagrams\integration\git-integration.md
+  - Mkdocs Integration: images\diagrams\integration\mkdocs-integration.md
+  - Vscode Integration: images\diagrams\integration\vscode-integration.md
+- Operational:
+  - Conversation Flow: images\diagrams\operational\conversation-flow.md
+  - Health Check: images\diagrams\operational\health-check.md
+  - Knowledge Graph Update: images\diagrams\operational\knowledge-graph-update.md
+- Operations:
+  - Entry Point Modules: operations\entry-point-modules.md
+  - Health Monitoring: operations\health-monitoring.md
+  - Index: operations\index.md
+  - Overview: operations\overview.md
+  - Workflows: operations\workflows.md
+- Performance:
+  - Ci Cd Integration: performance\CI-CD-INTEGRATION.md
+  - Performance Budgets: performance\PERFORMANCE-BUDGETS.md
+- Plugins:
+  - Development: plugins\development.md
+  - Vscode Extension: plugins\vscode-extension.md
+- Project:
+  - Implementation Notes: project\implementation-notes.md
+  - Package Structure: project\package-structure.md
+- Recommendations:
+  - Story Recap System Recommendations: recommendations\story-recap-system-recommendations.md
+  - Workflow Pipeline Recommendation: recommendations\workflow-pipeline-recommendation.md
+- Reference:
+  - Api: reference\api.md
+  - Configuration: reference\configuration.md
+  - Response Templates: reference\response-templates.md
+- Awakening Of Cortex: awakening-of-cortex.md
+- Generation Report 20251115 201243: GENERATION-REPORT-20251115-201243.md
+- Generation Report 20251115 201255: GENERATION-REPORT-20251115-201255.md
+- Help System: HELP-SYSTEM.md
+- Index: index.md
+- Response Template User Guide: response-template-user-guide.md
+- Technical Cost Optimization: Technical-Cost-Optimization.md
+- Strategic:
+  - Agent Coordination: images\diagrams\strategic\agent-coordination.md
+  - Information Flow: images\diagrams\strategic\information-flow.md
+  - Tier Architecture: images\diagrams\strategic\tier-architecture.md
+- Summaries:
+  - Limitations And Status: summaries\limitations-and-status.md
+- Telemetry:
+  - Performance Telemetry Guide: telemetry\PERFORMANCE-TELEMETRY-GUIDE.md
 markdown_extensions:
-  # Python Markdown
-  - abbr
-  - admonition
-  - attr_list
-  - def_list
-  - footnotes
-  - meta
-  - md_in_html
-  - tables
-  - toc:
-      permalink: true
-      toc_depth: 3
-  
-  # PyMdown Extensions
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.mark
-  - pymdownx.tilde
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.keys
-  - pymdownx.snippets
-  - pymdownx.superfences
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
-
-# Plugins
+- abbr
+- admonition
+- attr_list
+- def_list
+- footnotes
+- meta
+- md_in_html
+- tables
+- toc:
+    permalink: true
+    toc_depth: 3
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.betterem:
+    smart_enable: all
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.details
+- pymdownx.emoji:
+    emoji_index: null
+    emoji_generator: null
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.snippets
+- pymdownx.superfences
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
 plugins:
-  - search:
-      lang: en
+- search:
+    lang: en

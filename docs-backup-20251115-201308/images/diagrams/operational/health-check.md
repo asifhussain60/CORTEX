@@ -1,0 +1,10 @@
+```mermaid
+graph LR
+    S1[Metric Collection]
+    S2[Anomaly Detection]
+    S1 --> S2
+    S3[Alert Generation]
+    S2 --> S3
+    S4[Auto Remediation]
+    S3 --> S4
+```

@@ -1,0 +1,280 @@
+/*
+ * CORTEX Story-Specific Styling
+ * Purpose: Comic font and engaging story presentation
+ * Version: 1.0.0
+ * Created: 2025-11-09
+ */
+
+/* ============================================================================
+   COMIC FONT FOR STORY SECTIONS
+   ============================================================================ */
+
+/* Import Comic Neue (better Comic Sans alternative) */
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+/* Story sections use comic font */
+.story-section,
+.md-content [data-content-type="story"],
+.md-content.story-page {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-size: 1em;        /* Reduced from 1.1em for consistency */
+    line-height: 1.5;      /* Reduced from 1.6 for tighter spacing */
+    color: #2c3e50;
+}
+
+/* ============================================================================
+   STORY HEADERS (Purple theme)
+   ============================================================================ */
+
+.story-section h1,
+[data-content-type="story"] h1 {
+    color: #8b008b;        /* Deep purple */
+    font-weight: 700;
+    font-size: 2.5em;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.story-section h2,
+[data-content-type="story"] h2 {
+    color: #9370db;        /* Medium purple */
+    font-weight: 600;
+    font-size: 2em;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.story-section h3,
+[data-content-type="story"] h3 {
+    color: #ba55d3;        /* Orchid */
+    font-weight: 600;
+    font-size: 1.5em;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================================
+   STORY PARAGRAPHS
+   ============================================================================ */
+
+.story-section p,
+[data-content-type="story"] p {
+    margin-bottom: 1.25em;
+    text-align: justify;
+}
+
+/* First paragraph of each section (drop cap would be cool but optional) */
+.story-section > p:first-of-type::first-letter {
+    font-size: 3em;
+    font-weight: 700;
+    float: left;
+    line-height: 0.9;
+    margin: 0.1em 0.1em 0 0;
+    color: #8b008b;
+}
+
+/* ============================================================================
+   STORY EMPHASIS (Italics and Bold)
+   ============================================================================ */
+
+.story-section em,
+[data-content-type="story"] em {
+    font-style: italic;
+    color: #d63384;        /* Pink for emphasis */
+    font-weight: 500;
+}
+
+.story-section strong,
+[data-content-type="story"] strong {
+    font-weight: 700;
+    color: #6f42c1;        /* Purple for strong emphasis */
+}
+
+/* ============================================================================
+   STORY QUOTES (Narrator Voice, Character Dialogue)
+   ============================================================================ */
+
+/* Narrator voice */
+.story-section blockquote,
+[data-content-type="story"] blockquote {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #856404;
+    border-radius: 4px;
+}
+
+/* Character dialogue (if using <q> tags) */
+.story-section q,
+[data-content-type="story"] q {
+    quotes: '"' '"' ''' ''';
+    font-style: italic;
+}
+
+/* ============================================================================
+   STORY LISTS (Bullet points in story context)
+   ============================================================================ */
+
+.story-section ul,
+[data-content-type="story"] ul {
+    list-style-type: disc;
+    margin-left: 2em;
+    margin-bottom: 1.25em;
+}
+
+.story-section ol,
+[data-content-type="story"] ol {
+    list-style-type: decimal;
+    margin-left: 2em;
+    margin-bottom: 1.25em;
+}
+
+.story-section li {
+    margin-bottom: 0.5em;
+}
+
+/* ============================================================================
+   STORY SECTIONS (Part dividers)
+   ============================================================================ */
+
+/* Part headers (e.g., "PART 1: THE AWAKENING") */
+.story-section .part-header,
+[data-content-type="story"] .part-header {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #8b008b;
+    margin: 3rem 0 2rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Chapter headers */
+.story-section .chapter-header,
+[data-content-type="story"] .chapter-header {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #9370db;
+    margin: 2rem 0 1rem 0;
+    border-bottom: 2px solid #ffe4b5;
+    padding-bottom: 0.5rem;
+}
+
+/* ============================================================================
+   STORY INTERLUDES (Technical recaps in story format)
+   ============================================================================ */
+
+.story-section .interlude,
+[data-content-type="story"] .interlude {
+    background-color: #e8f4f8;
+    border: 2px dashed #6c757d;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.95em;
+}
+
+.story-section .interlude h3 {
+    color: #495057;
+    font-style: italic;
+    margin-top: 0;
+}
+
+/* ============================================================================
+   STORY CALLOUTS (Fun fact boxes, warnings, etc.)
+   ============================================================================ */
+
+.story-section .fun-fact,
+[data-content-type="story"] .fun-fact {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+}
+
+.story-section .fun-fact::before {
+    content: "💡 Fun Fact: ";
+    font-weight: 700;
+    color: #155724;
+}
+
+/* ============================================================================
+   STORY IMAGES (Narrative context)
+   ============================================================================ */
+
+.story-section img,
+[data-content-type="story"] img {
+    border: 3px solid var(--cortex-story-border);
+    border-radius: 12px;
+}
+
+.story-section figcaption {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-style: italic;
+    color: #6c757d;
+}
+
+/* ============================================================================
+   TRANSITIONS (Between story and technical)
+   ============================================================================ */
+
+/* Visual transition marker when switching from story to technical */
+.content-transition {
+    text-align: center;
+    margin: 3rem 0;
+    font-size: 2em;
+    color: #ced4da;
+}
+
+.content-transition::before {
+    content: "✧ ✦ ✧";
+}
+
+/* ============================================================================
+   RESPONSIVE (Mobile-friendly story reading)
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+    .story-section,
+    [data-content-type="story"] {
+        font-size: 1em;
+        padding: 1rem;
+    }
+    
+    .story-section h1,
+    [data-content-type="story"] h1 {
+        font-size: 2em;
+    }
+    
+    .story-section h2,
+    [data-content-type="story"] h2 {
+        font-size: 1.5em;
+    }
+    
+    /* Remove drop cap on mobile */
+    .story-section > p:first-of-type::first-letter {
+        font-size: inherit;
+        float: none;
+        margin: 0;
+    }
+}
+
+/* ============================================================================
+   PRINT STYLES (Story sections print beautifully)
+   ============================================================================ */
+
+@media print {
+    .story-section,
+    [data-content-type="story"] {
+        font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+        color: #000;
+    }
+    
+    .story-section blockquote {
+        background-color: #f0f0f0;
+    }
+}

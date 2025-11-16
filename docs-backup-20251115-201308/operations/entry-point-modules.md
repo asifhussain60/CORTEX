@@ -1,0 +1,302 @@
+# EPM Guide: Entry Point Modules
+
+**Generated**:   
+**Version**: 
+
+Entry Point Modules (EPMs) are the primary interface for administrative operations in CORTEX 3.0. They handle major, infrequent tasks like documentation generation, system cleanup, and migrations.
+
+## What are EPMs?
+
+EPMs are specialized Python modules designed for high-impact administrative operations. Unlike agent workflows (which handle day-to-day operations), EPMs are:
+
+- **Destructive**: Can completely regenerate or restructure data
+- **Infrequent**: Run only after major changes
+- **Admin-only**: Require elevated privileges
+- **Safe**: Include backup, rollback, and validation
+- **Coordinated**: Orchestrate multiple stages with validation gates
+
+## EPM Architecture
+
+![EPM Pipeline](../images/diagrams/architectural/epm-doc-generator-pipeline.md)
+
+### Common EPM Pattern
+
+All EPMs follow a consistent pipeline pattern:
+
+1. **Pre-flight Validation**: Verify prerequisites
+2. **Backup Creation**: Create safety backups
+3. **Execution**: Perform main operation
+4. **Validation**: Verify results
+5. **Cleanup**: Remove temporary files
+6. **Reporting**: Generate summary report
+
+### Safety Features
+
+- **Dry-run mode**: Preview changes without executing
+- **Automatic backups**: Create timestamped backups
+- **Rollback capability**: Restore from backup on failure
+- **Validation gates**: Block execution if validation fails
+- **Audit logging**: Complete operation logs
+
+## Available EPMs
+
+### doc_generator
+
+**Location**: `src/epm/doc_generator.py`
+
+**Purpose**: Automated documentation generation system that creates comprehensive CORTEX documentation from templates, diagrams, and YAML data sources.
+
+#### Usage
+
+```bash
+# Standard execution
+python src/epm/doc_generator.py
+
+# Dry-run mode (preview only)
+python src/epm/doc_generator.py --dry-run
+
+# With custom config
+python src/epm/doc_generator.py --config=path/to/config.yaml
+
+# Quick profile (validation only)
+python src/epm/doc_generator.py --profile=quick
+```
+
+#### Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--dry-run` | Preview changes without making them | `False` |
+| `--verbose` | Enable detailed logging output | `False` |
+| `--config` | Path to custom configuration file | `cortex.config.json` |
+| `--profile` | Execution profile (quick/standard/comprehensive) | `standard` |
+| `--force` | Skip confirmation prompts | `False` |
+
+#### When to Use
+
+- Regenerate documentation after major CORTEX updates
+- Create fresh documentation set for new installation
+- Update documentation after adding new operations or agents
+- Refresh documentation when design documents change
+- Generate documentation for different CORTEX versions
+
+#### Example
+
+```bash
+# Generate full documentation with comprehensive profile
+python src/epm/doc_generator.py --profile=comprehensive
+```
+
+**Expected output**:
+```
+✅ Pre-Flight Validation: PASSED (0.09s)
+✅ Destructive Cleanup: PASSED (0.84s)
+✅ Diagram Generation: PASSED (0.25s) - 12 diagrams
+✅ Page Generation: PASSED (2.31s) - 20 pages
+✅ Cross-Reference Building: PASSED (0.18s)
+✅ Post-Generation Validation: PASSED (0.12s)
+
+📊 Documentation generated successfully in 3.79s
+```
+
+#### Safety Level
+
+**DESTRUCTIVE**
+
+⚠️ **WARNING**: This EPM will delete and regenerate documentation. Always review dry-run output first. Automatic backups are created before destructive operations.
+
+---
+
+## Documentation Generator EPM
+
+The **Documentation Generator** is the flagship EPM, responsible for regenerating all CORTEX documentation.
+
+### Pipeline Stages
+
+1. **Pre-flight Validation**
+   - Verify brain structure
+   - Validate YAML schemas
+   - Check code structure
+   - Verify write permissions
+   - Check dependencies
+
+2. **Destructive Cleanup**
+   - Create backup with timestamp
+   - Clear generated content (preserves assets)
+   - Track space freed
+
+3. **Diagram Generation**
+   - Generate Mermaid diagrams from code
+   - Create architecture diagrams
+   - Generate workflow diagrams
+   - Output to `docs/images/diagrams/`
+
+4. **Page Generation**
+   - Render Jinja2 templates
+   - Collect data from sources
+   - Generate markdown pages
+   - Output to `docs/`
+
+5. **Cross-reference Building**
+   - Scan all pages for links
+   - Build link index
+   - Detect broken links
+   - Update navigation structure
+
+6. **Post Validation**
+   - Verify all content generated
+   - Check internal links
+   - Validate markdown syntax
+   - Test MkDocs build
+
+### Configuration
+
+The Documentation Generator uses several configuration files:
+
+- `cortex-brain/doc-generation-config/source-mapping.yaml`: Data source locations
+- `cortex-brain/doc-generation-config/diagram-definitions.yaml`: Diagram specifications
+- `cortex-brain/doc-generation-config/page-definitions.yaml`: Page specifications
+- `cortex-brain/doc-generation-config/validation-rules.yaml`: Validation rules
+
+### Templates
+
+Jinja2 templates are stored in `cortex-brain/templates/doc-templates/`:
+
+```
+doc-templates/
+├── quick-start.md.j2
+├── architecture-overview.md.j2
+├── operations-overview.md.j2
+├── epm-guide.md.j2
+└── ...
+```
+
+Each template has access to data from mapped sources.
+
+## Creating a New EPM
+
+### Step 1: Define the Module
+
+Create `src/epm/my_epm.py`:
+
+```python
+"""
+CORTEX EPM - My EPM Module
+Brief description of what this EPM does
+
+Author: Your Name
+"""
+
+from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
+
+class MyEPM:
+    def __init__(self, root_path: Path, dry_run: bool = False):
+        self.root_path = root_path
+        self.dry_run = dry_run
+    
+    def execute(self) -> dict:
+        """Main execution method"""
+        # Pre-flight validation
+        if not self._validate():
+            raise RuntimeError("Pre-flight validation failed")
+        
+        # Create backup
+        backup_path = self._create_backup()
+        
+        try:
+            # Main operation
+            result = self._perform_operation()
+            
+            # Validation
+            if not self._validate_result(result):
+                raise RuntimeError("Post validation failed")
+            
+            return result
+        except Exception as e:
+            logger.error(f"EPM failed: {e}")
+            self._rollback(backup_path)
+            raise
+```
+
+### Step 2: Add CLI Interface
+
+```python
+def main():
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="My EPM")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--config", type=Path)
+    
+    args = parser.parse_args()
+    
+    epm = MyEPM(Path.cwd(), dry_run=args.dry_run)
+    result = epm.execute()
+    
+    print(f"✓ EPM complete: {result}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Step 3: Add Tests
+
+Create `tests/test_my_epm.py`:
+
+```python
+import pytest
+from src.epm.my_epm import MyEPM
+
+def test_my_epm_dry_run(tmp_path):
+    epm = MyEPM(tmp_path, dry_run=True)
+    result = epm.execute()
+    assert result['dry_run'] is True
+```
+
+### Step 4: Document
+
+Add documentation to `page-definitions.yaml` and create a template.
+
+## Best Practices
+
+1. **Always use dry-run first**: Preview changes before executing
+2. **Test on a branch**: Run EPMs on a feature branch before main
+3. **Review backups**: Verify backups are created successfully
+4. **Monitor logs**: Watch logs during execution
+5. **Validate output**: Check generated content for quality
+6. **Update regularly**: Keep EPMs in sync with system changes
+
+## Troubleshooting
+
+### EPM Fails During Execution
+
+1. Check logs in `logs/epm/`
+2. Review error message
+3. If backup exists, rollback: `--rollback=backup-timestamp`
+4. Fix the issue
+5. Retry with `--dry-run` first
+
+### Validation Failures
+
+1. Run validation manually: `python -m src.epm.validation_engine`
+2. Fix validation errors
+3. Retry EPM
+
+### Performance Issues
+
+1. Use `--verbose` flag for detailed timing
+2. Check system resources
+3. Consider running in batches
+
+## Related Documentation
+
+- [Operations Overview](overview.md)
+- [Admin Guide](../guides/admin-guide.md)
+- [Troubleshooting](../guides/troubleshooting.md)
+
+---
+
+*This page was automatically generated by the CORTEX Documentation Generator.*

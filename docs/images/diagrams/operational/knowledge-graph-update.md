@@ -1,0 +1,10 @@
+```mermaid
+graph LR
+    S1[Pattern Detection]
+    S2[Relationship Extraction]
+    S1 --> S2
+    S3[Graph Update]
+    S2 --> S3
+    S4[Validation]
+    S3 --> S4
+```

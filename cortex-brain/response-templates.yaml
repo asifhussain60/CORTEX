@@ -2774,8 +2774,9 @@ templates:
       category: system
       usage: orchestrator_execution
     content: |
-
-        CORTEX {{operation_name}} Orchestrator v{{version}}
+      ================================================================================
+      CORTEX {{operation_name}} Orchestrator v{{version}}
+      ================================================================================
 
       📝 **Your Request:** {{user_request}}
       
@@ -2811,9 +2812,10 @@ templates:
       category: system
       usage: orchestrator_completion
     content: |
-
-        CORTEX {{operation_name}} - {{status}}
-
+      
+      
+      CORTEX {{operation_name}} - {{status}}
+      
       Duration: {{duration}}  │  Modules: {{modules_succeeded}}/{{modules_total}} succeeded
       {{#if warnings}}⚠️  Warnings: {{warnings_count}}{{/if}}
       {{#if errors}}❌ Errors: {{errors_count}}{{/if}}
@@ -2925,7 +2927,7 @@ templates:
       **Key Insight:** Even with same $39 Copilot subscription, CORTEX saves **$7,040/month**
       through efficiency gains (memory, learning, error prevention, proactive intelligence).
       
-
+      
       ## 📊 Heavy Usage (500 tasks/month) - Side-by-Side Comparison
       
       ```

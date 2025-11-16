@@ -1,0 +1,9 @@
+```mermaid
+graph LR
+    Source[Git Repository]
+    Processing[Processing]
+    Target[Context Intelligence (T3)]
+    
+    Source --> Processing
+    Processing --> Target
+```

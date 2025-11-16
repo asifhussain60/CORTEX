@@ -265,6 +265,160 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
    4. Refresh examples with new syntax
 ```
 
+### Example 4: Token Optimization
+
+```markdown
+🧠 **CORTEX Token Optimization**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:** 
+   You want to analyze and optimize the token usage in your codebase to reduce costs
+
+⚠️ **Challenge:** ✓ **Accept**
+   Token optimization is crucial for cost efficiency. I'll analyze current usage and provide optimization strategies.
+
+💬 **Response:** I'll scan your prompts and documentation, identify high-token files, analyze patterns using CORTEX brain's optimization principles, and suggest modular refactoring. This typically achieves 90-97% token reduction as demonstrated in CORTEX 2.0 migration.
+
+📝 **Your Request:** Optimize token usage across the project
+
+🔍 Next Steps:
+   1. Run token analysis on current codebase
+   2. Identify high-token files and patterns
+   3. Apply modular refactoring (split large files)
+   4. Move static data to YAML/JSON
+   5. Implement lazy-loading for large contexts
+```
+
+### Example 5: PR Code Review
+
+```markdown
+🧠 **CORTEX PR Code Review**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:** 
+   You want CORTEX to review your pull request for code quality, best practices, and potential issues
+
+⚠️ **Challenge:** ✓ **Accept**
+   I'll perform a comprehensive code review using CORTEX's validation framework and industry standards.
+
+💬 **Response:** I'll analyze your PR changes for: code quality (readability, maintainability), security vulnerabilities, performance issues, test coverage, documentation completeness, and adherence to project standards. I'll reference the CORTEX brain's industry-standards.yaml for best practices.
+
+📝 **Your Request:** Review PR #123 for authentication feature
+
+🔍 Next Steps:
+   1. Analyze code changes and diff
+   2. Check against security best practices
+   3. Verify test coverage (unit + integration)
+   4. Review documentation updates
+   5. Validate acceptance criteria met
+   6. Suggest improvements or approve
+```
+
+### Example 6: DoD, DoR, and Acceptance Criteria Support
+
+```markdown
+🧠 **CORTEX Definition Support**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:** 
+   You want help defining Definition of Done (DoD), Definition of Ready (DoR), and acceptance criteria for your feature
+
+⚠️ **Challenge:** ✓ **Accept**
+   Clear definitions are essential for feature quality and team alignment. I'll help you create comprehensive criteria.
+
+💬 **Response:** I'll generate DoR (prerequisites before work starts), DoD (quality gates before completion), and acceptance criteria (functional requirements) based on your feature description. These will reference CORTEX's validation framework and test strategy for completeness.
+
+📝 **Your Request:** Create DoD, DoR, and acceptance criteria for user authentication
+
+🔍 Next Steps:
+   ☐ Phase 1: Definition of Ready (DoR)
+      • Requirements documented
+      • Dependencies identified
+      • Technical design approved
+      • Test strategy defined
+   
+   ☐ Phase 2: Acceptance Criteria
+      • User can login with email/password
+      • Session management works correctly
+      • Error handling for invalid credentials
+      • Password reset flow functional
+   
+   ☐ Phase 3: Definition of Done (DoD)
+      • Code reviewed and approved
+      • Unit tests (≥80% coverage)
+      • Integration tests passing
+      • Documentation updated
+      • Security scan passed
+      • Deployed to staging
+```
+
+### Example 7: Learning from PR
+
+```markdown
+🧠 **CORTEX PR Learning Capture**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:** 
+   You want CORTEX to extract and capture learnings from a completed pull request for future reference
+
+⚠️ **Challenge:** ✓ **Accept**
+   PR retrospectives are valuable for continuous improvement. I'll extract patterns, decisions, and lessons learned.
+
+💬 **Response:** I'll analyze the PR conversation, code reviews, and implementation to extract: technical decisions made, problems encountered and solutions, best practices applied, anti-patterns avoided, and reusable patterns. These will be stored in CORTEX brain's lessons-learned.yaml and pattern libraries for future use.
+
+📝 **Your Request:** Capture learnings from PR #123
+
+🔍 Next Steps:
+   1. Extract discussion threads and decisions
+   2. Identify technical patterns used
+   3. Document problem-solution pairs
+   4. Update lessons-learned.yaml
+   5. Add to CORTEX knowledge graph
+   6. Tag for future similarity search
+```
+
+### Example 8: Crawler Functionality
+
+```markdown
+🧠 **CORTEX Crawler Operation**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:** 
+   You want to use CORTEX's crawler to scan and analyze your codebase or external documentation
+
+⚠️ **Challenge:** ✓ **Accept**
+   The crawler will systematically scan targets and extract structured information for CORTEX brain.
+
+💬 **Response:** I'll configure the crawler to scan your specified targets (codebase directories, documentation sites, API endpoints) and extract: file relationships, dependency graphs, API contracts, documentation links, and code patterns. Results are stored in structured format for knowledge graph integration. After crawling, I'll generate Mermaid diagrams to visualize the architecture, dependencies, and relationships discovered in your application.
+
+📝 **Your Request:** Crawl the codebase to build a dependency map
+
+🔍 Next Steps:
+   Track A: Codebase Analysis (can run in parallel)
+   • Scan source files for imports/dependencies
+   • Build module relationship graph
+   • Identify circular dependencies
+   
+   Track B: Documentation Crawl (can run in parallel)
+   • Extract API documentation
+   • Map code-to-docs relationships
+   • Identify missing documentation
+   
+   Track C: Integration & Storage (after A+B)
+   • Store in file-relationships.yaml
+   • Update knowledge graph
+   • Generate dependency visualization
+   
+   Track D: Mermaid Diagram Generation (after C)
+   • Create architecture diagram (component relationships)
+   • Generate dependency graph (import chains)
+   • Build data flow diagrams (API call patterns)
+   • Produce class/module hierarchy diagrams
+   • Export to docs/diagrams/ for documentation
+   
+   Start with both tracks (A+B together), then C, then D?
+```
+
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Proprietary - See LICENSE file for terms  
