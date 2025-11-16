@@ -1455,3 +1455,8 @@ dist/
             f.write(content)
         
         self.logger.info("Generated .gitignore")
+
+
+def register():
+    """Register the extension scaffold plugin"""
+    return Plugin()

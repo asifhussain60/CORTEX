@@ -1236,3 +1236,8 @@ Original markdown files are preserved in this archive for historical reference.
             'issues_found': len(self.actions_taken),
             'recommendations': result.get('recommendations', [])
         }
+
+
+def register():
+    """Register the cleanup plugin"""
+    return Plugin()

@@ -1,0 +1,290 @@
+# CORTEX Protection Layer: Skull Protection
+
+# Condensed for token optimization - full docs in protection-layers-docs/
+
+  rules:
+    - rule_id: "SKULL_TEST_BEFORE_CLAIM"
+      name: "Test Before Claim (SKULL-001)"
+      severity: "blocked"
+      description: "Never claim a fix is complete without test validation"
+
+      detection:
+        keywords:
+          - "fixed ✅"
+          - "complete ✅"
+          - "done ✅"
+          - "implemented ✅"
+        without_keywords:
+          - "test passed"
+          - "test verified"
+          - "validated by test"
+          - "pytest"
+
+        - "Create automated test before claiming fix"
+        - "Run test and include results in response"
+
+    - rule_id: "SKULL_INTEGRATION_VERIFICATION"
+      name: "Integration Verification (SKULL-002)"
+      severity: "blocked"
+      description: "Integration must be tested end-to-end"
+
+      detection:
+        keywords:
+          - "integration complete"
+          - "components connected"
+          - "API integrated"
+          - "auto-engages"
+        without_keywords:
+          - "end-to-end test"
+          - "integration test"
+          - "e2e test"
+
+        - "Create end-to-end integration test"
+        - "Test full call chain: A → B → C"
+        - "Verify actual execution path, not just config"
+
+    - rule_id: "SKULL_VISUAL_REGRESSION"
+      name: "Visual Regression (SKULL-003)"
+      severity: "warning"
+      description: "CSS/UI changes require visual validation"
+
+      detection:
+        keywords:
+          - "css fixed"
+          - "style updated"
+          - "color changed"
+          - "UI improved"
+        without_keywords:
+          - "visual test"
+          - "computed style"
+          - "playwright"
+          - "browser test"
+
+        - "Verify computed style in browser"
+        - "Include before/after screenshot comparison"
+
+    - rule_id: "SKULL_RETRY_WITHOUT_LEARNING"
+      name: "Retry Without Learning (SKULL-004)"
+      severity: "warning"
+      description: "Must diagnose failures before retrying same approach"
+
+      detection:
+        combined_keywords:
+            - "try again"
+            - "retry"
+            - "attempt 2"
+            - "attempt 3"
+            - "same fix"
+            - "reapply"
+            - "rebuild again"
+        without_keywords:
+          - "diagnosed"
+          - "root cause"
+          - "cache cleared"
+          - "verified"
+
+        - "Diagnose WHY previous fix failed"
+        - "Change approach based on diagnosis"
+        - "Add test to prevent regression"
+
+    - rule_id: "SKULL_TRANSFORMATION_VERIFICATION"
+      name: "Transformation Verification (SKULL-005)"
+      severity: "blocked"
+      description: "Operations claiming transformation MUST produce measurable changes"
+
+      detection:
+        combined_keywords:
+            - "transformation complete"
+            - "refresh complete"
+            - "converted"
+            - "updated documentation"
+            - "generated"
+            - "success"
+            - "completed successfully"
+            - "fixed ✅"
+            - "done ✅"
+
+          description: "Compare file hash before/after operation"
+
+          description: "Verify git diff shows actual changes"
+
+          description: "Validate transformation logic executed"
+
+    - rule_id: "SKULL_PRIVACY_PROTECTION"
+      name: "Privacy Protection (SKULL-006)"
+      severity: "blocked"
+      description: "Publish operations MUST NOT include files with machine-specific paths or private data"
+
+      detection:
+          - "AHHOME"
+          - ".coverage.*.* "
+          - "C:\\\\"
+          - "D:\\\\"
+          - "/home/[a-z]+"
+          - "/Users/[a-z]+"
+          - "**/*.log"
+          - "**/logs/**"
+          - "**/.coverage.*"
+          - "**/health-reports/**"
+          - "**/__pycache__/**"
+
+          description: "Scan all published files for machine-specific paths"
+
+          description: "Test that publish script excludes privacy-leaking files"
+
+          description: "Verify config files use template values, not real paths"
+
+        - "Use template configs with placeholder paths"
+
+    - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE"
+      name: "Faculty Integrity Check (SKULL-007)"
+      severity: "blocked"
+      description: "Publish package MUST contain ALL essential CORTEX faculties for full operation"
+
+      detection:
+          - "Tier 0 (SKULL) not found"
+          - "Tier 1 (Memory) not found"
+          - "Tier 2 (Knowledge) not found"
+          - "Tier 3 (Context) not found"
+          - "Agents missing"
+          - "Operations missing"
+          - "Entry point missing"
+
+          description: "Test that verifies ALL CORTEX faculties exist in publish package"
+
+          description: "Verify all 4 tiers (Tier 0-3) present"
+
+          description: "Verify 10 specialist agents present"
+
+          description: "Verify GitHub Copilot integration files"
+
+          description: "Verify user documentation present"
+
+    - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE_LEGACY"
+      name: "Header/Footer in Copilot Response (Legacy)"
+      severity: "blocked"
+      description: "Operation orchestrators MUST include formatted headers/footers in Copilot Chat response"
+
+      detection:
+        combined_keywords:
+            - "execute operation"
+            - "orchestrator.execute"
+            - "operation complete"
+            - "formatted_header: None"
+            - "formatted_footer: None"
+            - "no header in response"
+
+          description: "Verify OperationResult contains formatted_header/footer"
+
+          description: "Verify ResponseFormatter uses stored headers"
+
+          description: "Verify header appears in Copilot Chat window"
+
+    - rule_id: "SKULL_ALL_TESTS_MUST_PASS"
+      name: "All Tests Must Pass (SKULL-007)"
+      severity: "blocked"
+      description: "Test suite MUST have 100% pass rate before claiming any work complete"
+
+      detection:
+        keywords:
+          - "fixed ✅"
+          - "complete ✅"
+          - "done ✅"
+          - "implemented ✅"
+          - "ready for review"
+          - "PR ready"
+          - "failed"
+          - "FAILED"
+          - "ERROR"
+          - "test failures"
+          - "X passed, Y failed"
+
+          description: "Run complete test suite (not just new tests)"
+
+          description: "Verify no critical tests are skipped"
+
+          description: "Ensure test count doesn't decrease unexpectedly"
+
+        - "Mark work as 'IN PROGRESS' until tests pass"
+        - "Revert changes if they break existing tests"
+
+           - "Already broken" becomes acceptable
+
+           - "My tests pass" ≠ "All tests pass"
+
+           - "Just one more broken test" mentality
+
+        - "These failures are unrelated to my work"
+        - "I'll fix them in next PR"
+        - "Tests are broken, not my code"
+        - "Only my new tests need to pass"
+
+    - rule_id: "SKULL_MULTI_TRACK_VALIDATION"
+      name: "Multi-Track Configuration Validation (SKULL-008)"
+      severity: "blocked"
+      description: "Multi-track mode MUST have valid configuration with proper phase distribution"
+
+      detection:
+        keywords:
+          - "enable multi-track"
+          - "activate multi-track"
+          - "create tracks"
+          - "split tracks"
+          - "multi-machine mode"
+
+          description: "Verify workload balanced across tracks"
+
+          description: "Verify no cross-track dependencies"
+
+          description: "Verify each machine assigned to exactly one track"
+
+          description: "Verify track names are unique and generated properly"
+
+        - "Verify machine count matches track count"
+
+    - rule_id: "SKULL_TRACK_ISOLATION"
+      name: "Track Work Isolation (SKULL-009)"
+      severity: "blocked"
+      description: "Work on Track A MUST NOT modify Track B's assigned modules"
+
+      detection:
+        combined_keywords:
+            - "continue implementation for"
+            - "working on track"
+            - "active track"
+            - "modified module"
+            - "updated file"
+            - "changed"
+
+          description: "Verify modified modules belong to active track"
+
+          description: "Verify work stays within assigned phases"
+
+          description: "Verify git changes match track scope"
+
+        - "Filter implementation state by active track"
+        - "Add pre-commit hook checking track boundaries"
+        - "Switch to correct track before making changes"
+
+    - rule_id: "SKULL_CONSOLIDATION_INTEGRITY"
+      name: "Track Consolidation Integrity (SKULL-010)"
+      severity: "blocked"
+      description: "Consolidation MUST merge all track progress accurately without data loss"
+
+      detection:
+        keywords:
+          - "consolidate tracks"
+          - "merge tracks"
+          - "reset to single-track"
+          - "design sync consolidation"
+
+          description: "Verify no completed modules lost in merge"
+
+          description: "Log all conflict resolutions with justification"
+
+          description: "Verify split docs archived before deletion"
+
+          description: "Verify consolidation tracked in git history"
+
+        - "Run consolidation with --verify flag"
+        - "Keep split docs until archive verified"

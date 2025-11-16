@@ -820,5 +820,10 @@ class CodeReviewPlugin(BasePlugin):
         return recommendations
 
 
+def register():
+    """Register the code review plugin"""
+    return CodeReviewPlugin()
+
+
 # Export main class
 __all__ = ['CodeReviewPlugin', 'ReviewResult', 'CodeViolation', 'ViolationType', 'ViolationSeverity']
