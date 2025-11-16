@@ -1,0 +1,113 @@
+name: Drift Detection
+
+on:
+  push:
+    branches: [ CORTEX-2.0, main ]
+  pull_request:
+    branches: [ CORTEX-2.0, main ]
+
+jobs:
+  detect-drift:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install pyyaml pytest
+    
+    - name: Check Module Count Consistency
+      run: |
+        python -c "
+        import yaml
+        from pathlib import Path
+        
+        # Read operations YAML
+        with open('cortex-operations.yaml') as f:
+            ops = yaml.safe_load(f)
+            yaml_count = ops['statistics']['total_modules']
+        
+        # Count actual modules
+        modules = len(list(Path('src/operations/modules').glob('*.py')))
+        modules -= 1  # Subtract __init__.py
+        
+        print(f'YAML claims: {yaml_count} modules')
+        print(f'Actual files: {modules} modules')
+        
+        if abs(yaml_count - modules) > 3:
+            print(f'ERROR: Module count drift detected ({abs(yaml_count - modules)} difference)')
+            exit(1)
+        
+        print('✅ Module counts consistent')
+        "
+    
+    - name: Check Knowledge Graph Sync
+      run: |
+        python -c "
+        import yaml
+        import sqlite3
+        
+        # Count YAML patterns
+        with open('cortex-brain/knowledge-graph.yaml') as f:
+            data = yaml.safe_load(f)
+            yaml_patterns = len(data.get('validation_insights', {}))
+        
+        # Count SQLite patterns
+        conn = sqlite3.connect('cortex-brain/tier2/knowledge_graph.db')
+        cursor = conn.cursor()
+        sqlite_patterns = cursor.execute('SELECT COUNT(*) FROM patterns').fetchone()[0]
+        conn.close()
+        
+        print(f'YAML patterns: {yaml_patterns}')
+        print(f'SQLite patterns: {sqlite_patterns}')
+        
+        if yaml_patterns > sqlite_patterns + 5:
+            print(f'WARNING: {yaml_patterns - sqlite_patterns} patterns not migrated')
+            print('Run: python scripts/migrate_knowledge_patterns.py')
+        else:
+            print('✅ Knowledge graph in sync')
+        "
+    
+    - name: Check Status Document Sync
+      run: |
+        # Check if status files were modified together
+        if git diff --name-only HEAD~1..HEAD | grep -q "STATUS.md"; then
+          if ! git diff --name-only HEAD~1..HEAD | grep -q "CORTEX2-STATUS.MD"; then
+            echo "WARNING: STATUS.md changed but CORTEX2-STATUS.MD not updated"
+          fi
+        fi
+    
+    - name: Collect Test Metrics
+      run: |
+        pytest tests/ --collect-only -q > /tmp/test-collection.txt 2>&1 || true
+        
+        # Extract test count
+        if grep -q "collected" /tmp/test-collection.txt; then
+          TEST_COUNT=$(grep "collected" /tmp/test-collection.txt | awk '{print $1}')
+          echo "Total tests: $TEST_COUNT"
+          echo "TEST_COUNT=$TEST_COUNT" >> $GITHUB_ENV
+        fi
+    
+    - name: Run Smoke Tests
+      continue-on-error: true
+      run: |
+        pytest tests/ --maxfail=10 -x -q --tb=no
+        echo "SMOKE_RESULT=$?" >> $GITHUB_ENV
+    
+    - name: Report Drift Status
+      run: |
+        echo "## 🔍 Drift Detection Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Test Count:** ${TEST_COUNT:-Unknown}" >> $GITHUB_STEP_SUMMARY
+        echo "**Smoke Tests:** ${SMOKE_RESULT}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${SMOKE_RESULT}" != "0" ]; then
+          echo "⚠️ Smoke tests failed - review test suite health" >> $GITHUB_STEP_SUMMARY
+        fi

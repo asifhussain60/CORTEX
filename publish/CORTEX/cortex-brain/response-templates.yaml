@@ -1,0 +1,219 @@
+schema_version: '2.1'
+last_updated: '2025-11-16'
+optimization:
+  type: aggressive_minimal
+  original_templates: 107
+  minimal_templates: 16
+  reduction_strategy: Core essentials only + fallback pattern
+templates:
+  help_table:
+    name: Help Table
+    trigger:
+    - help_table
+    response_type: table
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  help_detailed:
+    name: Help Detailed
+    trigger:
+    - help_detailed
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  quick_start:
+    name: Quick Start
+    trigger:
+    - quick_start
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  status_check:
+    name: Status Check
+    trigger:
+    - status_check
+    response_type: table
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  success_general:
+    name: Success General
+    trigger:
+    - success_general
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  error_general:
+    name: Error General
+    trigger:
+    - error_general
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  not_implemented:
+    name: Not Implemented
+    trigger:
+    - not_implemented
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  executor_success:
+    name: Executor Success
+    trigger:
+    - executor_success
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  executor_error:
+    name: Executor Error
+    trigger:
+    - executor_error
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  tester_success:
+    name: Tester Success
+    trigger:
+    - tester_success
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  operation_started:
+    name: Operation Started
+    trigger:
+    - operation_started
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  operation_progress:
+    name: Operation Progress
+    trigger:
+    - operation_progress
+    response_type: narrative
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  operation_complete:
+    name: Operation Complete
+    trigger:
+    - operation_complete
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  question_documentation_issues:
+    name: Question Documentation Issues
+    trigger:
+    - question_documentation_issues
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  work_planner_success:
+    name: Work Planner Success
+    trigger:
+    - work_planner_success
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+      \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
+      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
+      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
+      \ format]"
+  fallback:
+    name: Fallback Response
+    trigger:
+    - '*'
+    response_type: structured
+    content: "\U0001F9E0 **CORTEX Response**\nAuthor: Asif Hussain | \xA9 2024-2025\
+      \ | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your\
+      \ Request:**\n   [State what you understand they want to achieve]\n\n\u26A0\uFE0F\
+      \ **Challenge:** [Validate assumptions, then Accept OR Challenge]\n\n\U0001F4AC\
+      \ **Response:**\n   [Provide helpful response]\n\n\U0001F4DD **Your Request:**\
+      \ [Echo user request]\n\n\U0001F50D **Next Steps:**\n   1. [First recommendation]\n\
+      \   2. [Second recommendation]\n   3. [Third recommendation]"
+routing:
+  default: fallback
+  help_triggers:
+  - help
+  - /help
+  - what can cortex do
+  status_triggers:
+  - status
+  - where are we
+  quick_start_triggers:
+  - quick start
+  - get started
+formatting:
+  mandatory_sections:
+  - understanding
+  - challenge
+  - response
+  - request_echo
+  - next_steps

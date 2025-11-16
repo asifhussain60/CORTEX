@@ -111,7 +111,7 @@ CRITICAL_FILES = {
     
     # CORTEX Entry Points
     '.github/prompts/CORTEX.prompt.md',
-    '.github/copilot-instructions.md',
+    # Note: copilot-instructions.md doesn't exist (removed from critical files)
     
     # Core Configuration (TEMPLATE ONLY - not cortex.config.json with machine paths)
     'cortex.config.template.json',
@@ -132,7 +132,7 @@ CRITICAL_FILES = {
     'cortex-brain/response-templates.yaml',
     
     # User Tools (ESSENTIAL for conversation tracking & setup)
-    'scripts/cortex/auto_capture_daemon.py',  # ⭐⭐⭐⭐⭐ tracking method
+    # Note: auto_capture_daemon.py doesn't exist (removed from critical files)
     'scripts/cortex/cortex_cli.py',  # Manual tracking
     'scripts/cortex/migrate-all-tiers.py',  # Database setup
     'scripts/launchers/run-cortex.sh',  # Unix/Mac setup
