@@ -1,483 +1,270 @@
 # Brain Amnesia - Application Data Reset
 
-**Version:** 1.0  
+**Version:** 2.0  
+**Config:** `#file:cortex-brain/agents/amnesia-config.yaml`  
 **Purpose:** Remove application-specific learned data while preserving KDS core intelligence  
-**Status:** 🧠 SAFE RESET - Only affects application context, not KDS capabilities  
+**Status:** 🧠 SAFE RESET - Only affects application context
 
 ---
 
-## What This Does
+## Overview
 
-**REMOVES (Application-Specific):**
-- ✅ File relationships (e.g., SPA/NoorCanvas/... paths)
-- ✅ Application-specific workflow patterns (e.g., "start_session_flow")
-- ✅ Application-specific feature components (e.g., "fab_button")
-- ✅ Conversation history (application discussions)
-- ✅ Events log (application interactions)
-- ✅ Development context metrics (git stats, velocity)
-- ✅ Correction history with application file paths
+**Brain amnesia safely resets application-specific data while preserving generic KDS intelligence and governance patterns.**
 
-**PRESERVES (KDS Core Intelligence):**
-- ✅ Generic intent patterns (e.g., "add [X] button" → plan)
-- ✅ Generic workflow patterns (e.g., "test_first_id_preparation")
-- ✅ Generic test patterns (e.g., "id_based_playwright_selectors")
-- ✅ KDS-specific patterns (e.g., "brain_test_synchronization", "kds_health_monitoring")
-- ✅ Protection configuration (confidence thresholds, routing safety)
+### What Gets Removed
+- ✅ File relationships (application paths)
+- ✅ Application-specific workflow patterns
+- ✅ Feature components
+- ✅ Conversation history
+- ✅ Events log
+- ✅ Development context metrics
+- ✅ Correction history with app paths
+
+### What Gets Preserved
+- ✅ Generic intent patterns (templates with [X]/[Y] placeholders)
+- ✅ Generic workflow patterns (test_first_id_preparation, etc.)
+- ✅ KDS-specific patterns (brain_test_synchronization, kds_health_monitoring)
+- ✅ Generic test patterns (id_based_playwright_selectors)
+- ✅ Protection configuration (all thresholds)
 - ✅ Validation insights structure
 - ✅ All KDS prompts and agents
+
+**Full lists:** See `data_categories` in config
+
+---
+
+## Pattern Classification
+
+**Generic Pattern Indicators:**
+- Contains `[X]` or `[Y]` placeholders
+- No specific file paths
+- Applies to any project type
+- Named: "generic", "reusable", "pattern"
+- Scope: `kds_internal_governance` or undefined
+
+**Application-Specific Indicators:**
+- Hardcoded file paths (e.g., "SPA/NoorCanvas/...")
+- Specific features (e.g., "fab_button")
+- Architecture-specific (e.g., "Blazor + SignalR")
+- Scope: NOT `kds_internal_governance`
+
+**Classification rules:** See `classification` in config
 
 ---
 
 ## Safety Mechanisms
 
-### Pattern Classification
-
-**Generic Pattern Indicators:**
-- Contains `[X]` or `[Y]` placeholders (generic template)
-- No specific file paths in examples
-- Workflow applies to any project type
-- Pattern name includes: "generic", "reusable", "pattern", "approach"
-- Scope is "kds_internal_governance" or undefined (not application)
-
-**Application-Specific Indicators:**
-- Contains hardcoded file paths (e.g., "SPA/NoorCanvas/...")
-- References specific features (e.g., "fab_button", "host_control_panel")
-- Workflow tied to specific architecture (e.g., "Blazor + SignalR")
-- Pattern name includes application name or feature name
-- Scope is NOT "kds_internal_governance"
-
 ### Pre-Reset Validation
-
-Before amnesia:
-1. ✅ Create backup of current BRAIN state (`kds-brain/backups/pre-amnesia-{timestamp}.zip`)
-2. ✅ Generate amnesia report (what will be removed vs preserved)
-3. ✅ Require user confirmation (show report first)
-4. ✅ Validate BRAIN files writeable
-5. ✅ Ensure no active sessions (warn if exists)
+1. Create backup → `kds-brain/backups/pre-amnesia-{timestamp}.zip`
+2. Generate amnesia report → Shows what will be removed/preserved
+3. Require user confirmation → Show report first
+4. Validate BRAIN files writeable
+5. Check for active sessions → Warn if exists
 
 ### Post-Reset Validation
+1. Verify BRAIN structure intact → All files exist
+2. Verify generic patterns preserved → Count >= 8
+3. Verify KDS patterns preserved → Required patterns exist
+4. Verify protection config intact → All settings unchanged
+5. Run BRAIN integrity tests → `test-brain-integrity.ps1`
+6. Generate completion report
 
-After amnesia:
-1. ✅ Verify BRAIN structure intact (all files exist)
-2. ✅ Verify generic patterns preserved (count check)
-3. ✅ Verify KDS patterns preserved (health monitoring, etc.)
-4. ✅ Verify protection config intact
-5. ✅ Run BRAIN integrity tests
-6. ✅ Generate amnesia completion report
+**Full validation steps:** See `safety` in config
+
+---
+
+## Execution Flow
+
+```yaml
+step1_backup:
+  action: "Create backup of current BRAIN state"
+  location: "kds-brain/backups/pre-amnesia-{timestamp}"
+  includes: ["*.yaml", "*.jsonl"]
+
+step2_report:
+  action: "Generate amnesia report"
+  file: "amnesia-report-{timestamp}.yaml"
+  sections: ["will_be_removed", "will_be_preserved", "confidence_scores"]
+
+step3_confirm:
+  action: "Show report and require explicit user approval"
+
+step4_reset:
+  tier1: "Reset conversation-history.jsonl to bootstrap only"
+  tier2: "Reset knowledge-graph.yaml (preserve generic, remove app-specific)"
+  tier3: "Reset development-context.yaml (zero counters)"
+  events: "Reset events.jsonl to single bootstrap event"
+
+step5_verify:
+  integrity: "Run all integrity checks"
+  patterns: "Verify pattern counts"
+  config: "Verify protection settings"
+
+step6_report:
+  action: "Generate amnesia-complete-{timestamp}.yaml"
+  includes: ["summary", "counts", "health", "next_steps"]
+```
+
+**Detailed procedures:** See `reset_procedures` in config
+
+---
+
+## Reset Procedures by Tier
+
+### Tier 1: Conversation History
+```yaml
+file: conversation-history.jsonl
+action: Reset to bootstrap only
+result: Single bootstrap conversation documenting reset
+```
+
+### Tier 2: Knowledge Graph
+```yaml
+file: knowledge-graph.yaml
+actions:
+  intent_patterns: Preserve generic templates, remove app examples
+  file_relationships: Completely empty
+  workflow_patterns: Keep 6 generic/KDS patterns, remove app-specific
+  correction_history: Reset counters to 0
+  feature_components: Completely empty
+  statistics: Reset counters, preserve structure
+```
+
+**Preserved workflow patterns (6):**
+- test_first_id_preparation
+- single_file_spa_creation
+- kds_health_monitoring
+- powershell_http_server
+- unified_launcher_pattern
+- brain_test_synchronization
+
+### Tier 3: Development Context
+```yaml
+file: development-context.yaml
+action: Zero all counters, clear application data
+```
+
+### Events Log
+```yaml
+file: events.jsonl
+action: Single bootstrap event
+content: Documents the reset with previous_app and new_app fields
+```
+
+**Complete procedures:** See `reset_procedures` in config
 
 ---
 
 ## Implementation
 
-### Step 1: Pre-Reset Backup
-
-**Create Backup:**
 ```powershell
+# Step 1: Create Backup
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $backupDir = "KDS/kds-brain/backups/pre-amnesia-$timestamp"
 New-Item -ItemType Directory -Force -Path $backupDir
 Copy-Item -Path "KDS/kds-brain/*.yaml" -Destination $backupDir
 Copy-Item -Path "KDS/kds-brain/*.jsonl" -Destination $backupDir
+
+# Step 2: Generate and show report
+# (Use amnesia-config.yaml to determine what gets removed/preserved)
+
+# Step 3: Require confirmation
+Read-Host "Proceed with amnesia? (Y/N)"
+
+# Step 4: Execute reset
+# (Apply reset procedures from config for each tier)
+
+# Step 5: Verify
+# (Run integrity checks from config)
+
+# Step 6: Generate completion report
 ```
 
-**Generate Amnesia Report:**
+---
+
+## Integrity Checks
+
 ```yaml
-# KDS/kds-brain/amnesia-report-{timestamp}.yaml
+file_structure:
+  verify_exist:
+    - conversation-history.jsonl
+    - knowledge-graph.yaml
+    - development-context.yaml
+    - events.jsonl
+    - protection-rules.yaml
+    - schema.sql
 
-will_be_removed:
-  file_relationships:
-    - host_control_panel
-    - start_session_flow
-    - playwright_test_preparation
-    - kds_dashboard (contains NoorCanvas paths)
-  workflow_patterns:
-    - service_layer_ui_injection
-    - blazor_component_api_flow
-    - two_phase_button_injection
-  feature_components:
-    - fab_button
-    - kds_health_dashboard (if contains app-specific paths)
-  correction_history:
-    - file_mismatch entries with NoorCanvas paths
-  conversation_history:
-    - All conversations (application context)
-  events:
-    - All events (application interactions)
-  development_context:
-    - All metrics (reset to baseline)
+pattern_counts:
+  min_generic_intent_patterns: 5
+  min_workflow_patterns: 6
+  min_test_patterns: 1
 
-will_be_preserved:
-  intent_patterns:
-    - plan.phrases (generic templates)
-    - execute.phrases (generic templates)
-    - All other intent types (structure)
-  workflow_patterns:
-    - test_first_id_preparation (generic, reusable)
-    - single_file_spa_creation (generic, reusable)
-    - kds_health_monitoring (KDS-specific)
-    - powershell_http_server (generic, reusable)
-    - unified_launcher_pattern (generic, reusable)
-    - brain_test_synchronization (KDS governance)
-  test_patterns:
-    - id_based_playwright_selectors (generic)
-    - dashboard_refresh_automation (if made generic)
-  validation_insights:
-    - Structure (empty but ready)
-  protection_config:
-    - All settings (confidence thresholds, routing safety)
-  statistics:
-    - Structure (reset counters to 0)
-
-confidence_scores:
-  generic_patterns_preserved: 100%
-  application_data_removed: 100%
-  kds_capabilities_retained: 100%
-```
-
-### Step 2: Execute Amnesia
-
-**Reset Tier 1: Conversation History**
-```yaml
-# conversation-history.jsonl → Reset to bootstrap only
-{"conversation_id":"conv-bootstrap","title":"KDS System Initialization","started":"{timestamp}","ended":"{timestamp}","message_count":1,"active":false,"messages":[{"id":"msg-bootstrap-001","timestamp":"{timestamp}","user":"Bootstrap","intent":"SYSTEM","entities":["conversation tracking"],"context_ref":null}],"entities_discussed":["conversation tracking"],"files_modified":[],"outcome":"initialized","note":"BRAIN reset - ready for new application"}
-```
-
-**Reset Tier 2: Knowledge Graph**
-```yaml
-# knowledge-graph.yaml → Preserve generic, remove application-specific
-
-intent_patterns:
-  plan:
-    phrases:
-      - pattern: "add [X] button"
-        confidence: 0.95
-        routes_to: "work-planner.md"
-        examples:
-          - "add share button"
-          - "add login button"
-      - pattern: "create [X] dashboard"
-        confidence: 0.95
-        routes_to: "work-planner.md"
-        examples:
-          - "create admin dashboard"
-          - "create health dashboard"
-      - pattern: "implement [X]"
-        confidence: 0.90
-        routes_to: "work-planner.md"
-        examples:
-          - "implement authentication"
-          - "implement API integration"
-  execute:
-    phrases:
-      - pattern: "add ids to [component]"
-        confidence: 0.95
-        routes_to: "direct_execution"
-        skip_planning: true
-        examples:
-          - "add ids to component"
-          - "add IDs for tests"
-      - pattern: "add [attributes] for [testing]"
-        confidence: 0.90
-        routes_to: "test_preparation"
-        skip_planning: true
-        examples:
-          - "add data-testid attributes"
-  resume: {}
-  correct: {}
-  test: {}
-  validate: {}
-  ask: {}
-  govern: {}
-
-file_relationships: {}
-  # Completely empty - will be learned from new application
-
-workflow_patterns:
-  # PRESERVE: Generic, reusable patterns
-  test_first_id_preparation:
-    description: "Add semantic IDs to components before writing Playwright tests"
-    steps:
-      - "Analyze component structure"
-      - "Add semantic IDs following [component]-[section]-[element] convention"
-      - "Document IDs in comprehensive reference"
-      - "Provide test examples"
-      - "Include Percy visual regression examples"
-      - "Mark IDs with [PLAYWRIGHT-IDS] comments"
-    success_rate: 1.0
-    confidence: 1.0
-    reusable: true
-  
-  single_file_spa_creation:
-    description: "Create portable HTML dashboard with inline CSS/JS and zero dependencies"
-    steps:
-      - "Design UI structure with tabs and cards"
-      - "Inline all CSS (no external stylesheets)"
-      - "Inline all JavaScript (no external scripts)"
-      - "Add PowerShell launcher script"
-      - "Create VS Code task integration"
-      - "Write comprehensive documentation"
-    file_pattern:
-      main_file: "KDS/*.html"
-      documentation: "KDS/dashboard/*.md"
-      launcher: "KDS/scripts/open-*.ps1"
-      tasks: ".vscode/tasks.json"
-    success_rate: 1.0
-    confidence: 0.95
-    reusable: true
-    benefits:
-      - "100% portable (single file)"
-      - "Zero external dependencies"
-      - "Works offline"
-      - "Fast load time"
-      - "Easy to share/deploy"
-  
-  kds_health_monitoring:
-    description: "PowerShell-based health checks with browser dashboard and API server"
-    architecture: "Client-Server (browser SPA + local API)"
-    components:
-      dashboard: "Single-file HTML with auto-detection (Live/Demo modes)"
-      api_server: "PowerShell HTTP listener on localhost:8765"
-      health_checks: "PowerShell script with categorized validations"
-      launcher: "All-in-one script (server + client)"
-    steps:
-      - "Start PowerShell HTTP server (background job)"
-      - "Open dashboard in browser"
-      - "Dashboard detects API availability"
-      - "Execute health checks on demand"
-      - "Display results with status circles"
-      - "Generate recommendations from failures"
-    technologies:
-      - "PowerShell (server + health checks)"
-      - "HTML5/CSS3/JavaScript (dashboard)"
-      - "HTTP REST API (communication)"
-      - "VS Code tasks (easy launch)"
-    success_rate: 1.0
-    confidence: 0.95
-    reusable: true
-  
-  powershell_http_server:
-    description: "Simple PowerShell HTTP server for local API endpoints"
-    pattern_type: "Local development server"
-    implementation:
-      - "Create HttpListener on localhost:port"
-      - "Set up CORS headers for browser access"
-      - "Handle GET/POST requests"
-      - "Return JSON responses"
-      - "Run as background job"
-    use_cases:
-      - "Dashboard API integration"
-      - "Local testing without IIS/Kestrel"
-      - "Lightweight health check endpoints"
-    success_rate: 1.0
-    confidence: 0.90
-    reusable: true
-  
-  unified_launcher_pattern:
-    description: "Single command to start server + open client application"
-    pattern_type: "Developer experience"
-    steps:
-      - "Start background API server (job)"
-      - "Wait for server readiness"
-      - "Open client application"
-      - "Verify connectivity"
-      - "Optional: keep server running or auto-cleanup"
-    parameters:
-      - "-KeepServerRunning (optional)"
-      - "-Port (default 8765)"
-    success_rate: 1.0
-    confidence: 0.95
-    reusable: true
-    benefits:
-      - "Single command UX"
-      - "Automatic cleanup"
-      - "User-friendly"
-      - "Reduces setup friction"
-  
-  brain_test_synchronization:
-    description: "CRITICAL: BRAIN integrity test changes require synchronous updates to health checks and dashboard"
-    rule_id: "BRAIN-SYNC-001"
-    enforcement: "MANDATORY (change-governor blocks violations)"
-    trigger_files:
-      - "KDS/tests/test-brain-integrity.ps1"
-      - "KDS/tests/test-brain-corruption-scenarios.ps1"
-    required_dependencies:
-      - path: "KDS/scripts/run-health-checks.ps1"
-        section: "Test-BRAINSystem()"
-        requirement: "Must map ALL integrity checks from test suite"
-      - path: "KDS/kds-dashboard.html"
-        section: "renderBRAINMetricsFromAPI()"
-        requirement: "Must display ALL integrity checks in BRAIN System tab"
-      - path: "KDS/tests/BRAIN-INTEGRITY-TEST.md"
-        section: "What Gets Validated"
-        requirement: "Must document ALL checks with current count"
-    validation_logic:
-      - "Detect if test-brain-integrity.ps1 modified"
-      - "Verify all 3 dependencies also modified in same commit"
-      - "Count checks in test suite (currently 13)"
-      - "Verify health script maps all 13 checks"
-      - "Verify dashboard displays all 13 checks"
-      - "Verify documentation reflects count of 13"
-      - "REJECT commit if any dependency missing or count mismatch"
-    rationale:
-      - "Dashboard must show ALL current BRAIN checks, not subset"
-      - "Automated health checks must include every integrity validation"
-      - "System components must agree on what 'healthy BRAIN' means"
-      - "Users must see accurate, complete BRAIN status"
-      - "Silent failures are prevented by enforced synchronization"
-    confidence: 1.00
-    source: "governance/rules/brain-test-synchronization.md"
-    enforced_by: "change-governor.md"
-    created: "2025-11-03"
-    current_check_count: 13
-    success_rate: 1.0
-    reusable: false
-    scope: "kds_internal_governance"
-
-correction_history:
-  # Reset - will learn from new application's corrections
-  file_mismatch:
-    total_occurrences: 0
-    common_mistakes: []
-  approach_mismatch:
-    total_occurrences: 0
-    common_mistakes: []
-  scope_mismatch:
-    total_occurrences: 0
-    common_mistakes: []
-
-validation_insights:
-  common_failures: []
-  test_patterns:
-    # PRESERVE: Generic test pattern intelligence
-    id_based_playwright_selectors:
-      framework: "playwright"
-      description: "Use semantic element IDs for reliable test selectors instead of text-based selectors"
-      confidence: 1.0
-      reusable: true
-      naming_convention: "[component]-[section]-[element]"
-      examples:
-        - "component-section-element"
-        - "feature-area-button"
-      benefits:
-        - "Resilient to UI text changes"
-        - "More maintainable"
-        - "Better for visual regression testing"
-
-feature_components: {}
-  # Reset - will learn from new application's features
-
-statistics:
-  total_events_processed: 0
-  last_updated: "{timestamp}"
-  knowledge_graph_version: "2.0"
-  confidence_threshold: 0.70
-  learning_enabled: true
-  status: "RESET - Ready for new application"
-  recent_sessions: []
+required_kds_patterns:
+  - brain_test_synchronization
+  - kds_health_monitoring
 
 protection_config:
-  # PRESERVE: All protection settings
-  enabled: true
-  version: "1.0"
-  description: "Phase 1 Protection - Confidence checks and learning quality thresholds"
-  
-  learning_quality:
-    min_confidence_threshold: 0.70
-    min_occurrences_for_pattern: 3
-    max_single_event_confidence: 0.50
-    anomaly_confidence_threshold: 0.95
-    description: "Prevents learning from insufficient data and detects anomalies"
-  
-  routing_safety:
-    enabled: true
-    fallback_on_low_confidence: true
-    ask_user_threshold: 0.70
-    auto_route_threshold: 0.85
-    description: "Asks user for clarification when confidence is low"
-  
-  correction_memory:
-    enabled: true
-    alert_on_repeated_mistake: 3
-    prevent_action_threshold: 5
-    track_correction_patterns: true
-    description: "Prevents repeating the same mistakes"
-  
-  validation:
-    validate_confidence_scores: true
-    validate_file_references: true
-    detect_stale_relationships: true
-    max_relationship_age_days: 90
-    description: "Ensures data integrity and removes stale information"
+  must_have_keys:
+    - learning_quality
+    - routing_safety
+    - correction_memory
+    - validation
 ```
 
-**Reset Tier 3: Development Context**
-```yaml
-# development-context.yaml → Reset to baseline template
-# (Copy structure from current file, but zero all counters and clear application data)
+**Full checks:** See `integrity_checks` in config
+
+---
+
+## Safety Guarantees
+
+### Cannot Be Lost (Guaranteed)
+
+**KDS Core Capabilities:**
+- Intent routing (8 types)
+- 10 specialist agents
+- Abstraction layer (4 components)
+- Governance rules (17 rules)
+- Protection system
+- Health dashboard
+- All KDS prompts
+
+**Generic Intelligence:**
+- "Add [X] button" → plan template
+- Test-first ID preparation workflow
+- Single-file SPA creation pattern
+- ID-based Playwright selectors
+- KDS health monitoring patterns
+- Brain synchronization governance
+
+### Will Be Lost (Intentional)
+
+**Application-Specific Data:**
+- Application file paths (e.g., NoorCanvas)
+- Application-specific workflows
+- Feature components
+- Conversation history
+- Git metrics
+- Correction history
+
+**Complete guarantees:** See `guarantees` in config
+
+---
+
+## Rollback Procedure
+
+If amnesia needs to be undone:
+
+```powershell
+# Restore from backup
+$backupDir = "KDS/kds-brain/backups/pre-amnesia-{timestamp}"
+Copy-Item -Path "$backupDir/*.yaml" -Destination "KDS/kds-brain/" -Force
+Copy-Item -Path "$backupDir/*.jsonl" -Destination "KDS/kds-brain/" -Force
+
+# Verify restoration
+# (Run integrity tests, verify counts)
 ```
 
-**Reset Events Log**
-```jsonl
-# events.jsonl → Single bootstrap event
-{"timestamp":"{timestamp}","type":"brain_reset","source":"brain-amnesia.md","data":{"reason":"Application context reset","previous_app":"NoorCanvas","new_app":"pending_setup","events_archived":68,"conversations_archived":5,"patterns_preserved":8,"patterns_removed":15}}
-```
-
-### Step 3: Verify Reset
-
-**BRAIN Integrity Checks:**
-1. ✅ File structure intact (all .yaml/.jsonl files exist)
-2. ✅ Generic intent patterns present (count >= 5)
-3. ✅ KDS workflow patterns present (brain_test_synchronization, kds_health_monitoring)
-4. ✅ Protection config unchanged
-5. ✅ No application-specific file paths remain
-6. ✅ Statistics structure intact (counters at 0)
-7. ✅ Backup created successfully
-
-### Step 4: Generate Completion Report
-
-```yaml
-# KDS/kds-brain/amnesia-complete-{timestamp}.yaml
-
-amnesia_summary:
-  executed: "{timestamp}"
-  previous_application: "NoorCanvas"
-  backup_location: "KDS/kds-brain/backups/pre-amnesia-{timestamp}"
-  
-  removed:
-    file_relationships: 5
-    workflow_patterns: 4
-    feature_components: 2
-    conversations: 5
-    events: 68
-    corrections: 1
-  
-  preserved:
-    intent_patterns: 2  # plan, execute with generic templates
-    workflow_patterns: 6  # Generic + KDS governance patterns
-    test_patterns: 1  # id_based_playwright_selectors
-    protection_config: 1
-  
-  brain_health:
-    structure_intact: true
-    generic_intelligence_preserved: true
-    application_data_removed: true
-    ready_for_new_app: true
-  
-  next_steps:
-    - "Update kds.config.json with new application details"
-    - "Run Setup command to learn new application architecture"
-    - "KDS will automatically learn from new interactions"
-    - "BRAIN will rebuild application-specific knowledge over time"
-
-validation_passed:
-  - ✅ Backup created
-  - ✅ Generic patterns preserved
-  - ✅ KDS patterns preserved
-  - ✅ Application data removed
-  - ✅ Protection config intact
-  - ✅ File structure valid
-  - ✅ Ready for use
-```
+**Rollback config:** See `rollback` in config
 
 ---
 
@@ -491,89 +278,106 @@ Reset BRAIN for new application (amnesia)
 ```
 
 **Expected Flow:**
-1. Router detects "amnesia" or "reset brain" → Routes to brain-amnesia.md
-2. Generate amnesia report (what will be removed/preserved)
-3. Show report to user, require confirmation
-4. Create backup of current BRAIN state
-5. Execute amnesia (reset Tier 1, Tier 2, Tier 3)
-6. Verify BRAIN integrity
+1. Router detects "amnesia" or "reset brain"
+2. Generate and show amnesia report
+3. User confirms
+4. Create backup
+5. Execute reset (Tier 1 → 2 → 3)
+6. Verify integrity
 7. Generate completion report
-8. User updates kds.config.json
+8. User updates `kds.config.json`
 9. User runs Setup to learn new application
+10. KDS automatically learns from new interactions
 
 ---
 
-## Safety Guarantees
+## Post-Reset Next Steps
 
-### What CANNOT Be Lost
+1. **Update configuration:** Edit `kds.config.json` with new application details
+2. **Run Setup:** Execute Setup command to learn new architecture
+3. **Allow learning:** KDS will automatically learn from interactions
+4. **Monitor rebuild:** BRAIN rebuilds application knowledge over time
 
-**KDS Core Capabilities:**
-- ✅ Intent routing (8 intent types)
-- ✅ 10 specialist agents
-- ✅ Abstraction layer (session-loader, test-runner, file-accessor, brain-query)
-- ✅ Governance rules (17 rules)
-- ✅ Protection system (confidence thresholds, anomaly detection)
-- ✅ Health dashboard
-- ✅ Metrics reporter
-- ✅ All KDS prompts
-
-**Generic Intelligence:**
-- ✅ "Add [X] button" → plan (generic template)
-- ✅ "Test-first ID preparation" workflow
-- ✅ "Single-file SPA creation" pattern
-- ✅ "ID-based Playwright selectors" approach
-- ✅ KDS health monitoring patterns
-- ✅ Brain synchronization governance
-
-### What WILL Be Lost (As Intended)
-
-**Application-Specific Data:**
-- ✅ NoorCanvas file paths
-- ✅ Blazor/SignalR workflow patterns (application-specific)
-- ✅ Feature components (fab_button, etc.)
-- ✅ Conversation history (application discussions)
-- ✅ Git metrics from old repository
-- ✅ Correction history (old file paths)
+**Next steps details:** See `next_steps` in config
 
 ---
 
-## Rollback Procedure
+## Reports Generated
 
-**If amnesia needs to be undone:**
-```powershell
-# Restore from backup
-$backupDir = "KDS/kds-brain/backups/pre-amnesia-{timestamp}"
-Copy-Item -Path "$backupDir/*.yaml" -Destination "KDS/kds-brain/" -Force
-Copy-Item -Path "$backupDir/*.jsonl" -Destination "KDS/kds-brain/" -Force
+### Amnesia Report (Pre-Reset)
+```yaml
+will_be_removed:
+  file_relationships: [count]
+  workflow_patterns: [count]
+  feature_components: [count]
+  conversations: [count]
+  events: [count]
+
+will_be_preserved:
+  intent_patterns: [count]
+  workflow_patterns: [count]
+  test_patterns: [count]
+  protection_config: [yes]
+
+confidence_scores:
+  generic_patterns_preserved: 100%
+  application_data_removed: 100%
+  kds_capabilities_retained: 100%
 ```
 
-**Verification:**
-```markdown
-#file:KDS/prompts/internal/health-validator.md
-Validate BRAIN system
+### Completion Report (Post-Reset)
+```yaml
+amnesia_summary:
+  executed: "{timestamp}"
+  previous_application: "{app_name}"
+  backup_location: "{path}"
+
+removed: {counts}
+preserved: {counts}
+
+brain_health:
+  structure_intact: true
+  generic_intelligence_preserved: true
+  application_data_removed: true
+  ready_for_new_app: true
+
+validation_passed:
+  - ✅ Backup created
+  - ✅ Generic patterns preserved
+  - ✅ KDS patterns preserved
+  - ✅ Application data removed
+  - ✅ Protection config intact
+  - ✅ File structure valid
+  - ✅ Ready for use
+
+next_steps: [...]
 ```
 
----
-
-## Testing Amnesia
-
-**Test Scenario:**
-1. Backup current BRAIN
-2. Run amnesia (dry-run mode first)
-3. Verify generic patterns preserved
-4. Verify application data removed
-5. Restore from backup
-6. Verify restoration successful
-
-**Success Criteria:**
-- ✅ No KDS capabilities lost
-- ✅ Generic patterns intact
-- ✅ Application data removed
-- ✅ BRAIN ready for new application
-- ✅ Backup/restore works
+**Report templates:** See `reports` in config
 
 ---
 
-**Version:** 1.0  
-**Status:** Ready for implementation  
-**Safety Level:** MAXIMUM (preserves all KDS intelligence)
+## Configuration Reference
+
+**All configuration in:** `#file:cortex-brain/agents/amnesia-config.yaml`
+
+Includes:
+- Data categories (removes/preserves)
+- Classification rules (generic vs app-specific)
+- Safety mechanisms (pre/post validation)
+- Reset procedures (all tiers)
+- Preserved patterns baseline (6 workflows, 1 test pattern)
+- Integrity checks (files, counts, required patterns)
+- Rollback configuration
+- Safety guarantees
+- Next steps
+- Report templates
+
+---
+
+## See Also
+
+- **Config:** `#file:cortex-brain/agents/amnesia-config.yaml`
+- **Brain Query:** `prompts/internal/brain-query.md`
+- **Brain Updater:** `prompts/internal/brain-updater.md`
+- **Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
