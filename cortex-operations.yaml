@@ -195,6 +195,63 @@ operations:
       consolidation_from:
         - refresh_cortex_story
         - update_documentation
+  enterprise_documentation:
+    name: Enterprise Documentation Generator
+    description: EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows
+    deployment_tier: admin  # ❌ Admin-only (uses EPM system for comprehensive documentation generation)
+    module: "src.operations.modules.enterprise_documentation_orchestrator_module"
+    class: "EnterpriseDocumentationOrchestratorModule"
+    natural_language:
+    - /CORTEX Generate documentation
+    - /CORTEX generate documentation
+    - generate documentation
+    - generate cortex docs
+    - generate cortex documentation
+    - enterprise documentation
+    - epm documentation
+    - documentation generator
+    - doc generator
+    - create enterprise docs
+    - build enterprise documentation
+    - generate enterprise documentation
+    - run documentation generator
+    - execute documentation epm
+    category: documentation
+    modules:
+    # Uses EPM system - single orchestrator module
+    - enterprise_documentation_orchestrator_module
+    profiles:
+      quick:
+        description: Validation-only mode - preview what would be generated
+        execution_mode: dry_run
+        options:
+          dry_run: true
+      standard:
+        description: Full documentation generation using EPM system
+        execution_mode: live
+        options:
+          profile: standard
+      comprehensive:
+        description: Complete enterprise documentation with all EPM stages
+        execution_mode: live
+        options:
+          profile: comprehensive
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Enterprise Documentation EPM orchestrator implemented. Integrates with existing EPM doc_generator system for comprehensive documentation generation workflow."
+      estimated_hours: 8
+      completion_date: "2025-11-16"
+      epm_integration: true
+      epm_modules:
+        - doc_generator.py
+        - modules/validation_engine.py
+        - modules/cleanup_manager.py
+        - modules/diagram_generator.py
+        - modules/page_generator.py
+        - modules/cross_reference_builder.py
   refresh_cortex_story:
     name: Refresh CORTEX Story
     description: "[DEPRECATED] Use 'document_cortex' instead - Update CORTEX story documentation with narrator voice transformation"
