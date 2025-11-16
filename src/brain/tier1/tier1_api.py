@@ -16,7 +16,7 @@ Example Usage:
     from src.brain.tier1.tier1_api import Tier1API
     
     # Initialize
-    api = Tier1API(db_path="cortex-brain/cortex-brain.db")
+    api = Tier1API(db_path="cortex-brain/tier1/conversations.db")
     
     # Log a conversation (auto-extracts entities and tracks files)
     conv_id = api.log_conversation(
