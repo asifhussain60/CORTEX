@@ -1,3 +1,18 @@
+# CORTEX Knowledge Graph
+# Validation insights, patterns, and strategic knowledge for CORTEX operations
+# 
+# Version: 2.1
+# Type: Knowledge Graph
+# Purpose: Capture patterns and learnings from CORTEX operations
+
+version: "2.1"
+type: "knowledge_graph"
+patterns:
+  github_copilot_conversation_history_loop:
+    category: "performance_optimization"
+    pattern: "Large MD files cause conversation history loop"
+    description: "GitHub Copilot enters summarizing loop with large markdown files"
+
 validation_insights:
   github_copilot_conversation_history_loop:
     issue: GitHub Copilot enters "Summarizing Conversation History..." loop when conversation contains large MD files
