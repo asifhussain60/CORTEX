@@ -68,6 +68,10 @@ class IntentType(Enum):
     COMMIT = "commit"
     GIT = "git"
     
+    # Conversation tracking (CORTEX 3.0 Feature 5.1)
+    CAPTURE = "capture"
+    IMPORT = "import"
+    
     # Governance
     CHECK_RULES = "check_rules"
     COMPLIANCE = "compliance"

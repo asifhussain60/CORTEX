@@ -1,10 +1,20 @@
-# CORTEX Response Templates - QUESTIONS Category
-# Auto-generated from response-templates.yaml
-# Template count: 11
+# CORTEX 3.0 Enhanced Question Response Templates
+# ===============================================
+# 
+# Intelligent question routing templates for namespace-aware responses.
+# Eliminates confusion between CORTEX framework and workspace code questions.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# Feature: Quick Win #2 (Week 1) - Enhanced response template routing
+# Updated: 2025-11-16
 
+schema_version: "3.0.0"
+feature: "intelligent_question_routing" 
+status: "production"
+created: "2025-11-13"
+updated: "2025-11-16"
 category: questions
-last_updated: '2025-11-13'
-schema_version: 2.1.0
 templates:
   question_about_cortex_general:
     content: '🧠 **CORTEX Framework Status**
@@ -667,3 +677,60 @@ templates:
     - cortex patterns about my code
     - what does cortex know about this project
     verbosity: detailed
+
+# ========================================
+# CORTEX 3.0 ENHANCED ROUTING TEMPLATES
+# ========================================
+# New intelligent question routing templates
+
+  cortex_system_health_v3:
+    name: "CORTEX 3.0 System Health Status"
+    description: "Comprehensive CORTEX framework health with 3.0 capabilities"
+    namespace: "cortex"
+    triggers:
+      - "how is cortex"
+      - "cortex status" 
+      - "cortex health"
+      - "system status"
+    content: |
+      🧠 **CORTEX 3.0 System Status**
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+      🎯 **My Understanding Of Your Request:**
+         You want to check the health and status of the CORTEX 3.0 framework
+
+      ⚠️ **Challenge:** ✓ **Accept**
+         Providing CORTEX system status with real-time 3.0 metrics and capabilities.
+
+      💬 **Response:**
+         
+         **🧠 CORTEX 3.0 Health Score: {{brain_health_score}}/100** ⚡
+         
+         **Core Architecture:**
+         - Unified Interface: ✅ Active (Mode: {{cortex_mode}})
+         - Enhanced Agents: ✅ {{active_agents}}/{{total_agents}} operational
+         - Dual-Channel Memory: ✅ {{memory_channels}} channels active
+         - Smart Context Intelligence: ✅ Learning rate {{learning_rate}}/hour
+
+      📝 **Your Request:** Check CORTEX 3.0 framework status
+
+      🔍 **Next Steps:**
+         1. All systems operational - excellent health
+         2. Continue monitoring performance metrics
+
+  workspace_intelligence_v3:
+    name: "Workspace Intelligence Analysis (CORTEX 3.0)"
+    description: "Intelligent analysis of user's workspace with 3.0 enhancements"
+    namespace: "workspace"
+    triggers:
+      - "how is the code"
+      - "code quality"
+      - "workspace health" 
+      - "my code status"
+
+# CORTEX 3.0 Routing Metadata
+routing_metadata_v3:
+  version: "3.0.0"
+  feature: "intelligent_question_routing"
+  accuracy_target: 0.92
+  response_time_target: 75
