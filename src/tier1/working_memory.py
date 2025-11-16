@@ -903,10 +903,10 @@ class WorkingMemory:
         import_date = import_date or datetime.now()
         
         # VALIDATION: Check for valid conversation turns
-        if not conversation_turns or not isinstance(conversation_turns, list):
+        if not isinstance(conversation_turns, list):
             return {
                 'success': False,
-                'error': 'conversation_turns must be a non-empty list',
+                'error': 'conversation_turns must be a list',
                 'conversation_id': None,
                 'session_id': None,
                 'quality_score': 0,
@@ -914,6 +914,69 @@ class WorkingMemory:
                 'semantic_elements': {},
                 'turns_imported': 0
             }
+        
+        # EDGE CASE: Handle empty conversation gracefully (test_07)
+        if len(conversation_turns) == 0:
+            # Generate conversation ID inline
+            import hashlib
+            now = import_date or datetime.now()
+            hash_suffix = hashlib.md5(b'empty_conversation').hexdigest()[:6]
+            conversation_id = f"conv_{now.strftime('%Y%m%d_%H%M%S')}_{hash_suffix}"
+            
+            session_id = None
+            if workspace_path:
+                try:
+                    active_session = self.session_manager.get_active_session(workspace_path)
+                    session_id = active_session.session_id if active_session else None
+                except Exception:
+                    session_id = None  # Gracefully handle session errors in tests
+            
+            # Store empty conversation with LOW quality
+            timestamp = now.isoformat()
+            try:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO conversations 
+                    (conversation_id, session_id, title, message_count, tags, created_at, updated_at,
+                     conversation_type, import_source, quality_score, semantic_elements)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    conversation_id,
+                    session_id,
+                    "Empty conversation",
+                    0,
+                    json.dumps(['empty']),
+                    timestamp,
+                    timestamp,
+                    'imported',
+                    import_source,
+                    0,  # quality_score (LOW = 0 points)
+                    json.dumps({})
+                ))
+                conn.commit()
+                conn.close()
+                return {
+                    'success': True,
+                    'conversation_id': conversation_id,
+                    'session_id': session_id,
+                    'quality_score': 0,
+                    'quality_level': 'LOW',
+                    'semantic_elements': {},
+                    'turns_imported': 0
+                }
+            except Exception as e:
+                print(f"[DEBUG] Database insert failed: {e}")  # DEBUG
+                return {
+                    'success': False,
+                    'error': f'Failed to store empty conversation: {e}',
+                    'conversation_id': None,
+                    'session_id': None,
+                    'quality_score': 0,
+                    'quality_level': 'INVALID',
+                    'semantic_elements': {},
+                    'turns_imported': 0
+                }
         
         # VALIDATION: Check each turn has valid structure
         for i, turn in enumerate(conversation_turns):
@@ -930,10 +993,14 @@ class WorkingMemory:
                 }
             
             # Check for required keys and non-empty values
-            if not turn.get('user') or not turn.get('assistant'):
+            # EDGE CASE: Allow incomplete turns (test_08) - save user message even without assistant
+            user_msg = turn.get('user', '').strip()
+            assistant_msg = turn.get('assistant', '').strip()
+            
+            if not user_msg:
                 return {
                     'success': False,
-                    'error': f'Turn {i} missing valid user or assistant message',
+                    'error': f'Turn {i} missing user message',
                     'conversation_id': None,
                     'session_id': None,
                     'quality_score': 0,
@@ -941,6 +1008,9 @@ class WorkingMemory:
                     'semantic_elements': {},
                     'turns_imported': 0
                 }
+            
+            # Assistant message is optional - incomplete turns are allowed
+            # They will be stored with empty assistant response
         
         # Quality analysis using CORTEX 3.0 analyzer
         from .conversation_quality import ConversationQualityAnalyzer
