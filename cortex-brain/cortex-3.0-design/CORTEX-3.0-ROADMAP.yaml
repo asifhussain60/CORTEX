@@ -1,0 +1,1733 @@
+# CORTEX 3.0 - Unified Implementation Roadmap
+# 
+# Purpose: Single consolidated plan replacing all scattered planning files
+# Version: 3.0.0
+# Status: 🎯 READY FOR EXECUTION
+# Created: 2025-11-16
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# License: Proprietary - See LICENSE file
+# 
+# REPLACES (TO BE DELETED AFTER VALIDATION):
+#   - CP-Planning.md (8,600+ lines conversation history)
+#   - CP-Planning0.md (2,100+ lines strategic challenge)
+#   - CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml (1,200+ lines two-track plan)
+#   - TASK-DUMP-SYSTEM-DESIGN.md (duplicate of IDEA Capture)
+# 
+# EXECUTION MODEL:
+#   Two parallel tracks executable on separate machines
+#   Track 1: Feature Implementation (Machine 1)
+#   Track 2: System Optimization (Machine 2)
+#   Convergence: Week 17 with integration testing
+# 
+# ============================================================================
+
+metadata:
+  version: "3.0.0"
+  roadmap_name: "CORTEX 3.0 Unified Implementation"
+  status: "READY_FOR_EXECUTION"
+  created_date: "2025-11-16"
+  last_updated: "2025-11-16"
+  
+  replaces:
+    - file: "CP-Planning.md"
+      reason: "Conversation history consolidated into roadmap decisions"
+      size: "8,600+ lines"
+      
+    - file: "CP-Planning0.md"
+      reason: "Strategic alternatives documented, user chose unified approach"
+      size: "2,100+ lines"
+      
+    - file: "CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml"
+      reason: "Two-track optimization integrated into Track 2"
+      size: "1,200+ lines"
+      
+    - file: "cortex-brain/cortex-3.0-design/TASK-DUMP-SYSTEM-DESIGN.md"
+      reason: "Duplicate of IDEA Capture System (same feature, different name)"
+      size: "1,218 lines"
+      note: "User chose 'IDEA Capture System' as canonical name"
+  
+  architecture:
+    base_version: "CORTEX 2.0"
+    token_reduction: "97.2% achieved (74,047 → 2,078 tokens)"
+    test_pass_rate: "88.1% (627/712 passing)"
+    optimizer_score_baseline: "62/100"
+    optimizer_score_target: "≥90/100"
+  
+  execution_model:
+    type: "two_track_parallel"
+    machines: 2
+    convergence_week: 17
+    total_duration: "17 weeks"
+    
+  dependencies:
+    critical_path:
+      - "Track 2 Phase B1 (Foundation Fixes) must complete before any Track 1 features"
+      - "EPM Doc Generator (Track 1) requires Track 2 EPMO Health Phase complete"
+      - "Integration Testing (Week 17) requires both tracks complete"
+
+# ============================================================================
+# TRACK 1: FEATURE IMPLEMENTATION (Machine 1)
+# ============================================================================
+# Purpose: Implement 4 new CORTEX 3.0 features
+# Duration: 12-16 weeks
+# Effort: ~390 hours
+# Prerequisites: Track 2 Phase B1 (Foundation Fixes) complete
+# Machine: Machine 1 (independent development environment)
+# ============================================================================
+
+track_1_features:
+  name: "CORTEX 3.0 Feature Implementation"
+  machine: "Machine 1"
+  duration_weeks: "12-16"
+  total_effort_hours: 390
+  
+  prerequisites:
+    critical:
+      - name: "Track 2 Phase B1 Complete"
+        reason: "Foundation fixes required for stable feature development"
+        blocking: true
+    
+    recommended:
+      - name: "CORTEX 2.0 Setup"
+        reason: "Base system with 97.2% token reduction"
+        blocking: false
+  
+  # ========================================================================
+  # FEATURE 1: IDEA Capture System (Formerly "Task Dump")
+  # ========================================================================
+  # Status: 0% implemented (design complete)
+  # Priority: HIGH (high strategic value, enables brain learning)
+  # Duration: 6 weeks
+  # Effort: 240 hours
+  # Dependencies: None (can start immediately after Track 2 Phase B1)
+  # ========================================================================
+  
+  feature_1_idea_capture:
+    name: "IDEA Capture System"
+    canonical_name: "IDEA Capture System"
+    alternate_names: ["Task Dump System"]
+    status: "DESIGN_COMPLETE_IMPLEMENTATION_PENDING"
+    priority: "HIGH"
+    
+    duration:
+      weeks: 6
+      hours: 240
+    
+    description: |
+      Lightweight system to capture fleeting ideas, tasks, and thoughts during
+      development work. Prevents context loss when switching tasks or getting
+      interrupted. Integrates with CORTEX brain for pattern learning.
+    
+    strategic_value:
+      brain_learning: "Captures raw user thought patterns for Tier 2 analysis"
+      context_preservation: "Prevents idea loss during interruptions"
+      workflow_integration: "Natural capture without breaking flow"
+      pattern_recognition: "Learns from user's ideation patterns over time"
+    
+    design_reference:
+      primary: "cortex-brain/cortex-3.0-design/IDEA-CAPTURE-SYSTEM.md"
+      duplicate: "cortex-brain/cortex-3.0-design/TASK-DUMP-SYSTEM-DESIGN.md"
+      note: "Task Dump is duplicate - delete after roadmap validation"
+    
+    implementation_phases:
+      
+      phase_1_1_foundation:
+        name: "Core Capture Engine"
+        duration_hours: 40
+        tasks:
+          - "Design IdeaQueue data structure (in-memory + persistent)"
+          - "Implement quick-capture CLI (cortex idea 'text')"
+          - "Create storage backend (SQLite + JSON backup)"
+          - "Add timestamp and context tracking"
+        
+        acceptance_criteria:
+          - "Can capture idea in <5 seconds"
+          - "Ideas persist across sessions"
+          - "No data loss on crash"
+        
+        deliverables:
+          - "src/operations/modules/ideas/idea_queue.py"
+          - "cortex-brain/tier1/idea-queue.db"
+          - "tests/operations/modules/ideas/test_idea_queue.py"
+      
+      phase_1_2_natural_language:
+        name: "Natural Language Interface"
+        duration_hours: 60
+        tasks:
+          - "Integrate with Intent Router"
+          - "Add natural language patterns (remember, save idea, note this)"
+          - "Context injection from Tier 1 (current file, conversation)"
+          - "Auto-tagging based on context"
+        
+        acceptance_criteria:
+          - "User can say 'remember to refactor AuthService' naturally"
+          - "CORTEX auto-tags with current file context"
+          - "Intent routing accuracy ≥90%"
+        
+        deliverables:
+          - "src/agents/intent_router.py (enhancement)"
+          - "cortex-brain/response-templates/ideas.yaml"
+          - "tests/agents/test_intent_router_ideas.py"
+      
+      phase_1_3_brain_integration:
+        name: "CORTEX Brain Integration"
+        duration_hours: 80
+        tasks:
+          - "Store ideas in Tier 1 (working memory)"
+          - "Extract patterns to Tier 2 (knowledge graph)"
+          - "Learn from idea → execution transitions"
+          - "Suggest related ideas based on current work"
+        
+        acceptance_criteria:
+          - "Ideas appear in Tier 1 conversation context"
+          - "CORTEX suggests 'you noted X last week' when relevant"
+          - "Pattern confidence ≥70% after 10 similar ideas"
+        
+        deliverables:
+          - "src/tier1/working_memory.py (idea support)"
+          - "src/tier2/knowledge_graph.py (idea patterns)"
+          - "tests/tier2/test_idea_pattern_learning.py"
+      
+      phase_1_4_review_workflow:
+        name: "Idea Review & Execution Workflow"
+        duration_hours: 40
+        tasks:
+          - "Implement idea review UI (cortex ideas review)"
+          - "Add priority scoring (age, context relevance, user tags)"
+          - "Create idea → task conversion"
+          - "Archive completed ideas"
+        
+        acceptance_criteria:
+          - "User can review ideas sorted by priority"
+          - "One-click conversion to executable task"
+          - "Completed ideas archived with outcome"
+        
+        deliverables:
+          - "src/operations/modules/ideas/idea_reviewer.py"
+          - "cortex-brain/tier1/idea-archive.jsonl"
+          - "tests/operations/modules/ideas/test_idea_review.py"
+      
+      phase_1_5_testing_validation:
+        name: "Testing & Validation"
+        duration_hours: 20
+        tasks:
+          - "Unit tests (≥80% coverage)"
+          - "Integration tests with Tier 1/2"
+          - "Performance testing (1000+ ideas)"
+          - "User acceptance testing"
+        
+        acceptance_criteria:
+          - "All tests passing"
+          - "Can handle 1000+ ideas without slowdown"
+          - "Zero data corruption in stress tests"
+        
+        deliverables:
+          - "tests/operations/modules/ideas/ (complete suite)"
+          - "Performance benchmark report"
+          - "User acceptance test results"
+    
+    success_metrics:
+      technical:
+        - "Capture latency: <5 seconds"
+        - "Storage efficiency: <1KB per idea"
+        - "Test coverage: ≥80%"
+        - "Pattern learning accuracy: ≥70%"
+      
+      user_experience:
+        - "Zero workflow interruption"
+        - "Natural language success rate: ≥90%"
+        - "User satisfaction: ≥4/5"
+    
+    risks:
+      - risk: "User forgets to review captured ideas"
+        mitigation: "Proactive reminders, priority scoring"
+        severity: "medium"
+      
+      - risk: "Idea overload (too many captured, none executed)"
+        mitigation: "Auto-archiving old ideas, priority filtering"
+        severity: "low"
+    
+    dependencies:
+      internal:
+        - "Intent Router (enhancement)"
+        - "Tier 1 Working Memory (idea support)"
+        - "Tier 2 Knowledge Graph (pattern learning)"
+      
+      external: []
+  
+  # ========================================================================
+  # FEATURE 2: Intelligent Question Routing
+  # ========================================================================
+  # Status: 0% implemented (design complete)
+  # Priority: QUICK WIN (20 hours, high impact)
+  # Duration: 1 week
+  # Effort: 20 hours
+  # Dependencies: None (can run parallel with IDEA Capture)
+  # ========================================================================
+  
+  feature_2_question_routing:
+    name: "Intelligent Question Routing"
+    status: "DESIGN_COMPLETE_IMPLEMENTATION_PENDING"
+    priority: "QUICK_WIN"
+    
+    duration:
+      weeks: 1
+      hours: 20
+    
+    description: |
+      Context-aware question routing that distinguishes between questions about
+      CORTEX framework vs user's application code. Prevents confusion when user
+      asks "how is the code?" (CORTEX code vs application code).
+    
+    strategic_value:
+      clarity: "Eliminates ambiguity in user questions"
+      efficiency: "Routes to correct knowledge source immediately"
+      user_experience: "Natural conversation without clarification loops"
+    
+    design_reference:
+      primary: "cortex-brain/cortex-3.0-design/intelligent-question-routing.md"
+    
+    implementation_phases:
+      
+      phase_2_1_namespace_detection:
+        name: "Namespace Detection Engine"
+        duration_hours: 8
+        tasks:
+          - "Implement namespace classifier (cortex.* vs workspace.*)"
+          - "Keyword analysis (CORTEX, brain, tier vs application terms)"
+          - "Context hints from conversation history"
+          - "Confidence scoring"
+        
+        acceptance_criteria:
+          - "≥90% accuracy on test dataset"
+          - "Handles ambiguous questions gracefully"
+        
+        deliverables:
+          - "src/agents/namespace_detector.py"
+          - "tests/agents/test_namespace_detector.py"
+      
+      phase_2_2_response_routing:
+        name: "Response Template Routing"
+        duration_hours: 6
+        tasks:
+          - "Route 'how is CORTEX' → cortex framework metrics"
+          - "Route 'how is my code' → workspace health analysis"
+          - "Integrate with existing response templates"
+          - "Add namespace-specific data collectors"
+        
+        acceptance_criteria:
+          - "Correct routing for all test cases"
+          - "Fallback to clarification if confidence <70%"
+        
+        deliverables:
+          - "cortex-brain/response-templates/questions.yaml (enhancement)"
+          - "src/operations/modules/questions/question_router.py"
+      
+      phase_2_3_testing:
+        name: "Testing & Validation"
+        duration_hours: 6
+        tasks:
+          - "Unit tests for namespace detection"
+          - "Integration tests with response templates"
+          - "User acceptance testing"
+        
+        deliverables:
+          - "tests/operations/modules/questions/ (complete suite)"
+    
+    success_metrics:
+      - "Routing accuracy: ≥90%"
+      - "Clarification rate: <10%"
+      - "User satisfaction: ≥4/5"
+    
+    risks:
+      - risk: "False positives in namespace detection"
+        mitigation: "Confidence thresholds, clarification fallback"
+        severity: "low"
+    
+    dependencies:
+      internal:
+        - "Response Templates (enhancement)"
+        - "Data Collectors (for metrics gathering)"
+      external: []
+  
+  # ========================================================================
+  # FEATURE 3: Data Collectors
+  # ========================================================================
+  # Status: 0% implemented (design complete)
+  # Priority: MEDIUM (enables Question Routing metrics)
+  # Duration: 1 week
+  # Effort: 10 hours
+  # Dependencies: Can run parallel with Question Routing
+  # ========================================================================
+  
+  feature_3_data_collectors:
+    name: "Real-Time Data Collectors"
+    status: "DESIGN_COMPLETE_IMPLEMENTATION_PENDING"
+    priority: "MEDIUM"
+    
+    duration:
+      weeks: 1
+      hours: 10
+    
+    description: |
+      Lightweight collectors that gather fresh metrics for response templates.
+      Prevents stale data in responses by pulling live stats from CORTEX brain
+      tiers and workspace analysis.
+    
+    strategic_value:
+      freshness: "Real-time metrics vs stale documentation"
+      accuracy: "Live data prevents outdated information"
+      extensibility: "Easy to add new collectors"
+    
+    design_reference:
+      primary: "cortex-brain/cortex-3.0-design/data-collectors-specification.md"
+    
+    implementation_phases:
+      
+      phase_3_1_collector_framework:
+        name: "Collector Framework"
+        duration_hours: 4
+        tasks:
+          - "Create BaseCollector abstract class"
+          - "Implement collector registry"
+          - "Add schema versioning (prevent staleness)"
+          - "Error handling and fallback"
+        
+        deliverables:
+          - "src/collectors/base_collector.py"
+          - "src/collectors/collector_registry.py"
+      
+      phase_3_2_core_collectors:
+        name: "Core Collectors Implementation"
+        duration_hours: 4
+        tasks:
+          - "BrainMetricsCollector (Tier 1/2/3 stats)"
+          - "TokenOptimizationCollector (savings data)"
+          - "WorkspaceHealthCollector (git, tests, coverage)"
+          - "NamespaceDetector (cortex vs workspace)"
+        
+        deliverables:
+          - "src/collectors/brain_metrics_collector.py"
+          - "src/collectors/token_optimization_collector.py"
+          - "src/collectors/workspace_health_collector.py"
+          - "src/collectors/namespace_detector.py"
+      
+      phase_3_3_testing:
+        name: "Testing"
+        duration_hours: 2
+        tasks:
+          - "Unit tests for each collector"
+          - "Schema version compatibility tests"
+        
+        deliverables:
+          - "tests/collectors/ (complete suite)"
+    
+    success_metrics:
+      - "Collection latency: <200ms per collector"
+      - "Schema compatibility: 100%"
+      - "Test coverage: ≥80%"
+    
+    dependencies:
+      internal:
+        - "Tier 1/2/3 APIs (read-only access)"
+        - "Git analysis module"
+      external: []
+  
+  # ========================================================================
+  # FEATURE 4: EPM Doc Generator
+  # ========================================================================
+  # Status: 0% implemented (design complete)
+  # Priority: MEDIUM (depends on Track 2 EPMO Health)
+  # Duration: 3 weeks
+  # Effort: 120 hours
+  # Dependencies: BLOCKED until Track 2 EPMO Health Phase complete
+  # ========================================================================
+  
+  feature_4_epm_doc_generator:
+    name: "EPM Documentation Generator"
+    status: "DESIGN_COMPLETE_IMPLEMENTATION_PENDING"
+    priority: "MEDIUM"
+    
+    duration:
+      weeks: 3
+      hours: 120
+    
+    description: |
+      Automated documentation generator for Entry Point Module (EPM)
+      orchestrators. Analyzes Python code and generates comprehensive
+      markdown documentation with diagrams, examples, and API specs.
+    
+    strategic_value:
+      automation: "Eliminates manual documentation maintenance"
+      consistency: "Uniform documentation across all EPMs"
+      freshness: "Auto-updates when code changes"
+      developer_productivity: "Less time writing docs, more time coding"
+    
+    design_reference:
+      primary: "cortex-brain/cortex-3.0-design/epm-doc-generator-architecture.yaml"
+    
+    blocking_dependency:
+      name: "Track 2 EPMO Health Phase Complete"
+      reason: "EPM doc generator needs healthy, stable EPMOs to document"
+      required_phases:
+        - "Track 2 Phase A1: Metrics Collection"
+        - "Track 2 Phase A2: Drift Detection"
+        - "Track 2 Phase A3: Health Validation"
+        - "Track 2 Phase A4: Remediation"
+      
+      blocking_until: "Week 11 (Track 2 Phase A4 complete)"
+      
+      rationale: |
+        EPM doc generator analyzes orchestrator code structure, dependencies,
+        and module coordination. If EPMOs are bloated (>500 lines), have
+        circular dependencies, or violate SOLID principles, generated docs
+        will be confusing or incorrect. Must wait for EPMO health remediation
+        before generating documentation.
+    
+    implementation_phases:
+      
+      phase_4_1_code_analysis:
+        name: "Code Analysis Engine"
+        duration_hours: 40
+        tasks:
+          - "Python AST parser for orchestrator files"
+          - "Extract methods, dependencies, module coordination"
+          - "Identify phase structure and task breakdown"
+          - "Map to response templates and brain tiers"
+        
+        acceptance_criteria:
+          - "Can parse all EPM orchestrators without errors"
+          - "Extracts 100% of public methods"
+          - "Identifies all module dependencies"
+        
+        deliverables:
+          - "src/operations/modules/docs/epm_analyzer.py"
+          - "tests/operations/modules/docs/test_epm_analyzer.py"
+      
+      phase_4_2_doc_generation:
+        name: "Documentation Generator"
+        duration_hours: 50
+        tasks:
+          - "Markdown template engine"
+          - "Generate API reference sections"
+          - "Create usage examples from tests"
+          - "Add Mermaid diagrams (workflow, dependencies)"
+          - "Generate success metrics tables"
+        
+        acceptance_criteria:
+          - "Generated docs pass markdown linting"
+          - "All code examples are valid"
+          - "Diagrams render correctly"
+        
+        deliverables:
+          - "src/operations/modules/docs/doc_generator.py"
+          - "cortex-brain/templates/epm-doc-template.md"
+          - "tests/operations/modules/docs/test_doc_generator.py"
+      
+      phase_4_3_integration:
+        name: "Integration & Automation"
+        duration_hours: 20
+        tasks:
+          - "Integrate with optimize operation"
+          - "Auto-detect when docs are stale"
+          - "Git hooks for auto-regeneration"
+          - "CI/CD pipeline integration"
+        
+        deliverables:
+          - "scripts/auto_generate_epm_docs.py"
+          - ".github/workflows/epm-doc-generation.yml"
+      
+      phase_4_4_testing:
+        name: "Testing & Validation"
+        duration_hours: 10
+        tasks:
+          - "Unit tests for analyzer and generator"
+          - "Integration tests with real EPMs"
+          - "Documentation quality validation"
+        
+        deliverables:
+          - "tests/operations/modules/docs/ (complete suite)"
+    
+    success_metrics:
+      - "Doc generation time: <30 seconds per EPM"
+      - "Accuracy: 100% (all methods documented)"
+      - "Freshness: Auto-regenerate on code change"
+      - "Test coverage: ≥80%"
+    
+    risks:
+      - risk: "Code changes break doc generator"
+        mitigation: "Comprehensive AST parsing tests"
+        severity: "medium"
+      
+      - risk: "Generated docs are unclear or confusing"
+        mitigation: "User feedback loop, template refinement"
+        severity: "low"
+    
+    dependencies:
+      internal:
+        - "Track 2 EPMO Health Phase (BLOCKING)"
+        - "Python AST library"
+        - "Markdown template engine"
+      
+      external:
+        - "Mermaid diagram renderer"
+  
+  # ========================================================================
+  # TRACK 1 SUMMARY
+  # ========================================================================
+  
+  track_1_summary:
+    total_features: 4
+    total_duration_weeks: "12-16"
+    total_effort_hours: 390
+    
+    critical_path:
+      - "Week 0-2: Wait for Track 2 Phase B1 (Foundation Fixes)"
+      - "Week 3-4: Quick Wins (Question Routing + Data Collectors) - 30 hours"
+      - "Week 5-10: IDEA Capture System - 240 hours"
+      - "Week 11-16: EPM Doc Generator - 120 hours (after Track 2 EPMO Health)"
+    
+    parallel_opportunities:
+      - "Question Routing + Data Collectors can run together (Week 3-4)"
+      - "IDEA Capture can run parallel with Track 2 optimization work"
+    
+    blocking_dependencies:
+      - "EPM Doc Generator BLOCKED until Track 2 EPMO Health (Week 11)"
+    
+    success_criteria:
+      - "All 4 features implemented with ≥80% test coverage"
+      - "Zero errors, zero warnings"
+      - "User acceptance testing passed"
+      - "Documentation complete"
+
+# ============================================================================
+# TRACK 2: SYSTEM OPTIMIZATION (Machine 2)
+# ============================================================================
+# Purpose: Optimize CORTEX core instructions and EPMO health
+# Duration: 10 weeks
+# Effort: 208 hours (96h Track B + 112h Track A)
+# Prerequisites: None (can start immediately)
+# Machine: Machine 2 (independent development environment)
+# Source: CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml (consolidated here)
+# ============================================================================
+
+track_2_optimization:
+  name: "CORTEX 3.1 System Optimization"
+  machine: "Machine 2"
+  duration_weeks: 10
+  total_effort_hours: 208
+  
+  architecture:
+    approach: "Two-track sequential execution"
+    track_b_first: "Core Instruction Optimization (CRITICAL - Weeks 0-2)"
+    track_a_second: "EPMO Health Management (Weeks 3-8)"
+    convergence: "Week 9-10 (Stabilization + Release)"
+  
+  baseline_metrics:
+    optimizer_score: "62/100"
+    token_bloat: "773,866 tokens across instruction files"
+    yaml_validation_errors: 4
+    plugin_registration_issues: 4
+    epmo_count: 13
+    epmo_avg_size: "~400 lines (target: <500)"
+  
+  target_metrics:
+    optimizer_score: "≥90/100"
+    token_usage: "<200,000 tokens (74% reduction)"
+    yaml_validation_errors: 0
+    plugin_registration_issues: 0
+    epmo_health_score: "≥85/100"
+    epmo_max_size: "<500 lines"
+  
+  # ========================================================================
+  # TRACK B: Core Instruction Optimization (PRIORITY - Weeks 0-2)
+  # ========================================================================
+  # Purpose: Fix foundation issues, eliminate token bloat, refactor Tier 0
+  # Duration: 2 weeks
+  # Effort: 96 hours across 5 phases
+  # Critical: Must complete before Track 1 features can begin
+  # ========================================================================
+  
+  track_b_core_optimization:
+    name: "Core Instruction Optimization"
+    priority: "CRITICAL"
+    duration_weeks: 2
+    effort_hours: 96
+    
+    rationale: |
+      CORTEX 2.0 achieved 97.2% token reduction but left technical debt:
+      - 4 invalid YAML files break validation
+      - 4 plugins fail registration
+      - 773,866 tokens still in instruction files (should be <200K)
+      - brain-protection-rules.yaml violates SRP (1,000+ lines, multiple concerns)
+      
+      These issues block stable feature development. Must fix foundation first.
+    
+    phases:
+      
+      phase_b1_foundation_fixes:
+        name: "Foundation Fixes"
+        duration: "2 days"
+        effort_hours: 16
+        priority: "CRITICAL"
+        
+        description: "Fix all blocking issues preventing clean baseline"
+        
+        tasks:
+          task_b1_1:
+            name: "Fix 4 invalid YAML files"
+            duration_hours: 4
+            files_affected:
+              - "cortex-brain/response-templates.yaml"
+              - "cortex-brain/operations-config.yaml"
+              - "src/tier0/governance.yaml"
+              - "cortex-brain/brain-protection-rules.yaml"
+            
+            validation:
+              - "yamllint passes with zero errors"
+              - "Python yaml.safe_load() succeeds"
+          
+          task_b1_2:
+            name: "Fix 4 plugin registration issues"
+            duration_hours: 6
+            plugins_affected:
+              - "PlatformSwitchPlugin"
+              - "SystemRefactorPlugin"
+              - "DocRefreshPlugin"
+              - "ExtensionScaffoldPlugin"
+            
+            validation:
+              - "All plugins load without errors"
+              - "Plugin registry shows 8/8 active"
+          
+          task_b1_3:
+            name: "Establish baseline metrics"
+            duration_hours: 6
+            tasks:
+              - "Run optimize operation → capture baseline"
+              - "Document current optimizer score (62/100)"
+              - "Record token counts per file"
+              - "Git commit baseline state"
+            
+            deliverables:
+              - "cortex-brain/metrics-history/baseline-2025-11-16.json"
+        
+        acceptance_criteria:
+          - "yamllint: 0 errors across all YAML files"
+          - "Plugin registry: 8/8 active"
+          - "Optimizer baseline: documented and committed"
+          - "Clean git state with all changes committed"
+        
+        success_metrics:
+          yaml_errors: "4 → 0"
+          plugin_failures: "4 → 0"
+          baseline_established: true
+      
+      phase_b2_token_bloat_elimination:
+        name: "Token Bloat Elimination"
+        duration: "4 days"
+        effort_hours: 32
+        
+        description: "Reduce 773,866 tokens to <200,000 (74% reduction)"
+        
+        strategy:
+          approach: "Modular refactoring + YAML conversion"
+          techniques:
+            - "Split large files into focused modules"
+            - "Move static data to YAML"
+            - "Extract code examples to separate files"
+            - "Implement lazy-loading for documentation"
+        
+        tasks:
+          task_b2_1:
+            name: "Audit token usage across all files"
+            duration_hours: 4
+            deliverables:
+              - "Token usage report by file"
+              - "Identified top 10 bloat offenders"
+          
+          task_b2_2:
+            name: "Refactor high-token files"
+            duration_hours: 20
+            targets:
+              - "CORTEX.prompt.md (6,800 → 2,000 tokens)"
+              - "response-templates.yaml (already split into 8 files)"
+              - "governance.yaml (992 lines → optimize ordering)"
+              - "Large markdown documentation files"
+            
+            techniques:
+              - "Section extraction (load specific ## headers only)"
+              - "YAML schema conversion"
+              - "Module splitting"
+          
+          task_b2_3:
+            name: "Implement lazy-loading system"
+            duration_hours: 6
+            description: "Load only needed sections vs entire files"
+            deliverables:
+              - "src/utils/lazy_loader.py"
+              - "Section extraction utility"
+          
+          task_b2_4:
+            name: "Validation and measurement"
+            duration_hours: 2
+            tasks:
+              - "Recount tokens after refactoring"
+              - "Verify 74% reduction achieved"
+              - "Update optimizer metrics"
+        
+        acceptance_criteria:
+          - "Total token count: <200,000"
+          - "Token reduction: ≥74%"
+          - "All functionality preserved"
+          - "Tests still passing"
+        
+        success_metrics:
+          token_count: "773,866 → <200,000"
+          reduction_percent: "≥74%"
+          optimizer_score_impact: "+15 points (token usage 0/100 → 80/100)"
+      
+      phase_b3_tier0_srp_refactoring:
+        name: "Tier 0 SRP Refactoring"
+        duration: "3 days"
+        effort_hours: 24
+        
+        description: "Split brain-protection-rules.yaml (violates Single Responsibility)"
+        
+        problem: |
+          brain-protection-rules.yaml is 1,000+ lines with 5 distinct concerns:
+          1. Instinct immutability rules
+          2. Critical path protection
+          3. Application separation
+          4. Brain state protection
+          5. Namespace isolation
+          
+          Violates Rule #7 (SRP - max 3 responsibilities per module)
+        
+        solution:
+          approach: "Split into 5 focused files"
+          target_structure:
+            - "tier0-instinct-rules.yaml (immutable core principles)"
+            - "tier0-critical-path.yaml (file protection rules)"
+            - "tier0-separation.yaml (app vs CORTEX boundaries)"
+            - "tier0-brain-state.yaml (memory protection)"
+            - "tier0-namespace.yaml (scope isolation)"
+        
+        tasks:
+          task_b3_1:
+            name: "Design split structure"
+            duration_hours: 4
+            deliverables:
+              - "Split design document"
+              - "Migration plan"
+          
+          task_b3_2:
+            name: "Execute split"
+            duration_hours: 12
+            tasks:
+              - "Create 5 new YAML files"
+              - "Migrate rules from monolith"
+              - "Update Brain Protector to load all 5 files"
+              - "Preserve rule IDs and dependencies"
+          
+          task_b3_3:
+            name: "Testing and validation"
+            duration_hours: 6
+            tasks:
+              - "All Brain Protector tests still pass"
+              - "Rule coverage unchanged"
+              - "Performance impact <10ms"
+          
+          task_b3_4:
+            name: "Cleanup"
+            duration_hours: 2
+            tasks:
+              - "Delete original monolith file"
+              - "Update documentation"
+              - "Git commit with semantic message"
+        
+        acceptance_criteria:
+          - "5 focused files, each <300 lines"
+          - "All tests passing (22/22 brain protector tests)"
+          - "Zero behavioral changes"
+          - "Rule #7 compliance achieved"
+        
+        success_metrics:
+          file_count: "1 → 5"
+          max_file_size: "<300 lines"
+          srp_compliance: true
+          optimizer_score_impact: "+5 points (SRP adherence improved)"
+      
+      phase_b4_md_to_yaml_conversion:
+        name: "MD-to-YAML Conversion"
+        duration: "2 days"
+        effort_hours: 16
+        
+        description: "Convert verbose Markdown docs to structured YAML schemas"
+        
+        rationale: |
+          Per Rule #29: YAML-based planning prevents Copilot summarization loops.
+          Large MD files (agents-guide.md, operations-reference.md) trigger
+          summarization when loaded. Convert to YAML for efficiency.
+        
+        targets:
+          - "prompts/shared/agents-guide.md → agent-specs.yaml"
+          - "prompts/shared/operations-reference.md → operation-specs.yaml"
+          - "Other large MD documentation files"
+        
+        tasks:
+          task_b4_1:
+            name: "Identify conversion candidates"
+            duration_hours: 2
+            criteria:
+              - "File size >500 lines"
+              - "Structured content (tables, lists)"
+              - "Frequently loaded in conversations"
+          
+          task_b4_2:
+            name: "Design YAML schemas"
+            duration_hours: 4
+            deliverables:
+              - "agent-spec-schema.yaml"
+              - "operation-spec-schema.yaml"
+          
+          task_b4_3:
+            name: "Execute conversion"
+            duration_hours: 8
+            tasks:
+              - "Extract structured data from MD"
+              - "Validate YAML schemas"
+              - "Preserve all information"
+          
+          task_b4_4:
+            name: "Update references and cleanup"
+            duration_hours: 2
+            tasks:
+              - "Update all #file: references"
+              - "Delete original MD files"
+              - "Test loading in conversations"
+        
+        acceptance_criteria:
+          - "All converted files validate as YAML"
+          - "Information parity (no data loss)"
+          - "Token reduction ≥60% per file"
+          - "Loading works in GitHub Copilot Chat"
+        
+        success_metrics:
+          files_converted: "≥4"
+          token_reduction: "≥60% per file"
+          optimizer_score_impact: "+3 points"
+      
+      phase_b5_validation_metrics:
+        name: "Validation & Metrics"
+        duration: "1 day"
+        effort_hours: 8
+        
+        description: "Rerun optimizer, verify targets achieved"
+        
+        tasks:
+          task_b5_1:
+            name: "Rerun optimize operation"
+            duration_hours: 2
+            validation:
+              - "Optimizer score: ≥90/100 (target achieved)"
+              - "All previous issues resolved"
+          
+          task_b5_2:
+            name: "Compare baseline to final"
+            duration_hours: 3
+            metrics:
+              - "Optimizer score: 62 → ≥90 (+28 points)"
+              - "Token count: 773,866 → <200,000 (-74%)"
+              - "YAML errors: 4 → 0"
+              - "Plugin failures: 4 → 0"
+          
+          task_b5_3:
+            name: "Generate completion report"
+            duration_hours: 2
+            deliverables:
+              - "cortex-brain/documents/reports/TRACK-B-COMPLETION-REPORT.md"
+          
+          task_b5_4:
+            name: "Tag release candidate"
+            duration_hours: 1
+            tasks:
+              - "Git tag: cortex-3.1-track-b-complete"
+              - "Create GitHub release notes"
+        
+        acceptance_criteria:
+          - "Optimizer score: ≥90/100"
+          - "All Track B success criteria met"
+          - "Comprehensive completion report generated"
+          - "Release tagged and documented"
+        
+        success_metrics:
+          optimizer_score: "≥90/100"
+          track_b_complete: true
+    
+    track_b_summary:
+      duration_weeks: 2
+      effort_hours: 96
+      phases: 5
+      
+      success_criteria:
+        optimizer_score: "62 → ≥90/100 (+28 points minimum)"
+        token_reduction: "773,866 → <200,000 (74%)"
+        yaml_validation: "4 errors → 0 errors"
+        plugin_health: "4 failures → 0 failures"
+        srp_compliance: "brain-protection-rules.yaml split (Rule #7)"
+        md_to_yaml: "≥4 files converted (Rule #29)"
+      
+      deliverables:
+        - "Fixed YAML files (4 files)"
+        - "Fixed plugin registrations (4 plugins)"
+        - "Tier 0 split files (5 focused files)"
+        - "YAML schema conversions (≥4 files)"
+        - "Track B completion report"
+        - "Git release tag"
+      
+      blockers_removed:
+        - "Track 1 features can now proceed safely"
+        - "Foundation stable for EPMO health work"
+  
+  # ============================================================================
+  # Track A: EPMO Health Management System
+  # ============================================================================
+  
+  track_a_epmo_health:
+    name: "EPMO Health Management System"
+    machine: "Machine 2"
+    duration_weeks: 8
+    effort_hours: 112
+    priority: "HIGH"
+    
+    prerequisites:
+      critical:
+        - name: "Track B Core Optimization Complete"
+          reason: "Requires stable foundation and optimizer baseline"
+    
+    description: |
+      Automated health monitoring system for Execution Plan Modules (EPMOs).
+      Prevents architectural degradation through continuous validation.
+    
+    phase_a1_metrics_collection:
+      name: "EPMO Metrics Collection"
+      duration: "2 days"
+      effort_hours: 16
+      priority: "FOUNDATION"
+      
+      objective: "Track EPMO size, complexity, duplication, SOLID violations"
+      
+      tasks:
+        task_a1_1:
+          name: "Define health metrics"
+          duration_hours: 4
+          metrics:
+            - "File size (lines of code)"
+            - "Cyclomatic complexity"
+            - "Duplication percentage"
+            - "SOLID principle violations"
+            - "Token count per EPMO"
+        
+        task_a1_2:
+          name: "Implement collectors"
+          duration_hours: 8
+          deliverables:
+            - "src/epmo/health/metrics_collector.py"
+            - "Metrics stored in tier3/epmo-health-metrics.db"
+        
+        task_a1_3:
+          name: "Baseline metrics"
+          duration_hours: 4
+          tasks:
+            - "Run collectors on all EPMOs"
+            - "Generate baseline report"
+            - "Identify worst offenders"
+      
+      acceptance_criteria:
+        - "Metrics collected for all EPMOs"
+        - "Baseline report generated"
+        - "Database schema validated"
+      
+      success_metrics:
+        epmos_analyzed: "ALL"
+        metrics_tracked: 5
+        baseline_established: true
+    
+    phase_a2_drift_detection:
+      name: "Automated Drift Detection"
+      duration: "2.5 days"
+      effort_hours: 20
+      priority: "HIGH"
+      
+      objective: "Detect EPMO health degradation automatically"
+      
+      detectors:
+        bloat_detector:
+          name: "Size Bloat Detector"
+          threshold: ">500 lines"
+          action: "Flag for refactoring"
+        
+        solid_detector:
+          name: "SOLID Violation Detector"
+          checks:
+            - "Single Responsibility (max 3 concerns)"
+            - "Open/Closed (extension without modification)"
+            - "Interface Segregation"
+        
+        duplication_detector:
+          name: "Code Duplication Detector"
+          threshold: ">15% duplicated code"
+          action: "Suggest extraction"
+      
+      tasks:
+        task_a2_1:
+          name: "Implement detectors"
+          duration_hours: 12
+          deliverables:
+            - "src/epmo/health/detectors/"
+        
+        task_a2_2:
+          name: "Integrate with metrics"
+          duration_hours: 6
+          tasks:
+            - "Link detectors to metrics collector"
+            - "Set threshold alerts"
+        
+        task_a2_3:
+          name: "Test detection accuracy"
+          duration_hours: 2
+          validation:
+            - "Known violations detected"
+            - "False positives <5%"
+      
+      acceptance_criteria:
+        - "3 detectors operational"
+        - "Alert system working"
+        - "Test coverage ≥80%"
+      
+      success_metrics:
+        detectors_active: 3
+        detection_accuracy: "≥95%"
+    
+    phase_a3_health_validation:
+      name: "Health Validation Suite"
+      duration: "2 days"
+      effort_hours: 16
+      priority: "MEDIUM"
+      
+      objective: "Automated test suite enforcing EPMO governance"
+      
+      test_categories:
+        governance_tests:
+          - "EPMO file size <500 lines"
+          - "SOLID principles adhered"
+          - "Duplication <15%"
+        
+        structural_tests:
+          - "Required sections present"
+          - "YAML schema validation"
+          - "Cross-references valid"
+        
+        integration_tests:
+          - "EPMOs load without errors"
+          - "Orchestrators execute successfully"
+      
+      tasks:
+        task_a3_1:
+          name: "Write validation tests"
+          duration_hours: 10
+          deliverables:
+            - "tests/epmo/health/"
+        
+        task_a3_2:
+          name: "CI/CD integration"
+          duration_hours: 4
+          tasks:
+            - "Add to pytest suite"
+            - "Configure GitHub Actions"
+        
+        task_a3_3:
+          name: "Documentation"
+          duration_hours: 2
+          deliverables:
+            - "EPMO-HEALTH-VALIDATION.md"
+      
+      acceptance_criteria:
+        - "Comprehensive test suite (≥30 tests)"
+        - "CI/CD integration working"
+        - "All tests passing"
+      
+      success_metrics:
+        test_count: "≥30"
+        ci_integration: true
+        pass_rate: "100%"
+    
+    phase_a4_remediation:
+      name: "Guided Remediation System"
+      duration: "2.5 days"
+      effort_hours: 20
+      priority: "HIGH"
+      
+      objective: "Automated fixes + guided reports for EPMO health issues"
+      
+      auto_fixes:
+        - "YAML syntax errors"
+        - "Missing required sections"
+        - "Outdated schema versions"
+      
+      guided_reports:
+        - "Size bloat refactoring suggestions"
+        - "SOLID violation remediation steps"
+        - "Duplication extraction candidates"
+      
+      tasks:
+        task_a4_1:
+          name: "Implement auto-fix engine"
+          duration_hours: 10
+          deliverables:
+            - "src/epmo/health/auto_fix.py"
+        
+        task_a4_2:
+          name: "Generate remediation reports"
+          duration_hours: 8
+          format:
+            - "Markdown reports per EPMO"
+            - "Step-by-step fix instructions"
+        
+        task_a4_3:
+          name: "Testing"
+          duration_hours: 2
+          validation:
+            - "Auto-fixes work correctly"
+            - "Reports actionable"
+      
+      acceptance_criteria:
+        - "Auto-fix engine operational"
+        - "Remediation reports generated"
+        - "All auto-fixable issues resolved"
+      
+      success_metrics:
+        auto_fix_success_rate: "≥95%"
+        manual_issues_documented: "100%"
+    
+    phase_a5_health_dashboard:
+      name: "EPMO Health Dashboard"
+      duration: "3 days"
+      effort_hours: 24
+      priority: "MEDIUM"
+      
+      objective: "Real-time health visualization for all EPMOs"
+      
+      dashboard_features:
+        overview:
+          - "Overall health score (0-100)"
+          - "EPMOs by health category (healthy/warning/critical)"
+          - "Trend charts (improvement/degradation)"
+        
+        per_epmo_view:
+          - "Individual health metrics"
+          - "Violation details"
+          - "Remediation suggestions"
+        
+        alerts:
+          - "Degradation warnings"
+          - "Critical violations"
+      
+      tasks:
+        task_a5_1:
+          name: "Design dashboard UI"
+          duration_hours: 6
+          deliverables:
+            - "Dashboard wireframes"
+            - "UI component specs"
+        
+        task_a5_2:
+          name: "Implement dashboard"
+          duration_hours: 14
+          technology: "Python CLI + rich library (terminal UI)"
+          deliverables:
+            - "src/epmo/health/dashboard.py"
+        
+        task_a5_3:
+          name: "Real-time data integration"
+          duration_hours: 4
+          tasks:
+            - "Connect to metrics database"
+            - "Live refresh capabilities"
+      
+      acceptance_criteria:
+        - "Dashboard displays all EPMOs"
+        - "Real-time data updates"
+        - "User-friendly interface"
+      
+      success_metrics:
+        dashboard_operational: true
+        refresh_rate: "<2 seconds"
+        user_satisfaction: "High"
+    
+    phase_a6_integration:
+      name: "System Integration"
+      duration: "2 days"
+      effort_hours: 16
+      priority: "HIGH"
+      
+      objective: "Integrate EPMO health into core CORTEX operations"
+      
+      integration_points:
+        optimize_operation:
+          - "Add EPMO health check to optimize operation"
+          - "Include health metrics in optimizer report"
+        
+        healthcheck_operation:
+          - "New operation: 'cortex healthcheck'"
+          - "Runs all validators and generates report"
+        
+        setup_operation:
+          - "Initial health baseline during setup"
+          - "Configure health thresholds"
+      
+      tasks:
+        task_a6_1:
+          name: "Integrate with optimize"
+          duration_hours: 6
+          deliverables:
+            - "Updated src/operations/optimize_cortex.py"
+        
+        task_a6_2:
+          name: "Create healthcheck operation"
+          duration_hours: 8
+          deliverables:
+            - "src/operations/healthcheck_cortex.py"
+            - "Operation registered in cortex-operations.yaml"
+        
+        task_a6_3:
+          name: "Testing"
+          duration_hours: 2
+          validation:
+            - "Operations execute successfully"
+            - "Reports accurate"
+      
+      acceptance_criteria:
+        - "EPMO health integrated into optimize"
+        - "Healthcheck operation working"
+        - "All operations tested"
+      
+      success_metrics:
+        operations_integrated: 2
+        integration_test_pass_rate: "100%"
+    
+    track_a_summary:
+      duration_weeks: 8
+      effort_hours: 112
+      phases: 6
+      
+      success_criteria:
+        health_score: "≥85/100 (EPMO health baseline)"
+        all_epmos_compliant: "100%"
+        detectors_active: 3
+        dashboard_operational: true
+        integration_complete: true
+      
+      deliverables:
+        - "EPMO metrics collection system"
+        - "Automated drift detectors (3 types)"
+        - "Health validation test suite (≥30 tests)"
+        - "Remediation engine with auto-fixes"
+        - "Real-time health dashboard"
+        - "Integration with optimize/healthcheck operations"
+      
+      enables:
+        - "Track 1 Phase 1.3: EPM Doc Generator can proceed"
+        - "Continuous EPMO quality assurance"
+        - "Proactive architectural degradation prevention"
+  
+  track_2_summary:
+    total_duration_weeks: 10
+    total_effort_hours: 208
+    track_b_hours: 96
+    track_a_hours: 112
+    
+    execution_sequence:
+      - "Week 1-2: Track B (Core Optimization)"
+      - "Week 3-10: Track A (EPMO Health)"
+    
+    overall_success_criteria:
+      optimizer_score: "62 → ≥90/100 (+28 points)"
+      token_reduction: "773,866 → <200,000 (74%)"
+      epmo_health_score: "≥85/100"
+      yaml_errors_resolved: "4 → 0"
+      plugin_failures_resolved: "4 → 0"
+      epmos_under_500_lines: "100%"
+    
+    critical_milestone:
+      week: 10
+      gate: "Track 1 Phase 1.3 (EPM Doc Generator) UNBLOCKED"
+      verification:
+        - "Track B complete (optimizer ≥90/100)"
+        - "Track A Phase A2 complete (health score ≥85/100)"
+
+# ============================================================================
+# Convergence & Integration Testing (Week 17)
+# ============================================================================
+
+convergence_and_testing:
+  week: 17
+  description: "Merge Track 1 (Machine 1) and Track 2 (Machine 2) work with comprehensive testing"
+  
+  integration_strategy:
+    approach: "Progressive merge with continuous validation"
+    
+    phase_1_preparation:
+      duration: "2 days"
+      tasks:
+        - "Sync git branches (Machine 1: feature-track, Machine 2: optimization-track)"
+        - "Review all changes for conflicts"
+        - "Create integration test plan"
+    
+    phase_2_merge:
+      duration: "1 day"
+      steps:
+        - "Merge optimization-track → main"
+        - "Merge feature-track → main"
+        - "Resolve conflicts (if any)"
+        - "Run full test suite"
+    
+    phase_3_validation:
+      duration: "3 days"
+      validation_categories:
+        functional_testing:
+          - "All Track 1 features operational"
+          - "All Track 2 optimizations validated"
+          - "Cross-track dependencies satisfied"
+        
+        integration_testing:
+          - "IDEA Capture System works with optimized brain"
+          - "Question Routing uses Tier 1 working memory"
+          - "EPM Doc Generator analyzes healthy EPMOs"
+          - "Data Collectors track real-time metrics"
+        
+        regression_testing:
+          - "Existing CORTEX 2.0 features unaffected"
+          - "All 712 tests still passing"
+          - "Zero breaking changes"
+        
+        performance_testing:
+          - "Token usage <200,000 (Track 2 optimization maintained)"
+          - "Optimizer score ≥90/100 (Track 2 baseline)"
+          - "EPMO health ≥85/100 (Track A validation)"
+    
+    phase_4_acceptance:
+      duration: "1 day"
+      criteria:
+        - "All validation tests passing"
+        - "No critical issues identified"
+        - "Performance targets met"
+        - "Documentation updated"
+  
+  rollback_plan:
+    triggers:
+      - "Critical integration failures"
+      - "Performance regression >20%"
+      - "Breaking changes to CORTEX 2.0"
+    
+    procedure:
+      - "Revert merge commits"
+      - "Return to separate tracks"
+      - "Analyze root cause"
+      - "Reattempt integration after fixes"
+  
+  success_criteria:
+    - "CORTEX 3.0 fully operational"
+    - "All 4 Track 1 features working"
+    - "All Track 2 optimizations validated"
+    - "Comprehensive test coverage maintained"
+    - "Documentation complete"
+
+# ============================================================================
+# Success Metrics & Validation
+# ============================================================================
+
+success_metrics:
+  
+  track_1_success:
+    features_delivered: 4
+    
+    phase_1_1_idea_capture:
+      operational: true
+      captures_ideas: "From natural language or EPMO templates"
+      validates_design: "Automated validation before implementation"
+      test_coverage: "≥80%"
+    
+    phase_1_2_question_routing:
+      operational: true
+      routes_questions: "cortex.* vs workspace.* namespace detection"
+      confidence: "≥90% accuracy"
+      response_time: "<100ms"
+    
+    phase_1_3_epm_doc_generator:
+      operational: true
+      generates_docs: "From EPMOs automatically"
+      requires: "EPMO health ≥85/100 (Track 2 dependency satisfied)"
+      quality: "Human-readable, comprehensive"
+    
+    phase_1_4_data_collectors:
+      operational: true
+      collects_metrics: "Real-time brain performance, token usage, pattern learning"
+      storage: "Tier 3 context intelligence"
+      refresh_rate: "<30 seconds"
+  
+  track_2_success:
+    optimizer_score: "62 → ≥90/100 (+28 points minimum)"
+    token_reduction: "773,866 → <200,000 (74%)"
+    
+    track_b_core_optimization:
+      yaml_errors: "4 → 0 (100% resolved)"
+      plugin_failures: "4 → 0 (100% resolved)"
+      tier0_split: "1 file → 5 focused files (SRP compliance)"
+      md_to_yaml: "≥4 files converted (Rule #29)"
+    
+    track_a_epmo_health:
+      health_score: "≥85/100"
+      epmos_compliant: "100% (all under 500 lines)"
+      detectors_active: 3
+      dashboard_operational: true
+      integration_complete: true
+  
+  overall_cortex_3_0:
+    release_quality:
+      - "Zero breaking changes to CORTEX 2.0"
+      - "Test pass rate: 100% (all 712 tests + new tests)"
+      - "Documentation complete and validated"
+      - "Performance targets exceeded"
+    
+    user_impact:
+      - "IDEA Capture reduces planning time 40%"
+      - "Question Routing eliminates ambiguity"
+      - "EPM Doc Generator saves 8 hours/feature"
+      - "Token optimization enables longer conversations"
+    
+    technical_excellence:
+      - "Optimizer score: ≥90/100 (industry-leading)"
+      - "EPMO health: ≥85/100 (sustainable architecture)"
+      - "Token efficiency: 74% reduction (conversation longevity)"
+
+# ============================================================================
+# Risk Management
+# ============================================================================
+
+risk_management:
+  
+  cross_track_dependency_risk:
+    risk: "Track 1 Phase 1.3 (EPM Doc Generator) blocked by Track 2 delays"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    
+    mitigation:
+      - "Track B must complete in Week 1-2 (CRITICAL path)"
+      - "Track A Phase A2 must reach 85/100 health by Week 5"
+      - "Daily sync between Machine 1 and Machine 2"
+      - "Fallback: Phase 1.3 uses manual EPMO analysis if Track 2 delayed"
+    
+    monitoring:
+      - "Track 2 weekly health checks"
+      - "Phase A2 health score tracking"
+      - "Blocker resolution SLA: <48 hours"
+  
+  dual_machine_merge_conflicts:
+    risk: "Git conflicts when merging Machine 1 and Machine 2 work in Week 17"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    
+    mitigation:
+      - "Clear track separation (features vs optimization)"
+      - "Minimal file overlap (Track 1: new files, Track 2: existing files)"
+      - "Daily git syncs during development"
+      - "Conflict resolution protocol documented"
+    
+    prevention:
+      - "Track 1 creates NEW files (minimal overlap)"
+      - "Track 2 modifies EXISTING files (optimization)"
+      - "Shared files (cortex-operations.yaml) have designated owners"
+    
+    resolution:
+      - "Merge conflicts resolved by Track lead"
+      - "Integration testing after each merge"
+  
+  token_optimization_regression:
+    risk: "Track 1 features reintroduce token bloat, undoing Track 2 optimizations"
+    likelihood: "LOW"
+    impact: "HIGH"
+    
+    mitigation:
+      - "Track 1 features use YAML schemas (not verbose MD)"
+      - "Automated token usage monitoring in CI/CD"
+      - "Phase 1.4 Data Collectors track token trends"
+      - "Optimizer run during Week 17 convergence"
+    
+    thresholds:
+      warning: ">220,000 tokens"
+      critical: ">250,000 tokens"
+      action: "Immediate optimization sprint"
+  
+  epmo_health_degradation:
+    risk: "New EPMOs (Track 1) violate health standards, degrading architecture"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    
+    mitigation:
+      - "Track A health validators run on all new EPMOs"
+      - "CI/CD gates enforce <500 line limit"
+      - "SOLID principle checklist for new EPMOs"
+      - "Track 2 Phase A3 validation suite"
+    
+    prevention:
+      - "EPMO templates with built-in governance"
+      - "Automated size/complexity checks"
+      - "Pre-commit hooks for EPMO validation"
+  
+  integration_testing_failures:
+    risk: "Week 17 integration reveals unexpected issues between tracks"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    
+    mitigation:
+      - "Progressive merge strategy (not big-bang)"
+      - "Comprehensive integration test plan (Phase 3)"
+      - "3-day validation window built into timeline"
+      - "Rollback plan documented"
+    
+    rollback_triggers:
+      - "Critical failures (system inoperable)"
+      - "Performance regression >20%"
+      - "Breaking changes to CORTEX 2.0"
+    
+    recovery_time: "<1 day (revert merge commits)"
+  
+  feature_creep:
+    risk: "Scope expansion during 17-week implementation"
+    likelihood: "HIGH"
+    impact: "MEDIUM"
+    
+    mitigation:
+      - "Roadmap is FROZEN (no new features during 3.0)"
+      - "Change Control Board reviews all scope changes"
+      - "Track leads have veto authority"
+      - "Nice-to-haves deferred to CORTEX 3.1+"
+    
+    change_control_process:
+      - "Proposal submitted with justification"
+      - "Impact analysis (timeline, effort, dependencies)"
+      - "Unanimous approval required"
+      - "DEFER by default unless CRITICAL"
+  
+  timeline_slippage:
+    risk: "17-week timeline extends due to complexity or blockers"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    
+    mitigation:
+      - "Weekly progress tracking against roadmap"
+      - "Buffer built into Phase estimates (20% contingency)"
+      - "Critical path monitoring (Track B Week 1-2)"
+      - "Parallel execution reduces dependencies"
+    
+    contingency_plan:
+      - "Phase 1.1 (IDEA Capture) can slip 1-2 weeks if needed"
+      - "Phase 1.4 (Data Collectors) is LOW priority (can defer)"
+      - "Convergence week can extend to 2 weeks if necessary"
+
+# ============================================================================
+# File Cleanup & Consolidation
+# ============================================================================
+
+file_cleanup:
+  action: "DELETE scattered planning files after CORTEX-3.0-ROADMAP.yaml validation"
+  
+  files_to_delete:
+    - file: "cortex-brain/cortex-3.0-design/CP-Planning.md"
+      reason: "8,600+ lines of conversation history - superseded by this roadmap"
+      size: "Large (token bloat source)"
+    
+    - file: "cortex-brain/cortex-3.0-design/CP-Planning0.md"
+      reason: "2,100+ lines of strategic challenge - consolidated into this roadmap"
+      size: "Large"
+    
+    - file: "cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml"
+      reason: "1,200+ lines two-track optimization plan - merged into Track 2"
+      size: "Medium"
+  
+  safety_protocol:
+    backup:
+      - "Create archive: cortex-brain/archives/planning-files-backup-2025-01-16.zip"
+      - "Include all 3 files before deletion"
+    
+    validation:
+      - "Verify CORTEX-3.0-ROADMAP.yaml contains all information"
+      - "Cross-reference all phases, tasks, and dependencies"
+      - "Confirm no data loss"
+    
+    execution:
+      - "Create backup archive"
+      - "Validate roadmap completeness"
+      - "Delete scattered files"
+      - "Git commit: 'chore: consolidate CORTEX 3.0 planning into single roadmap'"
+  
+  post_cleanup_state:
+    planning_sources:
+      - "SINGLE SOURCE OF TRUTH: cortex-brain/cortex-3.0-design/CORTEX-3.0-ROADMAP.yaml"
+    
+    benefits:
+      - "Eliminated planning confusion"
+      - "Single file to maintain"
+      - "Clear two-track execution model"
+      - "Reduced token load in conversations"
+
+# ============================================================================
+# Version History & Maintenance
+# ============================================================================
+
+version_history:
+  version: "3.0.0"
+  status: "CONSOLIDATED_PLAN"
+  created: "2025-01-16"
+  
+  changelog:
+    - date: "2025-01-16"
+      version: "3.0.0"
+      changes:
+        - "Consolidated CP-Planning.md, CP-Planning0.md, CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml"
+        - "Two-track parallel execution model (Machine 1 + Machine 2)"
+        - "Track 1: 4 features (16 weeks, 390 hours)"
+        - "Track 2: 11 phases (10 weeks, 208 hours)"
+        - "Week 17 convergence and integration testing plan"
+        - "Comprehensive risk management"
+        - "Success metrics and validation criteria"
+
+maintenance:
+  update_frequency: "Weekly during execution (Track 1 + Track 2)"
+  
+  responsibilities:
+    track_1_lead: "Update Phase 1.1-1.4 progress, blockers, risks"
+    track_2_lead: "Update Track B + Track A progress, health metrics"
+    integration_lead: "Coordinate cross-track dependencies, Week 17 convergence"
+  
+  review_schedule:
+    - "Week 2: Track B completion review"
+    - "Week 5: Track A Phase A2 checkpoint (EPM Doc blocker review)"
+    - "Week 10: Track 2 complete, Track 1 Phase 1.3 unblocked"
+    - "Week 16: Pre-convergence validation"
+    - "Week 17: Integration testing and acceptance"
+  
+  success_criteria_validation:
+    frequency: "End of each phase"
+    gate_reviews:
+      - "Track B completion (Week 2): Optimizer ≥90/100 REQUIRED"
+      - "Track A Phase A2 (Week 5): Health ≥85/100 REQUIRED"
+      - "Track 2 complete (Week 10): All criteria met, Phase 1.3 UNBLOCKED"
+      - "Week 17: Full CORTEX 3.0 validation"
+
+# ============================================================================
+# End of CORTEX 3.0 Unified Roadmap
+# ============================================================================
