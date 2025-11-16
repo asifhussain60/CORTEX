@@ -1866,3 +1866,8 @@ class Plugin(BasePlugin):
     def cleanup(self) -> bool:
         """Cleanup plugin resources"""
         return True
+
+
+def register():
+    """Register the doc refresh plugin"""
+    return Plugin()

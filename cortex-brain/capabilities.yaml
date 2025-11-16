@@ -2,6 +2,7 @@
 # Machine-readable capability definitions for automation and feature planning
 
 metadata:
+  version: "2.0.0"
   date: "2025-11-09"
   author: "Asif Hussain"
   purpose: "Evaluate CORTEX 2.0 capabilities for developer features"

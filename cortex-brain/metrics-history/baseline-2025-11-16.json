@@ -1,0 +1,35 @@
+{
+  "baseline_date": "2025-11-16",
+  "cortex_version": "3.0",
+  "track": "B",
+  "phase": "B1_foundation_fixes",
+  "optimizer_score": {
+    "overall": 62,
+    "breakdown": {
+      "token_usage": 0,
+      "yaml_validation": 77,
+      "plugin_health": 71,
+      "database_optimization": 100
+    }
+  },
+  "issues_identified": {
+    "total": 67,
+    "token_issues": 59,
+    "yaml_issues": 4,
+    "plugin_issues": 4
+  },
+  "critical_fixes_needed": [
+    "capabilities.yaml missing fields: version",
+    "mkdocs-refresh-config.yaml YAML parse error",
+    "brain-protection-rules.yaml missing fields: rules",
+    "Missing register() in extension_scaffold_plugin.py",
+    "Missing register() in cleanup_plugin.py", 
+    "Missing register() in doc_refresh_plugin.py"
+  ],
+  "track_b_targets": {
+    "optimizer_score": ">=90/100",
+    "token_reduction": "74% (773,866 -> <200,000)",
+    "yaml_errors": 0,
+    "plugin_failures": 0
+  }
+}

@@ -276,8 +276,8 @@ mkdocs:
     - pymdownx.tilde              # Strikethrough
     - pymdownx.details            # Collapsible call-outs
     - pymdownx.emoji:             # Emojis
-        emoji_index: !!python/name:material.extensions.emoji.twemoji
-        emoji_generator: !!python/name:material.extensions.emoji.to_svg
+        emoji_index: "material.extensions.emoji.twemoji"
+        emoji_generator: "material.extensions.emoji.to_svg"
     - pymdownx.highlight:         # Code highlighting
         anchor_linenums: true
         line_spans: __span
@@ -289,7 +289,7 @@ mkdocs:
         custom_fences:
           - name: mermaid
             class: mermaid
-            format: !!python/name:pymdownx.superfences.fence_code_format
+            format: "pymdownx.superfences.fence_code_format"
     - pymdownx.tabbed:            # Tabbed content
         alternate_style: true
     - pymdownx.tasklist:          # Task lists
