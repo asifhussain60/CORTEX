@@ -23,6 +23,7 @@ from src.epm.modules.cleanup_manager import CleanupManager
 from src.epm.modules.diagram_generator import DiagramGenerator
 from src.epm.modules.page_generator import PageGenerator
 from src.epm.modules.cross_reference_builder import CrossReferenceBuilder
+from src.epm.modules.image_prompt_generator import ImagePromptGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -58,6 +59,7 @@ class DocumentationGenerator:
         self.diagram_generator = DiagramGenerator(root_path, dry_run)
         self.page_generator = PageGenerator(root_path, dry_run)
         self.cross_ref_builder = CrossReferenceBuilder(root_path, dry_run)
+        self.image_prompt_generator = ImagePromptGenerator(root_path / "docs" / "diagrams")
         
         # Track generation results
         self.results = {
@@ -231,23 +233,72 @@ class DocumentationGenerator:
         }
     
     def _stage_diagram_generation(self) -> Dict:
-        """Stage 3: Diagram Generation"""
-        logger.info("Generating diagrams...")
+        """Stage 3: Visual Asset Generation (Mermaid Diagrams + Image Prompts)"""
+        logger.info("Generating visual assets...")
         
-        # Load diagram definitions
+        # Part 1: Generate Mermaid diagrams
+        logger.info("  → Generating Mermaid diagrams...")
         definitions_file = self.brain_path / "doc-generation-config" / "diagram-definitions.yaml"
         
         # Generate all diagrams from definitions
-        result = self.diagram_generator.generate_all_diagrams(definitions_file)
+        mermaid_result = self.diagram_generator.generate_all_diagrams(definitions_file)
         
-        total_diagrams = result["diagrams_generated"]
-        logger.info(f"✓ Generated {total_diagrams} diagrams")
+        total_mermaid = mermaid_result["diagrams_generated"]
+        logger.info(f"    ✓ Generated {total_mermaid} Mermaid diagrams")
         
-        self.results["files_generated"]["diagrams"] = total_diagrams
+        # Part 2: Generate image prompts (if enabled by profile)
+        image_prompt_result = None
+        if self.profile in ["comprehensive", "full"]:
+            logger.info("  → Generating image prompts...")
+            
+            try:
+                # Load capabilities and modules data
+                import yaml
+                capabilities_file = self.brain_path / "capabilities.yaml"
+                modules_file = self.brain_path / "module-definitions.yaml"
+                
+                with open(capabilities_file, 'r', encoding='utf-8') as f:
+                    capabilities = yaml.safe_load(f)
+                
+                with open(modules_file, 'r', encoding='utf-8') as f:
+                    modules = yaml.safe_load(f)
+                
+                # Generate all image prompts and narratives
+                image_prompt_result = self.image_prompt_generator.generate_all(
+                    capabilities=capabilities,
+                    modules=modules.get('modules', [])
+                )
+                
+                if image_prompt_result['success']:
+                    total_prompts = image_prompt_result['diagrams_generated']
+                    logger.info(f"    ✓ Generated {total_prompts} image prompts")
+                    logger.info(f"    ✓ Prompts: {image_prompt_result['prompts_dir']}")
+                    logger.info(f"    ✓ Narratives: {image_prompt_result['narratives_dir']}")
+                    logger.info(f"    ✓ Structure ready for AI-generated images")
+                else:
+                    logger.warning("    ⚠️  Image prompt generation failed")
+                    self.results["warnings"].append("Image prompt generation failed")
+                    
+            except Exception as e:
+                logger.warning(f"    ⚠️  Image prompt generation error: {e}")
+                self.results["warnings"].append(f"Image prompts: {str(e)}")
+                image_prompt_result = None
+        else:
+            logger.info(f"  → Image prompts skipped (profile={self.profile}, requires 'comprehensive' or 'full')")
+        
+        self.results["files_generated"]["mermaid_diagrams"] = total_mermaid
+        if image_prompt_result:
+            self.results["files_generated"]["image_prompts"] = image_prompt_result['diagrams_generated']
         
         return {
-            "total": total_diagrams,
-            "files": result["files"]
+            "mermaid_diagrams": {
+                "total": total_mermaid,
+                "files": mermaid_result["files"]
+            },
+            "image_prompts": image_prompt_result if image_prompt_result else {
+                "enabled": False,
+                "reason": f"Profile '{self.profile}' does not include image prompts"
+            }
         }
     
     def _stage_page_generation(self) -> Dict:

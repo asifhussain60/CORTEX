@@ -206,3 +206,63 @@ priority_levels:
   high: 1
   medium: 2
   low: 3
+
+# Visual Assets Configuration
+visual_assets:
+  mermaid_diagrams:
+    enabled: true
+    output_path: "docs/diagrams/mermaid"
+    description: "Auto-generated Mermaid diagrams from code analysis"
+  
+  image_prompts:
+    enabled: true  # Activated for 'comprehensive' and 'full' profiles
+    output_path: "docs/diagrams"
+    description: "Gemini-compatible image generation prompts with narratives"
+    
+    structure:
+      prompts_dir: "docs/diagrams/prompts"
+      narratives_dir: "docs/diagrams/narratives"
+      generated_dir: "docs/diagrams/generated"
+    
+    diagrams:
+      - id: "01-tier-architecture"
+        name: "4-Tier Brain Architecture"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "critical"
+      
+      - id: "02-agent-system"
+        name: "Dual Hemisphere Agent System"
+        aspect_ratio: "1:1"
+        size: "2160x2160"
+        priority: "critical"
+      
+      - id: "03-plugin-architecture"
+        name: "Hub-and-Spoke Plugin Architecture"
+        aspect_ratio: "1:1"
+        size: "2160x2160"
+        priority: "high"
+      
+      - id: "04-memory-flow"
+        name: "Conversation to Knowledge Flow"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "high"
+      
+      - id: "05-agent-coordination"
+        name: "Multi-Agent Workflow Sequence"
+        aspect_ratio: "9:16"
+        size: "1620x2880"
+        priority: "medium"
+      
+      - id: "06-basement-scene"
+        name: "Origin Story Illustration"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "optional"
+    
+    profiles:
+      standard: false      # No image prompts
+      comprehensive: true  # Generate all image prompts
+      full: true          # Generate all image prompts
+

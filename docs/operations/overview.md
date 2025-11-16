@@ -89,6 +89,17 @@ CORTEX uses response templates for consistent communication:
 
 ---
 
+### optimization
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
 ### templates
 
 **When to Use**: 
