@@ -275,9 +275,9 @@ mkdocs:
     - pymdownx.mark               # Highlighting
     - pymdownx.tilde              # Strikethrough
     - pymdownx.details            # Collapsible call-outs
-    - pymdownx.emoji:             # Emojis
-        emoji_index: "material.extensions.emoji.twemoji"
-        emoji_generator: "material.extensions.emoji.to_svg"
+    - pymdownx.emoji:             # Emojis (Material theme integration)
+        emoji_index: material.extensions.emoji.twemoji
+        emoji_generator: material.extensions.emoji.to_svg
     - pymdownx.highlight:         # Code highlighting
         anchor_linenums: true
         line_spans: __span
@@ -285,11 +285,11 @@ mkdocs:
     - pymdownx.inlinehilite       # Inline code highlighting
     - pymdownx.keys               # Keyboard keys
     - pymdownx.snippets           # Include snippets
-    - pymdownx.superfences:       # Code blocks with features
+    - pymdownx.superfences:       # Code blocks with features (Mermaid diagrams)
         custom_fences:
           - name: mermaid
             class: mermaid
-            format: "pymdownx.superfences.fence_code_format"
+            format: pymdownx.superfences.fence_code_format
     - pymdownx.tabbed:            # Tabbed content
         alternate_style: true
     - pymdownx.tasklist:          # Task lists

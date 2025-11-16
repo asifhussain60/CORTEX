@@ -7,6 +7,18 @@
 
 from .capture_handler import ConversationCaptureHandler
 from .import_handler import ConversationImportHandler
+from .quality_monitor import QualityMonitor, create_monitor
+from .smart_hint_generator import SmartHintGenerator, create_hint_generator
+from .tier2_learning import Tier2LearningIntegration, create_tier2_learning
 
-__all__ = ['ConversationCaptureHandler', 'ConversationImportHandler']
+__all__ = [
+    'ConversationCaptureHandler',
+    'ConversationImportHandler',
+    'QualityMonitor',
+    'create_monitor',
+    'SmartHintGenerator',
+    'create_hint_generator',
+    'Tier2LearningIntegration',
+    'create_tier2_learning'
+]
 

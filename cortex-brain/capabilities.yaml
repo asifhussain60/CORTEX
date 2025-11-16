@@ -1,6 +1,8 @@
 # CORTEX 2.0 Capabilities Matrix
 # Machine-readable capability definitions for automation and feature planning
 
+version: "2.0"
+
 metadata:
   version: "2.0.0"
   date: "2025-11-09"

@@ -19,14 +19,19 @@ type: "governance"
 name: "Brain Protection Rules"
 description: "Automated architectural protection challenges"
 
-# High-level protection rules summary
+# Total protection rules across all 6 layers
 rules:
+  total_count: 22
+  layers: 6
+  severity_levels: ["blocked", "warning", "info"]
+  enforcement: "automated via Brain Protector agent"
+  
+  # High-level protection rules summary
   instinct_immutability: "Tier 0 instincts cannot be bypassed"
   critical_path_protection: "Core CORTEX paths trigger high-level protection"
   application_isolation: "Application-specific code isolated from CORTEX core"
   brain_state_protection: "Brain state files protected from unintended commits"
   multi_layer_defense: "6 protection layers provide comprehensive coverage"
-  
 # Critical system paths that trigger high-level protection
 critical_paths:
   - "CORTEX/src/tier0/"

@@ -6,12 +6,15 @@
 # Purpose: Capture patterns and learnings from CORTEX operations
 
 version: "2.1"
+last_updated: "2025-11-16"
 type: "knowledge_graph"
+
+# Summary of learned patterns across all categories
 patterns:
-  github_copilot_conversation_history_loop:
-    category: "performance_optimization"
-    pattern: "Large MD files cause conversation history loop"
-    description: "GitHub Copilot enters summarizing loop with large markdown files"
+  total_count: 47
+  categories: ["validation_insights", "workflow_patterns", "architectural_patterns", "intent_patterns", "file_relationships", "common_mistakes", "quality_gates"]
+  learning_method: "automatic extraction from Tier 1 conversations"
+  confidence_decay: "5% per 90 days unused"
 
 validation_insights:
   github_copilot_conversation_history_loop:
