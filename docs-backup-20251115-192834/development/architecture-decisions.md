@@ -1,3 +1,0 @@
-# Architecture Decisions
-
-Coming soon.

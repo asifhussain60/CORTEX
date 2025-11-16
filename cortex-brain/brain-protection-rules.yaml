@@ -45,6 +45,7 @@ tier0_instincts:
   - "SKULL_FACULTY_INTEGRITY"  # SKULL-007: Publish MUST include ALL essential CORTEX faculties
   - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
   - "DISTRIBUTED_DATABASE_ARCHITECTURE"  # CRITICAL: Use tier-specific databases, never monolithic
+  - "CORTEX_PROMPT_FILE_PROTECTION"  # CRITICAL: CORTEX.prompt.md NEVER renamed, safe update procedure enforced
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -308,6 +309,146 @@ protection_layers:
           - Clinical/academic tone ("The system was designed to...")
           - Passive voice constructions
           - Documentary-style time markers
+      
+      - rule_id: "CORTEX_PROMPT_FILE_PROTECTION"
+        name: "CORTEX.prompt.md Protection (Never Rename, Safe Update)"
+        severity: "blocked"
+        description: "Prevent renaming CORTEX.prompt.md and enforce safe update procedure"
+        
+        detection:
+          combined_keywords:
+            rename_attempt:
+              - "rename CORTEX.prompt.md"
+              - "CORTEX.prompt.md to"
+              - "move CORTEX.prompt.md"
+              - "cortex-lite"
+              - "cortex-backup"
+              - "cortex-fixed"
+              - "CORTEX-"
+            or_unsafe_edit:
+              - "edit CORTEX.prompt.md directly"
+              - "modify in place"
+          scope: ["intent", "description", "file_operation"]
+          logic: "OR"
+        
+        alternatives:
+          - "Use safe update: temp file → optimize → DELETE original → copy → delete temp"
+          - "Create .github/prompts/temp-cortex-update.md with optimized content"
+          - "DELETE ALL content of CORTEX.prompt.md (clear file completely)"
+          - "Copy complete instructions from temp to CORTEX.prompt.md"
+          - "Delete temporary file after successful copy"
+        
+        evidence_template: |
+          🚨 CORTEX.prompt.md PROTECTION VIOLATION
+          
+          Attempted: '{operation}'
+          
+          CRITICAL: CORTEX.prompt.md is the GitHub Copilot integration entry point!
+          
+          ❌ NEVER:
+          - Rename to cortex-lite.prompt.md
+          - Rename to cortex-backup.prompt.md  
+          - Rename to cortex-fixed.prompt.md
+          - Add ANY prefix or suffix
+          - Edit directly (risky, no rollback)
+          
+          ✅ SAFE UPDATE PROCEDURE:
+          1. Create: .github/prompts/temp-cortex-update.md
+          2. Generate optimized content in temp file
+          3. DELETE ALL content of CORTEX.prompt.md
+          4. Copy complete instructions from temp
+          5. Delete temp-cortex-update.md
+          
+          Why? Filename stability + Atomic updates + Rollback capability
+        
+        rationale: |
+          CORTEX_PROMPT_FILE_PROTECTION: Entry Point Stability
+          
+          CORTEX.prompt.md is the SINGLE entry point for GitHub Copilot Chat.
+          Its exact filename (.github/prompts/CORTEX.prompt.md) is:
+          - Hardcoded in GitHub Copilot discovery
+          - Referenced throughout all documentation
+          - Critical for `/CORTEX` command to work
+          
+          Why This Protection Matters:
+          
+          1. GitHub Copilot Discovery:
+             Copilot looks for .github/prompts/CORTEX.prompt.md
+             ANY rename → integration breaks completely
+             No fallback mechanism exists
+          
+          2. Documentation References:
+             - README.md references CORTEX.prompt.md
+             - Setup guides reference CORTEX.prompt.md
+             - Quick start tutorials reference CORTEX.prompt.md
+             All references break if renamed
+          
+          3. User Confusion:
+             Multiple prompt files create:
+             - "Which one do I use?"
+             - "Is cortex-lite the new version?"
+             - Cognitive overhead increases
+          
+          4. Git History Fragmentation:
+             Rename creates new file in git
+             Old file shows as deleted
+             History split across filenames
+          
+          Safe Update Procedure:
+          
+          Step 1: Create Temporary File
+          ```
+          .github/prompts/temp-cortex-update.md
+          ```
+          - Contains new optimized content
+          - Reviewable before applying
+          - Acts as backup if issues occur
+          
+          Step 2: Generate Optimized Content
+          - Apply token optimizations
+          - Restructure sections
+          - Update documentation references
+          - Add new features
+          
+          Step 3: Clear Original (Atomic Update)
+          ```python
+          # DELETE ALL content
+          Path('.github/prompts/CORTEX.prompt.md').write_text('')
+          ```
+          - Prevents partial updates
+          - Ensures clean slate
+          - No merge conflicts
+          
+          Step 4: Copy Complete Instructions
+          ```python
+          content = Path('temp-cortex-update.md').read_text()
+          Path('CORTEX.prompt.md').write_text(content)
+          ```
+          - Atomic replacement
+          - No partial content risk
+          
+          Step 5: Delete Temporary File
+          ```python
+          Path('temp-cortex-update.md').unlink()
+          ```
+          - Clean up
+          - Single source of truth
+          
+          Benefits:
+          - Filename NEVER changes (stability)
+          - Atomic updates (no half-updated states)
+          - Review capability (temp file inspection)
+          - Rollback support (restore from temp)
+          - Clean git history (single file evolution)
+          
+          Real Incident Pattern Prevented:
+          Developer: "I'll create CORTEX-lite.prompt.md"
+          Result: Two prompt files coexist
+          User confusion: "Which is current?"
+          Maintenance nightmare: Multiple files diverge
+          
+          This rule BLOCKS any rename attempt.
+          Exception: Temporary files for update workflow ARE encouraged.
   
   # Layer 2: Tier Boundary Protection
   - layer_id: "tier_boundary"

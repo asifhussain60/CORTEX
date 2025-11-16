@@ -387,6 +387,24 @@ future_enhancements:
   - "Video generation (screencasts from scripts)"
   - "Versioned documentation (maintain docs for multiple CORTEX versions)"
 
+related_initiatives:
+  cortex_3_1_epmo_optimization:
+    description: "EPMO Health Management System for continuous quality monitoring"
+    plan_location: "cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml"
+    relationship: |
+      CORTEX 3.0 introduces powerful EPM orchestrators (like doc generator).
+      CORTEX 3.1 ensures those EPMs stay healthy and optimized through:
+      - Automated drift detection (bloat, duplication, SOLID violations)
+      - Health validation tests (CI/CD integrated)
+      - Guided remediation (clear action plans)
+      - Real-time dashboard (visual monitoring)
+    benefits_to_epm_doc_generator:
+      - "Prevents bloat (keep under 500 line soft limit)"
+      - "Enforces SRP (single responsibility for orchestrator)"
+      - "Detects duplication (no duplicate EPM orchestrators)"
+      - "Monitors complexity (keep methods simple)"
+      - "Ensures maintainability (SOLID compliance)"
+
 testing:
   test_files:
     - "tests/epm/test_doc_generator.py"

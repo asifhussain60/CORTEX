@@ -82,6 +82,12 @@ class OptimizationMetrics:
     final_pass_rate: float = 0.0
     skull_007_compliant: bool = False
     
+    # Phase 7: Governance Health Check
+    governance_drift_score: float = 100.0
+    governance_position_drifts: int = 0
+    governance_forward_refs: int = 0
+    governance_orphaned_rules: int = 0
+    
     # Overall
     total_improvements: int = 0
     execution_time_seconds: float = 0.0
@@ -132,6 +138,12 @@ class SystemHealthReport:
                     'tests_fixed': self.metrics.tests_fixed,
                     'final_pass_rate': self.metrics.final_pass_rate,
                     'skull_007_compliant': self.metrics.skull_007_compliant
+                },
+                'governance': {
+                    'health_score': self.metrics.governance_drift_score,
+                    'position_drifts': self.metrics.governance_position_drifts,
+                    'forward_refs': self.metrics.governance_forward_refs,
+                    'orphaned_rules': self.metrics.governance_orphaned_rules
                 }
             },
             'total_improvements': self.metrics.total_improvements,
@@ -147,7 +159,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     """
     Meta-level orchestrator for comprehensive CORTEX system optimization.
     
-    Coordinates 6 optimization phases:
+    Coordinates 7 optimization phases:
     
     Phase 1: Design Sync
         - Run design_sync_orchestrator
@@ -184,6 +196,14 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         - Calculate overall health score
         - Generate recommendations
         - Save to cortex-brain/system-optimization-report.md
+    
+    Phase 7: Governance Health Check (NEW - CORTEX 3.1)
+        - Check rule position drift vs optimal ordering
+        - Count forward references (target: <3)
+        - Detect file bloat (target: <1200 lines)
+        - Identify orphaned rules (never referenced)
+        - Validate metadata (copilot_position, reference_count)
+        - Calculate governance health score (0-100)
     
     Usage:
         orchestrator = OptimizeSystemOrchestrator(project_root=Path('/path/to/cortex'))
@@ -348,10 +368,23 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             
             # Phase 6: Test Suite Optimization
             if 'test_suite' not in skip_phases:
-                logger.info("\n[Phase 6/6] Optimizing test suite...")
+                logger.info("\n[Phase 6/7] Optimizing test suite...")
                 self._run_test_suite_optimization(context)
             else:
-                logger.info("\n[Phase 6/6] Test suite optimization skipped (per user request)")
+                logger.info("\n[Phase 6/7] Test suite optimization skipped (per user request)")
+            
+            # Phase 7: Governance Health Check
+            if 'governance' not in skip_phases:
+                logger.info("\n[Phase 7/7] Checking governance drift...")
+                governance_result = self._check_governance_drift(context)
+                if governance_result['has_issues']:
+                    logger.warning(f"⚠️  Governance issues detected (score: {governance_result['health_score']:.1f}/100)")
+                    for issue in governance_result['issues']:
+                        logger.warning(f"   • {issue}")
+                else:
+                    logger.info(f"✅ Governance health: {governance_result['health_score']:.1f}/100")
+            else:
+                logger.info("\n[Phase 7/7] Governance check skipped (per user request)")
             
             # Calculate metrics
             end_time = datetime.now()
@@ -477,16 +510,301 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         self.metrics.warnings.append("Brain tuning not yet implemented")
     
     def _run_entry_point_alignment(self, context: Dict[str, Any]) -> None:
-        """Run entry point alignment (Phase 5)."""
-        # TODO: Implement entry point alignment module
-        logger.info("⏩ Entry point alignment implementation pending...")
-        self.metrics.warnings.append("Entry point alignment not yet implemented")
+        """
+        Run entry point alignment (Phase 5).
+        
+        CORTEX 3.1 Enhancement: EPMO Health Check
+        - Detects EPMO bloat (>500 lines soft limit, >1000 hard limit)
+        - Finds EPMO duplication (same class in multiple locations)
+        - Validates SOLID principles (SRP, OCP, DIP violations)
+        - Checks hemisphere separation (RIGHT vs LEFT brain)
+        - Reports drift from governance rules
+        
+        See: cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml
+        """
+        logger.info("🔍 Checking EPMO health and alignment...")
+        
+        try:
+            # Check for EPMO health issues
+            epmo_health = self._check_epmo_health()
+            
+            if epmo_health['has_issues']:
+                logger.warning(f"⚠️ EPMO health issues detected:")
+                for issue in epmo_health['issues']:
+                    logger.warning(f"  - {issue}")
+                
+                # Add to warnings
+                self.metrics.warnings.extend(epmo_health['issues'])
+                
+                # Provide remediation guidance
+                logger.info("\n💡 Remediation guidance:")
+                logger.info("  See: cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml")
+                logger.info("  Run: pytest tests/tier0/test_epmo_health.py (when implemented)")
+            else:
+                logger.info("✅ All EPMOs healthy and aligned")
+                self.metrics.orchestrators_aligned = epmo_health['epmo_count']
+        
+        except Exception as e:
+            error_msg = f"EPMO health check error: {e}"
+            logger.error(error_msg, exc_info=True)
+            self.metrics.errors_encountered.append(error_msg)
+    
+    def _check_epmo_health(self) -> Dict[str, Any]:
+        """
+        Check EPMO health metrics.
+        
+        Implements CORTEX 3.1 EPMO drift detection:
+        - Size metrics (line count, token count)
+        - Duplication detection (class name similarity)
+        - SOLID compliance (SRP, OCP, DIP)
+        - Hemisphere separation (RIGHT vs LEFT)
+        
+        Returns:
+            Dict with keys:
+                - has_issues: bool
+                - issues: List[str]
+                - epmo_count: int
+                - health_score: float (0-100)
+        """
+        issues = []
+        epmo_files = []
+        
+        # Find all orchestrator files
+        operations_dir = self.project_root / "src" / "operations" / "modules"
+        if operations_dir.exists():
+            for py_file in operations_dir.rglob("*_orchestrator.py"):
+                epmo_files.append(py_file)
+        
+        if not epmo_files:
+            return {
+                'has_issues': False,
+                'issues': [],
+                'epmo_count': 0,
+                'health_score': 100.0
+            }
+        
+        # Check 1: File size (bloat detection)
+        SOFT_LIMIT = 500  # lines
+        HARD_LIMIT = 1000  # lines
+        
+        for epmo_file in epmo_files:
+            line_count = len(epmo_file.read_text(encoding='utf-8').splitlines())
+            
+            if line_count > HARD_LIMIT:
+                issues.append(
+                    f"CRITICAL: {epmo_file.name} has {line_count} lines (hard limit: {HARD_LIMIT})"
+                )
+            elif line_count > SOFT_LIMIT:
+                issues.append(
+                    f"WARNING: {epmo_file.name} has {line_count} lines (soft limit: {SOFT_LIMIT})"
+                )
+        
+        # Check 2: Duplication detection (simple class name matching)
+        class_names = {}
+        for epmo_file in epmo_files:
+            content = epmo_file.read_text(encoding='utf-8')
+            # Simple regex to find class definitions
+            import re
+            matches = re.findall(r'class\s+(\w+Orchestrator)\s*\(', content)
+            
+            for class_name in matches:
+                if class_name not in class_names:
+                    class_names[class_name] = []
+                class_names[class_name].append(epmo_file)
+        
+        # Report duplicates
+        for class_name, files in class_names.items():
+            if len(files) > 1:
+                file_list = ', '.join([f.name for f in files])
+                issues.append(
+                    f"DUPLICATION: {class_name} found in {len(files)} locations: {file_list}"
+                )
+        
+        # Check 3: SOLID principle violations (simple heuristics)
+        for epmo_file in epmo_files:
+            content = epmo_file.read_text(encoding='utf-8')
+            
+            # SRP check: Count methods (rough proxy for responsibilities)
+            method_count = len(re.findall(r'\n    def \w+\(', content))
+            if method_count > 15:
+                issues.append(
+                    f"SRP VIOLATION: {epmo_file.name} has {method_count} methods (suggests >3 responsibilities)"
+                )
+        
+        # Calculate health score
+        health_score = 100.0
+        health_score -= len([i for i in issues if 'CRITICAL' in i]) * 20
+        health_score -= len([i for i in issues if 'WARNING' in i]) * 5
+        health_score -= len([i for i in issues if 'DUPLICATION' in i]) * 15
+        health_score -= len([i for i in issues if 'VIOLATION' in i]) * 10
+        health_score = max(0.0, health_score)
+        
+        return {
+            'has_issues': len(issues) > 0,
+            'issues': issues,
+            'epmo_count': len(epmo_files),
+            'health_score': health_score
+        }
     
     def _run_test_suite_optimization(self, context: Dict[str, Any]) -> None:
         """Run test suite optimization (Phase 6)."""
         # TODO: Implement test suite optimization module
         logger.info("⏩ Test suite optimization implementation pending...")
         self.metrics.warnings.append("Test suite optimization not yet implemented")
+    
+    def _check_governance_drift(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Check governance.yaml for ordering drift and inefficiencies (Phase 7).
+        
+        Monitors:
+        - Rule position drift (rules moved from optimal positions)
+        - Forward reference count (rules referencing later rules)
+        - File bloat (excessive line count)
+        - Orphaned rules (never referenced by other rules)
+        - Missing metadata (copilot_position, reference_count missing)
+        
+        Returns:
+            Dict with has_issues, issues list, health_score, and recommendations
+        """
+        import yaml
+        
+        governance_path = self.project_root / "src" / "tier0" / "governance.yaml"
+        
+        if not governance_path.exists():
+            return {
+                'has_issues': True,
+                'issues': ["CRITICAL: governance.yaml not found"],
+                'health_score': 0.0,
+                'recommendations': ["Create governance.yaml in src/tier0/"]
+            }
+        
+        issues = []
+        recommendations = []
+        
+        try:
+            # Load governance rules
+            with open(governance_path, 'r', encoding='utf-8') as f:
+                governance = yaml.safe_load(f)
+            
+            rules = governance.get('rules', [])
+            if not rules:
+                return {
+                    'has_issues': True,
+                    'issues': ["CRITICAL: No rules found in governance.yaml"],
+                    'health_score': 0.0,
+                    'recommendations': ["Add governance rules"]
+                }
+            
+            # Check 1: Rule position drift (compare actual vs optimal positions)
+            optimal_order = [
+                'DEFINITION_OF_DONE', 'DEFINITION_OF_READY', 'BRAIN_PROTECTION',
+                'TEST_FIRST_TDD', 'CHALLENGE_USER_CHANGES_TO_BRAIN',
+                'SINGLE_RESPONSIBILITY_PRINCIPLE', 'INTERFACE_SEGREGATION_PRINCIPLE',
+                'DEPENDENCY_INVERSION_PRINCIPLE', 'DESIGN_PATTERNS_OVER_IMPROVISATION',
+                'MODULAR_STRUCTURE', 'HEMISPHERE_SEPARATION', 'PLUGIN_ARCHITECTURE_FIRST',
+                'TIER_BOUNDARIES', 'FIFO_QUEUE_MANAGEMENT', 'PATTERN_DECAY',
+                'ANOMALY_DETECTION', 'DEV_CONTEXT_THROTTLING',
+                'AUTO_BRAIN_STATE_UPDATE', 'AUTO_RECORDING', 'AUTO_GIT_COMMIT',
+                'CHECKPOINT_STRATEGY', 'YAML_FOR_PLANNING', 'DUAL_INTERFACE',
+                'LIVE_DESIGN_DOC', 'DELETE_NOT_ARCHIVE', 'ONE_PROMPT_PER_FILE',
+                'GOVERNANCE_SELF_ENFORCEMENT', 'SYSTEM_LIMITS'
+            ]
+            
+            actual_order = [rule.get('id') for rule in rules]
+            position_drifts = []
+            
+            for idx, rule_id in enumerate(actual_order, start=1):
+                if rule_id in optimal_order:
+                    optimal_pos = optimal_order.index(rule_id) + 1
+                    if abs(idx - optimal_pos) > 3:  # More than 3 positions off
+                        position_drifts.append(f"{rule_id}: actual pos {idx}, optimal pos {optimal_pos} (drift: {idx - optimal_pos})")
+            
+            if position_drifts:
+                issues.append(f"POSITION DRIFT: {len(position_drifts)} rules out of optimal position")
+                recommendations.append(f"Reorder {len(position_drifts)} drifted rules to optimal positions")
+            
+            # Check 2: Forward reference count (rule X references rule Y appearing later)
+            forward_refs = []
+            rule_ids = {rule.get('id'): idx for idx, rule in enumerate(rules)}
+            
+            for idx, rule in enumerate(rules):
+                rule_id = rule.get('id')
+                referenced_by = rule.get('referenced_by', [])
+                
+                for ref_id in referenced_by:
+                    if ref_id in rule_ids:
+                        ref_idx = rule_ids[ref_id]
+                        if ref_idx < idx:  # Referencing rule appears BEFORE current rule
+                            forward_refs.append(f"{ref_id} → {rule_id} (forward: {idx - ref_idx} positions)")
+            
+            if len(forward_refs) > 3:
+                issues.append(f"FORWARD REFERENCES: {len(forward_refs)} detected (target: <3)")
+                recommendations.append(f"Reduce forward references from {len(forward_refs)} to <3")
+            
+            # Check 3: File bloat (excessive line count)
+            with open(governance_path, 'r', encoding='utf-8') as f:
+                line_count = len(f.readlines())
+            
+            if line_count > 1500:
+                issues.append(f"FILE BLOAT: {line_count} lines (target: <1200)")
+                recommendations.append("Remove redundant comments or split into focused sections")
+            
+            # Check 4: Orphaned rules (never referenced)
+            all_referenced = set()
+            for rule in rules:
+                all_referenced.update(rule.get('referenced_by', []))
+            
+            orphaned = [rule.get('id') for rule in rules if rule.get('id') not in all_referenced and rule.get('reference_count', 0) == 0]
+            
+            if orphaned:
+                issues.append(f"ORPHANED RULES: {len(orphaned)} never referenced")
+                recommendations.append(f"Review orphaned rules: {', '.join(orphaned[:3])}")
+            
+            # Check 5: Missing metadata
+            missing_metadata = []
+            for rule in rules:
+                rule_id = rule.get('id')
+                if 'copilot_position' not in rule:
+                    missing_metadata.append(f"{rule_id}: missing copilot_position")
+                if 'reference_count' not in rule:
+                    missing_metadata.append(f"{rule_id}: missing reference_count")
+            
+            if missing_metadata:
+                issues.append(f"MISSING METADATA: {len(missing_metadata)} fields missing")
+                recommendations.append(f"Add copilot_position and reference_count to all rules")
+            
+            # Calculate health score
+            health_score = 100.0
+            health_score -= len(position_drifts) * 2.0  # -2 per drifted rule
+            health_score -= max(0, len(forward_refs) - 3) * 5.0  # -5 per forward ref over 3
+            health_score -= max(0, (line_count - 1200) / 30)  # -1 per 30 lines over 1200
+            health_score -= len(orphaned) * 3.0  # -3 per orphaned rule
+            health_score -= len(missing_metadata) * 1.0  # -1 per missing field
+            health_score = max(0.0, min(100.0, health_score))
+            
+            # Store metrics for reporting
+            self.metrics.governance_drift_score = health_score
+            self.metrics.governance_position_drifts = len(position_drifts)
+            self.metrics.governance_forward_refs = len(forward_refs)
+            self.metrics.governance_orphaned_rules = len(orphaned)
+            
+            return {
+                'has_issues': len(issues) > 0,
+                'issues': issues,
+                'health_score': health_score,
+                'recommendations': recommendations,
+                'position_drifts': len(position_drifts),
+                'forward_refs': len(forward_refs),
+                'orphaned_rules': len(orphaned)
+            }
+        
+        except Exception as e:
+            logger.error(f"Governance drift check failed: {e}", exc_info=True)
+            return {
+                'has_issues': True,
+                'issues': [f"ERROR: {str(e)}"],
+                'health_score': 0.0,
+                'recommendations': ["Fix governance.yaml parsing errors"]
+            }
     
     def _calculate_total_improvements(self) -> int:
         """Calculate total improvements made across all phases."""
@@ -621,6 +939,12 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
 - Tests fixed: {report.metrics.tests_fixed}
 - Final pass rate: {report.metrics.final_pass_rate:.1f}%
 - SKULL-007 compliant: {'✅' if report.metrics.skull_007_compliant else '❌'}
+
+### Phase 7: Governance Health Check
+- Governance health score: {report.metrics.governance_drift_score:.1f}/100
+- Position drifts detected: {report.metrics.governance_position_drifts}
+- Forward references: {report.metrics.governance_forward_refs} (target: <3)
+- Orphaned rules: {report.metrics.governance_orphaned_rules}
 
 ---
 

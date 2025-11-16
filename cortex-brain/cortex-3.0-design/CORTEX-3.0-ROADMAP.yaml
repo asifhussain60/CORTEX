@@ -23,11 +23,29 @@
 # ============================================================================
 
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
   roadmap_name: "CORTEX 3.0 Unified Implementation"
   status: "READY_FOR_EXECUTION"
   created_date: "2025-11-16"
   last_updated: "2025-11-16"
+  
+  changelog:
+    - date: "2025-11-16"
+      version: "3.0.2"
+      changes:
+        - "Updated Feature 5 Method 1: Changed to /CORTEX command workflow"
+        - "Method 1 now two-step: '/CORTEX Capture' creates empty file, '/CORTEX Import' imports after paste"
+        - "Updated user workflow: Create empty file → User pastes → Import to brain"
+        - "Aligned with conversation-capture.md implementation design"
+    
+    - date: "2025-11-16"
+      version: "3.0.1"
+      changes:
+        - "Added Feature 5: Conversation Tracking & Capture (80 hours, 2 weeks)"
+        - "Method 1: Manual capture with 'save this conversation' command"
+        - "Method 3: Intelligent auto-detection with Smart Hint prompts"
+        - "Updated Track 1 total: 5 features, 470 hours, 12-18 weeks"
+        - "User approved both methods from cp1.md conversation"
   
   replaces:
     - file: "CP-Planning.md"
@@ -79,8 +97,8 @@ metadata:
 track_1_features:
   name: "CORTEX 3.0 Feature Implementation"
   machine: "Machine 1"
-  duration_weeks: "12-16"
-  total_effort_hours: 390
+  duration_weeks: "12-18"
+  total_effort_hours: 470
   
   prerequisites:
     critical:
@@ -574,32 +592,297 @@ track_1_features:
         - "Mermaid diagram renderer"
   
   # ========================================================================
+  # FEATURE 5: Conversation Tracking & Capture
+  # ========================================================================
+  # Status: 0% implemented (Track A partially exists)
+  # Priority: HIGH (critical for CORTEX brain memory)
+  # Duration: 2 weeks
+  # Effort: 80 hours
+  # Dependencies: Track A conversation import pipeline (partial implementation)
+  # User Approved: Method 1 (manual) + Method 3 (intelligent auto-prompt)
+  # ========================================================================
+  
+  feature_5_conversation_tracking:
+    name: "Conversation Tracking & Capture"
+    status: "PARTIALLY_IMPLEMENTED_NEEDS_UI"
+    priority: "HIGH"
+    
+    duration:
+      weeks: 2
+      hours: 80
+    
+    description: |
+      Two-method conversation capture system:
+      1. Manual capture when user wants to save strategic conversations
+      2. Intelligent auto-detection of valuable conversations with built-in
+         save mechanism using Method 1's infrastructure
+      
+      Solves the critical problem: GitHub Copilot Chat conversations are NOT
+      automatically tracked to CORTEX brain, causing amnesia between sessions.
+    
+    strategic_value:
+      memory_persistence: "Preserves strategic conversations across sessions"
+      pattern_learning: "Enables Tier 2 to learn from conversation patterns"
+      context_continuity: "Solves 'Make it purple' amnesia problem"
+      brain_intelligence: "Feeds quality conversations into knowledge graph"
+    
+    user_requirements:
+      method_1_manual: "User says '/CORTEX Capture this conversation' to create empty file, then '/CORTEX Import this conversation' after pasting content"
+      method_3_intelligent: "CORTEX detects valuable conversation and prompts user with Smart Hint to capture"
+      
+      user_approval:
+        - "Method 1: Two-step process - create empty file, then import after user pastes"
+        - "Method 3: CORTEX determines valuable conversation and prompts with Method 1 mechanism"
+    
+    existing_infrastructure:
+      track_a_pipeline:
+        status: "11/20 tests passing (55%)"
+        location: "tests/tier1/test_conversation_pipeline_harness.py"
+        capabilities:
+          - "CopilotConversationParser (working)"
+          - "SemanticExtractor (working)"
+          - "import_conversation() method (working)"
+          - "Quality scoring (broken - needs fixing)"
+        
+        issues:
+          - "Multi-turn conversations rated LOW quality incorrectly"
+          - "No natural language trigger integration"
+          - "No intelligent auto-detection of valuable conversations"
+    
+    implementation_phases:
+      
+      phase_5_1_method_1_manual_capture:
+        name: "Method 1: Manual Conversation Capture"
+        duration_hours: 30
+        
+        description: |
+          User-initiated conversation save with /CORTEX commands.
+          Two-part workflow: (1) Create empty file, (2) Import after user pastes content.
+          Integrates existing Track A import pipeline with Intent Router.
+        
+        tasks:
+          - "Add '/CORTEX Capture this conversation' trigger to Intent Router"
+          - "Implement empty file creation with YYYYMMDD-[description].md naming"
+          - "Generate clickable file link for user to open"
+          - "Add '/CORTEX Import this conversation' trigger to Intent Router"
+          - "Implement file reading and Track A import pipeline call"
+          - "Return confirmation with import statistics"
+        
+        acceptance_criteria:
+          - "User can say '/CORTEX Capture this conversation'"
+          - "Empty file created at cortex-brain/documents/conversation-captures/YYYYMMDD-description.md"
+          - "Clickable link provided to open file"
+          - "User can paste conversation and save file"
+          - "User can say '/CORTEX Import this conversation'"
+          - "Track A pipeline imports file to SQLite successfully"
+          - "User sees confirmation: 'Imported: 15 messages, 3 entities tracked'"
+        
+        deliverables:
+          - "src/agents/intent_router.py (CAPTURE_CONVERSATION + IMPORT_CONVERSATION intents)"
+          - "cortex-brain/response-templates/conversation-capture.yaml"
+          - "cortex-brain/response-templates/conversation-import.yaml"
+          - "src/operations/modules/conversations/capture_handler.py (create empty file)"
+          - "src/operations/modules/conversations/import_handler.py (read file + import)"
+          - "tests/operations/modules/conversations/test_capture_handler.py"
+          - "tests/operations/modules/conversations/test_import_handler.py"
+        
+        integration_points:
+          - "Intent Router: Add CAPTURE_CONVERSATION intent (empty file creation)"
+          - "Intent Router: Add IMPORT_CONVERSATION intent (file import)"
+          - "Response Templates: conversation_capture_initiated + conversation_import_complete"
+          - "Track A Pipeline: Reuse CopilotConversationParser for import"
+          - "Tier 1 Working Memory: Store via import_conversation()"
+        
+        user_workflow:
+          step_1: "User says '/CORTEX Capture this conversation'"
+          step_2: "CORTEX creates empty file: YYYYMMDD-[auto-description].md"
+          step_3: "CORTEX provides clickable link to open file"
+          step_4: "User opens file, copies conversation from chat, pastes, saves"
+          step_5: "User says '/CORTEX Import this conversation'"
+          step_6: "CORTEX reads markdown file"
+          step_7: "Calls Track A pipeline to parse and import to SQLite"
+          step_8: "Updates Tier 1 working memory + Tier 2 knowledge graph"
+          step_9: "Returns: 'Conversation imported: 15 messages, 3 entities tracked'"
+      
+      phase_5_2_quality_scoring_fix:
+        name: "Fix Track A Quality Scoring"
+        duration_hours: 20
+        
+        description: |
+          Fix broken quality scoring so multi-turn conversations are rated
+          correctly. Currently 11/20 tests passing, quality scoring broken.
+        
+        tasks:
+          - "Debug multi-turn conversation quality scoring"
+          - "Fix LOW quality rating for valuable conversations"
+          - "Implement proper turn count weighting"
+          - "Add depth analysis (question → answer → follow-up patterns)"
+          - "Test with real roadmap planning conversation"
+        
+        acceptance_criteria:
+          - "20/20 Track A tests passing"
+          - "Multi-turn conversations rated ≥7/10 if substantive"
+          - "Roadmap planning conversation scores ≥8/10"
+        
+        deliverables:
+          - "src/tier1/semantic_extractor.py (quality scoring fix)"
+          - "tests/tier1/test_conversation_pipeline_harness.py (all passing)"
+        
+        validation:
+          - "Test with today's roadmap conversation (cp1.md)"
+          - "Should score ≥8/10 (strategic planning, decisions, Q&A)"
+      
+      phase_5_3_method_3_intelligent_detection:
+        name: "Method 3: Intelligent Auto-Detection"
+        duration_hours: 30
+        
+        description: |
+          CORTEX analyzes conversation quality in real-time and prompts user
+          to save when valuable conversation detected. Uses Method 1's capture
+          mechanism automatically.
+        
+        tasks:
+          - "Implement real-time quality analysis during conversation"
+          - "Define thresholds for 'valuable conversation' (≥7/10 quality)"
+          - "Add Smart Hint system to response format (optional section)"
+          - "Generate one-click save prompt when threshold met"
+          - "Track user acceptance/rejection patterns (Tier 2 learning)"
+        
+        acceptance_criteria:
+          - "Detects valuable conversations with ≥85% accuracy"
+          - "Prompts user after 5+ substantive turns (strategic work)"
+          - "User can accept (one-click save) or dismiss"
+          - "CORTEX learns from user preferences (which convos worth saving)"
+        
+        deliverables:
+          - "src/operations/modules/conversations/quality_monitor.py"
+          - "src/operations/modules/conversations/smart_hint_generator.py"
+          - "cortex-brain/response-templates/smart-hint.yaml"
+          - "tests/operations/modules/conversations/test_quality_monitor.py"
+        
+        smart_hint_format: |
+          # After Response section, BEFORE Next Steps
+          
+          ---
+          
+          > ### 💡 CORTEX Learning Opportunity
+          > 
+          > **This conversation has exceptional strategic value:**
+          > - Multi-phase planning with clear execution
+          > - Design decisions documented
+          > - Complete implementation with tests
+          > 
+          > **Quality Score: 9/10 (EXCELLENT)**
+          > 
+          > 📁 **One-click capture:**  
+          > Say "/CORTEX Capture this conversation" to create file
+          > Then paste conversation and say "/CORTEX Import this conversation"
+          > 
+          > *Or dismiss: Say "skip" and I won't suggest this again*
+          
+          ---
+        
+        user_workflow:
+          step_1: "CORTEX monitors conversation quality real-time"
+          step_2: "After 5+ turns, quality score ≥7/10 detected"
+          step_3: "Smart Hint appears in response (optional section)"
+          step_4: "User says '/CORTEX Capture this conversation' (triggers Method 1 Step 1-2)"
+          step_5: "User pastes conversation into created file"
+          step_6: "User says '/CORTEX Import this conversation' (triggers Method 1 Step 5-9)"
+          step_7: "Conversation imported using Method 1 infrastructure"
+        
+        learning_integration:
+          tier_2_patterns:
+            - "Learn which conversation types user saves"
+            - "Learn which quality scores correlate with saves"
+            - "Adjust threshold based on user behavior"
+            - "Store rejection patterns to reduce noise"
+          
+          confidence_decay:
+            - "Start threshold at 7/10"
+            - "Increase to 8/10 if user rejects multiple suggestions"
+            - "Decrease to 6/10 if user accepts most suggestions"
+    
+    success_metrics:
+      method_1:
+        - "Capture time: <5 seconds from command to confirmation"
+        - "Import success rate: 100%"
+        - "User satisfaction: ≥4/5"
+      
+      method_3:
+        - "Detection accuracy: ≥85%"
+        - "False positive rate: <15%"
+        - "User acceptance rate: ≥60%"
+        - "Learning convergence: <20 conversations"
+      
+      overall:
+        - "Solves amnesia problem (conversation continuity)"
+        - "Tier 2 learns from captured patterns"
+        - "Test coverage: ≥80%"
+    
+    risks:
+      - risk: "GitHub Copilot Chat API doesn't expose conversation content"
+        mitigation: "Manual copy-paste workflow as fallback"
+        severity: "high"
+        note: "Current limitation - API access not available yet"
+      
+      - risk: "Quality scoring false positives (suggest saving low-value convos)"
+        mitigation: "Conservative threshold (7/10), user feedback learning"
+        severity: "medium"
+      
+      - risk: "User ignores Smart Hints (notification fatigue)"
+        mitigation: "Only show for ≥7/10 quality, learn from rejections"
+        severity: "low"
+    
+    dependencies:
+      internal:
+        - "Track A conversation import pipeline (partial - needs quality fix)"
+        - "Intent Router (enhancement)"
+        - "Response Templates (enhancement)"
+        - "Tier 1 Working Memory (import_conversation method)"
+        - "Tier 2 Knowledge Graph (pattern learning)"
+      
+      external:
+        - "GitHub Copilot Chat API (conversation extraction)"
+        - "Current workaround: Manual copy-paste to markdown file"
+    
+    future_enhancements:
+      phase_2_automation:
+        - "GitHub Copilot Chat extension integration"
+        - "Auto-extract conversation without manual copy-paste"
+        - "Background quality monitoring"
+        - "Batch import of historical conversations"
+  
+  # ========================================================================
   # TRACK 1 SUMMARY
   # ========================================================================
   
   track_1_summary:
-    total_features: 4
-    total_duration_weeks: "12-16"
-    total_effort_hours: 390
+    total_features: 5
+    total_duration_weeks: "12-18"
+    total_effort_hours: 470
     
     critical_path:
       - "Week 0-2: Wait for Track 2 Phase B1 (Foundation Fixes)"
-      - "Week 3-4: Quick Wins (Question Routing + Data Collectors) - 30 hours"
+      - "Week 3-4: Quick Wins (Question Routing + Data Collectors + Conversation Tracking Phase 1) - 60 hours"
       - "Week 5-10: IDEA Capture System - 240 hours"
-      - "Week 11-16: EPM Doc Generator - 120 hours (after Track 2 EPMO Health)"
+      - "Week 11: Conversation Tracking Phase 2-3 (Quality Fix + Intelligent Detection) - 50 hours"
+      - "Week 12-18: EPM Doc Generator - 120 hours (after Track 2 EPMO Health)"
     
     parallel_opportunities:
-      - "Question Routing + Data Collectors can run together (Week 3-4)"
+      - "Question Routing + Data Collectors + Conversation Tracking Phase 1 can run together (Week 3-4)"
       - "IDEA Capture can run parallel with Track 2 optimization work"
+      - "Conversation Tracking Phase 2-3 can run parallel with EPM Doc Generator wait"
     
     blocking_dependencies:
-      - "EPM Doc Generator BLOCKED until Track 2 EPMO Health (Week 11)"
+      - "EPM Doc Generator BLOCKED until Track 2 EPMO Health (Week 12)"
     
     success_criteria:
-      - "All 4 features implemented with ≥80% test coverage"
+      - "All 5 features implemented with ≥80% test coverage"
       - "Zero errors, zero warnings"
       - "User acceptance testing passed"
       - "Documentation complete"
+      - "Conversation tracking solves amnesia problem"
 
 # ============================================================================
 # TRACK 2: SYSTEM OPTIMIZATION (Machine 2)
@@ -1452,7 +1735,7 @@ convergence_and_testing:
 success_metrics:
   
   track_1_success:
-    features_delivered: 4
+    features_delivered: 5
     
     phase_1_1_idea_capture:
       operational: true
@@ -1477,6 +1760,15 @@ success_metrics:
       collects_metrics: "Real-time brain performance, token usage, pattern learning"
       storage: "Tier 3 context intelligence"
       refresh_rate: "<30 seconds"
+    
+    phase_1_5_conversation_tracking:
+      operational: true
+      method_1_manual: "User-initiated capture with 'save this conversation'"
+      method_3_intelligent: "Auto-detection with Smart Hint prompts"
+      capture_time: "<5 seconds"
+      quality_scoring: "Fixed (20/20 tests passing)"
+      track_a_integration: "Complete"
+      solves_amnesia: "Conversation continuity across sessions"
   
   track_2_success:
     optimizer_score: "62 → ≥90/100 (+28 points minimum)"
@@ -1506,6 +1798,7 @@ success_metrics:
       - "IDEA Capture reduces planning time 40%"
       - "Question Routing eliminates ambiguity"
       - "EPM Doc Generator saves 8 hours/feature"
+      - "Conversation Tracking solves amnesia problem (memory continuity)"
       - "Token optimization enables longer conversations"
     
     technical_excellence:

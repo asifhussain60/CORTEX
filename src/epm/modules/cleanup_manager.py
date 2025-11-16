@@ -29,23 +29,54 @@ class CleanupManager:
             "stylesheets/",
             ".gitkeep"
         ]
+        
+        # Patterns to delete (docs-backup folders, referential MD files)
+        self.cleanup_patterns = [
+            "docs-backup-*",  # All docs-backup folders
+            "*-COMPLETE*.md",  # Completion reports
+            "*-SUMMARY*.md",  # Summary documents
+            "*-REPORT*.md",  # Report documents
+            "*Session*.md",  # Session documents (unless in cortex-brain/tier1)
+        ]
     
     def create_backup(self, timestamp: str) -> Path:
-        """Create backup of current documentation"""
+        """Create backup of current documentation (DEPRECATED - backups create clutter)"""
         backup_path = self.root_path / f"docs-backup-{timestamp}"
         
-        if self.dry_run:
-            logger.info(f"[DRY RUN] Would create backup: {backup_path}")
-            return backup_path
-        
-        if self.docs_path.exists():
-            logger.info(f"Creating backup: {backup_path}")
-            shutil.copytree(self.docs_path, backup_path)
-            logger.info(f"✓ Backup created: {backup_path}")
-        else:
-            logger.warning("docs/ does not exist, skipping backup")
+        logger.warning("Backup creation is deprecated. Use git for version history.")
+        logger.info("Skipping backup creation to prevent docs-backup clutter.")
         
         return backup_path
+    
+    def cleanup_backup_folders(self) -> Dict:
+        """Remove all docs-backup* folders"""
+        removed_count = 0
+        space_freed_mb = 0.0
+        
+        if self.dry_run:
+            logger.info("[DRY RUN] Would remove docs-backup* folders")
+            return {"folders_removed": 0, "space_freed_mb": 0.0}
+        
+        # Find all docs-backup folders
+        backup_folders = list(self.root_path.glob("docs-backup-*"))
+        
+        for backup_folder in backup_folders:
+            if backup_folder.is_dir():
+                # Calculate size
+                folder_size = sum(f.stat().st_size for f in backup_folder.rglob("*") if f.is_file())
+                space_freed_mb += folder_size / (1024 * 1024)
+                
+                # Remove folder
+                shutil.rmtree(backup_folder)
+                removed_count += 1
+                logger.info(f"Removed backup folder: {backup_folder.name}")
+        
+        logger.info(f"✓ Removed {removed_count} backup folders ({space_freed_mb:.2f} MB)")
+        
+        return {
+            "folders_removed": removed_count,
+            "space_freed_mb": space_freed_mb
+        }
     
     def clear_generated_content(self, keep_old: bool = False) -> Dict:
         """

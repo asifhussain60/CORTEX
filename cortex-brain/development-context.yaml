@@ -1,9 +1,3 @@
-# KDS BRAIN - Development Context (Tier 3)
-# Version: 1.0
-# Last Updated: 2025-11-04T17:42:22Z
-# Purpose: Holistic project understanding for intelligent planning and proactive warnings
-# Update Frequency: Hourly (automated) or on-demand
-
 code_changes:
   change_velocity:
     trend: stable
@@ -17,14 +11,14 @@ code_changes:
     lines_deleted: 0
     net_growth: 0
     total_files_modified: 0
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
 correlations:
   commit_size_vs_success:
     insight: null
     large_commit_success_rate: null
-    large_commits_range: "10+ files"
+    large_commits_range: 10+ files
     small_commit_success_rate: null
-    small_commits_range: "1-3 files"
+    small_commits_range: 1-3 files
   kds_usage_vs_velocity:
     correlation: null
     high_kds_velocity: null
@@ -32,29 +26,33 @@ correlations:
     insight: null
     low_kds_velocity: null
     low_kds_weeks: []
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
   test_first_vs_rework:
     insight: null
     test_first_rework_rate: null
     test_skip_rework_rate: null
 git_activity:
-  commit_patterns: []
-  commits_by_component:
-    Backend: 0
-    Documentation: 16
-    Tests: 2
-    UI: 0
-  files_most_changed: []
   last_30_days:
-    active_branches: []
-    commits_per_day_avg: 1.00
-    contributors:
-      - Asif Hussain
-    total_commits: 29
-  last_updated: "2025-11-04T17:42:22Z"
+    total_commits: 0
+    commits_per_day_avg: 0.0
+    contributors: []
+    active_branches:
+    - CORTEX-1.0
+    - CORTEX-2.0
+    - CORTEX-3.0
+    - cortex-migration
+    - feature/demo-modules-track-a
+  last_updated: '2025-11-16T04:01:48.895872'
+  commits_by_component:
+    UI: 0
+    Backend: 0
+    Tests: 2
+    Documentation: -2
+  commit_patterns: []
+  files_most_changed: []
 kds_usage:
-  avg_session_duration: "0 hours"
-  avg_tasks_per_session: 0.00
+  avg_session_duration: 0 hours
+  avg_tasks_per_session: 0.0
   intent_distribution:
     ASK: 0
     CORRECT: 0
@@ -64,132 +62,94 @@ kds_usage:
     TEST: 0
     VALIDATE: 0
   kds_effectiveness:
-    improvement: 0.00
-    kds_success_rate: 0.00
-    manual_success_rate: 0.00
+    improvement: 0.0
+    kds_success_rate: 0.0
+    manual_success_rate: 0.0
     tasks_completed_manually: 0
     tasks_completed_with_kds: 0
   last_30_days:
-    completion_rate: 0.00
+    completion_rate: 0.0
     sessions_completed: 0
     sessions_created: 0
     total_kds_invocations: 0
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
   workflow_success:
     test_first: null
     test_skip: null
 proactive_insights:
   current_warnings: []
   historical_warnings:
-    effectiveness_rate: 0.00
+    effectiveness_rate: 0.0
     total_addressed: 0
     total_generated: 0
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
 project_health:
   build_status: unknown
-  build_time_avg: "0 seconds"
+  build_time_avg: 0 seconds
   code_quality:
-    linting_pass_rate: 0.00
+    linting_pass_rate: 0.0
     security_scan_last: null
     security_vulnerabilities: 0
   deployment_frequency:
-    avg_per_week: 0.00
+    avg_per_week: 0.0
     last_30_days: 0
     last_deployment: null
   issue_tracking:
-    avg_resolution_time: "0 days"
+    avg_resolution_time: 0 days
     closed_last_30d: 0
     open_issues: 0
   last_build: null
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
 statistics:
   collection_frequency: hourly
   data_sources:
-    - git
-    - kds-events
-    - test-results
-    - build-logs
+  - git
+  - kds-events
+  - test-results
+  - build-logs
   enabled: true
-  last_collection: "2025-11-04T17:42:22Z"
-  last_updated: "2025-11-04T17:42:22Z"
+  last_collection: '2025-11-16T04:01:48.898299'
+  last_updated: '2025-11-16T04:01:48.898299'
   total_metrics_collected: 10
   total_storage_kb: 0
   version: 1.0
 testing_activity:
   flaky_tests: []
   last_30_days:
-    test_pass_rate: 0.00
+    test_pass_rate: 0.0
     total_test_runs: 0
     total_tests_created: 0
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
   test_coverage:
-    current: 0.00
-    previous_month: 0.00
+    current: 0.0
+    previous_month: 0.0
     trend: stable
   test_types:
     integration: 0
     ui_playwright: 2
     unit: 0
 work_patterns:
-  avg_coding_hours_per_day: 0.00
+  avg_coding_hours_per_day: 0.0
   feature_lifecycle:
-    avg_days_from_start_to_deploy: 0.00
-    avg_iterations_per_feature: 0.00
+    avg_days_from_start_to_deploy: 0.0
+    avg_iterations_per_feature: 0.0
   focus_duration:
-    avg_without_interruption: "0 hours"
-    longest_session: "0 hours"
+    avg_without_interruption: 0 hours
+    longest_session: 0 hours
     longest_session_date: null
-  last_updated: "2025-11-04T17:42:22Z"
+  last_updated: '2025-11-16T04:01:48.898299'
   most_productive_time: unknown
   session_patterns:
-    afternoon_sessions: 0.00
-    evening_sessions: 0.00
-    morning_sessions: 0.00
-
-
+    afternoon_sessions: 0.0
+    evening_sessions: 0.0
+    morning_sessions: 0.0
 tier1_metrics:
-  total_conversations: 10
-  auto_recorded: 1
-  manual_recorded: 4
-  unknown_source: 5
-  utilization_rate: 10
-  fifo_capacity: 50
-  avg_message_count: 3.6
-  last_updated: "2025-11-05T08:09:01.8596612-05:00"
-  status: critical
-
-
-tier1_metrics:
-  total_conversations: 12
-  auto_recorded: 2
-  manual_recorded: 5
-  unknown_source: 5
-  utilization_rate: 16.7
-  fifo_capacity: 60
-  avg_message_count: 3.2
-  last_updated: "2025-11-05T08:09:19.2455615-05:00"
-  status: critical
-
-
-tier1_metrics:
-  total_conversations: 14
-  auto_recorded: 3
-  manual_recorded: 6
-  unknown_source: 5
-  utilization_rate: 21.4
+  total_conversations: 3
+  auto_recorded: 0
+  manual_recorded: 0
+  unknown_source: 3
+  utilization_rate: 4.3
   fifo_capacity: 70
-  avg_message_count: 3
-  last_updated: "2025-11-05T08:09:35.0114035-05:00"
-  status: warning
-
-# Tier 1 Health Metrics (Auto-updated by monitor-tier1-health.ps1)
-tier1_metrics:
-  total_conversations: 14
-  auto_recorded: 3
-  manual_recorded: 6
-  unknown_source: 5
-  utilization_rate: 21.4
-  fifo_capacity: 70
-  avg_message_count: 3
-  last_updated: "2025-11-05T08:12:03.5762718-05:00"
-  status: warning
+  avg_message_count: 3.0
+  last_updated: '2025-11-16T04:01:48.898163'
+  status: critical

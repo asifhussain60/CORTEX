@@ -7,6 +7,10 @@
 **Author:** Asif Hussain  
 **Date:** November 10, 2025
 
+> **NOTE:** See CORTEX 3.1 EPMO Optimization Plan for health management guidance  
+> **Link:** `cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml`  
+> **Evolution:** `cortex-brain/cortex-3.0-design/CORTEX-3.0-TO-3.1-EVOLUTION.md`
+
 ---
 
 ## 📋 Executive Summary
