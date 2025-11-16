@@ -102,6 +102,21 @@ class NamespaceDetector:
             ContextCue(r"\bmy application\b", NamespaceType.WORKSPACE_CODE, weight=2.0),
             ContextCue(r"\bmy project\b", NamespaceType.WORKSPACE_CODE, weight=1.8),
             ContextCue(r"\bour code\b", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bthe project\b", NamespaceType.WORKSPACE_CODE, weight=1.5),
+            ContextCue(r"\bthe application\b", NamespaceType.WORKSPACE_CODE, weight=1.5),
+            ContextCue(r"\bthe codebase\b", NamespaceType.WORKSPACE_CODE, weight=1.5),
+            
+            # Testing and quality indicators (clearly about user's workspace)
+            ContextCue(r"\btest coverage\b", NamespaceType.WORKSPACE_CODE, weight=2.0),
+            ContextCue(r"\bcode coverage\b", NamespaceType.WORKSPACE_CODE, weight=2.0),
+            ContextCue(r"\bunit test", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bintegration test", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bcode quality\b", NamespaceType.WORKSPACE_CODE, weight=2.0),
+            ContextCue(r"\bcode smell", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bbuild error", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bbuild status\b", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bcompilation error", NamespaceType.WORKSPACE_CODE, weight=1.8),
+            ContextCue(r"\bproject health\b", NamespaceType.WORKSPACE_CODE, weight=1.8),
             
             # Authentication/business logic (common user features)
             ContextCue(r"\bauthentication\b", NamespaceType.WORKSPACE_CODE, weight=1.5),
@@ -127,11 +142,18 @@ class NamespaceDetector:
             # These could go either way
             ContextCue(r"^how is the code\?$", NamespaceType.AMBIGUOUS, weight=2.0,
                       requires_confirmation=True),
-            ContextCue(r"^status\s*$", NamespaceType.AMBIGUOUS, weight=1.5,
+            ContextCue(r"^status\s*\??$", NamespaceType.AMBIGUOUS, weight=1.5,
                       requires_confirmation=True),
-            ContextCue(r"^health\s*$", NamespaceType.AMBIGUOUS, weight=1.5,
+            ContextCue(r"^health\s*\??$", NamespaceType.AMBIGUOUS, weight=1.5,
+                      requires_confirmation=True),
+            ContextCue(r"\bhow is everything\b", NamespaceType.AMBIGUOUS, weight=2.0,
+                      requires_confirmation=True),
+            ContextCue(r"\bhow are things\b", NamespaceType.AMBIGUOUS, weight=1.8,
+                      requires_confirmation=True),
+            ContextCue(r"^what's the status\b", NamespaceType.AMBIGUOUS, weight=1.8,
                       requires_confirmation=True),
             ContextCue(r"\bthe system\b", NamespaceType.AMBIGUOUS, weight=1.0),
+            ContextCue(r"\boverall\b", NamespaceType.AMBIGUOUS, weight=1.2),
         ]
         
     def detect_namespace(self, user_message: str, 
@@ -317,6 +339,37 @@ class NamespaceDetector:
         
         return "Could you provide a bit more context about what you're asking?"
 
+    def detect(self, user_message: str, context: Dict = None) -> 'NamespaceResult':
+        """
+        Compatibility method for test suite.
+        Maps to detect_namespace with simplified result format.
+        """
+        # Extract context parameters if provided
+        conversation_history = context.get('conversation_history') if context else None
+        current_files = context.get('current_files') if context else None
+        
+        # Get full detection result
+        full_result = self.detect_namespace(user_message, conversation_history, current_files)
+        
+        # Convert to expected format for tests
+        return NamespaceResult(
+            namespace=full_result.primary_namespace.value,
+            confidence=full_result.confidence,
+            indicators=full_result.contributing_factors,
+            reasoning=f"Primary: {full_result.primary_namespace.value}, "
+                     f"Confidence: {full_result.confidence:.2f}, "
+                     f"Factors: {len(full_result.contributing_factors)}"
+        )
+
+
+@dataclass
+class NamespaceResult:
+    """Simplified result format for compatibility with test suite"""
+    namespace: str
+    confidence: float
+    indicators: List[str]
+    reasoning: str
+
 
 # Export for use in question routing
-__all__ = ['NamespaceDetector', 'NamespaceType', 'NamespaceDetectionResult']
+__all__ = ['NamespaceDetector', 'NamespaceType', 'NamespaceDetectionResult', 'NamespaceResult']

@@ -20,7 +20,7 @@ import logging
 from pathlib import Path
 
 from ....agents.namespace_detector import NamespaceDetector, NamespaceType, NamespaceDetectionResult
-from ....response_templates.template_renderer import ResponseTemplateRenderer
+from ....response_templates.template_renderer import TemplateRenderer
 
 
 @dataclass
@@ -33,6 +33,15 @@ class QuestionRoutingResult:
     parameters: Dict[str, Any]
     requires_clarification: bool = False
     clarification_template: Optional[str] = None
+
+
+@dataclass
+class RoutingResult:
+    """Simplified result format for compatibility with test suite"""
+    template_name: str
+    confidence: float
+    parameters: Dict
+    namespace: str
 
 
 class IntelligentQuestionRouter:
@@ -49,7 +58,7 @@ class IntelligentQuestionRouter:
     def __init__(self, brain_path: str):
         self.brain_path = Path(brain_path)
         self.namespace_detector = NamespaceDetector()
-        self.template_renderer = ResponseTemplateRenderer(brain_path)
+        self.template_renderer = TemplateRenderer()
         self.logger = logging.getLogger(__name__)
         
         # Initialize routing rules
@@ -195,6 +204,26 @@ class IntelligentQuestionRouter:
             template_name=template_info['template'],
             parameters=parameters,
             requires_clarification=False
+        )
+    
+    def route(self, message: str, context: Dict = None) -> 'RoutingResult':
+        """
+        Compatibility method for test suite.
+        Maps to route_question with simplified result format.
+        """
+        # Extract context parameters if provided
+        conversation_history = context.get('conversation_history') if context else None
+        current_files = context.get('current_files') if context else None
+        
+        # Get full routing result
+        full_result = self.route_question(message, conversation_history, current_files)
+        
+        # Convert to expected format for tests
+        return RoutingResult(
+            template_name=full_result.template_name,
+            confidence=full_result.confidence,
+            parameters=full_result.parameters,
+            namespace=full_result.namespace.value
         )
         
     def _find_template_pattern(self, message: str, namespace: NamespaceType) -> Dict[str, Any]:
@@ -351,5 +380,19 @@ class IntelligentQuestionRouter:
             return {'error': 'Build status unavailable'}
 
 
+# Compatibility aliases for test suite
+class QuestionRouter:
+    """Compatibility wrapper for test suite"""
+    def __init__(self, brain_path: str = None):
+        if brain_path is None:
+            # Use default brain path for tests
+            brain_path = "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain"
+        self._router = IntelligentQuestionRouter(brain_path)
+        
+    def route(self, message: str, context: Dict = None) -> 'RoutingResult':
+        return self._router.route(message, context)
+
+RoutingResult = QuestionRoutingResult
+
 # Export for use in CORTEX operations
-__all__ = ['IntelligentQuestionRouter', 'QuestionRoutingResult']
+__all__ = ['IntelligentQuestionRouter', 'QuestionRoutingResult', 'QuestionRouter', 'RoutingResult']
