@@ -45,6 +45,7 @@ from .response_template_collector import ResponseTemplateMetricsCollector
 from .brain_performance_collector import BrainPerformanceCollector
 from .token_usage_collector import TokenUsageCollector
 from .workspace_health_collector import WorkspaceHealthCollector
+from .conversation_collector import ConversationCollector
 
 from .manager import (
     CollectorManager,
@@ -123,6 +124,7 @@ __all__ = [
     "BrainPerformanceCollector",
     "TokenUsageCollector", 
     "WorkspaceHealthCollector",
+    "ConversationCollector",
     
     # Management
     "CollectorManager",

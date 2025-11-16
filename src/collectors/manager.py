@@ -25,6 +25,7 @@ from .response_template_collector import ResponseTemplateMetricsCollector
 from .brain_performance_collector import BrainPerformanceCollector
 from .token_usage_collector import TokenUsageCollector
 from .workspace_health_collector import WorkspaceHealthCollector
+from .conversation_collector import ConversationCollector
 
 
 class CollectorManager:
@@ -91,7 +92,7 @@ class CollectorManager:
             return False
     
     def _create_core_collectors(self) -> None:
-        """Create and register the 4 core collectors"""
+        """Create and register the 5 core collectors"""
         
         # 1. Response Template Metrics Collector
         template_collector = ResponseTemplateMetricsCollector(
@@ -121,6 +122,13 @@ class CollectorManager:
         )
         self.collectors[workspace_collector.collector_id] = workspace_collector
         collector_registry.register(workspace_collector)
+        
+        # 5. Conversation Pipeline Collector (NEW)
+        conversation_collector = ConversationCollector(
+            brain_path=self.brain_path
+        )
+        self.collectors[conversation_collector.collector_id] = conversation_collector
+        collector_registry.register(conversation_collector)
         
         self.logger.info(f"Created {len(self.collectors)} core collectors")
     
