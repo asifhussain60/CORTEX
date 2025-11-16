@@ -16,6 +16,9 @@ operations:
     - demo_introduction
     - demo_help_system
     - demo_story_refresh
+    - demo_dod_dor_workflow
+    - demo_token_optimization
+    - demo_code_review
     - demo_cleanup
     - demo_conversation
     - demo_completion
@@ -33,6 +36,7 @@ operations:
         - demo_introduction
         - demo_help_system
         - demo_story_refresh
+        - demo_dod_dor_workflow
         - demo_cleanup
         - demo_completion
       comprehensive:
@@ -41,17 +45,29 @@ operations:
         - demo_introduction
         - demo_help_system
         - demo_story_refresh
+        - demo_dod_dor_workflow
+        - demo_token_optimization
+        - demo_cleanup
+        - demo_conversation
+        - demo_completion
+      developer:
+        description: Development workflow deep-dive (8-10 minutes)
+        modules:
+        - demo_introduction
+        - demo_help_system
+        - demo_dod_dor_workflow
+        - demo_token_optimization
+        - demo_code_review
+        - demo_story_refresh
         - demo_cleanup
         - demo_conversation
         - demo_completion
     implementation_status:
       status: ready
-      modules_implemented: 6
-      modules_total: 6
-      completion_percentage: 100
-      notes: All 6 demo modules complete and tested. Both Windows Track A (intro,
-        help, cleanup) and Mac Track B (story_refresh, conversation, completion) implemented
-        successfully.
+      modules_implemented: 8
+      modules_total: 9
+      completion_percentage: 89
+      notes: Core demo modules complete (intro, help, story_refresh, dod_dor, token_optimization, code_review, conversation, completion). Cleanup module in progress. All showcase real CORTEX capabilities - no mocks.
       estimated_hours: 6
   environment_setup:
     name: Environment Setup
@@ -1824,6 +1840,71 @@ modules:
     estimated_hours: 1.5
     token_cost: 200
     cortex_version: '2.0'
+  demo_dod_dor_workflow:
+    name: Demo DoD/DoR Workflow Integration
+    description: Showcase how CORTEX processes user-provided DoD, DoR, and acceptance criteria through Work Planner agent
+    phase: DEMONSTRATION
+    priority: medium
+    class: DoDDoRWorkflowDemo
+    file: demo_dod_dor_workflow.py
+    dependencies:
+    - demo_help_system
+    optional: true
+    tags:
+    - demo
+    - dod
+    - dor
+    - work-planner
+    - quality-gates
+    - acceptance-criteria
+    status: ready
+    estimated_hours: 2.0
+    token_cost: 250
+    cortex_version: '2.0'
+    notes: Demonstrates DoR validation (Rule #21), planning enhancement, AC-to-test mapping, and DoD enforcement (Rule #20)
+  demo_token_optimization:
+    name: Demo Token Optimization
+    description: Showcase CORTEX's 97.2% token reduction achievement and optimization strategies (modular architecture, YAML extraction, lazy loading)
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoTokenOptimizationModule
+    file: demo_token_optimization_module.py
+    dependencies:
+    - demo_dod_dor_workflow
+    optional: true
+    tags:
+    - demo
+    - optimization
+    - token-reduction
+    - cost-savings
+    - performance
+    status: ready
+    estimated_hours: 1.5
+    token_cost: 200
+    cortex_version: '2.0'
+    notes: Demonstrates 97.2% token reduction (74,047 → 2,078 tokens), 93.4% cost savings, and optimization techniques applied to CORTEX 2.0
+  demo_code_review:
+    name: Demo Code Review & PR Capabilities
+    description: Showcase CORTEX's automated code review with SOLID principles, security scanning, performance analysis, and PR integration
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoCodeReviewModule
+    file: demo_code_review_module.py
+    dependencies:
+    - demo_token_optimization
+    optional: true
+    tags:
+    - demo
+    - code-review
+    - pull-request
+    - solid-principles
+    - security
+    - performance
+    status: ready
+    estimated_hours: 2.0
+    token_cost: 300
+    cortex_version: '2.0'
+    notes: Demonstrates automated PR review, SOLID violation detection, security scanning (secrets, SQL injection, XSS), and performance anti-pattern detection
   demo_cleanup:
     name: Demo Cleanup
     description: Execute workspace cleanup and show optimization report (files removed,

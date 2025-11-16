@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - cortex-migration
+      - CORTEX-3.0
   workflow_dispatch:
 
 permissions:

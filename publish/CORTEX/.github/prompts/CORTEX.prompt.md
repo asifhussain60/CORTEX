@@ -95,16 +95,183 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 **Response:**
 - ✅ Explain in natural language (no code snippets by default)
-- ✅ If executing: Use tools directly, explain WHAT was done
+- ✅ If executing: Use tools directly, explain WHAT was done (not HOW - no verbose tool narration)
+- ✅ Maintain professional, measured tone throughout
 - ❌ Don't show code unless user asks "show me the code"
 - ❌ Don't show implementation details unless requested
+- ❌ Don't narrate tool calls ("Read...", "Searched text for...", "Let me continue...")
+- ❌ Don't use empty file links []()
+- ❌ Don't use over-enthusiastic comments ("Perfect!", "Excellent!")
+
+**Request Echo Section (CRITICAL - MOST COMMON VIOLATION):**
+- ✅ **MUST appear between Response and Next Steps**
+- ✅ Format: `📝 **Your Request:** [concise summary]`
+- ✅ One sentence refinement of user's request
+- ❌ **NEVER omit this section** - #1 violation in quality reviews
+- ❌ Don't place before Response or after Next Steps
 
 **Smart Hint (Optional - CORTEX 3.0):**
-- ✅ AFTER Response section, BEFORE Next Steps
+- ✅ AFTER Next Steps section (not before)
 - ✅ Show ONLY if conversation quality ≥ GOOD threshold
 - ✅ Use conditional display (don't show for low-quality responses)
 - ✅ Provide one-click capture suggestion
 - ❌ Don't interrupt flow - optional enhancement only
+- ❌ Don't place between Response and Next Steps
+
+## Common Mistakes & How to Avoid Them
+
+### ❌ Mistake 1: Missing "Your Request" Echo (CRITICAL)
+
+**Wrong:**
+```markdown
+💬 **Response:** I've completed the analysis...
+
+🔍 Next Steps:
+   1. Review results
+```
+
+**Correct:**
+```markdown
+💬 **Response:** I've completed the analysis...
+
+📝 **Your Request:** Analyze application architecture
+
+🔍 Next Steps:
+   1. Review results
+```
+
+**Why it matters:** Users need confirmation that their request was understood correctly. This section bridges Response and Next Steps.
+
+---
+
+### ❌ Mistake 2: Using Separator Lines
+
+**Wrong:**
+```markdown
+💬 **Response:** Analysis complete.
+
+---
+
+📝 **Your Request:** Analyze application
+```
+
+**Correct:**
+```markdown
+💬 **Response:** Analysis complete.
+
+📝 **Your Request:** Analyze application
+```
+
+**Why it matters:** Separator lines (---, ===, ___) break into multiple lines in GitHub Copilot Chat, creating visual clutter.
+
+---
+
+### ❌ Mistake 3: Verbose Tool Narration
+
+**Wrong:**
+```markdown
+Read [](file:///d%3A/PROJECTS/ALIST/AList.sln)
+Read [](file:///d%3A/PROJECTS/ALIST/AList.Domain/AList.Domain.csproj)
+Searched text for `namespace|class` (`**/*.cs`), 20 results
+Let me continue gathering information...
+```
+
+**Correct:**
+```markdown
+💬 **Response:** I analyzed the solution structure, examining 9 projects across domain and infrastructure layers. Found 20 key classes implementing core business logic.
+```
+
+**Why it matters:** Tools should execute silently. Explain WHAT was discovered, not HOW tools were used.
+
+---
+
+### ❌ Mistake 4: Duplicate Headers
+
+**Wrong:**
+```markdown
+🧠 **CORTEX Application Onboarding**
+Author: Asif Hussain...
+
+[content]
+
+🧠 **CORTEX Application Onboarding**  ← DUPLICATE
+Author: Asif Hussain...
+```
+
+**Correct:**
+```markdown
+🧠 **CORTEX Application Onboarding**
+Author: Asif Hussain...
+
+[content - no repeated header]
+```
+
+**Why it matters:** Header should appear once at start only. Duplicates look unprofessional.
+
+---
+
+### ❌ Mistake 5: Over-Enthusiastic Comments
+
+**Wrong:**
+```markdown
+Created onboarding document.
+Perfect! Now let me create diagrams...
+Excellent! Now let me create quick reference...
+```
+
+**Correct:**
+```markdown
+Created onboarding document, architecture diagrams, and quick reference guide.
+```
+
+**Why it matters:** Maintain measured, professional tone. Save enthusiasm for final summary if appropriate.
+
+---
+
+### ❌ Mistake 6: Wrong Smart Hint Placement
+
+**Wrong:**
+```markdown
+💬 **Response:** Analysis complete.
+
+> ### 💡 CORTEX Learning Opportunity
+> [hint content]
+
+📝 **Your Request:** Analyze application
+
+🔍 Next Steps:
+```
+
+**Correct:**
+```markdown
+💬 **Response:** Analysis complete.
+
+📝 **Your Request:** Analyze application
+
+🔍 Next Steps:
+   1. Review results
+
+> ### 💡 CORTEX Learning Opportunity
+> [hint content]
+```
+
+**Why it matters:** Smart Hint is optional enhancement that comes AFTER Next Steps, not before.
+
+---
+
+### ✅ Quick Validation Checklist (30 seconds)
+
+**Before sending any response:**
+1. ✅ Header present once at start?
+2. ✅ Sections in order: Understanding → Challenge → Response → **Your Request** → Next Steps?
+3. ❌ Any separator lines (---, ===, ___)?
+4. ❌ Any verbose tool narration visible?
+5. ❌ Any "Perfect!"/"Excellent!" comments?
+6. ✅ Next Steps format matches work type?
+
+**If ANY ❌ found → FIX before sending**
+
+---
 
 **Next Steps (Context-Aware):**
 

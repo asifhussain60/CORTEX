@@ -1,0 +1,43 @@
+%% CORTEX Intent Detection & Routing
+%% Shows how natural language requests are routed to agents
+
+graph TD
+    USER["👤 User Request<br/>(Natural Language)"]
+    
+    subgraph router["🧭 INTENT ROUTER"]
+        PARSE["Parse Request<br/>Extract Keywords"]
+        ENTITY["Extract Entities<br/>Files, Components"]
+        MATCH["Pattern Match<br/>Search Tier 2"]
+        CONF["Confidence Score<br/>0.0 - 1.0"]
+    end
+
+    USER --> PARSE
+    PARSE --> ENTITY
+    ENTITY --> MATCH
+    MATCH --> CONF
+
+    CONF -->|"≥ 0.7"| ROUTE
+    CONF -->|"< 0.7"| CLARIFY["❓ Ask User<br/>Disambiguate"]
+
+    ROUTE{"Intent Type?"}
+    
+    ROUTE -->|"PLAN"| AGENT1["📋 Work Planner<br/>'create plan', 'design'"]
+    ROUTE -->|"EXECUTE"| AGENT2["💻 Code Executor<br/>'add', 'create', 'build'"]
+    ROUTE -->|"TEST"| AGENT3["✅ Test Generator<br/>'test', 'verify'"]
+    ROUTE -->|"FIX"| AGENT4["🔧 Error Corrector<br/>'fix', 'bug', 'error'"]
+    ROUTE -->|"VALIDATE"| AGENT5["❤️ Health Validator<br/>'check health', 'status'"]
+    ROUTE -->|"ANALYZE"| AGENT6["📸 Screenshot Analyzer<br/>'analyze image'"]
+    ROUTE -->|"PROTECT"| AGENT7["🛡️ Brain Protector<br/>'modify tier0', 'delete'"]
+    ROUTE -->|"CONTINUE"| AGENT8["🔄 Resume Session<br/>'continue', 'next'"]
+
+    CLARIFY -->|"User Clarifies"| PARSE
+
+    style router fill:#F59E0B,stroke:#92400E,color:#fff
+    style AGENT1 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style AGENT2 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style AGENT3 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style AGENT4 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style AGENT5 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style AGENT6 fill:#F59E0B,stroke:#92400E,color:#fff
+    style AGENT7 fill:#6B46C1,stroke:#4C1D95,color:#fff
+    style AGENT8 fill:#10B981,stroke:#065F46,color:#fff
