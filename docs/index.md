@@ -1,7 +1,5 @@
-# <img src="assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; vertical-align: middle; margin-right: 20px;"> **CORTEX**
-
-<div style="font-size: 1.1rem; color: #666; margin-top: -10px; margin-bottom: 30px;">
-<em>Cognitive Operation & Reasoning Through EXtension for Copilot</em>
+<div style="text-align: center; margin: 40px 0;">
+<img src="assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px;">
 </div>
 
 <div class="ancient-rules" markdown="1">

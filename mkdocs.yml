@@ -49,8 +49,7 @@ extra_css:
 nav:
 - Home: index.md
 - The CORTEX Story:
-  - The Awakening of CORTEX: awakening-of-cortex.md
-  - Visual Story: diagrams/story/The-CORTEX-Story.md
+  - The Awakening of CORTEX: diagrams/story/The-CORTEX-Story.md
 - Getting Started:
   - Quick Start: getting-started/quick-start.md
   - Installation: getting-started/installation.md
