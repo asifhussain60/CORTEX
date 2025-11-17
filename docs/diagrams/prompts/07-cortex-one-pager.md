@@ -44,9 +44,9 @@ Create a professional one-page infographic showing CORTEX's complete architectur
 - Number: "93.4%" (Bold, 32pt)
 - Label: "Cost Savings" (Regular, 16pt, gray)
 
-**Metric 3:** <500ms Latency
+**Metric 3:** &lt;500ms Latency
 - Icon: 🚀 Rocket (40×40px, #3B82F6)
-- Number: "<500ms" (Bold, 32pt)
+- Number: "&lt;500ms" (Bold, 32pt)
 - Label: "Response Time" (Regular, 16pt, gray)
 
 **Metric 4:** 100% Test Pass
@@ -140,7 +140,7 @@ Create a professional one-page infographic showing CORTEX's complete architectur
 **5 LEFT Agents (Vertical Stack, 140px height each):**
 
 1. **Code Executor** (y: 600px)
-   - Icon: `</>` (40×40px, #3B82F6)
+   - Icon: `&lt;/&gt;` (40×40px, #3B82F6)
    - Name: "Code Executor" (Bold, 18pt)
    - Role: "Implements with TDD" (14pt, gray)
 
@@ -271,7 +271,7 @@ Create a professional one-page infographic showing CORTEX's complete architectur
 - **Coverage:** "627/834 modules" (Bold, 18pt, green)
 
 **Row 2:**
-- **Latency:** "<500ms pipeline" (Bold, 18pt, blue)
+- **Latency:** "&lt;500ms pipeline" (Bold, 18pt, blue)
 - **Storage:** "SQLite + YAML" (Bold, 18pt, gray)
 
 **Row 3:**
@@ -363,6 +363,6 @@ Create a professional one-page infographic showing CORTEX's complete architectur
 - Production-ready quality
 - Continuous learning system
 - Cost-effective (93.4% savings)
-- Fast (<500ms response)
+- Fast (&lt;500ms response)
 
 *Generated: November 17, 2025*
