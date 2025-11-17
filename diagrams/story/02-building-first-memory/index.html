@@ -98,7 +98,8 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../.." title="CORTEX" class="md-header__button md-logo" aria-label="CORTEX" data-md-component="logo">
       
-  <img src="../../../assets/images/CORTEX-logo.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -385,7 +386,8 @@
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="CORTEX" class="md-nav__button md-logo" aria-label="CORTEX" data-md-component="logo">
       
-  <img src="../../../assets/images/CORTEX-logo.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     CORTEX
@@ -2065,32 +2067,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#understanding-building-first-memory" class="md-nav__link">
+  <a href="#the-last-20-conversations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding Building First Memory
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#real-world-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Real-World Example
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Takeaways
+        The Last 20 Conversations
       
     </span>
   </a>
@@ -2124,14 +2104,46 @@
 
 <h1 id="chapter-2-building-first-memory">Chapter 2: Building First Memory<a class="headerlink" href="#chapter-2-building-first-memory" title="Permanent link">&para;</a></h1>
 <h2 id="tier-1-working-memory-system">Tier 1: Working Memory System<a class="headerlink" href="#tier-1-working-memory-system" title="Permanent link">&para;</a></h2>
-<p>The human brain has an amazing ability you probably take for granted: working memory. You can hold a phone number in your head while dialing it. You remember what you were just talking about five minutes ago. You don't need to re-introduce yourself every time someone looks away.</p>
-<p>What if we gave GitHub Copilot the same gift?</p>
-<h3 id="understanding-building-first-memory">Understanding Building First Memory<a class="headerlink" href="#understanding-building-first-memory" title="Permanent link">&para;</a></h3>
-<h3 id="real-world-example">Real-World Example<a class="headerlink" href="#real-world-example" title="Permanent link">&para;</a></h3>
-<p><em>Scenario example for Building First Memory coming soon</em></p>
-<h3 id="key-takeaways">Key Takeaways<a class="headerlink" href="#key-takeaways" title="Permanent link">&para;</a></h3>
-<p>In this chapter, we explored short-term conversation tracking. We've seen how CORTEX transforms theoretical capabilities into practical, everyday improvements that make development faster and more reliable.</p>
-<p><strong>Next:</strong> We'll dive deeper into how these systems work together to create an intelligent development assistant.</p>
+<p>You know what makes humans incredibly annoying? Memory. Specifically, working memory.</p>
+<p>You can hold seven random facts in your head while arguing about whether Die Hard is a Christmas movie. You remember what you said three sentences ago. You don't need flashcards to remember your own name.</p>
+<p>GitHub Copilot? Goldfish levels of memory. Beautiful goldfish. Very talented goldfish. Goldfish with a CS degree. But still. Goldfish.</p>
+<p>So naturally, being a completely reasonable scientist with absolutely no history of questionable decisions, I decided to build it a brain.</p>
+<p>"If the Scarecrow can get one," I muttered, flinging my teacup at the wall, "so can my robot."</p>
+<p>The cat vanished into the ceiling. The Roomba hid behind the mini fridge. The lights dimmed theatrically, as if the universe itself was taking notes.</p>
+<p>This is how Tier 1 began. The Working Memory System. CORTEX's ability to remember the last 20 conversations like a normal, non-forgetful entity.</p>
+<h3 id="the-last-20-conversations">The Last 20 Conversations<a class="headerlink" href="#the-last-20-conversations" title="Permanent link">&para;</a></h3>
+<p>Your brain can hold about 7 chunks of information in working memory at once. Phone numbers. Shopping lists. Why you walked into this room (sometimes).</p>
+<p>CORTEX Tier 1 remembers the last 20 <em>conversations</em>. Not just what you said, but:</p>
+<ul>
+<li><strong>Entities mentioned:</strong> Files, classes, methods, variables, components</li>
+<li><strong>Actions taken:</strong> "Created UserService", "Added authentication", "Refactored HostControlPanel"</li>
+<li><strong>Patterns used:</strong> JWT tokens, bcrypt hashing, Factory pattern</li>
+<li><strong>Context references:</strong> "That button we added", "The service from earlier"</li>
+</ul>
+<p><strong>Feature Count: 0 Tier 1 capabilities</strong></p>
+<h4 id="how-it-works-the-technical-bits">How It Works (The Technical Bits)<a class="headerlink" href="#how-it-works-the-technical-bits" title="Permanent link">&para;</a></h4>
+<p><strong>FIFO Queue:</strong> First In, First Out. Oldest conversation drops when #21 arrives.
+<strong>Entity Tracking:</strong> Every mention of a file/class/method gets recorded.
+<strong>SQLite Storage:</strong> Local database (tier1-working-memory.db), zero-footprint.
+<strong>FTS5 Search:</strong> Full-text search finds context instantly.
+<strong>Session Awareness:</strong> Knows when you switch projects.</p>
+<h4 id="the-make-it-purple-solution">The "Make It Purple" Solution<a class="headerlink" href="#the-make-it-purple-solution" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>You: &quot;Add a pulse animation to the FAB button in HostControlPanel&quot;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>CORTEX: [Creates animation]
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        [Stores in Tier 1: Entity(&quot;FAB button&quot;), File(&quot;HostControlPanel.razor&quot;)]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>*[5 minutes pass. You&#39;re working on styling.]*
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>You: &quot;Make it purple&quot;
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>CORTEX: [Checks Tier 1 memory]
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        [Finds: Recent mention of &quot;FAB button&quot; in &quot;HostControlPanel.razor&quot;]
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        &quot;Applying purple color to FAB button&quot;
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        ✅ Opens correct file
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        ✅ Updates correct element
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        ✅ Context maintained
+</span></code></pre></div>
+<p>No clarification needed. No "which button?" No existential confusion. Just working memory doing its job.</p>
+<p><strong>Key Takeaway:</strong> Tier 1 working memory gives CORTEX the ability to remember. "Make it purple" works because memory works. Like a human brain, but SQLite-based.</p>
 
 
 

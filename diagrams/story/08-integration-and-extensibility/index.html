@@ -98,7 +98,8 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../.." title="CORTEX" class="md-header__button md-logo" aria-label="CORTEX" data-md-component="logo">
       
-  <img src="../../../assets/images/CORTEX-logo.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -385,7 +386,8 @@
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="CORTEX" class="md-nav__button md-logo" aria-label="CORTEX" data-md-component="logo">
       
-  <img src="../../../assets/images/CORTEX-logo.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     CORTEX
@@ -2065,10 +2067,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#understanding-integration-extensibility" class="md-nav__link">
+  <a href="#the-zero-footprint-philosophy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding Integration &amp; Extensibility
+        The Zero-Footprint Philosophy
       
     </span>
   </a>
@@ -2076,10 +2078,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#real-world-example" class="md-nav__link">
+  <a href="#plugin-architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Real-World Example
+        Plugin Architecture
       
     </span>
   </a>
@@ -2087,10 +2089,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#key-takeaways" class="md-nav__link">
+  <a href="#cross-platform-support-mac-windows-linux" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Takeaways
+        Cross-Platform Support (Mac, Windows, Linux)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs-code-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#natural-language-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Natural Language API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extensibility-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensibility Examples
       
     </span>
   </a>
@@ -2124,15 +2159,163 @@
 
 <h1 id="chapter-8-integration-extensibility">Chapter 8: Integration &amp; Extensibility<a class="headerlink" href="#chapter-8-integration-extensibility" title="Permanent link">&para;</a></h1>
 <h2 id="zero-footprint-plugins-and-cross-platform">Zero-Footprint Plugins and Cross-Platform<a class="headerlink" href="#zero-footprint-plugins-and-cross-platform" title="Permanent link">&para;</a></h2>
-<p><strong>Focus:</strong> Plugin system and integration capabilities</p>
-<h3 id="understanding-integration-extensibility">Understanding Integration &amp; Extensibility<a class="headerlink" href="#understanding-integration-extensibility" title="Permanent link">&para;</a></h3>
-<p>Let's explore how CORTEX solves this challenge:</p>
-<p><strong>Plugins:</strong> A key component of the Integration &amp; Extensibility system that enables intelligent behavior and context awareness.</p>
-<h3 id="real-world-example">Real-World Example<a class="headerlink" href="#real-world-example" title="Permanent link">&para;</a></h3>
-<p><em>Scenario example for Integration &amp; Extensibility coming soon</em></p>
-<h3 id="key-takeaways">Key Takeaways<a class="headerlink" href="#key-takeaways" title="Permanent link">&para;</a></h3>
-<p>In this chapter, we explored plugin system and integration capabilities. We've seen how CORTEX transforms theoretical capabilities into practical, everyday improvements that make development faster and more reliable.</p>
-<p><strong>Next:</strong> We'll dive deeper into how these systems work together to create an intelligent development assistant.</p>
+<p>You know what's beautiful? Modularity. Extensibility. The ability to add capabilities without turning your codebase into spaghetti.</p>
+<p>CORTEX has a plugin system. Zero-footprint plugins. They register themselves, hook into operations, and play nice with everyone else.</p>
+<p><strong>Story Generator Plugin:</strong> You're reading its output right now. Hello from inside the plugin.</p>
+<p><strong>Documentation Refresh Plugin:</strong> Keeps all docs in sync without manual labor.</p>
+<p><strong>Pattern Capture Plugin:</strong> Learns from your PRs and conversations.</p>
+<p>The system is cross-platform (Mac, Windows, Linux). Integrates with VS Code. Speaks natural language. Has an API for everything. Plays nicely with GitHub Actions, Azure DevOps, whatever you're using.</p>
+<p>Want to add mobile testing? Write a plugin. Want Figma integration? Plugin. Want your toaster to reject improperly injected dependencies? You guessed it—plugin.</p>
+<p>The Roomba is technically a Kubernetes-orchestrated plugin now. Long story. Involving the cat. Don't ask.</p>
+<h3 id="the-zero-footprint-philosophy">The Zero-Footprint Philosophy<a class="headerlink" href="#the-zero-footprint-philosophy" title="Permanent link">&para;</a></h3>
+<p><strong>Zero-Footprint Plugin:</strong> A plugin that adds capabilities without bloating the codebase.</p>
+<p>How? It registers itself, hooks into operations, and stays modular. Need it? It's there. Don't need it? It's invisible.</p>
+<p><strong>Example Plugins Currently Running:</strong></p>
+<p><strong>1. Story Generator Plugin</strong> (You're reading its output right now)
+- Hooks into doc refresh operations
+- Generates narrative documentation
+- Uses Codenstein voice (hi!)<br />
+- Zero impact on core system</p>
+<p><strong>2. Documentation Refresh Plugin</strong>
+- Keeps all docs in sync
+- Regenerates diagrams automatically
+- Updates cross-references
+- Runs during doc operations only</p>
+<p><strong>3. Pattern Capture Plugin</strong>
+- Learns from PR conversations
+- Extracts successful patterns
+- Stores in Tier 2 knowledge graph
+- Silent unless pattern detected</p>
+<p><strong>4. Health Monitor Plugin</strong>
+- Tracks system health metrics
+- Alerts on anomalies
+- Generates health reports
+- Background operation, zero interruption</p>
+<hr />
+<h3 id="plugin-architecture">Plugin Architecture<a class="headerlink" href="#plugin-architecture" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">BasePlugin</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;All plugins inherit from this base&quot;&quot;&quot;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="c1"># Setup plugin resources</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="c1"># Do plugin work</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="c1"># Clean up resources</span>
+</span></code></pre></div>
+<p><strong>That's it.</strong> Three methods. Register plugin, and it integrates seamlessly.</p>
+<p><strong>Hook Points:</strong>
+- <code>ON_DOC_REFRESH</code> - Runs during documentation updates
+- <code>ON_FEATURE_COMPLETE</code> - Runs after feature implementation
+- <code>ON_PR_REVIEW</code> - Runs during code reviews
+- <code>ON_TEST_RUN</code> - Runs during test execution
+- <code>ON_DEPLOY</code> - Runs during deployment</p>
+<p>Plugins hook into these points. Multiple plugins can hook to same point. They coordinate via corpus callosum.</p>
+<hr />
+<h3 id="cross-platform-support-mac-windows-linux">Cross-Platform Support (Mac, Windows, Linux)<a class="headerlink" href="#cross-platform-support-mac-windows-linux" title="Permanent link">&para;</a></h3>
+<p>CORTEX runs everywhere. Literally everywhere. Even on that weird Arch Linux setup you have.</p>
+<p><strong>Path Resolution:</strong>
+- Auto-detects operating system
+- Resolves paths correctly (/ vs )
+- Handles drive letters (Windows C:)
+- Respects symlinks (Linux)
+- Works with network paths</p>
+<p><strong>Configuration:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;machines&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&quot;AsifMacBook&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">&quot;root_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/Users/asifhussain/PROJECTS/CORTEX&quot;</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;brain_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/Users/asifhussain/PROJECTS/CORTEX/cortex-brain&quot;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">&quot;AsifDesktop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">&quot;root_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;D:\PROJECTS\CORTEX&quot;</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">&quot;brain_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;D:\PROJECTS\CORTEX\cortex-brain&quot;</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p>One config file. Multiple machines. Zero path issues.</p>
+<hr />
+<h3 id="vs-code-integration">VS Code Integration<a class="headerlink" href="#vs-code-integration" title="Permanent link">&para;</a></h3>
+<p>CORTEX lives in VS Code. Deeply integrated.</p>
+<p><strong>Chat Integration:</strong>
+- Natural language commands in GitHub Copilot Chat
+- Response templates formatted for chat UI
+- No separator lines (they break in chat)
+- Context-aware suggestions</p>
+<p><strong>Task Integration:</strong>
+- Auto-generates VS Code tasks
+- Build, run, test, deploy tasks
+- One-click execution
+- Output captured for analysis</p>
+<p><strong>Git Integration:</strong>
+- Reads git history
+- Analyzes commit patterns
+- Tracks file changes
+- Generates semantic commits</p>
+<p><strong>Extension APIs:</strong>
+- Full VS Code API access
+- File system operations
+- Terminal integration
+- Notification system</p>
+<p>The Roomba wanted VS Code integration too. Denied. Roombas don't need IDEs.</p>
+<hr />
+<h3 id="natural-language-api">Natural Language API<a class="headerlink" href="#natural-language-api" title="Permanent link">&para;</a></h3>
+<p>No syntax to memorize. Just conversation.</p>
+<p><strong>Commands That Work:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>&quot;make it purple&quot;
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>&quot;use the same pattern as last time&quot;
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>&quot;is this file safe to edit?&quot;
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>&quot;let&#39;s plan authentication&quot;
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>&quot;run tests&quot;
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>&quot;show me the coverage report&quot;
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>&quot;what&#39;s the commit velocity on this file?&quot;
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>&quot;help&quot;
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>&quot;status&quot;
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>&quot;cleanup&quot;
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>&quot;generate docs&quot;
+</span></code></pre></div>
+<p><strong>Commands That Also Work:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>&quot;/CORTEX help&quot;
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>&quot;/CORTEX status&quot;
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>&quot;/CORTEX cleanup&quot;
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>&quot;/setup&quot;
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>&quot;/resume&quot;
+</span></code></pre></div>
+<p>Slash commands are shortcuts. Natural language always works. Use whichever feels right.</p>
+<hr />
+<h3 id="extensibility-examples">Extensibility Examples<a class="headerlink" href="#extensibility-examples" title="Permanent link">&para;</a></h3>
+<p><strong>Want mobile testing?</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">MobileTestingPlugin</span><span class="p">(</span><span class="n">BasePlugin</span><span class="p">):</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>        <span class="c1"># Appium integration</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="c1"># Selector generation</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="c1"># Visual regression</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="c1"># Device farm connection</span>
+</span></code></pre></div></p>
+<p>Register it. Done. Mobile testing active.</p>
+<p><strong>Want Figma integration?</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">FigmaPlugin</span><span class="p">(</span><span class="n">BasePlugin</span><span class="p">):</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        <span class="c1"># Figma API connection</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="c1"># Design token extraction</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="c1"># Component generation</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="c1"># Style system export</span>
+</span></code></pre></div></p>
+<p>Register it. Done. Figma designs become code.</p>
+<p><strong>Want your toaster to reject improperly injected dependencies?</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ToasterDependencyPlugin</span><span class="p">(</span><span class="n">BasePlugin</span><span class="p">):</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        <span class="c1"># Check if bread has proper DI</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="c1"># Reject gluten without interface</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        <span class="c1"># Toast only if IoC container configured</span>
+</span></code></pre></div></p>
+<p>Register it. Your toaster is now enterprise-grade.</p>
+<p>The plugin system makes anything possible. CORTEX provides the brain. You provide the imagination.</p>
+<p>The Roomba is technically a plugin now. Kubernetes-orchestrated. Event-driven. Perfectly scaled. Possibly sentient. Definitely judging my life choices.</p>
+<p><strong>Key Takeaway:</strong> Plugins extend capabilities without bloat. Cross-platform works everywhere. VS Code integration runs deep. Natural language replaces syntax. Extensibility unlimited.</p>
 
 
 
