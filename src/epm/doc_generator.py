@@ -24,6 +24,7 @@ from src.epm.modules.diagram_generator import DiagramGenerator
 from src.epm.modules.page_generator import PageGenerator
 from src.epm.modules.cross_reference_builder import CrossReferenceBuilder
 from src.epm.modules.image_prompt_generator import ImagePromptGenerator
+from src.epm.modules.story_generator import StoryGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -60,6 +61,7 @@ class DocumentationGenerator:
         self.page_generator = PageGenerator(root_path, dry_run)
         self.cross_ref_builder = CrossReferenceBuilder(root_path, dry_run)
         self.image_prompt_generator = ImagePromptGenerator(root_path / "docs" / "diagrams")
+        self.story_generator = StoryGenerator(root_path, dry_run)
         
         # Track generation results
         self.results = {
@@ -305,6 +307,20 @@ class DocumentationGenerator:
         """Stage 4: Page Generation"""
         logger.info("Generating documentation pages...")
         
+        # Part 1: Generate The CORTEX Story
+        logger.info("  → Generating The CORTEX Story...")
+        story_result = self.story_generator.generate_story()
+        
+        if story_result["success"]:
+            logger.info(f"    ✓ Generated: {story_result['output_file']}")
+            logger.info(f"    ✓ Length: {story_result['word_count']} words")
+        else:
+            logger.warning(f"    ⚠️  Story generation failed: {story_result.get('error')}")
+            self.results["warnings"].append(f"Story generation failed: {story_result.get('error')}")
+        
+        # Part 2: Generate standard documentation pages
+        logger.info("  → Generating documentation pages from templates...")
+        
         # Load page definitions
         definitions_file = self.brain_path / "doc-generation-config" / "page-definitions.yaml"
         
@@ -320,16 +336,25 @@ class DocumentationGenerator:
                     source_mapping.update(config[category])
         
         # Generate all pages from definitions
-        result = self.page_generator.generate_all_pages(definitions_file, source_mapping)
+        pages_result = self.page_generator.generate_all_pages(definitions_file, source_mapping)
         
-        total_pages = result["pages_generated"]
-        logger.info(f"✓ Generated {total_pages} pages")
+        total_pages = pages_result["pages_generated"]
+        logger.info(f"    ✓ Generated {total_pages} template-based pages")
         
+        # Combined totals
+        total_generated = total_pages + (1 if story_result["success"] else 0)
         self.results["files_generated"]["pages"] = total_pages
+        self.results["files_generated"]["story"] = 1 if story_result["success"] else 0
+        
+        logger.info(f"✓ Generated {total_generated} total pages")
         
         return {
-            "total": total_pages,
-            "files": result["files"]
+            "story": story_result,
+            "template_pages": {
+                "total": total_pages,
+                "files": pages_result["files"]
+            },
+            "total_pages": total_generated
         }
     
     def _stage_cross_reference(self) -> Dict:

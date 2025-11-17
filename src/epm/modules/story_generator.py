@@ -1,8 +1,155 @@
-# The CORTEX Story: How We Gave GitHub Copilot a Brain
+"""
+CORTEX EPM - Story Generator Module
+Generates "The CORTEX Story" - an engaging narrative showcasing features
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+"""
+
+from pathlib import Path
+from typing import Dict, Any
+import yaml
+import logging
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+
+class StoryGenerator:
+    """Generates The CORTEX Story from template and source data"""
+    
+    def __init__(self, root_path: Path, dry_run: bool = False):
+        self.root_path = root_path
+        self.brain_path = root_path / "cortex-brain"
+        self.output_path = root_path / "docs" / "diagrams" / "story"
+        self.dry_run = dry_run
+        
+        # Ensure output directory exists
+        if not self.dry_run:
+            self.output_path.mkdir(parents=True, exist_ok=True)
+    
+    def generate_story(self) -> Dict[str, Any]:
+        """
+        Generate The CORTEX Story document
+        
+        Returns:
+            Dictionary with generation results
+        """
+        logger.info("Generating The CORTEX Story...")
+        
+        try:
+            # Collect data from CORTEX brain
+            story_data = self._collect_story_data()
+            
+            # Generate story content
+            story_content = self._generate_story_content(story_data)
+            
+            # Write to file
+            output_file = self.output_path / "The CORTEX Story.md"
+            
+            if self.dry_run:
+                logger.info(f"[DRY RUN] Would generate: {output_file}")
+                logger.info(f"[DRY RUN] Content length: {len(story_content)} characters")
+            else:
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(story_content)
+                
+                logger.info(f"✓ Generated: {output_file}")
+                logger.info(f"  Story length: {len(story_content)} characters")
+                logger.info(f"  Word count: {len(story_content.split())} words")
+            
+            return {
+                "success": True,
+                "output_file": str(output_file),
+                "content_length": len(story_content),
+                "word_count": len(story_content.split())
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to generate story: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+    
+    def _collect_story_data(self) -> Dict[str, Any]:
+        """Collect data from CORTEX brain for story generation"""
+        data = {
+            "agents": {
+                "left_brain": [
+                    {"id": "code-executor", "name": "The Builder", "role": "Implements features with surgical precision"},
+                    {"id": "test-generator", "name": "The Tester", "role": "Creates comprehensive test suites, enforces TDD"},
+                    {"id": "error-corrector", "name": "The Fixer", "role": "Catches mistakes and prevents repetition"},
+                    {"id": "health-validator", "name": "The Inspector", "role": "Validates system health obsessively"},
+                    {"id": "commit-handler", "name": "The Archivist", "role": "Creates semantic commit messages"}
+                ],
+                "right_brain": [
+                    {"id": "intent-router", "name": "The Dispatcher", "role": "Interprets natural language requests"},
+                    {"id": "work-planner", "name": "The Planner", "role": "Creates strategic implementation plans"},
+                    {"id": "screenshot-analyzer", "name": "The Analyst", "role": "Extracts requirements from screenshots"},
+                    {"id": "change-governor", "name": "The Governor", "role": "Protects architectural integrity"},
+                    {"id": "brain-protector", "name": "The Brain Protector", "role": "Implements Rule #22: Challenge risky changes"}
+                ]
+            },
+            "tiers": {
+                "tier0": {
+                    "name": "Instinct",
+                    "description": "Immutable core principles",
+                    "features": ["TDD enforcement", "Definition of Done", "Definition of Ready", "Brain Protection"]
+                },
+                "tier1": {
+                    "name": "Working Memory",
+                    "description": "Last 20 conversations",
+                    "features": ["Conversation history", "Entity tracking", "Context references", "FIFO queue"]
+                },
+                "tier2": {
+                    "name": "Knowledge Graph",
+                    "description": "Learned patterns and workflows",
+                    "features": ["Intent patterns", "File relationships", "Workflow templates", "Pattern decay"]
+                },
+                "tier3": {
+                    "name": "Context Intelligence",
+                    "description": "Git analysis and productivity insights",
+                    "features": ["Commit velocity", "File hotspots", "Session analytics", "Proactive warnings"]
+                }
+            },
+            "features": [
+                "Natural language commands (no syntax to memorize)",
+                "Context continuity across sessions",
+                "Pattern learning and reuse",
+                "Proactive risk warnings",
+                "Brain self-protection (Rule #22)",
+                "Interactive feature planning",
+                "Screenshot analysis",
+                "Test-driven development enforcement",
+                "Zero errors/warnings enforcement",
+                "Semantic commit messages"
+            ],
+            "timestamp": datetime.now().strftime("%Y-%m-%d"),
+            "version": "3.0"
+        }
+        
+        # Try to load actual capabilities from brain
+        capabilities_file = self.brain_path / "capabilities.yaml"
+        if capabilities_file.exists():
+            try:
+                with open(capabilities_file, 'r', encoding='utf-8') as f:
+                    capabilities = yaml.safe_load(f)
+                    if capabilities:
+                        data["capabilities"] = capabilities
+            except Exception as e:
+                logger.warning(f"Could not load capabilities.yaml: {e}")
+        
+        return data
+    
+    def _generate_story_content(self, data: Dict[str, Any]) -> str:
+        """Generate the complete story content"""
+        
+        content = f"""# The CORTEX Story: How We Gave GitHub Copilot a Brain
 
 **A human-centered explanation of CORTEX through relatable scenarios**  
-**Generated:** 2025-11-17  
-**Version:** CORTEX 3.0
+**Generated:** {data['timestamp']}  
+**Version:** CORTEX {data['version']}
 
 ---
 
@@ -30,12 +177,13 @@ Like the human left brain (which handles language, logic, and sequential process
 
 **Meet the Left Brain Specialists:**
 
-- **The Builder** (`code-executor`): Implements features with surgical precision
-- **The Tester** (`test-generator`): Creates comprehensive test suites, enforces TDD
-- **The Fixer** (`error-corrector`): Catches mistakes and prevents repetition
-- **The Inspector** (`health-validator`): Validates system health obsessively
-- **The Archivist** (`commit-handler`): Creates semantic commit messages
-
+"""
+        
+        # Add left brain agents
+        for agent in data["agents"]["left_brain"]:
+            content += f"- **{agent['name']}** (`{agent['id']}`): {agent['role']}\n"
+        
+        content += """
 **What They Do Together:**
 - Enforce Test-Driven Development (RED → GREEN → REFACTOR)
 - Execute code with surgical precision
@@ -48,12 +196,13 @@ Like the human right brain (which handles creativity, holistic thinking, and pat
 
 **Meet the Right Brain Specialists:**
 
-- **The Dispatcher** (`intent-router`): Interprets natural language requests
-- **The Planner** (`work-planner`): Creates strategic implementation plans
-- **The Analyst** (`screenshot-analyzer`): Extracts requirements from screenshots
-- **The Governor** (`change-governor`): Protects architectural integrity
-- **The Brain Protector** (`brain-protector`): Implements Rule #22: Challenge risky changes
-
+"""
+        
+        # Add right brain agents
+        for agent in data["agents"]["right_brain"]:
+            content += f"- **{agent['name']}** (`{agent['id']}`): {agent['role']}\n"
+        
+        content += """
 **What They Do Together:**
 - Understand natural language requests
 - Create strategic implementation plans
@@ -78,47 +227,18 @@ The **corpus callosum** coordinates communication between hemispheres. Just like
 
 CORTEX's brain has four distinct memory tiers, each serving a specific cognitive function:
 
-### INSTINCT (TIER0)
-
-Immutable core principles
-
-**Key Features:**
-- TDD enforcement
-- Definition of Done
-- Definition of Ready
-- Brain Protection
-
-### WORKING MEMORY (TIER1)
-
-Last 20 conversations
-
-**Key Features:**
-- Conversation history
-- Entity tracking
-- Context references
-- FIFO queue
-
-### KNOWLEDGE GRAPH (TIER2)
-
-Learned patterns and workflows
-
-**Key Features:**
-- Intent patterns
-- File relationships
-- Workflow templates
-- Pattern decay
-
-### CONTEXT INTELLIGENCE (TIER3)
-
-Git analysis and productivity insights
-
-**Key Features:**
-- Commit velocity
-- File hotspots
-- Session analytics
-- Proactive warnings
-
-
+"""
+        
+        # Add memory tiers
+        for tier_id, tier_info in data["tiers"].items():
+            content += f"### {tier_info['name'].upper()} ({tier_id.upper()})\n\n"
+            content += f"{tier_info['description']}\n\n"
+            content += "**Key Features:**\n"
+            for feature in tier_info['features']:
+                content += f"- {feature}\n"
+            content += "\n"
+        
+        content += """
 **How The Memory System Solves Amnesia:**
 
 ```
@@ -396,3 +516,25 @@ CORTEX is actively developed and improving every week. Your feedback helps make 
 **Repository:** https://github.com/asifhussain60/CORTEX
 
 *This story was generated on {data['timestamp']} by the CORTEX documentation system.*
+"""
+        
+        return content
+
+
+if __name__ == "__main__":
+    # Test story generation
+    import sys
+    
+    root_path = Path(__file__).parent.parent.parent.parent
+    generator = StoryGenerator(root_path, dry_run=False)
+    
+    result = generator.generate_story()
+    
+    if result["success"]:
+        print(f"✅ Story generated successfully!")
+        print(f"   Output: {result['output_file']}")
+        print(f"   Length: {result['content_length']} characters")
+        print(f"   Words: {result['word_count']} words")
+    else:
+        print(f"❌ Story generation failed: {result.get('error')}")
+        sys.exit(1)

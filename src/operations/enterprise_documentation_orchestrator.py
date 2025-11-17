@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.epm.doc_generator import DocumentationGenerator
 from src.operations.base_operation_module import OperationResult, OperationStatus
+from src.plugins.story_generator_plugin import StoryGeneratorPlugin
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -95,6 +96,34 @@ class EnterpriseDocumentationOrchestrator:
             else:
                 logger.info("Executing full 6-stage documentation pipeline")
                 generation_result = doc_generator.execute()
+            
+            # Execute Story Generation Plugin (if enabled)
+            story_enabled = options.get("generate_story", True) if options else True
+            if story_enabled and not stage:  # Only run for full pipeline
+                logger.info("")
+                logger.info("=" * 80)
+                logger.info("Running Story Generation Plugin...")
+                logger.info("=" * 80)
+                
+                story_plugin = StoryGeneratorPlugin(config={
+                    "root_path": str(self.workspace_root)
+                })
+                
+                if story_plugin.initialize():
+                    story_context = {
+                        "dry_run": dry_run,
+                        "chapters": options.get("story_chapters", 10) if options else 10,
+                        "max_words_per_chapter": options.get("story_max_words", 5000) if options else 5000
+                    }
+                    
+                    story_result = story_plugin.execute(story_context)
+                    
+                    # Add story results to generation result
+                    generation_result["story_generation"] = story_result
+                    
+                    story_plugin.cleanup()
+                else:
+                    logger.warning("⚠️ Story generation plugin initialization failed")
             
             # Calculate duration
             duration = (datetime.now() - start_time).total_seconds()
@@ -183,6 +212,18 @@ class EnterpriseDocumentationOrchestrator:
                     "files_affected": stage_data.get("files_affected", 0)
                 }
         
+        # Extract story generation metrics
+        story_metrics = {}
+        if "story_generation" in generation_result:
+            story_data = generation_result["story_generation"]
+            if story_data.get("success"):
+                story_metrics = {
+                    "chapters_generated": story_data.get("chapters_generated", 0),
+                    "total_words": story_data.get("total_words", 0),
+                    "files_created": len(story_data.get("files_created", [])),
+                    "output_path": story_data.get("output_path", "")
+                }
+        
         return {
             "execution_summary": {
                 "profile": profile,
@@ -194,6 +235,7 @@ class EnterpriseDocumentationOrchestrator:
             },
             "pipeline_stages": stage_summary,
             "file_generation": file_counts,
+            "story_generation": story_metrics,  # Add story metrics
             "documentation_structure": self._analyze_docs_structure(),
             "quality_metrics": {
                 "warnings_count": len(warnings),
