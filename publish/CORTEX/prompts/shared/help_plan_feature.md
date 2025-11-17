@@ -10,6 +10,39 @@
 
 ---
 
+## 🚨 ACTIVATION TRIGGERS
+
+**This module activates automatically when you say:**
+
+| Trigger Phrase | Example Usage | Context Detection |
+|----------------|---------------|-------------------|
+| `plan` | "plan authentication" | General planning |
+| `let's plan` | "let's plan a feature" | Conversational planning |
+| `plan a feature` | "plan a feature for users" | Explicit feature planning |
+| `plan this` | "plan this ADO enhancement" | Contextual planning |
+| `help me plan` | "help me plan the API" | Assistance request |
+| `planning` | "planning user dashboard" | Activity-based |
+| `feature planning` | "feature planning session" | Explicit workflow |
+| `i want to plan` | "i want to plan deployment" | Intent declaration |
+
+**Domain-Specific Context:**
+- "let's plan an ADO feature" → Planning workflow + Azure DevOps context
+- "plan AWS infrastructure" → Planning workflow + AWS context
+- "help me plan Kubernetes migration" → Planning workflow + K8s context
+
+**No separate triggers needed for domain specialization** - CORTEX detects context naturally within the planning workflow.
+
+**Configuration:** Triggers defined in `cortex-brain/response-templates.yaml` under `routing.planning_triggers`
+
+**When activated:**
+1. CORTEX loads this module (#file:help_plan_feature.md)
+2. Work Planner agent activates (Right Brain - Strategic)
+3. Interactive planning workflow begins
+4. Confidence assessment determines question depth
+5. Phase-based plan generated and saved
+
+---
+
 ## 🎯 What Is Feature Planning?
 
 Interactive feature planning helps you break down complex features into actionable tasks through a guided conversation. CORTEX asks clarifying questions, analyzes requirements, and generates a structured roadmap you can execute immediately.
