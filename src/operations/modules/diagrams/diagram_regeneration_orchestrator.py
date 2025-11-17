@@ -540,7 +540,7 @@ Style: Isometric view, clean modern design, professional color scheme, subtle sh
         pass
 
 
-class DiagramRegenerationOperation(BaseOperationModule):
+class DiagramRegenerationOrchestrator(BaseOperationModule):
     """
     Regenerate all CORTEX diagrams with fresh design analysis.
     
@@ -554,10 +554,11 @@ class DiagramRegenerationOperation(BaseOperationModule):
     
     def get_metadata(self) -> OperationModuleMetadata:
         return OperationModuleMetadata(
-            operation_id="regenerate_diagrams",
+            module_id="diagram_regeneration",
             name="Regenerate Diagrams",
-            version="1.0.0",
             description="Analyze CORTEX design and regenerate all visual assets from scratch",
+            phase=OperationPhase.PROCESSING,
+            version="1.0.0",
             author="Asif Hussain",
             tags=["diagrams", "documentation", "visual-assets", "mermaid", "illustrations"]
         )

@@ -35,29 +35,37 @@ def test_diagram_regeneration():
         )
         
         # Check result
-        if report.status == 'success':
+        if report.success:
             print("✅ Operation completed successfully!")
             print(f"\n📊 Results:")
-            print(f"   - Features analyzed: {report.data.get('features_analyzed', 0)}")
-            print(f"   - Diagrams generated: {report.data.get('diagrams_generated', 0)}")
+            print(f"   - Modules executed: {len(report.modules_executed)}")
+            print(f"   - Modules succeeded: {len(report.modules_succeeded)}")
+            print(f"   - Total duration: {report.total_duration_seconds:.2f}s")
             
-            files_stats = report.data.get('files_created', {})
-            print(f"   - Mermaid files: {files_stats.get('mermaid', 0)}")
-            print(f"   - Illustration prompts: {files_stats.get('prompts', 0)}")
-            print(f"   - Narratives: {files_stats.get('narratives', 0)}")
-            print(f"   - Total files: {files_stats.get('total_files', 0)}")
+            # Check context for results
+            context = report.context or {}
+            print(f"   - Features analyzed: {context.get('features_analyzed', 0)}")
+            print(f"   - Diagrams generated: {context.get('diagrams_generated', 0)}")
             
-            if 'report' in report.data:
+            files_stats = context.get('files_created', {})
+            if files_stats:
+                print(f"   - Mermaid files: {files_stats.get('mermaid', 0)}")
+                print(f"   - Illustration prompts: {files_stats.get('prompts', 0)}")
+                print(f"   - Narratives: {files_stats.get('narratives', 0)}")
+                print(f"   - Total files: {files_stats.get('total_files', 0)}")
+            
+            if context.get('report'):
                 print(f"\n📄 Report Preview:")
                 print("-" * 80)
-                print(report.data['report'][:500] + "...")
+                print(context['report'][:500] + "...")
             
             print("\n✅ Test PASSED")
             return True
         else:
-            print(f"❌ Operation failed: {report.message}")
-            if report.error:
-                print(f"   Error: {report.error}")
+            print(f"❌ Operation failed")
+            if report.errors:
+                for error in report.errors:
+                    print(f"   Error: {error}")
             print("\n❌ Test FAILED")
             return False
             

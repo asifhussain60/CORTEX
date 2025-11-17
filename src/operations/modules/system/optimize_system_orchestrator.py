@@ -212,16 +212,16 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     
     VERSION = "1.0.0"
     
-    def __init__(self, project_root: Path, mode: ExecutionMode = ExecutionMode.LIVE):
+    def __init__(self, project_root: Optional[Path] = None, mode: ExecutionMode = ExecutionMode.LIVE):
         """
         Initialize system optimizer.
         
         Args:
-            project_root: CORTEX project root directory
+            project_root: CORTEX project root directory (optional, will be detected from context)
             mode: Execution mode (LIVE only)
         """
         super().__init__()
-        self.project_root = project_root
+        self.project_root = project_root or Path.cwd()
         self.mode = mode
         self.metrics = OptimizationMetrics()
         self.start_time = None
