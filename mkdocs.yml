@@ -48,7 +48,18 @@ extra_css:
 # ============================================
 nav:
 - Home: index.md
-- The CORTEX Story: diagrams/story/The-CORTEX-Story.md
+- The CORTEX Story:
+  - The Awakening: diagrams/story/The-CORTEX-Story.md
+  - "01. The Amnesia Problem": diagrams/story/01-the-amnesia-problem.md
+  - "02. Building First Memory": diagrams/story/02-building-first-memory.md
+  - "03. The Learning System": diagrams/story/03-the-learning-system.md
+  - "04. Context Intelligence": diagrams/story/04-context-intelligence.md
+  - "05. The Dual Hemisphere Brain": diagrams/story/05-the-dual-hemisphere-brain.md
+  - "06. Intelligence & Automation": diagrams/story/06-intelligence-and-automation.md
+  - "07. Protection & Governance": diagrams/story/07-protection-and-governance.md
+  - "08. Integration & Extensibility": diagrams/story/08-integration-and-extensibility.md
+  - "09. Real-World Scenarios": diagrams/story/09-real-world-scenarios.md
+  - "10. The Transformation": diagrams/story/10-the-transformation.md
 - Getting Started:
   - Quick Start: getting-started/quick-start.md
   - Installation: getting-started/installation.md

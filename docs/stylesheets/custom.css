@@ -731,3 +731,47 @@ code[class*="language-"],
 [data-md-color-scheme="slate"] .ancient-rules p strong {
   color: #d4b896;
 }
+
+/* ============================================
+   STICKY HEADER FIX - Prevent Logo Cutoff
+   Based on Vision API analysis of scrolling issue
+   ============================================ */
+
+/* Add padding to prevent header content from being cut off when sticky */
+.md-header {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Ensure logo and title have proper spacing */
+.md-header__title {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Add white space margin between sticky header and content */
+.md-header--shadow {
+  box-shadow: 0 0 0.4rem rgba(0,0,0,.1), 0 0.4rem 0.8rem rgba(0,0,0,.2) !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Prevent logo from being cropped on scroll */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  max-height: 2.5rem !important;
+  margin: 0.25rem 0 !important;
+  display: block !important;
+}
+
+/* Clean spacing for header inner container */
+.md-header__inner {
+  padding: 0.5rem 1rem !important;
+  min-height: 3.5rem !important;
+}
+
+/* Ensure proper z-index for header */
+.md-header {
+  z-index: 4 !important;
+}
+
