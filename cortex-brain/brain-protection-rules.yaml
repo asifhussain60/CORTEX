@@ -21,7 +21,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all 6 layers
 rules:
-  total_count: 22
+  total_count: 24
   layers: 6
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -822,6 +822,308 @@ protection_layers:
           
           This rule ensures CORTEX acts as a seamless extension of the
           developer, not a foreign entity imposing its own conventions.
+      
+      - rule_id: "NO_EMOJIS_IN_SCRIPTS"
+        name: "No Emojis in Generated Scripts"
+        severity: "warning"
+        description: "Scripts (Python, PowerShell, Bash, etc.) should not contain emojis"
+        
+        detection:
+          combined_keywords:
+            script_generation:
+              - "generate script"
+              - "create .py"
+              - "create .ps1"
+              - "create .sh"
+              - "write script"
+            emoji_usage:
+              - "✅"
+              - "❌"
+              - "⚠️"
+              - "🔍"
+              - "📊"
+              - "🧠"
+              - "emoji"
+          scope: ["code", "file_content"]
+          logic: "AND"
+        
+        alternatives:
+          - "Use plain text markers: [OK], [FAIL], [WARN]"
+          - "Use ASCII art or text symbols: +, -, *, !"
+          - "Reserve emojis for documentation and user-facing text only"
+          - "Use logging levels: INFO, ERROR, WARNING instead of emojis"
+        
+        evidence_template: |
+          Emoji detected in script: '{file_path}'
+          
+          Emojis found: {emoji_list}
+          
+          Scripts should use plain text for maximum compatibility:
+          - Encoding issues across platforms
+          - Terminal rendering problems
+          - Copy/paste issues in some editors
+          - Professional appearance
+        
+        rationale: |
+          NO_EMOJIS_IN_SCRIPTS: Code Quality Standard
+          
+          Why Emojis Don't Belong in Scripts:
+          
+          1. Encoding Issues:
+             - UTF-8 encoding not universal in all environments
+             - PowerShell ISE may not render correctly
+             - Windows cmd.exe has encoding problems
+             - Remote SSH sessions may lose emojis
+          
+          2. Terminal Compatibility:
+             - Some terminals don't support Unicode emojis
+             - CI/CD logs may show broken characters
+             - Legacy systems show question marks
+             - Screen readers struggle with emojis
+          
+          3. Professional Standards:
+             - Scripts are code, not social media
+             - Emojis reduce professional appearance
+             - Industry standard: plain text markers
+             - Easier to grep/search logs
+          
+          4. Copy/Paste Problems:
+             - Email clients may corrupt emojis
+             - Documentation tools may strip emojis
+             - Version control diffs show weird bytes
+             - Stack Overflow code samples break
+          
+          What to Use Instead:
+          
+          ❌ Emoji-Based:
+          ```python
+          print("✅ Test passed")
+          print("❌ Test failed")
+          print("⚠️ Warning detected")
+          ```
+          
+          ✅ Plain Text:
+          ```python
+          print("[OK] Test passed")
+          print("[FAIL] Test failed")
+          print("[WARN] Warning detected")
+          ```
+          
+          ✅ Logging Levels:
+          ```python
+          logger.info("Test passed")
+          logger.error("Test failed")
+          logger.warning("Warning detected")
+          ```
+          
+          ✅ ASCII Symbols:
+          ```python
+          print("+ Test passed")
+          print("- Test failed")
+          print("! Warning detected")
+          ```
+          
+          Allowed Emoji Usage:
+          - Documentation (README.md, guides)
+          - User-facing messages (GitHub Copilot Chat responses)
+          - Markdown files (story.md, setup-guide.md)
+          - Comments in code (sparingly, for clarity)
+          
+          Not Allowed:
+          - Python scripts (.py)
+          - PowerShell scripts (.ps1)
+          - Bash scripts (.sh)
+          - Batch files (.bat, .cmd)
+          - Any executable script files
+          
+          Example Violation:
+          ```python
+          # ❌ BAD
+          def run_tests():
+              print("🧪 Running tests...")
+              if all_pass:
+                  print("✅ All tests passed!")
+              else:
+                  print("❌ Some tests failed!")
+          
+          # ✅ GOOD
+          def run_tests():
+              print("[TEST] Running tests...")
+              if all_pass:
+                  print("[OK] All tests passed!")
+              else:
+                  print("[FAIL] Some tests failed!")
+          ```
+          
+          This maintains code professionalism and ensures scripts work
+          universally across all platforms and environments.
+      
+      - rule_id: "NO_ROOT_SUMMARY_DOCUMENTS"
+        name: "No Summary Documents in Repository Root"
+        severity: "warning"
+        description: "Summary/report documents should be in cortex-brain/documents/, not repository root"
+        
+        detection:
+          combined_keywords:
+            root_level_creation:
+              - "create file in root"
+              - "save to repository root"
+              - ".md in d:\\PROJECTS\\CORTEX\\"
+              - ".md in /Users/"
+              - ".md in /home/"
+            summary_markers:
+              - "summary"
+              - "report"
+              - "analysis"
+              - "status"
+              - "completion"
+              - "investigation"
+          scope: ["intent", "file_path"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "path_validation"
+            description: "Verify document created in cortex-brain/documents/"
+            requirement: "File path MUST contain 'cortex-brain/documents/'"
+          
+          - type: "category_check"
+            description: "Verify document placed in appropriate category"
+            requirement: "Must be in reports/, analysis/, summaries/, etc."
+        
+        alternatives:
+          - "Use cortex-brain/documents/reports/ for completion reports"
+          - "Use cortex-brain/documents/analysis/ for investigations"
+          - "Use cortex-brain/documents/summaries/ for quick overviews"
+          - "Use cortex-brain/documents/conversation-captures/ for strategic conversations"
+          - "See cortex-brain/documents/README.md for full structure"
+        
+        evidence_template: |
+          Summary document created in wrong location!
+          
+          File: '{file_path}'
+          Expected: cortex-brain/documents/{category}/
+          
+          Document Organization Rules:
+          - Reports → cortex-brain/documents/reports/
+          - Analysis → cortex-brain/documents/analysis/
+          - Summaries → cortex-brain/documents/summaries/
+          - Investigations → cortex-brain/documents/investigations/
+          - Planning → cortex-brain/documents/planning/
+          
+          Repository root is reserved for:
+          - README.md
+          - LICENSE
+          - Package files (package.json, requirements.txt)
+          - Configuration (cortex.config.json)
+        
+        rationale: |
+          NO_ROOT_SUMMARY_DOCUMENTS: Document Organization Standard
+          
+          Why Root-Level Summaries Are Problematic:
+          
+          1. Repository Clutter:
+             - Too many documents make root directory unnavigable
+             - Hard to find important files (README, LICENSE)
+             - Git status becomes noisy
+             - New contributors confused by file soup
+          
+          2. Loss of Context:
+             - No categorization = documents hard to find
+             - "Which report is the latest?"
+             - "Where's the security analysis?"
+             - Search becomes time-consuming
+          
+          3. Merge Conflicts:
+             - Multiple people creating summaries in root
+             - Filename collisions likely
+             - No clear ownership or hierarchy
+          
+          4. Violates CORTEX Organization Mandate:
+             - CORTEX has structured document system
+             - Category-based organization already exists
+             - Ignoring structure creates technical debt
+          
+          CORTEX Document Structure:
+          
+          ```
+          cortex-brain/documents/
+          ├── reports/              # Implementation completion, status reports
+          │   ├── CORTEX-3.0-FINAL-REPORT.md
+          │   └── PHASE-0-COMPLETION-REPORT.md
+          │
+          ├── analysis/             # Deep investigations, performance analysis
+          │   ├── ROUTER-PERFORMANCE-ANALYSIS.md
+          │   └── TOKEN-OPTIMIZATION-ANALYSIS.md
+          │
+          ├── summaries/            # Quick overviews, daily progress
+          │   ├── TIER3-IMPLEMENTATION-SUMMARY.md
+          │   └── WEEKLY-PROGRESS-SUMMARY.md
+          │
+          ├── investigations/       # Research, architecture investigations
+          │   ├── AUTH-FEATURE-INVESTIGATION.md
+          │   └── DATABASE-MIGRATION-INVESTIGATION.md
+          │
+          ├── planning/             # Roadmaps, implementation plans
+          │   ├── CORTEX-4.0-PLANNING.md
+          │   └── features/
+          │       └── PLAN-2025-11-17-authentication.md
+          │
+          ├── conversation-captures/ # Strategic conversation captures
+          │   └── CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
+          │
+          └── implementation-guides/  # How-to guides, integration docs
+              └── CORTEX-SETUP-GUIDE.md
+          ```
+          
+          Benefits of Organized Structure:
+          - Easy to find related documents
+          - Clear ownership and purpose
+          - Searchable by category
+          - No root-level clutter
+          - Professional appearance
+          
+          Root Directory Reserved For:
+          ```
+          CORTEX/
+          ├── README.md              ✅ Project overview
+          ├── LICENSE                ✅ Legal
+          ├── package.json           ✅ Dependencies
+          ├── requirements.txt       ✅ Python packages
+          ├── cortex.config.json     ✅ Configuration
+          ├── setup.py               ✅ Installation
+          ├── mkdocs.yml             ✅ Docs build config
+          └── .gitignore             ✅ Git config
+          ```
+          
+          Example Violations:
+          
+          ❌ BAD:
+          ```
+          d:\PROJECTS\CORTEX\INVESTIGATION-ANALYSIS-REPORT.md
+          d:\PROJECTS\CORTEX\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
+          d:\PROJECTS\CORTEX\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
+          ```
+          
+          ✅ GOOD:
+          ```
+          d:\PROJECTS\CORTEX\cortex-brain\documents\analysis\INVESTIGATION-ANALYSIS-REPORT.md
+          d:\PROJECTS\CORTEX\cortex-brain\documents\reports\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
+          d:\PROJECTS\CORTEX\cortex-brain\documents\analysis\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
+          ```
+          
+          Enforcement:
+          - Brain Protector challenges root-level document creation
+          - Suggests appropriate category automatically
+          - Provides full path template
+          - References cortex-brain/documents/README.md for guidelines
+          
+          Override Cases (Rare):
+          - User explicitly requests root-level placement
+          - Temporary scaffolding during setup
+          - Files intended for repository metadata (CHANGELOG.md, CONTRIBUTING.md)
+          
+          This maintains clean repository structure and ensures documents
+          are findable, organized, and maintainable long-term.
   
   # Layer 4: Hemisphere Specialization
   - layer_id: "hemisphere_specialization"
