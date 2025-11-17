@@ -6,7 +6,6 @@ repo_url: https://github.com/asifhussain60/CORTEX
 repo_name: asifhussain60/CORTEX
 theme:
   name: material
-  logo: assets/images/CORTEX-logo.png
   favicon: assets/images/CORTEX-logo.png
   palette:
   - scheme: default

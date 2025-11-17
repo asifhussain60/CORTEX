@@ -1,13 +1,8 @@
-# 🧠 CORTEX - AI Enhancement Framework
+# <img src="assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; vertical-align: middle; margin-right: 20px;"> **CORTEX**
 
-<div class="cortex-hero">
-  <h1>🧠 CORTEX</h1>
-  <p>Long-term memory and strategic planning for GitHub Copilot</p>
-  <a href="getting-started/quick-start/" class="cta-button">Get Started</a>
-  <a href="awakening-of-cortex/" class="cta-button secondary">Read the Story</a>
+<div style="font-size: 1.1rem; color: #666; margin-top: -10px; margin-bottom: 30px;">
+<em>Cognitive Operation & Reasoning Through EXtension for Copilot</em>
 </div>
-
----
 
 <div class="ancient-rules" markdown="1">
 
@@ -141,7 +136,16 @@ Never create a monolithic database. Use tier-specific storage: Tier 1 (conversat
 
 ---
 
-## ⚡ The Solution: CORTEX
+<div class="cortex-hero">
+  <h1>⚡ The Solution: CORTEX</h1>
+  <p>Long-term memory and strategic planning for GitHub Copilot</p>
+  <a href="getting-started/quick-start/" class="cta-button">Get Started</a>
+  <a href="awakening-of-cortex/" class="cta-button secondary">Read the Story</a>
+</div>
+
+---
+
+## 🧠 Core Architecture
 
 CORTEX is a sophisticated cognitive architecture that gives Copilot a permanent, learning brain:
 
