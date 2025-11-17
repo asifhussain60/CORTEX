@@ -1,11 +1,13 @@
-site_name: CORTEX - AI Enhancement Framework
-site_description: Long-term memory and strategic planning for GitHub Copilot
+site_name: CORTEX
+site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
 site_author: Asif Hussain
 copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
 repo_url: https://github.com/asifhussain60/CORTEX
 repo_name: asifhussain60/CORTEX
 theme:
   name: material
+  logo: assets/images/CORTEX-logo.png
+  favicon: assets/images/CORTEX-logo.png
   palette:
   - scheme: default
     primary: deep purple
@@ -28,7 +30,6 @@ theme:
   - navigation.top
   - search.suggest
   - search.highlight
-  - toc.integrate
   - content.code.copy
   - content.tabs.link
   font:
@@ -41,102 +42,58 @@ extra_css:
 - stylesheets/story.css
 - stylesheets/technical.css
 - https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
+
+# ============================================
+# NAVIGATION STRUCTURE - Simplified & Logical
+# 7 Main Sections: Home | The CORTEX Story | Getting Started | Architecture | Guides | Operations | Reference
+# ============================================
 nav:
-- Architectural:
-  - Brain Protection: images/diagrams/architectural/brain-protection.md
-  - Epm Doc Generator Pipeline: images/diagrams/architectural/epm-doc-generator-pipeline.md
-  - Module Structure: images/diagrams/architectural/module-structure.md
+- Home: index.md
+- The CORTEX Story:
+  - The Awakening of CORTEX: awakening-of-cortex.md
+  - Visual Story: diagrams/story/The-CORTEX-Story.md
+- Getting Started:
+  - Quick Start: getting-started/quick-start.md
+  - Installation: getting-started/installation.md
+  - Configuration: getting-started/configuration.md
 - Architecture:
-  - Agents: architecture/agents.md
-  - Brain Protection: architecture/brain-protection.md
   - Overview: architecture/overview.md
   - Tier System: architecture/tier-system.md
-- Demos:
-  - Dod Dor Workflow Demo Reference: demos/DOD-DOR-WORKFLOW-DEMO-REFERENCE.md
-- Diagrams:
-  - Readme: diagrams/README.md
-  - Style Guide: diagrams/STYLE-GUIDE.md
-- Getting Started:
-  - Configuration: getting-started/configuration.md
-  - Installation: getting-started/installation.md
-  - Quick Start: getting-started/quick-start.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
+  - Diagrams:
+    - Module Structure: images/diagrams/architectural/module-structure.md
+    - Brain Protection: images/diagrams/architectural/brain-protection.md
+    - EPM Doc Generator: images/diagrams/architectural/epm-doc-generator-pipeline.md
+    - Agent Coordination: images/diagrams/strategic/agent-coordination.md
+    - Information Flow: images/diagrams/strategic/information-flow.md
+    - Tier Architecture: images/diagrams/strategic/tier-architecture.md
 - Guides:
+  - Developer Guide: guides/developer-guide.md
   - Admin Guide: guides/admin-guide.md
   - Best Practices: guides/best-practices.md
-  - Developer Guide: guides/developer-guide.md
   - Troubleshooting: guides/troubleshooting.md
-- Integration:
-  - Git Integration: images/diagrams/integration/git-integration.md
-  - Mkdocs Integration: images/diagrams/integration/mkdocs-integration.md
-  - Vscode Integration: images/diagrams/integration/vscode-integration.md
-- Narratives:
-  - 01 Tier Architecture: diagrams/narratives/01-tier-architecture.md
-  - 02 Agent System: diagrams/narratives/02-agent-system.md
-  - 03 Plugin Architecture: diagrams/narratives/03-plugin-architecture.md
-  - 04 Memory Flow: diagrams/narratives/04-memory-flow.md
-  - 05 Agent Coordination: diagrams/narratives/05-agent-coordination.md
-  - 06 Basement Scene: diagrams/narratives/06-basement-scene.md
-  - 07 Cortex One Pager: diagrams/narratives/07-cortex-one-pager.md
-- Operational:
-  - Conversation Flow: images/diagrams/operational/conversation-flow.md
-  - Health Check: images/diagrams/operational/health-check.md
-  - Knowledge Graph Update: images/diagrams/operational/knowledge-graph-update.md
 - Operations:
-  - Entry Point Modules: operations/entry-point-modules.md
-  - Health Monitoring: operations/health-monitoring.md
-  - Index: operations/index.md
   - Overview: operations/overview.md
+  - Entry Point Modules: operations/entry-point-modules.md
   - Workflows: operations/workflows.md
-- Performance:
-  - Ci Cd Integration: performance/CI-CD-INTEGRATION.md
-  - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
-- Plugins:
-  - Development: plugins/development.md
-  - Vscode Extension: plugins/vscode-extension.md
-- Project:
-  - Implementation Notes: project/implementation-notes.md
-  - Package Structure: project/package-structure.md
-- Prompts:
-  # Diagram Prompts (temporarily excluded due to emoji/HTML parsing issues)
-  # - 01 Tier Architecture: diagrams/prompts/01-tier-architecture.md
-  - 02 Agent System: diagrams/prompts/02-agent-system.md
-  # - 03 Plugin Architecture: diagrams/prompts/03-plugin-architecture.md
-  # - 04 Memory Flow: diagrams/prompts/04-memory-flow.md
-  # - 05 Agent Coordination: diagrams/prompts/05-agent-coordination.md
-  # - 06 Basement Scene: diagrams/prompts/06-basement-scene.md
-  # - 07 Cortex One Pager: diagrams/prompts/07-cortex-one-pager.md
-- Recommendations:
-  - Story Recap System Recommendations: recommendations/story-recap-system-recommendations.md
-  - Workflow Pipeline Recommendation: recommendations/workflow-pipeline-recommendation.md
+  - Health Monitoring: operations/health-monitoring.md
+  - Diagrams:
+    - Conversation Flow: images/diagrams/operational/conversation-flow.md
+    - Health Check: images/diagrams/operational/health-check.md
+    - Knowledge Graph Update: images/diagrams/operational/knowledge-graph-update.md
 - Reference:
-  - Api: reference/api.md
+  - API Reference: reference/api.md
   - Configuration: reference/configuration.md
   - Response Templates: reference/response-templates.md
-- Generation Report 20251115 201243: GENERATION-REPORT-20251115-201243.md
-- Generation Report 20251115 201255: GENERATION-REPORT-20251115-201255.md
-- Generation Report 20251115 201308: GENERATION-REPORT-20251115-201308.md
-- Generation Report 20251116 133042: GENERATION-REPORT-20251116-133042.md
-- Generation Report 20251116 133909: GENERATION-REPORT-20251116-133909.md
-- Generation Report 20251116 134030: GENERATION-REPORT-20251116-134030.md
-- Generation Report 20251116 134819: GENERATION-REPORT-20251116-134819.md
-- Generation Report 20251116 140845: GENERATION-REPORT-20251116-140845.md
-- Help System: HELP-SYSTEM.md
-- Technical Cost Optimization: Technical-Cost-Optimization.md
-- Awakening Of Cortex: awakening-of-cortex.md
-- Index: index.md
-- Response Template User Guide: response-template-user-guide.md
-- Strategic:
-  - Agent Coordination: images/diagrams/strategic/agent-coordination.md
-  - Information Flow: images/diagrams/strategic/information-flow.md
-  - Tier Architecture: images/diagrams/strategic/tier-architecture.md
-- Summaries:
-  - Limitations And Status: summaries/limitations-and-status.md
-- Telemetry:
-  - Performance Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
-- Test Generated:
-  - Readme: test-generated/README.md
-  - Metrics: test-generated/metrics.md
-  - Project Overview: test-generated/project-overview.md
+  - Integration:
+    - Git Integration: images/diagrams/integration/git-integration.md
+    - MkDocs Integration: images/diagrams/integration/mkdocs-integration.md
+    - VSCode Integration: images/diagrams/integration/vscode-integration.md
+  - Performance:
+    - CI/CD Integration: performance/CI-CD-INTEGRATION.md
+    - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
+    - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
 markdown_extensions:
 - abbr
 - admonition
@@ -157,9 +114,9 @@ markdown_extensions:
 - pymdownx.mark
 - pymdownx.tilde
 - pymdownx.details
-- pymdownx.emoji:
-    emoji_index: !!python/name:material.extensions.emoji.twemoji
-    emoji_generator: !!python/name:material.extensions.emoji.to_svg
+# - pymdownx.emoji:
+#     emoji_index: null
+#     emoji_generator: null
 - pymdownx.highlight:
     anchor_linenums: true
     line_spans: __span

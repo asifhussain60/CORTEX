@@ -38,6 +38,75 @@
 }
 
 /* ============================================
+   HEADER LOGO & TITLE CUSTOMIZATION
+   ============================================ */
+
+/* Logo styling - make it larger and more prominent */
+.md-header__button.md-logo {
+  padding: 0.2rem;
+  margin-right: 0.8rem;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2.8rem;
+  width: auto;
+  display: block;
+}
+
+/* Site title styling */
+.md-header__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+/* Add subtitle with full form under title */
+.md-header__title::after {
+  content: "Cognitive Operation & Reasoning Through EXtension";
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+  margin-top: 0.15rem;
+  line-height: 1.3;
+}
+
+/* Ensure header has enough height for subtitle */
+.md-header {
+  min-height: 4rem;
+}
+
+/* Adjust header inner for better spacing */
+.md-header__inner {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Mobile responsive - hide subtitle on small screens */
+@media screen and (max-width: 768px) {
+  .md-header__title::after {
+    display: none;
+  }
+  
+  .md-header__button.md-logo img,
+  .md-header__button.md-logo svg {
+    height: 2.2rem;
+  }
+  
+  .md-header__title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] .md-header__title::after {
+  opacity: 0.75;
+}
+
+/* ============================================
    GLOBAL OVERRIDES - Light Material Theme
    ============================================ */
 
@@ -371,6 +440,7 @@ code[class*="language-"],
 .md-sidebar--primary {
   background: linear-gradient(180deg, #F8F9FA 0%, #E9ECEF 100%) !important;
   border-right: 3px solid var(--cortex-primary) !important;
+  z-index: 3 !important;  /* Fix: Ensure sidebar doesn't overlap content */
 }
 
 .md-sidebar--primary .md-sidebar__scrollwrap,
@@ -392,6 +462,21 @@ code[class*="language-"],
 /* REMOVE BLACK BAR - Hide the sidebar header completely */
 .md-sidebar--primary .md-sidebar__inner .md-nav--primary > .md-nav__title {
   display: none !important;
+}
+
+/* Fix: Prevent sidebar from sticking over content on scroll */
+.md-sidebar--primary {
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+/* Fix: Ensure main content doesn't get hidden behind sidebar */
+.md-content {
+  position: relative !important;
+  z-index: 1 !important;
+  margin-left: 0 !important;
 }
 
 /* Section titles with gradient background */
@@ -553,6 +638,28 @@ code[class*="language-"],
   
   .story-image img {
     border-radius: 8px;
+  }
+  
+  /* Fix: Collapse sidebar on mobile to prevent overlap */
+  .md-sidebar--primary {
+    position: relative !important;
+    height: auto !important;
+  }
+  
+  .md-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* Fix: Tablet breakpoint */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .md-sidebar--primary {
+    width: 200px !important;
+  }
+  
+  .md-nav__link {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.9rem !important;
   }
 }
 
