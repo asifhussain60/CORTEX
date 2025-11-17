@@ -57,7 +57,9 @@ def cortex_entry(temp_brain):
         brain_path=str(temp_brain),
         enable_logging=False
     )
-    return entry
+    yield entry
+    # Cleanup: Close all database connections before temp directory deletion
+    entry.cleanup()
 
 
 class TestConversationTrackingProtection:
@@ -190,6 +192,7 @@ class TestConversationTrackingProtection:
         conv_id_1 = session1_info['conversation_id']
         
         # Simulate closing/reopening (new CortexEntry instance)
+        entry1.cleanup()  # Close database connections
         del entry1
         
         # Second invocation - should load existing conversation
@@ -215,6 +218,7 @@ class TestConversationTrackingProtection:
         assert msg_count >= 4, f"❌ Messages lost: expected 4+, got {msg_count}"
         
         conn.close()
+        entry2.cleanup()  # Close database connections
         
         print(f"✅ Data persists: {msg_count} messages retained")
     
@@ -326,6 +330,7 @@ class TestConversationTrackingHealth:
         assert required_columns.issubset(columns), f"❌ Missing columns: {required_columns - columns}"
         
         conn.close()
+        entry.cleanup()  # Close database connections
         print(f"✅ Schema valid: {len(tables)} tables, {len(columns)} columns in conversations")
     
     def test_performance_under_load(self, cortex_entry):

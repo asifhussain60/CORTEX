@@ -3,10 +3,12 @@ CORTEX Package Setup
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary
+
+Version: 5.2.0 (Response Template Architecture)
+Status: Production Ready
 """
 
 from setuptools import setup, find_packages
-import os
 from pathlib import Path
 
 # Read README for long description
@@ -38,7 +40,7 @@ setup(
         "Documentation": "https://github.com/asifhussain60/CORTEX/docs",
         "Source Code": "https://github.com/asifhussain60/CORTEX",
     },
-    packages=find_packages(exclude=["tests", "tests.*", "docs", "examples"]),
+    packages=find_packages(exclude=["tests", "tests.*", "docs", "examples", "scripts.temp"]),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -51,6 +53,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Operating System :: OS Independent",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: MacOS",
@@ -74,8 +77,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "cortex=src.main:main",
-            "cortex-setup=scripts.setup_cortex:main",
+            "cortex=src.cortex_cli:main",
         ],
     },
     include_package_data=True,
@@ -84,11 +86,20 @@ setup(
             "*.yaml",
             "*.yml",
             "*.json",
+            "*.jsonl",
             "*.md",
             "*.txt",
+            "*.prompt.md",
+        ],
+        "cortex_brain": [
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.json",
+            "**/*.jsonl",
+            "**/*.md",
         ],
     },
     zip_safe=False,
     license="Proprietary",
-    keywords="ai copilot memory context planning assistant cognitive-framework",
+    keywords="ai copilot memory context planning assistant cognitive-framework github-copilot",
 )
