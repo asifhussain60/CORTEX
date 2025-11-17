@@ -159,7 +159,7 @@ Edit `cortex.config.json`:
 
 - **Agent Architecture:** [Agents](agents.md)
 - **Tier System:** [Tier System](tier-system.md)
-- **Configuration:** [Configuration Guide](../../getting-started/configuration.md)
+- **Configuration:** [Configuration Guide](../getting-started/configuration.md)
 
 ---
 

@@ -290,12 +290,11 @@ Unlike stateless AI, CORTEX remembers:
 
 | Section | Description | Audience |
 |---------|-------------|----------|
-| [**The Story**](story/the-awakening.md) | Complete 5-chapter narrative + technical docs | Everyone |
 | [**Getting Started**](getting-started/quick-start.md) | 5-minute introduction and setup | New users |
 | [**Architecture**](architecture/overview.md) | Dual hemispheres, tiers, agents, crawler | Developers |
-| [**Guides**](guides/universal-entry-point.md) | How-to guides and workflows | All users |
-| [**Reference**](reference/tier0-governance.md) | API docs, configuration, glossary | Developers |
-| [**Development**](development/contributing.md) | Contributing, testing, architecture decisions | Contributors |
+| [**Guides**](guides/admin-guide.md) | How-to guides and workflows | All users |
+| [**Reference**](reference/api-reference.md) | API docs, configuration, glossary | Developers |
+| [**Operations**](operations/index.md) | All CORTEX operations reference | Contributors |
 
 ---
 

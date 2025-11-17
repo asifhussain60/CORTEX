@@ -60,4 +60,4 @@ Tier 0 (Instinct) ──▶ Enforces core rules
 - Tier 3 warns about risky files proactively
 
 *Version: 1.0*  
-*Last Updated: November 16, 2025*
+*Last Updated: November 17, 2025*

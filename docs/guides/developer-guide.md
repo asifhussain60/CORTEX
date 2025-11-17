@@ -258,7 +258,7 @@ class MyPlugin(BasePlugin):
         return {"success": True}
 ```
 
-See: [Extension Development Guide](extension-development.md)
+See: [VS Code Extension Guide](https://code.visualstudio.com/api/get-started/your-first-extension)
 
 ---
 

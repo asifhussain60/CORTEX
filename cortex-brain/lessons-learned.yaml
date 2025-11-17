@@ -746,12 +746,15 @@ statistics:
     below_0.70: 0
   total_patterns: 7
   avg_confidence: 0.952
-maintenance:
-  review_frequency: quarterly
-  last_reviewed: '2025-11-16'
-  next_review: '2026-02-09'
-  archival_policy: Archive lessons older than 6 months with confidence < 0.80
-  update_policy: Increment confidence when lesson prevents an issue
+  maintenance:
+    review_frequency: quarterly
+    last_reviewed: '2025-11-16'
+    next_review: '2026-02-09'
+    archival_policy: Archive lessons older than 6 months with confidence < 0.80
+    update_policy: Increment confidence when lesson prevents an issue
+
+# Additional Lessons (Recent)
+additional_lessons:
 - id: prompt-routing-001
   title: GitHub Copilot Chat requires explicit trigger detection instructions
   category: architecture

@@ -1,78 +1,122 @@
-# Image Prompt: CORTEX Dual-Hemisphere Agent System
+# Diagram 02: CORTEX Agent System (Dual Hemispheres)
 
-**For:** ChatGPT Image Generator (DALL-E 3)
+**AI Generation Instructions for ChatGPT DALL-E:**
 
-## Prompt
+Create a professional split-view diagram showing CORTEX's 10 specialist agents organized by hemisphere. Use modern flat design with clear visual separation and professional color scheme suitable for technical presentations.
 
-Create a professional, modern infographic diagram with generous margins (10% on all sides) showing a dual-hemisphere agent system with central coordination layer. The diagram should be centered on the canvas with clear spacing around all edges.
+## Design Requirements
 
-**Visual Style:**
-- Sleek tech aesthetic with gradient background (dark navy to deep purple)
-- Three distinct sections: LEFT brain, CENTER coordination, RIGHT brain
-- Rounded rectangles with subtle shadows and glows
-- Modern, professional typography with perfect spelling
-- Use brain hemisphere metaphor visually
+**Style:** Modern flat design infographic, clean corporate aesthetic, high readability, professional color coordination
 
-**Layout (Left to Right):**
+**Canvas:** 1:1 square aspect ratio (2160x2160 pixels equivalent)
 
-**RIGHT HEMISPHERE (Left Side - Orange/Amber #F59E0B):**
-- Large heading: "RIGHT HEMISPHERE" (bold, 28pt) with target icon
-- Subtitle: "Strategic Planning"
-- Five agent cards vertically stacked:
-  1. "Intent Router" | "Parse & Route Requests" (with compass icon)
-  2. "Work Planner" | "Multi-Phase Strategies" (with clipboard icon)
-  3. "Screenshot Analyzer" | "Extract UI Requirements" (with camera icon)
-  4. "Change Governor" | "Protect Architecture" (with shield icon)
-  5. "Brain Protector" | "Enforce Rule #22" (with lock icon)
+## Layout Structure
 
-**CORPUS CALLOSUM (Center - Green #10B981):**
-- Large heading: "CORPUS CALLOSUM" (bold, 28pt) with bridge icon
-- Subtitle: "Coordination Layer"
-- Two components:
-  1. "Message Queue" | "coordination-queue.jsonl"
-  2. "State Sync" | "Alignment Check"
-- Flowing arrows in/out to both hemispheres
+**Split Canvas Vertically (50/50):**
+- LEFT Hemisphere: Cool blue section (#3B82F6)
+- RIGHT Hemisphere: Warm orange section (#F59E0B)
+- Center Bridge: Gray connector (#6B7280)
 
-**LEFT HEMISPHERE (Right Side - Blue #3B82F6):**
-- Large heading: "LEFT HEMISPHERE" (bold, 28pt) with gear icon
-- Subtitle: "Tactical Execution"
-- Five agent cards vertically stacked:
-  1. "Code Executor" | "Implement with TDD" (with laptop icon)
-  2. "Test Generator" | "Create Test Suites" (with checkmark icon)
-  3. "Error Corrector" | "Fix Wrong Files" (with wrench icon)
-  4. "Health Validator" | "Enforce DoD" (with heart icon)
-  5. "Commit Handler" | "Semantic Commits" (with branch icon)
+## LEFT Hemisphere (Tactical Execution) - 5 Agents
 
-**Connection Flow:**
-- RIGHT → CENTER: "Plan" (large arrow)
-- CENTER → LEFT: "Tasks" (large arrow)
-- LEFT → CENTER: "Results" (large arrow)
-- CENTER → RIGHT: "Learn" (large arrow)
+**Background:** Subtle blue gradient (light to medium blue)
+**Header:** "LEFT BRAIN" - Bold, 28pt, white text, top of section
+**Subheader:** "Tactical Execution" - Regular, 16pt, white with 90% opacity
 
-**Typography Requirements:**
-- All text perfectly spelled with NO typos
-- Section headings: 28pt, bold, sans-serif
-- Subtitles: 18pt, regular
-- Agent names: 16pt, bold
-- Agent descriptions: 14pt, regular
+**Agent List:**
 
-**Color Palette:**
-- Right Hemisphere: Orange (#F59E0B) with dark orange border (#92400E)
-- Left Hemisphere: Blue (#3B82F6) with dark blue border (#1E3A8A)
-- Corpus Callosum: Green (#10B981) with dark green border (#065F46)
-- Background: Gradient from #0F172A to #1E1B4B
-- Text: White (#FFFFFF)
+1. **Code Executor** - Implements features with surgical precision using TDD workflow
+2. **Test Generator** - Creates comprehensive test suites (RED → GREEN → REFACTOR)
+3. **Error Corrector** - Fixes bugs, syntax errors, and "wrong file" mistakes
+4. **Health Validator** - Enforces Definition of Done (zero errors, zero warnings)
+5. **Commit Handler** - Creates semantic commits with meaningful messages
 
-**Margin Requirements:**
-- Top margin: 10% of canvas height
-- Bottom margin: 10% of canvas height
-- Left margin: 10% of canvas width
-- Right margin: 10% of canvas width
+**Agent Boxes:**
+- Vertical stack, evenly spaced
+- Rounded rectangles (8px radius)
+- White background with subtle shadow
+- Agent icon (left) + Name (center) + Description (right)
+- Size: 480px wide × 80px tall
+- Spacing: 20px between boxes
 
-**Additional Elements:**
-- "CORTEX Agent System" title at top
-- "10 Specialist Agents • Dual-Hemisphere Architecture" subtitle
-- Small brain icon in top left
-- "© 2024-2025" copyright bottom right
+## RIGHT Hemisphere (Strategic Planning) - 5 Agents
 
-Make it look like a cutting-edge AI system architecture diagram with perfect spelling and professional presentation.
+**Background:** Subtle orange gradient (light to medium orange)
+**Header:** "RIGHT BRAIN" - Bold, 28pt, white text, top of section
+**Subheader:** "Strategic Planning" - Regular, 16pt, white with 90% opacity
+
+**Agent List:**
+
+1. **Intent Router** - Interprets natural language and routes to appropriate agent
+2. **Work Planner** - Creates multi-phase strategic implementation plans
+3. **Screenshot Analyzer** - Extracts technical requirements from UI mockups
+4. **Change Governor** - Protects CORTEX architectural integrity
+5. **Brain Protector** - Enforces Rule #22 (challenge risky brain changes)
+
+**Agent Boxes:** Same styling as LEFT hemisphere
+
+## Corpus Callosum (Center Bridge)
+
+**Position:** Vertical strip in center (80px wide)
+**Color:** Gradient from blue (top) to orange (bottom)
+**Label:** "Corpus Callosum" rotated 90° - Bold, 18pt, white
+**Connectors:** 4-6 bidirectional arrows connecting both sides
+**Symbol:** Bridge icon at center
+
+## Agent Icons (Consistent Style)
+
+**Style:** Flat design, outlined icons with 2px stroke, consistent size
+**Color:** Match hemisphere color (blue for LEFT, orange for RIGHT)
+**Size:** 40×40px per icon
+**Position:** Left side of each agent box
+
+**Icon Mappings:**
+- Code Executor: Code brackets icon
+- Test Generator: Checkmark in circle icon
+- Error Corrector: Wrench icon
+- Health Validator: Heartbeat/pulse icon  
+- Commit Handler: Git branch symbol icon
+- Intent Router: Traffic light icon
+- Work Planner: Clipboard/checklist icon
+- Screenshot Analyzer: Camera icon
+- Change Governor: Shield icon
+- Brain Protector: Lock icon
+
+## Typography
+
+**Title:** "CORTEX Agent System" - Bold, 36pt, centered at top
+**Hemisphere Headers:** Bold, 28pt, white
+**Subheaders:** Regular, 16pt, white with 90% opacity
+**Agent Names:** Bold, 18pt, dark gray (#374151)
+**Agent Descriptions:** Regular, 12pt, medium gray (#6B7280)
+
+## Visual Polish
+
+**Shadows:** Subtle drop shadows on agent boxes (2px offset, 4px blur, 15% opacity)
+**Borders:** None on agent boxes (clean flat design)
+**Whitespace:** Generous padding (20px inside boxes, 40px margins)
+**Alignment:** Perfect vertical alignment on both sides
+**Balance:** Symmetrical layout, equal number of agents per side
+
+**Background:** Clean white or very light gray (#FAFAFA)
+
+**Overall Quality:**
+- High contrast for readability
+- Professional color harmony
+- Balanced composition
+- Conference presentation ready
+- Print quality (300 DPI equivalent)
+
+## Technical Accuracy
+
+LEFT Brain (Execution):
+- Precise, methodical, test-driven
+- RED → GREEN → REFACTOR cycle
+- Zero-tolerance for errors
+
+RIGHT Brain (Strategy):
+- Visionary, context-aware, holistic
+- Breaks work into phases
+- Protects architectural integrity
+
+*Generated: November 17, 2025*

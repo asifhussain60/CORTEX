@@ -15,7 +15,7 @@ Complete guide to all CORTEX operations, organized by category.
 
 ## Onboarding
 
-### [CORTEX Interactive Demo](./cortex-tutorial.md)
+### CORTEX Interactive Demo
 **Operation:** `cortex_tutorial` | **Status:** ✅ Ready
 
 Hands-on walkthrough of CORTEX capabilities with live execution.
@@ -27,11 +27,13 @@ Hands-on walkthrough of CORTEX capabilities with live execution.
 - Standard (3-4 min): Core capabilities ⭐ Recommended
 - Comprehensive (5-6 min): Full walkthrough
 
+**See also:** [Getting Started](../getting-started/quick-start.md)
+
 ---
 
 ## Environment
 
-### [Environment Setup](./environment-setup.md)
+### Environment Setup
 **Operation:** `environment_setup` | **Status:** ✅ Ready
 
 Configure CORTEX development environment on Mac/Windows/Linux.
@@ -60,7 +62,7 @@ Auto-detect operating system and architecture.
 
 ## Documentation
 
-### [Refresh CORTEX Story](./refresh-cortex-story.md)
+### Refresh CORTEX Story
 **Operation:** `refresh_cortex_story` | **Status:** ✅ Ready
 
 Update CORTEX story documentation with narrator voice transformation.
@@ -80,7 +82,7 @@ Update CORTEX story documentation with narrator voice transformation.
 
 ---
 
-### [Update Documentation](./update-documentation.md)
+### Update Documentation
 **Operation:** `update_documentation` | **Status:** 🔄 Partial
 
 Refresh all 6 synchronized documentation files.
@@ -94,6 +96,8 @@ Refresh all 6 synchronized documentation files.
 - History.md (timeline)
 - Ancient-Rules.md (governance rules)
 - CORTEX-FEATURES.md (feature list)
+
+**See also:** [Documentation Operations](./overview.md)
 
 ---
 
@@ -141,7 +145,7 @@ Load and validate brain protection rules (SKULL layer + 6 protection layers).
 
 ## Development
 
-### [Help Command](./help-command.md)
+### Help Command
 **Operation:** `command_help` | **Status:** ✅ Ready
 
 Display available operations with search, filtering, and multiple output formats.
@@ -385,10 +389,9 @@ To add a new operation:
 
 ## Related Documentation
 
-- [Plugin System Guide](../guides/plugin-system.md)
-- [Module Development](../architecture/modules.md)
-- [Natural Language Routing](../architecture/intent-detection.md)
-- [Testing Operations](../testing/operation-testing.md)
+- [Entry Point Modules](./entry-point-modules.md)
+- [Agent System](../architecture/agents.md)
+- [Operations Workflows](./workflows.md)
 
 ---
 
