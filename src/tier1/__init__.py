@@ -24,6 +24,9 @@ from .ml_context_optimizer import MLContextOptimizer
 from .cache_monitor import CacheMonitor, CacheHealthReport
 from .token_metrics import TokenMetricsCollector, TokenMetricsFormatter
 
+# Phase 3: Real Brain Implementation
+from .conversation_memory import ConversationMemory
+
 __all__ = [
     'ConversationManager',
     'EntityExtractor',
@@ -35,5 +38,7 @@ __all__ = [
     'CacheMonitor',
     'CacheHealthReport',
     'TokenMetricsCollector',
-    'TokenMetricsFormatter'
+    'TokenMetricsFormatter',
+    # Phase 3: Real Brain
+    'ConversationMemory'
 ]
