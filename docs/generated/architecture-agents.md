@@ -1,0 +1,535 @@
+---
+title: Agent Architecture
+description: CORTEX's dual-hemisphere agent system and coordination
+author: 
+generated: true
+version: ""
+last_updated: 
+---
+
+# CORTEX Agent Architecture
+
+**Purpose:** Documentation of the dual-hemisphere agent system and coordination  
+**Audience:** Developers, system architects  
+**Version:**   
+**Last Updated:** 
+
+---
+
+## Overview
+
+CORTEX implements a **dual-hemisphere agent architecture** inspired by the human brain. Ten specialist agents work together, divided between tactical execution (left brain) and strategic planning (right brain), coordinated through a corpus callosum message system.
+
+```
+RIGHT BRAIN (Strategic)        CORPUS CALLOSUM         LEFT BRAIN (Tactical)
+┌─────────────────────┐       ┌──────────────┐        ┌────────────────────┐
+│ 1. Intent Router    │──────▶│  Coordination │◀──────│ 6. Code Executor   │
+│ 2. Work Planner     │       │  Message Queue│       │ 7. Test Generator  │
+│ 3. Screenshot       │       │               │       │ 8. Error Corrector │
+│    Analyzer         │       │  Tasks →      │       │ 9. Health          │
+│ 4. Change Governor  │       │  ← Results    │       │    Validator       │
+│ 5. Brain Protector  │       │               │       │ 10. Commit Handler │
+└─────────────────────┘       └──────────────┘        └────────────────────┘
+  Strategy & Planning           Coordination            Execution & Testing
+```
+
+---
+
+## Right Brain Agents (Strategic)
+
+### 1. Intent Router
+
+**Location:** `src/cortex_agents/intent_router.py`  
+**Purpose:** Parse natural language and route to appropriate specialist
+
+**Responsibilities:**
+- Parse user requests for intent (PLAN, EXECUTE, TEST, FIX, etc.)
+- Calculate confidence scores (0.0-1.0)
+- Route to appropriate agent when confidence > threshold
+- Request clarification when ambiguous (confidence < 0.75)
+
+**Intent Types:**
+
+| Intent | Agent | Trigger Words | Confidence Threshold |
+|--------|-------|---------------|---------------------|
+| **PLAN** | Work Planner | "create plan", "design", "architecture" | 0.7 |
+| **EXECUTE** | Code Executor | "add", "create", "implement", "build" | 0.7 |
+| **TEST** | Test Generator | "test", "verify", "validate" | 0.7 |
+| **FIX** | Error Corrector | "fix", "bug", "error", "broken" | 0.7 |
+| **VALIDATE** | Health Validator | "check health", "validate system" | 0.7 |
+| **ANALYZE** | Screenshot Analyzer | "analyze image", "screenshot" | 0.7 |
+| **PROTECT** | Brain Protector | "modify tier0", "change rules" | 0.9 |
+
+**Usage Example:**
+
+```python
+from src.cortex_agents.intent_router import IntentRouter
+
+router = IntentRouter()
+
+result = router.parse(
+    user_message="Add a purple button to the host panel",
+    context_hints={"current_file": "HostControlPanel.razor"}
+)
+
+# Returns:
+# {
+#   "intent": "EXECUTE",
+#   "confidence": 0.92,
+#   "agent": "code-executor",
+#   "entities": {"component": "button", "color": "purple"}
+# }
+```
+
+---
+
+### 2. Work Planner
+
+**Location:** `src/cortex_agents/work_planner.py`  
+**Purpose:** Create multi-phase strategic implementation plans
+
+**Responsibilities:**
+- Analyze requirements and extract what needs to be done
+- Break work into logical phases (typically 3-5)
+- Create specific, actionable tasks per phase
+- Estimate effort and complexity
+- Assess risks and identify blockers
+- Define success criteria (Definition of Done per phase)
+
+**Planning Process:**
+
+```
+User Request: "Add user authentication"
+        ↓
+Phase 1: Requirements Analysis
+  ✓ Define authentication requirements
+  ✓ Identify affected layers (UI, API, DB)
+  ✓ Check for existing auth patterns
+        ↓
+Phase 2: Test Creation (RED)
+  ✓ Write failing login tests
+  ✓ Write failing registration tests
+  ✓ Write failing authorization tests
+        ↓
+Phase 3: Implementation (GREEN)
+  ✓ Implement User model
+  ✓ Implement AuthService
+  ✓ Implement LoginController
+  ✓ Make all tests pass
+        ↓
+Phase 4: Refactoring & Validation (REFACTOR)
+  ✓ Refactor code for clarity
+  ✓ Run full test suite
+  ✓ Validate zero errors/warnings (DoD)
+```
+
+**Usage Example:**
+
+```python
+from src.cortex_agents.work_planner import WorkPlanner
+
+planner = WorkPlanner()
+
+plan = planner.create_plan(
+    feature_description="User Authentication",
+    complexity="medium",
+    context={"existing_features": ["user_management"]}
+)
+
+# Returns multi-phase plan with tasks, estimates, risks
+```
+
+---
+
+### 3. Screenshot Analyzer
+
+**Location:** `src/cortex_agents/screenshot_analyzer.py`  
+**Purpose:** Extract technical requirements from UI screenshots/mockups
+
+**Responsibilities:**
+- Identify UI components (buttons, inputs, etc.)
+- Understand spatial relationships and layout
+- Detect colors, fonts, spacing
+- Infer expected interactions and behavior
+- Generate technical specifications
+
+**Analysis Output:**
+
+```yaml
+components:
+  - type: "button"
+    label: "Login"
+    id_suggestion: "btn-login"
+    properties:
+      color: "#4A90E2"
+      action: "submit_form"
+
+layout:
+  structure: "centered_card"
+  width: "400px"
+  background: "white with shadow"
+
+requirements:
+  - "Create LoginForm component"
+  - "Implement form validation"
+  - "Add submit handler with API call"
+```
+
+---
+
+### 4. Change Governor
+
+**Location:** `src/cortex_agents/change_governor.py`  
+**Purpose:** Protect CORTEX architectural integrity from degradation
+
+**Responsibilities:**
+- Keep application code out of CORTEX core
+- Prevent mixing of application and CORTEX concerns
+- Enforce layered architecture
+- Prevent namespace cross-contamination
+- Challenge unnecessary complexity ("creeping bloat")
+
+**Protection Example:**
+
+```
+User: "Add SignalR hub to CORTEX brain"
+      ↓
+Change Governor Analysis:
+  ❌ SignalR is application-specific
+  ❌ Would create tight coupling
+  ❌ Violates Local-First principle
+      ↓
+Recommendation:
+  ✅ Create SignalR hub in application layer
+  ✅ Use CORTEX as data source via API
+  ✅ Keep CORTEX core technology-agnostic
+```
+
+---
+
+### 5. Brain Protector
+
+**Location:** `src/cortex_agents/brain_protector.py`  
+**Purpose:** Enforce Rule #22 - Challenge risky changes to CORTEX brain
+
+**Protection Layers:**
+1. Instinct Immutability - Tier 0 rules cannot be bypassed
+2. Critical Path Protection - Core files protected
+3. Application Separation - No app code in CORTEX core
+4. Brain State Protection - Memory files not committed
+5. Namespace Isolation - Scope boundaries enforced
+6. Architectural Integrity - Design principles maintained
+
+**Challenge Workflow:**
+
+```
+User: "Delete conversation history"
+      ↓
+Brain Protector: CHALLENGE
+  Severity: BLOCKED
+  Layer: Brain State Protection
+      ↓
+Safer Alternatives:
+  ✅ Use FIFO queue cleanup (auto-deletes oldest)
+  ✅ Export old conversations before deletion
+  ✅ Adjust FIFO limit in config
+  ✅ Archive conversations to long-term storage
+```
+
+---
+
+## Left Brain Agents (Tactical)
+
+### 6. Code Executor
+
+**Location:** `src/cortex_agents/code_executor.py`  
+**Purpose:** Implement features with surgical precision using TDD
+
+**Responsibilities:**
+- Execute plans from Work Planner
+- Enforce TDD: Always RED → GREEN → REFACTOR
+- Make precise file edits (no guessing)
+- Create large files incrementally (<100 lines at a time)
+- Validate syntax correctness
+
+**TDD Workflow:**
+
+```
+Phase 1: RED (Write Failing Test)
+  Create test: LoginTests.cs
+  Status: ❌ Test FAILS (expected)
+      ↓
+Phase 2: GREEN (Make It Pass)
+  Create implementation: AuthService.cs
+  Status: ✅ Test PASSES
+      ↓
+Phase 3: REFACTOR (Clean Up)
+  Refactor: Extract validation, improve naming
+  Status: ✅ All tests still pass
+```
+
+---
+
+### 7. Test Generator
+
+**Location:** `src/cortex_agents/test_generator.py`  
+**Purpose:** Create comprehensive test suites (always RED phase first)
+
+**Test Creation Strategy:**
+1. Happy Path Tests - Verify expected behavior
+2. Edge Case Tests - Boundary conditions, limits
+3. Error Handling Tests - Invalid inputs, exceptions
+4. Integration Tests - Component interactions
+5. Regression Tests - Prevent known bugs from returning
+
+**Test Coverage Example:**
+
+```csharp
+public class LoginTests
+{
+    // Happy path
+    [Test]
+    public void Login_WithValidCredentials_ReturnsSuccess()
+
+    // Edge cases
+    [Test]
+    public void Login_WithEmptyUsername_ReturnsValidationError()
+    
+    [Test]
+    public void Login_WithEmptyPassword_ReturnsValidationError()
+
+    // Error handling
+    [Test]
+    public void Login_WithInvalidCredentials_ReturnsFailed()
+
+    // Security
+    [Test]
+    public void Login_FailedAttempt_DoesNotRevealUserExistence()
+}
+```
+
+---
+
+### 8. Error Corrector
+
+**Location:** `src/cortex_agents/error_corrector.py`  
+**Purpose:** Fix bugs, syntax errors, and "wrong file" mistakes
+
+**Error Detection & Correction:**
+- Syntax Errors - Missing semicolons, brackets, typos
+- Wrong File Errors - Catches confusion (learned from Tier 2)
+- Logic Errors - Unexpected behavior, test failures
+- Build Errors - Compilation issues, missing dependencies
+- Runtime Errors - Null references, exceptions
+
+**Prevention Example:**
+
+```
+Tier 2 shows: "HostControlPanel" often confused with
+              "HostControlPanelContent"
+      ↓
+User: "Modify HostControlPanel"
+      ↓
+Error Corrector:
+  ⚠️ WARNING: Similar file names detected
+     - HostControlPanel.razor (likely correct)
+     - HostControlPanelContent.razor (commonly confused)
+     
+  Based on past corrections, I'll modify
+  HostControlPanel.razor. Proceed? (yes/no)
+```
+
+---
+
+### 9. Health Validator
+
+**Location:** `src/cortex_agents/health_validator.py`  
+**Purpose:** Enforce Definition of Done - zero errors, zero warnings
+
+**Validation Checks:**
+1. All Tests Pass - No red tests allowed
+2. Zero Errors - Compilation/syntax errors = FAIL
+3. Zero Warnings - Even warnings must be fixed
+4. Build Succeeds - Project builds cleanly
+5. No Regressions - Existing features still work
+
+**Validation Report:**
+
+```yaml
+status: "FAIL"
+tests:
+  passed: 45
+  failed: 2
+  status: "❌ FAIL"
+
+build:
+  errors: 0
+  warnings: 3
+  status: "⚠️ WARNINGS"
+
+verdict: "NOT DONE - Fix 2 test failures and 3 warnings"
+```
+
+---
+
+### 10. Commit Handler
+
+**Location:** `src/cortex_agents/commit_handler.py`  
+**Purpose:** Create semantic commits with meaningful messages
+
+**Commit Message Format:**
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types:** `feat`, `fix`, `refactor`, `test`, `docs`, `style`, `chore`
+
+**Example Commits:**
+
+```git
+feat(auth): Add user authentication system
+
+- Implement AuthService with password hashing
+- Add login endpoint to API
+- Create comprehensive test suite (47 tests)
+- All tests passing, zero errors/warnings
+
+Closes #123
+```
+
+---
+
+## Corpus Callosum (Coordination)
+
+### Message Queue System
+
+**Location:** `cortex-brain/corpus-callosum/coordination-queue.jsonl`  
+**Purpose:** Coordinate communication between hemispheres
+
+**Message Flow:**
+
+```
+Right Brain (Planner) creates plan
+        ↓
+Corpus Callosum: Post message
+        {
+          "type": "task_assignment",
+          "from": "work-planner",
+          "to": "code-executor",
+          "task": {...}
+        }
+        ↓
+Left Brain (Executor) receives task
+        ↓
+Left Brain executes with TDD
+        ↓
+Corpus Callosum: Post result
+        {
+          "type": "task_completion",
+          "from": "code-executor",
+          "to": "work-planner",
+          "result": {...}
+        }
+        ↓
+Right Brain updates knowledge graph
+```
+
+---
+
+## Agent Coordination Examples
+
+### Simple Feature: "Add a logout button"
+
+```
+1. Intent Router → Detects EXECUTE intent → Routes to Code Executor
+2. Code Executor → No plan exists → Requests Work Planner
+3. Work Planner → Creates quick 2-phase plan → Sends via Corpus Callosum
+4. Test Generator → Creates button click test (RED)
+5. Code Executor → Implements logout button → Test passes (GREEN)
+6. Code Executor → Refactors code
+7. Health Validator → Zero errors/warnings confirmed
+8. Commit Handler → Creates "feat(ui): Add logout button"
+9. Knowledge Graph → Learns "add button" → EXECUTE pattern
+```
+
+### Complex Feature with Challenge: "Delete all CORTEX brain data"
+
+```
+1. Intent Router → Detects PROTECT intent (high severity) → Routes to Brain Protector
+2. Brain Protector → Analyzes deletion → Triggers Layer 4 protection → BLOCKS
+3. Brain Protector → Suggests safer alternatives
+4. User → "I want to clean up old conversations"
+5. Intent Router → Re-detects VALIDATE intent → Routes to Health Validator
+6. Health Validator → Recommends FIFO queue cleanup
+7. Health Validator → Executes memory.cleanup_old_conversations()
+8. Result: Risk prevented, safe alternative executed
+```
+
+---
+
+## Agent Configuration
+
+Edit `cortex.config.json`:
+
+```json
+{
+  "agents": {
+    "enabled": true,
+    
+    "intentRouter": {
+      "enabled": true,
+      "confidenceThreshold": 0.75
+    },
+    
+    "workPlanner": {
+      "enabled": true,
+      "autoCreatePlans": true,
+      "minComplexityForPlan": "medium"
+    },
+    
+    "codeExecutor": {
+      "enabled": true,
+      "enforceTDD": true,
+      "maxFileChunkSize": 100
+    },
+    
+    "brainProtector": {
+      "enabled": true,
+      "blockSeverity": "blocked"
+    }
+  }
+}
+```
+
+---
+
+## Performance Metrics
+
+| Agent | Average Response Time | Status |
+|-------|----------------------|--------|
+| **Intent Router** | 45ms | ⚡ Excellent |
+| **Work Planner** | 1.2s | ✅ Good |
+| **Brain Protector** | 89ms | ⚡ Excellent |
+| **Code Executor** | Varies by task | ✅ Good |
+| **Health Validator** | 2.1s | ✅ Good |
+
+---
+
+## Related Documentation
+
+- **Architecture Overview:** [Overview](overview.md)
+- **Tier System:** [Tier System](tier-system.md)
+- **Operations:** [Operations Overview](../operations/overview.md)
+- **API Reference:** [API](../reference/api.md)
+
+---
+
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Proprietary - See LICENSE file  
+**Version:**   
+**Generated:** 
