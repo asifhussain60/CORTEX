@@ -1,77 +1,92 @@
-# Diagram 01: CORTEX 4-Tier Brain Architecture
+# Image Prompt: CORTEX 4-Tier Memory Architecture
 
-**AI Generation Instructions for ChatGPT DALL-E:**
+**For:** ChatGPT Image Generator (DALL-E 3)
 
-Create a professional, modern vertical architecture diagram showing CORTEX's 4-tier brain system. Use a clean infographic style suitable for corporate presentations and technical documentation.
+## Prompt
 
-**AI Generation Instructions for ChatGPT DALL-E:**
+Create a professional, modern infographic diagram with generous margins (top, bottom, left, right - at least 10% of canvas on each side) showing a 4-tier hierarchical cognitive architecture. The diagram should be centered within the canvas with clear spacing around all edges.
 
-Create a professional, modern vertical architecture diagram showing CORTEX's 4-tier brain system. Use a clean infographic style suitable for corporate presentations and technical documentation.
+**Visual Style:**
+- Clean, modern tech aesthetic with a gradient background (dark blue to purple)
+- Four distinct horizontal tiers stacked vertically
+- Each tier should be a rounded rectangle with generous padding
+- Use vibrant, contrasting colors for each tier
+- Include subtle glow effects and modern shadows
+- Professional typography with perfect spelling
 
-## Design Requirements
+**Tier Layout (Top to Bottom):**
 
-**Style:** Professional technical infographic with modern flat design aesthetic, crisp edges, clean lines, high contrast for readability
+**TIER 0 (Purple/Violet - Top Tier):**
+- Label: "TIER 0: INSTINCT" (large, bold heading with shield icon)
+- Subtitle: "Immutable Core Rules"
+- Five boxes inside containing (with correct spelling):
+  - "Test-Driven Development" (with subtitle: "RED → GREEN → REFACTOR")
+  - "Definition of READY" (with subtitle: "Clear Requirements First")
+  - "Definition of DONE" (with subtitle: "Zero Errors, Zero Warnings")
+  - "Brain Protection (Rule #22)" (with subtitle: "Challenge Risky Changes")
+  - "Incremental Creation" (with subtitle: "Large Files in Chunks")
 
-**Canvas:** 16:9 landscape orientation (3840x2160 pixels equivalent)
+**TIER 1 (Blue - Second Tier):**
+- Label: "TIER 1: WORKING MEMORY" (large, bold heading with disk icon)
+- Subtitle: "Last 20 Conversations"
+- Four boxes inside containing:
+  - "Conversation History" (with subtitle: "FIFO Queue")
+  - "Message Context" (with subtitle: "Last 10 Messages")
+  - "Entity Tracking" (with subtitle: "Files, Classes, Methods")
+  - "Performance: 18ms avg" (with subtitle: "Target: <50ms")
 
-## Tier Layout (Bottom to Top - Vertical Stack)
+**TIER 2 (Green - Third Tier):**
+- Label: "TIER 2: KNOWLEDGE GRAPH" (large, bold heading with puzzle icon)
+- Subtitle: "Long-Term Memory"
+- Five boxes inside containing:
+  - "Intent Patterns" (with subtitle: "Learning from Conversations")
+  - "File Relationships" (with subtitle: "Co-modification Tracking")
+  - "Workflow Templates" (with subtitle: "Proven Patterns")
+  - "Validation Insights" (with subtitle: "Correction History")
+  - "Performance: 92ms avg" (with subtitle: "Target: <150ms")
 
+**TIER 3 (Orange/Amber - Bottom Tier):**
+- Label: "TIER 3: CONTEXT INTELLIGENCE" (large, bold heading with chart icon)
+- Subtitle: "Development Metrics"
+- Five boxes inside containing:
+  - "Git Analysis" (with subtitle: "Commit Velocity, Hotspots")
+  - "Code Health" (with subtitle: "Test Coverage, Build Success")
+  - "Session Analytics" (with subtitle: "Productivity Patterns")
+  - "File Stability" (with subtitle: "Churn Rate Classification")
+  - "Performance: 156ms avg" (with subtitle: "Target: <200ms")
 
+**Connecting Elements:**
+- Dotted arrows from Tier 0 to all other tiers (labeled "Enforces Rules", "Protects Integrity", "Validates Quality")
+- Solid arrow from Tier 1 to Tier 2 (labeled "Recent Patterns")
+- Solid arrow from Tier 2 to Tier 3 (labeled "Historical Context")
+- Dotted arrow from Tier 1 to Tier 3 (labeled "Active Context")
 
-**Spacing:** 40px between tier boxes, 60px margin from canvas edges
+**Typography Requirements:**
+- All text must be perfectly spelled
+- Use modern, sans-serif font (like Helvetica or Arial)
+- Tier headings: 24-28pt, bold
+- Subtitles: 16-18pt, regular
+- Box content: 14-16pt
+- Connection labels: 12-14pt, italic
 
-## Visual Specifications
+**Color Palette:**
+- Tier 0: Purple (#6B46C1) with dark purple border (#4C1D95)
+- Tier 1: Blue (#3B82F6) with dark blue border (#1E3A8A)
+- Tier 2: Green (#10B981) with dark green border (#065F46)
+- Tier 3: Orange (#F59E0B) with dark orange border (#92400E)
+- Background: Gradient from #1E293B to #312E81
+- Text: White (#FFFFFF) for all tier content
 
-**Tier Boxes:**
-- Rounded rectangles (12px corner radius)
-- Subtle gradient fill from tier color to lighter shade
-- Soft drop shadow (4px offset, 8px blur, 20% opacity)
-- White or light text for contrast
-- Each box: 800px wide × 180px tall
+**Margin Requirements:**
+- Top margin: 10% of canvas height
+- Bottom margin: 10% of canvas height
+- Left margin: 10% of canvas width
+- Right margin: 10% of canvas width
+- Content centered within remaining space
 
-**Icons (Per Tier):**
-- Position: Top-left corner of each tier box
-- Size: 48×48px, white with subtle glow
-- Style: Outlined icons, consistent stroke width
-- Tier 0: Shield icon
-- Tier 1: Database cylinder icon
-- Tier 2: Connected nodes (network graph) icon
-- Tier 3: Bar chart / analytics icon
+**Additional Elements:**
+- Add "CORTEX" logo/text in top left corner
+- Add "Cognitive AI Memory System" tagline below tiers
+- Include small "© 2024-2025" copyright in bottom right
 
-**Arrows Between Tiers:**
-- Upward-pointing, centered between boxes
-- Color: #6B7280 (medium gray)
-- Thickness: 3px with arrowhead
-- Label: "Data Flow ↑" in small gray text
-
-**Typography:**
-- Title: "CORTEX 4-Tier Brain Architecture" - Bold, 36pt, sans-serif, centered at top
-- Tier names: Bold, 24pt, white text
-- Storage type: Regular, 14pt, white text with 80% opacity
-- Layer labels: Regular, 12pt, gray text
-
-**Legend (Bottom Right):**
-- Box: 200px × 120px, white with light border
-- Content: "Immutable → Dynamic" gradient explanation
-- Arrow direction key
-- Small color swatches with labels
-
-**Background:**
-- Clean white or very light gray (#F9FAFB)
-- No distracting patterns or textures
-
-**Overall Quality:**
-- High contrast for readability
-- Professional color palette (no harsh colors)
-- Balanced composition (not too busy)
-- Print-quality resolution (300 DPI equivalent)
-- Conference slide ready
-
-## Technical Accuracy
-
-- Tier 0: governance/rules.md (YAML, immutable)
-- Tier 1: conversations.db (SQLite, FIFO queue, last 20)
-- Tier 2: knowledge-graph.db (SQLite + FTS5)
-- Tier 3: context-intelligence.db (SQLite analytics)
-
-*Generated: November 16, 2025*
+Make it look like a professional tech company's product diagram with perfect spelling, clean layout, and generous whitespace around all edges.
