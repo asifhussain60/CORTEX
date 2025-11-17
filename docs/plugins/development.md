@@ -147,7 +147,7 @@ def test_my_plugin():
 
 ## Related Documentation
 
-- **Plugin Examples:** See `src/plugins/` directory for working examples
+- **Plugin System:** [Plugin System](../../prompts/shared/plugin-system.md)
 - **API Reference:** [API](../reference/api.md)
 - **Best Practices:** [Best Practices](../guides/best-practices.md)
 

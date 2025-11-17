@@ -1,6 +1,36 @@
 source: multi-threaded-crawler
-last_updated: 2025-11-04T10:26:42Z
+last_updated: 2025-11-17T13:45:00Z
 relationships:
+- related_file: docs/stylesheets/custom.css
+  source: mkdocs-repair-2025-11-17
+  relationship: styling-configuration
+  primary_file: mkdocs.yml
+  confidence: 0.95
+  description: "CSS z-index fixes applied in conjunction with toc.integrate removal from mkdocs.yml"
+- related_file: docs/index.md
+  source: mkdocs-repair-2025-11-17
+  relationship: content-configuration
+  primary_file: mkdocs.yml
+  confidence: 0.95
+  description: "Home page content structure must match navigation expectations in mkdocs.yml"
+- related_file: docs/NAVIGATION-GUIDE.md
+  source: mkdocs-repair-2025-11-17
+  relationship: maintenance-documentation
+  primary_file: mkdocs.yml
+  confidence: 0.98
+  description: "Comprehensive guide for maintaining navigation structure defined in mkdocs.yml"
+- related_file: docs/stylesheets/custom.css
+  source: mkdocs-repair-2025-11-17
+  relationship: visual-implementation
+  primary_file: docs/index.md
+  confidence: 0.90
+  description: "Custom CSS styles content elements defined in index.md (hero, Sacred Laws)"
+- related_file: .gitignore
+  source: mkdocs-repair-2025-11-17
+  relationship: file-organization
+  primary_file: mkdocs.yml
+  confidence: 0.85
+  description: "Excludes auto-generated reports from tracking (not in navigation)"
 - related_file: Components/**/test-brain-integrity.razor
   source: test-crawler
   relationship: test-coverage

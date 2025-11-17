@@ -277,7 +277,7 @@ python scripts/test_template.py "help_table"
 ## Related Documentation
 
 - **Response Templates:** See `cortex-brain/response-templates.yaml` (90+ templates)
-- **Template User Guide:** [User Guide](../response-template-user-guide.md)
+- **Template User Guide:** [User Guide](../../docs/response-template-user-guide.md)
 
 ---
 

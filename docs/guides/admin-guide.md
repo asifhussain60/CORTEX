@@ -351,7 +351,7 @@ grep "epm_execute" logs/audit/audit.log
 
 ### Custom EPM Development
 
-See [EPM Guide](../operations/entry-point-modules.md) for creating custom EPMs.
+See [EPM Guide](entry-point-modules.md#creating-a-new-epm) for creating custom EPMs.
 
 ### Performance Tuning
 

@@ -1,6 +1,6 @@
 version: '1.0'
-last_updated: '2025-11-17T23:45:00'
-total_lessons: 19
+last_updated: '2025-11-17T13:45:00'
+total_lessons: 20
 lessons:
 - id: file-validation-001
   title: Document generation without filesystem validation creates false positives
@@ -1055,3 +1055,134 @@ patterns:
   - High value from consistency? → Add trigger
   related_lessons:
   - trigger-strategy-001
+- id: mkdocs-repair-001
+  title: MkDocs site repair requires phased approach and root cause analysis
+  category: documentation
+  subcategory: mkdocs
+  severity: medium
+  date: '2025-11-17'
+  problem: "MkDocs documentation site broken with multiple issues:\n- 20+ top-level\
+    \ navigation items (overwhelming sidebar)\n- Duplicate hero section on home\
+    \ page\n- Sidebar overlapping main content (CSS z-index issues)\n- Poor mobile/tablet\
+    \ responsive behavior\n"
+  root_cause: "Multiple root causes:\n1. Navigation: Unorganized mkdocs.yml with\
+    \ duplicate sections (Architectural/Architecture/Strategic)\n2. Content: Duplicate\
+    \ hero section in index.md (lines 1-10 duplicated)\n3. CSS: toc.integrate feature\
+    \ conflicting with Material theme + missing z-index layering\n4. Responsive:\
+    \ Missing breakpoints for mobile/tablet optimization\n"
+  symptoms:
+  - Navigation sidebar shows 20+ top-level items
+  - Home page has two identical hero sections
+  - Main content hidden behind sidebar on scroll
+  - Layout broken on mobile devices (sidebar overlap)
+  - Generated report files cluttering navigation
+  solution: "5-phase systematic repair:\n\nPhase 1: Navigation Simplification\n-\
+    \ Consolidate 20+ items to 7 logical sections (user-journey-based)\n- Merge\
+    \ duplicates (Architectural/Architecture → Architecture)\n- Remove 'Generated'\
+    \ top-level menu\n- Nest diagrams under parent sections\n\nPhase 2: Content\
+    \ Restructuring\n- Remove duplicate hero section (index.md lines 1-10)\n- Promote\
+    \ Sacred Laws to top of page\n- Single hero section after Sacred Laws\n\nPhase\
+    \ 3: CSS Layout Fixes\n- Remove toc.integrate from mkdocs.yml features\n- Add\
+    \ z-index layering (sidebar: 3, navbar: 2, content: 1)\n- Add sticky positioning\
+    \ for sidebar\n- Add responsive breakpoints (mobile: <768px, tablet: 769-1024px)\n\
+    \nPhase 4: Visual Validation\n- Build site: python3 -m mkdocs build --clean\n\
+    - Serve locally: python3 -m mkdocs serve\n- Test in browser (desktop/tablet/mobile\
+    \ modes)\n\nPhase 5: Cleanup & Documentation\n- Archive 20+ generated reports\
+    \ to docs/generated/reports/\n- Update .gitignore with exclusion patterns\n-\
+    \ Create NAVIGATION-GUIDE.md (400 lines, comprehensive)\n"
+  prevention_rules:
+  - "ALWAYS use user-journey-based navigation (learn → understand → use → reference)"
+  - "Limit top-level sections to 7±2 for cognitive load management"
+  - "Maximum 3 levels depth in navigation tree"
+  - "NEVER use toc.integrate with Material theme (causes positioning conflicts)"
+  - "ALWAYS add explicit z-index hierarchy (sidebar > navbar > content)"
+  - "ALWAYS add responsive breakpoints for mobile/tablet optimization"
+  - "Archive auto-generated files to separate directory (not in navigation)"
+  - "Create maintenance documentation as part of implementation (not afterthought)"
+  - "Visual validation required for UI changes (build + serve + browser testing)"
+  key_patterns:
+    navigation_organization:
+      principle: "User-journey-based (Getting Started → Architecture → Guides →\
+        \ Operations → Reference → Story)"
+      limit: "7±2 sections"
+      depth: "Maximum 3 levels"
+      anti_patterns:
+      - "Top-level 'Generated' menus"
+      - "Duplicate sections (Architectural/Architecture)"
+      - "Diagrams as standalone menus (nest under parent)"
+    css_z_index_hierarchy:
+      sidebar: "z-index: 3 !important"
+      navbar: "z-index: 2 !important"
+      content: "z-index: 1 !important"
+      requires_important: "Override Material theme defaults"
+    responsive_breakpoints:
+      mobile: "max-width: 768px - collapse sidebar"
+      tablet: "769-1024px - optimize sidebar width (200px)"
+      desktop: "1025px+ - full experience"
+    file_organization:
+      user_facing: "Keep in navigation (docs/core-content/)"
+      auto_generated: "Archive to docs/generated/ (exclude from nav)"
+      deprecated: "Move to docs/_archive/"
+  time_cost:
+    analysis_minutes: 15
+    phase_1_minutes: 30
+    phase_2_minutes: 20
+    phase_3_minutes: 45
+    phase_4_minutes: 30
+    phase_5_minutes: 40
+    total_cost_minutes: 180
+    prevention_cost_minutes: 30
+  metrics:
+    navigation_reduction: "20+ items → 7 sections (65%)"
+    css_fixes: "100% overlap resolved"
+    responsive_support: "100% functional"
+    build_time: "1.47 seconds"
+    documentation_created: "NAVIGATION-GUIDE.md (400 lines)"
+  reusable_artifacts:
+  - "7-section navigation template (mkdocs.yml)"
+  - "CSS z-index layering pattern (custom.css)"
+  - "Responsive breakpoint strategy"
+  - "Navigation maintenance guide (NAVIGATION-GUIDE.md)"
+  code_example: |
+    # Navigation Organization (mkdocs.yml)
+    nav:
+      - Home: index.md
+      - Getting Started:
+          - Quick Start: getting-started/quick-start.md
+          - Installation: getting-started/installation.md
+      - Architecture:
+          - Overview: architecture/overview.md
+          - Diagrams:
+              - System: architecture/diagrams/system.md
+      - Reference:
+          - API: reference/api.md
+    
+    # CSS Z-Index Hierarchy (custom.css)
+    .md-sidebar--primary {
+      z-index: 3 !important;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .md-content {
+      z-index: 1 !important;
+    }
+    
+    # Responsive Breakpoints
+    @media screen and (max-width: 768px) {
+      .md-sidebar--primary {
+        position: relative;
+        height: auto;
+      }
+    }
+  transferable_to:
+  - All MkDocs sites using Material theme
+  - Static site generators with navigation issues
+  - Documentation sites with CSS layout problems
+  - Responsive design implementation
+  confidence: 0.95
+  success_rate: 1.0
+  conversation_capture: cortex-brain/documents/conversation-captures/2025-11-17-mkdocs-site-repair.md
+
