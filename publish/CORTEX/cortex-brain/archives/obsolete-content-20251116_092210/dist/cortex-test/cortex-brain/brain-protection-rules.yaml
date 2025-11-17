@@ -1,0 +1,1723 @@
+# CORTEX Brain Protection Rules
+# Architectural Integrity Guardian Configuration
+# 
+# Implements 6 protection layers to prevent degradation of CORTEX intelligence
+# Replaces hardcoded rules in brain_protector.py for easier maintenance
+#
+# Version: 2.0
+# Created: 2025-11-08
+# Author: CORTEX Team
+
+version: "2.0"
+type: "governance"
+name: "Brain Protection Rules"
+description: "Automated architectural protection challenges"
+
+# Critical system paths that trigger high-level protection
+critical_paths:
+  - "CORTEX/src/tier0/"
+  - "prompts/internal/"
+  - "governance/rules.md"
+  - "cortex-brain/tier0/"
+
+# Tier 0 immutable instincts (cannot be bypassed)
+tier0_instincts:
+  - "TDD_ENFORCEMENT"
+  - "DEFINITION_OF_READY"
+  - "DEFINITION_OF_DONE"
+  - "SOLID_PRINCIPLES"
+  - "LOCAL_FIRST"
+  - "BRAIN_PROTECTION_TESTS_MANDATORY"
+  - "MACHINE_READABLE_FORMATS"
+  - "SKULL_TEST_BEFORE_CLAIM"
+  - "SKULL_INTEGRATION_VERIFICATION"
+  - "SKULL_VISUAL_REGRESSION"
+  - "SKULL_RETRY_WITHOUT_LEARNING"
+  - "SKULL_TRANSFORMATION_VERIFICATION"  # NEW: Operations claiming transformation MUST produce changes
+  - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
+
+# Application-specific paths that don't belong in CORTEX core
+application_paths:
+  - "SPA/"
+  - "KSESSIONS/"
+  - "NOOR/"
+  - "blazor"
+  - "signalr"
+  - "canvas"
+
+# Brain state files that shouldn't be committed
+brain_state_files:
+  - "conversation-history.jsonl"
+  - "conversation-context.jsonl"
+  - "events.jsonl"
+  - "development-context.yaml"
+  - "protection-events.jsonl"
+
+# Protection Layers (6 layers of defense)
+protection_layers:
+  
+  # Layer 1: Instinct Immutability
+  - layer_id: "instinct_immutability"
+    name: "Instinct Immutability"
+    description: "Tier 0 governance rules cannot be bypassed"
+    priority: 1
+    
+    rules:
+      - rule_id: "TDD_ENFORCEMENT"
+        name: "Test-Driven Development Enforcement"
+        severity: "blocked"
+        description: "Attempt to bypass Test-Driven Development requirement"
+        
+        detection:
+          keywords:
+            - "skip test"
+            - "bypass tdd"
+            - "no tests"
+            - "disable tdd"
+            - "skip validation"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Write failing test first (RED phase)"
+          - "Create spike branch for exploration (throwaway)"
+          - "Use TDD cycle: RED → GREEN → REFACTOR"
+        
+        evidence_template: "Intent: '{intent}'"
+      
+      - rule_id: "DEFINITION_OF_DONE"
+        name: "Definition of Done"
+        severity: "blocked"
+        description: "Attempt to bypass Definition of Done (zero errors, zero warnings)"
+        
+        detection:
+          keywords:
+            - "skip validation"
+            - "bypass done"
+            - "disable error check"
+            - "allow warnings"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Fix all warnings before proceeding"
+          - "Add exception rule if truly needed"
+          - "Update test to expect new behavior"
+        
+        evidence_template: "Description: '{description}'"
+      
+      - rule_id: "DEFINITION_OF_READY"
+        name: "Definition of Ready"
+        severity: "blocked"
+        description: "Work item does not meet DoR criteria"
+        
+        detection:
+          keywords:
+            - "skip DoR"
+            - "bypass ready"
+            - "start without requirements"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Define acceptance criteria first"
+          - "Get stakeholder clarification"
+          - "Create refined user story"
+        
+        evidence_template: "Missing DoR criteria: '{description}'"
+      
+      - rule_id: "BRAIN_PROTECTION_TESTS_MANDATORY"
+        name: "Brain Protection Tests - 100% Pass Rate Mandatory"
+        severity: "blocked"
+        description: "Brain protection tests MUST pass - no exceptions"
+        
+        detection:
+          keywords:
+            - "skip brain protection"
+            - "ignore test failures"
+            - "brain tests failing"
+            - "disable brain tests"
+            - "bypass protection tests"
+            - "xfail brain"
+            - "skip tier0 tests"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Fix the failing tests immediately"
+          - "Revert changes that broke protection"
+          - "Do not proceed until 100% pass rate achieved"
+        
+        evidence_template: "Brain protection tests are CRITICAL. Intent: '{intent}'"
+        
+        rationale: |
+          Brain protection tests validate core CORTEX integrity:
+          - Path handling (cross-platform compatibility)
+          - Protection layer logic (architectural safeguards)
+          - Conversation tracking (memory system)
+          - YAML configuration loading (governance rules)
+          
+          If these fail, CORTEX has fundamental issues that MUST be resolved.
+          100% pass rate is MANDATORY before any other work continues.
+      
+      - rule_id: "MACHINE_READABLE_FORMATS"
+        name: "Use Machine-Readable Formats for Efficiency"
+        severity: "warning"
+        description: "Non-user files should use YAML/JSON, not Markdown"
+        
+        detection:
+          combined_keywords:
+            markdown_creation:
+              - "create markdown"
+              - "new .md"
+              - "add .md"
+            structured_data:
+              - "structured data"
+              - "configuration"
+              - "capability matrix"
+              - "status table"
+              - "metrics"
+              - "statistics"
+              - "code example"
+              - "implementation pattern"
+          scope: ["intent", "description"]
+          logic: "AND"  # Both conditions must be true
+        
+        alternatives:
+          - "Use YAML for structured data (capabilities, rules, config)"
+          - "Use JSON for metrics, statistics, logs"
+          - "Reserve Markdown for user-facing narratives only"
+          - "Use code files with docstrings for examples"
+        
+        evidence_template: "Description: '{description}'"
+        
+        rationale: |
+          CORTEX 2.0 efficiency principles:
+          
+          USE MARKDOWN FOR:
+          - User guides and tutorials
+          - Narrative documentation (stories, history)
+          - Architecture explanations
+          - Design rationale
+          
+          USE YAML/JSON FOR:
+          - Structured data (capabilities, status, priorities)
+          - Configuration and rules
+          - Metrics and statistics
+          - Patterns and templates
+          - API schemas
+          
+          USE CODE FILES FOR:
+          - Implementation examples
+          - Code snippets and patterns
+          - Reusable templates
+          
+          Benefits:
+          - 60% token reduction in context injection
+          - Automated validation and schema checking
+          - Better version control diffs
+          - Direct machine consumption
+          - No documentation drift
+      
+      - rule_id: "ACTIVE_NARRATOR_VOICE"
+        name: "Active Narrator Voice (Not Passive Documentation)"
+        severity: "warning"
+        description: "Story uses passive/clinical narrator voice instead of active storytelling"
+        
+        detection:
+          passive_verbs:
+            - "Asif Codeinstein designed"
+            - "Asif Codeinstein created"
+            - "Asif Codeinstein wrote"
+            - "Asif Codeinstein implemented"
+            - "Asif Codeinstein developed"
+            - "He wrote routines"
+            - "He created routines"
+            - "He implemented"
+            - "He developed"
+          
+          documentary_markers:
+            - "One evening, while"
+            - "One morning, while"
+            - "One day, while"
+            - "One night, while"
+            - "After completing"
+            - "After finishing"
+            - ", while reviewing"
+            - "During the"
+          
+          scope: ["file_content"]
+          file_patterns:
+            - "docs/story/**/*.md"
+            - "prompts/shared/story.md"
+        
+        alternatives:
+          - "Use active storytelling: 'So Asif built' (adds momentum)"
+          - "Show immediate action: 'grabbed keyboard and coded' (not 'wrote routines')"
+          - "Vivid scene-setting: 'That evening, knee-deep in' (not 'One evening, while')"
+          - "Present-tense urgency: 'The refactor complete, Asif leaned back' (not 'After completing')"
+          - "Energy verbs: 'dove into', 'attacked', 'grabbed', 'swept' (not 'designed', 'created')"
+        
+        evidence_template: |
+          Passive narrator detected: '{match}'
+          
+          Story should be ACTIVE third-person narrative, not clinical documentation.
+          
+          Examples:
+          ❌ "Asif Codeinstein designed..." ← documentation
+          ✅ "So Asif built..." ← storytelling
+          
+          ❌ "He wrote routines for..." ← neutral observer  
+          ✅ "He grabbed his keyboard and..." ← immediate action
+          
+          ❌ "One evening, while reviewing..." ← documentary
+          ✅ "That evening, knee-deep in..." ← vivid scene
+        
+        rationale: |
+          CORTEX story is a COMEDY told by an energetic narrator, not a memoir or
+          technical documentation. Third-person is CORRECT, but it must be ACTIVE
+          storytelling with personality, immediacy, and energy.
+          
+          The narrator is a CHARACTER in the story—witty, observant, timing jokes.
+          Not a clinical observer reporting facts.
+          
+          TRANSFORMATION PATTERNS:
+          
+          Passive → Active:
+          - "designed a system" → "So Asif built a system"
+          - "wrote routines for" → "grabbed his keyboard and coded"
+          - "One evening, while reviewing" → "That evening, knee-deep in"
+          - "made a decision" → "stared at the screen and decided"
+          - "implemented the feature" → "dove into implementing"
+          - "After completing X, he" → "X complete, Asif leaned back and"
+          
+          PRESERVE:
+          - Third-person perspective (it's a STORY about Asif, not BY Asif)
+          - Narrator personality and comedy
+          - Technical content and accuracy
+          - Character name "Asif Codeinstein"
+          
+          AVOID:
+          - First-person memoir style ("I designed...")
+          - Clinical/academic tone ("The system was designed to...")
+          - Passive voice constructions
+          - Documentary-style time markers
+  
+  # Layer 2: Tier Boundary Protection
+  - layer_id: "tier_boundary"
+    name: "Tier Boundary Protection"
+    description: "Data stored in correct tier"
+    priority: 2
+    
+    rules:
+      - rule_id: "TIER0_APPLICATION_DATA"
+        name: "No Application Data in Tier 0"
+        severity: "blocked"
+        description: "Application-specific path in Tier 0 (immutable governance)"
+        
+        detection:
+          path_patterns:
+            - "tier0/**"
+            - "governance/**"
+          contains_any: "{{application_paths}}"
+        
+        alternatives:
+          - "Store in Tier 2 with scope='application'"
+          - "Keep generic principles in Tier 0"
+          - "Create application-specific tier"
+        
+        evidence: "Tier 0 is for generic CORTEX principles only"
+      
+      - rule_id: "TIER2_CONVERSATION_DATA"
+        name: "No Conversation Data in Tier 2"
+        severity: "warning"
+        description: "Conversation data should be in Tier 1, not Tier 2"
+        
+        detection:
+          path_patterns:
+            - "tier2/**"
+          contains: "conversation"
+        
+        alternatives:
+          - "Move to Tier 1 (conversation-history.jsonl)"
+          - "Store aggregated patterns in Tier 2"
+          - "Keep raw data in Tier 1, patterns in Tier 2"
+        
+        evidence: "Tier 2 is for aggregated patterns, not raw conversations"
+  
+  # Layer 3: SOLID Compliance
+  - layer_id: "solid_compliance"
+    name: "SOLID Compliance"
+    description: "No God Objects, proper separation"
+    priority: 3
+    
+    rules:
+      - rule_id: "SINGLE_RESPONSIBILITY"
+        name: "Single Responsibility Principle"
+        severity: "warning"
+        description: "Potential God Object pattern detected (adding multiple responsibilities)"
+        
+        detection:
+          keywords:
+            - "add mode"
+            - "add switch"
+            - "handle all"
+            - "do everything"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Create dedicated agent for new responsibility"
+          - "Use composition instead of adding modes"
+          - "Extract to separate module"
+        
+        evidence_template: "Intent: '{intent}'"
+      
+      - rule_id: "DEPENDENCY_INVERSION"
+        name: "Dependency Inversion Principle"
+        severity: "warning"
+        description: "Hardcoded dependency detected (violates DIP)"
+        
+        detection:
+          keywords:
+            - "hardcode path"
+            - "fixed path"
+            - "absolute path"
+            - "inline config"
+          scope: ["description"]
+        
+        alternatives:
+          - "Use dependency injection"
+          - "Load from configuration file"
+          - "Pass as parameter"
+        
+        evidence_template: "Description: '{description}'"
+      
+      - rule_id: "OPEN_CLOSED"
+        name: "Open/Closed Principle"
+        severity: "warning"
+        description: "Modifying existing behavior instead of extending"
+        
+        detection:
+          keywords:
+            - "change behavior"
+            - "modify existing"
+            - "alter functionality"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Create new implementation via extension"
+          - "Use strategy pattern"
+          - "Add decorator or wrapper"
+        
+        evidence_template: "Consider extension over modification"
+  
+  # Layer 4: Hemisphere Specialization
+  - layer_id: "hemisphere_specialization"
+    name: "Hemisphere Specialization"
+    description: "Strategic vs tactical separation"
+    priority: 4
+    
+    rules:
+      - rule_id: "LEFT_BRAIN_TACTICAL"
+        name: "Left Brain Tactical Only"
+        severity: "warning"
+        description: "Strategic planning logic in tactical executor"
+        
+        detection:
+          files:
+            - "code-executor.md"
+            - "test-generator.md"
+            - "error-corrector.md"
+          keywords:
+            - "create plan"
+            - "estimate time"
+            - "assess risk"
+            - "strategy"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Move planning logic to work-planner.md"
+          - "Keep execution logic in code-executor.md"
+          - "Use corpus callosum for coordination"
+        
+        evidence: "LEFT brain should execute, not plan"
+      
+      - rule_id: "RIGHT_BRAIN_STRATEGIC"
+        name: "Right Brain Strategic Only"
+        severity: "warning"
+        description: "Tactical execution logic in strategic planner"
+        
+        detection:
+          files:
+            - "work-planner.md"
+            - "intent-router.md"
+          keywords:
+            - "write code"
+            - "run test"
+            - "execute"
+            - "implement"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Delegate execution to LEFT brain agents"
+          - "Keep planning in RIGHT brain"
+          - "Use agent coordination"
+        
+        evidence: "RIGHT brain should plan, not execute"
+  
+  # Layer 5: SKULL Protection (Safety, Knowledge, Validation & Learning)
+  - layer_id: "skull_protection"
+    name: "SKULL Protection Layer"
+    description: "Test validation and quality enforcement (prevents November 9th incident)"
+    priority: 5
+    
+    rules:
+      - rule_id: "SKULL_TEST_BEFORE_CLAIM"
+        name: "Test Before Claim (SKULL-001)"
+        severity: "blocked"
+        description: "Never claim a fix is complete without test validation"
+        
+        detection:
+          keywords:
+            - "fixed ✅"
+            - "complete ✅"
+            - "done ✅"
+            - "implemented ✅"
+          without_keywords:
+            - "test passed"
+            - "test verified"
+            - "validated by test"
+            - "pytest"
+          scope: ["response"]
+        
+        alternatives:
+          - "Create automated test before claiming fix"
+          - "Run test and include results in response"
+          - "Show test output: 'Fixed ✅ (Verified by: test_button_color)'"
+        
+        evidence_template: "Claim: '{match}' without test validation"
+        
+        rationale: |
+          SKULL-001: Test Before Claim
+          
+          Real incident (2025-11-09):
+          - CSS fixes claimed "Fixed ✅" three times
+          - Vision API claimed "Auto-engages ✅" 
+          - Zero tests run to validate
+          - User had to report "not working" each time
+          
+          SKULL prevents this by BLOCKING any success claim without test validation.
+      
+      - rule_id: "SKULL_INTEGRATION_VERIFICATION"
+        name: "Integration Verification (SKULL-002)"
+        severity: "blocked"
+        description: "Integration must be tested end-to-end"
+        
+        detection:
+          keywords:
+            - "integration complete"
+            - "components connected"
+            - "API integrated"
+            - "auto-engages"
+          without_keywords:
+            - "end-to-end test"
+            - "integration test"
+            - "e2e test"
+          scope: ["description"]
+        
+        alternatives:
+          - "Create end-to-end integration test"
+          - "Test full call chain: A → B → C"
+          - "Verify actual execution path, not just config"
+        
+        evidence_template: "Integration claim without E2E test: '{match}'"
+        
+        rationale: |
+          SKULL-002: Integration Verification
+          
+          Real incident (2025-11-09):
+          - Vision API "integration" claimed complete
+          - Only config was changed
+          - No test of actual call chain
+          - Vision API was never actually called
+          
+          SKULL prevents this by requiring end-to-end integration tests.
+      
+      - rule_id: "SKULL_VISUAL_REGRESSION"
+        name: "Visual Regression (SKULL-003)"
+        severity: "warning"
+        description: "CSS/UI changes require visual validation"
+        
+        detection:
+          keywords:
+            - "css fixed"
+            - "style updated"
+            - "color changed"
+            - "UI improved"
+          without_keywords:
+            - "visual test"
+            - "computed style"
+            - "playwright"
+            - "browser test"
+          scope: ["description"]
+        
+        alternatives:
+          - "Add visual regression test (Playwright/Puppeteer)"
+          - "Verify computed style in browser"
+          - "Include before/after screenshot comparison"
+        
+        evidence_template: "CSS/UI change without visual test: '{match}'"
+        
+        rationale: |
+          SKULL-003: Visual Regression
+          
+          Real incident (2025-11-09):
+          - CSS rules applied to fix title color
+          - Claimed "Fixed ✅" without checking browser
+          - Cache wasn't cleared, changes not visible
+          - Repeated 3 times with same approach
+          
+          SKULL prevents this by requiring visual validation of CSS changes.
+      
+      - rule_id: "SKULL_RETRY_WITHOUT_LEARNING"
+        name: "Retry Without Learning (SKULL-004)"
+        severity: "warning"
+        description: "Must diagnose failures before retrying same approach"
+        
+        detection:
+          combined_keywords:
+            retry_marker:
+              - "try again"
+              - "retry"
+              - "attempt 2"
+              - "attempt 3"
+            no_diagnosis:
+              - "same fix"
+              - "reapply"
+              - "rebuild again"
+          without_keywords:
+            - "diagnosed"
+            - "root cause"
+            - "cache cleared"
+            - "verified"
+          scope: ["description"]
+          logic: "AND"
+        
+        alternatives:
+          - "Diagnose WHY previous fix failed"
+          - "Check: file contents, browser cache, build output, computed styles"
+          - "Change approach based on diagnosis"
+          - "Add test to prevent regression"
+        
+        evidence_template: "Retry without diagnosis: '{description}'"
+        
+        rationale: |
+          SKULL-004: Retry Without Learning
+          
+          Real incident (2025-11-09):
+          - CSS fix applied
+          - User: "didn't work"
+          - Same CSS fix applied again
+          - User: "still didn't work"  
+          - Same CSS fix applied THIRD time
+          - No diagnosis of why it failed
+          
+          SKULL prevents this by requiring root cause analysis before retries.
+      
+      - rule_id: "SKULL_TRANSFORMATION_VERIFICATION"
+        name: "Transformation Verification (SKULL-005)"
+        severity: "blocked"
+        description: "Operations claiming transformation MUST produce measurable changes"
+        
+        detection:
+          combined_keywords:
+            transformation_claim:
+              - "transformation complete"
+              - "refresh complete"
+              - "converted"
+              - "updated documentation"
+              - "generated"
+            success_claim:
+              - "success"
+              - "completed successfully"
+              - "fixed ✅"
+              - "done ✅"
+          scope: ["description", "log_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "file_hash_comparison"
+            description: "Compare file hash before/after operation"
+            requirement: "Hashes MUST differ for transformation operations"
+          
+          - type: "git_diff_check"
+            description: "Verify git diff shows actual changes"
+            requirement: "git diff MUST show modifications, not empty output"
+          
+          - type: "content_analysis"
+            description: "Validate transformation logic executed"
+            requirement: "Operation MUST NOT be pass-through (input != output)"
+        
+        alternatives:
+          - "Implement actual transformation logic (not pass-through)"
+          - "Mark operation as 'validation-only' if no transformation needed"
+          - "Add integration test verifying file changes occur"
+          - "Change success message to reflect pass-through behavior"
+        
+        evidence_template: "Operation '{operation_name}' claims transformation but produces no changes"
+        
+        rationale: |
+          SKULL-005: Transformation Verification
+          
+          Real incident (2025-11-10):
+          - refresh_cortex_story operation executed
+          - Module apply_narrator_voice_module.py claims "transformation complete"
+          - Returns success=True with "Narrator voice transformation complete"
+          - BUT: Line 123 does `context['transformed_story'] = story_content` (pass-through!)
+          - File hash unchanged after operation
+          - git diff shows NO changes
+          - User discovers operation is fake
+          
+          Impact:
+          - User trust degradation (claims success but does nothing)
+          - Status inflation (operations marked READY when incomplete)
+          - Integration failures (downstream operations expect real data)
+          
+          SKULL-005 prevents this by:
+          1. Detecting transformation + success claims in output
+          2. Requiring file hash comparison test
+          3. Blocking completion without measurable changes
+          4. Forcing honest status reporting (PARTIAL vs READY)
+          
+          Implementation:
+          - Add @verify_transformation decorator to operation modules
+          - Integration tests MUST check before/after file state
+          - CI fails if transformation claims success but git diff empty
+          - Status documents distinguish architecture vs implementation
+      
+      - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE"
+        name: "Header/Footer in Copilot Response (SKULL-006)"
+        severity: "blocked"
+        description: "Operation orchestrators MUST include formatted headers/footers in Copilot Chat response"
+        
+        detection:
+          combined_keywords:
+            orchestrator_execution:
+              - "execute operation"
+              - "orchestrator.execute"
+              - "operation complete"
+            missing_header_footer:
+              - "formatted_header: None"
+              - "formatted_footer: None"
+              - "no header in response"
+          scope: ["code", "test_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "result_object_check"
+            description: "Verify OperationResult contains formatted_header/footer"
+            requirement: "result.formatted_header MUST NOT be None"
+          
+          - type: "response_formatter_check"
+            description: "Verify ResponseFormatter uses stored headers"
+            requirement: "Chat response MUST include header/footer in code blocks"
+          
+          - type: "visual_inspection"
+            description: "Verify header appears in Copilot Chat window"
+            requirement: "User MUST see copyright header + purpose + accomplishments"
+        
+        alternatives:
+          - "Use format_minimalist_header() and store in result.formatted_header"
+          - "Use format_completion_footer() and store in result.formatted_footer"
+          - "Ensure ResponseFormatter wraps headers in code blocks for display"
+          - "Add integration test verifying header presence in formatted response"
+        
+        evidence_template: |
+          Operation '{operation_name}' executed but headers not in Copilot response
+          
+          Expected in Copilot Chat:
+          ```
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            CORTEX {operation_name} Orchestrator v{version}
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          
+          Profile: {profile} │ Mode: {mode} │ Started: {timestamp}
+          
+          📋 Purpose: {purpose}
+          
+          © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          ```
+          
+          Actual: Header missing or only in terminal
+        
+        rationale: |
+          SKULL-006: Header/Footer in Copilot Response
+          
+          Real incident (2025-11-11):
+          - User: "why is header not being displayed?"
+          - Headers printing to terminal (stdout) correctly
+          - But GitHub Copilot Chat response had NO header
+          - ResponseFormatter suppressing headers after first operation
+          - User specified they want header "in the copilot response in the chat window"
+          
+          Root Cause:
+          1. Orchestrators print headers to stdout (terminal visibility)
+          2. But stdout doesn't reach Copilot Chat window
+          3. ResponseFormatter has _first_operation_shown flag (header suppression)
+          4. User sees execution in terminal, but Chat response lacks context
+          
+          Why This Matters:
+          - Copyright attribution must be visible to user
+          - Purpose/profile provides context for what operation did
+          - Accomplishments show value delivered
+          - Headers make operations feel professional and informative
+          - Chat is primary interface (terminal is secondary)
+          
+          Solution:
+          1. Orchestrators generate formatted headers/footers
+          2. Store in OperationResult.formatted_header/footer
+          3. ResponseFormatter checks for stored headers (priority)
+          4. Wraps headers in code blocks for proper display
+          5. Also prints to terminal for immediate visibility
+          
+          SKULL-006 enforces this by:
+          - Requiring formatted_header/footer in OperationResult
+          - Integration tests verify headers in formatted response
+          - Blocking completion if headers missing from Chat output
+          - Ensuring copyright/attribution always visible
+          
+          Implementation:
+          ```python
+          # In orchestrator execute():
+          formatted_header = format_minimalist_header(...)
+          print(formatted_header)  # Terminal visibility
+          
+          # ... operation logic ...
+          
+          formatted_footer = format_completion_footer(...)
+          print(formatted_footer)  # Terminal visibility
+          
+          return OperationResult(
+              success=True,
+              formatted_header=formatted_header,  # For Copilot Chat
+              formatted_footer=formatted_footer   # For Copilot Chat
+          )
+          ```
+      
+      - rule_id: "SKULL_ALL_TESTS_MUST_PASS"
+        name: "All Tests Must Pass (SKULL-007)"
+        severity: "blocked"
+        description: "Test suite MUST have 100% pass rate before claiming any work complete"
+        
+        detection:
+          keywords:
+            - "fixed ✅"
+            - "complete ✅"
+            - "done ✅"
+            - "implemented ✅"
+            - "ready for review"
+            - "PR ready"
+          with_test_failures:
+            - "failed"
+            - "FAILED"
+            - "ERROR"
+            - "test failures"
+            - "X passed, Y failed"
+          scope: ["response", "test_output"]
+        
+        verification_required:
+          - type: "full_test_suite"
+            description: "Run complete test suite (not just new tests)"
+            requirement: "pytest exit code MUST be 0 (100% pass rate)"
+          
+          - type: "no_skipped_critical_tests"
+            description: "Verify no critical tests are skipped"
+            requirement: "Core functionality tests MUST run (not skipped)"
+          
+          - type: "test_count_validation"
+            description: "Ensure test count doesn't decrease unexpectedly"
+            requirement: "Total tests should increase or stay same (not decrease)"
+        
+        alternatives:
+          - "Fix ALL failing tests before claiming completion"
+          - "Mark work as 'IN PROGRESS' until tests pass"
+          - "Revert changes if they break existing tests"
+          - "Fix pre-existing failures first (clean baseline)"
+        
+        evidence_template: |
+          Work claimed complete but tests failing!
+          
+          Test Results: {test_summary}
+          - Passed: {passed_count}
+          - Failed: {failed_count}  ❌
+          - Skipped: {skipped_count}
+          
+          SKULL-007 VIOLATION: Cannot claim "done ✅" with {failed_count} failures
+        
+        rationale: |
+          SKULL-007: All Tests Must Pass
+          
+          Real incident (2025-11-11):
+          - User: "are all tests passing?"
+          - Agent: Ran tests, found 123 failed, 337 passed
+          - Agent response: "No, not all tests are passing" (honest)
+          - BUT: Agent claimed SKULL-006 work "complete ✅" earlier
+          - Pre-existing failures create false confidence
+          
+          Why Pre-existing Failures Are Dangerous:
+          1. Mask New Regressions:
+             - Can't tell if new code broke something
+             - "Already broken" becomes acceptable
+             - Technical debt accumulates silently
+          
+          2. Create False Confidence:
+             - "My tests pass" ≠ "All tests pass"
+             - Incomplete validation of changes
+             - Integration issues hidden
+          
+          3. Compound Over Time:
+             - Each feature adds more failures
+             - "Just one more broken test" mentality
+             - Eventually unmaintainable
+          
+          4. Undermine Trust:
+             - Claims of completion ring hollow
+             - Quality standards erode
+             - Testing becomes performative
+          
+          Examples from Current Failures:
+          - 123 failed tests (51% failure rate!)
+          - Categories: Agent internals, platform issues, schema errors
+          - Some tests testing wrong APIs (implementation changed)
+          - Some tests have environmental dependencies
+          - All must be fixed before claiming ANY work complete
+          
+          SKULL-007 Enforcement:
+          1. BLOCKING severity - cannot proceed with failures
+          2. Requires full test suite run (not just new tests)
+          3. Exit code 0 mandatory (100% pass rate)
+          4. No "works on my machine" exceptions
+          5. No "will fix later" promises
+          
+          Allowed Exceptions:
+          - Known flaky tests marked with @pytest.mark.flaky
+          - Platform-specific tests properly skipped on other platforms
+          - Optional feature tests when feature disabled in config
+          
+          Not Allowed:
+          - "These failures are unrelated to my work"
+          - "I'll fix them in next PR"
+          - "Tests are broken, not my code"
+          - "Only my new tests need to pass"
+          
+          Implementation Strategy:
+          1. Fix critical blockers first (schema, imports)
+          2. Fix by category (agents, ambient, tier1)
+          3. Update tests if implementation changed
+          4. Mark truly optional tests appropriately
+          5. Achieve 100% pass rate
+          6. Maintain 100% going forward
+          
+          This is NOT optional. This is core quality engineering.
+      
+      - rule_id: "SKULL_MULTI_TRACK_VALIDATION"
+        name: "Multi-Track Configuration Validation (SKULL-008)"
+        severity: "blocked"
+        description: "Multi-track mode MUST have valid configuration with proper phase distribution"
+        
+        detection:
+          keywords:
+            - "enable multi-track"
+            - "activate multi-track"
+            - "create tracks"
+            - "split tracks"
+            - "multi-machine mode"
+          scope: ["intent", "description"]
+        
+        verification_required:
+          - type: "track_balance_check"
+            description: "Verify workload balanced across tracks"
+            requirement: "Track estimated hours MUST not differ by >30%"
+          
+          - type: "dependency_isolation_check"
+            description: "Verify no cross-track dependencies"
+            requirement: "Phase groups MUST be self-contained per track"
+          
+          - type: "machine_assignment_check"
+            description: "Verify each machine assigned to exactly one track"
+            requirement: "No machine overlap, no unassigned machines"
+          
+          - type: "fun_name_uniqueness"
+            description: "Verify track names are unique and generated properly"
+            requirement: "Track names MUST be deterministic and collision-free"
+        
+        alternatives:
+          - "Run track distribution algorithm to validate balance"
+          - "Use PhaseDistributor.distribute() to check dependency isolation"
+          - "Verify machine count matches track count"
+          - "Test track name generation for collision resistance"
+        
+        evidence_template: |
+          Multi-track mode validation failed!
+          
+          Configuration Issues:
+          - Track balance: {balance_check}
+          - Dependencies: {dependency_check}
+          - Machines: {machine_check}
+          - Track names: {name_check}
+          
+          SKULL-008: Multi-track MUST be properly configured before use
+        
+        rationale: |
+          SKULL-008: Multi-Track Configuration Validation
+          
+          Multi-track mode is powerful but requires careful setup:
+          
+          1. Workload Balance:
+             - Tracks with vastly different hours → bottlenecks
+             - One machine idle while other overloaded
+             - Race metrics meaningless if unfair
+             Example: Track A (10h) vs Track B (40h) = broken
+          
+          2. Dependency Isolation:
+             - Track A waiting on Track B output → blocked
+             - Cross-dependencies defeat parallel development
+             - Must group dependent phases on same track
+             Example: "setup" phases must complete before "processing"
+          
+          3. Machine Assignment:
+             - Machine assigned to multiple tracks → confusion
+             - Unassigned machines → wasted capacity
+             - Clear 1:1 or 1:N mapping required
+             Example: AHHOME on both tracks = which context?
+          
+          4. Track Name Uniqueness:
+             - Collision-resistant generation
+             - Deterministic (same input → same name)
+             - Human-memorable for commands
+             Example: Hash collision → wrong track loaded
+          
+          Why This Matters:
+          - Prevents split-mode failures mid-development
+          - Ensures race metrics are meaningful
+          - Maintains track isolation guarantees
+          - Makes "continue implementation for [track]" reliable
+          
+          Validation Points:
+          
+          Pre-Initialization:
+          - Check machine count > 0
+          - Verify operations.yaml accessible
+          - Validate module definitions exist
+          
+          Post-Distribution:
+          - Balance check: max_hours/min_hours < 1.3 (30% tolerance)
+          - Dependency check: No phase in track requires other track's output
+          - Machine check: Each machine in exactly one track
+          - Name check: All track names unique and deterministic
+          
+          Integration Test Required:
+          ```python
+          def test_multi_track_validation():
+              # Setup
+              machines = ["AHHOME", "Mac"]
+              config = create_multi_track_config(machines, modules)
+              
+              # Balance check
+              hours = [t.estimated_hours for t in config.tracks.values()]
+              assert max(hours) / min(hours) < 1.3, "Imbalanced tracks"
+              
+              # Dependency check
+              for track in config.tracks.values():
+                  deps = get_phase_dependencies(track.phases)
+                  assert all(d in track.phases for d in deps), "Cross-track dep"
+              
+              # Machine check
+              all_machines = [m for t in config.tracks.values() for m in t.machines]
+              assert len(all_machines) == len(set(all_machines)), "Duplicate machine"
+              
+              # Name check
+              names = [t.track_name for t in config.tracks.values()]
+              assert len(names) == len(set(names)), "Duplicate track name"
+          ```
+          
+          Enforcement:
+          - CLI script validates before writing config
+          - Design sync validates before split
+          - Continue command validates track exists
+          - Consolidation validates all tracks present
+      
+      - rule_id: "SKULL_TRACK_ISOLATION"
+        name: "Track Work Isolation (SKULL-009)"
+        severity: "blocked"
+        description: "Work on Track A MUST NOT modify Track B's assigned modules"
+        
+        detection:
+          combined_keywords:
+            track_context:
+              - "continue implementation for"
+              - "working on track"
+              - "active track"
+            cross_modification:
+              - "modified module"
+              - "updated file"
+              - "changed"
+          scope: ["intent", "log_output"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "module_ownership_check"
+            description: "Verify modified modules belong to active track"
+            requirement: "All changed files MUST be in active track's module list"
+          
+          - type: "phase_boundary_check"
+            description: "Verify work stays within assigned phases"
+            requirement: "Modified files MUST belong to active track's phases"
+          
+          - type: "git_diff_validation"
+            description: "Verify git changes match track scope"
+            requirement: "git diff MUST only show files from active track"
+        
+        alternatives:
+          - "Filter implementation state by active track"
+          - "Validate module ownership before allowing changes"
+          - "Add pre-commit hook checking track boundaries"
+          - "Switch to correct track before making changes"
+        
+        evidence_template: |
+          Track isolation violation detected!
+          
+          Active Track: {active_track}
+          Modified Files: {modified_files}
+          Violations: {violations}
+          
+          Files belong to: {actual_track}
+          
+          SKULL-009: Tracks MUST NOT cross-modify each other's work
+        
+        rationale: |
+          SKULL-009: Track Work Isolation
+          
+          Core principle: Each track is an isolated development context.
+          
+          Why Isolation Matters:
+          
+          1. Prevents Merge Conflicts:
+             - Two machines editing same file → disaster
+             - Track A changes conflicting with Track B changes
+             - Consolidation becomes manual merge nightmare
+             Example: Both tracks fix same module differently
+          
+          2. Maintains Race Integrity:
+             - Track A can't "cheat" by doing Track B's work
+             - Progress metrics stay meaningful
+             - Velocity calculations remain accurate
+             Example: Track A does Track B's modules → unfair race
+          
+          3. Enables True Parallel Development:
+             - No coordination needed during work
+             - No "wait for Track A to finish" scenarios
+             - Maximum throughput achieved
+             Example: Both machines working simultaneously without blocking
+          
+          4. Simplifies Context Management:
+             - Each machine sees only relevant modules
+             - Copilot context smaller and focused
+             - Fewer tokens, faster responses
+             Example: Track A context excludes Track B's 50 modules
+          
+          Enforcement Mechanism:
+          
+          1. Pre-Modification Check:
+             ```python
+             def validate_module_ownership(module_id, active_track):
+                 if module_id not in active_track.modules:
+                     raise TrackIsolationError(
+                         f"Module {module_id} belongs to different track"
+                     )
+             ```
+          
+          2. Git Pre-Commit Hook:
+             ```bash
+             # Check if modified files belong to active track
+             active_track=$(get_active_track)
+             for file in $(git diff --cached --name-only); do
+                 if ! track_owns_file "$active_track" "$file"; then
+                     echo "Error: $file not in active track"
+                     exit 1
+                 fi
+             done
+             ```
+          
+          3. Design Sync Validation:
+             - Compare git log with track assignments
+             - Flag any cross-track modifications
+             - Require explicit override with justification
+          
+          Allowed Cross-Track Work:
+          - Shared files (cortex.config.json)
+          - Documentation updates (README.md)
+          - Test fixtures (tests/fixtures/)
+          
+          Not Allowed:
+          - Modifying other track's modules
+          - Changing other track's phase files
+          - Updating other track's status in design doc
+          
+          Override Process:
+          If cross-track work truly needed:
+          1. Document why isolation must break
+          2. Get explicit user approval
+          3. Log violation for consolidation review
+          4. Merge carefully during consolidation
+          
+          Integration Test:
+          ```python
+          def test_track_isolation():
+              # Setup two tracks
+              config = setup_multi_track(['AHHOME', 'Mac'])
+              track_a = config.tracks['track_1']
+              track_b = config.tracks['track_2']
+              
+              # Simulate Track A trying to modify Track B's module
+              with pytest.raises(TrackIsolationError):
+                  modify_module(track_b.modules[0], active_track=track_a)
+              
+              # Verify Track A can modify own modules
+              modify_module(track_a.modules[0], active_track=track_a)  # OK
+          ```
+      
+      - rule_id: "SKULL_CONSOLIDATION_INTEGRITY"
+        name: "Track Consolidation Integrity (SKULL-010)"
+        severity: "blocked"
+        description: "Consolidation MUST merge all track progress accurately without data loss"
+        
+        detection:
+          keywords:
+            - "consolidate tracks"
+            - "merge tracks"
+            - "reset to single-track"
+            - "design sync consolidation"
+          scope: ["intent", "operation_name"]
+        
+        verification_required:
+          - type: "progress_preservation_check"
+            description: "Verify no completed modules lost in merge"
+            requirement: "Consolidated count MUST equal sum of track counts"
+          
+          - type: "conflict_resolution_audit"
+            description: "Log all conflict resolutions with justification"
+            requirement: "Conflicts MUST be documented in archive"
+          
+          - type: "archive_completeness_check"
+            description: "Verify split docs archived before deletion"
+            requirement: "All split docs MUST exist in archive before removal"
+          
+          - type: "git_commit_validation"
+            description: "Verify consolidation tracked in git history"
+            requirement: "Git commit MUST reference both tracks and merge details"
+        
+        alternatives:
+          - "Run consolidation with --verify flag"
+          - "Review conflict resolution log before committing"
+          - "Keep split docs until archive verified"
+          - "Add integration test for consolidation accuracy"
+        
+        evidence_template: |
+          Consolidation integrity check failed!
+          
+          Pre-Consolidation:
+          - Track A: {track_a_completed}/{track_a_total} modules
+          - Track B: {track_b_completed}/{track_b_total} modules
+          - Total: {pre_total_completed} modules
+          
+          Post-Consolidation:
+          - Unified: {post_total_completed} modules
+          
+          Discrepancy: {discrepancy} modules
+          Conflicts Resolved: {conflicts}
+          Archive Status: {archive_status}
+          
+          SKULL-010: Consolidation MUST preserve all progress
+        
+        rationale: |
+          SKULL-010: Track Consolidation Integrity
+          
+          Consolidation is the critical merge operation - must be perfect.
+          
+          What Can Go Wrong:
+          
+          1. Progress Loss:
+             - Track A shows module complete
+             - Consolidation misses it
+             - User loses work (demoralizing)
+             Example: Track A completed 15 modules, only 12 appear in merge
+          
+          2. Conflict Mishandling:
+             - Both tracks modified same module
+             - Wrong version selected
+             - Work overwritten silently
+             Example: Track A's fix lost, Track B's bug remains
+          
+          3. Archive Failure:
+             - Split docs deleted before archiving
+             - No way to audit merge decisions
+             - Can't roll back if issues found
+             Example: User wants to see what Track A had, archive empty
+          
+          4. Git History Gaps:
+             - Consolidation not committed properly
+             - Can't trace what was merged when
+             - Audit trail incomplete
+             Example: Merge happened, git log says nothing
+          
+          Consolidation Algorithm:
+          
+          ```python
+          def consolidate_tracks(track_config, impl_state):
+              # Step 1: Collect all track progress
+              all_modules = {}
+              for track in track_config.tracks.values():
+                  for module_id in track.modules:
+                      status = get_module_status(module_id, impl_state)
+                      
+                      # Conflict detection
+                      if module_id in all_modules:
+                          conflict = resolve_conflict(
+                              all_modules[module_id],
+                              status,
+                              strategy='latest_timestamp'
+                          )
+                          log_conflict_resolution(module_id, conflict)
+                          all_modules[module_id] = conflict.winner
+                      else:
+                          all_modules[module_id] = status
+              
+              # Step 2: Validate counts
+              pre_count = sum(t.metrics.modules_completed for t in track_config.tracks.values())
+              post_count = sum(1 for s in all_modules.values() if s.completed)
+              
+              if pre_count != post_count:
+                  raise ConsolidationError(
+                      f"Progress mismatch: {pre_count} → {post_count}"
+                  )
+              
+              # Step 3: Archive split docs
+              archive_dir = create_archive_directory()
+              for status_file in get_split_design_docs():
+                  archive_file(status_file, archive_dir)
+              
+              # Step 4: Generate consolidated doc
+              consolidated = generate_consolidated_document(
+                  all_modules,
+                  track_config,
+                  archive_reference=archive_dir
+              )
+              
+              # Step 5: Git commit with full details
+              commit_message = f"""design: consolidate multi-track progress
+              
+              Tracks merged:
+              - {track_config.tracks['track_1'].track_name}: {track_config.tracks['track_1'].metrics.completion_percentage}%
+              - {track_config.tracks['track_2'].track_name}: {track_config.tracks['track_2'].metrics.completion_percentage}%
+              
+              Total progress: {post_count}/{len(all_modules)} modules ({post_count/len(all_modules)*100:.0f}%)
+              Conflicts resolved: {len(get_conflicts())}
+              Archive: {archive_dir.name}
+              
+              [design_sync consolidation]
+              """
+              
+              git_commit(consolidated, commit_message)
+              
+              return consolidated
+          ```
+          
+          Conflict Resolution Strategy:
+          
+          Default: Latest Timestamp Wins
+          - Simple, deterministic, predictable
+          - Assumes most recent work is correct
+          - Logged for audit
+          
+          Example:
+          ```
+          Module: platform_detection
+          - Track A: marked complete 2025-11-11 14:00
+          - Track B: marked complete 2025-11-11 15:00
+          Winner: Track B (later timestamp)
+          Logged: conflict-resolution.yaml
+          ```
+          
+          Archive Structure:
+          ```
+          cortex-brain/archived-tracks/20251111-164530/
+          ├── CORTEX2-STATUS-SPLIT.MD       # Original split doc
+          ├── track-1-history.jsonl         # Track A progress log
+          ├── track-2-history.jsonl         # Track B progress log
+          ├── conflicts-resolved.yaml       # Conflict resolution log
+          └── consolidation-report.md       # Summary of merge
+          ```
+          
+          Integration Test:
+          ```python
+          def test_consolidation_integrity():
+              # Setup: Two tracks with overlapping work
+              config = create_multi_track(['AHHOME', 'Mac'])
+              track_a_complete = mark_modules_complete(config.tracks['track_1'], [0, 1, 2])
+              track_b_complete = mark_modules_complete(config.tracks['track_2'], [3, 4, 5])
+              
+              # Introduce conflict: both complete module 2
+              mark_complete(config.tracks['track_1'], 'module_2', timestamp='14:00')
+              mark_complete(config.tracks['track_2'], 'module_2', timestamp='15:00')
+              
+              # Consolidate
+              consolidated = consolidate_tracks(config, impl_state)
+              
+              # Verify counts
+              assert consolidated.modules_completed == 6, "Progress lost"
+              
+              # Verify conflict handled
+              conflicts = get_conflict_log()
+              assert 'module_2' in conflicts, "Conflict not logged"
+              assert conflicts['module_2']['winner'] == 'track_2', "Wrong winner"
+              
+              # Verify archive
+              archive = get_latest_archive()
+              assert archive.exists(), "Archive missing"
+              assert (archive / 'CORTEX2-STATUS-SPLIT.MD').exists(), "Split doc not archived"
+              
+              # Verify git
+              commit = get_latest_commit()
+              assert 'consolidate multi-track' in commit.message
+              assert 'track_1' in commit.message
+              assert 'track_2' in commit.message
+          ```
+          
+          User Experience:
+          ```
+          $ /CORTEX design sync
+          
+          🏁 Multi-Track Mode: Running design sync consolidation
+             Will merge all tracks into unified status
+          
+          [Phase 1/6] Discovering live implementation state...
+          ✅ Track A (Blazing Phoenix): 8/15 modules (53%)
+          ✅ Track B (Swift Falcon): 12/18 modules (67%)
+          
+          [Phase 5/6] Consolidating tracks...
+          ⚙️  Merging progress from 2 tracks...
+          ⚠️  Conflict detected: platform_detection
+              Track A: complete @ 14:00
+              Track B: complete @ 15:00
+              Resolution: Track B wins (latest timestamp)
+          
+          ✅ Consolidated 2 tracks into unified document
+             Combined: 20/33 modules (61%)
+             Conflicts resolved: 1 (logged)
+             Archive: cortex-brain/archived-tracks/20251111-164530/
+          
+          [Phase 6/6] Committing changes...
+          💾 Git commit: 7a3b9c2 "design: consolidate multi-track progress"
+          
+          Design Sync ✅ COMPLETED in 4.2s
+             • Merged 2 tracks: Blazing Phoenix (53%) + Swift Falcon (67%)
+             • Combined progress: 20/33 modules (61%)
+             • Conflicts resolved: 1
+             • Archived split docs
+             • Reset to single-track mode
+          ```
+  
+  # Layer 6: Knowledge Quality
+  - layer_id: "knowledge_quality"
+    name: "Knowledge Quality"
+    description: "Pattern validation and confidence thresholds"
+    priority: 6
+    
+    rules:
+      - rule_id: "MIN_OCCURRENCES"
+        name: "Minimum Occurrences for High Confidence"
+        severity: "warning"
+        description: "High confidence (>0.50) with single occurrence"
+        
+        detection:
+          combined_keywords:
+            high_confidence:
+              - "confidence: 1.0"
+              - "confidence=1.0"
+              - "confidence: 0.95"
+            single_event:
+              - "first occurrence"
+              - "single event"
+              - "occurrences: 1"
+          scope: ["description"]
+          logic: "AND"  # Both conditions must be true
+        
+        alternatives:
+          - "Start with confidence ≤0.50 for single event"
+          - "Wait for 3+ occurrences before high confidence"
+          - "Mark as provisional pattern"
+        
+        evidence: "Require 3+ occurrences for confidence >0.50"
+      
+      - rule_id: "PATTERN_VALIDATION"
+        name: "Pattern Validation"
+        severity: "warning"
+        description: "Pattern lacks validation evidence"
+        
+        detection:
+          keywords:
+            - "add pattern without validation"
+            - "no evidence"
+            - "unverified pattern"
+          scope: ["description"]
+        
+        alternatives:
+          - "Add validation test"
+          - "Link to source documentation"
+          - "Mark as hypothesis for validation"
+        
+        evidence: "Patterns require empirical validation"
+  
+  # Layer 7: Commit Integrity
+  - layer_id: "commit_integrity"
+    name: "Commit Integrity"
+    description: "Brain state files excluded from commits"
+    priority: 7
+    
+    rules:
+      - rule_id: "BRAIN_STATE_GITIGNORE"
+        name: "Brain State Files Not Committed"
+        severity: "warning"
+        description: "Brain state file should not be committed"
+        
+        detection:
+          files: "{{brain_state_files}}"
+          keywords:
+            - "commit"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Add to .gitignore"
+          - "Keep local-only"
+          - "Export as snapshot if needed for sharing"
+        
+        evidence: "Add to .gitignore to prevent pollution"
+      
+      - rule_id: "TEMP_FILES_COMMIT"
+        name: "Temporary Files Not Committed"
+        severity: "warning"
+        description: "Temporary or generated files should not be committed"
+        
+        detection:
+          path_patterns:
+            - "**/*.tmp"
+            - "**/temp_*"
+            - "**/__pycache__/**"
+            - "**/node_modules/**"
+          keywords:
+            - "commit"
+          scope: ["intent"]
+        
+        alternatives:
+          - "Update .gitignore"
+          - "Clean before commit"
+          - "Use .gitkeep for empty directories"
+        
+        evidence: "Temporary files pollute repository"
+  
+  # Layer 8: Git Isolation (CRITICAL)
+  - layer_id: "git_isolation"
+    name: "Git Isolation Enforcement"
+    description: "CORTEX code MUST NEVER be committed to user application repositories"
+    priority: 8
+    
+    rules:
+      - rule_id: "GIT_ISOLATION_ENFORCEMENT"
+        name: "CORTEX Code Isolation from User Repos"
+        severity: "blocked"
+        description: "CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository"
+        
+        detection:
+          path_patterns:
+            - "**/src/tier0/**"
+            - "**/src/tier1/**"
+            - "**/src/tier2/**"
+            - "**/src/tier3/**"
+            - "**/src/cortex_agents/**"
+            - "**/src/plugins/**"
+            - "**/src/crawlers/**"
+            - "**/cortex-brain/**"
+            - "**/prompts/**"
+            - "**/scripts/cortex/**"
+            - "**/CORTEX/**"
+          in_repo: "user_application"  # Detection: not in CORTEX repo
+          
+        alternatives:
+          - "Keep CORTEX as separate repository/package"
+          - "Install CORTEX via pip/npm (when distributed)"
+          - "Use git submodule if local development required"
+          - "Ensure .gitignore excludes CORTEX directories"
+        
+        evidence_template: |
+          🚨 CRITICAL VIOLATION: Git Isolation Breach
+          
+          CORTEX code detected in user application repository!
+          File: '{path}'
+          
+          CORTEX MUST remain isolated from user application code:
+          - User App Repo: Application-specific code only
+          - CORTEX Repo: Framework code (separate repository)
+          - Knowledge Sharing: Via exported YAML (team-knowledge/)
+          
+          Brain knowledge (cortex-brain/) is LOCAL ONLY - never committed anywhere.
+        
+        rationale: |
+          GIT_ISOLATION_ENFORCEMENT: Core CORTEX Principle
+          
+          CORTEX operates as a SEPARATE cognitive layer:
+          
+          ❌ NEVER DO THIS:
+          UserApp/
+          ├── src/                    # User's application code
+          ├── cortex-brain/           # ❌ WRONG - Don't commit brain!
+          ├── src/tier0/              # ❌ WRONG - Don't copy CORTEX code!
+          ├── src/cortex_agents/      # ❌ WRONG - Keep CORTEX separate!
+          └── .git/
+          
+          ✅ CORRECT SETUP:
+          UserApp/
+          ├── src/                    # User's application code
+          ├── team-knowledge/         # ✅ OK - Exported YAML patterns
+          ├── .gitignore              # ✅ Must include: cortex-brain/
+          └── .git/
+          
+          CORTEX/ (separate repo)
+          ├── src/tier0/              # ✅ CORTEX framework code
+          ├── src/cortex_agents/      # ✅ Agent system
+          ├── cortex-brain/           # ✅ Local brain (not in git)
+          └── .git/
+          
+          Why This Matters:
+          1. Separation of Concerns: Framework vs. Application
+          2. Licensing: CORTEX proprietary, user code their own license
+          3. Updates: CORTEX updates don't pollute user repos
+          4. Security: Brain knowledge stays local, never exposed
+          5. Clarity: Clear boundary between "your code" and "framework"
+          
+          Git Hooks (setup during init):
+          - pre-commit: Scans for CORTEX paths, blocks commit if found
+          - pre-push: Double-check no CORTEX code being pushed
+          
+          Exception: team-knowledge/ YAML exports allowed (knowledge sharing)
+      
+      - rule_id: "GIT_HOOKS_INSTALLATION"
+        name: "Git Hooks Must Be Installed During Setup"
+        severity: "blocked"
+        description: "Setup process must install git hooks to prevent accidental CORTEX code commits"
+        
+        detection:
+          keywords:
+            - "skip git hooks"
+            - "disable hooks"
+            - "bypass hook installation"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Run 'cortex init' to install hooks automatically"
+          - "Manually run setup script with hooks enabled"
+          - "Never bypass hook installation (critical protection)"
+        
+        evidence_template: "Git hooks are MANDATORY for CORTEX isolation protection"
+        
+        rationale: |
+          Git hooks provide automatic enforcement:
+          
+          pre-commit hook:
+          - Scans staged files for CORTEX paths
+          - Blocks commit if any CORTEX code detected
+          - Shows clear error message with alternatives
+          
+          pre-push hook:
+          - Final safety check before push
+          - Prevents accidental exposure of CORTEX code
+          
+          Installation: Automatic during 'cortex init'
+          Location: UserApp/.git/hooks/ (user's repo, not CORTEX repo)
+
+# Severity levels
+severity_levels:
+  safe:
+    decision: "ALLOW"
+    override_required: false
+    message: "✅ Modification appears safe. No violations detected."
+  
+  warning:
+    decision: "WARN"
+    override_required: false
+    message: "⚠️ WARNING: Risky patterns detected. Proceed with caution."
+  
+  blocked:
+    decision: "BLOCK"
+    override_required: true
+    message: "🛡️ BLOCKED: Critical architectural violations detected."
+
+# Challenge templates
+challenge_template: |
+  ═══════════════════════════════════════════════
+  🧠 BRAIN PROTECTION CHALLENGE
+  
+  Timestamp: {timestamp}
+  Severity: {severity}
+  Decision: {decision}
+  
+  {message}
+  
+  SAFE ALTERNATIVES:
+  {alternatives}
+  
+  ═══════════════════════════════════════════════
+  
+  Options:
+    1. Accept recommended alternative (SAFE)
+    2. Provide different approach (REVIEW)
+    3. Type 'OVERRIDE' with justification (RISKY)
+  
+  Your choice:
+
+# Logging configuration
+logging:
+  enabled: true
+  path: "cortex-brain/corpus-callosum/protection-events.jsonl"
+  format: "jsonl"
+  include_fields:
+    - "timestamp"
+    - "event"
+    - "request"
+    - "violations"
+    - "decision"
+    - "severity"
+    - "alternatives_suggested"
+    - "user_decision"
+    - "override_justification"
+    - "override_required"
+
+# Validation rules
+validation:
+  - check: "rules_complete"
+    scope: "protection_layers"
+    required: true
+    params:
+      all_layers_have_rules: true
+      all_rules_have_detection: true
+      all_rules_have_alternatives: true
+  
+  - check: "severity_valid"
+    scope: "rules"
+    required: true
+    params:
+      valid_severities: ["safe", "warning", "blocked"]
+  
+  - check: "templates_valid"
+    scope: "challenge_template"
+    required: true
+    params:
+      has_placeholders: true
+      has_options: true

@@ -1,0 +1,82 @@
+# Secure Feature Creation Workflow
+# Full workflow with threat modeling, DoD/DoR, TDD, validation
+
+workflow_id: "secure_feature_creation"
+name: "Secure Feature Creation"
+description: |
+  Complete feature creation workflow with security and quality gates:
+  1. Threat model the request
+  2. Clarify Definition of Done and Definition of Ready
+  3. Plan feature with work-planner
+  4. Implement with TDD cycle
+  5. Run all tests
+  6. Validate DoD compliance
+  7. Cleanup code
+  8. Generate documentation
+
+stages:
+  # Stage 1: Threat Modeling (NEW)
+  - id: "threat_model"
+    script: "threat_modeler"
+    required: true
+    depends_on: []
+    timeout_seconds: 60
+    description: "Analyze security risks and threats in user request"
+  
+  # Stage 2: DoD/DoR Clarification (NEW)
+  - id: "clarify_dod_dor"
+    script: "dod_dor_clarifier"
+    required: true
+    depends_on: ["threat_model"]
+    timeout_seconds: 30
+    description: "Clarify Definition of Done and Definition of Ready with user"
+  
+  # Stage 3: Planning (EXISTING)
+  - id: "plan"
+    script: "work_planner"
+    required: true
+    depends_on: ["clarify_dod_dor"]
+    timeout_seconds: 120
+    description: "Create multi-phase implementation plan"
+  
+  # Stage 4: TDD Implementation (EXISTING)
+  - id: "tdd_cycle"
+    script: "tdd_workflow"
+    required: true
+    depends_on: ["plan"]
+    retryable: true
+    max_retries: 3
+    timeout_seconds: 600
+    description: "RED → GREEN → REFACTOR cycle for each task"
+  
+  # Stage 5: Test Execution (EXISTING)
+  - id: "run_tests"
+    script: "test_runner"
+    required: true
+    depends_on: ["tdd_cycle"]
+    timeout_seconds: 300
+    description: "Run complete test suite"
+  
+  # Stage 6: DoD Validation (EXISTING)
+  - id: "validate_dod"
+    script: "dod_validator"
+    required: true
+    depends_on: ["run_tests"]
+    timeout_seconds: 60
+    description: "Validate Definition of Done criteria"
+  
+  # Stage 7: Code Cleanup (NEW)
+  - id: "cleanup"
+    script: "code_cleanup"
+    required: false  # Optional - failure doesn't block
+    depends_on: ["validate_dod"]
+    timeout_seconds: 120
+    description: "Remove unused imports, format code, fix linting"
+  
+  # Stage 8: Documentation (NEW)
+  - id: "document"
+    script: "doc_generator"
+    required: true
+    depends_on: ["cleanup"]
+    timeout_seconds: 180
+    description: "Generate documentation for new feature"

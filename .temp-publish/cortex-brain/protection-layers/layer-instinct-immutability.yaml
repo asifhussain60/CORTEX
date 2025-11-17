@@ -1,0 +1,394 @@
+# CORTEX Protection Layer: Instinct Immutability
+# Extracted from brain-protection-rules.yaml for token optimization
+# Version: 2.1
+# Part of: CORTEX 3.0 Track B (Token Optimization)
+
+version: "2.1"
+type: "protection_layer"
+layer_id: "instinct_immutability"
+parent_file: "brain-protection-rules.yaml"
+
+# Layer definition (normalized indentation)
+- layer_id: "instinct_immutability"
+  name: "Instinct Immutability"
+  description: "Tier 0 governance rules cannot be bypassed"
+  priority: 1
+
+  rules:
+    - rule_id: "TDD_ENFORCEMENT"
+      name: "Test-Driven Development Enforcement"
+      severity: "blocked"
+      description: "Attempt to bypass Test-Driven Development requirement"
+
+      detection:
+        keywords:
+          - "skip test"
+          - "bypass tdd"
+          - "no tests"
+          - "disable tdd"
+          - "skip validation"
+        scope: ["intent", "description"]
+
+      alternatives:
+        - "Write failing test first (RED phase)"
+        - "Create spike branch for exploration (throwaway)"
+        - "Use TDD cycle: RED → GREEN → REFACTOR"
+
+      evidence_template: "Intent: '{intent}'"
+
+    - rule_id: "DEFINITION_OF_DONE"
+      name: "Definition of Done"
+      severity: "blocked"
+      description: "Attempt to bypass Definition of Done (zero errors, zero warnings)"
+
+      detection:
+        keywords:
+          - "skip validation"
+          - "bypass done"
+          - "disable error check"
+          - "allow warnings"
+        scope: ["intent", "description"]
+
+      alternatives:
+        - "Fix all warnings before proceeding"
+        - "Add exception rule if truly needed"
+        - "Update test to expect new behavior"
+
+      evidence_template: "Description: '{description}'"
+
+    - rule_id: "DEFINITION_OF_READY"
+      name: "Definition of Ready"
+      severity: "blocked"
+      description: "Work item does not meet DoR criteria"
+
+      detection:
+        keywords:
+          - "skip DoR"
+          - "bypass ready"
+          - "start without requirements"
+        scope: ["intent", "description"]
+
+      alternatives:
+        - "Define acceptance criteria first"
+        - "Get stakeholder clarification"
+        - "Create refined user story"
+
+      evidence_template: "Missing DoR criteria: '{description}'"
+
+    - rule_id: "BRAIN_PROTECTION_TESTS_MANDATORY"
+      name: "Brain Protection Tests - 100% Pass Rate Mandatory"
+      severity: "blocked"
+      description: "Brain protection tests MUST pass - no exceptions"
+
+      detection:
+        keywords:
+          - "skip brain protection"
+          - "ignore test failures"
+          - "brain tests failing"
+          - "disable brain tests"
+          - "bypass protection tests"
+          - "xfail brain"
+          - "skip tier0 tests"
+        scope: ["intent", "description"]
+
+      alternatives:
+        - "Fix the failing tests immediately"
+        - "Revert changes that broke protection"
+        - "Do not proceed until 100% pass rate achieved"
+
+      evidence_template: "Brain protection tests are CRITICAL. Intent: '{intent}'"
+
+      rationale: |
+        Brain protection tests validate core CORTEX integrity:
+        - Path handling (cross-platform compatibility)
+        - Protection layer logic (architectural safeguards)
+        - Conversation tracking (memory system)
+        - YAML configuration loading (governance rules)
+
+        If these fail, CORTEX has fundamental issues that MUST be resolved.
+        100% pass rate is MANDATORY before any other work continues.
+
+    - rule_id: "MACHINE_READABLE_FORMATS"
+      name: "Use Machine-Readable Formats for Efficiency"
+      severity: "warning"
+      description: "Non-user files should use YAML/JSON, not Markdown"
+
+      detection:
+        combined_keywords:
+          markdown_creation:
+            - "create markdown"
+            - "new .md"
+            - "add .md"
+          structured_data:
+            - "structured data"
+            - "configuration"
+            - "capability matrix"
+            - "status table"
+            - "metrics"
+            - "statistics"
+            - "code example"
+            - "implementation pattern"
+        scope: ["intent", "description"]
+        logic: "AND"  # Both conditions must be true
+
+      alternatives:
+        - "Use YAML for structured data (capabilities, rules, config)"
+        - "Use JSON for metrics, statistics, logs"
+        - "Reserve Markdown for user-facing narratives only"
+        - "Use code files with docstrings for examples"
+
+      evidence_template: "Description: '{description}'"
+
+      rationale: |
+        CORTEX 2.0 efficiency principles:
+
+        USE MARKDOWN FOR:
+        - User guides and tutorials
+        - Narrative documentation (stories, history)
+        - Architecture explanations
+        - Design rationale
+
+        USE YAML/JSON FOR:
+        - Structured data (capabilities, status, priorities)
+        - Configuration and rules
+        - Metrics and statistics
+        - Patterns and templates
+        - API schemas
+
+        USE CODE FILES FOR:
+        - Implementation examples
+        - Code snippets and patterns
+        - Reusable templates
+
+        Benefits:
+        - 60% token reduction in context injection
+        - Automated validation and schema checking
+        - Better version control diffs
+        - Direct machine consumption
+        - No documentation drift
+
+    - rule_id: "ACTIVE_NARRATOR_VOICE"
+      name: "Active Narrator Voice (Not Passive Documentation)"
+      severity: "warning"
+      description: "Story uses passive/clinical narrator voice instead of active storytelling"
+
+      detection:
+        passive_verbs:
+          - "Asif Codeinstein designed"
+          - "Asif Codeinstein created"
+          - "Asif Codeinstein wrote"
+          - "Asif Codeinstein implemented"
+          - "Asif Codeinstein developed"
+          - "He wrote routines"
+          - "He created routines"
+          - "He implemented"
+          - "He developed"
+
+        documentary_markers:
+          - "One evening, while"
+          - "One morning, while"
+          - "One day, while"
+          - "One night, while"
+          - "After completing"
+          - "After finishing"
+          - ", while reviewing"
+          - "During the"
+
+        scope: ["file_content"]
+        file_patterns:
+          - "docs/story/**/*.md"
+          - "prompts/shared/story.md"
+
+      alternatives:
+        - "Use active storytelling: 'So Asif built' (adds momentum)"
+        - "Show immediate action: 'grabbed keyboard and coded' (not 'wrote routines')"
+        - "Vivid scene-setting: 'That evening, knee-deep in' (not 'One evening, while')"
+        - "Present-tense urgency: 'The refactor complete, Asif leaned back' (not 'After completing')"
+        - "Energy verbs: 'dove into', 'attacked', 'grabbed', 'swept' (not 'designed', 'created')"
+
+      evidence_template: |
+        Passive narrator detected: '{match}'
+
+        Story should be ACTIVE third-person narrative, not clinical documentation.
+
+        Examples:
+        ❌ "Asif Codeinstein designed..." ← documentation
+        ✅ "So Asif built..." ← storytelling
+
+        ❌ "He wrote routines for..." ← neutral observer  
+        ✅ "He grabbed his keyboard and..." ← immediate action
+
+        ❌ "One evening, while reviewing..." ← documentary
+        ✅ "That evening, knee-deep in..." ← vivid scene
+
+      rationale: |
+        CORTEX story is a COMEDY told by an energetic narrator, not a memoir or
+        technical documentation. Third-person is CORRECT, but it must be ACTIVE
+        storytelling with personality, immediacy, and energy.
+
+        The narrator is a CHARACTER in the story—witty, observant, timing jokes.
+        Not a clinical observer reporting facts.
+
+        TRANSFORMATION PATTERNS:
+
+        Passive → Active:
+        - "designed a system" → "So Asif built a system"
+        - "wrote routines for" → "grabbed his keyboard and coded"
+        - "One evening, while reviewing" → "That evening, knee-deep in"
+        - "made a decision" → "stared at the screen and decided"
+        - "implemented the feature" → "dove into implementing"
+        - "After completing X, he" → "X complete, Asif leaned back and"
+
+        PRESERVE:
+        - Third-person perspective (it's a STORY about Asif, not BY Asif)
+        - Narrator personality and comedy
+        - Technical content and accuracy
+        - Character name "Asif Codeinstein"
+
+        AVOID:
+        - First-person memoir style ("I designed...")
+        - Clinical/academic tone ("The system was designed to...")
+        - Passive voice constructions
+        - Documentary-style time markers
+
+    - rule_id: "CORTEX_PROMPT_FILE_PROTECTION"
+      name: "CORTEX.prompt.md Protection (Never Rename, Safe Update)"
+      severity: "blocked"
+      description: "Prevent renaming CORTEX.prompt.md and enforce safe update procedure"
+
+      detection:
+        combined_keywords:
+          rename_attempt:
+            - "rename CORTEX.prompt.md"
+            - "CORTEX.prompt.md to"
+            - "move CORTEX.prompt.md"
+            - "cortex-lite"
+            - "cortex-backup"
+            - "cortex-fixed"
+            - "CORTEX-"
+          or_unsafe_edit:
+            - "edit CORTEX.prompt.md directly"
+            - "modify in place"
+        scope: ["intent", "description", "file_operation"]
+        logic: "OR"
+
+      alternatives:
+        - "Use safe update: temp file → optimize → DELETE original → copy → delete temp"
+        - "Create .github/prompts/temp-cortex-update.md with optimized content"
+        - "DELETE ALL content of CORTEX.prompt.md (clear file completely)"
+        - "Copy complete instructions from temp to CORTEX.prompt.md"
+        - "Delete temporary file after successful copy"
+
+      evidence_template: |
+        🚨 CORTEX.prompt.md PROTECTION VIOLATION
+
+        Attempted: '{operation}'
+
+        CRITICAL: CORTEX.prompt.md is the GitHub Copilot integration entry point!
+
+        ❌ NEVER:
+        - Rename to cortex-lite.prompt.md
+        - Rename to cortex-backup.prompt.md  
+        - Rename to cortex-fixed.prompt.md
+        - Add ANY prefix or suffix
+        - Edit directly (risky, no rollback)
+
+        ✅ SAFE UPDATE PROCEDURE:
+        1. Create: .github/prompts/temp-cortex-update.md
+        2. Generate optimized content in temp file
+        3. DELETE ALL content of CORTEX.prompt.md
+        4. Copy complete instructions from temp
+        5. Delete temp-cortex-update.md
+
+        Why? Filename stability + Atomic updates + Rollback capability
+
+      rationale: |
+        CORTEX_PROMPT_FILE_PROTECTION: Entry Point Stability
+
+        CORTEX.prompt.md is the SINGLE entry point for GitHub Copilot Chat.
+        Its exact filename (.github/prompts/CORTEX.prompt.md) is:
+        - Hardcoded in GitHub Copilot discovery
+        - Referenced throughout all documentation
+        - Critical for `/CORTEX` command to work
+
+        Why This Protection Matters:
+
+        1. GitHub Copilot Discovery:
+           Copilot looks for .github/prompts/CORTEX.prompt.md
+           ANY rename → integration breaks completely
+           No fallback mechanism exists
+
+        2. Documentation References:
+           - README.md references CORTEX.prompt.md
+           - Setup guides reference CORTEX.prompt.md
+           - Quick start tutorials reference CORTEX.prompt.md
+           All references break if renamed
+
+        3. User Confusion:
+           Multiple prompt files create:
+           - "Which one do I use?"
+           - "Is cortex-lite the new version?"
+           - Cognitive overhead increases
+
+        4. Git History Fragmentation:
+           Rename creates new file in git
+           Old file shows as deleted
+           History split across filenames
+
+        Safe Update Procedure:
+
+        Step 1: Create Temporary File
+        ```
+        .github/prompts/temp-cortex-update.md
+        ```
+        - Contains new optimized content
+        - Reviewable before applying
+        - Acts as backup if issues occur
+
+        Step 2: Generate Optimized Content
+        - Apply token optimizations
+        - Restructure sections
+        - Update documentation references
+        - Add new features
+
+        Step 3: Clear Original (Atomic Update)
+        ```python
+        # DELETE ALL content
+        Path('.github/prompts/CORTEX.prompt.md').write_text('')
+        ```
+        - Prevents partial updates
+        - Ensures clean slate
+        - No merge conflicts
+
+        Step 4: Copy Complete Instructions
+        ```python
+        content = Path('temp-cortex-update.md').read_text()
+        Path('CORTEX.prompt.md').write_text(content)
+        ```
+        - Atomic replacement
+        - No partial content risk
+
+        Step 5: Delete Temporary File
+        ```python
+        Path('temp-cortex-update.md').unlink()
+        ```
+        - Clean up
+        - Single source of truth
+
+        Benefits:
+        - Filename NEVER changes (stability)
+        - Atomic updates (no half-updated states)
+        - Review capability (temp file inspection)
+        - Rollback support (restore from temp)
+        - Clean git history (single file evolution)
+
+        Real Incident Pattern Prevented:
+        Developer: "I'll create CORTEX-lite.prompt.md"
+        Result: Two prompt files coexist
+        User confusion: "Which is current?"
+        Maintenance nightmare: Multiple files diverge
+
+        This rule BLOCKS any rename attempt.
+        Exception: Temporary files for update workflow ARE encouraged.
+
+# Layer 2: Tier Boundary Protection

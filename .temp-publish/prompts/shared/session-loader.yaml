@@ -1,0 +1,117 @@
+# CORTEX Session Loader Plugin
+# Load and restore session context
+
+version: "2.0"
+type: "workflow"
+name: "Session Loader"
+description: "Load existing sessions with full context restoration"
+author: "CORTEX"
+created: "2025-11-08"
+
+# Target constraints
+targets:
+  - identifier: "session_state"
+    constraints:
+      - type: "must_exist"
+        message: "Session must exist in database"
+      - type: "must_be_valid"
+        message: "Session data must be valid and complete"
+
+# Workflow steps
+workflow:
+  - step: "validate_session_id"
+    action: "validate"
+    params:
+      check_format: true
+      check_exists: true
+
+  - step: "query_tier1"
+    action: "query"
+    params:
+      tier: 1
+      get_conversation: true
+      get_messages: true
+      get_context: true
+      session_id: "${session_id}"
+
+  - step: "load_session_data"
+    action: "query"
+    params:
+      load_status: true
+      load_goals: true
+      load_next_steps: true
+      load_metadata: true
+
+  - step: "restore_context"
+    action: "transform"
+    params:
+      reconstruct_conversation_history: true
+      restore_working_memory: true
+      load_relevant_patterns: true
+      load_file_references: true
+
+  - step: "validate_completeness"
+    action: "validate"
+    params:
+      check_all_required_fields: true
+      check_conversation_continuity: true
+      check_context_validity: true
+
+  - step: "display_summary"
+    action: "notify"
+    params:
+      show_session_info: true
+      show_status: true
+      show_goals: true
+      show_next_steps: true
+      show_message_count: true
+
+  - step: "set_active_session"
+    action: "execute"
+    params:
+      set_global_session_id: "${session_id}"
+      enable_session_tracking: true
+
+# Validation rules
+validation:
+  - check: "session_exists"
+    scope: "session"
+    required: true
+    params:
+      error_if_missing: true
+
+  - check: "session_valid"
+    scope: "session_data"
+    required: true
+    params:
+      has_conversation: true
+      has_messages: true
+
+  - check: "context_restored"
+    scope: "working_memory"
+    required: true
+    params:
+      conversation_loaded: true
+      patterns_loaded: true
+
+# Parameters
+parameters:
+  - name: "session_id"
+    type: "string"
+    required: true
+    description: "Session ID to load (UUID or short name)"
+
+  - name: "restore_full_context"
+    type: "bool"
+    default: true
+    description: "Load all conversation history and patterns"
+
+  - name: "show_summary"
+    type: "bool"
+    default: true
+    description: "Display session summary after loading"
+
+  - name: "set_as_active"
+    type: "bool"
+    default: true
+    description: "Set as the active session"

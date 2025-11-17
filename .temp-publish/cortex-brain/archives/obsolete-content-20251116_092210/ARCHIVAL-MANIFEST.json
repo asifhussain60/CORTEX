@@ -1,0 +1,47 @@
+{
+  "archival_timestamp": "20251116_092210",
+  "reason": "CORTEX 3.0 Track B - Token Bloat Elimination",
+  "total_tokens_archived": 2399089,
+  "items_archived": [
+    {
+      "path": "prompts/user/ARCHIVE-2025-11-09",
+      "type": "directory",
+      "tokens": 30231,
+      "files": 6
+    },
+    {
+      "path": "cortex-brain/archives/converted-to-yaml-2025-11-09",
+      "type": "directory",
+      "tokens": 20354,
+      "files": 3
+    },
+    {
+      "path": "cortex-brain/backups/obsolete-tests-2025-11-16",
+      "type": "directory",
+      "tokens": 139682,
+      "files": 36
+    },
+    {
+      "path": "dist",
+      "type": "directory",
+      "tokens": 2185719,
+      "files": 744
+    },
+    {
+      "path": "src/tier1/working_memory_legacy.py",
+      "type": "file",
+      "tokens": 6512
+    },
+    {
+      "path": "src/tier2/knowledge_graph_legacy.py",
+      "type": "file",
+      "tokens": 9748
+    },
+    {
+      "path": "src/tier3/context_intelligence_legacy.py",
+      "type": "file",
+      "tokens": 6843
+    }
+  ],
+  "restoration_note": "Files can be restored from this archive if needed"
+}

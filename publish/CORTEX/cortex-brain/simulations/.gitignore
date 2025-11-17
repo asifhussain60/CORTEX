@@ -1,0 +1,4 @@
+# Simulation data - do not commit to avoid polluting design files
+*
+!.gitignore
+!README.md

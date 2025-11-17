@@ -1,0 +1,424 @@
+yaml_conversion_roadmap:
+  metadata:
+    version: "1.0"
+    date: "2025-11-11"
+    purpose: "Roadmap for converting verbose MD docs to structured YAML"
+    current_adoption: "30%"
+    target_adoption: "70%"
+    estimated_time: "20-25 hours"
+  
+  current_yaml_files:
+    - file: cortex-operations.yaml
+      lines: 682
+      status: complete
+      description: "Universal operations registry (14 operations, 97 modules)"
+      impact: "High - Core system orchestration"
+    
+    - file: brain-protection-rules.yaml
+      lines: ~200
+      status: complete
+      description: "Tier 0 governance rules (27 rules)"
+      impact: "High - Brain protection enforcement"
+    
+    - file: response-templates.yaml
+      lines: ~400
+      status: complete
+      description: "Response formatting templates (90+ templates)"
+      impact: "High - 97% token reduction"
+    
+    - file: architectural-patterns.yaml
+      lines: ~150
+      status: complete
+      description: "Architecture patterns library"
+      impact: "Medium - Pattern matching"
+    
+    - file: capabilities.yaml
+      lines: ~100
+      status: complete
+      description: "System capabilities inventory"
+      impact: "Medium - Feature discovery"
+    
+    - file: development-context.yaml
+      lines: ~250
+      status: complete
+      description: "Tier 3 context intelligence data"
+      impact: "High - Context tracking"
+    
+    - file: anomalies.yaml
+      lines: ~80
+      status: complete
+      description: "Anomaly detection patterns"
+      impact: "Low - Quality monitoring"
+    
+    - file: file-relationships.yaml
+      lines: ~100
+      status: complete
+      description: "File dependency graph"
+      impact: "Medium - Dependency tracking"
+    
+    - file: CORTEX-UNIFIED-ARCHITECTURE.yaml
+      lines: ~300
+      status: complete
+      description: "Complete architecture specification"
+      impact: "High - System design"
+  
+  conversion_candidates:
+    priority_1_high_impact:
+      - document: cortex-agents/agent-types.py
+        target: agent-workflows.yaml
+        estimated_lines: 400
+        estimated_hours: 3
+        rationale: "Agent system architecture should be declarative data"
+        benefits:
+          - "Agents configurable without code changes"
+          - "Clear agent responsibilities"
+          - "Easy agent addition/removal"
+          - "50% token reduction"
+        structure:
+          agents:
+            strategic:
+              - agent_id: architect
+                name: "Architect Agent"
+                responsibility: "System design and architecture"
+                triggers: ["design", "architecture", "system planning"]
+                outputs: ["architecture plans", "design documents"]
+              - agent_id: health_validator
+                name: "Health Validator Agent"
+                responsibility: "System health monitoring"
+              - agent_id: pattern_matcher
+                name: "Pattern Matcher Agent"
+                responsibility: "Pattern recognition and learning"
+              - agent_id: learner
+                name: "Learner Agent"
+                responsibility: "Knowledge accumulation"
+              - agent_id: intent_detector
+                name: "Intent Detector Agent"
+                responsibility: "Request routing and classification"
+            tactical:
+              - agent_id: executor
+                name: "Executor Agent"
+                responsibility: "Feature implementation"
+              - agent_id: tester
+                name: "Tester Agent"
+                responsibility: "Test generation and execution"
+              - agent_id: validator
+                name: "Validator Agent"
+                responsibility: "Quality assurance and validation"
+              - agent_id: work_planner
+                name: "Work Planner Agent"
+                responsibility: "Task breakdown and planning"
+              - agent_id: documenter
+                name: "Documenter Agent"
+                responsibility: "Documentation generation"
+        
+      - document: src/plugins/base_plugin.py (docstrings)
+        target: plugin-registry.yaml
+        estimated_lines: 350
+        estimated_hours: 2.5
+        rationale: "Plugin metadata should be declarative"
+        benefits:
+          - "Plugin discovery automation"
+          - "Dependency management"
+          - "Version compatibility checks"
+          - "40% token reduction"
+        structure:
+          plugins:
+            - plugin_id: cleanup
+              name: "Workspace Cleanup"
+              version: "1.0.0"
+              author: "Asif Hussain"
+              description: "Clean temporary files and optimize databases"
+              entry_point: "cleanup_plugin.py"
+              dependencies: []
+              hooks:
+                - pre_execute
+                - post_execute
+              natural_language:
+                - "cleanup"
+                - "clean workspace"
+                - "tidy up"
+        
+      - document: tests/ (test organization)
+        target: test-specifications.yaml
+        estimated_lines: 500
+        estimated_hours: 4
+        rationale: "Test suite structure should be machine-readable"
+        benefits:
+          - "Automated test discovery"
+          - "Coverage tracking"
+          - "Test categorization"
+          - "CI/CD integration"
+          - "60% token reduction"
+        structure:
+          test_suites:
+            unit_tests:
+              tier0:
+                - test_file: test_brain_protector.py
+                  tests: 22
+                  coverage_target: 95%
+                  priority: critical
+              tier1:
+                - test_file: test_working_memory.py
+                  tests: 45
+                  coverage_target: 90%
+            integration_tests:
+              - test_file: test_agent_coordination.py
+                tests: 60
+                coverage_target: 85%
+            
+      - document: cortex-brain/cortex-2.0-design/ (various)
+        target: implementation-roadmap.yaml
+        estimated_lines: 600
+        estimated_hours: 5
+        rationale: "Implementation planning should be machine-tracked"
+        benefits:
+          - "Automated progress tracking"
+          - "Dependency resolution"
+          - "Resource estimation"
+          - "Timeline visualization"
+          - "70% token reduction"
+    
+    priority_2_medium_impact:
+      - document: src/tier0/brain_protector.py (docstrings)
+        target: brain-protection-extended.yaml
+        estimated_lines: 200
+        estimated_hours: 2
+        rationale: "Extend existing brain-protection-rules.yaml"
+        benefits:
+          - "Validation rules"
+          - "Challenge protocols"
+          - "Auto-fix strategies"
+      
+      - document: src/tier2/knowledge_graph.py (docstrings)
+        target: knowledge-graph-schema.yaml
+        estimated_lines: 250
+        estimated_hours: 2.5
+        rationale: "Knowledge graph structure should be declarative"
+        benefits:
+          - "Schema validation"
+          - "Query patterns"
+          - "Index definitions"
+      
+      - document: docs/architecture/*.md (design decisions)
+        target: architectural-decisions.yaml
+        estimated_lines: 400
+        estimated_hours: 3
+        rationale: "ADRs (Architecture Decision Records) as data"
+        benefits:
+          - "Decision tracking"
+          - "Rationale preservation"
+          - "Impact analysis"
+      
+      - document: prompts/shared/*.md (documentation)
+        target: documentation-structure.yaml
+        estimated_lines: 300
+        estimated_hours: 2.5
+        rationale: "Documentation metadata and organization"
+        benefits:
+          - "Doc generation automation"
+          - "Link validation"
+          - "Version tracking"
+    
+    priority_3_lower_impact:
+      - document: src/config.py (configuration)
+        target: config-schema.yaml
+        estimated_lines: 150
+        estimated_hours: 1.5
+        rationale: "Configuration validation schema"
+        benefits:
+          - "Config validation"
+          - "Type checking"
+          - "Default values"
+      
+      - document: scripts/ (automation)
+        target: automation-workflows.yaml
+        estimated_lines: 200
+        estimated_hours: 2
+        rationale: "Script orchestration and dependencies"
+        benefits:
+          - "Workflow automation"
+          - "Script discovery"
+          - "Dependency tracking"
+  
+  implementation_phases:
+    phase_1_foundation:
+      duration: "1 week"
+      estimated_hours: 15
+      target_files:
+        - agent-workflows.yaml
+        - plugin-registry.yaml
+        - test-specifications.yaml
+      benefits:
+        - "Core system components declarative"
+        - "50-60% token reduction on key docs"
+        - "Automated discovery mechanisms"
+    
+    phase_2_extension:
+      duration: "1 week"
+      estimated_hours: 10
+      target_files:
+        - brain-protection-extended.yaml
+        - knowledge-graph-schema.yaml
+        - architectural-decisions.yaml
+        - documentation-structure.yaml
+      benefits:
+        - "Extended system metadata"
+        - "Comprehensive YAML coverage"
+        - "40-50% additional token reduction"
+    
+    phase_3_polish:
+      duration: "3 days"
+      estimated_hours: 5
+      target_files:
+        - config-schema.yaml
+        - automation-workflows.yaml
+        - implementation-roadmap.yaml
+      benefits:
+        - "Complete YAML adoption"
+        - "70% total adoption achieved"
+        - "All major subsystems declarative"
+  
+  metrics_and_targets:
+    current_state:
+      yaml_files: 9
+      total_yaml_lines: ~2262
+      md_lines_remaining: ~15000
+      yaml_adoption: "30%"
+    
+    target_state:
+      yaml_files: 18
+      total_yaml_lines: ~5900
+      md_lines_remaining: ~8000
+      yaml_adoption: "70%"
+    
+    improvements:
+      token_reduction: "50-60%"
+      parsing_speed: "10-50x faster"
+      maintenance_effort: "-70%"
+      query_performance: "100-500ms → 10-50ms"
+  
+  validation_strategy:
+    schema_validation:
+      tool: "yamllint + custom JSON Schema"
+      coverage: "100% YAML files"
+      ci_integration: true
+    
+    backward_compatibility:
+      legacy_md_support: true
+      deprecation_timeline: "6 months"
+      migration_tooling: "auto-convert scripts"
+    
+    testing:
+      unit_tests: "Each YAML loader"
+      integration_tests: "End-to-end workflows"
+      performance_tests: "Query benchmarks"
+  
+  risks_and_mitigations:
+    - risk: "YAML complexity for non-technical users"
+      mitigation: "Keep MD docs as human-readable views, YAML as source of truth"
+      likelihood: medium
+      impact: low
+    
+    - risk: "Conversion errors losing information"
+      mitigation: "Git history preserves original, extensive testing"
+      likelihood: low
+      impact: high
+    
+    - risk: "Increased maintenance burden"
+      mitigation: "Automated validation, clear schemas, tooling support"
+      likelihood: medium
+      impact: medium
+    
+    - risk: "Breaking existing integrations"
+      mitigation: "Backward compatibility layer, phased rollout"
+      likelihood: low
+      impact: high
+  
+  success_criteria:
+    phase_1_success:
+      - "3 YAML files created and validated"
+      - "50% token reduction on converted docs"
+      - "All tests passing"
+      - "Documentation updated"
+    
+    phase_2_success:
+      - "4 additional YAML files created"
+      - "60% cumulative token reduction"
+      - "Integration tests passing"
+      - "Performance benchmarks met"
+    
+    phase_3_success:
+      - "70% YAML adoption achieved"
+      - "Complete system declarative"
+      - "CI/CD integration complete"
+      - "Migration guide published"
+  
+  timeline:
+    week_1:
+      days: 5
+      hours: 15
+      deliverables:
+        - agent-workflows.yaml
+        - plugin-registry.yaml
+        - test-specifications.yaml
+    
+    week_2:
+      days: 5
+      hours: 10
+      deliverables:
+        - brain-protection-extended.yaml
+        - knowledge-graph-schema.yaml
+        - architectural-decisions.yaml
+        - documentation-structure.yaml
+    
+    week_3:
+      days: 3
+      hours: 5
+      deliverables:
+        - config-schema.yaml
+        - automation-workflows.yaml
+        - implementation-roadmap.yaml
+        - validation suite
+        - migration guide
+  
+  next_actions:
+    immediate:
+      - action: "Create agent-workflows.yaml schema"
+        priority: high
+        time: "3 hours"
+      - action: "Implement YAML loader for agents"
+        priority: high
+        time: "2 hours"
+      - action: "Update agent system to use YAML"
+        priority: high
+        time: "3 hours"
+    
+    this_week:
+      - action: "Complete Phase 1 (3 YAML files)"
+        priority: high
+        time: "15 hours"
+      - action: "Write conversion validation tests"
+        priority: high
+        time: "4 hours"
+      - action: "Update documentation"
+        priority: medium
+        time: "2 hours"
+    
+    next_week:
+      - action: "Complete Phase 2 (4 YAML files)"
+        priority: medium
+        time: "10 hours"
+      - action: "Integration testing"
+        priority: high
+        time: "3 hours"
+    
+    following_week:
+      - action: "Complete Phase 3 (final 3 files)"
+        priority: medium
+        time: "5 hours"
+      - action: "Performance benchmarking"
+        priority: high
+        time: "2 hours"
+      - action: "Publish migration guide"
+        priority: medium
+        time: "2 hours"

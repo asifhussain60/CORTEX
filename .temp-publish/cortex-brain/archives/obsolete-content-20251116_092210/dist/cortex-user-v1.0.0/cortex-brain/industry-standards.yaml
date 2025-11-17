@@ -1,0 +1,404 @@
+# KDS BRAIN - Industry Standards Layer
+# Version: 7.0
+# Location: RIGHT BRAIN - Tier 2 (Long-Term Knowledge)
+# Purpose: Best practices, architectural patterns, technology standards
+# Usage: Referenced by all agents for strategic architecture decisions
+
+# ========================================
+# SOLID PRINCIPLES
+# ========================================
+solid_principles:
+  single_responsibility:
+    definition: "A class/function/agent should have only one reason to change"
+    rationale: "Prevents bloat, improves testability, enables clear ownership"
+    examples:
+      - pattern: "intent-router.md routes ONLY, doesn't execute"
+        why: "Routing vs execution are different responsibilities"
+      - pattern: "work-planner.md plans ONLY, doesn't implement"
+        why: "Planning vs implementation are different responsibilities"
+      - pattern: "test-runner.md executes tests, test-writer.md creates tests"
+        why: "Execution vs creation are different responsibilities"
+    violations:
+      - anti_pattern: "Adding mode switches to single agents (--analyze, --execute, --plan)"
+        why: "Multiple responsibilities in one agent"
+        fix: "Create separate agents for each mode"
+      - anti_pattern: "Mixing strategic and tactical in one markdown agent"
+        why: "Different levels of abstraction"
+        fix: "Split into strategist (planning) and executor (implementation)"
+    
+  open_closed:
+    definition: "Open for extension, closed for modification"
+    rationale: "Add features without breaking existing code"
+    examples:
+      - pattern: "Add new agents to knowledge/, don't modify intent-router logic"
+        why: "New capabilities via composition, not modification"
+      - pattern: "Extend via abstractions (session-loader, test-runner interfaces)"
+        why: "Polymorphism enables extension"
+    violations:
+      - anti_pattern: "Hardcoding agent lists in router"
+        fix: "Auto-discover agents from knowledge/ directory"
+  
+  liskov_substitution:
+    definition: "Subtypes must be substitutable for their base types"
+    rationale: "Polymorphism guarantees predictable behavior"
+    examples:
+      - pattern: "All specialist agents follow same interface (context → output)"
+        why: "Router can invoke any agent identically"
+    
+  interface_segregation:
+    definition: "Clients shouldn't depend on interfaces they don't use"
+    rationale: "Focused, minimal dependencies"
+    examples:
+      - pattern: "Agents only import what they need from kds-brain/"
+        why: "Don't load entire brain for simple operations"
+    
+  dependency_inversion:
+    definition: "Depend on abstractions, not concretions"
+    rationale: "Decoupling enables flexibility and testing"
+    examples:
+      - pattern: "Agents depend on BRAIN interface, not specific YAML files"
+        why: "Can swap storage mechanism without changing agents"
+
+# ========================================
+# DESIGN PATTERNS
+# ========================================
+design_patterns:
+  tdd_workflow:
+    name: "Test-Driven Development (RED → GREEN → REFACTOR)"
+    enforcement: "Tier 0 Instinct (cannot override)"
+    rationale: "94% success rate vs 67% without TDD (KDS empirical data)"
+    workflow:
+      - step: "RED - Write failing test first"
+        why: "Defines expected behavior before implementation"
+      - step: "GREEN - Write minimal code to pass"
+        why: "Prevents over-engineering"
+      - step: "REFACTOR - Improve code while keeping tests green"
+        why: "Safe optimization with regression protection"
+    enforcement_mechanism: "test-first.md agent (Tier 0)"
+    
+  semantic_commits:
+    name: "Conventional Commits Specification"
+    pattern: "type(scope): description"
+    types:
+      feat: "New feature"
+      fix: "Bug fix"
+      test: "Add or modify tests"
+      docs: "Documentation changes"
+      refactor: "Code restructuring without behavior change"
+      chore: "Maintenance tasks (dependencies, config)"
+      perf: "Performance improvements"
+      style: "Code formatting (no logic change)"
+    examples:
+      - "feat(brain): Add industry standards layer to Tier 2"
+      - "fix(crawler): Handle null project descriptions"
+      - "test(health-checks): Add critical health check tests"
+      - "docs(v7): Update holistic plan with Phase 1 completion"
+    enforcement: "commit-handler.md agent"
+    rationale: "Enables automatic changelog generation and semantic versioning"
+    
+  aaa_testing:
+    name: "Arrange-Act-Assert Pattern"
+    pattern: "Three-phase test structure"
+    phases:
+      arrange:
+        purpose: "Setup test data, mocks, and dependencies"
+        example: "$testInput = @{ Name = 'Test'; Value = 42 }"
+      act:
+        purpose: "Execute the operation being tested"
+        example: "$result = Invoke-SomeFunction $testInput"
+      assert:
+        purpose: "Verify expected outcomes"
+        example: "$result.Value | Should -Be 42"
+    rationale: "Clear, readable tests with predictable structure"
+    
+  separation_of_concerns:
+    name: "Separation of Concerns"
+    definition: "Different concerns should be in different modules"
+    layers:
+      presentation: "UI/CLI (Blazor components, PowerShell scripts)"
+      business_logic: "Agents (markdown), domain models (YAML)"
+      data_access: "BRAIN files (YAML/JSONL), git metadata"
+    examples:
+      - violation: "Blazor component directly manipulating YAML files"
+        fix: "Component → Agent → BRAIN (proper layering)"
+
+# ========================================
+# TECHNOLOGY STANDARDS
+# ========================================
+technology_standards:
+  blazor_components:
+    naming_convention: "PascalCase for components (e.g., Dashboard.razor)"
+    structure:
+      - "@page directive at top"
+      - "@using statements for imports"
+      - "HTML markup (Razor syntax)"
+      - "@code block at bottom (C# logic)"
+    dependency_injection: "Use @inject, not manual instantiation"
+    examples:
+      - good: "@inject NavigationManager Navigation"
+        bad: "var nav = new NavigationManager();"
+    state_management: "Use StateHasChanged() after async operations"
+    
+  powershell_scripting:
+    error_handling: "Use $ErrorActionPreference = 'Stop' for safety"
+    parameter_validation:
+      - "[Parameter(Mandatory=$true)] for required params"
+      - "[ValidateSet('value1', 'value2')] for enums"
+      - "[ValidateNotNullOrEmpty()] for strings"
+    output_formatting:
+      - "Use Write-Host with -ForegroundColor for clarity"
+      - "Use Write-Error for errors (stderr)"
+      - "Use Write-Verbose for debug output (opt-in)"
+    naming_convention: "Verb-Noun pattern (e.g., Get-BrainMetrics, Update-Brain)"
+    
+  csharp_conventions:
+    naming:
+      classes: "PascalCase (e.g., ProjectMetrics)"
+      methods: "PascalCase (e.g., CalculateVelocity)"
+      private_fields: "_camelCase (e.g., _httpClient)"
+      constants: "UPPER_CASE (e.g., MAX_RETRIES)"
+    async_await: "Always use async/await for I/O operations"
+    nullability: "Enable nullable reference types (<Nullable>enable</Nullable>)"
+    
+  yaml_structure:
+    indentation: "2 spaces (no tabs)"
+    key_format: "snake_case for consistency"
+    comments: "Use # for inline documentation"
+    anchors_and_aliases: "Use & and * for DRY YAML"
+    
+  markdown_agents:
+    structure:
+      - "# Agent Name (heading level 1)"
+      - "## Purpose (heading level 2)"
+      - "## Context Requirements (inputs)"
+      - "## Output Format (expected deliverables)"
+      - "## Examples (reference implementations)"
+    naming: "kebab-case.md (e.g., intent-router.md)"
+    location: "knowledge/ directory for discoverability"
+
+# ========================================
+# TESTING STANDARDS
+# ========================================
+testing_standards:
+  coverage_thresholds:
+    critical_paths: "100% (health checks, brain integrity, commit hooks)"
+    business_logic: "80% (agents, brain update logic)"
+    utilities: "60% (PowerShell helpers, formatters)"
+    rationale: "Critical paths need perfect coverage, utilities can be lower"
+    
+  test_types:
+    unit:
+      scope: "Single function/agent in isolation"
+      mocking: "Mock external dependencies (file system, git)"
+      speed: "< 100ms per test"
+    integration:
+      scope: "Multiple components working together"
+      real_dependencies: "Use real BRAIN files in test fixtures"
+      speed: "< 2s per test"
+    e2e:
+      scope: "Full workflow (commit → hooks → brain update → health check)"
+      real_environment: "Actual git operations"
+      speed: "< 10s per test"
+      
+  test_data:
+    fixtures: "Use tests/fixtures/ for sample projects"
+    isolation: "Each test creates temporary copies (no shared state)"
+    cleanup: "Always restore original state in finally block"
+    
+  assertion_style:
+    powershell: "Use Pester (Should -Be, Should -Contain)"
+    csharp: "Use xUnit (Assert.Equal, Assert.True)"
+    pattern: "One assertion per test (focused tests)"
+
+# ========================================
+# SECURITY STANDARDS
+# ========================================
+security_standards:
+  owasp_top_10:
+    injection:
+      rule: "Never concatenate user input into commands"
+      mitigation: "Use parameterized queries, validated inputs"
+      example: "git log -1 --format=%H (safe) vs git log -1 --format=$userInput (unsafe)"
+    authentication:
+      rule: "Never store credentials in code or config"
+      mitigation: "Use environment variables or secret managers"
+    sensitive_data:
+      rule: "Don't commit API keys, tokens, passwords"
+      mitigation: "Use .gitignore, .env files, Azure Key Vault"
+      
+  least_privilege:
+    file_permissions: "Read-only by default, write only when necessary"
+    script_execution: "Use -WhatIf for dry-run validation"
+    
+  input_validation:
+    rule: "Validate all external inputs (user, file, network)"
+    techniques:
+      - "Regex patterns for format validation"
+      - "[ValidateSet] for PowerShell enums"
+      - "Try-catch for safe parsing"
+
+# ========================================
+# DOCUMENTATION STANDARDS
+# ========================================
+documentation_standards:
+  three_tier_system:
+    tier_1_permanent:
+      definition: "Core documentation (doesn't expire)"
+      examples: ["README.md", "governance/rules.md", "architecture docs"]
+      location: "docs/ and root"
+    tier_2_historical:
+      definition: "Time-bounded reports and decisions"
+      examples: ["Implementation summaries", "completion reports"]
+      location: "docs/reports/"
+      archival: "Move to .archived/ after 90 days"
+    tier_3_auto_generated:
+      definition: "Generated from code/git (regenerable)"
+      examples: ["Crawler reports", "health check logs"]
+      location: "reports/monitoring/"
+      git_tracking: "Excluded via .gitignore"
+      
+  markdown_structure:
+    headings: "Use ATX-style (# heading) not Setext (underline)"
+    code_blocks: "Always specify language for syntax highlighting"
+    links: "Use relative paths for internal docs"
+    images: "Store in docs/images/ with descriptive names"
+    
+  code_comments:
+    when_to_comment:
+      - "Why, not what (code shows what, comment explains why)"
+      - "Complex algorithms or business rules"
+      - "Workarounds for known issues"
+      - "TODOs with issue tracker links"
+    when_not_to_comment:
+      - "Obvious code (e.g., // Set x to 5)"
+      - "Out-of-date comments (remove or update)"
+
+# ========================================
+# GIT WORKFLOW STANDARDS
+# ========================================
+git_workflow:
+  branching_strategy:
+    main: "Production-ready code (protected)"
+    feature_branches: "Short-lived (< 1 week)"
+    naming: "type/short-description (e.g., feat/industry-standards-layer)"
+    
+  commit_frequency:
+    rule: "Commit early, commit often"
+    rationale: "Small commits are easier to review and revert"
+    guideline: "One logical change per commit"
+    
+  pull_request_standards:
+    title: "Follow semantic commit format"
+    description:
+      - "Problem statement"
+      - "Solution approach"
+      - "Testing done"
+      - "Screenshots (if UI changes)"
+    reviewers: "At least one reviewer for production code"
+    
+  version_tagging:
+    scheme: "Semantic versioning (vX.Y.Z)"
+    when: "Major milestones and releases"
+    automation: "scripts/auto-tag-version.ps1"
+
+# ========================================
+# PERFORMANCE STANDARDS
+# ========================================
+performance_standards:
+  latency_budgets:
+    critical_health_checks: "< 2 seconds (Tier 0 guarantee)"
+    brain_update_check: "< 50ms (timestamp comparison only)"
+    full_brain_update: "< 500ms (file I/O and parsing)"
+    comprehensive_health: "< 45 seconds (deep analysis)"
+    
+  optimization_priorities:
+    p0_critical: "Health checks, git hooks (block developer workflow)"
+    p1_important: "BRAIN updates, crawler runs (affect productivity)"
+    p2_nice_to_have: "Dashboard rendering, report generation"
+    
+  caching_strategy:
+    brain_files: "Cache parsed YAML in memory during script execution"
+    git_metadata: "Cache git log output for 5-minute windows"
+    health_checks: "Don't cache (always fresh data)"
+
+# ========================================
+# ARCHITECTURAL PRINCIPLES
+# ========================================
+architectural_principles:
+  dry_principle:
+    name: "Don't Repeat Yourself"
+    definition: "Every piece of knowledge should have single source of truth"
+    examples:
+      - violation: "Duplicating agent patterns across markdown files"
+        fix: "Create agent templates in templates/"
+      - violation: "Hardcoding file paths in multiple scripts"
+        fix: "Centralize paths in kds.config.json"
+        
+  kiss_principle:
+    name: "Keep It Simple, Stupid"
+    definition: "Simplest solution that works is usually the best"
+    examples:
+      - good: "PowerShell script vs custom DSL"
+      - good: "YAML files vs proprietary database"
+    rationale: "Simplicity improves maintainability and onboarding"
+    
+  yagni_principle:
+    name: "You Aren't Gonna Need It"
+    definition: "Don't add functionality until it's actually needed"
+    examples:
+      - violation: "Adding 10 configurable modes to agent"
+        fix: "Start with one mode, add others when users request"
+    rationale: "Prevents over-engineering and scope creep"
+    
+  fail_fast:
+    name: "Fail Fast Principle"
+    definition: "Detect and report errors as early as possible"
+    examples:
+      - "$ErrorActionPreference = 'Stop' in PowerShell"
+      - "Validation at script start, not mid-execution"
+      - "Critical health checks after every commit"
+    rationale: "Early errors are easier to debug and fix"
+
+# ========================================
+# KDS-SPECIFIC STANDARDS
+# ========================================
+kds_specific:
+  brain_architecture:
+    left_hemisphere: "Tactical/Operational (recent memory, events)"
+    right_hemisphere: "Strategic/Analytical (knowledge, metrics)"
+    tier_0: "Instinct Layer (immutable operations)"
+    tier_1: "Short-Term Memory (last 20 conversations)"
+    tier_2: "Long-Term Knowledge (patterns, standards) ← THIS FILE"
+    tier_3: "Development Context (project metrics)"
+    
+  rule_enforcement:
+    tier_0_rules: "Cannot be overridden (Test First, Health Checks)"
+    tier_1_rules: "Best practices (enforcement via agents)"
+    rule_violations: "Logged to governance/challenges.jsonl"
+    rule_evolution: "Rules can be added/refined based on experience"
+    
+  efficiency_targets:
+    markdown_agents: "Strategic planning, architecture decisions"
+    powershell_helpers: "Repetitive tasks, file operations, git automation"
+    hybrid_approach: "Use both (agent plans, script executes)"
+    speedup_goal: "80% reduction in time for repetitive tasks"
+    
+  quality_gates:
+    commit: "Critical health checks pass (< 2s)"
+    merge: "Full test suite passes"
+    release: "All health checks + E2E tests pass"
+
+# ========================================
+# METADATA
+# ========================================
+metadata:
+  version: "7.0.0"
+  created: "2025-11-05"
+  last_updated: "2025-11-05"
+  author: "KDS BRAIN"
+  tier: "RIGHT BRAIN - Tier 2 (Long-Term Knowledge)"
+  references:
+    - "docs/planning/KDS-V7-HOLISTIC-PLAN.md"
+    - "governance/rules.md"
+    - "kds-brain/architectural-patterns.yaml"
+  usage: "Referenced by all agents for architecture and design decisions"

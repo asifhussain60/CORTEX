@@ -1,0 +1,499 @@
+{
+  "timestamp": "2025-11-11T17:25:04.723603",
+  "mode": "live",
+  "workspace_root": "D:\\PROJECTS\\CORTEX",
+  "rules_file": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cleanup-rules.yaml",
+  "statistics": {
+    "files_scanned": 272,
+    "files_deleted": 154,
+    "files_archived": 4,
+    "folders_deleted": 84,
+    "space_freed_bytes": 18748935,
+    "space_freed_mb": 17.880377769470215,
+    "space_freed_gb": 0.017461306415498257,
+    "categories_processed": 10,
+    "execution_time_seconds": 6.877998
+  },
+  "categories": {
+    "backup_archive": {
+      "count": 3,
+      "size_mb": 0.24122142791748047
+    },
+    "story_backups": {
+      "count": 128,
+      "size_mb": 3.8807668685913086
+    },
+    "system_refactor_reports": {
+      "count": 20,
+      "size_mb": 0.09917068481445312
+    },
+    "phase_reports": {
+      "count": 5,
+      "size_mb": 0.04674053192138672
+    },
+    "build_output": {
+      "count": 31,
+      "size_mb": 13.254327774047852
+    },
+    "python_cache": {
+      "count": 70,
+      "size_mb": 0.46970081329345703
+    }
+  },
+  "items": [
+    {
+      "path": ".backup-archive\\.backup-archive",
+      "category": "backup_archive",
+      "action": "delete_all",
+      "size_bytes": 55055,
+      "size_mb": 0.052504539489746094,
+      "reason": "Recursive nesting, legacy distribution builds",
+      "risk_level": "low"
+    },
+    {
+      "path": ".backup-archive\\.venv",
+      "category": "backup_archive",
+      "action": "delete_all",
+      "size_bytes": 0,
+      "size_mb": 0.0,
+      "reason": "Recursive nesting, legacy distribution builds",
+      "risk_level": "low"
+    },
+    {
+      "path": ".backup-archive\\dist",
+      "category": "backup_archive",
+      "action": "delete_all",
+      "size_bytes": 197884,
+      "size_mb": 0.18871688842773438,
+      "reason": "Recursive nesting, legacy distribution builds",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_152319.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_152318.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_150650.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_150316.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_150315.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_135625.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_135624.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_133058.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_132903.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_130137.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_130136.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_124225.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_123533.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_105816.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_090654.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_090653.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_090633.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251111_090554.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_160100.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_143454.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_143453.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_143108.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_143107.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_142313.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_142311.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_141554.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_141552.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140853.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140851.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140835.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140833.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140150.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_140148.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_134612.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_134611.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_134318.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_134316.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_133908.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_133907.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_132724.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124510.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124508.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124357.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124355.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124209.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124208.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\awakening-of-cortex.backup.20251110_124017.md",
+      "category": "story_backups",
+      "action": "retain_recent",
+      "size_bytes": 19899,
+      "size_mb": 0.01897716522216797,
+      "reason": "Excessive backup files (retain 5 most recent)",
+      "risk_level": "low"
+    }
+  ],
+  "errors": [
+    "Failed to process D:\\PROJECTS\\CORTEX\\cortex-brain\\PHASE-5.1-CONTINUED-PROGRESS.md: [WinError 2] The system cannot find the file specified"
+  ],
+  "warnings": []
+}

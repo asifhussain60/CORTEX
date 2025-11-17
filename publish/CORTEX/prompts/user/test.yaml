@@ -1,0 +1,128 @@
+# CORTEX Test Command Plugin
+# Generate comprehensive tests for code
+
+version: "2.0"
+type: "workflow"
+name: "Generate Tests"
+description: "Create unit, integration, and visual tests using test-first workflow"
+author: "CORTEX"
+created: "2025-11-08"
+
+# Target code files for testing
+targets:
+  - path: "${target_file}"
+    type: "source_code"
+    constraints:
+      - "identify_testable_units"
+      - "extract_public_api"
+      - "detect_dependencies"
+
+# Workflow steps
+workflow:
+  - step: "load_test_generator"
+    action: "query"
+    params:
+      agent: "test_generator"
+      module: "prompts/internal/test-generator.md"
+
+  - step: "analyze_code"
+    action: "analyze"
+    params:
+      extract:
+        - "classes"
+        - "methods"
+        - "functions"
+        - "dependencies"
+        - "edge_cases"
+      identify_complexity: true
+
+  - step: "determine_test_types"
+    action: "analyze"
+    params:
+      types:
+        - "unit"
+        - "integration"
+        - "visual"
+        - "e2e"
+      coverage_target: "${coverage_target}"
+
+  - step: "generate_unit_tests"
+    action: "execute"
+    params:
+      framework: "pytest"
+      follow_aaa_pattern: true  # Arrange, Act, Assert
+      include_edge_cases: true
+      include_error_cases: true
+      mock_dependencies: true
+
+  - step: "generate_integration_tests"
+    action: "execute"
+    condition: "requires_integration_tests"
+    params:
+      test_interactions: true
+      test_data_flow: true
+
+  - step: "generate_visual_tests"
+    action: "execute"
+    condition: "is_ui_component"
+    params:
+      tool: "percy"
+      capture_states: true
+
+  - step: "run_tests"
+    action: "validate"
+    params:
+      run_new_tests: true
+      verify_passing: true
+      measure_coverage: true
+
+  - step: "report_results"
+    action: "notify"
+    params:
+      show_tests_created: true
+      show_coverage: true
+      show_test_results: true
+
+# Validation rules
+validation:
+  - check: "tests_created"
+    scope: "file_system"
+    required: true
+    params:
+      min_tests: 1
+
+  - check: "tests_passing"
+    scope: "test_results"
+    required: true
+
+  - check: "coverage_target_met"
+    scope: "coverage"
+    required: false
+    params:
+      target_percent: "${coverage_target}"
+
+  - check: "follows_aaa_pattern"
+    scope: "test_structure"
+    required: true
+
+# Parameters
+parameters:
+  - name: "target_file"
+    type: "string"
+    required: true
+    description: "File path to generate tests for"
+
+  - name: "test_types"
+    type: "list"
+    default: ["unit"]
+    description: "Types of tests to generate"
+
+  - name: "coverage_target"
+    type: "int"
+    default: 80
+    description: "Target code coverage percentage"
+
+  - name: "run_tests"
+    type: "bool"
+    default: true
+    description: "Automatically run tests after generation"

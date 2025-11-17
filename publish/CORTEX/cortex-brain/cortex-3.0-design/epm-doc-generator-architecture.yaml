@@ -1,0 +1,438 @@
+# EPM Documentation Generator Architecture
+# CORTEX 3.0 - Single Entry Point for Complete Documentation Generation
+# Version: 1.0.0
+# Status: DESIGN
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+metadata:
+  version: "1.0.0"
+  status: "DESIGN"
+  created: "2025-11-15"
+  purpose: "Single destructive entry point for generating ALL CORTEX 3.0 documentation"
+  usage: "Admin-only operation for major releases/changes"
+  nature: "Destructive refresh - clears and regenerates everything from source"
+
+architecture:
+  overview: |
+    The EPM Documentation Generator is a comprehensive system that generates the entire
+    CORTEX 3.0 documentation suite from source files in a single operation. It is 
+    destructive by design - clearing and regenerating everything to ensure consistency.
+    
+    This is NOT a regular operation. It's designed for major releases or significant
+    architectural changes where complete documentation refresh is needed.
+  
+  principles:
+    - "Single Entry Point: One command generates everything"
+    - "Destructive Refresh: Clear before regenerate (no partial updates)"
+    - "Source-Driven: Pull from CORTEX brain, code, config files"
+    - "Validation-First: Verify sources before generation"
+    - "Progressive Generation: Generate in logical order with dependencies"
+    - "Self-Documenting: Generate metadata about the generation process"
+  
+  design_goals:
+    consistency: "All documentation reflects current state"
+    completeness: "Nothing missing, nothing outdated"
+    traceability: "Know what was generated from what source"
+    repeatability: "Same sources = same output every time"
+    validation: "Verify output quality automatically"
+
+pipeline:
+  overview: "Six-stage generation pipeline with validation at each stage"
+  
+  stages:
+    - id: 1
+      name: "Pre-Flight Validation"
+      description: "Verify all source files exist and are valid"
+      operations:
+        - "Check CORTEX brain structure integrity"
+        - "Validate YAML schemas"
+        - "Verify code structure"
+        - "Confirm all required sources present"
+        - "Check write permissions on docs/"
+      outputs:
+        - "validation-report.json"
+      fail_behavior: "ABORT - do not proceed if sources invalid"
+    
+    - id: 2
+      name: "Destructive Cleanup"
+      description: "Remove all generated documentation (preserve sources)"
+      operations:
+        - "Backup current docs/ to docs-backup-{timestamp}/"
+        - "Clear docs/diagrams/ (except .gitkeep)"
+        - "Clear docs/images/diagrams/ (except .gitkeep)"
+        - "Remove all generated .md files from docs/"
+        - "Preserve manual/source files (index.md, assets/)"
+      outputs:
+        - "cleanup-report.json"
+        - "docs-backup-{timestamp}/"
+      safeguards:
+        - "Never delete cortex-brain/"
+        - "Never delete prompts/"
+        - "Never delete src/"
+        - "Only clear docs/generated content"
+    
+    - id: 3
+      name: "Diagram Generation"
+      description: "Generate all Mermaid diagrams from code and config"
+      operations:
+        - "Generate strategic diagrams (architecture overview, decision flows)"
+        - "Generate architectural diagrams (tier structure, agent system)"
+        - "Generate operational diagrams (workflows, processes)"
+        - "Generate integration diagrams (system integrations, data flows)"
+        - "Generate page-specific diagrams (getting-started, operations, etc.)"
+      sources:
+        - "cortex-brain/schemas/"
+        - "cortex-brain/cognitive-framework/"
+        - "src/agents/"
+        - "src/tier*/"
+        - "cortex-operations.yaml"
+      outputs:
+        - "docs/images/diagrams/strategic/*.mmd + *.svg"
+        - "docs/images/diagrams/architectural/*.mmd + *.svg"
+        - "docs/images/diagrams/operational/*.mmd + *.svg"
+        - "docs/images/diagrams/integration/*.mmd + *.svg"
+        - "docs/diagrams/{section}/*.mmd + *.svg"
+    
+    - id: 4
+      name: "Page Generation"
+      description: "Generate all documentation pages from templates and sources"
+      operations:
+        - "Generate getting-started pages (installation, quickstart, tutorials)"
+        - "Generate architecture pages (tiers, agents, brain structure)"
+        - "Generate operations pages (all operations with examples)"
+        - "Generate plugins pages (plugin system, available plugins)"
+        - "Generate reference pages (API docs, configuration, glossary)"
+        - "Generate guide pages (best practices, troubleshooting)"
+      sources:
+        - "cortex-brain/response-templates.yaml"
+        - "cortex-brain/operations-config.yaml"
+        - "cortex-brain/module-definitions.yaml"
+        - "prompts/shared/*.md"
+        - "src/ (code analysis)"
+      outputs:
+        - "docs/getting-started/*.md"
+        - "docs/architecture/*.md"
+        - "docs/operations/*.md"
+        - "docs/plugins/*.md"
+        - "docs/reference/*.md"
+        - "docs/guides/*.md"
+      templates:
+        location: "cortex-brain/templates/doc-templates/"
+        format: "Jinja2 with YAML front matter"
+    
+    - id: 5
+      name: "Cross-Reference & Navigation"
+      description: "Generate inter-document links and navigation structure"
+      operations:
+        - "Scan all generated pages for linkable content"
+        - "Generate cross-reference index"
+        - "Create navigation structure for MkDocs"
+        - "Update index.md with generated TOC"
+        - "Generate sitemap"
+      outputs:
+        - "docs/cross-reference-index.json"
+        - "mkdocs.yml (updated nav section)"
+        - "docs/sitemap.xml"
+    
+    - id: 6
+      name: "Post-Generation Validation"
+      description: "Verify generated documentation quality"
+      operations:
+        - "Check all internal links valid"
+        - "Verify all diagrams referenced exist"
+        - "Validate markdown syntax"
+        - "Check code block syntax"
+        - "Verify front matter complete"
+        - "Run MkDocs build test"
+      outputs:
+        - "validation-report.json"
+        - "broken-links.json (if any)"
+        - "generation-summary.md"
+      fail_behavior: "WARN - report issues but don't rollback"
+
+source_mapping:
+  description: "Map source files to generated documentation"
+  
+  diagrams:
+    strategic:
+      - source: "cortex-brain/cognitive-framework/"
+        generates: "docs/images/diagrams/strategic/cortex-architecture-overview.mmd"
+      - source: "cortex-brain/brain-protection-rules.yaml"
+        generates: "docs/images/diagrams/strategic/brain-protection-layers.mmd"
+    
+    architectural:
+      - source: "cortex-brain/schemas/tier*.sql"
+        generates: "docs/images/diagrams/architectural/tier-database-schemas.mmd"
+      - source: "src/agents/"
+        generates: "docs/images/diagrams/architectural/agent-system.mmd"
+    
+    operational:
+      - source: "cortex-operations.yaml"
+        generates: "docs/images/diagrams/operational/operations-workflow.mmd"
+      - source: "src/operations/"
+        generates: "docs/images/diagrams/operational/*-operation-flow.mmd"
+  
+  pages:
+    getting_started:
+      - source: "prompts/shared/setup-guide.md"
+        template: "templates/doc-templates/getting-started-page.j2"
+        generates: "docs/getting-started/installation.md"
+      - source: "prompts/shared/story.md"
+        template: "templates/doc-templates/concept-page.j2"
+        generates: "docs/getting-started/understanding-cortex.md"
+    
+    architecture:
+      - source: "cortex-brain/cognitive-framework/"
+        template: "templates/doc-templates/architecture-page.j2"
+        generates: "docs/architecture/brain-tiers.md"
+      - source: "src/agents/"
+        template: "templates/doc-templates/architecture-page.j2"
+        generates: "docs/architecture/agent-system.md"
+    
+    operations:
+      - source: "cortex-operations.yaml"
+        template: "templates/doc-templates/operations-index.j2"
+        generates: "docs/operations/index.md"
+      - source: "src/operations/*.py"
+        template: "templates/doc-templates/operation-page.j2"
+        generates: "docs/operations/{operation-name}.md"
+    
+    reference:
+      - source: "cortex-brain/response-templates.yaml"
+        template: "templates/doc-templates/reference-page.j2"
+        generates: "docs/reference/response-templates.md"
+      - source: "cortex.config.template.json"
+        template: "templates/doc-templates/reference-page.j2"
+        generates: "docs/reference/configuration.md"
+
+generation_modules:
+  description: "Specialized modules for different generation tasks"
+  
+  modules:
+    - name: "DiagramGenerator"
+      purpose: "Generate Mermaid diagrams from code and config"
+      capabilities:
+        - "Analyze code structure and generate architecture diagrams"
+        - "Parse YAML config and generate workflow diagrams"
+        - "Convert database schemas to ER diagrams"
+        - "Generate class/component diagrams from Python code"
+      output_formats: ["mermaid (.mmd)", "svg (rendered)", "png (rendered)"]
+    
+    - name: "PageGenerator"
+      purpose: "Generate markdown pages from templates and sources"
+      capabilities:
+        - "Load Jinja2 templates"
+        - "Extract data from source files (YAML, Python, Markdown)"
+        - "Render templates with extracted data"
+        - "Add front matter metadata"
+        - "Generate code examples from actual code"
+      template_engine: "Jinja2"
+    
+    - name: "CrossReferenceBuilder"
+      purpose: "Build inter-document links and navigation"
+      capabilities:
+        - "Scan all pages for linkable content (headings, code blocks)"
+        - "Generate anchor links"
+        - "Create cross-reference index"
+        - "Build navigation tree for MkDocs"
+        - "Detect broken links"
+    
+    - name: "ValidationEngine"
+      purpose: "Validate generated documentation quality"
+      capabilities:
+        - "Check markdown syntax"
+        - "Verify internal links"
+        - "Validate diagram references"
+        - "Check code block syntax"
+        - "Run MkDocs build test"
+        - "Generate quality report"
+    
+    - name: "CleanupManager"
+      purpose: "Safe destructive cleanup of generated content"
+      capabilities:
+        - "Backup existing documentation"
+        - "Identify generated vs. manual content"
+        - "Remove generated content safely"
+        - "Preserve source files and assets"
+        - "Generate cleanup report"
+    
+    - name: "OrchestratorEPM"
+      purpose: "Coordinate entire generation process"
+      capabilities:
+        - "Execute pipeline stages in order"
+        - "Handle dependencies between stages"
+        - "Progress reporting"
+        - "Error handling and rollback"
+        - "Generate final summary report"
+
+implementation:
+  entry_point: "src/epm/doc_generator.py"
+  
+  structure:
+    - path: "src/epm/"
+      files:
+        - "doc_generator.py (main orchestrator)"
+        - "modules/diagram_generator.py"
+        - "modules/page_generator.py"
+        - "modules/cross_reference_builder.py"
+        - "modules/validation_engine.py"
+        - "modules/cleanup_manager.py"
+    
+    - path: "cortex-brain/templates/"
+      files:
+        - "doc-templates/getting-started-page.j2"
+        - "doc-templates/architecture-page.j2"
+        - "doc-templates/operation-page.j2"
+        - "doc-templates/reference-page.j2"
+        - "doc-templates/guide-page.j2"
+    
+    - path: "cortex-brain/doc-generation-config/"
+      files:
+        - "source-mapping.yaml (what to generate from what)"
+        - "diagram-definitions.yaml (diagram specifications)"
+        - "page-definitions.yaml (page structures)"
+        - "validation-rules.yaml (quality checks)"
+
+usage:
+  admin_command: "python src/epm/doc_generator.py --full-refresh"
+  
+  options:
+    - flag: "--full-refresh"
+      description: "Destructive full regeneration (default behavior)"
+    
+    - flag: "--dry-run"
+      description: "Show what would be generated without actually doing it"
+    
+    - flag: "--stage"
+      description: "Run specific stage only (e.g., --stage=diagrams)"
+      values: ["validation", "cleanup", "diagrams", "pages", "cross-ref", "validate"]
+    
+    - flag: "--profile"
+      description: "Generation profile"
+      values: ["minimal", "standard", "comprehensive"]
+    
+    - flag: "--skip-backup"
+      description: "Skip backup creation (USE WITH CAUTION)"
+    
+    - flag: "--keep-old"
+      description: "Keep old docs in docs-old/ instead of deleting"
+
+output:
+  summary_report:
+    location: "docs/GENERATION-REPORT-{timestamp}.md"
+    content:
+      - "Generation timestamp"
+      - "Pipeline stages executed"
+      - "Sources used"
+      - "Files generated (count by type)"
+      - "Diagrams generated (count by category)"
+      - "Validation results"
+      - "Warnings/errors encountered"
+      - "Generation duration"
+  
+  metadata:
+    location: "docs/generation-metadata.json"
+    content:
+      - "Generation version"
+      - "Source file checksums"
+      - "Generated file list with sources"
+      - "Validation results"
+      - "Can be used for incremental detection later"
+
+safety:
+  safeguards:
+    - "Always backup before cleanup"
+    - "Never touch cortex-brain/ or src/"
+    - "Preserve manual documentation (if marked)"
+    - "Fail-fast on source validation"
+    - "Atomic operations (rollback on error)"
+  
+  rollback:
+    triggers:
+      - "Pre-flight validation fails"
+      - "Critical error during generation"
+      - "User cancels mid-process"
+    actions:
+      - "Restore from backup"
+      - "Clean partial generation"
+      - "Report rollback reason"
+
+integration:
+  epm_workflow:
+    description: "How doc generation fits into EPM pattern"
+    steps:
+      - "User: 'generate documentation' or 'refresh all docs'"
+      - "IntentDetector routes to EPM Doc Generator"
+      - "EPM orchestrates 6-stage pipeline"
+      - "Progress reported to user in real-time"
+      - "Final summary with links to generated docs"
+  
+  with_other_operations:
+    - operation: "design_sync"
+      integration: "Run after design sync to reflect latest architecture"
+    
+    - operation: "optimize"
+      integration: "Can trigger doc refresh if major changes detected"
+    
+    - operation: "cleanup"
+      integration: "Different scope - cleanup is maintenance, this is generation"
+
+future_enhancements:
+  - "Incremental generation (only update changed sources)"
+  - "Multi-language support (generate docs in multiple languages)"
+  - "PDF export (generate PDF versions of documentation)"
+  - "Interactive diagrams (clickable SVGs with JavaScript)"
+  - "API documentation from code annotations"
+  - "Video generation (screencasts from scripts)"
+  - "Versioned documentation (maintain docs for multiple CORTEX versions)"
+
+related_initiatives:
+  cortex_3_1_epmo_optimization:
+    description: "EPMO Health Management System for continuous quality monitoring"
+    plan_location: "cortex-brain/cortex-3.0-design/CORTEX-3.1-EPMO-OPTIMIZATION-PLAN.yaml"
+    relationship: |
+      CORTEX 3.0 introduces powerful EPM orchestrators (like doc generator).
+      CORTEX 3.1 ensures those EPMs stay healthy and optimized through:
+      - Automated drift detection (bloat, duplication, SOLID violations)
+      - Health validation tests (CI/CD integrated)
+      - Guided remediation (clear action plans)
+      - Real-time dashboard (visual monitoring)
+    benefits_to_epm_doc_generator:
+      - "Prevents bloat (keep under 500 line soft limit)"
+      - "Enforces SRP (single responsibility for orchestrator)"
+      - "Detects duplication (no duplicate EPM orchestrators)"
+      - "Monitors complexity (keep methods simple)"
+      - "Ensures maintainability (SOLID compliance)"
+
+testing:
+  test_files:
+    - "tests/epm/test_doc_generator.py"
+    - "tests/epm/modules/test_diagram_generator.py"
+    - "tests/epm/modules/test_page_generator.py"
+    - "tests/epm/modules/test_validation_engine.py"
+  
+  test_strategy:
+    - "Unit tests for each generation module"
+    - "Integration tests for full pipeline"
+    - "Snapshot tests (compare generated output to expected)"
+    - "Performance tests (generation should complete in <5 minutes)"
+
+metrics:
+  success_criteria:
+    - "All 6 stages complete without errors"
+    - "Zero broken internal links"
+    - "All diagrams render correctly"
+    - "MkDocs builds successfully"
+    - "Generation completes in <5 minutes"
+  
+  tracking:
+    - "Generation duration per stage"
+    - "Files generated (by type)"
+    - "Validation errors/warnings"
+    - "Backup size"
+    - "Documentation size (before/after)"
+
+copyright:
+  notice: "© 2024-2025 Asif Hussain. All rights reserved."
+  license: "Proprietary - Part of CORTEX 3.0"

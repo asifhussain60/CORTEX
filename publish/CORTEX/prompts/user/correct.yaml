@@ -1,0 +1,134 @@
+# CORTEX Correct Plugin
+# Override incorrect assumptions and hallucinations
+
+version: "2.0"
+type: "workflow"
+name: "Correct"
+description: "User correction workflow to fix misunderstandings"
+author: "CORTEX"
+created: "2025-01-15"
+
+# No specific file targets - correction applies to ongoing work
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "halt_current_work"
+    action: "execute"
+    params:
+      stop_active_tasks: true
+      rollback_uncommitted: "${rollback_changes}"
+      preserve_context: true
+
+  - step: "capture_correction"
+    action: "analyze"
+    params:
+      extract_what_was_wrong: true
+      extract_correct_approach: true
+      identify_affected_files: true
+      identify_misunderstandings: true
+
+  - step: "analyze_current_state"
+    action: "analyze"
+    params:
+      review_recent_actions: true
+      review_modified_files: true
+      review_assumptions_made: true
+
+  - step: "validate_correction"
+    action: "validate"
+    params:
+      verify_files_exist: true
+      verify_apis_exist: true
+      verify_dependencies_exist: true
+      check_against_codebase: true
+
+  - step: "update_understanding"
+    action: "execute"
+    params:
+      update_working_memory: true
+      clear_false_assumptions: true
+      record_correction: true
+      update_context: true
+
+  - step: "propose_corrected_approach"
+    action: "notify"
+    params:
+      show_what_was_wrong: true
+      show_what_is_correct: true
+      show_corrected_plan: true
+      request_confirmation: true
+
+  - step: "wait_for_confirmation"
+    action: "validate"
+    params:
+      require_user_approval: true
+      timeout_seconds: 300
+
+  - step: "log_correction"
+    action: "execute"
+    params:
+      tier: 1
+      log_to_session: true
+      record_what_was_wrong: true
+      record_correct_approach: true
+      record_rationale: true
+      update_conversation: true
+
+  - step: "update_session_state"
+    action: "execute"
+    params:
+      update_next_steps: true
+      mark_incorrect_assumptions: true
+      add_validation_note: true
+
+  - step: "resume_work"
+    action: "notify"
+    condition: "user_confirmed"
+    params:
+      show_corrected_approach: true
+      show_next_steps: true
+
+# Validation rules
+validation:
+  - check: "correction_understood"
+    scope: "user_input"
+    required: true
+    params:
+      identified_what_wrong: true
+      identified_correct_approach: true
+
+  - check: "files_validated"
+    scope: "codebase"
+    required: true
+    params:
+      mentioned_files_exist: true
+      mentioned_apis_exist: false  # May need to create
+
+  - check: "user_confirmed"
+    scope: "corrected_plan"
+    required: true
+    params:
+      user_approved_approach: true
+
+# Parameters
+parameters:
+  - name: "correction"
+    type: "string"
+    required: true
+    description: "User's correction explaining what was wrong"
+
+  - name: "rollback_changes"
+    type: "bool"
+    default: false
+    description: "Rollback uncommitted changes"
+
+  - name: "require_confirmation"
+    type: "bool"
+    default: true
+    description: "Require user confirmation before resuming"
+
+  - name: "log_correction"
+    type: "bool"
+    default: true
+    description: "Log correction to session for learning"

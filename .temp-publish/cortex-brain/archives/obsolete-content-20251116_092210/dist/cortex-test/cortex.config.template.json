@@ -1,0 +1,60 @@
+{
+  "application": {
+    "name": "{{PROJECT_NAME:CORTEX}}",
+    "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
+    "language": "TypeScript/Python/PowerShell",
+    "rootPath": "{{PROJECT_ROOT}}",
+    "buildCommand": "npm run build",
+    "runCommand": "npm run dev"
+  },
+  "testing": {
+    "framework": "None",
+    "configPath": "",
+    "orchestrationPattern": "none",
+    "orchestrationScript": "",
+    "healthCheckUrl": "",
+    "healthCheckTimeout": 30,
+    "testCommand": "",
+    "headlessDefault": false
+  },
+  "database": {
+    "provider": "None",
+    "connectionStringKey": "",
+    "testSessionId": null,
+    "testHostToken": ""
+  },
+  "governance": {
+    "autoChainTasks": true,
+    "autoChainPhases": false,
+    "requireBuildValidation": false,
+    "requireGitValidation": true,
+    "testQualityThreshold": 70
+  },
+  "token_optimization": {
+    "enabled": true,
+    "soft_limit": 40000,
+    "hard_limit": 50000,
+    "target_reduction": 0.6,
+    "quality_threshold": 0.9,
+    "cache_check_frequency": 5,
+    "comment": "Phase 1.5: Token Optimization System - Reduces API costs by 50-70% while maintaining >0.9 quality score"
+  },
+  "vision_api": {
+    "enabled": false,
+    "max_tokens_per_image": 500,
+    "max_image_size_bytes": 2000000,
+    "downscale_threshold": 1920,
+    "jpeg_quality": 85,
+    "cache_analysis_results": true,
+    "cache_ttl_hours": 24,
+    "warn_threshold_tokens": 400,
+    "comment": "Phase 1.6: Vision API Integration - Enables screenshot analysis with token budgets (<2% token increase)"
+  },
+  "portability": {
+    "version": "5.0.0",
+    "lastUpdated": "{{TIMESTAMP:YYYY-MM-DD}}",
+    "configSchema": "cortex-config-v5.0",
+    "setupCompleted": false,
+    "kdsRoot": "{{KDS_ROOT:}}"
+  }
+}
