@@ -66,21 +66,6 @@ Codenstein does not care.
 
 ---
 
-## Table of Contents
-
-1. [The Amnesia Problem](#01-the-amnesia-problem)
-2. [Building First Memory](#02-building-first-memory)
-3. [The Learning System](#03-the-learning-system)
-4. [Context Intelligence](#04-context-intelligence)
-5. [The Dual Hemisphere Brain](#05-the-dual-hemisphere-brain)
-6. [Intelligence & Automation](#06-intelligence-and-automation)
-7. [Protection & Governance](#07-protection-and-governance)
-8. [Integration & Extensibility](#08-integration-and-extensibility)
-9. [Real-World Scenarios](#09-real-world-scenarios)
-10. [The Transformation](#10-the-transformation)
-
----
-
 # Chapter 1: The Amnesia Problem
 
 ## When Your AI Forgets Everything
