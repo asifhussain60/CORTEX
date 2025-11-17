@@ -41,6 +41,11 @@
   },
   "vision_api": {
     "enabled": false,
+    "auto_detect_images": true,
+    "auto_analyze_on_detect": true,
+    "auto_inject_context": true,
+    "max_images_per_request": 5,
+    "supported_formats": ["png", "jpg", "jpeg", "webp", "gif", "bmp"],
     "max_tokens_per_image": 500,
     "max_image_size_bytes": 2000000,
     "downscale_threshold": 1920,
@@ -48,7 +53,7 @@
     "cache_analysis_results": true,
     "cache_ttl_hours": 24,
     "warn_threshold_tokens": 400,
-    "comment": "Phase 1.6: Vision API Integration - Enables screenshot analysis with token budgets (<2% token increase)"
+    "comment": "Phase 1.6: Vision API Integration - Enables screenshot analysis with token budgets (<2% token increase). Auto-detection analyzes images automatically when attached."
   },
   "smart_hints": {
     "enabled": true,

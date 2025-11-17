@@ -56,12 +56,22 @@ class IntentRouter(BaseAgent):
         # }
     """
     
-    def __init__(self, name: str, tier1_api=None, tier2_kg=None, tier3_context=None):
+    def __init__(self, name: str, tier1_api=None, tier2_kg=None, tier3_context=None, config=None):
         """Initialize IntentRouter with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.routing_history = []  # Track routing decisions for learning
         self.agents = {}  # Registry of available agents for routing
+        self.config = config or {}
         self._initialize_agent_registry()
+        
+        # Initialize Vision orchestrator for automatic image detection
+        try:
+            from src.tier1.vision_orchestrator import VisionOrchestrator
+            self.vision_orchestrator = VisionOrchestrator(self.config)
+            self.logger.info("Vision orchestrator initialized - automatic image detection enabled")
+        except Exception as e:
+            self.logger.warning(f"Could not initialize vision orchestrator: {e}")
+            self.vision_orchestrator = None
         
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
@@ -166,6 +176,21 @@ class IntentRouter(BaseAgent):
         start_time = self.logger.info("Starting intent routing")
         
         try:
+            # Step 0: Check for images and analyze automatically (PRIORITY)
+            if self.vision_orchestrator:
+                vision_result = self._process_images(request)
+                if vision_result['images_found']:
+                    # Inject vision analysis into request context
+                    if not request.context:
+                        request.context = {}
+                    request.context['vision_analysis'] = vision_result
+                    
+                    # Log image detection
+                    self.logger.info(
+                        f"Auto-detected {len(vision_result['detected_images'])} image(s), "
+                        f"analyzed {vision_result['images_analyzed']}"
+                    )
+            
             # Check for investigation commands first
             if self._is_investigation_request(request.user_message):
                 return self._handle_investigation_request(request)
@@ -573,6 +598,51 @@ class IntentRouter(BaseAgent):
             self.logger.error(f"Investigation routing failed: {e}")
             # Fallback to regular routing
             return self._handle_regular_routing(request)
+    
+    def _process_images(self, request: AgentRequest) -> Dict:
+        """
+        Process images in request with Vision API.
+        
+        Args:
+            request: The agent request to check for images
+            
+        Returns:
+            Vision processing result dictionary
+        """
+        try:
+            # Extract attachments from context if available
+            attachments = None
+            if request.context:
+                attachments = request.context.get('attachments')
+            
+            # Determine context type for specialized prompts
+            context_type = 'generic'
+            message_lower = request.user_message.lower()
+            
+            if 'plan' in message_lower or 'feature' in message_lower:
+                context_type = 'planning'
+            elif 'error' in message_lower or 'bug' in message_lower or 'debug' in message_lower:
+                context_type = 'debugging'
+            elif 'ado' in message_lower or 'work item' in message_lower:
+                context_type = 'ado'
+            
+            # Process request with Vision orchestrator
+            result = self.vision_orchestrator.process_request(
+                user_request=request.user_message,
+                attachments=attachments,
+                context_type=context_type
+            )
+            
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"Image processing error: {e}", exc_info=True)
+            return {
+                'images_found': False,
+                'images_analyzed': 0,
+                'images_failed': 0,
+                'errors': [str(e)]
+            }
     
     def _handle_regular_routing(self, request: AgentRequest) -> AgentResponse:
         """Handle regular (non-investigation) routing"""
