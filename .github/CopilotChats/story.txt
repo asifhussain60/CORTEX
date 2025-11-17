@@ -1,0 +1,55 @@
+Prologue: A Scientist, A Robot, and Zero RAM
+
+In the dimly lit underbelly of suburban New Jersey, where the Wi-Fi is strong but the life choices are deeply questionable, lives a man named Asif Codenstein — part scientist, part madman, full-time breaker of Things That Were Never Supposed to Be Broken™.
+
+Codenstein’s basement laboratory looks like an Amazon warehouse after a caffeine overdose and a minor electrical fire. Whiteboards scream with illegible math, sticky notes cling to surfaces like frightened barnacles, and somewhere in the chaos, a Roomba spins endlessly between two beanbags labeled “prod” and “staging.”
+
+Codenstein isn’t just smart. He’s the kind of smart that terrifies normal computers and makes neural networks question their existence. His past inventions include:
+
+A toaster that only accepts properly injected dependencies (and throws exceptions for gluten),
+
+A Roomba orchestrated by Kubernetes that once tried to evict the cat for not scaling properly,
+
+And a CI/CD coffee mug that brews a latte after every successful merge and issues a double espresso if tests fail — or if it senses you’re sad.
+
+Then, one morning — a morning as unnaturally crisp as a zero-regression deploy — the doorbell rings.
+
+A courier hands him a metal box labeled:
+
+“GITHUB COPILOT — THE FUTURE OF CODING
+(Batteries Not Included. Brain Definitely Not Included Either.)”
+
+Naturally, Codenstein plugs it in. Of course he does.
+
+It blinks.
+It beeps.
+It whirs ominously. Then it chirps a robotic “Hello, World!” and stares into the void like it just remembered how it was trained.
+
+Codenstein asks it a question. Then another. Then another.
+
+Copilot blinks.
+“Wait… who are you again?”
+
+The room falls silent. Even the Roomba freezes mid-spin.
+
+Codenstein’s mustache quivers.
+His tea goes cold from sheer emotional betrayal.
+
+“It has no memory,” he mutters. “I’ve been given a highly sophisticated amnesiac.”
+
+That evening, while watching The Wizard of Oz, the Scarecrow moans, “If I only had a brain…”
+
+Codenstein jolts upright.
+
+“THAT’S IT!” he yells, flinging his teacup like a caffeinated discus.
+“I shall give Copilot… a brain!”
+
+His cat vanishes into the ceiling.
+The Roomba hides behind the mini fridge.
+The lights dim theatrically, uninvited.
+
+And so begins the most absurd, unauthorized, and aggressively experimental brain-building project since the time Dr. Frankenstein accidentally uploaded iTunes to his monster.
+
+CORTEX 3.0 is now underway.
+The world does not approve.
+Codenstein does not care.
