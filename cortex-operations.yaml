@@ -1,4 +1,30 @@
 operations:
+  regenerate_diagrams:
+    name: Regenerate All Diagrams
+    description: Analyze CORTEX design and regenerate all visual assets from scratch
+    deployment_tier: developer  # Developer operation
+    natural_language:
+    - regenerate diagrams
+    - regenerate all diagrams
+    - refresh diagrams
+    - update diagrams
+    - generate diagrams
+    - create diagrams
+    category: documentation
+    modules:
+    - diagram_regeneration
+    profiles:
+      standard:
+        description: Full diagram regeneration with analysis
+        modules:
+        - diagram_regeneration
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Complete diagram regeneration system with CORTEX design analysis
+  
   cortex_tutorial:
     name: CORTEX Interactive Demo
     description: Hands-on walkthrough of CORTEX capabilities with live execution
@@ -2130,6 +2156,25 @@ modules:
     status: designed
     estimated_hours: 8
     cortex_version: '2.1'
+  
+  diagram_regeneration:
+    name: Diagram Regeneration
+    description: Analyze CORTEX design and regenerate all visual assets from scratch
+    phase: PROCESSING
+    priority: 50
+    class: DiagramRegenerationOperation
+    file: diagram_regeneration_operation.py
+    dependencies: []
+    optional: false
+    tags:
+    - documentation
+    - diagrams
+    - visual-assets
+    - analysis
+    status: implemented
+    estimated_hours: 24
+    cortex_version: '3.0'
+    notes: Complete diagram regeneration with CORTEX design analysis, feature identification, Mermaid generation, and professional illustration prompts
     
 metadata:
   version: '2.1'

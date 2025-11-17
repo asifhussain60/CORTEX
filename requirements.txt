@@ -2,39 +2,39 @@
 # Phase 0: Tier 0 (Instinct Layer)
 
 # Testing
-pytest>=7.4.0
-pytest-cov>=4.1.0
+pytest>=8.4.0
+pytest-cov>=6.0.0
 
 # YAML parsing
-PyYAML>=6.0.1
+PyYAML>=6.0.2
 
 # Documentation (Phase 0)
-mkdocs>=1.5.0
-mkdocs-material>=9.4.0
-mkdocs-mermaid2-plugin>=1.1.0
+mkdocs>=1.6.1
+mkdocs-material>=9.5.52
+mkdocs-mermaid2-plugin>=1.2.1
 
 # Phase 1 & 2: SQLite with FTS5 (coming soon)
 # No additional dependencies needed - uses Python's built-in sqlite3
 
 # Phase 2: Ambient Capture
-watchdog>=3.0.0  # File system monitoring
-psutil>=5.9.0  # Process monitoring for terminal tracker
+watchdog>=6.0.0  # File system monitoring
+psutil>=6.1.1  # Process monitoring for terminal tracker
 send2trash>=1.8.3  # OS-native Recycle Bin support for sweeper plugin
 
 # Phase 1.5: Token Optimization System
-scikit-learn>=1.3.0  # ML context compression (TF-IDF vectorization)
-numpy>=1.24.0  # Required by scikit-learn
+scikit-learn>=1.5.2  # ML context compression (TF-IDF vectorization) - compatible with Python 3.9
+numpy>=1.26.4,<2.0.0  # Required by scikit-learn - Python 3.9 compatible
 # pydantic removed (Python 3.13 build issue); using dataclasses validation for planning schemas
 
 # Development
-black>=23.0.0
-flake8>=6.0.0
-mypy>=1.0.0
+black>=24.12.0
+flake8>=7.1.1
+mypy>=1.14.2
 
 # Admin Tools (Code Analysis & Optimization)
 radon>=6.0.1  # Complexity metrics (cyclomatic, maintainability)
-pylint>=3.0.0  # Comprehensive code quality analysis
-vulture>=2.10  # Dead code detection
+pylint>=3.3.4  # Comprehensive code quality analysis
+vulture>=2.14  # Dead code detection
 
 # Track A: Conversation Import (CORTEX 3.0)
-pyperclip>=1.8.2  # Optional: Clipboard support for conversation import
+pyperclip>=1.9.0  # Optional: Clipboard support for conversation import
