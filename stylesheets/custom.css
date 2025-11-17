@@ -50,6 +50,29 @@
   background-color: #FFFFFF;
 }
 
+/* FIX: Page title styling - colorful gradient for main title */
+.md-typeset h1:first-of-type,
+.md-content__inner > h1:first-child {
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent), #A855F7) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 700 !important;
+  font-size: 2.5rem !important;
+  text-shadow: 0 2px 4px rgba(99, 102, 241, 0.1) !important;
+  padding: 1rem 0 !important;
+  border-bottom: 4px solid transparent !important;
+  border-image: linear-gradient(90deg, var(--cortex-primary), var(--cortex-accent), #A855F7) 1 !important;
+  margin-bottom: 2rem !important;
+}
+
+/* Special styling for the brain emoji in title */
+.md-typeset h1:first-of-type::before {
+  content: "🧠 ";
+  -webkit-text-fill-color: initial !important;
+  margin-right: 0.5rem;
+}
+
 /* ============================================
    TYPOGRAPHY - Comics for Story, Standard for Technical
    ============================================ */
@@ -174,29 +197,30 @@
 }
 
 /* ============================================
-   CODE BLOCKS - Black Background, White Text
+   CODE BLOCKS - Dark Grey Background, White Text
    ============================================ */
 
-/* Override Material theme code blocks */
+/* Override Material theme code blocks - use dark grey instead of black */
 .highlight,
 .highlighttable,
 pre,
 code[class*="language-"],
 .md-typeset pre > code {
-  background-color: var(--bg-code) !important;
+  background-color: #1F2937 !important;  /* Dark grey instead of black */
   color: var(--text-code) !important;
 }
 
 .md-typeset pre {
-  background-color: var(--bg-code) !important;
-  border: 1px solid var(--border-code);
+  background-color: #1F2937 !important;  /* Dark grey instead of black */
+  border: 1px solid #374151;
   border-radius: 6px;
   padding: 1rem;
   overflow-x: auto;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
 }
 
 .md-typeset code {
-  background-color: var(--bg-code) !important;
+  background-color: #1F2937 !important;  /* Dark grey instead of black */
   color: var(--text-code) !important;
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
@@ -208,7 +232,7 @@ code[class*="language-"],
 .md-typeset p code,
 .md-typeset li code,
 .md-typeset td code {
-  background-color: var(--bg-code) !important;
+  background-color: #1F2937 !important;  /* Dark grey instead of black */
   color: var(--text-code) !important;
 }
 
@@ -343,16 +367,120 @@ code[class*="language-"],
    NAVIGATION - Enhanced for CORTEX
    ============================================ */
 
-/* Active navigation item */
-.md-nav__link--active {
-  color: var(--cortex-primary) !important;
-  font-weight: 600;
+/* Colorful sidebar background - subtle gradient */
+.md-sidebar--primary {
+  background: linear-gradient(180deg, #F8F9FA 0%, #E9ECEF 100%) !important;
+  border-right: 3px solid var(--cortex-primary) !important;
+  z-index: 3 !important;  /* Fix: Ensure sidebar doesn't overlap content */
 }
 
-/* Navigation section titles */
+.md-sidebar--primary .md-sidebar__scrollwrap,
+.md-sidebar--primary .md-sidebar__inner,
+.md-sidebar__inner,
+[data-md-component="sidebar"],
+.md-nav--primary {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* REMOVE BLACK BAR COMPLETELY - Hide the repository source link area */
+.md-nav__source,
+.md-source {
+  display: none !important;
+}
+
+/* REMOVE BLACK BAR - Hide the sidebar header completely */
+.md-sidebar--primary .md-sidebar__inner .md-nav--primary > .md-nav__title {
+  display: none !important;
+}
+
+/* Fix: Prevent sidebar from sticking over content on scroll */
+.md-sidebar--primary {
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+/* Fix: Ensure main content doesn't get hidden behind sidebar */
+.md-content {
+  position: relative !important;
+  z-index: 1 !important;
+  margin-left: 0 !important;
+}
+
+/* Section titles with gradient background */
+.md-nav--primary > .md-nav__title {
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent)) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+  border: none !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  margin: 0.5rem !important;
+}
+
+.md-nav--primary > .md-nav__title[for] {
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent)) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Make sidebar navigation text dark grey (not black) */
+.md-nav__link {
+  color: #374151 !important;  /* Dark grey for readability */
+  font-weight: 500 !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  margin: 0.2rem 0.5rem !important;
+}
+
+/* Active navigation item - vibrant color */
+.md-nav__link--active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)) !important;
+  color: var(--cortex-primary) !important;
+  font-weight: 700 !important;
+  border-left: 4px solid var(--cortex-primary) !important;
+}
+
+/* Navigation section titles - Colorful with icons */
 .md-nav__title {
-  font-weight: 600;
-  color: var(--cortex-primary);
+  font-weight: 700 !important;
+  color: var(--cortex-primary) !important;
+  font-size: 1.1rem !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)) !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  margin: 0.5rem !important;
+  border-left: 4px solid var(--cortex-accent) !important;
+}
+
+/* Fix the navigation label specifically */
+.md-nav__title .md-nav__label {
+  color: var(--cortex-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Navigation list items */
+.md-nav__item {
+  color: #374151 !important;
+}
+
+/* Nested navigation items */
+.md-nav__item .md-nav__link {
+  color: #4B5563 !important;  /* Slightly lighter grey for nested items */
+  padding-left: 1.5rem !important;
+}
+
+/* Hover state for navigation links - colorful highlight */
+.md-nav__link:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(168, 85, 247, 0.15)) !important;
+  color: var(--cortex-accent) !important;
+  transform: translateX(4px) !important;
+  border-left: 4px solid var(--cortex-accent) !important;
 }
 
 /* ============================================
@@ -369,7 +497,7 @@ code[class*="language-"],
 
 .cortex-hero h1 {
   font-size: 3rem;
-  color: var(--cortex-primary);
+  color: #4338CA !important;  /* Darker indigo for better visibility */
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -442,6 +570,28 @@ code[class*="language-"],
   .story-image img {
     border-radius: 8px;
   }
+  
+  /* Fix: Collapse sidebar on mobile to prevent overlap */
+  .md-sidebar--primary {
+    position: relative !important;
+    height: auto !important;
+  }
+  
+  .md-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* Fix: Tablet breakpoint */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .md-sidebar--primary {
+    width: 200px !important;
+  }
+  
+  .md-nav__link {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.9rem !important;
+  }
 }
 
 /* ============================================
@@ -464,4 +614,120 @@ code[class*="language-"],
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--cortex-accent);
+}
+
+/* ============================================
+   ANCIENT RULES STYLING - Sacred Text
+   ============================================ */
+
+.ancient-rules {
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f0e8 100%);
+  padding: 3rem;
+  margin: 3rem 0;
+  border: 3px double #8b7355;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(139, 115, 85, 0.15);
+  position: relative;
+}
+
+.ancient-rules::before {
+  content: "✦";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #8b7355;
+  background: #faf8f3;
+  padding: 0 1rem;
+}
+
+.ancient-rules h2 {
+  font-family: 'Cinzel', 'IM Fell English', serif !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #5d4e37;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ancient-rules > p:first-of-type {
+  font-family: 'IM Fell English', 'Cinzel', serif !important;
+  font-style: italic;
+  text-align: center;
+  color: #8b7355;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.ancient-rules h3 {
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b5744;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #d4c5b0;
+  padding-bottom: 0.5rem;
+}
+
+.ancient-rules p strong {
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700;
+  color: #5d4e37;
+  font-size: 1.05rem;
+}
+
+.ancient-rules p {
+  font-family: 'IM Fell English', Georgia, serif !important;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #3e352e;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.ancient-rules > p:last-of-type {
+  font-family: 'IM Fell English', serif !important;
+  font-style: italic;
+  text-align: center;
+  color: #8b7355;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  border-top: 1px solid #d4c5b0;
+  padding-top: 1rem;
+}
+
+/* Dark mode adjustments for ancient rules */
+[data-md-color-scheme="slate"] .ancient-rules {
+  background: linear-gradient(135deg, #2d2520 0%, #3a2f28 100%);
+  border-color: #8b7355;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules::before {
+  background: #2d2520;
+  color: #c9a875;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules h2 {
+  color: #d4b896;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules > p:first-of-type {
+  color: #c9a875;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules h3 {
+  color: #c9a875;
+  border-bottom-color: #5d4e37;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules p {
+  color: #e5d4c1;
+}
+
+[data-md-color-scheme="slate"] .ancient-rules p strong {
+  color: #d4b896;
 }
