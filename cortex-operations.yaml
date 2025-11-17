@@ -694,7 +694,7 @@ operations:
     - onboard app
     - application onboarding
     category: setup
-    status: in_progress
+    status: ready
     modules:
     - copy_cortex_entry_points
     - install_tooling

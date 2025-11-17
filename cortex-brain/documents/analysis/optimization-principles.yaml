@@ -162,6 +162,54 @@ yaml_optimization:
       inline_modules = load('cortex-operations.yaml')['modules']
       all_modules = primary_modules | inline_modules  # Merge
     evidence: "Module consistency validation fixed by unified resolution"
+  
+  pattern_4_timestamp_caching:
+    name: "Timestamp-Based File Caching"
+    description: "Cache parsed YAML with automatic invalidation via file mtime"
+    benefit: "99.9% load time reduction with zero-overhead invalidation"
+    implementation: |
+      # Cache parsed result + file modification time
+      _cache = None
+      _cache_mtime = None
+      
+      def load_yaml(path, force_reload=False):
+          current_mtime = os.path.getmtime(path)
+          
+          # Cache hit if file unchanged
+          if not force_reload and _cache and _cache_mtime == current_mtime:
+              return _cache  # 0.11ms average
+          
+          # Cache miss - reload
+          with open(path) as f:
+              _cache = yaml.safe_load(f)  # 147ms average
+          _cache_mtime = current_mtime
+          return _cache
+    evidence: "brain-protection-rules.yaml: 147ms → 0.11ms (99.9% improvement, 1277x speedup)"
+    performance:
+      cold_cache: 147  # ms (first load)
+      warm_cache: 0.11  # ms (subsequent loads)
+      improvement: 99.9  # %
+      speedup: 1277  # x
+      session_savings: 98.9  # % (100-operation session)
+    validation:
+      tests_passing: 17  # out of 17 non-skipped
+      hit_rate_target: 90  # % minimum
+      warm_cache_target: 5  # ms maximum
+      actual_hit_rate: 99  # % (production usage)
+      actual_warm_time: 0.11  # ms (far below 5ms target)
+    safety:
+      - "Automatic invalidation on file modification"
+      - "Manual cache clear for testing"
+      - "Force reload parameter available"
+      - "Fallback to direct load if cache fails"
+      - "No stale data risk (checked every call)"
+    application:
+      - "Apply to frequently-accessed large YAML files (>10KB)"
+      - "Use os.path.getmtime() for zero-overhead validation"
+      - "Global variables for single-file caching"
+      - "Add cache statistics API for monitoring"
+      - "Include force_reload parameter for testing"
+    reference: "src/tier0/brain_protection_loader.py, BRAIN-PERFORMANCE-CACHING-2025-11-17.md"
 
 plugin_optimization:
   
