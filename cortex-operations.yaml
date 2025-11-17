@@ -1,4 +1,45 @@
 operations:
+  publish_cortex:
+    name: Publish CORTEX to Branch
+    description: Build production-ready package and publish to cortex-publish branch for user deployment
+    deployment_tier: admin  # Admin operation (publishes CORTEX itself)
+    natural_language:
+    - publish cortex
+    - publish to branch
+    - create publish branch
+    - build production package
+    - deploy cortex
+    - release cortex
+    - create production ready version of cortex
+    - create production version
+    - build production ready cortex
+    - prepare cortex for deployment
+    - package cortex for production
+    - export cortex to production branch
+    - create cortex release
+    category: deployment
+    modules:
+    - publish_branch_orchestrator
+    profiles:
+      dry_run:
+        description: Preview publish without git operations
+        modules:
+        - publish_branch_orchestrator
+        options:
+          dry_run: true
+      standard:
+        description: Full publish to cortex-publish branch
+        modules:
+        - publish_branch_orchestrator
+        options:
+          dry_run: false
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Integrates existing publish_to_branch.py script into CORTEX operations system
+  
   regenerate_diagrams:
     name: Regenerate All Diagrams
     description: Analyze CORTEX design and regenerate all visual assets from scratch
@@ -2175,6 +2216,25 @@ modules:
     estimated_hours: 24
     cortex_version: '3.0'
     notes: Complete diagram regeneration with CORTEX design analysis, feature identification, Mermaid generation, and professional illustration prompts
+  
+  publish_branch_orchestrator:
+    name: Publish Branch Orchestrator
+    description: Build production package and publish to dedicated git branch
+    phase: DEPLOYMENT
+    priority: 100
+    class: PublishBranchOrchestrator
+    file: publish/publish_branch_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - publish
+    - deployment
+    - production
+    - git
+    status: implemented
+    estimated_hours: 0
+    cortex_version: '3.0'
+    notes: Wraps existing publish_to_branch.py script for integration with CORTEX operations system
     
 metadata:
   version: '2.1'
