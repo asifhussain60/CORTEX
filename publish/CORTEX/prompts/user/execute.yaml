@@ -1,0 +1,106 @@
+# CORTEX Execute Command Plugin
+# Continue working on active session by executing next task
+
+version: "2.0"
+type: "workflow"
+name: "Execute Next Task"
+description: "Load session state, identify next task, execute with test-first workflow"
+author: "CORTEX"
+created: "2025-11-08"
+
+# No specific targets - operates on session state
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "load_session"
+    action: "query"
+    params:
+      path: "sessions/current-session.json"
+      validate_exists: true
+      on_missing: "error_no_session"
+
+  - step: "load_code_executor"
+    action: "query"
+    params:
+      agent: "code_executor"
+      module: "prompts/internal/code-executor.md"
+
+  - step: "identify_next_task"
+    action: "analyze"
+    params:
+      read_current_phase: true
+      read_task_number: true
+      load_task_details: true
+      check_dependencies: true
+
+  - step: "execute_task"
+    action: "execute"
+    params:
+      follow_test_first: true  # Rule #8
+      implement_changes: true
+      document_in_work_log: true
+
+  - step: "validate_changes"
+    action: "validate"
+    params:
+      run_affected_tests: true
+      check_build_status: true
+      verify_no_errors: true
+
+  - step: "update_state"
+    action: "execute"
+    params:
+      mark_task_complete: true
+      update_progress: true
+      save_handoff_data: true
+      paths:
+        - "sessions/current-session.json"
+        - "keys/{feature}/work-log.md"
+        - "keys/{feature}/handoffs/execute-{N}.json"
+
+  - step: "report_progress"
+    action: "notify"
+    params:
+      show_completion: true
+      show_files_modified: true
+      show_changes_summary: true
+      show_test_results: true
+      show_build_status: true
+      show_next_command: "execute.yaml"
+      show_progress_percent: true
+
+  - step: "check_phase_complete"
+    action: "validate"
+    params:
+      check_all_tasks_done: true
+      on_complete: "notify_phase_done"
+
+# Validation rules
+validation:
+  - check: "session_exists"
+    scope: "file_system"
+    required: true
+    params:
+      path: "sessions/current-session.json"
+
+  - check: "task_completed"
+    scope: "session_state"
+    required: true
+
+  - check: "work_log_updated"
+    scope: "file_system"
+    required: true
+
+  - check: "tests_passing"
+    scope: "test_results"
+    required: false
+    params:
+      allow_known_failures: true
+
+  - check: "build_passing"
+    scope: "build_status"
+    required: true
+
+# Parameters (execute takes no user parameters - reads from session)
+parameters: []

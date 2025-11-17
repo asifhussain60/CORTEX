@@ -678,7 +678,7 @@ CORTEX will:
 | 📊 **Tracking** | Enable conversation memory | #file:../../prompts/shared/tracking-guide.md |
 | ⚙️ **Configuration** | Advanced settings, multi-machine | #file:../../prompts/shared/configuration-reference.md |
 
-**Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Manual: `setup environment` or #file:../../docs/plugins/platform-switch-plugin.md
+**Platform Switch:** Auto-detects Mac/Windows/Linux on startup. Use `setup environment` for manual configuration.
 
 ---
 
@@ -752,8 +752,8 @@ let's plan a feature / plan authentication system
 | Operations | #file:../../prompts/shared/operations-reference.md |
 | Plugins | #file:../../prompts/shared/plugin-system.md |
 | Limitations | #file:../../prompts/shared/limitations-and-status.md |
-| Test Strategy | #file:../../cortex-brain/test-strategy.yaml |
-| Optimization Principles | #file:../../cortex-brain/optimization-principles.yaml |
+| Test Strategy | #file:../../cortex-brain/documents/implementation-guides/test-strategy.yaml |
+| Optimization Principles | #file:../../cortex-brain/documents/analysis/optimization-principles.yaml |
 
 ---
 
@@ -1036,8 +1036,6 @@ logs/
 **Phase 6: Documentation** - ⏳ PLANNED (30 min)
 
 **Total Estimated Time:** 6-7 hours
-
-**Detailed Planning:** See #file:../.github/CopilotChats/CC01 for comprehensive architectural design
 
 ---
 

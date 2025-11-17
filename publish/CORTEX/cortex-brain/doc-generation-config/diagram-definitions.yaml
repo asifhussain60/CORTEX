@@ -1,0 +1,143 @@
+# Diagram Definitions Configuration
+# Defines all diagrams to be generated for CORTEX 3.0 documentation
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+version: "1.0"
+description: "Diagram generation definitions for CORTEX 3.0"
+
+diagrams:
+  # Strategic Level Diagrams
+  - name: "CORTEX 4-Tier Architecture"
+    type: tier_architecture
+    output_path: images/diagrams/strategic/tier-architecture.md
+    description: "High-level 4-tier cognitive architecture"
+    data_sources:
+      - capabilities
+      - module_definitions
+  
+  - name: "Agent Coordination System"
+    type: agent_system
+    output_path: images/diagrams/strategic/agent-coordination.md
+    description: "Right/left brain agent coordination"
+    data_sources:
+      - capabilities
+      - operations_config
+  
+  - name: "Information Flow"
+    type: data_flow
+    output_path: images/diagrams/strategic/information-flow.md
+    description: "Data flow across tiers"
+    source: "User Intent"
+    target: "Code Execution"
+  
+  # Architectural Level Diagrams
+  - name: "EPM Documentation Generator Pipeline"
+    type: pipeline_flow
+    output_path: images/diagrams/architectural/epm-doc-generator-pipeline.md
+    description: "6-stage documentation generation pipeline"
+    stages:
+      - pre_flight_validation
+      - destructive_cleanup
+      - diagram_generation
+      - page_generation
+      - cross_reference_building
+      - post_validation
+  
+  - name: "Module Structure"
+    type: module_structure
+    output_path: images/diagrams/architectural/module-structure.md
+    description: "Python module organization"
+    data_sources:
+      - code_sources
+  
+  - name: "Brain Protection System"
+    type: pipeline_flow
+    output_path: images/diagrams/architectural/brain-protection.md
+    description: "Multi-layer brain protection mechanism"
+    stages:
+      - rule_validation
+      - change_approval
+      - backup_creation
+      - safe_execution
+      - verification
+  
+  # Operational Level Diagrams
+  - name: "Conversation Flow"
+    type: pipeline_flow
+    output_path: images/diagrams/operational/conversation-flow.md
+    description: "User conversation handling workflow"
+    stages:
+      - intent_capture
+      - context_enrichment
+      - agent_routing
+      - execution
+      - response_generation
+  
+  - name: "Knowledge Graph Update"
+    type: pipeline_flow
+    output_path: images/diagrams/operational/knowledge-graph-update.md
+    description: "Knowledge graph learning workflow"
+    stages:
+      - pattern_detection
+      - relationship_extraction
+      - graph_update
+      - validation
+  
+  - name: "Health Check System"
+    type: pipeline_flow
+    output_path: images/diagrams/operational/health-check.md
+    description: "System health monitoring workflow"
+    stages:
+      - metric_collection
+      - anomaly_detection
+      - alert_generation
+      - auto_remediation
+  
+  # Integration Level Diagrams
+  - name: "VS Code Integration"
+    type: data_flow
+    output_path: images/diagrams/integration/vscode-integration.md
+    description: "VS Code extension integration points"
+    source: "VS Code Extension"
+    target: "CORTEX Brain"
+  
+  - name: "Git Integration"
+    type: data_flow
+    output_path: images/diagrams/integration/git-integration.md
+    description: "Git analysis and commit workflow"
+    source: "Git Repository"
+    target: "Context Intelligence (T3)"
+  
+  - name: "MkDocs Integration"
+    type: data_flow
+    output_path: images/diagrams/integration/mkdocs-integration.md
+    description: "Documentation site generation"
+    source: "Generated Docs"
+    target: "MkDocs Site"
+
+# Diagram Generation Settings
+settings:
+  mermaid_theme: "default"
+  diagram_format: "markdown"
+  include_legend: true
+  auto_layout: true
+  
+  # Style overrides
+  styles:
+    tier_architecture:
+      node_shape: "rounded"
+      color_scheme: "blue_gradient"
+    
+    agent_system:
+      node_shape: "hexagon"
+      color_scheme: "green_purple"
+    
+    pipeline_flow:
+      node_shape: "rectangle"
+      color_scheme: "sequential"
+    
+    data_flow:
+      node_shape: "cylinder"
+      color_scheme: "orange"

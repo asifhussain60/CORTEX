@@ -1,0 +1,107 @@
+# CORTEX Plan Command Plugin
+# Create multi-phase implementation plan for new features
+
+version: "2.0"
+type: "workflow"
+name: "Plan New Feature"
+description: "Analyze request and create structured implementation plan with phases and tasks"
+author: "CORTEX"
+created: "2025-11-08"
+
+# No specific targets - operates on session state
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "load_work_planner"
+    action: "query"
+    params:
+      agent: "work_planner"
+      module: "prompts/internal/work-planner.md"
+
+  - step: "analyze_request"
+    action: "analyze"
+    params:
+      extract:
+        - "feature_requirements"
+        - "affected_layers"
+        - "complexity"
+        - "existing_work"
+      layers: ["UI", "API", "Database", "Tests"]
+
+  - step: "check_active_session"
+    action: "validate"
+    params:
+      query_active_sessions: true
+      warn_if_exists: true
+
+  - step: "create_plan"
+    action: "execute"
+    params:
+      break_into_phases: true
+      break_phases_into_tasks: true
+      define_success_criteria: true
+      estimate_effort: true
+
+  - step: "create_session"
+    action: "execute"
+    params:
+      generate_session_id: true
+      initialize_work_log: true
+      create_session_directory: true
+      paths:
+        - "sessions/current-session.json"
+        - "keys/{feature-name}/plan.md"
+        - "keys/{feature-name}/work-log.md"
+
+  - step: "provide_guidance"
+    action: "notify"
+    params:
+      show_plan_summary: true
+      show_next_command: "execute.yaml"
+      show_progress: "0% (planning complete)"
+
+# Validation rules
+validation:
+  - check: "plan_created"
+    scope: "session_state"
+    required: true
+
+  - check: "phases_defined"
+    scope: "plan"
+    required: true
+    params:
+      min_phases: 1
+
+  - check: "tasks_actionable"
+    scope: "plan"
+    required: true
+    params:
+      all_tasks_have_description: true
+
+  - check: "success_criteria_defined"
+    scope: "plan"
+    required: true
+
+  - check: "session_saved"
+    scope: "file_system"
+    required: true
+    params:
+      path: "sessions/current-session.json"
+
+# Parameters
+parameters:
+  - name: "feature_description"
+    type: "string"
+    required: true
+    description: "Natural language description of the feature to plan"
+
+  - name: "check_existing"
+    type: "bool"
+    default: true
+    description: "Check for existing active sessions"
+
+  - name: "auto_branch"
+    type: "bool"
+    default: false
+    description: "Automatically create git branch for feature"

@@ -186,6 +186,51 @@ templates:
       \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
       \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
       \ format]"
+  ado_created:
+    name: ADO Created
+    trigger:
+    - ado_created
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX ADO Planning**\nAuthor: Asif Hussain | \xA9 2024-2025\
+      \ | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your\
+      \ Request:**\n   You want to create a new ADO work item with planning template\n\
+      \n\u26A0\uFE0F **Challenge:** \u2713 **Accept**\n   This uses the ADO Planning\
+      \ System 2.0 with database storage and template-based workflow.\n\n\U0001F4AC\
+      \ **Response:**\n   Created ADO work item with complete planning template. File\
+      \ opened in VS Code for review and customization.\n\n\U0001F4DD **Your Request:**\
+      \ Create new ADO work item\n\n\U0001F50D **Next Steps:**\n   1. Review and customize\
+      \ the planning template\n   2. Fill in Definition of Ready (DoR) checkboxes\n\
+      \   3. Define acceptance criteria\n   4. Approve plan when ready: 'approve ado\
+      \ [number]'\n   5. Start implementation: 'resume ado [number]'"
+  ado_resumed:
+    name: ADO Resumed
+    trigger:
+    - ado_resumed
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX ADO Resume**\nAuthor: Asif Hussain | \xA9 2024-2025\
+      \ | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your\
+      \ Request:**\n   You want to resume work on an existing ADO item\n\n\u26A0\uFE0F\
+      \ **Challenge:** \u2713 **Accept**\n   Context restored from database with recent\
+      \ activity, files, and smart suggestions.\n\n\U0001F4AC **Response:**\n   Restored\
+      \ ADO context with activity history and related files. All planning documents\
+      \ opened in VS Code.\n\n\U0001F4DD **Your Request:** Resume ADO work item\n\n\
+      \U0001F50D **Next Steps:**\n   1. Review activity log and recent changes\n  \
+      \ 2. Check DoR/DoD completion status\n   3. Continue implementation\n   4. Update\
+      \ status when milestones reached\n   5. Mark complete when DoD satisfied"
+  ado_search_results:
+    name: ADO Search Results
+    trigger:
+    - ado_search_results
+    response_type: table
+    content: "\U0001F9E0 **CORTEX ADO Search**\nAuthor: Asif Hussain | \xA9 2024-2025\
+      \ | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your\
+      \ Request:**\n   You want to search for ADO work items\n\n\u26A0\uFE0F **Challenge:**\
+      \ \u2713 **Accept**\n   Using FTS5 full-text search across all ADO fields (title,\
+      \ description, technical notes).\n\n\U0001F4AC **Response:**\n   [Display search\
+      \ results in table format]\n\n\U0001F4DD **Your Request:** Search ADO work items\n\
+      \n\U0001F50D **Next Steps:**\n   1. Review search results\n   2. Open specific\
+      \ ADO: 'resume ado [number]'\n   3. Refine search if needed\n   4. Filter by\
+      \ status: 'show ados planning' or 'show ados in-progress'"
   fallback:
     name: Fallback Response
     trigger:
@@ -210,6 +255,36 @@ routing:
   quick_start_triggers:
   - quick start
   - get started
+  planning_triggers:
+  - plan
+  - let's plan
+  - plan a feature
+  - plan this
+  - help me plan
+  - planning
+  - feature planning
+  - i want to plan
+  ado_planning_triggers:
+  - plan ado
+  - create ado
+  - new ado
+  - ado planning
+  - plan work item
+  ado_resume_triggers:
+  - resume ado
+  - continue ado
+  - open ado
+  - show ado
+  ado_search_triggers:
+  - find ado
+  - search ado
+  - list ado
+  - show ados
+  ado_status_triggers:
+  - ado status
+  - planning status
+  - show plans
+  - active ados
 formatting:
   mandatory_sections:
   - understanding

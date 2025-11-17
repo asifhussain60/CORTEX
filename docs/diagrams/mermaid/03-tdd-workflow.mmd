@@ -1,0 +1,50 @@
+%% CORTEX TDD Workflow
+%% Shows the RED → GREEN → REFACTOR cycle enforced by agents
+
+graph LR
+    START([User Request:<br/>'Add Authentication'])
+    
+    subgraph phase1["🔴 RED: Write Failing Test"]
+        P1A["Test Generator<br/>Creates Test Suite"]
+        P1B["LoginTests.cs<br/>test_valid_credentials()"]
+        P1C["Run Tests<br/>❌ ALL FAIL"]
+    end
+
+    subgraph phase2["🟢 GREEN: Make It Pass"]
+        P2A["Code Executor<br/>Minimal Implementation"]
+        P2B["AuthService.cs<br/>Login() method"]
+        P2C["Run Tests<br/>✅ ALL PASS"]
+    end
+
+    subgraph phase3["🔵 REFACTOR: Clean Up"]
+        P3A["Code Executor<br/>Improve Code Quality"]
+        P3B["Extract Methods<br/>Apply SOLID"]
+        P3C["Run Tests<br/>✅ STILL PASS"]
+    end
+
+    subgraph validate["✅ VALIDATE: Definition of Done"]
+        V1["Health Validator<br/>Zero Errors"]
+        V2["Health Validator<br/>Zero Warnings"]
+        V3["All Tests Pass<br/>Coverage ≥ 80%"]
+        V4["Commit Handler<br/>Semantic Message"]
+    end
+
+    START --> P1A
+    P1A --> P1B
+    P1B --> P1C
+    P1C -->|"Expected Failure"| P2A
+    P2A --> P2B
+    P2B --> P2C
+    P2C -->|"Tests Pass"| P3A
+    P3A --> P3B
+    P3B --> P3C
+    P3C -->|"Quality Improved"| V1
+    V1 --> V2
+    V2 --> V3
+    V3 --> V4
+    V4 --> DONE([✅ Feature Complete])
+
+    style phase1 fill:#EF4444,stroke:#991B1B,color:#fff
+    style phase2 fill:#10B981,stroke:#065F46,color:#fff
+    style phase3 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style validate fill:#6B46C1,stroke:#4C1D95,color:#fff

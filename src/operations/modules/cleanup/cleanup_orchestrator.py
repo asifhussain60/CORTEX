@@ -201,12 +201,12 @@ class CleanupOrchestrator(BaseOperationModule):
             start_time = datetime.now()
             
             # Display header
+            mode = "DRY RUN" if dry_run else "LIVE EXECUTION"
             print_minimalist_header(
                 operation_name="Cleanup",
                 version="1.0.0",
                 profile=profile,
-                mode="LIVE EXECUTION",
-                dry_run=dry_run
+                mode=mode
             )
             
             logger.info(f"Profile: {profile}")

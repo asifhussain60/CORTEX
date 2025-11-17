@@ -1,0 +1,457 @@
+# PR Review & Team Collaboration Guidelines (YAML)
+# Converted from: 27-pr-review-team-collaboration.md
+# Purpose: Structured PR review checklist and team collaboration workflow
+# Version: 2.0.0
+# Created: 2025-11-10
+
+metadata:
+  version: "2.0.0"
+  status: "design_phase"
+  created: "2025-11-07"
+  converted: "2025-11-10"
+  component: "team_collaboration_enhancement"
+  integration: "azure_devops"
+
+strategic_value:
+  knowledge_distribution: "3-5x faster onboarding"
+  quality_improvement: "20-30% reduction in post-merge bugs"
+  team_learning: "Shared patterns and best practices"
+  context_preservation: "Searchable team knowledge"
+  proactive_mentoring: "AI-assisted review suggestions"
+
+# Three-layer PR integration architecture
+architecture:
+  layer_1_pre_pr:
+    name: "Pre-PR Analysis"
+    when: "Before creating PR"
+    purpose: "Analyze changes and generate context"
+    outputs:
+      - "PR context summary"
+      - "Pattern extraction"
+      - "Risk assessment"
+      - "Suggested reviewers"
+  
+  layer_2_pr_creation:
+    name: "PR Creation & Enrichment"
+    when: "During PR creation"
+    purpose: "Auto-generate comprehensive PR description"
+    outputs:
+      - "What/Why/How documentation"
+      - "Risk summary"
+      - "Testing summary"
+      - "Review checklist"
+  
+  layer_3_knowledge_capture:
+    name: "Team Knowledge Capture"
+    when: "After PR review"
+    purpose: "Capture team learning from review"
+    outputs:
+      - "Approved patterns → Shared Tier 2"
+      - "Anti-patterns from rejections"
+      - "Team best practices update"
+
+# PR context package structure
+pr_context_package:
+  summary:
+    description: "High-level overview of changes"
+    max_length: 500
+    includes:
+      - "What changed"
+      - "Business rationale"
+      - "Implementation approach"
+  
+  what_changed:
+    files_modified: "count"
+    files_added: "count"
+    lines_added: "count"
+    lines_deleted: "count"
+    components: ["list of affected components"]
+  
+  why_changed:
+    rationale: "Business/technical reason for change"
+    triggering_conversations: ["CORTEX conversation references"]
+    related_issues: ["Issue tracker references"]
+  
+  how_implemented:
+    approach: "High-level implementation approach"
+    patterns_used:
+      - pattern_name: "string"
+        confidence: "0.0-1.0"
+        source: "where pattern came from"
+    
+    key_decisions:
+      - decision: "string"
+        rationale: "string"
+  
+  risks_identified:
+    - risk: "description"
+      severity: "LOW|MEDIUM|HIGH|CRITICAL"
+      mitigation: "how risk is mitigated"
+  
+  testing_done:
+    test_coverage: "percentage"
+    tests_added: ["list of test names"]
+    manual_testing: ["description of manual tests"]
+  
+  review_focus_areas:
+    - area: "description"
+      priority: "LOW|MEDIUM|HIGH|CRITICAL"
+      files: ["list of files"]
+      why: "reason for focus"
+  
+  suggested_reviewers:
+    - reviewer: "email"
+      files: "number of relevant files"
+      confidence: "0.0-1.0"
+      rationale: "why suggested"
+
+# Review checklist for reviewers
+review_checklist:
+  code_quality:
+    - item: "Follows SOLID principles"
+      category: "architecture"
+      severity: "high"
+    
+    - item: "No code smells (duplication, long methods, god classes)"
+      category: "maintainability"
+      severity: "high"
+    
+    - item: "Appropriate abstractions (not over/under-engineered)"
+      category: "design"
+      severity: "medium"
+    
+    - item: "Consistent with existing codebase style"
+      category: "style"
+      severity: "low"
+    
+    - item: "Clear variable/function names"
+      category: "readability"
+      severity: "medium"
+  
+  testing:
+    - item: "All tests pass"
+      category: "validation"
+      severity: "critical"
+      blocking: true
+    
+    - item: "New tests for new functionality"
+      category: "coverage"
+      severity: "high"
+      blocking: true
+    
+    - item: "Coverage maintained or improved"
+      category: "coverage"
+      severity: "high"
+      blocking: false
+    
+    - item: "Edge cases tested"
+      category: "robustness"
+      severity: "medium"
+      blocking: false
+    
+    - item: "No flaky tests introduced"
+      category: "reliability"
+      severity: "high"
+      blocking: true
+  
+  security:
+    - item: "No hardcoded secrets or credentials"
+      category: "secrets"
+      severity: "critical"
+      blocking: true
+    
+    - item: "Input validation present"
+      category: "validation"
+      severity: "high"
+      blocking: true
+    
+    - item: "Authentication/authorization checked"
+      category: "access_control"
+      severity: "critical"
+      blocking: true
+    
+    - item: "SQL injection prevention (parameterized queries)"
+      category: "injection"
+      severity: "critical"
+      blocking: true
+    
+    - item: "XSS prevention (output encoding)"
+      category: "xss"
+      severity: "high"
+      blocking: true
+  
+  documentation:
+    - item: "Docstrings updated for new/modified functions"
+      category: "code_docs"
+      severity: "medium"
+      blocking: false
+    
+    - item: "README updated if needed"
+      category: "user_docs"
+      severity: "medium"
+      blocking: false
+    
+    - item: "API documentation updated"
+      category: "api_docs"
+      severity: "high"
+      blocking: true
+    
+    - item: "Design docs updated for architectural changes"
+      category: "design_docs"
+      severity: "high"
+      blocking: true
+  
+  performance:
+    - item: "No obvious performance regressions"
+      category: "efficiency"
+      severity: "medium"
+      blocking: false
+    
+    - item: "Database queries optimized (no N+1)"
+      category: "database"
+      severity: "high"
+      blocking: true
+    
+    - item: "Large file operations handled efficiently"
+      category: "file_io"
+      severity: "medium"
+      blocking: false
+  
+  deployment:
+    - item: "Database migrations included if needed"
+      category: "database"
+      severity: "critical"
+      blocking: true
+    
+    - item: "Configuration changes documented"
+      category: "config"
+      severity: "high"
+      blocking: true
+    
+    - item: "Backward compatibility maintained"
+      category: "compatibility"
+      severity: "high"
+      blocking: true
+    
+    - item: "Rollback plan exists for risky changes"
+      category: "risk_management"
+      severity: "critical"
+      blocking: true
+
+# Workflow steps
+workflow:
+  author_steps:
+    step_1_implement:
+      action: "Implement feature/fix with tests"
+      checklist:
+        - "Code complete"
+        - "Tests passing locally"
+        - "Self-review done"
+    
+    step_2_analyze:
+      action: "Run CORTEX Pre-PR Analysis"
+      command: "#file:cortex.md \"Analyze my changes for PR\""
+      outputs:
+        - "PR context package generated"
+        - "Suggested reviewers identified"
+        - "Risk assessment complete"
+    
+    step_3_create_pr:
+      action: "Create PR in Azure DevOps"
+      includes:
+        - "CORTEX-generated description"
+        - "Review checklist"
+        - "Focus areas for reviewers"
+        - "Suggested reviewers tagged"
+    
+    step_4_address_feedback:
+      action: "Address reviewer comments"
+      process:
+        - "Read feedback carefully"
+        - "Ask clarifying questions if needed"
+        - "Make requested changes"
+        - "Update PR with resolution"
+  
+  reviewer_steps:
+    step_1_understand:
+      action: "Read PR description and context"
+      focus:
+        - "What problem being solved"
+        - "Why this approach chosen"
+        - "What risks identified"
+    
+    step_2_review_code:
+      action: "Review code changes"
+      use_checklist: true
+      focus_areas: "From PR description"
+    
+    step_3_test:
+      action: "Verify tests pass"
+      optional: "Run tests locally for complex changes"
+    
+    step_4_provide_feedback:
+      action: "Leave comments"
+      types:
+        - "Blocking issues (must fix)"
+        - "Suggestions (nice to have)"
+        - "Questions (clarification)"
+        - "Praise (what done well)"
+    
+    step_5_approve_or_request_changes:
+      action: "Make decision"
+      options:
+        - "Approve (ready to merge)"
+        - "Request changes (blocking issues)"
+        - "Comment (non-blocking feedback)"
+  
+  post_merge:
+    step_1_knowledge_capture:
+      action: "CORTEX captures team knowledge"
+      automatic: true
+      captures:
+        - "Approved patterns → Shared Tier 2"
+        - "Reviewer insights → Team learning"
+        - "Anti-patterns if rejected"
+    
+    step_2_pattern_promotion:
+      action: "Individual patterns → Team patterns"
+      criteria:
+        - "PR approved and merged"
+        - "Pattern used successfully"
+        - "Team reviewers validated"
+      result: "Confidence boost for team-approved patterns"
+
+# Team knowledge management
+team_knowledge:
+  shared_tier_2:
+    purpose: "Team-wide approved patterns and best practices"
+    sources:
+      - "Approved PRs (patterns validated by team)"
+      - "Reviewer suggestions (new patterns proposed)"
+      - "Anti-patterns (from rejected PRs)"
+    
+    access: "All team members"
+    visibility: "Searchable in CORTEX brain"
+  
+  pattern_promotion:
+    trigger: "PR approved and merged"
+    process:
+      - "Extract patterns used in PR"
+      - "Boost confidence (+15% for team approval)"
+      - "Tag with reviewers who approved"
+      - "Make visible to all team members"
+  
+  anti_pattern_capture:
+    trigger: "PR rejected or changes requested"
+    process:
+      - "Extract rejection reasons"
+      - "Document why pattern rejected"
+      - "Store as anti-pattern in Tier 2"
+      - "Prevent future use of anti-pattern"
+
+# Success metrics
+success_metrics:
+  quality:
+    post_merge_bugs:
+      target: "-20% to -30%"
+      measurement: "Bugs reported within 7 days of merge"
+    
+    review_coverage:
+      target: "100%"
+      measurement: "PRs reviewed before merge"
+  
+  knowledge:
+    pattern_reuse:
+      target: "+40%"
+      measurement: "Team patterns used vs individual patterns"
+    
+    onboarding_time:
+      target: "-50%"
+      measurement: "Time for new dev to first productive PR"
+  
+  efficiency:
+    review_time:
+      target: "-30%"
+      measurement: "Time from PR creation to approval"
+    
+    context_availability:
+      target: "90%"
+      measurement: "Reviewers report having sufficient context"
+
+# Integration requirements
+integration:
+  azure_devops:
+    webhooks_needed:
+      - event: "pr.created"
+        handler: "pr_creation_enrichment"
+      
+      - event: "pr.merged"
+        handler: "post_merge_knowledge_capture"
+      
+      - event: "pr.rejected"
+        handler: "anti_pattern_capture"
+    
+    api_access:
+      - "Read PR details"
+      - "Read PR comments"
+      - "Post PR comments (for CORTEX suggestions)"
+      - "Read file diffs"
+  
+  cortex_tiers:
+    tier_1:
+      access: "Read last 5 conversations for implementation context"
+    
+    tier_2:
+      access: "Read/Write patterns (individual → team promotion)"
+    
+    tier_3:
+      access: "Read git history for reviewer suggestions"
+
+# Implementation phases
+implementation:
+  phase_1:
+    name: "Pre-PR Analysis"
+    duration: "2 weeks"
+    deliverables:
+      - "pr_analyzer.py stage"
+      - "PR context package generator"
+      - "Suggested reviewers algorithm"
+  
+  phase_2:
+    name: "PR Creation Integration"
+    duration: "1 week"
+    deliverables:
+      - "Azure DevOps webhook handler"
+      - "PR description template"
+      - "Review checklist formatter"
+  
+  phase_3:
+    name: "Knowledge Capture"
+    duration: "2 weeks"
+    deliverables:
+      - "post_pr_merge plugin"
+      - "Pattern promotion logic"
+      - "Anti-pattern capture"
+      - "Shared Tier 2 access"
+  
+  phase_4:
+    name: "Testing & Refinement"
+    duration: "1 week"
+    deliverables:
+      - "End-to-end testing"
+      - "Metrics collection"
+      - "Team training"
+
+# Notes
+notes:
+  design_status: "Complete - ready for implementation"
+  dependencies:
+    - "Azure DevOps webhook access"
+    - "Shared Tier 2 implementation"
+    - "Team adoption and training"
+  
+  future_enhancements:
+    - "AI-powered code review suggestions"
+    - "Automated test generation from PRs"
+    - "Cross-repository pattern sharing"
+    - "PR risk scoring and prioritization"

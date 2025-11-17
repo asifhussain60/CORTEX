@@ -1,6 +1,11 @@
 """
 CORTEX Optimize Entry Point Orchestrator
 
+⚠️ DEPRECATED: This module is deprecated as of November 17, 2025.
+   Use src.operations.modules.optimization.optimize_cortex_orchestrator instead.
+   
+   This file will be removed in CORTEX 4.0 (targeted for May 2026).
+
 Performs comprehensive system health scans to ensure CORTEX is fully operational.
 
 This orchestrator:
@@ -26,6 +31,7 @@ License: Proprietary - See LICENSE file for terms
 Date: November 11, 2025
 """
 
+import warnings
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Set, Optional, Tuple
@@ -116,6 +122,8 @@ class SystemHealthReport:
 
 class OptimizeCortexOrchestrator(BaseOperationModule):
     """
+    ⚠️ DEPRECATED: Use optimization.optimize_cortex_orchestrator instead.
+    
     Comprehensive CORTEX optimization and health check orchestrator.
     
     Performs full system scan to ensure CORTEX is operational:
@@ -128,6 +136,15 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
     
     def __init__(self, project_root: Path = None):
         super().__init__()
+        
+        # Emit deprecation warning
+        warnings.warn(
+            "optimize.optimize_cortex_orchestrator is deprecated and will be removed in CORTEX 4.0. "
+            "Use optimization.optimize_cortex_orchestrator instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        
         self.project_root = project_root or Path.cwd()
         self.report = SystemHealthReport(
             timestamp=datetime.now(),

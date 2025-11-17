@@ -1,0 +1,93 @@
+import sqlite3
+from pathlib import Path
+
+db_path = Path("cortex-brain/tier1/conversations.db")
+print(f"Checking database: {db_path}")
+print(f"Database exists: {db_path.exists()}")
+
+if db_path.exists():
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    
+    # Get tables
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    tables = cursor.fetchall()
+    print(f"\nTables: {tables}")
+    
+    # Check conversations table
+    if tables:
+        cursor.execute("SELECT COUNT(*) FROM conversations")
+        count = cursor.fetchone()[0]
+        print(f"Conversation count: {count}")
+        
+        # Get schema
+        cursor.execute("PRAGMA table_info(conversations)")
+        schema = cursor.fetchall()
+        print(f"\nConversations table schema:")
+        for col in schema:
+            print(f"  - {col[1]} ({col[2]})")
+        
+        # Get recent conversations
+        cursor.execute("SELECT * FROM conversations ORDER BY created_at DESC LIMIT 5")
+        recent = cursor.fetchall()
+        print(f"\nRecent {len(recent)} conversations:")
+        for conv in recent:
+            print(f"  - ID: {conv[0]}, Goal: {conv[4][:50] if conv[4] else 'N/A'}, Status: {conv[6]}, Created: {conv[9]}")
+        
+        # Check working_memory_conversations table
+        cursor.execute("PRAGMA table_info(working_memory_conversations)")
+        wm_schema = cursor.fetchall()
+        print(f"\nWorking Memory Conversations schema:")
+        for col in wm_schema:
+            print(f"  - {col[1]} ({col[2]})")
+        
+        cursor.execute("SELECT COUNT(*) FROM working_memory_conversations")
+        wm_count = cursor.fetchone()[0]
+        print(f"\nWorking Memory conversation count: {wm_count}")
+        
+        # Get sample from working_memory_conversations
+        cursor.execute("SELECT * FROM working_memory_conversations ORDER BY last_activity DESC LIMIT 3")
+        wm_recent = cursor.fetchall()
+        print(f"\nRecent working memory conversations:")
+        for wm in wm_recent:
+            print(f"  - ID: {wm[0]}, Intent: {wm[3] if len(wm) > 3 else 'N/A'}, Status: {wm[4] if len(wm) > 4 else 'N/A'}, Last Activity: {wm[5] if len(wm) > 5 else 'N/A'}")
+        
+        # Check working_memory_messages table
+        cursor.execute("PRAGMA table_info(working_memory_messages)")
+        wm_msg_schema = cursor.fetchall()
+        print(f"\nWorking Memory Messages schema:")
+        for col in wm_msg_schema:
+            print(f"  - {col[1]} ({col[2]})")
+        
+        cursor.execute("SELECT COUNT(*) FROM working_memory_messages")
+        wm_msg_count = cursor.fetchone()[0]
+        print(f"\nWorking Memory message count: {wm_msg_count}")
+        
+        # Check the 'messages' table (not working_memory_messages)
+        cursor.execute("PRAGMA table_info(messages)")
+        msg_schema = cursor.fetchall()
+        print(f"\n'messages' table schema:")
+        for col in msg_schema:
+            print(f"  - {col[1]} ({col[2]})")
+        
+        cursor.execute("SELECT COUNT(*) FROM messages")
+        msg_count = cursor.fetchone()[0]
+        print(f"\n'messages' table count: {msg_count}")
+        
+        if msg_count > 0:
+            cursor.execute("SELECT * FROM messages LIMIT 3")
+            sample_messages = cursor.fetchall()
+            print(f"\nSample messages from 'messages' table:")
+            for msg in sample_messages:
+                print(f"  - Conversation: {msg[1][:30]}, Role: {msg[2]}, Content: {msg[3][:50]}")
+        
+        # Check if working_memory tables are being used at all
+        cursor.execute("SELECT conversation_id FROM working_memory_conversations WHERE status = 'test' LIMIT 1")
+        test_conv = cursor.fetchone()
+        if test_conv:
+            print(f"\n⚠️  Found TEST conversations in working_memory_conversations")
+            print(f"   These are likely from unit tests, not real GitHub Copilot Chat conversations")
+    
+    conn.close()
+else:
+    print("Database file not found!")

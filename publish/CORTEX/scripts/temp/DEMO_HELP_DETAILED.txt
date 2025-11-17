@@ -1,0 +1,124 @@
+
+==========================================================================================
+CORTEX COMMANDS - DETAILED
+==========================================================================================
+
+
+DISCOVERY:
+------------------------------------------------------------------------------------------
+
+🎯 Command Discovery & Help
+   Quick:      help
+   Example:    available commands
+   Module:     command_help
+   Status:     planned
+   Modules:    5 modules
+   Command:    /help
+
+🎯 Command Search
+   Quick:      help search
+   Example:    search commands
+   Module:     command_search
+   Status:     planned
+   Modules:    4 modules
+   Command:    /help search <keyword>
+
+DOCUMENTATION:
+------------------------------------------------------------------------------------------
+
+⏸️ Update Documentation
+   Quick:      build docs
+   Example:    generate documentation
+   Module:     update_documentation
+   Status:     pending
+   Modules:    6 modules
+   Command:    /CORTEX, generate documentation
+
+✅ Refresh CORTEX Story
+   Quick:      update story
+   Example:    refresh cortex story
+   Module:     refresh_cortex_story
+   Status:     ready
+   Modules:    6 modules
+   Command:    /CORTEX, refresh cortex story
+
+ENVIRONMENT:
+------------------------------------------------------------------------------------------
+
+🔄 Environment Setup
+   Quick:      setup
+   Example:    initialize environment
+   Module:     environment_setup
+   Status:     partial
+   Modules:    11 modules
+   Command:    /setup
+
+MAINTENANCE:
+------------------------------------------------------------------------------------------
+
+🔄 Workspace Cleanup
+   Quick:      cleanup
+   Example:    remove temporary files
+   Module:     workspace_cleanup
+   Status:     partial
+   Modules:    6 modules
+   Command:    /CORTEX, cleanup
+
+PLANNING:
+------------------------------------------------------------------------------------------
+
+🎯 Interactive Feature Planning
+   Quick:      plan this
+   Example:    collaborative planning
+   Module:     interactive_planning
+   Status:     planned
+   Modules:    8 modules
+   Command:    /CORTEX, let's plan a feature
+
+🎯 Refactoring Module Planning
+   Quick:      refactor code
+   Example:    refactor this module
+   Module:     refactoring_planning
+   Status:     planned
+   Modules:    6 modules
+   Command:    /CORTEX, refactor this module
+
+🎯 Architecture Solution Planning
+   Quick:      system design
+   Example:    architect a solution
+   Module:     architecture_planning
+   Status:     planned
+   Modules:    7 modules
+   Command:    /CORTEX, architect a solution
+
+TESTING:
+------------------------------------------------------------------------------------------
+
+⏸️ Test Suite Execution
+   Quick:      run tests
+   Example:    run test suite
+   Module:     run_tests
+   Status:     pending
+   Modules:    5 modules
+   Command:    /CORTEX, run tests
+
+VALIDATION:
+------------------------------------------------------------------------------------------
+
+⏸️ Brain Protection Validation
+   Quick:      check brain
+   Example:    check brain protection
+   Module:     brain_protection_check
+   Status:     pending
+   Modules:    6 modules
+   Command:    /CORTEX, run brain protection
+
+⏸️ Comprehensive Self-Review
+   Quick:      health check
+   Example:    check all protections
+   Module:     comprehensive_self_review
+   Status:     pending
+   Modules:    20 modules
+   Command:    /CORTEX, run self-review
+
+==========================================================================================

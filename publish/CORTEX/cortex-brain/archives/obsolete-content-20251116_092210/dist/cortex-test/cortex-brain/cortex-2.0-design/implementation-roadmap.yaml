@@ -1,0 +1,865 @@
+# CORTEX 2.0 Implementation Roadmap (YAML)
+# Converted from: 25-implementation-roadmap.md
+# Purpose: Machine-readable roadmap for CI/CD automation, timeline tracking, and risk management
+# Version: 1.0
+# Created: 2025-11-10
+
+metadata:
+  version: "2.0.0"
+  status: "planning"
+  created: "2025-11-07"
+  last_updated: "2025-11-10"
+  estimated_duration_weeks: 16
+  risk_level: "medium"
+  expected_impact:
+    maintainability: "+40%"
+    performance: "+25%"
+    complexity_reduction: "-60%"
+
+goals:
+  primary:
+    - "Modularize bloated components (<500 lines)"
+    - "Implement workflow pipeline"
+    - "Enhance risk mitigation (75+ tests)"
+    - "Establish baseline (>85% coverage)"
+    - "Maintain backward compatibility"
+  
+  success_criteria:
+    - metric: "module_size"
+      target: "<500 lines per module"
+      current: "1144 lines max"
+      
+    - metric: "test_coverage"
+      target: ">85%"
+      current: "~70%"
+      
+    - metric: "regression_rate"
+      target: "0%"
+      current: "baseline"
+      
+    - metric: "performance_improvement"
+      target: ">20%"
+      current: "baseline"
+      
+    - metric: "critical_bugs"
+      target: "0"
+      current: "baseline"
+
+phases:
+  phase_0:
+    name: "Baseline Establishment"
+    duration_weeks: 2
+    timeline: "Week 1-2"
+    priority: "CRITICAL"
+    status: "complete"
+    dependencies: []
+    
+    goal: "Establish CORTEX 1.0 baseline and prepare for transformation"
+    
+    tasks:
+      - id: "0.1"
+        name: "Run Complete Test Suite"
+        estimated_hours: 8
+        status: "complete"
+        subtasks:
+          - "Execute all 300+ tests"
+          - "Document current pass rate"
+          - "Identify flaky tests"
+          - "Create baseline performance metrics"
+      
+      - id: "0.2"
+        name: "Analyze Current Architecture"
+        estimated_hours: 12
+        status: "complete"
+        subtasks:
+          - "Map dependencies between components"
+          - "Identify coupling hotspots"
+          - "Document current workflows"
+          - "Create architecture diagrams"
+      
+      - id: "0.3"
+        name: "Risk Assessment"
+        estimated_hours: 8
+        status: "complete"
+        subtasks:
+          - "Identify high-risk refactoring areas"
+          - "Document potential breaking changes"
+          - "Create rollback strategies"
+          - "Establish monitoring baselines"
+      
+      - id: "0.4"
+        name: "Documentation Audit"
+        estimated_hours: 4
+        status: "complete"
+        subtasks:
+          - "Review existing documentation"
+          - "Identify gaps"
+          - "Create documentation plan"
+          - "Archive deprecated patterns"
+    
+    deliverables:
+      - "Baseline test results report"
+      - "Current architecture documentation"
+      - "Risk assessment matrix"
+      - "Documentation gap analysis"
+    
+    risks: []
+  
+  phase_1:
+    name: "Core Modularization"
+    duration_weeks: 3
+    timeline: "Week 3-5"
+    priority: "CRITICAL"
+    status: "in_progress"
+    dependencies: ["phase_0"]
+    
+    goal: "Break down monolithic files into focused, maintainable modules"
+    
+    tasks:
+      - id: "1.1"
+        name: "Knowledge Graph Refactoring"
+        timeline: "Week 3"
+        estimated_hours: 40
+        status: "in_progress"
+        file: "src/tier2/knowledge_graph.py"
+        current_lines: 1144
+        target_structure:
+          main: "knowledge_graph.py (150 lines)"
+          modules:
+            - path: "database/schema.py"
+              lines: 100
+              purpose: "Database schema definitions"
+            - path: "database/migrations.py"
+              lines: 150
+              purpose: "Schema migrations"
+            - path: "database/connection.py"
+              lines: 80
+              purpose: "Connection management"
+            - path: "patterns/pattern_store.py"
+              lines: 200
+              purpose: "Pattern CRUD operations"
+            - path: "patterns/pattern_search.py"
+              lines: 250
+              purpose: "FTS5 search implementation"
+            - path: "patterns/pattern_decay.py"
+              lines: 120
+              purpose: "Confidence decay logic"
+            - path: "relationships/relationship_manager.py"
+              lines: 180
+              purpose: "Graph relationships"
+            - path: "relationships/graph_traversal.py"
+              lines: 150
+              purpose: "Traversal algorithms"
+            - path: "tags/tag_manager.py"
+              lines: 120
+              purpose: "Tag-based organization"
+        
+        tests:
+          unit_tests: 45
+          integration_tests: 8
+        
+        migration_strategy:
+          - "Create new module structure"
+          - "Extract classes/functions (copy, don't delete)"
+          - "Add integration tests"
+          - "Update imports gradually"
+          - "Deprecate old file after 2 releases"
+      
+      - id: "1.2"
+        name: "Tier 1 Working Memory Refactoring"
+        timeline: "Week 3-4"
+        estimated_hours: 35
+        status: "not_started"
+        file: "src/tier1/working_memory.py"
+        current_lines: 813
+        target_structure:
+          main: "working_memory.py (120 lines)"
+          modules:
+            - path: "conversations/conversation_store.py"
+              lines: 180
+            - path: "conversations/fifo_manager.py"
+              lines: 150
+            - path: "conversations/conversation_search.py"
+              lines: 140
+            - path: "messages/message_store.py"
+              lines: 160
+            - path: "messages/message_formatter.py"
+              lines: 100
+            - path: "entities/entity_extractor.py"
+              lines: 120
+        
+        tests:
+          unit_tests: 38
+          integration_tests: 6
+      
+      - id: "1.3"
+        name: "Context Intelligence Refactoring"
+        timeline: "Week 4-5"
+        estimated_hours: 40
+        status: "not_started"
+        file: "src/tier3/context_intelligence.py"
+        current_lines: 776
+        target_structure:
+          main: "context_intelligence.py (100 lines)"
+          modules:
+            - path: "metrics/git_metrics.py"
+              lines: 180
+            - path: "metrics/file_metrics.py"
+              lines: 150
+            - path: "metrics/velocity_metrics.py"
+              lines: 140
+            - path: "analysis/hotspot_analyzer.py"
+              lines: 160
+            - path: "analysis/pattern_analyzer.py"
+              lines: 140
+            - path: "analysis/insight_generator.py"
+              lines: 180
+            - path: "storage/metrics_store.py"
+              lines: 120
+        
+        tests:
+          unit_tests: 42
+          integration_tests: 7
+      
+      - id: "1.4"
+        name: "Agent Modularization"
+        timeline: "Week 5"
+        estimated_hours: 60
+        status: "not_started"
+        target_files:
+          - file: "error_corrector.py"
+            current_lines: 692
+          - file: "health_validator.py"
+            current_lines: 654
+          - file: "code_executor.py"
+            current_lines: 634
+          - file: "test_generator.py"
+            current_lines: 617
+          - file: "work_planner.py"
+            current_lines: 612
+        
+        pattern: "Strategy Pattern"
+        target_structure:
+          - "agent.py (150 lines) - Main coordinator"
+          - "strategies/ - Multiple strategy implementations"
+          - "parsers/ - Input parsing"
+          - "validators/ - Output validation"
+        
+        tests:
+          unit_tests_per_agent: 12
+          total_unit_tests: 60
+    
+    deliverables:
+      - "Modularized knowledge graph with tests"
+      - "Modularized working memory with tests"
+      - "Modularized context intelligence with tests"
+      - "Modularized agents with tests"
+      - "Updated architecture documentation"
+    
+    risks:
+      - name: "Breaking existing functionality"
+        severity: "high"
+        probability: "medium"
+        mitigation: "Comprehensive test coverage, feature flags"
+      
+      - name: "Import path changes"
+        severity: "medium"
+        probability: "high"
+        mitigation: "Gradual migration, deprecation warnings"
+
+  phase_2:
+    name: "Workflow Pipeline Implementation"
+    duration_weeks: 3
+    timeline: "Week 6-8"
+    priority: "HIGH"
+    status: "not_started"
+    dependencies: ["phase_1"]
+    
+    goal: "Complete workflow orchestration system with all stages"
+    
+    tasks:
+      - id: "2.1"
+        name: "Core Pipeline Enhancement"
+        timeline: "Week 6"
+        estimated_hours: 20
+        status: "partial"
+        notes: "Orchestrator, DAG validation, state management already implemented"
+        remaining_work:
+          - "Add checkpointing (resume from failure)"
+          - "Implement parallel execution"
+          - "Add conditional stages"
+          - "Performance optimization"
+      
+      - id: "2.2"
+        name: "Missing Critical Stages"
+        timeline: "Week 6-7"
+        estimated_hours: 40
+        status: "not_started"
+        stages:
+          - name: "code_cleanup"
+            file: "code_cleanup.py"
+            purpose: "Remove unused imports, format code, fix linting"
+            tests: 4
+          
+          - name: "dod_validator"
+            file: "dod_validator.py"
+            purpose: "Verify tests, build, quality, documentation"
+            tests: 4
+          
+          - name: "test_runner"
+            file: "test_runner.py"
+            purpose: "Execute tests, collect coverage, generate reports"
+            tests: 4
+          
+          - name: "doc_generator"
+            file: "doc_generator.py"
+            purpose: "Generate API docs, feature docs, README, changelogs"
+            tests: 4
+      
+      - id: "2.3"
+        name: "Workflow Definitions"
+        timeline: "Week 7-8"
+        estimated_hours: 30
+        status: "not_started"
+        workflows:
+          - name: "feature_development"
+            stages: ["clarify_dod_dor", "threat_model", "plan", "tdd_cycle", "run_tests", "validate_dod", "cleanup", "document"]
+            tests: 4
+          
+          - name: "bug_fix"
+            stages: ["analyze_bug", "plan_fix", "tdd_cycle", "run_tests", "validate_dod", "security_review"]
+            tests: 4
+          
+          - name: "refactoring"
+            stages: ["analyze_code", "plan_refactor", "backup_tests", "refactor", "run_tests", "performance_check", "document"]
+            tests: 4
+          
+          - name: "security_enhancement"
+            stages: ["threat_model", "security_review", "plan", "tdd_cycle", "penetration_test", "validate_dod", "document"]
+            tests: 4
+    
+    deliverables:
+      - "Enhanced core pipeline with checkpointing"
+      - "8 critical workflow stages implemented"
+      - "4 production-ready workflows"
+      - "32 stage tests + 16 integration tests"
+    
+    risks:
+      - name: "Stage complexity"
+        severity: "medium"
+        probability: "medium"
+        mitigation: "Incremental development, clear interfaces"
+
+  phase_3:
+    name: "Risk Mitigation & Testing"
+    duration_weeks: 2
+    timeline: "Week 9-10"
+    priority: "CRITICAL"
+    status: "not_started"
+    dependencies: ["phase_2"]
+    
+    goal: "Strengthen protection mechanisms and test coverage"
+    
+    tasks:
+      - id: "3.1"
+        name: "Risk Mitigation Tests"
+        timeline: "Week 9"
+        estimated_hours: 40
+        status: "not_started"
+        test_categories:
+          brain_protector:
+            count: 20
+            focus: ["immutability", "tier_boundaries", "challenge_generation", "rollback"]
+          
+          workflow_safety:
+            count: 15
+            focus: ["dag_cycles", "dependencies", "failure_handling", "retry_logic"]
+          
+          data_integrity:
+            count: 12
+            focus: ["migrations", "consistency", "backup_restore", "referential_integrity"]
+          
+          security:
+            count: 18
+            focus: ["stride_detection", "input_sanitization", "permissions", "audit_logging"]
+          
+          performance:
+            count: 10
+            focus: ["context_injection", "search_performance", "concurrent_ops", "memory_usage"]
+        
+        total_tests: 75
+      
+      - id: "3.2"
+        name: "Integration Testing"
+        timeline: "Week 10"
+        estimated_hours: 40
+        status: "not_started"
+        scenarios:
+          - name: "Complete Feature Workflow"
+            description: "User request → Planning → Implementation → Testing → Documentation"
+            validates: "Entire pipeline with real data, rollback on failure"
+          
+          - name: "Multi-Agent Collaboration"
+            description: "Test agent handoffs, state sharing, error propagation"
+          
+          - name: "Brain Operations"
+            description: "Test tier 1-2-3 integration, pattern learning, memory"
+          
+          - name: "Security Scenarios"
+            description: "Threat detection → mitigation, audit trail, permissions"
+        
+        total_tests: 20
+    
+    deliverables:
+      - "75 risk mitigation tests"
+      - "20 end-to-end integration tests"
+      - "Test coverage report >85%"
+      - "Risk assessment update"
+
+  phase_4:
+    name: "Performance Optimization"
+    duration_weeks: 2
+    timeline: "Week 11-12"
+    priority: "HIGH"
+    status: "not_started"
+    dependencies: ["phase_3"]
+    
+    goal: "Achieve 20%+ performance improvement"
+    
+    tasks:
+      - id: "4.1"
+        name: "Database Optimization"
+        timeline: "Week 11"
+        estimated_hours: 30
+        status: "not_started"
+        targets:
+          fts5_search:
+            current: "150ms"
+            target: "100ms"
+            improvements: ["optimize indexes", "query caching", "pagination", "reduce full scans"]
+          
+          context_injection:
+            current: "200ms"
+            target: "120ms"
+            improvements: ["cache tier contexts", "parallelize queries", "lazy loading", "reduce redundant queries"]
+          
+          pattern_retrieval:
+            current: "50ms"
+            target: "30ms"
+            improvements: ["in-memory cache", "optimize joins", "connection pooling"]
+        
+        benchmarks: 30
+      
+      - id: "4.2"
+        name: "Workflow Optimization"
+        timeline: "Week 11-12"
+        estimated_hours: 30
+        status: "not_started"
+        improvements:
+          - name: "Parallel Stage Execution"
+            description: "Execute independent stages in parallel"
+            expected_speedup: "30%"
+          
+          - name: "Checkpoint/Resume"
+            description: "Save state, resume from last successful stage"
+            benefit: "Avoid re-running completed work"
+          
+          - name: "Lazy Context Loading"
+            description: "Load tier contexts only when needed"
+            expected_memory_reduction: "40%"
+          
+          - name: "Stage Caching"
+            description: "Cache outputs for identical inputs"
+            expected_speedup: "50%"
+        
+        tests: 15
+    
+    deliverables:
+      - "Optimized database operations"
+      - "Parallelized workflow execution"
+      - "Checkpoint/resume system"
+      - "Performance benchmark report"
+
+  phase_5:
+    name: "Documentation & Training"
+    duration_weeks: 2
+    timeline: "Week 13-14"
+    priority: "MEDIUM"
+    status: "not_started"
+    dependencies: ["phase_4"]
+    
+    goal: "Complete documentation and user training materials"
+    
+    tasks:
+      - id: "5.1"
+        name: "Technical Documentation"
+        estimated_hours: 40
+        categories:
+          architecture_guides:
+            - "System architecture overview"
+            - "Module interaction diagrams"
+            - "Data flow documentation"
+            - "API reference guides"
+          
+          developer_guides:
+            - "Contributing guidelines"
+            - "Module development guide"
+            - "Testing best practices"
+            - "Debugging workflows"
+          
+          deployment_guides:
+            - "Installation instructions"
+            - "Configuration management"
+            - "Monitoring setup"
+            - "Troubleshooting guide"
+      
+      - id: "5.2"
+        name: "User Documentation"
+        estimated_hours: 30
+        categories:
+          user_guides:
+            - "Quick start guide"
+            - "Workflow usage guide"
+            - "Best practices"
+            - "Common patterns"
+          
+          tutorials:
+            - "Your First Feature with CORTEX"
+            - "Using Workflow Pipelines"
+            - "Customizing CORTEX"
+            - "Advanced Patterns"
+          
+          reference:
+            - "Command reference"
+            - "Configuration options"
+            - "Error messages"
+            - "Troubleshooting"
+    
+    deliverables:
+      - "Complete technical documentation"
+      - "User guides and tutorials"
+      - "API reference documentation"
+      - "Training materials"
+
+  phase_6:
+    name: "Migration & Rollout"
+    duration_weeks: 2
+    timeline: "Week 15-16"
+    priority: "CRITICAL"
+    status: "not_started"
+    dependencies: ["phase_5"]
+    
+    goal: "Migrate to CORTEX 2.0 with zero downtime"
+    
+    tasks:
+      - id: "6.1"
+        name: "Migration Strategy"
+        timeline: "Week 15"
+        estimated_hours: 30
+        approach: "Gradual Migration"
+        steps:
+          feature_flags:
+            - "Add feature flags for CORTEX 2.0 modules"
+            - "Default to CORTEX 1.0 behavior"
+            - "Allow opt-in per feature"
+          
+          dual_mode:
+            - "Run CORTEX 1.0 and 2.0 in parallel"
+            - "Compare outputs for consistency"
+            - "Identify discrepancies"
+          
+          rollout_phases:
+            - phase: "A"
+              name: "Internal testing"
+              week: 15
+            - phase: "B"
+              name: "Alpha users"
+              week: 16
+            - phase: "C"
+              name: "Beta rollout"
+              week: "Post-roadmap"
+            - phase: "D"
+              name: "General availability"
+              week: "Post-roadmap"
+      
+      - id: "6.2"
+        name: "Monitoring & Validation"
+        timeline: "Week 16"
+        estimated_hours: 20
+        metrics:
+          test_pass_rate:
+            threshold: "≥95%"
+            current: "baseline"
+          
+          performance:
+            target: "+20% improvement"
+            current: "baseline"
+          
+          error_rate:
+            threshold: "≤0.1%"
+            current: "baseline"
+          
+          user_satisfaction:
+            target: "≥4.5/5"
+            current: "baseline"
+        
+        rollback_triggers:
+          - "Test pass rate drops below 90%"
+          - "Critical bug discovered"
+          - "Performance degrades by >10%"
+          - "User satisfaction drops below 3.5/5"
+    
+    deliverables:
+      - "Feature flag system"
+      - "Dual-mode operation"
+      - "Monitoring dashboard"
+      - "Rollback procedures"
+
+resources:
+  team:
+    - role: "Lead Architect"
+      fte: 1.0
+      engagement: "Full"
+    
+    - role: "Senior Developers"
+      fte: 2.0
+      focus: "Modularization work"
+    
+    - role: "Test Engineers"
+      fte: 1.0
+      focus: "Test coverage"
+    
+    - role: "Technical Writer"
+      fte: 0.5
+      focus: "Documentation"
+    
+    - role: "DevOps Engineer"
+      fte: 0.5
+      focus: "Deployment"
+  
+  infrastructure:
+    - name: "Development Environment"
+      status: "existing"
+    
+    - name: "CI/CD Pipeline"
+      platform: "GitHub Actions"
+      status: "existing"
+    
+    - name: "Testing Infrastructure"
+      tools: "Pytest + Coverage"
+      status: "existing"
+    
+    - name: "Documentation Platform"
+      tool: "MkDocs"
+      status: "existing"
+
+risks:
+  high:
+    - name: "Breaking existing functionality"
+      impact: "high"
+      probability: "medium"
+      mitigation: "Comprehensive test coverage, feature flags"
+    
+    - name: "Incomplete migration"
+      impact: "high"
+      probability: "low"
+      mitigation: "Backward compatibility, dual-mode operation"
+  
+  medium:
+    - name: "Performance regression"
+      impact: "medium"
+      probability: "low"
+      mitigation: "Extensive benchmarking, rollback plan"
+    
+    - name: "Timeline overrun"
+      impact: "medium"
+      probability: "medium"
+      mitigation: "Phased approach, buffer weeks"
+    
+    - name: "Documentation gaps"
+      impact: "medium"
+      probability: "medium"
+      mitigation: "Dedicated technical writer"
+    
+    - name: "Test coverage insufficient"
+      impact: "medium"
+      probability: "low"
+      mitigation: "85% coverage requirement"
+    
+    - name: "Team bandwidth issues"
+      impact: "medium"
+      probability: "medium"
+      mitigation: "Prioritization, scope management"
+
+success_metrics:
+  technical:
+    code_quality:
+      metric: "Max file size"
+      target: "<500 lines"
+    
+    test_coverage:
+      metric: "Overall coverage"
+      target: ">85%"
+    
+    performance:
+      metric: "Performance improvement"
+      target: "+20%"
+    
+    bug_rate:
+      metric: "Critical bugs"
+      target: "<0.1%"
+    
+    documentation:
+      metric: "API coverage"
+      target: "100%"
+  
+  user:
+    satisfaction:
+      metric: "User satisfaction score"
+      target: "≥4.5/5"
+    
+    adoption:
+      metric: "Feature adoption rate"
+      target: "≥80%"
+    
+    support:
+      metric: "Support tickets"
+      target: "-30% reduction"
+    
+    onboarding:
+      metric: "Onboarding time"
+      target: "-50% reduction"
+  
+  process:
+    deployment_frequency:
+      metric: "Release frequency"
+      target: "Weekly"
+    
+    lead_time:
+      metric: "Feature to production"
+      target: "<2 weeks"
+    
+    mttr:
+      metric: "Mean time to recovery"
+      target: "<4 hours"
+    
+    change_failure_rate:
+      metric: "Failed deployments"
+      target: "<5%"
+
+milestones:
+  month_1:
+    weeks: "1-4"
+    achievements:
+      - "Baseline established"
+      - "Phase 1 modularization complete"
+      - "50% test coverage achieved"
+  
+  month_2:
+    weeks: "5-8"
+    achievements:
+      - "All modules refactored"
+      - "Workflow pipeline complete"
+      - "75% test coverage achieved"
+  
+  month_3:
+    weeks: "9-12"
+    achievements:
+      - "Risk mitigation tests complete"
+      - "Performance optimizations delivered"
+      - "85% test coverage achieved"
+  
+  month_4:
+    weeks: "13-16"
+    achievements:
+      - "Documentation complete"
+      - "Migration successful"
+      - "CORTEX 2.0 in production"
+
+dependencies:
+  technical:
+    - name: "Python"
+      version: "3.8+"
+      status: "existing"
+    
+    - name: "SQLite"
+      version: "3.35+ with FTS5"
+      status: "existing"
+    
+    - name: "Pytest"
+      version: "7.0+"
+      status: "existing"
+    
+    - name: "Git"
+      status: "existing"
+  
+  external:
+    - name: "GitHub Actions"
+      purpose: "CI/CD"
+    
+    - name: "MkDocs"
+      purpose: "Documentation"
+    
+    - name: "PyYAML"
+      purpose: "Configuration"
+  
+  team:
+    - "Access to production metrics"
+    - "User feedback channel"
+    - "Testing infrastructure"
+
+post_implementation:
+  ongoing:
+    monitoring:
+      - "Track performance metrics"
+      - "Monitor error rates"
+      - "Collect user feedback"
+    
+    maintenance:
+      - "Bug fixes"
+      - "Security patches"
+      - "Performance tuning"
+    
+    enhancement:
+      - "New workflow stages"
+      - "Additional modules"
+      - "Feature requests"
+  
+  future_roadmap:
+    - version: "2.1"
+      focus: "Advanced AI integration"
+    
+    - version: "2.2"
+      focus: "Multi-project support"
+    
+    - version: "3.0"
+      focus: "Cloud-native architecture"
+
+guidelines:
+  module_sizing:
+    max_lines: 500
+    max_complexity: 10
+    max_nesting: 3
+    function_length: 50
+  
+  test_coverage:
+    unit_tests: "90%"
+    integration_tests: "80%"
+    e2e_tests: "Critical paths only"
+    overall_target: "85%"
+  
+  performance_benchmarks:
+    context_injection: "<120ms"
+    fts5_search: "<100ms"
+    pattern_retrieval: "<30ms"
+    workflow_execution: "<6s (8-stage)"
+
+status_indicators:
+  current_status: "READY FOR IMPLEMENTATION"
+  approval_required:
+    - "Lead Architect"
+    - "Product Owner"
+  next_steps: "Phase 0 - Baseline Establishment"
+  document_maintained_by: "CORTEX Development Team"
+  last_markdown_update: "2025-11-07"
+  yaml_conversion_date: "2025-11-10"

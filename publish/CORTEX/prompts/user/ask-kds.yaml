@@ -1,0 +1,128 @@
+# CORTEX Ask-KDS Plugin
+# Query CORTEX design and implementation
+
+version: "2.0"
+type: "workflow"
+name: "Ask-KDS"
+description: "Query CORTEX knowledge with freshness validation"
+author: "CORTEX"
+created: "2025-01-15"
+
+# No specific file targets - queries knowledge base
+targets: []
+
+# Workflow steps
+workflow:
+  - step: "parse_question"
+    action: "analyze"
+    params:
+      extract_intent: true
+      extract_entities: true
+      detect_question_type: true
+      types: ["architecture", "rules", "workflows", "implementation", "how-to"]
+
+  - step: "search_knowledge_base"
+    action: "query"
+    params:
+      use_plugin: "brain-query"
+      scope: "cortex"
+      sources:
+        - "cortex-brain/cortex-2.0-design/"
+        - "cortex-brain/architectural-patterns.yaml"
+        - "cortex-brain/industry-standards.yaml"
+        - "prompts/**/*.yaml"
+        - "src/core/"
+        - "docs/"
+
+  - step: "validate_freshness"
+    action: "validate"
+    params:
+      compare_docs_vs_implementation: true
+      check_file_timestamps: true
+      check_schema_consistency: true
+      check_plugin_references: true
+
+  - step: "detect_staleness"
+    action: "analyze"
+    params:
+      identify_outdated_docs: true
+      identify_mismatches: true
+      calculate_staleness_score: true
+
+  - step: "synthesize_answer"
+    action: "transform"
+    params:
+      combine_sources: true
+      create_answer: true
+      add_citations: true
+      add_source_links: true
+      add_related_info: true
+
+  - step: "publish_update_request"
+    action: "execute"
+    condition: "stale_docs_detected"
+    params:
+      create_update_request: true
+      include_mismatch_details: true
+      include_suggested_fix: true
+      notify_user: true
+
+  - step: "display_answer"
+    action: "notify"
+    params:
+      show_answer: true
+      show_citations: true
+      show_freshness_status: true
+      show_related_info: true
+      show_update_alerts: "${stale_docs_detected}"
+
+# Validation rules
+validation:
+  - check: "sources_found"
+    scope: "knowledge_base"
+    required: true
+    params:
+      min_sources: 1
+      warn_if_few: true
+
+  - check: "answer_complete"
+    scope: "response"
+    required: true
+    params:
+      has_answer: true
+      has_citations: true
+
+  - check: "freshness_validated"
+    scope: "sources"
+    required: true
+    params:
+      checked_timestamps: true
+      checked_consistency: true
+
+# Parameters
+parameters:
+  - name: "question"
+    type: "string"
+    required: true
+    description: "Question about CORTEX design or implementation"
+
+  - name: "validate_freshness"
+    type: "bool"
+    default: true
+    description: "Validate documentation freshness"
+
+  - name: "include_citations"
+    type: "bool"
+    default: true
+    description: "Include source citations"
+
+  - name: "publish_updates"
+    type: "bool"
+    default: true
+    description: "Publish update requests for stale docs"
+
+  - name: "search_depth"
+    type: "enum"
+    values: ["quick", "normal", "deep"]
+    default: "normal"
+    description: "Search depth in knowledge base"
