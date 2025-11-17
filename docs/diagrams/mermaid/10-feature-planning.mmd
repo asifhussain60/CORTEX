@@ -1,0 +1,79 @@
+%% CORTEX Feature Planning Flow
+%% Shows interactive planning with Work Planner agent
+
+graph TD
+    START([User: 'plan a feature'])
+    
+    subgraph detect["🎯 INTENT DETECTION"]
+        I1["Intent Router<br/>Detects: PLAN"]
+        I2["Confidence: 0.92<br/>(High)"]
+        I3["Route to<br/>Work Planner"]
+    end
+
+    subgraph assess["📊 CONFIDENCE ASSESSMENT"]
+        C1{"Detail Level?"}
+        C2["High (80-100%)<br/>'Plan JWT auth with OAuth'"]
+        C3["Medium (50-79%)<br/>'Plan authentication'"]
+        C4["Low (< 50%)<br/>'Plan a feature'"]
+    end
+
+    subgraph questions["❓ CLARIFYING QUESTIONS"]
+        Q1["What auth methods?<br/>(JWT, OAuth, SAML)"]
+        Q2["Which user types?<br/>(admins, users, guests)"]
+        Q3["Integration requirements?<br/>(SSO, third-party)"]
+        Q4["Security constraints?<br/>(2FA, password policies)"]
+    end
+
+    subgraph plan["📋 PLAN GENERATION"]
+        P1["Phase 1: Foundation<br/>Tasks: 1-4"]
+        P2["Phase 2: Core Auth<br/>Tasks: 5-8"]
+        P3["Phase 3: OAuth<br/>Tasks: 9-12"]
+        P4["Phase 4: Security<br/>Tasks: 13-16"]
+    end
+
+    subgraph meta["📝 PLAN METADATA"]
+        M1["Dependencies<br/>Phase linkages"]
+        M2["Risks<br/>Mitigation strategies"]
+        M3["Acceptance Criteria<br/>Definition of Done"]
+        M4["Complexity<br/>Estimated effort"]
+    end
+
+    subgraph execute["⚙️ EXECUTION READY"]
+        E1["Store in Tier 1<br/>Working memory"]
+        E2["User Reviews<br/>Plan"]
+        E3["Start Phase 1<br/>Code Executor"]
+    end
+
+    START --> I1
+    I1 --> I2
+    I2 --> I3
+    I3 --> C1
+    
+    C1 -->|"High"| P1
+    C1 -->|"Medium"| Q1
+    C1 -->|"Low"| Q1
+    
+    Q1 --> Q2
+    Q2 --> Q3
+    Q3 --> Q4
+    Q4 --> P1
+    
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+    
+    P4 --> M1
+    M1 --> M2
+    M2 --> M3
+    M3 --> M4
+    
+    M4 --> E1
+    E1 --> E2
+    E2 --> E3
+
+    style detect fill:#F59E0B,stroke:#92400E,color:#fff
+    style assess fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style questions fill:#10B981,stroke:#065F46,color:#fff
+    style plan fill:#6B46C1,stroke:#4C1D95,color:#fff
+    style meta fill:#F59E0B,stroke:#92400E,color:#fff
+    style execute fill:#10B981,stroke:#065F46,color:#fff

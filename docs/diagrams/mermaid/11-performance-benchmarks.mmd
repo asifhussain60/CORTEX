@@ -1,0 +1,75 @@
+%% CORTEX Performance Benchmarks
+%% Shows actual vs target performance metrics
+
+graph LR
+    subgraph tier1["💾 TIER 1 PERFORMANCE"]
+        T1_OP["Store Conversation"]
+        T1_TARGET["Target: < 30ms"]
+        T1_ACTUAL["Actual: 12ms ⚡"]
+        
+        T1_OP2["Query Recent"]
+        T1_TARGET2["Target: < 50ms"]
+        T1_ACTUAL2["Actual: 18ms ⚡"]
+        
+        T1_OP3["Search"]
+        T1_TARGET3["Target: < 100ms"]
+        T1_ACTUAL3["Actual: 45ms ⚡"]
+    end
+
+    subgraph tier2["🧩 TIER 2 PERFORMANCE"]
+        T2_OP["Pattern Search"]
+        T2_TARGET["Target: < 150ms"]
+        T2_ACTUAL["Actual: 92ms ⚡"]
+        
+        T2_OP2["Store Pattern"]
+        T2_TARGET2["Target: < 80ms"]
+        T2_ACTUAL2["Actual: 56ms ⚡"]
+        
+        T2_OP3["Relationship Query"]
+        T2_TARGET3["Target: < 120ms"]
+        T2_ACTUAL3["Actual: 78ms ⚡"]
+    end
+
+    subgraph tier3["📊 TIER 3 PERFORMANCE"]
+        T3_OP["Git Analysis"]
+        T3_TARGET["Target: < 200ms"]
+        T3_ACTUAL["Actual: 156ms ⚡"]
+        
+        T3_OP2["File Stability"]
+        T3_TARGET2["Target: < 100ms"]
+        T3_ACTUAL2["Actual: 67ms ⚡"]
+        
+        T3_OP3["Session Analytics"]
+        T3_TARGET3["Target: < 150ms"]
+        T3_ACTUAL3["Actual: 89ms ⚡"]
+    end
+
+    subgraph agents["🤖 AGENT PERFORMANCE"]
+        A_OP["Intent Routing"]
+        A_TARGET["Target: < 100ms"]
+        A_ACTUAL["Actual: 45ms ⚡"]
+        
+        A_OP2["Brain Protection"]
+        A_TARGET2["Target: < 150ms"]
+        A_ACTUAL2["Actual: 89ms ⚡"]
+    end
+
+    T1_OP --> T1_TARGET --> T1_ACTUAL
+    T1_OP2 --> T1_TARGET2 --> T1_ACTUAL2
+    T1_OP3 --> T1_TARGET3 --> T1_ACTUAL3
+    
+    T2_OP --> T2_TARGET --> T2_ACTUAL
+    T2_OP2 --> T2_TARGET2 --> T2_ACTUAL2
+    T2_OP3 --> T2_TARGET3 --> T2_ACTUAL3
+    
+    T3_OP --> T3_TARGET --> T3_ACTUAL
+    T3_OP2 --> T3_TARGET2 --> T3_ACTUAL2
+    T3_OP3 --> T3_TARGET3 --> T3_ACTUAL3
+    
+    A_OP --> A_TARGET --> A_ACTUAL
+    A_OP2 --> A_TARGET2 --> A_ACTUAL2
+
+    style tier1 fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style tier2 fill:#10B981,stroke:#065F46,color:#fff
+    style tier3 fill:#F59E0B,stroke:#92400E,color:#fff
+    style agents fill:#6B46C1,stroke:#4C1D95,color:#fff

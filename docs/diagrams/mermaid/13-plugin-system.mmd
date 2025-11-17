@@ -1,0 +1,65 @@
+%% CORTEX Plugin System Architecture
+%% Shows zero-footprint plugin architecture
+
+graph TD
+    subgraph core["🧠 CORTEX CORE"]
+        C1["Tier 0: Instinct"]
+        C2["Tier 1: Memory"]
+        C3["Tier 2: Knowledge"]
+        C4["Tier 3: Context"]
+    end
+
+    subgraph plugins["🔌 PLUGIN SYSTEM"]
+        P1["Plugin Manager<br/>Zero-footprint coordinator"]
+        P2["Natural Language<br/>Pattern Registry"]
+    end
+
+    subgraph flagship["⭐ FLAGSHIP PLUGINS"]
+        F1["Recommendation API<br/>Code quality suggestions"]
+        F2["Platform Switch<br/>Mac/Win/Linux detection"]
+        F3["System Refactor<br/>Code restructuring"]
+        F4["Doc Refresh<br/>Documentation generation"]
+    end
+
+    subgraph usage["📝 PLUGIN USAGE"]
+        U1["User: 'recommend improvements'"]
+        U2["Router matches pattern"]
+        U3["Plugin executes with<br/>Tier 2/3 access"]
+        U4["Returns intelligent<br/>recommendations"]
+    end
+
+    subgraph zero["⚡ ZERO-FOOTPRINT PRINCIPLES"]
+        Z1["❌ No External APIs"]
+        Z2["❌ No Additional Tools"]
+        Z3["❌ No Network Dependencies"]
+        Z4["✅ Uses CORTEX Brain Only"]
+        Z5["✅ Learned Patterns (Tier 2)"]
+        Z6["✅ Git Analysis (Tier 3)"]
+    end
+
+    core --> plugins
+    plugins --> F1
+    plugins --> F2
+    plugins --> F3
+    plugins --> F4
+    
+    F1 --> U1
+    U1 --> U2
+    U2 --> U3
+    U3 --> U4
+    
+    U3 -.-> C3
+    U3 -.-> C4
+    
+    plugins --> Z1
+    plugins --> Z2
+    plugins --> Z3
+    plugins --> Z4
+    Z4 --> Z5
+    Z4 --> Z6
+
+    style core fill:#6B46C1,stroke:#4C1D95,color:#fff
+    style plugins fill:#3B82F6,stroke:#1E3A8A,color:#fff
+    style flagship fill:#10B981,stroke:#065F46,color:#fff
+    style usage fill:#F59E0B,stroke:#92400E,color:#fff
+    style zero fill:#EF4444,stroke:#991B1B,color:#fff
