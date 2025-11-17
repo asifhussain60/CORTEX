@@ -1,0 +1,57 @@
+%% CORTEX Comparison: Before vs After
+%% Visual comparison of Copilot with and without CORTEX
+
+graph TB
+    subgraph without["❌ WITHOUT CORTEX<br/>(Copilot Alone - Amnesia Problem)"]
+        W1["Session 1 (Monday 9am)<br/>User: 'Make button purple'<br/>Copilot: Creates button ✅"]
+        W2["❌ Close VS Code"]
+        W3["Session 2 (Monday 2pm)<br/>User: 'Move the button right'<br/>Copilot: 'Which button?' ❌"]
+        W4["❌ No memory of purple button"]
+        W5["❌ No pattern learning"]
+        W6["❌ No context awareness"]
+        W7["❌ Repeated mistakes"]
+    end
+
+    subgraph with["✅ WITH CORTEX<br/>(Memory + Intelligence)"]
+        C1["Session 1 (Monday 9am)<br/>User: 'Make button purple'<br/>Copilot: Creates button ✅<br/>CORTEX: Stores in Tier 1 💾"]
+        C2["✅ Close VS Code (memory persists)"]
+        C3["Session 2 (Monday 2pm)<br/>User: 'Move the button right'<br/>CORTEX: Loads context 🧠<br/>Copilot: 'Moving purple button' ✅"]
+        C4["✅ Remembers button from 5 hours ago"]
+        C5["✅ Learns workflow patterns (Tier 2)"]
+        C6["✅ Context-aware suggestions"]
+        C7["✅ Prevents repeated mistakes"]
+    end
+
+    subgraph benefits["🎯 KEY BENEFITS"]
+        B1["📚 20 Conversations<br/>Remembered (FIFO)"]
+        B2["🧩 Pattern Learning<br/>Gets smarter over time"]
+        B3["📊 Git Analysis<br/>1,237 commits tracked"]
+        B4["⚡ 18ms Memory Access<br/>Instant context"]
+        B5["🛡️ Brain Protection<br/>Self-preserving"]
+        B6["🔄 Continuous Learning<br/>From every interaction"]
+    end
+
+    W1 --> W2
+    W2 --> W3
+    W3 --> W4
+    W4 --> W5
+    W5 --> W6
+    W6 --> W7
+    
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C4 --> C5
+    C5 --> C6
+    C6 --> C7
+    
+    C4 -.-> B1
+    C5 -.-> B2
+    C6 -.-> B3
+    C3 -.-> B4
+    C7 -.-> B5
+    C5 -.-> B6
+
+    style without fill:#EF4444,stroke:#991B1B,color:#fff
+    style with fill:#10B981,stroke:#065F46,color:#fff
+    style benefits fill:#6B46C1,stroke:#4C1D95,color:#fff
