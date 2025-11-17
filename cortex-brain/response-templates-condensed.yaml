@@ -1,6 +1,17 @@
 schema_version: 2.1.0
 last_updated: '2025-11-16'
 optimization_note: Condensed for token efficiency - full examples in response-templates-docs/
+routing:
+  default: fallback
+  planning_triggers:
+  - plan
+  - let's plan
+  - plan a feature
+  - plan this
+  - help me plan
+  - planning
+  - feature planning
+  - i want to plan
 templates:
   help_table:
     response_type: table

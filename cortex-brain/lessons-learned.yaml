@@ -724,7 +724,7 @@ patterns:
   related_lessons:
   - response-format-001
 statistics:
-  total_lessons: 18
+  total_lessons: 20
   by_category:
     testing: 3
     validation: 1
@@ -734,20 +734,226 @@ statistics:
     documentation: 1
     optimization: 1
     quality-control: 1
+    architecture: 2
   by_severity:
-    critical: 1
+    critical: 2
     high: 5
-    medium: 3
+    medium: 4
     low: 0
   by_confidence:
-    0.90-1.00: 9
+    0.90-1.00: 11
     0.70-0.89: 0
     below_0.70: 0
-  total_patterns: 5
-  avg_confidence: 0.946
+  total_patterns: 7
+  avg_confidence: 0.952
 maintenance:
   review_frequency: quarterly
   last_reviewed: '2025-11-16'
   next_review: '2026-02-09'
   archival_policy: Archive lessons older than 6 months with confidence < 0.80
   update_policy: Increment confidence when lesson prevents an issue
+- id: prompt-routing-001
+  title: GitHub Copilot Chat requires explicit trigger detection instructions
+  category: architecture
+  subcategory: prompt-engineering
+  severity: critical
+  date: '2025-11-17'
+  problem: 'Planning workflow not activating when user said "let''s plan Azure DevOps
+    enhancements". CORTEX went straight to execution mode, creating todos instead
+    of engaging interactive planning template. Investigation revealed documentation
+    described "autonomous intent router" but no such mechanism existed.'
+  root_cause: GitHub Copilot reads prompts as context, not executable code. Without
+    explicit "BEFORE responding, check triggers" instruction, LLM makes natural language
+    decisions without checking response-templates.yaml
+  symptoms:
+  - Planning template exists but never loads
+  - User says "let's plan" but execution happens instead
+  - Documentation describes auto-routing that doesn't occur
+  - Templates are passive data, not executable logic
+  - Missing trigger keywords in routing configuration
+  solution: 'Implemented 4-part fix: (1) Added planning_triggers to response-templates.yaml,
+    (2) Added explicit "BEFORE responding" instruction to CORTEX.prompt.md, (3) Added
+    activation triggers section to help_plan_feature.md, (4) Updated condensed templates
+    for consistency'
+  architecture_insight: 'CORTEX''s "intent router" is not autonomous middleware -
+    it''s prompt-instructed behavior. GitHub Copilot Chat has no separate routing
+    layer. All routing happens through explicit instructions: "Check triggers FIRST,
+    then respond"'
+  prevention_rules:
+  - Add explicit "BEFORE responding" instructions for all workflow triggers
+  - Never assume LLM will automatically detect and route keywords
+  - Prompts are context, not executable middleware
+  - Document trigger detection mechanism explicitly
+  - Test trigger activation before marking feature complete
+  trigger_detection_pattern: |
+    # CRITICAL: Template Trigger Detection
+    
+    BEFORE responding to ANY user request:
+    1. Check for template triggers in response-templates.yaml
+    2. If matched: Load corresponding template/module
+    3. If no match: Proceed with natural language response
+    
+    Examples:
+    - "let's plan" → MATCH planning_triggers → Load help_plan_feature.md
+    - "help" → MATCH help_triggers → Return help_table template
+    - "add button" → NO MATCH → Natural language execution
+  files_modified:
+  - .github/prompts/CORTEX.prompt.md
+  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-condensed.yaml
+  - prompts/shared/help_plan_feature.md
+  time_cost:
+    investigation_minutes: 45
+    design_minutes: 30
+    implementation_minutes: 25
+    testing_minutes: 15
+    total_minutes: 115
+  related_files:
+  - .github/prompts/CORTEX.prompt.md
+  - cortex-brain/response-templates.yaml
+  - prompts/shared/help_plan_feature.md
+  - cortex-brain/documents/investigations/PLANNING-TRIGGER-INVESTIGATION.md
+  - cortex-brain/documents/reports/PLANNING-TRIGGER-IMPLEMENTATION-COMPLETE.md
+  - cortex-brain/documents/conversation-captures/2025-11-17-planning-trigger-implementation.md
+  tags:
+  - prompt-engineering
+  - github-copilot-chat
+  - trigger-detection
+  - architecture
+  - intent-routing
+  - workflow-activation
+  pattern_id: prompt_based_trigger_detection_pattern
+  confidence: 0.98
+- id: trigger-strategy-001
+  title: Context detection prevents trigger explosion
+  category: architecture
+  subcategory: trigger-design
+  severity: medium
+  date: '2025-11-17'
+  problem: 'Considered creating separate triggers for each domain (ADO planning,
+    AWS planning, K8s planning). Would have led to trigger explosion: 8 planning
+    triggers × 10 domains = 80 triggers to maintain.'
+  root_cause: Initial impulse to create explicit triggers for every variation instead
+    of using context detection within workflows
+  symptoms:
+  - Temptation to create domain-specific triggers
+  - Difficulty maintaining large trigger arrays
+  - Redundant trigger definitions
+  - Complex routing logic
+  solution: 'Use single trigger array ("planning") with context detection inside
+    workflow. Same "let''s plan" trigger activates for all domains. Questions adapt
+    based on detected context (ADO, AWS, K8s keywords).'
+  architecture_decision: 'TIER-based trigger strategy: TIER 1 (need triggers now):
+    planning, help, status. TIER 2 (beneficial later): setup, docs, maintenance.
+    TIER 3 (never need): code execution, questions (natural language handles these).'
+  prevention_rules:
+  - Create triggers for structured workflows with consistent patterns only
+  - Use context detection within workflows, not separate triggers
+  - Maximum 8-12 trigger arrays total (maintainability limit)
+  - Let natural language handle variations and domain specifics
+  - Start with TIER 1, add TIER 2 only after validation
+  context_detection_pattern: |
+    Trigger Match: "let's plan" → planning_triggers
+    Context Detection: "ADO" / "Azure DevOps" in request
+    Flow:
+      1. Same planning workflow activates
+      2. Confidence assessment includes domain context
+      3. Questions tailored to detected domain
+      4. Phase structure adapted for domain needs
+  benefits:
+  - Maintainability (8-12 triggers vs 50+)
+  - Flexibility (new domains don't need new triggers)
+  - Natural language understanding handles variations
+  - Context detection more powerful than trigger matching
+  time_cost:
+    design_discussion_minutes: 25
+    documentation_minutes: 15
+    total_minutes: 40
+  related_files:
+  - cortex-brain/response-templates.yaml
+  - cortex-brain/documents/conversation-captures/2025-11-17-planning-trigger-implementation.md
+  tags:
+  - trigger-strategy
+  - context-detection
+  - maintainability
+  - architecture
+  - scalability
+  pattern_id: context_over_triggers_pattern
+  confidence: 0.95
+patterns:
+- pattern_id: prompt_based_trigger_detection_pattern
+  name: Prompt-Based Trigger Detection for LLM Routing
+  confidence: 0.98
+  applies_to:
+  - github-copilot-chat
+  - prompt-engineering
+  - workflow-activation
+  - intent-routing
+  problem: LLMs don't automatically detect and route keywords without explicit instructions
+  solution_template: |
+    # CRITICAL: Template Trigger Detection
+    
+    BEFORE responding to ANY user request:
+    1. Check for template triggers in [config-file]
+    2. If matched: Load corresponding [template/module]
+    3. If no match: Proceed with natural language response
+  implementation_steps:
+  - 'Step 1: Define trigger keywords in YAML (planning_triggers, help_triggers, etc.)'
+  - 'Step 2: Add "BEFORE responding" instruction to prompt file'
+  - 'Step 3: Document triggers in feature module (activation section)'
+  - 'Step 4: Update condensed versions for token efficiency'
+  - 'Step 5: Test trigger activation with original request'
+  key_insights:
+  - GitHub Copilot reads prompts as context, not executable code
+  - No middleware layer intercepts requests in Copilot Chat
+  - Templates are passive data until explicitly loaded
+  - Routing must be taught through explicit procedural instructions
+  - '''Intent router'' is conceptual - actually prompt-instructed behavior'
+  benefits:
+  - Consistent workflow activation across sessions
+  - Predictable routing behavior
+  - No external infrastructure required
+  - Works within GitHub Copilot Chat constraints
+  - Maintains CORTEX local-first principle
+  related_lessons:
+  - prompt-routing-001
+- pattern_id: context_over_triggers_pattern
+  name: Context Detection Over Trigger Explosion
+  confidence: 0.95
+  applies_to:
+  - trigger-strategy
+  - scalability
+  - maintainability
+  - workflow-design
+  problem: Creating separate triggers for every domain variation leads to unmaintainable
+    trigger explosion
+  solution_approach: Single trigger array with context detection inside workflow
+  tier_based_strategy:
+    tier_1_need_triggers:
+    - Planning (interactive, structured workflow)
+    - Help/Status (pre-formatted responses)
+    tier_2_beneficial_later:
+    - Setup/Configuration
+    - Documentation operations
+    - Maintenance
+    tier_3_never_need:
+    - Code execution (context-dependent, too many variations)
+    - Questions (direct responses work fine)
+  context_detection_flow: |
+    User: "let's plan an ADO feature"
+    → Matches: planning_triggers
+    → Detects: "ADO" keyword in request
+    → Adapts: Questions specific to Azure DevOps
+    → Generates: ADO-specialized phase plan
+  benefits:
+  - Maintainability (8-12 triggers vs 50+ with domain explosion)
+  - Flexibility (new domains auto-detected, no new triggers needed)
+  - Natural language handles variations better than explicit triggers
+  - Scalable without configuration bloat
+  decision_criteria:
+  - Structured workflow with consistent pattern? → Add trigger
+  - Many domain variations? → Use context detection
+  - Simple direct response? → Natural language only
+  - High value from consistency? → Add trigger
+  related_lessons:
+  - trigger-strategy-001

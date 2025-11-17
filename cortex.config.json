@@ -85,6 +85,17 @@
     "configSchema": "cortex-config-v5.0",
     "setupCompleted": true
   },
+  "ado_planning": {
+    "enabled": true,
+    "database_path": "cortex-brain/ado-work-items.db",
+    "templates_path": "cortex-brain/templates/ado",
+    "storage_path": "cortex-brain/documents/planning/ado",
+    "pagination_size": 50,
+    "cache_size": 100,
+    "auto_inject_context": true,
+    "track_file_changes": true,
+    "track_commits": true
+  },
   "vision_api": {
     "enabled": true,
     "max_tokens_per_image": 500,
