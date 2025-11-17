@@ -4,8 +4,8 @@ Backward compatibility layer during Phase 1 modularization.
 Phase 3: Real brain implementation.
 """
 
-# Import from legacy file during migration
-from .knowledge_graph_legacy import (
+# Import types from modular implementation
+from .knowledge_graph.types import (
     Pattern,
     PatternType,
     RelationshipType

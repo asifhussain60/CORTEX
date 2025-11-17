@@ -67,6 +67,19 @@ class IntentRouter(BaseAgent):
                 "let's plan", "plan a feature", "plan this", "help me plan",
                 "planning", "interactive planning", "create plan"
             ],
+            IntentType.ENHANCE: [
+                # Direct enhancement verbs
+                "enhance", "improve", "extend", "augment", "upgrade",
+                "optimize", "refactor", "modernize",
+                # Modification of existing
+                "modify existing", "update existing", "change existing",
+                "improve existing", "enhance existing", "extend existing",
+                # Context clues for existing features
+                "existing system", "current implementation", "the authentication",
+                "the dashboard", "the api", "our payment", "our user",
+                # Want to work with what's there
+                "add to", "build on", "expand on"
+            ],
             IntentType.CODE: ["create", "implement", "build", "add", "make"],
             IntentType.EDIT_FILE: ["edit", "modify", "update", "change", "refactor"],
             IntentType.TEST: ["test", "tdd", "testing", "verify"],
@@ -190,11 +203,52 @@ class IntentRouter(BaseAgent):
             if score > 0:
                 intent_scores[intent_type] = score
         
+        # Check for application domain terms that suggest existing features
+        # (not CORTEX internal terms like "brain", "tier", "agent")
+        domain_signals = self._detect_domain_context(message_lower)
+        if domain_signals and not any(
+            cortex_term in message_lower 
+            for cortex_term in ["cortex", "brain", "tier", "agent", "router"]
+        ):
+            # Boost ENHANCE score if domain context detected
+            if IntentType.ENHANCE in intent_scores:
+                intent_scores[IntentType.ENHANCE] += 2
+            else:
+                intent_scores[IntentType.ENHANCE] = 1
+        
         # Return highest scoring intent, or UNKNOWN if none found
         if intent_scores:
             return max(intent_scores.items(), key=lambda x: x[1])[0]
         
         return IntentType.UNKNOWN
+    
+    def _detect_domain_context(self, message: str) -> bool:
+        """
+        Detect if message mentions application domain terms (not CORTEX framework).
+        
+        Signals that suggest working with existing application features:
+        - Technology/component names: "authentication", "payment", "dashboard", "api"
+        - Possessive references: "our system", "the database", "my app"
+        - Common business domains: "user management", "billing", "reporting"
+        
+        Args:
+            message: Lowercased user message
+        
+        Returns:
+            True if domain context detected
+        """
+        domain_signals = [
+            # Technology components
+            "authentication", "payment", "dashboard", "api", "database",
+            "user management", "billing", "reporting", "analytics",
+            # Possessive/definite references
+            "our ", "the ", "my ", "this ",
+            # Business domains
+            "login", "signup", "checkout", "order", "invoice",
+            "profile", "settings", "admin", "customer"
+        ]
+        
+        return any(signal in message for signal in domain_signals)
     
     def _find_similar_intents(
         self,
@@ -242,6 +296,13 @@ class IntentRouter(BaseAgent):
         # Get primary agent for intent
         primary_agent = get_agent_for_intent(intent)
         
+        # For ENHANCE intent, check if we have fresh crawled data
+        crawl_required = False
+        crawl_status = None
+        if intent in [IntentType.ENHANCE, IntentType.IMPROVE, IntentType.EXTEND]:
+            crawl_status = self._check_crawled_data_staleness(request)
+            crawl_required = crawl_status.get("needs_crawl", False)
+        
         # Determine secondary agents based on message analysis
         secondary_agents = self._identify_secondary_agents(request, intent)
         
@@ -262,12 +323,130 @@ class IntentRouter(BaseAgent):
             "secondary_agents": secondary_agents,
             "confidence": confidence,
             "intent": intent,
+            "crawl_required": crawl_required,
+            "crawl_status": crawl_status,
             "routing_reason": self._get_routing_reason(
                 intent,
                 similar_patterns,
-                confidence
+                confidence,
+                crawl_status
             )
         }
+    
+    def _check_crawled_data_staleness(self, request: AgentRequest) -> Dict[str, Any]:
+        """
+        Check if we have fresh crawled data for the application domain.
+        
+        Queries Tier 2 Knowledge Graph for:
+        1. Existence of application patterns
+        2. Recency of patterns (timestamp check)
+        3. Coverage of mentioned domain terms
+        
+        Args:
+            request: The agent request
+        
+        Returns:
+            {
+                "has_data": bool,
+                "is_stale": bool,
+                "needs_crawl": bool,
+                "last_crawl": datetime or None,
+                "coverage": float (0.0-1.0)
+            }
+        """
+        if not self.tier2:
+            return {
+                "has_data": False,
+                "is_stale": True,
+                "needs_crawl": True,
+                "last_crawl": None,
+                "coverage": 0.0,
+                "reason": "Tier 2 not available"
+            }
+        
+        try:
+            from datetime import datetime, timedelta
+            
+            # Search for application patterns (not CORTEX internal)
+            app_patterns = self.tier2.search_patterns(
+                query=request.user_message,
+                limit=10
+            )
+            
+            # Filter out CORTEX internal patterns
+            app_patterns = [
+                p for p in app_patterns 
+                if not p.get("_namespace", "").startswith("cortex.")
+            ]
+            
+            if not app_patterns:
+                return {
+                    "has_data": False,
+                    "is_stale": True,
+                    "needs_crawl": True,
+                    "last_crawl": None,
+                    "coverage": 0.0,
+                    "reason": "No application patterns found in knowledge graph"
+                }
+            
+            # Check staleness (patterns older than 24 hours are stale)
+            now = datetime.now()
+            stale_threshold = timedelta(hours=24)
+            
+            # Get most recent pattern timestamp
+            latest_pattern = max(
+                app_patterns,
+                key=lambda p: datetime.fromisoformat(
+                    p.get("created_at", "1970-01-01T00:00:00")
+                )
+            )
+            last_crawl = datetime.fromisoformat(
+                latest_pattern.get("created_at", "1970-01-01T00:00:00")
+            )
+            
+            is_stale = (now - last_crawl) > stale_threshold
+            
+            # Calculate coverage (how many domain terms have patterns)
+            message_lower = request.user_message.lower()
+            domain_terms = [
+                term for term in [
+                    "authentication", "payment", "dashboard", "api", "database",
+                    "user", "login", "signup", "profile", "settings"
+                ]
+                if term in message_lower
+            ]
+            
+            covered_terms = sum(
+                1 for term in domain_terms
+                if any(term in p.get("content", "").lower() for p in app_patterns)
+            )
+            coverage = covered_terms / len(domain_terms) if domain_terms else 0.0
+            
+            needs_crawl = is_stale or coverage < 0.5
+            
+            return {
+                "has_data": True,
+                "is_stale": is_stale,
+                "needs_crawl": needs_crawl,
+                "last_crawl": last_crawl,
+                "coverage": coverage,
+                "pattern_count": len(app_patterns),
+                "reason": (
+                    f"Data is {'stale' if is_stale else 'fresh'}, "
+                    f"coverage {coverage:.0%}"
+                )
+            }
+            
+        except Exception as e:
+            self.logger.warning(f"Staleness check failed: {str(e)}")
+            return {
+                "has_data": False,
+                "is_stale": True,
+                "needs_crawl": True,
+                "last_crawl": None,
+                "coverage": 0.0,
+                "reason": f"Check failed: {str(e)}"
+            }
     
     def _identify_secondary_agents(
         self,
@@ -362,7 +541,8 @@ class IntentRouter(BaseAgent):
         self,
         intent: IntentType,
         similar_patterns: List[Dict[str, Any]],
-        confidence: float
+        confidence: float,
+        crawl_status: Optional[Dict[str, Any]] = None
     ) -> str:
         """
         Get human-readable routing reason.
@@ -371,6 +551,7 @@ class IntentRouter(BaseAgent):
             intent: Classified intent
             similar_patterns: Similar patterns
             confidence: Confidence score
+            crawl_status: Crawl staleness check result (optional)
         
         Returns:
             Routing reason string
@@ -378,10 +559,18 @@ class IntentRouter(BaseAgent):
         if intent == IntentType.UNKNOWN:
             return "Intent unclear, using pattern matching"
         
-        if similar_patterns:
-            return f"Intent '{intent.value}' matched, {len(similar_patterns)} similar patterns found"
+        reason = f"Intent '{intent.value}' classified with {confidence:.0%} confidence"
         
-        return f"Intent '{intent.value}' classified with {confidence:.0%} confidence"
+        if similar_patterns:
+            reason += f", {len(similar_patterns)} similar patterns found"
+        
+        if crawl_status:
+            if crawl_status.get("needs_crawl"):
+                reason += f" | Crawl required: {crawl_status.get('reason', 'Data stale or incomplete')}"
+            else:
+                reason += f" | Using cached data (coverage: {crawl_status.get('coverage', 0):.0%})"
+        
+        return reason
     
     def _log_to_conversation(
         self,

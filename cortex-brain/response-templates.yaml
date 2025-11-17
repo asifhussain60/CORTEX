@@ -243,6 +243,30 @@ templates:
       \ **Response:**\n   [Provide helpful response]\n\n\U0001F4DD **Your Request:**\
       \ [Echo user request]\n\n\U0001F50D **Next Steps:**\n   1. [First recommendation]\n\
       \   2. [Second recommendation]\n   3. [Third recommendation]"
+  enhance_existing:
+    name: Enhancement Workflow
+    trigger:
+    - enhance_existing
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Enhancement Analysis**\nAuthor: Asif Hussain |\
+      \ \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   You want to enhance/improve/extend an existing feature\
+      \ in your application.\n\n\u26A0\uFE0F **Challenge:** \u2713 **Accept**\n  \
+      \ Enhancement requires understanding current implementation before planning changes.\
+      \ I'll discover existing code first.\n\n\U0001F4AC **Response:**\n   Starting\
+      \ enhancement workflow:\n   \u2705 Phase 1: Discovery (crawl existing UI, API,\
+      \ database)\n   \u23F3 Phase 2: Context Building (understand current implementation)\n\
+      \   \u23F3 Phase 3: Enhancement Planning (plan improvements)\n   \u23F3 Phase\
+      \ 4: Implementation (apply changes with tests)\n\n\U0001F4DD **Your Request:**\
+      \ Enhance existing application feature\n\n\U0001F50D **Next Steps:**\n   \u2611\
+      \ Phase 1: Discovery & Analysis\n      \u2022 Crawl codebase for [feature] patterns\n\
+      \      \u2022 Extract UI components, API endpoints, database schema\n      \u2022\
+      \ Identify dependencies and relationships\n   \n   \u2610 Phase 2: Context Building\n\
+      \      \u2022 Analyze current architecture\n      \u2022 Identify enhancement\
+      \ opportunities\n      \u2022 Review existing tests and coverage\n   \n   \u2610\
+      \ Phase 3: Enhancement Planning\n      \u2022 Define improvement scope\n   \
+      \   \u2022 Create DoR/DoD/Acceptance Criteria\n      \u2022 Approve plan before\
+      \ implementation\n   \n   Ready to crawl existing implementation?"
 routing:
   default: fallback
   help_triggers:
@@ -264,6 +288,21 @@ routing:
   - planning
   - feature planning
   - i want to plan
+  enhancement_triggers:
+  - enhance
+  - improve
+  - extend
+  - enhance existing
+  - improve existing
+  - extend existing
+  - modify existing
+  - update existing
+  - optimize
+  - refactor
+  - upgrade
+  - enhance the
+  - improve the
+  - extend the
   ado_planning_triggers:
   - plan ado
   - create ado

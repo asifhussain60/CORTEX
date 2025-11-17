@@ -16,13 +16,15 @@ New Structure (in progress):
 Once modularization is complete, this will import from the new coordinator.
 """
 
-# Backward compatibility: Re-export from legacy file
-from ..knowledge_graph_legacy import (
-    KnowledgeGraph,
+# Import from modular types
+from .types import (
     Pattern,
     PatternType,
     RelationshipType
 )
+
+# Import KnowledgeGraph facade
+from .knowledge_graph import KnowledgeGraph
 
 # New modular components (partially complete)
 from .database import DatabaseSchema, ConnectionManager

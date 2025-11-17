@@ -30,6 +30,11 @@ class IntentType(Enum):
     FEATURE = "feature"
     TASK_BREAKDOWN = "task_breakdown"
     
+    # Enhancement intents (NEW - for improving existing features)
+    ENHANCE = "enhance"
+    IMPROVE = "improve"
+    EXTEND = "extend"
+    
     # Architectural analysis intents (NEW)
     ARCHITECTURE = "architecture"
     ANALYZE_STRUCTURE = "analyze_structure" 
@@ -112,6 +117,11 @@ INTENT_AGENT_MAP = {
     IntentType.PLAN: AgentType.PLANNER,
     IntentType.FEATURE: AgentType.PLANNER,
     IntentType.TASK_BREAKDOWN: AgentType.PLANNER,
+    
+    # Enhancement mapping (NEW - crawl existing + plan changes)
+    IntentType.ENHANCE: AgentType.ARCHITECT,  # First discovers existing, then routes to PLANNER
+    IntentType.IMPROVE: AgentType.ARCHITECT,
+    IntentType.EXTEND: AgentType.ARCHITECT,
     
     # Architectural analysis mapping (NEW)
     IntentType.ARCHITECTURE: AgentType.ARCHITECT,
