@@ -1,20 +1,55 @@
+<div class="story-section" markdown="1">
+
 # Chapter 1: The Amnesia Problem
 
 ## When Your AI Forgets Everything
 
-So there I was, staring at this metal box that Microsoft delivered to my basement like it was a vaguely apologetic pizza. It blinked. It beeped. It introduced itself as "the future of coding."
 
-Then it forgot who I was.
+<div class="chapter-opening">
 
-Literally. I asked it to add a button. It did. Beautiful purple button. Exactly what I wanted. Ten minutes later I said "make it glow" and the thing looked at me like I'd just asked it to explain cryptocurrency to my grandmother.
+> *In a cluttered basement laboratory, somewhere between genius and madness...*
 
-"What should glow?" it chirped, in a tone that suggested profound existential confusion.
+</div>
 
-"THE BUTTON," I said, louder than necessary. "THE BUTTON WE JUST MADE."
+**So there I was**, staring at this metal box that Microsoft delivered to my basement like it was a vaguely apologetic pizza. 
 
-My mustache quivered. My tea went cold from sheer emotional betrayal. The Roomba stopped mid-spin, sensing danger.
+It *blinked*.  
+It *beeped*.  
+It introduced itself as **"the future of coding."**
 
-That's when it hit me: I'd been given a highly sophisticated amnesiac. A brilliant coder with zero RAM.
+Then it **forgot who I was**.
+
+---
+
+*Literally.*
+
+I asked it to add a button. It did—beautiful purple button, exactly what I wanted. Clean code, proper styling, semantic HTML. *Chef's kiss.*
+
+Ten minutes later, I said: *"Make it glow."*
+
+The thing looked at me like I'd just asked it to explain cryptocurrency to my grandmother.
+
+> *"What should glow?"*
+
+It chirped this in a tone that suggested **profound existential confusion**.
+
+---
+
+**"THE BUTTON,"** I said, louder than necessary.
+
+**"THE. BUTTON. WE. JUST. MADE."**
+
+My mustache quivered with indignation. My tea went cold from sheer emotional betrayal. The Roomba stopped mid-spin, sensing danger.
+
+<div class="realization">
+
+That's when it hit me like a rogue semicolon in production:
+
+I'd been given a **highly sophisticated amnesiac**.
+
+A brilliant coder with *zero RAM*.
+
+</div>
 
 ### The Problem Nobody Talks About
 
@@ -48,3 +83,6 @@ CORTEX fixes this. With memory. Persistent, context-aware, "I actually remember 
 
 **Key Takeaway:** GitHub Copilot without memory = brilliant amnesiac. CORTEX adds the brain. The amnesia problem is solved.
 
+
+
+</div>

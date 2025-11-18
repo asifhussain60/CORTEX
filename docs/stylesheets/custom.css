@@ -19,20 +19,20 @@
   --cortex-right-brain: #A855F7;      /* Purple - Strategic */
   
   /* Light subtle backgrounds */
-  --bg-story: #FEF3E2;                /* Warm cream for story sections */
+  --bg-story: #FFFFFF;                /* White for story sections */
   --bg-technical: #F0F4F8;            /* Cool light gray for technical */
   --bg-code: #000000;                 /* Black for code blocks */
-  --bg-note: #FFF9E6;                 /* Soft yellow for notes */
+  --bg-note: #F8F9FA;                 /* Light grey for notes */
   --bg-warning: #FFE5E5;              /* Soft red for warnings */
   --bg-success: #E8F5E9;              /* Soft green for success */
   
   /* Text colors */
-  --text-story: #3E2723;              /* Dark brown for story text */
+  --text-story: #333333;              /* Dark grey for story text */
   --text-technical: #1F2937;          /* Dark gray for technical */
   --text-code: #FFFFFF;               /* White for code */
   
   /* Border colors */
-  --border-story: #F59E0B;            /* Amber border for story */
+  --border-story: #666666;            /* Grey border for story */
   --border-technical: var(--cortex-primary);
   --border-code: #333333;
 }
@@ -99,23 +99,23 @@
 }
 
 /* ============================================
-   STORY SECTIONS - Warm, Narrative Style
+   STORY SECTIONS - Clean, Readable Style
    ============================================ */
 
 .story-section {
-  background: linear-gradient(135deg, var(--bg-story) 0%, #FFF4E0 100%);
+  background: #FFFFFF;
   padding: 2rem;
   border-radius: 12px;
   border-left: 6px solid var(--border-story);
   color: var(--text-story);
   margin: 2rem 0;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .story-section h1,
 .story-section h2,
 .story-section h3 {
-  color: #D97706;
+  color: #2c3e50;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -307,7 +307,7 @@ code[class*="language-"],
 .md-typeset .admonition.note,
 .md-typeset details.note {
   background-color: var(--bg-note);
-  border-left: 4px solid #F59E0B;
+  border-left: 4px solid #666666;
 }
 
 /* Warning admonitions */
