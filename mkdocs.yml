@@ -21,8 +21,7 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
-extra_css:
-- stylesheets/material-tales-override.css
+    - toc.integrate
 
 # ============================================
 # NAVIGATION STRUCTURE - Simplified & Logical

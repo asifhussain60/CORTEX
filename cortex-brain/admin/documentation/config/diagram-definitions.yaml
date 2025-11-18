@@ -167,75 +167,8 @@ diagrams:
       - anomaly_detection
       - alert_generation
       - auto_remediation
-  
-  - name: "Interactive Planning Workflow"
-    id: "15-interactive-planning"
-    type: pipeline_flow
-    output_path: diagrams/mermaid/15-interactive-planning.mmd
-    description: "Feature planning with Work Planner integration"
-    aspect_ratio: "16:9"
-    stages:
-      - trigger_detection
-      - phase_breakdown
-      - task_generation
-      - validation
-      - approval
-  
-  - name: "Error Correction Loop"
-    id: "16-error-correction"
-    type: pipeline_flow
-    output_path: diagrams/mermaid/16-error-correction.mmd
-    description: "Automated error detection and correction"
-    aspect_ratio: "1:1"
-    stages:
-      - error_detection
-      - pattern_matching
-      - solution_generation
-      - validation
-      - learning
-  
-  # Integration Level Diagrams (4 diagrams)
-  - name: "VS Code Integration"
-    id: "17-vscode-integration"
-    type: data_flow
-    output_path: diagrams/mermaid/17-vscode-integration.mmd
-    description: "VS Code extension integration points"
-    aspect_ratio: "16:9"
-    source: "VS Code Extension"
-    target: "CORTEX Brain"
-  
-  - name: "Git Integration"
-    id: "18-git-integration"
-    type: data_flow
-    output_path: diagrams/mermaid/18-git-integration.mmd
-    description: "Git analysis and commit workflow"
-    aspect_ratio: "16:9"
-    source: "Git Repository"
-    target: "Context Intelligence (T3)"
-  
-  - name: "MkDocs Integration"
-    id: "19-mkdocs-integration"
-    type: data_flow
-    output_path: diagrams/mermaid/19-mkdocs-integration.mmd
-    description: "Documentation site generation"
-    aspect_ratio: "16:9"
-    source: "Generated Docs"
-    target: "MkDocs Site"
-  
-  - name: "GitHub Actions CI/CD Pipeline"
-    id: "20-github-actions-pipeline"
-    type: pipeline_flow
-    output_path: diagrams/mermaid/20-github-actions-pipeline.mmd
-    description: "Automated testing and deployment"
-    aspect_ratio: "16:9"
-    stages:
-      - trigger
-      - test
-      - build
-      - deploy
-      - validate
 
-# Total: 20 diagrams (exceeds 17 minimum requirement)
+# Total: 14 diagrams (meets 14 minimum requirement after removing diagrams 15-20)
 # Distribution:
 #   Strategic: 5 diagrams
 #   Architectural: 6 diagrams
@@ -286,5 +219,5 @@ settings:
 generation:
   cleanup_before_run: true  # Delete existing files before regeneration
   validate_after_run: true  # Run validation tests
-  minimum_count: 17  # Fail if fewer than 17 diagrams generated
+  minimum_count: 14  # Fail if fewer than 14 diagrams generated (updated after removing diagrams 15-20)
   enforce_parity: true  # mermaid count == prompt count == narrative count

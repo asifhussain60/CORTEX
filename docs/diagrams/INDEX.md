@@ -22,12 +22,4 @@
 - [Conversation Flow](mermaid/12-conversation-flow.mmd) - Conversation handling
 - [Knowledge Graph Update](mermaid/13-knowledge-graph-update.mmd) - Pattern learning
 - [Health Check](mermaid/14-health-check.mmd) - System validation
-- [Interactive Planning](mermaid/15-interactive-planning.mmd) - Feature planning workflow
 
-## Integration & DevOps
-
-- [Error Correction](mermaid/16-error-correction.mmd) - Error handling
-- [VS Code Integration](mermaid/17-vscode-integration.mmd) - IDE integration
-- [Git Integration](mermaid/18-git-integration.mmd) - Version control
-- [MkDocs Integration](mermaid/19-mkdocs-integration.mmd) - Documentation site
-- [GitHub Actions Pipeline](mermaid/20-github-actions-pipeline.mmd) - CI/CD workflow

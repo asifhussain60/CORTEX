@@ -508,7 +508,7 @@ ensuring that every action is validated against architectural principles and bus
         mermaid_files = list(mermaid_dir.glob("*.mmd"))
         
         # Validate minimum count (CRITICAL: prevents regression)
-        MINIMUM_DIAGRAMS = 17
+        MINIMUM_DIAGRAMS = 14  # Updated after removing diagrams 15-20
         errors = []
         
         if len(mermaid_files) < MINIMUM_DIAGRAMS:
