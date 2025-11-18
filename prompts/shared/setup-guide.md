@@ -186,7 +186,11 @@ Phase 5: Configuration File Creation
   ✅ Enabled pattern decay (5% per 30 days)
   ✅ Configured git analysis (30-day lookback)
 
-Phase 6: Brain Protection Setup
+Phase 6: .gitignore Configuration
+  ✅ Added CORTEX/ to .gitignore (prevents accidental commits)
+  ℹ️  CORTEX internals now excluded from your repository
+
+Phase 7: Brain Protection Setup
   ✅ Loaded brain-protection-rules.yaml (6 protection layers)
   ✅ Validated 22 protection rules
   ✅ Initialized Brain Protector agent
@@ -202,6 +206,8 @@ Next Steps:
 
 For conversation tracking setup: #file:prompts/shared/tracking-guide.md
 ```
+
+**Important:** CORTEX automatically adds the `CORTEX/` folder to your repository's `.gitignore` file. This prevents CORTEX's internal code, brain databases, and configuration from being committed to your application repository.
 
 ---
 
