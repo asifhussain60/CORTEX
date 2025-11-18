@@ -1,51 +1,140 @@
-site_name: CORTEX Documentation
-site_description: AI-powered development assistant with persistent memory
+site_name: CORTEX
+site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
 site_author: Asif Hussain
-site_url: https://cortex-docs.example.com
-repo_url: https://github.com/asifhussain60/CORTEX
-repo_name: CORTEX
 copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
+repo_url: https://github.com/asifhussain60/CORTEX
+repo_name: asifhussain60/CORTEX
 theme:
   name: material
+  favicon: assets/images/CORTEX-logo.png
   palette:
-    primary: indigo
+  - scheme: default
+    primary: deep purple
     accent: purple
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - scheme: slate
+    primary: deep purple
+    accent: purple
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
   features:
+  - navigation.instant
+  - navigation.tracking
   - navigation.tabs
   - navigation.sections
   - navigation.expand
   - navigation.top
+  - toc.integrate
+  - search.suggest
   - search.highlight
-  - search.share
-  - toc.follow
-plugins:
-- search
-- mermaid2
+  - content.code.copy
+  - content.tabs.link
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+extra_css:
+- stylesheets/material-tokens.css  # NEW: Material Design 3 token system - must load first
+- stylesheets/custom.css
+- stylesheets/story.css
+- stylesheets/technical.css
+- https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
+
+# ============================================
+# NAVIGATION STRUCTURE - Simplified & Logical
+# 7 Main Sections: Home | The CORTEX Story | Getting Started | Architecture | Guides | Operations | Reference
+# ============================================
+nav:
+- Home: index.md
+- The CORTEX Story:
+  - Prologue - The Amnesia Problem: story/CORTEX-STORY/01-amnesia-problem.md
+  - Chapter 1 - First Memory: story/CORTEX-STORY/02-first-memory.md
+  - Chapter 2 - Brain Architecture: story/CORTEX-STORY/03-brain-architecture.md
+  - Chapter 3 - The Left Brain: story/CORTEX-STORY/04-left-brain.md
+  - Chapter 4 - The Right Brain: story/CORTEX-STORY/05-right-brain.md
+  - Chapter 5 - Corpus Callosum: story/CORTEX-STORY/06-corpus-callosum.md
+  - Chapter 6 - Knowledge Graph: story/CORTEX-STORY/07-knowledge-graph.md
+  - Chapter 7 - Protection Layer: story/CORTEX-STORY/08-protection-layer.md
+  - Chapter 8 - The Awakening: story/CORTEX-STORY/09-awakening.md
+- Getting Started:
+  - Quick Start: getting-started/quick-start.md
+  - Installation: getting-started/installation.md
+  - Configuration: getting-started/configuration.md
+- Architecture:
+  - Overview: architecture/overview.md
+  - Tier System: architecture/tier-system.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
+  - Diagrams:
+    - Module Structure: images/diagrams/architectural/module-structure.md
+    - Brain Protection: images/diagrams/architectural/brain-protection.md
+    - EPM Doc Generator: images/diagrams/architectural/epm-doc-generator-pipeline.md
+    - Agent Coordination: images/diagrams/strategic/agent-coordination.md
+    - Information Flow: images/diagrams/strategic/information-flow.md
+    - Tier Architecture: images/diagrams/strategic/tier-architecture.md
+- Guides:
+  - Developer Guide: guides/developer-guide.md
+  - Admin Guide: guides/admin-guide.md
+  - Best Practices: guides/best-practices.md
+  - Troubleshooting: guides/troubleshooting.md
+- Operations:
+  - Overview: operations/overview.md
+  - Entry Point Modules: operations/entry-point-modules.md
+  - Workflows: operations/workflows.md
+  - Health Monitoring: operations/health-monitoring.md
+  - Diagrams:
+    - Conversation Flow: images/diagrams/operational/conversation-flow.md
+    - Health Check: images/diagrams/operational/health-check.md
+    - Knowledge Graph Update: images/diagrams/operational/knowledge-graph-update.md
+- Reference:
+  - API Reference: reference/api.md
+  - Configuration: reference/configuration.md
+  - Response Templates: reference/response-templates.md
+  - Integration:
+    - Git Integration: images/diagrams/integration/git-integration.md
+    - MkDocs Integration: images/diagrams/integration/mkdocs-integration.md
+    - VSCode Integration: images/diagrams/integration/vscode-integration.md
 markdown_extensions:
-- pymdownx.highlight
+- abbr
+- admonition
+- attr_list
+- def_list
+- footnotes
+- meta
+- md_in_html
+- tables
+- toc:
+    permalink: true
+    toc_depth: 3
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.betterem:
+    smart_enable: all
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.details
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.snippets
 - pymdownx.superfences:
     custom_fences:
     - name: mermaid
       class: mermaid
       format: !!python/name:pymdownx.superfences.fence_code_format
-- pymdownx.tabbed
-- admonition
-- attr_list
-- md_in_html
-
-# Exclude problematic auto-generated prompt files
-exclude_docs: |
-  diagrams/prompts/
-  diagrams/generated/
-
-nav:
-- Home: index.md
-- The CORTEX Story: awakening-of-cortex.md
-- Architecture:
-  - Overview: EXECUTIVE-SUMMARY.md
-  - Features: FEATURES.md
-  - Capabilities: CAPABILITIES-MATRIX.md
-- Diagrams:
-  - Overview: diagrams/README.md
-  - Mermaid Diagrams: diagrams/INDEX.md
-  - Architecture Story: diagrams/story/The CORTEX Story.md
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+plugins:
+- search:
+    lang: en
+- mermaid2
