@@ -26,6 +26,7 @@ from .base_plugin import (
     PluginPriority,
     HookPoint
 )
+from .story_formatting import StoryFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,9 @@ class StoryGeneratorPlugin(BasePlugin):
             self.brain_path = self.root_path / "cortex-brain"
             self.docs_path = self.root_path / "docs"
             self.story_output_path = self.docs_path / "diagrams" / "story"
+            
+            # Initialize visual formatter for future enhancements
+            self.formatter = StoryFormatter()
             
             # Load story template
             self.story_template_path = self.root_path / ".github" / "prompts" / "cortex-story-builder.md"

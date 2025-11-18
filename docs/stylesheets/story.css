@@ -1,57 +1,79 @@
 /*
  * CORTEX Story-Specific Styling
- * Purpose: Comic font and engaging story presentation
- * Version: 1.0.0
- * Created: 2025-11-09
+ * Purpose: Comic Sans font with dark purple chapter styling
+ * Version: 2.0.0
+ * Updated: 2025-11-17
  */
 
 /* ============================================================================
-   COMIC FONT FOR STORY SECTIONS
+   COMIC SANS FONT FOR STORY SECTIONS
    ============================================================================ */
 
-/* Import Comic Neue (better Comic Sans alternative) */
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+/* Override Material theme's md-typeset font size for story pages */
+.md-typeset {
+    font-size: 0.95rem;    /* Increased from default 0.8rem for better readability */
+}
 
-/* Story sections use comic font */
+/* Story sections use Comic Sans MS (requested by user) */
 .story-section,
 .md-content [data-content-type="story"],
-.md-content.story-page {
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-    font-size: 1em;        /* Reduced from 1.1em for consistency */
-    line-height: 1.5;      /* Reduced from 1.6 for tighter spacing */
-    color: #2c3e50;
+.md-content.story-page,
+article[data-md-component="content"] {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+    font-size: 0.9rem;     /* Updated from 16px (0.8rem would be 12.8px at default) */
+    line-height: 1.6;      /* Optimal readability */
+    color: #2c3e50;        /* Dark slate for body text */
+}
+
+/* Target story directory specifically */
+[data-md-component="content"] article:has([href*="story"]),
+[data-md-component="content"] article:has([href*="The-CORTEX-Story"]) {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 }
 
 /* ============================================================================
-   STORY HEADERS (Purple theme)
+   STORY HEADERS - DARK PURPLE CHAPTER STYLING
    ============================================================================ */
 
+/* H1 - Chapter Headings (Bold Dark Purple) */
 .story-section h1,
-[data-content-type="story"] h1 {
-    color: #8b008b;        /* Deep purple */
-    font-weight: 700;
-    font-size: 2.5em;
+[data-content-type="story"] h1,
+article h1 {
+    color: #4B0082;        /* Indigo (dark purple) - as requested */
+    font-weight: 700;      /* Bold - as requested */
+    font-size: 2.5em;      /* 40px at 16px base - industry standard for H1 */
     margin-top: 1.5rem;
     margin-bottom: 1rem;
-    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #4B0082;
+    text-align: left;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 }
 
+/* H2 - Section Headings (Medium Purple) */
 .story-section h2,
-[data-content-type="story"] h2 {
-    color: #9370db;        /* Medium purple */
-    font-weight: 600;
-    font-size: 2em;
+[data-content-type="story"] h2,
+article h2 {
+    color: #663399;        /* Rebecca Purple (medium dark) */
+    font-weight: 600;      /* Semi-bold for hierarchy */
+    font-size: 1.8em;      /* 28.8px at 16px base - industry standard for H2 */
     margin-top: 1.25rem;
     margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #663399;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 }
 
+/* H3 - Subsection Headings (Lighter Purple) */
 .story-section h3,
-[data-content-type="story"] h3 {
-    color: #ba55d3;        /* Orchid */
-    font-weight: 600;
-    font-size: 1.5em;
+[data-content-type="story"] h3,
+article h3 {
+    color: #8B4789;        /* Plum (lighter purple) */
+    font-weight: 600;      /* Semi-bold */
+    font-size: 1.4em;      /* 22.4px at 16px base - industry standard for H3 */
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 }
 
 /* ============================================================================

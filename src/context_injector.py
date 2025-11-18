@@ -15,12 +15,19 @@ Version: 1.0
 from typing import Dict, List, Optional
 import time
 import logging
+from pathlib import Path
+from datetime import datetime
 
 # Tier imports - using correct class names from CORTEX 2.0 architecture
-from src.config import ConfigManager
+try:
+    from src.config import CortexConfig as ConfigManager
+except ImportError:
+    ConfigManager = None
 
 try:
     from src.tier1.working_memory import WorkingMemory
+    from src.tier1.context_formatter import ContextFormatter
+    from src.tier1.relevance_scorer import RelevanceScorer
     TIER1_AVAILABLE = True
 except ImportError:
     TIER1_AVAILABLE = False
@@ -63,9 +70,16 @@ class ContextInjector:
         """
         # Use ConfigManager for tier-specific paths (CORTEX 2.0 distributed architecture)
         if db_path is None:
-            config = ConfigManager()
-            # Context injector uses Tier 1 for conversations
-            db_path = config.get_tier1_conversations_path()
+            # Default to cortex-brain/tier1/working_memory.db
+            db_path = Path("cortex-brain/tier1/working_memory.db")
+            if ConfigManager:
+                try:
+                    config = ConfigManager()
+                    # Try to get Tier 1 path if method exists
+                    if hasattr(config, 'get_tier1_conversations_path'):
+                        db_path = config.get_tier1_conversations_path()
+                except Exception as e:
+                    logger.warning(f"Could not use ConfigManager: {e}, using default path")
         
         self.db_path = db_path
         
@@ -73,6 +87,12 @@ class ContextInjector:
         self.wm = WorkingMemory(db_path) if TIER1_AVAILABLE else None
         self.kg = KnowledgeGraph() if TIER2_AVAILABLE else None
         self.ci = ContextIntelligence() if TIER3_AVAILABLE else None
+        
+        # Initialize context formatter for Tier 1 (Phase 2)
+        self.formatter = ContextFormatter() if TIER1_AVAILABLE else None
+        
+        # Initialize relevance scorer for Tier 1 (Phase 4B)
+        self.relevance_scorer = RelevanceScorer() if TIER1_AVAILABLE else None
         
         # Performance tracking
         self._last_injection_time_ms = 0.0
@@ -109,13 +129,17 @@ class ContextInjector:
         
         context = {}
         
-        # Tier 1: Working Memory
+        # Tier 1: Working Memory (with pronoun resolution)
         if include_tiers.get('tier1', True) and self.wm:
-            context['tier1'] = self._inject_tier1(conversation_id)
+            context['tier1'] = self._inject_tier1(conversation_id, user_request)
         
         # Tier 2: Knowledge Graph (with namespace awareness)
         if include_tiers.get('tier2', True) and self.kg:
-            context['tier2'] = self._inject_tier2(user_request, current_file)
+            # Use resolved request if available
+            resolved_request = user_request
+            if 'tier1' in context and 'resolved_request' in context['tier1']:
+                resolved_request = context['tier1']['resolved_request']
+            context['tier2'] = self._inject_tier2(resolved_request, current_file)
         
         # Tier 3: Development Context
         if include_tiers.get('tier3', True) and self.ci:
@@ -135,34 +159,108 @@ class ContextInjector:
         
         return context
     
-    def _inject_tier1(self, conversation_id: Optional[str] = None) -> Dict:
+    def _inject_tier1(self, conversation_id: Optional[str] = None, user_request: str = "") -> Dict:
         """
-        Inject Tier 1: Recent conversations + entities
+        Inject Tier 1: Relevant conversations + entities (with relevance scoring)
+        
+        Phase 4B Enhancement: Uses relevance scoring instead of simple recency.
         
         Args:
             conversation_id: Current conversation UUID
+            user_request: User's request (for pronoun resolution and relevance scoring)
         
         Returns:
             {
                 'current_conversation': {...},
-                'recent_entities': [...],
-                'recent_conversations': [...]
+                'relevant_conversations': [...],  # Relevance-scored conversations
+                'formatted_summary': str,  # Token-efficient formatted summary
+                'active_entities': {...},  # Extracted entities for pronoun resolution
+                'resolved_request': str,  # Request with pronouns resolved
+                'relevance_scores': [...]  # Debug: relevance scores for each conversation
             }
         """
         tier1_context = {}
         
-        # Current conversation (if exists)
-        if conversation_id:
-            tier1_context['current_conversation'] = \
-                self.wm_engine.get_conversation(conversation_id)
+        if not self.wm:
+            return tier1_context
         
-        # Recent entities (files, components, rules mentioned in last 20 conversations)
-        tier1_context['recent_entities'] = \
-            self.wm_engine.extract_entities_from_recent(limit=20)
-        
-        # Recent conversations (summary of last 5)
-        tier1_context['recent_conversations'] = \
-            self.wm_engine.get_recent_conversations(limit=5)
+        # Get recent conversations (larger pool for relevance scoring)
+        try:
+            recent_convs = self.wm.get_recent_conversations(limit=20)
+            
+            if not recent_convs:
+                tier1_context['relevant_conversations'] = []
+                tier1_context['formatted_summary'] = "No recent context available"
+                tier1_context['active_entities'] = {}
+                tier1_context['resolved_request'] = user_request
+                tier1_context['context_display'] = ""
+                return tier1_context
+            
+            # Score conversations by relevance (Phase 4B)
+            if self.relevance_scorer and user_request:
+                scored_conversations = []
+                for conv in recent_convs:
+                    score = self.relevance_scorer.score_conversation(
+                        user_request=user_request,
+                        conversation_summary=conv.get('summary', ''),
+                        conversation_entities=conv.get('entities', {}),
+                        conversation_timestamp=conv.get('timestamp', datetime.now()),
+                        conversation_intent=conv.get('intent', 'UNKNOWN')
+                    )
+                    scored_conversations.append((score, conv))
+                
+                # Sort by relevance score (descending)
+                scored_conversations.sort(key=lambda x: x[0], reverse=True)
+                
+                # Take top 5 most relevant
+                top_relevant = [conv for score, conv in scored_conversations[:5]]
+                tier1_context['relevant_conversations'] = top_relevant
+                tier1_context['relevance_scores'] = [
+                    {'conversation_id': conv.get('conversation_id'), 'score': score}
+                    for score, conv in scored_conversations[:5]
+                ]
+            else:
+                # Fallback to simple recency (top 5)
+                tier1_context['relevant_conversations'] = recent_convs[:5]
+                tier1_context['relevance_scores'] = []
+            
+            # Format conversations for LLM (token-efficient)
+            if self.formatter and tier1_context['relevant_conversations']:
+                tier1_context['formatted_summary'] = self.formatter.format_recent_conversations(
+                    tier1_context['relevant_conversations']
+                )
+                
+                # Extract active entities for pronoun resolution
+                tier1_context['active_entities'] = self.formatter.extract_active_entities(
+                    tier1_context['relevant_conversations']
+                )
+                
+                # Resolve pronouns in user request
+                tier1_context['resolved_request'] = self.formatter.resolve_pronouns(
+                    user_request, 
+                    tier1_context['active_entities']
+                )
+                    
+                # Create user-friendly context summary
+                tier1_context['context_display'] = self.formatter.format_context_summary(
+                    tier1_context['relevant_conversations'],
+                    tier1_context['active_entities'],
+                    include_header=True
+                )
+            else:
+                tier1_context['formatted_summary'] = "No recent context available"
+                tier1_context['active_entities'] = {}
+                tier1_context['resolved_request'] = user_request
+                tier1_context['context_display'] = ""
+                
+        except Exception as e:
+            logger.error(f"Error injecting Tier 1 context: {e}")
+            tier1_context['error'] = str(e)
+            tier1_context['relevant_conversations'] = []
+            tier1_context['formatted_summary'] = "Error loading context"
+            tier1_context['active_entities'] = {}
+            tier1_context['resolved_request'] = user_request
+            tier1_context['context_display'] = ""
         
         return tier1_context
     

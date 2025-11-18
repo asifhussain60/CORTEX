@@ -953,6 +953,149 @@ CORTEX:
 
 ---
 
+## 🧠 Context Memory Commands (Tier 1)
+
+**CORTEX automatically remembers your conversations across sessions**—this is the key differentiator from standard Copilot.
+
+### What Is Tier 1 Context?
+
+When you ask "implement authentication", CORTEX:
+1. **Searches** past conversations for related discussions
+2. **Scores** them for relevance (keywords, files, intent, recency)
+3. **Auto-injects** relevant context into the response
+4. **Displays** context summary so you know what Copilot "remembered"
+
+**Example:**
+```
+You (Monday): How should I implement JWT authentication?
+Copilot: Use PyJWT library with token expiration...
+
+You (Wednesday): Add token refresh to the auth system
+Copilot:
+📋 **Context from Previous Conversations**
+- 2 days ago: JWT authentication discussion (Relevance: 0.87)
+- Files: auth.py, tokens.py | Intent: IMPLEMENT
+
+Based on your previous JWT setup, here's how to add refresh...
+```
+
+### Context Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `show context` | View what Copilot remembers | "show context" |
+| `forget [topic]` | Remove specific conversations | "forget about authentication" |
+| `forget [topic]` | Multiple topics supported | "forget the old API design" |
+| `clear all context` | Remove ALL memory (fresh start) | "clear memory" |
+| `clear memory` | Alias for clear all | "reset cortex memory" |
+
+### Context Display Format
+
+When you use `show context`, CORTEX displays:
+
+```markdown
+📋 Context Summary (Last 24 hours)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔹 Conversation 1: JWT authentication implementation
+   Relevance: 0.87 (High)
+   Time: 2 days ago
+   Files: auth.py, tokens.py
+   Intent: IMPLEMENT
+
+🔹 Conversation 2: Password reset flow design
+   Relevance: 0.65 (Medium)
+   Time: 5 days ago
+   Files: auth.py, emails.py
+   Intent: PLAN
+
+Quality Indicators:
+- Total Conversations: 2
+- Average Relevance: 0.76
+- Token Usage: 324 / 500
+
+✅ Context quality: Good
+```
+
+### Automatic Context Injection
+
+**You don't need to request context manually**—CORTEX automatically injects it when:
+- Current request relates to past conversations (relevance score > 0.50)
+- Related files are open in editor
+- Intent matches (PLAN → IMPLEMENT → TEST progression)
+
+**Context appears at the START of Copilot responses:**
+```markdown
+📋 **Context from Previous Conversations**
+- [Conversation summary]
+- Relevance score + indicators
+
+[Response continues...]
+```
+
+### Context Quality Indicators
+
+| Score | Quality | Meaning |
+|-------|---------|---------|
+| 0.80+ | 🟢 High | Same topic, files, intent - very relevant |
+| 0.50-0.79 | 🟡 Medium | Related concepts |
+| 0.20-0.49 | 🟠 Low | Tangentially related |
+| <0.20 | 🔴 Very Low | Not useful |
+
+**What affects relevance:**
+- Keyword overlap (30%)
+- File overlap (25%) 
+- Entity overlap - classes, functions (20%)
+- Recency - newer scores higher (15%)
+- Intent match - PLAN/IMPLEMENT/FIX/etc. (10%)
+
+### Best Practices
+
+**Capture Important Decisions:** Natural conversation stores automatically:
+```
+You: Let's use PostgreSQL for main DB and Redis for caching
+[CORTEX captures this architectural decision]
+
+Later: Implement caching layer
+[CORTEX auto-injects the PostgreSQL/Redis decision]
+```
+
+**Clean Up Outdated Context:** Monthly maintenance:
+```
+forget about the old authentication approach
+forget the prototype implementation
+show context
+[Review and clean as needed]
+```
+
+**Cross-Session Continuity:** Work across days/files seamlessly:
+```
+Day 1 (models/user.py): Design user permissions system
+Day 2 (api/auth.py): Add permission checks
+[CORTEX maintains context across sessions and files]
+```
+
+### Performance Metrics
+
+- **Context Injection:** < 500ms
+- **Context Display:** < 200ms  
+- **Token Budget:** < 600 tokens (optimized formatting)
+- **Relevance Accuracy:** > 80%
+
+### Privacy & Storage
+
+- **Location:** `cortex-brain/tier1/working_memory.db` (local SQLite)
+- **No cloud sync:** All data stays on your machine
+- **No telemetry:** CORTEX doesn't send data anywhere
+
+---
+
+## 📋 Planning Commands (Legacy - Use Natural Language Above)
+
+**No slash commands needed.** Just natural language.
+
+---
+
 ## 🗂️ Planning File Structure
 
 ```
