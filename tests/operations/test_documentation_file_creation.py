@@ -291,7 +291,7 @@ class TestDocumentationFileCreation:
                 logger.warning("⚠️  Templates path not found")
             
             # Check page definitions
-            definitions_file = project_root / "cortex-brain" / "doc-generation-config" / "page-definitions.yaml"
+            definitions_file = project_root / "cortex-brain" / "admin" / "documentation" / "config" / "page-definitions.yaml"
             
             if definitions_file.exists():
                 logger.info(f"✓ Page definitions exist: {definitions_file}")

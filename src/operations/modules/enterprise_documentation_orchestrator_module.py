@@ -441,7 +441,7 @@ class EnterpriseDocumentationOrchestratorModule(BaseOperationModule):
     def _validate_configuration(self, project_root: Path) -> Dict[str, Any]:
         """Validate documentation configuration"""
         config_files = [
-            "cortex-brain/doc-generation-config",
+            "cortex-brain/admin/documentation/config",
             "cortex-brain/templates/doc-templates"
         ]
         

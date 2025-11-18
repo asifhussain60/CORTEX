@@ -240,7 +240,7 @@ class DocumentationGenerator:
         
         # Part 1: Generate Mermaid diagrams
         logger.info("  → Generating Mermaid diagrams...")
-        definitions_file = self.brain_path / "doc-generation-config" / "diagram-definitions.yaml"
+        definitions_file = self.brain_path / "admin" / "documentation" / "config" / "diagram-definitions.yaml"
         
         # Generate all diagrams from definitions
         mermaid_result = self.diagram_generator.generate_all_diagrams(definitions_file)
@@ -322,10 +322,10 @@ class DocumentationGenerator:
         logger.info("  → Generating documentation pages from templates...")
         
         # Load page definitions
-        definitions_file = self.brain_path / "doc-generation-config" / "page-definitions.yaml"
+        definitions_file = self.brain_path / "admin" / "documentation" / "config" / "page-definitions.yaml"
         
         # Load source mapping
-        source_mapping_file = self.brain_path / "doc-generation-config" / "source-mapping.yaml"
+        source_mapping_file = self.brain_path / "admin" / "documentation" / "config" / "source-mapping.yaml"
         with open(source_mapping_file, 'r') as f:
             import yaml
             config = yaml.safe_load(f)
@@ -375,6 +375,11 @@ class DocumentationGenerator:
         """Stage 6: Post-Generation Validation"""
         logger.info("Validating generated documentation...")
         
+        # Capability-driven coverage validation (NEW!)
+        logger.info("Checking capability documentation coverage...")
+        coverage_threshold = 0.80  # 80% of capabilities must be documented
+        coverage_valid, coverage_report = self.validator.validate_documentation_coverage(coverage_threshold)
+        
         # Check internal links
         logger.info("Checking internal links...")
         links_valid, broken_links = self.validator.check_internal_links()
@@ -392,6 +397,7 @@ class DocumentationGenerator:
         mkdocs_valid = self.validator.test_mkdocs_build()
         
         validation_result = {
+            "capability_coverage": coverage_report,  # NEW: Detailed coverage report
             "internal_links": "VALID" if links_valid else "INVALID",
             "broken_links": broken_links,
             "diagram_references": "VALID" if diagrams_valid else "INVALID",
@@ -399,11 +405,24 @@ class DocumentationGenerator:
             "mkdocs_build": "VALID" if mkdocs_valid else "INVALID"
         }
         
-        if not all([links_valid, diagrams_valid, markdown_valid, mkdocs_valid]):
+        # Enhanced validation logic: coverage is now the primary check
+        all_valid = all([coverage_valid, links_valid, diagrams_valid, markdown_valid, mkdocs_valid])
+        
+        if not all_valid:
             self.results["warnings"].append("Post-validation found issues")
             logger.warning("⚠️  Validation found issues (see report)")
+            
+            # Log specific failures
+            if not coverage_valid:
+                coverage_rate = coverage_report.get('coverage_rate', 0) * 100
+                threshold = coverage_report.get('threshold', 0) * 100
+                logger.warning(f"  - Coverage: {coverage_rate:.1f}% (threshold: {threshold:.1f}%)")
+                undoc_count = coverage_report.get('undocumented_capabilities', 0)
+                logger.warning(f"  - {undoc_count} capabilities lack documentation")
         else:
             logger.info("✓ All validations passed")
+            coverage_rate = coverage_report.get('coverage_rate', 0) * 100
+            logger.info(f"  - Coverage: {coverage_rate:.1f}%")
         
         return validation_result
     

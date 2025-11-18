@@ -1,0 +1,10 @@
+graph TB
+    subgraph CORTEX["CORTEX One-Pager"]
+        Brain[CORTEX Brain]
+        Agents[Agent System]
+        Plugins[Plugin System]
+    end
+    
+    User[User] --> Brain
+    Brain --> Agents
+    Agents --> Plugins

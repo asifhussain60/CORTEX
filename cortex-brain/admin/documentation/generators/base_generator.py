@@ -303,9 +303,8 @@ class BaseDocumentationGenerator(ABC):
 
         Search order:
         1) cortex-brain/admin/documentation/config/{config_name}
-        2) cortex-brain/doc-generation-config/{config_name}
-        3) workspace root: {config_name}
-        4) cortex-brain/{config_name}
+        2) workspace root: {config_name}
+        3) cortex-brain/{config_name}
         
         Args:
             config_name: Config file name (e.g., "diagrams-config.yaml")
@@ -315,7 +314,6 @@ class BaseDocumentationGenerator(ABC):
         """
         candidates = [
             self.config_path / config_name,
-            self.workspace_root / "cortex-brain" / "doc-generation-config" / config_name,
             self.workspace_root / config_name,
             self.workspace_root / "cortex-brain" / config_name,
         ]

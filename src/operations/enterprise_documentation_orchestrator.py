@@ -357,13 +357,13 @@ class EnterpriseDocumentationOrchestrator:
             steps.extend([
                 "Review the dry-run output above",
                 "Run actual generation: 'Generate Cortex docs' (without dry-run)",
-                "Check for any configuration issues in cortex-brain/doc-generation-config/"
+                "Check for any configuration issues in cortex-brain/admin/documentation/config/"
             ])
         elif errors:
             steps.extend([
                 "Fix the errors listed above before proceeding",
                 "Check EPM documentation generator logs for details",
-                "Validate YAML configuration files in cortex-brain/doc-generation-config/"
+                "Validate YAML configuration files in cortex-brain/admin/documentation/config/"
             ])
         elif warnings:
             steps.extend([

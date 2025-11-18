@@ -64,7 +64,10 @@ class ImagePromptGenerator:
         modules: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
-        Generate all image prompts and narratives.
+        Generate all image prompts and narratives from YAML configuration.
+        
+        This method now reads from diagram-definitions.yaml instead of using
+        hardcoded diagram lists, ensuring configuration-driven generation.
         
         Args:
             capabilities: CORTEX capabilities data
@@ -73,39 +76,51 @@ class ImagePromptGenerator:
         Returns:
             Summary with paths and statistics
         """
-        logger.info("Generating image prompts with EPM integration...")
+        logger.info("Generating image prompts from diagram-definitions.yaml...")
         
         # Create directory structure
         self._create_directory_structure()
+        
+        # Load diagram configuration from YAML
+        diagram_config = self._load_diagram_config()
+        if not diagram_config:
+            logger.error("Failed to load diagram-definitions.yaml")
+            return {
+                'success': False,
+                'error': 'Could not load diagram configuration',
+                'diagrams_generated': 0
+            }
         
         # Extract architecture data
         tiers = capabilities.get('tiers', [])
         agents = capabilities.get('agents', [])
         plugins = capabilities.get('plugins', [])
         
-        # Generate each diagram type
+        # Generate each diagram from configuration
         results = {}
+        diagrams = diagram_config.get('diagrams', [])
         
-        # 1. Tier Architecture (16:9)
-        results['tier_architecture'] = self._generate_tier_architecture(tiers)
+        logger.info(f"Found {len(diagrams)} diagrams in configuration")
         
-        # 2. Agent System (1:1)
-        results['agent_system'] = self._generate_agent_system(agents)
-        
-        # 3. Plugin Architecture (1:1)
-        results['plugin_architecture'] = self._generate_plugin_architecture(plugins)
-        
-        # 4. Memory Flow (16:9)
-        results['memory_flow'] = self._generate_memory_flow(tiers)
-        
-        # 5. Agent Coordination (9:16)
-        results['agent_coordination'] = self._generate_agent_coordination(agents)
-        
-        # 6. Basement Scene (16:9, optional)
-        results['basement_scene'] = self._generate_basement_scene()
-        
-        # 7. One-Pager (16:9, landscape) - High-level CORTEX functionality
-        results['one_pager'] = self._generate_one_pager(capabilities, agents, plugins)
+        for diagram_def in diagrams:
+            diagram_id = diagram_def.get('id')
+            diagram_type = diagram_def.get('type')
+            
+            logger.info(f"Generating diagram: {diagram_id} (type: {diagram_type})")
+            
+            # Route to appropriate generator based on type
+            result = self._generate_diagram_by_type(
+                diagram_def, 
+                capabilities, 
+                tiers, 
+                agents, 
+                plugins
+            )
+            
+            if result:
+                results[diagram_id] = result
+            else:
+                logger.warning(f"Failed to generate diagram: {diagram_id}")
         
         # Generate README for workflow instructions
         self._generate_readme()
@@ -123,6 +138,204 @@ class ImagePromptGenerator:
         }
     
     def _create_directory_structure(self):
+        """Create the 3-part directory structure."""
+        self.prompts_dir.mkdir(parents=True, exist_ok=True)
+        self.narratives_dir.mkdir(parents=True, exist_ok=True)
+        self.generated_dir.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Created diagram structure at {self.output_dir}")
+    
+    def _load_diagram_config(self) -> Optional[Dict[str, Any]]:
+        """
+        Load diagram definitions from YAML configuration.
+        
+        Returns:
+            Diagram configuration dict or None if failed
+        """
+        # Try to locate diagram-definitions.yaml
+        config_paths = [
+            Path('cortex-brain/admin/documentation/config/diagram-definitions.yaml'),
+            Path('admin/documentation/config/diagram-definitions.yaml'),
+            Path('../cortex-brain/admin/documentation/config/diagram-definitions.yaml')
+        ]
+        
+        for config_path in config_paths:
+            if config_path.exists():
+                try:
+                    with open(config_path, 'r', encoding='utf-8') as f:
+                        config = yaml.safe_load(f)
+                        logger.info(f"Loaded diagram config from: {config_path}")
+                        return config
+                except Exception as e:
+                    logger.error(f"Error loading {config_path}: {e}")
+                    continue
+        
+        logger.error("Could not find diagram-definitions.yaml in any expected location")
+        return None
+    
+    def _generate_diagram_by_type(
+        self,
+        diagram_def: Dict[str, Any],
+        capabilities: Dict[str, Any],
+        tiers: List[Dict],
+        agents: List[Dict],
+        plugins: List[Dict]
+    ) -> Optional[Dict[str, str]]:
+        """
+        Generate diagram based on type from configuration.
+        
+        Routes to appropriate specialized generator method based on diagram type.
+        
+        Args:
+            diagram_def: Diagram definition from YAML
+            capabilities: Full capabilities data
+            tiers: Tier data
+            agents: Agent data
+            plugins: Plugin data
+            
+        Returns:
+            Result dict with paths or None if failed
+        """
+        diagram_type = diagram_def.get('type')
+        diagram_id = diagram_def.get('id')
+        
+        # Map diagram types to generator methods
+        type_map = {
+            'tier_architecture': lambda: self._generate_tier_architecture(tiers),
+            'agent_system': lambda: self._generate_agent_system(agents),
+            'plugin_architecture': lambda: self._generate_plugin_architecture(plugins),
+            'memory_flow': lambda: self._generate_memory_flow(tiers),
+            'agent_coordination': lambda: self._generate_agent_coordination(agents),
+            'overview': lambda: self._generate_one_pager(capabilities, agents, plugins),
+            'data_flow': lambda: self._generate_data_flow_diagram(diagram_def),
+            'pipeline_flow': lambda: self._generate_pipeline_diagram(diagram_def),
+            'flowchart': lambda: self._generate_generic_flowchart(diagram_def)
+        }
+        
+        # Special case for basement_scene (no config needed)
+        if diagram_id == '06-basement-scene':
+            return self._generate_basement_scene()
+        
+        # Get the appropriate generator
+        generator = type_map.get(diagram_type)
+        
+        if generator:
+            try:
+                return generator()
+            except Exception as e:
+                logger.error(f"Error generating {diagram_id}: {e}")
+                return None
+        else:
+            logger.warning(f"Unknown diagram type: {diagram_type} for {diagram_id}")
+            # Generate a placeholder for unknown types
+            return self._generate_placeholder_diagram(diagram_def)
+    
+    def _generate_placeholder_diagram(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """
+        Generate placeholder for diagram types not yet implemented.
+        
+        Creates basic prompt and narrative as placeholder.
+        """
+        diagram_id = diagram_def.get('id')
+        diagram_name = diagram_def.get('name', 'Unknown Diagram')
+        description = diagram_def.get('description', 'No description available')
+        
+        prompt = f"""# {diagram_name}
+
+**AI Generation Instructions for ChatGPT DALL-E:**
+
+Create a professional diagram illustrating: {description}
+
+This is a placeholder prompt. Full implementation pending.
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        narrative = f"""# {diagram_name}
+
+## Overview
+
+{description}
+
+## Implementation Status
+
+This diagram is in the configuration but requires a specialized generator method.
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        # Write files
+        prompt_path = self.prompts_dir / f"{diagram_id}.md"
+        narrative_path = self.narratives_dir / f"{diagram_id}.md"
+        
+        prompt_path.write_text(prompt, encoding='utf-8')
+        narrative_path.write_text(narrative, encoding='utf-8')
+        
+        logger.info(f"Generated placeholder for {diagram_id}")
+        
+        return {
+            'id': diagram_id,
+            'prompt_path': str(prompt_path),
+            'narrative_path': str(narrative_path),
+            'generated_path': str(self.generated_dir / f"{diagram_id}-v1.png"),
+            'placeholder': True
+        }
+    
+    def _generate_data_flow_diagram(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """Generate data flow diagram from configuration."""
+        diagram_id = diagram_def.get('id')
+        diagram_name = diagram_def.get('name', 'Data Flow')
+        description = diagram_def.get('description', '')
+        source = diagram_def.get('source', 'Input')
+        target = diagram_def.get('target', 'Output')
+        
+        prompt = f"""# {diagram_name}
+
+**AI Generation Instructions for ChatGPT DALL-E:**
+
+Create a professional data flow diagram showing: {description}
+
+**Flow:** {source} → [Processing] → {target}
+
+Use modern flat design with clear arrows and process boxes.
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        narrative = f"""# {diagram_name}
+
+## Overview
+
+{description}
+
+This diagram illustrates the flow from {source} to {target}.
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        # Write files
+        prompt_path = self.prompts_dir / f"{diagram_id}.md"
+        narrative_path = self.narratives_dir / f"{diagram_id}.md"
+        
+        prompt_path.write_text(prompt, encoding='utf-8')
+        narrative_path.write_text(narrative, encoding='utf-8')
+        
+        logger.info(f"Generated data flow diagram: {diagram_id}")
+        
+        return {
+            'id': diagram_id,
+            'prompt_path': str(prompt_path),
+            'narrative_path': str(narrative_path),
+            'generated_path': str(self.generated_dir / f"{diagram_id}-v1.png")
+        }
+    
+    def _generate_pipeline_diagram(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """Generate pipeline flow diagram from configuration."""
+        return self._generate_placeholder_diagram(diagram_def)
+    
+    def _generate_generic_flowchart(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """Generate generic flowchart from configuration."""
+        return self._generate_placeholder_diagram(diagram_def)
+
         """Create the 3-part directory structure."""
         self.prompts_dir.mkdir(parents=True, exist_ok=True)
         self.narratives_dir.mkdir(parents=True, exist_ok=True)

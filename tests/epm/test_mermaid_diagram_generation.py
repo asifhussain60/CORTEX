@@ -313,7 +313,7 @@ class TestMermaidIntegrationWithMasterConfig(unittest.TestCase):
     
     def setUp(self):
         """Load master diagram configuration"""
-        self.config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "doc-generation-config" / "master-diagram-list.yaml"
+        self.config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "admin" / "documentation" / "config" / "master-diagram-list.yaml"
         
         if self.config_path.exists():
             with open(self.config_path, 'r', encoding='utf-8') as f:
@@ -322,8 +322,8 @@ class TestMermaidIntegrationWithMasterConfig(unittest.TestCase):
             self.master_config = None
     
     @unittest.skipIf(
-        not Path(__file__).parent.parent.parent.joinpath("cortex-brain/doc-generation-config/master-diagram-list.yaml").exists(),
-        "Master diagram config not found"
+        not Path(__file__).parent.parent.parent.joinpath("cortex-brain/admin/documentation/config/master-diagram-list.yaml").exists(),
+        "Master diagram config not found in cortex-brain/admin/documentation/config/"
     )
     def test_mermaid_generator_supports_master_config_types(self):
         """Test that DiagramGenerator supports all diagram types in master config"""

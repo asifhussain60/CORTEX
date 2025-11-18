@@ -23,9 +23,29 @@ plugins:
 - mermaid2
 markdown_extensions:
 - pymdownx.highlight
-- pymdownx.superfences
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format
 - pymdownx.tabbed
 - admonition
 - attr_list
 - md_in_html
-nav: []
+
+# Exclude problematic auto-generated prompt files
+exclude_docs: |
+  diagrams/prompts/
+  diagrams/generated/
+
+nav:
+- Home: index.md
+- The CORTEX Story: awakening-of-cortex.md
+- Architecture:
+  - Overview: EXECUTIVE-SUMMARY.md
+  - Features: FEATURES.md
+  - Capabilities: CAPABILITIES-MATRIX.md
+- Diagrams:
+  - Overview: diagrams/README.md
+  - Mermaid Diagrams: diagrams/INDEX.md
+  - Architecture Story: diagrams/story/The CORTEX Story.md

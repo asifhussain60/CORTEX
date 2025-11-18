@@ -32,7 +32,7 @@ class TestDiagramCompleteness(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load master diagram configuration"""
-        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "doc-generation-config" / "master-diagram-list.yaml"
+        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "admin" / "documentation" / "config" / "master-diagram-list.yaml"
         
         if not config_path.exists():
             raise FileNotFoundError(f"Master diagram config not found: {config_path}")
@@ -374,7 +374,7 @@ class TestDiagramRegressionProtection(unittest.TestCase):
         
         This test MUST FAIL if diagram count drops.
         """
-        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "doc-generation-config" / "master-diagram-list.yaml"
+        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "admin" / "documentation" / "config" / "master-diagram-list.yaml"
         
         with open(config_path, 'r', encoding='utf-8') as f:
             master_config = yaml.safe_load(f)
@@ -392,7 +392,7 @@ class TestDiagramRegressionProtection(unittest.TestCase):
     
     def test_no_missing_diagram_ids(self):
         """Test that there are no gaps in diagram ID sequence"""
-        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "doc-generation-config" / "master-diagram-list.yaml"
+        config_path = Path(__file__).parent.parent.parent / "cortex-brain" / "admin" / "documentation" / "config" / "master-diagram-list.yaml"
         
         with open(config_path, 'r', encoding='utf-8') as f:
             master_config = yaml.safe_load(f)
