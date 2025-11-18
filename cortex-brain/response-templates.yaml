@@ -396,6 +396,83 @@ templates:
       \ local)\n   python3 scripts/brain_transfer_cli.py import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
       \ \\\n     --strategy=replace\n   ```\n   \n   Ready to import? I can run the\
       \ dry-run preview first to show you what will change."
+  generate_documentation_intro:
+    name: Generate Documentation - Introduction
+    trigger:
+    - generate_documentation_intro
+    - doc_generation_intro
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Documentation Generation**\nAuthor: Asif Hussain\
+      \ | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   You want to generate comprehensive documentation for\
+      \ your CORTEX workspace.\n\n\U0001F4AC **Response:**\n   I'll generate the\
+      \ following documentation using the Enterprise Documentation Generator:\n\n\
+      \   \U0001F4DA **Documents to be Generated:**\n   \n   1. **API Reference**\n\
+      \      \u2022 Module documentation from Python docstrings\n      \u2022 Class\
+      \ and method references\n      \u2022 Type hints and parameter descriptions\n\
+      \   \n   2. **Architecture Documentation**\n      \u2022 System architecture\
+      \ diagrams\n      \u2022 Component relationship diagrams\n      \u2022 Data\
+      \ flow visualizations\n   \n   3. **Operations Guide**\n      \u2022 Available\
+      \ operations and workflows\n      \u2022 Usage examples and best practices\n\
+      \      \u2022 Configuration options\n   \n   4. **User Guides**\n      \u2022\
+      \ Setup and configuration guides\n      \u2022 Feature walkthroughs\n      \u2022\
+  admin_help:
+    name: Admin Help
+    trigger:
+    - admin help
+    - help admin
+    - /admin help
+    - cortex admin help
+    - admin docs
+    - docs admin
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Admin Operations Help**\nAuthor: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your Request:**\n   You want administrative-level help including internal documentation generation component triggers.\n\n\u26A0\uFE0F **Challenge:** \u2713 **Accept**\n   Admin operations expose internal generators not shown to general users. Use responsibly; they mutate documentation artifacts directly.\n\n\U0001F4AC **Response:**\n   Below are natural language triggers reserved for admin usage along with their effects.\n\n   | Trigger | Purpose | Component | Notes |\n   |---------|---------|-----------|-------|\n   | generate diagrams | Build/refresh architecture & workflow diagrams | diagrams | Uses centralized config YAMLs |\n   | generate mkdocs | Recreate mkdocs.yml & navigation pages | mkdocs | Overwrites nav sections |\n   | generate feature list | Produce capabilities & modules reference set | feature_list | Writes FEATURES.md & related refs |\n   | generate executive summary | (Planned) Create high-level summary page | executive_summary | Add when generator implemented |\n   | publish docs | Build & publish MkDocs site (future pipeline) | publish | Depends on mkdocs output |\n   | generate documentation | Run full pipeline (all components) | all | Aggregates results table |\n   | refresh docs | Alias for generate documentation | all | Safe regeneration |\n\n   Access Control: These triggers are routed only when admin context is detected (user explicitly invokes admin help or privileged workflow).\n\n\U0001F4DD **Your Request:** Access admin-only help & triggers\n\n\U0001F50D **Next Steps:**\n   1. Use any trigger above to run a single component or full pipeline\n   2. Implement missing generators (executive summary, publish) before invoking them\n   3. After changes, run focused tests to verify registry health"
+      \ Troubleshooting tips\n   \n   5. **Cross-References**\n      \u2022 Linked\
+      \ documentation navigation\n      \u2022 Related topics and see-also sections\n\
+      \      \u2022 Code-to-docs mappings\n\n   \u23F1\uFE0F **Estimated Time:** 2-5\
+      \ minutes depending on workspace size\n   \n   \U0001F4BE **Output Location:**\
+      \ `docs/` directory in your workspace\n\n\U0001F4DD **Your Request:** Generate\
+      \ comprehensive documentation\n\n\U0001F680 Starting documentation generation..."
+  admin_help_triggers:
+  - admin help
+  - help admin
+  - /admin help
+  - cortex admin help
+  - admin docs
+  - docs admin
+  generate_documentation_completion:
+    name: Generate Documentation - Completion
+    trigger:
+    - generate_documentation_completion
+    - doc_generation_completion
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Documentation Generation - Complete**\nAuthor:\
+      \ Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF\
+      \ **My Understanding Of Your Request:**\n   Documentation generation has completed.\n\
+      \n\U0001F4AC **Response:**\n   Successfully generated comprehensive documentation\
+      \ for your CORTEX workspace.\n\n   \u2705 **Generated Documents:**\n\n   |\
+      \ Document Type | Location | Files Generated |\n   |--------------|----------|------------------|\n\
+      \   | API Reference | `docs/api/` | {api_files} |\n   | Architecture Diagrams\
+      \ | `docs/architecture/` | {arch_files} |\n   | Operations Guide | `docs/operations/`\
+      \ | {ops_files} |\n   | User Guides | `docs/guides/` | {guide_files} |\n  \
+      \ | Cross-References | `docs/` (embedded) | {xref_count} links |\n   \n   \U0001F4CA\
+      \ **Summary:**\n   \u2022 Total documents: {total_files}\n   \u2022 Total pages:\
+      \ {total_pages}\n   \u2022 Documentation coverage: {coverage}%\n   \u2022 Generation\
+      \ time: {duration}\n\n\U0001F4DD **Your Request:** Generate comprehensive documentation\n\
+      \n\U0001F50D **Next Steps:**\n   1. **Preview Documentation Locally**\n   \
+      \   \u2022 Run: `mkdocs serve`\n      \u2022 Open: http://localhost:8000\n\
+      \   \n   2. **Generate MkDocs Site**\n      \u2022 Command: \"generate mkdocs\"\
+      \n      \u2022 Builds static site in `site/` directory\n      \u2022 Ready for\
+      \ deployment\n   \n   3. **Publish to GitHub Pages**\n      \u2022 Command:\
+      \ \"publish mkdocs to git pages\"\n      \u2022 Deploys to GitHub Pages automatically\n\
+      \      \u2022 Makes docs publicly accessible\n   \n   4. **Build Documentation\
+      \ Package**\n      \u2022 Command: \"build docs package\"\n      \u2022 Creates\
+      \ portable documentation bundle\n      \u2022 Can be shared offline\n   \n \
+      \  5. **Update Documentation**\n      \u2022 Command: \"refresh docs\" or \"\
+      update documentation\"\n      \u2022 Regenerates docs with latest changes\n\
+      \      \u2022 Maintains existing structure\n\n   \U0001F4A1 **Tip:** Documentation\
+      \ is automatically validated and cross-referenced. Check the validation report\
+      \ at `docs/validation-report.md`"
 routing:
   default: fallback
   help_triggers:
@@ -465,6 +542,12 @@ routing:
   - load brain
   - import knowledge
   - import patterns
+  generate_documentation_triggers:
+  - generate documentation
+  - generate docs
+  - create documentation
+  - doc generation
+  - generate cortex docs
 formatting:
   mandatory_sections:
   - understanding
