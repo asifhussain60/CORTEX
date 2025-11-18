@@ -183,21 +183,32 @@ class EnterpriseDocumentationOrchestrator:
             
             # Create operation result
             if generation_result.get("success", False):
+                # Add metadata to data dict instead of separate parameter
+                result_data["metadata"] = {
+                    "operation": "enterprise_documentation",
+                    "profile": profile,
+                    "dry_run": dry_run,
+                    "stage": stage,
+                    "timestamp": self.timestamp
+                }
+                
                 return OperationResult(
                     success=True,
                     status=OperationStatus.SUCCESS,
                     message="✅ Enterprise documentation generation completed successfully",
                     data=result_data,
-                    duration_seconds=duration,
-                    metadata={
-                        "operation": "enterprise_documentation",
-                        "profile": profile,
-                        "dry_run": dry_run,
-                        "stage": stage,
-                        "timestamp": self.timestamp
-                    }
+                    duration_seconds=duration
                 )
             else:
+                # Add metadata to data dict for failure case too
+                result_data["metadata"] = {
+                    "operation": "enterprise_documentation",
+                    "profile": profile,
+                    "dry_run": dry_run,
+                    "stage": stage,
+                    "timestamp": self.timestamp
+                }
+                
                 return OperationResult(
                     success=False,
                     status=OperationStatus.FAILED,

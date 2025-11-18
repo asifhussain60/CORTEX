@@ -1,18 +1,13 @@
-graph TB
-    subgraph EPM["Entry Point Module"]
-        Main[Main Orchestrator]
-    end
+graph TD
+    SRC[src/] --> AGENTS[agents/]
+    SRC --> OPERATIONS[operations/]
+    SRC --> TIER1[tier1/]
+    SRC --> TIER2[tier2/]
+    SRC --> TIER3[tier3/]
     
-    subgraph Modules["Generation Modules"]
-        Valid[Validation Engine]
-        Clean[Cleanup Manager]
-        Diagram[Diagram Generator]
-        Page[Page Generator]
-        XRef[Cross-Reference Builder]
-    end
+    AGENTS --> STRATEGIC[Strategic Agents]
+    AGENTS --> TACTICAL[Tactical Agents]
     
-    Main --> Valid
-    Main --> Clean
-    Main --> Diagram
-    Main --> Page
-    Main --> XRef
+    style SRC fill:#EF4444
+    style AGENTS fill:#3B82F6
+    style OPERATIONS fill:#10B981

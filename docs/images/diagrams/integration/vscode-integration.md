@@ -1,9 +1,0 @@
-```mermaid
-graph LR
-    Source[VS Code Extension]
-    Processing[Processing]
-    Target[CORTEX Brain]
-    
-    Source --> Processing
-    Processing --> Target
-```

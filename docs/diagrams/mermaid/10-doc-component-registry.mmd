@@ -1,11 +1,13 @@
 graph TB
-    Title["Documentation Component Registry"]
-    Desc["Extensible documentation generation components"]
-    Type["Type: plugin_architecture"]
-    Status["Status: Placeholder - Implementation Pending"]
+    CORE[CORTEX Core] --> REGISTRY[Plugin Registry]
+    REGISTRY --> P1[Documentation Plugin]
+    REGISTRY --> P2[Optimization Plugin]
+    REGISTRY --> P3[Health Check Plugin]
+    REGISTRY --> P4[Custom Plugins...]
     
-    Title --> Desc
-    Desc --> Type
-    Type --> Status
-    
-    style Status fill:#fef3c7,stroke:#f59e0b
+    style CORE fill:#EF4444
+    style REGISTRY fill:#10B981
+    style P1 fill:#3B82F6
+    style P2 fill:#3B82F6
+    style P3 fill:#3B82F6
+    style P4 fill:#6B7280

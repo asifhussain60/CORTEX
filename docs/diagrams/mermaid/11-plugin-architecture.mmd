@@ -1,16 +1,13 @@
 graph TB
-    subgraph Core["CORTEX Core"]
-        Engine[Plugin Engine]
-        Registry[Plugin Registry]
-    end
+    CORE[CORTEX Core] --> REGISTRY[Plugin Registry]
+    REGISTRY --> P1[Documentation Plugin]
+    REGISTRY --> P2[Optimization Plugin]
+    REGISTRY --> P3[Health Check Plugin]
+    REGISTRY --> P4[Custom Plugins...]
     
-    subgraph Plugins["Available Plugins"]
-        P1[Code Generator]
-        P2[Test Generator]
-        P3[Doc Generator]
-    end
-    
-    Engine --> Registry
-    Registry --> P1
-    Registry --> P2
-    Registry --> P3
+    style CORE fill:#EF4444
+    style REGISTRY fill:#10B981
+    style P1 fill:#3B82F6
+    style P2 fill:#3B82F6
+    style P3 fill:#3B82F6
+    style P4 fill:#6B7280

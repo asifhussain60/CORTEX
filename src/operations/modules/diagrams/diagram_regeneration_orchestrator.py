@@ -3,7 +3,7 @@
 CORTEX Diagram Regeneration Operation
 
 Performs comprehensive CORTEX design analysis and regenerates all visual assets:
-- Analyzes current implementation to identify powerful features
+- Loads diagram definitions from YAML configuration (diagram-definitions.yaml)
 - Clears all existing diagrams (fresh start)
 - Generates Mermaid diagrams for architecture, agents, workflows
 - Creates professional illustration prompts for DALL-E/Midjourney
@@ -17,6 +17,7 @@ License: Proprietary - Part of CORTEX 3.0
 import os
 import logging
 import shutil
+import yaml
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
@@ -220,63 +221,103 @@ class CortexDesignAnalyzer:
 
 
 class DiagramGenerator:
-    """Generates Mermaid diagrams and illustration prompts from CORTEX features"""
+    """Generates Mermaid diagrams and illustration prompts from YAML configuration"""
     
     def __init__(self, cortex_root: Path):
         self.cortex_root = cortex_root
+        self.brain_path = cortex_root / "cortex-brain"
+        self.config_path = self.brain_path / "admin" / "documentation" / "config"
         
-    def generate_diagrams_from_features(self, features: List[CortexFeature]) -> List[DiagramSpec]:
-        """Generate comprehensive diagram suite from identified features"""
+    def load_diagram_definitions(self) -> Dict[str, Any]:
+        """Load diagram definitions from YAML configuration"""
+        yaml_file = self.config_path / "diagram-definitions.yaml"
+        
+        if not yaml_file.exists():
+            logger.error(f"Diagram definitions not found: {yaml_file}")
+            return {"diagrams": []}
+        
+        try:
+            with open(yaml_file, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+            logger.info(f"Loaded {len(config.get('diagrams', []))} diagram definitions from YAML")
+            return config
+        except Exception as e:
+            logger.error(f"Failed to load diagram definitions: {e}")
+            return {"diagrams": []}
+    
+    def generate_diagrams_from_yaml(self, features: List[CortexFeature]) -> List[DiagramSpec]:
+        """Generate comprehensive diagram suite from YAML configuration"""
+        config = self.load_diagram_definitions()
         diagrams = []
         
-        # 1. Five-tier architecture diagram
-        diagrams.append(self._generate_tier_architecture_diagram(features))
+        diagram_definitions = config.get("diagrams", [])
         
-        # 2. Dual-hemisphere agent system
-        diagrams.append(self._generate_agent_system_diagram(features))
+        if not diagram_definitions:
+            logger.warning("No diagram definitions found in YAML, generating fallback diagrams")
+            # Fallback to a basic diagram if config is missing
+            diagrams.append(self._generate_tier_architecture_diagram(features))
+            return diagrams
         
-        # 3. TDD workflow
-        diagrams.append(self._generate_tdd_workflow_diagram())
+        logger.info(f"Generating {len(diagram_definitions)} diagrams from YAML configuration")
         
-        # 4. Intent routing
-        diagrams.append(self._generate_intent_routing_diagram(features))
-        
-        # 5. Agent coordination sequence
-        diagrams.append(self._generate_agent_coordination_diagram())
-        
-        # 6. Conversation memory flow
-        diagrams.append(self._generate_conversation_memory_diagram(features))
-        
-        # 7. Brain protection layers
-        diagrams.append(self._generate_brain_protection_diagram(features))
-        
-        # 8. Knowledge graph structure
-        diagrams.append(self._generate_knowledge_graph_diagram(features))
-        
-        # 9. Context intelligence
-        diagrams.append(self._generate_context_intelligence_diagram(features))
-        
-        # 10. Feature planning workflow
-        diagrams.append(self._generate_feature_planning_diagram())
-        
-        # 11. Performance benchmarks
-        diagrams.append(self._generate_performance_diagram())
-        
-        # 12. Token optimization
-        diagrams.append(self._generate_token_optimization_diagram(features))
-        
-        # 13. Plugin system
-        diagrams.append(self._generate_plugin_system_diagram())
-        
-        # 14. Complete data flow
-        diagrams.append(self._generate_complete_dataflow_diagram(features))
-        
-        # 15. Before vs After CORTEX
-        diagrams.append(self._generate_before_after_diagram())
+        for idx, diagram_def in enumerate(diagram_definitions, 1):
+            try:
+                diagram_id = diagram_def.get("id", f"{idx:02d}-unknown")
+                diagram_name = diagram_def.get("name", f"Diagram {idx}")
+                diagram_type = diagram_def.get("type", "generic")
+                description = diagram_def.get("description", "")
+                
+                logger.info(f"Generating diagram {idx}/{len(diagram_definitions)}: {diagram_name}")
+                
+                # Generate diagram based on type using specialized generators
+                diagram = self._generate_diagram_by_type(
+                    diagram_id=diagram_id,
+                    diagram_name=diagram_name,
+                    diagram_type=diagram_type,
+                    description=description,
+                    diagram_def=diagram_def,
+                    features=features
+                )
+                
+                if diagram:
+                    diagrams.append(diagram)
+                    
+            except Exception as e:
+                logger.error(f"Failed to generate diagram {diagram_def.get('id', idx)}: {e}")
+                continue
         
         return diagrams
     
-    def _generate_tier_architecture_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
+    def _generate_diagram_by_type(self, diagram_id: str, diagram_name: str, 
+                                   diagram_type: str, description: str,
+                                   diagram_def: Dict[str, Any],
+                                   features: List[CortexFeature]) -> Optional[DiagramSpec]:
+        """Generate diagram based on type from YAML definition"""
+        
+        # Map diagram types to specialized generators
+        type_handlers = {
+            "tier_architecture": self._generate_tier_architecture_diagram,
+            "agent_system": self._generate_agent_system_diagram,
+            "data_flow": self._generate_data_flow_diagram,
+            "pipeline_flow": self._generate_pipeline_flow_diagram,
+            "module_structure": self._generate_module_structure_diagram,
+            "plugin_architecture": self._generate_plugin_diagram,
+            "plugin_system": self._generate_plugin_diagram,
+            "overview": self._generate_overview_diagram,
+        }
+        
+        # Use specialized handler or generic generator
+        handler = type_handlers.get(diagram_type, self._generate_generic_diagram)
+        
+        try:
+            return handler(diagram_id, diagram_name, description, diagram_def, features)
+        except Exception as e:
+            logger.error(f"Handler failed for {diagram_type}: {e}, falling back to generic")
+            return self._generate_generic_diagram(diagram_id, diagram_name, description, diagram_def, features)
+    
+    def _generate_tier_architecture_diagram(self, diagram_id: str, diagram_name: str,
+                                            description: str, diagram_def: Dict[str, Any],
+                                            features: List[CortexFeature]) -> DiagramSpec:
         """Generate five-tier architecture diagram"""
         mermaid = """graph TB
     subgraph "TIER 0: INSTINCT"
@@ -314,7 +355,7 @@ class DiagramGenerator:
     style T4 fill:#6B46C1,stroke:#4C1D95,color:#FFF"""
         
         illustration_prompt = """Professional technical illustration: Five-tier cognitive architecture inspired by human brain structure. 
-        
+
 Central vertical stack showing 5 distinct layers:
 - TIER 0 (RED): Immutable instinct layer with shield icon, governance rules floating around
 - TIER 1 (BLUE): Working memory with conversation bubbles in FIFO queue, glowing active conversations
@@ -324,21 +365,163 @@ Central vertical stack showing 5 distinct layers:
 
 Style: Isometric 3D perspective, clean lines, modern tech aesthetic, gradient backgrounds, glowing connections between tiers. Professional color palette matching tier colors. Include subtle brain hemisphere overlay showing dual-processing."""
         
-        narrative = """CORTEX's five-tier architecture mimics human cognitive processing. Tier 0 provides immutable instincts (like breathing - you can't override it). Tier 1 holds working memory (what you're currently thinking about). Tier 2 stores long-term patterns (learned experiences). Tier 3 provides situational awareness (context about your environment). Tier 4 captures real-time activity (immediate sensory input). Together, they create a complete cognitive system that makes Copilot self-aware and continuously learning."""
+        narrative = f"""CORTEX's {diagram_name.lower()} mimics human cognitive processing. Tier 0 provides immutable instincts (like breathing - you can't override it). Tier 1 holds working memory (what you're currently thinking about). Tier 2 stores long-term patterns (learned experiences). Tier 3 provides situational awareness (context about your environment). Tier 4 captures real-time activity (immediate sensory input). Together, they create a complete cognitive system that makes Copilot self-aware and continuously learning."""
         
         return DiagramSpec(
-            diagram_id="01-tier-architecture",
-            title="Five-Tier Cognitive Architecture",
+            diagram_id=diagram_id,
+            title=diagram_name,
             diagram_type="both",
             content_type="architecture",
-            description="Brain-inspired memory system with five specialized tiers",
+            description=description,
             mermaid_syntax=mermaid,
             illustration_prompt=illustration_prompt,
             narrative=narrative,
             priority=10
         )
     
-    def _generate_agent_system_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
+    def _generate_agent_system_diagram(self, diagram_id: str, diagram_name: str,
+                                        description: str, diagram_def: Dict[str, Any],
+                                        features: List[CortexFeature]) -> DiagramSpec:
+        """Generate agent system diagram"""
+        return self._generate_generic_diagram(diagram_id, diagram_name, description, diagram_def, features)
+    
+    def _generate_data_flow_diagram(self, diagram_id: str, diagram_name: str,
+                                     description: str, diagram_def: Dict[str, Any],
+                                     features: List[CortexFeature]) -> DiagramSpec:
+        """Generate data flow diagram"""
+        source = diagram_def.get('source', 'Input')
+        target = diagram_def.get('target', 'Output')
+        
+        mermaid = f"""flowchart LR
+    A[{source}] --> B[Process Layer]
+    B --> C[Transformation]
+    C --> D[{target}]
+    
+    style A fill:#3B82F6
+    style D fill:#10B981"""
+        
+        return self._create_diagram_spec(diagram_id, diagram_name, description, mermaid, "data_flow")
+    
+    def _generate_pipeline_flow_diagram(self, diagram_id: str, diagram_name: str,
+                                         description: str, diagram_def: Dict[str, Any],
+                                         features: List[CortexFeature]) -> DiagramSpec:
+        """Generate pipeline flow diagram"""
+        stages = diagram_def.get('stages', ['Stage 1', 'Stage 2', 'Stage 3'])
+        
+        # Build mermaid flowchart from stages
+        mermaid_lines = ["flowchart LR"]
+        for i, stage in enumerate(stages):
+            node_id = f"S{i+1}"
+            stage_name = str(stage).replace('_', ' ').title()
+            mermaid_lines.append(f"    {node_id}[{stage_name}]")
+            if i > 0:
+                mermaid_lines.append(f"    S{i} --> {node_id}")
+        
+        mermaid = "\n".join(mermaid_lines)
+        return self._create_diagram_spec(diagram_id, diagram_name, description, mermaid, "pipeline")
+    
+    def _generate_module_structure_diagram(self, diagram_id: str, diagram_name: str,
+                                            description: str, diagram_def: Dict[str, Any],
+                                            features: List[CortexFeature]) -> DiagramSpec:
+        """Generate module structure diagram"""
+        mermaid = """graph TD
+    SRC[src/] --> AGENTS[agents/]
+    SRC --> OPERATIONS[operations/]
+    SRC --> TIER1[tier1/]
+    SRC --> TIER2[tier2/]
+    SRC --> TIER3[tier3/]
+    
+    AGENTS --> STRATEGIC[Strategic Agents]
+    AGENTS --> TACTICAL[Tactical Agents]
+    
+    style SRC fill:#EF4444
+    style AGENTS fill:#3B82F6
+    style OPERATIONS fill:#10B981"""
+        
+        return self._create_diagram_spec(diagram_id, diagram_name, description, mermaid, "module_structure")
+    
+    def _generate_plugin_diagram(self, diagram_id: str, diagram_name: str,
+                                  description: str, diagram_def: Dict[str, Any],
+                                  features: List[CortexFeature]) -> DiagramSpec:
+        """Generate plugin system diagram"""
+        mermaid = """graph TB
+    CORE[CORTEX Core] --> REGISTRY[Plugin Registry]
+    REGISTRY --> P1[Documentation Plugin]
+    REGISTRY --> P2[Optimization Plugin]
+    REGISTRY --> P3[Health Check Plugin]
+    REGISTRY --> P4[Custom Plugins...]
+    
+    style CORE fill:#EF4444
+    style REGISTRY fill:#10B981
+    style P1 fill:#3B82F6
+    style P2 fill:#3B82F6
+    style P3 fill:#3B82F6
+    style P4 fill:#6B7280"""
+        
+        return self._create_diagram_spec(diagram_id, diagram_name, description, mermaid, "plugin")
+    
+    def _generate_overview_diagram(self, diagram_id: str, diagram_name: str,
+                                    description: str, diagram_def: Dict[str, Any],
+                                    features: List[CortexFeature]) -> DiagramSpec:
+        """Generate overview/one-pager diagram"""
+        return self._generate_generic_diagram(diagram_id, diagram_name, description, diagram_def, features)
+    
+    def _generate_generic_diagram(self, diagram_id: str, diagram_name: str,
+                                   description: str, diagram_def: Dict[str, Any],
+                                   features: List[CortexFeature]) -> DiagramSpec:
+        """Generate generic fallback diagram for any type"""
+        # Create a simple flowchart as fallback
+        mermaid = f"""flowchart TD
+    START([{diagram_name}])
+    START --> PROCESS[Processing]
+    PROCESS --> END([Complete])
+    
+    style START fill:#3B82F6
+    style END fill:#10B981"""
+        
+        return self._create_diagram_spec(diagram_id, diagram_name, description, mermaid, "generic")
+    
+    def _create_diagram_spec(self, diagram_id: str, diagram_name: str,
+                             description: str, mermaid: str,
+                             diagram_type: str) -> DiagramSpec:
+        """Helper to create a DiagramSpec with standard prompt and narrative"""
+        
+        illustration_prompt = f"""Professional technical illustration for {diagram_name}:
+
+{description}
+
+Style: Modern, clean, technical illustration with:
+- Isometric or 2.5D perspective
+- Professional color palette (blues, greens, oranges)
+- Clear visual hierarchy
+- Minimal but informative
+- Suitable for technical documentation
+
+Technical elements: nodes, connections, data flow arrows, process indicators.
+Output: High-resolution PNG suitable for professional documentation."""
+        
+        narrative = f"""{diagram_name} provides a visual representation of {description.lower()}. 
+
+This diagram helps developers understand the structure, flow, and relationships within CORTEX's {diagram_type} system. It serves as a reference for implementation decisions and system design discussions.
+
+The visualization emphasizes clarity and actionability, allowing team members to quickly grasp complex technical concepts and their interdependencies."""
+        
+        return DiagramSpec(
+            diagram_id=diagram_id,
+            title=diagram_name,
+            diagram_type="both",
+            content_type=diagram_type,
+            description=description,
+            mermaid_syntax=mermaid,
+            illustration_prompt=illustration_prompt,
+            narrative=narrative,
+            priority=5
+        )
+    
+    # LEGACY METHODS - NO LONGER USED (kept for reference during migration)
+    # These are now replaced by YAML-driven generation above
+    
+    def _generate_agent_system_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
         """Generate dual-hemisphere agent system diagram"""
         mermaid = """graph LR
     subgraph RIGHT["RIGHT HEMISPHERE<br/>(Strategic Planning)"]
@@ -487,56 +670,58 @@ Style: Isometric view, clean modern design, professional color scheme, subtle sh
             priority=8
         )
     
-    # Additional diagram generation methods would continue here...
-    # For brevity, I'm showing the pattern with 3 complete examples
+    # ============================================================================
+    # LEGACY HARDCODED METHODS - NO LONGER USED
+    # All diagram generation is now driven by diagram-definitions.yaml
+    # These methods are kept for reference but should not be called
+    # ============================================================================
     
-    def _generate_intent_routing_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate intent routing diagram"""
-        # Implementation similar to above pattern
+    def _generate_intent_routing_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate intent routing diagram"""
         pass
     
-    def _generate_agent_coordination_diagram(self) -> DiagramSpec:
-        """Generate agent coordination sequence diagram"""
+    def _generate_agent_coordination_diagram_LEGACY(self) -> DiagramSpec:
+        """LEGACY: Generate agent coordination sequence diagram"""
         pass
     
-    def _generate_conversation_memory_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate conversation memory flow diagram"""
+    def _generate_conversation_memory_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate conversation memory flow diagram"""
         pass
     
-    def _generate_brain_protection_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate brain protection layers diagram"""
+    def _generate_brain_protection_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate brain protection layers diagram"""
         pass
     
-    def _generate_knowledge_graph_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate knowledge graph structure diagram"""
+    def _generate_knowledge_graph_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate knowledge graph structure diagram"""
         pass
     
-    def _generate_context_intelligence_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate context intelligence diagram"""
+    def _generate_context_intelligence_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate context intelligence diagram"""
         pass
     
-    def _generate_feature_planning_diagram(self) -> DiagramSpec:
-        """Generate feature planning workflow diagram"""
+    def _generate_feature_planning_diagram_LEGACY(self) -> DiagramSpec:
+        """LEGACY: Generate feature planning workflow diagram"""
         pass
     
-    def _generate_performance_diagram(self) -> DiagramSpec:
-        """Generate performance benchmarks diagram"""
+    def _generate_performance_diagram_LEGACY(self) -> DiagramSpec:
+        """LEGACY: Generate performance benchmarks diagram"""
         pass
     
-    def _generate_token_optimization_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate token optimization diagram"""
+    def _generate_token_optimization_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate token optimization diagram"""
         pass
     
-    def _generate_plugin_system_diagram(self) -> DiagramSpec:
-        """Generate plugin system diagram"""
+    def _generate_plugin_system_diagram_LEGACY(self) -> DiagramSpec:
+        """LEGACY: Generate plugin system diagram"""
         pass
     
-    def _generate_complete_dataflow_diagram(self, features: List[CortexFeature]) -> DiagramSpec:
-        """Generate complete data flow diagram"""
+    def _generate_complete_dataflow_diagram_LEGACY(self, features: List[CortexFeature]) -> DiagramSpec:
+        """LEGACY: Generate complete data flow diagram"""
         pass
     
-    def _generate_before_after_diagram(self) -> DiagramSpec:
-        """Generate before/after CORTEX comparison diagram"""
+    def _generate_before_after_diagram_LEGACY(self) -> DiagramSpec:
+        """LEGACY: Generate before/after CORTEX comparison diagram"""
         pass
 
 
@@ -564,38 +749,35 @@ class DiagramRegenerationOrchestrator(BaseOperationModule):
         )
     
     def execute(self, context: Dict[str, Any]) -> OperationResult:
-        """Execute diagram regeneration"""
+        """Execute diagram regeneration from YAML configuration"""
         try:
-            cortex_root = self.workspace_path
+            # Get workspace path from context or use current directory
+            cortex_root = context.get('workspace_root', Path.cwd())
             
             # Phase 1: Analyze CORTEX features
-            self.update_progress(OperationPhase.INITIALIZATION, 0.0)
             analyzer = CortexDesignAnalyzer(cortex_root)
             features = analyzer.analyze_cortex_features()
             self.log_info(f"Identified {len(features)} CORTEX features for visualization")
             
             # Phase 2: Clear existing diagrams
-            self.update_progress(OperationPhase.PROCESSING, 0.2)
             self._clear_diagram_folders(cortex_root)
             self.log_info("Cleared existing diagram folders")
             
-            # Phase 3: Generate new diagrams
-            self.update_progress(OperationPhase.PROCESSING, 0.4)
+            # Phase 3: Generate new diagrams FROM YAML CONFIGURATION
             generator = DiagramGenerator(cortex_root)
-            diagrams = generator.generate_diagrams_from_features(features)
-            self.log_info(f"Generated {len(diagrams)} diagram specifications")
+            diagrams = generator.generate_diagrams_from_yaml(features)  # CHANGED: Now loads from YAML
+            self.log_info(f"Generated {len(diagrams)} diagram specifications from YAML config")
             
             # Phase 4: Save diagrams to files
-            self.update_progress(OperationPhase.VALIDATION, 0.7)
             stats = self._save_diagrams(cortex_root, diagrams)
             
             # Phase 5: Generate report
-            self.update_progress(OperationPhase.COMPLETION, 0.9)
             report = self._generate_report(features, diagrams, stats)
             
             return OperationResult(
+                success=True,
                 status=OperationStatus.SUCCESS,
-                message=f"Successfully regenerated {stats['total_files']} diagram files",
+                message=f"Successfully regenerated {stats['total_files']} diagram files from YAML configuration",
                 data={
                     "features_analyzed": len(features),
                     "diagrams_generated": len(diagrams),
@@ -607,9 +789,10 @@ class DiagramRegenerationOrchestrator(BaseOperationModule):
         except Exception as e:
             self.log_error(f"Diagram regeneration failed: {e}")
             return OperationResult(
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Diagram regeneration failed: {str(e)}",
-                error=str(e)
+                errors=[str(e)]
             )
     
     def _clear_diagram_folders(self, cortex_root: Path):

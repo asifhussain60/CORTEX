@@ -1,7 +1,7 @@
-graph LR
-    Source[User Intent]
-    Processing[Processing]
-    Target[Code Execution]
+flowchart LR
+    A[User Intent] --> B[Process Layer]
+    B --> C[Transformation]
+    C --> D[Code Execution]
     
-    Source --> Processing
-    Processing --> Target
+    style A fill:#3B82F6
+    style D fill:#10B981

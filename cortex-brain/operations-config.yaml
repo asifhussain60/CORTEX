@@ -518,3 +518,20 @@ metadata:
     before_tokens: 4200  # Estimated from MD sections
     after_tokens: 2500   # Current YAML
     reduction_percent: 40.5
+
+  # --------------------------------------------------------------------------
+  # SYSTEM OPTIMIZATION SETTINGS
+  # --------------------------------------------------------------------------
+  system_optimization:
+    enabled: true
+    file_size_limits:
+      soft_limit_lines: 500  # Warning threshold for file size
+      hard_limit_lines: 1000  # Critical threshold for file size
+    code_quality:
+      max_methods_per_class: 15  # SRP violation threshold
+      max_complexity: 10  # Cyclomatic complexity
+      max_duplication_percent: 5  # Code duplication threshold
+    performance:
+      max_execution_time_seconds: 300  # 5 minutes
+      memory_limit_mb: 512
+
