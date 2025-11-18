@@ -7,34 +7,34 @@
    ============================================ */
 
 /* ============================================
-   ROOT VARIABLES - CORTEX Brand Colors
+   ROOT VARIABLES - CORTEX Brand Colors (MD3 Token Aliases)
    ============================================ */
 :root {
-  /* Primary brand colors */
-  --cortex-primary: #6366F1;          /* Indigo */
-  --cortex-accent: #8B5CF6;           /* Purple */
+  /* Primary brand colors - Map to MD3 tokens */
+  --cortex-primary: var(--md-sys-color-primary);          /* Indigo */
+  --cortex-accent: var(--md-sys-color-secondary);         /* Purple */
   
-  /* Hemisphere colors */
-  --cortex-left-brain: #3B82F6;       /* Blue - Tactical */
-  --cortex-right-brain: #A855F7;      /* Purple - Strategic */
+  /* Hemisphere colors - Map to MD3 tokens */
+  --cortex-left-brain: var(--md-sys-color-tertiary);      /* Blue - Tactical */
+  --cortex-right-brain: var(--md-sys-color-tertiary-alt); /* Purple - Strategic */
   
-  /* Light subtle backgrounds */
-  --bg-story: #FFFFFF;                /* White for story sections */
-  --bg-technical: #F0F4F8;            /* Cool light gray for technical */
-  --bg-code: #000000;                 /* Black for code blocks */
-  --bg-note: #F8F9FA;                 /* Light grey for notes */
-  --bg-warning: #FFE5E5;              /* Soft red for warnings */
-  --bg-success: #E8F5E9;              /* Soft green for success */
+  /* Light subtle backgrounds - Map to MD3 surface tokens */
+  --bg-story: var(--md-sys-color-surface);                /* White for story sections */
+  --bg-technical: var(--md-sys-color-surface-container-low); /* Cool light gray for technical */
+  --bg-code: var(--md-sys-color-inverse-surface);         /* Black for code blocks */
+  --bg-note: var(--md-sys-color-surface-container);       /* Light grey for notes */
+  --bg-warning: var(--md-sys-color-error-container);      /* Soft red for warnings */
+  --bg-success: var(--md-sys-color-success-container);    /* Soft green for success */
   
-  /* Text colors */
-  --text-story: #333333;              /* Dark grey for story text */
-  --text-technical: #1F2937;          /* Dark gray for technical */
-  --text-code: #FFFFFF;               /* White for code */
+  /* Text colors - Map to MD3 on-color tokens */
+  --text-story: var(--md-sys-color-on-surface);           /* Dark grey for story text */
+  --text-technical: var(--md-sys-color-on-surface-variant); /* Dark gray for technical */
+  --text-code: var(--md-sys-color-on-inverse-surface);    /* White for code */
   
-  /* Border colors */
-  --border-story: #666666;            /* Grey border for story */
+  /* Border colors - Map to MD3 outline tokens */
+  --border-story: var(--md-sys-color-outline);            /* Grey border for story */
   --border-technical: var(--cortex-primary);
-  --border-code: #333333;
+  --border-code: var(--md-sys-color-outline-variant);
 }
 
 /* ============================================
@@ -43,17 +43,17 @@
 
 /* Main content area - subtle light background */
 .md-main {
-  background-color: #FAFBFC;
+  background-color: var(--md-sys-color-surface-container-lowest);
 }
 
 .md-content {
-  background-color: #FFFFFF;
+  background-color: var(--md-sys-color-surface);
 }
 
 /* FIX: Page title styling - colorful gradient for main title */
 .md-typeset h1:first-of-type,
 .md-content__inner > h1:first-child {
-  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent), #A855F7) !important;
+  background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent), var(--md-sys-color-tertiary-alt)) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
@@ -62,7 +62,7 @@
   text-shadow: 0 2px 4px rgba(99, 102, 241, 0.1) !important;
   padding: 1rem 0 !important;
   border-bottom: 4px solid transparent !important;
-  border-image: linear-gradient(90deg, var(--cortex-primary), var(--cortex-accent), #A855F7) 1 !important;
+  border-image: linear-gradient(90deg, var(--cortex-primary), var(--cortex-accent), var(--md-sys-color-tertiary-alt)) 1 !important;
   margin-bottom: 2rem !important;
 }
 
@@ -103,19 +103,19 @@
    ============================================ */
 
 .story-section {
-  background: #FFFFFF;
+  background: var(--md-sys-color-surface);
   padding: 2rem;
   border-radius: 12px;
   border-left: 6px solid var(--border-story);
   color: var(--text-story);
   margin: 2rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--md-sys-elevation-2);
 }
 
 .story-section h1,
 .story-section h2,
 .story-section h3 {
-  color: #2c3e50;
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -143,12 +143,12 @@
 
 /* Story emphasis */
 .story-section strong {
-  color: #B45309;
+  color: var(--md-sys-color-tertiary);
   font-weight: bold;
 }
 
 .story-section em {
-  color: #92400E;
+  color: var(--md-sys-color-tertiary-container);
   font-style: italic;
 }
 
@@ -163,7 +163,7 @@
   border-left: 4px solid var(--border-technical);
   color: var(--text-technical);
   margin: 2rem 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .technical-section h1,
@@ -206,21 +206,21 @@
 pre,
 code[class*="language-"],
 .md-typeset pre > code {
-  background-color: #1F2937 !important;  /* Dark grey instead of black */
+  background-color: var(--md-sys-color-surface-dark) !important;
   color: var(--text-code) !important;
 }
 
 .md-typeset pre {
-  background-color: #1F2937 !important;  /* Dark grey instead of black */
-  border: 1px solid #374151;
+  background-color: var(--md-sys-color-surface-dark) !important;
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 6px;
   padding: 1rem;
   overflow-x: auto;
-  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
+  box-shadow: var(--md-sys-elevation-3);
 }
 
 .md-typeset code {
-  background-color: #1F2937 !important;  /* Dark grey instead of black */
+  background-color: var(--md-sys-color-surface-dark) !important;
   color: var(--text-code) !important;
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
@@ -232,17 +232,17 @@ code[class*="language-"],
 .md-typeset p code,
 .md-typeset li code,
 .md-typeset td code {
-  background-color: #1F2937 !important;  /* Dark grey instead of black */
+  background-color: var(--md-sys-color-surface-dark) !important;
   color: var(--text-code) !important;
 }
 
 /* Syntax highlighting - adjust for black background */
-.highlight .c { color: #75715E; } /* Comment */
-.highlight .k { color: #66D9EF; } /* Keyword */
-.highlight .s { color: #E6DB74; } /* String */
-.highlight .n { color: #F8F8F2; } /* Name */
-.highlight .o { color: #F92672; } /* Operator */
-.highlight .m { color: #AE81FF; } /* Number */
+.highlight .c { color: var(--md-sys-color-comment); } /* Comment */
+.highlight .k { color: var(--md-sys-color-keyword); } /* Keyword */
+.highlight .s { color: var(--md-sys-color-string); } /* String */
+.highlight .n { color: var(--md-sys-color-name); } /* Name */
+.highlight .o { color: var(--md-sys-color-operator); } /* Operator */
+.highlight .m { color: var(--md-sys-color-number); } /* Number */
 
 /* ============================================
    IMAGE STYLING - Clean, Professional
@@ -258,14 +258,14 @@ code[class*="language-"],
   max-width: 100%;
   height: auto;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 3px solid #FFF;
+  box-shadow: var(--md-sys-elevation-3);
+  border: 3px solid var(--md-sys-color-surface);
 }
 
 .story-image figcaption,
 .md-typeset figure > figcaption {
   font-style: italic;
-  color: #6B7280;
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: 0.75rem;
   font-size: 0.95rem;
   font-family: 'Roboto', sans-serif;
@@ -276,26 +276,26 @@ code[class*="language-"],
    ============================================ */
 
 .left-brain {
-  background: linear-gradient(135deg, var(--cortex-left-brain), #2563EB);
-  color: white;
+  background: linear-gradient(135deg, var(--cortex-left-brain), var(--md-sys-color-tertiary-container));
+  color: var(--md-sys-color-on-primary);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-weight: bold;
   font-size: 0.85rem;
   display: inline-block;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: var(--md-sys-elevation-2);
   margin: 0.2rem;
 }
 
 .right-brain {
-  background: linear-gradient(135deg, var(--cortex-right-brain), #9333EA);
-  color: white;
+  background: linear-gradient(135deg, var(--cortex-right-brain), var(--md-sys-color-secondary-container));
+  color: var(--md-sys-color-on-secondary);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-weight: bold;
   font-size: 0.85rem;
   display: inline-block;
-  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.3);
+  box-shadow: var(--md-sys-elevation-2);
   margin: 0.2rem;
 }
 
@@ -307,14 +307,14 @@ code[class*="language-"],
 .md-typeset .admonition.note,
 .md-typeset details.note {
   background-color: var(--bg-note);
-  border-left: 4px solid #666666;
+  border-left: 4px solid var(--md-sys-color-outline);
 }
 
 /* Warning admonitions */
 .md-typeset .admonition.warning,
 .md-typeset details.warning {
   background-color: var(--bg-warning);
-  border-left: 4px solid #DC2626;
+  border-left: 4px solid var(--md-sys-color-error);
 }
 
 /* Success/Tip admonitions */
@@ -322,13 +322,13 @@ code[class*="language-"],
 .md-typeset .admonition.tip,
 .md-typeset details.tip {
   background-color: var(--bg-success);
-  border-left: 4px solid #16A34A;
+  border-left: 4px solid var(--md-sys-color-success);
 }
 
 /* Info admonitions */
 .md-typeset .admonition.info,
 .md-typeset details.info {
-  background-color: #EFF6FF;
+  background-color: var(--md-sys-color-primary-container);
   border-left: 4px solid var(--cortex-primary);
 }
 
@@ -337,15 +337,15 @@ code[class*="language-"],
    ============================================ */
 
 .md-typeset table:not([class]) {
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .md-typeset table:not([class]) thead {
   background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent));
-  color: white;
+  color: var(--md-sys-color-on-primary);
 }
 
 .md-typeset table:not([class]) th {
@@ -356,11 +356,11 @@ code[class*="language-"],
 
 .md-typeset table:not([class]) td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--md-sys-color-surface-container);
 }
 
 .md-typeset table:not([class]) tbody tr:hover {
-  background-color: #FAFBFC;
+  background-color: var(--md-sys-color-surface-container-lowest);
 }
 
 /* ============================================
@@ -369,7 +369,7 @@ code[class*="language-"],
 
 /* Colorful sidebar background - subtle gradient */
 .md-sidebar--primary {
-  background: linear-gradient(180deg, #F8F9FA 0%, #E9ECEF 100%) !important;
+  background: linear-gradient(180deg, var(--md-sys-color-surface-container-lowest) 0%, var(--md-sys-color-surface-container-low) 100%) !important;
   border-right: 3px solid var(--cortex-primary) !important;
   z-index: 3 !important;  /* Fix: Ensure sidebar doesn't overlap content */
 }
@@ -413,9 +413,9 @@ code[class*="language-"],
 /* Section titles with gradient background */
 .md-nav--primary > .md-nav__title {
   background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent)) !important;
-  color: #FFFFFF !important;
+  color: var(--md-sys-color-on-primary) !important;
   font-weight: 700 !important;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+  box-shadow: var(--md-sys-elevation-2) !important;
   border: none !important;
   padding: 1rem !important;
   border-radius: 8px !important;
@@ -424,13 +424,13 @@ code[class*="language-"],
 
 .md-nav--primary > .md-nav__title[for] {
   background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent)) !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+  color: var(--md-sys-color-on-primary) !important;
+  box-shadow: var(--md-sys-elevation-2) !important;
 }
 
 /* Make sidebar navigation text dark grey (not black) */
 .md-nav__link {
-  color: #374151 !important;  /* Dark grey for readability */
+  color: var(--md-sys-color-on-surface-variant) !important;
   font-weight: 500 !important;
   padding: 0.5rem 1rem !important;
   border-radius: 6px !important;
@@ -466,12 +466,12 @@ code[class*="language-"],
 
 /* Navigation list items */
 .md-nav__item {
-  color: #374151 !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
 }
 
 /* Nested navigation items */
 .md-nav__item .md-nav__link {
-  color: #4B5563 !important;  /* Slightly lighter grey for nested items */
+  color: var(--md-sys-color-on-surface) !important;
   padding-left: 1.5rem !important;
 }
 
@@ -490,21 +490,21 @@ code[class*="language-"],
 .cortex-hero {
   text-align: center;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+  background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-secondary-container) 100%);
   border-radius: 12px;
   margin: 2rem 0;
 }
 
 .cortex-hero h1 {
   font-size: 3rem;
-  color: #4338CA !important;  /* Darker indigo for better visibility */
+  color: var(--md-sys-color-primary) !important;
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .cortex-hero p {
   font-size: 1.3rem;
-  color: #4B5563;
+  color: var(--md-sys-color-on-surface-variant);
   margin-bottom: 2rem;
 }
 
@@ -513,22 +513,22 @@ code[class*="language-"],
   padding: 0.75rem 2rem;
   margin: 0.5rem;
   background: linear-gradient(135deg, var(--cortex-primary), var(--cortex-accent));
-  color: white;
+  color: var(--md-sys-color-on-primary);
   text-decoration: none;
   border-radius: 30px;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: var(--md-sys-elevation-3);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .cortex-hero .cta-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+  box-shadow: var(--md-sys-elevation-4);
 }
 
 .cortex-hero .cta-button.secondary {
-  background: linear-gradient(135deg, #6B7280, #4B5563);
-  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+  background: linear-gradient(135deg, var(--md-sys-color-surface-variant), var(--md-sys-color-outline));
+  box-shadow: var(--md-sys-elevation-3);
 }
 
 /* ============================================
@@ -536,8 +536,8 @@ code[class*="language-"],
    ============================================ */
 
 .chapter-marker {
-  background: linear-gradient(135deg, var(--cortex-accent), #C084FC);
-  color: white;
+  background: linear-gradient(135deg, var(--cortex-accent), var(--md-sys-color-secondary-container));
+  color: var(--md-sys-color-on-secondary);
   padding: 1rem 2rem;
   border-radius: 8px;
   margin: 3rem 0 1rem 0;
@@ -545,7 +545,7 @@ code[class*="language-"],
   font-size: 1.5rem;
   font-weight: bold;
   font-family: 'Comic Sans MS', cursive;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  box-shadow: var(--md-sys-elevation-3);
 }
 
 /* ============================================
@@ -604,7 +604,7 @@ code[class*="language-"],
 }
 
 ::-webkit-scrollbar-track {
-  background: #F3F4F6;
+  background: var(--md-sys-color-surface-container);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -621,12 +621,12 @@ code[class*="language-"],
    ============================================ */
 
 .ancient-rules {
-  background: linear-gradient(135deg, #faf8f3 0%, #f5f0e8 100%);
+  background: linear-gradient(135deg, var(--md-sys-color-surface) 0%, var(--md-sys-color-surface-container-low) 100%);
   padding: 3rem;
   margin: 3rem 0;
-  border: 3px double #8b7355;
+  border: 3px double var(--md-sys-color-outline);
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(139, 115, 85, 0.15);
+  box-shadow: var(--md-sys-elevation-4);
   position: relative;
 }
 
@@ -637,8 +637,8 @@ code[class*="language-"],
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem;
-  color: #8b7355;
-  background: #faf8f3;
+  color: var(--md-sys-color-outline);
+  background: var(--md-sys-color-surface);
   padding: 0 1rem;
 }
 
@@ -646,7 +646,7 @@ code[class*="language-"],
   font-family: 'Cinzel', 'IM Fell English', serif !important;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #5d4e37;
+  color: var(--md-sys-color-on-surface-variant);
   text-align: center;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
@@ -657,7 +657,7 @@ code[class*="language-"],
   font-family: 'IM Fell English', 'Cinzel', serif !important;
   font-style: italic;
   text-align: center;
-  color: #8b7355;
+  color: var(--md-sys-color-outline);
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
@@ -666,17 +666,17 @@ code[class*="language-"],
   font-family: 'Cinzel', serif !important;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #6b5744;
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: 2rem;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #d4c5b0;
+  border-bottom: 2px solid var(--md-sys-color-surface-container);
   padding-bottom: 0.5rem;
 }
 
 .ancient-rules p strong {
   font-family: 'Cinzel', serif !important;
   font-weight: 700;
-  color: #5d4e37;
+  color: var(--md-sys-color-on-surface-variant);
   font-size: 1.05rem;
 }
 
@@ -684,7 +684,7 @@ code[class*="language-"],
   font-family: 'IM Fell English', Georgia, serif !important;
   font-size: 1rem;
   line-height: 1.7;
-  color: #3e352e;
+  color: var(--md-sys-color-on-surface);
   margin-bottom: 1rem;
   text-align: justify;
 }
@@ -693,43 +693,43 @@ code[class*="language-"],
   font-family: 'IM Fell English', serif !important;
   font-style: italic;
   text-align: center;
-  color: #8b7355;
+  color: var(--md-sys-color-outline);
   margin-top: 2rem;
   font-size: 0.95rem;
-  border-top: 1px solid #d4c5b0;
+  border-top: 1px solid var(--md-sys-color-surface-container);
   padding-top: 1rem;
 }
 
 /* Dark mode adjustments for ancient rules */
 [data-md-color-scheme="slate"] .ancient-rules {
-  background: linear-gradient(135deg, #2d2520 0%, #3a2f28 100%);
-  border-color: #8b7355;
+  background: linear-gradient(135deg, var(--md-sys-color-surface-dark) 0%, var(--md-sys-color-surface-container-low) 100%);
+  border-color: var(--md-sys-color-outline);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules::before {
-  background: #2d2520;
-  color: #c9a875;
+  background: var(--md-sys-color-surface-dark);
+  color: var(--md-sys-color-outline);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules h2 {
-  color: #d4b896;
+  color: var(--md-sys-color-on-surface);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules > p:first-of-type {
-  color: #c9a875;
+  color: var(--md-sys-color-outline);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules h3 {
-  color: #c9a875;
-  border-bottom-color: #5d4e37;
+  color: var(--md-sys-color-outline);
+  border-bottom-color: var(--md-sys-color-outline-variant);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules p {
-  color: #e5d4c1;
+  color: var(--md-sys-color-on-surface);
 }
 
 [data-md-color-scheme="slate"] .ancient-rules p strong {
-  color: #d4b896;
+  color: var(--md-sys-color-on-surface);
 }
 
 /* ============================================
