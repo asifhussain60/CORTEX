@@ -60,28 +60,54 @@ class CodeExecutor(BaseAgent):
             # Extract context
             context = request.context
             task_description = request.user_message
+            rule_context = context.get('rule_context', {})
             
-            # TODO: Implement actual code execution logic
-            # For now, return a basic response indicating capability
+            # Phase 2: Intelligent test determination
+            requires_tests = self._determine_if_tests_needed(
+                task_description=task_description,
+                context=context,
+                rule_context=rule_context
+            )
             
+            # Phase 3: Summary generation control
+            skip_summary = rule_context.get('skip_summary_generation', False)
+            
+            # Build result
             result = {
                 'status': 'acknowledged',
                 'task': task_description,
                 'message': 'CodeExecutor is ready to implement this task',
-                'tdd_cycle': 'RED → GREEN → REFACTOR enforced',
-                'next_step': 'Test generation required before implementation'
+                'requires_tests': requires_tests,
+                'skip_summary': skip_summary,
+                'tdd_cycle': 'RED → GREEN → REFACTOR enforced' if requires_tests else 'Direct implementation',
+                'next_step': 'Test generation required before implementation' if requires_tests else 'Direct implementation'
             }
+            
+            # Determine next actions based on test requirement
+            next_actions = []
+            if requires_tests:
+                next_actions = [
+                    "Generate failing tests (RED)",
+                    "Implement minimal code to pass tests (GREEN)",
+                    "Refactor for quality (REFACTOR)"
+                ]
+            else:
+                next_actions = [
+                    "Implement change directly",
+                    "Verify syntax and structure",
+                    "Track implementation progress"
+                ]
+            
+            # Add summary note if suppressed
+            if skip_summary:
+                result['summary_note'] = 'Summary generation suppressed (execution-focused intent)'
             
             return AgentResponse(
                 success=True,
                 result=result,
                 message=f"Code execution request acknowledged: {task_description}",
                 agent_name=self.name,
-                next_actions=[
-                    "Generate failing tests (RED)",
-                    "Implement minimal code to pass tests (GREEN)",
-                    "Refactor for quality (REFACTOR)"
-                ]
+                next_actions=next_actions
             )
             
         except Exception as e:
@@ -93,6 +119,118 @@ class CodeExecutor(BaseAgent):
                 agent_name=self.name,
                 error=str(e)
             )
+    
+    def _determine_if_tests_needed(
+        self, 
+        task_description: str, 
+        context: Dict[str, Any],
+        rule_context: Dict[str, Any]
+    ) -> bool:
+        """
+        Intelligently determine if tests are required for this change.
+        
+        Phase 2 Implementation: Analyzes change type to decide if TDD is needed.
+        
+        Strategy: 
+        1. Check for compound tasks (AND, multiple verbs) - require tests
+        2. Check for strong trivial patterns - skip tests
+        3. Check for documentation-only changes - skip tests
+        4. Check for significant changes - require tests
+        5. Default to requiring tests (safety)
+        
+        Args:
+            task_description: Description of the task
+            context: Request context with additional information
+            rule_context: Rule context from IntentRouter
+            
+        Returns:
+            True if tests should be written, False otherwise
+        """
+        # Check if intelligent determination is enabled
+        if not rule_context.get('intelligent_test_determination', False):
+            # If not enabled, default to requiring tests
+            return True
+        
+        # Analyze task description for change type
+        task_lower = task_description.lower()
+        
+        # Step 1: Detect compound tasks (multiple actions)
+        # If task has "and" or multiple verbs, it's compound -> requires tests
+        has_and = ' and ' in task_lower
+        action_verbs = ['add', 'create', 'implement', 'fix', 'update', 'modify']
+        verb_count = sum(1 for verb in action_verbs if verb in task_lower)
+        
+        if has_and and verb_count > 1:
+            self.logger.info(
+                f"Test determination: TESTS REQUIRED "
+                f"(compound task with multiple actions)"
+            )
+            return True
+        
+        # Step 2: Strong trivial patterns (explicit trivial changes)
+        strong_trivial_patterns = [
+            'fix typo', 'fix spelling', 'update comment', 'add comment',
+            'fix whitespace', 'fix formatting', 'fix indent',
+            'rename variable', 'rename file'
+        ]
+        
+        # Check strong trivial patterns - but only if not compound
+        if not has_and:
+            for pattern in strong_trivial_patterns:
+                if pattern in task_lower:
+                    self.logger.info(
+                        f"Test determination: NO TESTS NEEDED "
+                        f"(detected strong trivial pattern '{pattern}')"
+                    )
+                    return False
+        
+        # Step 3: Documentation-only changes
+        doc_patterns = ['add documentation', 'update documentation', 'write documentation']
+        for pattern in doc_patterns:
+            if pattern in task_lower:
+                self.logger.info(
+                    f"Test determination: NO TESTS NEEDED "
+                    f"(documentation-only change)"
+                )
+                return False
+        
+        # Step 4: Significant changes that require tests
+        test_required_indicators = [
+            'add feature', 'implement', 'create class', 'create method',
+            'business logic', 'algorithm', 'calculation', 'validation',
+            'api endpoint', 'database', 'authentication', 'authorization',
+            'payment', 'integration', 'state change', 'workflow'
+        ]
+        
+        # Check for test-required indicators
+        for indicator in test_required_indicators:
+            if indicator in task_lower:
+                self.logger.info(
+                    f"Test determination: TESTS REQUIRED "
+                    f"(detected '{indicator}' - significant change)"
+                )
+                return True
+        
+        # Step 5: Weak trivial indicators (standalone keywords)
+        weak_trivial_indicators = [
+            'typo', 'spelling', 'comment', 'readme',
+            'whitespace', 'formatting'
+        ]
+        
+        for indicator in weak_trivial_indicators:
+            if indicator in task_lower:
+                self.logger.info(
+                    f"Test determination: NO TESTS NEEDED "
+                    f"(trivial change: '{indicator}')"
+                )
+                return False
+        
+        # Default: require tests for safety
+        self.logger.info(
+            "Test determination: TESTS REQUIRED "
+            "(default - change type unclear)"
+        )
+        return True
 
 
 __all__ = ["CodeExecutor"]

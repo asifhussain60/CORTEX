@@ -13,6 +13,7 @@ from .base_agent import BaseAgent, AgentRequest, AgentResponse
 from .agent_types import (
     AgentType,
     IntentType,
+    IntentClassificationResult,
     get_agent_for_intent,
     INTENT_AGENT_MAP
 )
@@ -126,6 +127,107 @@ class IntentRouter(BaseAgent):
             IntentType.COMMIT: ["commit", "git", "push", "save changes"],
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
         }
+        
+        # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
+        # Maps intents to applicable governance rules and behavioral flags
+        self.INTENT_RULE_CONTEXT = {
+            IntentType.CODE: {
+                'rules_to_consider': ['TDD_ENFORCEMENT', 'DEFINITION_OF_DONE'],
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.IMPLEMENT: {
+                'rules_to_consider': ['TDD_ENFORCEMENT', 'DEFINITION_OF_DONE', 'DEFINITION_OF_READY'],
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True,
+                'requires_dor_validation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.ARCHITECTURE: {
+                'rules_to_consider': ['CRAWLER_ACTIVATION', 'PATTERN_ANALYSIS'],
+                'enable_crawlers': True,
+                'skip_summary_generation': False,  # Investigations often need summaries
+                'requires_documentation': True
+            },
+            IntentType.ANALYZE_STRUCTURE: {
+                'rules_to_consider': ['CRAWLER_ACTIVATION', 'PATTERN_ANALYSIS'],
+                'enable_crawlers': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True
+            },
+            IntentType.CRAWL_SYSTEM: {
+                'rules_to_consider': ['CRAWLER_ACTIVATION', 'DEEP_ANALYSIS'],
+                'enable_crawlers': True,
+                'enable_deep_crawl': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True
+            },
+            IntentType.FIX: {
+                'rules_to_consider': ['DEFINITION_OF_DONE'],  # DoD but not always TDD
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.DEBUG: {
+                'rules_to_consider': ['ROOT_CAUSE_ANALYSIS'],
+                'enable_investigation_mode': True,
+                'skip_summary_generation': False,  # Debug sessions need summaries
+                'requires_documentation': True
+            },
+            IntentType.PLAN: {
+                'rules_to_consider': ['INCREMENTAL_PLAN_GENERATION', 'DEFINITION_OF_READY'],
+                'skip_summary_generation': False,  # Plans ARE the deliverable
+                'requires_dor_validation': True,
+                'create_persistent_artifact': True
+            },
+            IntentType.FEATURE: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'TDD_ENFORCEMENT', 'DEFINITION_OF_DONE'],
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True,
+                'requires_dor_validation': True,
+                'requires_dod_validation': True,
+                'requires_planning': True
+            },
+            IntentType.TEST: {
+                'rules_to_consider': ['TDD_ENFORCEMENT', 'TEST_COVERAGE'],
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.REFACTOR: {
+                'rules_to_consider': ['DEFINITION_OF_DONE', 'SOLID_PRINCIPLES'],
+                'intelligent_test_determination': True,  # Tests must stay green
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.EDIT_FILE: {
+                'rules_to_consider': ['DEFINITION_OF_DONE'],
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.HEALTH_CHECK: {
+                'rules_to_consider': ['VALIDATION_RULES'],
+                'skip_summary_generation': False,  # Health reports are valuable
+                'requires_documentation': False
+            },
+            IntentType.COMMIT: {
+                'rules_to_consider': ['DEFINITION_OF_DONE', 'COMMIT_MESSAGE_STANDARDS'],
+                'skip_summary_generation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.COMPLIANCE: {
+                'rules_to_consider': ['ALL_GOVERNANCE_RULES'],
+                'skip_summary_generation': False,
+                'requires_documentation': True
+            },
+            IntentType.SCREENSHOT: {
+                'rules_to_consider': ['VISION_ANALYSIS', 'UI_STANDARDS'],
+                'enable_vision_api': True,
+                'skip_summary_generation': False,
+                'requires_documentation': False
+            }
+        }
 
     def _initialize_agent_registry(self):
         """Initialize agent registry with available agent types."""
@@ -195,17 +297,18 @@ class IntentRouter(BaseAgent):
             if self._is_investigation_request(request.user_message):
                 return self._handle_investigation_request(request)
             
-            # Step 1: Classify intent if not already classified
-            classified_intent = self._classify_intent(request)
+            # Step 1: Classify intent with rule context (CORTEX 3.0 Phase 1)
+            classification_result = self._classify_intent_with_rules(request)
             
             # Step 2: Query Tier 2 for similar past intents
             similar_patterns = self._find_similar_intents(request)
             
-            # Step 3: Make routing decision
+            # Step 3: Make routing decision with rule context
             routing_decision = self._make_routing_decision(
-                classified_intent,
+                classification_result.intent,  # Extract intent for backward compatibility
                 similar_patterns,
-                request
+                request,
+                classification_result  # Pass full classification result
             )
             
             # Step 4: Log routing decision to Tier 1 if conversation exists
@@ -223,9 +326,11 @@ class IntentRouter(BaseAgent):
                 message=self._format_routing_message(routing_decision),
                 agent_name=self.name,
                 metadata={
-                    "classified_intent": classified_intent.value,
+                    "classified_intent": classification_result.intent.value,
+                    "classification_confidence": classification_result.confidence,
+                    "rule_context": classification_result.rule_context,
                     "similar_patterns_found": len(similar_patterns),
-                    "confidence": routing_decision["confidence"]
+                    "routing_confidence": routing_decision["confidence"]
                 },
                 next_actions=[
                     f"Execute {routing_decision['primary_agent'].name} agent"
@@ -248,13 +353,33 @@ class IntentRouter(BaseAgent):
         """
         Classify user intent from message text and context.
         
+        DEPRECATED: Use _classify_intent_with_rules() for new code.
+        This method maintained for backward compatibility.
+        
         Args:
             request: The agent request
         
         Returns:
             Classified IntentType
         """
+        result = self._classify_intent_with_rules(request)
+        return result.intent
+    
+    def _classify_intent_with_rules(self, request: AgentRequest) -> IntentClassificationResult:
+        """
+        Classify user intent and attach relevant rule context.
+        
+        This is the enhanced classification method that returns rich context
+        for intelligent rule enforcement. Replaces legacy _classify_intent().
+        
+        Args:
+            request: The agent request
+        
+        Returns:
+            IntentClassificationResult with intent, confidence, and rule context
+        """
         message_lower = request.user_message.lower()
+        metadata = {}
         
         # Check if there's an image attachment in context - this takes priority
         if request.context:
@@ -268,7 +393,16 @@ class IntentRouter(BaseAgent):
             )
             if has_image:
                 self.logger.info("Image detected in request context - routing to screenshot analysis")
-                return IntentType.SCREENSHOT
+                intent = IntentType.SCREENSHOT
+                confidence = 1.0  # High confidence when image present
+                metadata['detection_method'] = 'image_context'
+                
+                return IntentClassificationResult(
+                    intent=intent,
+                    confidence=confidence,
+                    rule_context=self.INTENT_RULE_CONTEXT.get(intent, {}),
+                    metadata=metadata
+                )
         
         # If intent already classified and valid (not UNKNOWN), use it
         try:
@@ -276,7 +410,15 @@ class IntentRouter(BaseAgent):
             if normalized != "unknown":  # Don't return early for UNKNOWN - classify from message
                 for intent_type in IntentType:
                     if intent_type.value == normalized:
-                        return intent_type
+                        confidence = 0.9  # High confidence from pre-classified intent
+                        metadata['detection_method'] = 'pre_classified'
+                        
+                        return IntentClassificationResult(
+                            intent=intent_type,
+                            confidence=confidence,
+                            rule_context=self.INTENT_RULE_CONTEXT.get(intent_type, {}),
+                            metadata=metadata
+                        )
         except:
             pass
         
@@ -284,18 +426,52 @@ class IntentRouter(BaseAgent):
         intent_scores = {}
         for intent_type, keywords in self.INTENT_KEYWORDS.items():
             score = 0
+            matched_keywords = []
             for keyword in keywords:
                 if keyword in message_lower:
                     # Give higher weight to multi-word phrases
                     word_count = len(keyword.split())
                     score += word_count
+                    matched_keywords.append(keyword)
             if score > 0:
-                intent_scores[intent_type] = score
+                intent_scores[intent_type] = {
+                    'score': score,
+                    'matched_keywords': matched_keywords
+                }
         
         # Return highest scoring intent, or UNKNOWN if none found
         if intent_scores:
-            return max(intent_scores.items(), key=lambda x: x[1])[0]
+            best_match = max(intent_scores.items(), key=lambda x: x[1]['score'])
+            intent = best_match[0]
+            score_data = best_match[1]
+            
+            # Calculate confidence based on score strength
+            max_possible_score = len(message_lower.split())  # Rough estimate
+            confidence = min(score_data['score'] / max_possible_score, 1.0)
+            confidence = max(confidence, 0.6)  # Minimum confidence for keyword match
+            
+            metadata['detection_method'] = 'keyword_matching'
+            metadata['matched_keywords'] = score_data['matched_keywords']
+            metadata['score'] = score_data['score']
+            
+            return IntentClassificationResult(
+                intent=intent,
+                confidence=confidence,
+                rule_context=self.INTENT_RULE_CONTEXT.get(intent, {}),
+                metadata=metadata
+            )
         
+        # No match found - return UNKNOWN with empty rule context
+        intent = IntentType.UNKNOWN
+        confidence = 0.0
+        metadata['detection_method'] = 'default'
+        
+        return IntentClassificationResult(
+            intent=intent,
+            confidence=confidence,
+            rule_context={},  # No rules for unknown intent
+            metadata=metadata
+        )
         return IntentType.UNKNOWN
     
     def _find_similar_intents(
@@ -328,7 +504,8 @@ class IntentRouter(BaseAgent):
         self,
         intent: IntentType,
         similar_patterns: List[Dict[str, Any]],
-        request: AgentRequest
+        request: AgentRequest,
+        classification_result: Optional[IntentClassificationResult] = None
     ) -> Dict[str, Any]:
         """
         Make routing decision based on intent and patterns.
@@ -337,9 +514,10 @@ class IntentRouter(BaseAgent):
             intent: Classified intent
             similar_patterns: Similar patterns from Tier 2
             request: Original request
+            classification_result: Rich classification result with rule context (CORTEX 3.0)
         
         Returns:
-            Routing decision with primary agent, secondary agents, and confidence
+            Routing decision with primary agent, secondary agents, confidence, and rule context
         """
         # Get primary agent for intent
         primary_agent = get_agent_for_intent(intent)
@@ -359,7 +537,8 @@ class IntentRouter(BaseAgent):
             primary_agent = self._infer_agent_from_patterns(similar_patterns)
             confidence = 0.7  # Pattern-based routing gets moderate confidence
         
-        return {
+        # Build routing decision
+        decision = {
             "primary_agent": primary_agent,
             "secondary_agents": secondary_agents,
             "confidence": confidence,
@@ -370,6 +549,14 @@ class IntentRouter(BaseAgent):
                 confidence
             )
         }
+        
+        # Attach rule context if available (CORTEX 3.0 Phase 1)
+        if classification_result:
+            decision["rule_context"] = classification_result.rule_context
+            decision["classification_metadata"] = classification_result.metadata
+            decision["classification_confidence"] = classification_result.confidence
+        
+        return decision
     
     def _identify_secondary_agents(
         self,
