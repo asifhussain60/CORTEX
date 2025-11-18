@@ -458,6 +458,30 @@ It's not just a tool—it's a **cognitive AI system** that grows with you.
 
 ---
 
+## 🧭 Navigation Hub
+
+**Now that you understand the story, dive deeper into CORTEX:**
+
+### 📚 Learn More
+- [**Technical Architecture**](architecture/overview.md) - Deep dive into dual-hemisphere design, memory tiers, and agent coordination
+- [**Getting Started Guide**](getting-started/quick-start.md) - Set up CORTEX in 5 minutes
+- [**Complete Navigation**](getting-started/navigation.md) - Find any document by role, task, or topic
+
+### 🔧 For Developers
+- [**API Reference**](reference/api-reference.md) - DocumentValidator, memory APIs, agent interfaces
+- [**Operations Guide**](operations/index.md) - All CORTEX operations and workflows
+- [**Implementation Reports**](../cortex-brain/documents/reports/) - Phase completions, status updates
+
+### 🎯 For Contributors
+- [**Planning Documents**](../cortex-brain/documents/planning/) - Roadmaps, architecture plans
+- [**Analysis & Investigations**](../cortex-brain/documents/analysis/) - Performance studies, research findings
+- [**Conversation Captures**](../cortex-brain/documents/conversation-captures/) - High-value design discussions
+
+### 🧪 Explore the Code
+- [**Test Suite**](../tests/) - 712 tests covering all cognitive functions
+- [**Source Code**](../src/) - DocumentValidator, memory systems, agents
+- [**Example Projects**](../examples/) - Sample integrations and use cases
+
 **For technical implementation details, see:** `#file:prompts/shared/technical-reference.md`  
 **For agent system architecture, see:** `#file:prompts/shared/agents-guide.md`  
 **For setup instructions, see:** `#file:prompts/shared/setup-guide.md`

@@ -25,6 +25,7 @@ import json
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.epm.doc_generator import DocumentationGenerator
+from src.operations.documentation_component_registry import create_default_registry
 from src.operations.base_operation_module import OperationResult, OperationStatus
 from src.plugins.story_generator_plugin import StoryGeneratorPlugin
 
@@ -82,20 +83,59 @@ class EnterpriseDocumentationOrchestrator:
             if stage:
                 logger.info(f"Stage: {stage}")
             
-            # Initialize EPM Documentation Generator
-            doc_generator = DocumentationGenerator(
-                root_path=self.workspace_root,
-                profile=profile,
-                dry_run=dry_run
-            )
-            
-            # Execute generation pipeline
-            if stage:
-                logger.info(f"Executing single stage: {stage}")
-                generation_result = doc_generator.execute(stage=stage)
+            # If specific components are requested, use the new component registry
+            requested_components: Optional[List[str]] = None
+            if options:
+                # Accept multiple possible keys to be NL-friendly
+                requested_components = options.get("components") or options.get("component")
+                if isinstance(requested_components, str):
+                    requested_components = [requested_components]
+
+            # Map stage shortcuts to components
+            stage_component_map = {
+                "diagrams": ["diagrams"],
+                "mkdocs": ["mkdocs"],
+                "feature-list": ["feature_list"],
+                "all": ["diagrams", "feature_list", "mkdocs"],
+            }
+            if not requested_components and stage in stage_component_map:
+                requested_components = stage_component_map.get(stage)
+
+            registry_result: Optional[Dict[str, Any]] = None
+            if requested_components:
+                logger.info("Executing documentation via Component Registry")
+                registry = create_default_registry(self.workspace_root)
+                pipeline = requested_components
+                # Default output path is docs/
+                registry_result = registry.execute_pipeline(
+                    component_ids=pipeline,
+                    output_path=self.docs_path,
+                    profile=profile,
+                    stop_on_failure=True,
+                )
+                # Align to previous data shape
+                generation_result = {
+                    "success": registry_result.get("all_success", False),
+                    "stages": {c["id"]: {"status": "success" if c.get("success") else "failed"} for c in registry_result.get("components", [])},
+                    "files_generated": {},
+                    "errors": [],
+                    "warnings": [],
+                }
             else:
-                logger.info("Executing full 6-stage documentation pipeline")
-                generation_result = doc_generator.execute()
+                # Initialize EPM Documentation Generator (legacy pipeline)
+                doc_generator = DocumentationGenerator(
+                    root_path=self.workspace_root,
+                    profile=profile,
+                    dry_run=dry_run
+                )
+                
+                # Execute generation pipeline
+                if stage:
+                    logger.info(f"Executing single stage: {stage}")
+                    generation_result = doc_generator.execute(stage=stage)
+                else:
+                    logger.info("Executing full 6-stage documentation pipeline")
+                    generation_result = doc_generator.execute()
             
             # Execute Story Generation Plugin (if enabled)
             story_enabled = options.get("generate_story", True) if options else True
@@ -136,6 +176,10 @@ class EnterpriseDocumentationOrchestrator:
                 stage,
                 duration
             )
+
+            # Attach registry execution summary if used
+            if registry_result is not None:
+                result_data["registry_execution"] = registry_result
             
             # Create operation result
             if generation_result.get("success", False):

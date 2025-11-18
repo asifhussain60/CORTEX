@@ -34,7 +34,11 @@
    - Triggers: "plan", "let's plan", "plan a feature", "plan this", "help me plan", "planning", "feature planning", "i want to plan"
    - If matched: Load #file:../../prompts/shared/help_plan_feature.md and activate interactive planning workflow
    - Context detection: "let's plan ADO feature" = planning + ADO context (no separate triggers needed)
-3. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
+3. **Documentation Generation Detection** - Check if user wants to generate docs:
+   - Triggers: "generate documentation", "generate docs", "generate cortex docs", "update documentation", "refresh docs", "build documentation"
+   - If matched: Use doc_generation_intro template FIRST (set expectations)
+   - After generation: Use doc_generation_complete template with file summary table
+4. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
 
 **Examples:**
 
@@ -48,6 +52,12 @@ User: "let's plan an Azure DevOps feature" + [screenshot attached]
 → MATCH: planning_triggers + vision API integration
 → ACTION: Analyze screenshot (extract ADO#, title, AC), create ADO form file pre-populated
 → RESPONSE: "✅ Vision API extracted ADO-12345. Review template (opened in VS Code)"
+
+User: "generate documentation"
+→ MATCH: doc_generation_triggers
+→ ACTION: Show doc_generation_intro template (set expectations)
+→ EXECUTE: Run enterprise_documentation_orchestrator
+→ RESPONSE: Show doc_generation_complete template with file table
 
 User: "help"
 → MATCH: help_triggers
@@ -691,6 +701,40 @@ CORTEX will:
 **✅ ALWAYS USE:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
 
 **❌ NEVER CREATE:** Documents in repository root or unorganized locations
+
+## Pre-Flight Checklist (MANDATORY)
+
+**Before creating ANY .md document, CORTEX MUST:**
+
+1. **Determine Document Type** - Is this a report, analysis, guide, investigation, planning doc, or conversation capture?
+2. **Select Category** - Choose appropriate category from `cortex-brain/documents/[category]/`
+3. **Construct Path** - Build full path: `cortex-brain/documents/[category]/[filename].md`
+4. **Validate Path** - Use DocumentValidator if available to verify path correctness
+5. **Create Document** - Only create after validation passes
+
+**Enforcement Rules:**
+- ❌ NEVER create `.md` files in repository root (except whitelist: README.md, LICENSE, etc.)
+- ❌ NEVER create `.md` files in `cortex-brain/` root (except whitelist: see `cortex-brain/documents/README.md`)
+- ❌ NEVER create arbitrary subdirectories for documents
+- ✅ ALWAYS use `cortex-brain/documents/[category]/` structure
+- ✅ ALWAYS verify with DocumentValidator: `python src/core/document_validator.py [path]`
+- ✅ ALWAYS follow category naming conventions
+
+**DocumentValidator Integration:**
+```python
+from src.core.document_validator import DocumentValidator
+
+validator = DocumentValidator()
+result = validator.validate_document_path('cortex-brain/documents/reports/MY-REPORT.md')
+
+if result['valid']:
+    # Create document at validated path
+    create_file(path, content)
+else:
+    # Use suggested path from validator
+    suggested = result['suggestion']
+    create_file(suggested, content)
+```
 
 ## Categories & Usage
 
