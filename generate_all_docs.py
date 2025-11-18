@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from src.epm.modules.diagram_generator import DiagramGenerator
 from src.epm.modules.image_prompt_generator import ImagePromptGenerator
-from src.epm.modules.story_generator import StoryGenerator
+from src.epm.modules.story_generator_enhanced import StoryGeneratorEnhanced
 from src.epm.modules.validation_engine import ValidationEngine
 
 # Configure logging
@@ -69,7 +69,7 @@ class EnterpriseDocumentationGenerator:
         # Initialize modules
         self.diagram_generator = DiagramGenerator(root_path, dry_run)
         self.image_prompt_generator = ImagePromptGenerator(self.diagrams_path)
-        self.story_generator = StoryGenerator(root_path, dry_run)
+        self.story_generator = StoryGeneratorEnhanced(root_path, dry_run)
         self.validator = ValidationEngine(root_path)
         
         # Track results

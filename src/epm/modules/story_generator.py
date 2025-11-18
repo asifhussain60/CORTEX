@@ -145,6 +145,7 @@ class StoryGenerator:
     def _generate_story_content(self, data: Dict[str, Any]) -> str:
         """Generate the complete story content in Codenstein narrative voice"""
         
+        # CHAPTERS 1-2: Same as current (good setup)
         content = f"""# The CORTEX Story: The Awakening
 
 **When GitHub Copilot Got A Brain**  

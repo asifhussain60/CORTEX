@@ -203,6 +203,8 @@ class ImagePromptGenerator:
             'tier_architecture': lambda: self._generate_tier_architecture(tiers),
             'agent_system': lambda: self._generate_agent_system(agents),
             'plugin_architecture': lambda: self._generate_plugin_architecture(plugins),
+            'plugin_system': lambda: self._generate_plugin_system(plugins, diagram_def),
+            'module_structure': lambda: self._generate_module_structure(diagram_def),
             'memory_flow': lambda: self._generate_memory_flow(tiers),
             'agent_coordination': lambda: self._generate_agent_coordination(agents),
             'overview': lambda: self._generate_one_pager(capabilities, agents, plugins),
@@ -330,13 +332,282 @@ This diagram illustrates the flow from {source} to {target}.
     
     def _generate_pipeline_diagram(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
         """Generate pipeline flow diagram from configuration."""
-        return self._generate_placeholder_diagram(diagram_def)
+        diagram_id = diagram_def.get('id')
+        diagram_name = diagram_def.get('name', 'Pipeline')
+        description = diagram_def.get('description', '')
+        stages = diagram_def.get('stages', [])
+        
+        # Format stages for the prompt
+        stages_text = "\n".join([f"- {stage.replace('_', ' ').title()}" for stage in stages]) if stages else "Multiple processing stages"
+        
+        prompt = f"""# {diagram_name}
+
+**AI Generation Instructions for ChatGPT DALL-E:**
+
+Create a professional horizontal pipeline flow diagram showing: {description}
+
+## Design Requirements
+
+**Style:** Modern flowchart with clean boxes and arrows
+**Canvas:** 16:9 landscape orientation
+**Layout:** Left-to-right flow
+
+## Pipeline Stages:
+
+{stages_text}
+
+## Visual Specifications
+
+**Stage Boxes:**
+- Rounded rectangles (8px corner radius)
+- Gradient fill (blue to light blue)
+- Drop shadow (2px offset, 4px blur)
+- White text, bold font
+- Equal spacing between stages
+
+**Arrows:**
+- Bold arrows (4px width) with arrowheads
+- Color: #3B82F6 (blue)
+- Labels indicating data flow
+
+**Icons:**
+- Small icon in top-right of each box
+- Consistent style across all stages
+
+**Background:** Clean white or very light gray
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        narrative = f"""# {diagram_name}
+
+## Overview
+
+{description}
+
+## Pipeline Flow
+
+This diagram illustrates a multi-stage pipeline with the following stages:
+
+{stages_text}
+
+Each stage processes data and passes results to the next stage in sequence.
+
+## Business Value
+
+- **Visibility:** Clear understanding of processing flow
+- **Maintainability:** Easy to identify bottlenecks
+- **Reliability:** Validation at each stage
+- **Scalability:** Stages can be independently optimized
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        # Write files
+        prompt_path = self.prompts_dir / f"{diagram_id}.md"
+        narrative_path = self.narratives_dir / f"{diagram_id}.md"
+        
+        prompt_path.write_text(prompt, encoding='utf-8')
+        narrative_path.write_text(narrative, encoding='utf-8')
+        
+        logger.info(f"Generated pipeline diagram: {diagram_id}")
+        
+        return {
+            'id': diagram_id,
+            'prompt_path': str(prompt_path),
+            'narrative_path': str(narrative_path),
+            'generated_path': str(self.generated_dir / f"{diagram_id}-v1.png")
+        }
     
     def _generate_generic_flowchart(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
         """Generate generic flowchart from configuration."""
         return self._generate_placeholder_diagram(diagram_def)
+    
+    def _generate_module_structure(self, diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """Generate module structure diagram showing Python package organization."""
+        diagram_id = diagram_def.get('id')
+        diagram_name = diagram_def.get('name', 'Module Structure')
+        description = diagram_def.get('description', 'Python module organization')
+        
+        prompt = f"""# {diagram_name}
 
-        """Create the 3-part directory structure."""
+**AI Generation Instructions for ChatGPT DALL-E:**
+
+Create a professional hierarchical module structure diagram showing: {description}
+
+## Design Requirements
+
+**Style:** Clean tree/hierarchy diagram with folder icons
+**Canvas:** 1:1 square orientation for hierarchy visualization
+**Layout:** Top-down tree structure
+
+## Visual Specifications
+
+**Module Boxes:**
+- Folder icons for packages
+- File icons for modules
+- Nested indentation showing hierarchy
+- Color coding:
+  - Root: Dark blue (#1E3A8A)
+  - Packages: Medium blue (#3B82F6)
+  - Modules: Light blue (#93C5FD)
+
+**Connections:**
+- Thin lines connecting parent to children
+- Tree-like branching structure
+
+**Labels:**
+- Module/package names in monospace font
+- Small description text below each item
+
+**Background:** Clean white
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        narrative = f"""# {diagram_name}
+
+## Overview
+
+{description}
+
+## Module Organization
+
+This diagram shows the hierarchical structure of Python packages and modules, illustrating:
+
+- **Package Structure:** How code is organized into logical packages
+- **Module Dependencies:** Relationships between modules
+- **Code Organization:** Clean separation of concerns
+
+## Benefits
+
+- **Maintainability:** Clear structure makes code easy to navigate
+- **Scalability:** Modular design supports growth
+- **Testing:** Isolated modules are easier to test
+- **Collaboration:** Teams understand project organization
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        # Write files
+        prompt_path = self.prompts_dir / f"{diagram_id}.md"
+        narrative_path = self.narratives_dir / f"{diagram_id}.md"
+        
+        prompt_path.write_text(prompt, encoding='utf-8')
+        narrative_path.write_text(narrative, encoding='utf-8')
+        
+        logger.info(f"Generated module structure diagram: {diagram_id}")
+        
+        return {
+            'id': diagram_id,
+            'prompt_path': str(prompt_path),
+            'narrative_path': str(narrative_path),
+            'generated_path': str(self.generated_dir / f"{diagram_id}-v1.png")
+        }
+    
+    def _generate_plugin_system(self, plugins: List[Dict], diagram_def: Dict[str, Any]) -> Dict[str, str]:
+        """Generate plugin system architecture diagram."""
+        diagram_id = diagram_def.get('id')
+        diagram_name = diagram_def.get('name', 'Plugin System')
+        description = diagram_def.get('description', 'Plugin architecture and lifecycle')
+        
+        # Extract plugin names
+        plugin_names = [p.get('name', 'Unknown') for p in plugins[:5]]  # Limit to 5 for clarity
+        plugins_text = "\n".join([f"- {name}" for name in plugin_names])
+        
+        prompt = f"""# {diagram_name}
+
+**AI Generation Instructions for ChatGPT DALL-E:**
+
+Create a professional plugin architecture diagram showing: {description}
+
+## Design Requirements
+
+**Style:** Hub-and-spoke architecture with central core
+**Canvas:** 16:9 landscape orientation
+**Layout:** Central hub with plugins radiating outward
+
+## Core Components:
+
+- **Central Hub:** Core system with plugin manager
+- **Plugin Hooks:** Event system (ON_STARTUP, ON_SHUTDOWN, etc.)
+- **Example Plugins:**
+{plugins_text}
+
+## Visual Specifications
+
+**Hub (Center):**
+- Large rounded rectangle
+- Gradient fill (purple to blue)
+- "Plugin Manager" label
+- Hook connection points around perimeter
+
+**Plugins (Spokes):**
+- Medium rounded rectangles radiating from hub
+- Each with unique icon
+- Connected to hub with arrows
+- Color: Blue (#3B82F6)
+
+**Hooks:**
+- Small circles on hub perimeter
+- Labels: ON_STARTUP, ON_SHUTDOWN, ON_EVENT, etc.
+- Connection lines to plugins
+
+**Lifecycle Panel:**
+- Bottom corner: Loaded → Initialized → Executing → Cleanup
+- State flow with arrows
+
+**Background:** Clean white with subtle grid
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        narrative = f"""# {diagram_name}
+
+## Overview
+
+{description}
+
+## Plugin Architecture
+
+The plugin system enables extensibility without modifying core code:
+
+- **Central Hub:** Plugin manager coordinates all plugins
+- **Event Hooks:** Plugins respond to system events
+- **Isolation:** Plugins run independently
+- **Lifecycle:** Managed initialization, execution, and cleanup
+
+## Example Plugins
+
+{plugins_text}
+
+## Benefits
+
+- **Extensibility:** Add features without changing core
+- **Maintainability:** Plugins are self-contained
+- **Flexibility:** Enable/disable features dynamically
+- **Testing:** Plugins tested in isolation
+
+**Diagram ID:** {diagram_id}
+"""
+        
+        # Write files
+        prompt_path = self.prompts_dir / f"{diagram_id}.md"
+        narrative_path = self.narratives_dir / f"{diagram_id}.md"
+        
+        prompt_path.write_text(prompt, encoding='utf-8')
+        narrative_path.write_text(narrative, encoding='utf-8')
+        
+        logger.info(f"Generated plugin system diagram: {diagram_id}")
+        
+        return {
+            'id': diagram_id,
+            'prompt_path': str(prompt_path),
+            'narrative_path': str(narrative_path),
+            'generated_path': str(self.generated_dir / f"{diagram_id}-v1.png")
+        }
+
+    def _create_directory_structure(self):
         self.prompts_dir.mkdir(parents=True, exist_ok=True)
         self.narratives_dir.mkdir(parents=True, exist_ok=True)
         self.generated_dir.mkdir(parents=True, exist_ok=True)

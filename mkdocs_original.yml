@@ -1,0 +1,142 @@
+site_name: CORTEX
+site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
+site_author: Asif Hussain
+copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
+repo_url: https://github.com/asifhussain60/CORTEX
+repo_name: asifhussain60/CORTEX
+theme:
+  name: material
+  favicon: assets/images/CORTEX-logo.png
+  palette:
+  - scheme: default
+    primary: deep purple
+    accent: purple
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - scheme: slate
+    primary: deep purple
+    accent: purple
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
+  features:
+  - navigation.instant
+  - navigation.tracking
+  - navigation.tabs
+  - navigation.sections
+  - navigation.expand
+  - navigation.top
+  - search.suggest
+  - search.highlight
+  - content.code.copy
+  - content.tabs.link
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+extra_css:
+- stylesheets/custom.css
+- stylesheets/story.css
+- stylesheets/technical.css
+- https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
+
+# ============================================
+# NAVIGATION STRUCTURE - Simplified & Logical
+# 7 Main Sections: Home | The CORTEX Story | Getting Started | Architecture | Guides | Operations | Reference
+# ============================================
+nav:
+- Home: index.md
+- The CORTEX Story:
+  - The Awakening: diagrams/story/The-CORTEX-Story.md
+  - "01. The Amnesia Problem": diagrams/story/01-the-amnesia-problem.md
+  - "02. Building First Memory": diagrams/story/02-building-first-memory.md
+  - "03. The Learning System": diagrams/story/03-the-learning-system.md
+  - "04. Context Intelligence": diagrams/story/04-context-intelligence.md
+  - "05. The Dual Hemisphere Brain": diagrams/story/05-the-dual-hemisphere-brain.md
+  - "06. Intelligence & Automation": diagrams/story/06-intelligence-and-automation.md
+  - "07. Protection & Governance": diagrams/story/07-protection-and-governance.md
+  - "08. Integration & Extensibility": diagrams/story/08-integration-and-extensibility.md
+  - "09. Real-World Scenarios": diagrams/story/09-real-world-scenarios.md
+  - "10. The Transformation": diagrams/story/10-the-transformation.md
+- Getting Started:
+  - Quick Start: getting-started/quick-start.md
+  - Installation: getting-started/installation.md
+  - Configuration: getting-started/configuration.md
+- Architecture:
+  - Overview: architecture/overview.md
+  - Tier System: architecture/tier-system.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
+  - Diagrams:
+    - Module Structure: images/diagrams/architectural/module-structure.md
+    - Brain Protection: images/diagrams/architectural/brain-protection.md
+    - EPM Doc Generator: images/diagrams/architectural/epm-doc-generator-pipeline.md
+    - Agent Coordination: images/diagrams/strategic/agent-coordination.md
+    - Information Flow: images/diagrams/strategic/information-flow.md
+    - Tier Architecture: images/diagrams/strategic/tier-architecture.md
+- Guides:
+  - Developer Guide: guides/developer-guide.md
+  - Admin Guide: guides/admin-guide.md
+  - Best Practices: guides/best-practices.md
+  - Troubleshooting: guides/troubleshooting.md
+- Operations:
+  - Overview: operations/overview.md
+  - Entry Point Modules: operations/entry-point-modules.md
+  - Workflows: operations/workflows.md
+  - Health Monitoring: operations/health-monitoring.md
+  - Diagrams:
+    - Conversation Flow: images/diagrams/operational/conversation-flow.md
+    - Health Check: images/diagrams/operational/health-check.md
+    - Knowledge Graph Update: images/diagrams/operational/knowledge-graph-update.md
+- Reference:
+  - API Reference: reference/api.md
+  - Configuration: reference/configuration.md
+  - Response Templates: reference/response-templates.md
+  - Integration:
+    - Git Integration: images/diagrams/integration/git-integration.md
+    - MkDocs Integration: images/diagrams/integration/mkdocs-integration.md
+    - VSCode Integration: images/diagrams/integration/vscode-integration.md
+  - Performance:
+    - CI/CD Integration: performance/CI-CD-INTEGRATION.md
+    - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
+    - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
+markdown_extensions:
+- abbr
+- admonition
+- attr_list
+- def_list
+- footnotes
+- meta
+- md_in_html
+- tables
+- toc:
+    permalink: true
+    toc_depth: 3
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.betterem:
+    smart_enable: all
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.details
+# - pymdownx.emoji:
+#     emoji_index: null
+#     emoji_generator: null
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.snippets
+- pymdownx.superfences
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+plugins:
+- search:
+    lang: en

@@ -49,6 +49,20 @@ body[data-md-path*="diagrams/story/"] .md-typeset {
    STORY HEADERS (Clean grey theme)
    ============================================================================ */
 
+/* Story page title with CORTEX logo */
+body[data-md-path*="diagrams/story/"] h1:first-of-type::before {
+    content: "";
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    background-image: url('../assets/images/CORTEX-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 0.3em;
+    vertical-align: -0.15em;
+}
+
 .story-section h1,
 [data-content-type="story"] h1 {
     color: #2c3e50;        /* Dark grey */

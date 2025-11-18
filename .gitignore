@@ -58,3 +58,6 @@ cortex-brain/tier1/working_memory.db
 
 # Ambient capture logs (runtime state)
 logs/ambient_capture.log
+
+# Workspace directory (external project files)
+workspace/

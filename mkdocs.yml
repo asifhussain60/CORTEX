@@ -50,16 +50,7 @@ extra_css:
 # ============================================
 nav:
 - Home: index.md
-- The CORTEX Story:
-  - Prologue - The Amnesia Problem: story/CORTEX-STORY/01-amnesia-problem.md
-  - Chapter 1 - First Memory: story/CORTEX-STORY/02-first-memory.md
-  - Chapter 2 - Brain Architecture: story/CORTEX-STORY/03-brain-architecture.md
-  - Chapter 3 - The Left Brain: story/CORTEX-STORY/04-left-brain.md
-  - Chapter 4 - The Right Brain: story/CORTEX-STORY/05-right-brain.md
-  - Chapter 5 - Corpus Callosum: story/CORTEX-STORY/06-corpus-callosum.md
-  - Chapter 6 - Knowledge Graph: story/CORTEX-STORY/07-knowledge-graph.md
-  - Chapter 7 - Protection Layer: story/CORTEX-STORY/08-protection-layer.md
-  - Chapter 8 - The Awakening: story/CORTEX-STORY/09-awakening.md
+- The CORTEX Story: diagrams/story/The CORTEX Story.md
 - Getting Started:
   - Quick Start: getting-started/quick-start.md
   - Installation: getting-started/installation.md
