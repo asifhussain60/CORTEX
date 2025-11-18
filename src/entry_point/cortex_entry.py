@@ -697,3 +697,34 @@ class CortexEntry:
             logger.setLevel(logging.INFO)
         
         return logger
+    
+    def cleanup(self) -> None:
+        """
+        Close all tier database connections.
+        
+        This ensures database files are not locked during cleanup operations
+        (particularly important on Windows during test teardown).
+        
+        Safe to call multiple times (idempotent).
+        """
+        try:
+            # Close Tier 2 Knowledge Graph connection
+            if hasattr(self, 'tier2') and self.tier2:
+                if hasattr(self.tier2, 'connection_manager'):
+                    self.tier2.connection_manager.close()
+                    self.logger.info("Tier 2 database connection closed")
+            
+            # Close Tier 1 connection (if connection manager exists)
+            if hasattr(self, 'tier1') and self.tier1:
+                if hasattr(self.tier1, 'close'):
+                    self.tier1.close()
+                    self.logger.info("Tier 1 database connection closed")
+            
+            # Close Tier 3 connection (if connection manager exists)
+            if hasattr(self, 'tier3') and self.tier3:
+                if hasattr(self.tier3, 'close'):
+                    self.tier3.close()
+                    self.logger.info("Tier 3 database connection closed")
+        
+        except Exception as e:
+            self.logger.warning(f"Cleanup encountered error: {e}")

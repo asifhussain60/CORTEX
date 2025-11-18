@@ -21,7 +21,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all 6 layers
 rules:
-  total_count: 25
+  total_count: 26
   layers: 6
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -1271,6 +1271,143 @@ protection_layers:
           ├── summaries/            # Quick overviews, daily progress
           │   ├── TIER3-IMPLEMENTATION-SUMMARY.md
           │   └── WEEKLY-PROGRESS-SUMMARY.md
+          │
+      
+      - rule_id: "YAML_ONLY_PLANNING"
+        name: "YAML-Only Planning Documents (No Markdown Plans)"
+        severity: "blocked"
+        description: "ALL planning documents MUST be created in YAML format, NEVER Markdown - prevents documentation bloat and enforces machine-readable standards"
+        
+        detection:
+          combined_keywords:
+            planning_document:
+              - "plan"
+              - "planning"
+              - "roadmap"
+              - "design"
+              - "consolidation"
+              - "implementation plan"
+              - "comprehensive plan"
+            and_markdown_format:
+              - ".md"
+              - "markdown"
+              - "create markdown plan"
+            not_user_facing:
+              - "!story"
+              - "!guide"
+              - "!tutorial"
+          scope: ["file_path", "description", "operation"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "format_validation"
+            description: "Verify plan document created as YAML, not Markdown"
+            requirement: "File extension MUST be .yaml, NOT .md"
+          
+          - type: "location_validation"
+            description: "Verify plan placed in planning folder"
+            requirement: "File path MUST be cortex-brain/documents/planning/"
+          
+          - type: "schema_validation"
+            description: "Verify YAML follows structured planning schema"
+            requirement: "YAML MUST validate against planning schema"
+        
+        alternatives:
+          - "Create YAML plan in cortex-brain/documents/planning/[name].yaml"
+          - "Use structured YAML schemas for all planning documents"
+          - "Reference existing YAML plans: YAML-PHASE-TRACKER-DESIGN.yaml"
+          - "Use cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml as template"
+        
+        evidence_template: |
+          🚨 MARKDOWN PLANNING DOCUMENT DETECTED
+          
+          File: '{file_path}'
+          Type: Planning Document (should be YAML)
+          
+          VIOLATION: Planning documents MUST be YAML format, NOT Markdown
+          
+          ❌ WRONG:
+          - DOCUMENTATION-CONSOLIDATION-COMPREHENSIVE-PLAN.md
+          - IMPLEMENTATION-PLAN.md
+          - FEATURE-DESIGN.md
+          - ARCHITECTURE-PLAN.md
+          
+          ✅ CORRECT:
+          - documentation-consolidation-plan.yaml
+          - implementation-plan.yaml
+          - feature-design.yaml
+          - architecture-plan.yaml
+          
+          Why YAML-Only Planning?
+          
+          1. **Prevents Documentation Bloat**
+             - Markdown plans tend to be verbose (10-50 pages)
+             - YAML enforces concise structured format
+             - Token efficiency (YAML 60-80% smaller than MD)
+          
+          2. **Machine-Readable**
+             - YAML can be parsed and processed programmatically
+             - Enables automated validation and tracking
+             - Integrates with CORTEX brain systems
+          
+          3. **Consistency**
+             - Enforced schema structure
+             - Standard fields across all plans
+             - No "wall of text" formatting variations
+          
+          4. **Searchability**
+             - Structured queries on plan fields
+             - Easy to filter and aggregate
+             - Better brain integration
+          
+          Correct Location:
+          - cortex-brain/documents/planning/[plan-name].yaml
+          
+          Exception:
+          - User-facing documentation (stories, guides, tutorials) CAN be Markdown
+          - Internal planning/design MUST be YAML
+        
+        rationale: |
+          YAML_ONLY_PLANNING: Documentation Bloat Prevention
+          
+          Real incident (2025-11-18):
+          - CORTEX created: DOCUMENTATION-CONSOLIDATION-COMPREHENSIVE-PLAN.md
+          - File size: 23KB (extensive markdown document)
+          - User: "why is CORTEX still generating md plans instead of yaml plans?"
+          - User: "Add to tier 0 that planning should ALWAYS done using yaml files NEVER MD to prevent documentation bloat"
+          
+          Problem with Markdown Plans:
+          - Verbose "comprehensive" documents (10-50 pages typical)
+          - Heavy token cost to read/process
+          - Difficult to parse programmatically
+          - No enforced structure (inconsistent formats)
+          - Accumulates as "documentation debt"
+          
+          YAML Planning Benefits:
+          - Enforced concise structure
+          - 60-80% token reduction vs Markdown
+          - Machine-readable for automation
+          - Consistent schema across all plans
+          - Easy to validate and query
+          
+          Implementation:
+          - CORTEX creates planning YAML schemas
+          - Validation against JSON Schema
+          - Brain integration for automated tracking
+          - Markdown reserved ONLY for user-facing docs (stories, guides)
+          
+          Related Rules:
+          - MACHINE_READABLE_FORMATS (Tier 0 instinct)
+          - NO_ROOT_SUMMARY_DOCUMENTS (Layer 3)
+          
+          Reference Examples:
+          - cortex-brain/documents/planning/YAML-PHASE-TRACKER-DESIGN.yaml
+          - cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml
+          - cortex-operations.yaml
+          
+          User Feedback:
+          "Add to tier 0 of cortex that planning should ALWAYS done using yaml files NEVER MD 
+          to prevent documentation bloat" - Asif Hussain, 2025-11-18
           │
           ├── investigations/       # Research, architecture investigations
           │   ├── AUTH-FEATURE-INVESTIGATION.md

@@ -117,9 +117,46 @@ class KnowledgeGraph:
     # ---------------------- Search ----------------------
     def search_patterns(self, query: str, **kwargs) -> List[Dict[str, Any]]:
         return self.pattern_search.search(query=query, **kwargs)
+    
+    def search(self, query: str, **kwargs) -> List[Dict[str, Any]]:
+        """Alias for search_patterns for backward compatibility."""
+        return self.search_patterns(query=query, **kwargs)
 
     def search_patterns_with_namespace_priority(self, query: str, **kwargs) -> List[Dict[str, Any]]:
         return self.pattern_search.search_with_namespace_priority(query=query, **kwargs)
+    
+    def add_pattern(self, pattern: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Add a pattern (alias for store_pattern for backward compatibility).
+        
+        Args:
+            pattern: Pattern dictionary containing fields like:
+                - pattern_id: Optional unique ID
+                - title: Pattern title
+                - content: Pattern content
+                - pattern_type: Type of pattern (workflow, intent, validation, etc.)
+                - confidence: Confidence score (0.0-1.0)
+                - etc.
+            
+        Returns:
+            Result dictionary with pattern_id and status
+        """
+        # Extract fields from pattern dict with defaults
+        import uuid
+        
+        return self.store_pattern(
+            pattern_id=pattern.get('pattern_id', str(uuid.uuid4())),
+            title=pattern.get('title', 'Untitled Pattern'),
+            content=pattern.get('content', ''),
+            pattern_type=pattern.get('pattern_type', 'workflow'),
+            confidence=pattern.get('confidence', 1.0),
+            source=pattern.get('source'),
+            metadata=pattern.get('metadata'),
+            is_pinned=pattern.get('is_pinned', False),
+            scope=pattern.get('scope', 'application'),
+            namespaces=pattern.get('namespaces', []),
+            is_cortex_internal=pattern.get('is_cortex_internal', False)
+        )
 
     def get_cortex_patterns(self, **kwargs) -> List[Dict[str, Any]]:
         return self.pattern_search.get_cortex_patterns(**kwargs)

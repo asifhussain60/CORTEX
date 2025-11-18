@@ -6,6 +6,7 @@ repo_url: https://github.com/asifhussain60/CORTEX
 repo_name: asifhussain60/CORTEX
 theme:
   name: material
+  logo: assets/images/CORTEX-logo.png
   favicon: assets/images/CORTEX-logo.png
   palette:
   - scheme: default
@@ -118,6 +119,7 @@ markdown_extensions:
     generic: true
 - pymdownx.betterem:
     smart_enable: all
+- pymdownx.smartsymbols
 - pymdownx.caret
 - pymdownx.mark
 - pymdownx.tilde

@@ -17,6 +17,7 @@ from src.cortex_agents.agent_types import AgentType
 from src.cortex_agents.strategic.architect import ArchitectAgent
 from src.cortex_agents.work_planner.agent import WorkPlanner
 from src.cortex_agents.health_validator.agent import HealthValidator
+from src.cortex_agents.tactical.code_executor import CodeExecutor
 
 
 class AgentExecutor:
@@ -130,6 +131,13 @@ class AgentExecutor:
         if agent_type == AgentType.ARCHITECT:
             agent = ArchitectAgent(
                 name="Architect",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+        elif agent_type == AgentType.EXECUTOR:
+            agent = CodeExecutor(
+                name="CodeExecutor",
                 tier1_api=self.tier1,
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3

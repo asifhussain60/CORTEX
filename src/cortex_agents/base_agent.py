@@ -55,6 +55,7 @@ class AgentResponse:
         agent_name: Name of the agent that generated this response
         duration_ms: Execution time in milliseconds
         next_actions: Suggested follow-up actions
+        error: Optional error message if execution failed
     
     Example:
         response = AgentResponse(
@@ -71,6 +72,7 @@ class AgentResponse:
     agent_name: str = ""
     duration_ms: float = 0.0
     next_actions: List[str] = field(default_factory=list)
+    error: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 
