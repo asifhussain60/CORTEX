@@ -969,11 +969,290 @@ Perfect! Now I understand the complete solution. The problem is that mkdocs.yml 
 Let me fix this by updating the mkdocs.yml navigation to include all 9 chapters AND add the new navigation structure: 
 
 Using "Replace String in File"
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md). let's plan a new feature called "mkdocs restyling"
+
+GitHub Copilot: I'll read the CORTEX prompt instructions and then help you plan the "mkdocs restyling" feature. 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/.github/CopilotChats/mkdocs-restyling.md)
+
+I'll help you plan the "mkdocs restyling" feature following the CORTEX planning workflow. Let me create a comprehensive planning document. 
+
+Created 4 todos
+
+Read [](file:///d%3A/PROJECTS/CORTEX/mkdocs.yml)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/stylesheets/custom.css)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/stylesheets/technical.css)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/stylesheets/story.css)
+
+Completed (1/4) *Create mkdocs-restyling planning document*
+
+Created [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/documents/planning/features/active/PLAN-2025-11-18-mkdocs-restyling.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/.github/CopilotChats/mkdocs-restyling.md)
+
+Now let me create a comprehensive planning document based on the conversation history and CORTEX planning principles: 
+
+Created [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/documents/planning/features/active/PLAN-2025-11-18-mkdocs-restyling-COMPREHENSIVE.md)
+
+Completed (3/4) *Define Material Design 3 token system*
+
+Perfect! Now let me provide you with the final response:
+
+🧠 **CORTEX Feature Planning - MkDocs Restyling**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:**
+You want to plan a new feature called "mkdocs restyling" following the CORTEX planning workflow, including comprehensive analysis, phased implementation, and test strategy.
+
+⚠️ **Challenge:** ✓ **Accept**
+Based on the conversation history in mkdocs-restyling.md, I can see you've already done significant work on MkDocs (fixing broken links, regenerating docs, fixing story navigation). This planning document will build on that foundation to create a Material Design 3 restyling plan.
+
+💬 **Response:**
+I've created a comprehensive planning document that analyzes the current state of your MkDocs site (1,590 lines of CSS across 3 files), identifies what's already good (gradient backgrounds, Comic Sans MS for story), and proposes a phased Material Design 3 adoption strategy.
+
+**Key Findings:**
+
+**Current State:**
+- ✅ Material theme already configured
+- ✅ CORTEX brand colors defined (#6366F1 indigo, #8B5CF6 purple)
+- ✅ Comic Sans MS font for story sections (CRITICAL - must preserve)
+- ✅ Gradient backgrounds, hero section, Sacred Rules styling
+- ❌ Hardcoded values throughout (not using design tokens)
+- ❌ No motion/animation system
+- ❌ Inconsistent spacing (1rem, 2rem, 1.5rem mixed)
+
+**What I've Planned:**
+
+**Phase 1: Foundation (4-5 hours)**
+- Create `material-tokens.css` with full MD3 design system (200 lines)
+- Refactor custom.css to use tokens (colors, spacing, elevation, typography)
+- Test incrementally (preserve Comic font!)
+
+**Phase 2: Extension (2-3 hours)**
+- Apply tokens to technical.css and story.css
+- Coordinate all 3 files with unified token system
+
+**Phase 3: Enhancements (3-4 hours)**
+- Add MD3 state layers (hover, focus, press)
+- Implement motion tokens for smooth transitions
+- Polish interactive elements
+
+**Phase 4: Polish (1-2 hours)**
+- Verify WCAG AA accessibility
+- Add focus indicators
+- Optimize CSS (reduce file size 5-10%)
+
+**Critical Preservation Rules:**
+- ❌ **DO NOT CHANGE** Comic Sans MS font for story sections (CORTEX brand identity)
+- ❌ **DO NOT CHANGE** Ancient Rules styling (Cinzel font, sacred text aesthetic)
+- ❌ **DO NOT CHANGE** Gradient backgrounds on headers
+- ✅ **SAFE TO CHANGE** Hardcoded values → MD3 tokens
+
+**CSS Files:**
+1. custom.css (753 lines) - Main target
+2. technical.css (379 lines) - Apply tokens
+3. story.css (458 lines) - Apply tokens (preserve Comic font)
+4. `docs/stylesheets/material-tokens.css` (NEW - 200 lines) - Token system
+
+**Material Design 3 Token System:**
+- Color tokens (primary, secondary, tertiary, surface hierarchy)
+- Elevation tokens (5 levels)
+- Typography scale (display, headline, title, body)
+- Spacing tokens (4px/8px grid)
+- Shape tokens (border radius)
+- Motion tokens (duration + easing curves)
+- State layer opacities (hover, focus, press)
+
+📝 **Your Request:** Plan a new feature called "mkdocs restyling"
+
+🔍 **Next Steps:**
+   ☐ Phase 1: Material Design Foundation (4-5 hours)
+      • Create material-tokens.css with comprehensive MD3 design system
+      • Refactor custom.css colors → tokens
+      • Refactor custom.css spacing → tokens
+      • Refactor custom.css elevation/shape → tokens
+      • Refactor custom.css typography → tokens
+      • Test on localhost (verify Comic font preserved)
+   
+   ☐ Phase 2: Extend to Other CSS Files (2-3 hours)
+      • Apply tokens to technical.css
+      • Apply tokens to story.css (preserve Comic font!)
+      • Test all pages
+   
+   ☐ Phase 3: Component Enhancements (3-4 hours)
+      • Add MD3 state layers to navigation
+      • Add MD3 state layers to buttons
+      • Add hover motion to cards
+      • Test all interactions
+   
+   ☐ Phase 4: Accessibility & Optimization (1-2 hours)
+      • Verify WCAG AA color contrast
+      • Add focus indicators
+      • Optimize CSS performance
+      • Final testing (Lighthouse audit)
+   
+   **Total Estimate:** 10-12 hours
+   
+   Ready to proceed with Phase 1 (create material-tokens.css and begin refactoring)?
+
+**Planning Document Created:**
+PLAN-2025-11-18-mkdocs-restyling-COMPREHENSIVE.md
+
+The document includes:
+- Complete Material Design 3 token system (code ready to use)
+- Before/after CSS examples
+- Git commit strategy for each phase
+- Detailed testing checklist
+- Risk analysis with mitigation
+- Token usage reference guide
+- Success metrics (objective + subjective)
+
+Made changes.
+
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
+If I give you a sample css folder such as workspace\Tales\Tales-3.3.6-v3\HTML can you steal the styling and apply to mkdocs?
+
+GitHub Copilot: Summarized conversation history🧠 **CORTEX CSS Migration & Styling**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:**
+   You want to extract CSS styling from an external HTML template folder (Tales-3.3.6-v3) and apply those styles to your MkDocs documentation site, essentially "stealing" the professional look and feel.
+
+⚠️ **Challenge:** ✓ **Accept**
+   This is a smart approach for rapid design improvement. I can analyze the external CSS, extract reusable patterns (color schemes, typography, component styles, animations), and adapt them to MkDocs Material theme structure while preserving CORTEX brand identity (Comic Sans MS for story sections, gradient backgrounds, hemisphere badges).
+
+💬 **Response:**
+   I'll create a systematic CSS migration workflow:
+
+**Phase 1: Discovery & Analysis**
+- Scan the Tales template CSS folder
+- Extract design tokens (colors, typography, spacing, shadows)
+- Identify reusable component patterns (cards, buttons, navigation, code blocks)
+- Document layout structure and responsive breakpoints
+
+**Phase 2: Compatibility Mapping**
+- Map Tales CSS classes to MkDocs Material theme selectors
+- Identify conflicts with existing custom.css/technical.css/story.css
+- Plan integration strategy (override, extend, or replace)
+
+**Phase 3: Selective Migration**
+- Extract valuable styles (modern UI components, professional polish)
+- Adapt to MkDocs HTML structure (`.md-typeset`, `.md-nav`, etc.)
+- Preserve CORTEX critical elements (Comic font, Ancient Rules, gradients)
+- Create new `tales-inspired.css` or merge into existing files
+
+**Phase 4: Testing & Refinement**
+- Test on localhost (verify no visual regressions)
+- Ensure responsive design works (mobile, tablet, desktop)
+- Validate accessibility (color contrast, focus indicators)
+- Performance check (CSS file size, load times)
+
+**What I need from you:**
+1. Path to the Tales CSS folder (e.g., css)
+2. Which aspects you like most (color scheme? buttons? cards? overall layout?)
+3. Any Tales elements to avoid (features that don't fit CORTEX identity)
+
+**Critical Preservation (Non-Negotiable):**
+- ✅ Comic Sans MS font for story sections (brand identity)
+- ✅ Ancient Rules styling with Cinzel font
+- ✅ Gradient backgrounds (left brain blue, right brain purple)
+- ✅ CORTEX color tokens (--cortex-primary: #6366F1, etc.)
+
+📝 **Your Request:** Migrate CSS styling from Tales HTML template to MkDocs
+
+🔍 **Next Steps:**
+   1. Provide path to Tales CSS folder (I'll analyze structure and extract styles)
+   2. Review extracted design tokens (I'll show color palette, typography scale, spacing system)
+   3. Approve migration plan (which styles to adopt, which to preserve from current MkDocs)
+   4. Execute CSS migration with testing after each major component
+   
+   OR if you want me to proceed with assumptions:
+   
+   5. I can search your workspace for `Tales-3.3.6-v3` folder and begin analysis automatically
+   
+   Ready to start discovery phase?
+
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
+I want the Home page to show the executive cortex feature list. After the Home item on the top menu, there should the options:
+- Cortex Bible (This shiould show the CORTEX rulebook book in a beautiful style)
+- The Awakening (this should load the complete cortex story with Asif codenstein and copilot with table of contents on the let for easy user navigation)
+- Remaining technical documentation and tutorial menu items.
+
+Add this to the plan and continue discovery
+
+GitHub Copilot: Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/documents/planning/features/active/PLAN-2025-11-18-mkdocs-restyling-COMPREHENSIVE.md)
+
+Summarized conversation historyNow I need to read the mkdocs.yml to understand the current navigation structure, then update the plan with the new navigation requirements. 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/mkdocs.yml)
+
+Now let me check what content exists in the index.md (Home page) and if there's a CORTEX rulebook or features document: 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/index.md)
+
+Searched for files matching `**/capabilities*.md`, no matches
+
+Searched for files matching `**/features*.md`, no matches
+
+Searched for files matching `**/rules*.md`, no matches
+
+Let me search for capabilities documentation in the cortex-brain folder: 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/capabilities.yaml)
+
+Summarized conversation historyNow let me read the 9 story chapter files to understand their structure: 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/01-amnesia-problem.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/02-first-memory.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/03-brain-architecture.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/04-left-brain.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/05-right-brain.md)
+
+Let me continue reading the remaining story chapters: 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/06-corpus-callosum.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/07-knowledge-graph.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/08-protection-layer.md)
+
+Read [](file:///d%3A/PROJECTS/CORTEX/docs/story/CORTEX-STORY/09-awakening.md)
+
+Summarized conversation historyNow I have a comprehensive understanding. Let me create an organized plan and add it to the mkdocs restyling document: 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/.github/CopilotChats/mkdocs-restyling.md)
+
+Summarized conversation historyNow let me update the plan with your new navigation requirements and continue with discovery: 
+
+Using "Replace String in File"
 
 
 ```
 
 ```
+Summarized conversation historyNow let me continue with discovery and planning. Let me check what files exist for the CORTEX rulebook: 
 
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/brain-protection-rules.yaml#1-1), lines 1 to 101
+
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/capabilities.yaml#1-1), lines 1 to 101
+
+Summarized conversation historyPerfect! Now let me add this comprehensive plan to the mkdocs restyling document: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Summarizing conversation history...
 
 Made changes.

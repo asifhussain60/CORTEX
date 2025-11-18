@@ -140,7 +140,7 @@ Create a professional one-page infographic showing CORTEX's complete architectur
 **5 LEFT Agents (Vertical Stack, 140px height each):**
 
 1. **Code Executor** (y: 600px)
-   - Icon: `</>` (40×40px, #3B82F6)
+   - Icon: code brackets (40×40px, #3B82F6)
    - Name: "Code Executor" (Bold, 18pt)
    - Role: "Implements with TDD" (14pt, gray)
 

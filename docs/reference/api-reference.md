@@ -225,7 +225,7 @@ except CortexError as e:
 
 ## See Also
 
-- [Architecture Overview](../architecture/README.md)
-- [Plugin Development Guide](../plugins/development-guide.md)
-- [Configuration Reference](../reference/configuration-reference.md)
-- [Testing Guide](../testing/guide.md)
+- [Architecture Overview](../architecture/overview.md)
+- [Plugin Development Guide](../plugins/development.md)
+- [Configuration Reference](../reference/configuration.md)
+- [Best Practices Guide](../guides/best-practices.md)

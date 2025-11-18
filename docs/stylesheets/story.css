@@ -15,22 +15,32 @@
 /* AUTO-APPLY COMIC FONT TO ALL STORY PAGES */
 /* Target all pages in the /diagrams/story/ directory */
 /* This works because MkDocs Material sets data-md-path attribute on body */
+/* CRITICAL: Use !important to override Material theme defaults */
+body[data-md-path*="diagrams/story/"],
+body[data-md-path*="diagrams/story/"] *,
 body[data-md-path*="diagrams/story/"] .md-typeset,
+body[data-md-path*="diagrams/story/"] .md-typeset *,
 body[data-md-path*="diagrams/story/"] .md-content,
+body[data-md-path*="diagrams/story/"] .md-content *,
 body[data-md-path*="diagrams/story/"] article.md-content__inner,
-body[data-md-path*="diagrams/story/"] article.md-content__inner * {
+body[data-md-path*="diagrams/story/"] article.md-content__inner *,
+body[data-md-path*="diagrams/story/"] .md-content__inner,
+body[data-md-path*="diagrams/story/"] .md-content__inner * {
     font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif !important;
 }
 
 /* Also apply to manual story sections */
 .story-section,
+.story-section *,
 .md-content [data-content-type="story"],
-.md-content.story-page {
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #333333;       /* Dark grey text */
-    background-color: #ffffff;  /* White background */
+.md-content [data-content-type="story"] *,
+.md-content.story-page,
+.md-content.story-page * {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    color: #333333 !important;       /* Dark grey text */
+    background-color: #ffffff !important;  /* White background */
 }
 
 /* AUTO-APPLY: All files under /diagrams/story/ automatically get comic font */

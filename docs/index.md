@@ -2,197 +2,300 @@
 <img src="assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px;">
 </div>
 
-<div class="ancient-rules" markdown="1">
-
-## The Sacred Laws of CORTEX
-
-*Herein lie the immutable principles that govern the realm of intelligent automation*
-
----
-
-### 📜 Layer I: Instinct Immutability
-
-**The Foundation Upon Which All Else Rests**
-
-**TDD_ENFORCEMENT** - *Test-Driven Development Enforcement*  
-No code shall be written without first establishing the test by which it shall be judged. The cycle must be followed: RED (failing test), GREEN (implementation), REFACTOR (improvement). Those who bypass this sacred cycle invite chaos into their realm.
-
-**DEFINITION_OF_DONE** - *The Standard of Completion*  
-No work shall be deemed complete whilst errors persist or warnings cry out for attention. Zero errors, zero warnings - this is the law. Only when all validation passes may one claim victory.
-
-**DEFINITION_OF_READY** - *Prerequisites for Commencement*  
-Before any work begins, requirements must be documented, dependencies identified, technical design approved, and test strategy defined. To proceed without preparation is to court disaster.
-
-**BRAIN_PROTECTION_TESTS_MANDATORY** - *Guardian of Core Integrity*  
-The brain protection tests are sacred sentinels that must never fail. They validate path handling, protection logic, conversation tracking, and configuration loading. A 100% pass rate is not a goal but a covenant - any failure blocks all work until resolved.
-
-**MACHINE_READABLE_FORMATS** - *The Principle of Efficiency*  
-Use YAML for structured data, JSON for metrics, code files for examples. Reserve Markdown for user-facing narratives only. Machine-readable formats reduce tokens by 60% and prevent documentation drift.
-
-**CORTEX_PROMPT_FILE_PROTECTION** - *Stability of the Entry Point*  
-The file CORTEX.prompt.md must never be renamed. It is the single entry point for GitHub Copilot integration. To rename it is to break the covenant. Updates must follow the sacred procedure: create temporary file, clear original, copy content, delete temporary.
-
----
-
-### 🛡️ Layer II: Tier Boundary Protection
-
-**The Organization of Knowledge**
-
-**TIER0_APPLICATION_DATA** - *Immutability of Governance*  
-Tier 0 contains only generic CORTEX principles, never application-specific data. Application data belongs in Tier 2 with proper scope markers. To pollute Tier 0 is to corrupt the foundation.
-
-**TIER2_CONVERSATION_DATA** - *Proper Data Placement*  
-Raw conversation data resides in Tier 1 (conversation-history.jsonl). Tier 2 holds only aggregated patterns and knowledge extracted from conversations. Keep raw data in Tier 1, patterns in Tier 2.
-
----
-
-### 🏛️ Layer III: SOLID Compliance
-
-**The Architecture of Excellence**
-
-**SINGLE_RESPONSIBILITY** - *One Purpose, One Module*  
-Beware the God Object that attempts to do all things. Each agent must have a single, well-defined responsibility. When tempted to add "modes" or "switches," create a dedicated agent instead.
-
-**DEPENDENCY_INVERSION** - *Flexibility Through Abstraction*  
-Hardcoded paths and fixed dependencies are the enemies of maintainability. Use dependency injection, load from configuration, pass as parameters. Never embed absolutes into the fabric of the code.
-
-**OPEN_CLOSED** - *Extension Over Modification*  
-When behavior must change, extend through new implementations rather than modifying existing ones. Use strategy patterns, decorators, and wrappers. Keep the foundation stable while building upward.
-
-**CODE_STYLE_CONSISTENCY** - *Harmony in Expression*  
-Generated code must blend seamlessly with the existing codebase. Match indentation, naming conventions, bracket styles, and documentation formats. But never compromise on best practices - SOLID principles and security trump style preferences.
-
----
-
-### 🧠 Layer IV: Hemisphere Specialization
-
-**The Division of Labor**
-
-**LEFT_BRAIN_TACTICAL** - *Execution Without Planning*  
-The left hemisphere executes but does not plan. Code executors, test generators, and error correctors focus on implementation. Strategic planning belongs to the right brain.
-
-**RIGHT_BRAIN_STRATEGIC** - *Planning Without Execution*  
-The right hemisphere plans but does not execute. Work planners and intent routers design strategy. They delegate actual execution to left brain agents through the corpus callosum.
-
----
-
-### 💀 Layer V: SKULL Protection
-
-**Safety, Knowledge, Validation & Learning**
-
-**SKULL-001: Test Before Claim** - *Never claim completion without validation*  
-Every fix, every feature, every change must be validated by automated tests before claiming success. "Fixed ✅" without "Verified by: test_name" is forbidden.
-
-**SKULL-002: Integration Verification** - *Test the full chain*  
-Integration must be tested end-to-end, not just configuration. Verify the actual execution path from A → B → C. Configuration alone proves nothing.
-
-**SKULL-003: Visual Regression** - *CSS changes require visual validation*  
-CSS and UI changes must be validated visually in the browser, with computed styles verified. Cache must be cleared. Before/after screenshots are required.
-
-**SKULL-004: Retry Without Learning** - *Diagnose before repeating*  
-When a fix fails, diagnose the root cause before retrying. Never apply the same fix multiple times without understanding why it failed. Change approach based on diagnosis.
-
-**SKULL-005: Transformation Verification** - *Operations claiming transformation must produce changes*  
-If an operation claims to transform files, the file hash must differ before and after. Git diff must show modifications. Pass-through operations must not claim transformation success.
-
-**SKULL-006: Privacy Protection** - *No machine-specific data in published packages*  
-Published packages must contain no absolute paths (C:\\, D:\\, /home/, /Users/), no machine names (AHHOME), no log files, no coverage artifacts, no health reports. Use template configs with placeholders.
-
-**SKULL-007: Faculty Integrity** - *Published CORTEX must be fully operational*  
-Published packages must contain all essential faculties: all four tiers (Tier 0-3), all ten specialist agents, operations framework, plugin system, entry points, and user documentation. Incomplete CORTEX is broken CORTEX.
-
-**SKULL-008: Multi-Track Configuration Validation** - *Parallel development requires proper setup*  
-Multi-track mode requires balanced workloads (±30%), isolated dependencies (no cross-track), proper machine assignments (1:1 mapping), and unique track names. Validate before splitting work.
-
-**SKULL-009: Track Work Isolation** - *Stay within assigned boundaries*  
-When working on Track A, only modify modules assigned to Track A. Cross-track modifications break parallel development guarantees and create merge conflicts during consolidation.
-
-**SKULL-010: Consolidation Integrity** - *Merge without data loss*  
-Track consolidation must preserve all progress from all tracks. Compare module counts before/after, log all conflict resolutions, archive split documents before deletion, and commit with full merge details.
-
----
-
-### 🎯 Layer VI: Git & Distribution Protection
-
-**Isolation and Integrity**
-
-**GIT_ISOLATION_ENFORCEMENT** - *CORTEX code never pollutes user repositories*  
-CORTEX framework code must never be committed to user application repositories. Keep CORTEX in its own repository. Applications reference CORTEX via configuration, not by copying its source.
-
-**DISTRIBUTED_DATABASE_ARCHITECTURE** - *Use tier-specific databases*  
-Never create a monolithic database. Use tier-specific storage: Tier 1 (conversation-history.jsonl), Tier 2 (knowledge-graph.yaml), Tier 3 (development-context.yaml). Distributed data prevents corruption.
-
----
-
-*These laws are not mere suggestions but the bedrock upon which CORTEX stands. To violate them is to invite entropy into order, chaos into reason. Follow them with diligence, and your AI companion shall serve with wisdom and reliability.*
-
-*Inscribed in the annals of CORTEX, November 2025*
-
-✦
-
-</div>
-
----
-
+<!-- Hero Section -->
 <div class="cortex-hero">
-  <h1>⚡ The Solution: CORTEX</h1>
-  <p>Long-term memory and strategic planning for GitHub Copilot</p>
-  <a href="getting-started/quick-start/" class="cta-button">Get Started</a>
-  <a href="awakening-of-cortex/" class="cta-button secondary">Read the Story</a>
+  <h1>🧠 CORTEX</h1>
+  <p class="subtitle">Cognitive Operation & Reasoning Through EXtension for Copilot</p>
+  <p class="description">Transforming GitHub Copilot from a forgetful intern into an expert partner with long-term memory and strategic planning</p>
+  <div class="hero-actions">
+    <a href="getting-started/quick-start/" class="cta-button primary">Get Started</a>
+    <a href="diagrams/story/The CORTEX Story/" class="cta-button secondary">Read the Story</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value">97.2%</div>
+    <div class="stat-label">Token Reduction</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">4</div>
+    <div class="stat-label">Memory Tiers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">10</div>
+    <div class="stat-label">Specialist Agents</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">100%</div>
+    <div class="stat-label">Test Coverage</div>
+  </div>
+</div>
+
+<!-- Alert: New Feature -->
+<div class="alert alert-info">
+  <strong>🎉 New in CORTEX 2.0:</strong> Dual-hemisphere brain architecture with left/right brain specialization, 6-layer protection system, and automatic knowledge graph learning.
 </div>
 
 ---
 
-## 🧠 Core Architecture
+## 🎯 Core Capabilities
 
-CORTEX is a sophisticated cognitive architecture that gives Copilot a permanent, learning brain:
+<div class="capability-grid">
+  
+  <!-- Code Writing -->
+  <div class="capability-card">
+    <div class="capability-icon">💻</div>
+    <h3>Code Writing</h3>
+    <p>Multi-language support with test-first workflow (RED → GREEN → REFACTOR). Pattern-aware generation with SOLID compliance.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-### 🧠 **Dual-Hemisphere Brain**
+  <!-- Code Review -->
+  <div class="capability-card">
+    <div class="capability-icon">🔍</div>
+    <h3>Code Review</h3>
+    <p>Automated pull request reviews with SOLID validation, security checks, and pattern analysis.</p>
+    <div class="capability-footer">
+      <span class="badge badge-warning">⚠️ Partial</span>
+      <span class="readiness">60% Ready</span>
+    </div>
+  </div>
 
-<span class="left-brain">LEFT BRAIN - Tactical Executor</span> Precise TDD implementation, code execution, validation
+  <!-- Backend Testing -->
+  <div class="capability-card">
+    <div class="capability-icon">🧪</div>
+    <h3>Backend Testing</h3>
+    <p>Unit and integration test generation with pytest/unittest. Mock generation and test-first workflow support.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">95% Ready</span>
+    </div>
+  </div>
 
-<span class="right-brain">RIGHT BRAIN - Strategic Planner</span> Architecture design, pattern recognition, proactive planning
+  <!-- Web Testing -->
+  <div class="capability-card">
+    <div class="capability-icon">🌐</div>
+    <h3>Web Testing</h3>
+    <p>Playwright integration with E2E tests, selector generation, and visual regression testing.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">85% Ready</span>
+    </div>
+  </div>
 
-**Corpus Callosum** - Message bridge coordinating hemispheres
+  <!-- Documentation -->
+  <div class="capability-card">
+    <div class="capability-icon">📚</div>
+    <h3>Documentation</h3>
+    <p>Docstring, README, and API doc generation. MkDocs integration with architecture documentation.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-### 🗂️ **Five-Tier Memory System**
+  <!-- Reverse Engineering -->
+  <div class="capability-card">
+    <div class="capability-icon">🕷️</div>
+    <h3>Reverse Engineering</h3>
+    <p>Codebase scanning with Oracle Crawler. Discovers 1,000+ files, UI elements, and relationship patterns.</p>
+    <div class="capability-footer">
+      <span class="badge badge-warning">⚠️ Partial</span>
+      <span class="readiness">70% Ready</span>
+    </div>
+  </div>
 
-| Tier | Type | Purpose | Storage |
-|------|------|---------|---------|
-| **Tier 0** | Instinct | Immutable core values (TDD, SOLID, DoR/DoD) | `governance/rules.md` |
-| **Tier 1** | Short-Term | Last 20 conversations (FIFO queue) | `conversation-history.jsonl` |
-| **Tier 2** | Long-Term | Learned patterns and knowledge graph | `knowledge-graph.yaml` |
-| **Tier 3** | Context | Development metrics and project intelligence | `development-context.yaml` |
-| **Tier 4** | Event Stream | Life recorder for automatic learning | `events.jsonl` |
+  <!-- Memory & Context -->
+  <div class="capability-card">
+    <div class="capability-icon">🧠</div>
+    <h3>Memory & Context</h3>
+    <p>4-tier memory system: Instinct (Tier 0), Short-term (Tier 1), Long-term (Tier 2), Context (Tier 3).</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-### 🛡️ **Six-Layer Protection System**
+  <!-- Dual-Hemisphere Brain -->
+  <div class="capability-card">
+    <div class="capability-icon">🎯</div>
+    <h3>Dual-Hemisphere Brain</h3>
+    <p><span class="left-brain">LEFT</span> for tactical execution, <span class="right-brain">RIGHT</span> for strategic planning. 10 specialist agents.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-1. **Instinct Immutability** - Challenges TDD violations
-2. **Tier Boundary Protection** - Ensures correct data placement
-3. **SOLID Compliance** - Enforces single responsibility
-4. **Hemisphere Specialization** - Routes to correct brain hemisphere
-5. **Knowledge Quality** - Pattern decay and consolidation
-6. **Commit Integrity** - Git protection and semantic commits
+  <!-- Protection System -->
+  <div class="capability-card">
+    <div class="capability-icon">🛡️</div>
+    <h3>Protection System</h3>
+    <p>6-layer protection with SKULL rules (SKULL-001 through SKULL-010). Challenges risky proposals automatically.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-### ✅ **60 Sacred Tests**
+  <!-- Natural Language Interface -->
+  <div class="capability-card">
+    <div class="capability-icon">💬</div>
+    <h3>Natural Language Interface</h3>
+    <p>No slash commands needed. Just describe what you want in plain English. CORTEX handles everything.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-Comprehensive test suite validating all cognitive functions:
-- 60/60 passing ⭐
-- 100% coverage of memory, protection, and coordination
-- Validates dual-hemisphere coordination
-- Ensures tier boundaries are respected
+  <!-- Tool Integration -->
+  <div class="capability-card">
+    <div class="capability-icon">🔧</div>
+    <h3>Tool Integration</h3>
+    <p>Git, MkDocs, VS Code, Playwright, pytest, dotnet. Seamless integration with your existing toolchain.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">95% Ready</span>
+    </div>
+  </div>
 
-### 🕷️ **Oracle Crawler**
+  <!-- Learning & Adaptation -->
+  <div class="capability-card">
+    <div class="capability-icon">📈</div>
+    <h3>Learning & Adaptation</h3>
+    <p>Automatic knowledge graph updates. Pattern reinforcement from successful workflows. Gets smarter with use.</p>
+    <div class="capability-footer">
+      <span class="badge badge-success">✅ Ready</span>
+      <span class="readiness">100% Ready</span>
+    </div>
+  </div>
 
-Deep codebase scanner that discovers:
-- 1,000+ files and relationships
-- UI element ID mapping for robust tests
-- Pattern discovery and classification
-- Feeds knowledge graph automatically
+</div>
 
 ---
 
-## 📖 Read The Full Story
+## 🏗️ System Architecture
+
+<div class="architecture-overview">
+
+CORTEX implements a **four-tier cognitive architecture** inspired by human brain structure:
+
+<div class="tier-grid">
+
+<div class="tier-card">
+  <div class="tier-number">0</div>
+  <h4>Instinct (Core Rules)</h4>
+  <p>Immutable governance rules that protect CORTEX integrity. Test-driven development, SOLID principles, brain protection challenges.</p>
+</div>
+
+<div class="tier-card">
+  <div class="tier-number">1</div>
+  <h4>Working Memory</h4>
+  <p>Short-term conversation history (last 20 conversations). FIFO queue with entity tracking. Solves the amnesia problem.</p>
+</div>
+
+<div class="tier-card">
+  <div class="tier-number">2</div>
+  <h4>Knowledge Graph</h4>
+  <p>Long-term pattern learning. Stores successful workflows, file relationships, and intent patterns. Gets smarter over time.</p>
+</div>
+
+<div class="tier-card">
+  <div class="tier-number">3</div>
+  <h4>Context Intelligence</h4>
+  <p>Git analysis, file stability tracking, and productivity metrics. Provides proactive warnings and recommendations.</p>
+</div>
+
+</div>
+
+### Dual-Hemisphere Design
+
+<div class="hemisphere-grid">
+
+<div class="hemisphere-card left">
+  <div class="hemisphere-badge">LEFT BRAIN</div>
+  <h4>Tactical Execution</h4>
+  <ul>
+    <li><strong>Code Executor:</strong> Implements features with TDD</li>
+    <li><strong>Test Generator:</strong> Creates comprehensive test suites</li>
+    <li><strong>Error Corrector:</strong> Fixes bugs systematically</li>
+    <li><strong>Health Validator:</strong> Enforces Definition of Done</li>
+    <li><strong>Commit Handler:</strong> Semantic git commits</li>
+  </ul>
+</div>
+
+<div class="hemisphere-card right">
+  <div class="hemisphere-badge">RIGHT BRAIN</div>
+  <h4>Strategic Planning</h4>
+  <ul>
+    <li><strong>Intent Router:</strong> Natural language understanding</li>
+    <li><strong>Work Planner:</strong> Multi-phase strategic plans</li>
+    <li><strong>Screenshot Analyzer:</strong> UI requirement extraction</li>
+    <li><strong>Change Governor:</strong> Architecture protection</li>
+    <li><strong>Brain Protector:</strong> Challenges risky changes</li>
+  </ul>
+</div>
+
+</div>
+
+</div>
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/asifhussain60/CORTEX.git
+cd CORTEX
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run setup
+python scripts/cortex_setup.py
+
+# Start using CORTEX - no commands needed!
+# Just describe what you want in natural language:
+# "plan a feature"
+# "add authentication"
+# "test the login flow"
+```
+
+[Get Started →](getting-started/quick-start/){ .md-button .md-button--primary }
+
+---
+
+## 💡 Use Cases
+
+<div class="use-case-grid">
+
+<div class="use-case-card">
+  <h4>🧑‍💻 Solo Developers</h4>
+  <p>Build features faster with intelligent code generation, automated testing, and context-aware suggestions. CORTEX remembers your project structure and coding patterns.</p>
+</div>
+
+<div class="use-case-card">
+  <h4>👥 Development Teams</h4>
+  <p>Share learned patterns across team members. Export brain snapshots to onboard new developers instantly. Maintain consistent coding standards.</p>
+</div>
+
+<div class="use-case-card">
+  <h4>🎓 Learning & Experimentation</h4>
+  <p>Safe sandbox environment with brain protection. Experiment with new patterns without breaking existing code. CORTEX validates changes before applying.</p>
+</div>
+
+</div>
+
+---
+
+## � Read The Full Story
 
 <div class="story-section">
 
@@ -214,162 +317,23 @@ Each chapter blends narrative storytelling with technical deep-dives and visual 
 
 ---
 
-## 🚀 Quick Start
+## 🌟 Ready to Transform Your Development Workflow?
 
-The only command you need to remember:
-
-```markdown
-#file:CORTEX/prompts/user/cortex.md
-
-[Your request in natural language - CORTEX handles everything]
-```
-
-**Example:**
-```markdown
-#file:CORTEX/prompts/user/cortex.md
-
-Add a purple button to the Host Control Panel
-```
-
-**CORTEX automatically:**
-
-✅ Analyzes intent (<span class="right-brain">RIGHT BRAIN</span> queries 3 memory tiers)  
-✅ Creates strategic plan (phases, warnings, estimates)  
-✅ Executes with TDD (<span class="left-brain">LEFT BRAIN</span>: RED → GREEN → REFACTOR)  
-✅ Validates health (zero errors, zero warnings)  
-✅ Logs events for learning  
-✅ Protection system verifies integrity
-
-[Learn more →](getting-started/quick-start.md)
-
----
-
-## ✨ What Makes CORTEX Revolutionary
-
-<div class="technical-section">
-
-### 🧠 **Persistent Memory**
-
-Unlike stateless AI, CORTEX remembers:
-
-- **Short-term**: Last 20 conversations (Tier 1)
-- **Long-term**: Learned patterns from all history (Tier 2)
-- **Context**: Project-wide intelligence and metrics (Tier 3)
-
-### 📈 **Automatic Learning**
-
-- Every action logged to event stream
-- 50+ events or 24 hours → Automatic BRAIN update
-- Knowledge graph grows smarter with use
-- Pattern reinforcement from successful workflows
-
-### 🛡️ **Quality Protection**
-
-- Challenges risky proposals (e.g., "skip TDD")
-- Provides data-driven alternatives
-- Enforces Definition of Ready and Done
-- Protects brain integrity (Rule #22)
-
-### 🎯 **Context Awareness**
-
-- Knows project structure and hot files
-- Identifies co-modification patterns
-- Provides proactive warnings
-- Data-driven estimates (not guesses)
-
-### 🔄 **Dual-Hemisphere Coordination**
-
-- <span class="left-brain">LEFT</span> executes with precision
-- <span class="right-brain">RIGHT</span> plans with intelligence
-- Corpus Callosum ensures alignment
-- 10+ specialist agents coordinate seamlessly
-
+<div class="cortex-cta">
+  <div class="cta-content">
+    <h3>Experience the Power of CORTEX</h3>
+    <p>Join developers who've transformed GitHub Copilot into an expert partner with memory, learning, and intelligence.</p>
+    <div class="cta-actions">
+      <a href="getting-started/quick-start/" class="cta-button primary">Get Started Now</a>
+      <a href="diagrams/story/The CORTEX Story/" class="cta-button secondary">Read the Story</a>
+    </div>
+  </div>
 </div>
 
 ---
 
-## 📚 Documentation
-
-| Section | Description | Audience |
-|---------|-------------|----------|
-| [**Getting Started**](getting-started/quick-start.md) | 5-minute introduction and setup | New users |
-| [**Architecture**](architecture/overview.md) | Dual hemispheres, tiers, agents, crawler | Developers |
-| [**Guides**](guides/admin-guide.md) | How-to guides and workflows | All users |
-| [**Reference**](reference/api-reference.md) | API docs, configuration, glossary | Developers |
-| [**Operations**](operations/index.md) | All CORTEX operations reference | Contributors |
-
----
-
-## 🎯 Use Cases
-
-**For Solo Developers:**
-- Remember context across sessions
-- Learn from your patterns
-- Protect code quality automatically
-- Faster development with less rework
-
-**For Teams:**
-- Shared knowledge graph
-- Consistent workflows
-- Automated quality enforcement
-- Project-wide intelligence
-
-**For Learning:**
-- Read "The Awakening" story
-- Understand cognitive architecture
-- See TDD in action
-- Learn from examples
-
----
-
-## 💡 Example: A Day with CORTEX
-
-**Morning (9:47 AM):**
-```markdown
-You: Add a purple button to the HostControlPanel
-CORTEX: ✅ Complete in 84 seconds with 3 tests passing
-```
-
-**Mid-Day (12:30 PM):**
-```markdown
-You: Make it purple
-CORTEX: ✅ Found "pulse animation" in Tier 1 memory, applying purple color
-```
-
-**Afternoon (3:00 PM):**
-```markdown
-You: Let's skip tests for this next feature
-CORTEX: ⚠️ Brain Protector Challenge: TDD skip reduces success rate from 94% to 67%
-         Recommendation: Create minimal test first (5-10 min investment)
-```
-
-**Next Day (9:00 AM):**
-```markdown
-You: Where did I leave off yesterday?
-CORTEX: ✅ Found in Tier 1: Invoice export - Phase 2/4 complete. Ready to continue?
-```
-
----
-
-## 🌟 The Result
-
-**Week 1:** Copilot has amnesia, needs constant guidance  
-**Week 4:** Copilot remembers 20 conversations, knows 500+ patterns  
-**Week 12:** Copilot is an expert on YOUR project with 3,247 patterns  
-**Week 24:** Copilot feels like a senior developer
-
----
-
-## 🚀 Ready to Begin?
-
-<div style="text-align: center; margin: 2rem 0;">
-  <a href="getting-started/quick-start/" class="cta-button">Get Started Now</a>
-  <a href="story/the-awakening/" class="cta-button secondary">Read The Story First</a>
-</div>
-
----
-
-<div style="text-align: center; color: #6B7280; font-size: 0.9rem; margin-top: 3rem;">
-  <p><strong>CORTEX</strong> - Transforming GitHub Copilot from forgetful intern to expert partner</p>
-  <p>Built with ❤️ by the CORTEX Team | <a href="https://github.com/asifhussain60/CORTEX">GitHub</a></p>
+<div class="footer-branding">
+  <p><strong>CORTEX</strong> - Cognitive Operation & Reasoning Through EXtension</p>
+  <p>© 2024-2025 Asif Hussain | Licensed under Proprietary License</p>
+  <p><a href="https://github.com/asifhussain60/CORTEX">GitHub Repository</a></p>
 </div>

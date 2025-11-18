@@ -54,7 +54,6 @@ Create a professional split-view diagram showing CORTEX's 10 specialist agents o
 **Symbol:** Bridge icon at center
 
 ## Agent Icons (Consistent Style)
-## Agent Icons (Consistent Style)
 
 **Style:** Flat design, outlined icons with 2px stroke, consistent size
 **Color:** Match hemisphere color (blue for LEFT, orange for RIGHT)
@@ -62,7 +61,7 @@ Create a professional split-view diagram showing CORTEX's 10 specialist agents o
 **Position:** Left side of each agent box
 
 **Icon Mappings:**
-- Code Executor: `</>` code brackets icon
+- Code Executor: code brackets icon (angle brackets with slash)
 - Test Generator: ✓ checkmark in circle icon
 - Error Corrector: 🔧 wrench icon
 - Health Validator: ❤️ heartbeat/pulse icon  

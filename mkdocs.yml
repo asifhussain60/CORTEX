@@ -6,43 +6,23 @@ repo_url: https://github.com/asifhussain60/CORTEX
 repo_name: asifhussain60/CORTEX
 theme:
   name: material
-  favicon: assets/images/CORTEX-logo.png
   palette:
-  - scheme: default
-    primary: deep purple
-    accent: purple
-    toggle:
-      icon: material/brightness-7
-      name: Switch to dark mode
-  - scheme: slate
-    primary: deep purple
-    accent: purple
-    toggle:
-      icon: material/brightness-4
-      name: Switch to light mode
-  features:
-  - navigation.instant
-  - navigation.tracking
-  - navigation.tabs
-  - navigation.sections
-  - navigation.expand
-  - navigation.top
-  - toc.integrate
-  - search.suggest
-  - search.highlight
-  - content.code.copy
-  - content.tabs.link
+    scheme: slate
   font:
-    text: Roboto
-    code: Roboto Mono
-  icon:
-    repo: fontawesome/brands/github
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
 extra_css:
-- stylesheets/material-tokens.css  # NEW: Material Design 3 token system - must load first
-- stylesheets/custom.css
-- stylesheets/story.css
-- stylesheets/technical.css
-- https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap
+- stylesheets/material-tales-override.css
 
 # ============================================
 # NAVIGATION STRUCTURE - Simplified & Logical

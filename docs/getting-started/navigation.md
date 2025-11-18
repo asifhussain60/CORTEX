@@ -3,9 +3,9 @@
 ## Quick Links
 
 - [Home](../index.md) - CORTEX Documentation Home
-- [The CORTEX Story](../awakening-of-cortex.md) - Understanding CORTEX
-- [Architecture](../architecture/README.md) - System Architecture
-- [API Reference](../reference/api-reference.md) - API Documentation
+- [The CORTEX Story](../diagrams/story/The CORTEX Story.md) - Understanding CORTEX
+- [Architecture Overview](../architecture/overview.md) - System Architecture
+- [API Reference](../reference/api.md) - API Documentation
 - [Diagrams](../diagrams/INDEX.md) - System Diagrams
 
 ## Documentation Structure
@@ -34,6 +34,6 @@
 
 ## Need Help?
 
-- Check the [Story](../awakening-of-cortex.md) for conceptual understanding
-- See [Architecture](../architecture/README.md) for technical details
-- Visit [API Reference](../reference/api-reference.md) for code examples
+- Check the [Story](../diagrams/story/The CORTEX Story.md) for conceptual understanding
+- See [Architecture Overview](../architecture/overview.md) for technical details
+- Visit [API Reference](../reference/api.md) for code examples

@@ -2120,10 +2120,10 @@ A cognitive architecture that gives GitHub Copilot:
 
 **Ready to give YOUR Copilot a brain?**
 
-1. [Setup Guide](../../prompts/shared/setup-guide.md) - Install CORTEX in 5 minutes  
-2. [Quick Start](../../prompts/shared/story.md#quick-start) - Your first conversation with memory  
-3. [Planning System](../../prompts/shared/help_plan_feature.md) - Plan your next feature interactively  
-4. [Technical Docs](../../prompts/shared/technical-reference.md) - Deep dive into architecture  
+1. [Installation Guide](../../getting-started/installation.md) - Install CORTEX in 5 minutes  
+2. [Quick Start Guide](../../getting-started/quick-start.md) - Your first conversation with memory  
+3. [Developer Guide](../../guides/developer-guide.md) - Plan and build features  
+4. [Architecture Overview](../../architecture/overview.md) - Deep dive into architecture  
 
 **Because if the Scarecrow could get a brain, so can your robot.**
 

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Documentation - Tales Style Mockup</title>
+    <style>
+        /* Tales-Inspired Design System */
+        :root {
+            /* Color Palette - Professional Tech */
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --dark-bg: #0F172A;
+            --dark-surface: #1E293B;
+            --dark-surface-hover: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            
+            /* Typography Scale */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            /* Spacing Scale */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header with Gradient */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: var(--space-2xl) var(--space-md);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: var(--space-md);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .subtitle {
+            font-size: 2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Drop cap styling for subtitle - first letter of each word larger */
+        .header .subtitle .word {
+            display: inline-block;
+            margin-right: 0.3em;
+        }
+        
+        .header .subtitle .word::first-letter {
+            font-size: 1.4em;
+            font-weight: 800;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: var(--dark-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: var(--space-md);
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--dark-surface-hover);
+            color: var(--text-primary);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+        
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+        
+        /* Card Component */
+        .card {
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .card-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .card-footer {
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .badge-primary {
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+        
+        /* Button */
+        .btn {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.8;
+        }
+        
+        .code-block code {
+            color: #A5D6FF;
+        }
+        
+        /* Section */
+        .section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Sidebar Layout */
+        .layout-sidebar {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+        
+        .sidebar {
+            background: var(--dark-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            height: fit-content;
+            position: sticky;
+            top: var(--space-md);
+        }
+        
+        .sidebar-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin: var(--space-sm) 0;
+        }
+        
+        .sidebar-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            color: var(--text-primary);
+            background: var(--dark-surface-hover);
+            border-left: 3px solid var(--primary-color);
+            padding-left: calc(var(--space-sm) + 3px);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+        }
+        
+        .stat-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: var(--space-sm);
+        }
+        
+        /* Alert */
+        .alert {
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background: rgba(79, 70, 229, 0.1);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--secondary-color);
+            color: var(--text-primary);
+        }
+        
+        @media (max-width: 768px) {
+            .layout-sidebar {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; margin-bottom: var(--space-lg);">
+        <p class="subtitle">
+            <span class="word">COGNITIVE</span>
+            <span class="word">OPTIMIZATION</span>
+            <span class="word">&</span>
+            <span class="word">RETRIEVAL</span>
+            <span class="word">TECHNOLOGY</span>
+            <span class="word">FOR</span>
+            <span class="word">EXTENDED</span>
+            <span class="word">CONTEXT</span>
+        </p>
+    </header>
+    
+    <nav class="nav">
+        <a href="#" class="nav-item active">Home</a>
+        <a href="#" class="nav-item">CORTEX Bible</a>
+        <a href="#" class="nav-item">The Awakening</a>
+        <a href="#" class="nav-item">Architecture</a>
+        <a href="#" class="nav-item">Guides</a>
+        <a href="#" class="nav-item">API Reference</a>
+    </nav>
+    
+    <div class="container">
+        <!-- Stats Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">97.2%</div>
+                <div class="stat-label">Token Reduction</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Memory Tiers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">10</div>
+                <div class="stat-label">Specialist Agents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Test Coverage</div>
+            </div>
+        </div>
+        
+        <!-- Alert -->
+        <div class="alert alert-info">
+            <strong>🎯 New Feature:</strong> Interactive planning system with Work Planner agent integration. Try saying "plan a feature" to get started!
+        </div>
+        
+        <!-- Main Content Section -->
+        <section class="section">
+            <h2 class="section-title">Executive Feature List</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🧠</div>
+                        <h3 class="card-title">Memory System</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">Production Ready</span>
+                        <span class="badge badge-primary">Tier 1-4</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🤖</div>
+                        <h3 class="card-title">Agent System</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae ultricies eget.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">10 Agents Active</span>
+                        <span class="badge badge-warning">Dual Hemisphere</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Context Intelligence</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">Git Analysis</span>
+                        <span class="badge badge-primary">Tier 3</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🧬</div>
+                        <h3 class="card-title">Pattern Learning</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Sed porttitor lectus nibh.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">Knowledge Graph</span>
+                        <span class="badge badge-primary">Tier 2</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🛡️</div>
+                        <h3 class="card-title">Brain Protection</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Donec sollicitudin molestie malesuada. Quisque velit nisi.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">6 Protection Layers</span>
+                        <span class="badge badge-warning">SKULL Rules</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <h3 class="card-title">Performance</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Proin eget tortor risus. Curabitur arcu erat, accumsan id imperdiet et.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge badge-success">18ms Queries</span>
+                        <span class="badge badge-primary">Optimized</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Code Example Section -->
+        <section class="section">
+            <h2 class="section-title">Quick Start Example</h2>
+            
+            <div class="code-block">
+<code># Initialize CORTEX
+from cortex import WorkingMemory, KnowledgeGraph
+
+# Store conversation in Tier 1
+memory = WorkingMemory()
+conversation_id = memory.store_conversation(
+    user_message="Add authentication to dashboard",
+    assistant_response="I'll implement JWT authentication",
+    intent="EXECUTE"
+)
+
+# Search patterns in Tier 2
+kg = KnowledgeGraph()
+patterns = kg.search_patterns(
+    query="authentication workflow",
+    min_confidence=0.7
+)
+
+print(f"Found {len(patterns)} related patterns")</code>
+            </div>
+            
+            <a href="#" class="btn btn-primary">View Full Documentation →</a>
+        </section>
+        
+        <!-- Sidebar Layout Example -->
+        <section class="section">
+            <h2 class="section-title">The Awakening Story</h2>
+            
+            <div class="layout-sidebar">
+                <aside class="sidebar">
+                    <h3 class="sidebar-title">Table of Contents</h3>
+                    <ul class="sidebar-nav">
+                        <li><a href="#" class="active">Chapter 1: The Amnesia Problem</a></li>
+                        <li><a href="#">Chapter 2: First Memory</a></li>
+                        <li><a href="#">Chapter 3: Brain Architecture</a></li>
+                        <li><a href="#">Chapter 4: Left Brain - The Executor</a></li>
+                        <li><a href="#">Chapter 5: Right Brain - The Strategist</a></li>
+                        <li><a href="#">Chapter 6: Corpus Callosum</a></li>
+                        <li><a href="#">Chapter 7: Knowledge Graph</a></li>
+                        <li><a href="#">Chapter 8: Protection Layer</a></li>
+                        <li><a href="#">Chapter 9: The Awakening</a></li>
+                    </ul>
+                </aside>
+                
+                <main>
+                    <h3 style="font-size: 1.75rem; margin-bottom: var(--space-lg); color: var(--text-primary);">
+                        Chapter 1: The Amnesia Problem
+                    </h3>
+                    
+                    <div style="line-height: 1.8; color: var(--text-secondary);">
+                        <p style="margin-bottom: var(--space-lg);">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                        
+                        <p style="margin-bottom: var(--space-lg);">
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        
+                        <div class="alert alert-success" style="margin: var(--space-xl) 0;">
+                            <strong>💡 Key Insight:</strong> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                        </div>
+                        
+                        <p style="margin-bottom: var(--space-lg);">
+                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
+                        </p>
+                        
+                        <a href="#" class="btn btn-primary">Continue to Chapter 2 →</a>
+                    </div>
+                </main>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
