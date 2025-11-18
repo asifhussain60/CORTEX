@@ -26,6 +26,7 @@ import re
 import uuid
 import logging
 import shutil
+import os
 
 # CORTEX internal imports
 from src.tier1.working_memory import WorkingMemory
@@ -694,6 +695,151 @@ The button is now larger with increased padding and font size, plus it has a pur
             return 'Conversation already imported successfully'
         else:
             return 'Unknown status'
+    
+    def import_files_directly(self, file_paths: List[str]) -> Dict[str, Any]:
+        """
+        Import conversations directly from files (no template creation)
+        
+        Args:
+            file_paths: List of file paths to import
+            
+        Returns:
+            Dict with import results for all files
+        """
+        results = []
+        successful = 0
+        failed = 0
+        
+        for file_path in file_paths:
+            # Validate file
+            validation_error = self._validate_file(file_path)
+            if validation_error:
+                results.append({
+                    'file': file_path,
+                    'success': False,
+                    'error': validation_error
+                })
+                failed += 1
+                continue
+            
+            # Read file content
+            content = self._read_file_content(file_path)
+            if content is None:
+                results.append({
+                    'file': file_path,
+                    'success': False,
+                    'error': 'Failed to read file'
+                })
+                failed += 1
+                continue
+            
+            # Parse conversation
+            try:
+                parsed = self._parse_conversation_content(content)
+                
+                if not parsed['messages']:
+                    results.append({
+                        'file': file_path,
+                        'success': False,
+                        'error': 'No valid conversation messages found'
+                    })
+                    failed += 1
+                    continue
+                
+                # Import to working memory
+                import_result = self._import_to_working_memory(parsed)
+                
+                if import_result['success']:
+                    results.append({
+                        'file': file_path,
+                        'success': True,
+                        'conversation_id': import_result['conversation_id'],
+                        'messages_imported': len(parsed['messages']),
+                        'entities_extracted': len(parsed['entities'])
+                    })
+                    successful += 1
+                else:
+                    results.append({
+                        'file': file_path,
+                        'success': False,
+                        'error': import_result.get('error', 'Import failed')
+                    })
+                    failed += 1
+                    
+            except Exception as e:
+                self.logger.error(f"Failed to parse/import {file_path}: {e}")
+                results.append({
+                    'file': file_path,
+                    'success': False,
+                    'error': f'Parse error: {str(e)}'
+                })
+                failed += 1
+        
+        return {
+            'success': successful > 0,
+            'total_files': len(file_paths),
+            'successful_imports': successful,
+            'failed_imports': failed,
+            'results': results
+        }
+    
+    def _validate_file(self, file_path: str) -> Optional[str]:
+        """
+        Validate file exists and is readable
+        
+        Returns:
+            Error message if validation fails, None if valid
+        """
+        try:
+            path = Path(file_path)
+            
+            # Handle workspace-relative paths
+            if not path.is_absolute():
+                path = self.workspace_root / path
+            
+            if not path.exists():
+                return f'File not found: {file_path}'
+            
+            if not path.is_file():
+                return f'Not a file: {file_path}'
+            
+            if not os.access(path, os.R_OK):
+                return f'File not readable: {file_path}'
+            
+            return None
+            
+        except Exception as e:
+            return f'Validation error: {str(e)}'
+    
+    def _read_file_content(self, file_path: str) -> Optional[str]:
+        """
+        Read file content with proper encoding
+        
+        Returns:
+            File content as string, or None if read fails
+        """
+        try:
+            path = Path(file_path)
+            
+            # Handle workspace-relative paths
+            if not path.is_absolute():
+                path = self.workspace_root / path
+            
+            with open(path, 'r', encoding='utf-8') as f:
+                return f.read()
+                
+        except UnicodeDecodeError:
+            # Try with different encoding
+            try:
+                with open(path, 'r', encoding='latin-1') as f:
+                    return f.read()
+            except Exception as e:
+                self.logger.error(f"Failed to read {file_path}: {e}")
+                return None
+                
+        except Exception as e:
+            self.logger.error(f"Failed to read {file_path}: {e}")
+            return None
 
 
 # Export for use in CORTEX operations

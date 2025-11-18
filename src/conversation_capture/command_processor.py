@@ -129,10 +129,17 @@ class CaptureCommandProcessor:
                         if command_type in ['import', 'capture_status']:
                             params['capture_id'] = match.group(1)
                         elif command_type == 'capture':
-                            # Extract optional hint from input
-                            hint_match = re.search(r'about\s+(.*)', user_input, re.IGNORECASE)
-                            if hint_match:
-                                params['hint'] = hint_match.group(1)
+                            # Check for file: parameters (direct import mode)
+                            file_matches = re.findall(r'file:([^\s]+)', user_input, re.IGNORECASE)
+                            if file_matches:
+                                params['files'] = file_matches
+                                params['mode'] = 'direct'
+                            else:
+                                params['mode'] = 'template'
+                                # Extract optional hint from input
+                                hint_match = re.search(r'about\s+(.*)', user_input, re.IGNORECASE)
+                                if hint_match:
+                                    params['hint'] = hint_match.group(1)
                     
                     return {
                         'command': command_type,
@@ -142,7 +149,13 @@ class CaptureCommandProcessor:
         return None
     
     def _handle_capture_command(self, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle capture conversation command"""
+        """Handle capture conversation command (template mode or direct mode)"""
+        
+        # Check if files were provided (direct mode)
+        if params.get('files'):
+            return self._handle_direct_import(params['files'])
+        
+        # Template mode (existing behavior)
         user_hint = params.get('hint', '')
         result = self.capture_manager.create_capture_file(user_hint)
         
@@ -168,6 +181,37 @@ class CaptureCommandProcessor:
                 'error': result['error'],
                 'response': f"❌ Failed to create capture file: {result['error']}",
                 'suggestion': 'Check CORTEX brain directory permissions'
+            }
+    
+    def _handle_direct_import(self, file_paths: List[str]) -> Dict[str, Any]:
+        """Handle direct file import mode (no template creation)"""
+        result = self.capture_manager.import_files_directly(file_paths)
+        
+        if result['success']:
+            return {
+                'handled': True,
+                'success': True,
+                'operation': 'direct_import_completed',
+                'response': self._format_direct_import_response(result),
+                'brain_integration': {
+                    'tier': 'Tier 1 Working Memory',
+                    'total_files': result['total_files'],
+                    'successful_imports': result['successful_imports'],
+                    'failed_imports': result['failed_imports']
+                }
+            }
+        else:
+            return {
+                'handled': True,
+                'success': False,
+                'operation': 'direct_import_failed',
+                'error': 'All file imports failed',
+                'response': self._format_direct_import_failure_response(result),
+                'suggestions': [
+                    'Check that files exist and are readable',
+                    'Verify files contain valid conversation format',
+                    'Use absolute paths or paths relative to workspace root'
+                ]
             }
     
     def _handle_import_command(self, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -382,6 +426,69 @@ No capture files are currently awaiting import.
             response += "\n\n🎉 **This conversation has been successfully imported to CORTEX brain!**"
         elif not result['has_conversation']:
             response += "\n\n💡 **Next Steps:** Open the capture file, paste your conversation, and save."
+        
+        return response.strip()
+
+
+    def _format_direct_import_response(self, result: Dict[str, Any]) -> str:
+        """Format success response for direct file import"""
+        response = f"""
+🧠 **Direct Import Completed!** 
+
+✅ **Batch Import Summary**
+- **Total Files:** {result['total_files']}
+- **Successful:** {result['successful_imports']}
+- **Failed:** {result['failed_imports']}
+
+📊 **Import Details:**
+"""
+        
+        for item in result['results']:
+            if item['success']:
+                response += f"\n✅ `{Path(item['file']).name}`"
+                response += f"\n   - Conversation ID: `{item['conversation_id']}`"
+                response += f"\n   - Messages: {item['messages_imported']}"
+                response += f"\n   - Entities: {item['entities_extracted']}"
+            else:
+                response += f"\n❌ `{Path(item['file']).name}`"
+                response += f"\n   - Error: {item['error']}"
+        
+        response += """
+
+🔗 **Context Continuity NOW ACTIVE**
+All imported conversations are now in CORTEX working memory!
+
+🎉 **No template files created** - Direct import mode!
+"""
+        
+        return response.strip()
+    
+    def _format_direct_import_failure_response(self, result: Dict[str, Any]) -> str:
+        """Format failure response for direct file import"""
+        response = f"""
+❌ **Direct Import Failed**
+
+**Summary:**
+- **Total Files:** {result['total_files']}
+- **Successful:** {result['successful_imports']}
+- **Failed:** {result['failed_imports']}
+
+**Failure Details:**
+"""
+        
+        for item in result['results']:
+            if not item['success']:
+                response += f"\n❌ `{Path(item['file']).name}`"
+                response += f"\n   - Error: {item['error']}"
+        
+        response += """
+
+💡 **Troubleshooting Tips:**
+- Verify files exist and are readable
+- Check file paths (use absolute or workspace-relative paths)
+- Ensure files contain valid conversation format (You:/Copilot: structure)
+- Try importing files one at a time to isolate issues
+"""
         
         return response.strip()
 
