@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX Visual Style Guide - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../.." id="logo">
+                        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../..">Home</a></li>
+                        <li><a href="../story/The-CORTEX-Story/">The CORTEX Birth</a></li>
+                        <li><a href="../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../architecture/overview/">Architecture</a></li>
+                        <li><a href="../../reference/api/">Technical Docs</a></li>
+                        <li><a href="../../guides/developer-guide/">User Guides</a></li>
+                        <li><a href="../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/The-CORTEX-Story/" >The Awakening Story</a></li>
+                                
+                                    <li><a href="../narratives/" >Narratives</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li><a href="../../governance/THE-RULEBOOK/" >Cortex Bible</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                    <li><a href="../.." >Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../../reference/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../.." >Operations</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../guides/developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../prompts/" >DALL-E Prompts</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                    
+                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
+                    
+                    <div class="toc-wrapper">
+                        <h4>On This Page</h4>
+                        CORTEX Visual Style Guide - #cortex-visual-style-guide
+    Color Palette - #color-palette
+    Typography - #typography
+    Layout Principles - #layout-principles
+    Iconography - #iconography
+    Diagram Types - #diagram-types
+    Technical Specifications - #technical-specifications
+    Accessibility - #accessibility
+    Examples - #examples
+    Quality Checklist - #quality-checklist
+
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-visual-style-guide">CORTEX Visual Style Guide<a class="headerlink" href="#cortex-visual-style-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0<br />
+<strong>Generated:</strong> November 19, 2025</p>
+<h2 id="color-palette">Color Palette<a class="headerlink" href="#color-palette" title="Permanent link">&para;</a></h2>
+<h3 id="primary-colors-tiers">Primary Colors (Tiers)<a class="headerlink" href="#primary-colors-tiers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Color Name</th>
+<th>Hex Code</th>
+<th>RGB</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tier 0</td>
+<td>Deep Purple</td>
+<td><code>#6B46C1</code></td>
+<td>rgb(107, 70, 193)</td>
+<td>Instinct/Governance</td>
+</tr>
+<tr>
+<td>Tier 1</td>
+<td>Bright Blue</td>
+<td><code>#3B82F6</code></td>
+<td>rgb(59, 130, 246)</td>
+<td>Working Memory</td>
+</tr>
+<tr>
+<td>Tier 2</td>
+<td>Emerald Green</td>
+<td><code>#10B981</code></td>
+<td>rgb(16, 185, 129)</td>
+<td>Knowledge Graph</td>
+</tr>
+<tr>
+<td>Tier 3</td>
+<td>Warm Orange</td>
+<td><code>#F59E0B</code></td>
+<td>rgb(245, 158, 11)</td>
+<td>Context Intelligence</td>
+</tr>
+</tbody>
+</table>
+<h3 id="secondary-colors-agents">Secondary Colors (Agents)<a class="headerlink" href="#secondary-colors-agents" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Color Name</th>
+<th>Hex Code</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LEFT Brain</td>
+<td>Cool Blue</td>
+<td><code>#3B82F6</code></td>
+<td>Execution agents</td>
+</tr>
+<tr>
+<td>RIGHT Brain</td>
+<td>Warm Orange</td>
+<td><code>#F59E0B</code></td>
+<td>Strategy agents</td>
+</tr>
+<tr>
+<td>Connections</td>
+<td>Gray</td>
+<td><code>#6B7280</code></td>
+<td>Arrows, links</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>White/Light Gray</td>
+<td><code>#FFFFFF</code> / <code>#F9FAFB</code></td>
+<td>Canvas</td>
+</tr>
+</tbody>
+</table>
+<h2 id="typography">Typography<a class="headerlink" href="#typography" title="Permanent link">&para;</a></h2>
+<h3 id="font-families">Font Families<a class="headerlink" href="#font-families" title="Permanent link">&para;</a></h3>
+<p><strong>Primary Font:</strong> Inter, system-ui, sans-serif
+<strong>Monospace Font:</strong> 'Courier New', Consolas, monospace</p>
+<h3 id="font-sizes">Font Sizes<a class="headerlink" href="#font-sizes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Size</th>
+<th>Weight</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diagram Titles</td>
+<td>24pt</td>
+<td>Bold</td>
+<td>Main diagram heading</td>
+</tr>
+<tr>
+<td>Section Headers</td>
+<td>18pt</td>
+<td>Bold</td>
+<td>Tier names, agent groups</td>
+</tr>
+<tr>
+<td>Body Text</td>
+<td>14pt</td>
+<td>Regular</td>
+<td>Labels, descriptions</td>
+</tr>
+<tr>
+<td>Small Text</td>
+<td>11pt</td>
+<td>Regular</td>
+<td>Annotations, metadata</td>
+</tr>
+<tr>
+<td>Code Samples</td>
+<td>12pt</td>
+<td>Regular</td>
+<td>Monospace code</td>
+</tr>
+</tbody>
+</table>
+<h3 id="text-contrast">Text Contrast<a class="headerlink" href="#text-contrast" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dark text on light backgrounds: Minimum contrast ratio 4.5:1</li>
+<li>Light text on dark backgrounds: Minimum contrast ratio 7:1</li>
+<li>Use color picker to verify accessibility</li>
+</ul>
+<h2 id="layout-principles">Layout Principles<a class="headerlink" href="#layout-principles" title="Permanent link">&para;</a></h2>
+<h3 id="spacing">Spacing<a class="headerlink" href="#spacing" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Margin:</strong> 40px minimum from canvas edge</li>
+<li><strong>Padding:</strong> 20px inside boxes/containers</li>
+<li><strong>Gap:</strong> 30px between major elements</li>
+<li><strong>Line spacing:</strong> 1.5x for readability</li>
+</ul>
+<h3 id="alignment">Alignment<a class="headerlink" href="#alignment" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Left-align:</strong> Text within boxes</li>
+<li><strong>Center-align:</strong> Diagram titles</li>
+<li><strong>Consistent:</strong> Grid-based alignment for elements</li>
+</ul>
+<h3 id="visual-hierarchy">Visual Hierarchy<a class="headerlink" href="#visual-hierarchy" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Primary:</strong> Main diagram elements (tiers, agents)</li>
+<li><strong>Secondary:</strong> Connecting arrows, relationships</li>
+<li><strong>Tertiary:</strong> Labels, annotations</li>
+<li><strong>Quaternary:</strong> Metadata, timestamps</li>
+</ol>
+<h2 id="iconography">Iconography<a class="headerlink" href="#iconography" title="Permanent link">&para;</a></h2>
+<h3 id="standard-icons">Standard Icons<a class="headerlink" href="#standard-icons" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Icon</th>
+<th>Unicode</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database</td>
+<td>🗄️</td>
+<td>U+1F5C4</td>
+<td>Tier 1 storage</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>🔗</td>
+<td>U+1F517</td>
+<td>Tier 2 relationships</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>📊</td>
+<td>U+1F4CA</td>
+<td>Tier 3 metrics</td>
+</tr>
+<tr>
+<td>Shield</td>
+<td>🛡️</td>
+<td>U+1F6E1</td>
+<td>Tier 0 protection</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>💻</td>
+<td>U+1F4BB</td>
+<td>Code Executor</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>✅</td>
+<td>U+2705</td>
+<td>Test Generator</td>
+</tr>
+<tr>
+<td>Wrench</td>
+<td>🔧</td>
+<td>U+1F527</td>
+<td>Error Corrector</td>
+</tr>
+<tr>
+<td>Heart</td>
+<td>❤️</td>
+<td>U+2764</td>
+<td>Health Validator</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>🌿</td>
+<td>U+1F33F</td>
+<td>Commit Handler</td>
+</tr>
+</tbody>
+</table>
+<h3 id="icon-guidelines">Icon Guidelines<a class="headerlink" href="#icon-guidelines" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Size:</strong> 32x32px minimum</li>
+<li><strong>Style:</strong> Outlined or flat (consistent within diagram)</li>
+<li><strong>Color:</strong> Match element color or neutral gray</li>
+<li><strong>Placement:</strong> Top-left or center of container</li>
+</ul>
+<h2 id="diagram-types">Diagram Types<a class="headerlink" href="#diagram-types" title="Permanent link">&para;</a></h2>
+<h3 id="1-architecture-diagrams-vertical-stacks">1. Architecture Diagrams (Vertical Stacks)<a class="headerlink" href="#1-architecture-diagrams-vertical-stacks" title="Permanent link">&para;</a></h3>
+<p><strong>Best for:</strong> Tier architecture, layered systems</p>
+<p><strong>Layout:</strong>
+- Vertical orientation (bottom to top)
+- Boxes with rounded corners (8px radius)
+- Upward arrows showing data flow
+- Legend in bottom-right corner</p>
+<p><strong>Aspect Ratio:</strong> 16:9 (landscape)</p>
+<h3 id="2-agent-system-diagrams-dual-hemispheres">2. Agent System Diagrams (Dual Hemispheres)<a class="headerlink" href="#2-agent-system-diagrams-dual-hemispheres" title="Permanent link">&para;</a></h3>
+<p><strong>Best for:</strong> LEFT/RIGHT brain agents, coordination</p>
+<p><strong>Layout:</strong>
+- Split canvas vertically (LEFT | RIGHT)
+- Color-coded hemispheres
+- Central bridge (Corpus Callosum)
+- Agents in vertical lists</p>
+<p><strong>Aspect Ratio:</strong> 1:1 (square)</p>
+<h3 id="3-flow-diagrams-left-to-right">3. Flow Diagrams (Left-to-Right)<a class="headerlink" href="#3-flow-diagrams-left-to-right" title="Permanent link">&para;</a></h3>
+<p><strong>Best for:</strong> Process flows, transformations</p>
+<p><strong>Layout:</strong>
+- Horizontal orientation (left to right)
+- Stages as boxes
+- Arrows showing progression
+- Example data at each stage</p>
+<p><strong>Aspect Ratio:</strong> 16:9 (landscape)</p>
+<h3 id="4-sequence-diagrams-top-to-bottom">4. Sequence Diagrams (Top-to-Bottom)<a class="headerlink" href="#4-sequence-diagrams-top-to-bottom" title="Permanent link">&para;</a></h3>
+<p><strong>Best for:</strong> Multi-agent workflows, time sequences</p>
+<p><strong>Layout:</strong>
+- Vertical swimlanes
+- Time flows downward
+- Messages as horizontal arrows
+- Step numbers in circles</p>
+<p><strong>Aspect Ratio:</strong> 9:16 (portrait)</p>
+<h2 id="technical-specifications">Technical Specifications<a class="headerlink" href="#technical-specifications" title="Permanent link">&para;</a></h2>
+<h3 id="resolution">Resolution<a class="headerlink" href="#resolution" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Minimum:</strong> 300 DPI for print quality</li>
+<li><strong>Recommended:</strong> 3840x2160 (4K) for 16:9</li>
+<li><strong>Web:</strong> 1920x1080 acceptable for online use</li>
+</ul>
+<h3 id="file-formats">File Formats<a class="headerlink" href="#file-formats" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Primary:</strong> PNG (lossless, transparency support)</li>
+<li><strong>Alternative:</strong> SVG (vector, scalable)</li>
+<li><strong>Avoid:</strong> JPEG (lossy compression)</li>
+</ul>
+<h3 id="file-naming">File Naming<a class="headerlink" href="#file-naming" title="Permanent link">&para;</a></h3>
+<p>Pattern: <code>##-diagram-name-vN.ext</code></p>
+<p>Examples:
+- <code>01-tier-architecture-v1.png</code>
+- <code>02-agent-system-v2.svg</code>
+- <code>05-agent-coordination-v1.png</code></p>
+<h3 id="version-control">Version Control<a class="headerlink" href="#version-control" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>v1:</strong> Initial version</li>
+<li><strong>v2:</strong> First revision</li>
+<li><strong>v3+:</strong> Subsequent iterations</li>
+<li>Keep all versions (storage is cheap)</li>
+</ul>
+<h2 id="accessibility">Accessibility<a class="headerlink" href="#accessibility" title="Permanent link">&para;</a></h2>
+<h3 id="color-blindness">Color Blindness<a class="headerlink" href="#color-blindness" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Don't rely solely on color to convey information</li>
+<li>Use patterns, textures, or icons as backups</li>
+<li>Test with color blindness simulators</li>
+</ul>
+<h3 id="screen-readers">Screen Readers<a class="headerlink" href="#screen-readers" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Provide alt text for all images</li>
+<li>Use descriptive filenames</li>
+<li>Include text transcripts in narratives</li>
+</ul>
+<h3 id="zoommagnification">Zoom/Magnification<a class="headerlink" href="#zoommagnification" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Text legible at 200% zoom</li>
+<li>Icons recognizable at 150% zoom</li>
+<li>Layout doesn't break at high zoom levels</li>
+</ul>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h3 id="good-practices">Good Practices ✅<a class="headerlink" href="#good-practices" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear visual hierarchy</li>
+<li>Consistent color usage</li>
+<li>Readable text (legible at 50% zoom)</li>
+<li>Proper spacing (not cramped)</li>
+<li>Aligned to grid</li>
+<li>Appropriate aspect ratio</li>
+</ul>
+<h3 id="bad-practices">Bad Practices ❌<a class="headerlink" href="#bad-practices" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Inconsistent colors (random palette)</li>
+<li>Tiny unreadable text</li>
+<li>Cluttered layout (too many elements)</li>
+<li>Poor contrast (gray on white)</li>
+<li>Misaligned elements</li>
+<li>Wrong aspect ratio (stretched)</li>
+</ul>
+<h2 id="quality-checklist">Quality Checklist<a class="headerlink" href="#quality-checklist" title="Permanent link">&para;</a></h2>
+<p>Before finalizing any diagram:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Colors match style guide palette</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Text is readable at 50% zoom</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Icons are distinct (32x32px minimum)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Spacing is consistent (20-40px)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Alignment follows grid</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Aspect ratio correct</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Resolution 300 DPI or higher</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> File naming follows convention</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Alt text provided</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Narrative matches diagram</li>
+</ul>
+<hr />
+<p><strong>Author:</strong> Asif Hussain<br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.<br />
+<strong>Version:</strong> 1.0<br />
+<strong>Last Updated:</strong> November 19, 2025</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../search/main.js"></script>
+</body>
+</html>

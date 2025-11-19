@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX Operations Reference - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../diagrams/story/The-CORTEX-Story/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture/overview/">Architecture</a></li>
+                        <li><a href="../reference/api/">Technical Docs</a></li>
+                        <li><a href="../guides/developer-guide/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../diagrams/story/The-CORTEX-Story/" >The Awakening Story</a></li>
+                                
+                                    <li><a href="../diagrams/narratives/" >Narratives</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li><a href="../governance/THE-RULEBOOK/" >Cortex Bible</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                    <li><a href=".." >Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../reference/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href=".." >Operations</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../guides/developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../diagrams/prompts/" >DALL-E Prompts</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                    
+                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
+                    
+                    <div class="toc-wrapper">
+                        <h4>On This Page</h4>
+                        CORTEX Operations Reference - #cortex-operations-reference
+    Available Operations - #available-operations
+
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-operations-reference">CORTEX Operations Reference<a class="headerlink" href="#cortex-operations-reference" title="Permanent link">&para;</a></h1>
+<p>Complete reference for all CORTEX operations.</p>
+<hr />
+<h2 id="available-operations">Available Operations<a class="headerlink" href="#available-operations" title="Permanent link">&para;</a></h2>
+<h3 id="publish-cortex-to-branch">Publish CORTEX to Branch<a class="headerlink" href="#publish-cortex-to-branch" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Build production-ready package and publish to cortex-publish branch for user deployment</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "publish cortex"
+- "publish to branch"
+- "create publish branch"</p>
+<p><strong>Modules Used:</strong>
+- publish_branch_orchestrator</p>
+<hr />
+<h3 id="regenerate-all-diagrams">Regenerate All Diagrams<a class="headerlink" href="#regenerate-all-diagrams" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Analyze CORTEX design and regenerate all visual assets from scratch</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "regenerate diagrams"
+- "regenerate all diagrams"
+- "refresh diagrams"</p>
+<p><strong>Modules Used:</strong>
+- diagram_regeneration</p>
+<hr />
+<h3 id="cortex-interactive-demo">CORTEX Interactive Demo<a class="headerlink" href="#cortex-interactive-demo" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Hands-on walkthrough of CORTEX capabilities with live execution</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "demo"
+- "show me what cortex can do"
+- "walkthrough"</p>
+<p><strong>Modules Used:</strong>
+- demo_introduction
+- demo_help_system
+- demo_story_refresh
+- demo_dod_dor_workflow
+- demo_token_optimization
+- demo_code_review
+- demo_cleanup
+- demo_conversation
+- demo_completion</p>
+<hr />
+<h3 id="environment-setup">Environment Setup<a class="headerlink" href="#environment-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Configure CORTEX development environment on Mac/Windows/Linux</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "setup"
+- "setup environment"
+- "configure"</p>
+<p><strong>Modules Used:</strong>
+- project_validation
+- platform_detection
+- git_sync
+- virtual_environment
+- python_dependencies
+- vision_api
+- conversation_tracking
+- brain_initialization
+- brain_tests
+- tooling_verification
+- setup_completion</p>
+<hr />
+<h3 id="cortex-documentation">CORTEX Documentation<a class="headerlink" href="#cortex-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Comprehensive CORTEX documentation management combining story refresh and documentation updates</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "document"
+- "documentation"
+- "refresh story"</p>
+<p><strong>Modules Used:</strong>
+- load_story_template
+- apply_narrator_voice
+- validate_story_structure
+- save_story_markdown
+- update_mkdocs_index
+- build_story_preview
+- update_api_docs
+- refresh_user_guides
+- validate_doc_links
+- generate_doc_index
+- build_doc_preview</p>
+<hr />
+<h3 id="enterprise-documentation-generator">Enterprise Documentation Generator<a class="headerlink" href="#enterprise-documentation-generator" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "/CORTEX Generate documentation"
+- "/CORTEX generate documentation"
+- "generate documentation"</p>
+<p><strong>Modules Used:</strong>
+- enterprise_documentation_orchestrator_module</p>
+<hr />
+<h3 id="refresh-cortex-story">Refresh CORTEX Story<a class="headerlink" href="#refresh-cortex-story" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [DEPRECATED] Use 'document_cortex' instead - Update CORTEX story documentation with narrator voice transformation</p>
+<p><strong>Status:</strong> unknown</p>
+<p><strong>Natural Language Examples:</strong>
+- "refresh story"
+- "refresh cortex story"
+- "update story"</p>
+<p><strong>Modules Used:</strong>
+- load_story_template
+- apply_narrator_voice
+- validate_story_structure
+- save_story_markdown
+- update_mkdocs_index
+- build_story_preview</p>
+<hr />
+<h3 id="cortex-maintenance">CORTEX Maintenance<a class="headerlink" href="#cortex-maintenance" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "maintain"
+- "maintenance"
+- "cleanup"</p>
+<p><strong>Modules Used:</strong>
+- cleanup_orchestrator
+- optimize_cortex_orchestrator
+- validate_tier0_governance
+- validate_tier_health
+- analyze_test_coverage
+- profile_performance
+- audit_configuration
+- review_module_status
+- optimize_knowledge_graph
+- optimize_databases
+- optimize_context_cache
+- generate_optimization_plan
+- generate_health_report</p>
+<hr />
+<h3 id="feature-planning">Feature Planning<a class="headerlink" href="#feature-planning" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Interactive feature planning with Work Planner agent - breaks down requirements into executable phases</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "plan a feature"
+- "let's plan a feature"
+- "help me plan"</p>
+<p><strong>Modules Used:</strong>
+- feature_discovery
+- pattern_search
+- requirement_breakdown
+- dependency_analysis
+- risk_identification
+- roadmap_generation
+- plan_storage</p>
+<hr />
+<h3 id="update-documentation">Update Documentation<a class="headerlink" href="#update-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site</p>
+<p><strong>Status:</strong> deprecated</p>
+<p><strong>Natural Language Examples:</strong>
+- "update docs (deprecated - use document)"</p>
+<hr />
+<h3 id="brain-protection-validation">Brain Protection Validation<a class="headerlink" href="#brain-protection-validation" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically</p>
+<p><strong>Status:</strong> experimental</p>
+<p><strong>Natural Language Examples:</strong>
+- "check brain (experimental)"
+- "validate brain (experimental)"
+- "brain protection (experimental)"</p>
+<hr />
+<h3 id="brain-health-check-self-optimization">Brain Health Check &amp; Self-Optimization<a class="headerlink" href="#brain-health-check-self-optimization" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations</p>
+<p><strong>Status:</strong> deprecated</p>
+<p><strong>Natural Language Examples:</strong>
+- "brain health check (deprecated - use maintain)"</p>
+<hr />
+<h3 id="comprehensive-self-review">Comprehensive Self-Review<a class="headerlink" href="#comprehensive-self-review" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature</p>
+<p><strong>Status:</strong> experimental</p>
+<p><strong>Natural Language Examples:</strong>
+- "run self-review (experimental)"
+- "comprehensive review (experimental)"
+- "validate everything (experimental)"</p>
+<hr />
+<h3 id="test-suite-execution">Test Suite Execution<a class="headerlink" href="#test-suite-execution" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation</p>
+<p><strong>Status:</strong> integrated</p>
+<p><strong>Natural Language Examples:</strong>
+- "run tests (integrated into maintain operation)"
+- "test this (integrated into operations)"</p>
+<hr />
+<h3 id="cortex-optimization">CORTEX Optimization<a class="headerlink" href="#cortex-optimization" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations</p>
+<p><strong>Status:</strong> deprecated</p>
+<p><strong>Natural Language Examples:</strong>
+- "optimize (deprecated - use maintain)"</p>
+<hr />
+<h3 id="deploy-cortex-to-application">Deploy CORTEX to Application<a class="headerlink" href="#deploy-cortex-to-application" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature</p>
+<p><strong>Status:</strong> future</p>
+<p><strong>Natural Language Examples:</strong>
+- "deploy to app (future feature)"
+- "deploy cortex (future feature)"</p>
+<hr />
+<h3 id="design-implementation-synchronization">Design-Implementation Synchronization<a class="headerlink" href="#design-implementation-synchronization" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "sync design"
+- "design sync"
+- "synchronize design"</p>
+<p><strong>Modules Used:</strong>
+- design_sync_orchestrator</p>
+<hr />
+<h3 id="interactive-feature-planning">Interactive Feature Planning<a class="headerlink" href="#interactive-feature-planning" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities</p>
+<p><strong>Status:</strong> integrated</p>
+<p><strong>Natural Language Examples:</strong>
+- "let's plan a feature (integrated into feature planning)"
+- "collaborative planning (integrated into feature planning)"</p>
+<hr />
+<h3 id="architecture-solution-planning">Architecture Solution Planning<a class="headerlink" href="#architecture-solution-planning" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [FUTURE] Collaborative architecture design with guided questions - Advanced planning feature</p>
+<p><strong>Status:</strong> future</p>
+<p><strong>Natural Language Examples:</strong>
+- "architect a solution (future feature)"
+- "design architecture (future feature)"
+- "plan architecture (future feature)"</p>
+<hr />
+<h3 id="application-onboarding-intelligent-analysis">Application Onboarding &amp; Intelligent Analysis<a class="headerlink" href="#application-onboarding-intelligent-analysis" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> One-command CORTEX deployment with intelligent codebase discovery and contextual questioning</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "onboard this application"
+- "analyze my codebase"
+- "setup cortex for this project"</p>
+<p><strong>Modules Used:</strong>
+- copy_cortex_entry_points
+- install_tooling
+- initialize_brain_tiers
+- crawl_application
+- analyze_discoveries
+- generate_smart_questions
+- present_onboarding_summary</p>
+<hr />
+<h3 id="user-onboarding-cortex-introduction">User Onboarding &amp; CORTEX Introduction<a class="headerlink" href="#user-onboarding-cortex-introduction" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> Guided new user experience with interactive learning and hands-on validation</p>
+<p><strong>Status:</strong> ready</p>
+<p><strong>Natural Language Examples:</strong>
+- "onboard me"
+- "new user setup"
+- "cortex introduction"</p>
+<p><strong>Modules Used:</strong>
+- present_cortex_introduction
+- detect_user_environment
+- validate_cortex_installation
+- demonstrate_memory_capabilities
+- guide_first_interaction
+- setup_conversation_tracking
+- present_graduation_summary</p>
+<hr />
+<h3 id="refactoring-module-planning">Refactoring Module Planning<a class="headerlink" href="#refactoring-module-planning" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance</p>
+<p><strong>Status:</strong> future</p>
+<p><strong>Natural Language Examples:</strong>
+- "refactor this module (future feature)"
+- "refactor code (future feature)"</p>
+<hr />
+<h3 id="command-discovery-help">Command Discovery &amp; Help<a class="headerlink" href="#command-discovery-help" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface</p>
+<p><strong>Status:</strong> integrated</p>
+<p><strong>Natural Language Examples:</strong>
+- "help (integrated into help system)"
+- "show commands (integrated into help system)"</p>
+<hr />
+<h3 id="command-search">Command Search<a class="headerlink" href="#command-search" title="Permanent link">&para;</a></h3>
+<p><strong>Description:</strong> [INTEGRATED] Command search integrated into CORTEX help system and natural language interface</p>
+<p><strong>Status:</strong> integrated</p>
+<p><strong>Natural Language Examples:</strong>
+- "find command (integrated into help system)"
+- "search commands (integrated into help system)"</p>
+<hr />
+<p><em>Generated by CORTEX Documentation System</em></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

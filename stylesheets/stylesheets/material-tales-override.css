@@ -1,0 +1,435 @@
+/* ============================================
+   CORTEX Tales Color Theme Override for Material
+   Applies Tales color scheme to Material theme
+   ============================================ */
+
+/* Import Inter and JetBrains Mono fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap');
+
+/* Tales Color Palette */
+:root {
+    /* Primary Colors */
+    --md-primary-fg-color: #4F46E5;
+    --md-primary-fg-color--light: #6366F1;
+    --md-primary-fg-color--dark: #4338CA;
+    --md-primary-bg-color: #F1F5F9;
+    --md-primary-bg-color--light: #FFFFFF;
+    
+    /* Accent Colors */
+    --md-accent-fg-color: #10B981;
+    --md-accent-fg-color--transparent: rgba(16, 185, 129, 0.1);
+    --md-accent-bg-color: #F1F5F9;
+    --md-accent-bg-color--light: #FFFFFF;
+    
+    /* Background Colors - Dark Theme */
+    --md-default-bg-color: #0F172A;
+    --md-default-bg-color--light: #1E293B;
+    --md-default-bg-color--lighter: #334155;
+    --md-default-bg-color--lightest: #475569;
+    
+    /* Foreground Colors */
+    --md-default-fg-color: #F1F5F9;
+    --md-default-fg-color--light: #CBD5E1;
+    --md-default-fg-color--lighter: #94A3B8;
+    --md-default-fg-color--lightest: #64748B;
+    
+    /* Code Colors */
+    --md-code-bg-color: #1E293B;
+    --md-code-fg-color: #F1F5F9;
+    --md-code-hl-color: rgba(79, 70, 229, 0.15);
+    --md-code-hl-number-color: #F59E0B;
+    --md-code-hl-special-color: #10B981;
+    --md-code-hl-function-color: #4F46E5;
+    --md-code-hl-constant-color: #EC4899;
+    --md-code-hl-keyword-color: #8B5CF6;
+    --md-code-hl-string-color: #10B981;
+    
+    /* Typography */
+    --md-text-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --md-code-font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* Shadows */
+    --md-shadow-z1: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --md-shadow-z2: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --md-shadow-z3: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    
+    /* Border Colors */
+    --md-border-color: #334155;
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+body {
+    font-family: var(--md-text-font-family);
+    background: var(--md-default-bg-color);
+    color: var(--md-default-fg-color);
+}
+
+/* Apply font to all elements */
+* {
+    font-family: var(--md-text-font-family);
+}
+
+code, pre, kbd, samp {
+    font-family: var(--md-code-font-family) !important;
+}
+
+/* ============================================
+   HEADER - Purple Gradient
+   ============================================ */
+
+.md-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+    border-bottom: none;
+}
+
+.md-header__title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.md-header__button {
+    color: var(--md-primary-bg-color);
+}
+
+/* Search bar styling */
+.md-search__input {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--md-primary-bg-color);
+}
+
+.md-search__input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.md-search__input:focus {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+   SIDEBAR / NAVIGATION
+   ============================================ */
+
+.md-sidebar {
+    background-color: var(--md-default-bg-color--light);
+    border-right: 1px solid var(--md-border-color);
+}
+
+.md-nav {
+    font-family: var(--md-text-font-family);
+}
+
+.md-nav__title {
+    background-color: var(--md-default-bg-color--lighter);
+    color: var(--md-default-fg-color);
+    font-weight: 700;
+    border-bottom: 2px solid var(--md-primary-fg-color);
+}
+
+.md-nav__link {
+    color: var(--md-default-fg-color--lighter);
+    transition: all 0.3s ease;
+}
+
+.md-nav__link:hover {
+    color: var(--md-default-fg-color);
+    background-color: var(--md-default-bg-color--lighter);
+}
+
+.md-nav__link--active {
+    color: var(--md-primary-fg-color);
+    font-weight: 600;
+    background-color: rgba(79, 70, 229, 0.1);
+    border-left: 3px solid var(--md-primary-fg-color);
+}
+
+/* Navigation items */
+.md-nav__item {
+    border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+/* ============================================
+   CONTENT AREA
+   ============================================ */
+
+.md-content {
+    background-color: var(--md-default-bg-color);
+}
+
+.md-content__inner {
+    color: var(--md-default-fg-color);
+}
+
+/* Headings */
+.md-content h1 {
+    color: var(--md-default-fg-color);
+    font-weight: 800;
+    border-bottom: 3px solid var(--md-primary-fg-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.md-content h2 {
+    color: var(--md-default-fg-color);
+    font-weight: 700;
+    border-bottom: 2px solid var(--md-default-bg-color--lighter);
+    padding-bottom: 0.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.md-content h3 {
+    color: var(--md-default-fg-color--light);
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.md-content h4,
+.md-content h5,
+.md-content h6 {
+    color: var(--md-default-fg-color--lighter);
+    font-weight: 600;
+}
+
+/* Paragraphs and text */
+.md-content p {
+    color: var(--md-default-fg-color--light);
+    line-height: 1.7;
+}
+
+/* Links */
+.md-content a {
+    color: var(--md-primary-fg-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.md-content a:hover {
+    color: var(--md-primary-fg-color--light);
+    border-bottom-color: var(--md-primary-fg-color--light);
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+
+.md-content code {
+    background-color: var(--md-code-bg-color);
+    color: var(--md-code-fg-color);
+    padding: 0.2em 0.4em;
+    border-radius: 0.375rem;
+    font-family: var(--md-code-font-family);
+    font-size: 0.875em;
+}
+
+.md-content pre {
+    background-color: var(--md-code-bg-color);
+    border: 1px solid var(--md-border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.md-content pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Syntax highlighting */
+.highlight {
+    background-color: var(--md-code-bg-color);
+    border-radius: 0.5rem;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+.md-content table {
+    background-color: var(--md-default-bg-color--light);
+    border: 1px solid var(--md-border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.md-content table thead {
+    background-color: var(--md-default-bg-color--lighter);
+    color: var(--md-default-fg-color);
+    font-weight: 600;
+}
+
+.md-content table th,
+.md-content table td {
+    border: 1px solid var(--md-border-color);
+    padding: 0.75rem;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-content table tbody tr:hover {
+    background-color: var(--md-default-bg-color--lighter);
+}
+
+/* ============================================
+   ADMONITIONS
+   ============================================ */
+
+.admonition {
+    background-color: var(--md-default-bg-color--light);
+    border-left: 4px solid var(--md-primary-fg-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.admonition-title {
+    font-weight: 700;
+    color: var(--md-primary-fg-color);
+}
+
+.admonition.note {
+    border-left-color: #4F46E5;
+}
+
+.admonition.tip {
+    border-left-color: #10B981;
+}
+
+.admonition.warning {
+    border-left-color: #F59E0B;
+}
+
+.admonition.danger {
+    border-left-color: #EF4444;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.md-footer {
+    background-color: var(--md-default-bg-color--light);
+    border-top: 1px solid var(--md-border-color);
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-footer-meta {
+    background-color: var(--md-default-bg-color);
+}
+
+.md-footer__link {
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-footer__link:hover {
+    color: var(--md-primary-fg-color);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.md-button {
+    background-color: var(--md-primary-fg-color);
+    color: var(--md-primary-bg-color);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.md-button:hover {
+    background-color: var(--md-primary-fg-color--light);
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+}
+
+.md-button--primary {
+    background-color: var(--md-primary-fg-color);
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.tabbed-set {
+    background-color: var(--md-default-bg-color--light);
+    border: 1px solid var(--md-border-color);
+    border-radius: 0.5rem;
+}
+
+.tabbed-labels label {
+    color: var(--md-default-fg-color--lighter);
+    background-color: var(--md-default-bg-color--lighter);
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.tabbed-labels label:hover {
+    color: var(--md-default-fg-color);
+}
+
+.tabbed-labels label[for]:checked {
+    color: var(--md-primary-fg-color);
+    background-color: var(--md-default-bg-color--light);
+    border-bottom: 2px solid var(--md-primary-fg-color);
+}
+
+/* ============================================
+   SCROLLBARS
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--md-default-bg-color--light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--md-default-bg-color--lighter);
+    border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--md-primary-fg-color);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 76.1875em) {
+    .md-nav--primary .md-nav__title {
+        background-color: var(--md-default-bg-color--light);
+    }
+}
+
+/* ============================================
+   CUSTOM ENHANCEMENTS
+   ============================================ */
+
+/* Add glow effect to active elements */
+.md-nav__link--active,
+.md-button:hover {
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+}
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Card-like styling for content sections */
+.md-content article {
+    background-color: var(--md-default-bg-color--light);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--md-border-color);
+    box-shadow: var(--md-shadow-z2);
+}

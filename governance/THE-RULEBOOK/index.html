@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Cortex Bible - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../.." id="logo">
+                        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../..">Home</a></li>
+                        <li><a href="../../diagrams/story/The-CORTEX-Story/">The CORTEX Birth</a></li>
+                        <li><a href="./">Cortex Bible</a></li>
+                        <li><a href="../../architecture/overview/">Architecture</a></li>
+                        <li><a href="../../reference/api/">Technical Docs</a></li>
+                        <li><a href="../../guides/developer-guide/">User Guides</a></li>
+                        <li><a href="../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../../diagrams/story/The-CORTEX-Story/" >The Awakening Story</a></li>
+                                
+                                    <li><a href="../../diagrams/narratives/" >Narratives</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li><a href="./" class="active">Cortex Bible</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                    <li><a href="../.." >Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../../reference/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../.." >Operations</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../guides/developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../../diagrams/prompts/" >DALL-E Prompts</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                    
+                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
+                    
+                    <div class="toc-wrapper">
+                        <h4>On This Page</h4>
+                        THE CORTEX RULEBOOK - #the-cortex-rulebook
+    About This Document - #about-this-document
+    I. Core Principles (Tier 0 Instinct) - #i-core-principles-tier-0-instinct
+    II. Test-Driven Development (TDD) - #ii-test-driven-development-tdd
+    III. Brain Protection System (SKULL Rules) - #iii-brain-protection-system-skull-rules
+    IV. Optimization Principles - #iv-optimization-principles
+    V. Code Quality Standards - #v-code-quality-standards
+    VI. Enforcement Mechanisms - #vi-enforcement-mechanisms
+    VII. Rulebook Maintenance - #vii-rulebook-maintenance
+    VIII. Conclusion - #viii-conclusion
+
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="the-cortex-rulebook">THE CORTEX RULEBOOK<a class="headerlink" href="#the-cortex-rulebook" title="Permanent link">&para;</a></h1>
+<p><strong>The Primary Bible of CORTEX</strong></p>
+<p><em>Author: Asif Hussain | © 2024-2025</em><br />
+<em>Last Updated: November 19, 2025</em><br />
+<em>Version: 2.1</em></p>
+<hr />
+<h2 id="about-this-document">About This Document<a class="headerlink" href="#about-this-document" title="Permanent link">&para;</a></h2>
+<p>This is <strong>THE</strong> authoritative source of truth for all CORTEX governance, rules, standards, and principles. Every rule, constraint, and best practice is derived from live brain sources - no placeholders, no mock data.</p>
+<p><strong>Brain Sources (Live Data):</strong>
+- <code>cortex-brain/brain-protection-rules.yaml</code> - 27 protection rules across 10 layers
+- <code>cortex-brain/documents/implementation-guides/test-strategy.yaml</code> - TDD philosophy, test categories
+- <code>cortex-brain/documents/analysis/optimization-principles.yaml</code> - Pragmatic MVP approach, validated patterns</p>
+<p><strong>Wired Into CORTEX Operations:</strong><br />
+This rulebook is not documentation for documentation's sake. Every rule here is enforced by:
+- Brain Protector agent (automated architectural protection)
+- Test suite (SKULL rules validation)
+- Design Sync orchestrator (commit-time validation)
+- Health monitoring (continuous governance checks)</p>
+<hr />
+<h2 id="i-core-principles-tier-0-instinct">I. Core Principles (Tier 0 Instinct)<a class="headerlink" href="#i-core-principles-tier-0-instinct" title="Permanent link">&para;</a></h2>
+<h3 id="philosophy-pragmatic-mvp-approach">Philosophy: Pragmatic MVP Approach<a class="headerlink" href="#philosophy-pragmatic-mvp-approach" title="Permanent link">&para;</a></h3>
+<p>Balance aspirational goals with shipping reality. Block on critical issues,
+warn on future optimizations. Ship working software incrementally.</p>
+<h3 id="tier-0-immutable-instincts">Tier 0 Immutable Instincts<a class="headerlink" href="#tier-0-immutable-instincts" title="Permanent link">&para;</a></h3>
+<p><strong>These instincts CANNOT be bypassed.</strong> They are hardwired into CORTEX's brain and enforced automatically.</p>
+<ol>
+<li><strong>INCREMENTAL_PLAN_GENERATION</strong></li>
+<li><strong>TDD_ENFORCEMENT</strong></li>
+<li><strong>DEFINITION_OF_READY</strong></li>
+<li><strong>DEFINITION_OF_DONE</strong></li>
+<li><strong>SOLID_PRINCIPLES</strong></li>
+<li><strong>CODE_STYLE_CONSISTENCY</strong></li>
+<li><strong>LOCAL_FIRST</strong></li>
+<li><strong>BRAIN_PROTECTION_TESTS_MANDATORY</strong></li>
+<li><strong>MACHINE_READABLE_FORMATS</strong></li>
+<li><strong>SKULL_TEST_BEFORE_CLAIM</strong></li>
+<li><strong>SKULL_INTEGRATION_VERIFICATION</strong></li>
+<li><strong>SKULL_VISUAL_REGRESSION</strong></li>
+<li><strong>SKULL_RETRY_WITHOUT_LEARNING</strong></li>
+<li><strong>SKULL_TRANSFORMATION_VERIFICATION</strong></li>
+<li><strong>SKULL_PRIVACY_PROTECTION</strong></li>
+<li><strong>SKULL_FACULTY_INTEGRITY</strong></li>
+<li><strong>GIT_ISOLATION_ENFORCEMENT</strong></li>
+<li><strong>DISTRIBUTED_DATABASE_ARCHITECTURE</strong></li>
+<li><strong>CORTEX_PROMPT_FILE_PROTECTION</strong></li>
+</ol>
+<p><strong>Total Instincts:</strong> 19</p>
+<h3 id="core-development-principles">Core Development Principles<a class="headerlink" href="#core-development-principles" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Working software &gt; perfect architecture</li>
+<li>Fail on blocking issues, warn on future work</li>
+<li>MVP thresholds &gt; aspirational goals for Phase 0</li>
+<li>Incremental progress &gt; all-or-nothing</li>
+<li>Backward compatibility &gt; breaking changes</li>
+</ul>
+<hr />
+<h2 id="ii-test-driven-development-tdd">II. Test-Driven Development (TDD)<a class="headerlink" href="#ii-test-driven-development-tdd" title="Permanent link">&para;</a></h2>
+<h3 id="test-strategy-philosophy">Test Strategy Philosophy<a class="headerlink" href="#test-strategy-philosophy" title="Permanent link">&para;</a></h3>
+<h3 id="performance-budgets">Performance Budgets<a class="headerlink" href="#performance-budgets" title="Permanent link">&para;</a></h3>
+<p>Phase 0 calibrated thresholds for realistic MVP expectations:</p>
+<hr />
+<h2 id="iii-brain-protection-system-skull-rules">III. Brain Protection System (SKULL Rules)<a class="headerlink" href="#iii-brain-protection-system-skull-rules" title="Permanent link">&para;</a></h2>
+<h3 id="protection-architecture">Protection Architecture<a class="headerlink" href="#protection-architecture" title="Permanent link">&para;</a></h3>
+<p>The Brain Protection System implements <strong>10 protection layers</strong> with <strong>27 automated rules</strong> to prevent architectural degradation.</p>
+<h3 id="critical-system-paths">Critical System Paths<a class="headerlink" href="#critical-system-paths" title="Permanent link">&para;</a></h3>
+<p>These paths trigger high-level protection:</p>
+<ul>
+<li><code>CORTEX/src/tier0/</code></li>
+<li><code>prompts/internal/</code></li>
+<li><code>governance/rules.md</code></li>
+<li><code>cortex-brain/tier0/</code></li>
+</ul>
+<h3 id="protection-layers">Protection Layers<a class="headerlink" href="#protection-layers" title="Permanent link">&para;</a></h3>
+<h4 id="layer-1-instinct-immutability">Layer 1: Instinct Immutability<a class="headerlink" href="#layer-1-instinct-immutability" title="Permanent link">&para;</a></h4>
+<p>Tier 0 governance rules cannot be bypassed</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>INCREMENTAL_PLAN_GENERATION</strong>: Incremental YAML Plan Generation
+   - <em>When generating YAML planning documents, create file first then add phases incrementally to avoid response length limits</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>TDD_ENFORCEMENT</strong>: Test-Driven Development Enforcement
+   - <em>Attempt to bypass Test-Driven Development requirement</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>DEFINITION_OF_DONE</strong>: Definition of Done
+   - <em>Attempt to bypass Definition of Done (zero errors, zero warnings)</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>DEFINITION_OF_READY</strong>: Definition of Ready
+   - <em>Work item does not meet DoR criteria</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>BRAIN_PROTECTION_TESTS_MANDATORY</strong>: Brain Protection Tests - 100% Pass Rate Mandatory
+   - <em>Brain protection tests MUST pass - no exceptions</em>
+   - Severity: <code>blocked</code></p>
+<p>⚠️ <strong>MACHINE_READABLE_FORMATS</strong>: Use Machine-Readable Formats for Efficiency
+   - <em>Non-user files should use YAML/JSON, not Markdown</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>ACTIVE_NARRATOR_VOICE</strong>: Active Narrator Voice (Not Passive Documentation)
+   - <em>Story uses passive/clinical narrator voice instead of active storytelling</em>
+   - Severity: <code>warning</code></p>
+<p>🚫 <strong>CORTEX_PROMPT_FILE_PROTECTION</strong>: CORTEX.prompt.md Protection (Never Rename, Safe Update)
+   - <em>Prevent renaming CORTEX.prompt.md and enforce safe update procedure</em>
+   - Severity: <code>blocked</code></p>
+<h4 id="layer-2-tier-boundary-protection">Layer 2: Tier Boundary Protection<a class="headerlink" href="#layer-2-tier-boundary-protection" title="Permanent link">&para;</a></h4>
+<p>Data stored in correct tier</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>TIER0_APPLICATION_DATA</strong>: No Application Data in Tier 0
+   - <em>Application-specific path in Tier 0 (immutable governance)</em>
+   - Severity: <code>blocked</code></p>
+<p>⚠️ <strong>TIER2_CONVERSATION_DATA</strong>: No Conversation Data in Tier 2
+   - <em>Conversation data should be in Tier 1, not Tier 2</em>
+   - Severity: <code>warning</code></p>
+<h4 id="layer-3-solid-compliance">Layer 3: SOLID Compliance<a class="headerlink" href="#layer-3-solid-compliance" title="Permanent link">&para;</a></h4>
+<p>No God Objects, proper separation</p>
+<p><strong>Rules:</strong></p>
+<p>⚠️ <strong>SINGLE_RESPONSIBILITY</strong>: Single Responsibility Principle
+   - <em>Potential God Object pattern detected (adding multiple responsibilities)</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>DEPENDENCY_INVERSION</strong>: Dependency Inversion Principle
+   - <em>Hardcoded dependency detected (violates DIP)</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>OPEN_CLOSED</strong>: Open/Closed Principle
+   - <em>Modifying existing behavior instead of extending</em>
+   - Severity: <code>warning</code></p>
+<p>🚫 <strong>CORTEX_WORKSPACE_ISOLATION</strong>: CORTEX Workspace Isolation
+   - <em>All CORTEX-generated documentation for application repos MUST be within CORTEX/Workspaces/ folder</em>
+   - Severity: <code>blocked</code></p>
+<p>⚠️ <strong>CODE_STYLE_CONSISTENCY</strong>: Adopt User's Code Style
+   - <em>Generated code should match existing codebase style conventions</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>NO_EMOJIS_IN_SCRIPTS</strong>: No Emojis in Generated Scripts
+   - <em>Scripts (Python, PowerShell, Bash, etc.) should not contain emojis</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>NO_ROOT_SUMMARY_DOCUMENTS</strong>: No Summary Documents in Repository Root
+   - <em>Summary/report documents should be in cortex-brain/documents/, not repository root</em>
+   - Severity: <code>warning</code></p>
+<p>🚫 <strong>YAML_ONLY_PLANNING</strong>: YAML-Only Planning Documents (No Markdown Plans)
+   - <em>ALL planning documents MUST be created in YAML format, NEVER Markdown - prevents documentation bloat and enforces machine-readable standards</em>
+   - Severity: <code>blocked</code></p>
+<h4 id="layer-4-hemisphere-specialization">Layer 4: Hemisphere Specialization<a class="headerlink" href="#layer-4-hemisphere-specialization" title="Permanent link">&para;</a></h4>
+<p>Strategic vs tactical separation</p>
+<p><strong>Rules:</strong></p>
+<p>⚠️ <strong>LEFT_BRAIN_TACTICAL</strong>: Left Brain Tactical Only
+   - <em>Strategic planning logic in tactical executor</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>RIGHT_BRAIN_STRATEGIC</strong>: Right Brain Strategic Only
+   - <em>Tactical execution logic in strategic planner</em>
+   - Severity: <code>warning</code></p>
+<h4 id="layer-5-skull-protection-layer">Layer 5: SKULL Protection Layer<a class="headerlink" href="#layer-5-skull-protection-layer" title="Permanent link">&para;</a></h4>
+<p>Test validation and quality enforcement (prevents November 9th incident)</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>SKULL_TEST_BEFORE_CLAIM</strong>: Test Before Claim (SKULL-001)
+   - <em>Never claim a fix is complete without test validation</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_INTEGRATION_VERIFICATION</strong>: Integration Verification (SKULL-002)
+   - <em>Integration must be tested end-to-end</em>
+   - Severity: <code>blocked</code></p>
+<p>⚠️ <strong>SKULL_VISUAL_REGRESSION</strong>: Visual Regression (SKULL-003)
+   - <em>CSS/UI changes require visual validation</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>SKULL_RETRY_WITHOUT_LEARNING</strong>: Retry Without Learning (SKULL-004)
+   - <em>Must diagnose failures before retrying same approach</em>
+   - Severity: <code>warning</code></p>
+<p>🚫 <strong>SKULL_TRANSFORMATION_VERIFICATION</strong>: Transformation Verification (SKULL-005)
+   - <em>Operations claiming transformation MUST produce measurable changes</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_PRIVACY_PROTECTION</strong>: Privacy Protection (SKULL-006)
+   - <em>Publish operations MUST NOT include files with machine-specific paths or private data</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_HEADER_FOOTER_IN_RESPONSE</strong>: Faculty Integrity Check (SKULL-007)
+   - <em>Publish package MUST contain ALL essential CORTEX faculties for full operation</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_HEADER_FOOTER_IN_RESPONSE_LEGACY</strong>: Header/Footer in Copilot Response (Legacy)
+   - <em>Operation orchestrators MUST include formatted headers/footers in Copilot Chat response</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_ALL_TESTS_MUST_PASS</strong>: All Tests Must Pass (SKULL-007)
+   - <em>Test suite MUST have 100% pass rate before claiming any work complete</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_MULTI_TRACK_VALIDATION</strong>: Multi-Track Configuration Validation (SKULL-008)
+   - <em>Multi-track mode MUST have valid configuration with proper phase distribution</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_TRACK_ISOLATION</strong>: Track Work Isolation (SKULL-009)
+   - <em>Work on Track A MUST NOT modify Track B's assigned modules</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>SKULL_CONSOLIDATION_INTEGRITY</strong>: Track Consolidation Integrity (SKULL-010)
+   - <em>Consolidation MUST merge all track progress accurately without data loss</em>
+   - Severity: <code>blocked</code></p>
+<h4 id="layer-6-knowledge-quality">Layer 6: Knowledge Quality<a class="headerlink" href="#layer-6-knowledge-quality" title="Permanent link">&para;</a></h4>
+<p>Pattern validation and confidence thresholds</p>
+<p><strong>Rules:</strong></p>
+<p>⚠️ <strong>MIN_OCCURRENCES</strong>: Minimum Occurrences for High Confidence
+   - <em>High confidence (&gt;0.50) with single occurrence</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>PATTERN_VALIDATION</strong>: Pattern Validation
+   - <em>Pattern lacks validation evidence</em>
+   - Severity: <code>warning</code></p>
+<h4 id="layer-7-commit-integrity">Layer 7: Commit Integrity<a class="headerlink" href="#layer-7-commit-integrity" title="Permanent link">&para;</a></h4>
+<p>Brain state files excluded from commits</p>
+<p><strong>Rules:</strong></p>
+<p>⚠️ <strong>BRAIN_STATE_GITIGNORE</strong>: Brain State Files Not Committed
+   - <em>Brain state file should not be committed</em>
+   - Severity: <code>warning</code></p>
+<p>⚠️ <strong>TEMP_FILES_COMMIT</strong>: Temporary Files Not Committed
+   - <em>Temporary or generated files should not be committed</em>
+   - Severity: <code>warning</code></p>
+<h4 id="layer-8-git-isolation-enforcement">Layer 8: Git Isolation Enforcement<a class="headerlink" href="#layer-8-git-isolation-enforcement" title="Permanent link">&para;</a></h4>
+<p>CORTEX code MUST NEVER be committed to user application repositories</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>GIT_ISOLATION_ENFORCEMENT</strong>: CORTEX Code Isolation from User Repos
+   - <em>CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository</em>
+   - Severity: <code>blocked</code></p>
+<p>🚫 <strong>GIT_HOOKS_INSTALLATION</strong>: Git Hooks Must Be Installed During Setup
+   - <em>Setup process must install git hooks to prevent accidental CORTEX code commits</em>
+   - Severity: <code>blocked</code></p>
+<h4 id="layer-6-knowledge-namespace-boundaries">Layer 6: Knowledge Namespace Boundaries<a class="headerlink" href="#layer-6-knowledge-namespace-boundaries" title="Permanent link">&para;</a></h4>
+<p>Enforce separation between CORTEX framework and workspace knowledge</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>NAMESPACE-001</strong>: Protected CORTEX Namespace
+   - <em>Prevent user code from writing to cortex.</em> namespace*
+   - Severity: <code>blocked</code></p>
+<p>⚠️ <strong>NAMESPACE-002</strong>: Workspace Isolation
+   - <em>Isolate workspace patterns by owner/project</em>
+   - Severity: <code>warning</code></p>
+<p>🚫 <strong>NAMESPACE-003</strong>: No Namespace Mixing
+   - <em>Prevent patterns from spanning multiple namespaces</em>
+   - Severity: <code>blocked</code></p>
+<h4 id="layer-9-distributed-database-architecture">Layer 9: Distributed Database Architecture<a class="headerlink" href="#layer-9-distributed-database-architecture" title="Permanent link">&para;</a></h4>
+<p>CORTEX uses tier-specific databases, never monolithic cortex-brain.db</p>
+<p><strong>Rules:</strong></p>
+<p>🚫 <strong>DISTRIBUTED_DATABASE_ARCHITECTURE</strong>: Use Tier-Specific Databases (Never Monolithic)
+   - <em>Code referencing monolithic cortex-brain.db instead of tier-specific databases</em>
+   - Severity: <code>blocked</code></p>
+<h3 id="application-isolation">Application Isolation<a class="headerlink" href="#application-isolation" title="Permanent link">&para;</a></h3>
+<p>These application-specific paths don't belong in CORTEX core:</p>
+<ul>
+<li><code>SPA/</code></li>
+<li><code>KSESSIONS/</code></li>
+<li><code>NOOR/</code></li>
+<li><code>blazor</code></li>
+<li><code>signalr</code></li>
+<li><code>canvas</code></li>
+</ul>
+<h3 id="brain-state-protection">Brain State Protection<a class="headerlink" href="#brain-state-protection" title="Permanent link">&para;</a></h3>
+<p>These files contain ephemeral state and shouldn't be committed:</p>
+<ul>
+<li><code>conversation-history.jsonl</code></li>
+<li><code>conversation-context.jsonl</code></li>
+<li><code>events.jsonl</code></li>
+<li><code>development-context.yaml</code></li>
+<li><code>protection-events.jsonl</code></li>
+</ul>
+<hr />
+<h2 id="iv-optimization-principles">IV. Optimization Principles<a class="headerlink" href="#iv-optimization-principles" title="Permanent link">&para;</a></h2>
+<h3 id="pragmatic-mvp-approach">Pragmatic MVP Approach<a class="headerlink" href="#pragmatic-mvp-approach" title="Permanent link">&para;</a></h3>
+<h3 id="test-optimization-patterns">Test Optimization Patterns<a class="headerlink" href="#test-optimization-patterns" title="Permanent link">&para;</a></h3>
+<h4 id="three-tier-test-categorization">Three-Tier Test Categorization<a class="headerlink" href="#three-tier-test-categorization" title="Permanent link">&para;</a></h4>
+<p>Classify tests as BLOCKING, WARNING, or PRAGMATIC</p>
+<p><strong>Benefit:</strong> Clear remediation strategy, no wasted effort on non-critical issues</p>
+<p><strong>Evidence:</strong> 18 failures → 0 failures in 6 hours using this approach</p>
+<h4 id="phase-based-remediation">Phase-Based Remediation<a class="headerlink" href="#phase-based-remediation" title="Permanent link">&para;</a></h4>
+<p>Fix tests in logical phases by category</p>
+<p><strong>Benefit:</strong> Clear progress, systematic approach, easier debugging</p>
+<p><strong>Evidence:</strong> 91.4% → 92.1% → 92.8% → 93.0% pass rate progression</p>
+<h4 id="reality-based-performance-budgets">Reality-Based Performance Budgets<a class="headerlink" href="#reality-based-performance-budgets" title="Permanent link">&para;</a></h4>
+<p>Set thresholds based on current architecture, not aspirational goals</p>
+<p><strong>Benefit:</strong> Tests guide optimization without blocking development</p>
+<p><strong>Evidence:</strong> 5 YAML performance tests fixed by threshold adjustment</p>
+<h3 id="architecture-optimization-patterns">Architecture Optimization Patterns<a class="headerlink" href="#architecture-optimization-patterns" title="Permanent link">&para;</a></h3>
+<h4 id="backward-compatibility-aliasing">Backward Compatibility Aliasing<a class="headerlink" href="#backward-compatibility-aliasing" title="Permanent link">&para;</a></h4>
+<p>Add aliases when refactoring/renaming APIs</p>
+<p><strong>Benefit:</strong> Avoid breaking existing code, smooth migration</p>
+<p><strong>Evidence:</strong> Fixed integration test without changing consuming code</p>
+<h4 id="multiple-valid-sources-pattern">Multiple Valid Sources Pattern<a class="headerlink" href="#multiple-valid-sources-pattern" title="Permanent link">&para;</a></h4>
+<p>Allow definitions in both centralized and inline locations</p>
+<p><strong>Benefit:</strong> Self-contained operations + central registry coexist</p>
+<p><strong>Evidence:</strong> YAML consistency tests fixed by dual-source validation</p>
+<h4 id="lazy-initialization-with-defaults">Lazy Initialization with Defaults<a class="headerlink" href="#lazy-initialization-with-defaults" title="Permanent link">&para;</a></h4>
+<p>Provide default empty structures, initialize on first use</p>
+<p><strong>Benefit:</strong> No initialization order dependencies, tests easier to write</p>
+<p><strong>Evidence:</strong> IntentRouter test fixed by adding default agent initialization</p>
+<hr />
+<h2 id="v-code-quality-standards">V. Code Quality Standards<a class="headerlink" href="#v-code-quality-standards" title="Permanent link">&para;</a></h2>
+<h3 id="solid-principles-non-negotiable">SOLID Principles (Non-Negotiable)<a class="headerlink" href="#solid-principles-non-negotiable" title="Permanent link">&para;</a></h3>
+<p>All CORTEX code must adhere to SOLID principles:</p>
+<ol>
+<li><strong>Single Responsibility Principle</strong> - Each class has one reason to change</li>
+<li><strong>Open/Closed Principle</strong> - Open for extension, closed for modification</li>
+<li><strong>Liskov Substitution Principle</strong> - Subtypes must be substitutable for base types</li>
+<li><strong>Interface Segregation Principle</strong> - Many specific interfaces &gt; one general interface</li>
+<li><strong>Dependency Inversion Principle</strong> - Depend on abstractions, not concretions</li>
+</ol>
+<h3 id="code-style-consistency">Code Style Consistency<a class="headerlink" href="#code-style-consistency" title="Permanent link">&para;</a></h3>
+<p><strong>SKULL Rule:</strong> <code>CODE_STYLE_CONSISTENCY</code></p>
+<ul>
+<li>Adopt user's coding style (naming conventions, formatting)</li>
+<li>BUT never compromise on SOLID principles, OOP best practices, security</li>
+<li><strong>Hierarchy:</strong> Best practices &gt; Style preferences</li>
+</ul>
+<h3 id="local-first-architecture">Local-First Architecture<a class="headerlink" href="#local-first-architecture" title="Permanent link">&para;</a></h3>
+<p><strong>SKULL Rule:</strong> <code>LOCAL_FIRST</code></p>
+<ul>
+<li>All CORTEX functionality works offline</li>
+<li>No mandatory cloud dependencies</li>
+<li>User data stays on user's machine</li>
+<li>Optional cloud integration for advanced features</li>
+</ul>
+<h3 id="machine-readable-formats">Machine-Readable Formats<a class="headerlink" href="#machine-readable-formats" title="Permanent link">&para;</a></h3>
+<p><strong>SKULL Rule:</strong> <code>MACHINE_READABLE_FORMATS</code></p>
+<ul>
+<li>YAML for configuration, metadata, governance</li>
+<li>JSON for data exchange, API contracts</li>
+<li>Markdown for documentation</li>
+<li>Python for logic, orchestration</li>
+</ul>
+<h3 id="git-isolation">Git Isolation<a class="headerlink" href="#git-isolation" title="Permanent link">&para;</a></h3>
+<p><strong>SKULL Rule:</strong> <code>GIT_ISOLATION_ENFORCEMENT</code></p>
+<p><strong>CRITICAL:</strong> CORTEX code is NEVER committed to user repositories.</p>
+<ul>
+<li>CORTEX lives in its own repository</li>
+<li>User projects reference CORTEX as dependency</li>
+<li>No mixing of CORTEX implementation with user code</li>
+</ul>
+<hr />
+<h2 id="vi-enforcement-mechanisms">VI. Enforcement Mechanisms<a class="headerlink" href="#vi-enforcement-mechanisms" title="Permanent link">&para;</a></h2>
+<h3 id="automated-enforcement">Automated Enforcement<a class="headerlink" href="#automated-enforcement" title="Permanent link">&para;</a></h3>
+<p>This rulebook is enforced through multiple automated systems:</p>
+<ol>
+<li><strong>Brain Protector Agent</strong> - Real-time architectural protection</li>
+<li>Monitors file changes</li>
+<li>Triggers protection layers</li>
+<li>Blocks SKULL rule violations</li>
+<li>
+<p>Generates protection events</p>
+</li>
+<li>
+<p><strong>Test Suite</strong> - Continuous validation</p>
+</li>
+<li>900+ tests validate governance</li>
+<li>SKULL rules tested before every claim</li>
+<li>Integration verification mandatory</li>
+<li>
+<p>Visual regression testing for UI changes</p>
+</li>
+<li>
+<p><strong>Design Sync Orchestrator</strong> - Commit-time validation</p>
+</li>
+<li>Validates YAML structure</li>
+<li>Checks module consistency</li>
+<li>Verifies documentation alignment</li>
+<li>
+<p>Enforces git isolation</p>
+</li>
+<li>
+<p><strong>Health Monitoring</strong> - Continuous governance checks</p>
+</li>
+<li>Documentation structure validation</li>
+<li>Brain file integrity checks</li>
+<li>Performance budget compliance</li>
+<li>SKULL rule effectiveness tracking</li>
+</ol>
+<h3 id="manual-review">Manual Review<a class="headerlink" href="#manual-review" title="Permanent link">&para;</a></h3>
+<p>For changes to governance-critical files:
+- <code>brain-protection-rules.yaml</code> - Requires architectural review
+- <code>test-strategy.yaml</code> - Requires test lead approval
+- <code>optimization-principles.yaml</code> - Requires evidence of success
+- <code>THE-RULEBOOK.md</code> - Regenerated from brain sources (no manual edits)</p>
+<hr />
+<h2 id="vii-rulebook-maintenance">VII. Rulebook Maintenance<a class="headerlink" href="#vii-rulebook-maintenance" title="Permanent link">&para;</a></h2>
+<h3 id="single-source-of-truth">Single Source of Truth<a class="headerlink" href="#single-source-of-truth" title="Permanent link">&para;</a></h3>
+<p><strong>This file is GENERATED.</strong> Do not edit manually.</p>
+<p>To update the rulebook:</p>
+<ol>
+<li>Edit source brain files:</li>
+<li><code>cortex-brain/brain-protection-rules.yaml</code></li>
+<li><code>cortex-brain/documents/implementation-guides/test-strategy.yaml</code></li>
+<li>
+<p><code>cortex-brain/documents/analysis/optimization-principles.yaml</code></p>
+</li>
+<li>
+<p>Regenerate rulebook:
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Via EPM orchestrator</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/CORTEX<span class="w"> </span>Generate<span class="w"> </span>documentation
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Or directly</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>python<span class="w"> </span>src/operations/enterprise_documentation_orchestrator.py<span class="w"> </span>--component<span class="w"> </span>rulebook
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Review changes in generated <code>THE-RULEBOOK.md</code></p>
+</li>
+<li>
+<p>Commit both brain sources and generated rulebook</p>
+</li>
+</ol>
+<h3 id="version-control">Version Control<a class="headerlink" href="#version-control" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Rulebook version matches <code>brain-protection-rules.yaml</code> version</li>
+<li>Changes tracked through git history</li>
+<li>Major version bump for breaking changes to governance</li>
+<li>Minor version bump for additions/clarifications</li>
+</ul>
+<hr />
+<h2 id="viii-conclusion">VIII. Conclusion<a class="headerlink" href="#viii-conclusion" title="Permanent link">&para;</a></h2>
+<p>This rulebook represents the accumulated wisdom of CORTEX development. Every rule, principle, and pattern has been validated through real implementation experience.</p>
+<p><strong>Zero Placeholders. Zero Mock Data. 100% Live Brain Sources.</strong></p>
+<p>When in doubt, refer to this rulebook. When rules conflict, Tier 0 instincts win. When facing architectural decisions, prioritize brain protection over convenience.</p>
+<p><strong>"The brain protects itself, even from me."</strong> - Asif Codenstein</p>
+<hr />
+<p><em>This rulebook is automatically generated from brain sources and wired into CORTEX operations.</em><br />
+<em>Generated: November 19, 2025</em><br />
+<em>Total Rules: 27</em><br />
+<em>Protection Layers: 10</em><br />
+<em>Brain Sources: 3</em></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../../diagrams/story/The-CORTEX-Story/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> The Awakening Story
+                        </a>
+                        
+                        
+                        <a href="../../architecture/overview/" class="btn btn-default pull-right">
+                            Overview <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../search/main.js"></script>
+</body>
+</html>

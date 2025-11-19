@@ -1,0 +1,581 @@
+/* ===================================
+   CORTEX Tales Design System
+   CRITICAL: Complete theme override
+   =================================== */
+
+/* STEP 1: Nuclear CSS Reset - Remove ALL default theme styles */
+.wy-nav-side,
+.wy-side-scroll,
+.wy-nav-content-wrap,
+.wy-breadcrumbs,
+.wy-menu-vertical,
+.wy-side-nav-search,
+.wy-nav-top,
+.rst-versions,
+.rst-content .section,
+div[role="navigation"],
+nav[role="navigation"] {
+    display: none !important;
+}
+
+/* Force full-width content */
+.wy-nav-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* Remove ALL default containers */
+.rst-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Tales-Inspired Design System for CORTEX Documentation */
+:root {
+    /* Color Palette - Professional Tech */
+    --primary-color: #4F46E5;
+    --primary-hover: #4338CA;
+    --secondary-color: #10B981;
+    --accent-color: #F59E0B;
+    --dark-bg: #0F172A;
+    --dark-surface: #1E293B;
+    --dark-surface-hover: #334155;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --border-color: #334155;
+    
+    /* Typography Scale */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.3);
+}
+
+* {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+html {
+    scroll-behavior: smooth !important;
+}
+
+body {
+    font-family: var(--font-sans) !important;
+    background: var(--dark-bg) !important;
+    color: var(--text-primary) !important;
+    line-height: 1.6 !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Force our custom structure to be visible */
+body > .header,
+body > .nav,
+body > .container,
+body > .footer-branding,
+body > header,
+body > nav,
+body > main,
+body > footer {
+    display: block !important;
+    position: relative !important;
+    margin: 0 !important;
+}
+
+/* Header with Gradient */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+    opacity: 0.3;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+    position: relative;
+    z-index: 1;
+}
+
+.header .subtitle {
+    font-size: 2rem;
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* Drop cap styling for subtitle - first letter of each word larger */
+.header .subtitle .word {
+    display: inline-block;
+    margin-right: 0.3em;
+}
+
+.header .subtitle .word::first-letter {
+    font-size: 1.4em;
+    font-weight: 800;
+}
+
+/* Navigation */
+.nav {
+    background: var(--dark-surface);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-md);
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.nav-item {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: var(--dark-surface-hover);
+    color: var(--text-primary);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+}
+
+/* Content Typography */
+.content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    color: var(--text-primary);
+}
+
+.content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.content p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+}
+
+.content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.content a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Code Block */
+.content pre,
+.content code {
+    background: var(--dark-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+}
+
+.content pre {
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    overflow-x: auto;
+    line-height: 1.8;
+}
+
+.content code {
+    padding: var(--space-xs) var(--space-sm);
+    color: #A5D6FF;
+}
+
+.content pre code {
+    padding: 0;
+    border: none;
+}
+
+/* Lists */
+.content ul,
+.content ol {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-xl);
+    color: var(--text-secondary);
+}
+
+.content li {
+    margin-bottom: var(--space-sm);
+}
+
+/* Tables */
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-lg) 0;
+    background: var(--dark-surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.content table thead {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.content table th {
+    padding: var(--space-md);
+    text-align: left;
+    font-weight: 600;
+    color: white;
+}
+
+.content table td {
+    padding: var(--space-md);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.content table tbody tr:hover {
+    background: var(--dark-surface-hover);
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+}
+
+/* Card Component */
+.card {
+    background: var(--dark-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.card-content {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.card-footer {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+/* Badge */
+.badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background: rgba(79, 70, 229, 0.2);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+/* Button */
+.btn {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-xl) 0;
+}
+
+.stat-card {
+    background: var(--dark-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: var(--space-sm);
+}
+
+/* Alert */
+.alert {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    margin: var(--space-lg) 0;
+    border-left: 4px solid;
+}
+
+.alert-info {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--secondary-color);
+    color: var(--text-primary);
+}
+
+/* Blockquotes */
+.content blockquote {
+    background: var(--dark-surface);
+    border-left: 4px solid var(--primary-color);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Images */
+.content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: var(--space-lg) 0;
+    border: 1px solid var(--border-color);
+}
+
+/* Footer */
+.footer-branding {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--space-2xl);
+}
+
+.footer-branding p {
+    margin: var(--space-sm) 0;
+}
+
+.footer-branding a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.footer-branding a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .header .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .nav {
+        flex-direction: column;
+    }
+    
+    .nav-item {
+        text-align: center;
+    }
+    
+    .container {
+        padding: var(--space-lg) var(--space-md);
+    }
+    
+    .content h1 {
+        font-size: 1.75rem;
+    }
+    
+    .content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .content h3 {
+        font-size: 1.25rem;
+    }
+}

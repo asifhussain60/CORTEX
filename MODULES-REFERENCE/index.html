@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX Modules Reference - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../diagrams/story/The-CORTEX-Story/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture/overview/">Architecture</a></li>
+                        <li><a href="../reference/api/">Technical Docs</a></li>
+                        <li><a href="../guides/developer-guide/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../diagrams/story/The-CORTEX-Story/" >The Awakening Story</a></li>
+                                
+                                    <li><a href="../diagrams/narratives/" >Narratives</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li><a href="../governance/THE-RULEBOOK/" >Cortex Bible</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                    <li><a href=".." >Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../reference/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href=".." >Operations</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../guides/developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Quick Start</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../diagrams/prompts/" >DALL-E Prompts</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                    
+                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
+                    
+                    <div class="toc-wrapper">
+                        <h4>On This Page</h4>
+                        CORTEX Modules Reference - #cortex-modules-reference
+    Implemented Modules - #implemented-modules
+
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-modules-reference">CORTEX Modules Reference<a class="headerlink" href="#cortex-modules-reference" title="Permanent link">&para;</a></h1>
+<p>Complete reference for all CORTEX modules.</p>
+<hr />
+<h2 id="implemented-modules">Implemented Modules<a class="headerlink" href="#implemented-modules" title="Permanent link">&para;</a></h2>
+<h3 id="demo-introduction">Demo Introduction<a class="headerlink" href="#demo-introduction" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Welcome message and demo flow explanation</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="demo-help-system">Demo Help System<a class="headerlink" href="#demo-help-system" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Demonstrate help command capabilities</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="demo-story-refresh">Demo Story Refresh<a class="headerlink" href="#demo-story-refresh" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Show story transformation in action</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="demo-cleanup">Demo Cleanup<a class="headerlink" href="#demo-cleanup" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Demonstrate cleanup operation</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="demo-conversation">Demo Conversation<a class="headerlink" href="#demo-conversation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Demonstrate conversation memory</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="demo-completion">Demo Completion<a class="headerlink" href="#demo-completion" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> demo</p>
+<p><strong>Description:</strong> Summary and next steps</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="project-validation">Project Validation<a class="headerlink" href="#project-validation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Validate CORTEX project structure</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="platform-detection">Platform Detection<a class="headerlink" href="#platform-detection" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Detect OS and configure platform-specific settings</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="git-repository-synchronization">Git Repository Synchronization<a class="headerlink" href="#git-repository-synchronization" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Sync project with remote git repository</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="virtual-environment-setup">Virtual Environment Setup<a class="headerlink" href="#virtual-environment-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Create and configure Python virtual environment</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="python-dependencies-installation">Python Dependencies Installation<a class="headerlink" href="#python-dependencies-installation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Install required Python packages</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="vision-api-configuration">Vision API Configuration<a class="headerlink" href="#vision-api-configuration" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Configure Google Cloud Vision API</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="conversation-tracking-setup">Conversation Tracking Setup<a class="headerlink" href="#conversation-tracking-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Configure conversation capture daemon</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="brain-initialization">Brain Initialization<a class="headerlink" href="#brain-initialization" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Initialize CORTEX brain tiers</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="brain-tests-execution">Brain Tests Execution<a class="headerlink" href="#brain-tests-execution" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Run brain integrity tests</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="tooling-verification">Tooling Verification<a class="headerlink" href="#tooling-verification" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Verify required tools are available</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="setup-completion">Setup Completion<a class="headerlink" href="#setup-completion" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> setup</p>
+<p><strong>Description:</strong> Finalize setup and provide summary</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="scan-temporary-files">Scan Temporary Files<a class="headerlink" href="#scan-temporary-files" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Identify temporary files for removal</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="remove-old-logs">Remove Old Logs<a class="headerlink" href="#remove-old-logs" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Clean up old log files</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="clear-python-cache">Clear Python Cache<a class="headerlink" href="#clear-python-cache" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Remove <strong>pycache</strong> directories</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="vacuum-sqlite-databases">Vacuum SQLite Databases<a class="headerlink" href="#vacuum-sqlite-databases" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Optimize SQLite database files</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="remove-orphaned-files">Remove Orphaned Files<a class="headerlink" href="#remove-orphaned-files" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Clean up orphaned temporary files</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="compress-old-files">Compress Old Files<a class="headerlink" href="#compress-old-files" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Compress large old files</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="validate-cleanup-safety">Validate Cleanup Safety<a class="headerlink" href="#validate-cleanup-safety" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Ensure cleanup didn't break anything</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="generate-cleanup-report">Generate Cleanup Report<a class="headerlink" href="#generate-cleanup-report" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> cleanup</p>
+<p><strong>Description:</strong> Create cleanup summary report</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="load-story-source">Load Story Source<a class="headerlink" href="#load-story-source" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Load original CORTEX story markdown</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="load-story-template">Load Story Template<a class="headerlink" href="#load-story-template" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Load story template for transformation</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="validate-story-structure">Validate Story Structure<a class="headerlink" href="#validate-story-structure" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Ensure story meets structural requirements</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="apply-narrator-voice">Apply Narrator Voice<a class="headerlink" href="#apply-narrator-voice" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Transform story with narrator voice</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="story-length-manager">Story Length Manager<a class="headerlink" href="#story-length-manager" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Manage story length and token optimization</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="build-story-preview">Build Story Preview<a class="headerlink" href="#build-story-preview" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Generate HTML preview of transformed story</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="deploy-docs-preview">Deploy Docs Preview<a class="headerlink" href="#deploy-docs-preview" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Deploy story preview to docs site</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="update-story-documentation">Update Story Documentation<a class="headerlink" href="#update-story-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Update story in documentation site</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="save-story-markdown">Save Story Markdown<a class="headerlink" href="#save-story-markdown" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Write transformed story to file</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="story-refresh-completion">Story Refresh Completion<a class="headerlink" href="#story-refresh-completion" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> story</p>
+<p><strong>Description:</strong> Finalize story refresh with summary</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="scan-docstrings">Scan Docstrings<a class="headerlink" href="#scan-docstrings" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Extract docstrings from source code</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="generate-api-documentation">Generate API Documentation<a class="headerlink" href="#generate-api-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Generate API reference documentation</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="build-mkdocs-site">Build MkDocs Site<a class="headerlink" href="#build-mkdocs-site" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Build complete documentation site</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="update-mkdocs-index">Update MkDocs Index<a class="headerlink" href="#update-mkdocs-index" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Update documentation index</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="validate-documentation-links">Validate Documentation Links<a class="headerlink" href="#validate-documentation-links" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Check for broken links in docs</p>
+<p><strong>Status:</strong> ready</p>
+<hr />
+<h3 id="refresh-design-documentation">Refresh Design Documentation<a class="headerlink" href="#refresh-design-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Update design documentation files</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="generate-diagrams">Generate Diagrams<a class="headerlink" href="#generate-diagrams" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Generate architecture diagrams</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="update-changelog">Update Changelog<a class="headerlink" href="#update-changelog" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Update CHANGELOG.md</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="deploy-documentation-site">Deploy Documentation Site<a class="headerlink" href="#deploy-documentation-site" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Deploy docs to GitHub Pages</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<h3 id="documentation-completion">Documentation Completion<a class="headerlink" href="#documentation-completion" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> documentation</p>
+<p><strong>Description:</strong> Finalize documentation with summary</p>
+<p><strong>Status:</strong> pending</p>
+<hr />
+<p><em>Generated by CORTEX Documentation System</em></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

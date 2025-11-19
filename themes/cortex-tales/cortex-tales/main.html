@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+    <meta name="description" content="{{ config.site_description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ 'assets/css/cortex-tales.css'|url }}">
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="{{ nav.homepage.url|url }}" id="logo">
+                        <img src="{{ 'assets/images/CORTEX-logo.png'|url }}" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="{{ nav.homepage.url|url }}">Home</a></li>
+                        <li><a href="{{ 'diagrams/story/The-CORTEX-Story/'|url }}">The CORTEX Birth</a></li>
+                        <li><a href="{{ 'governance/THE-RULEBOOK/'|url }}">Cortex Bible</a></li>
+                        <li><a href="{{ 'architecture/overview/'|url }}">Architecture</a></li>
+                        <li><a href="{{ 'reference/api/'|url }}">Technical Docs</a></li>
+                        <li><a href="{{ 'guides/developer-guide/'|url }}">User Guides</a></li>
+                        <li><a href="{{ 'getting-started/quick-start/'|url }}">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    {% if page.toc %}
+                    <div class="toc-wrapper">
+                        <h4>On This Page</h4>
+                        {{ page.toc }}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Navigation Tree -->
+                    {% if nav %}
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        {% for nav_item in nav %}
+                            {% if nav_item.children %}
+                            <li class="nav-group">
+                                <strong>{{ nav_item.title }}</strong>
+                                <ul>
+                                {% for child in nav_item.children %}
+                                    <li><a href="{{ child.url|url }}" {% if child.active %}class="active"{% endif %}>{{ child.title }}</a></li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                            {% else %}
+                            <li><a href="{{ nav_item.url|url }}" {% if nav_item.active %}class="active"{% endif %}>{{ nav_item.title }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        {{ page.content }}
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        {% if page.previous_page %}
+                        <a href="{{ page.previous_page.url|url }}" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> {{ page.previous_page.title }}
+                        </a>
+                        {% endif %}
+                        {% if page.next_page %}
+                        <a href="{{ page.next_page.url|url }}" class="btn btn-default pull-right">
+                            {{ page.next_page.title }} <i class="fa fa-arrow-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © {{ config.copyright }}
+                            <span class="separator">|</span>
+                            <a href="{{ config.repo_url }}" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- MkDocs Search -->
+    <script src="{{ 'search/main.js'|url }}"></script>
+</body>
+</html>
