@@ -1,31 +1,104 @@
-site_name: CORTEX Documentation
-site_description: AI-powered development assistant with persistent memory
+site_name: CORTEX
+site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
 site_author: Asif Hussain
-site_url: https://cortex-docs.example.com
+copyright: "2024-2025 Asif Hussain. All rights reserved."
 repo_url: https://github.com/asifhussain60/CORTEX
-repo_name: CORTEX
-copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
+repo_name: asifhussain60/CORTEX
+
+# GitHub Pages Configuration
+site_url: https://asifhussain60.github.io/CORTEX/
+use_directory_urls: true
+
+# Custom Tales Theme
 theme:
-  name: material
-  palette:
-    primary: indigo
-    accent: purple
-  features:
-  - navigation.tabs
-  - navigation.sections
-  - navigation.expand
-  - navigation.top
-  - search.highlight
-  - search.share
-  - toc.follow
-plugins:
-- search
-- mermaid2
+  name: null
+  custom_dir: docs/themes/cortex-tales
+  
+# Theme does not use extra_css (CSS is in theme)
+
+# ============================================
+# NAVIGATION STRUCTURE - Matches Horizontal Menu
+# Home | The CORTEX Birth | Cortex Bible | Architecture | Technical Docs | User Guides | Examples
+# ============================================
+nav:
+- Home: index.md
+- The CORTEX Birth:
+  - The Awakening Story: diagrams/story/The-CORTEX-Story.md
+  - Narratives: diagrams/narratives/
+- Cortex Bible: governance/THE-RULEBOOK.md
+- Architecture:
+  - Overview: architecture/overview.md
+  - Tier System: architecture/tier-system.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
+  - Diagrams:
+    - Module Structure: images/diagrams/architectural/module-structure.md
+    - Brain Protection: images/diagrams/architectural/brain-protection.md
+    - EPM Doc Generator: images/diagrams/architectural/epm-doc-generator-pipeline.md
+    - Agent Coordination: images/diagrams/strategic/agent-coordination.md
+    - Information Flow: images/diagrams/strategic/information-flow.md
+    - Tier Architecture: images/diagrams/strategic/tier-architecture.md
+    - Operational Diagrams: images/diagrams/operational/
+    - Integration Diagrams: images/diagrams/integration/
+- Technical Docs:
+  - API Reference: reference/api.md
+  - Configuration: reference/configuration.md
+  - Response Templates: reference/response-templates.md
+  - Operations:
+    - Overview: operations/overview.md
+    - Entry Point Modules: operations/entry-point-modules.md
+    - Workflows: operations/workflows.md
+    - Health Monitoring: operations/health-monitoring.md
+- User Guides:
+  - Quick Start: getting-started/quick-start.md
+  - Installation: getting-started/installation.md
+  - Configuration: getting-started/configuration.md
+  - Developer Guide: guides/developer-guide.md
+  - Admin Guide: guides/admin-guide.md
+  - Best Practices: guides/best-practices.md
+  - Troubleshooting: guides/troubleshooting.md
+- Examples:
+  - Getting Started: getting-started/quick-start.md
+  - Use Cases: guides/best-practices.md
+  - DALL-E Prompts: diagrams/prompts/
 markdown_extensions:
-- pymdownx.highlight
-- pymdownx.superfences
-- pymdownx.tabbed
+- abbr
 - admonition
 - attr_list
+- def_list
+- footnotes
+- meta
 - md_in_html
-nav: []
+- tables
+- toc:
+    permalink: true
+    toc_depth: 2
+    title: "On This Page"
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.betterem:
+    smart_enable: all
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.details
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.snippets
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+
+plugins:
+- search:
+    lang: en

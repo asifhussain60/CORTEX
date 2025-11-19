@@ -10,6 +10,10 @@ import sys
 import json
 from datetime import datetime
 
+# Add CORTEX root to path
+cortex_root = Path(__file__).parent.parent
+sys.path.insert(0, str(cortex_root))
+
 def generate_all_documentation() -> Dict[str, Any]:
     """Generate all CORTEX documentation and return results."""
     

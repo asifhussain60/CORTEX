@@ -1,0 +1,3 @@
+# DALL-E Prompt: Information Flow Sequence
+
+Create a sequence diagram showing request flow...

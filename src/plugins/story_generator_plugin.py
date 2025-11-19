@@ -2,6 +2,16 @@
 CORTEX Story Generator Plugin
 Generates "The CORTEX Story" narrative for MkDocs documentation
 
+⚠️ DEPRECATED - Use Enterprise Documentation Orchestrator instead
+Location: cortex-brain/admin/scripts/documentation/enterprise_documentation_orchestrator.py
+
+This plugin is kept for backward compatibility but will be removed in v4.0.
+For story generation, use the Enterprise Documentation Orchestrator:
+- Includes "The Awakening of CORTEX" story (hilarious technical narrative)
+- Part of unified documentation pipeline
+- Discovery Engine automatically finds new features
+- Admin-only (not packaged for production)
+
 Integrates with: /CORTEX generate mkdocs
 Output: docs/diagrams/story/The-CORTEX-Story.md
 Hosting: GitHub Pages alongside architecture diagrams
@@ -9,6 +19,7 @@ Hosting: GitHub Pages alongside architecture diagrams
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary - Part of CORTEX 3.0
+Status: DEPRECATED (use Enterprise Documentation Orchestrator)
 """
 
 import logging

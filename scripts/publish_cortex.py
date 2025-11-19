@@ -162,6 +162,7 @@ INCLUDED_DIRS = {
 #   - docs/images/system-design-prompts/ → Image generation prompts (admin tool)
 #   - docs/images/system-design-prompts/narrative/ → PR narratives (admin workflow)
 #   - Architecture diagrams, technical specs, development guides
+# - cortex-brain/admin/ → Admin-only scripts and tools (NEW: documentation orchestrator)
 # - cortex-brain/cortex-2.0-design/ → Design documents (admin planning)
 # - cortex-brain/archives/ → Historical records (admin reference)
 # - cortex-brain/simulations/ → Development testing data
@@ -172,6 +173,7 @@ EXCLUDED_DIRS = {
     'tests',
     'workflow_checkpoints',
     'docs',  # ⭐ ADMIN CONTENT: All documentation, image prompts, narratives
+    'cortex-brain/admin',  # ⭐ ADMIN-ONLY: Documentation orchestrator, admin scripts (NEW)
     'cortex-brain/cortex-2.0-design',  # Design docs (admin only)
     'cortex-brain/archives',
     'cortex-brain/simulations',  # Dev-only simulation data
