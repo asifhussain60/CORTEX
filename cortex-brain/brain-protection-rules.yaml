@@ -21,7 +21,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all 6 layers
 rules:
-  total_count: 27
+  total_count: 28
   layers: 6
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -61,6 +61,7 @@ tier0_instincts:
   - "GIT_ISOLATION_ENFORCEMENT"  # CRITICAL: CORTEX code NEVER committed to user repos
   - "DISTRIBUTED_DATABASE_ARCHITECTURE"  # CRITICAL: Use tier-specific databases, never monolithic
   - "CORTEX_PROMPT_FILE_PROTECTION"  # CRITICAL: CORTEX.prompt.md NEVER renamed, safe update procedure enforced
+  - "GIT_CHECKPOINT_ENFORCEMENT"  # CRITICAL: Create git checkpoint before starting development work
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -624,6 +625,195 @@ protection_layers:
           
           This rule BLOCKS any rename attempt.
           Exception: Temporary files for update workflow ARE encouraged.
+      
+      - rule_id: "GIT_CHECKPOINT_ENFORCEMENT"
+        name: "Git Checkpoint Before Development Work"
+        severity: "blocked"
+        description: "Require git checkpoint (commit/tag) before starting any development work"
+        
+        detection:
+          combined_keywords:
+            development_start:
+              - "implement feature"
+              - "start development"
+              - "begin implementation"
+              - "fix bug"
+              - "refactor code"
+              - "add functionality"
+              - "create new"
+              - "modify existing"
+            and_no_checkpoint:
+              - "no checkpoint"
+              - "skip checkpoint"
+              - "without commit"
+              - "uncommitted changes"
+          scope: ["intent", "description", "git_status"]
+          logic: "AND"
+        
+        alternatives:
+          - "Create git checkpoint: git commit -m 'checkpoint: before [feature] development'"
+          - "Create git tag: git tag -a checkpoint-YYYY-MM-DD-HH-MM -m 'Checkpoint before [feature]'"
+          - "Stash changes if needed: git stash save 'WIP: checkpoint before [feature]'"
+          - "Use git_checkpoint_module for automated checkpoint creation"
+        
+        evidence_template: |
+          🚨 GIT CHECKPOINT ENFORCEMENT VIOLATION
+          
+          Attempted: '{operation}'
+          Git Status: '{git_status}'
+          
+          CRITICAL: Git checkpoint REQUIRED before starting development work!
+          
+          ❌ NEVER:
+          - Start development with uncommitted changes
+          - Skip checkpoint creation
+          - Assume current state is safe
+          - Ignore git status warnings
+          
+          ✅ REQUIRED PROCEDURE:
+          1. Check git status: Ensure clean working tree or commit staged changes
+          2. Create checkpoint commit: git commit -m 'checkpoint: before [feature] development'
+          3. OR create checkpoint tag: git tag -a checkpoint-[timestamp] -m 'Checkpoint before [feature]'
+          4. Verify checkpoint: Confirm commit/tag created successfully
+          5. Proceed with development: Now safe to make changes
+          
+          Why? Rollback capability + Audit trail + Risk mitigation
+        
+        rationale: |
+          GIT_CHECKPOINT_ENFORCEMENT: Safety Net for Development
+          
+          Git checkpoints are MANDATORY before any development work to ensure:
+          - Rollback capability if changes break functionality
+          - Audit trail of what was changed and when
+          - Clear separation between working states
+          - Risk mitigation for exploratory changes
+          
+          Why This Protection Matters:
+          
+          1. Rollback Capability:
+             Development can break things
+             Checkpoint provides known-good state
+             Quick recovery: git reset --hard [checkpoint]
+             No data loss from experimentation
+          
+          2. Audit Trail:
+             Clear history of development progression
+             "What changed between checkpoints?"
+             Blame analysis for regression debugging
+             Documentation of development journey
+          
+          3. Risk Mitigation:
+             Exploratory refactoring is safe
+             Failed experiments don't pollute history
+             Easy to abandon bad paths
+             Encourages bold technical decisions
+          
+          4. Collaboration Safety:
+             Team members can sync to checkpoints
+             Code reviews reference specific checkpoints
+             Integration points clearly marked
+             Merge conflicts easier to resolve
+          
+          Checkpoint Types:
+          
+          A) Commit Checkpoint (Recommended):
+          ```bash
+          git commit -m "checkpoint: before authentication implementation"
+          ```
+          - Creates permanent history entry
+          - Easy to reference: git show [commit-hash]
+          - Appears in git log
+          - Can be pushed for team visibility
+          
+          B) Tag Checkpoint (Alternative):
+          ```bash
+          git tag -a checkpoint-2025-11-19-14-30 \\
+                   -m "Checkpoint before authentication feature"
+          ```
+          - Named reference point
+          - Easy to remember: checkpoint-[date-time]
+          - Lightweight (no commit overhead)
+          - Can mark multiple points in history
+          
+          C) Stash Checkpoint (Temporary):
+          ```bash
+          git stash save "WIP: checkpoint before refactor"
+          ```
+          - Saves uncommitted changes
+          - Useful for quick experiments
+          - Recoverable: git stash pop
+          - Local only (not pushed)
+          
+          Automated Checkpoint Module:
+          
+          ```python
+          from src.operations.modules.git_checkpoint_module import GitCheckpointModule
+          
+          checkpoint = GitCheckpointModule()
+          result = checkpoint.execute({
+              'message': 'before authentication implementation',
+              'checkpoint_type': 'commit'  # or 'tag'
+          })
+          ```
+          
+          When Checkpoints Are Required:
+          - ✅ Before implementing new features
+          - ✅ Before refactoring existing code
+          - ✅ Before fixing bugs (capture broken state)
+          - ✅ Before exploratory changes
+          - ✅ Before risky architectural changes
+          - ❌ NOT for trivial changes (typo fixes, comments)
+          - ❌ NOT for documentation-only updates
+          
+          Verification Process:
+          
+          1. Pre-Development Check:
+             ```python
+             git_status = subprocess.run(['git', 'status', '--porcelain'], 
+                                        capture_output=True, text=True)
+             if git_status.stdout.strip():
+                 raise CheckpointViolation("Uncommitted changes detected")
+             ```
+          
+          2. Checkpoint Creation:
+             ```python
+             subprocess.run(['git', 'commit', '-m', 'checkpoint: before feature'])
+             # OR
+             subprocess.run(['git', 'tag', '-a', 'checkpoint-[timestamp]'])
+             ```
+          
+          3. Checkpoint Verification:
+             ```python
+             verify = subprocess.run(['git', 'log', '-1', '--oneline'], 
+                                    capture_output=True, text=True)
+             assert 'checkpoint:' in verify.stdout.lower()
+             ```
+          
+          Integration Points:
+          - BrainProtector: Validates checkpoint before development
+          - HealthValidator: Checks for uncommitted changes
+          - OptimizeOperation: Enforces checkpoint before changes
+          - CommitHandler: Can create checkpoints automatically
+          
+          Real Incident Patterns Prevented:
+          
+          Scenario 1: Lost Refactoring Work
+          Developer: Starts major refactor without checkpoint
+          Result: Code breaks, no way to recover working state
+          Prevention: Checkpoint required → rollback available
+          
+          Scenario 2: Exploratory Regression
+          Developer: Tries experimental approach, causes regression
+          Result: Can't identify what changed, debugging nightmare
+          Prevention: Checkpoint shows exact diff of changes
+          
+          Scenario 3: Merge Conflict Chaos
+          Developer: Multiple changes without checkpoints
+          Result: Massive merge conflicts, unclear resolution
+          Prevention: Checkpoints provide integration points
+          
+          This rule BLOCKS development work without checkpoint.
+          Exception: Documentation-only changes don't require checkpoints.
   
   # Layer 2: Tier Boundary Protection
   - layer_id: "tier_boundary"
