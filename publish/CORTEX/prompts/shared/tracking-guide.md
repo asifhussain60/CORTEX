@@ -103,7 +103,7 @@ Install-Module -Name UIAutomation -Force
 #### 3. Test the Capture Script
 
 ```powershell
-cd d:\PROJECTS\CORTEX
+cd /path/to/projects\CORTEX
 .\scripts\capture-copilot-chat.ps1
 ```
 
@@ -123,7 +123,7 @@ cd d:\PROJECTS\CORTEX
 2. Open PowerToys Run settings
 3. Add custom action:
    - **Trigger:** `cortex-capture`
-   - **Command:** `powershell.exe -File "d:\PROJECTS\CORTEX\scripts\capture-copilot-chat.ps1"`
+   - **Command:** `powershell.exe -File "/path/to/projects\CORTEX\scripts\capture-copilot-chat.ps1"`
 
 Now you can press `Alt+Space`, type `cortex-capture`, and hit Enter.
 
@@ -229,7 +229,7 @@ notepad $PROFILE
 
 Add this line:
 ```powershell
-function cortex-remember { python d:\PROJECTS\CORTEX\scripts\cli.py remember }
+function cortex-remember { python /path/to/projects\CORTEX\scripts\cli.py remember }
 ```
 
 Now you can type `cortex-remember` anywhere.

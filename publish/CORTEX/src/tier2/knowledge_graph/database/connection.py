@@ -31,7 +31,7 @@ class ConnectionManager:
         Args:
             db_path: Path to SQLite database file
         """
-        self.db_path = db_path
+        self.db_path = Path(db_path) if isinstance(db_path, str) else db_path
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._connection = None
         # Create database file immediately and initialize schema

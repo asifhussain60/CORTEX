@@ -111,6 +111,10 @@ class CommitHandler(BaseAgent):
         start_time = datetime.now()
         
         try:
+            # Extract rule context for Phase 3: Summary generation control
+            rule_context = request.context.get("rule_context", {})
+            skip_summary = rule_context.get("skip_summary_generation", False)
+            
             # Check for uncommitted changes
             has_changes, staged_files = self._check_git_status()
             if not has_changes:
@@ -141,23 +145,43 @@ class CommitHandler(BaseAgent):
             # Build response
             duration_ms = (datetime.now() - start_time).total_seconds() * 1000
             
-            return AgentResponse(
-                success=committed or dry_run,
-                result={
-                    "committed": committed,
-                    "message": commit_message,
+            # Build result - conditionally include verbose details
+            result = {
+                "committed": committed,
+                "message": commit_message,
+                "dry_run": dry_run
+            }
+            
+            # Add detailed commit info only if NOT suppressed
+            if not skip_summary:
+                result.update({
                     "files": len(staged_files),
                     "staged_files": staged_files,
-                    "commit_hash": commit_hash,
-                    "dry_run": dry_run
-                },
-                message=f"{'Would commit' if dry_run else 'Committed'} {len(staged_files)} files: {commit_message}",
-                agent_name=self.name,
-                duration_ms=duration_ms,
-                next_actions=[
+                    "commit_hash": commit_hash
+                })
+            
+            # Build message - conditionally verbose
+            if skip_summary:
+                message = f"{'Would commit' if dry_run else 'Committed'}: {commit_message}"
+            else:
+                message = f"{'Would commit' if dry_run else 'Committed'} {len(staged_files)} files: {commit_message}"
+            
+            # Build next_actions - conditionally verbose
+            next_actions = []
+            if not skip_summary:
+                next_actions = [
                     "Push to remote" if committed else "Review commit message",
                     "Update Tier 1 conversation log" if committed else "Execute commit"
                 ]
+            
+            return AgentResponse(
+                success=committed or dry_run,
+                result=result,
+                message=message,
+                agent_name=self.name,
+                duration_ms=duration_ms,
+                metadata={"skip_summary": skip_summary},
+                next_actions=next_actions
             )
             
         except Exception as e:

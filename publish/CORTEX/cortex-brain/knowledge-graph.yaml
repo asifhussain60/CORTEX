@@ -6,17 +6,85 @@
 # Purpose: Capture patterns and learnings from CORTEX operations
 
 version: "2.1"
-last_updated: "2025-11-16"
+last_updated: "2025-11-17"
 type: "knowledge_graph"
 
 # Summary of learned patterns across all categories
 patterns:
-  total_count: 48
-  categories: ["validation_insights", "workflow_patterns", "architectural_patterns", "intent_patterns", "file_relationships", "common_mistakes", "quality_gates"]
+  total_count: 54
+  categories: ["validation_insights", "workflow_patterns", "architectural_patterns", "intent_patterns", "file_relationships", "common_mistakes", "quality_gates", "documentation_patterns", "ui_patterns"]
   learning_method: "automatic extraction from Tier 1 conversations"
   confidence_decay: "5% per 90 days unused"
 
 validation_insights:
+  filesystem_validation_required:
+    issue: File generation operations report success without verifying actual filesystem changes
+    root_cause: "Missing post-write validation - code execution ≠ file creation success"
+    symptom: "Operations return success status, logs show '✓ Generated', but target folders remain empty (0 files)"
+    incident_date: '2025-11-17'
+    impact: "Critical - False positives damage user trust, silent failures undetected until manual verification"
+    solution: "Multi-layer validation after every file write: exists() + size > 0 + count matches expected"
+    validation_layers:
+      layer_1: "Template exists before rendering"
+      layer_2: "Rendered content length > 0"
+      layer_3: "File exists after write (os.path.exists)"
+      layer_4: "File size > 0 bytes (os.path.getsize)"
+      layer_5: "File count matches expected minimum"
+      layer_6: "Return actual counts/sizes in operation result"
+      layer_7: "Fail operation if validation fails"
+    code_pattern: |
+      # Anti-pattern
+      with open(file, 'w') as f:
+          f.write(content)
+      logger.info("✓ Generated")  # Lies!
+      
+      # Correct pattern
+      with open(file, 'w') as f:
+          f.write(content)
+      
+      if not file.exists():
+          raise ValueError(f"File not created: {file}")
+      if file.stat().st_size == 0:
+          raise ValueError(f"Empty file: {file}")
+      
+      logger.info(f"✓ Created: {file} ({file.stat().st_size} bytes)")
+    test_pattern: |
+      def test_operation_creates_files():
+          result = operation.execute()
+          
+          # Verify filesystem reality
+          assert output_dir.exists()
+          files = list(output_dir.glob("*.md"))
+          assert len(files) > 0, "No files created"
+          assert all(f.stat().st_size > 0 for f in files), "Zero-byte files found"
+          assert result["files_created"] == len(files), "Count mismatch"
+    applies_to:
+      - document_generators
+      - diagram_generators
+      - report_builders
+      - code_generators
+      - export_operations
+      - download_operations
+      - build_operations
+    prevention_rule: "ALWAYS validate filesystem state after write operations - trust but verify"
+    test_evidence: |
+      pytest test_folders_not_empty: FAILED
+      Error: "Empty folders found: diagrams, generated"
+      pytest test_generated_folder_has_content: FAILED
+      Error: "Generated folder is empty - document generation not creating files"
+    affected_operations:
+      - enterprise_documentation
+      - document_generation
+      - diagram_generation
+    frequency: 1
+    confidence: 1.0
+    severity: critical
+    strategic_value: extremely_high
+    reusability: 100
+    last_seen: '2025-11-17'
+    conversation_reference: CONVERSATION-CAPTURE-2025-11-17-DOCUMENT-GENERATION-VALIDATION-GAP.md
+    lesson: "Verify filesystem changes, not code execution - false positives are worse than explicit failures"
+  
   github_copilot_conversation_history_loop:
     issue: GitHub Copilot enters "Summarizing Conversation History..." loop when conversation contains large MD files
     root_cause: Large markdown documents (500-1500+ lines) in conversation history cause token bloat
@@ -145,7 +213,7 @@ validation_insights:
     incorrect_pattern: $path = "$WorkspaceRoot\KDS\kds-brain"
     correct_pattern: if ($WorkspaceRoot -match '\\KDS$') { $path = "$WorkspaceRoot\kds-brain"
       } else { $path = "$WorkspaceRoot\KDS\kds-brain" }
-    explanation: Detect if workspace path ends with KDS to avoid path doubling (D:\PROJECTS\KDS\KDS\)
+    explanation: Detect if workspace path ends with KDS to avoid path doubling (/path/to/projects\KDS\KDS\)
     frequency: 6
     confidence: 0.98
     impact: high
@@ -1045,4 +1113,151 @@ learning_sessions:
     - source_of_truth_hierarchy
     - planning_vs_implementation_reconciliation
 
+documentation_patterns:
+  mkdocs_repair_workflow:
+    description: "Systematic approach to fixing broken MkDocs documentation sites"
+    incident_date: "2025-11-17"
+    problem_symptoms:
+      - "20+ top-level navigation items causing overwhelming sidebar"
+      - "Duplicate hero sections on home page"
+      - "Sidebar overlapping main content (CSS z-index issues)"
+      - "Poor mobile/tablet responsive behavior"
+    root_causes:
+      navigation_clutter: "Unorganized mkdocs.yml with duplicate sections"
+      duplicate_content: "Initial hero section duplicated in index.md"
+      css_conflict: "toc.integrate feature conflicting with Material theme + missing z-index"
+    solution_phases:
+      phase_1:
+        name: "Navigation Simplification"
+        action: "Consolidate 20+ items to 7 logical sections"
+        result: "65% reduction in navigation complexity"
+      phase_2:
+        name: "Content Restructuring"
+        action: "Remove duplicate hero, promote Sacred Laws to top"
+        result: "Clean content hierarchy, single source of truth"
+      phase_3:
+        name: "CSS Layout Fixes"
+        action: "Remove toc.integrate, add z-index layering, responsive breakpoints"
+        result: "No overlap, proper visual hierarchy"
+      phase_4:
+        name: "Visual Validation"
+        action: "Build + serve + browser testing (desktop/tablet/mobile)"
+        result: "Production-ready site validated"
+      phase_5:
+        name: "Cleanup & Documentation"
+        action: "Archive generated files, create NAVIGATION-GUIDE.md"
+        result: "Maintainable structure with comprehensive guide"
+    key_patterns:
+      navigation_organization:
+        principle: "User-journey-based (learn → understand → use → reference)"
+        limit: "7±2 sections for cognitive load management"
+        depth: "Maximum 3 levels to avoid overwhelming tree"
+        anti_patterns:
+          - "Don't create top-level 'Generated' menus"
+          - "Don't duplicate similar sections (Architectural/Architecture)"
+          - "Don't nest diagrams as standalone menus"
+      css_z_index_hierarchy:
+        pattern: "Explicit layering prevents overlap"
+        implementation:
+          sidebar: "z-index: 3 (top layer)"
+          navbar: "z-index: 2 (middle layer)"
+          content: "z-index: 1 (bottom layer)"
+        importance: "!important flag needed for Material theme override"
+      responsive_design:
+        mobile: "max-width: 768px - collapse sidebar to relative positioning"
+        tablet: "769-1024px - optimize sidebar width (200px)"
+        desktop: "1025px+ - full sidebar experience"
+      file_organization:
+        user_facing: "Keep in navigation (docs/core-content/)"
+        auto_generated: "Archive to docs/generated/ (exclude from nav)"
+        deprecated: "Move to docs/_archive/"
+    metrics:
+      navigation_reduction: "20+ items → 7 sections (65%)"
+      css_fixes: "100% overlap issues resolved"
+      responsive_support: "100% functional (mobile/tablet/desktop)"
+      build_time: "1.47 seconds"
+      documentation_created: "NAVIGATION-GUIDE.md (400 lines)"
+    reusable_artifacts:
+      - "7-section navigation template (user-journey-based)"
+      - "CSS z-index layering pattern"
+      - "Responsive breakpoint strategy"
+      - "Navigation maintenance guide (anti-patterns, procedures)"
+    confidence: 0.95
+    success_rate: 1.0
+    time_cost:
+      total_minutes: 165
+      phases:
+        analysis: 15
+        implementation: 120
+        testing: 15
+        documentation: 15
+
+ui_patterns:
+  css_z_index_layering:
+    description: "Prevent UI element overlap through explicit z-index hierarchy"
+    use_case: "Sidebar overlapping main content, navbar conflicts, modal dialogs"
+    pattern: |
+      /* Explicit z-index hierarchy */
+      .sidebar { z-index: 3 !important; }  /* Top layer */
+      .navbar { z-index: 2 !important; }   /* Middle layer */
+      .content { z-index: 1 !important; }  /* Bottom layer */
+      
+      /* Sticky positioning fix */
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+    why_important_flag: "Override framework defaults (Material theme, Bootstrap)"
+    responsive_considerations:
+      mobile: "Collapse to relative positioning (no overlap needed)"
+      tablet: "Optimize widths, maintain z-index hierarchy"
+      desktop: "Full z-index layering active"
+    common_mistakes:
+      - "Forgetting !important for framework override"
+      - "Not testing across breakpoints"
+      - "Mixing z-index with position: static (z-index requires position)"
+    debugging_approach:
+      - "Use browser DevTools to inspect computed z-index"
+      - "Check position property (static vs relative/absolute/sticky)"
+      - "Test with different viewport sizes"
+    confidence: 0.95
+    incident_date: "2025-11-17"
+
+  responsive_breakpoints_strategy:
+    description: "Mobile-first responsive design with clear breakpoints"
+    pattern: |
+      /* Mobile-first approach */
+      @media screen and (max-width: 768px) {
+        .sidebar {
+          position: relative;
+          height: auto;
+        }
+      }
+      
+      @media screen and (min-width: 769px) and (max-width: 1024px) {
+        .sidebar {
+          width: 200px;
+          font-size: 0.9rem;
+        }
+      }
+      
+      @media screen and (min-width: 1025px) {
+        .sidebar {
+          width: 250px;
+          /* Full desktop experience */
+        }
+      }
+    breakpoint_rationale:
+      mobile: "768px - Common smartphone landscape width"
+      tablet: "769-1024px - iPad and similar tablets"
+      desktop: "1025px+ - Standard desktop monitors"
+    progressive_enhancement: "Start with mobile styles, add complexity for larger screens"
+    testing_checklist:
+      - "Test at each breakpoint boundary (768px, 769px, 1024px, 1025px)"
+      - "Verify intermediate sizes (800px, 900px, 1200px)"
+      - "Check orientation changes (portrait/landscape)"
+    confidence: 0.90
+    incident_date: "2025-11-17"
 

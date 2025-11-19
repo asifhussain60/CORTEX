@@ -386,7 +386,7 @@ class QuestionRouter:
     def __init__(self, brain_path: str = None):
         if brain_path is None:
             # Use default brain path for tests
-            brain_path = "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain"
+            brain_path = "/Users/username/PROJECTS/CORTEX/cortex-brain"
         self._router = IntelligentQuestionRouter(brain_path)
         
     def route(self, message: str, context: Dict = None) -> 'RoutingResult':

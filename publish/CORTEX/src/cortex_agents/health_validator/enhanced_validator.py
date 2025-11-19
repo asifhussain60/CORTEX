@@ -315,7 +315,7 @@ class EnhancedHealthValidator(BaseHealthValidator):
     async def _find_component_files(self, component_name: str) -> List[str]:
         """Find files associated with a component"""
         # Simple heuristic - would be enhanced with actual component discovery
-        workspace_root = Path('/Users/asifhussain/PROJECTS/CORTEX')
+        workspace_root = Path('/Users/username/PROJECTS/CORTEX')
         potential_files = []
         
         for ext in ['.py', '.cs', '.js', '.ts', '.razor', '.tsx', '.jsx']:

@@ -21,7 +21,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all 6 layers
 rules:
-  total_count: 24
+  total_count: 27
   layers: 6
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -32,6 +32,7 @@ rules:
   application_isolation: "Application-specific code isolated from CORTEX core"
   brain_state_protection: "Brain state files protected from unintended commits"
   multi_layer_defense: "6 protection layers provide comprehensive coverage"
+  incremental_planning: "YAML plans created incrementally to avoid response length limits"
 # Critical system paths that trigger high-level protection
 critical_paths:
   - "CORTEX/src/tier0/"
@@ -41,6 +42,7 @@ critical_paths:
 
 # Tier 0 immutable instincts (cannot be bypassed)
 tier0_instincts:
+  - "INCREMENTAL_PLAN_GENERATION"  # TOP PRIORITY: Generate YAML plans incrementally to avoid response length limits
   - "TDD_ENFORCEMENT"
   - "DEFINITION_OF_READY"
   - "DEFINITION_OF_DONE"
@@ -87,6 +89,166 @@ protection_layers:
     priority: 1
     
     rules:
+      - rule_id: "INCREMENTAL_PLAN_GENERATION"
+        name: "Incremental YAML Plan Generation"
+        severity: "blocked"
+        description: "When generating YAML planning documents, create file first then add phases incrementally to avoid response length limits"
+        
+        detection:
+          combined_keywords:
+            planning_generation:
+              - "create plan"
+              - "generate plan"
+              - "planning document"
+              - "migration plan"
+              - "comprehensive plan"
+            yaml_format:
+              - ".yaml"
+              - "yaml plan"
+            response_length_risk:
+              - "comprehensive"
+              - "complete"
+              - "detailed phases"
+          scope: ["intent", "description"]
+          logic: "AND"
+        
+        alternatives:
+          - "STEP 1: Create planning YAML file with metadata and structure only"
+          - "STEP 2: Add Phase 1 details to file"
+          - "STEP 3: Add Phase 2 details to file (separate response)"
+          - "STEP 4: Add Phase 3 details to file (separate response)"
+          - "STEP 5: Add remaining phases incrementally"
+          - "Each step writes to file, NOT to chat response (avoid length limit)"
+        
+        evidence_template: |
+          Planning document generation detected: '{file_path}'
+          
+          CRITICAL: Avoid "Sorry, the response hit the length limit" error
+          
+          ❌ WRONG APPROACH:
+          - Generate entire comprehensive plan in single response
+          - Response exceeds GitHub Copilot length limit
+          - Plan truncated, user sees incomplete content
+          
+          ✅ CORRECT APPROACH (Incremental):
+          
+          **Response 1:** Create file with structure
+          ```yaml
+          # File created: cortex-brain/documents/planning/migration-plan.yaml
+          version: "1.0"
+          phases: 4
+          # Phase details to be added incrementally
+          ```
+          
+          **Response 2:** Add Phase 1
+          ```yaml
+          phase_1:
+            name: "Low-Risk Migration"
+            duration: "3-4 hours"
+            tasks: [...]
+          ```
+          
+          **Response 3:** Add Phase 2
+          ```yaml
+          phase_2:
+            name: "Medium-Risk Migration"
+            duration: "4-5 hours"
+            tasks: [...]
+          ```
+          
+          **Response 4:** Add remaining phases + validation
+          
+          Each response writes directly to file (not chat output).
+          Chat shows summary only: "✅ Phase 1 added to plan file"
+        
+        rationale: |
+          INCREMENTAL_PLAN_GENERATION: Response Length Limit Prevention
+          
+          Real incident (2025-11-18):
+          - User: "Create a complete migration yaml plan"
+          - Copilot generates 500+ line comprehensive YAML plan
+          - Response hits length limit: "Sorry, the response hit the length limit. Please rephrase your prompt."
+          - Plan truncated mid-content, unusable
+          - User frustrated by incomplete deliverable
+          
+          Why This Happens:
+          - GitHub Copilot Chat has ~8K token response limit
+          - Comprehensive YAML plans easily exceed this (15-25K tokens typical)
+          - Single-response generation forces truncation
+          - No way to continue from truncation point
+          
+          Incremental Generation Benefits:
+          1. **No Truncation**: Each response stays under limit
+          2. **Progressive Disclosure**: User sees plan build in real-time
+          3. **Review Opportunity**: Can adjust direction between phases
+          4. **File-Based**: Plan persists in file, not ephemeral chat
+          5. **Resumable**: Can pause and continue later
+          
+          Implementation Pattern:
+          
+          ```python
+          # WRONG: Single response generation
+          def generate_comprehensive_plan():
+              plan = {
+                  'phase_1': {...},  # 200 lines
+                  'phase_2': {...},  # 200 lines
+                  'phase_3': {...},  # 200 lines
+                  'phase_4': {...}   # 200 lines
+              }
+              return yaml.dump(plan)  # ❌ 800 lines exceeds limit
+          
+          # CORRECT: Incremental file writing
+          def generate_plan_incrementally():
+              # Response 1: Structure
+              create_plan_file_with_metadata()
+              return "✅ Plan file created: migration-plan.yaml"
+              
+              # Response 2: Phase 1
+              append_phase_to_file(phase=1, details={...})
+              return "✅ Phase 1 added (3-4 hours, 15 tasks)"
+              
+              # Response 3: Phase 2
+              append_phase_to_file(phase=2, details={...})
+              return "✅ Phase 2 added (4-5 hours, 20 tasks)"
+              
+              # Response 4: Remaining phases
+              append_remaining_phases_to_file()
+              return "✅ All phases complete. Plan ready for execution."
+          ```
+          
+          User Experience:
+          
+          ✅ GOOD (Incremental):
+          User: "Create migration plan"
+          Copilot: "✅ Created migration-plan.yaml with structure. Adding Phase 1..."
+          [writes to file]
+          Copilot: "✅ Phase 1 complete (15 tasks). Adding Phase 2..."
+          [writes to file]
+          Copilot: "✅ Phase 2 complete (20 tasks). Adding remaining phases..."
+          [writes to file]
+          Copilot: "✅ Migration plan complete. 4 phases, 70 tasks, 13-15 hours estimated."
+          
+          ❌ BAD (Single response):
+          User: "Create migration plan"
+          Copilot: [generates 800-line YAML in response]
+          Copilot: "Sorry, the response hit the length limit. Please rephrase your prompt."
+          User: "Ugh, now I have to ask again?"
+          
+          Chat Response Format:
+          - Show progress: "✅ Phase 1/4 added"
+          - Show summary: "15 tasks, 3-4 hours"
+          - Reference file: "See migration-plan.yaml for full details"
+          - No full YAML dump in chat (file is source of truth)
+          
+          File-Based Planning Advantages:
+          - Persistent artifact (survives chat closure)
+          - Git-trackable (version control)
+          - Resumable (open file anytime)
+          - Shareable (commit to repo)
+          - No token limit concerns
+          
+          This makes CORTEX planning system robust and professional.
+      
       - rule_id: "TDD_ENFORCEMENT"
         name: "Test-Driven Development Enforcement"
         severity: "blocked"
@@ -571,6 +733,219 @@ protection_layers:
         
         evidence_template: "Consider extension over modification"
       
+      - rule_id: "CORTEX_WORKSPACE_ISOLATION"
+        name: "CORTEX Workspace Isolation"
+        severity: "blocked"
+        description: "All CORTEX-generated documentation for application repos MUST be within CORTEX/Workspaces/ folder"
+        
+        detection:
+          combined_keywords:
+            cortex_generation:
+              - "onboard application"
+              - "generate documentation"
+              - "create docs"
+              - "application onboarding"
+            root_output:
+              - "/docs/"
+              - "\\docs\\"
+              - "root_path / 'docs'"
+              - "project_root / 'docs'"
+          scope: ["code", "file_path", "intent"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "output_path_validation"
+            description: "Verify all generated files within CORTEX/Workspaces/"
+            requirement: "Output paths MUST contain 'CORTEX/Workspaces/[app-name]/'"
+          
+          - type: "no_root_pollution"
+            description: "Verify no files created in application repository root or docs/"
+            requirement: "git status MUST show zero new files outside CORTEX/"
+          
+          - type: "workspace_structure"
+            description: "Verify proper workspace folder structure created"
+            requirement: "CORTEX/Workspaces/[app-name]/{docs,diagrams,references}/"
+        
+        alternatives:
+          - "Use CORTEX/Workspaces/[app-name]/docs/ for all generated documentation"
+          - "Use CORTEX/Workspaces/[app-name]/diagrams/ for architecture diagrams"
+          - "Use CORTEX/Workspaces/[app-name]/references/ for quick references"
+          - "Add .gitignore: CORTEX/ (exclude entire CORTEX folder from user repo)"
+        
+        evidence_template: |
+          CORTEX documentation generated outside workspace isolation!
+          
+          File: '{file_path}'
+          Expected: CORTEX/Workspaces/[app-name]/...
+          Actual: {actual_location}
+          
+          CRITICAL: NO cortex documentation should exist outside CORTEX folder
+          
+          Proper Structure:
+          user-repo/
+          ├── CORTEX/                          ← CORTEX folder (git-ignored)
+          │   └── Workspaces/                  ← All app documentation here
+          │       └── MyApp/                   ← App-specific workspace
+          │           ├── docs/                ← Generated docs
+          │           ├── diagrams/            ← Architecture diagrams
+          │           └── references/          ← Quick references
+          ├── src/                             ← User application code
+          └── .gitignore                       ← Must include "CORTEX/"
+          
+          Why This Matters:
+          - Clean separation (CORTEX artifacts ≠ application code)
+          - Easy cleanup (delete CORTEX/ removes all CORTEX files)
+          - No git pollution (CORTEX/ excluded via .gitignore)
+          - Portability (CORTEX workspace self-contained)
+        
+        rationale: |
+          CORTEX_WORKSPACE_ISOLATION: Repository Organization Standard
+          
+          Real incident (2025-11-17):
+          - User: "onboarding app creates docs in repo root, not CORTEX folder"
+          - Published onboarding generates: user-repo/docs/onboarding.md
+          - CORTEX artifacts polluting user's application repository
+          - Cleanup difficult (which docs are CORTEX vs application?)
+          - .gitignore cannot exclude selectively
+          
+          Why Workspace Isolation Critical:
+          
+          1. Repository Cleanliness:
+             - User repo = user's application code only
+             - CORTEX artifacts = temporary scaffolding
+             - Clear boundary prevents confusion
+             Example: docs/ could be user's actual docs or CORTEX-generated
+          
+          2. Easy Cleanup:
+             - Delete CORTEX/ → all CORTEX artifacts gone
+             - No hunting for scattered CORTEX files
+             - Uninstall = single folder removal
+             Example: rm -rf CORTEX/ vs finding 47 scattered files
+          
+          3. Git Isolation:
+             - Add "CORTEX/" to .gitignore once
+             - No CORTEX artifacts ever committed to user repo
+             - No accidental commits of temporary scaffolding
+             Example: CORTEX workspace excluded, user code included
+          
+          4. Portability:
+             - CORTEX workspace self-contained
+             - Can backup/restore entire CORTEX state
+             - Can sync across machines if desired
+             Example: Copy CORTEX/ to new machine = full context restored
+          
+          5. Multi-Application Support:
+             - CORTEX can work with multiple applications
+             - Each app gets isolated workspace
+             - No cross-contamination of artifacts
+             Example: CORTEX/Workspaces/AppA/, CORTEX/Workspaces/AppB/
+          
+          Proper Workspace Structure:
+          
+          ```
+          user-application-repo/
+          ├── CORTEX/                          ← Git-ignored CORTEX folder
+          │   ├── .cortex-metadata.json        ← Workspace metadata
+          │   └── Workspaces/                  ← All application workspaces
+          │       ├── MyApp/                   ← Application-specific workspace
+          │       │   ├── docs/                ← Generated documentation
+          │       │   │   ├── onboarding.md
+          │       │   │   ├── architecture-overview.md
+          │       │   │   └── quick-reference.md
+          │       │   ├── diagrams/            ← Architecture diagrams
+          │       │   │   ├── component-diagram.mmd
+          │       │   │   ├── data-flow.mmd
+          │       │   │   └── images/          ← Rendered images
+          │       │   ├── references/          ← Quick references
+          │       │   │   └── api-quick-ref.md
+          │       │   └── analysis/            ← Code analysis reports
+          │       │       └── complexity-report.json
+          │       └── AnotherApp/              ← Another application
+          │           └── docs/
+          │               └── onboarding.md
+          ├── src/                             ← User's actual application code
+          │   └── MyApp/
+          ├── tests/                           ← User's tests
+          ├── README.md                        ← User's README
+          └── .gitignore                       ← Must include "CORTEX/"
+          ```
+          
+          Implementation Changes Required:
+          
+          1. PageGenerator (src/epm/modules/page_generator.py):
+             Before:
+             ```python
+             self.output_path = root_path / "docs"
+             ```
+             
+             After:
+             ```python
+             app_name = context.get('app_name', 'UnknownApp')
+             self.output_path = root_path / "CORTEX" / "Workspaces" / app_name / "docs"
+             ```
+          
+          2. DiagramGenerator (src/epm/modules/diagram_generator.py):
+             Before:
+             ```python
+             self.output_path = root_path / "docs"
+             ```
+             
+             After:
+             ```python
+             app_name = context.get('app_name', 'UnknownApp')
+             self.output_path = root_path / "CORTEX" / "Workspaces" / app_name / "diagrams"
+             ```
+          
+          3. ImagePromptGenerator (src/epm/modules/image_prompt_generator.py):
+             Before:
+             ```python
+             self.output_dir = Path(output_dir)  # Typically docs/diagrams
+             ```
+             
+             After:
+             ```python
+             app_name = context.get('app_name', 'UnknownApp')
+             self.output_dir = root_path / "CORTEX" / "Workspaces" / app_name / "diagrams"
+             ```
+          
+          4. Onboarding Orchestrator Context:
+             Add app_name to session context:
+             ```python
+             session_context = {
+                 "app_name": self._detect_app_name(root_path),  # From solution file, csproj, package.json
+                 "profile": profile.value,
+                 "project_root": self.project_root,
+                 ...
+             }
+             ```
+          
+          5. .gitignore Creation:
+             Onboarding MUST create/update user repo's .gitignore:
+             ```gitignore
+             # CORTEX AI Assistant (local workspace, not committed)
+             CORTEX/
+             ```
+          
+          Benefits:
+          - Clean separation: CORTEX ≠ Application
+          - Easy uninstall: Delete CORTEX/ folder
+          - No git pollution: Single .gitignore entry
+          - Multi-app support: Isolated workspaces
+          - Portable: Self-contained CORTEX state
+          
+          Enforcement:
+          - Brain Protector blocks operations writing outside CORTEX/
+          - Integration tests verify output paths
+          - Onboarding validates workspace structure
+          - Design sync validates isolation maintained
+          
+          Exception: Shared CORTEX Installation
+          If user wants to share CORTEX across projects (not per-repo):
+          - Install CORTEX once (e.g., ~/CORTEX/)
+          - Each repo references shared CORTEX
+          - Workspaces still isolated: ~/CORTEX/Workspaces/[app-name]/
+          - This is advanced configuration (document separately)
+      
       - rule_id: "CODE_STYLE_CONSISTENCY"
         name: "Adopt User's Code Style"
         severity: "warning"
@@ -968,7 +1343,7 @@ protection_layers:
             root_level_creation:
               - "create file in root"
               - "save to repository root"
-              - ".md in d:\\PROJECTS\\CORTEX\\"
+              - ".md in /path/to/projects\\CORTEX\\"
               - ".md in /Users/"
               - ".md in /home/"
             summary_markers:
@@ -1059,6 +1434,143 @@ protection_layers:
           │   ├── TIER3-IMPLEMENTATION-SUMMARY.md
           │   └── WEEKLY-PROGRESS-SUMMARY.md
           │
+      
+      - rule_id: "YAML_ONLY_PLANNING"
+        name: "YAML-Only Planning Documents (No Markdown Plans)"
+        severity: "blocked"
+        description: "ALL planning documents MUST be created in YAML format, NEVER Markdown - prevents documentation bloat and enforces machine-readable standards"
+        
+        detection:
+          combined_keywords:
+            planning_document:
+              - "plan"
+              - "planning"
+              - "roadmap"
+              - "design"
+              - "consolidation"
+              - "implementation plan"
+              - "comprehensive plan"
+            and_markdown_format:
+              - ".md"
+              - "markdown"
+              - "create markdown plan"
+            not_user_facing:
+              - "!story"
+              - "!guide"
+              - "!tutorial"
+          scope: ["file_path", "description", "operation"]
+          logic: "AND"
+        
+        verification_required:
+          - type: "format_validation"
+            description: "Verify plan document created as YAML, not Markdown"
+            requirement: "File extension MUST be .yaml, NOT .md"
+          
+          - type: "location_validation"
+            description: "Verify plan placed in planning folder"
+            requirement: "File path MUST be cortex-brain/documents/planning/"
+          
+          - type: "schema_validation"
+            description: "Verify YAML follows structured planning schema"
+            requirement: "YAML MUST validate against planning schema"
+        
+        alternatives:
+          - "Create YAML plan in cortex-brain/documents/planning/[name].yaml"
+          - "Use structured YAML schemas for all planning documents"
+          - "Reference existing YAML plans: YAML-PHASE-TRACKER-DESIGN.yaml"
+          - "Use cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml as template"
+        
+        evidence_template: |
+          🚨 MARKDOWN PLANNING DOCUMENT DETECTED
+          
+          File: '{file_path}'
+          Type: Planning Document (should be YAML)
+          
+          VIOLATION: Planning documents MUST be YAML format, NOT Markdown
+          
+          ❌ WRONG:
+          - DOCUMENTATION-CONSOLIDATION-COMPREHENSIVE-PLAN.md
+          - IMPLEMENTATION-PLAN.md
+          - FEATURE-DESIGN.md
+          - ARCHITECTURE-PLAN.md
+          
+          ✅ CORRECT:
+          - documentation-consolidation-plan.yaml
+          - implementation-plan.yaml
+          - feature-design.yaml
+          - architecture-plan.yaml
+          
+          Why YAML-Only Planning?
+          
+          1. **Prevents Documentation Bloat**
+             - Markdown plans tend to be verbose (10-50 pages)
+             - YAML enforces concise structured format
+             - Token efficiency (YAML 60-80% smaller than MD)
+          
+          2. **Machine-Readable**
+             - YAML can be parsed and processed programmatically
+             - Enables automated validation and tracking
+             - Integrates with CORTEX brain systems
+          
+          3. **Consistency**
+             - Enforced schema structure
+             - Standard fields across all plans
+             - No "wall of text" formatting variations
+          
+          4. **Searchability**
+             - Structured queries on plan fields
+             - Easy to filter and aggregate
+             - Better brain integration
+          
+          Correct Location:
+          - cortex-brain/documents/planning/[plan-name].yaml
+          
+          Exception:
+          - User-facing documentation (stories, guides, tutorials) CAN be Markdown
+          - Internal planning/design MUST be YAML
+        
+        rationale: |
+          YAML_ONLY_PLANNING: Documentation Bloat Prevention
+          
+          Real incident (2025-11-18):
+          - CORTEX created: DOCUMENTATION-CONSOLIDATION-COMPREHENSIVE-PLAN.md
+          - File size: 23KB (extensive markdown document)
+          - User: "why is CORTEX still generating md plans instead of yaml plans?"
+          - User: "Add to tier 0 that planning should ALWAYS done using yaml files NEVER MD to prevent documentation bloat"
+          
+          Problem with Markdown Plans:
+          - Verbose "comprehensive" documents (10-50 pages typical)
+          - Heavy token cost to read/process
+          - Difficult to parse programmatically
+          - No enforced structure (inconsistent formats)
+          - Accumulates as "documentation debt"
+          
+          YAML Planning Benefits:
+          - Enforced concise structure
+          - 60-80% token reduction vs Markdown
+          - Machine-readable for automation
+          - Consistent schema across all plans
+          - Easy to validate and query
+          
+          Implementation:
+          - CORTEX creates planning YAML schemas
+          - Validation against JSON Schema
+          - Brain integration for automated tracking
+          - Markdown reserved ONLY for user-facing docs (stories, guides)
+          
+          Related Rules:
+          - MACHINE_READABLE_FORMATS (Tier 0 instinct)
+          - NO_ROOT_SUMMARY_DOCUMENTS (Layer 3)
+          
+          Reference Examples:
+          - cortex-brain/documents/planning/YAML-PHASE-TRACKER-DESIGN.yaml
+          - cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml
+          - cortex-operations.yaml
+          
+          User Feedback:
+          "Add to tier 0 of cortex that planning should ALWAYS done using yaml files NEVER MD 
+          to prevent documentation bloat" - Asif Hussain, 2025-11-18
+          │
           ├── investigations/       # Research, architecture investigations
           │   ├── AUTH-FEATURE-INVESTIGATION.md
           │   └── DATABASE-MIGRATION-INVESTIGATION.md
@@ -1099,16 +1611,16 @@ protection_layers:
           
           ❌ BAD:
           ```
-          d:\PROJECTS\CORTEX\INVESTIGATION-ANALYSIS-REPORT.md
-          d:\PROJECTS\CORTEX\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
-          d:\PROJECTS\CORTEX\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
+          /path/to/projects\CORTEX\INVESTIGATION-ANALYSIS-REPORT.md
+          /path/to/projects\CORTEX\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
+          /path/to/projects\CORTEX\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
           ```
           
           ✅ GOOD:
           ```
-          d:\PROJECTS\CORTEX\cortex-brain\documents\analysis\INVESTIGATION-ANALYSIS-REPORT.md
-          d:\PROJECTS\CORTEX\cortex-brain\documents\reports\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
-          d:\PROJECTS\CORTEX\cortex-brain\documents\analysis\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
+          /path/to/projects\CORTEX\cortex-brain\documents\analysis\INVESTIGATION-ANALYSIS-REPORT.md
+          /path/to/projects\CORTEX\cortex-brain\documents\reports\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md
+          /path/to/projects\CORTEX\cortex-brain\documents\analysis\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md
           ```
           
           Enforcement:
@@ -1416,10 +1928,10 @@ protection_layers:
         
         detection:
           patterns:
-            - "AHHOME"
+            - "HOSTNAME"
             - ".coverage.*.* "
-            - "C:\\\\"
-            - "D:\\\\"
+            - "C:/"
+            - "D:/"
             - "/home/[a-z]+"
             - "/Users/[a-z]+"
           file_types:
@@ -1433,7 +1945,7 @@ protection_layers:
         verification_required:
           - type: "privacy_scan"
             description: "Scan all published files for machine-specific paths"
-            requirement: "Zero files with absolute paths (C:\\, D:\\, /home/, AHHOME)"
+            requirement: "Zero files with absolute paths (C:/, D:/, /home/, HOSTNAME)"
           
           - type: "exclusion_test"
             description: "Test that publish script excludes privacy-leaking files"
@@ -1441,7 +1953,7 @@ protection_layers:
           
           - type: "config_sanitization"
             description: "Verify config files use template values, not real paths"
-            requirement: "cortex.config.json MUST use placeholders, not AHHOME paths"
+            requirement: "cortex.config.json MUST use placeholders, not HOSTNAME paths"
         
         alternatives:
           - "Add file patterns to EXCLUDE_PATTERNS in publish script"
@@ -1456,10 +1968,10 @@ protection_layers:
           
           Real incident (2025-11-12):
           - User runs publish script
-          - Discovers .coverage.AHHOME.12345.XgvxuuYx in publish/CORTEX/
+          - Discovers .coverage.HOSTNAME.12345.XgvxuuYx in publish/CORTEX/
           - 7 coverage files with machine name exposed
           - logs/ambient_capture.log contains C:\Windows\Temp paths
-          - cortex.config.json contains AHHOME machine paths
+          - cortex.config.json contains HOSTNAME machine paths
           - health-reports/ has user-specific diagnostic data
           
           Impact:
@@ -1866,7 +2378,7 @@ protection_layers:
              - Machine assigned to multiple tracks → confusion
              - Unassigned machines → wasted capacity
              - Clear 1:1 or 1:N mapping required
-             Example: AHHOME on both tracks = which context?
+             Example: HOSTNAME on both tracks = which context?
           
           4. Track Name Uniqueness:
              - Collision-resistant generation
@@ -1897,7 +2409,7 @@ protection_layers:
           ```python
           def test_multi_track_validation():
               # Setup
-              machines = ["AHHOME", "Mac"]
+              machines = ["HOSTNAME", "Mac"]
               config = create_multi_track_config(machines, modules)
               
               # Balance check
@@ -2052,7 +2564,7 @@ protection_layers:
           ```python
           def test_track_isolation():
               # Setup two tracks
-              config = setup_multi_track(['AHHOME', 'Mac'])
+              config = setup_multi_track(['HOSTNAME', 'Mac'])
               track_a = config.tracks['track_1']
               track_b = config.tracks['track_2']
               
@@ -2240,7 +2752,7 @@ protection_layers:
           ```python
           def test_consolidation_integrity():
               # Setup: Two tracks with overlapping work
-              config = create_multi_track(['AHHOME', 'Mac'])
+              config = create_multi_track(['HOSTNAME', 'Mac'])
               track_a_complete = mark_modules_complete(config.tracks['track_1'], [0, 1, 2])
               track_b_complete = mark_modules_complete(config.tracks['track_2'], [3, 4, 5])
               

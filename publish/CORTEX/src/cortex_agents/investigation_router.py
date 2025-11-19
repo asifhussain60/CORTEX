@@ -535,7 +535,7 @@ class InvestigationRouter:
         """Get current workspace context for investigation"""
         return {
             'current_file': current_file,
-            'workspace_root': '/Users/asifhussain/PROJECTS/CORTEX',  # Could be dynamic
+            'workspace_root': '/Users/username/PROJECTS/CORTEX',  # Could be dynamic
             'active_context': 'investigation'
         }
     

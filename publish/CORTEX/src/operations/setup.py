@@ -218,6 +218,57 @@ def install_dependencies(project_root: Path) -> Tuple[bool, int, str]:
         return False, 0, f"Error installing dependencies: {e}"
 
 
+def configure_gitignore(project_root: Path) -> Tuple[bool, str]:
+    """
+    Add CORTEX folder to .gitignore to prevent committing CORTEX internals.
+    
+    Creates .gitignore if it doesn't exist, or appends CORTEX exclusion if missing.
+    
+    Args:
+        project_root: CORTEX project root directory
+    
+    Returns:
+        (success, message)
+    """
+    gitignore_path = project_root / '.gitignore'
+    
+    cortex_entry = "CORTEX/"
+    cortex_section = f"""
+# CORTEX AI Assistant (local only, not committed)
+# This folder contains CORTEX's internal code, brain databases, and configuration.
+# Excluding it prevents accidental commits to your application repository.
+{cortex_entry}
+"""
+    
+    try:
+        # Read existing .gitignore if it exists
+        if gitignore_path.exists():
+            with open(gitignore_path, 'r', encoding='utf-8') as f:
+                existing_content = f.read()
+            
+            # Check if CORTEX is already excluded
+            if cortex_entry in existing_content or "CORTEX/" in existing_content:
+                return True, ".gitignore already contains CORTEX exclusion"
+            
+            # Append to existing file
+            with open(gitignore_path, 'a', encoding='utf-8') as f:
+                # Add newline if file doesn't end with one
+                if existing_content and not existing_content.endswith('\n'):
+                    f.write('\n')
+                f.write(cortex_section)
+            
+            return True, "Added CORTEX/ to existing .gitignore"
+        else:
+            # Create new .gitignore with CORTEX exclusion
+            with open(gitignore_path, 'w', encoding='utf-8') as f:
+                f.write(cortex_section.lstrip())
+            
+            return True, "Created .gitignore with CORTEX/ exclusion"
+    
+    except Exception as e:
+        return False, f"Failed to configure .gitignore: {e}"
+
+
 def initialize_brain_databases(project_root: Path) -> Tuple[bool, str]:
     """
     Initialize CORTEX brain SQLite databases.
@@ -407,8 +458,19 @@ def setup_environment(
         
         print(f"   ✅ {brain_message}")
     
-    # 8. Final Validation
-    print("\n✅ Step 8: Final validation...")
+    # 8. Configure .gitignore
+    if profile in ['standard', 'full']:
+        print("\n🔒 Step 8: Configuring .gitignore...")
+        gitignore_success, gitignore_message = configure_gitignore(project_root)
+        
+        if not gitignore_success:
+            result.add_warning(gitignore_message)
+            print(f"   ⚠️  {gitignore_message}")
+        else:
+            print(f"   ✅ {gitignore_message}")
+    
+    # 9. Final Validation
+    print("\n✅ Step 9: Final validation...")
     
     if profile == 'full':
         # Additional checks for full profile

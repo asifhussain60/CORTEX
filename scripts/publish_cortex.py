@@ -40,7 +40,6 @@ USER_OPERATIONS = {
     'environment_setup',
     'workspace_cleanup',
     'cortex_demo',
-    'refresh_cortex_story',
     'cortex_tutorial',
     'application_onboarding'  # NEW: Intelligent onboarding
 }
@@ -48,7 +47,8 @@ USER_OPERATIONS = {
 # Admin-only operations (EXCLUDE from publish package)
 ADMIN_OPERATIONS = {
     'design_sync',           # Admin development tool
-    'interactive_planning'   # Not yet implemented
+    'interactive_planning',  # Not yet implemented
+    'refresh_cortex_story'   # ❌ Admin-only: Updates CORTEX's own story documentation
 }
 
 # Patterns to EXCLUDE from publish (privacy & unnecessary files)
@@ -111,7 +111,6 @@ CRITICAL_FILES = {
     
     # CORTEX Entry Points
     '.github/prompts/CORTEX.prompt.md',
-    # Note: copilot-instructions.md doesn't exist (removed from critical files)
     
     # Core Configuration (TEMPLATE ONLY - not cortex.config.json with machine paths)
     'cortex.config.template.json',
@@ -132,7 +131,6 @@ CRITICAL_FILES = {
     'cortex-brain/response-templates.yaml',
     
     # User Tools (ESSENTIAL for conversation tracking & setup)
-    # Note: auto_capture_daemon.py doesn't exist (removed from critical files)
     'scripts/cortex/cortex_cli.py',  # Manual tracking
     'scripts/cortex/migrate-all-tiers.py',  # Database setup
     'scripts/launchers/run-cortex.sh',  # Unix/Mac setup
@@ -186,7 +184,8 @@ EXCLUDED_DIRS = {
     '.pytest_cache',
     '.git',
     'node_modules',
-    'publish'  # Don't copy publish into itself!
+    'publish',  # Don't copy publish into itself!
+    'archives'  # Exclude any 'archives' subdirectories (e.g., src/plugins/archives)
 }
 
 # Specific files to EXCLUDE (privacy leaks)
@@ -369,6 +368,9 @@ def should_include_file(file_path: Path, source_root: Path, admin_ops: Set[str])
     for excluded_dir in EXCLUDED_DIRS:
         if relative_str.startswith(excluded_dir):
             return False
+        # Also check if 'archives' appears anywhere in the path (e.g., src/plugins/archives)
+        if 'archives' in relative_str.split('/'):
+            return False
     
     # Exclude admin scripts
     if file_path.name in ADMIN_SCRIPTS:
@@ -473,6 +475,7 @@ def copy_essential_directories(
                     '.log' in item.suffix,
                     '.coverage' in item.name,
                     item.name.startswith('.pytest'),
+                    'archives' in item.parts,  # Skip any file in an 'archives' directory
                 ]):
                     continue
                 
@@ -516,8 +519,7 @@ def copy_essential_directories(
     
     # Copy essential user scripts/tools
     essential_scripts = [
-        # Ambient Capture Daemon (⭐⭐⭐⭐⭐ feature in tracking guide)
-        'scripts/cortex/auto_capture_daemon.py',
+        # Git Event Capture (tracking helper)
         'scripts/cortex/capture_git_event.py',
         
         # CLI Tools (manual conversation tracking)
@@ -695,7 +697,6 @@ your-app/
 │   ├── .github/                     # Entry points HERE initially
 │   │   ├── prompts/
 │   │   │   └── CORTEX.prompt.md     # Copilot reads this
-│   │   └── copilot-instructions.md
 │   ├── cortex-brain/
 │   ├── src/
 │   └── ...
@@ -709,7 +710,6 @@ your-app/
 ├── .github/                         # ✅ Entry points copied here by Module 1
 │   ├── prompts/
 │   │   └── CORTEX.prompt.md         # For convenience (app root location)
-│   └── copilot-instructions.md
 ├── cortex/                          # CORTEX installation (unchanged)
 │   ├── .github/                     # Original entry points (backup)
 │   ├── cortex-brain/                # Brain initialized
@@ -732,7 +732,6 @@ cp -r /path/to/publish/CORTEX ./cortex
 # 2. Copy entry points to app root
 mkdir -p .github/prompts
 cp cortex/.github/prompts/CORTEX.prompt.md .github/prompts/
-cp cortex/.github/copilot-instructions.md .github/
 
 # 3. Install dependencies
 cd cortex
@@ -814,6 +813,82 @@ And it remembers everything from past conversations! 🧠
         return False
 
 
+def sanitize_privacy_leaks(
+    publish_cortex: Path,
+    dry_run: bool = False
+) -> bool:
+    """
+    Remove privacy leaks (absolute paths, usernames, hostnames) from published files.
+    
+    Args:
+        publish_cortex: Path to publish/CORTEX directory
+        dry_run: If True, only preview changes
+    
+    Returns:
+        True if successful
+    """
+    logger.info("Step 5/6: Sanitizing privacy leaks...")
+    
+    import re
+    
+    # Privacy patterns to replace
+    privacy_patterns = [
+        (r'D:\\\\PROJECTS', '/path/to/projects'),
+        (r'D:\\PROJECTS', '/path/to/projects'),
+        (r'C:\\\\Users\\\\[a-zA-Z0-9]+', '/home/user'),
+        (r'C:\\Users\\[a-zA-Z0-9]+', '/home/user'),
+        (r'/Users/asifhussain', '/Users/username'),
+        (r'/home/[a-z]+', '/home/user'),
+        (r'AHHOME', 'HOSTNAME'),
+        # Windows drive letters
+        (r'C:\\\\\\\\', 'C:/'),
+        (r'D:\\\\\\\\', 'D:/'),
+        (r'C:\\\\', 'C:/'),
+        (r'D:\\\\', 'D:/'),
+    ]
+    
+    sanitized_count = 0
+    
+    # Files to sanitize (text files only)
+    text_extensions = {'.py', '.md', '.yaml', '.yml', '.json', '.txt', '.sh', '.ps1'}
+    
+    for file_path in publish_cortex.rglob('*'):
+        if not file_path.is_file():
+            continue
+        
+        if file_path.suffix not in text_extensions:
+            continue
+        
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            original_content = content
+            
+            # Apply all privacy pattern replacements
+            for pattern, replacement in privacy_patterns:
+                content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+            
+            # If content changed, write it back
+            if content != original_content:
+                if not dry_run:
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    sanitized_count += 1
+                    logger.info(f"✓ Sanitized: {file_path.relative_to(publish_cortex)}")
+                else:
+                    logger.info(f"[DRY RUN] Would sanitize: {file_path.relative_to(publish_cortex)}")
+        
+        except (UnicodeDecodeError, PermissionError):
+            # Skip binary files or files we can't read
+            continue
+        except Exception as e:
+            logger.warning(f"Failed to sanitize {file_path}: {e}")
+    
+    logger.info(f"✓ Sanitized {sanitized_count} files")
+    return True
+
+
 def run_validation_tests(source_root: Path) -> Tuple[bool, int, int]:
     """
     Run publish validation tests to ensure package integrity.
@@ -826,7 +901,7 @@ def run_validation_tests(source_root: Path) -> Tuple[bool, int, int]:
     """
     logger.info("")
     logger.info("=" * 80)
-    logger.info("Step 5/6: Running Validation Tests")
+    logger.info("Step 6/7: Running Validation Tests")
     logger.info("=" * 80)
     logger.info("")
     
@@ -931,7 +1006,7 @@ def generate_report(
     """
     logger.info("")
     logger.info("=" * 80)
-    logger.info("Step 6/6: Generating Summary Report")
+    logger.info("Step 7/7: Generating Summary Report")
     logger.info("=" * 80)
     logger.info("")
     
@@ -1046,6 +1121,10 @@ def main():
     
     if not create_setup_for_copilot(publish_cortex, args.dry_run):
         logger.error("Failed to create setup file")
+        return 1
+    
+    if not sanitize_privacy_leaks(publish_cortex, args.dry_run):
+        logger.error("Failed to sanitize privacy leaks")
         return 1
     
     # Run validation tests (unless dry-run or explicitly skipped)

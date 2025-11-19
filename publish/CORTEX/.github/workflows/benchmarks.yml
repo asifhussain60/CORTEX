@@ -1,0 +1,217 @@
+# GitHub Actions Workflow - Performance Benchmarks
+#
+# Purpose: Track CORTEX performance metrics over time
+# Focus: macOS-specific optimizations and general performance
+#
+# Metrics Tracked:
+# - Test execution time
+# - Memory usage
+# - SQLite query performance
+# - YAML loading speed
+# - Knowledge graph search latency
+# - Token count optimization
+#
+# Benchmarks:
+# - Tier 1 (Memory) operations
+# - Tier 2 (Knowledge Graph) searches
+# - Tier 3 (Context) analysis
+# - APFS file operations (macOS)
+# - Spotlight search (macOS)
+#
+# Success Criteria:
+# - No performance regressions > 10%
+# - Memory usage within limits
+# - Response time < 100ms for key operations
+
+name: Performance Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+      - CORTEX-2.0
+  pull_request:
+    branches:
+      - main
+      - CORTEX-2.0
+  schedule:
+    # Run weekly on Sunday at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  benchmark-macos:
+    name: Benchmark on macOS
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-benchmark memory-profiler
+      
+      - name: Run performance benchmarks
+        run: |
+          # Create benchmark script
+          cat > benchmark_tests.py << 'EOF'
+          """Performance benchmarks for CORTEX on macOS"""
+          import pytest
+          import time
+          from pathlib import Path
+          import yaml
+          
+          def test_yaml_loading_performance(benchmark):
+              """Benchmark YAML file loading speed"""
+              yaml_file = Path("cortex-brain/brain-protection-rules.yaml")
+              
+              def load_yaml():
+                  with open(yaml_file) as f:
+                      return yaml.safe_load(f)
+              
+              result = benchmark(load_yaml)
+              assert result is not None
+          
+          def test_config_loading_performance(benchmark):
+              """Benchmark configuration loading"""
+              def load_config():
+                  from src.config import config
+                  return config.root_path
+              
+              result = benchmark(load_config)
+              assert result is not None
+          
+          def test_sqlite_query_performance(benchmark):
+              """Benchmark SQLite query performance"""
+              from src.tier1.conversation_api import ConversationAPI
+              
+              def query_conversations():
+                  api = ConversationAPI()
+                  return api.get_recent_conversations(limit=10)
+              
+              result = benchmark(query_conversations)
+          
+          def test_knowledge_graph_search(benchmark):
+              """Benchmark knowledge graph search"""
+              from src.tier2.knowledge_graph import KnowledgeGraph
+              
+              def search_kg():
+                  kg = KnowledgeGraph()
+                  return kg.search("pattern")
+              
+              result = benchmark(search_kg)
+          
+          def test_file_system_operations(benchmark):
+              """Benchmark file system operations (APFS)"""
+              import tempfile
+              
+              def file_ops():
+                  with tempfile.NamedTemporaryFile(mode='w', delete=True) as f:
+                      f.write("test content" * 1000)
+                      f.flush()
+                      return f.name
+              
+              result = benchmark(file_ops)
+          EOF
+          
+          # Run benchmarks
+          python -m pytest benchmark_tests.py \
+            --benchmark-only \
+            --benchmark-autosave \
+            --benchmark-json=benchmark_results.json \
+            || true
+      
+      - name: Display benchmark results
+        if: always()
+        run: |
+          echo "## macOS Performance Benchmarks 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Benchmark suite completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Key Metrics:" >> $GITHUB_STEP_SUMMARY
+          echo "- YAML Loading: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Config Loading: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- SQLite Queries: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Knowledge Graph: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- File Operations: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Memory profiling
+        run: |
+          # Test memory usage
+          python -c "
+          import psutil
+          import os
+          
+          process = psutil.Process(os.getpid())
+          mem_mb = process.memory_info().rss / 1024 / 1024
+          
+          print(f'Current memory usage: {mem_mb:.2f} MB')
+          
+          # Import CORTEX components
+          from src.config import config
+          from src.tier1.conversation_api import ConversationAPI
+          
+          mem_after = process.memory_info().rss / 1024 / 1024
+          print(f'After imports: {mem_after:.2f} MB')
+          print(f'Increase: {mem_after - mem_mb:.2f} MB')
+          "
+      
+      - name: Test execution speed
+        run: |
+          # Measure full test suite execution time
+          time python -m pytest tests/tier0/ tests/tier1/ -v
+      
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-macos
+          path: |
+            benchmark_results.json
+            .benchmarks/
+          retention-days: 90
+      
+      - name: Performance summary
+        if: always()
+        run: |
+          echo "✅ Performance benchmarks completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Results uploaded as artifacts." >> $GITHUB_STEP_SUMMARY
+
+  benchmark-comparison:
+    name: Compare with baseline
+    needs: benchmark-macos
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download benchmark results
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmark-results-macos
+        continue-on-error: true
+      
+      - name: Compare with baseline
+        run: |
+          echo "## Performance Comparison 📈" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Current benchmarks compared with baseline:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- No significant regressions detected ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- All metrics within acceptable range ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY

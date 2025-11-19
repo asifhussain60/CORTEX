@@ -524,7 +524,7 @@ async def demo_context_linking():
     print("=" * 50)
     
     # Create context linker
-    cortex_root = "/Users/asifhussain/PROJECTS/CORTEX"
+    cortex_root = "/Users/username/PROJECTS/CORTEX"
     linker = create_context_linker(cortex_root)
     
     # Create sample ideas to test linking

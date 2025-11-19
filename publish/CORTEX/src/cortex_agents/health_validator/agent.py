@@ -93,6 +93,10 @@ class HealthValidator(BaseAgent):
             self.log_request(request)
             self.logger.info("Starting health validation")
             
+            # Extract rule context for Phase 3: Summary generation control
+            rule_context = request.context.get("rule_context", {})
+            skip_summary = rule_context.get("skip_summary_generation", False)
+            
             # Perform all health checks using validators
             check_results = {
                 "databases": self.db_validator.check(),
@@ -108,11 +112,16 @@ class HealthValidator(BaseAgent):
             # Calculate overall risk
             risk_level = self.analyzer.calculate_risk(check_results, errors)
             
-            # Format message
-            message = self.formatter.format_message(status, warnings, errors, check_results)
+            # Format message - conditionally verbose based on skip_summary
+            if skip_summary:
+                # Concise message for execution intents
+                message = f"System {status}"
+            else:
+                # Detailed message for investigation intents
+                message = self.formatter.format_message(status, warnings, errors, check_results)
             
-            # Get action suggestions
-            suggestions = self.formatter.suggest_actions(check_results, risk_level)
+            # Get action suggestions only if NOT suppressed
+            suggestions = self.formatter.suggest_actions(check_results, risk_level) if not skip_summary else []
             
             # Log to Tier 1 if available
             if self.tier1 and request.conversation_id:
@@ -122,26 +131,38 @@ class HealthValidator(BaseAgent):
                     f"HealthValidator: System {status}, {len(errors)} errors, {len(warnings)} warnings"
                 )
             
-            response = AgentResponse(
-                success=(status in ["healthy", "degraded"]),  # degraded is operational with warnings
-                result={
-                    "status": status,
+            # Build result - conditionally include verbose details
+            result = {
+                "status": status,
+                "risk_level": risk_level,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            # Add detailed check results only if NOT suppressed
+            if not skip_summary:
+                result.update({
                     "checks": check_results,
                     "warnings": warnings,
                     "errors": errors,
-                    "risk_level": risk_level,
-                    "suggestions": suggestions,
-                    "timestamp": datetime.now().isoformat()
-                },
+                    "suggestions": suggestions
+                })
+            
+            # Build metadata - always include summary counts
+            metadata = {
+                "total_checks": len(check_results),
+                "passed": sum(1 for r in check_results.values() if r.get("status") == "pass"),
+                "failed": sum(1 for r in check_results.values() if r.get("status") == "fail"),
+                "warnings": sum(1 for r in check_results.values() if r.get("status") == "warn"),
+                "skipped": sum(1 for r in check_results.values() if r.get("status") == "skip"),
+                "skip_summary": skip_summary
+            }
+            
+            response = AgentResponse(
+                success=(status in ["healthy", "degraded"]),  # degraded is operational with warnings
+                result=result,
                 message=message,
                 agent_name=self.name,
-                metadata={
-                    "total_checks": len(check_results),
-                    "passed": sum(1 for r in check_results.values() if r.get("status") == "pass"),
-                    "failed": sum(1 for r in check_results.values() if r.get("status") == "fail"),
-                    "warnings": sum(1 for r in check_results.values() if r.get("status") == "warn"),
-                    "skipped": sum(1 for r in check_results.values() if r.get("status") == "skip")
-                }
+                metadata=metadata
             )
             
             self.logger.info(f"Health validation complete: {status}")

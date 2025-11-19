@@ -65,7 +65,7 @@ class HardcodedDataCleanerModule(BaseOperationModule):
     Detection Rules:
     
     1. HARDCODED PATHS (CRITICAL):
-       - Absolute paths: C:\\Users\\..., /home/user/..., D:\\PROJECTS\\...
+       - Absolute paths: C:/Users\\..., /home/user/..., /path/to/projects\\...
        - Platform-specific paths without Path() wrapper
        - Hardcoded directory separators (\\, /) instead of Path.joinpath
     

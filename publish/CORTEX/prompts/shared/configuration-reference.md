@@ -194,7 +194,7 @@ cortex.config.json (main configuration)
   
   "machine": {
     "id": "DESKTOP-PRIMARY",
-    "workspacePath": "d:\\PROJECTS\\CORTEX",
+    "workspacePath": "/path/to/projects\\CORTEX",
     "pythonPath": "python",
     "gitPath": "git",
     "vscodePath": "code"
@@ -749,7 +749,7 @@ cortex-brain/tier2/workflows/
 ```json
 "machine": {
   "id": "DESKTOP-PRIMARY",
-  "workspacePath": "d:\\PROJECTS\\CORTEX",
+  "workspacePath": "/path/to/projects\\CORTEX",
   "pythonPath": "python",
   "gitPath": "git",
   "vscodePath": "code"
@@ -769,8 +769,8 @@ cortex-brain/tier2/workflows/
 // Machine 1 (Windows Desktop)
 "machine": {
   "id": "DESKTOP-PRIMARY",
-  "workspacePath": "d:\\PROJECTS\\CORTEX",
-  "pythonPath": "C:\\Python39\\python.exe"
+  "workspacePath": "/path/to/projects\\CORTEX",
+  "pythonPath": "C:/Python39\\python.exe"
 }
 
 // Machine 2 (Linux Laptop)

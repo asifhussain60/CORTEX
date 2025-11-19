@@ -37,8 +37,8 @@ Environment variables tell CORTEX where it lives on your machine.
 
 ```powershell
 # Set environment variables
-[Environment]::SetEnvironmentVariable("CORTEX_ROOT", "D:\PROJECTS\CORTEX", "User")
-[Environment]::SetEnvironmentVariable("CORTEX_BRAIN_PATH", "D:\PROJECTS\CORTEX\cortex-brain", "User")
+[Environment]::SetEnvironmentVariable("CORTEX_ROOT", "/path/to/projects\CORTEX", "User")
+[Environment]::SetEnvironmentVariable("CORTEX_BRAIN_PATH", "/path/to/projects\CORTEX\cortex-brain", "User")
 
 # Verify they're set
 $env:CORTEX_ROOT
@@ -139,8 +139,8 @@ python scripts/cortex_setup.py
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Phase 1: Environment Validation
-  ✅ CORTEX_ROOT set: D:\PROJECTS\CORTEX
-  ✅ CORTEX_BRAIN_PATH set: D:\PROJECTS\CORTEX\cortex-brain
+  ✅ CORTEX_ROOT set: /path/to/projects\CORTEX
+  ✅ CORTEX_BRAIN_PATH set: /path/to/projects\CORTEX\cortex-brain
   ✅ Python version: 3.11.5 (meets requirement: 3.9+)
   ✅ SQLite version: 3.42.0 (meets requirement: 3.35+)
   ✅ Write permissions verified
@@ -186,7 +186,11 @@ Phase 5: Configuration File Creation
   ✅ Enabled pattern decay (5% per 30 days)
   ✅ Configured git analysis (30-day lookback)
 
-Phase 6: Brain Protection Setup
+Phase 6: .gitignore Configuration
+  ✅ Added CORTEX/ to .gitignore (prevents accidental commits)
+  ℹ️  CORTEX internals now excluded from your repository
+
+Phase 7: Brain Protection Setup
   ✅ Loaded brain-protection-rules.yaml (6 protection layers)
   ✅ Validated 22 protection rules
   ✅ Initialized Brain Protector agent
@@ -203,6 +207,8 @@ Next Steps:
 For conversation tracking setup: #file:prompts/shared/tracking-guide.md
 ```
 
+**Important:** CORTEX automatically adds the `CORTEX/` folder to your repository's `.gitignore` file. This prevents CORTEX's internal code, brain databases, and configuration from being committed to your application repository.
+
 ---
 
 ## ⚙️ Configuration
@@ -217,8 +223,8 @@ The setup wizard creates this file automatically, but you can customize it:
 {
   "machines": {
     "YOUR-PC-NAME": {
-      "rootPath": "D:\\PROJECTS\\CORTEX",
-      "brainPath": "D:\\PROJECTS\\CORTEX\\cortex-brain",
+      "rootPath": "/path/to/projects\\CORTEX",
+      "brainPath": "/path/to/projects\\CORTEX\\cortex-brain",
       "machineId": "YOUR-PC-NAME-12345"
     },
     "YOUR-LAPTOP": {
@@ -343,8 +349,8 @@ Agents:
 Configuration:
   ✅ cortex.config.json: Loaded
   ✅ Machine ID: YOUR-PC-NAME-12345
-  ✅ Root Path: D:\PROJECTS\CORTEX
-  ✅ Brain Path: D:\PROJECTS\CORTEX\cortex-brain
+  ✅ Root Path: /path/to/projects\CORTEX
+  ✅ Brain Path: /path/to/projects\CORTEX\cortex-brain
 
 ⚡ System Health: EXCELLENT (100%)
 ```
@@ -378,7 +384,7 @@ python scripts/cortex_setup.py --force-reinit
 ```bash
 # Windows: Verify and reset
 echo $env:CORTEX_ROOT
-[Environment]::SetEnvironmentVariable("CORTEX_ROOT", "D:\PROJECTS\CORTEX", "User")
+[Environment]::SetEnvironmentVariable("CORTEX_ROOT", "/path/to/projects\CORTEX", "User")
 
 # macOS/Linux: Verify and reset
 echo $CORTEX_ROOT
@@ -413,7 +419,7 @@ Best for: Ad-hoc tracking after each work session
 
 ```powershell
 # Navigate to CORTEX root
-cd D:\PROJECTS\CORTEX
+cd /path/to/projects\CORTEX
 
 # Capture most recent Copilot conversation
 .\scripts\cortex-capture.ps1 -AutoDetect
@@ -540,8 +546,8 @@ Edit `cortex.config.json`:
 {
   "machines": {
     "WORK-PC": {
-      "rootPath": "D:\\PROJECTS\\CORTEX",
-      "brainPath": "D:\\PROJECTS\\CORTEX\\cortex-brain"
+      "rootPath": "/path/to/projects\\CORTEX",
+      "brainPath": "/path/to/projects\\CORTEX\\cortex-brain"
     },
     "LAPTOP": {
       "rootPath": "/Users/you/Projects/CORTEX",

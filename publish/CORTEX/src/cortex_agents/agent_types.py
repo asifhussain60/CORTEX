@@ -5,7 +5,8 @@ Defines common types and enumerations used across all CORTEX agents.
 """
 
 from enum import Enum, auto
-from typing import List
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass, field
 
 
 class AgentType(Enum):
@@ -30,6 +31,11 @@ class IntentType(Enum):
     FEATURE = "feature"
     TASK_BREAKDOWN = "task_breakdown"
     
+    # Enhancement intents (NEW - for improving existing features)
+    ENHANCE = "enhance"
+    IMPROVE = "improve"
+    EXTEND = "extend"
+    
     # Architectural analysis intents (NEW)
     ARCHITECTURE = "architecture"
     ANALYZE_STRUCTURE = "analyze_structure" 
@@ -40,6 +46,7 @@ class IntentType(Enum):
     IMPLEMENT = "implement"
     CREATE_FILE = "create_file"
     EDIT_FILE = "edit_file"
+    REFACTOR = "refactor"  # NEW - for code improvement without changing behavior
     
     # Testing intents
     TEST = "test"
@@ -113,6 +120,11 @@ INTENT_AGENT_MAP = {
     IntentType.FEATURE: AgentType.PLANNER,
     IntentType.TASK_BREAKDOWN: AgentType.PLANNER,
     
+    # Enhancement mapping (NEW - crawl existing + plan changes)
+    IntentType.ENHANCE: AgentType.ARCHITECT,  # First discovers existing, then routes to PLANNER
+    IntentType.IMPROVE: AgentType.ARCHITECT,
+    IntentType.EXTEND: AgentType.ARCHITECT,
+    
     # Architectural analysis mapping (NEW)
     IntentType.ARCHITECTURE: AgentType.ARCHITECT,
     IntentType.ANALYZE_STRUCTURE: AgentType.ARCHITECT,
@@ -160,3 +172,38 @@ def get_intents_for_agent(agent_type: AgentType) -> List[IntentType]:
         intent for intent, agent in INTENT_AGENT_MAP.items()
         if agent == agent_type
     ]
+
+
+# =============================================================================
+# Intent Classification Result (CORTEX 3.0 - Phase 1)
+# =============================================================================
+
+@dataclass
+class IntentClassificationResult:
+    """
+    Rich classification result with intent, rule context, and confidence.
+    
+    Used by IntentRouter to attach governance rules based on classified intent.
+    This enables intelligent rule enforcement without duplicating Tier 0 logic.
+    
+    Attributes:
+        intent: Classified intent type
+        confidence: Classification confidence (0.0-1.0)
+        rule_context: Rules and behaviors relevant to this intent
+        metadata: Additional classification metadata
+    
+    Example:
+        result = IntentClassificationResult(
+            intent=IntentType.CODE,
+            confidence=0.9,
+            rule_context={
+                'rules_to_consider': ['TDD_ENFORCEMENT', 'DEFINITION_OF_DONE'],
+                'intelligent_test_determination': True,
+                'skip_summary_generation': True
+            }
+        )
+    """
+    intent: IntentType
+    confidence: float
+    rule_context: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)

@@ -17,6 +17,9 @@ This meta-orchestrator coordinates ALL optimization operations to ensure:
 - Test suite health (100% pass rate)
 - Entry point consistency
 
+Configuration is loaded from cortex-brain/operations-config.yaml under system_optimization section.
+No hardcoded limits or thresholds.
+
 Natural Language Triggers:
 - "optimize cortex system"
 - "optimize everything"
@@ -38,6 +41,7 @@ from dataclasses import dataclass, field
 import logging
 import json
 import subprocess
+import yaml
 
 from src.operations.base_operation_module import (
     BaseOperationModule,
@@ -225,6 +229,76 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         self.mode = mode
         self.metrics = OptimizationMetrics()
         self.start_time = None
+        self._config_cache = None  # Cache for YAML config
+    
+    def _load_optimization_config(self, project_root: Path) -> Dict[str, Any]:
+        """
+        Load system optimization configuration from YAML.
+        
+        Loads from cortex-brain/operations-config.yaml under system_optimization section.
+        Returns defaults if file not found or section missing.
+        
+        Args:
+            project_root: CORTEX project root
+            
+        Returns:
+            Dict with optimization settings (file_size_limits, code_quality, performance)
+        """
+        if self._config_cache is not None:
+            return self._config_cache
+            
+        config_file = project_root / "cortex-brain" / "operations-config.yaml"
+        
+        # Default configuration (fallback if YAML missing)
+        default_config = {
+            'file_size_limits': {
+                'soft_limit_lines': 500,
+                'hard_limit_lines': 1000
+            },
+            'code_quality': {
+                'max_methods_per_class': 15,
+                'max_complexity': 10,
+                'max_duplication_percent': 5
+            },
+            'performance': {
+                'max_execution_time_seconds': 300,
+                'memory_limit_mb': 512
+            }
+        }
+        
+        if not config_file.exists():
+            logger.warning(f"Config file not found: {config_file}, using defaults")
+            self._config_cache = default_config
+            return default_config
+        
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                full_config = yaml.safe_load(f)
+            
+            # Extract system_optimization section
+            operations_config = full_config.get('operations_config', {})
+            system_opt = operations_config.get('system_optimization', {})
+            
+            if not system_opt:
+                logger.warning("system_optimization section not found in config, using defaults")
+                self._config_cache = default_config
+                return default_config
+            
+            # Merge with defaults to ensure all keys exist
+            merged_config = {
+                'file_size_limits': {**default_config['file_size_limits'], **system_opt.get('file_size_limits', {})},
+                'code_quality': {**default_config['code_quality'], **system_opt.get('code_quality', {})},
+                'performance': {**default_config['performance'], **system_opt.get('performance', {})}
+            }
+            
+            self._config_cache = merged_config
+            logger.info(f"Loaded optimization config from {config_file}")
+            return merged_config
+            
+        except Exception as e:
+            logger.error(f"Failed to load config from {config_file}: {e}, using defaults")
+            self._config_cache = default_config
+            return default_config
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Return metadata for this operation module."""
@@ -583,9 +657,14 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 'health_score': 100.0
             }
         
-        # Check 1: File size (bloat detection)
-        SOFT_LIMIT = 500  # lines
-        HARD_LIMIT = 1000  # lines
+        # Load configuration from YAML (no hardcoded limits!)
+        config = self._load_optimization_config(self.project_root)
+        file_size_limits = config.get('file_size_limits', {})
+        SOFT_LIMIT = file_size_limits.get('soft_limit_lines', 500)
+        HARD_LIMIT = file_size_limits.get('hard_limit_lines', 1000)
+        
+        code_quality = config.get('code_quality', {})
+        MAX_METHODS = code_quality.get('max_methods_per_class', 15)
         
         for epmo_file in epmo_files:
             line_count = len(epmo_file.read_text(encoding='utf-8').splitlines())
@@ -626,9 +705,9 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             
             # SRP check: Count methods (rough proxy for responsibilities)
             method_count = len(re.findall(r'\n    def \w+\(', content))
-            if method_count > 15:
+            if method_count > MAX_METHODS:
                 issues.append(
-                    f"SRP VIOLATION: {epmo_file.name} has {method_count} methods (suggests >3 responsibilities)"
+                    f"SRP VIOLATION: {epmo_file.name} has {method_count} methods (limit: {MAX_METHODS}, suggests >3 responsibilities)"
                 )
         
         # Calculate health score

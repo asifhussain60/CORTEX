@@ -16,7 +16,7 @@ def extract_file_paths(text: str) -> List[str]:
     Matches patterns like:
     - /absolute/path/to/file.py
     - relative/path/to/file.js
-    - C:\\Windows\\path\\file.txt
+    - C:/Windows\\path\\file.txt
     
     Args:
         text: Text to search for file paths

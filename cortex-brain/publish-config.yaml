@@ -189,9 +189,9 @@ user_content_patterns:
     - "environment_setup"
     - "workspace_cleanup"
     - "cortex_demo"
-    - "refresh_cortex_story"
     - "cortex_tutorial"
     - "application_onboarding"
+    # NOTE: refresh_cortex_story is admin-only (updates CORTEX's own docs)
 
 # Publish Validation Rules
 validation:

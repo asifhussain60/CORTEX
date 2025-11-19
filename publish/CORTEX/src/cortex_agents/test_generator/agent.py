@@ -70,6 +70,10 @@ class TestGenerator(BaseAgent):
             self.log_request(request)
             self.logger.info("Starting test generation")
             
+            # Extract rule context for Phase 3: Summary generation control
+            rule_context = request.context.get("rule_context", {})
+            skip_summary = rule_context.get("skip_summary_generation", False)
+            
             # Get file path or code to test
             file_path = safe_get(request.context, "file_path")
             source_code = safe_get(request.context, "source_code")
@@ -127,27 +131,41 @@ class TestGenerator(BaseAgent):
             # Store pattern in Tier 2 for learning
             self.pattern_learner.store_pattern(analysis, test_code, test_count)
             
+            # Build result - conditionally include summary fields based on rule context
             result = {
                 "success": True,
                 "test_code": test_code,
                 "test_count": test_count,
-                "scenarios": analysis["scenarios"],
-                "functions": len(analysis["functions"]),
-                "classes": len(analysis["classes"]),
                 "file_path": file_path,
                 "timestamp": datetime.now().isoformat()
             }
             
+            # Add verbose summary only if NOT suppressed
+            if not skip_summary:
+                result.update({
+                    "scenarios": analysis["scenarios"],
+                    "functions": len(analysis["functions"]),
+                    "classes": len(analysis["classes"])
+                })
+            
+            # Build response message
+            if skip_summary:
+                # Concise message for execution intents
+                message = f"Generated {test_count} tests"
+            else:
+                # Detailed message for investigation intents
+                message = f"Generated {test_count} tests for {len(analysis['functions'])} functions and {len(analysis['classes'])} classes"
+            
             response = AgentResponse(
                 success=True,
                 result=result,
-                message=f"Generated {test_count} tests for {len(analysis['functions'])} functions and {len(analysis['classes'])} classes",
+                message=message,
                 agent_name=self.name,
                 metadata={
                     "test_count": test_count,
-                    "scenarios": analysis["scenarios"]
+                    "skip_summary": skip_summary
                 },
-                next_actions=self._suggest_next_actions(result)
+                next_actions=self._suggest_next_actions(result) if not skip_summary else ["Run generated tests"]
             )
             
             self.log_response(response)

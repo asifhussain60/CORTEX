@@ -25,7 +25,9 @@ import json
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.epm.doc_generator import DocumentationGenerator
+from src.operations.documentation_component_registry import create_default_registry
 from src.operations.base_operation_module import OperationResult, OperationStatus
+from src.plugins.story_generator_plugin import StoryGeneratorPlugin
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -81,20 +83,87 @@ class EnterpriseDocumentationOrchestrator:
             if stage:
                 logger.info(f"Stage: {stage}")
             
-            # Initialize EPM Documentation Generator
-            doc_generator = DocumentationGenerator(
-                root_path=self.workspace_root,
-                profile=profile,
-                dry_run=dry_run
-            )
-            
-            # Execute generation pipeline
-            if stage:
-                logger.info(f"Executing single stage: {stage}")
-                generation_result = doc_generator.execute(stage=stage)
+            # If specific components are requested, use the new component registry
+            requested_components: Optional[List[str]] = None
+            if options:
+                # Accept multiple possible keys to be NL-friendly
+                requested_components = options.get("components") or options.get("component")
+                if isinstance(requested_components, str):
+                    requested_components = [requested_components]
+
+            # Map stage shortcuts to components
+            stage_component_map = {
+                "diagrams": ["diagrams"],
+                "mkdocs": ["mkdocs"],
+                "feature-list": ["feature_list"],
+                "all": ["diagrams", "feature_list", "mkdocs"],
+            }
+            if not requested_components and stage in stage_component_map:
+                requested_components = stage_component_map.get(stage)
+
+            registry_result: Optional[Dict[str, Any]] = None
+            if requested_components:
+                logger.info("Executing documentation via Component Registry")
+                registry = create_default_registry(self.workspace_root)
+                pipeline = requested_components
+                # Default output path is docs/
+                registry_result = registry.execute_pipeline(
+                    component_ids=pipeline,
+                    output_path=self.docs_path,
+                    profile=profile,
+                    stop_on_failure=True,
+                )
+                # Align to previous data shape
+                generation_result = {
+                    "success": registry_result.get("all_success", False),
+                    "stages": {c["id"]: {"status": "success" if c.get("success") else "failed"} for c in registry_result.get("components", [])},
+                    "files_generated": {},
+                    "errors": [],
+                    "warnings": [],
+                }
             else:
-                logger.info("Executing full 6-stage documentation pipeline")
-                generation_result = doc_generator.execute()
+                # Initialize EPM Documentation Generator (legacy pipeline)
+                doc_generator = DocumentationGenerator(
+                    root_path=self.workspace_root,
+                    profile=profile,
+                    dry_run=dry_run
+                )
+                
+                # Execute generation pipeline
+                if stage:
+                    logger.info(f"Executing single stage: {stage}")
+                    generation_result = doc_generator.execute(stage=stage)
+                else:
+                    logger.info("Executing full 6-stage documentation pipeline")
+                    generation_result = doc_generator.execute()
+            
+            # Execute Story Generation Plugin (if enabled)
+            story_enabled = options.get("generate_story", True) if options else True
+            if story_enabled and not stage:  # Only run for full pipeline
+                logger.info("")
+                logger.info("=" * 80)
+                logger.info("Running Story Generation Plugin...")
+                logger.info("=" * 80)
+                
+                story_plugin = StoryGeneratorPlugin(config={
+                    "root_path": str(self.workspace_root)
+                })
+                
+                if story_plugin.initialize():
+                    story_context = {
+                        "dry_run": dry_run,
+                        "chapters": options.get("story_chapters", 10) if options else 10,
+                        "max_words_per_chapter": options.get("story_max_words", 5000) if options else 5000
+                    }
+                    
+                    story_result = story_plugin.execute(story_context)
+                    
+                    # Add story results to generation result
+                    generation_result["story_generation"] = story_result
+                    
+                    story_plugin.cleanup()
+                else:
+                    logger.warning("⚠️ Story generation plugin initialization failed")
             
             # Calculate duration
             duration = (datetime.now() - start_time).total_seconds()
@@ -107,24 +176,39 @@ class EnterpriseDocumentationOrchestrator:
                 stage,
                 duration
             )
+
+            # Attach registry execution summary if used
+            if registry_result is not None:
+                result_data["registry_execution"] = registry_result
             
             # Create operation result
             if generation_result.get("success", False):
+                # Add metadata to data dict instead of separate parameter
+                result_data["metadata"] = {
+                    "operation": "enterprise_documentation",
+                    "profile": profile,
+                    "dry_run": dry_run,
+                    "stage": stage,
+                    "timestamp": self.timestamp
+                }
+                
                 return OperationResult(
                     success=True,
                     status=OperationStatus.SUCCESS,
                     message="✅ Enterprise documentation generation completed successfully",
                     data=result_data,
-                    duration_seconds=duration,
-                    metadata={
-                        "operation": "enterprise_documentation",
-                        "profile": profile,
-                        "dry_run": dry_run,
-                        "stage": stage,
-                        "timestamp": self.timestamp
-                    }
+                    duration_seconds=duration
                 )
             else:
+                # Add metadata to data dict for failure case too
+                result_data["metadata"] = {
+                    "operation": "enterprise_documentation",
+                    "profile": profile,
+                    "dry_run": dry_run,
+                    "stage": stage,
+                    "timestamp": self.timestamp
+                }
+                
                 return OperationResult(
                     success=False,
                     status=OperationStatus.FAILED,
@@ -183,6 +267,18 @@ class EnterpriseDocumentationOrchestrator:
                     "files_affected": stage_data.get("files_affected", 0)
                 }
         
+        # Extract story generation metrics
+        story_metrics = {}
+        if "story_generation" in generation_result:
+            story_data = generation_result["story_generation"]
+            if story_data.get("success"):
+                story_metrics = {
+                    "chapters_generated": story_data.get("chapters_generated", 0),
+                    "total_words": story_data.get("total_words", 0),
+                    "files_created": len(story_data.get("files_created", [])),
+                    "output_path": story_data.get("output_path", "")
+                }
+        
         return {
             "execution_summary": {
                 "profile": profile,
@@ -194,6 +290,7 @@ class EnterpriseDocumentationOrchestrator:
             },
             "pipeline_stages": stage_summary,
             "file_generation": file_counts,
+            "story_generation": story_metrics,  # Add story metrics
             "documentation_structure": self._analyze_docs_structure(),
             "quality_metrics": {
                 "warnings_count": len(warnings),
@@ -271,13 +368,13 @@ class EnterpriseDocumentationOrchestrator:
             steps.extend([
                 "Review the dry-run output above",
                 "Run actual generation: 'Generate Cortex docs' (without dry-run)",
-                "Check for any configuration issues in cortex-brain/doc-generation-config/"
+                "Check for any configuration issues in cortex-brain/admin/documentation/config/"
             ])
         elif errors:
             steps.extend([
                 "Fix the errors listed above before proceeding",
                 "Check EPM documentation generator logs for details",
-                "Validate YAML configuration files in cortex-brain/doc-generation-config/"
+                "Validate YAML configuration files in cortex-brain/admin/documentation/config/"
             ])
         elif warnings:
             steps.extend([

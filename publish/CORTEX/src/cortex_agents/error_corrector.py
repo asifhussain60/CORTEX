@@ -90,6 +90,10 @@ class ErrorCorrector(BaseAgent):
         - file_path: Optional file where error occurred
         - error_type: Optional type hint (pytest, linter, runtime, syntax)
         """
+        # Extract rule context for Phase 3: Summary generation control (before try block)
+        rule_context = request.context.get("rule_context", {})
+        skip_summary = rule_context.get("skip_summary_generation", False)
+        
         try:
             # Extract error information
             error_output = request.context.get("error_output", "")
@@ -100,7 +104,8 @@ class ErrorCorrector(BaseAgent):
                 return AgentResponse(
                     success=False,
                     result={},
-                    message="No error output provided"
+                    message="No error output provided",
+                    metadata={"skip_summary": skip_summary}
                 )
             
             # Check if file is in protected directory
@@ -108,7 +113,8 @@ class ErrorCorrector(BaseAgent):
                 return AgentResponse(
                     success=False,
                     result={"error": "protected_path"},
-                    message=f"Cannot auto-fix protected path: {file_path}"
+                    message=f"Cannot auto-fix protected path: {file_path}",
+                    metadata={"skip_summary": skip_summary}
                 )
             
             # Parse the error
@@ -118,37 +124,54 @@ class ErrorCorrector(BaseAgent):
                 return AgentResponse(
                     success=False,
                     result=parsed_error,
-                    message="Could not parse error"
+                    message="Could not parse error",
+                    metadata={"skip_summary": skip_summary}
                 )
             
             # Find applicable fix patterns
             fix_patterns = self._find_fix_patterns(parsed_error)
             
             if not fix_patterns:
+                # Build result - conditionally include verbose error details
+                result = {"recommendation": "Manual review needed"}
+                if not skip_summary:
+                    result.update({
+                        "parsed_error": parsed_error,
+                        "fix_patterns": []
+                    })
+                
                 return AgentResponse(
                     success=True,
-                    result={
-                        "parsed_error": parsed_error,
-                        "fix_patterns": [],
-                        "recommendation": "Manual review needed"
-                    },
-                    message="Error detected but no automatic fix available"
+                    result=result,
+                    message="Error detected but no automatic fix available",
+                    metadata={"skip_summary": skip_summary}
                 )
             
             # Apply the best fix pattern
             fix_result = self._apply_fix(parsed_error, fix_patterns, file_path)
             
+            # Conditionally suppress verbose error analysis
+            if skip_summary and "parsed_error" in fix_result:
+                # Keep only essential fields for execution intents
+                fix_result = {
+                    "success": fix_result["success"],
+                    "message": fix_result.get("message"),
+                    "fix_applied": fix_result.get("fix_applied", False)
+                }
+            
             return AgentResponse(
                 success=fix_result["success"],
                 result=fix_result,
-                message=fix_result.get("message", "Fix applied successfully")
+                message=fix_result.get("message", "Fix applied successfully"),
+                metadata={"skip_summary": skip_summary}
             )
             
         except Exception as e:
             return AgentResponse(
                 success=False,
                 result={"error": str(e)},
-                message=f"Error correction failed: {str(e)}"
+                message=f"Error correction failed: {str(e)}",
+                metadata={"skip_summary": skip_summary}
             )
     
     def _is_protected_path(self, file_path: str) -> bool:

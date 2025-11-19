@@ -20,12 +20,12 @@
 - **Use When:** Design docs show incorrect counts, multiple status files exist, implementation reality differs from documentation
 
 ### Story Refresh (refresh_cortex_story)
-- **Status:** 🟡 VALIDATION-ONLY (not transformation yet)
-- **Current Behavior:** Validates story structure and read time, but does NOT transform content
-- **Why:** The story at `prompts/shared/story.md` is already in narrator voice
-- **Operation:** Validates structure → Copies to `docs/awakening-of-cortex.md` → Reports validation status
-- **No Changes:** Files have identical content before/after (this is expected)
-- **Planned:** Phase 6 enhancement will add AI-based transformation for dynamic updates
+- **Status:** ❌ ADMIN-ONLY (not included in user deployment)
+- **Deployment Tier:** Admin operation - updates CORTEX's own story documentation
+- **Deprecated:** Use `document_cortex` for documentation updates
+- **Current Behavior:** Validates story structure and read time, copies to docs folder
+- **Why Admin-Only:** This operation updates CORTEX's internal documentation, not user application docs
+- **User Alternative:** Users can use `document_cortex` for their own documentation needs
 - **SKULL-005:** Module explicitly marked as validation-only to prevent false success claims
 
 ### Vision API

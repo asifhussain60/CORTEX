@@ -11,7 +11,7 @@
 **All informational documents MUST be created in organized folder structure within CORTEX brain.**
 
 ### ✅ ALWAYS USE
-`/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
+`/Users/username/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
 
 ### ❌ NEVER CREATE
 Documents in repository root or unorganized locations
@@ -36,16 +36,16 @@ Documents in repository root or unorganized locations
 
 ```markdown
 # Instead of this (WRONG):
-/Users/asifhussain/PROJECTS/CORTEX/INVESTIGATION-ANALYSIS-REPORT.md
+/Users/username/PROJECTS/CORTEX/INVESTIGATION-ANALYSIS-REPORT.md
 
 # Use this (CORRECT):
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/analysis/INVESTIGATION-ANALYSIS-REPORT.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/analysis/INVESTIGATION-ANALYSIS-REPORT.md
 
 # For conversation captures:
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/conversation-captures/CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/conversation-captures/CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
 
 # For implementation reports:
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/reports/CORTEX-3.0-IMPLEMENTATION-REPORT.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/reports/CORTEX-3.0-IMPLEMENTATION-REPORT.md
 ```
 
 ---

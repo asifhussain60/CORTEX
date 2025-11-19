@@ -34,7 +34,11 @@
    - Triggers: "plan", "let's plan", "plan a feature", "plan this", "help me plan", "planning", "feature planning", "i want to plan"
    - If matched: Load #file:../../prompts/shared/help_plan_feature.md and activate interactive planning workflow
    - Context detection: "let's plan ADO feature" = planning + ADO context (no separate triggers needed)
-3. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
+3. **Documentation Generation Detection** - Check if user wants to generate docs:
+   - Triggers: "generate documentation", "generate docs", "generate cortex docs", "update documentation", "refresh docs", "build documentation"
+   - If matched: Use doc_generation_intro template FIRST (set expectations)
+   - After generation: Use doc_generation_complete template with file summary table
+4. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
 
 **Examples:**
 
@@ -48,6 +52,12 @@ User: "let's plan an Azure DevOps feature" + [screenshot attached]
 → MATCH: planning_triggers + vision API integration
 → ACTION: Analyze screenshot (extract ADO#, title, AC), create ADO form file pre-populated
 → RESPONSE: "✅ Vision API extracted ADO-12345. Review template (opened in VS Code)"
+
+User: "generate documentation"
+→ MATCH: doc_generation_triggers
+→ ACTION: Show doc_generation_intro template (set expectations)
+→ EXECUTE: Run enterprise_documentation_orchestrator
+→ RESPONSE: Show doc_generation_complete template with file table
 
 User: "help"
 → MATCH: help_triggers
@@ -688,9 +698,43 @@ CORTEX will:
 
 ## Document Creation Rules
 
-**✅ ALWAYS USE:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
+**✅ ALWAYS USE:** `/Users/username/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
 
 **❌ NEVER CREATE:** Documents in repository root or unorganized locations
+
+## Pre-Flight Checklist (MANDATORY)
+
+**Before creating ANY .md document, CORTEX MUST:**
+
+1. **Determine Document Type** - Is this a report, analysis, guide, investigation, planning doc, or conversation capture?
+2. **Select Category** - Choose appropriate category from `cortex-brain/documents/[category]/`
+3. **Construct Path** - Build full path: `cortex-brain/documents/[category]/[filename].md`
+4. **Validate Path** - Use DocumentValidator if available to verify path correctness
+5. **Create Document** - Only create after validation passes
+
+**Enforcement Rules:**
+- ❌ NEVER create `.md` files in repository root (except whitelist: README.md, LICENSE, etc.)
+- ❌ NEVER create `.md` files in `cortex-brain/` root (except whitelist: see `cortex-brain/documents/README.md`)
+- ❌ NEVER create arbitrary subdirectories for documents
+- ✅ ALWAYS use `cortex-brain/documents/[category]/` structure
+- ✅ ALWAYS verify with DocumentValidator: `python src/core/document_validator.py [path]`
+- ✅ ALWAYS follow category naming conventions
+
+**DocumentValidator Integration:**
+```python
+from src.core.document_validator import DocumentValidator
+
+validator = DocumentValidator()
+result = validator.validate_document_path('cortex-brain/documents/reports/MY-REPORT.md')
+
+if result['valid']:
+    # Create document at validated path
+    create_file(path, content)
+else:
+    # Use suggested path from validator
+    suggested = result['suggestion']
+    create_file(suggested, content)
+```
 
 ## Categories & Usage
 
@@ -708,16 +752,16 @@ CORTEX will:
 
 ```markdown
 # Instead of this (WRONG):
-/Users/asifhussain/PROJECTS/CORTEX/INVESTIGATION-ANALYSIS-REPORT.md
+/Users/username/PROJECTS/CORTEX/INVESTIGATION-ANALYSIS-REPORT.md
 
 # Use this (CORRECT):
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/analysis/INVESTIGATION-ANALYSIS-REPORT.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/analysis/INVESTIGATION-ANALYSIS-REPORT.md
 
 # For conversation captures:
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/conversation-captures/CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/conversation-captures/CONVERSATION-CAPTURE-2025-11-14-AUTHENTICATION.md
 
 # For implementation reports:
-/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/reports/CORTEX-3.0-IMPLEMENTATION-REPORT.md
+/Users/username/PROJECTS/CORTEX/cortex-brain/documents/reports/CORTEX-3.0-IMPLEMENTATION-REPORT.md
 ```
 
 **Reference Guide:** See `cortex-brain/documents/README.md` for complete organization structure and naming conventions.
@@ -948,6 +992,149 @@ CORTEX:
 | `resume plan [name]` | Continue existing plan | "resume plan authentication" |
 | `planning status` | Show all active plans | Dashboard view |
 | `import ado template` | Parse filled ADO template | After filling out ADO form |
+
+**No slash commands needed.** Just natural language.
+
+---
+
+## 🧠 Context Memory Commands (Tier 1)
+
+**CORTEX automatically remembers your conversations across sessions**—this is the key differentiator from standard Copilot.
+
+### What Is Tier 1 Context?
+
+When you ask "implement authentication", CORTEX:
+1. **Searches** past conversations for related discussions
+2. **Scores** them for relevance (keywords, files, intent, recency)
+3. **Auto-injects** relevant context into the response
+4. **Displays** context summary so you know what Copilot "remembered"
+
+**Example:**
+```
+You (Monday): How should I implement JWT authentication?
+Copilot: Use PyJWT library with token expiration...
+
+You (Wednesday): Add token refresh to the auth system
+Copilot:
+📋 **Context from Previous Conversations**
+- 2 days ago: JWT authentication discussion (Relevance: 0.87)
+- Files: auth.py, tokens.py | Intent: IMPLEMENT
+
+Based on your previous JWT setup, here's how to add refresh...
+```
+
+### Context Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `show context` | View what Copilot remembers | "show context" |
+| `forget [topic]` | Remove specific conversations | "forget about authentication" |
+| `forget [topic]` | Multiple topics supported | "forget the old API design" |
+| `clear all context` | Remove ALL memory (fresh start) | "clear memory" |
+| `clear memory` | Alias for clear all | "reset cortex memory" |
+
+### Context Display Format
+
+When you use `show context`, CORTEX displays:
+
+```markdown
+📋 Context Summary (Last 24 hours)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔹 Conversation 1: JWT authentication implementation
+   Relevance: 0.87 (High)
+   Time: 2 days ago
+   Files: auth.py, tokens.py
+   Intent: IMPLEMENT
+
+🔹 Conversation 2: Password reset flow design
+   Relevance: 0.65 (Medium)
+   Time: 5 days ago
+   Files: auth.py, emails.py
+   Intent: PLAN
+
+Quality Indicators:
+- Total Conversations: 2
+- Average Relevance: 0.76
+- Token Usage: 324 / 500
+
+✅ Context quality: Good
+```
+
+### Automatic Context Injection
+
+**You don't need to request context manually**—CORTEX automatically injects it when:
+- Current request relates to past conversations (relevance score > 0.50)
+- Related files are open in editor
+- Intent matches (PLAN → IMPLEMENT → TEST progression)
+
+**Context appears at the START of Copilot responses:**
+```markdown
+📋 **Context from Previous Conversations**
+- [Conversation summary]
+- Relevance score + indicators
+
+[Response continues...]
+```
+
+### Context Quality Indicators
+
+| Score | Quality | Meaning |
+|-------|---------|---------|
+| 0.80+ | 🟢 High | Same topic, files, intent - very relevant |
+| 0.50-0.79 | 🟡 Medium | Related concepts |
+| 0.20-0.49 | 🟠 Low | Tangentially related |
+| <0.20 | 🔴 Very Low | Not useful |
+
+**What affects relevance:**
+- Keyword overlap (30%)
+- File overlap (25%) 
+- Entity overlap - classes, functions (20%)
+- Recency - newer scores higher (15%)
+- Intent match - PLAN/IMPLEMENT/FIX/etc. (10%)
+
+### Best Practices
+
+**Capture Important Decisions:** Natural conversation stores automatically:
+```
+You: Let's use PostgreSQL for main DB and Redis for caching
+[CORTEX captures this architectural decision]
+
+Later: Implement caching layer
+[CORTEX auto-injects the PostgreSQL/Redis decision]
+```
+
+**Clean Up Outdated Context:** Monthly maintenance:
+```
+forget about the old authentication approach
+forget the prototype implementation
+show context
+[Review and clean as needed]
+```
+
+**Cross-Session Continuity:** Work across days/files seamlessly:
+```
+Day 1 (models/user.py): Design user permissions system
+Day 2 (api/auth.py): Add permission checks
+[CORTEX maintains context across sessions and files]
+```
+
+### Performance Metrics
+
+- **Context Injection:** < 500ms
+- **Context Display:** < 200ms  
+- **Token Budget:** < 600 tokens (optimized formatting)
+- **Relevance Accuracy:** > 80%
+
+### Privacy & Storage
+
+- **Location:** `cortex-brain/tier1/working_memory.db` (local SQLite)
+- **No cloud sync:** All data stays on your machine
+- **No telemetry:** CORTEX doesn't send data anywhere
+
+---
+
+## 📋 Planning Commands (Legacy - Use Natural Language Above)
 
 **No slash commands needed.** Just natural language.
 

@@ -1034,7 +1034,7 @@ param([switch]$KeepAppRunning)
 
 # Step 1: Launch application with Start-Job
 $appJob = Start-Job -ScriptBlock {
-    Set-Location 'D:\PROJECTS\CORTEX'
+    Set-Location '/path/to/projects\CORTEX'
     dotnet run --project MyApp.csproj
 }
 
@@ -1043,7 +1043,7 @@ Start-Sleep -Seconds 20
 
 # Step 3: Run Playwright tests
 try {
-    Set-Location 'D:\PROJECTS\CORTEX'
+    Set-Location '/path/to/projects\CORTEX'
     npx playwright test Tests/UI/my-test.spec.ts --headed
     $exitCode = $LASTEXITCODE
 }

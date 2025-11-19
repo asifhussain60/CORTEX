@@ -202,7 +202,7 @@ validation:
     - "**/docs/images/**"
     - "**/narrative/*.md"
     - "**/system-design-prompts/**"
-    - "**/*<HOSTNAME>*"  # Hostname leak (example: AHHOME)
+    - "**/*<HOSTNAME>*"  # Hostname leak (example: HOSTNAME)
     - "**/*<USERNAME>*"  # Username leak (example: asifhussain)
   
   # Files that MUST be present in publish package

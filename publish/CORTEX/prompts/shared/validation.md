@@ -355,7 +355,7 @@ function validateHealthStatus(status: string): ValidationResult {
 ```typescript
 function validateWorkspacePath(path: string): ValidationResult {
     // Ensure path starts with workspace root
-    const workspaceRoot = 'd:\\PROJECTS\\NOOR CANVAS';
+    const workspaceRoot = '/path/to/projects\\NOOR CANVAS';
     
     if (!path.startsWith(workspaceRoot)) {
         return {
