@@ -1086,6 +1086,209 @@ class HybridKnowledgeGraph:
 
 ---
 
+### Feature 2.5: Model Context Protocol (MCP) Integration
+
+**Priority:** 🔴 **HIGH**  
+**Effort:** 16-20 weeks  
+**Status:** Planning Complete (See MCP.md)  
+**Document:** `.github/CopilotChats/MCP.md`
+
+**What It Is:**
+Integrate Model Context Protocol (MCP) to enable CORTEX to connect to external knowledge sources, databases, and specialized tools while maintaining local-first operation. MCP is Anthropic's open standard for AI systems to securely access external data sources.
+
+**Current Status:**
+- ✅ **Pylance MCP Server Already Integrated!** (via GitHub Copilot)
+  - Tools: `mcp_pylance_mcp_s_pylanceImports`, `mcp_pylance_mcp_s_pylanceWorkspaceUserFiles`, `mcp_pylance_mcp_s_pylanceRunCodeSnippet`
+- ⏸️ **Planned MCP Servers:** MSSQL, Filesystem, GitHub, Stack Overflow
+
+**Why MCP Matters:**
+CORTEX 3.0 is completely local-first (no external dependencies). This is excellent for privacy and offline operation, but limits access to external knowledge (Stack Overflow solutions, API documentation, database schemas).
+
+**MCP enables:**
+- ✅ Database introspection (SQL Server schemas for accurate query generation)
+- ✅ External knowledge (Stack Overflow error solutions)
+- ✅ Business tool integration (GitHub Issues, Jira, Slack)
+- ✅ Language-specific analysis (Pylance for Python, ESLint for JavaScript)
+
+**Adaptive Local-First Architecture:**
+```python
+# CORTEX 4.0 Knowledge Resolution (Adaptive)
+
+class AdaptiveKnowledgeResolver:
+    """
+    Tiered fallback for knowledge queries:
+    1. Tier 1/2/3 (Local - Always Available) ← Priority
+    2. MCP Servers (External - If enabled and online)
+    3. MCP Cache (Previously fetched - Always available)
+    """
+    
+    def resolve_query(self, query: str) -> dict:
+        # Step 1: Check local tiers first (fast, always available)
+        local_result = self.query_local_tiers(query)
+        
+        if local_result["confidence"] >= 0.8:
+            return local_result  # High confidence from local data
+        
+        # Step 2: Optionally enhance with MCP (if enabled and online)
+        if self.config.get("mcp_enabled") and self.is_online():
+            mcp_result = self.query_mcp_servers(query)
+            return self.merge_results(local_result, mcp_result)
+        
+        # Step 3: Check MCP cache (previously fetched)
+        cached = self.get_cached_mcp_response(query)
+        if cached:
+            return self.merge_results(local_result, cached)
+        
+        # Step 4: Return local-only (offline mode)
+        return local_result
+```
+
+**MCP Servers Roadmap:**
+
+| Server | Priority | Purpose | Phase |
+|--------|----------|---------|-------|
+| Pylance | ✅ **Already Integrated** | Python analysis, imports, refactoring | N/A |
+| MSSQL | 🔴 **High** | Database schema introspection | Phase 3 |
+| Stack Overflow | 🟡 **Medium** | Error solutions, best practices | Phase 4 |
+| GitHub | 🟡 **Medium** | Issue integration, PR context | Phase 4 |
+| Filesystem | 🟢 **Low** | Multi-repo analysis, safe file ops | Future |
+
+**Implementation Phases:**
+
+**Phase 1: MCP Foundation (Weeks 1-4)**
+- [ ] `src/mcp/mcp_host.py` - MCP host infrastructure
+- [ ] `src/mcp/server_registry.py` - MCP server registry
+- [ ] `src/mcp/protocol.py` - MCP protocol handling
+- [ ] Privacy enforcement layer (never send `.env`, keys, credentials)
+- [ ] Configuration schema in `cortex.config.json`
+
+**Phase 2: Pylance Deep Integration (Weeks 5-8)**
+- [ ] Auto-enhance Tier 2 with Pylance-discovered dependencies
+- [ ] Import relationship tracking (file A imports B)
+- [ ] Module availability checking before suggesting imports
+- [ ] Refactoring integration (fix imports, organize imports)
+
+**Phase 3: Database Introspection (Weeks 9-12)**
+- [ ] MSSQL MCP client implementation
+- [ ] Schema caching in Tier 2
+- [ ] SQL query generation using live schema
+- [ ] Entity Framework model generation
+
+**Phase 4: External Knowledge (Weeks 13-16)**
+- [ ] Stack Overflow MCP client
+- [ ] GitHub MCP client
+- [ ] Error correction enhancement (Stack Overflow integration)
+- [ ] GitHub Issue ↔ ADO synchronization
+
+**Phase 5: Testing & Polish (Weeks 17-20)**
+- [ ] Integration tests for all MCP servers
+- [ ] Performance benchmarks (<500ms MCP query target)
+- [ ] Privacy audit (verify no data leaks)
+- [ ] User documentation (MCP setup guide)
+
+**Configuration Example:**
+```yaml
+# cortex.config.json (CORTEX 4.0)
+
+mcp:
+  enabled: false  # Global toggle (opt-in)
+  
+  servers:
+    pylance:
+      enabled: true  # Already integrated
+      auto_enhance_tier2: true
+    
+    mssql:
+      enabled: false
+      connections:
+        - name: "Production DB"
+          connection_string: "${MSSQL_CONNECTION_STRING}"
+          read_only: true  # Safety: SELECT only
+    
+    stackoverflow:
+      enabled: false
+      cache_duration: 86400  # 24 hours
+      rate_limit: 30  # requests per hour
+    
+    github:
+      enabled: false
+      auth_token: "${GITHUB_TOKEN}"
+      cache_duration: 3600  # 1 hour
+  
+  privacy:
+    never_send_to_external:
+      - "*.env"
+      - "*.key"
+      - "*.pem"
+      - "secrets/*"
+    log_external_queries: true  # Audit trail
+    require_user_approval: true  # Confirm before external query
+```
+
+**User Experience Example:**
+```
+User: "How do I fix asyncio.run() error in Python?"
+
+CORTEX: "I found a local solution (Tier 2: 65% confidence)
+         
+         Would you like me to also check Stack Overflow?
+         (This will send the error message to stackoverflow.com)
+         
+         [Yes, check Stack Overflow] [No, use local solution only]"
+
+User: Clicks "Yes"
+
+CORTEX: "✅ Querying Stack Overflow...
+         📊 Found 3 solutions (sorted by votes)
+         💾 Caching result locally (24h)
+         📝 Logged query to cortex-brain/logs/mcp-queries.log
+         
+         Top solution (42 votes):
+         [Shows Stack Overflow answer]"
+```
+
+**Why CORTEX 4.0:**
+- Architectural complexity (MCP host infrastructure)
+- Configuration overhaul (new MCP section)
+- Privacy model change (from "never external" to "optionally external")
+- Backward compatibility maintained but behavior changes significantly
+- 16-20 week development timeline warrants major version
+
+**Benefits:**
+- ✅ Smarter suggestions (external knowledge enhances local patterns)
+- ✅ Faster debugging (Stack Overflow integration)
+- ✅ Better SQL (database introspection prevents syntax errors)
+- ✅ Cross-tool workflow (GitHub Issues ↔ CORTEX ADO)
+- ✅ Competitive advantage (matches GitHub Copilot's external access)
+
+**Risks & Mitigations:**
+
+| Risk | Mitigation |
+|------|------------|
+| Privacy concerns | Opt-in only, explicit approval, audit trail |
+| Performance degradation | Aggressive caching, local-first priority |
+| External API rate limits | Per-server rate limits, quota monitoring |
+| Breaking changes from 3.0 | MCP disabled = CORTEX 3.0 behavior (backward compatible) |
+
+**Success Criteria:**
+- [ ] MCP host can connect to 4+ MCP servers
+- [ ] Privacy tests pass (no sensitive data leaked)
+- [ ] MCP queries complete in <500ms average
+- [ ] Works offline (degrades gracefully when MCP unavailable)
+- [ ] 100% test pass rate for MCP integration
+- [ ] User documentation complete (setup, privacy, troubleshooting)
+
+**Dependencies:**
+- Feature 2 (Pluggable Knowledge Sources) - MCP is the implementation mechanism
+- Tier 2 Knowledge Graph - MCP results cached in Tier 2
+
+**Reference Documentation:**
+- Detailed MCP Plan: `.github/CopilotChats/MCP.md`
+- MCP Specification: https://modelcontextprotocol.io
+- Pylance MCP Already Used: `cortex-brain/documents/analysis/FILE-DEPENDENCY-ANALYSIS.md`
+
+---
+
 ### Feature 3: Nested Agent Coordination (Hierarchical Agents)
 
 **Priority:** 🟢 **LOW**  
@@ -1198,38 +1401,49 @@ CORTEX agents persist state across sessions (Tier 1/2 memory). Chatmodes are ses
 
 ## CORTEX 4.0 Summary
 
-**Total Effort:** 24-32 weeks (6-8 months)  
-**Features:** 4 major architectural changes  
+**Total Effort:** 40-52 weeks (10-13 months)  
+**Features:** 5 major architectural changes  
 **Backward Compatibility:** Breaking changes (migration provided)
 
 ### Implementation Priority Matrix
 
-| Feature | Effort | Impact | Priority | Quarter |
-|---------|--------|--------|----------|---------|
-| Dynamic Agent Composition | 6-8 weeks | High | 🔴 High | Q3 2025 |
-| Pluggable Knowledge Sources | 8-10 weeks | Medium | 🟡 Medium | Q3-Q4 2025 |
-| Nested Agent Coordination | 6-8 weeks | Low | 🟢 Low | Q4 2025 |
-| Session-Specific Agent State | 4-6 weeks | Low | 🟢 Low | Q4 2025 |
+| Feature | Effort | Impact | Priority | Quarter | Status |
+|---------|--------|--------|----------|---------|--------|
+| Dynamic Agent Composition | 6-8 weeks | High | 🔴 High | Q3 2025 | Research |
+| Pluggable Knowledge Sources | 8-10 weeks | Medium | 🟡 Medium | Q3-Q4 2025 | Research |
+| **MCP Integration** | **16-20 weeks** | **High** | **🔴 High** | **Q3 2026** | **✅ Planning Complete** |
+| Nested Agent Coordination | 6-8 weeks | Low | 🟢 Low | Q4 2025 | Research |
+| Session-Specific Agent State | 4-6 weeks | Low | 🟢 Low | Q4 2025 | Research |
+
+**Note:** MCP Integration (Feature 2.5) is the concrete implementation of Pluggable Knowledge Sources (Feature 2). MCP provides the standard protocol for external knowledge access.
 
 ### Development Phases
 
 **Phase 1: Research & Design (Weeks 1-8)**
 - Dynamic agent engine design
 - Hybrid knowledge architecture design
+- **MCP host architecture design** ✅ (Planning complete)
 - Migration planning
 - Community feedback
 
 **Phase 2: Core Implementation (Weeks 9-20)**
 - Dynamic agent engine
 - Pluggable knowledge sources
+- **MCP host infrastructure (Weeks 9-12)**
 - Integration testing
 
-**Phase 3: Advanced Features (Weeks 21-28)**
+**Phase 3: MCP Deep Integration (Weeks 21-36)**
+- **Pylance deep integration (Weeks 21-24)**
+- **MSSQL MCP server (Weeks 25-28)**
+- **External knowledge sources (Weeks 29-32)**
+- **MCP testing & polish (Weeks 33-36)**
+
+**Phase 4: Advanced Features (Weeks 37-44)**
 - Nested agent coordination
 - Session state management
 - Performance optimization
 
-**Phase 4: Migration & Release (Weeks 29-32)**
+**Phase 5: Migration & Release (Weeks 45-52)**
 - Migration tools
 - Breaking change documentation
 - CORTEX 4.0.0 release
@@ -1362,12 +1576,18 @@ Output:
 3. ✅ Build Technology-Specific Prompt Library (2 weeks)
 4. ✅ Release CORTEX 3.1.0 (major feature update)
 
-### Long-Term (Q3-Q4 2025):
-1. ⏸️ Research Dynamic Agent Composition (Q3)
-2. ⏸️ Research Pluggable Knowledge Sources (Q3)
-3. ⏸️ Implement CORTEX 4.0 Core (Q3-Q4)
-4. ⏸️ Beta testing and migration tooling (Q4)
-5. ⏸️ Release CORTEX 4.0.0 (Q4 2025)
+### Long-Term (Q3 2025 - Q3 2026):
+1. ⏸️ Research Dynamic Agent Composition (Q3 2025)
+2. ⏸️ Research Pluggable Knowledge Sources (Q3 2025)
+3. ✅ **MCP Integration Planning Complete** (Q4 2025)
+4. ⏸️ Implement MCP Host Infrastructure (Q1 2026)
+5. ⏸️ Implement Pylance Deep Integration (Q1 2026)
+6. ⏸️ Implement MSSQL & External Knowledge MCP Servers (Q2 2026)
+7. ⏸️ Implement CORTEX 4.0 Core (Q2-Q3 2026)
+8. ⏸️ Beta testing and migration tooling (Q3 2026)
+9. ⏸️ Release CORTEX 4.0.0 (Q3 2026)
+
+**Target Release Date:** CORTEX 4.0.0 with MCP Integration - Q3 2026
 
 ---
 
