@@ -125,21 +125,25 @@ class CaptureCommandProcessor:
                 match = re.search(pattern, user_input, re.IGNORECASE)
                 if match:
                     params = {}
-                    if match.groups():
-                        if command_type in ['import', 'capture_status']:
-                            params['capture_id'] = match.group(1)
-                        elif command_type == 'capture':
-                            # Check for file: parameters (direct import mode)
-                            file_matches = re.findall(r'file:([^\s]+)', user_input, re.IGNORECASE)
-                            if file_matches:
-                                params['files'] = file_matches
-                                params['mode'] = 'direct'
-                            else:
-                                params['mode'] = 'template'
-                                # Extract optional hint from input
-                                hint_match = re.search(r'about\s+(.*)', user_input, re.IGNORECASE)
-                                if hint_match:
-                                    params['hint'] = hint_match.group(1)
+                    
+                    # Handle capture ID extraction for import/status commands
+                    if match.groups() and command_type in ['import', 'capture_status']:
+                        params['capture_id'] = match.group(1)
+                    
+                    # Handle capture command (both template and direct mode)
+                    if command_type == 'capture':
+                        # Check for file: parameters (direct import mode)
+                        # Support both #file: (GitHub Copilot style) and file: syntax
+                        file_matches = re.findall(r'(?:#file:|file:)([^\s]+)', user_input, re.IGNORECASE)
+                        if file_matches:
+                            params['files'] = file_matches
+                            params['mode'] = 'direct'
+                        else:
+                            params['mode'] = 'template'
+                            # Extract optional hint from input
+                            hint_match = re.search(r'about\s+(.*)', user_input, re.IGNORECASE)
+                            if hint_match:
+                                params['hint'] = hint_match.group(1)
                     
                     return {
                         'command': command_type,

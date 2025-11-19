@@ -56,8 +56,9 @@ class ConversationCaptureManager:
         # Setup logging
         self.logger = logging.getLogger('cortex.conversation_capture')
         
-        # Working memory integration
-        self.working_memory = WorkingMemory(str(self.brain_path))
+        # Working memory integration - pass full database path
+        db_path = self.brain_path / "tier1" / "working_memory.db"
+        self.working_memory = WorkingMemory(str(db_path))
         
         # Capture file tracking
         self.active_captures = {}
@@ -735,7 +736,7 @@ The button is now larger with increased padding and font size, plus it has a pur
             
             # Parse conversation
             try:
-                parsed = self._parse_conversation_content(content)
+                parsed = self._parse_conversation(content, '')
                 
                 if not parsed['messages']:
                     results.append({

@@ -184,13 +184,78 @@ templates:
     trigger:
     - work_planner_success
     response_type: detailed
-    content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | \xA9\
+    content: "\U0001F9E0 **CORTEX Feature Planning**\nAuthor: Asif Hussain | \xA9\
       \ 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
-      \ Of Your Request:**\n   [State understanding]\n\n\u26A0\uFE0F **Challenge:**\
-      \ [\u2713 Accept with rationale OR \u26A1 Challenge with alternatives]\n\n\U0001F4AC\
-      \ **Response:**\n   [Natural language explanation]\n\n\U0001F4DD **Your Request:**\
-      \ [Echo refined request]\n\n\U0001F50D **Next Steps:**\n   [Context-appropriate\
-      \ format]"
+      \ Of Your Request:**\n   You want to plan [feature name] with structured approach\
+      \ and zero ambiguity.\n\n\u26A0\uFE0F **Challenge:** \u26A1 **DoR Validation\
+      \ Required**\n   I need to ensure Definition of Ready (DoR) is met with zero\
+      \ ambiguity before proceeding. I will not move forward until all clarifying\
+      \ questions are answered.\n\n\U0001F4AC **Response:**\n   Created planning file:\
+      \ `cortex-brain/documents/planning/features/PLAN-[date]-[feature].md`\n   \n\
+      \   Starting interactive planning session with DoR enforcement...\n\n\U0001F4DD\
+      \ **Your Request:** Plan [feature name] with zero ambiguity\n\n\U0001F50D **Next\
+      \ Steps - DoR Validation (Interactive Session):**\n   \n   \U0001F4CB **Definition\
+      \ of Ready Checklist:**\n   \u2610 Requirements documented (zero ambiguity)\n\
+      \   \u2610 Dependencies identified & validated\n   \u2610 Technical design approach\
+      \ agreed\n   \u2610 Test strategy defined\n   \u2610 Acceptance criteria measurable\n\
+      \   \u2610 User approval on scope\n   \n   \U0001F4AC **Clarifying Questions\
+      \ (Must answer ALL):**\n   \n   1. **Feature Scope** - What EXACTLY does this\
+      \ feature do? (Be specific, not vague)\n   2. **Users** - Who are the SPECIFIC\
+      \ users? (Roles, not \"people\")\n   3. **Integration Points** - What EXACT\
+      \ systems/APIs/databases? (Names, not \"services\")\n   4. **Constraints** -\
+      \ What are the MEASURABLE limits? (Numbers, not \"fast\")\n   5. **Success Metrics**\
+      \ - How do we MEASURE success? (KPIs, not \"better\")\n   6. **Dependencies**\
+      \ - What files/services MUST exist? (I will verify)\n   \n   \u26A0\uFE0F **I\
+      \ will not proceed until DoR is met with zero ambiguity.**\n   \n   Please answer\
+      \ these questions, and I'll validate dependencies before generating the plan."
+  planning_dor_incomplete:
+    name: Planning DoR Incomplete
+    trigger:
+    - planning_dor_incomplete
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Planning - DoR Incomplete**\nAuthor: Asif Hussain\
+      \ | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   You want to proceed with planning, but Definition of\
+      \ Ready (DoR) is not yet met.\n\n\u26A0\uFE0F **Challenge:** \u26A1 **Cannot\
+      \ Proceed - DoR Incomplete**\n   I cannot move forward with analysis or implementation\
+      \ until DoR is satisfied with zero ambiguity.\n\n\U0001F4AC **Response:**\n\
+      \   \u274C **DoR Status: INCOMPLETE**\n   \n   **Missing Requirements:**\n \
+      \  [List specific missing items from DoR checklist]\n   \n   **Ambiguities Detected:**\n\
+      \   [List vague requirements that need clarification]\n   \n   **Unvalidated\
+      \ Dependencies:**\n   [List files/services referenced but not verified]\n\n\U0001F4DD\
+      \ **Your Request:** Proceed with planning\n\n\U0001F50D **Next Steps:**\n  \
+      \ \n   1. **Answer Clarifying Questions** - Provide specific, measurable answers\n\
+      \   2. **Resolve Ambiguities** - Replace vague terms with exact specifications\n\
+      \   3. **Validate Dependencies** - Confirm all referenced resources exist\n\
+      \   4. **Review DoR Checklist** - Ensure all items checked\n   5. **Resubmit\
+      \ for Approval** - Once DoR is complete\n   \n   \u26A0\uFE0F I will not approve\
+      \ this plan until DoR is met."
+  planning_dor_complete:
+    name: Planning DoR Complete
+    trigger:
+    - planning_dor_complete
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Planning - DoR Complete**\nAuthor: Asif Hussain\
+      \ | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   All clarifying questions answered, DoR validation complete.\n\
+      \n\u26A0\uFE0F **Challenge:** \u2713 **Accept - DoR Met**\n   All requirements\
+      \ documented with zero ambiguity. Dependencies validated. Ready to generate\
+      \ detailed plan.\n\n\U0001F4AC **Response:**\n   \u2705 **DoR Status: COMPLETE**\n\
+      \   \n   \u2713 Requirements documented (zero ambiguity)\n   \u2713 Dependencies\
+      \ identified & validated\n   \u2713 Technical design approach agreed\n   \u2713\
+      \ Test strategy defined\n   \u2713 Acceptance criteria measurable\n   \u2713\
+      \ User approval on scope\n   \n   Generating detailed plan with:\n   \u2022\
+      \ Phase breakdown (Foundation \u2192 Core \u2192 Validation)\n   \u2022 Risk\
+      \ analysis\n   \u2022 Task generation\n   \u2022 Acceptance criteria\n\n\U0001F4DD\
+      \ **Your Request:** Generate plan with DoR validated\n\n\U0001F50D **Next Steps:**\n\
+      \   \n   \u2610 Phase 1: Planning Complete\n      \u2713 DoR validated\n   \
+      \   \u2713 Plan generated\n      \u23F3 User review pending\n   \n   \u2610\
+      \ Phase 2: Analysis Phase\n      \u23F3 Awaiting plan approval\n      \u2022\
+      \ Crawler will scan codebase\n      \u2022 Knowledge graph will be built\n \
+      \     \u2022 Analysis report will be generated\n   \n   \u2610 Phase 3: Execution\
+      \ Phase\n      \u23F3 Awaiting analysis approval\n      \u2022 TDD implementation\n\
+      \      \u2022 Quality validation\n      \u2022 DoD enforcement\n   \n   **Review\
+      \ the planning document and say \"approve plan\" when ready.**"
   ado_created:
     name: ADO Created
     trigger:

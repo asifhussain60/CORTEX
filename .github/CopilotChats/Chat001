@@ -1,0 +1,362 @@
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
+Review #file:Chat001 holistically and come up with a cohesive plan of how a user should begin planning, once the plan is complete and approved by user, there should be a thoroguh analysis phase with crawlers buildign knowledge graphs etc. The analysis should lead the development effort. The analysis should be presented to the user in a concise clear manner for approval before execution.
+
+GitHub Copilot: I'll analyze the conversation history and create a cohesive planning workflow that integrates CORTEX's planning, analysis, and execution capabilities. 
+
+Read [](file:///d%3A/PROJECTS/CORTEX/.github/CopilotChats/Chat001)
+
+🧠 **CORTEX Workflow Architecture Design**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+🎯 **My Understanding Of Your Request:**
+   You want me to synthesize the Chat001 conversation into a cohesive planning workflow that follows this pattern:
+   1. User initiates planning (triggered by natural language)
+   2. CORTEX facilitates structured planning with user collaboration
+   3. Once plan is approved → Analysis phase begins (crawlers, knowledge graphs)
+   4. Analysis results presented to user for approval
+   5. After analysis approval → Execution begins
+
+⚠️ **Challenge:** ✓ **Accept**
+   This is the correct architectural pattern. The conversation reveals two key insights:
+   
+   **Insight 1:** "Focus" intent is really an analysis/context-gathering phase that should happen AFTER planning, BEFORE execution
+   
+   **Insight 2:** Analysis should be mandatory (not optional) to ensure quality and build proper working knowledge
+
+💬 **Response:**
+
+Based on the Chat001 conversation, here's the cohesive workflow architecture:
+
+## 🎯 CORTEX Planning-Analysis-Execution Pipeline
+
+### **Phase 1: Planning (User-Collaborative)**
+
+**Triggers:** "plan [feature]", "let's plan", "plan a feature"
+
+**What Happens:**
+1. Intent Router detects PLAN intent
+2. Work Planner agent activates
+3. Creates planning file: `cortex-brain/documents/planning/features/PLAN-[date]-[feature].md`
+4. **Interactive session with DoR enforcement (Zero Ambiguity Required):**
+   - **Clarifying questions** - CORTEX MUST NOT proceed until ALL ambiguities resolved
+     - What is the exact feature scope? (No "probably" or "maybe")
+     - Who are the users? (Specific roles, not "people")
+     - What are the integration points? (Exact APIs, services, databases)
+     - What are the constraints? (Performance, security, compliance)
+     - What success metrics? (Measurable, specific)
+   - **Definition of Ready (DoR) Validation** - MUST be met before phase breakdown:
+     ✓ Requirements documented with zero ambiguity
+     ✓ Dependencies identified and validated (files exist, services accessible)
+     ✓ Technical design approach agreed upon
+     ✓ Test strategy defined
+     ✓ Acceptance criteria measurable and specific
+     ✓ User approval on scope and approach
+   - **Phase breakdown** (Phase 1: Foundation → Phase 2: Core → Phase 3: Validation)
+   - **Risk analysis** - Based on validated context
+   - **Task generation** - Specific, actionable tasks
+   - **Acceptance criteria definition** - Must be measurable and testable
+5. **DoR Gate Check:** CORTEX validates DoR completion before allowing "approve plan"
+6. User reviews and refines planning document
+7. User approves: "approve plan" (only allowed after DoR met)
+
+**Output:** Approved planning document with DoR validation checklist completed
+
+**Key Enforcement Rules:**
+- ❌ CORTEX MUST NOT proceed to analysis phase if DoR incomplete
+- ❌ CORTEX MUST NOT assume referenced files/services exist without verification
+- ❌ CORTEX MUST NOT accept vague requirements ("improve performance" → "reduce API response time to <200ms")
+- ✅ CORTEX MUST ask clarifying questions until zero ambiguity achieved
+- ✅ CORTEX MUST validate all assumptions before marking DoR complete
+
+---
+
+### **Phase 2: Analysis (Automatic Context Gathering)**
+
+**Triggers:** Automatically after "approve plan" OR manual "analyze [feature]"
+
+**What Happens:**
+1. **Crawler Orchestration** (runs in background):
+   ```
+   ☐ File Discovery: Scan codebase for related files
+   ☐ Dependency Analysis: Map imports/usages
+   ☐ Database Schema: Extract relevant tables/relationships
+   ☐ API Endpoints: Identify integration points
+   ☐ Test Coverage: Find existing tests
+   ☐ Documentation: Locate related docs
+   ```
+
+2. **Knowledge Graph Building**:
+   - File relationships (co-modification patterns)
+   - Component dependencies
+   - Data flow patterns
+   - Integration points
+   - Test coverage gaps
+
+3. **Analysis Report Generation**:
+   ```markdown
+   📊 Analysis Report: Authentication Feature
+   
+   🔍 Discovered Assets:
+   • 12 related files (AuthService.cs, LoginController.cs, ...)
+   • 3 database tables (Users, Sessions, Tokens)
+   • 5 API endpoints (/login, /logout, /refresh, ...)
+   • 8 existing tests (67% coverage)
+   • 2 integration points (Email service, Audit log)
+   
+   📈 Architecture Diagram: [Mermaid graph generated]
+   
+   🎯 Recommendations:
+   ✓ Start with Phase 1: Foundation (low risk)
+   ⚠️ Phase 2 requires database migration (medium risk)
+   ✓ Existing session management can be reused
+   
+   🧪 Test Strategy:
+   • Add 12 new tests for authentication flows
+   • Integration tests for email verification
+   • Security tests for token handling
+   ```
+
+4. **User Review & Approval**:
+   - Analysis report displayed in chat (summary)
+   - Full report saved: `cortex-brain/discovery-reports/ANALYSIS-[date]-[feature].md`
+   - User reviews: "looks good" or "refine [aspect]"
+   - User approves: "start implementation" or "begin phase 1"
+
+**Output:** Approved analysis with discovered context and architecture understanding
+
+---
+
+### **Phase 3: Execution (Test-Driven Implementation)**
+
+**Triggers:** "start implementation", "begin phase 1", or natural request like "implement authentication"
+
+**What Happens:**
+1. **Context Injection** (automatic):
+   - Analysis report loaded into Tier 1 memory
+   - Related files opened in context
+   - Knowledge graph patterns applied
+   - Test strategy activated
+
+2. **TDD Workflow** (Code Executor + Test Generator):
+   ```
+   Phase 1: Foundation
+   ☐ Task 1.1: Create User model
+      → Test Generator: Write failing tests (RED)
+      → Code Executor: Implement until tests pass (GREEN)
+      → Code Executor: Refactor for quality (REFACTOR)
+   ☐ Task 1.2: Create AuthService
+      → [Same TDD cycle]
+   ```
+
+3. **Progress Tracking**:
+   - Planning document updated with checkboxes: ✓ Task 1.1 complete
+   - Tier 1 memory: Conversation tracking
+   - Tier 2 knowledge: Pattern learning
+   - Tier 3 context: File metrics updated
+
+4. **Health Validation** (after each phase):
+   - All tests passing? ✓
+   - Zero errors/warnings? ✓
+   - DoD criteria met? ✓
+   - If validation fails → Error Corrector activates
+
+**Output:** Working implementation with tests, documentation, and quality validation
+
+---
+
+## 🔄 Complete User Flow Example
+
+**User Journey: "I want to add authentication to my app"**
+
+### **Step 1: Initiate Planning**
+```
+User: "plan authentication feature"
+
+CORTEX:
+✅ Created planning file (opened in VS Code)
+💬 Let's break this down together...
+
+[Interactive planning session - 15 minutes]
+- What authentication methods? (Email/password, OAuth, etc.)
+- Which user types need access?
+- Session management requirements?
+- Security constraints?
+
+✅ Generated 4-phase plan with 16 tasks
+📄 Review: cortex-brain/documents/planning/features/PLAN-2025-11-19-authentication.md
+```
+
+**User reviews plan, makes adjustments**
+
+```
+User: "approve plan"
+```
+
+---
+
+### **Step 2: Analysis Phase (Automatic)**
+```
+CORTEX:
+🔍 Starting analysis phase...
+
+Crawling codebase:
+[██████████████████████████████] 100% (47 files scanned)
+
+Building knowledge graph:
+✅ File relationships mapped (23 connections)
+✅ Database schema extracted (3 tables)
+✅ API endpoints identified (5 endpoints)
+✅ Test coverage analyzed (67% current)
+✅ Integration points discovered (2 services)
+
+📊 Analysis complete! Generated report.
+
+[Shows summary in chat]
+[Full report saved to discovery-reports/]
+
+⚠️ Key Findings:
+• Existing session management can be reused
+• Database migration needed for Users table
+• Email service integration required
+
+Ready for your review.
+```
+
+**User reviews analysis report**
+
+```
+User: "looks good, let's start"
+```
+
+---
+
+### **Step 3: Execution Phase**
+```
+CORTEX:
+✅ Analysis approved
+🚀 Starting Phase 1: Foundation
+
+Context loaded:
+• 12 related files in working memory
+• 3 database tables mapped
+• 5 API endpoints identified
+
+Task 1.1: Create User model
+   🔴 Writing failing tests... (RED)
+   [Test code generated]
+   ✅ Tests fail as expected
+   
+   🟢 Implementing User model... (GREEN)
+   [Code generated]
+   ✅ All tests passing
+   
+   🔵 Refactoring... (REFACTOR)
+   [Code cleaned up]
+   ✅ Quality validated
+
+✓ Task 1.1 complete (3 of 16 tasks done)
+
+Continue with Task 1.2: Create AuthService?
+```
+
+---
+
+## 🎯 Key Benefits of This Workflow
+
+**1. No Blind Execution** - Analysis phase ensures CORTEX understands the codebase before making changes
+
+**2. User Control** - Approval gates at planning and analysis prevent unwanted automated changes
+
+**3. Quality Built-In** - TDD + validation + DoD enforcement at every step
+
+**4. Context-Rich** - Crawlers build deep understanding, not surface-level implementation
+
+**5. Resumable** - Planning files persist, analysis reports saved, progress tracked
+
+**6. Learning** - Patterns extracted to Tier 2 for future similar features
+
+---
+
+## 📋 Response Templates Needed
+
+**Template 1: Planning Started**
+```yaml
+trigger: ["plan", "let's plan", "plan a feature"]
+response: |
+  ✅ Created planning file
+  💬 Starting interactive planning session...
+  [Questions for user]
+```
+
+**Template 2: Analysis Started** (NEW)
+```yaml
+trigger: ["approve plan", "analyze [feature]"]
+response: |
+  🔍 Starting analysis phase...
+  Crawling codebase: [progress bar]
+  Building knowledge graph...
+  [Analysis summary when complete]
+```
+
+**Template 3: Analysis Report** (NEW)
+```yaml
+trigger: [internal - after analysis complete]
+response: |
+  📊 Analysis Report: [feature name]
+  
+  🔍 Discovered Assets: [summary]
+  📈 Architecture: [diagram]
+  🎯 Recommendations: [insights]
+  🧪 Test Strategy: [approach]
+  
+  Review full report: [file path]
+  Ready to proceed?
+```
+
+**Template 4: Execution Started**
+```yaml
+trigger: ["start implementation", "begin phase 1"]
+response: |
+  ✅ Analysis approved
+  🚀 Starting [phase name]
+  
+  Context loaded: [summary]
+  Task [x.y]: [task name]
+  [TDD cycle progress]
+```
+
+📝 **Your Request:** Design cohesive planning-analysis-execution workflow based on Chat001 insights
+
+🔍 **Next Steps:**
+   
+   **Implementation Roadmap:**
+   
+   ☐ Phase 1: Response Template Updates (1-2 hours)
+      • Create "analysis_started" template
+      • Create "analysis_report" template
+      • Update "planning_complete" to trigger analysis
+   
+   ☐ Phase 2: Analysis Orchestrator (3-4 hours)
+      • Build crawler integration layer
+      • Implement knowledge graph builder
+      • Create analysis report generator
+      • Add Mermaid diagram generation
+   
+   ☐ Phase 3: Context Injection (2-3 hours)
+      • Load analysis into Tier 1 memory
+      • Integrate with Code Executor
+      • Add context summary display
+   
+   ☐ Phase 4: Approval Gates (1-2 hours)
+      • Add "approve analysis" command
+      • Block execution until approval
+      • Track approval status in planning doc
+   
+   ☐ Phase 5: Testing & Validation (2-3 hours)
+      • Test complete workflow end-to-end
+      • Validate crawler performance
+      • Ensure proper error handling
+   
+   **Total Estimated Time:** 9-14 hours
+   
+   Ready to proceed with implementation, or refine the design first?
