@@ -64,6 +64,76 @@ Agent operations are the day-to-day workflows that handle user requests.
 ## Response Templates
 
 
+CORTEX uses response templates for consistent communication:
+
+
+### schema_version
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+### last_updated
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+### optimization
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+### templates
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+### routing
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+### formatting
+
+**When to Use**: 
+
+**Template**:
+```
+
+```
+
+---
+
+
 
 ## Safety and Governance
 
