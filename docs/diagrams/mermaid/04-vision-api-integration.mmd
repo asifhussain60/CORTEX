@@ -1,7 +1,7 @@
-flowchart LR
-    A[User Screenshot] --> B[Process Layer]
-    B --> C[Transformation]
-    C --> D[Planning Template]
+graph LR
+    Source[User Screenshot]
+    Processing[Processing]
+    Target[Planning Template]
     
-    style A fill:#3B82F6
-    style D fill:#10B981
+    Source --> Processing
+    Processing --> Target

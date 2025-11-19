@@ -1,7 +1,10 @@
-flowchart TD
-    START([CORTEX One-Pager])
-    START --> PROCESS[Processing]
-    PROCESS --> END([Complete])
+graph TB
+    subgraph CORTEX["CORTEX One-Pager"]
+        Brain[CORTEX Brain]
+        Agents[Agent System]
+        Plugins[Plugin System]
+    end
     
-    style START fill:#3B82F6
-    style END fill:#10B981
+    User[User] --> Brain
+    Brain --> Agents
+    Agents --> Plugins
