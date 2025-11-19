@@ -205,9 +205,22 @@ templates:
       \ systems/APIs/databases? (Names, not \"services\")\n   4. **Constraints** -\
       \ What are the MEASURABLE limits? (Numbers, not \"fast\")\n   5. **Success Metrics**\
       \ - How do we MEASURE success? (KPIs, not \"better\")\n   6. **Dependencies**\
-      \ - What files/services MUST exist? (I will verify)\n   \n   \u26A0\uFE0F **I\
-      \ will not proceed until DoR is met with zero ambiguity.**\n   \n   Please answer\
-      \ these questions, and I'll validate dependencies before generating the plan."
+      \ - What files/services MUST exist? (I will verify)\n   \n   \U0001F4DD **Self-Audit\
+      \ Questions (Review before answering):**\n   \n   **Edge Cases:**\n   - What\
+      \ happens if the input is empty?\n   - What happens if the user is not authenticated?\n\
+      \   - What happens if the database is unavailable?\n   - What happens if a third-party\
+      \ API times out?\n   \n   **Access Control:**\n   - Who can access this feature?\n\
+      \   - What permissions are required?\n   - What happens if an unauthorized user\
+      \ tries to access?\n   \n   **Data Risk:**\n   - What data is at risk if this\
+      \ feature is compromised?\n   - Is sensitive data (PII, passwords, tokens) involved?\n\
+      \   - How is data validated before storage?\n   \n   **Testing:**\n   - How\
+      \ do we test this feature?\n   - What are the happy path test cases?\n   - What\
+      \ are the error/edge case test cases?\n   \n   **Dependencies:**\n   - What\
+      \ other systems/services does this depend on?\n   - What happens if a dependency\
+      \ is unavailable?\n   - Are there third-party APIs involved?\n   \n   \u26A0\uFE0F\
+      \ **I will not proceed until DoR is met with zero ambiguity.**\n   \n   Please\
+      \ answer these questions, and I'll validate dependencies before generating the\
+      \ plan."
   planning_dor_incomplete:
     name: Planning DoR Incomplete
     trigger:
@@ -220,16 +233,25 @@ templates:
       \ Proceed - DoR Incomplete**\n   I cannot move forward with analysis or implementation\
       \ until DoR is satisfied with zero ambiguity.\n\n\U0001F4AC **Response:**\n\
       \   \u274C **DoR Status: INCOMPLETE**\n   \n   **Missing Requirements:**\n \
-      \  [List specific missing items from DoR checklist]\n   \n   **Ambiguities Detected:**\n\
-      \   [List vague requirements that need clarification]\n   \n   **Unvalidated\
-      \ Dependencies:**\n   [List files/services referenced but not verified]\n\n\U0001F4DD\
-      \ **Your Request:** Proceed with planning\n\n\U0001F50D **Next Steps:**\n  \
-      \ \n   1. **Answer Clarifying Questions** - Provide specific, measurable answers\n\
-      \   2. **Resolve Ambiguities** - Replace vague terms with exact specifications\n\
-      \   3. **Validate Dependencies** - Confirm all referenced resources exist\n\
-      \   4. **Review DoR Checklist** - Ensure all items checked\n   5. **Resubmit\
-      \ for Approval** - Once DoR is complete\n   \n   \u26A0\uFE0F I will not approve\
-      \ this plan until DoR is met."
+      \  [List specific missing items from DoR checklist]\n   \n   **Ambiguities Detected\
+      \ (Line-Level Feedback):**\n   \n   Line 3: \"improve performance\"\n   \u274C\
+      \ VAGUE TERM: \"improve\"\n   Challenge: Improve by how much? What specific\
+      \ metric?\n   Suggestion: Define target metric (e.g., page load <1s, query time\
+      \ <100ms)\n   \n   Line 7: \"the system will handle user requests\"\n   \u274C\
+      \ UNDEFINED: \"the system\"\n   Challenge: Which system specifically? Which\
+      \ component/service?\n   Suggestion: Be explicit (e.g., \"The authentication\
+      \ service (AuthService.cs)\")\n   \n   Line 12: \"optimize database queries\"\
+      \n   \u274C VAGUE TERM: \"optimize\"\n   Challenge: Optimize what specifically?\
+      \ What's the target?\n   Suggestion: Define measurable goal (e.g., \"Reduce\
+      \ query time from 500ms to <100ms\")\n   \n   **Unvalidated Dependencies:**\n\
+      \   [List files/services referenced but not verified]\n\n\U0001F4DD **Your Request:**\
+      \ Proceed with planning\n\n\U0001F50D **Next Steps:**\n   \n   1. **Answer\
+      \ Clarifying Questions** - Provide specific, measurable answers\n   2. **Resolve\
+      \ Ambiguities** - Replace vague terms with exact specifications (see line-level\
+      \ feedback above)\n   3. **Validate Dependencies** - Confirm all referenced\
+      \ resources exist\n   4. **Review DoR Checklist** - Ensure all items checked\n\
+      \   5. **Resubmit for Approval** - Once DoR is complete\n   \n   \u26A0\uFE0F\
+      \ I will not approve this plan until DoR is met."
   planning_dor_complete:
     name: Planning DoR Complete
     trigger:
@@ -256,6 +278,49 @@ templates:
       \ Phase\n      \u23F3 Awaiting analysis approval\n      \u2022 TDD implementation\n\
       \      \u2022 Quality validation\n      \u2022 DoD enforcement\n   \n   **Review\
       \ the planning document and say \"approve plan\" when ready.**"
+  planning_security_review:
+    name: Planning Security Review
+    trigger:
+    - planning_security_review
+    - security review
+    - owasp review
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Security Review (OWASP Checklist)**\nAuthor: Asif\
+      \ Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF\
+      \ **My Understanding Of Your Request:**\n   You want a security review for [feature\
+      \ name] mapped to OWASP Top 10 categories.\n\n\u26A0\uFE0F **Challenge:** \u2713\
+      \ **Accept**\n   Security validation is mandatory before development. I'll identify\
+      \ relevant OWASP categories based on your feature type.\n\n\U0001F4AC **Response:**\n\
+      \   \U0001F512 **Auto-Detected Feature Type:** [authentication/api/data_storage/file_upload/payment]\n\
+      \   \n   **Relevant OWASP Top 10 Categories:**\n   \n   Based on your feature,\
+      \ these categories apply:\n   \n   \u2705 **A01 - Broken Access Control**\n\
+      \   - [ ] Authentication required for protected resources?\n   - [ ] Authorization\
+      \ checks present for all actions?\n   - [ ] Role-based access control (RBAC)\
+      \ implemented?\n   - [ ] Horizontal privilege escalation prevented?\n   \n \
+      \  \u2705 **A02 - Cryptographic Failures**\n   - [ ] Sensitive data encrypted\
+      \ at rest?\n   - [ ] HTTPS enforced for all data in transit?\n   - [ ] No hardcoded\
+      \ secrets, API keys, or passwords?\n   - [ ] Strong encryption algorithms used\
+      \ (AES-256, RSA-2048+)?\n   \n   \u2705 **A03 - Injection**\n   - [ ] Parameterized\
+      \ queries used (no string concatenation)?\n   - [ ] Input validation on ALL\
+      \ user inputs?\n   - [ ] Output encoding to prevent XSS?\n   - [ ] Command injection\
+      \ prevention (no shell execution of user input)?\n   \n   \u2705 **A07 - Identification\
+      \ & Authentication Failures**\n   - [ ] Multi-factor authentication available?\n\
+      \   - [ ] Account lockout after failed login attempts?\n   - [ ] Session timeout\
+      \ configured (e.g., 30 minutes)?\n   - [ ] Password complexity requirements\
+      \ enforced?\n   \n   \u2705 **A09 - Security Logging & Monitoring**\n   - [\
+      \ ] Security events logged (login attempts, access denials)?\n   - [ ] Logs\
+      \ monitored for anomalies?\n   - [ ] Incident response plan defined?\n   - [\
+      \ ] Sensitive data NOT logged (passwords, tokens)?\n\n\U0001F4DD **Your Request:**\
+      \ Security review for [feature name]\n\n\U0001F50D **Next Steps - Security\
+      \ Validation:**\n   \n   1. **Review Checklist Above** - Check all applicable\
+      \ items\n   2. **Identify HIGH/CRITICAL Risks** - Flag any unchecked items that\
+      \ are critical\n   3. **Mitigation Plan** - Define how to address each risk\n\
+      \   4. **Automated Scanning** - Run detect-secrets, Bandit, pip-audit before\
+      \ development\n   5. **Security Approval** - Once all HIGH/CRITICAL items addressed,\
+      \ proceed with DoR\n   \n   \u26A0\uFE0F **Security Gate:** Any HIGH/CRITICAL\
+      \ vulnerabilities must be addressed before development begins.\n   \n   Say\
+      \ \"security approved\" once checklist complete, or \"security concerns: [describe]\"\
+      \ to discuss risks."
   ado_created:
     name: ADO Created
     trigger:
