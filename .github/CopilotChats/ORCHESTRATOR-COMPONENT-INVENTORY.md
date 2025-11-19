@@ -90,9 +90,9 @@ CORTEX uses an **Entry Point Module Orchestrator (EPMO)** architecture where spe
 
 ---
 
-### 4. Enterprise Documentation Orchestrator
+### 4. Documentation Orchestrator
 **Location:** `src/operations/enterprise_documentation_orchestrator.py`  
-**Purpose:** Natural language interface for comprehensive documentation generation  
+**Purpose:** Singular entry point for all CORTEX documentation operations - controls generation, MkDocs site configuration, and GitHub Pages hosting  
 **Lines:** 552 (total)
 
 **Plugged Components:**

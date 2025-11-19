@@ -11,11 +11,12 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
    Documentation generation provides a complete project overview. This is a read-only analysis operation that will examine your codebase and generate structured documentation artifacts.
 
 💬 **Response:**
-   I'll generate comprehensive documentation using the **Enterprise Documentation Generator** - the single unified entry point for all CORTEX documentation generation.
+   I'll generate comprehensive documentation using the **Documentation Orchestrator** - the singular entry point for all CORTEX documentation operations.
 
-   🎯 **Single Entry Point: Enterprise Documentation Orchestrator**
+   🎯 **Single Entry Point: Documentation Orchestrator**
    • Located: `src/operations/enterprise_documentation_orchestrator.py`
    • Natural Language: "generate all documentation" | "generate all docs" | "generate cortex docs"
+   • Controls: Documentation generation, MkDocs site configuration, GitHub Pages hosting
    • Components: Integrates with EPM system (diagrams, narratives, prompts, executive summary, features, MkDocs site)
 
    📚 **Documents to be Generated:**
@@ -90,10 +91,10 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
       • `site/` - Built MkDocs static website
 
    ⚠️ **Obsolete Modules Removed:**
-      • ❌ `update_documentation.py` (replaced by enterprise orchestrator)
+      • ❌ `update_documentation.py` (replaced by documentation orchestrator)
       • ❌ `diagram_generator.py` (integrated into EPM system)
       • ❌ `diagram_regeneration_orchestrator.py` (legacy, replaced)
-      • ✅ **Single entry point:** `enterprise_documentation_orchestrator.py` only
+      • ✅ **Single entry point:** `enterprise_documentation_orchestrator.py` (Documentation Orchestrator)
 
 📝 **Your Request:** Generate comprehensive CORTEX documentation
 

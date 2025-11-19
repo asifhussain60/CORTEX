@@ -265,52 +265,8 @@ class TestDocumentationFileCreation:
         except ImportError as e:
             pytest.skip(f"Cannot import operations module: {e}")
     
-    def test_page_generator_directly(self, project_root):
-        """Test 6: Test PageGenerator module directly"""
-        logger.info("=" * 80)
-        logger.info("TEST 6: Test PageGenerator module directly")
-        logger.info("=" * 80)
-        
-        try:
-            from src.epm.modules.page_generator import PageGenerator
-            
-            # Initialize PageGenerator
-            page_generator = PageGenerator(project_root, dry_run=False)
-            
-            logger.info(f"Root path: {page_generator.root_path}")
-            logger.info(f"Output path: {page_generator.output_path}")
-            logger.info(f"Templates path: {page_generator.templates_path}")
-            
-            # Check if templates exist
-            if page_generator.templates_path.exists():
-                templates = list(page_generator.templates_path.glob("*.j2"))
-                logger.info(f"Available templates: {len(templates)}")
-                for tmpl in templates[:5]:
-                    logger.info(f"  - {tmpl.name}")
-            else:
-                logger.warning("⚠️  Templates path not found")
-            
-            # Check page definitions
-            definitions_file = project_root / "cortex-brain" / "admin" / "documentation" / "config" / "page-definitions.yaml"
-            
-            if definitions_file.exists():
-                logger.info(f"✓ Page definitions exist: {definitions_file}")
-                
-                import yaml
-                with open(definitions_file, 'r') as f:
-                    definitions = yaml.safe_load(f)
-                
-                pages = definitions.get('pages', [])
-                logger.info(f"Pages defined: {len(pages)}")
-                
-                for page_def in pages[:5]:
-                    logger.info(f"  - {page_def.get('output_path', 'Unknown')}")
-            else:
-                logger.warning(f"⚠️  Page definitions not found: {definitions_file}")
-                pytest.skip("Page definitions file missing")
-            
-        except ImportError as e:
-            pytest.skip(f"Cannot import PageGenerator: {e}")
+    # REMOVED: test_page_generator_directly - EPM PageGenerator module deleted
+    # This test imported src.epm.modules.page_generator which no longer exists
 
 
 if __name__ == "__main__":

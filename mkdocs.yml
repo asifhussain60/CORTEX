@@ -1,184 +1,31 @@
-site_name: CORTEX
-site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
+site_name: CORTEX Documentation
+site_description: AI-powered development assistant with persistent memory
 site_author: Asif Hussain
-copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
+site_url: https://cortex-docs.example.com
 repo_url: https://github.com/asifhussain60/CORTEX
-repo_name: asifhussain60/CORTEX
+repo_name: CORTEX
+copyright: "\xA9 2024-2025 Asif Hussain. All rights reserved."
 theme:
   name: material
   palette:
-    scheme: slate
-  font:
-    text: Inter
-    code: JetBrains Mono
+    primary: indigo
+    accent: purple
   features:
-  - navigation.instant
-  - navigation.tracking
   - navigation.tabs
   - navigation.sections
   - navigation.expand
   - navigation.top
-  - search.suggest
   - search.highlight
-  - content.code.copy
-  - toc.integrate
-nav:
-- Architecture:
-  - Agents: architecture/agents.md
-  - Brain Protection: architecture/brain-protection.md
-  - Overview: architecture/overview.md
-  - Tier System: architecture/tier-system.md
-- Cortex Awakening:
-  - Readme: images/cortex-awakening/README.md
-- Diagrams:
-  - Readme: diagrams/README.md
-  - Style Guide: diagrams/STYLE-GUIDE.md
-- Getting Started:
-  - Configuration: getting-started/configuration.md
-  - Installation: getting-started/installation.md
-  - Quick Start: getting-started/quick-start.md
-- Governance:
-  - The Rulebook: governance/THE-RULEBOOK.md
-- Guides:
-  - Admin Guide: guides/admin-guide.md
-  - Best Practices: guides/best-practices.md
-  - Developer Guide: guides/developer-guide.md
-  - Troubleshooting: guides/troubleshooting.md
-- Narratives:
-  - 01 Tier Architecture: diagrams/narratives/01-tier-architecture.md
-  - 02 Agent System: diagrams/narratives/02-agent-system.md
-  - 03 Information Flow: diagrams/narratives/03-information-flow.md
-  - 03 Plugin Architecture: diagrams/narratives/03-plugin-architecture.md
-  - 04 Vision Api Integration: diagrams/narratives/04-vision-api-integration.md
-  - 06 Epm Doc Generator Pipeline: diagrams/narratives/06-epm-doc-generator-pipeline.md
-  - 07 Cortex One Pager: diagrams/narratives/07-cortex-one-pager.md
-  - 07 Module Structure: diagrams/narratives/07-module-structure.md
-  - 08 Brain Protection: diagrams/narratives/08-brain-protection.md
-  - 09 Tdd Cycle: diagrams/narratives/09-tdd-cycle.md
-  - 11 Plugin Architecture: diagrams/narratives/11-plugin-architecture.md
-  - 12 Conversation Flow: diagrams/narratives/12-conversation-flow.md
-  - 13 Knowledge Graph Update: diagrams/narratives/13-knowledge-graph-update.md
-  - 14 Health Check: diagrams/narratives/14-health-check.md
-  - The Cortex Story: narratives/THE-CORTEX-STORY.md
-- Operations:
-  - Entry Point Modules: operations/entry-point-modules.md
-  - Health Monitoring: operations/health-monitoring.md
-  - Index: operations/index.md
-  - Overview: operations/overview.md
-  - Workflows: operations/workflows.md
-- Performance:
-  - Ci Cd Integration: performance/CI-CD-INTEGRATION.md
-  - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
-- Plugins:
-  - Development: plugins/development.md
-  - Vscode Extension: plugins/vscode-extension.md
-- Prompts:
-  - 01 Tier Architecture: diagrams/prompts/01-tier-architecture.md
-  - 02 Agent System: diagrams/prompts/02-agent-system.md
-  - 03 Information Flow: diagrams/prompts/03-information-flow.md
-  - 03 Plugin Architecture: diagrams/prompts/03-plugin-architecture.md
-  - 04 Vision Api Integration: diagrams/prompts/04-vision-api-integration.md
-  - 06 Epm Doc Generator Pipeline: diagrams/prompts/06-epm-doc-generator-pipeline.md
-  - 07 Cortex One Pager: diagrams/prompts/07-cortex-one-pager.md
-  - 07 Module Structure: diagrams/prompts/07-module-structure.md
-  - 08 Brain Protection: diagrams/prompts/08-brain-protection.md
-  - 09 Tdd Cycle: diagrams/prompts/09-tdd-cycle.md
-  - 11 Plugin Architecture: diagrams/prompts/11-plugin-architecture.md
-  - 12 Conversation Flow: diagrams/prompts/12-conversation-flow.md
-  - 13 Knowledge Graph Update: diagrams/prompts/13-knowledge-graph-update.md
-  - 14 Health Check: diagrams/prompts/14-health-check.md
-- Reference:
-  - Api: reference/api.md
-  - Configuration: reference/configuration.md
-  - Response Templates: reference/response-templates.md
-- Reports:
-  - Generation Report 20251115 201243: generated/reports/GENERATION-REPORT-20251115-201243.md
-  - Generation Report 20251115 201255: generated/reports/GENERATION-REPORT-20251115-201255.md
-  - Generation Report 20251115 201308: generated/reports/GENERATION-REPORT-20251115-201308.md
-  - Generation Report 20251116 133042: generated/reports/GENERATION-REPORT-20251116-133042.md
-  - Generation Report 20251116 133909: generated/reports/GENERATION-REPORT-20251116-133909.md
-  - Generation Report 20251116 134030: generated/reports/GENERATION-REPORT-20251116-134030.md
-  - Generation Report 20251116 134819: generated/reports/GENERATION-REPORT-20251116-134819.md
-  - Generation Report 20251116 140845: generated/reports/GENERATION-REPORT-20251116-140845.md
-  - Generation Report 20251117 082431: generated/reports/GENERATION-REPORT-20251117-082431.md
-  - Generation Report 20251117 091621: generated/reports/GENERATION-REPORT-20251117-091621.md
-  - Generation Report 20251117 100816: generated/reports/GENERATION-REPORT-20251117-100816.md
-  - Generation Report 20251117 101006: generated/reports/GENERATION-REPORT-20251117-101006.md
-  - Generation Report 20251117 101246: generated/reports/GENERATION-REPORT-20251117-101246.md
-  - Generation Report 20251117 101536: generated/reports/GENERATION-REPORT-20251117-101536.md
-  - Generation Report 20251117 101852: generated/reports/GENERATION-REPORT-20251117-101852.md
-  - Generation Report 20251117 102743: generated/reports/GENERATION-REPORT-20251117-102743.md
-  - Generation Report 20251117 103129: generated/reports/GENERATION-REPORT-20251117-103129.md
-  - Generation Report 20251117 104455: generated/reports/GENERATION-REPORT-20251117-104455.md
-  - Generation Report 20251117 105215: generated/reports/GENERATION-REPORT-20251117-105215.md
-  - Generation Report 20251117 132753: generated/reports/GENERATION-REPORT-20251117-132753.md
-- Capabilities Matrix: CAPABILITIES-MATRIX.md
-- Documentation Links Fixed Report: DOCUMENTATION-LINKS-FIXED-REPORT.md
-- Executive Summary: EXECUTIVE-SUMMARY.md
-- Feature Comparison: FEATURE-COMPARISON.md
-- Features: FEATURES.md
-- Help System: HELP-SYSTEM.md
-- Knowledge Graph Import Guide: KNOWLEDGE-GRAPH-IMPORT-GUIDE.md
-- Modules Reference: MODULES-REFERENCE.md
-- Navigation Guide: NAVIGATION-GUIDE.md
-- Operations Reference: OPERATIONS-REFERENCE.md
-- Technical Cost Optimization: Technical-Cost-Optimization.md
-- Index: index.md
-- Response Template User Guide: response-template-user-guide.md
-- Story:
-  - The Cortex Story: diagrams/story/The CORTEX Story.md
-- Telemetry:
-  - Performance Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
-- The Intern With Amnesia:
-  - 01 The Amnesia Problem: narratives/the-intern-with-amnesia/01-the-amnesia-problem.md
-  - 02 Building First Memory: narratives/the-intern-with-amnesia/02-building-first-memory.md
-  - 03 The Learning System: narratives/the-intern-with-amnesia/03-the-learning-system.md
-  - 04 Context Intelligence: narratives/the-intern-with-amnesia/04-context-intelligence.md
-  - 05 Dual Hemisphere Brain: narratives/the-intern-with-amnesia/05-dual-hemisphere-brain.md
-  - 06 Intelligence Automation: narratives/the-intern-with-amnesia/06-intelligence-automation.md
-  - 07 Protection And Governance: narratives/the-intern-with-amnesia/07-protection-and-governance.md
-  - 08 Integration And Extensibility: narratives/the-intern-with-amnesia/08-integration-and-extensibility.md
-  - 09 Real World Scenarios: narratives/the-intern-with-amnesia/09-real-world-scenarios.md
-  - 10 The Transformation: narratives/the-intern-with-amnesia/10-the-transformation.md
-  - Readme: narratives/the-intern-with-amnesia/README.md
-- The CORTEX Story: diagrams/story/The-CORTEX-Story.md
+  - search.share
+  - toc.follow
+plugins:
+- search
+- mermaid2
 markdown_extensions:
-- abbr
+- pymdownx.highlight
+- pymdownx.superfences
+- pymdownx.tabbed
 - admonition
 - attr_list
-- def_list
-- footnotes
-- meta
 - md_in_html
-- tables
-- toc:
-    permalink: true
-    toc_depth: 3
-- pymdownx.arithmatex:
-    generic: true
-- pymdownx.betterem:
-    smart_enable: all
-- pymdownx.caret
-- pymdownx.mark
-- pymdownx.tilde
-- pymdownx.details
-- pymdownx.highlight:
-    anchor_linenums: true
-    line_spans: __span
-    pygments_lang_class: true
-- pymdownx.inlinehilite
-- pymdownx.keys
-- pymdownx.snippets
-- pymdownx.superfences:
-    custom_fences:
-    - name: mermaid
-      class: mermaid
-      format: null
-- pymdownx.tabbed:
-    alternate_style: true
-- pymdownx.tasklist:
-    custom_checkbox: true
-plugins:
-- search:
-    lang: en
-- mermaid2
+nav: []
