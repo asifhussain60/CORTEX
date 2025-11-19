@@ -25,6 +25,13 @@ from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
 
+# Import plan sync manager for two-way sync
+try:
+    from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
+    PLAN_SYNC_AVAILABLE = True
+except ImportError:
+    PLAN_SYNC_AVAILABLE = False
+
 
 class FileStatus(Enum):
     """Planning file status states"""
@@ -80,6 +87,15 @@ class PlanningFileManager:
         # Metadata file
         self.metadata_file = self.ado_path / "planning_metadata.json"
         self.metadata = self._load_metadata()
+        
+        # Initialize plan sync manager for two-way sync
+        self.plan_sync_manager = None
+        if PLAN_SYNC_AVAILABLE:
+            try:
+                self.plan_sync_manager = PlanSyncManager()
+                print("✅ PlanSyncManager initialized for auto-sync")
+            except Exception as e:
+                print(f"⚠️  PlanSyncManager unavailable: {e}")
     
     def _ensure_directories(self):
         """Create all required directories"""
@@ -138,6 +154,9 @@ class PlanningFileManager:
                 'title': title
             }
             self._save_metadata()
+            
+            # Auto-sync to database
+            self._sync_file_to_database(file_path)
             
             return True, str(file_path)
             
@@ -204,6 +223,16 @@ class PlanningFileManager:
                 self.metadata[ado_number]['rejection_reason'] = reason
             
             self._save_metadata()
+            
+            # Update status marker in file content
+            self._update_status_in_file(new_path, new_status)
+            
+            # Update database path for moved file (before sync)
+            if self.plan_sync_manager:
+                self._update_database_path(current_path, new_path)
+            
+            # Auto-sync status change to database
+            self._sync_file_to_database(new_path)
             
             return True, f"Moved to {new_status.value}: {new_path}"
             
@@ -343,6 +372,80 @@ class PlanningFileManager:
                 stats['errors'] += 1
         
         return stats
+    
+    def _update_database_path(self, old_path: Path, new_path: Path) -> None:
+        """
+        Update file path in database when file is moved.
+        
+        Args:
+            old_path: Previous file path
+            new_path: New file path after move
+        """
+        if not self.plan_sync_manager:
+            return
+        
+        try:
+            # Update path in database
+            import sqlite3
+            conn = sqlite3.connect(str(self.plan_sync_manager.db_path))
+            cursor = conn.cursor()
+            
+            cursor.execute(
+                "UPDATE plans SET file_path = ? WHERE file_path = ?",
+                (str(new_path), str(old_path))
+            )
+            
+            conn.commit()
+            conn.close()
+            
+            if cursor.rowcount > 0:
+                print(f"✅ Updated database path: {old_path.name} → {new_path}")
+            
+        except Exception as e:
+            print(f"⚠️  Failed to update database path: {e}")
+    
+    def _update_status_in_file(self, file_path: Path, new_status: FileStatus) -> None:
+        """
+        Update the **Status:** marker in file content to match new status.
+        
+        Args:
+            file_path: Path to the planning file
+            new_status: New status to set
+        """
+        try:
+            content = file_path.read_text(encoding='utf-8')
+            
+            # Update status marker (case-insensitive search)
+            import re
+            pattern = r'\*\*Status:\*\*\s+\w+'
+            replacement = f"**Status:** {new_status.value.capitalize()}"
+            
+            updated_content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+            
+            # Write back
+            file_path.write_text(updated_content, encoding='utf-8')
+            
+        except Exception as e:
+            print(f"⚠️  Failed to update status in file: {e}")
+    
+    def _sync_file_to_database(self, file_path: Path) -> None:
+        """
+        Sync planning file to database using PlanSyncManager.
+        
+        Args:
+            file_path: Path to the planning file
+        """
+        if not self.plan_sync_manager:
+            return
+        
+        try:
+            result = self.plan_sync_manager.sync_file_to_database(file_path)
+            if result.get("success"):
+                print(f"✅ Synced to database: {result.get('plan_id')}")
+            else:
+                print(f"⚠️  Sync failed: {result.get('message')}")
+        except Exception as e:
+            print(f"❌ Sync error: {e}")
     
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize title for use in filename"""

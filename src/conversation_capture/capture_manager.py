@@ -130,6 +130,14 @@ class ConversationCaptureManager:
                 'status': 'awaiting_paste'
             }
             
+            # Try to create relative path, but fall back to full path if not in workspace
+            try:
+                relative_path = capture_file.relative_to(self.workspace_root)
+                file_location = str(relative_path)
+            except ValueError:
+                # File is outside workspace (e.g., in brain directory)
+                file_location = str(capture_file)
+            
             return {
                 'success': True,
                 'capture_id': capture_id,
@@ -146,7 +154,7 @@ class ConversationCaptureManager:
 4. **Save the file** 
 5. **Run:** `/CORTEX Import {capture_id}`
 
-**File Location:** `{capture_file.relative_to(self.workspace_root)}`
+**File Location:** `{file_location}`
 
 The capture file has been pre-filled with a template. Just replace the example conversation with your real one!
                 """.strip(),
@@ -620,25 +628,27 @@ The button is now larger with increased padding and font size, plus it has a pur
             if not messages:
                 return {'success': False, 'error': 'No messages to import'}
             
-            # Create conversation summary
-            user_message = ' | '.join([msg['content'][:100] for msg in messages if msg['role'] == 'user'])
-            assistant_message = ' | '.join([msg['content'][:100] for msg in messages if msg['role'] == 'assistant'])
+            # Generate unique conversation ID
+            conversation_id = f"conv_import_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
             
-            # Store in working memory
-            conversation_id = self.working_memory.store_conversation(
-                user_message=user_message[:1000],  # Limit length
-                assistant_response=assistant_message[:1000],  # Limit length
-                intent=conversation_data['intent'],
-                context={
-                    'manual_import': True,
-                    'entities': conversation_data['entities'],
-                    'message_count': len(messages),
-                    'imported_at': datetime.now(timezone.utc).isoformat(),
-                    'metadata': conversation_data['metadata']
-                }
+            # Create conversation title from first user message
+            first_user_msg = next((msg['content'] for msg in messages if msg['role'] == 'user'), 'Imported conversation')
+            title = first_user_msg[:100] + ('...' if len(first_user_msg) > 100 else '')
+            
+            # Prepare tags: intent + entity mentions
+            tags = [conversation_data['intent']]
+            for entity in conversation_data['entities'][:5]:  # Add top 5 entities as tags
+                tags.append(f"{entity['type']}:{entity['value']}")
+            
+            # Use the correct WorkingMemory API
+            conversation = self.working_memory.add_conversation(
+                conversation_id=conversation_id,
+                title=title,
+                messages=messages,
+                tags=tags
             )
             
-            if conversation_id:
+            if conversation:
                 return {
                     'success': True,
                     'conversation_id': conversation_id

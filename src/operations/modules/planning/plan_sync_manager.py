@@ -457,17 +457,18 @@ class PlanSyncManager:
                     break
             
             # Extract status (from file location)
+            # Normalize path separators for cross-platform compatibility
+            file_path_normalized = str(file_path).replace('\\', '/')
             status = 'active'
-            if '/approved/' in str(file_path):
+            if '/approved/' in file_path_normalized:
                 status = 'approved'
-            elif '/completed/' in str(file_path):
+            elif '/completed/' in file_path_normalized:
                 status = 'completed'
-            elif '/blocked/' in str(file_path):
+            elif '/blocked/' in file_path_normalized:
                 status = 'blocked'
             
-            # Extract plan type (normalize path separators)
+            # Extract plan type
             plan_type = 'feature'
-            file_path_normalized = str(file_path).replace('\\', '/')
             if '/ado/' in file_path_normalized:
                 plan_type = 'ado'
             

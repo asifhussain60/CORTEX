@@ -169,6 +169,7 @@ class CaptureCommandProcessor:
                 'success': True,
                 'operation': 'capture_created',
                 'capture_id': result['capture_id'],
+                'file_path': result['file_path'],  # Add for backward compatibility
                 'response': self._format_capture_success_response(result),
                 'next_steps': [
                     f"Open file: {Path(result['file_path']).name}",

@@ -242,6 +242,10 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             logger.info("\nPhase 6: Running brain health diagnostics...")
             self._check_brain_health()
             
+            # Phase 6b: Enhancement preservation validation
+            logger.info("\nPhase 6b: Validating CORTEX 3.0 enhancements...")
+            self._validate_enhancements()
+            
             # Phase 7: Calculate health score
             logger.info("\nCalculating system health score...")
             self._calculate_health_score()
@@ -591,6 +595,99 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 recommendation="Restore base_plugin.py"
             )
             self.report.issues.append(issue)
+    
+    def _validate_enhancements(self) -> None:
+        """Validate CORTEX 3.0 enhancement integrity and functionality"""
+        enhancement_health = {
+            'meta_template_system': False,
+            'confidence_display': False,
+            'response_templates': False,
+            'enhancement_tests': False
+        }
+        
+        # Load preservation rules
+        rules_path = self.project_root / 'cortex-brain' / 'protection-layers' / 'enhancement-preservation-rules.yaml'
+        if not rules_path.exists():
+            logger.warning("  Enhancement preservation rules not found")
+            return
+        
+        try:
+            import yaml
+            with open(rules_path, 'r', encoding='utf-8') as f:
+                rules = yaml.safe_load(f)
+            
+            protected_files = rules.get('protected_files', {})
+            
+            # Check Meta-Template System
+            meta_template_files = protected_files.get('meta_template_system', [])
+            meta_missing = []
+            for file_spec in meta_template_files:
+                file_path = self.project_root / file_spec['path']
+                if not file_path.exists():
+                    meta_missing.append(file_spec['path'])
+                    issue = HealthIssue(
+                        severity='critical',
+                        category='enhancement',
+                        title=f"Missing meta-template file: {file_spec['path']}",
+                        description=file_spec['reason'],
+                        file_path=file_path,
+                        recommendation="Restore from backup or repository"
+                    )
+                    self.report.issues.append(issue)
+            
+            if len(meta_missing) == 0:
+                enhancement_health['meta_template_system'] = True
+                logger.info(f"  Meta-Template System: OK ({len(meta_template_files)} files)")
+            else:
+                logger.warning(f"  Meta-Template System: {len(meta_missing)} missing files")
+            
+            # Check Confidence Display
+            confidence_files = protected_files.get('confidence_display', [])
+            confidence_missing = []
+            for file_spec in confidence_files:
+                file_path = self.project_root / file_spec['path']
+                if not file_path.exists():
+                    confidence_missing.append(file_spec['path'])
+            
+            if len(confidence_missing) == 0:
+                enhancement_health['confidence_display'] = True
+                logger.info(f"  Confidence Display: OK ({len(confidence_files)} files)")
+            else:
+                logger.warning(f"  Confidence Display: {len(confidence_missing)} missing files")
+            
+            # Check Response Templates
+            template_file = self.project_root / 'cortex-brain' / 'response-templates.yaml'
+            if template_file.exists():
+                with open(template_file, 'r', encoding='utf-8') as f:
+                    template_data = yaml.safe_load(f)
+                
+                template_count = len(template_data.get('templates', {}))
+                confidence_templates = [k for k in template_data.get('templates', {}).keys() if 'confidence' in k]
+                
+                if template_count >= 32 and len(confidence_templates) >= 4:
+                    enhancement_health['response_templates'] = True
+                    logger.info(f"  Response Templates: OK ({template_count} templates, {len(confidence_templates)} confidence)")
+                else:
+                    logger.warning(f"  Response Templates: Issue (expected 32+, found {template_count})")
+            
+            # Check Enhancement Tests
+            test_file = self.project_root / 'tests' / 'integration' / 'test_cortex_enhancements.py'
+            if test_file.exists():
+                enhancement_health['enhancement_tests'] = True
+                logger.info("  Enhancement Tests: Present")
+            else:
+                logger.warning("  Enhancement Tests: Missing")
+            
+            # Store enhancement health statistics
+            healthy = sum(enhancement_health.values())
+            total = len(enhancement_health)
+            health_pct = (healthy / total) * 100
+            
+            self.report.statistics['enhancement_health'] = health_pct
+            logger.info(f"  Enhancement Health: {healthy}/{total} components ({health_pct:.1f}%)")
+            
+        except Exception as e:
+            logger.error(f"  Enhancement validation failed: {e}")
     
     def _check_brain_health(self) -> None:
         """Comprehensive brain health diagnostics (Tier 0-3 + Agents)"""
