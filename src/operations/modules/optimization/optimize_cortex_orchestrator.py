@@ -31,6 +31,10 @@ from src.operations.base_operation_module import (
     OperationResult,
     OperationStatus
 )
+from src.operations.modules.validation.planning_rules_validator import (
+    PlanningRulesValidator,
+    PlanningValidationReport
+)
 
 logger = logging.getLogger(__name__)
 
@@ -166,8 +170,15 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         )
         
         try:
-            # Phase 1: Run SKULL tests
-            logger.info("\n[Phase 1] Running SKULL tests...")
+            # Phase 1: Validate Planning Rules
+            logger.info("\n[Phase 1] Validating planning rules...")
+            planning_result = self._validate_planning_rules(project_root, metrics)
+            
+            if not planning_result['success']:
+                logger.warning("Planning validation found issues - recommendations provided")
+            
+            # Phase 2: Run SKULL tests
+            logger.info("\n[Phase 2] Running SKULL tests...")
             skull_result = self._run_skull_tests(project_root, metrics)
             
             if not skull_result['success']:
@@ -179,27 +190,27 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                     errors=metrics.errors
                 )
             
-            # Phase 2: Analyze architecture
-            logger.info("\n[Phase 2] Analyzing CORTEX architecture...")
+            # Phase 3: Analyze architecture
+            logger.info("\n[Phase 3] Analyzing CORTEX architecture...")
             analysis_result = self._analyze_architecture(project_root, metrics)
             
-            # Phase 3: Generate optimization plan
-            logger.info("\n[Phase 3] Generating optimization plan...")
+            # Phase 4: Generate optimization plan
+            logger.info("\n[Phase 4] Generating optimization plan...")
             plan_result = self._generate_optimization_plan(
                 analysis_result,
                 metrics
             )
             
-            # Phase 4: Execute optimizations
-            logger.info("\n[Phase 4] Executing optimizations...")
+            # Phase 5: Execute optimizations
+            logger.info("\n[Phase 5] Executing optimizations...")
             execution_result = self._execute_optimizations(
                 plan_result,
                 project_root,
                 metrics
             )
             
-            # Phase 5: Collect final metrics
-            logger.info("\n[Phase 5] Collecting metrics...")
+            # Phase 6: Collect final metrics
+            logger.info("\n[Phase 6] Collecting metrics...")
             metrics.duration_seconds = (datetime.now() - start_time).total_seconds()
             
             # Generate report
@@ -234,6 +245,66 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 data={'metrics': metrics.__dict__},
                 errors=metrics.errors
             )
+    
+    def _validate_planning_rules(
+        self,
+        project_root: Path,
+        metrics: OptimizationMetrics
+    ) -> Dict[str, Any]:
+        """
+        Validate planning artifacts against DoR and Development Executor rules.
+        
+        This phase validates:
+        - Definition of Ready (DoR) compliance
+        - Ambiguity detection (vague terms, missing context)
+        - Security review completion (OWASP checklist)
+        - TDD quality tier assignment
+        
+        Args:
+            project_root: Project root directory
+            metrics: Metrics collector
+        
+        Returns:
+            Dict with validation results and recommendations
+        """
+        logger.info("Validating planning rules and quality standards...")
+        
+        try:
+            validator = PlanningRulesValidator(project_root)
+            report = validator.validate_all_plans()
+            
+            logger.info(f"Plans validated: {report.plans_validated}/{report.total_plans}")
+            logger.info(f"Compliance rate: {report.compliance_rate:.1f}%")
+            logger.info(f"Blocking issues: {len(report.blocking_issues)}")
+            logger.info(f"Warnings: {len(report.warnings)}")
+            
+            # Update metrics
+            metrics.issues_identified += len(report.blocking_issues) + len(report.warnings)
+            
+            # Generate recommendations
+            recommendations = validator.generate_recommendations(report)
+            
+            if recommendations:
+                logger.info("\n📋 Planning Quality Recommendations:")
+                for rec in recommendations:
+                    logger.info(rec)
+            
+            success = not report.has_blocking_issues and report.compliance_rate >= 80
+            
+            return {
+                'success': success,
+                'report': report,
+                'recommendations': recommendations,
+                'compliance_rate': report.compliance_rate
+            }
+        
+        except Exception as e:
+            logger.error(f"Planning validation failed: {e}", exc_info=True)
+            metrics.errors.append(f"Planning validation error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
     
     def _run_skull_tests(
         self,
