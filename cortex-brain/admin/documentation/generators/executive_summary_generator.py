@@ -190,60 +190,122 @@ class ExecutiveSummaryGenerator(BaseDocumentationGenerator):
         }
     
     def _collect_status(self) -> Dict[str, Any]:
-        """Collect current implementation status"""
-        # Try to load from TRUTH-SOURCES.yaml or similar status files
-        truth_sources = self.brain_path / "TRUTH-SOURCES.yaml"
+        """Collect current implementation status from live brain sources"""
+        # Load from module-definitions.yaml (SINGLE SOURCE OF TRUTH)
+        module_defs_path = self.brain_path / "module-definitions.yaml"
+        operations_path = self.workspace_root / "cortex-operations.yaml"
         
-        if truth_sources.exists():
-            try:
-                with open(truth_sources) as f:
-                    truth_data = yaml.safe_load(f)
-                    
-                    # Extract implementation status
-                    modules = truth_data.get("modules", {})
-                    operations = truth_data.get("operations", {})
-                    
-                    total_modules = len(modules)
-                    implemented_modules = sum(1 for m in modules.values() if m.get("status") == "implemented")
-                    
-                    total_ops = len(operations)
-                    ready_ops = sum(1 for o in operations.values() if o.get("status") == "ready")
-                    
-                    return {
-                        "modules": {
-                            "total": total_modules,
-                            "implemented": implemented_modules,
-                            "percentage": round(implemented_modules / total_modules * 100, 1) if total_modules > 0 else 0
-                        },
-                        "operations": {
-                            "total": total_ops,
-                            "ready": ready_ops,
-                            "percentage": round(ready_ops / total_ops * 100, 1) if total_ops > 0 else 0
-                        },
-                        "phase": "Track A - Phase 1 Complete"
-                    }
-            except Exception as e:
-                self.record_warning(f"Failed to load TRUTH-SOURCES.yaml: {e}")
-        
-        # Fallback status
-        return {
-            "modules": {"total": 70, "implemented": 70, "percentage": 100.0},
-            "operations": {"total": 13, "ready": 5, "percentage": 38.5},
-            "phase": "Track A - Phase 1 Complete"
+        status = {
+            "modules": {"total": 0, "implemented": 0, "pending": 0, "percentage": 0.0},
+            "operations": {"total": 0, "ready": 0, "in_progress": 0, "percentage": 0.0},
+            "phase": "Unknown"
         }
+        
+        # Load module definitions
+        if module_defs_path.exists():
+            try:
+                with open(module_defs_path) as f:
+                    module_data = yaml.safe_load(f)
+                    
+                    metadata = module_data.get("metadata", {})
+                    status["modules"]["total"] = metadata.get("total_modules", 0)
+                    status["modules"]["implemented"] = metadata.get("modules_implemented", 0)
+                    status["modules"]["pending"] = metadata.get("modules_pending", 0)
+                    status["modules"]["percentage"] = metadata.get("completion_percentage", 0.0)
+                    
+            except Exception as e:
+                self.record_warning(f"Failed to load module-definitions.yaml: {e}")
+        
+        # Load operations
+        if operations_path.exists():
+            try:
+                with open(operations_path) as f:
+                    ops_data = yaml.safe_load(f)
+                    
+                    operations = ops_data.get("operations", {})
+                    status["operations"]["total"] = len(operations)
+                    
+                    ready_count = 0
+                    in_progress_count = 0
+                    
+                    for op_id, op_data in operations.items():
+                        impl_status = op_data.get("implementation_status", {})
+                        op_status = impl_status.get("status", "pending")
+                        
+                        if op_status == "ready":
+                            ready_count += 1
+                        elif op_status == "in_progress":
+                            in_progress_count += 1
+                    
+                    status["operations"]["ready"] = ready_count
+                    status["operations"]["in_progress"] = in_progress_count
+                    status["operations"]["percentage"] = round(
+                        ready_count / len(operations) * 100, 1
+                    ) if operations else 0.0
+                    
+            except Exception as e:
+                self.record_warning(f"Failed to load cortex-operations.yaml: {e}")
+        
+        # Determine current phase from latest completion reports
+        reports_path = self.brain_path / "documents" / "reports"
+        if reports_path.exists():
+            try:
+                completion_reports = sorted(
+                    reports_path.glob("*COMPLETION*.md"),
+                    key=lambda p: p.stat().st_mtime,
+                    reverse=True
+                )
+                
+                if completion_reports:
+                    # Extract phase from most recent report
+                    latest_report = completion_reports[0].name
+                    if "PHASE-0" in latest_report:
+                        status["phase"] = "Phase 0 Complete (Test Stabilization)"
+                    elif "PHASE-1" in latest_report:
+                        status["phase"] = "Phase 1 Complete (Dual-Channel Memory)"
+                    elif "PHASE-2" in latest_report:
+                        status["phase"] = "Phase 2 Complete"
+                    elif "PHASE-3" in latest_report:
+                        status["phase"] = "Phase 3 Complete"
+                    elif "TRACK-A" in latest_report:
+                        status["phase"] = "Track A Complete"
+                    else:
+                        status["phase"] = "Development in Progress"
+            except Exception as e:
+                self.record_warning(f"Failed to determine phase from reports: {e}")
+        
+        return status
     
     def _collect_metrics(self) -> Dict[str, Any]:
-        """Collect quality metrics from test results and reports"""
+        """Collect quality metrics from live test results and brain data"""
         metrics = {
-            "test_coverage": "88.1%",
-            "test_pass_rate": "100% (non-skipped)",
-            "total_tests": 897,
-            "passing_tests": 834,
-            "skipped_tests": 63,
-            "code_quality": "Production Ready"
+            "test_coverage": "Unknown",
+            "test_pass_rate": "Unknown",
+            "total_tests": 0,
+            "passing_tests": 0,
+            "skipped_tests": 0,
+            "failed_tests": 0,
+            "code_quality": "Unknown"
         }
         
-        # Try to load actual metrics from reports
+        # Try to load from pytest cache
+        pytest_cache = self.workspace_root / ".pytest_cache"
+        if pytest_cache.exists():
+            try:
+                # Read from lastfailed or .pytest_cache/v/cache/stepwise
+                cache_dir = pytest_cache / "v" / "cache"
+                if cache_dir.exists():
+                    # Look for nodeids or lastfailed
+                    lastfailed_path = cache_dir / "lastfailed"
+                    if lastfailed_path.exists():
+                        import json
+                        with open(lastfailed_path) as f:
+                            lastfailed = json.load(f)
+                            metrics["failed_tests"] = len(lastfailed)
+            except Exception as e:
+                self.record_warning(f"Failed to load pytest cache: {e}")
+        
+        # Try to load actual metrics from health reports (LIVE DATA)
         health_reports = self.brain_path / "health-reports"
         if health_reports.exists():
             try:
@@ -261,44 +323,137 @@ class ExecutiveSummaryGenerator(BaseDocumentationGenerator):
                         if "test_metrics" in health_data:
                             tm = health_data["test_metrics"]
                             metrics.update({
-                                "total_tests": tm.get("total", metrics["total_tests"]),
-                                "passing_tests": tm.get("passing", metrics["passing_tests"]),
-                                "skipped_tests": tm.get("skipped", metrics["skipped_tests"])
+                                "total_tests": tm.get("total", 0),
+                                "passing_tests": tm.get("passing", 0),
+                                "skipped_tests": tm.get("skipped", 0),
+                                "failed_tests": tm.get("failed", 0),
+                                "test_coverage": tm.get("coverage", "Unknown"),
+                                "test_pass_rate": tm.get("pass_rate", "Unknown")
                             })
+                        
+                        # Code quality assessment
+                        if "code_quality" in health_data:
+                            metrics["code_quality"] = health_data["code_quality"]
+                        elif metrics["total_tests"] > 0:
+                            # Calculate based on pass rate
+                            pass_rate = (metrics["passing_tests"] / metrics["total_tests"]) * 100
+                            if pass_rate >= 95:
+                                metrics["code_quality"] = "Production Ready"
+                            elif pass_rate >= 90:
+                                metrics["code_quality"] = "Stable"
+                            elif pass_rate >= 80:
+                                metrics["code_quality"] = "Beta"
+                            else:
+                                metrics["code_quality"] = "Alpha"
             except Exception as e:
                 self.record_warning(f"Failed to load health reports: {e}")
+        
+        # If no health reports, try to run pytest collect to get count
+        if metrics["total_tests"] == 0:
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ["pytest", "--collect-only", "-q"],
+                    cwd=self.workspace_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+                
+                # Parse output for test count
+                for line in result.stdout.split('\n'):
+                    if " test" in line and "selected" in line:
+                        # Extract number from "X tests selected"
+                        parts = line.split()
+                        if parts and parts[0].isdigit():
+                            metrics["total_tests"] = int(parts[0])
+                        break
+            except Exception as e:
+                self.record_warning(f"Failed to collect test count: {e}")
+        
+        # Calculate pass rate if we have data
+        if metrics["total_tests"] > 0:
+            non_skipped = metrics["total_tests"] - metrics["skipped_tests"]
+            if non_skipped > 0:
+                pass_rate = (metrics["passing_tests"] / non_skipped) * 100
+                metrics["test_pass_rate"] = f"{pass_rate:.1f}%"
         
         return metrics
     
     def _collect_milestones(self) -> List[Dict[str, str]]:
-        """Collect recent milestones and achievements"""
-        return [
-            {
-                "date": "2025-11-17",
-                "title": "Brain Protection Caching Optimization",
-                "description": "99.9% load time reduction (147ms → 0.11ms) via timestamp-based caching"
-            },
-            {
-                "date": "2025-11-15",
-                "title": "Track A Phase 1 Complete",
-                "description": "Dual-channel memory architecture with conversation import/export"
-            },
-            {
-                "date": "2025-11-13",
-                "title": "Phase 0 Complete",
-                "description": "100% test pass rate achieved, test strategy codified"
-            },
-            {
-                "date": "2025-11-12",
-                "title": "CORTEX 2.0 Story Refresh",
-                "description": "Updated architecture documentation and narrative structure"
-            },
-            {
-                "date": "2025-11-08",
-                "title": "Module System Complete",
-                "description": "70/70 modules implemented with cross-platform support"
-            }
-        ]
+        """Collect recent milestones from actual completion reports (LIVE DATA)"""
+        milestones = []
+        
+        # Scan completion reports in brain
+        reports_path = self.brain_path / "documents" / "reports"
+        if reports_path.exists():
+            try:
+                completion_reports = sorted(
+                    reports_path.glob("*COMPLETION*.md"),
+                    key=lambda p: p.stat().st_mtime,
+                    reverse=True
+                )
+                
+                for report_path in completion_reports[:10]:  # Check last 10 reports
+                    try:
+                        content = report_path.read_text(encoding='utf-8')
+                        
+                        # Extract date from filename or file mtime
+                        date = datetime.fromtimestamp(report_path.stat().st_mtime).strftime("%Y-%m-%d")
+                        
+                        # Extract title from report name
+                        title = report_path.stem.replace("-", " ").replace("_", " ").title()
+                        
+                        # Try to extract description from first paragraph
+                        lines = content.split('\n')
+                        description = ""
+                        for line in lines[1:20]:  # Check first 20 lines
+                            line = line.strip()
+                            if line and not line.startswith('#') and not line.startswith('*'):
+                                description = line
+                                break
+                        
+                        if not description:
+                            # Fallback: extract from title or use generic
+                            if "PHASE-0" in report_path.name:
+                                description = "Test stabilization and pragmatic MVP approach implemented"
+                            elif "PHASE-1" in report_path.name:
+                                description = "Dual-channel memory architecture with conversation management"
+                            elif "PHASE-2" in report_path.name:
+                                description = "Documentation reorganization and EPM enhancement"
+                            elif "PHASE-3" in report_path.name:
+                                description = "Advanced features and optimization"
+                            else:
+                                description = "Milestone completed successfully"
+                        
+                        milestones.append({
+                            "date": date,
+                            "title": title,
+                            "description": description[:200]  # Limit description length
+                        })
+                        
+                        if len(milestones) >= 5:
+                            break
+                            
+                    except Exception as e:
+                        self.record_warning(f"Failed to parse report {report_path.name}: {e}")
+                        continue
+                        
+            except Exception as e:
+                self.record_warning(f"Failed to scan completion reports: {e}")
+        
+        # If no milestones found from reports, create from known achievements
+        if not milestones:
+            self.record_warning("No completion reports found - using generic milestones")
+            milestones = [
+                {
+                    "date": datetime.now().strftime("%Y-%m-%d"),
+                    "title": "CORTEX 3.0 Development",
+                    "description": "Ongoing development of memory architecture and documentation system"
+                }
+            ]
+        
+        return milestones
     
     def generate(self) -> GenerationResult:
         """

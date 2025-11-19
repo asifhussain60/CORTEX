@@ -96,7 +96,10 @@ class EnterpriseDocumentationOrchestrator:
                 "diagrams": ["diagrams"],
                 "mkdocs": ["mkdocs"],
                 "feature-list": ["feature_list"],
-                "all": ["diagrams", "feature_list", "mkdocs"],
+                "rulebook": ["rulebook"],  # NEW: Generate THE-RULEBOOK.md
+                "narratives": ["narratives"],  # NEW: Generate story chapters
+                "executive-summary": ["executive_summary"],  # NEW: Refresh executive summary
+                "all": ["diagrams", "feature_list", "executive_summary", "rulebook", "narratives", "mkdocs"],  # UPDATED: All components
             }
             if not requested_components and stage in stage_component_map:
                 requested_components = stage_component_map.get(stage)
