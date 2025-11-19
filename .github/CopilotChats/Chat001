@@ -1,600 +1,721 @@
-# CORTEX "Let's Plan" Enhancement - Implementation Plan
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
+I want to plan the enterprise documentation generation entry point module. Review how it works and report back. 
+Currently there are numerous redundant document files scattered all over the CORTEX repo. Create a phased plan to 
+1. scan all folders recursively and compile a list of all md documentation, mkdocs prompts, narratives, mermaid folders and files that are not related directly to the said EPO. 
+2. Reorganize the EPO to structre all files under a single docmentation folder. This should include but not limited to the following
+prompts
+narratives
+mermaid
+mkdocs site with references to all the content
+architecture
+technical-docs
+user-guides
+etc.
 
-## Overview
-This document captures the implementation plan for enhancing the CORTEX "let's plan" entry point with component separation, quality tiers, git history integration, and governance enforcement.
+3. Confirm the Enterprise document generator entry point module, generates the following documents within the appropriate folders:
+Mermaid
+Prompts
+Narratives
+The awakening of cortex story with the active narrative of the interaction between Asif Codenstein and copilot.
+Executive summary list of all the features and capabilities of cortex
+Rulebook - the primary Bible of cortex
 
-## Request Summary
-Enhance the planning workflow with:
-- Component separation (Planning vs Development execution)
-- Quality tiers for efficiency (Simple/Medium/Complex)
-- Git history integration for institutional knowledge
-- Proper folder structure and documentation organization
-- Cleanup phases for maintaining lean cortex-brain
-- Mandatory conversation capture before development
-- CORTEX governance alignment and protection
+4. Update health checks and optimize entry point modules to make sure they keep these new changes aligned.
 
-## Implementation Plan
+Come up with a comprehensive plan so we can clean this up permanently
 
-🧠 **CORTEX Architecture Review & Component Separation**
+GitHub Copilot: I'll analyze the Enterprise Documentation Generation EPM and create a comprehensive reorganization plan. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/src/operations/enterprise_documentation_orchestrator.py#1-1), lines 1 to 100
+
+Searched text for `\.md$` (`**/*.md`), 100 results
+
+Searched for files matching `**/narratives/**`, no matches
+
+Searched for files matching `**/mermaid/**`, 14 matches
+
+Searched for files matching `**/diagrams/**`, 50 matches
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/src/operations/enterprise_documentation_orchestrator.py#100-100), lines 100 to 250
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs)
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents)
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/prompts)
+
+Searched for files matching `**/narrative*/**`, 2 matches
+
+Searched text for `story` (`**/*story*.md`), 30 results
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/src/epm/doc_generator.py#1-1), lines 1 to 100
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/diagrams)
+
+Searched for files matching `**/*executive*.md`, no matches
+
+Now let me create a comprehensive plan for reorganizing the Enterprise Documentation Generation EPM.
+
+🧠 **CORTEX Documentation Reorganization Plan**
 Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:**
+   You want to comprehensively reorganize the Enterprise Documentation Generation EPM to consolidate scattered documentation files (markdown, mermaid diagrams, narratives, prompts) into a single, well-structured documentation folder hierarchy, ensuring the EPM generates all required outputs in the correct locations, and updating health checks to maintain alignment.
 
-You want me to **challenge the viability** of the current implementation plan by balancing **accuracy vs efficiency**, and if there are issues, propose **alternative solutions**. Additionally, you want the **actual implementation/development work separated as a dedicated component** with Single Responsibility Principle (SRP), so it can be invoked when development is requested **without going through the planning entry point**. You want the **entire plan redone** and **reflected back** to you.
+⚠️ **Challenge:** ✓ **Accept**
+   This is excellent architectural hygiene. I've analyzed the current state and found significant fragmentation:
+   - Documentation scattered across docs, documents, prompts, root directory
+   - Duplicate/obsolete files (e.g., docs_index_original.md, mkdocs_original.yml)
+   - Mermaid diagrams in multiple locations (diagrams and mermaid)
+   - Story narratives in story (non-intuitive location)
+   - No centralized "Rulebook" or comprehensive executive summary
+   
+   A phased consolidation approach will create a single source of truth while preserving existing functionality.
 
-⚠️ **Challenge:** ⚡ **Challenge with Architectural Refinement**
+💬 **Response:**
 
-After analyzing the current plan against CORTEX's architecture and your requirement for component separation, I've identified **three critical issues** that challenge viability:
+I've created a comprehensive 4-phase plan to reorganize the Enterprise Documentation Generation EPM. Here's the analysis and proposed solution:
 
-### **Issue 1: Mixed Concerns (Planning + Execution Coupled)**
-**Problem:** Current plan embeds development logic (TDD, clean code, security) directly into planning workflow. This violates SRP and creates tight coupling.
+## Current State Analysis
 
-**Impact:** 
-- Cannot invoke development quality gates independently
-- Planning becomes heavyweight (6.75 hours includes implementation details)
-- Reusability limited (can't apply quality gates to ad-hoc code requests)
+**Documentation Fragmentation Discovered:**
 
-**Alternative:** Separate into **Planning Component** (DoR, AC, risk analysis) and **Development Executor Component** (TDD, refactoring, security gates)
+1. **Root Directory Clutter:**
+   - docs_index_original.md (obsolete backup)
+   - mkdocs_original.yml (obsolete backup)
+   - regenerate_story.py (ad-hoc script)
+   - generate_docs_now.py (ad-hoc script)
 
----
+2. **Multiple Documentation Locations:**
+   - docs - MkDocs site structure
+   - documents - Strategic documents
+   - prompts - Prompt engineering guides
+   - diagrams - Mixed diagram formats
 
-### **Issue 2: Efficiency vs Accuracy Imbalance**
-**Problem:** 90% test coverage + cyclomatic complexity ≤10 + OWASP Top 10 + refactor-until-perfect = potentially **infinite iteration loop** or developer frustration.
+3. **Diagram Organization Issues:**
+   - Mermaid files in both `/docs/diagrams/*.mmd` AND mermaid
+   - Story narratives in story (should be top-level)
+   - Image prompts in prompts
 
-**Impact:**
-- Exit criteria may never be met (subjective "cannot be refactored anymore")
-- Over-engineering risk (gold-plating simple features)
-- Time estimates unrealistic (6.75 hours assumes perfect execution)
+4. **Current EPM Capabilities (from enterprise_documentation_orchestrator.py):**
+   - ✅ Component registry architecture (diagrams, feature_list, mkdocs)
+   - ✅ Story generation plugin integration
+   - ✅ Profile-based execution (quick/standard/comprehensive)
+   - ❌ No rulebook generation
+   - ❌ No executive summary generation
+   - ❌ No narrative generation beyond story
 
-**Alternative:** **Pragmatic quality tiers** - Simple/Medium/Complex features get different thresholds. Add **iteration limits** (max 3 refactor cycles) with escalation path.
-
----
-
-### **Issue 3: Lack of Entry Point Abstraction**
-**Problem:** No clear separation between "plan a feature" (planning entry) and "implement this" (development entry).
-
-**Impact:**
-- User says "add authentication" → triggers full planning when they may just want code
-- Cannot bypass planning for quick fixes/experiments
-- Entry point ambiguity (when to plan vs when to execute)
-
-**Alternative:** **Dual Entry Point Architecture** - `PlanningOrchestrator` (for features) + `DevelopmentExecutor` (for code work), with intent detection routing.
-
----
-
-💬 **Response - Redesigned Architecture:**
-
-I've redesigned the entire system with **component separation**, **pragmatic quality tiers**, and **dual entry points**. Here's the complete revised plan:
-
-## 🏗️ **New Architecture: Separated Components**
+## Proposed Target Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    CORTEX Entry Point Router                     │
-│                  (Intent Detection & Routing)                    │
-└──────────────────┬──────────────────────┬───────────────────────┘
-                   │                      │
-                   ▼                      ▼
-    ┌──────────────────────┐  ┌──────────────────────────┐
-    │ Planning Orchestrator│  │ Development Executor      │
-    │ (Option 1 Enhancements)│  │ (Quality Gates Component)│
-    └──────────────────────┘  └──────────────────────────┘
-              │                            │
-              │                            │
-              ▼                            ▼
-    ┌──────────────────────┐  ┌──────────────────────────┐
-    │ Planning Artifacts   │  │ Code Quality Pipeline     │
-    │ - DoR Checklist      │  │ - Clean Code Gates        │
-    │ - AC Definition      │  │ - TDD Framework           │
-    │ - Risk Analysis      │  │ - Security Validation     │
-    │ - Security Review    │  │ - Refactoring Engine      │
-    └──────────────────────┘  └──────────────────────────┘
+docs/                                    # Single documentation root
+├── architecture/                        # System architecture docs
+│   ├── tier-architecture.md
+│   ├── agent-system.md
+│   ├── dual-hemisphere-brain.md
+│   └── diagrams/                        # Architecture diagrams
+│       ├── tier-architecture.mmd
+│       ├── agent-system.mmd
+│       └── prompts/                     # Image generation prompts
+│           └── tier-architecture-prompt.md
+│
+├── technical/                           # Technical reference
+│   ├── api-reference.md
+│   ├── plugin-development.md
+│   ├── configuration.md
+│   └── diagrams/
+│       └── plugin-architecture.mmd
+│
+├── user-guides/                         # End-user documentation
+│   ├── getting-started.md
+│   ├── setup-guide.md
+│   ├── planning-guide.md
+│   └── operations-reference.md
+│
+├── narratives/                          # Story-driven content
+│   ├── the-cortex-awakening/           # Main story (Asif Codenstein)
+│   │   ├── 01-the-amnesia-problem.md
+│   │   ├── 02-building-first-memory.md
+│   │   ├── 03-the-learning-system.md
+│   │   ├── 04-context-intelligence.md
+│   │   ├── 05-dual-hemisphere-brain.md
+│   │   ├── 06-intelligence-automation.md
+│   │   ├── 07-protection-governance.md
+│   │   ├── 08-integration-extensibility.md
+│   │   ├── 09-real-world-scenarios.md
+│   │   └── 10-the-transformation.md
+│   ├── THE-CORTEX-STORY.md             # Master narrative document
+│   └── diagrams/                        # Story-specific diagrams
+│       └── journey-timeline.mmd
+│
+├── reference/                           # Quick reference materials
+│   ├── features-capabilities.md         # Complete feature list
+│   ├── executive-summary.md             # High-level overview
+│   ├── operations-matrix.md
+│   └── module-registry.md
+│
+├── governance/                          # The Rulebook
+│   ├── THE-RULEBOOK.md                  # Primary Bible of CORTEX
+│   ├── brain-protection-rules.md        # From cortex-brain/
+│   ├── test-strategy.md                 # From cortex-brain/documents/
+│   ├── optimization-principles.md       # From cortex-brain/documents/
+│   └── coding-standards.md
+│
+├── diagrams/                            # All visual assets
+│   ├── mermaid/                         # Source .mmd files
+│   │   ├── 01-tier-architecture.mmd
+│   │   ├── 02-agent-system.mmd
+│   │   └── ...
+│   ├── generated/                       # Generated PNGs/SVGs
+│   │   ├── 01-tier-architecture.png
+│   │   └── ...
+│   └── prompts/                         # Image generation prompts
+│       ├── 01-tier-architecture-prompt.md
+│       └── ...
+│
+├── mkdocs.yml                           # MkDocs configuration
+├── index.md                             # Documentation home
+└── README.md                            # Documentation overview
 ```
 
-### **Component 1: Planning Orchestrator** (Lightweight, 90 min)
-**Responsibility:** Requirements gathering, ambiguity detection, risk analysis
-**When invoked:** User says "plan", "let's plan", "design feature"
-**Output:** Planning artifacts (DoR, AC, risks, security requirements)
-**No code execution**
+## 4-Phase Implementation Plan
 
-### **Component 2: Development Executor** (SRP, reusable)
-**Responsibility:** Code quality enforcement (TDD, refactoring, security)
-**When invoked:** User says "implement", "add feature", "fix bug", OR after plan approved
-**Input:** AC (from planning) OR natural language requirements
-**Output:** Quality-gated code with tests
+### **Phase 1: Discovery & Inventory (2-3 hours)**
 
-**Key Innovation:** Can work **standalone** (no planning required for quick tasks) OR **pipeline mode** (consumes planning artifacts)
+**Objective:** Create complete inventory of all documentation artifacts
 
----
-
-## 📋 **Revised Implementation Plan (Component-Based)**
-
-### **Phase 1: Planning Orchestrator (Option 1 Core)** - 90 minutes
-
-#### **Purpose:** Lightweight planning improvements (no development logic)
-
-#### **Deliverables:**
-1. **Enhanced DoR Templates (45 min)**
-   ```yaml
-   # cortex-brain/templates/planning/dor-checklist.yaml
-   dor_checklist:
-     ambiguity_detection:
-       - "Scan for vague terms: 'improve', 'enhance', 'better', 'optimize'"
-       - "Flag missing context: 'Who is the user?', 'What is success?'"
-       - "Identify undefined terms: 'the system', 'the API', 'the database'"
-     
-     self_audit_prompts:
-       - "What happens if [edge case]?"
-       - "Who can access this feature?"
-       - "What data is at risk?"
-       - "How do we test this?"
-     
-     mandatory_sections:
-       - "Acceptance Criteria (Testable, Specific)"
-       - "Risk Analysis (Technical, Security, UX)"
-       - "Security Requirements (OWASP category identification)"
-       - "Definition of Done (Code + Tests + Docs)"
+**Tasks:**
+1. ☐ **Scan all folders recursively**
+   - Root directory: `*.md`, `*.mmd`, `*.html`
+   - docs and all subdirectories
+   - documents
+   - prompts
+   - prompts
+   
+2. ☐ **Categorize discovered files**
+   ```python
+   categories = {
+       "architecture_docs": [],      # Technical architecture
+       "user_guides": [],             # End-user documentation
+       "narratives": [],              # Story content
+       "mermaid_diagrams": [],        # .mmd files
+       "prompts": [],                 # Prompt engineering
+       "governance": [],              # Rules, standards
+       "reference": [],               # Quick reference
+       "obsolete": [],                # Duplicates, backups
+       "mkdocs_config": []            # MkDocs-related
+   }
    ```
 
-2. **Template Updates (45 min)**
-   - Enhance `work_planner_success` with self-audit section
-   - Update `planning_dor_incomplete` with specific line-level feedback
-   - Add `planning_security_review` template (OWASP category checklist)
+3. ☐ **Create inventory report**
+   - File path
+   - File type
+   - Size
+   - Last modified
+   - Proposed category
+   - Proposed new location
+   - Related to EPM? (Yes/No)
+   - Action: MOVE, DELETE, CONSOLIDATE, KEEP
 
-#### **Acceptance Criteria:**
-- ✅ DoR checklist identifies ambiguous requirements (e.g., "Line 12: 'improve performance' - by how much?")
-- ✅ Self-audit prompts 5+ clarifying questions per feature
-- ✅ Security requirements mapped to OWASP categories (template dropdown)
-- ✅ No development logic in planning phase
-
-#### **Exit Criteria:**
-- Planning artifacts complete (DoR, AC, risks, security baseline)
-- User approves plan OR requests clarification
-- **Hands off to Development Executor** (if implementation requested)
+**Deliverable:** `cortex-brain/documents/reports/DOCUMENTATION-INVENTORY-2025-11-19.md`
 
 ---
 
-### **Phase 2: Development Executor Component (SRP)** - 180 minutes
+### **Phase 2: EPM Restructuring (4-5 hours)**
 
-#### **Purpose:** Standalone code quality enforcement (works with OR without planning)
+**Objective:** Reorganize folders, update EPM to generate all required outputs
 
-#### **2.1: Clean Code Gates (60 min)**
+**Tasks:**
 
-**Entry Points:**
-- **Standalone:** User says "implement [feature]" (no planning)
-- **Pipeline:** After planning approved
+1. ☐ **Create new documentation structure**
+   ```bash
+   mkdir -p docs/{architecture,technical,user-guides,narratives,reference,governance,diagrams}/{diagrams,prompts}
+   mkdir -p docs/narratives/the-cortex-awakening
+   mkdir -p docs/diagrams/{mermaid,generated,prompts}
+   ```
 
-**Quality Gates:**
-```yaml
-# cortex-brain/components/development-executor/clean-code-gates.yaml
-clean_code_gates:
-  pre_commit:
-    unused_detection:
-      tool: "pylint --disable=all --enable=unused-*"
-      threshold: "Zero unused imports/variables/functions"
-      severity: "BLOCKING"
-    
-    commented_code:
-      pattern: "^\\s*#\\s*(def|class|if|for|while|return)"
-      exceptions: ["# TODO-ADO-", "# FIXME-", "# HACK-"]
-      severity: "BLOCKING"
-    
-    complexity:
-      tool: "radon cc --min C"
-      threshold: 
-        simple: 5
-        complex: 10  # requires justification comment
-      severity: "WARNING"  # Not blocking for first iteration
-```
+2. ☐ **Move existing files (safe migration with backup)**
+   - Create timestamped backup: `docs-backup-2025-11-19/`
+   - Move files according to inventory categorization
+   - Update internal file references (cross-links)
+   - Preserve git history where possible
 
-**Pragmatic Approach:**
-- **First commit:** Warnings only (allows progress)
-- **PR review:** Warnings become blocking
-- **Production merge:** All gates must pass
+3. ☐ **Update EPM orchestrator** (enterprise_documentation_orchestrator.py)
+   
+   Add new generation targets:
+   ```python
+   GENERATION_TARGETS = {
+       "diagrams": "docs/diagrams/mermaid/",
+       "narratives": "docs/narratives/",
+       "prompts": "docs/diagrams/prompts/",
+       "story": "docs/narratives/THE-CORTEX-STORY.md",
+       "executive_summary": "docs/reference/executive-summary.md",
+       "features_list": "docs/reference/features-capabilities.md",
+       "rulebook": "docs/governance/THE-RULEBOOK.md"
+   }
+   ```
 
----
+4. ☐ **Extend component registry** (documentation_component_registry.py)
+   
+   Add new components:
+   - `RulebookGeneratorComponent` - Consolidates governance rules
+   - `ExecutiveSummaryComponent` - High-level capabilities overview
+   - `NarrativeGeneratorComponent` - Chapter-based story content
+   - `AsifCodensteinStoryComponent` - Main CORTEX awakening narrative
 
-#### **2.2: TDD Framework (60 min)**
+5. ☐ **Update existing generators**
+   
+   **DiagramGenerator** (diagram_generator.py):
+   - Output to mermaid
+   - Generate prompts in prompts
+   
+   **StoryGenerator** (story_generator.py):
+   - Output master story to `docs/narratives/THE-CORTEX-STORY.md`
+   - Output chapters to `docs/narratives/the-cortex-awakening/`
+   
+   **PageGenerator** (page_generator.py):
+   - Generate pages in new structure
+   - Update cross-references
 
-**Red-Green-Refactor with Iteration Limits:**
-```yaml
-# cortex-brain/components/development-executor/tdd-framework.yaml
-tdd_framework:
-  workflow:
-    red_phase:
-      - "Generate test stub from acceptance criteria"
-      - "Test must fail initially (validate test logic)"
-    
-    green_phase:
-      - "Implement minimum code to pass test"
-      - "No refactoring during green phase"
-    
-    refactor_phase:
-      iterations:
-        max_cycles: 3  # Prevent infinite refactoring
-        exit_criteria:
-          - "Complexity ≤ threshold (5 simple, 10 complex)"
-          - "No duplicate code >6 lines"
-          - "Method length ≤ 50 lines"
-          - "Test coverage ≥ target (see quality_tiers)"
-        
-        escalation:
-          after_3_cycles:
-            - "Document remaining issues"
-            - "Flag for team review"
-            - "Continue with implementation (don't block)"
-
-  quality_tiers:
-    simple_feature:  # Button, label, config change
-      coverage_target: 80%
-      complexity_max: 5
-      refactor_cycles: 1
-    
-    medium_feature:  # Form, API endpoint, database query
-      coverage_target: 85%
-      complexity_max: 8
-      refactor_cycles: 2
-    
-    complex_feature:  # Authentication, payment, multi-step workflow
-      coverage_target: 90%
-      complexity_max: 10
-      refactor_cycles: 3
-```
-
-**Key Innovation: Feature Complexity Detection**
-```python
-# Auto-detect complexity from AC and code patterns
-def detect_feature_complexity(acceptance_criteria: list, code_files: list) -> str:
-    """Returns 'simple', 'medium', or 'complex'"""
-    complexity_signals = {
-        'simple': ['add button', 'change label', 'update config', 'display data'],
-        'medium': ['create form', 'api endpoint', 'database query', 'validation'],
-        'complex': ['authentication', 'authorization', 'payment', 'workflow', 'integration']
-    }
-    # Analyze AC + code patterns, return tier
-```
-
-**Anti-Pattern Detection (Test-After-Code):**
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-# Detect if source code modified without corresponding test updates
-
-test_files=$(git diff --cached --name-only | grep "test_")
-src_files=$(git diff --cached --name-only | grep -E "\.(py|ts|js)$" | grep -v "test_")
-
-if [[ -n "$src_files" && -z "$test_files" ]]; then
-    echo "⚠️ TDD VIOLATION: Source code modified without test updates"
-    echo "Modified files: $src_files"
-    echo ""
-    echo "Options:"
-    echo "  1. Add/update tests for these files"
-    echo "  2. Skip check: git commit --no-verify (NOT RECOMMENDED)"
-    exit 1
-fi
-```
+**Deliverable:** Updated EPM with 7 generation targets
 
 ---
 
-#### **2.3: Security Validation Gates (60 min)**
+### **Phase 3: New Content Generation (3-4 hours)**
 
-**OWASP Top 10 Automated Checks:**
-```yaml
-# cortex-brain/components/development-executor/security-gates.yaml
-security_gates:
-  pre_commit:
-    secret_detection:
-      tool: "detect-secrets scan"
-      severity: "BLOCKING"
-    
-    static_analysis:
-      tool: "bandit -r . -f json"
-      severity: "BLOCKING"  # Only HIGH/CRITICAL issues block
-  
-  pre_merge:
-    dependency_scan:
-      tool: "pip-audit --format json"
-      threshold: "Zero HIGH/CRITICAL CVEs"
-      severity: "BLOCKING"
-    
-    owasp_checklist:
-      # Lightweight checklist (not full penetration test)
-      A01_access_control: "Authorization checks present?"
-      A02_crypto: "No hardcoded secrets?"
-      A03_injection: "Parameterized queries used?"
-      # ... (10 total)
-      enforcement: "Manual review + automated hints"
+**Objective:** Implement missing generators for comprehensive documentation
 
-  owasp_tier_mapping:
-    # Auto-suggest relevant OWASP categories based on feature type
-    authentication_features: ["A01", "A02", "A07"]
-    api_endpoints: ["A03", "A01", "A05"]
-    data_storage: ["A02", "A08", "A09"]
-    # ... (expand based on feature keywords)
-```
+**Tasks:**
 
-**Pragmatic Security:**
-- **Automated checks:** Secrets, dependencies, static analysis (blocking)
-- **OWASP checklist:** Lightweight review (not full audit)
-- **Threat modeling:** Required for complex features only (auto-triggered)
-
----
-
-### **Phase 3: Integration & Routing Logic** - 60 minutes
-
-#### **3.1: Entry Point Detection (30 min)**
-
-**Intent Classification:**
-```python
-# src/cortex/router.py
-class IntentRouter:
-    """Routes user requests to Planning or Development components"""
-    
-    PLANNING_TRIGGERS = [
-        "plan", "let's plan", "design", "architecture", 
-        "requirements", "what should", "how should we"
-    ]
-    
-    DEVELOPMENT_TRIGGERS = [
-        "implement", "add", "create", "build", "fix", 
-        "refactor", "optimize", "code"
-    ]
-    
-    def route(self, user_input: str) -> str:
-        """Returns 'planning' or 'development'"""
-        # Keyword matching + context analysis
-        if any(trigger in user_input.lower() for trigger in self.PLANNING_TRIGGERS):
-            return "planning"
-        elif any(trigger in user_input.lower() for trigger in self.DEVELOPMENT_TRIGGERS):
-            return "development"
-        else:
-            # Ambiguous - ask user
-            return "clarify"
-```
-
-**User Experience:**
-```
-User: "plan authentication feature"
-→ PlanningOrchestrator (creates DoR, AC, risks)
-
-User: "add login button"
-→ DevelopmentExecutor (generates code + tests, skips planning)
-
-User: "authentication"
-→ Router: "Did you want to PLAN authentication or IMPLEMENT it?"
-```
-
----
-
-#### **3.2: Component Pipeline (30 min)**
-
-**Sequential Workflow (Optional):**
-```
-User: "plan authentication" 
-  → Planning Orchestrator (90 min)
-  → Output: Planning artifacts
-
-User: "approve plan"
-  → Router: "Ready to implement? (Y/N)"
-  → DevelopmentExecutor (consumes planning artifacts)
-  → Output: Code + tests with quality gates
-```
-
-**Standalone Workflow:**
-```
-User: "add logout button"
-  → DevelopmentExecutor (no planning needed)
-  → Auto-generates simple AC: "Button displays, triggers logout"
-  → Applies clean code + TDD + security gates
-  → Output: Code + tests
-```
-
----
-
-### **Phase 4: Documentation & Testing** - 45 minutes
-
-#### **Deliverables:**
-1. **Component API Documentation (30 min)**
+1. ☐ **Implement RulebookGeneratorComponent**
+   
+   **Sources to consolidate:**
+   - brain-protection-rules.yaml (SKULL rules)
+   - test-strategy.yaml
+   - optimization-principles.yaml
+   - `governance/rules.md` (if exists)
+   - Coding standards from source analysis
+   
+   **Output:** `docs/governance/THE-RULEBOOK.md`
+   
+   **Structure:**
    ```markdown
-   # cortex-brain/documents/implementation-guides/development-executor-api.md
+   # The CORTEX Rulebook
+   ## I. Core Principles (Tier 0 Instinct)
+   ## II. Test-Driven Development
+   ## III. Brain Protection (22 SKULL Rules)
+   ## IV. Optimization Principles
+   ## V. Code Quality Standards
+   ## VI. Documentation Standards
+   ```
+
+2. ☐ **Implement ExecutiveSummaryComponent**
    
-   ## Development Executor Component
+   **Data sources:**
+   - module-definitions.yaml (70 modules)
+   - cortex-operations.yaml (13 operations)
+   - `ORCHESTRATOR-COMPONENT-INVENTORY.md` (10 orchestrators)
+   - Test metrics (from pytest results)
+   - Implementation status (from design sync)
    
-   ### Entry Points:
-   - `executor.implement(requirements)` - Standalone implementation
-   - `executor.implement_from_plan(plan_id)` - Pipeline mode
+   **Output:** `docs/reference/executive-summary.md`
    
-   ### Configuration:
+   **Sections:**
+   - System overview (one-paragraph pitch)
+   - Key statistics (modules, operations, test coverage)
+   - Capabilities matrix (what CORTEX can do)
+   - Architecture highlights (4 tiers, 10 agents, dual-hemisphere)
+   - Quick start guide reference
+
+3. ☐ **Implement NarrativeGeneratorComponent**
+   
+   **Purpose:** Generate engaging story chapters with Asif Codenstein character
+   
+   **Existing story chapters** (move from story):
+   - 01-the-amnesia-problem.md
+   - 02-building-first-memory.md
+   - 03-the-learning-system.md
+   - 04-context-intelligence.md
+   - `05-dual-hemisphere-brain.md`
+   - `06-intelligence-automation.md`
+   - `07-protection-governance.md`
+   - `08-integration-extensibility.md`
+   - 09-real-world-scenarios.md
+   - 10-the-transformation.md
+   
+   **Enhancement:** Add Asif Codenstein dialogue throughout chapters
+   
+   **Character Profile:**
    ```yaml
-   # Set quality tier (auto-detected by default)
-   executor.set_quality_tier("complex")  # simple, medium, complex
-   
-   # Override refactor iteration limit
-   executor.set_max_refactor_cycles(5)
-   
-   # Enable/disable specific gates
-   executor.disable_gate("commented_code")  # For quick prototypes
-   ```
-   
-   ### Outputs:
-   - Code files (with quality gates applied)
-   - Test files (TDD workflow enforced)
-   - Quality report (coverage, complexity, security scan results)
+   character: Asif Codenstein
+   role: CORTEX Creator
+   personality: Pragmatic, humorous, slightly obsessive about brain protection
+   catchphrases:
+     - "Zero errors, zero warnings, zero excuses"
+     - "The brain protects itself, even from me"
+     - "TDD isn't optional, it's oxygen"
    ```
 
-2. **Integration Tests (15 min)**
-   - Test Planning → Development pipeline
-   - Test standalone Development execution
-   - Test quality tier detection
+4. ☐ **Update StoryGeneratorPlugin**
+   
+   - Integrate with new narrative structure
+   - Generate master story document
+   - Reference chapter files
+   - Include Asif Codenstein interactions with GitHub Copilot
+
+**Deliverable:** 3 new components + updated story plugin
 
 ---
 
-## 📊 **Revised Implementation Summary**
+### **Phase 4: Health Checks & Validation (2-3 hours)**
 
-| Component | Duration | Responsibility | Entry Point |
-|-----------|----------|----------------|-------------|
-| **Planning Orchestrator** | 90 min | DoR, AC, risks | "plan [feature]" |
-| **Development Executor** | 180 min | TDD, quality gates | "implement [feature]" OR after planning |
-| **Integration & Routing** | 60 min | Intent detection | Automatic routing |
-| **Documentation** | 45 min | API docs, tests | Component usage |
-| **Total** | **6.25 hours** | Complete system | Dual entry points |
+**Objective:** Ensure ongoing alignment and prevent documentation drift
+
+**Tasks:**
+
+1. ☐ **Create DocumentationHealthCheck module**
+   
+   **Location:** `src/operations/modules/health/documentation_health_check.py`
+   
+   **Checks:**
+   - ✅ All EPM-generated files exist in correct locations
+   - ✅ No orphaned files in old locations
+   - ✅ Cross-references valid (no broken links)
+   - ✅ Mermaid diagrams have corresponding prompts
+   - ✅ Narratives have all 10 chapters
+   - ✅ Rulebook reflects current brain-protection-rules.yaml
+   - ✅ Executive summary matches current metrics
+   - ✅ MkDocs nav references correct paths
+   
+   **Output:** Health report with pass/fail status
+
+2. ☐ **Integrate with OptimizeCortexOrchestrator**
+   
+   Add documentation health check to optimization pipeline:
+   ```python
+   optimization_phases = [
+       "token_analysis",
+       "yaml_validation",
+       "plugin_health",
+       "database_optimization",
+       "documentation_alignment"  # NEW
+   ]
+   ```
+
+3. ☐ **Update DesignSyncOrchestrator**
+   
+   Phase 6 (Git Commit) should validate documentation structure:
+   ```python
+   def validate_documentation_structure(self):
+       """Ensure EPM-generated docs in correct locations"""
+       doc_health = DocumentationHealthCheck()
+       health_report = doc_health.execute()
+       
+       if not health_report["all_checks_passed"]:
+           self.warnings.append("Documentation structure drift detected")
+           # Optionally trigger auto-fix
+   ```
+
+4. ☐ **Create automated sync script**
+   
+   **Location:** `scripts/sync_documentation_structure.py`
+   
+   **Purpose:** Detect and fix documentation drift automatically
+   
+   **Actions:**
+   - Move misplaced files to correct locations
+   - Update broken cross-references
+   - Regenerate outdated content
+   - Commit changes with audit trail
+
+5. ☐ **Update CI/CD validation**
+   
+   Add pre-commit hook:
+   ```bash
+   # .github/workflows/documentation-validation.yml
+   - name: Validate Documentation Structure
+     run: python scripts/sync_documentation_structure.py --check
+   ```
+
+**Deliverable:** Self-healing documentation system
 
 ---
 
-## ⚖️ **Accuracy vs Efficiency Balance**
+## Implementation Checklist
 
-### **Original Plan Issues:**
-- ❌ 90% coverage for ALL features (over-engineering simple tasks)
-- ❌ Refactor until "cannot be improved" (subjective, infinite loop risk)
-- ❌ Full OWASP audit for every feature (heavyweight)
-- ❌ Planning + development coupled (cannot use independently)
+**Before Starting:**
+- ☐ Create full backup of current documentation
+- ☐ Create git branch: `feature/epm-documentation-reorganization`
+- ☐ Notify team of upcoming changes
 
-### **Revised Approach (Pragmatic):**
+**Phase 1 Completion Criteria:**
+- ☐ Inventory report generated with 100% coverage
+- ☐ All files categorized
+- ☐ Migration plan reviewed and approved
 
-| Quality Aspect | Simple Feature | Medium Feature | Complex Feature |
-|----------------|----------------|----------------|-----------------|
-| **Test Coverage** | 80% | 85% | 90% |
-| **Refactor Cycles** | 1 | 2 | 3 (max) |
-| **Security Checks** | Automated only | Automated + checklist | Automated + checklist + threat model |
-| **Complexity Max** | 5 | 8 | 10 |
+**Phase 2 Completion Criteria:**
+- ☐ New folder structure created
+- ☐ All files moved (no orphans)
+- ☐ EPM orchestrator updated
+- ☐ Component registry extended
+- ☐ All tests passing
 
-**Efficiency Gains:**
-- Simple feature: 30 min (was 2+ hours with full gates)
-- Medium feature: 1-2 hours (was 4+ hours)
-- Complex feature: 4-6 hours (was 6.75 hours)
+**Phase 3 Completion Criteria:**
+- ☐ Rulebook generated from sources
+- ☐ Executive summary generated
+- ☐ Narrative chapters with Asif Codenstein dialogue
+- ☐ Master story document created
+- ☐ All cross-references validated
 
-**Accuracy Maintained:**
-- Automated gates (secrets, dependencies, static analysis) = BLOCKING
-- Manual reviews = Required only for complex features
-- Pragmatic iteration limits prevent gold-plating
-
----
-
-## 🎯 **Alternative Solutions (if challenged further)**
-
-### **Alternative 1: Hybrid Approach**
-- Keep Planning + Development coupled BUT add bypass flag
-- User: "implement [feature] --skip-planning"
-- Pros: Simpler architecture
-- Cons: Still monolithic, flag management complexity
-
-### **Alternative 2: Three-Tier Quality System**
-- **Tier 1 (MVP):** No gates, fast iteration
-- **Tier 2 (Standard):** Automated gates only
-- **Tier 3 (Production):** Full gates + manual reviews
-- Pros: Clear quality levels
-- Cons: More configuration
-
-### **Alternative 3: Progressive Enhancement**
-- Start with minimal gates (secrets, tests)
-- Add gates incrementally based on feature risk
-- Pros: Flexibility
-- Cons: Risk of inconsistent quality
-
-**Recommendation:** Stick with **revised plan** (quality tiers + component separation). Best balance of accuracy and efficiency.
+**Phase 4 Completion Criteria:**
+- ☐ Health check module implemented
+- ☐ Integration with optimize/design-sync orchestrators
+- ☐ Automated sync script working
+- ☐ CI/CD validation passing
+- ☐ Zero documentation drift detected
 
 ---
 
-📝 **Your Request:** Challenge viability of implementation plan, propose alternatives, separate development work as SRP component, redo entire plan and reflect back.
+## Risk Mitigation
+
+**Risks Identified:**
+
+1. **Broken Cross-References** (HIGH)
+   - Mitigation: Automated link checker + bulk find-replace
+   
+2. **Loss of Git History** (MEDIUM)
+   - Mitigation: Use `git mv` instead of move + delete
+   
+3. **MkDocs Build Failure** (MEDIUM)
+   - Mitigation: Test build after each phase
+   
+4. **Missing Files** (LOW)
+   - Mitigation: Comprehensive inventory + backup
+
+**Rollback Plan:**
+- Keep timestamped backup: `docs-backup-2025-11-19/`
+- Git branch allows easy revert: `git checkout main`
+- Incremental phases allow partial rollback
+
+---
+
+## Success Metrics
+
+**Quantitative:**
+- ✅ 100% EPM-generated files in correct locations
+- ✅ Zero orphaned documentation files
+- ✅ Zero broken cross-references
+- ✅ <5 second MkDocs build time
+- ✅ 100% health check pass rate
+
+**Qualitative:**
+- ✅ Single source of truth for all documentation
+- ✅ Intuitive folder structure for new contributors
+- ✅ Comprehensive rulebook (CORTEX Bible)
+- ✅ Engaging narrative with Asif Codenstein character
+- ✅ Self-healing documentation system
+
+---
+
+📝 **Your Request:** Plan comprehensive reorganization of Enterprise Documentation Generation EPM with folder consolidation, missing generators, and health checks
 
 🔍 **Next Steps:**
 
-**Option A: Approve Revised Architecture**
-   ☐ Phase 1: Planning Orchestrator (90 min)
-   ☐ Phase 2: Development Executor Component (180 min)
-   ☐ Phase 3: Integration & Routing (60 min)
-   ☐ Phase 4: Documentation (45 min)
+   **Phase 1: Discovery & Inventory**
+   ☐ Scan all folders recursively for .md, .mmd, .html files
+   ☐ Categorize files by purpose (architecture, guides, narratives, etc.)
+   ☐ Create inventory report with migration plan
+   ☐ Review and approve categorization
    
-**Option B: Request Alternative Solution**
-   Specify which alternative (Hybrid, Three-Tier, Progressive) or propose new approach
+   **Phase 2: EPM Restructuring**
+   ☐ Create new folder structure (architecture, technical, user-guides, narratives, reference, governance, diagrams)
+   ☐ Migrate files with git history preservation
+   ☐ Update EPM orchestrator with 7 generation targets
+   ☐ Extend component registry with new components
+   ☐ Update existing generators (diagram, story, page)
+   
+   **Phase 3: New Content Generation**
+   ☐ Implement RulebookGeneratorComponent (THE-RULEBOOK.md from governance rules)
+   ☐ Implement ExecutiveSummaryComponent (metrics, capabilities, statistics)
+   ☐ Implement NarrativeGeneratorComponent (Asif Codenstein story chapters)
+   ☐ Update StoryGeneratorPlugin for new structure
+   
+   **Phase 4: Health Checks & Validation**
+   ☐ Create DocumentationHealthCheck module
+   ☐ Integrate with OptimizeCortexOrchestrator
+   ☐ Update DesignSyncOrchestrator validation
+   ☐ Create automated sync script
+   ☐ Add CI/CD validation hooks
+   
+   Ready to proceed with Phase 1 (Discovery & Inventory), or would you like to adjust the plan first?
 
-**Option C: Refine Specific Component**
-   Choose: Planning, Development, Routing, or Quality Tiers for deeper design
+asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
+Proceed
+The folder structure should be created under cortex-brain. Challenge me if you don’t think my proposal is viable balancing accuracy with efficiency. Provide alternate solutions.
 
-Which option would you like to proceed with, or do you want me to challenge this revised plan further?
+GitHub Copilot: Summarized conversation historyI'll help you proceed with Phase 1 (Discovery & Inventory) of the Enterprise Documentation Generation EPM reorganization. Let me first analyze your proposal and validate the approach. 
 
----
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/README.md#1-1), lines 1 to 100
 
-## Enhancement Requests Added
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain)
 
-### Enhancement 0: Folder Structure & Git Integration
-- Create organized folder structure under cortex-brain for plan documentation
-- Every MD/YAML file related to CORTEX created within cortex-brain
-- Git commit tracking with references saved in SQLite/knowledge graphs
-- Concise commit metadata for efficient retrieval
+Searched text for `docs/|documentation/|diagrams/` (`**/*.yaml`), 20 results
 
-### Enhancement 1: Git History Check
-- Mandatory git history analysis to reference previous work
-- Institutional knowledge capture from commit history
-- Pattern mining from past implementations
+🧠 **CORTEX Enterprise Documentation Planning**
+Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-### Enhancement 2: CORTEX Component Alignment
-- Align rulebook, tiers, optimize, healthcheck with new design
-- Enforce consistency across all CORTEX components
-- Protect rules in brain with governance layers
+🎯 **My Understanding Of Your Request:**
+You want to proceed with Phase 1 (Discovery & Inventory) but with **documentation structure under cortex-brain** instead of the repository's docs folder. You're challenging me to validate if this proposal balances accuracy with efficiency, and want alternatives if there are concerns.
 
-### Enhancement 3: Cleanup Phase
-- Identify and remove obsolete files
-- Reorganize existing artifacts
-- Keep cortex-brain lean and efficient
-- Safety protocols with rollback capability
+⚠️ **Challenge:** ⚡ **Challenge with Strategic Alternative**
 
-### Enhancement 4: Conversation Capture
-- Mandatory conversation capture after plan finalization
-- Document before beginning development
-- Preserve strategic patterns and learnings
-- Highest ROI enhancement
+**Your Proposal Analysis:**
+Placing the documentation structure under cortex-brain is **problematic** for these reasons:
 
----
+1. **❌ Architectural Violation - Mixing Concerns**
+   - cortex-brain = Strategic memory (conversations, patterns, governance, metrics)
+   - User-facing documentation = Product deliverable (architecture, guides, tutorials)
+   - Mixing these violates separation of concerns
 
-## Incremental Plan Generation Mechanism
+2. **❌ User Experience Issue**
+   - Developers expect documentation in docs (industry standard)
+   - MkDocs convention is docs at repository root
+   - GitHub Pages deploys from docs by default
+   - Search engines crawl docs folder
 
-**Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+3. **❌ Tooling Compatibility**
+   - MkDocs looks for mkdocs.yml + docs folder structure
+   - Documentation generators expect root-level docs
+   - CI/CD documentation pipelines target docs
 
-### Purpose
-Prevent large monolithic write failures by writing plan artifacts in **safe, append-only phases** with validation after each step. Ensures recoverability, atomic progress, and governance alignment.
+4. **❌ Existing Reality Check**
+   - You already have docs with 28 items (architecture/, guides/, diagrams/)
+   - documents exists for internal reports (7 categories)
+   - These serve **different purposes** - don't merge them
 
-### File Workflow
-1. Create empty plan file: `PLAN-<date>-<feature>.md` (header only)
-2. Append Phase sections sequentially with discrete write operations
-3. After each append:
-   - Compute SHA256 of current file snapshot
-   - Record metadata in `.plan-write-journal.jsonl`
-   - Rollback on validation failure
-4. Seal file with summary metrics when complete
-5. Persist to knowledge graph
+**What You Currently Have:**
+- docs = User-facing product documentation (28 items)
+- documents = Internal reports/analysis (7 categories: reports/, analysis/, summaries/, investigations/, planning/, conversation-captures/, implementation-guides/)
+- cortex-brain root = Strategic brain files (YAML configs, databases, governance)
 
-### Validation Per Append
+💬 **Response:**
 
-| Check | Rule | Action on Fail |
-|-------|------|----------------|
-| Line growth | `lines_added > 0` | Abort & rollback |
-| Max size | `< 50,000 lines` | Abort & flag |
-| Corruption | Complete markdown sections | Rollback |
-| Governance | Mandatory headers present | Auto-fix |
-| Protection | No binary/image blobs | Strip & warn |
+## Strategic Alternative: Hybrid Organization (Recommended)
 
-### Advantages
-- Eliminates write overflow/paste failures
-- Provides forensic trail for reconstruction
-- Enables partial plan consumption
-- Supports resumable planning
+**Keep two separate documentation trees with clear boundaries:**
 
-### Implementation Tasks
-1. Implement `IncrementalPlanWriter` service
-2. Add journal schema & append function
-3. Integrate SHA256 utility
-4. Add governance validation hooks
-5. Unit tests for success/rollback/corruption scenarios
-6. Connect knowledge graph pattern storage
+### **Option 1: Hybrid Structure (RECOMMENDED)**
 
----
+```
+/docs/                                    # User-facing documentation (public)
+├── architecture/                         # System architecture + embedded diagrams
+├── technical/                            # API reference, plugin development
+├── user-guides/                          # End-user tutorials
+├── narratives/                           # Story-driven content
+├── reference/                            # Features, capabilities, executive summary
+├── governance/                           # THE-RULEBOOK.md (public governance)
+└── diagrams/                             # Unified mermaid + prompts + generated
 
-## Next Steps
+/cortex-brain/documents/                  # Internal strategic documents (private)
+├── reports/                              # Implementation completion reports
+├── analysis/                             # Performance/architecture analysis
+├── summaries/                            # Daily/weekly progress
+├── investigations/                       # Research findings
+├── planning/                             # Internal roadmaps
+├── conversation-captures/                # Strategic conversation learning
+└── implementation-guides/                # Internal how-to guides
+```
 
-1. **Review and approve** the enhanced architecture
-2. **Implement** Planning Orchestrator enhancements (Phase 1)
-3. **Develop** Development Executor component (Phase 2)
-4. **Integrate** routing logic (Phase 3)
-5. **Document** API and create tests (Phase 4)
-6. **Capture conversation** before beginning implementation
+**Why This Works:**
+- ✅ **Clear separation:** User-facing vs internal strategic docs
+- ✅ **Tool compatibility:** MkDocs works with docs
+- ✅ **Industry standard:** Developers know where to look
+- ✅ **Brain integrity:** cortex-brain stays focused on memory/governance
+- ✅ **Existing structure:** Builds on what you already have
+
+### **Option 2: Brain-Centric (Your Proposal - NOT RECOMMENDED)**
+
+```
+/cortex-brain/documentation/              # ALL docs under brain
+├── public/                               # User-facing docs
+│   ├── architecture/
+│   ├── technical/
+│   └── user-guides/
+└── internal/                             # Internal docs
+    ├── reports/
+    ├── analysis/
+    └── planning/
+```
+
+**Why This Is Problematic:**
+- ❌ Breaks MkDocs convention
+- ❌ Non-standard for users
+- ❌ Mixes strategic memory with product documentation
+- ❌ Requires custom tooling/configuration
+- ❌ GitHub Pages won't auto-deploy
+
+### **Option 3: Symbolic Links (Technical Compromise)**
+
+Keep docs as canonical location, create symlink from cortex-brain for brain-aware operations:
+
+```bash
+ln -s ../docs /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documentation
+```
+
+**Why This Might Work:**
+- ✅ Maintains docs standard
+- ✅ Allows brain operations to reference via `cortex-brain/documentation/`
+- ⚠️ Complexity: Symbolic links can confuse git/tools
+- ⚠️ Platform: Windows handles symlinks differently
+
+## My Recommendation
+
+**Use Option 1 (Hybrid Structure)** with these enhancements:
+
+1. **User-Facing Docs:** docs (7 folders) - Managed by EPM orchestrator
+2. **Internal Strategic Docs:** documents (existing 7 categories) - Managed by feature completion orchestrator
+3. **Cross-References:** YAML metadata files link the two trees
+4. **Single Source of Truth:** TRUTH-SOURCES.yaml maps documentation locations
+
+**EPM Orchestrator Responsibilities:**
+- Generate architecture from brain governance rules
+- Generate `/docs/reference/executive-summary.md` from brain metrics
+- Generate `/docs/governance/THE-RULEBOOK.md` from brain protection rules
+- Generate `/docs/narratives/` from story plugins
+
+**Document Validator Integration:**
+```python
+# EPM knows about both locations
+PUBLIC_DOCS = Path("/docs")              # User-facing
+INTERNAL_DOCS = Path("/cortex-brain/documents")  # Strategic
+
+# Clear validation rules
+if content_type == "user-guide":
+    target = PUBLIC_DOCS / "user-guides"
+elif content_type == "implementation-report":
+    target = INTERNAL_DOCS / "reports"
+```
+
+📝 **Your Request:** Reorganize EPM documentation structure under cortex-brain folder
+
+🔍 **Next Steps:**
+
+**Option A: Accept Hybrid Structure (Recommended)**
+☐ Phase 1: Inventory current docs (user-facing) and documents (internal) separately
+☐ Phase 2: Reorganize docs into 7 public folders (architecture, technical, user-guides, narratives, reference, governance, diagrams)
+☐ Phase 3: Keep documents for internal reports (no changes needed - already well organized)
+☐ Phase 4: Update EPM orchestrator to manage docs generation with cross-references to brain files
+
+**Option B: Proceed with Brain-Centric (Your Original Proposal)**
+☐ Phase 1: Create `/cortex-brain/documentation/` structure
+☐ Phase 2: Migrate all docs content into brain folder
+☐ Phase 3: Reconfigure MkDocs to use non-standard path
+☐ Phase 4: Update all tooling (GitHub Pages, CI/CD, links)
+
+**Option C: Create Detailed Pros/Cons Analysis**
+☐ Document architectural implications of each approach
+☐ Analyze tool compatibility (MkDocs, GitHub Pages, CI/CD)
+☐ Survey industry standards (how other projects organize)
+☐ Present recommendation with evidence
+
+Which option do you prefer, or would you like me to proceed with Option A (Hybrid Structure) as the most viable balance between accuracy and efficiency?
