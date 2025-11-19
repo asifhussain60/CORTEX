@@ -174,7 +174,8 @@ class KnowledgeGraph:
         pattern_type: Optional[str] = None,
         min_confidence: float = 0.7,
         scope: Optional[str] = None,
-        limit: int = 5
+        limit: int = 5,
+        include_confidence_metadata: bool = False
     ) -> List[Dict[str, Any]]:
         """
         Search patterns using FTS5 full-text search
@@ -185,9 +186,16 @@ class KnowledgeGraph:
             min_confidence: Minimum confidence threshold
             scope: Filter by scope (optional)
             limit: Maximum results
+            include_confidence_metadata: Include metadata for confidence scoring (NEW in Lean 3.1)
         
         Returns:
             List of matching patterns with match scores
+            
+            If include_confidence_metadata=True, each result includes:
+            - pattern_count: Total number of matching patterns (for all results)
+            - success_rate: Historical success rate of this pattern (0.0-1.0)
+            - usage_count: Number of times pattern has been used
+            - last_used: DateTime when pattern was last used
         """
         with self._get_connection() as conn:
             cursor = conn.cursor()
@@ -215,8 +223,10 @@ class KnowledgeGraph:
             params.append(limit)
             
             cursor.execute(sql, params)
+            results = cursor.fetchall()
             
-            return [
+            # Build result list
+            pattern_results = [
                 {
                     "pattern_id": row["pattern_id"],
                     "title": row["title"],
@@ -227,8 +237,17 @@ class KnowledgeGraph:
                     "last_used": row["last_used"],
                     "usage_count": row["usage_count"]
                 }
-                for row in cursor.fetchall()
+                for row in results
             ]
+            
+            # Add confidence metadata if requested
+            if include_confidence_metadata:
+                pattern_count = len(pattern_results)
+                for result in pattern_results:
+                    result["pattern_count"] = pattern_count
+                    result["success_rate"] = self._calculate_success_rate(result["pattern_id"])
+            
+            return pattern_results
     
     def track_relationship(
         self,
@@ -424,3 +443,40 @@ class KnowledgeGraph:
         clean_name = "".join(c for c in name if c.isalnum() or c in (' ', '-', '_'))
         clean_name = clean_name.replace(' ', '_').lower()
         return f"workflow_{clean_name}"
+    
+    def _calculate_success_rate(self, pattern_id: str) -> float:
+        """
+        Calculate success rate for a pattern
+        
+        For now, uses confidence as proxy for success rate.
+        Future: Track actual success/failure of pattern applications.
+        
+        Args:
+            pattern_id: Pattern to calculate success rate for
+            
+        Returns:
+            Success rate (0.0-1.0)
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT confidence, usage_count FROM patterns 
+                WHERE pattern_id = ?
+            """, (pattern_id,))
+            row = cursor.fetchone()
+            
+            if row:
+                # Use confidence as success rate proxy
+                # Adjust based on usage: more usage = more reliable
+                base_rate = row["confidence"]
+                usage_count = row["usage_count"]
+                
+                # Boost success rate slightly for well-used patterns
+                if usage_count > 10:
+                    return min(base_rate + 0.05, 1.0)
+                elif usage_count > 5:
+                    return min(base_rate + 0.02, 1.0)
+                else:
+                    return base_rate
+            
+            return 0.5  # Default if pattern not found

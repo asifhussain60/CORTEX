@@ -620,6 +620,49 @@ templates:
       \ documentation\"\n      • Regenerates docs with latest changes\n      • Maintains\
       \ existing structure\n\n   \U0001F4A1 **Tip:** Documentation is automatically\
       \ validated and cross-referenced. Check the validation report at `docs/validation-report.md`"
+  
+  confidence_high:
+    name: "Confidence Display - High"
+    trigger: []
+    response_type: "confidence_indicator"
+    content: "\U0001F3AF **Pattern Match Confidence:** {confidence_display}\n\nI'm\
+      \ applying learned patterns from {pattern_count} similar conversations.\n{detailed_explanation}"
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  
+  confidence_medium:
+    name: "Confidence Display - Medium"
+    trigger: []
+    response_type: "confidence_indicator"
+    content: "\U0001F7E1 **Pattern Match Confidence:** {confidence_display}\n\nI\
+      \ found {pattern_count} related patterns, applying with moderate confidence.\n\
+      {detailed_explanation}"
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  
+  confidence_low:
+    name: "Confidence Display - Low"
+    trigger: []
+    response_type: "confidence_indicator"
+    content: "\U0001F7E0 **Pattern Match Confidence:** {confidence_display}\n\nLimited\
+      \ pattern history available. Response based on {pattern_count} patterns.\n{detailed_explanation}"
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  
+  confidence_none:
+    name: "Confidence Display - No Patterns"
+    trigger: []
+    response_type: "confidence_indicator"
+    content: "\u2139\uFE0F **New Territory:** No learned patterns available for this\
+      \ request.\n\nGenerating fresh response using CORTEX capabilities."
+    placeholders: []
+
 routing:
   default: fallback
   help_triggers:
@@ -695,6 +738,7 @@ routing:
   - create documentation
   - doc generation
   - generate cortex docs
+
 formatting:
   mandatory_sections:
   - understanding
