@@ -23,59 +23,55 @@ theme:
   - content.code.copy
   - toc.integrate
 nav:
+- Home: index.md
 - Architecture:
-  - Agents: architecture\agents.md
-  - Brain Protection: architecture\brain-protection.md
-  - Overview: architecture\overview.md
-  - Tier System: architecture\tier-system.md
-- Cortex Awakening:
-  - Readme: images\cortex-awakening\README.md
+  - Overview: architecture/overview.md
+  - Tier System: architecture/tier-system.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
 - Getting Started:
-  - Configuration: getting-started\configuration.md
-  - Installation: getting-started\installation.md
-  - Quick Start: getting-started\quick-start.md
+  - Installation: getting-started/installation.md
+  - Quick Start: getting-started/quick-start.md
+  - Configuration: getting-started/configuration.md
 - Guides:
-  - Admin Guide: guides\admin-guide.md
-  - Best Practices: guides\best-practices.md
-  - Developer Guide: guides\developer-guide.md
-  - Troubleshooting: guides\troubleshooting.md
+  - Developer Guide: guides/developer-guide.md
+  - Admin Guide: guides/admin-guide.md
+  - Best Practices: guides/best-practices.md
+  - Troubleshooting: guides/troubleshooting.md
 - Operations:
-  - Entry Point Modules: operations\entry-point-modules.md
-  - Health Monitoring: operations\health-monitoring.md
-  - Index: operations\index.md
-  - Overview: operations\overview.md
-  - Workflows: operations\workflows.md
+  - Overview: operations/overview.md
+  - Entry Point Modules: operations/entry-point-modules.md
+  - Health Monitoring: operations/health-monitoring.md
+  - Workflows: operations/workflows.md
+- Governance:
+  - THE-RULEBOOK: governance/THE-RULEBOOK.md
+- Narratives:
+  - The Intern with Amnesia: narratives/the-intern-with-amnesia/README.md
+  - The CORTEX Story: diagrams/story/The-CORTEX-Story.md
+  - Cortex Awakening: images/cortex-awakening/README.md
 - Performance:
-  - Ci Cd Integration: performance\CI-CD-INTEGRATION.md
-  - Performance Budgets: performance\PERFORMANCE-BUDGETS.md
+  - CI/CD Integration: performance/CI-CD-INTEGRATION.md
+  - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
 - Plugins:
-  - Development: plugins\development.md
-  - Vscode Extension: plugins\vscode-extension.md
+  - Development: plugins/development.md
+  - VS Code Extension: plugins/vscode-extension.md
 - Reference:
-  - Api: reference\api.md
-  - Configuration: reference\configuration.md
-  - Response Templates: reference\response-templates.md
-- Capabilities Matrix: CAPABILITIES-MATRIX.md
-- Documentation Links Fixed Report: DOCUMENTATION-LINKS-FIXED-REPORT.md
-- Executive Summary: EXECUTIVE-SUMMARY.md
-- Feature Comparison: FEATURE-COMPARISON.md
-- Features: FEATURES.md
-- Generation Report 20251118 165516: GENERATION-REPORT-20251118-165516.md
-- Generation Report 20251118 165842: GENERATION-REPORT-20251118-165842.md
-- Generation Report 20251118 165914: GENERATION-REPORT-20251118-165914.md
-- Help System: HELP-SYSTEM.md
-- Index: index.md
-- Knowledge Graph Import Guide: KNOWLEDGE-GRAPH-IMPORT-GUIDE.md
-- Modules Reference: MODULES-REFERENCE.md
-- Navigation Guide: NAVIGATION-GUIDE.md
-- Operations Reference: OPERATIONS-REFERENCE.md
-- Response Template User Guide: response-template-user-guide.md
-- Technical Cost Optimization: Technical-Cost-Optimization.md
-- Story:
-  - The Cortex Story: diagrams\story\The CORTEX Story.md
+  - Executive Summary: EXECUTIVE-SUMMARY.md
+  - Capabilities Matrix: CAPABILITIES-MATRIX.md
+  - Modules Reference: MODULES-REFERENCE.md
+  - Operations Reference: OPERATIONS-REFERENCE.md
+  - Features: FEATURES.md
+  - Feature Comparison: FEATURE-COMPARISON.md
+  - API: reference/api.md
+  - Configuration: reference/configuration.md
+  - Response Templates: reference/response-templates.md
+  - Navigation Guide: NAVIGATION-GUIDE.md
+  - Help System: HELP-SYSTEM.md
+  - Knowledge Graph Import Guide: KNOWLEDGE-GRAPH-IMPORT-GUIDE.md
+  - Response Template User Guide: response-template-user-guide.md
+  - Technical Cost Optimization: Technical-Cost-Optimization.md
 - Telemetry:
-  - Performance Telemetry Guide: telemetry\PERFORMANCE-TELEMETRY-GUIDE.md
-- The CORTEX Story: diagrams/story/The-CORTEX-Story.md
+  - Performance Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
 markdown_extensions:
 - abbr
 - admonition
@@ -107,7 +103,7 @@ markdown_extensions:
     custom_fences:
     - name: mermaid
       class: mermaid
-      format: null
+      format: !!python/name:pymdownx.superfences.fence_code_format
 - pymdownx.tabbed:
     alternate_style: true
 - pymdownx.tasklist:
