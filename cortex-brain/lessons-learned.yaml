@@ -18,8 +18,8 @@ lessons:
     - Template rendering could fail silently producing empty content\n- Data sources\
     \ could return empty dicts undetected\n"
   symptoms:
-  - Operation returns {"status": "success"}
-  - Logs show "✓ Generated: [filename]"
+  - 'Operation returns {"status": "success"}'
+  - 'Logs show "✓ Generated: [filename]"'
   - Target folders remain empty (0 files)
   - No error messages or warnings
   - Silent failure - users discover bug manually
