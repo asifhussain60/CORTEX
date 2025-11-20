@@ -23,7 +23,7 @@ theme:
 nav:
 - Home: index.md
 - The CORTEX Birth:
-  - The Awakening Story: diagrams/story/The-CORTEX-Story.md
+  - The Awakening Story: diagrams/narratives/THE-AWAKENING-OF-CORTEX.md
   - Narratives: diagrams/narratives/
 - Cortex Bible: governance/THE-RULEBOOK.md
 - Architecture:

@@ -417,12 +417,13 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 > 
 > **Quality Score: 12/10 (EXCELLENT)**
 > 
-> 📁 **One-click capture:**  
-> → [Click here to create conversation-capture-2025-11-14.md](command:workbench.action.files.newUntitledFile?%7B%22languageId%22:%22markdown%22,%22content%22:%22%23%20Strategic%20Conversation%20Capture%5Cn%5Cn**Date:**%20{{current_date}}%5Cn**Quality%20Score:**%20{{quality_score}}%5Cn**Participants:**%20{{participants}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Conversation%20Summary%5Cn%5Cn{{conversation_summary}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Full%20Transcript%5Cn%5Cn{{full_conversation}}%5Cn%5Cn---%5Cn%5Cn%23%23%20Learning%20Value%5Cn%5Cn{{strategic_patterns}}%5Cn%5Cn**Captured:**%20{{timestamp}}%5Cn**Status:**%20Ready%20for%20import%20to%20CORTEX%20brain%22%7D)
+> 📁 **To capture this conversation:**  
+> Save conversation to file, then:
+> ```
+> capture conversation #file:cortex-brain/documents/conversation-captures/2025-11-14-authentication.md
+> ```
 > 
-> ⚡ **Alternative:** Copy this conversation to `cortex-brain/documents/conversation-captures/YYYY-MM-DD-description.md`
-> 
-> *Then say "import conversation" to add to CORTEX brain*
+> *CORTEX will import directly to brain (Tier 1), extract entities, and learn patterns.*
 
 ---
 
@@ -997,9 +998,28 @@ CORTEX:
 
 ---
 
-## 🧠 Context Memory Commands (Tier 1)
+## 🧠 Conversation Capture Commands
 
-**CORTEX automatically remembers your conversations across sessions**—this is the key differentiator from standard Copilot.
+**CRITICAL:** Capture conversation REQUIRES a file parameter. No parameterless capture.
+
+### How to Capture Conversations
+
+**Required format:**
+```
+capture conversation #file:docgen.md
+```
+
+**This will:**
+1. Read the specified file directly
+2. Parse conversation content
+3. Import to CORTEX brain (Tier 1)
+4. Extract entities and patterns
+5. Return confirmation with conversation ID
+
+**❌ DEPRECATED (removed):**
+```
+capture conversation  # No longer supported - file parameter required
+```
 
 ### What Is Tier 1 Context?
 

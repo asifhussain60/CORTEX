@@ -97,6 +97,7 @@ admin_content_patterns:
     - "system_refactor"  # Code refactoring tool
     - "token_optimizer"  # Performance analysis
     - "doc_sync"  # Documentation sync
+    - "enterprise_documentation"  # Enterprise doc generator (admin tool)
 
 # User Content Patterns (INCLUDED in publish)
 user_content_patterns:
@@ -189,9 +190,9 @@ user_content_patterns:
     - "environment_setup"
     - "workspace_cleanup"
     - "cortex_demo"
-    - "refresh_cortex_story"
     - "cortex_tutorial"
     - "application_onboarding"
+    # NOTE: refresh_cortex_story is admin-only (updates CORTEX's own docs)
 
 # Publish Validation Rules
 validation:

@@ -48,7 +48,8 @@ USER_OPERATIONS = {
 ADMIN_OPERATIONS = {
     'design_sync',           # Admin development tool
     'interactive_planning',  # Not yet implemented
-    'refresh_cortex_story'   # ❌ Admin-only: Updates CORTEX's own story documentation
+    'refresh_cortex_story',  # ❌ Admin-only: Updates CORTEX's own story documentation
+    'enterprise_documentation'  # ❌ Admin-only: Enterprise doc generator (EPM system)
 }
 
 # Patterns to EXCLUDE from publish (privacy & unnecessary files)
@@ -111,6 +112,7 @@ CRITICAL_FILES = {
     
     # CORTEX Entry Points
     '.github/prompts/CORTEX.prompt.md',
+    '.github/copilot-instructions.md',  # Main entry point for Copilot
     
     # Core Configuration (TEMPLATE ONLY - not cortex.config.json with machine paths)
     'cortex.config.template.json',
@@ -118,14 +120,8 @@ CRITICAL_FILES = {
     'requirements.txt',
     
     # User Documentation (essential only)
-    'prompts/shared/story.md',
-    'prompts/shared/setup-guide.md',
-    'prompts/shared/tracking-guide.md',
-    'prompts/shared/technical-reference.md',
-    'prompts/shared/agents-guide.md',
-    'prompts/shared/configuration-reference.md',
-    'prompts/shared/plugin-system.md',
-    'prompts/shared/operations-reference.md',
+    # Note: Documentation is now embedded in CORTEX.prompt.md and modules/
+    # No separate standalone guide files
     
     # Response Templates (NEW - 2025-11-12: 13 intelligent question routing templates)
     'cortex-brain/response-templates.yaml',
@@ -152,8 +148,7 @@ INCLUDED_DIRS = {
     'src/workflows',
     '.github/prompts',
     '.github',
-    'cortex-brain/schemas',
-    'prompts/shared'
+    'cortex-brain/schemas'
 }
 
 # Directories to EXCLUDE completely
@@ -216,7 +211,9 @@ ADMIN_SCRIPTS = {
     'update_operations_status.py',
     'measure_token_reduction.py',
     'design_sync_orchestrator.py',
-    'system_refactor_plugin.py'
+    'system_refactor_plugin.py',
+    'enterprise_documentation_orchestrator.py',  # Admin doc generator
+    'enterprise_documentation_orchestrator_module.py'  # Admin doc module
 }
 
 
@@ -439,10 +436,7 @@ def copy_essential_directories(
         'src/migrations',
         
         # Entry Points & Configuration
-        '.github',
-        
-        # User Documentation
-        'prompts/shared',
+        '.github/prompts',  # Include CORTEX.prompt.md and modules/
         
         # User Tools & Scripts (ESSENTIAL for users)
         # Note: We copy scripts/ selectively below
@@ -509,6 +503,7 @@ def copy_essential_directories(
         'cortex-brain/development-context.yaml',
         'cortex-brain/capabilities.yaml',
         'cortex-brain/migrate_brain_db.py',
+        'cortex-brain/publish-config.yaml',
     ]
     
     for brain_file in cortex_brain_files:
@@ -815,6 +810,61 @@ And it remembers everything from past conversations! 🧠
         return False
 
 
+def filter_operations_yaml(
+    publish_cortex: Path,
+    admin_ops: Set[str],
+    dry_run: bool = False
+) -> bool:
+    """
+    Remove admin operations from cortex-operations.yaml in publish package.
+    
+    Args:
+        publish_cortex: Path to publish/CORTEX directory
+        admin_ops: Set of admin operation IDs to remove
+        dry_run: If True, only preview changes
+    
+    Returns:
+        True if successful
+    """
+    logger.info("Step 5/7: Filtering admin operations from cortex-operations.yaml...")
+    
+    ops_file = publish_cortex / 'cortex-operations.yaml'
+    if not ops_file.exists():
+        logger.warning("cortex-operations.yaml not found in publish package")
+        return False
+    
+    try:
+        with open(ops_file, 'r', encoding='utf-8') as f:
+            ops_data = yaml.safe_load(f)
+        
+        if 'operations' not in ops_data:
+            logger.warning("No operations section found in cortex-operations.yaml")
+            return True
+        
+        # Remove admin operations
+        removed_count = 0
+        for admin_op in admin_ops:
+            if admin_op in ops_data['operations']:
+                if not dry_run:
+                    del ops_data['operations'][admin_op]
+                removed_count += 1
+                logger.info(f"✓ Removed admin operation: {admin_op}")
+        
+        if not dry_run and removed_count > 0:
+            # Write filtered operations back
+            with open(ops_file, 'w', encoding='utf-8') as f:
+                yaml.dump(ops_data, f, default_flow_style=False, sort_keys=False)
+            logger.info(f"✓ Filtered {removed_count} admin operations from cortex-operations.yaml")
+        elif dry_run:
+            logger.info(f"[DRY RUN] Would filter {removed_count} admin operations")
+        
+        return True
+    
+    except Exception as e:
+        logger.error(f"Failed to filter cortex-operations.yaml: {e}")
+        return False
+
+
 def sanitize_privacy_leaks(
     publish_cortex: Path,
     dry_run: bool = False
@@ -829,7 +879,7 @@ def sanitize_privacy_leaks(
     Returns:
         True if successful
     """
-    logger.info("Step 5/6: Sanitizing privacy leaks...")
+    logger.info("Step 6/7: Sanitizing privacy leaks...")
     
     import re
     
@@ -903,7 +953,7 @@ def run_validation_tests(source_root: Path) -> Tuple[bool, int, int]:
     """
     logger.info("")
     logger.info("=" * 80)
-    logger.info("Step 6/7: Running Validation Tests")
+    logger.info("Step 7/8: Running Validation Tests")
     logger.info("=" * 80)
     logger.info("")
     
@@ -1008,7 +1058,7 @@ def generate_report(
     """
     logger.info("")
     logger.info("=" * 80)
-    logger.info("Step 7/7: Generating Summary Report")
+    logger.info("Step 8/8: Generating Summary Report")
     logger.info("=" * 80)
     logger.info("")
     
@@ -1123,6 +1173,10 @@ def main():
     
     if not create_setup_for_copilot(publish_cortex, args.dry_run):
         logger.error("Failed to create setup file")
+        return 1
+    
+    if not filter_operations_yaml(publish_cortex, admin_ops, args.dry_run):
+        logger.error("Failed to filter operations yaml")
         return 1
     
     if not sanitize_privacy_leaks(publish_cortex, args.dry_run):

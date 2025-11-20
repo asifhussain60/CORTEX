@@ -118,12 +118,16 @@ operations:
       - tooling_verification
       - setup_completion
     
-  # STORY REFRESH  
+  # STORY REFRESH (ADMIN-ONLY - NOT IN USER DEPLOYMENT)
   refresh_cortex_story:
     name: "Refresh CORTEX Story"
-    description: "Update story documentation with narrator voice"
+    description: "[DEPRECATED] Admin-only operation - updates CORTEX's own story documentation"
+    deployment_tier: admin
+    status: deprecated
+    consolidation_target: document_cortex
     natural_language: ["refresh story", "update story", "regenerate story"]
     slash_command: "/CORTEX, refresh cortex story"
+    note: "Use 'document_cortex' instead for documentation updates"
     modules:
       - load_story_template
       - apply_narrator_voice

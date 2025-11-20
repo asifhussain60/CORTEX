@@ -8,6 +8,7 @@ from typing import Dict, Any
 import logging
 
 from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
+from src.core.context_management.context_injector import ContextInjector
 
 
 class CodeExecutor(BaseAgent):
@@ -25,6 +26,9 @@ class CodeExecutor(BaseAgent):
         """Initialize CodeExecutor agent."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.logger = logging.getLogger(__name__)
+        
+        # Initialize context injector (Phase 2: Context Management)
+        self.context_injector = ContextInjector(format_style='compact')
     
     def can_handle(self, request: AgentRequest) -> bool:
         """
@@ -102,10 +106,22 @@ class CodeExecutor(BaseAgent):
             if skip_summary:
                 result['summary_note'] = 'Summary generation suppressed (execution-focused intent)'
             
+            # Build response message
+            response_message = f"Code execution request acknowledged: {task_description}"
+            
+            # Inject context summary (Phase 2: Context Management)
+            context_data = request.context.get('unified_context', {})
+            if context_data:
+                response_message = self.context_injector.format_for_agent(
+                    agent_name="Code Executor",
+                    response_text=response_message,
+                    context_data=context_data
+                )
+            
             return AgentResponse(
                 success=True,
                 result=result,
-                message=f"Code execution request acknowledged: {task_description}",
+                message=response_message,
                 agent_name=self.name,
                 next_actions=next_actions
             )

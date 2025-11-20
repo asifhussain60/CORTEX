@@ -21,6 +21,20 @@ import logging
 from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
 from src.cortex_agents.agent_types import IntentType
 
+# Import plan sync manager for two-way sync
+try:
+    from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
+    PLAN_SYNC_AVAILABLE = True
+except ImportError:
+    PLAN_SYNC_AVAILABLE = False
+
+# Import plan sync manager for two-way sync
+try:
+    from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
+    PLAN_SYNC_AVAILABLE = True
+except ImportError:
+    PLAN_SYNC_AVAILABLE = False
+
 
 class PlanningState(Enum):
     """States in the interactive planning state machine."""
@@ -174,6 +188,15 @@ class InteractivePlannerAgent(BaseAgent):
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.logger = logging.getLogger(__name__)
         self.active_sessions: Dict[str, PlanningSession] = {}
+        
+        # Initialize plan sync manager for two-way sync
+        self.plan_sync_manager = None
+        if PLAN_SYNC_AVAILABLE:
+            try:
+                self.plan_sync_manager = PlanSyncManager()
+                self.logger.info("PlanSyncManager initialized for auto-sync")
+            except Exception as e:
+                self.logger.warning(f"Failed to initialize PlanSyncManager: {e}")
         
     def can_handle(self, request: AgentRequest) -> bool:
         """
@@ -521,18 +544,27 @@ class InteractivePlannerAgent(BaseAgent):
                     "risks": planner_response.result.get("risks", [])
                 }
                 
+                # Auto-sync plan to database
+                self._sync_plan_to_database(plan, session)
+                
                 return plan
             else:
                 # Fallback to basic plan if WorkPlanner fails
                 self.logger.warning(f"WorkPlanner failed, using fallback plan: {planner_response.message}")
-                return self._create_fallback_plan(session)
+                fallback_plan = self._create_fallback_plan(session)
+                self._sync_plan_to_database(fallback_plan, session)
+                return fallback_plan
                 
         except ImportError as e:
             self.logger.error(f"Failed to import WorkPlanner: {e}")
-            return self._create_fallback_plan(session)
+            fallback_plan = self._create_fallback_plan(session)
+            self._sync_plan_to_database(fallback_plan, session)
+            return fallback_plan
         except Exception as e:
             self.logger.error(f"Error delegating to WorkPlanner: {e}")
-            return self._create_fallback_plan(session)
+            fallback_plan = self._create_fallback_plan(session)
+            self._sync_plan_to_database(fallback_plan, session)
+            return fallback_plan
     
     def _build_enriched_request(self, session: PlanningSession) -> Dict[str, Any]:
         """
@@ -784,6 +816,45 @@ class InteractivePlannerAgent(BaseAgent):
             PlanningState.ABORTED: "Planning cancelled by user"
         }
         return state_messages.get(session.state, "Unknown state")
+    
+    def _sync_plan_to_database(self, plan: Dict[str, Any], session: PlanningSession) -> None:
+        """
+        Sync plan to database using PlanSyncManager.
+        
+        Auto-syncs plan file to database when created. If plan was written to
+        a markdown file, extracts metadata and updates database record.
+        
+        Args:
+            plan: Plan dictionary with title, phases, etc.
+            session: Planning session context
+        """
+        if not self.plan_sync_manager:
+            self.logger.debug("PlanSyncManager not available, skipping sync")
+            return
+        
+        try:
+            # Check if plan was written to file
+            plan_file_path = session.context.get("plan_file_path")
+            
+            if plan_file_path:
+                # Plan was written to file, sync file → database
+                from pathlib import Path
+                result = self.plan_sync_manager.sync_file_to_database(Path(plan_file_path))
+                
+                if result.get("success"):
+                    plan_id = result.get("plan_id")
+                    self.logger.info(f"Plan synced to database: {plan_id}")
+                    
+                    # Store plan_id in session context for future updates
+                    session.context["plan_id"] = plan_id
+                else:
+                    self.logger.warning(f"Plan sync failed: {result.get('message')}")
+            else:
+                # Plan not yet written to file, log info
+                self.logger.debug("Plan not yet written to file, will sync when saved")
+                
+        except Exception as e:
+            self.logger.error(f"Error syncing plan to database: {e}", exc_info=True)
     
     def _find_similar_patterns(self, request: str) -> List[Dict[str, Any]]:
         """Query Tier 2 for similar past requests (placeholder)."""

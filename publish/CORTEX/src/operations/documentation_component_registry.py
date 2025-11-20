@@ -196,6 +196,8 @@ class DocumentationComponentRegistry:
             "feature_list": self.GeneratorType.FEATURE_LIST,
             "executive_summary": self.GeneratorType.EXECUTIVE_SUMMARY,
             "publish": self.GeneratorType.PUBLISH,
+            "rulebook": self.GeneratorType.ARCHITECTURE,  # NEW: Governance documentation
+            "narratives": self.GeneratorType.ARCHITECTURE,  # NEW: Story documentation
             "all": self.GeneratorType.ALL,
         }
         return mapping.get(component_id, self.GeneratorType.ALL)
@@ -265,6 +267,31 @@ def create_default_registry(workspace_root: Optional[Path] = None) -> Documentat
             dependencies=["mkdocs"],  # Requires MkDocs to be built first
             critical=True,
             natural_language=["publish to github pages", "deploy docs", "publish documentation"],
+        )
+    )
+
+    # NEW: Phase 3 Components (EPM Enhancement)
+    registry.register(
+        DocumentationComponent(
+            id="rulebook",
+            name="THE RULEBOOK - CORTEX Bible",
+            module_path=admin_gen_path / "rulebook_generator.py",
+            class_name="RulebookGenerator",
+            dependencies=[],
+            critical=True,
+            natural_language=["generate rulebook", "cortex bible", "governance rules", "the rulebook"],
+        )
+    )
+
+    registry.register(
+        DocumentationComponent(
+            id="narratives",
+            name="The Intern with Amnesia Story",
+            module_path=admin_gen_path / "narrative_generator.py",
+            class_name="NarrativeGenerator",
+            dependencies=[],
+            critical=False,
+            natural_language=["generate story", "narrative chapters", "intern with amnesia", "cortex story"],
         )
     )
 

@@ -97,6 +97,7 @@ admin_content_patterns:
     - "system_refactor"  # Code refactoring tool
     - "token_optimizer"  # Performance analysis
     - "doc_sync"  # Documentation sync
+    - "enterprise_documentation"  # Enterprise doc generator (admin tool)
 
 # User Content Patterns (INCLUDED in publish)
 user_content_patterns:

@@ -5,18 +5,21 @@ This module provides a unified template-based response system for:
 - Consistent formatting across agents, operations, and plugins
 - Verbosity control (concise/detailed/expert)
 - Easy maintenance (edit YAML, not code)
+- Confidence-aware responses (NEW in Lean 3.1)
 
 Author: Asif Hussain
-Version: 1.0
+Version: 1.1
 """
 
 from .template_loader import TemplateLoader, Template
 from .template_renderer import TemplateRenderer
 from .template_registry import TemplateRegistry
+from .confidence_response_generator import ConfidenceResponseGenerator
 
 __all__ = [
     "TemplateLoader",
     "Template",
     "TemplateRenderer",
     "TemplateRegistry",
+    "ConfidenceResponseGenerator",
 ]

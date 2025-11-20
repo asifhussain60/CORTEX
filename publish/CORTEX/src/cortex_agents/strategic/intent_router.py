@@ -21,6 +21,7 @@ from src.cortex_agents.utils import (
     parse_priority_keywords,
     normalize_intent
 )
+from src.core.context_management.context_injector import ContextInjector
 
 
 class IntentRouter(BaseAgent):
@@ -59,6 +60,9 @@ class IntentRouter(BaseAgent):
         """Initialize IntentRouter with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         self.routing_history = []  # Track routing decisions for learning
+        
+        # Initialize context injector (Phase 2: Context Management)
+        self.context_injector = ContextInjector(format_style='detailed')
         
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
@@ -141,11 +145,23 @@ class IntentRouter(BaseAgent):
             if self.tier2:
                 self._store_routing_pattern(request, routing_decision)
             
+            # Build response message
+            response_message = self._format_routing_message(routing_decision)
+            
+            # Inject context summary (Phase 2: Context Management)
+            context_data = request.context.get('unified_context', {})
+            if context_data:
+                response_message = self.context_injector.format_for_agent(
+                    agent_name="Intent Router",
+                    response_text=response_message,
+                    context_data=context_data
+                )
+            
             # Build response
             response = AgentResponse(
                 success=True,
                 result=routing_decision,
-                message=self._format_routing_message(routing_decision),
+                message=response_message,
                 agent_name=self.name,
                 metadata={
                     "classified_intent": classified_intent.value,

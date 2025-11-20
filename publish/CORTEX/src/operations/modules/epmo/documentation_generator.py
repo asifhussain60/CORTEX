@@ -2,6 +2,15 @@
 CORTEX 3.0 - EPM Documentation Generator (Feature 4 - Phase 4.2)
 ================================================================
 
+⚠️ DEPRECATED - Use Enterprise Documentation Orchestrator instead
+Location: cortex-brain/admin/scripts/documentation/enterprise_documentation_orchestrator.py
+
+This module is kept for backward compatibility but will be removed in v4.0.
+For new documentation generation, use the Enterprise Documentation Orchestrator:
+- Unified entry point for ALL doc generation
+- Includes Discovery Engine, DALL-E prompts, narratives, story, executive summary
+- Admin-only (not packaged for production)
+
 Documentation generation pipeline that converts code analysis results
 into comprehensive, readable documentation.
 
@@ -11,6 +20,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 Feature: Feature 4 - Phase 4.2 (Week 2)
 Effort: 15 hours (documentation generation pipeline)
 Dependencies: Phase 4.1 (Code Analysis Engine) - COMPLETED
+Status: DEPRECATED (use Enterprise Documentation Orchestrator)
 """
 
 import os

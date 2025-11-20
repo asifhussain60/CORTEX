@@ -213,13 +213,14 @@ class TestCORTEXFaculties:
     # ============================================================
     
     def test_documentation_exists(self, publish_cortex):
-        """User documentation modules."""
+        """User documentation files for learning CORTEX."""
+        # Documentation is now in .github/prompts/modules/
         doc_files = [
-            'prompts/shared/story.md',
-            'prompts/shared/setup-guide.md',
-            'prompts/shared/technical-reference.md',
-            'prompts/shared/agents-guide.md',
-            'prompts/shared/tracking-guide.md',
+            '.github/prompts/CORTEX.prompt.md',  # Main entry point
+            '.github/prompts/modules/response-format.md',
+            '.github/prompts/modules/document-organization.md',
+            '.github/prompts/modules/planning-system.md',
+            '.github/prompts/modules/template-system.md',
         ]
         
         for file_path in doc_files:
@@ -306,7 +307,7 @@ class TestCORTEXFaculties:
             'Operations': publish_cortex / 'src/operations/operations_orchestrator.py',
             'Plugins': publish_cortex / 'src/plugins/base_plugin.py',
             'Entry Point': publish_cortex / '.github/prompts/CORTEX.prompt.md',
-            'Documentation': publish_cortex / 'prompts/shared',
+            'Documentation': publish_cortex / '.github/prompts/modules',
             'Setup Guide': publish_cortex / 'SETUP-FOR-COPILOT.md',
         }
         

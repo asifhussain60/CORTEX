@@ -197,6 +197,9 @@ class BrainProtector:
         # Layer 7: SKULL Protection (Test Validation)
         violations.extend(self._check_skull_protection(request))
         
+        # Layer 8: Git Checkpoint Enforcement
+        violations.extend(self._check_git_checkpoint(request))
+        
         # Determine overall severity
         if any(v.severity == Severity.BLOCKED for v in violations):
             severity = Severity.BLOCKED
@@ -524,6 +527,63 @@ class BrainProtector:
                     description="Retry without diagnosis (SKULL-004 violation)",
                     evidence=f"Description contains retry but no root cause analysis: {request.description[:100]}"
                 ))
+        
+        return violations
+    
+    def _check_git_checkpoint(self, request: ModificationRequest) -> List[Violation]:
+        """Check Layer 8: Git Checkpoint Enforcement using YAML rules."""
+        violations = []
+        
+        # Import git checkpoint module for validation
+        try:
+            from src.operations.modules.git_checkpoint_module import GitCheckpointModule
+            checkpoint_module = GitCheckpointModule()
+        except ImportError:
+            # If module not available, skip validation
+            return violations
+        
+        # Detect development-starting keywords
+        development_keywords = [
+            "implement", "start development", "begin implementation",
+            "fix bug", "refactor code", "add functionality",
+            "create new", "modify existing", "develop feature"
+        ]
+        
+        # Check if request is starting development work
+        text_to_check = (request.intent + " " + request.description).lower()
+        is_development_start = any(kw.lower() in text_to_check for kw in development_keywords)
+        
+        if is_development_start:
+            # Validate checkpoint exists
+            try:
+                result = checkpoint_module.execute({
+                    'operation': 'validate',
+                    'required_for': request.intent
+                })
+                
+                if not result.success:
+                    # Get rule configuration from YAML
+                    layer = self._get_layer_by_id("instinct_immutability")
+                    rule_config = None
+                    if layer:
+                        for rule in layer.get('rules', []):
+                            if rule.get('rule_id') == 'GIT_CHECKPOINT_ENFORCEMENT':
+                                rule_config = rule
+                                break
+                    
+                    # Create violation
+                    violations.append(Violation(
+                        layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
+                        rule="GIT_CHECKPOINT_ENFORCEMENT",
+                        severity=Severity.BLOCKED,
+                        description="Git checkpoint required before starting development work",
+                        evidence=f"Starting development: '{request.intent}' but {result.message}",
+                        file_path=None
+                    ))
+            
+            except Exception as e:
+                # Log but don't block if checkpoint validation fails
+                print(f"Warning: Checkpoint validation failed: {e}")
         
         return violations
     

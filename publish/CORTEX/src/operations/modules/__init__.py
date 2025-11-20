@@ -32,7 +32,7 @@ from .load_story_template_module import LoadStoryTemplateModule
 from .apply_narrator_voice_module import ApplyNarratorVoiceModule
 from .validate_story_structure_module import ValidateStoryStructureModule
 from .save_story_markdown_module import SaveStoryMarkdownModule
-from .update_mkdocs_index_module import UpdateMkDocsIndexModule
+# from .update_mkdocs_index_module import UpdateMkDocsIndexModule  # TODO: File missing, temporarily commented
 from .build_story_preview_module import BuildStoryPreviewModule
 
 # Cleanup modules
@@ -45,10 +45,10 @@ from .generate_cleanup_report_module import GenerateCleanupReportModule
 
 # Documentation modules
 from .scan_docstrings_module import ScanDocstringsModule
-from .generate_api_docs_module import GenerateAPIDocsModule
+# from .generate_api_docs_module import GenerateAPIDocsModule  # TODO: File missing, temporarily commented
 from .refresh_design_docs_module import RefreshDesignDocsModule
-from .build_mkdocs_site_module import BuildMkDocsSiteModule
-from .validate_doc_links_module import ValidateDocLinksModule
+# from .build_mkdocs_site_module import BuildMkDocsSiteModule  # TODO: File missing, temporarily commented
+# from .validate_doc_links_module import ValidateDocLinksModule  # TODO: File missing, temporarily commented
 from .deploy_docs_preview_module import DeployDocsPreviewModule
 
 # Brain protection modules
@@ -76,7 +76,7 @@ __all__ = [
     'ApplyNarratorVoiceModule',
     'ValidateStoryStructureModule',
     'SaveStoryMarkdownModule',
-    'UpdateMkDocsIndexModule',
+    # 'UpdateMkDocsIndexModule',  # TODO: File missing, temporarily commented
     'BuildStoryPreviewModule',
     
     # Cleanup modules
@@ -89,10 +89,10 @@ __all__ = [
     
     # Documentation modules
     'ScanDocstringsModule',
-    'GenerateAPIDocsModule',
+    # 'GenerateAPIDocsModule',  # TODO: File missing, temporarily commented
     'RefreshDesignDocsModule',
-    'BuildMkDocsSiteModule',
-    'ValidateDocLinksModule',
+    # 'BuildMkDocsSiteModule',  # TODO: File missing, temporarily commented
+    # 'ValidateDocLinksModule',  # TODO: File missing, temporarily commented
     'DeployDocsPreviewModule',
     
     # Brain protection modules

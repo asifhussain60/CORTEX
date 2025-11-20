@@ -131,6 +131,10 @@ class HealthAssessorCrawler(BaseCrawler):
             brain_health = brain_data.get('brain_health', 0)
             score += (brain_health / 10) * 2.0
         
+        # Enhancement health (1 point) - CORTEX 3.0 features
+        enhancement_health = self._assess_enhancement_health()
+        score += enhancement_health  # 0.0 to 1.0
+        
         # Plugin system (1 point)
         plugin_data = self._get_crawler_data('plugin_registry')
         if plugin_data:
@@ -343,6 +347,51 @@ class HealthAssessorCrawler(BaseCrawler):
             recommendations.append(opp['suggestion'])
         
         return recommendations
+    
+    def _assess_enhancement_health(self) -> float:
+        """
+        Assess CORTEX 3.0 enhancement health.
+        
+        Returns:
+            Health score from 0.0 to 1.0
+        """
+        score = 0.0
+        
+        try:
+            import yaml
+            from pathlib import Path
+            
+            project_root = Path(self.project_root)
+            
+            # Check meta-template system (0.25 points)
+            meta_template = project_root / 'cortex-brain' / 'templates' / 'meta-template.yaml'
+            validator = project_root / 'src' / 'validators' / 'template_validator.py'
+            if meta_template.exists() and validator.exists():
+                score += 0.25
+            
+            # Check confidence display (0.25 points)
+            confidence_scorer = project_root / 'src' / 'cognitive' / 'confidence_scorer.py'
+            if confidence_scorer.exists():
+                score += 0.25
+            
+            # Check response templates (0.25 points)
+            templates = project_root / 'cortex-brain' / 'response-templates.yaml'
+            if templates.exists():
+                with open(templates, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                template_count = len(data.get('templates', {}))
+                if template_count >= 32:
+                    score += 0.25
+            
+            # Check enhancement tests (0.25 points)
+            enhancement_tests = project_root / 'tests' / 'integration' / 'test_cortex_enhancements.py'
+            if enhancement_tests.exists():
+                score += 0.25
+            
+        except Exception as e:
+            self.log_warning(f"Enhancement health check failed: {e}")
+        
+        return score
     
     def _get_crawler_data(self, crawler_name: str) -> Dict[str, Any]:
         """

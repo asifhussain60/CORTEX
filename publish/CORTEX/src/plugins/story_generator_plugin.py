@@ -2,6 +2,16 @@
 CORTEX Story Generator Plugin
 Generates "The CORTEX Story" narrative for MkDocs documentation
 
+⚠️ DEPRECATED - Use Enterprise Documentation Orchestrator instead
+Location: cortex-brain/admin/scripts/documentation/enterprise_documentation_orchestrator.py
+
+This plugin is kept for backward compatibility but will be removed in v4.0.
+For story generation, use the Enterprise Documentation Orchestrator:
+- Includes "The Awakening of CORTEX" story (hilarious technical narrative)
+- Part of unified documentation pipeline
+- Discovery Engine automatically finds new features
+- Admin-only (not packaged for production)
+
 Integrates with: /CORTEX generate mkdocs
 Output: docs/diagrams/story/The-CORTEX-Story.md
 Hosting: GitHub Pages alongside architecture diagrams
@@ -9,6 +19,7 @@ Hosting: GitHub Pages alongside architecture diagrams
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary - Part of CORTEX 3.0
+Status: DEPRECATED (use Enterprise Documentation Orchestrator)
 """
 
 import logging
@@ -3237,36 +3248,83 @@ Solution: Tier 1 remembers the button from 10 minutes ago.
     
     def _load_prologue_from_story_txt(self) -> str:
         """
-        Load prologue dynamically from story.txt
+        Load prologue with Wizard of Oz inspiration
         Maintains narrator voice (Asif Codenstein style) throughout the story
+        
+        NEW: Uses blueprint-based prologue with Mrs. Codenstein and Wizard of Oz revelation
         """
-        story_txt_path = self.root_path / ".github" / "CopilotChats" / "story.txt"
+        # Use blueprint-based prologue instead of story.txt
+        return self._generate_wizard_of_oz_prologue()
+    
+    def _generate_wizard_of_oz_prologue(self) -> str:
+        """
+        Generate Prologue: "If the Scarecrow Can Get One..."
         
-        if not story_txt_path.exists():
-            logger.warning(f"story.txt not found at {story_txt_path}, using fallback")
-            return "## Prologue: A Scientist, A Robot, and Zero RAM\n\n*[Prologue content not found]*\n\n"
+        Setting: Lichfield, UK - Codenstein's basement laboratory, 10:47 PM on a Tuesday
+        """
+        prologue = """## Prologue: "If the Scarecrow Can Get One..."
+
+**Lichfield, UK - Basement Laboratory, 10:47 PM on a Tuesday**
+
+There I was, watching *The Wizard of Oz* for the 47th time (don't judge me), when the Scarecrow got his brain from the Wizard.
+
+Mrs. Codenstein walked in carrying a tea tray. "Again?" she asked.
+
+"THE SCARECROW GETS A BRAIN," I yelled, startling the Roomba awake.
+
+"Yes, dear. You've mentioned this."
+
+"If the SCARECROW can get a brain," I said, mustache quivering with revelation, "why can't MY ROBOT?"
+
+She set the tea down carefully—that particular expression reserved for when I've had an idea. Not the *good* kind of idea. The kind that involves late nights, scattered papers, and our electricity bill reaching heights previously thought theoretical.
+
+"You want to build a brain," she said slowly, "for GitHub Copilot."
+
+"YES!"
+
+"The AI that helps you code."
+
+"YES!"
+
+"The one that forgets what you're working on every five minutes."
+
+"EXACTLY! It has **amnesia**, darling! Like a goldfish with a computer science degree! Every conversation starts from scratch. Every 'make it purple' ends with 'what should I make purple?' It's maddening!"
+
+The Roomba, sensing tension, began recording. It had learned to document my revelations. I suspect it was building a case file.
+
+"You know this is madness, right?" Mrs. Codenstein asked, sipping her tea with the patience of someone who'd been married to me for far too long.
+
+"The **best** kind of madness," I declared, already scribbling diagrams on the whiteboard. "WIZARD-APPROVED madness! If they can give the Scarecrow intelligence, surely I can give Copilot **memory**!"
+
+"The Scarecrow got stuffing and a diploma," she pointed out.
+
+"METAPHORICALLY A BRAIN!"
+
+The cat, disturbed by the yelling, vanished into the ceiling. Our cat lives in the ceiling now. I'm not sure when that started, but it feels right.
+
+Mrs. Codenstein stood, collected her tea (mine had already gone cold), and paused at the doorway. "How long will this take?"
+
+"Two weeks! Maybe three!"
+
+"Mm-hmm." That particular 'mm-hmm' contained layers of skepticism that quantum physicists would struggle to measure. "I'll make sure the Roomba keeps the tea stocked."
+
+She left. The Roomba spun once—acknowledgment of its new duty. The cat's eyes glowed from the ceiling, bearing witness.
+
+And there, in my basement laboratory in Lichfield, with *The Wizard of Oz* playing its 47th encore and a whiteboard that would soon be covered in what can only be described as "organized chaos," I began building a brain for a robot.
+
+**If the Scarecrow could get one, so could GitHub Copilot.**
+
+The Roomba made a noise that might have been approval or might have been recording evidence for future proceedings.
+
+---
+
+*Author's Note: Mrs. Codenstein was right about the timeline. It took six months. But the Scarecrow didn't get his brain overnight either, and he had a WIZARD. I just had Stack Overflow and increasingly concerned tea deliveries at 2 AM.*
+
+---
+
+"""
         
-        try:
-            # Read the entire story.txt file
-            prologue_content = story_txt_path.read_text(encoding='utf-8')
-            
-            # Format as markdown (story.txt is plain text)
-            # Convert plain paragraphs to markdown format
-            formatted_content = "## " + prologue_content
-            
-            # Convert bullet points to markdown lists (handle both formats)
-            formatted_content = re.sub(
-                r'\n([A-Z][^,\n]+),\n',
-                r'\n- \1\n',
-                formatted_content
-            )
-            
-            logger.info(f"✅ Loaded prologue from story.txt ({len(prologue_content)} characters)")
-            return formatted_content + "\n"
-            
-        except Exception as e:
-            logger.error(f"Failed to load story.txt: {e}")
-            return "## Prologue: A Scientist, A Robot, and Zero RAM\n\n*[Error loading prologue]*\n\n"
+        return prologue
     
     def _write_story_files(
         self, 
