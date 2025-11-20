@@ -287,95 +287,31 @@ categories:
       create_manifest: true
   
   # --------------------------------------------------------------------------
-  # Category 12: Aggressive Sweeper (RECYCLE BIN MODE)
+  # Category 12: Aggressive Sweeper (DISABLED - needs custom implementation)
   # --------------------------------------------------------------------------
   sweeper:
-    enabled: true
+    enabled: false
     priority: high
-    risk_level: low  # Low risk - files go to Recycle Bin (reversible)
+    risk_level: low
     
-    # Sweeper uses dynamic scanning - no static paths
-    # It scans entire workspace for patterns
+    # Note: This category needs custom CleanupAction support for recycle_bin
+    # Disabled until recycle_bin action is implemented
     
-    target_extensions:
-      - "*.md"    # Markdown (reference docs, sessions, backups)
-      - "*.log"   # Log files
-      - "*.bak"   # Backup files
-      - "*.backup"
-      - "*.tmp"   # Temporary files
-      - "*.temp"
-      - "*.pyc"   # Python cache
-      - "*.pyo"
-      - "*.cache"
-      - "*.old"   # Old files
-      - "*.orig"  # Original files
+    paths:
+      - "**/*.bak"
+      - "**/*.backup"
+      - "**/*.old"
     
-    backup_patterns:
-      - "*-BACKUP-*"
-      - "*-backup-*"
-      - "*.backup.*"
-      - "*-OLD-*"
-      - "*-old-*"
-      - "*.old.*"
-    
-    session_patterns:
-      - "SESSION-*.md"
-      - "*-SESSION.md"
-      - "*-REPORT-*.md"
-      - "*-REPORT.md"
-      - "*REPORT*.md"
-      - "*-PROGRESS.md"
-      - "PHASE-*-PROGRESS.md"
-      - "*-CONTINUED-*.md"
-    
-    reference_doc_patterns:
-      - "*-REFERENCE.md"
-      - "*-reference.md"
-      - "*-IMPLEMENTATION.md"
-      - "*-implementation.md"
-      - "*-QUICK-REFERENCE.md"
-      - "*-quick-reference.md"
-      - "*-GUIDE.md"
-      - "*-guide.md"
-      - "*-INSTRUCTIONS.md"
-      - "*-instructions.md"
-      - "*-MANUAL.md"
-      - "*-manual.md"
-      - "*-SUMMARY.md"
-      - "*-summary.md"
-    
-    dated_duplicate_patterns:
-      - "*.202[0-9]-[0-1][0-9]-[0-3][0-9].*"  # file.2024-11-10.ext
-      - "*.[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9].*"  # file.20241110.ext
-    
-    age_policies:
-      session_reports_days: 30  # Delete session reports older than 30 days
-      log_files_days: 30  # Delete logs older than 30 days
-      reference_docs_days: 60  # Delete old reference docs after 60 days
-    
-    action: recycle_bin  # OS-native Recycle Bin (reversible!)
-    reason: "Moves clutter to Recycle Bin - fully reversible via OS"
+    action: delete_all
+    reason: "Backup files (disabled until recycle_bin action implemented)"
     
     scan_rules:
       recursion_limit: 20
       include_hidden: false
-      follow_symlinks: false
-      respect_gitignore: true
     
     safety:
-      # RECYCLE BIN MODE - Fully reversible!
-      require_confirmation: false
-      create_manifest: false  # NO manifests (they create clutter)
-      create_backup: false  # NO backups (Recycle Bin IS the backup)
-      use_recycle_bin: true  # OS-native reversibility
-      
-      # Only safety: audit log (minimal JSON for tracking)
-      create_audit_log: true
-      audit_log_location: "cortex-brain/sweeper-logs"
-      
-      # Whitelist protection still applies
-      respect_protected_dirs: true
-      respect_protected_patterns: true
+      require_confirmation: true
+      create_manifest: true
 
   # --------------------------------------------------------------------------
   # Category 13: CORTEX 2.0 Legacy Files (NEW!)
@@ -438,52 +374,97 @@ categories:
       - "INVESTIGATION-*.md"
       - "NOOR-CANVAS-INVESTIGATION-*.md"
     
-    # Define where each type of file should go
-    relocate_rules:
-      demo_scripts:
-        pattern: "demo_*.py"
-        destination: "scripts/demos"
-      
-      test_scripts:
-        pattern: "test_*.py"
-        destination: "tests/integration"
-      
-      validation_scripts:
-        pattern: "*_validation.py"
-        destination: "scripts/temp"
-        
-      process_scripts:
-        pattern: "process_*.py"
-        destination: "scripts/temp"
-      
-      investigation_docs:
-        pattern: "*INVESTIGATION*.md"
-        destination: "docs/investigation"
-      
-      temp_files:
-        pattern: "temp_*.json"
-        destination: "scripts/temp"
-        
-      pattern_files:
-        pattern: "pattern_*.json"
-        destination: "scripts/temp"
-    
-    action: relocate  # Move files to appropriate locations
-    
-    # Coverage files just get deleted
-    delete_patterns:
-      - ".coverage.*"
-    
-    reason: "Root folder organization - move misplaced files to proper locations"
+    action: delete_all
+    reason: "Root folder clutter - temporary/test/demo files"
     
     scan_rules:
       pattern_type: glob
-      include_hidden: true  # Include .coverage files
-      recursive: false  # Only root level
+      include_hidden: true
+      recursive: false
     
     safety:
-      require_confirmation: false  # Low risk - just organizing
+      require_confirmation: false
       create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 15: GitHub CopilotChats Clutter (NEW!)
+  # --------------------------------------------------------------------------
+  copilot_chats_clutter:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      - ".github/CopilotChats/issues.md"
+      - ".github/CopilotChats/brokencode.html"
+      - ".github/CopilotChats/brokenMkdocs.plan.md"
+      - ".github/CopilotChats/cortex-gaps.md"
+    
+    action: delete_all
+    reason: "GitHub Copilot temporary chat files with lint issues - not needed for project operation"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 16: Temporary/Historical Documentation Files (NEW!)
+  # --------------------------------------------------------------------------
+  temp_historical_docs:
+    enabled: true
+    priority: high
+    risk_level: medium
+    
+    paths:
+      # Temporary files in root
+      - "temp-enhanced-story.md"
+      - "DIRECT-IMPORT-IMPLEMENTATION-COMPLETE.md"
+      - "MKDOCS-ENCODING-FIX-SUMMARY.md"
+      - "MKDOCS-RESTORATION-COMPLETE.md"
+      - "STORY-GENERATOR-ENHANCEMENT-COMPLETE.md"
+      
+      # Implementation summaries that should be archived
+      - "src/tier1/IMPLEMENTATION-SUMMARY.md"
+      - "src/tier3/IMPLEMENTATION-SUMMARY.md"
+      - "publish/CORTEX/src/tier3/IMPLEMENTATION-SUMMARY.md"
+      
+      # Test summaries
+      - "tests/tier1/TEST_CONVERSATION_MANAGER_SUMMARY.md"
+      
+      # Scripts temp/completion docs
+      - "scripts/temp/FCO-INTEGRATION-GUIDE.md"
+      - "scripts/temp/CORTEX-3.0-IMPLEMENTATION-COMPLETE.md"
+      - "scripts/temp/COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md"
+      - "scripts/temp/CACHING-IMPLEMENTATION-SUMMARY.md"
+      - "scripts/QUICK-CAPTURE-TOOLS.md"
+      - "scripts/PUBLISH-TO-BRANCH-README.md"
+      
+      # Integration test design docs
+      - "tests/integration/PHASE-5.1-TEST-DESIGN.md"
+      
+      # Cortex brain resolution docs
+      - "tests/cortex_brain_001/CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md"
+      
+      # Admin session docs
+      - "scripts/cortex/AMBIENT-DAEMON-SESSION-INTEGRATION.md"
+    
+    action: archive
+    archive_to: "cortex-brain/archives/historical-docs"
+    
+    reason: "Historical completion/implementation documents - archive for reference"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: true
+      create_manifest: true
+      allow_rollback: true
 
 # ============================================================================
 # PROTECTED DIRECTORIES (NEVER DELETE)
