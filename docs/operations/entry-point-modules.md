@@ -447,6 +447,143 @@ Complete system architecture overview:
 - **External Integrations** - Git, Azure DevOps, LLM APIs
 - **External Integrations** - Git, Azure DevOps, LLM APIs
 
+### Story Generation
+
+Comprehensive CORTEX story generation from 9 modular chapter source files:
+
+![Story Generation Pipeline](../images/diagrams/13-story-generation-prompt.png)
+
+#### Story Architecture
+
+The CORTEX story "The Awakening of CORTEX - A Tech Comedy in Nine Chapters" is a narrative-driven technical documentation approach:
+
+- **Format:** 9 individual chapter files → 1 consolidated story
+- **Character:** Asif Codeinstein (mad scientist, software engineer, coffee enthusiast)
+- **Setting:** Moldy New Jersey basement with physical Copilot machine
+- **Theme:** Wizard of Oz metaphor (giving Copilot a brain)
+- **Style:** 95% narrative story, 5% technical content
+- **Target:** 15,000+ words, 60-75 minute read time
+
+#### Chapter Structure
+
+1. **The Amnesia Problem** - Core problem: Copilot's memory loss
+2. **First Memory** - Tier 1 working memory system
+3. **Brain Architecture** - 4-tier cognitive architecture
+4. **Left Brain** - 5 tactical execution agents
+5. **Right Brain** - 5 strategic planning agents
+6. **Corpus Callosum** - Agent coordination layer
+7. **Knowledge Graph** - Tier 2 pattern learning
+8. **Protection Layer** - Tier 0 SKULL rules
+9. **The Awakening** - Transformation complete
+
+#### Generation Pipeline
+
+**Stage 1: Source Validation**
+
+- Verify all 9 chapter files exist in `docs/story/CORTEX-STORY/`
+- Check file encoding (UTF-8)
+- Validate file readability
+
+**Stage 2: Intro Creation**
+
+- Generate hardcoded introduction with key elements:
+  - Asif Codeinstein character introduction
+  - Basement lab setting description
+  - Physical Copilot machine (server racks, LEDs)
+  - Wizard of Oz inspiration moment
+  - "Copilot needs a brain" epiphany
+
+**Stage 3: Content Assembly**
+
+- Read chapters 01-09 in sequential order
+- Strip markdown wrappers if present
+- Merge content with proper spacing (---separators)
+- Maintain chapter headers and structure
+
+**Stage 4: Quality Metrics**
+
+- **Word Count:** Calculate total words (target: 15,000+)
+- **Read Time:** Estimate at 250 words/minute (target: 60-75 min)
+- **Story Ratio:** Measure narrative vs technical content (target: 95:5)
+- **Quality Warnings:** Generate warnings if metrics out of range
+
+**Stage 5: Output Generation**
+
+- Write consolidated content to `THE-AWAKENING-OF-CORTEX.md`
+- Add footer with metadata and links
+- Verify file creation and line count
+- Store metrics in context for reporting
+
+#### Commands
+
+```bash
+cortex refresh story              # Generate consolidated story
+cortex refresh cortex story       # Alias
+cortex regenerate story           # Alias
+cortex generate story             # Alias
+```
+
+#### Quality Gates
+
+- ✅ All 9 chapter source files readable
+- ✅ Intro includes Codeinstein, basement, Wizard of Oz reference
+- ✅ All chapters present in correct sequential order
+- ✅ Word count > 10,000 words (minimum)
+- ✅ Read time 40-80 minutes (reasonable range)
+- ✅ Story ratio > 70% (narrative-dominant)
+- ✅ File creation verified (SKULL-005 protection)
+
+#### Module Implementation
+
+**BuildConsolidatedStoryModule** (`src/operations/modules/build_consolidated_story_module.py`)
+
+- **Version:** 2.0 (Mode-aware with read-time optimization)
+- **Dependencies:** None (reads files directly)
+- **Phase:** PROCESSING
+- **Execution Time:** < 2 seconds (fast file operations)
+- **Rollback:** Removes generated file, clears context
+
+#### Source Files Location
+
+```
+docs/story/CORTEX-STORY/
+├── 01-amnesia-problem.md        (171 lines)
+├── 02-first-memory.md           (279 lines)
+├── 03-brain-architecture.md     (347 lines)
+├── 04-left-brain.md             (441 lines)
+├── 05-right-brain.md            (484 lines)
+├── 06-corpus-callosum.md        (469 lines)
+├── 07-knowledge-graph.md        (462 lines)
+├── 08-protection-layer.md       (445 lines)
+├── 09-awakening.md              (425 lines)
+├── story.md                     (493 lines - reading modes index)
+└── THE-AWAKENING-OF-CORTEX.md   (3,621 lines - generated output)
+```
+
+#### Integration Tests
+
+**test_build_consolidated_story.py** validates:
+
+- File creation with correct filename
+- Intro content (Codeinstein, basement, Wizard of Oz, physical machine)
+- All 9 chapters included in sequential order
+- Quality metrics calculation (word count, read time, story ratio)
+- Quality warnings for out-of-range metrics
+- SKULL-005 protection (actual file creation, not validation-only)
+- Module metadata and prerequisites validation
+- Rollback functionality
+
+#### Example Output
+
+```
+Consolidated story: 15,247 words, 61.0 min read
+✅ File created: docs/story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX.md
+✅ Line count: 3,621 lines
+✅ Chapters included: 9
+✅ Story:technical ratio: 92%
+✅ Read time within target range (60-75 min)
+```
+
 ### When to Use EPM
 
 **✅ Use EPM for:**
@@ -456,14 +593,13 @@ Complete system architecture overview:
 - Workflows with quality gates
 - Complex feature implementations
 - Documentation generation
+- Story generation from modular sources
 - System setup and validation
 
 **❌ Don't use EPM for:**
 
 - Simple one-step operations
 - Quick file edits
-- Basic information queries
-- Single-agent tasks
 - Basic information queries
 - Single-agent tasks
 

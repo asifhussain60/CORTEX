@@ -17,51 +17,26 @@ theme:
 # Theme does not use extra_css (CSS is in theme)
 
 # ============================================
-# NAVIGATION STRUCTURE - Matches Horizontal Menu
-# Home | The CORTEX Birth | Cortex Bible | Architecture | Technical Docs | User Guides | Examples
+# NAVIGATION STRUCTURE - Chapter-Based
+# Home | The CORTEX Story (with chapter navigation)
 # ============================================
 nav:
 - Home: index.md
-- The CORTEX Birth:
-  - The Awakening Story: diagrams/narratives/THE-AWAKENING-OF-CORTEX.md
-  - Narratives: diagrams/narratives/
-- Cortex Bible: governance/THE-RULEBOOK.md
-- Architecture:
-  - Overview: architecture/overview.md
-  - Tier System: architecture/tier-system.md
-  - Agents: architecture/agents.md
-  - Brain Protection: architecture/brain-protection.md
-  - Diagrams:
-    - Module Structure: images/diagrams/architectural/module-structure.md
-    - Brain Protection: images/diagrams/architectural/brain-protection.md
-    - EPM Doc Generator: images/diagrams/architectural/epm-doc-generator-pipeline.md
-    - Agent Coordination: images/diagrams/strategic/agent-coordination.md
-    - Information Flow: images/diagrams/strategic/information-flow.md
-    - Tier Architecture: images/diagrams/strategic/tier-architecture.md
-    - Operational Diagrams: images/diagrams/operational/
-    - Integration Diagrams: images/diagrams/integration/
-- Technical Docs:
-  - API Reference: reference/api.md
-  - Configuration: reference/configuration.md
-  - Response Templates: reference/response-templates.md
-  - Operations:
-    - Overview: operations/overview.md
-    - Entry Point Modules: operations/entry-point-modules.md
-    - Workflows: operations/workflows.md
-    - Health Monitoring: operations/health-monitoring.md
-- User Guides:
-  - Quick Start: getting-started/quick-start.md
-  - Installation: getting-started/installation.md
-  - Configuration: getting-started/configuration.md
-  - Developer Guide: guides/developer-guide.md
-  - Admin Guide: guides/admin-guide.md
-  - Best Practices: guides/best-practices.md
-  - Troubleshooting: guides/troubleshooting.md
-- FAQ: FAQ.md
-- Examples:
-  - Getting Started: getting-started/quick-start.md
-  - Use Cases: guides/best-practices.md
-  - DALL-E Prompts: diagrams/prompts/
+- The CORTEX Story:
+  - Story Home: story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX.md
+  - Prologue: story/CORTEX-STORY/chapters/prologue.md
+  - Chapter 1 - The Amnesia Crisis: story/CORTEX-STORY/chapters/chapter-01.md
+  - Chapter 2 - Tier 0: story/CORTEX-STORY/chapters/chapter-02.md
+  - Chapter 3 - Tier 1: story/CORTEX-STORY/chapters/chapter-03.md
+  - Chapter 4 - The Agent Uprising: story/CORTEX-STORY/chapters/chapter-04.md
+  - Chapter 5 - The Knowledge Graph: story/CORTEX-STORY/chapters/chapter-05.md
+  - Chapter 6 - The Token Crisis: story/CORTEX-STORY/chapters/chapter-06.md
+  - Chapter 7 - Conversation Capture: story/CORTEX-STORY/chapters/chapter-07.md
+  - Chapter 8 - Cross-Platform: story/CORTEX-STORY/chapters/chapter-08.md
+  - Chapter 9 - Performance: story/CORTEX-STORY/chapters/chapter-09.md
+  - Chapter 10 - The Awakening: story/CORTEX-STORY/chapters/chapter-10.md
+  - Epilogue: story/CORTEX-STORY/chapters/epilogue.md
+  - Disclaimer: story/CORTEX-STORY/chapters/disclaimer.md
 markdown_extensions:
 - abbr
 - admonition

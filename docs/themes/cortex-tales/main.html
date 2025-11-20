@@ -82,14 +82,6 @@
                         </ul>
                     </div>
                     {% endif %}
-                    
-                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
-                    {% if page.toc and page.toc|string|length < 3000 %}
-                    <div class="toc-wrapper">
-                        <h4>On This Page</h4>
-                        {{ page.toc }}
-                    </div>
-                    {% endif %}
                 </div>
 
                 <!-- Main Content Area (No Right Sidebar) -->

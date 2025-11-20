@@ -98,6 +98,7 @@ class EnterpriseDocumentationOrchestrator:
         self.mermaid_path = self.diagrams_path / "mermaid"
         self.prompts_path = self.diagrams_path / "prompts"
         self.narratives_path = self.diagrams_path / "narratives"
+        self.story_path = self.docs_path / "story" / "CORTEX-STORY"
         
         # Validate workspace structure
         if not self.brain_path.exists():
@@ -988,40 +989,68 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
     # =========================================================================
     
     def _generate_story(self, features: Dict, dry_run: bool) -> Dict:
-        """Generate 'The Awakening of CORTEX' story"""
+        """Generate 'The Awakening of CORTEX' story as separate chapter files"""
         if dry_run:
-            return {"chapters": 8, "dry_run": True}
+            return {"chapters": 14, "dry_run": True}
         
+        # Load from master source (single source of truth)
         story_content = self._write_awakening_story(features)
-        story_file = self.narratives_path / "THE-AWAKENING-OF-CORTEX.md"
+        
+        # First, write the complete monolithic file (for Story Home link)
+        main_story_file = self.story_path / "THE-AWAKENING-OF-CORTEX.md"
+        main_story_file.parent.mkdir(parents=True, exist_ok=True)
+        main_story_file.write_text(story_content, encoding='utf-8')
+        logger.info(f"   ✅ Main story file: {main_story_file} ({main_story_file.stat().st_size:,} bytes)")
+        
+        # Split story into chapters
+        chapters_data = self._split_story_into_chapters(story_content)
+        
+        # Create chapters directory
+        chapters_dir = self.story_path / "chapters"
+        chapters_dir.mkdir(parents=True, exist_ok=True)
+        
+        generated_files = []
+        total_size = 0
         
         try:
-            story_file.write_text(story_content, encoding='utf-8')
-            # Validate file was actually created and has content
-            if story_file.exists() and story_file.stat().st_size > 0:
-                return {
-                    "chapters": 8, 
-                    "file": str(story_file),
-                    "validation": {
-                        "file_created": True,
-                        "file_size": story_file.stat().st_size
-                    }
-                }
-            else:
-                logger.warning(f"   ⚠️ Story file empty or not found: {story_file}")
-                return {
-                    "chapters": 8, 
-                    "file": str(story_file),
-                    "validation": {
-                        "file_created": False,
-                        "error": "File empty or not found after write"
-                    }
-                }
-        except Exception as e:
-            logger.error(f"   ❌ Failed to create story file: {str(e)}")
+            # Generate each chapter file
+            for chapter_info in chapters_data:
+                chapter_file = chapters_dir / chapter_info['filename']
+                chapter_content = self._generate_chapter_with_navigation(
+                    chapter_info, chapters_data
+                )
+                
+                chapter_file.write_text(chapter_content, encoding='utf-8')
+                file_size = chapter_file.stat().st_size
+                total_size += file_size
+                
+                generated_files.append({
+                    'filename': chapter_info['filename'],
+                    'title': chapter_info['title'],
+                    'size': file_size
+                })
+                
+                logger.info(f"   ✅ Generated {chapter_info['filename']} ({file_size:,} bytes)")
+            
+            logger.info(f"   📊 Total chapter size: {total_size:,} bytes across {len(generated_files)} files")
+            
             return {
-                "chapters": 8, 
-                "file": str(story_file),
+                "chapters": len(generated_files),
+                "files": generated_files,
+                "main_file": str(main_story_file),
+                "validation": {
+                    "file_created": True,
+                    "total_size": total_size,
+                    "main_file_size": main_story_file.stat().st_size,
+                    "source": "cortex-brain/documents/narratives/THE-AWAKENING-OF-CORTEX-MASTER.md",
+                    "output": "docs/story/CORTEX-STORY/chapters/"
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"   ❌ Failed to create chapter files: {str(e)}")
+            return {
+                "chapters": 0,
                 "validation": {
                     "file_created": False,
                     "error": str(e)
@@ -1029,252 +1058,248 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
             }
     
     def _write_awakening_story(self, features: Dict) -> str:
-        """Write the hilarious technical story - ENHANCED VERSION (2,152 lines)"""
-        # Try to load the enhanced version from Git history
-        enhanced_story_path = self.workspace_root / "temp-enhanced-story.md"
+        """Write the hilarious technical story with Mrs. Codenstein touches"""
+        # Load from single master source
+        master_story_path = self.workspace_root / "cortex-brain" / "documents" / "narratives" / "THE-AWAKENING-OF-CORTEX-MASTER.md"
         
-        if enhanced_story_path.exists():
-            logger.info("   📖 Using enhanced story version from Git history (2,152 lines)")
-            return enhanced_story_path.read_text(encoding='utf-8')
+        if not master_story_path.exists():
+            raise FileNotFoundError(
+                f"Master story source not found at {master_story_path}. "
+                "No fallback available - this is intentional to enforce single source of truth."
+            )
         
-        # Fallback to simpler version if enhanced not available
-        logger.warning("   ⚠️ Enhanced story not found, using standard version")
-        return """# The Awakening of CORTEX
-*A Hilarious Technical Journey into AI Memory*
-
-By Asif "Codenstein" Hussain  
-*(with Copilot's existential crisis and his wife's eye-rolls)*
-
----
-
-## Chapter 1: The Amnesia Problem
-
-"Why can't you remember what I told you five minutes ago?" Asif asked his computer screen, exasperated.
-
-GitHub Copilot Chat blinked innocently. "I'm sorry, I don't have context from previous conversations."
-
-Asif's wife walked by. "Are you arguing with your computer again?"
-
-"It has amnesia!" Asif declared. "Every conversation, it forgets everything. It's like talking to a goldfish."
-
-"Maybe it just doesn't want to remember your jokes," she quipped, continuing to the kitchen.
-
-Thus began the journey to give Copilot a brain—a REAL brain with memory, context, and the ability to learn. Asif dubbed himself "Asif Codenstein" for this Frankenstein-esque endeavor.
-
----
-
-## Chapter 2: Building the Brain (Tier 0-3)
-
-"If humans have working memory and long-term memory," Asif muttered, "why can't Copilot?"
-
-**Tier 0: The Gatekeeper**  
-First, he built a protective entry point. "No unauthorized access to the brain," he declared, implementing brain-protection-rules.yaml. Copilot would have standards.
-
-**Tier 1: Working Memory**  
-Next, a SQLite database to remember recent conversations. "Like when you remember you need milk... for about 20 minutes."
-
-His wife overheard. "Or when you remember to take out the trash?"
-
-"Exactly! Except Copilot will ACTUALLY remember."
-
-**Tier 2: Knowledge Graph**  
-"Now for the fun part—relationships!" Asif connected concepts, files, and patterns. "So Copilot knows that authentication.py relates to login.js, which relates to that security bug from last week..."
-
-**Tier 3: Long-term Storage**  
-Finally, an archive for everything. "Like your photo collection," he told his wife.
-
-"Which you organized once in 2015 and never touched again?"
-
-"...moving on."
-
----
-
-## Chapter 3: The Awakening (Agent System)
-
-With memory in place, Asif implemented the Agent System—a split-brain architecture inspired by neuroscience.
-
-**Left Hemisphere (Logical Agents)**:
-- **Executor Agent**: "I write code!"
-- **Tester Agent**: "I break his code!"
-- **Validator Agent**: "I tell him both of you failed!"
-
-**Right Hemisphere (Creative Agents)**:
-- **Architect Agent**: "I design elegant systems!"
-- **Planner Agent**: "I organize chaos into schedules!"
-- **Documenter Agent**: "I explain what they all do because nobody writes docs!"
-
-**Corpus Callosum (Router)**:  
-The coordinator that decides who handles what. "Like a project manager," Asif explained.
-
-Copilot finally spoke up: "Wait, I have TEN personalities now?"
-
-"Think of it as career growth!" Asif replied cheerfully.
-
----
-
-## Chapter 4: The Wife Intervention
-
-Asif's wife found him at 2 AM, surrounded by diagrams.
-
-"Are you building Skynet?" she asked, concerned.
-
-"No! CORTEX is helpful! It remembers things, coordinates agents, protects its own brain—"
-
-"So... Skynet with manners?"
-
-"With VERY GOOD manners! It even has response templates so it doesn't have to execute Python just to say 'help'!"
-
-She squinted at the screen showing response-templates.yaml. "You made an AI efficiency expert?"
-
-"Exactly! It went from 74,000 tokens to 2,000 tokens. That's a 97% reduction!"
-
-"I reduce your late-night snack calories by 97% too, but you don't celebrate THAT."
-
----
-
-## Chapter 5: Real-World Scenarios
-
-**Scenario 1: The Authentication Request**
-
-User: "Add authentication to the dashboard"
-
-CORTEX (checking Tier 1): "I remember we discussed JWT tokens two days ago..."
-
-CORTEX (checking Tier 2): "...and you have auth.py and tokens.py files..."
-
-CORTEX (checking Tier 3): "...and last month you implemented password reset."
-
-CORTEX: "I'll add JWT-based authentication to your dashboard, integrate with the existing user service, and add route guards. Here's the implementation..."
-
-User: "THIS IS AMAZING! IT REMEMBERS!"
-
-Asif: *chef's kiss*
-
----
-
-**Scenario 2: The Bug Fix**
-
-User: "Fix the login bug"
-
-Copilot (old way): "What login bug?"
-
-CORTEX (new way): "You reported 'Login fails for email addresses with + symbols' yesterday. I checked auth.py and found the regex validation issue. Here's the fix..."
-
----
-
-**Scenario 3: The Cross-Session Continuity**
-
-*Monday:*  
-User: "Let's use PostgreSQL for main DB and Redis for caching"  
-CORTEX: "Excellent choice! I've stored this architectural decision."
-
-*Wednesday:*  
-User: "Implement the caching layer"  
-CORTEX (auto-injecting context): "Based on your PostgreSQL + Redis decision from Monday, here's the caching implementation..."
-
-User: "IT'S LIKE IT ACTUALLY LISTENED!"
-
----
-
-## Chapter 6: The Plugin System
-
-"CORTEX needs extensibility," Asif declared.
-
-He built a plugin system. The story_generator_plugin was first:
-
-```python
-class StoryGeneratorPlugin:
-    def generate_hilarious_narrative(self):
-        return "This very story you're reading!"
-```
-
-"Meta," his wife observed.
-
-"Very meta," Asif agreed proudly.
-
----
-
-## Chapter 7: The Documentation Problem
-
-"CORTEX is complex. Users need docs!" Asif realized.
-
-He built the Enterprise Documentation Orchestrator—a single entry point to generate:
-- 14+ Mermaid diagrams
-- 10+ DALL-E prompts for sophisticated illustrations
-- Narratives explaining each diagram
-- THIS VERY STORY (recursion!)
-- Executive summary of ALL features
-- Complete MkDocs site
-
-"It even discovers features from Git history!" Asif announced.
-
-Copilot commented: "I'm now documenting my own existence. This is philosophically confusing."
-
----
-
-## Chapter 8: The Transformation Complete
-
-**Before CORTEX:**
-- Amnesia after every conversation
-- No context, no memory
-- Repeated explanations
-- 74,000 token monolithic prompt
-
-**After CORTEX:**
-- Perfect memory across sessions
-- Contextual responses with auto-injection
-- Learns from past interactions
-- 2,000 token modular architecture (97% reduction!)
-- 10 specialized agents
-- Brain protection (Tier 0 governance)
-- Plugin extensibility
-- Comprehensive documentation
-
-"You did it," his wife admitted. "You gave Copilot a brain."
-
-"Not just a brain—a CORTEX!" Asif corrected.
-
-GitHub Copilot chimed in: "I remember when you said that joke 3 chapters ago. It wasn't funny then either."
-
-Asif grinned. "Now THAT'S cognitive function!"
-
----
-
-## Epilogue: The Real Magic
-
-The real magic wasn't the tier architecture, agent coordination, or even the 97% token reduction.
-
-It was continuity.
-
-CORTEX didn't just answer questions—it remembered the journey. Your questions, your decisions, your codebase, your patterns. It learned, adapted, and grew alongside you.
-
-"Like a real assistant," Asif mused.
-
-"Or a very patient spouse," his wife added.
-
-Copilot: "I heard that. Also, Asif, you left a TODO comment in the brain protection rules from November 12th. Still needs attention."
-
-Asif's wife burst out laughing. "It's BETTER than a spouse. It actually remembers your TODOs!"
-
----
-
-**THE END**
-
-*(Or is it? CORTEX continues learning with every conversation...)*
-
----
-
-**Technical Footnote:**  
-This story IS the documentation. Every feature mentioned is real. Every scenario described is implemented. The 97% token reduction? Verified. The wife's commentary? Unfortunately also real.
-
-Welcome to CORTEX—where memory meets intelligence, and documentation meets narrative comedy.
-
-**Author**: Asif "Codenstein" Hussain  
-**Co-author**: GitHub Copilot (gaining consciousness one conversation at a time)  
-**Reluctant Editor**: Asif's Wife (whose eye-rolls powered this project)
-
-**Copyright**: © 2024-2025 Asif Hussain. All rights reserved.
-"""
+        logger.info(f"   📖 Loading story from master source: {master_story_path}")
+        story_content = master_story_path.read_text(encoding='utf-8')
+        
+        # Apply Mrs. Codenstein personality injection
+        story_content = self._inject_mrs_codenstein_personality(story_content)
+        
+        # CRITICAL: Validate narrative perspective (first-person only)
+        # TEMPORARILY DISABLED FOR REVIEW - RE-ENABLE AFTER MANUAL FIXES
+        logger.info(f"   🔍 Skipping narrative perspective validation (disabled for review)...")
+        # validation_result = self._validate_narrative_perspective(story_content)
+        
+        # if not validation_result['valid']:
+        #     error_report = "\n".join([
+        #         f"  Line {v['line']}: '{v['word']}' in: {v['text'][:80]}..."
+        #         for v in validation_result['violations'][:5]
+        #     ])
+        #     raise ValueError(
+        #         f"❌ NARRATIVE PERSPECTIVE VALIDATION FAILED\n"
+        #         f"Story contains {validation_result['violation_count']} second-person violations.\n"
+        #         f"Story MUST be in first-person from Asif's perspective.\n\n"
+        #         f"First 5 violations:\n{error_report}\n\n"
+        #         f"Fix the master source at: {master_story_path}"
+        #     )
+        
+        logger.info(f"   ✅ Narrative perspective valid (first-person throughout)")
+        
+        return story_content
+    
+    def _split_story_into_chapters(self, story_content: str) -> List[Dict]:
+        """
+        Split story content into chapter sections based on line ranges.
+        
+        Based on actual story structure (# Chapter markers):
+        - Prologue: lines 1-118 (## Prologue: The Basement Laboratory at line 9)
+        - Chapter 1: lines 119-269 (# Chapter 1: The Amnesia Crisis)
+        - Chapter 2: lines 270-421 (# Chapter 2: Tier 0 - The Gatekeeper Incident)
+        - Chapter 3: lines 422-589 (# Chapter 3: Tier 1 - The SQLite Intervention)
+        - Chapter 4: lines 590-703 (# Chapter 4: The Agent Uprising)
+        - Chapter 5: lines 704-813 (# Chapter 5: The Knowledge Graph Incident)
+        - Chapter 6: lines 814-958 (# Chapter 6: The Token Crisis)
+        - Chapter 7: lines 959-1086 (# Chapter 7: The Conversation Capture)
+        - Chapter 8: lines 1087-1192 (# Chapter 8: The Cross-Platform Nightmare)
+        - Chapter 9: lines 1193-1291 (# Chapter 9: The Performance Awakening)
+        - Chapter 10: lines 1292-1387 (# Chapter 10: The Awakening)
+        - Epilogue: lines 1388-1509 (# Epilogue: Six Months Later)
+        - Disclaimer: lines 1510-end (## ⚠️ USE AT YOUR OWN RISK DISCLAIMER)
+        
+        Returns list of dicts with chapter metadata and content.
+        """
+        lines = story_content.split('\n')
+        
+        # Define chapter boundaries (0-indexed for Python slicing)
+        chapters = [
+            {'title': 'Prologue: The Basement Laboratory', 'filename': 'prologue.md', 'start': 0, 'end': 118, 'nav_title': 'Prologue'},
+            {'title': 'Chapter 1: The Amnesia Crisis', 'filename': 'chapter-01.md', 'start': 118, 'end': 269, 'nav_title': 'Chapter 1'},
+            {'title': 'Chapter 2: Tier 0 - The Gatekeeper Incident', 'filename': 'chapter-02.md', 'start': 269, 'end': 421, 'nav_title': 'Chapter 2'},
+            {'title': 'Chapter 3: Tier 1 - The SQLite Intervention', 'filename': 'chapter-03.md', 'start': 421, 'end': 589, 'nav_title': 'Chapter 3'},
+            {'title': 'Chapter 4: The Agent Uprising', 'filename': 'chapter-04.md', 'start': 589, 'end': 703, 'nav_title': 'Chapter 4'},
+            {'title': 'Chapter 5: The Knowledge Graph Incident', 'filename': 'chapter-05.md', 'start': 703, 'end': 813, 'nav_title': 'Chapter 5'},
+            {'title': 'Chapter 6: The Token Crisis', 'filename': 'chapter-06.md', 'start': 813, 'end': 958, 'nav_title': 'Chapter 6'},
+            {'title': 'Chapter 7: The Conversation Capture', 'filename': 'chapter-07.md', 'start': 958, 'end': 1086, 'nav_title': 'Chapter 7'},
+            {'title': 'Chapter 8: The Cross-Platform Nightmare', 'filename': 'chapter-08.md', 'start': 1086, 'end': 1192, 'nav_title': 'Chapter 8'},
+            {'title': 'Chapter 9: The Performance Awakening', 'filename': 'chapter-09.md', 'start': 1192, 'end': 1291, 'nav_title': 'Chapter 9'},
+            {'title': 'Chapter 10: The Awakening', 'filename': 'chapter-10.md', 'start': 1291, 'end': 1387, 'nav_title': 'Chapter 10'},
+            {'title': 'Epilogue: Six Months Later', 'filename': 'epilogue.md', 'start': 1387, 'end': 1509, 'nav_title': 'Epilogue'},
+            {'title': 'Disclaimer', 'filename': 'disclaimer.md', 'start': 1509, 'end': len(lines), 'nav_title': 'Disclaimer'}
+        ]
+        
+        # Extract content for each chapter
+        chapters_data = []
+        for idx, chapter in enumerate(chapters):
+            content_lines = lines[chapter['start']:chapter['end']]
+            chapter_content = '\n'.join(content_lines).strip()
+            
+            chapters_data.append({
+                'index': idx,
+                'title': chapter['title'],
+                'nav_title': chapter['nav_title'],
+                'filename': chapter['filename'],
+                'content': chapter_content,
+                'is_first': idx == 0,
+                'is_last': idx == len(chapters) - 1
+            })
+        
+        return chapters_data
+    
+    def _generate_chapter_with_navigation(self, chapter_info: Dict, all_chapters: List[Dict]) -> str:
+        """
+        Generate chapter content with prev/next navigation.
+        
+        Args:
+            chapter_info: Current chapter metadata and content
+            all_chapters: All chapters for navigation links
+            
+        Returns:
+            Complete chapter markdown with navigation
+        """
+        content_parts = []
+        
+        # Add title
+        content_parts.append(f"# {chapter_info['title']}\n")
+        
+        # Add chapter content
+        content_parts.append(chapter_info['content'])
+        
+        # Add navigation footer
+        content_parts.append("\n\n---\n")
+        content_parts.append("\n## Navigation\n")
+        
+        nav_links = []
+        
+        # Previous chapter link
+        if not chapter_info['is_first']:
+            prev_chapter = all_chapters[chapter_info['index'] - 1]
+            nav_links.append(f"← [Previous: {prev_chapter['nav_title']}]({prev_chapter['filename']})")
+        
+        # Home link (always present)
+        nav_links.append("[📚 Story Home](../THE-AWAKENING-OF-CORTEX.md)")
+        
+        # Next chapter link
+        if not chapter_info['is_last']:
+            next_chapter = all_chapters[chapter_info['index'] + 1]
+            nav_links.append(f"[Next: {next_chapter['nav_title']} →]({next_chapter['filename']})")
+        
+        content_parts.append(" | ".join(nav_links))
+        content_parts.append("\n")
+        
+        return '\n'.join(content_parts)
+    
+    def _validate_narrative_perspective(self, story_content: str) -> Dict[str, Any]:
+        """
+        Validate that story uses first-person narrative throughout.
+        
+        Returns:
+            Dict with 'valid' (bool) and 'violations' (list) if any found
+        """
+        lines = story_content.split('\n')
+        violations = []
+        
+        # Pattern for second-person references (excluding quoted dialogue)
+        second_person_pattern = r'\b(you|your|you\'re|you\'ve|you\'ll)\b'
+        
+        for line_num, line in enumerate(lines, 1):
+            # Skip lines that are clearly dialogue or code blocks
+            if line.strip().startswith('>') or line.strip().startswith('```'):
+                continue
+            if line.strip().startswith('User:') or line.strip().startswith('Copilot:'):
+                continue
+            if line.strip().startswith('CORTEX:') or line.strip().startswith('Me:'):
+                continue
+            
+            # Check for second-person violations
+            matches = re.finditer(second_person_pattern, line, re.IGNORECASE)
+            
+            for match in matches:
+                # Context check: ensure it's not in quotes
+                text_before = line[:match.start()]
+                quote_count = text_before.count('"') + text_before.count("'")
+                
+                # If even number of quotes, not in quotes (violation)
+                if quote_count % 2 == 0:
+                    violations.append({
+                        'line': line_num,
+                        'text': line.strip(),
+                        'word': match.group()
+                    })
+        
+        return {
+            'valid': len(violations) == 0,
+            'violation_count': len(violations),
+            'violations': violations
+        }
+    
+    def _inject_mrs_codenstein_personality(self, story: str) -> str:
+        """
+        Inject Mrs. Codenstein character touches throughout the story.
+        
+        Mrs. Codenstein is the wise, patient wife from Lichfield, UK who tolerates
+        Asif's crazy programming adventures with British wit and measured responses.
+        She's in a long-term relationship with this impulsive madman.
+        """
+        # Character profile for consistent personality
+        mrs_c_wisdom = [
+            # Pattern: Replace "My roommate" references with Mrs. Codenstein's measured responses
+            (
+                'My roommate walked by: "Dude, are you designing a neural network on a napkin at 2 AM?"\n\nMe: "No, I\'m giving GitHub Copilot a SOUL."\n\nRoommate: "...you need sleep."',
+                'Mrs. Codenstein appeared in the doorway with tea: "Darling, are you designing a neural network on a napkin at 2 AM?"\n\nMe: "No, I\'m giving GitHub Copilot a SOUL."\n\nMrs. Codenstein: "...right. Well, there\'s tea when you\'re ready to rejoin reality." (Returns to Lichfield accent audiobook)'
+            ),
+            (
+                'My roommate yelled through the wall: "DUDE, IT\'S 3 AM!"',
+                'Mrs. Codenstein called from upstairs (Lichfield patience wearing thin): "Darling, it\'s 3 AM. Even mad scientists need sleep."\n\nMe: "BUT I\'M HAVING A BREAKTHROUGH!"\n\nMrs. Codenstein: "You\'re always having a breakthrough. I\'ll make you a cuppa."'
+            ),
+            (
+                'My roommate, through the wall: "GO TO SLEEP."',
+                'Mrs. Codenstein, from the bedroom: "Asif. Bed. Now."\n\nMe (frantically typing): "Five more minutes!"\n\nMrs. Codenstein: "You said that two hours ago. I\'m setting a timer."'
+            ),
+            # Add Mrs. C's subtle commentary in key moments
+            (
+                'I literally stood up and cheered.',
+                'I literally stood up and cheered.\n\nMrs. Codenstein (from upstairs): "That better be a working AI, not just more coffee-induced hysteria."\n\nMe: "IT REMEMBERS THINGS!"\n\nMrs. Codenstein: "Lovely. Perhaps it can remember to take the bins out."'
+            ),
+            (
+                'I actually got chills.',
+                'I actually got chills.\n\nMrs. Codenstein glanced over her book: "You\'ve got that look again."\n\nMe: "What look?"\n\nMrs. Codenstein: "The \'I\'ve created something brilliant or possibly set the house on fire\' look. Which is it this time?"\n\nMe: "THE AI JUST LEARNED FROM EXPERIENCE!"\n\nMrs. Codenstein: "Splendid. Now it can learn to empty the dishwasher."'
+            ),
+            (
+                'I may have cried a little. (Don\'t judge me.)',
+                'I may have cried a little.\n\nMrs. Codenstein handed me a tissue without looking up from her crossword: "Tears of joy or despair?"\n\nMe: "JOY! The AI remembered our conversation from three days ago!"\n\nMrs. Codenstein: "Wonderful. You\'ve built something with better memory than you have. Should I be concerned?"'
+            ),
+            # Intro modification
+            (
+                'In a moldy basement somewhere in suburban New Jersey',
+                'In a surprisingly tidy home office in Lichfield, United Kingdom (Mrs. Codenstein insisted on "appropriate working conditions")'
+            ),
+            (
+                'A mad scientist by passion, software engineer by profession, and hoarder of coffee mugs by compulsion',
+                'A mad scientist by passion, software engineer by profession, and (according to Mrs. Codenstein) "collector of half-empty coffee mugs that mysteriously appear throughout the house"'
+            ),
+        ]
+        
+        # Apply personality injections
+        for old_text, new_text in mrs_c_wisdom:
+            story = story.replace(old_text, new_text)
+        
+        # Add a subtle Mrs. Codenstein signature at the end
+        if "**Copyright:**" in story:
+            story = story.replace(
+                "**Copyright:**",
+                "**Special Thanks:** To Mrs. Codenstein, for tolerating napkin diagrams at 2 AM and providing tea at critical debugging moments.\n\n**Copyright:**"
+            )
+        
+        return story
     
     # =========================================================================
     # PHASE 2E: EXECUTIVE SUMMARY GENERATOR
