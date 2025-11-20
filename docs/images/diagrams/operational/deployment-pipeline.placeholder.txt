@@ -1,0 +1,2 @@
+Placeholder for operational/deployment-pipeline.png
+Generate using DALL-E prompt: docs/diagrams/prompts/12-deployment-pipeline-prompt.md

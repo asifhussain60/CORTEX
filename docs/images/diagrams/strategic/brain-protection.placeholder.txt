@@ -1,0 +1,2 @@
+Placeholder for strategic/brain-protection.png
+Generate using DALL-E prompt: docs/diagrams/prompts/06-brain-protection-prompt.md
