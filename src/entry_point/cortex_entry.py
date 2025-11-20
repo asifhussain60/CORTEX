@@ -34,6 +34,7 @@ from src.tier1.tier1_api import Tier1API
 from src.tier2.knowledge_graph import KnowledgeGraph
 from src.tier3.context_intelligence import ContextIntelligence
 from src.config import config
+from src.core.context_management.unified_context_manager import UnifiedContextManager
 
 
 class CortexEntry:
@@ -113,7 +114,15 @@ class CortexEntry:
             tier3_context=self.tier3
         )
         
-        self.logger.info("CORTEX entry point initialized")
+        # Initialize unified context manager (Phase 2: Context Management)
+        self.context_manager = UnifiedContextManager(
+            tier1=self.tier1,
+            tier2=self.tier2,
+            tier3=self.tier3
+        )
+        self.default_token_budget = 500  # Store as instance variable
+        
+        self.logger.info("CORTEX entry point initialized with unified context manager")
     
     def process(
         self,
@@ -161,6 +170,41 @@ class CortexEntry:
                 f"Processing request: intent={request.intent}, "
                 f"conv_id={conversation_id}"
             )
+            
+            # Build unified context from all tiers (Phase 2: Context Management)
+            try:
+                context_data = self.context_manager.build_context(
+                    conversation_id=conversation_id,
+                    user_request=user_message,
+                    current_files=[],  # TODO: Get from workspace
+                    token_budget=500
+                )
+                
+                # Add context data to request for agents to use
+                if not request.context:
+                    request.context = {}
+                request.context['unified_context'] = context_data
+                
+                # Log context quality for monitoring
+                token_usage = context_data.get('token_usage', {})
+                self.logger.info(
+                    f"Context loaded: "
+                    f"tokens={token_usage.get('total', 0)}/{token_usage.get('budget', 500)}, "
+                    f"T1={context_data.get('relevance_scores', {}).get('tier1', 0.0):.2f}, "
+                    f"T2={context_data.get('relevance_scores', {}).get('tier2', 0.0):.2f}, "
+                    f"T3={context_data.get('relevance_scores', {}).get('tier3', 0.0):.2f}"
+                )
+                
+                # Warn if over budget
+                if not token_usage.get('within_budget', True):
+                    self.logger.warning(
+                        f"Context exceeds token budget: "
+                        f"{token_usage.get('total', 0)}/{token_usage.get('budget', 500)} tokens"
+                    )
+            except Exception as e:
+                self.logger.error(f"Failed to build unified context: {e}", exc_info=True)
+                # Continue without context if building fails (graceful degradation)
+                request.context['unified_context'] = {}
 
             # Handle continuation requests with smart context loading
             if request.intent == "resume" or self._is_continue_request(user_message):

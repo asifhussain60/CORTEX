@@ -1,4 +1,0 @@
-# This file ensures the diagrams folder is not empty
-
-This folder is preserved for manual diagram files and narratives.
-Auto-generated diagrams are created in `images/diagrams/` subfolders.
