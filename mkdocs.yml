@@ -57,6 +57,7 @@ nav:
   - Admin Guide: guides/admin-guide.md
   - Best Practices: guides/best-practices.md
   - Troubleshooting: guides/troubleshooting.md
+- FAQ: FAQ.md
 - Examples:
   - Getting Started: getting-started/quick-start.md
   - Use Cases: guides/best-practices.md

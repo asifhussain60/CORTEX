@@ -176,8 +176,20 @@ class EnterpriseDocumentationOrchestrator:
                 logger.info(f"   ✅ Executive summary with {generation_results['executive']['feature_count']} features")
                 logger.info("")
             
+            if not stage or stage == "image_guidance":
+                logger.info("🖼️ Phase 2f: Generating Image Guidance")
+                generation_results['image_guidance'] = self._generate_image_guidance(discovered_features, dry_run)
+                logger.info(f"   ✅ Image generation instructions created")
+                logger.info("")
+            
+            if not stage or stage == "doc_integration":
+                logger.info("📸 Phase 2g: Integrating Images with Documentation")
+                generation_results['doc_integration'] = self._integrate_images_with_docs(discovered_features, dry_run)
+                logger.info(f"   ✅ Architecture docs updated with image references")
+                logger.info("")
+            
             if not stage or stage == "mkdocs":
-                logger.info("🌐 Phase 2f: Building MkDocs Site")
+                logger.info("🌐 Phase 2h: Building MkDocs Site")
                 generation_results['mkdocs'] = self._build_mkdocs_site(discovered_features, dry_run)
                 logger.info(f"   ✅ MkDocs site ready (preview: mkdocs serve)")
                 logger.info("")
@@ -391,10 +403,36 @@ class EnterpriseDocumentationOrchestrator:
             ("14-system-architecture.mmd", self._diagram_system_architecture()),
         ]
         
-        for filename, content in diagrams:
-            (self.mermaid_path / filename).write_text(content, encoding='utf-8')
+        files_created = []
+        files_failed = []
         
-        return {"count": len(diagrams), "files": [f[0] for f in diagrams]}
+        for filename, content in diagrams:
+            file_path = self.mermaid_path / filename
+            try:
+                file_path.write_text(content, encoding='utf-8')
+                # Validate file was actually created and has content
+                if file_path.exists() and file_path.stat().st_size > 0:
+                    files_created.append(filename)
+                else:
+                    files_failed.append(f"{filename} (file empty or not found)")
+            except Exception as e:
+                files_failed.append(f"{filename} (error: {str(e)})")
+        
+        result = {
+            "count": len(files_created), 
+            "files": files_created,
+            "expected_count": len(diagrams),
+            "validation": {
+                "files_created": len(files_created),
+                "files_failed": len(files_failed),
+                "failed_files": files_failed
+            }
+        }
+        
+        if files_failed:
+            logger.warning(f"   ⚠️ Failed to create {len(files_failed)} diagram files: {files_failed}")
+        
+        return result
     
     def _diagram_tier_architecture(self) -> str:
         """Generate tier architecture diagram"""
@@ -526,10 +564,36 @@ class EnterpriseDocumentationOrchestrator:
             ("14-system-architecture-prompt.md", self._prompt_system_architecture()),
         ]
         
-        for filename, content in prompts:
-            (self.prompts_path / filename).write_text(content, encoding='utf-8')
+        files_created = []
+        files_failed = []
         
-        return {"count": len(prompts), "files": [f[0] for f in prompts]}
+        for filename, content in prompts:
+            file_path = self.prompts_path / filename
+            try:
+                file_path.write_text(content, encoding='utf-8')
+                # Validate file was actually created and has content
+                if file_path.exists() and file_path.stat().st_size > 0:
+                    files_created.append(filename)
+                else:
+                    files_failed.append(f"{filename} (file empty or not found)")
+            except Exception as e:
+                files_failed.append(f"{filename} (error: {str(e)})")
+        
+        result = {
+            "count": len(files_created), 
+            "files": files_created,
+            "expected_count": len(prompts),
+            "validation": {
+                "files_created": len(files_created),
+                "files_failed": len(files_failed),
+                "failed_files": files_failed
+            }
+        }
+        
+        if files_failed:
+            logger.warning(f"   ⚠️ Failed to create {len(files_failed)} prompt files: {files_failed}")
+        
+        return result
     
     def _prompt_tier_architecture(self) -> str:
         """DALL-E prompt for tier architecture"""
@@ -635,10 +699,36 @@ Style: Modern flat design, technical illustration, clean labels, professional co
             ("14-system-architecture-narrative.md", self._narrative_system_architecture()),
         ]
         
-        for filename, content in narratives:
-            (self.narratives_path / filename).write_text(content, encoding='utf-8')
+        files_created = []
+        files_failed = []
         
-        return {"count": 14, "files": [f[0] for f in narratives]}
+        for filename, content in narratives:
+            file_path = self.narratives_path / filename
+            try:
+                file_path.write_text(content, encoding='utf-8')
+                # Validate file was actually created and has content
+                if file_path.exists() and file_path.stat().st_size > 0:
+                    files_created.append(filename)
+                else:
+                    files_failed.append(f"{filename} (file empty or not found)")
+            except Exception as e:
+                files_failed.append(f"{filename} (error: {str(e)})")
+        
+        result = {
+            "count": len(files_created), 
+            "files": files_created,
+            "expected_count": len(narratives),
+            "validation": {
+                "files_created": len(files_created),
+                "files_failed": len(files_failed),
+                "failed_files": files_failed
+            }
+        }
+        
+        if files_failed:
+            logger.warning(f"   ⚠️ Failed to create {len(files_failed)} narrative files: {files_failed}")
+        
+        return result
     
     def _narrative_tier_architecture(self) -> str:
         """High-level explanation of tier architecture image"""
@@ -904,9 +994,39 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
         
         story_content = self._write_awakening_story(features)
         story_file = self.narratives_path / "THE-AWAKENING-OF-CORTEX.md"
-        story_file.write_text(story_content, encoding='utf-8')
         
-        return {"chapters": 8, "file": str(story_file)}
+        try:
+            story_file.write_text(story_content, encoding='utf-8')
+            # Validate file was actually created and has content
+            if story_file.exists() and story_file.stat().st_size > 0:
+                return {
+                    "chapters": 8, 
+                    "file": str(story_file),
+                    "validation": {
+                        "file_created": True,
+                        "file_size": story_file.stat().st_size
+                    }
+                }
+            else:
+                logger.warning(f"   ⚠️ Story file empty or not found: {story_file}")
+                return {
+                    "chapters": 8, 
+                    "file": str(story_file),
+                    "validation": {
+                        "file_created": False,
+                        "error": "File empty or not found after write"
+                    }
+                }
+        except Exception as e:
+            logger.error(f"   ❌ Failed to create story file: {str(e)}")
+            return {
+                "chapters": 8, 
+                "file": str(story_file),
+                "validation": {
+                    "file_created": False,
+                    "error": str(e)
+                }
+            }
     
     def _write_awakening_story(self, features: Dict) -> str:
         """Write the hilarious technical story - ENHANCED VERSION (2,152 lines)"""
@@ -1167,12 +1287,39 @@ Welcome to CORTEX—where memory meets intelligence, and documentation meets nar
         
         summary_content = self._write_executive_summary(features)
         summary_file = self.docs_path / "EXECUTIVE-SUMMARY.md"
-        summary_file.write_text(summary_content, encoding='utf-8')
         
-        return {
-            "feature_count": len(features.get('features', [])),
-            "file": str(summary_file)
-        }
+        try:
+            summary_file.write_text(summary_content, encoding='utf-8')
+            # Validate file was actually created and has content
+            if summary_file.exists() and summary_file.stat().st_size > 0:
+                return {
+                    "feature_count": len(features.get('features', [])),
+                    "file": str(summary_file),
+                    "validation": {
+                        "file_created": True,
+                        "file_size": summary_file.stat().st_size
+                    }
+                }
+            else:
+                logger.warning(f"   ⚠️ Executive summary file empty or not found: {summary_file}")
+                return {
+                    "feature_count": len(features.get('features', [])),
+                    "file": str(summary_file),
+                    "validation": {
+                        "file_created": False,
+                        "error": "File empty or not found after write"
+                    }
+                }
+        except Exception as e:
+            logger.error(f"   ❌ Failed to create executive summary: {str(e)}")
+            return {
+                "feature_count": len(features.get('features', [])),
+                "file": str(summary_file),
+                "validation": {
+                    "file_created": False,
+                    "error": str(e)
+                }
+            }
     
     def _write_executive_summary(self, features: Dict) -> str:
         """Write comprehensive executive summary"""
@@ -1275,7 +1422,333 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
         return "\n".join(formatted)
     
     # =========================================================================
-    # PHASE 2F: MKDOCS SITE BUILDER
+    # PHASE 2F: IMAGE GENERATION GUIDANCE
+    # =========================================================================
+    
+    def _generate_image_guidance(self, features: Dict, dry_run: bool) -> Dict:
+        """
+        Generate guidance for DALL-E image generation
+        
+        Creates:
+        1. image-generation-instructions.md with step-by-step guidance
+        2. Placeholder images (with "Generate using DALL-E" watermark)
+        3. Image generation checklist
+        """
+        if dry_run:
+            return {"status": "ready", "dry_run": True}
+        
+        images_dir = self.docs_path / "images" / "diagrams"
+        instructions_file = images_dir / "README.md"
+        
+        files_created = []
+        files_failed = []
+        
+        # Generate image generation instructions
+        try:
+            instructions_content = self._create_image_generation_instructions()
+            instructions_file.write_text(instructions_content, encoding='utf-8')
+            if instructions_file.exists() and instructions_file.stat().st_size > 0:
+                files_created.append("README.md")
+            else:
+                files_failed.append("README.md (file empty or not found)")
+        except Exception as e:
+            files_failed.append(f"README.md (error: {str(e)})")
+        
+        # Map prompts to image paths
+        image_mapping = {
+            "01-tier-architecture-prompt.md": "architectural/tier-architecture.png",
+            "02-agent-coordination-prompt.md": "strategic/agent-coordination.png",
+            "03-information-flow-prompt.md": "strategic/information-flow.png",
+            "04-conversation-tracking-prompt.md": "strategic/conversation-tracking.png",
+            "05-plugin-system-prompt.md": "strategic/plugin-system.png",
+            "06-brain-protection-prompt.md": "strategic/brain-protection.png",
+            "07-operation-pipeline-prompt.md": "operational/operation-pipeline.png",
+            "08-setup-orchestration-prompt.md": "operational/setup-orchestration.png",
+            "09-documentation-generation-prompt.md": "operational/documentation-generation.png",
+            "10-feature-planning-prompt.md": "operational/feature-planning.png",
+            "11-testing-strategy-prompt.md": "integration/testing-strategy.png",
+            "12-deployment-pipeline-prompt.md": "operational/deployment-pipeline.png",
+            "13-user-journey-prompt.md": "integration/user-journey.png",
+            "14-system-architecture-prompt.md": "integration/system-architecture.png",
+        }
+        
+        # Create placeholder .gitkeep files (actual images generated manually via DALL-E)
+        placeholders_created = 0
+        for prompt_file, image_path in image_mapping.items():
+            placeholder_file = images_dir / image_path.replace('.png', '.placeholder.txt')
+            try:
+                placeholder_file.parent.mkdir(parents=True, exist_ok=True)
+                placeholder_content = f"Placeholder for {image_path}\nGenerate using DALL-E prompt: docs/diagrams/prompts/{prompt_file}"
+                placeholder_file.write_text(placeholder_content, encoding='utf-8')
+                placeholders_created += 1
+            except Exception as e:
+                logger.warning(f"Failed to create placeholder for {image_path}: {e}")
+        
+        result = {
+            "status": "ready",
+            "instructions_file": str(instructions_file),
+            "placeholders_created": placeholders_created,
+            "validation": {
+                "files_created": len(files_created),
+                "files_failed": len(files_failed),
+                "created_files": files_created,
+                "failed_files": files_failed
+            }
+        }
+        
+        if files_failed:
+            logger.warning(f"   ⚠️ Failed to create {len(files_failed)} guidance files: {files_failed}")
+        
+        return result
+    
+    def _create_image_generation_instructions(self) -> str:
+        """Create comprehensive image generation instructions"""
+        return """# CORTEX Diagram Image Generation Guide
+
+**Purpose:** Generate professional technical diagrams for CORTEX documentation using DALL-E  
+**Last Updated:** {timestamp}  
+**Status:** Production Ready
+
+---
+
+## 📋 Overview
+
+This directory contains:
+- **Enhanced DALL-E prompts** (500-800 words each) in `../prompts/`
+- **Placeholder markers** for pending image generation
+- **Generated PNG images** (after DALL-E generation)
+
+---
+
+## 🎨 How to Generate Images
+
+### Step 1: Access DALL-E
+
+Use ChatGPT Plus (includes DALL-E 3 access):
+1. Go to https://chat.openai.com/
+2. Ensure you have ChatGPT Plus subscription
+3. Select GPT-4 model with DALL-E capabilities
+
+### Step 2: Use Enhanced Prompts
+
+For each diagram:
+
+1. **Open prompt file:** `docs/diagrams/prompts/[NN]-[name]-prompt.md`
+2. **Copy DALL-E Generation Instruction** (last section of prompt)
+3. **Paste into ChatGPT** with prefix: "Generate an image using DALL-E:"
+4. **Review output** - regenerate if needed with adjustments
+5. **Download image** (right-click → Save Image As)
+6. **Save to appropriate subfolder:**
+   - `architectural/` - Core architecture diagrams
+   - `strategic/` - Conceptual/strategic diagrams
+   - `operational/` - Workflow/process diagrams
+   - `integration/` - Integration/interaction diagrams
+
+### Step 3: Optimize Images
+
+Before committing:
+
+```bash
+# Install optimization tools
+pip install pillow
+
+# Run optimization script (reduces file size)
+python scripts/optimize_images.py docs/images/diagrams/
+```
+
+**Requirements:**
+- Format: PNG with transparency
+- Resolution: 1920x1080 (Full HD minimum)
+- Max Size: 500KB (optimized)
+- Color Space: sRGB
+
+### Step 4: Verify Integration
+
+```bash
+# Build MkDocs to check image references
+cd docs
+mkdocs build
+
+# Serve locally to preview
+mkdocs serve
+# Visit http://localhost:8000
+```
+
+---
+
+## 📂 Image Mapping
+
+| DALL-E Prompt | Output Path | Category | Status |
+|---------------|-------------|----------|--------|
+| 01-tier-architecture-prompt.md | architectural/tier-architecture.png | Architectural | 📝 Pending |
+| 02-agent-coordination-prompt.md | strategic/agent-coordination.png | Strategic | 📝 Pending |
+| 03-information-flow-prompt.md | strategic/information-flow.png | Strategic | 📝 Pending |
+| 04-conversation-tracking-prompt.md | strategic/conversation-tracking.png | Strategic | 📝 Pending |
+| 05-plugin-system-prompt.md | strategic/plugin-system.png | Strategic | 📝 Pending |
+| 06-brain-protection-prompt.md | strategic/brain-protection.png | Strategic | 📝 Pending |
+| 07-operation-pipeline-prompt.md | operational/operation-pipeline.png | Operational | 📝 Pending |
+| 08-setup-orchestration-prompt.md | operational/setup-orchestration.png | Operational | 📝 Pending |
+| 09-documentation-generation-prompt.md | operational/documentation-generation.png | Operational | 📝 Pending |
+| 10-feature-planning-prompt.md | operational/feature-planning.png | Operational | 📝 Pending |
+| 11-testing-strategy-prompt.md | integration/testing-strategy.png | Integration | 📝 Pending |
+| 12-deployment-pipeline-prompt.md | operational/deployment-pipeline.png | Operational | 📝 Pending |
+| 13-user-journey-prompt.md | integration/user-journey.png | Integration | 📝 Pending |
+| 14-system-architecture-prompt.md | integration/system-architecture.png | Integration | 📝 Pending |
+
+**Update status:** Change `📝 Pending` to `✅ Complete` after generating
+
+---
+
+## 🎯 Quality Checklist
+
+Before finalizing each image:
+
+- [ ] High resolution (1920x1080 minimum)
+- [ ] Clear labels (readable at 100% zoom)
+- [ ] Color palette matches prompt specifications
+- [ ] Technical accuracy verified
+- [ ] Professional aesthetic maintained
+- [ ] File size optimized (<500KB)
+- [ ] Alt text added in documentation
+- [ ] Referenced in appropriate architecture doc
+
+---
+
+## 🔄 Regeneration Process
+
+If an image needs updates:
+
+1. **Update DALL-E prompt** with refinements
+2. **Regenerate image** using updated prompt
+3. **Replace old image** (keep filename same)
+4. **Commit changes** with clear message
+5. **Verify documentation** still renders correctly
+
+---
+
+## 📝 Naming Convention
+
+- Lowercase with hyphens: `tier-architecture.png`
+- Descriptive: `agent-coordination.png`
+- No version numbers (use git for versioning)
+- Match prompt file names (without `-prompt` suffix)
+
+---
+
+## 🛠️ Troubleshooting
+
+**DALL-E won't generate:** Prompt too long  
+→ Use "DALL-E Generation Instruction" section only (condensed version)
+
+**Image quality poor:** Resolution too low  
+→ Request "high resolution, 4K quality" in prompt
+
+**Colors don't match:** DALL-E interpretation varies  
+→ Specify hex codes explicitly: "Use #ff6b6b for red components"
+
+**File size too large:** Over 500KB  
+→ Run optimization script: `python scripts/optimize_images.py`
+
+---
+
+## 📊 Progress Tracking
+
+Total Images: 14  
+Generated: 0  
+Pending: 14  
+Completion: 0%
+
+**Next Steps:**
+1. Generate all 14 images using DALL-E
+2. Optimize images for web
+3. Update architecture documentation with image references
+4. Build and preview MkDocs site
+5. Commit images to repository
+
+---
+
+**Author:** Asif Hussain  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**Generated:** {timestamp}
+""".format(timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    
+    # =========================================================================
+    # PHASE 2G: DOCUMENTATION INTEGRATION
+    # =========================================================================
+    
+    def _integrate_images_with_docs(self, features: Dict, dry_run: bool) -> Dict:
+        """
+        Integrate images with architecture documentation
+        
+        Updates architecture docs to embed image references
+        """
+        if dry_run:
+            return {"docs_updated": 0, "dry_run": True}
+        
+        # Define image embeddings for architecture docs
+        image_embeddings = {
+            "docs/CAPABILITIES-MATRIX.md": [
+                {
+                    "marker": "## Architecture Overview",
+                    "image": "![CORTEX Tier Architecture](images/diagrams/architectural/tier-architecture.png)\n*Figure 1: CORTEX 4-tier architecture with Entry Point, Working Memory, Knowledge Graph, and Long-term Storage*\n\n"
+                }
+            ],
+            "docs/FEATURES.md": [
+                {
+                    "marker": "## Agent System",
+                    "image": "![Agent Coordination](images/diagrams/strategic/agent-coordination.png)\n*Figure 2: CORTEX split-brain agent coordination with 10 specialized agents*\n\n"
+                }
+            ],
+        }
+        
+        docs_updated = 0
+        docs_failed = []
+        
+        for doc_path_str, embeddings in image_embeddings.items():
+            doc_path = self.workspace_root / doc_path_str
+            
+            if not doc_path.exists():
+                docs_failed.append(f"{doc_path_str} (file not found)")
+                continue
+            
+            try:
+                content = doc_path.read_text(encoding='utf-8')
+                modified = False
+                
+                for embedding in embeddings:
+                    marker = embedding['marker']
+                    image_ref = embedding['image']
+                    
+                    # Check if image reference already exists
+                    if image_ref.split('\n')[0] not in content:
+                        # Find marker and insert image after it
+                        if marker in content:
+                            content = content.replace(
+                                marker,
+                                marker + "\n\n" + image_ref
+                            )
+                            modified = True
+                
+                if modified:
+                    doc_path.write_text(content, encoding='utf-8')
+                    docs_updated += 1
+                    
+            except Exception as e:
+                docs_failed.append(f"{doc_path_str} (error: {str(e)})")
+        
+        result = {
+            "docs_updated": docs_updated,
+            "docs_failed": len(docs_failed),
+            "failed_docs": docs_failed
+        }
+        
+        if docs_failed:
+            logger.warning(f"   ⚠️ Failed to update {len(docs_failed)} docs: {docs_failed}")
+        
+        return result
+    
+    # =========================================================================
+    # PHASE 2H: MKDOCS SITE BUILDER
     # =========================================================================
     
     def _build_mkdocs_site(self, features: Dict, dry_run: bool) -> Dict:
@@ -1286,21 +1759,49 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
         mkdocs_dir = self.diagrams_path
         mkdocs_config = mkdocs_dir / "mkdocs.yml"
         
+        files_created = []
+        files_failed = []
+        
         # Generate mkdocs.yml configuration
-        config_content = self._generate_mkdocs_config()
-        mkdocs_config.write_text(config_content, encoding='utf-8')
+        try:
+            config_content = self._generate_mkdocs_config()
+            mkdocs_config.write_text(config_content, encoding='utf-8')
+            if mkdocs_config.exists() and mkdocs_config.stat().st_size > 0:
+                files_created.append("mkdocs.yml")
+            else:
+                files_failed.append("mkdocs.yml (file empty or not found)")
+        except Exception as e:
+            files_failed.append(f"mkdocs.yml (error: {str(e)})")
         
         # Generate index.md
         index_file = mkdocs_dir / "docs" / "index.md"
-        index_file.parent.mkdir(parents=True, exist_ok=True)
-        index_file.write_text(self._generate_mkdocs_index(features), encoding='utf-8')
+        try:
+            index_file.parent.mkdir(parents=True, exist_ok=True)
+            index_file.write_text(self._generate_mkdocs_index(features), encoding='utf-8')
+            if index_file.exists() and index_file.stat().st_size > 0:
+                files_created.append("docs/index.md")
+            else:
+                files_failed.append("docs/index.md (file empty or not found)")
+        except Exception as e:
+            files_failed.append(f"docs/index.md (error: {str(e)})")
         
-        return {
-            "status": "ready",
+        result = {
+            "status": "ready" if not files_failed else "partial",
             "config_file": str(mkdocs_config),
             "preview_command": f"cd {mkdocs_dir} && mkdocs serve",
-            "build_command": f"cd {mkdocs_dir} && mkdocs build"
+            "build_command": f"cd {mkdocs_dir} && mkdocs build",
+            "validation": {
+                "files_created": len(files_created),
+                "files_failed": len(files_failed),
+                "created_files": files_created,
+                "failed_files": files_failed
+            }
         }
+        
+        if files_failed:
+            logger.warning(f"   ⚠️ Failed to create {len(files_failed)} MkDocs files: {files_failed}")
+        
+        return result
     
     def _generate_mkdocs_config(self) -> str:
         """Generate MkDocs configuration"""

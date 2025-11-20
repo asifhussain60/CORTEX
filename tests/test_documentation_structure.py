@@ -1,6 +1,10 @@
 """
 CORTEX Documentation Structure Test Harness
 Validates that all expected documentation files and folders exist after generation.
+
+NOTE: This test validates COMMITTED documentation structure, not GENERATED content.
+Generated content (docs/diagrams/*) is created by enterprise_documentation_orchestrator
+and is tested separately in test_enterprise_documentation_orchestrator.py.
 """
 import os
 from pathlib import Path
@@ -11,12 +15,13 @@ from typing import Dict, List, Tuple
 class DocumentationStructureValidator:
     """Validates CORTEX documentation folder structure against expected configuration."""
     
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path, skip_generated: bool = True):
         self.workspace_root = workspace_root
         self.docs_root = workspace_root / "docs"
+        self.skip_generated = skip_generated
         self.validation_results = {
-            "directories": {"expected": [], "found": [], "missing": []},
-            "files": {"expected": [], "found": [], "missing": []},
+            "directories": {"expected": [], "found": [], "missing": [], "skipped": []},
+            "files": {"expected": [], "found": [], "missing": [], "skipped": []},
             "categories": {}
         }
     
@@ -42,7 +47,8 @@ class DocumentationStructureValidator:
         print("📁 Validating Directory Structure...")
         print("-" * 80)
         
-        expected_dirs = [
+        # Core directories (committed, should always exist)
+        core_dirs = [
             "docs",
             "docs/getting-started",
             "docs/architecture",
@@ -50,12 +56,16 @@ class DocumentationStructureValidator:
             "docs/plugins",
             "docs/reference",
             "docs/guides",
+            "docs/images",
+        ]
+        
+        # Generated directories (created by orchestrator, may not exist)
+        generated_dirs = [
             "docs/diagrams",
             "docs/diagrams/prompts",
             "docs/diagrams/narratives",
             "docs/diagrams/generated",
             "docs/diagrams/story",
-            "docs/images",
             "docs/images/diagrams",
             "docs/images/diagrams/strategic",
             "docs/images/diagrams/architectural",
@@ -63,6 +73,8 @@ class DocumentationStructureValidator:
             "docs/images/diagrams/integration"
         ]
         
+        # Combine for full expected list
+        expected_dirs = core_dirs + ([] if self.skip_generated else generated_dirs)
         self.validation_results["directories"]["expected"] = expected_dirs
         
         for dir_path in expected_dirs:
@@ -75,6 +87,11 @@ class DocumentationStructureValidator:
             else:
                 self.validation_results["directories"]["missing"].append(dir_path)
                 print(f"  ❌ {dir_path} (MISSING)")
+        
+        # Track skipped directories
+        if self.skip_generated:
+            self.validation_results["directories"]["skipped"] = generated_dirs
+            print(f"\n  ℹ️ Skipped {len(generated_dirs)} generated directories (tested separately)")
         
         print()
     
@@ -127,7 +144,11 @@ class DocumentationStructureValidator:
                 "docs/images/diagrams/integration/git-integration.md",
                 "docs/images/diagrams/integration/mkdocs-integration.md"
             ],
-            "Image Prompts": [
+        }
+        
+        # Generated content categories (skipped if skip_generated=True)
+        generated_categories = {
+            "Image Prompts (Generated)": [
                 "docs/diagrams/prompts/01-tier-architecture.md",
                 "docs/diagrams/prompts/02-agent-system.md",
                 "docs/diagrams/prompts/03-plugin-architecture.md",
@@ -136,7 +157,7 @@ class DocumentationStructureValidator:
                 "docs/diagrams/prompts/06-basement-scene.md",
                 "docs/diagrams/prompts/07-cortex-one-pager.md"
             ],
-            "Narratives": [
+            "Narratives (Generated)": [
                 "docs/diagrams/narratives/01-tier-architecture.md",
                 "docs/diagrams/narratives/02-agent-system.md",
                 "docs/diagrams/narratives/03-plugin-architecture.md",
@@ -145,10 +166,14 @@ class DocumentationStructureValidator:
                 "docs/diagrams/narratives/06-basement-scene.md",
                 "docs/diagrams/narratives/07-cortex-one-pager.md"
             ],
-            "Story": [
+            "Story (Generated)": [
                 "docs/diagrams/story/The CORTEX Story.md"
             ]
         }
+        
+        # Add generated categories if not skipping
+        if not self.skip_generated:
+            categories.update(generated_categories)
         
         print("📄 Validating Documentation Files by Category...")
         print("-" * 80)
@@ -180,6 +205,14 @@ class DocumentationStructureValidator:
             # Category summary
             completion = (category_results["found"] / category_results["expected"]) * 100
             print(f"  📊 {category} Completion: {category_results['found']}/{category_results['expected']} ({completion:.1f}%)")
+        
+        # Track skipped categories
+        if self.skip_generated:
+            skipped_files = []
+            for files in generated_categories.values():
+                skipped_files.extend(files)
+            self.validation_results["files"]["skipped"] = skipped_files
+            print(f"\n  ℹ️ Skipped {len(skipped_files)} generated files (tested separately)")
         
         print()
     
@@ -253,14 +286,15 @@ class DocumentationStructureValidator:
 def test_documentation_structure():
     """PyTest test function to validate documentation structure."""
     workspace_root = Path("d:/PROJECTS/CORTEX")
-    validator = DocumentationStructureValidator(workspace_root)
+    # Skip generated content by default (tested in test_enterprise_documentation_orchestrator.py)
+    validator = DocumentationStructureValidator(workspace_root, skip_generated=True)
     results = validator.validate_structure()
     
-    # Assert all directories exist
+    # Assert all expected (non-generated) directories exist
     assert len(results["directories"]["missing"]) == 0, \
         f"Missing directories: {results['directories']['missing']}"
     
-    # Assert all files exist
+    # Assert all expected (non-generated) files exist
     assert len(results["files"]["missing"]) == 0, \
         f"Missing files: {results['files']['missing']}"
     
@@ -274,7 +308,11 @@ def test_documentation_structure():
 if __name__ == "__main__":
     """Run test harness directly."""
     workspace_root = Path("d:/PROJECTS/CORTEX")
-    validator = DocumentationStructureValidator(workspace_root)
+    # By default, skip generated content when running standalone
+    import sys
+    skip_generated = "--include-generated" not in sys.argv
+    
+    validator = DocumentationStructureValidator(workspace_root, skip_generated=skip_generated)
     results = validator.validate_structure()
     
     # Exit with appropriate code

@@ -9,8 +9,9 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
 
 ## Quick Links
 
-- [Architecture Overview](architecture/01-tier-architecture-narrative.md)
-- [The Awakening of CORTEX Story](story/THE-AWAKENING-OF-CORTEX.md)
+- [Architecture Overview](narratives/01-tier-architecture-narrative.md)
+- [The Awakening of CORTEX Story](narratives/THE-AWAKENING-OF-CORTEX.md)
+- [Executive Summary](../EXECUTIVE-SUMMARY.md)
 
 ## Key Features
 
@@ -23,7 +24,7 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
 ## Documentation
 
 This site contains:
-- 138 discovered features
+- 120 discovered features
 - 14+ Mermaid diagrams
 - 10+ DALL-E prompts
 - Technical narratives
@@ -31,9 +32,9 @@ This site contains:
 
 ## Getting Started
 
-1. Read [The Awakening of CORTEX](story/THE-AWAKENING-OF-CORTEX.md) for a fun introduction
-2. Explore [Architecture](architecture/01-tier-architecture-narrative.md) for technical details
-3. Browse through the Architecture section for detailed technical narratives
+1. Read [The Awakening of CORTEX](narratives/THE-AWAKENING-OF-CORTEX.md) for a fun introduction
+2. Explore [Architecture](narratives/01-tier-architecture-narrative.md) for technical details
+3. Check [Diagrams](diagrams/mermaid/) for visual references
 
 ---
 

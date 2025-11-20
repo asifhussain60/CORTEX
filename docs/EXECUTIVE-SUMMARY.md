@@ -1,7 +1,7 @@
 # CORTEX Executive Summary
 
 **Version:** 3.0  
-**Last Updated:** 2025-11-19  
+**Last Updated:** 2025-11-20  
 **Status:** Production Ready
 
 ## Overview
@@ -14,42 +14,42 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
 - **Cost Reduction:** 93.4% with GitHub Copilot pricing
 - **Agent Count:** 10 specialized agents
 - **Memory Tiers:** 4-tier architecture (Tier 0-3)
-- **Feature Count:** 138
+- **Feature Count:** 120
 
 ## Core Features
 
-1. **feat(docs): Streamline documentation with direct import + cleanup EPM remnants** (feature)
-2. **Merge branch 'CORTEX-3.0' of https://github.com/asifhussain60/CORTEX into CORTEX-3.0** (feature)
-3. **Update CORTEX 3.0 vs 4.0 feature roadmap and add MCP documentation** (feature)
-4. **refactor: Establish single documentation entry point - enterprise_documentation_orchestrator** (feature)
-5. **feat: Track A Phase 1 enhancements - conversation capture, planning workflow, and test harness improvements** (feature)
-6. **docs: regenerate comprehensive documentation with EPM pipeline** (feature)
-7. **feat(planning): Complete Feature 3 - Two-Way Sync between files and database** (feature)
-8. **feat: Complete Meta-Template System + Lean 3.1 Feature 1** (feature)
-9. **feat(tier0): Add git checkpoint enforcement as Tier 0 instinct** (feature)
-10. **Phase 3 Complete: EPM Enhancement - Documentation Generation from Live Brain Sources** (feature)
-11. **Phase 2 Complete: Reorganize /docs structure** (feature)
-12. **Phase 1 Complete: Root directory cleanup** (feature)
-13. **feat(validation): Integrate planning rules validation into optimize operation** (feature)
-14. **feat(planning): Complete Phase 2 Development Executor + conversation cleanup** (feature)
-15. **docs: Update implementation planning file with completion status** (feature)
-16. **docs: Final implementation report - All 4 phases complete** (feature)
-17. **docs: Complete Phase 4 - Development Executor API Documentation** (feature)
-18. **feat(routing): Complete Phase 3 - Intent Router with pipeline orchestration** (feature)
-19. **feat(planning): Complete Phase 1 - Planning Orchestrator with DoR framework** (feature)
-20. **Add conversation capture enhancements and planning documentation** (feature)
-21. **Sync CORTEX-3.0 branch: Major cleanup and structural improvements** (feature)
-22. **fix: YAML validation errors and optimization improvements** (feature)
-23. **docs: Update documentation structure, diagrams, and narratives** (feature)
-24. **refactor(docs): Clean up diagram structure and update documentation** (feature)
-25. **feat(docs): Add comprehensive EPMO documentation generator** (feature)
-26. **docs: Update MkDocs styling and documentation structure** (feature)
-27. **docs: MkDocs restoration and story generator enhancements** (feature)
-28. **feat(story): add token optimization, reverse engineering, DoD/DoR, semantic commits, and performance metrics chapters** (feature)
-29. **refactor: Replace 50+ hardcoded spacing values with MD3 tokens in custom.css** (feature)
-30. **refactor: Replace 70+ hardcoded colors with MD3 tokens in custom.css** (feature)
+1. **chore: update brain protection rules and add new test files** (feature)
+2. **Sync: URT v3 implementation, template orchestrator, cleanup reports, and workspace organization** (feature)
+3. **feat: Context Management Phase 1 & 2 Complete + Test Alignment** (feature)
+4. **Fix: MkDocs UTF-8 encoding + navigation sidebar structure** (feature)
+5. **Fix: UTF-8 encoding + navigation sidebar structure** (feature)
+6. **feat(docs): Streamline documentation with direct import + cleanup EPM remnants** (feature)
+7. **Merge branch 'CORTEX-3.0' of https://github.com/asifhussain60/CORTEX into CORTEX-3.0** (feature)
+8. **Update CORTEX 3.0 vs 4.0 feature roadmap and add MCP documentation** (feature)
+9. **refactor: Establish single documentation entry point - enterprise_documentation_orchestrator** (feature)
+10. **feat: Track A Phase 1 enhancements - conversation capture, planning workflow, and test harness improvements** (feature)
+11. **docs: regenerate comprehensive documentation with EPM pipeline** (feature)
+12. **feat(planning): Complete Feature 3 - Two-Way Sync between files and database** (feature)
+13. **feat: Complete Meta-Template System + Lean 3.1 Feature 1** (feature)
+14. **feat(tier0): Add git checkpoint enforcement as Tier 0 instinct** (feature)
+15. **Phase 3 Complete: EPM Enhancement - Documentation Generation from Live Brain Sources** (feature)
+16. **Phase 2 Complete: Reorganize /docs structure** (feature)
+17. **Phase 1 Complete: Root directory cleanup** (feature)
+18. **feat(validation): Integrate planning rules validation into optimize operation** (feature)
+19. **feat(planning): Complete Phase 2 Development Executor + conversation cleanup** (feature)
+20. **docs: Update implementation planning file with completion status** (feature)
+21. **docs: Final implementation report - All 4 phases complete** (feature)
+22. **docs: Complete Phase 4 - Development Executor API Documentation** (feature)
+23. **feat(routing): Complete Phase 3 - Intent Router with pipeline orchestration** (feature)
+24. **feat(planning): Complete Phase 1 - Planning Orchestrator with DoR framework** (feature)
+25. **Add conversation capture enhancements and planning documentation** (feature)
+26. **Sync CORTEX-3.0 branch: Major cleanup and structural improvements** (feature)
+27. **fix: YAML validation errors and optimization improvements** (feature)
+28. **docs: Update documentation structure, diagrams, and narratives** (feature)
+29. **refactor(docs): Clean up diagram structure and update documentation** (feature)
+30. **feat(docs): Add comprehensive EPMO documentation generator** (feature)
 
-*...and 108 more features*
+*...and 90 more features*
 
 ## Architecture Highlights
 
