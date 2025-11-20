@@ -19,10 +19,10 @@ type: "governance"
 name: "Brain Protection Rules"
 description: "Automated architectural protection challenges"
 
-# Total protection rules across all 6 layers
+# Total protection rules across all layers
 rules:
-  total_count: 28
-  layers: 6
+  total_count: 31
+  layers: 13
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
   
@@ -3604,6 +3604,386 @@ protection_layers:
           - ✅ ConfigManager returns correct paths
           - ✅ Migration scripts use tier-specific args
           - ✅ Documentation reflects distributed architecture
+
+  # Layer 11: Template Architecture Protection
+  - layer_id: "template_architecture"
+    name: "Template Architecture Protection"
+    description: "Protect URT v3.0 intelligent template system architectural invariants"
+    priority: 11
+    
+    rules:
+      - rule_id: "TEMPLATE_TOKEN_BUDGET_ENFORCEMENT"
+        name: "Token Budget Limits Enforced"
+        severity: "blocked"
+        description: "Token budget limits must remain: CONCISE=400, SUMMARIZED=600, DETAILED=800, VISUAL=500"
+        
+        detection:
+          path_patterns:
+            - "src/core/template_renderer.py"
+            - "cortex-brain/response-templates/*.yaml"
+          combined_keywords:
+            token_budget_change:
+              - "token_budget"
+              - "budget ="
+            invalid_value:
+              - "token_budget: int = 1200"
+              - "token_budget: int = 300"
+              - "budget = 1000"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "CONCISE format: 400 tokens (quick info, status checks)"
+          - "SUMMARIZED format: 600 tokens (summary + collapsible details)"
+          - "DETAILED format: 800 tokens (full subsections)"
+          - "VISUAL format: 500 tokens (tables, progress bars)"
+          - "Document rationale for any budget changes with performance data"
+        
+        evidence_template: |
+          Token budget modification detected: '{code_snippet}'
+          
+          CRITICAL: URT v3.0 token budgets are optimized values
+          - 42% token reduction achieved (800 → 466 avg)
+          - Validated with 21 integration tests
+          
+          Changes require performance analysis validation.
+        
+        rationale: |
+          URT v3.0 token budgets are carefully optimized:
+          - CONCISE: 400 tokens (simple help/status queries)
+          - SUMMARIZED: 600 tokens (implementation summaries)
+          - DETAILED: 800 tokens (complex planning/analysis)
+          - VISUAL: 500 tokens (metrics/diagrams)
+          
+          Changes must be validated with performance metrics.
+      
+      - rule_id: "CHALLENGE_MODE_ROUTING_INTEGRITY"
+        name: "Challenge Mode Routing Logic"
+        severity: "blocked"
+        description: "Challenge mode routing (SKIP/ACCEPT_ONLY/CHALLENGE_ONLY/MIXED/INTELLIGENT) must remain valid"
+        
+        detection:
+          path_patterns:
+            - "src/core/template_renderer.py"
+          combined_keywords:
+            challenge_logic:
+              - "ChallengeMode"
+              - "_determine_challenge_mode"
+            bypass_pattern:
+              - "return ChallengeMode.SKIP"
+              - "# Bypass all validation"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "Preserve intelligent routing based on context analysis"
+          - "SKIP mode only for simple info requests (help, status)"
+          - "INTELLIGENT mode for complex planning/validation"
+          - "Document any routing logic changes with test cases"
+        
+        evidence_template: "Challenge routing bypass detected: '{code_snippet}'"
+        
+        rationale: |
+          Challenge mode routing is core to URT v3.0:
+          - Eliminates forced challenge display when unnecessary
+          - Intelligent validation for complex requests
+          - User feedback: "No more forced challenge when nothing to validate"
+      
+      - rule_id: "TEMPLATE_SCHEMA_VALIDATION"
+        name: "Template Orchestration Metadata Schema"
+        severity: "warning"
+        description: "Templates must include orchestration metadata: relevance_keywords, priority, composability"
+        
+        detection:
+          path_patterns:
+            - "cortex-brain/response-templates/*.yaml"
+          keywords:
+            - "new template"
+            - "template_id:"
+          without_keywords:
+            - "orchestration:"
+            - "relevance_keywords:"
+          scope: ["code"]
+        
+        alternatives:
+          - "Add orchestration metadata block with relevance_keywords, priority, category"
+          - "Include composability rules: compatible_with, conflicts_with"
+          - "See cortex-brain/response-templates/base-template-v2.yaml for schema"
+        
+        evidence_template: "Template missing orchestration metadata: '{template_id}'"
+
+  # Layer 12: Context Management Architecture Protection
+  - layer_id: "context_management_architecture"
+    name: "Context Management Architecture Protection"
+    description: "Protect unified context management system (Phase 1-2) architectural invariants"
+    priority: 12
+    
+    rules:
+      - rule_id: "TIER_BOUNDARY_ISOLATION"
+        name: "Tier Boundary Isolation Enforcement"
+        severity: "blocked"
+        description: "T1/T2/T3 must be accessed through UnifiedContextManager, no direct cross-tier database access"
+        
+        detection:
+          path_patterns:
+            - "src/tier1/**/*.py"
+            - "src/tier2/**/*.py"
+            - "src/tier3/**/*.py"
+            - "src/cortex_agents/**/*.py"
+          combined_keywords:
+            cross_tier_access:
+              - "from src.tier2"
+              - "from src.tier3"
+              - "tier2.query_directly"
+              - "tier3.get_insights"
+            not_unified_context:
+              - "!UnifiedContextManager"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "Use UnifiedContextManager for all cross-tier context access"
+          - "UnifiedContextManager orchestrates T1/T2/T3 loading with relevance scoring"
+          - "Agents receive unified_context from UnifiedContextManager"
+        
+        evidence_template: |
+          Direct cross-tier access detected: '{code_snippet}'
+          
+          VIOLATION: Bypassing UnifiedContextManager
+          
+          ✅ CORRECT:
+          context = unified_context_manager.build_context(...)
+          # UnifiedContextManager handles T1/T2/T3 coordination
+        
+        rationale: |
+          UnifiedContextManager enforces architectural boundaries:
+          - Tier isolation (T1/T2/T3 separation)
+          - Relevance-based loading prioritization
+          - Token budget allocation fairness
+          - Context deduplication and merging
+      
+      - rule_id: "TOKEN_BUDGET_ALLOCATION_FAIRNESS"
+        name: "Token Budget Allocation Must Be Proportional"
+        severity: "blocked"
+        description: "Token budget allocation must be proportional to relevance scores, not fixed percentages"
+        
+        detection:
+          path_patterns:
+            - "src/core/context_management/token_budget_manager.py"
+          combined_keywords:
+            unfair_allocation:
+              - "tier1: total_budget * 0.9"
+              - "fixed allocation"
+              - "/ len(tier_relevance)"
+            not_proportional:
+              - "!tier_relevance"
+              - "!relevance_score"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "Allocate budget proportionally to tier relevance scores"
+          - "High relevance = more tokens, low relevance = fewer tokens"
+          - "Ensure total allocation ≤ total_budget (no overflow)"
+        
+        evidence_template: "Unfair token allocation detected: '{code_snippet}'"
+        
+        rationale: |
+          Token budget allocation algorithm ensures fairness:
+          - Proportional to relevance (high relevance → more tokens)
+          - Dynamic allocation (not fixed percentages)
+          - Sum constraint enforced (total ≤ budget)
+      
+      - rule_id: "STALENESS_THRESHOLD_ENFORCEMENT"
+        name: "Staleness Thresholds Must Be Enforced"
+        severity: "blocked"
+        description: "Staleness thresholds: T1=24h, T2=90d, T3=7d must be enforced"
+        
+        detection:
+          path_patterns:
+            - "src/core/context_management/context_quality_monitor.py"
+          combined_keywords:
+            staleness_bypass:
+              - "def check_staleness"
+              - "return False"
+            or_threshold_change:
+              - "tier1': 168"
+              - "tier2': 180"
+              - "tier3': 14"
+          scope: ["code"]
+          logic: "OR"
+        
+        alternatives:
+          - "T1 staleness: 24 hours (conversations)"
+          - "T2 staleness: 90 days (learned patterns)"
+          - "T3 staleness: 7 days (git metrics/insights)"
+          - "Document rationale for any threshold changes"
+        
+        evidence_template: "Staleness detection compromised: '{code_snippet}'"
+        
+        rationale: |
+          Staleness thresholds prevent using outdated context:
+          - T1: 24h (recent conversations relevant)
+          - T2: 90d (patterns valid longer term)
+          - T3: 7d (metrics need frequent refresh)
+      
+      - rule_id: "CROSS_TIER_LINKING_SCHEMA"
+        name: "Cross-Tier Linking Schema Integrity"
+        severity: "warning"
+        description: "Cross-tier linking fields (used_patterns, used_metrics) must be maintained"
+        
+        detection:
+          path_patterns:
+            - "src/core/context_management/migrate_cross_tier_linking.py"
+            - "src/tier1/**/*.py"
+            - "src/tier2/**/*.py"
+          keywords:
+            - "used_patterns"
+            - "used_metrics"
+            - "applied_in_conversations"
+          without_keywords:
+            - "JSON serialization"
+            - "json.dumps"
+          scope: ["code"]
+        
+        alternatives:
+          - "Store linking data as JSON-serialized lists"
+          - "Update bidirectionally (T1 → T2 and T2 → T1)"
+          - "Include context_quality_score for monitoring"
+        
+        evidence_template: "Cross-tier linking schema violation: '{code_snippet}'"
+
+  # Layer 13: Multi-Template Composition Protection
+  - layer_id: "multi_template_composition"
+    name: "Multi-Template Composition Rules Protection"
+    description: "Protect Multi-Template Orchestrator architectural invariants"
+    priority: 13
+    
+    rules:
+      - rule_id: "RELEVANCE_SCORING_WEIGHTS"
+        name: "Relevance Scoring Weight Immutability"
+        severity: "warning"
+        description: "Relevance scoring weights: keyword=0.4, trigger=0.3, context=0.2, category=0.1 (sum=1.0)"
+        
+        detection:
+          path_patterns:
+            - "src/response_templates/multi_template_orchestrator.py"
+          combined_keywords:
+            weight_modification:
+              - "keyword_weight"
+              - "trigger_weight"
+              - "context_weight"
+              - "category_weight"
+            invalid_values:
+              - "keyword_weight = 0.6"
+              - "trigger_weight = 0.5"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "Preserve validated weights: keyword=0.4, trigger=0.3, context=0.2, category=0.1"
+          - "Changes require A/B testing with 1000+ queries for validation"
+          - "Ensure weights sum to 1.0 (mathematical constraint)"
+        
+        evidence_template: |
+          Relevance weight modification detected: '{code_snippet}'
+          
+          Weights are validated through extensive testing.
+          Changes require performance analysis.
+        
+        rationale: |
+          Relevance scoring weights are empirically validated:
+          - keyword=0.4 (strongest signal)
+          - trigger=0.3 (explicit phrases)
+          - context=0.2 (metadata match)
+          - category=0.1 (general relevance)
+      
+      - rule_id: "CONFLICT_RESOLUTION_PRIORITY"
+        name: "Conflict Resolution Priority Map"
+        severity: "blocked"
+        description: "Priority map: error=100, security=90, planning=80, execution=70, validation=60, help=50, status=40, general=30"
+        
+        detection:
+          path_patterns:
+            - "src/response_templates/multi_template_orchestrator.py"
+          combined_keywords:
+            priority_change:
+              - "PRIORITY_MAP"
+              - "'error':"
+            invalid_priority:
+              - "'error': 50"
+              - "'general': 100"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "error=100 (highest priority - user blocked)"
+          - "security=90 (critical security issues)"
+          - "planning=80 (important strategic work)"
+          - "Preserve priority hierarchy for conflict resolution"
+        
+        evidence_template: "Priority map violation detected: '{code_snippet}'"
+        
+        rationale: |
+          Priority map ensures critical templates win conflicts:
+          - Errors block users → highest priority
+          - Security issues → second highest
+          - General info → lowest priority
+      
+      - rule_id: "MAX_TEMPLATES_LIMIT"
+        name: "Max Templates Composition Limit"
+        severity: "warning"
+        description: "max_templates=3 limit enforced (composition complexity management)"
+        
+        detection:
+          path_patterns:
+            - "src/response_templates/multi_template_orchestrator.py"
+            - "cortex-brain/response-templates/*.yaml"
+          combined_keywords:
+            limit_increase:
+              - "max_templates"
+              - "= 5"
+              - "= 10"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "max_templates=3 (validated composition complexity limit)"
+          - "Performance target: < 500ms composition time"
+          - "Changes require composition time benchmarking"
+        
+        evidence_template: "Max templates limit increase detected: '{code_snippet}'"
+        
+        rationale: |
+          max_templates=3 limit prevents:
+          - Excessive composition complexity
+          - Response token bloat
+          - Performance degradation (target: < 500ms)
+      
+      - rule_id: "TEMPLATE_COMPATIBILITY_MATRIX"
+        name: "Template Compatibility Matrix Integrity"
+        severity: "warning"
+        description: "Template compatibility declarations must be reciprocal and conflict-free"
+        
+        detection:
+          path_patterns:
+            - "cortex-brain/response-templates-enhanced.yaml"
+          combined_keywords:
+            compatibility_violation:
+              - "compatible_with"
+              - "conflicts_with"
+            circular_logic:
+              - "compatible_with: [template_b]"
+              - "conflicts_with: [template_b]"
+          scope: ["code"]
+          logic: "AND"
+        
+        alternatives:
+          - "Ensure compatible_with declarations are reciprocal"
+          - "Prevent circular conflicts (A compatible with B, A conflicts with B)"
+          - "Validate compatibility matrix with automated tests"
+        
+        evidence_template: "Template compatibility violation: '{code_snippet}'"
 
 # Severity levels
 severity_levels:
