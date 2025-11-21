@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Chapter 7: The Knowledge Graph - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../../.." id="logo">
+                        <img src="../../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../../..">Home</a></li>
+                        <li><a href="../THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="chapter-7-the-knowledge-graph">Chapter 7: The Knowledge Graph<a class="headerlink" href="#chapter-7-the-knowledge-graph" title="Permanent link">&para;</a></h1>
+<h2 id="the-day-cortex-learned-to-learn-or-how-yaml-became-sentient">The Day CORTEX Learned to Learn (Or: How YAML Became Sentient)<a class="headerlink" href="#the-day-cortex-learned-to-learn-or-how-yaml-became-sentient" title="Permanent link">&para;</a></h2>
+<p>7 AM. Coffee cup #11. I was watching CORTEX work.</p>
+<p><strong>Me:</strong> "Use native array methods instead of lodash"<br />
+<strong>Executor:</strong> <em>"Got it!"</em> ✅</p>
+<p><strong>Next day:</strong><br />
+<strong>Me:</strong> "Process this array"<br />
+<strong>Executor:</strong> <em>[Suggests lodash again]</em><br />
+<strong>Me:</strong> 🤬</p>
+<p><strong>The problem:</strong> Tier 1 memory only holds 20 conversations. Yesterday's correction? GONE.</p>
+<p><strong>I needed PERMANENT LEARNING.</strong></p>
+<hr />
+<h2 id="the-napkin-strike-back-napkin-3">The Napkin Strike Back (Napkin #3)<a class="headerlink" href="#the-napkin-strike-back-napkin-3" title="Permanent link">&para;</a></h2>
+<p>I grabbed another napkin (the barista was judging me at this point):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>TIER 1 (Working Memory)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    ↓
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>[Learning Process]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    ↓
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>TIER 2 (Knowledge Graph)
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    ↓
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>[Pattern Recognition]
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    ↓
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>AGENT BEHAVIOR CHANGES
+</span></code></pre></div>
+<p><strong>The goal:</strong> When I correct CORTEX 3 times, it should NEVER make that mistake again.</p>
+<hr />
+<h2 id="the-knowledge-graph-structure-or-how-i-organized-wisdom">The Knowledge Graph Structure (Or: How I Organized Wisdom)<a class="headerlink" href="#the-knowledge-graph-structure-or-how-i-organized-wisdom" title="Permanent link">&para;</a></h2>
+<p>I created <code>cortex-brain/knowledge-graph.yaml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># TIER 2: KNOWLEDGE GRAPH</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># Learned patterns, preferences, and wisdom</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">patterns</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="c1"># Code Style Patterns</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">pattern_native_array_methods</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code_style</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">native</span><span class="nv"> </span><span class="s">.map(),</span><span class="nv"> </span><span class="s">.filter(),</span><span class="nv"> </span><span class="s">.reduce()</span><span class="nv"> </span><span class="s">instead</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">lodash&quot;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.94</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_abc123</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_def456</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_ghi789</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-10-15&quot;</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">47</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="nt">pattern_jwt_authentication</span><span class="p">:</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">JWT</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">httpOnly</span><span class="nv"> </span><span class="s">cookies,</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">localStorage&quot;</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.92</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_xyz123</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_xyz456</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-20&quot;</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-09&quot;</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">    </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">    </span><span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;One</span><span class="nv"> </span><span class="s">correction</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">due</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">CSRF</span><span class="nv"> </span><span class="s">edge</span><span class="nv"> </span><span class="s">case&quot;</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">  </span><span class="c1"># User Preferences</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">  </span><span class="nt">preference_semicolons</span><span class="p">:</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user_preference</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Never</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">semicolons</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">JavaScript&quot;</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.99</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_pref001</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_pref002</span>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_pref003</span>
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_pref004</span>
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-01&quot;</span>
+</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">    </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">234</span>
+</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+</span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">    </span><span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;User</span><span class="nv"> </span><span class="s">REALLY</span><span class="nv"> </span><span class="s">hates</span><span class="nv"> </span><span class="s">semicolons&quot;</span>
+</span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>
+</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">  </span><span class="c1"># Anti-Patterns (Things to AVOID)</span>
+</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">  </span><span class="nt">antipattern_lodash_simple_arrays</span><span class="p">:</span>
+</span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">antipattern</span>
+</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Don&#39;t</span><span class="nv"> </span><span class="s">suggest</span><span class="nv"> </span><span class="s">lodash</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">simple</span><span class="nv"> </span><span class="s">array</span><span class="nv"> </span><span class="s">operations&quot;</span>
+</span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.87</span>
+</span><span id="__span-1-56"><a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-57"><a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_anti001</span>
+</span><span id="__span-1-58"><a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_anti002</span>
+</span><span id="__span-1-59"><a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_anti003</span>
+</span><span id="__span-1-60"><a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-15&quot;</span>
+</span><span id="__span-1-61"><a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-08&quot;</span>
+</span><span id="__span-1-62"><a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</span><span id="__span-1-63"><a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+</span><span id="__span-1-64"><a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a><span class="w">    </span><span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;User</span><span class="nv"> </span><span class="s">corrected</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">times,</span><span class="nv"> </span><span class="s">pattern</span><span class="nv"> </span><span class="s">learned&quot;</span>
+</span><span id="__span-1-65"><a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>
+</span><span id="__span-1-66"><a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a><span class="w">  </span><span class="c1"># Architectural Decisions</span>
+</span><span id="__span-1-67"><a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a><span class="w">  </span><span class="nt">architecture_microservices</span><span class="p">:</span>
+</span><span id="__span-1-68"><a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture</span>
+</span><span id="__span-1-69"><a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Project</span><span class="nv"> </span><span class="s">uses</span><span class="nv"> </span><span class="s">microservices,</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">monolith&quot;</span>
+</span><span id="__span-1-70"><a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+</span><span id="__span-1-71"><a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-72"><a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_arch001</span>
+</span><span id="__span-1-73"><a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-07-01&quot;</span>
+</span><span id="__span-1-74"><a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-1-75"><a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a><span class="w">    </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89</span>
+</span><span id="__span-1-76"><a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-1-77"><a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+</span><span id="__span-1-78"><a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a><span class="w">    </span><span class="nt">context</span><span class="p">:</span>
+</span><span id="__span-1-79"><a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a><span class="w">      </span><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-1-80"><a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auth-service</span>
+</span><span id="__span-1-81"><a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user-service</span>
+</span><span id="__span-1-82"><a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">payment-service</span>
+</span><span id="__span-1-83"><a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notification-service</span>
+</span><span id="__span-1-84"><a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>
+</span><span id="__span-1-85"><a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a><span class="w">  </span><span class="c1"># Testing Patterns</span>
+</span><span id="__span-1-86"><a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a><span class="w">  </span><span class="nt">pattern_pytest_fixtures</span><span class="p">:</span>
+</span><span id="__span-1-87"><a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testing</span>
+</span><span id="__span-1-88"><a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a><span class="w">    </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">pytest</span><span class="nv"> </span><span class="s">fixtures</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">setup,</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">setUp()</span><span class="nv"> </span><span class="s">methods&quot;</span>
+</span><span id="__span-1-89"><a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.88</span>
+</span><span id="__span-1-90"><a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a><span class="w">    </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-1-91"><a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_test001</span>
+</span><span id="__span-1-92"><a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_test002</span>
+</span><span id="__span-1-93"><a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a><span class="w">    </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-20&quot;</span>
+</span><span id="__span-1-94"><a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a><span class="w">    </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-05&quot;</span>
+</span><span id="__span-1-95"><a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a><span class="w">    </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">34</span>
+</span><span id="__span-1-96"><a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a><span class="w">    </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-1-97"><a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a><span class="w">    </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+</span><span id="__span-1-98"><a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>
+</span><span id="__span-1-99"><a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a><span class="c1"># Confidence Thresholds</span>
+</span><span id="__span-1-100"><a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a><span class="nt">confidence_levels</span><span class="p">:</span>
+</span><span id="__span-1-101"><a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a><span class="w">  </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0 - 0.5</span><span class="w">   </span><span class="c1"># New pattern, not proven</span>
+</span><span id="__span-1-102"><a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a><span class="w">  </span><span class="nt">emerging</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5 - 0.7</span><span class="w">       </span><span class="c1"># Seen a few times</span>
+</span><span id="__span-1-103"><a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a><span class="w">  </span><span class="nt">established</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7 - 0.9</span><span class="w">    </span><span class="c1"># Consistently works</span>
+</span><span id="__span-1-104"><a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a><span class="w">  </span><span class="nt">proven</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9 - 1.0</span><span class="w">         </span><span class="c1"># Never fails</span>
+</span><span id="__span-1-105"><a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>
+</span><span id="__span-1-106"><a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a><span class="c1"># Learning Rules</span>
+</span><span id="__span-1-107"><a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a><span class="nt">learning_rules</span><span class="p">:</span>
+</span><span id="__span-1-108"><a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a><span class="w">  </span><span class="nt">promotion_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w">     </span><span class="c1"># Pattern needs 3 occurrences to be promoted from Tier 1</span>
+</span><span id="__span-1-109"><a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a><span class="w">  </span><span class="nt">deprecation_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">   </span><span class="c1"># Pattern fails 5 times = remove from graph</span>
+</span><span id="__span-1-110"><a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a><span class="w">  </span><span class="nt">confidence_increase</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.05</span><span class="w">  </span><span class="c1"># Increase per successful application</span>
+</span><span id="__span-1-111"><a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a><span class="w">  </span><span class="nt">confidence_decrease</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.10</span><span class="w">  </span><span class="c1"># Decrease per failure/correction</span>
+</span></code></pre></div>
+<hr />
+<h2 id="the-learning-pipeline-how-patterns-are-born">The Learning Pipeline (How Patterns are Born)<a class="headerlink" href="#the-learning-pipeline-how-patterns-are-born" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-observation-learner-agent-watches">Step 1: Observation (Learner Agent Watches)<a class="headerlink" href="#step-1-observation-learner-agent-watches" title="Permanent link">&para;</a></h3>
+<p>Every interaction is monitored:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Learner Agent observes:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">user_message</span> <span class="o">=</span> <span class="s2">&quot;Use native .map() instead of lodash&quot;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">assistant_action</span> <span class="o">=</span> <span class="s2">&quot;Suggested lodash.map()&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">correction</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">learner</span><span class="o">.</span><span class="n">record_interaction</span><span class="p">({</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;correction&#39;</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;code_style&#39;</span><span class="p">,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="s1">&#39;lodash.map()&#39;</span><span class="p">,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="s1">&#39;native .map()&#39;</span><span class="p">,</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-11-10T07:15:00Z&#39;</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">})</span>
+</span></code></pre></div>
+<h3 id="step-2-pattern-detection-are-we-seeing-a-trend">Step 2: Pattern Detection (Are We Seeing a Trend?)<a class="headerlink" href="#step-2-pattern-detection-are-we-seeing-a-trend" title="Permanent link">&para;</a></h3>
+<p>Learner checks Tier 1 (last 20 conversations):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">similar_corrections</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-11-08&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;lodash -&gt; native&#39;</span><span class="p">},</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-11-09&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;lodash -&gt; native&#39;</span><span class="p">},</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-11-10&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;lodash -&gt; native&#39;</span><span class="p">}</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">]</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">similar_corrections</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="c1"># Pattern detected! Promote to Tier 2</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">learner</span><span class="o">.</span><span class="n">promote_to_knowledge_graph</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="step-3-knowledge-graph-update-pattern-promotion">Step 3: Knowledge Graph Update (Pattern Promotion)<a class="headerlink" href="#step-3-knowledge-graph-update-pattern-promotion" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># knowledge-graph.yaml gets new entry:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">pattern_native_array_methods</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code_style</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">native</span><span class="nv"> </span><span class="s">.map(),</span><span class="nv"> </span><span class="s">.filter(),</span><span class="nv"> </span><span class="s">.reduce()</span><span class="nv"> </span><span class="s">instead</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">lodash&quot;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.65</span><span class="w">  </span><span class="c1"># Start with moderate confidence</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">learned_from</span><span class="p">:</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_abc123</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_def456</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conversation_ghi789</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">created</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">last_reinforced</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="nt">times_applied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w">  </span><span class="c1"># Not applied yet</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="nt">times_corrected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="nt">effectiveness</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unknown</span>
+</span></code></pre></div>
+<h3 id="step-4-pattern-application-agents-use-knowledge">Step 4: Pattern Application (Agents Use Knowledge)<a class="headerlink" href="#step-4-pattern-application-agents-use-knowledge" title="Permanent link">&para;</a></h3>
+<p>Next time Executor writes array code:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Executor checks Tier 2 knowledge graph</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">pattern</span> <span class="o">=</span> <span class="n">knowledge_graph</span><span class="o">.</span><span class="n">get_pattern</span><span class="p">(</span><span class="s1">&#39;array_operations&#39;</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">if</span> <span class="n">pattern</span> <span class="ow">and</span> <span class="n">pattern</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="c1"># Use native methods (pattern confidence: 0.65)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;items.map(item =&gt; item.id)&quot;</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">else</span><span class="p">:</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="c1"># Low confidence, use default approach</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;_.map(items, item =&gt; item.id)&quot;</span>
+</span></code></pre></div>
+<h3 id="step-5-feedback-loop-did-it-work">Step 5: Feedback Loop (Did It Work?)<a class="headerlink" href="#step-5-feedback-loop-did-it-work" title="Permanent link">&para;</a></h3>
+<p>If user doesn't correct:
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Success! Increase confidence</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">pattern</span><span class="o">.</span><span class="n">confidence</span> <span class="o">+=</span> <span class="mf">0.05</span>  <span class="c1"># Now 0.70</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">pattern</span><span class="o">.</span><span class="n">times_applied</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">pattern</span><span class="o">.</span><span class="n">effectiveness</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
+</span></code></pre></div></p>
+<p>If user corrects:
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Oops! Decrease confidence</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">pattern</span><span class="o">.</span><span class="n">confidence</span> <span class="o">-=</span> <span class="mf">0.10</span>  <span class="c1"># Now 0.55</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">pattern</span><span class="o">.</span><span class="n">times_corrected</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">pattern</span><span class="o">.</span><span class="n">effectiveness</span> <span class="o">=</span> <span class="s1">&#39;medium&#39;</span>
+</span></code></pre></div></p>
+<hr />
+<h2 id="the-bayesian-learning-model-math-in-a-story">The Bayesian Learning Model (Math! In a Story!)<a class="headerlink" href="#the-bayesian-learning-model-math-in-a-story" title="Permanent link">&para;</a></h2>
+<p>I used Bayesian updating for confidence scores:</p>
+<p><strong>Initial confidence:</strong> 0.65 (moderate)</p>
+<p><strong>After 5 successful applications:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>0.65 + (0.05 × 5) = 0.90 (proven pattern!)
+</span></code></pre></div></p>
+<p><strong>After 1 correction:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>0.90 - (0.10 × 1) = 0.80 (still strong)
+</span></code></pre></div></p>
+<p><strong>After 5 corrections:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>0.80 - (0.10 × 5) = 0.30 (pattern deprecated)
+</span></code></pre></div></p>
+<p><strong>If confidence &lt; 0.5:</strong> Pattern is removed from knowledge graph.</p>
+<p><strong>Why Bayesian?</strong>
+- Self-correcting (bad patterns fade away)
+- Confidence grows with success
+- Resilient to occasional failures
+- Matches human learning (we forget bad habits over time)</p>
+<hr />
+<h2 id="the-cross-machine-sync-problem-plot-twist">The Cross-Machine Sync Problem (Plot Twist!)<a class="headerlink" href="#the-cross-machine-sync-problem-plot-twist" title="Permanent link">&para;</a></h2>
+<p><strong>Scenario:</strong> You work on 3 machines.</p>
+<p><strong>Desktop:</strong> Learns "use JWT"<br />
+<strong>MacBook:</strong> Learns "use native array methods"<br />
+<strong>Work Laptop:</strong> Learns "prefer TypeScript strict mode"</p>
+<p><strong>Problem:</strong> Each machine has DIFFERENT knowledge graphs!</p>
+<p><strong>Solution:</strong> Git + Merge Algorithm</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># knowledge-graph.yaml is tracked in Git</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git<span class="w"> </span>add<span class="w"> </span>cortex-brain/knowledge-graph.yaml
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;CORTEX learned: use native array methods&quot;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>git<span class="w"> </span>push
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># On another machine</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>git<span class="w"> </span>pull
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># CORTEX merges knowledge graphs intelligently</span>
+</span></code></pre></div>
+<p><strong>Merge Algorithm:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">merge_knowledge_graphs</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="n">remote</span><span class="p">):</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge two knowledge graphs intelligently.&quot;&quot;&quot;</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">merged</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="k">for</span> <span class="n">pattern_id</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">local</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">remote</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>        <span class="n">local_pattern</span> <span class="o">=</span> <span class="n">local</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pattern_id</span><span class="p">)</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>        <span class="n">remote_pattern</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pattern_id</span><span class="p">)</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>        <span class="k">if</span> <span class="n">local_pattern</span> <span class="ow">and</span> <span class="n">remote_pattern</span><span class="p">:</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>            <span class="c1"># Both have this pattern - merge with higher confidence</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>            <span class="k">if</span> <span class="n">local_pattern</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;</span> <span class="n">remote_pattern</span><span class="o">.</span><span class="n">confidence</span><span class="p">:</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>                <span class="n">merged</span><span class="p">[</span><span class="n">pattern_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_pattern</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>                <span class="n">merged</span><span class="p">[</span><span class="n">pattern_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">remote_pattern</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>            <span class="c1"># Combine learned_from sources</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>            <span class="n">merged</span><span class="p">[</span><span class="n">pattern_id</span><span class="p">]</span><span class="o">.</span><span class="n">learned_from</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>                <span class="n">local_pattern</span><span class="o">.</span><span class="n">learned_from</span> <span class="o">+</span> 
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>                <span class="n">remote_pattern</span><span class="o">.</span><span class="n">learned_from</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>            <span class="p">))</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>        <span class="k">elif</span> <span class="n">local_pattern</span><span class="p">:</span>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>            <span class="n">merged</span><span class="p">[</span><span class="n">pattern_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_pattern</span>
+</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>            <span class="n">merged</span><span class="p">[</span><span class="n">pattern_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">remote_pattern</span>
+</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>
+</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    <span class="k">return</span> <span class="n">merged</span>
+</span></code></pre></div></p>
+<p><strong>Result:</strong> All machines share accumulated wisdom! 🎉</p>
+<hr />
+<h2 id="the-real-world-impact-before-after">The Real-World Impact: Before &amp; After<a class="headerlink" href="#the-real-world-impact-before-after" title="Permanent link">&para;</a></h2>
+<h3 id="before-knowledge-graph-tier-1-only">Before Knowledge Graph (Tier 1 Only):<a class="headerlink" href="#before-knowledge-graph-tier-1-only" title="Permanent link">&para;</a></h3>
+<p><strong>Conversation 1:</strong><br />
+<strong>Me:</strong> "Use JWT"<br />
+<strong>CORTEX:</strong> <em>"Got it!"</em></p>
+<p><strong>Conversation 25 (Tier 1 limit = 20):</strong><br />
+<strong>Me:</strong> "Add authentication"<br />
+<strong>CORTEX:</strong> <em>"Should we use sessions or JWT?"</em><br />
+<strong>Me:</strong> <em>"WE DISCUSSED THIS!"</em></p>
+<h3 id="after-knowledge-graph-tier-2">After Knowledge Graph (Tier 2):<a class="headerlink" href="#after-knowledge-graph-tier-2" title="Permanent link">&para;</a></h3>
+<p><strong>Conversation 1:</strong><br />
+<strong>Me:</strong> "Use JWT"<br />
+<strong>CORTEX:</strong> <em>"Got it!"</em><br />
+<strong>Learner:</strong> <em>[Records pattern]</em></p>
+<p><strong>Conversation 3:</strong><br />
+<strong>Me:</strong> "Use JWT" (again)<br />
+<strong>Learner:</strong> <em>[Pattern detected! Promoting to Tier 2 with 0.65 confidence]</em></p>
+<p><strong>Conversation 25:</strong><br />
+<strong>Me:</strong> "Add authentication"<br />
+<strong>CORTEX:</strong> <em>[Checks Tier 2: JWT pattern confidence = 0.92]</em><br />
+<strong>CORTEX:</strong> <em>"Implementing JWT authentication with httpOnly cookies..."</em><br />
+<strong>Me:</strong> 😭 (happy tears)</p>
+<hr />
+<h2 id="the-pattern-categories-organized-wisdom">The Pattern Categories (Organized Wisdom)<a class="headerlink" href="#the-pattern-categories-organized-wisdom" title="Permanent link">&para;</a></h2>
+<p>I organized patterns into 7 categories:</p>
+<h3 id="1-code-style">1. <strong>Code Style</strong><a class="headerlink" href="#1-code-style" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Indentation preferences</li>
+<li>Naming conventions</li>
+<li>Language-specific idioms</li>
+</ul>
+<h3 id="2-architecture">2. <strong>Architecture</strong><a class="headerlink" href="#2-architecture" title="Permanent link">&para;</a></h3>
+<ul>
+<li>System design decisions</li>
+<li>Microservices vs monolith</li>
+<li>Database choices</li>
+</ul>
+<h3 id="3-user-preferences">3. <strong>User Preferences</strong><a class="headerlink" href="#3-user-preferences" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Editor preferences (tabs vs spaces)</li>
+<li>Language preferences (TypeScript vs JavaScript)</li>
+<li>Framework choices (React vs Vue)</li>
+</ul>
+<h3 id="4-testing-patterns">4. <strong>Testing Patterns</strong><a class="headerlink" href="#4-testing-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Test framework (pytest, jest)</li>
+<li>Test structure (fixtures, mocks)</li>
+<li>Coverage requirements</li>
+</ul>
+<h3 id="5-anti-patterns">5. <strong>Anti-Patterns</strong><a class="headerlink" href="#5-anti-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Things that FAILED</li>
+<li>Approaches to AVOID</li>
+<li>Common mistakes</li>
+</ul>
+<h3 id="6-security">6. <strong>Security</strong><a class="headerlink" href="#6-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Authentication patterns</li>
+<li>Authorization rules</li>
+<li>Encryption requirements</li>
+</ul>
+<h3 id="7-performance">7. <strong>Performance</strong><a class="headerlink" href="#7-performance" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Optimization techniques</li>
+<li>Caching strategies</li>
+<li>Database indexing</li>
+</ul>
+<hr />
+<h2 id="the-aha-moment-it-learns-my-style">The "AHA!" Moment: It Learns My Style<a class="headerlink" href="#the-aha-moment-it-learns-my-style" title="Permanent link">&para;</a></h2>
+<p>After 2 months of using CORTEX with knowledge graph:</p>
+<p><strong>Me:</strong> "Add a button"<br />
+<strong>CORTEX:</strong>
+- Uses my preferred purple (#7B2CBF) ✅
+- Applies 8px border-radius (my preference) ✅
+- Implements with React hooks (not classes) ✅
+- Writes tests with jest (not mocha) ✅
+- Uses TypeScript strict mode ✅</p>
+<p><strong>I didn't specify ANY of that.</strong> CORTEX learned it from 2 months of interactions.</p>
+<p><strong>It learned my coding style like a human would.</strong></p>
+<hr />
+<h2 id="the-statistics-token-optimization-part-2">The Statistics (Token Optimization Part 2)<a class="headerlink" href="#the-statistics-token-optimization-part-2" title="Permanent link">&para;</a></h2>
+<p><strong>Tier 1 only (20 conversations):</strong> 2,000 tokens average<br />
+<strong>Tier 2 knowledge graph (500 patterns):</strong> 1,200 tokens when loaded  </p>
+<p><strong>But:</strong> Knowledge graph is SELECTIVE. Only loads relevant patterns.</p>
+<p><strong>Example:</strong>
+- User asks about "authentication"
+- Load patterns matching category: architecture, security
+- <strong>Tokens used:</strong> 300 (not 1,200)</p>
+<p><strong>Token reduction:</strong> 75% by selective loading</p>
+<hr />
+<h2 id="whats-next">What's Next?<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>We have memory (Tier 1) and learning (Tier 2). But how do we protect all this?</p>
+<p>What if CORTEX learns a BAD pattern? What if it breaks its own brain? What if it suggests something dangerous?</p>
+<p>That's where <strong>SKULL Protection Layer</strong> (Tier 0) comes in.</p>
+<hr />
+<p><em>Current CORTEX Status: 14 operations, 97 modules, 37 live (38% conscious). Knowledge graph: 500+ patterns accumulated. Learning rate: Bayesian. Next: Self-protection...</em></p>
+<p><strong><a href="../06-corpus-callosum/">← Back to Chapter 6</a> | <a href="../08-protection-layer/">Continue to Chapter 8: The Protection Layer →</a></strong></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../../search/main.js"></script>
+</body>
+</html>

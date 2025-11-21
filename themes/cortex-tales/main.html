@@ -18,6 +18,11 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ 'assets/css/cortex-tales.css'|url }}">
     
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    {% if page.url and 'governance' in page.url %}
+    <link rel="stylesheet" href="{{ 'assets/css/rulebook.css'|url }}">
+    {% endif %}
+    
     <!-- Syntax Highlighting - Dark Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
     
@@ -43,11 +48,11 @@
                 <nav class="horizontal-nav">
                     <ul class="nav-menu">
                         <li><a href="{{ nav.homepage.url|url }}">Home</a></li>
-                        <li><a href="{{ 'diagrams/story/The-CORTEX-Story/'|url }}">The CORTEX Birth</a></li>
+                        <li><a href="{{ 'story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/'|url }}">The CORTEX Birth</a></li>
                         <li><a href="{{ 'governance/THE-RULEBOOK/'|url }}">Cortex Bible</a></li>
-                        <li><a href="{{ 'architecture/overview/'|url }}">Architecture</a></li>
-                        <li><a href="{{ 'reference/api/'|url }}">Technical Docs</a></li>
-                        <li><a href="{{ 'guides/developer-guide/'|url }}">User Guides</a></li>
+                        <li><a href="{{ 'architecture-diagrams/'|url }}">Architecture</a></li>
+                        <li><a href="{{ 'EXECUTIVE-SUMMARY/'|url }}">Technical Docs</a></li>
+                        <li><a href="{{ 'getting-started/quick-start/'|url }}">User Guides</a></li>
                         <li><a href="{{ 'getting-started/quick-start/'|url }}">Examples</a></li>
                     </ul>
                 </nav>
@@ -80,14 +85,6 @@
                             {% endif %}
                         {% endfor %}
                         </ul>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
-                    {% if page.toc and page.toc|string|length < 3000 %}
-                    <div class="toc-wrapper">
-                        <h4>On This Page</h4>
-                        {{ page.toc }}
                     </div>
                     {% endif %}
                 </div>
@@ -140,6 +137,9 @@
     <!-- Syntax Highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="{{ 'assets/js/navigation.js'|url }}"></script>
     
     <!-- MkDocs Search -->
     <script src="{{ 'search/main.js'|url }}"></script>

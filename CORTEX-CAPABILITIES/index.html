@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX AI Assistant - Executive Summary - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-ai-assistant-executive-summary">CORTEX AI Assistant - Executive Summary<a class="headerlink" href="#cortex-ai-assistant-executive-summary" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 3.0<br />
+<strong>Last Updated:</strong> 2025-11-21<br />
+<strong>Status:</strong> ✅ Production Ready<br />
+<strong>Author:</strong> Asif Hussain<br />
+<strong>Repository:</strong> <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a></p>
+<hr />
+<h2 id="what-is-cortex">🎯 What is CORTEX?<a class="headerlink" href="#what-is-cortex" title="Permanent link">&para;</a></h2>
+<p>CORTEX is a <strong>next-generation AI development assistant</strong> that combines memory, context awareness, and specialized agent coordination to deliver intelligent, consistent, and cost-effective software development support. Unlike traditional AI assistants, CORTEX <strong>remembers your conversations</strong>, <strong>learns from your patterns</strong>, and <strong>coordinates specialized agents</strong> to handle complex development workflows.</p>
+<hr />
+<h2 id="key-differentiators">🚀 Key Differentiators<a class="headerlink" href="#key-differentiators" title="Permanent link">&para;</a></h2>
+<h3 id="1-memory-powered-intelligence-4-tier-architecture">1. <strong>Memory-Powered Intelligence (4-Tier Architecture)</strong><a class="headerlink" href="#1-memory-powered-intelligence-4-tier-architecture" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Tier 0 (Brain Protection):</strong> Prevents harmful operations and enforces governance rules</li>
+<li><strong>Tier 1 (Working Memory):</strong> Remembers recent conversations with context scoring</li>
+<li><strong>Tier 2 (Knowledge Graph):</strong> Learns patterns and relationships across your codebase</li>
+<li><strong>Tier 3 (Long-Term Archive):</strong> Historical storage for trend analysis</li>
+</ul>
+<p><strong>Real-World Impact:</strong> Resume work across sessions without repeating context. CORTEX automatically injects relevant past conversations when you continue work.</p>
+<h3 id="2-specialized-agent-system-10-agents">2. <strong>Specialized Agent System (10 Agents)</strong><a class="headerlink" href="#2-specialized-agent-system-10-agents" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Left Hemisphere (Logical):</strong> Code Executor, Test Generator, Health Validator, Code Reviewer</li>
+<li><strong>Right Hemisphere (Creative):</strong> System Architect, Work Planner, Documentation Writer, Change Governor</li>
+<li><strong>Central Coordination:</strong> Intent Detector, Pattern Matcher, Corpus Callosum Router</li>
+</ul>
+<p><strong>Real-World Impact:</strong> Your request is automatically routed to the right specialist. "Write tests" goes to Test Generator. "Plan architecture" goes to System Architect. No manual routing needed.</p>
+<h3 id="3-cost-performance-optimization">3. <strong>Cost &amp; Performance Optimization</strong><a class="headerlink" href="#3-cost-performance-optimization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>97.2% Token Reduction:</strong> 74,047 → 2,078 average input tokens</li>
+<li><strong>93.4% Cost Reduction:</strong> Using GitHub Copilot pricing model</li>
+<li><strong>Projected Savings:</strong> $8,636/year (1,000 requests/month)</li>
+<li><strong>Response Time:</strong> &lt; 500ms for context injection</li>
+</ul>
+<p><strong>Real-World Impact:</strong> Faster responses, lower costs, cleaner architecture through modular design.</p>
+<h3 id="4-natural-language-interface">4. <strong>Natural Language Interface</strong><a class="headerlink" href="#4-natural-language-interface" title="Permanent link">&para;</a></h3>
+<p>No slash commands or syntax to memorize. Just tell CORTEX what you need:
+- "Add authentication to the dashboard"
+- "Plan a feature for user permissions"
+- "Generate documentation for the API"
+- "Review this pull request"</p>
+<p><strong>Real-World Impact:</strong> Intuitive for all skill levels. Works in conversation. Context-aware.</p>
+<hr />
+<h2 id="core-capabilities">🎨 Core Capabilities<a class="headerlink" href="#core-capabilities" title="Permanent link">&para;</a></h2>
+<h3 id="code-development"><strong>Code Development</strong><a class="headerlink" href="#code-development" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code Writing</strong></td>
+<td>✅ 100%</td>
+<td>Multi-language (Python, C#, TypeScript, JS), test-first workflow, pattern-aware generation</td>
+</tr>
+<tr>
+<td><strong>Code Rewrite</strong></td>
+<td>✅ 100%</td>
+<td>Refactoring with SOLID principles, test preservation during refactor</td>
+</tr>
+<tr>
+<td><strong>Code Review</strong></td>
+<td>🟡 60%</td>
+<td>Architecture validation, SOLID checks. <em>Enhancement needed: PR integration</em></td>
+</tr>
+<tr>
+<td><strong>Reverse Engineering</strong></td>
+<td>🟡 50%</td>
+<td>Code analysis, dependency graphs. <em>Enhancement: complexity analysis, diagrams</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing-quality"><strong>Testing &amp; Quality</strong><a class="headerlink" href="#testing-quality" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backend Testing</strong></td>
+<td>✅ 95%</td>
+<td>Unit/integration test generation (pytest, unittest), mocking, test execution</td>
+</tr>
+<tr>
+<td><strong>Web Testing</strong></td>
+<td>✅ 85%</td>
+<td>Playwright integration, E2E tests, visual regression. <em>Enhancement: Lighthouse, accessibility</em></td>
+</tr>
+<tr>
+<td><strong>Mobile Testing</strong></td>
+<td>⏳ 0%</td>
+<td><em>Planned Phase 2: Appium integration, cross-platform (iOS/Android)</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="documentation-planning"><strong>Documentation &amp; Planning</strong><a class="headerlink" href="#documentation-planning" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code Documentation</strong></td>
+<td>✅ 100%</td>
+<td>Docstrings, README, API docs, MkDocs integration, architecture diagrams</td>
+</tr>
+<tr>
+<td><strong>Feature Planning</strong></td>
+<td>✅ 100%</td>
+<td>Interactive planning workflow, vision API (screenshots), file-based artifacts</td>
+</tr>
+<tr>
+<td><strong>ADO Integration</strong></td>
+<td>✅ 90%</td>
+<td>Work item templates, DoR/DoD/AC generation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Legend:</strong><br />
+✅ = Production Ready | 🟡 = Partial (enhancements planned) | ⏳ = Not implemented (roadmap)</p>
+<hr />
+<h2 id="memory-context-intelligence">🧠 Memory &amp; Context Intelligence<a class="headerlink" href="#memory-context-intelligence" title="Permanent link">&para;</a></h2>
+<h3 id="tier-1-working-memory-conversation-context"><strong>Tier 1: Working Memory (Conversation Context)</strong><a class="headerlink" href="#tier-1-working-memory-conversation-context" title="Permanent link">&para;</a></h3>
+<p><strong>What it does:</strong>
+- Captures and indexes conversations automatically
+- Scores relevance based on keywords, files, entities, intent, and recency
+- Auto-injects relevant past conversations into current responses</p>
+<p><strong>Example:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Day 1: &quot;How should I implement JWT authentication?&quot;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Copilot: &quot;Use PyJWT library with token expiration...&quot;
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Day 3: &quot;Add token refresh to the auth system&quot;
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Copilot:
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>📋 Context from Previous Conversations
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>- 2 days ago: JWT authentication discussion (Relevance: 0.87)
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>- Files: auth.py, tokens.py | Intent: IMPLEMENT
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Based on your previous JWT setup, here&#39;s how to add refresh...
+</span></code></pre></div></p>
+<p><strong>Commands:</strong>
+- <code>show context</code> - View what CORTEX remembers
+- <code>forget [topic]</code> - Remove specific conversations
+- <code>clear memory</code> - Fresh start (remove all context)</p>
+<h3 id="tier-2-knowledge-graph"><strong>Tier 2: Knowledge Graph</strong><a class="headerlink" href="#tier-2-knowledge-graph" title="Permanent link">&para;</a></h3>
+<p><strong>What it does:</strong>
+- Learns patterns and relationships across your codebase
+- Detects work context automatically (debugging, testing, architecture)
+- Adapts response style based on work type</p>
+<p><strong>Automatic Context Detection:</strong>
+| Work Type | Response Focus | Agents Activated | Template Style |
+|-----------|---------------|------------------|----------------|
+| Feature Implementation | Code + tests | Executor, Tester, Validator | Technical detail |
+| Debugging/Issues | Root cause analysis | Health Validator, Pattern Matcher | Diagnostic focus |
+| Architecture/Design | System impact | Architect, Work Planner | Strategic overview |
+| Documentation | Clarity + examples | Documenter | User-friendly |</p>
+<h3 id="tier-3-long-term-storage"><strong>Tier 3: Long-Term Storage</strong><a class="headerlink" href="#tier-3-long-term-storage" title="Permanent link">&para;</a></h3>
+<p><strong>What it does:</strong>
+- Historical archive for trend analysis
+- Pattern library for reusable solutions
+- Lessons learned from past projects</p>
+<hr />
+<h2 id="architecture-overview">🏗️ Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    User[User Request] --&gt; IntentDetector[Intent Detector]
+    IntentDetector --&gt; Tier0[Tier 0: Brain Protection]
+    Tier0 --&gt; Router[Corpus Callosum Router]
+
+    Router --&gt; LeftHem[Left Hemisphere]
+    Router --&gt; RightHem[Right Hemisphere]
+
+    LeftHem --&gt; Executor[Code Executor]
+    LeftHem --&gt; Tester[Test Generator]
+    LeftHem --&gt; Validator[Health Validator]
+    LeftHem --&gt; Reviewer[Code Reviewer]
+
+    RightHem --&gt; Architect[System Architect]
+    RightHem --&gt; Planner[Work Planner]
+    RightHem --&gt; Documenter[Documentation Writer]
+    RightHem --&gt; Governor[Change Governor]
+
+    Executor --&gt; Tier1[Tier 1: Working Memory]
+    Tester --&gt; Tier1
+    Validator --&gt; Tier1
+    Reviewer --&gt; Tier1
+
+    Architect --&gt; Tier2[Tier 2: Knowledge Graph]
+    Planner --&gt; Tier2
+    Documenter --&gt; Tier2
+    Governor --&gt; Tier2
+
+    Tier1 --&gt; Response[Coordinated Response]
+    Tier2 --&gt; Response</code></pre>
+<p><strong>Key Components:</strong>
+- <strong>Brain Tiers:</strong> 4-tier memory system (Protection, Working, Knowledge, Archive)
+- <strong>Agents:</strong> 10 specialized agents coordinated by Corpus Callosum
+- <strong>Plugins:</strong> Extensible plugin system for custom functionality
+- <strong>Operations:</strong> 13+ high-level operations (setup, plan, execute, test, etc.)</p>
+<hr />
+<h2 id="getting-started">🚀 Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<h3 id="installation"><strong>Installation</strong><a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Clone Repository:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/asifhussain60/CORTEX.git
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>CORTEX
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Install Dependencies:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Configure:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cp<span class="w"> </span>cortex.config.template.json<span class="w"> </span>cortex.config.json
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Edit cortex.config.json with your settings</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify Installation:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-v
+</span></code></pre></div></p>
+</li>
+</ol>
+<h3 id="first-steps"><strong>First Steps</strong><a class="headerlink" href="#first-steps" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Enable Conversation Tracking</strong> (optional but recommended):
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>setup cortex tracking
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Try Natural Language Commands:</strong>
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>help
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>show me what cortex can do
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>plan a feature for user authentication
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Use in VS Code:</strong></p>
+</li>
+<li>Install CORTEX extension (coming soon)</li>
+<li>Or use GitHub Copilot Chat with CORTEX prompt</li>
+</ol>
+<hr />
+<h2 id="commands-reference">📋 Commands Reference<a class="headerlink" href="#commands-reference" title="Permanent link">&para;</a></h2>
+<h3 id="core-commands"><strong>Core Commands</strong><a class="headerlink" href="#core-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code></td>
+<td>Show available commands</td>
+<td>"help" or "what can cortex do"</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Show implementation status</td>
+<td>"show status" or "where are we"</td>
+</tr>
+<tr>
+<td><code>setup environment</code></td>
+<td>Configure CORTEX</td>
+<td>"setup environment"</td>
+</tr>
+<tr>
+<td><code>show context</code></td>
+<td>View conversation memory</td>
+<td>"show context"</td>
+</tr>
+<tr>
+<td><code>forget [topic]</code></td>
+<td>Remove specific conversations</td>
+<td>"forget about authentication"</td>
+</tr>
+<tr>
+<td><code>clear memory</code></td>
+<td>Fresh start (remove all)</td>
+<td>"clear memory"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="planning-commands"><strong>Planning Commands</strong><a class="headerlink" href="#planning-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plan [feature]</code></td>
+<td>Interactive feature planning</td>
+<td>"plan user authentication"</td>
+</tr>
+<tr>
+<td><code>plan ado</code></td>
+<td>ADO work item planning</td>
+<td>"plan ado feature"</td>
+</tr>
+<tr>
+<td><code>approve plan</code></td>
+<td>Finalize and hook into pipeline</td>
+<td>"approve plan"</td>
+</tr>
+<tr>
+<td><code>resume plan [name]</code></td>
+<td>Continue existing plan</td>
+<td>"resume plan authentication"</td>
+</tr>
+<tr>
+<td><code>planning status</code></td>
+<td>Show all active plans</td>
+<td>"planning status"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="development-commands"><strong>Development Commands</strong><a class="headerlink" href="#development-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>implement [feature]</code></td>
+<td>Code implementation</td>
+<td>"implement login page"</td>
+</tr>
+<tr>
+<td><code>write tests for [code]</code></td>
+<td>Generate tests</td>
+<td>"write tests for auth module"</td>
+</tr>
+<tr>
+<td><code>review [code/PR]</code></td>
+<td>Code review</td>
+<td>"review this pull request"</td>
+</tr>
+<tr>
+<td><code>generate docs</code></td>
+<td>Documentation generation</td>
+<td>"generate documentation"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="conversation-capture"><strong>Conversation Capture</strong><a class="headerlink" href="#conversation-capture" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>capture conversation #file:[path]</code></td>
+<td>Import conversation to brain</td>
+<td>"capture conversation #file:chat.md"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> All commands use natural language. No slash commands required.</p>
+<hr />
+<h2 id="roadmap">🗺️ Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
+<h3 id="phase-1-core-foundation-complete"><strong>Phase 1: Core Foundation</strong> (✅ Complete)<a class="headerlink" href="#phase-1-core-foundation-complete" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ 4-Tier memory architecture</li>
+<li>✅ 10-Agent coordination system</li>
+<li>✅ Natural language interface</li>
+<li>✅ Conversation tracking &amp; context injection</li>
+<li>✅ Interactive feature planning</li>
+<li>✅ Cost optimization (97.2% token reduction)</li>
+</ul>
+<h3 id="phase-2-enhanced-testing-validation-in-progress"><strong>Phase 2: Enhanced Testing &amp; Validation</strong> (🔄 In Progress)<a class="headerlink" href="#phase-2-enhanced-testing-validation-in-progress" title="Permanent link">&para;</a></h3>
+<ul>
+<li>🔄 Mobile testing (Appium integration)</li>
+<li>🔄 Advanced web testing (Lighthouse, accessibility)</li>
+<li>⏳ PR integration for code review</li>
+<li>⏳ Automated complexity analysis</li>
+</ul>
+<h3 id="phase-3-advanced-features-planned"><strong>Phase 3: Advanced Features</strong> (⏳ Planned)<a class="headerlink" href="#phase-3-advanced-features-planned" title="Permanent link">&para;</a></h3>
+<ul>
+<li>⏳ UI from Figma (Figma API integration)</li>
+<li>⏳ A/B testing framework</li>
+<li>⏳ Real-time collaboration</li>
+<li>⏳ Multi-workspace support</li>
+</ul>
+<h3 id="phase-4-enterprise-features-planned"><strong>Phase 4: Enterprise Features</strong> (⏳ Planned)<a class="headerlink" href="#phase-4-enterprise-features-planned" title="Permanent link">&para;</a></h3>
+<ul>
+<li>⏳ Team collaboration</li>
+<li>⏳ Custom agent marketplace</li>
+<li>⏳ Advanced analytics &amp; insights</li>
+<li>⏳ SaaS deployment option</li>
+</ul>
+<hr />
+<h2 id="support-community">📞 Support &amp; Community<a class="headerlink" href="#support-community" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Documentation:</strong> <a href="https://asifhussain60.github.io/CORTEX/">docs.cortex-ai.dev</a></li>
+<li><strong>Issues:</strong> <a href="https://github.com/asifhussain60/CORTEX/issues">GitHub Issues</a></li>
+<li><strong>Discussions:</strong> <a href="https://github.com/asifhussain60/CORTEX/discussions">GitHub Discussions</a></li>
+<li><strong>Author:</strong> Asif Hussain (asifhussain60@gmail.com)</li>
+</ul>
+<hr />
+<p><strong>Copyright © 2024-2025 Asif Hussain. All rights reserved.</strong><br />
+<strong>License:</strong> Proprietary - See LICENSE file for terms</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

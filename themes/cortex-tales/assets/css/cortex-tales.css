@@ -241,6 +241,14 @@ blockquote {
   border-bottom-color: var(--accent-primary);
 }
 
+/* Active section highlighting (from navigation.js) */
+.nav-menu li a.active-section {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-hover);
+  border-bottom-color: var(--accent-primary);
+  font-weight: 700;
+}
+
 /* ============================================
    Main Content Area
    ============================================ */
@@ -289,7 +297,6 @@ blockquote {
   padding-right: 30px;
 }
 
-.toc-wrapper,
 .nav-tree {
   background-color: var(--bg-secondary);
   padding: 20px;
@@ -297,9 +304,15 @@ blockquote {
   margin-bottom: 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   border: 1px solid var(--border-color);
+  min-height: calc(100vh - 400px);
+  position: sticky;
+  top: 80px; /* Adjusted for header height */
+  max-height: calc(100vh - 120px); /* Optimized for better visibility */
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-self: flex-start; /* Ensure sticky works with flexbox */
 }
 
-.toc-wrapper h4,
 .nav-tree h4 {
   font-size: 18px;
   font-weight: 600;
@@ -361,13 +374,7 @@ blockquote {
   border-left-color: var(--accent-primary);
 }
 
-/* TOC Styles */
-.toc-wrapper .toc {
-  list-style: none;
-  padding-left: 0;
-}
-
-/* Hide permalink symbols in headers and TOC */
+/* Hide permalink symbols in headers */
 .headerlink,
 a.headerlink {
   display: none !important;
@@ -381,27 +388,6 @@ h4 .headerlink,
 h5 .headerlink,
 h6 .headerlink {
   display: none !important;
-}
-
-.toc-wrapper .toc li {
-  margin: 8px 0;
-}
-
-.toc-wrapper .toc a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding: 6px 10px;
-  display: block;
-  border-left: 3px solid transparent;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-}
-
-.toc-wrapper .toc a:hover {
-  border-left-color: var(--accent-primary);
-  padding-left: 14px;
-  color: var(--accent-hover);
-  background-color: var(--bg-tertiary);
 }
 
 /* ============================================

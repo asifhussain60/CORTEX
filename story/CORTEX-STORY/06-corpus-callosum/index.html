@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Chapter 6: The Corpus Callosum - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../../.." id="logo">
+                        <img src="../../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../../..">Home</a></li>
+                        <li><a href="../THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="chapter-6-the-corpus-callosum">Chapter 6: The Corpus Callosum<a class="headerlink" href="#chapter-6-the-corpus-callosum" title="Permanent link">&para;</a></h1>
+<h2 id="when-10-agents-became-a-symphony-or-the-day-i-prevented-ai-civil-war">When 10 Agents Became a Symphony (Or: The Day I Prevented AI Civil War)<a class="headerlink" href="#when-10-agents-became-a-symphony-or-the-day-i-prevented-ai-civil-war" title="Permanent link">&para;</a></h2>
+<p>6 AM. I now had 10 specialist agents:
+- 5 tactical executors (left brain)
+- 5 strategic planners (right brain)</p>
+<p>I felt like a proud parent.</p>
+<p>Then I gave them a task: <strong>"Add authentication"</strong></p>
+<p><strong>What happened next was CHAOS.</strong></p>
+<hr />
+<h2 id="the-great-agent-war-of-2024">The Great Agent War of 2024<a class="headerlink" href="#the-great-agent-war-of-2024" title="Permanent link">&para;</a></h2>
+<p><strong>INTENT DETECTOR:</strong> <em>"I'll analyze this request!"</em><br />
+<strong>ARCHITECT:</strong> <em>"No, I design systems first!"</em><br />
+<strong>WORK PLANNER:</strong> <em>"But I need to break it down into tasks!"</em><br />
+<strong>EXECUTOR:</strong> <em>"FORGET PLANNING, I'M WRITING CODE NOW!"</em><br />
+<strong>HEALTH VALIDATOR:</strong> <em>"WAIT! The tests are failing!"</em><br />
+<strong>TESTER:</strong> <em>"I KNOW! I'm trying to fix them!"</em><br />
+<strong>VALIDATOR:</strong> <em>"This code doesn't meet standards!"</em><br />
+<strong>PATTERN MATCHER:</strong> <em>"We did this before, nobody's listening to me!"</em><br />
+<strong>LEARNER:</strong> <em>"I'm trying to record all this and it's TOO MUCH!"</em><br />
+<strong>DOCUMENTER:</strong> <em>"CAN SOMEONE TELL ME WHAT I'M DOCUMENTING?!"</em></p>
+<p><strong>Me:</strong> 😱</p>
+<p>My beautiful specialist agents were fighting like siblings on a road trip.</p>
+<hr />
+<h2 id="the-human-brain-saves-me-again">The Human Brain Saves Me Again<a class="headerlink" href="#the-human-brain-saves-me-again" title="Permanent link">&para;</a></h2>
+<p>Humans don't have this problem. Why?</p>
+<p>Because humans have the <strong>CORPUS CALLOSUM</strong>—the bridge between brain hemispheres that coordinates left/right brain activity.</p>
+<p>Without it, you get "split-brain syndrome" where the hemispheres don't communicate. (Google it. It's fascinating and terrifying.)</p>
+<p><strong>I needed a corpus callosum for CORTEX.</strong></p>
+<hr />
+<h2 id="the-coordination-protocol-or-how-i-became-a-traffic-cop">The Coordination Protocol (Or: How I Became a Traffic Cop)<a class="headerlink" href="#the-coordination-protocol-or-how-i-became-a-traffic-cop" title="Permanent link">&para;</a></h2>
+<p>I designed a workflow orchestration system:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────┐
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│         CORPUS CALLOSUM (Orchestrator)      │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                                             │
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  &quot;Who does what, when, and in what order&quot;   │
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└─────────────────────────────────────────────┘
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        ↓                           ↓
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>┌──────────────┐            ┌──────────────┐
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  LEFT BRAIN  │←──────────→│  RIGHT BRAIN │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  (Tactical)  │  handoffs  │ (Strategic)  │
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>└──────────────┘            └──────────────┘
+</span></code></pre></div>
+<hr />
+<h2 id="the-workflow-stages-a-play-in-7-acts">The Workflow Stages (A Play in 7 Acts)<a class="headerlink" href="#the-workflow-stages-a-play-in-7-acts" title="Permanent link">&para;</a></h2>
+<h3 id="stage-1-intent-detection">Stage 1: INTENT DETECTION<a class="headerlink" href="#stage-1-intent-detection" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agent:</strong> Intent Detector (Right Brain)</p>
+<p><strong>Job:</strong> Figure out what the user actually wants.</p>
+<p><strong>Example:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">user_request</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Add</span><span class="nv"> </span><span class="s">authentication&quot;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">intent_analysis</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">primary_intent</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PLAN_FEATURE&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">ambiguity_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MEDIUM&quot;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">clarifying_questions</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">session-based?&quot;</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Social</span><span class="nv"> </span><span class="s">login</span><span class="nv"> </span><span class="s">needed?&quot;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">routing_decision</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Route</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">ARCHITECT&quot;</span>
+</span></code></pre></div></p>
+<hr />
+<h3 id="stage-2-health-check">Stage 2: HEALTH CHECK<a class="headerlink" href="#stage-2-health-check" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agent:</strong> Health Validator (Right Brain)</p>
+<p><strong>Job:</strong> Make sure project isn't on fire before starting new work.</p>
+<p><strong>Example:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">health_status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YELLOW&quot;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">issues_found</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3</span><span class="nv"> </span><span class="s">failing</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">auth</span><span class="nv"> </span><span class="s">module&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">coverage:</span><span class="nv"> </span><span class="s">67%</span><span class="nv"> </span><span class="s">(below</span><span class="nv"> </span><span class="s">80%)&quot;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;14</span><span class="nv"> </span><span class="s">uncommitted</span><span class="nv"> </span><span class="s">files&quot;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nt">recommendations</span><span class="p">:</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Fix</span><span class="nv"> </span><span class="s">failing</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">FIRST&quot;</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Commit</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">stash</span><span class="nv"> </span><span class="s">changes&quot;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="nt">decision</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;BLOCK</span><span class="nv"> </span><span class="s">until</span><span class="nv"> </span><span class="s">issues</span><span class="nv"> </span><span class="s">resolved&quot;</span>
+</span></code></pre></div></p>
+<p><strong>If health is RED/YELLOW:</strong> STOP workflow, fix issues first.<br />
+<strong>If health is GREEN:</strong> Proceed to architecture.</p>
+<hr />
+<h3 id="stage-3-architecture-design">Stage 3: ARCHITECTURE DESIGN<a class="headerlink" href="#stage-3-architecture-design" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agent:</strong> Architect (Right Brain)</p>
+<p><strong>Job:</strong> Design the solution before writing code.</p>
+<p><strong>Example:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">architecture_decision</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">refresh</span><span class="nv"> </span><span class="s">tokens&quot;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">components</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auth_middleware</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">token_generation</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">token_validation</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refresh_endpoint</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nt">trade_offs_considered</span><span class="p">:</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Stateless</span><span class="nv"> </span><span class="s">(JWT)</span><span class="nv"> </span><span class="s">vs</span><span class="nv"> </span><span class="s">Stateful</span><span class="nv"> </span><span class="s">(sessions)&quot;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Chose</span><span class="nv"> </span><span class="s">JWT</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">horizontal</span><span class="nv"> </span><span class="s">scalability&quot;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="nt">specifications</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">detailed design doc</span><span class="p p-Indicator">]</span>
+</span></code></pre></div></p>
+<p><strong>Output:</strong> Technical specification document.</p>
+<hr />
+<h3 id="stage-4-pattern-matching">Stage 4: PATTERN MATCHING<a class="headerlink" href="#stage-4-pattern-matching" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agent:</strong> Pattern Matcher (Right Brain)</p>
+<p><strong>Job:</strong> Check if we've done this before.</p>
+<p><strong>Example:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">similar_patterns</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">pattern_1</span><span class="p">:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">similarity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.93</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">httpOnly</span><span class="nv"> </span><span class="s">cookies&quot;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">outcome</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Success&quot;</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">approach</span><span class="nv"> </span><span class="s">again&quot;</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nt">pattern_2</span><span class="p">:</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">similarity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.87</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">localStorage&quot;</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="nt">outcome</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;XSS</span><span class="nv"> </span><span class="s">vulnerability&quot;</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="nt">recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AVOID</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">approach&quot;</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="nt">suggested_implementation</span><span class="p">:</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="nt">approach</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">httpOnly</span><span class="nv"> </span><span class="s">cookies</span><span class="nv"> </span><span class="s">(pattern_1)&quot;</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">  </span><span class="nt">warnings</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Don&#39;t</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">localStorage</span><span class="nv"> </span><span class="s">(pattern_2</span><span class="nv"> </span><span class="s">failed)&quot;</span>
+</span></code></pre></div></p>
+<p><strong>Output:</strong> Recommended approach based on history.</p>
+<hr />
+<h3 id="stage-5-work-planning">Stage 5: WORK PLANNING<a class="headerlink" href="#stage-5-work-planning" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agent:</strong> Work Planner (Left Brain)</p>
+<p><strong>Job:</strong> Break architecture into executable tasks.</p>
+<p><strong>Example:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">tasks</span><span class="p">:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Implement</span><span class="nv"> </span><span class="s">JWT</span><span class="nv"> </span><span class="s">token</span><span class="nv"> </span><span class="s">generation&quot;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXECUTOR</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">estimate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M&quot;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Create</span><span class="nv"> </span><span class="s">auth</span><span class="nv"> </span><span class="s">middleware&quot;</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXECUTOR</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nt">estimate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M&quot;</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Write</span><span class="nv"> </span><span class="s">unit</span><span class="nv"> </span><span class="s">tests&quot;</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TESTER</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="nt">estimate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M&quot;</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Validate</span><span class="nv"> </span><span class="s">code</span><span class="nv"> </span><span class="s">quality&quot;</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VALIDATOR</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span><span class="nt">estimate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;S&quot;</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Generate</span><span class="nv"> </span><span class="s">documentation&quot;</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCUMENTER</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">4</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="nt">estimate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;S&quot;</span>
+</span></code></pre></div></p>
+<p><strong>Output:</strong> Sequenced task list with dependencies.</p>
+<hr />
+<h3 id="stage-6-tactical-execution">Stage 6: TACTICAL EXECUTION<a class="headerlink" href="#stage-6-tactical-execution" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agents:</strong> Executor → Tester → Validator (Left Brain)</p>
+<p><strong>Job:</strong> Do the actual work.</p>
+<p><strong>Flow:</strong>
+1. <strong>EXECUTOR</strong> implements tasks 1-2
+2. <strong>TESTER</strong> writes tests (task 3)
+3. <strong>VALIDATOR</strong> checks quality (task 4)
+4. If Validator finds issues → back to Executor
+5. If Validator approves → proceed to documentation</p>
+<p><strong>Output:</strong> Working, tested, validated code.</p>
+<hr />
+<h3 id="stage-7-learning-documentation">Stage 7: LEARNING &amp; DOCUMENTATION<a class="headerlink" href="#stage-7-learning-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>Responsible Agents:</strong> Learner + Documenter (Right Brain + Left Brain)</p>
+<p><strong>Job:</strong> Capture knowledge and document results.</p>
+<p><strong>LEARNER:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">lessons_learned</span><span class="p">:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;User</span><span class="nv"> </span><span class="s">chose</span><span class="nv"> </span><span class="s">JWT</span><span class="nv"> </span><span class="s">over</span><span class="nv"> </span><span class="s">sessions</span><span class="nv"> </span><span class="s">(preference</span><span class="nv"> </span><span class="s">reinforced)&quot;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;httpOnly</span><span class="nv"> </span><span class="s">cookies</span><span class="nv"> </span><span class="s">worked</span><span class="nv"> </span><span class="s">well</span><span class="nv"> </span><span class="s">(pattern</span><span class="nv"> </span><span class="s">confidence</span><span class="nv"> </span><span class="s">+0.15)&quot;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;No</span><span class="nv"> </span><span class="s">issues</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">implementation</span><span class="nv"> </span><span class="s">(architecture</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">sound)&quot;</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nt">knowledge_updates</span><span class="p">:</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;jwt_authentication&quot;</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.94 (was 0.79)</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nt">last_success</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span></code></pre></div></p>
+<p><strong>DOCUMENTER:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="gh"># Authentication System</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Implemented JWT-based authentication with:
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">-</span><span class="w"> </span>Access tokens (15 min expiry)
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">-</span><span class="w"> </span>Refresh tokens (30 day expiry)
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">-</span><span class="w"> </span>httpOnly cookies (XSS protection)
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>[Full documentation...]
+</span></code></pre></div></p>
+<p><strong>Output:</strong> Updated knowledge graph + documentation.</p>
+<hr />
+<h2 id="the-coordination-rules-traffic-laws-for-agents">The Coordination Rules (Traffic Laws for Agents)<a class="headerlink" href="#the-coordination-rules-traffic-laws-for-agents" title="Permanent link">&para;</a></h2>
+<p>I established <strong>6 sacred rules</strong>:</p>
+<h3 id="rule-1-single-point-of-entry">Rule 1: Single Point of Entry<a class="headerlink" href="#rule-1-single-point-of-entry" title="Permanent link">&para;</a></h3>
+<p><strong>All requests go through Intent Detector FIRST.</strong></p>
+<p>No agent starts work without Intent Detector's routing decision.</p>
+<h3 id="rule-2-health-check-is-non-negotiable">Rule 2: Health Check is Non-Negotiable<a class="headerlink" href="#rule-2-health-check-is-non-negotiable" title="Permanent link">&para;</a></h3>
+<p><strong>If Health Validator says STOP, everybody STOPS.</strong></p>
+<p>No "we'll fix it later" nonsense.</p>
+<h3 id="rule-3-right-brain-plans-left-brain-executes">Rule 3: Right Brain Plans, Left Brain Executes<a class="headerlink" href="#rule-3-right-brain-plans-left-brain-executes" title="Permanent link">&para;</a></h3>
+<p><strong>Strategy before tactics. Always.</strong></p>
+<p>Architect designs → Work Planner sequences → Executor implements.</p>
+<h3 id="rule-4-validation-is-mandatory">Rule 4: Validation is Mandatory<a class="headerlink" href="#rule-4-validation-is-mandatory" title="Permanent link">&para;</a></h3>
+<p><strong>Validator must approve before moving to next stage.</strong></p>
+<p>If Validator rejects, back to Executor. No exceptions.</p>
+<h3 id="rule-5-learning-never-stops">Rule 5: Learning Never Stops<a class="headerlink" href="#rule-5-learning-never-stops" title="Permanent link">&para;</a></h3>
+<p><strong>Learner observes ALL stages and updates Tier 2.</strong></p>
+<p>Even "failed" approaches teach lessons.</p>
+<h3 id="rule-6-handoffs-are-explicit">Rule 6: Handoffs Are Explicit<a class="headerlink" href="#rule-6-handoffs-are-explicit" title="Permanent link">&para;</a></h3>
+<p><strong>No agent hands work to another without clear context.</strong></p>
+<p>Every handoff includes:
+- What was done
+- What's needed next
+- Relevant context from Tier 1/2/3</p>
+<hr />
+<h2 id="the-workflow-orchestration-engine">The Workflow Orchestration Engine<a class="headerlink" href="#the-workflow-orchestration-engine" title="Permanent link">&para;</a></h2>
+<p>I built an orchestrator class:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># src/cortex_agents/corpus_callosum.py</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">CorpusCallosum</span><span class="p">:</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Coordinates agent workflows.&quot;&quot;&quot;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute_workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_request</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Main orchestration loop.&quot;&quot;&quot;</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        <span class="c1"># Stage 1: Intent Detection</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>        <span class="n">intent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intent_detector</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">user_request</span><span class="p">)</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="c1"># Stage 2: Health Check</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="n">health</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">health_validator</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="k">if</span> <span class="n">health</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RED&quot;</span><span class="p">,</span> <span class="s2">&quot;YELLOW&quot;</span><span class="p">]:</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_health_issues</span><span class="p">(</span><span class="n">health</span><span class="p">)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>        <span class="c1"># Stage 3: Architecture (if planning needed)</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>        <span class="k">if</span> <span class="n">intent</span><span class="o">.</span><span class="n">requires_planning</span><span class="p">:</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>            <span class="n">architecture</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">architect</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>        <span class="c1"># Stage 4: Pattern Matching</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>        <span class="n">patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_matcher</span><span class="o">.</span><span class="n">find_similar</span><span class="p">(</span><span class="n">architecture</span><span class="p">)</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>        <span class="c1"># Stage 5: Work Planning</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>        <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_planner</span><span class="o">.</span><span class="n">create_tasks</span><span class="p">(</span>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>            <span class="n">architecture</span><span class="p">,</span> 
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>            <span class="n">patterns</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>        <span class="p">)</span>
+</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>
+</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>        <span class="c1"># Stage 6: Execution</span>
+</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>            <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">agent</span> <span class="o">==</span> <span class="s2">&quot;EXECUTOR&quot;</span><span class="p">:</span>
+</span><span id="__span-8-33"><a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span id="__span-8-34"><a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>            <span class="k">elif</span> <span class="n">task</span><span class="o">.</span><span class="n">agent</span> <span class="o">==</span> <span class="s2">&quot;TESTER&quot;</span><span class="p">:</span>
+</span><span id="__span-8-35"><a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a>                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tester</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span id="__span-8-36"><a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>            <span class="k">elif</span> <span class="n">task</span><span class="o">.</span><span class="n">agent</span> <span class="o">==</span> <span class="s2">&quot;VALIDATOR&quot;</span><span class="p">:</span>
+</span><span id="__span-8-37"><a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a>                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span id="__span-8-38"><a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">approved</span><span class="p">:</span>
+</span><span id="__span-8-39"><a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a>                    <span class="c1"># Go back to executor</span>
+</span><span id="__span-8-40"><a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>                    <span class="bp">self</span><span class="o">.</span><span class="n">_handle_validation_failure</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</span><span id="__span-8-41"><a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a>
+</span><span id="__span-8-42"><a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>        <span class="c1"># Stage 7: Learning</span>
+</span><span id="__span-8-43"><a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">capture_lessons</span><span class="p">(</span><span class="n">workflow_context</span><span class="p">)</span>
+</span><span id="__span-8-44"><a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">documenter</span><span class="o">.</span><span class="n">generate_docs</span><span class="p">(</span><span class="n">workflow_context</span><span class="p">)</span>
+</span><span id="__span-8-45"><a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>
+</span><span id="__span-8-46"><a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a>        <span class="k">return</span> <span class="n">WorkflowReport</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">details</span><span class="o">=...</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="the-real-world-test-add-authentication">The Real-World Test: "Add Authentication"<a class="headerlink" href="#the-real-world-test-add-authentication" title="Permanent link">&para;</a></h2>
+<p>Here's the ACTUAL workflow:</p>
+<p><strong>User:</strong> "Add authentication"</p>
+<p><strong>Corpus Callosum Orchestration:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>[06:15:03] Intent Detector: Analyzing request...
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>[06:15:04] Intent Detector: Ambiguity detected. Asking clarification...
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>           User specifies: JWT, no social login
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>[06:15:12] Health Validator: Checking project health...
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>[06:15:13] Health Validator: ⚠️  3 failing tests, 67% coverage
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>[06:15:13] Health Validator: BLOCKING workflow
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>[06:18:45] User: Fixed tests
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>[06:18:46] Health Validator: ✅ GREEN - Safe to proceed
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>[06:18:47] Architect: Designing JWT architecture...
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>[06:19:03] Architect: Design complete. Spec ready.
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>[06:19:04] Pattern Matcher: Searching for similar implementations...
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>[06:19:05] Pattern Matcher: Found 2 matches (93% similarity)
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>[06:19:05] Pattern Matcher: Recommending httpOnly cookie approach
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>[06:19:06] Work Planner: Breaking down into 5 tasks...
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>[06:19:08] Work Planner: Task sequence ready
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>[06:19:09] Executor: Implementing task 1/5 (token generation)...
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>[06:20:34] Executor: Task 1 complete
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>[06:20:35] Executor: Implementing task 2/5 (auth middleware)...
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>[06:22:11] Executor: Task 2 complete
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>[06:22:12] Tester: Writing unit tests (task 3)...
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>[06:24:47] Tester: 12 tests written, all passing ✅
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>[06:24:48] Validator: Checking code quality...
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>[06:25:02] Validator: ✅ APPROVED (9.1/10)
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>           Minor suggestion: Add rate limiting to refresh endpoint
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>[06:25:03] Documenter: Generating documentation...
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>[06:25:47] Documenter: API docs + README updated
+</span><span id="__span-9-37"><a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>
+</span><span id="__span-9-38"><a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>[06:25:48] Learner: Capturing lessons...
+</span><span id="__span-9-39"><a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a>[06:25:49] Learner: Updated knowledge graph (3 patterns reinforced)
+</span><span id="__span-9-40"><a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a>
+</span><span id="__span-9-41"><a id="__codelineno-9-41" name="__codelineno-9-41" href="#__codelineno-9-41"></a>[06:25:50] Corpus Callosum: Workflow complete ✅
+</span><span id="__span-9-42"><a id="__codelineno-9-42" name="__codelineno-9-42" href="#__codelineno-9-42"></a>           Duration: 10 minutes 47 seconds
+</span><span id="__span-9-43"><a id="__codelineno-9-43" name="__codelineno-9-43" href="#__codelineno-9-43"></a>           Quality: 9.1/10
+</span></code></pre></div>
+<p><strong>Result:</strong>
+- Working JWT authentication
+- 12 tests (all passing)
+- 9.1/10 quality score
+- Documentation generated
+- Knowledge graph updated</p>
+<p><strong>Human effort:</strong> 2 clarifying questions answered, 3 failing tests fixed initially</p>
+<p><strong>Agent effort:</strong> Everything else</p>
+<hr />
+<h2 id="the-aha-moment-it-just-works">The "AHA!" Moment: It Just... Works<a class="headerlink" href="#the-aha-moment-it-just-works" title="Permanent link">&para;</a></h2>
+<p>After implementing the corpus callosum, I tested complex tasks:</p>
+<p><strong>Task:</strong> "Build a real-time chat feature with encryption"</p>
+<p><strong>Without Corpus Callosum (Old CORTEX):</strong>
+- Agents compete for control
+- Work happens out of order
+- Half-implemented features
+- Tests don't match code
+- Documentation wrong
+- <strong>Result:</strong> Unusable mess</p>
+<p><strong>With Corpus Callosum (New CORTEX):</strong>
+- Intent Detector clarifies requirements
+- Health Validator ensures stability
+- Architect designs scalable solution
+- Pattern Matcher suggests proven approach
+- Work Planner sequences tasks
+- Executor → Tester → Validator execute flawlessly
+- Learner captures knowledge
+- Documenter generates docs
+- <strong>Result:</strong> Production-ready feature in 23 minutes</p>
+<p><strong>I literally teared up a little.</strong> (Coffee #9 might have been a factor.)</p>
+<hr />
+<h2 id="whats-next">What's Next?<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>We have:
+- 4-tier brain architecture ✅
+- 10 specialist agents ✅
+- Corpus callosum coordination ✅</p>
+<p>But how does the <strong>KNOWLEDGE GRAPH</strong> (Tier 2) actually work? How does CORTEX LEARN from every interaction?</p>
+<p>That's Chapter 7.</p>
+<hr />
+<p><em>Current CORTEX Status: 14 operations, 97 modules, 37 live (38% conscious). Corpus callosum: OPERATIONAL. Agents coordinating in harmony. Next: Knowledge accumulation...</em></p>
+<p><strong><a href="../05-right-brain/">← Back to Chapter 5</a> | <a href="../07-knowledge-graph/">Continue to Chapter 7: The Knowledge Graph →</a></strong></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../../search/main.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Agents - CORTEX</title>
+    <title>Agent Architecture - CORTEX</title>
     <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -17,6 +17,9 @@
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
     
     <!-- Syntax Highlighting - Dark Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
@@ -43,11 +46,11 @@
                 <nav class="horizontal-nav">
                     <ul class="nav-menu">
                         <li><a href="../..">Home</a></li>
-                        <li><a href="../../diagrams/story/The-CORTEX-Story/">The CORTEX Birth</a></li>
+                        <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
                         <li><a href="../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
-                        <li><a href="../overview/">Architecture</a></li>
-                        <li><a href="../../reference/api/">Technical Docs</a></li>
-                        <li><a href="../../guides/developer-guide/">User Guides</a></li>
+                        <li><a href="../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../getting-started/quick-start/">User Guides</a></li>
                         <li><a href="../../getting-started/quick-start/">Examples</a></li>
                     </ul>
                 </nav>
@@ -75,16 +78,47 @@
                                 <strong>The CORTEX Birth</strong>
                                 <ul>
                                 
-                                    <li><a href="../../diagrams/story/The-CORTEX-Story/" >The Awakening Story</a></li>
+                                    <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
                                 
-                                    <li><a href="../../diagrams/narratives/" >Narratives</a></li>
+                                    <li><a href="../../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
                                 
                                 </ul>
                             </li>
                             
                         
                             
-                            <li><a href="../../governance/THE-RULEBOOK/" >Cortex Bible</a></li>
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
                             
                         
                             
@@ -92,15 +126,13 @@
                                 <strong>Architecture</strong>
                                 <ul>
                                 
-                                    <li><a href="../overview/" >Overview</a></li>
+                                    <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
-                                    <li><a href="../tier-system/" >Tier System</a></li>
+                                    <li><a href="../../integration-diagrams/" >Integration Diagrams</a></li>
                                 
-                                    <li><a href="./" class="active">Agents</a></li>
+                                    <li><a href="../../operational-diagrams/" >Operational Diagrams</a></li>
                                 
-                                    <li><a href="../brain-protection/" >Brain Protection</a></li>
-                                
-                                    <li><a href="../.." >Diagrams</a></li>
+                                    <li><a href="../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
                                 
                                 </ul>
                             </li>
@@ -111,13 +143,11 @@
                                 <strong>Technical Docs</strong>
                                 <ul>
                                 
-                                    <li><a href="../../reference/api/" >API Reference</a></li>
+                                    <li><a href="../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
                                 
-                                    <li><a href="../../reference/configuration/" >Configuration</a></li>
+                                    <li><a href="../../FEATURES/" >Features Overview</a></li>
                                 
-                                    <li><a href="../../reference/response-templates/" >Response Templates</a></li>
-                                
-                                    <li><a href="../.." >Operations</a></li>
+                                    <li><a href="../../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
                                 
                                 </ul>
                             </li>
@@ -128,19 +158,11 @@
                                 <strong>User Guides</strong>
                                 <ul>
                                 
-                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                    <li><a href="../../getting-started/quick-start/" >Getting Started</a></li>
                                 
-                                    <li><a href="../../getting-started/installation/" >Installation</a></li>
+                                    <li><a href="../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
                                 
-                                    <li><a href="../../getting-started/configuration/" >Configuration</a></li>
-                                
-                                    <li><a href="../../guides/developer-guide/" >Developer Guide</a></li>
-                                
-                                    <li><a href="../../guides/admin-guide/" >Admin Guide</a></li>
-                                
-                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
-                                
-                                    <li><a href="../../guides/troubleshooting/" >Troubleshooting</a></li>
+                                    <li><a href="../../HELP-SYSTEM/" >Help System</a></li>
                                 
                                 </ul>
                             </li>
@@ -151,28 +173,15 @@
                                 <strong>Examples</strong>
                                 <ul>
                                 
-                                    <li><a href="../../getting-started/quick-start/" >Quick Start</a></li>
+                                    <li><a href="../../getting-started/quick-start/" >Getting Started</a></li>
                                 
-                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
-                                
-                                    <li><a href="../../diagrams/prompts/" >DALL-E Prompts</a></li>
+                                    <li><a href="../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
                                 
                                 </ul>
                             </li>
                             
                         
                         </ul>
-                    </div>
-                    
-                    
-                    <!-- On This Page TOC - Only for pages with reasonable length TOC -->
-                    
-                    <div class="toc-wrapper">
-                        <h4>On This Page</h4>
-                        Agent Architecture - #agent-architecture
-    Overview - #overview
-    Features - #features
-
                     </div>
                     
                 </div>
@@ -197,14 +206,6 @@
                     <!-- Page Navigation -->
                     <div class="page-navigation">
                         
-                        <a href="../tier-system/" class="btn btn-default">
-                            <i class="fa fa-arrow-left"></i> Tier System
-                        </a>
-                        
-                        
-                        <a href="../brain-protection/" class="btn btn-default pull-right">
-                            Brain Protection <i class="fa fa-arrow-right"></i>
-                        </a>
                         
                     </div>
                 </div>
@@ -236,6 +237,9 @@
     <!-- Syntax Highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../assets/js/navigation.js"></script>
     
     <!-- MkDocs Search -->
     <script src="../../search/main.js"></script>

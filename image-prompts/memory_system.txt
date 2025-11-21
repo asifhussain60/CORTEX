@@ -1,0 +1,32 @@
+Create a visualization of CORTEX's 4-tier memory architecture.
+
+Style: Layered architectural diagram with depth, neural network aesthetic
+Color Scheme: Warm to cool gradient (top to bottom)
+
+Layers from top to bottom:
+1. **Tier 0: Brain Protection** (Red/Orange shield)
+   - SKULL rules forming protective barrier
+   - Filtering harmful operations
+   
+2. **Tier 1: Working Memory** (Bright yellow/gold)
+   - Recent conversations as glowing nodes
+   - Active connections showing relevance scores
+   - Conversation indexing in action
+   
+3. **Tier 2: Knowledge Graph** (Blue/purple)
+   - Pattern nodes interconnected
+   - Learning pathways lighting up
+   - Pattern confidence scores displayed
+   
+4. **Tier 3: Long-Term Archive** (Deep blue/black)
+   - Historical data fading into darkness
+   - Trend lines emerging from patterns
+   - Compressed knowledge storage
+
+Visual Elements:
+- Show data flowing between tiers
+- Highlight auto-injection of Tier 1 context into current request
+- Show pattern learning from Tier 1 to Tier 2
+- Include timeline indicators (hours → days → months)
+
+Mood: Intelligent, organized, deep, memory-like

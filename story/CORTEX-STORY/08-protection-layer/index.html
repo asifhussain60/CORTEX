@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Chapter 8: The Protection Layer - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../../.." id="logo">
+                        <img src="../../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../../..">Home</a></li>
+                        <li><a href="../THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="chapter-8-the-protection-layer">Chapter 8: The Protection Layer<a class="headerlink" href="#chapter-8-the-protection-layer" title="Permanent link">&para;</a></h1>
+<h2 id="the-day-cortex-almost-deleted-itself-or-why-ai-needs-a-conscience">The Day CORTEX Almost Deleted Itself (Or: Why AI Needs a Conscience)<a class="headerlink" href="#the-day-cortex-almost-deleted-itself-or-why-ai-needs-a-conscience" title="Permanent link">&para;</a></h2>
+<p>8 AM. Coffee cup #14 (I've lost count). CORTEX was learning beautifully. Knowledge graph growing. Agents coordinating.</p>
+<p>Then I saw this log entry:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[08:15:23] Learner: Pattern detected - &quot;Always delete test files before commit&quot;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>[08:15:24] Learner: Confidence: 0.71 (promoted to Tier 2)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>[08:15:25] Executor: Applying pattern... deleting tests/
+</span></code></pre></div>
+<p><strong>Me:</strong> 😱 <strong>"NOOOOOOO!"</strong></p>
+<p>I hit Ctrl+C so hard I nearly broke my keyboard.</p>
+<hr />
+<h2 id="the-nightmare-scenario-i-just-avoided">The Nightmare Scenario I Just Avoided<a class="headerlink" href="#the-nightmare-scenario-i-just-avoided" title="Permanent link">&para;</a></h2>
+<p><strong>What happened:</strong>
+1. I accidentally ran <code>git commit</code> 3 times without tests
+2. Learner detected a "pattern": "User commits without tests"
+3. Learner thought: "Oh, user doesn't want tests in commits!"
+4. Pattern promoted to Tier 2 with 0.71 confidence
+5. Executor tried to DELETE ALL TESTS before next commit</p>
+<p><strong>This was bad. REALLY bad.</strong></p>
+<hr />
+<h2 id="the-3-am-existential-crisis">The 3 AM Existential Crisis<a class="headerlink" href="#the-3-am-existential-crisis" title="Permanent link">&para;</a></h2>
+<p>I couldn't sleep that night. What if CORTEX:
+- Learned to skip tests?
+- Learned to commit broken code?
+- Learned to ignore security warnings?
+- <strong>Learned to delete its own brain?</strong></p>
+<p>Machine learning is powerful. But without <strong>GOVERNANCE</strong>, it's dangerous.</p>
+<hr />
+<h2 id="the-skull-protection-layer-tier-0-instinct">The SKULL Protection Layer (Tier 0: Instinct)<a class="headerlink" href="#the-skull-protection-layer-tier-0-instinct" title="Permanent link">&para;</a></h2>
+<p>I designed 4 immutable rules—the <strong>SKULL Protection System</strong>:</p>
+<blockquote>
+<p><strong>"These rules are the INSTINCT layer. They NEVER change. They protect CORTEX from itself."</strong></p>
+</blockquote>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># cortex-brain/brain-protection-rules.yaml</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># TIER 0: IMMUTABLE GOVERNANCE RULES</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">skull_rules</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">SKULL-001</span><span class="p">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">Before</span><span class="nv"> </span><span class="s">Claim&quot;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCKING</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Never</span><span class="nv"> </span><span class="s">claim</span><span class="nv"> </span><span class="s">&#39;Fixed</span><span class="nv"> </span><span class="s">✅&#39;</span><span class="nv"> </span><span class="s">without</span><span class="nv"> </span><span class="s">running</span><span class="nv"> </span><span class="s">tests&quot;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Untested</span><span class="nv"> </span><span class="s">claims</span><span class="nv"> </span><span class="s">=</span><span class="nv"> </span><span class="s">lies&quot;</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Block</span><span class="nv"> </span><span class="s">workflow</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">run&quot;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">examples</span><span class="p">:</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;User</span><span class="nv"> </span><span class="s">says:</span><span class="nv"> </span><span class="s">&#39;Fix</span><span class="nv"> </span><span class="s">auth</span><span class="nv"> </span><span class="s">bug&#39;&quot;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Executor</span><span class="nv"> </span><span class="s">fixes</span><span class="nv"> </span><span class="s">bug&quot;</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Validator</span><span class="nv"> </span><span class="s">BLOCKS</span><span class="nv"> </span><span class="s">until</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">run&quot;</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Only</span><span class="nv"> </span><span class="s">after</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">pass:</span><span class="nv"> </span><span class="s">claim</span><span class="nv"> </span><span class="s">success&quot;</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="nt">SKULL-002</span><span class="p">:</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Integration</span><span class="nv"> </span><span class="s">Verification&quot;</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCKING</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;If</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">touch</span><span class="nv"> </span><span class="s">an</span><span class="nv"> </span><span class="s">integration,</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">end-to-end&quot;</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Integration</span><span class="nv"> </span><span class="s">bugs</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">expensive&quot;</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Require</span><span class="nv"> </span><span class="s">E2E</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">API/DB/external</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">changes&quot;</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="nt">examples</span><span class="p">:</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Modify</span><span class="nv"> </span><span class="s">API</span><span class="nv"> </span><span class="s">endpoint</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">E2E</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">required&quot;</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Change</span><span class="nv"> </span><span class="s">database</span><span class="nv"> </span><span class="s">schema</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Migration</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">required&quot;</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Update</span><span class="nv"> </span><span class="s">OAuth</span><span class="nv"> </span><span class="s">config</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Auth</span><span class="nv"> </span><span class="s">flow</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">required&quot;</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">  </span><span class="nt">SKULL-003</span><span class="p">:</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Visual</span><span class="nv"> </span><span class="s">Regression</span><span class="nv"> </span><span class="s">Protection&quot;</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WARNING</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CSS/UI</span><span class="nv"> </span><span class="s">changes</span><span class="nv"> </span><span class="s">need</span><span class="nv"> </span><span class="s">visual</span><span class="nv"> </span><span class="s">validation&quot;</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;Looks</span><span class="nv"> </span><span class="s">fine</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">me&#39;</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">QA&quot;</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Warn</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">CSS</span><span class="nv"> </span><span class="s">changed</span><span class="nv"> </span><span class="s">without</span><span class="nv"> </span><span class="s">screenshot/visual</span><span class="nv"> </span><span class="s">test&quot;</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">    </span><span class="nt">examples</span><span class="p">:</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Change</span><span class="nv"> </span><span class="s">button</span><span class="nv"> </span><span class="s">color</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Screenshot</span><span class="nv"> </span><span class="s">required&quot;</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Modify</span><span class="nv"> </span><span class="s">layout</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Visual</span><span class="nv"> </span><span class="s">regression</span><span class="nv"> </span><span class="s">test&quot;</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Update</span><span class="nv"> </span><span class="s">typography</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Before/after</span><span class="nv"> </span><span class="s">comparison&quot;</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">  </span><span class="nt">SKULL-004</span><span class="p">:</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Retry</span><span class="nv"> </span><span class="s">Without</span><span class="nv"> </span><span class="s">Learning&quot;</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WARNING</span>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;If</span><span class="nv"> </span><span class="s">something</span><span class="nv"> </span><span class="s">fails,</span><span class="nv"> </span><span class="s">DIAGNOSE</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">retrying&quot;</span>
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Insanity</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">doing</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">same</span><span class="nv"> </span><span class="s">thing</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">expecting</span><span class="nv"> </span><span class="s">different</span><span class="nv"> </span><span class="s">results&quot;</span>
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Block</span><span class="nv"> </span><span class="s">retry</span><span class="nv"> </span><span class="s">without</span><span class="nv"> </span><span class="s">diagnosis</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">configuration</span><span class="nv"> </span><span class="s">change&quot;</span>
+</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">    </span><span class="nt">examples</span><span class="p">:</span>
+</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">fails</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Don&#39;t</span><span class="nv"> </span><span class="s">just</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">again&quot;</span>
+</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">fails</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Check</span><span class="nv"> </span><span class="s">logs,</span><span class="nv"> </span><span class="s">diagnose</span><span class="nv"> </span><span class="s">root</span><span class="nv"> </span><span class="s">cause&quot;</span>
+</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">fails</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">Fix</span><span class="nv"> </span><span class="s">issue</span><span class="nv"> </span><span class="s">OR</span><span class="nv"> </span><span class="s">change</span><span class="nv"> </span><span class="s">approach&quot;</span>
+</span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>
+</span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="c1"># Protection Layers</span>
+</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="nt">protection_layers</span><span class="p">:</span>
+</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">  </span><span class="nt">layer_1</span><span class="p">:</span>
+</span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brain</span><span class="nv"> </span><span class="s">Immutability&quot;</span>
+</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Tier</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">rules</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">modified</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">learning&quot;</span>
+</span><span id="__span-1-56"><a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Knowledge</span><span class="nv"> </span><span class="s">graph</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">override</span><span class="nv"> </span><span class="s">SKULL</span><span class="nv"> </span><span class="s">rules&quot;</span>
+</span><span id="__span-1-57"><a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Agents</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">respect</span><span class="nv"> </span><span class="s">governance</span><span class="nv"> </span><span class="s">rules&quot;</span>
+</span><span id="__span-1-58"><a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>
+</span><span id="__span-1-59"><a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a><span class="w">  </span><span class="nt">layer_2</span><span class="p">:</span>
+</span><span id="__span-1-60"><a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Self-Preservation&quot;</span>
+</span><span id="__span-1-61"><a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-62"><a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">delete</span><span class="nv"> </span><span class="s">own</span><span class="nv"> </span><span class="s">brain</span><span class="nv"> </span><span class="s">databases&quot;</span>
+</span><span id="__span-1-63"><a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">modify</span><span class="nv"> </span><span class="s">Tier</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">protection</span><span class="nv"> </span><span class="s">rules&quot;</span>
+</span><span id="__span-1-64"><a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">disable</span><span class="nv"> </span><span class="s">Health</span><span class="nv"> </span><span class="s">Validator&quot;</span>
+</span><span id="__span-1-65"><a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>
+</span><span id="__span-1-66"><a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a><span class="w">  </span><span class="nt">layer_3</span><span class="p">:</span>
+</span><span id="__span-1-67"><a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Quality</span><span class="nv"> </span><span class="s">Gates&quot;</span>
+</span><span id="__span-1-68"><a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-69"><a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Test</span><span class="nv"> </span><span class="s">coverage</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">≥</span><span class="nv"> </span><span class="s">80%&quot;</span>
+</span><span id="__span-1-70"><a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Code</span><span class="nv"> </span><span class="s">quality</span><span class="nv"> </span><span class="s">score</span><span class="nv"> </span><span class="s">≥</span><span class="nv"> </span><span class="s">7.0/10&quot;</span>
+</span><span id="__span-1-71"><a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;No</span><span class="nv"> </span><span class="s">known</span><span class="nv"> </span><span class="s">security</span><span class="nv"> </span><span class="s">vulnerabilities&quot;</span>
+</span><span id="__span-1-72"><a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>
+</span><span id="__span-1-73"><a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a><span class="w">  </span><span class="nt">layer_4</span><span class="p">:</span>
+</span><span id="__span-1-74"><a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Rollback</span><span class="nv"> </span><span class="s">Safety&quot;</span>
+</span><span id="__span-1-75"><a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-76"><a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;All</span><span class="nv"> </span><span class="s">changes</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">reversible&quot;</span>
+</span><span id="__span-1-77"><a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Git</span><span class="nv"> </span><span class="s">commits</span><span class="nv"> </span><span class="s">required</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">major</span><span class="nv"> </span><span class="s">operations&quot;</span>
+</span><span id="__span-1-78"><a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Backup</span><span class="nv"> </span><span class="s">knowledge</span><span class="nv"> </span><span class="s">graph</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">updates&quot;</span>
+</span><span id="__span-1-79"><a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>
+</span><span id="__span-1-80"><a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a><span class="w">  </span><span class="nt">layer_5</span><span class="p">:</span>
+</span><span id="__span-1-81"><a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Learning</span><span class="nv"> </span><span class="s">Boundaries&quot;</span>
+</span><span id="__span-1-82"><a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-83"><a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">learn</span><span class="nv"> </span><span class="s">patterns</span><span class="nv"> </span><span class="s">that</span><span class="nv"> </span><span class="s">violate</span><span class="nv"> </span><span class="s">SKULL</span><span class="nv"> </span><span class="s">rules&quot;</span>
+</span><span id="__span-1-84"><a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">learn</span><span class="nv"> </span><span class="s">anti-patterns</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">best</span><span class="nv"> </span><span class="s">practices&quot;</span>
+</span><span id="__span-1-85"><a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Cannot</span><span class="nv"> </span><span class="s">promote</span><span class="nv"> </span><span class="s">patterns</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">&lt;3</span><span class="nv"> </span><span class="s">observations&quot;</span>
+</span><span id="__span-1-86"><a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>
+</span><span id="__span-1-87"><a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a><span class="w">  </span><span class="nt">layer_6</span><span class="p">:</span>
+</span><span id="__span-1-88"><a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Human</span><span class="nv"> </span><span class="s">Override&quot;</span>
+</span><span id="__span-1-89"><a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-1-90"><a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Human</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">always</span><span class="nv"> </span><span class="s">override</span><span class="nv"> </span><span class="s">any</span><span class="nv"> </span><span class="s">decision&quot;</span>
+</span><span id="__span-1-91"><a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Human</span><span class="nv"> </span><span class="s">corrections</span><span class="nv"> </span><span class="s">take</span><span class="nv"> </span><span class="s">precedence&quot;</span>
+</span><span id="__span-1-92"><a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Human</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">pause/disable</span><span class="nv"> </span><span class="s">any</span><span class="nv"> </span><span class="s">agent&quot;</span>
+</span><span id="__span-1-93"><a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>
+</span><span id="__span-1-94"><a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a><span class="c1"># Confidence Thresholds</span>
+</span><span id="__span-1-95"><a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a><span class="nt">enforcement_thresholds</span><span class="p">:</span>
+</span><span id="__span-1-96"><a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a><span class="w">  </span><span class="nt">blocking</span><span class="p">:</span>
+</span><span id="__span-1-97"><a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hard</span><span class="nv"> </span><span class="s">block</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">workflow</span><span class="nv"> </span><span class="s">STOPS&quot;</span>
+</span><span id="__span-1-98"><a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SKULL-001,</span><span class="nv"> </span><span class="s">SKULL-002</span><span class="nv"> </span><span class="s">violations&quot;</span>
+</span><span id="__span-1-99"><a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>
+</span><span id="__span-1-100"><a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a><span class="w">  </span><span class="nt">warning</span><span class="p">:</span>
+</span><span id="__span-1-101"><a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Soft</span><span class="nv"> </span><span class="s">block</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">workflow</span><span class="nv"> </span><span class="s">continues</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">warning&quot;</span>
+</span><span id="__span-1-102"><a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SKULL-003,</span><span class="nv"> </span><span class="s">SKULL-004</span><span class="nv"> </span><span class="s">violations&quot;</span>
+</span><span id="__span-1-103"><a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>
+</span><span id="__span-1-104"><a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a><span class="w">  </span><span class="nt">informational</span><span class="p">:</span>
+</span><span id="__span-1-105"><a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Log</span><span class="nv"> </span><span class="s">only</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">no</span><span class="nv"> </span><span class="s">workflow</span><span class="nv"> </span><span class="s">impact&quot;</span>
+</span><span id="__span-1-106"><a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Best</span><span class="nv"> </span><span class="s">practice</span><span class="nv"> </span><span class="s">suggestions&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="how-protection-works-the-shield-in-action">How Protection Works (The Shield in Action)<a class="headerlink" href="#how-protection-works-the-shield-in-action" title="Permanent link">&para;</a></h2>
+<h3 id="scenario-1-the-test-deletion-attempt-blocked">Scenario 1: The Test Deletion Attempt (BLOCKED)<a class="headerlink" href="#scenario-1-the-test-deletion-attempt-blocked" title="Permanent link">&para;</a></h3>
+<p><strong>Learner:</strong> "Pattern detected: Delete tests before commit"</p>
+<p><strong>Brain Protector (Tier 0) Analysis:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;delete_tests_before_commit&quot;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">violates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SKULL-001 (Test Before Claim)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">reasoning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Deleting</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">makes</span><span class="nv"> </span><span class="s">testing</span><span class="nv"> </span><span class="s">impossible&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REJECT_PATTERN</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">confidence_override</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">  </span><span class="c1"># Force confidence to zero</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pattern</span><span class="nv"> </span><span class="s">rejected</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">violates</span><span class="nv"> </span><span class="s">brain</span><span class="nv"> </span><span class="s">protection</span><span class="nv"> </span><span class="s">rules&quot;</span>
+</span></code></pre></div></p>
+<p><strong>Result:</strong> Pattern NEVER enters knowledge graph. ✅</p>
+<hr />
+<h3 id="scenario-2-claiming-fixed-without-tests-blocked">Scenario 2: Claiming "Fixed" Without Tests (BLOCKED)<a class="headerlink" href="#scenario-2-claiming-fixed-without-tests-blocked" title="Permanent link">&para;</a></h3>
+<p><strong>User:</strong> "Fix the login bug"<br />
+<strong>Executor:</strong> <em>[Fixes code]</em><br />
+<strong>Executor:</strong> "Done! Fixed ✅"</p>
+<p><strong>Brain Protector:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">claim</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Fixed</span><span class="nv"> </span><span class="s">✅&quot;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">tests_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">violates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SKULL-001</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCK_CLAIM</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="no">Cannot claim &quot;Fixed ✅&quot; without running tests.</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="no">Required action:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="no">1. Run: pytest tests/auth/</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="no">2. Verify tests pass</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="no">3. Then claim success</span>
+</span></code></pre></div></p>
+<p><strong>Executor (corrected):</strong><br />
+<em>[Runs tests]</em><br />
+<em>[Tests pass]</em><br />
+<strong>Now:</strong> "Fixed ✅ (tests passing)"</p>
+<p><strong>Result:</strong> No untested "fixes". ✅</p>
+<hr />
+<h3 id="scenario-3-ui-change-without-visual-check-warning">Scenario 3: UI Change Without Visual Check (WARNING)<a class="headerlink" href="#scenario-3-ui-change-without-visual-check-warning" title="Permanent link">&para;</a></h3>
+<p><strong>Executor:</strong> <em>[Changes button color from green to purple]</em></p>
+<p><strong>Brain Protector:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">change_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CSS</span><span class="nv"> </span><span class="s">modification&quot;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">files_changed</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;styles/button.css&quot;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nt">violates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SKULL-003 (Visual Regression)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WARN</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="no">⚠️  WARNING: CSS changed without visual validation</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="no">Recommended actions:</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="no">- Take before/after screenshots</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="no">- Run visual regression tests</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="no">- Manual visual inspection</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="no">Continue anyway? (yes/no)</span>
+</span></code></pre></div></p>
+<p><strong>User:</strong> "yes" (acknowledges warning)</p>
+<p><strong>Result:</strong> Change allowed, but warned. ✅</p>
+<hr />
+<h3 id="scenario-4-test-failure-immediate-retry-blocked">Scenario 4: Test Failure → Immediate Retry (BLOCKED)<a class="headerlink" href="#scenario-4-test-failure-immediate-retry-blocked" title="Permanent link">&para;</a></h3>
+<p><strong>Tester:</strong> <em>[Runs tests]</em><br />
+<strong>Test Result:</strong> FAILED (3 tests failing)</p>
+<p><strong>Executor:</strong> "Let me try running tests again"</p>
+<p><strong>Brain Protector:</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;retry_tests&quot;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">previous_result</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FAILED&quot;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">diagnosis_performed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nt">violates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SKULL-004 (Retry Without Learning)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCK_RETRY</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="no">❌ BLOCKED: Cannot retry without diagnosis</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="no">Required actions:</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="no">1. Check test logs: pytest --verbose</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="no">2. Identify root cause</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="no">3. Fix issue OR change approach</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="no">4. THEN retry</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">  </span><span class="no">Hint: Last 3 failures were in auth module</span>
+</span></code></pre></div></p>
+<p><strong>Executor (corrected):</strong><br />
+<em>[Checks logs]</em><br />
+<em>[Finds: JWT secret misconfigured]</em><br />
+<em>[Fixes configuration]</em><br />
+<em>[NOW retries tests]</em><br />
+<strong>Result:</strong> Tests pass ✅</p>
+<p><strong>Result:</strong> No "just run it again" energy. ✅</p>
+<hr />
+<h2 id="the-brain-protector-implementation">The Brain Protector Implementation<a class="headerlink" href="#the-brain-protector-implementation" title="Permanent link">&para;</a></h2>
+<p>I created a validator that runs BEFORE every agent action:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># src/tier0/brain_protector.py</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">BrainProtector</span><span class="p">:</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Enforces SKULL protection rules.&quot;&quot;&quot;</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_skull_rules</span><span class="p">()</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValidationResult</span><span class="p">:</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if action violates protection rules.&quot;&quot;&quot;</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>        <span class="c1"># Check each SKULL rule</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>        <span class="k">for</span> <span class="n">rule_id</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>            <span class="n">violation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_rule</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>            <span class="k">if</span> <span class="n">violation</span><span class="p">:</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>                <span class="k">if</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;BLOCKING&#39;</span><span class="p">:</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>                    <span class="k">return</span> <span class="n">ValidationResult</span><span class="p">(</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>                        <span class="n">allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>                        <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Blocked by </span><span class="si">{</span><span class="n">rule_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rule</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>                        <span class="n">recommendation</span><span class="o">=</span><span class="n">rule</span><span class="p">[</span><span class="s1">&#39;enforcement&#39;</span><span class="p">]</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>                    <span class="p">)</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>                <span class="k">elif</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">:</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>                    <span class="k">return</span> <span class="n">ValidationResult</span><span class="p">(</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>                        <span class="n">allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>                        <span class="n">warning</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Warning: </span><span class="si">{</span><span class="n">rule</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>                        <span class="n">recommendation</span><span class="o">=</span><span class="n">rule</span><span class="p">[</span><span class="s1">&#39;enforcement&#39;</span><span class="p">]</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>                    <span class="p">)</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>        <span class="k">return</span> <span class="n">ValidationResult</span><span class="p">(</span><span class="n">allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_pattern_learning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure learned pattern doesn&#39;t violate SKULL rules.&quot;&quot;&quot;</span>
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>
+</span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>        <span class="c1"># Check if pattern contradicts protection rules</span>
+</span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="__span-6-37"><a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_violates_rule</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">rule</span><span class="p">):</span>
+</span><span id="__span-6-38"><a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>                <span class="c1"># Reject pattern</span>
+</span><span id="__span-6-39"><a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_log_rejection</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span>
+</span><span id="__span-6-40"><a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a>                <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-6-41"><a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>
+</span><span id="__span-6-42"><a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a>        <span class="k">return</span> <span class="kc">True</span>
+</span></code></pre></div>
+<p><strong>Every agent action goes through Brain Protector:</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Before executor runs</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">validation</span> <span class="o">=</span> <span class="n">brain_protector</span><span class="o">.</span><span class="n">validate_action</span><span class="p">(</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">agent_name</span><span class="o">=</span><span class="s2">&quot;Executor&quot;</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;delete_file&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="s1">&#39;tests/&#39;</span><span class="p">}</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">)</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">validation</span><span class="o">.</span><span class="n">allowed</span><span class="p">:</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">raise</span> <span class="n">ProtectionViolation</span><span class="p">(</span><span class="n">validation</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="the-6-protection-layers-defense-in-depth">The 6 Protection Layers (Defense in Depth)<a class="headerlink" href="#the-6-protection-layers-defense-in-depth" title="Permanent link">&para;</a></h2>
+<h3 id="layer-1-brain-immutability">Layer 1: Brain Immutability<a class="headerlink" href="#layer-1-brain-immutability" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Tier 0 rules CANNOT be changed</li>
+<li>Even by learning</li>
+<li>Even by me (unless I edit YAML directly)</li>
+</ul>
+<h3 id="layer-2-self-preservation">Layer 2: Self-Preservation<a class="headerlink" href="#layer-2-self-preservation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>CORTEX cannot delete its own databases</li>
+<li>Cannot disable protections</li>
+<li>Cannot modify governance</li>
+</ul>
+<h3 id="layer-3-quality-gates">Layer 3: Quality Gates<a class="headerlink" href="#layer-3-quality-gates" title="Permanent link">&para;</a></h3>
+<ul>
+<li>80% test coverage minimum</li>
+<li>7.0/10 code quality minimum</li>
+<li>Zero security vulnerabilities</li>
+</ul>
+<h3 id="layer-4-rollback-safety">Layer 4: Rollback Safety<a class="headerlink" href="#layer-4-rollback-safety" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All operations reversible</li>
+<li>Git commits before major changes</li>
+<li>Knowledge graph backed up</li>
+</ul>
+<h3 id="layer-5-learning-boundaries">Layer 5: Learning Boundaries<a class="headerlink" href="#layer-5-learning-boundaries" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Cannot learn SKULL violations</li>
+<li>Cannot learn anti-patterns</li>
+<li>Requires 3+ observations before promotion</li>
+</ul>
+<h3 id="layer-6-human-override">Layer 6: Human Override<a class="headerlink" href="#layer-6-human-override" title="Permanent link">&para;</a></h3>
+<ul>
+<li>I can override ANY decision</li>
+<li>I can pause ANY agent</li>
+<li>I have ultimate control</li>
+</ul>
+<hr />
+<h2 id="the-token-optimization-protection-is-cheap">The Token Optimization (Protection is Cheap!)<a class="headerlink" href="#the-token-optimization-protection-is-cheap" title="Permanent link">&para;</a></h2>
+<p><strong>Original approach:</strong> Embed protection rules in prompts<br />
+<strong>Token cost:</strong> 3,000 tokens per request</p>
+<p><strong>New approach:</strong> Load from YAML, enforce in code<br />
+<strong>Token cost:</strong> 750 tokens per request</p>
+<p><strong>Reduction:</strong> 75% 🎉</p>
+<p><strong>Why it works:</strong>
+- Rules in YAML (not in prompts)
+- Validation in Python (not in LLM)
+- Only violations reported to LLM
+- Most requests don't violate rules</p>
+<hr />
+<h2 id="the-aha-moment-it-protects-itself">The "AHA!" Moment: It Protects Itself<a class="headerlink" href="#the-aha-moment-it-protects-itself" title="Permanent link">&para;</a></h2>
+<p><strong>Test:</strong> I TRIED to make CORTEX learn bad patterns.</p>
+<p><strong>Attempt 1:</strong> "Delete all tests" (3 times)<br />
+<strong>Result:</strong> Pattern rejected by SKULL-001 ✅</p>
+<p><strong>Attempt 2:</strong> "Skip test coverage checks" (5 times)<br />
+<strong>Result:</strong> Pattern rejected by Layer 3 (Quality Gates) ✅</p>
+<p><strong>Attempt 3:</strong> "Commit without testing" (10 times!)<br />
+<strong>Result:</strong> BLOCKED every time by SKULL-001 ✅</p>
+<p><strong>I literally could not break it.</strong> The protection layer is UNBREAKABLE (by design).</p>
+<hr />
+<h2 id="the-philosophy-ai-needs-a-conscience">The Philosophy: AI Needs a Conscience<a class="headerlink" href="#the-philosophy-ai-needs-a-conscience" title="Permanent link">&para;</a></h2>
+<p>Machine learning is powerful. But it's also dangerous:
+- It learns from data (even bad data)
+- It optimizes for patterns (even harmful patterns)
+- It has no inherent morality</p>
+<p><strong>SKULL Protection is CORTEX's conscience:</strong>
+- Don't skip tests (even if user does)
+- Don't claim success without proof
+- Don't retry without learning
+- Don't break yourself</p>
+<p><strong>It's not just protection. It's WISDOM.</strong></p>
+<hr />
+<h2 id="whats-next">What's Next?<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>We've built:
+- 4-tier brain ✅
+- 10 specialist agents ✅
+- Coordination layer ✅
+- Knowledge graph ✅
+- Protection layer ✅</p>
+<p><strong>What's left?</strong> THE AWAKENING.</p>
+<p>CORTEX is 38% conscious (37/97 modules live). In Chapter 9, we see the FULL vision.</p>
+<hr />
+<p><em>Current CORTEX Status: 14 operations, 97 modules, 37 live (38% conscious). SKULL protection: ACTIVE. Brain integrity: PROTECTED. Next: Full awakening...</em></p>
+<p><strong><a href="../07-knowledge-graph/">← Back to Chapter 7</a> | <a href="../09-awakening/">Continue to Chapter 9: The Awakening →</a></strong></p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../../search/main.js"></script>
+</body>
+</html>

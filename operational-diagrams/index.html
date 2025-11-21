@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Operational Diagrams - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="./" class="active">Operational Diagrams</a></li>
+                                
+                                    <li><a href="../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="operational-diagrams">⚙️ Operational Diagrams<a class="headerlink" href="#operational-diagrams" title="Permanent link">&para;</a></h1>
+<p>Visual representations of CORTEX's workflows and operational processes.</p>
+<hr />
+<h2 id="operation-execution-pipeline">Operation Execution Pipeline<a class="headerlink" href="#operation-execution-pipeline" title="Permanent link">&para;</a></h2>
+<p>Step-by-step flow of operation execution from intent detection to validation.</p>
+<figure>
+  <img src="images/diagrams/operational/07-operation-pipeline.png" alt="Operation Execution Pipeline" style="border: 3px solid #f39c12; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Detection:</strong> Natural language intent classification and operation matching<br/>
+  <strong>Preparation:</strong> Context gathering, memory retrieval, validation checks<br/>
+  <strong>Execution:</strong> Agent coordination, operation steps, progress tracking<br/>
+  <strong>Completion:</strong> Result validation, memory persistence, response formatting</figcaption>
+</figure>
+
+<p><strong>Pipeline Phases:</strong>
+- 🎯 <strong>Intent Detection</strong>: Natural language analysis, template matching
+- 📋 <strong>Operation Mapping</strong>: Match intent to registered operations
+- 🔍 <strong>Context Gathering</strong>: Tier 1 memory search, file analysis
+- ✅ <strong>Pre-flight Validation</strong>: Brain protection, dependency checks
+- ⚡ <strong>Execution</strong>: Agent-driven implementation
+- 🏥 <strong>Health Monitoring</strong>: Real-time validation during execution
+- 📊 <strong>Result Validation</strong>: Output verification, test execution
+- 💾 <strong>Persistence</strong>: Save to Tier 1, extract patterns for Tier 2</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../FEATURES/">FEATURES.md</a> - Available operations
+- <a href="../HELP-SYSTEM/">HELP-SYSTEM.md</a> - Operation commands</p>
+<hr />
+<h2 id="setup-orchestration-part-a">Setup Orchestration (Part A)<a class="headerlink" href="#setup-orchestration-part-a" title="Permanent link">&para;</a></h2>
+<p>Cross-platform environment configuration and initialization workflow.</p>
+<figure>
+  <img src="images/diagrams/operational/08a-setup-orchestration.png" alt="Setup Orchestration Part A" style="border: 3px solid #f39c12; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Platform Detection:</strong> Automatic OS detection (Windows, Mac, Linux)<br/>
+  <strong>Environment Setup:</strong> Python virtual environment, dependencies, path configuration<br/>
+  <strong>Directory Structure:</strong> Create cortex-brain folders, initialize databases</figcaption>
+</figure>
+
+<p><strong>Setup Steps (Part A):</strong>
+- 🖥️ <strong>Platform Detection</strong>: Auto-detect Windows/Mac/Linux
+- 🐍 <strong>Python Environment</strong>: Virtual environment creation, activation
+- 📦 <strong>Dependencies</strong>: Install requirements.txt packages
+- 📁 <strong>Directory Structure</strong>: Create cortex-brain hierarchy
+- 🗄️ <strong>Database Init</strong>: Initialize Tier 1 (conversations) and Tier 2 (patterns) SQLite databases
+- ⚙️ <strong>Configuration</strong>: Generate cortex.config.json from template</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../HELP-SYSTEM/">HELP-SYSTEM.md</a> - Setup commands
+- <a href="../CAPABILITIES-MATRIX/">CAPABILITIES-MATRIX.md</a> - Platform support</p>
+<hr />
+<h2 id="setup-orchestration-part-b">Setup Orchestration (Part B)<a class="headerlink" href="#setup-orchestration-part-b" title="Permanent link">&para;</a></h2>
+<p>Plugin discovery, dependency resolution, and health validation.</p>
+<figure>
+  <img src="images/diagrams/operational/08b-setup-orchestration.png" alt="Setup Orchestration Part B" style="border: 3px solid #f39c12; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Plugin Discovery:</strong> Scan src/plugins directory, register commands<br/>
+  <strong>Dependency Resolution:</strong> Validate plugin dependencies, check external tools<br/>
+  <strong>Health Validation:</strong> Run health checks, verify configuration, report status</figcaption>
+</figure>
+
+<p><strong>Setup Steps (Part B):</strong>
+- 🔌 <strong>Plugin Discovery</strong>: Automatic plugin scanning
+- 📋 <strong>Command Registration</strong>: Map natural language to plugin operations
+- 🔍 <strong>Dependency Check</strong>: Validate required libraries, external tools
+- 🏥 <strong>Health Validation</strong>: System health checks
+- 🧪 <strong>Test Execution</strong>: Run smoke tests
+- 📊 <strong>Status Report</strong>: Configuration summary, warnings, next steps</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../HELP-SYSTEM/">HELP-SYSTEM.md</a> - Setup troubleshooting
+- <a href="../FEATURES/">FEATURES.md</a> - Plugin system</p>
+<hr />
+<h2 id="documentation-generation-workflow">Documentation Generation Workflow<a class="headerlink" href="#documentation-generation-workflow" title="Permanent link">&para;</a></h2>
+<p>Enterprise documentation orchestrator generating comprehensive documentation artifacts.</p>
+<figure>
+  <img src="images/diagrams/operational/09-documentation-generation.png" alt="Documentation Generation Workflow" style="border: 3px solid #f39c12; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Generation Phase:</strong> Mermaid diagrams, DALL-E prompts, narratives, executive summary<br/>
+  <strong>Integration Phase:</strong> IMAGE-CATALOG.yaml, story chapters, MkDocs configuration<br/>
+  <strong>Build Phase:</strong> Static site generation, validation, deployment to GitHub Pages</figcaption>
+</figure>
+
+<p><strong>Generation Components:</strong>
+- 📊 <strong>Mermaid Diagrams</strong>: 14 architectural, integration, and workflow diagrams
+- 🎨 <strong>DALL-E Prompts</strong>: 14 image generation prompts (500-800 words each)
+- 📝 <strong>Narratives</strong>: Technical explanations for each diagram
+- 📋 <strong>Executive Summary</strong>: Feature list, metrics, capabilities
+- 📖 <strong>Story Chapters</strong>: 13-chapter narrative split from master story
+- 🖼️ <strong>Image Integration</strong>: IMAGE-CATALOG.yaml with metadata
+- 🏗️ <strong>MkDocs Build</strong>: Generate static site with custom theme</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../FEATURES/">FEATURES.md</a> - Documentation capabilities
+- <a href="../HELP-SYSTEM/">HELP-SYSTEM.md</a> - Generation commands</p>
+<hr />
+<h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="../">Home</a></strong> - Return to documentation home</li>
+<li><strong><a href="../architecture-diagrams/">Architecture Diagrams</a></strong> - Core system architecture</li>
+<li><strong><a href="../integration-diagrams/">Integration Diagrams</a></strong> - Data flows and integrations</li>
+<li><strong><a href="../planning-diagrams/">Planning Diagrams</a></strong> - Strategic and planning systems</li>
+</ul>
+<hr />
+<p><strong>Image Source:</strong> Generated from DALL-E 3 prompts created by Enterprise Documentation Orchestrator<br />
+<strong>Diagram Metadata:</strong> See <a href="../images/diagrams/IMAGE-CATALOG.yaml">IMAGE-CATALOG.yaml</a><br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../integration-diagrams/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> Integration Diagrams
+                        </a>
+                        
+                        
+                        <a href="../planning-diagrams/" class="btn btn-default pull-right">
+                            Planning & Strategic Diagrams <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

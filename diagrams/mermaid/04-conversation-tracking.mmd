@@ -1,0 +1,6 @@
+graph TD
+    Chat[GitHub Copilot Chat] --> Capture[Conversation Capture]
+    Capture --> Parser[Markdown Parser]
+    Parser --> Tier1[(Tier 1 DB)]
+    Tier1 --> Context[Context Injection]
+    Context --> Future[Future Responses]

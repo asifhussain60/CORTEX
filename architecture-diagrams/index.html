@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Architecture Diagrams - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="./">Architecture</a></li>
+                        <li><a href="../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="./" class="active">Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="architecture-diagrams">🏗️ Architecture Diagrams<a class="headerlink" href="#architecture-diagrams" title="Permanent link">&para;</a></h1>
+<p>Visual representations of CORTEX's core architectural components and system design.</p>
+<hr />
+<h2 id="three-tier-architecture">Three-Tier Architecture<a class="headerlink" href="#three-tier-architecture" title="Permanent link">&para;</a></h2>
+<p>CORTEX's revolutionary three-tier memory system that enables persistent intelligence across conversations.</p>
+<figure>
+  <img src="images/diagrams/architectural/01-tier-architecture.png" alt="Three-Tier Architecture" style="border: 3px solid #3498db; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Tier 0 (Brain Protection):</strong> Seven-layer SKULL defense system protecting CORTEX integrity<br/>
+  <strong>Tier 1 (Conversation Memory):</strong> Working memory storing recent conversations for contextual responses<br/>
+  <strong>Tier 2 (Knowledge Graph):</strong> Long-term pattern storage learning from validated conversations</figcaption>
+</figure>
+
+<p><strong>Key Features:</strong>
+- 🛡️ <strong>Tier 0</strong>: Semantic validation, mutation prevention, integrity enforcement
+- 🧠 <strong>Tier 1</strong>: SQLite-based conversation storage, entity extraction, relevance scoring
+- 📊 <strong>Tier 2</strong>: Pattern learning, confidence scoring, namespace isolation</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../CAPABILITIES-MATRIX/">CAPABILITIES-MATRIX.md</a> - Complete capability listing
+- <a href="../FEATURES/">FEATURES.md</a> - Feature descriptions</p>
+<hr />
+<h2 id="agent-coordination-system">Agent Coordination System<a class="headerlink" href="#agent-coordination-system" title="Permanent link">&para;</a></h2>
+<p>Ten specialized agents orchestrated through the Corpus Callosum for intelligent task routing.</p>
+<figure>
+  <img src="images/diagrams/architectural/02-agent-coordination.png" alt="Agent Coordination System" style="border: 3px solid #3498db; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>10 Specialized Agents:</strong> Executor, Tester, Architect, Documenter, Health Validator, Pattern Matcher, Work Planner, Intent Detector, Conversation Manager, Security Auditor<br/>
+  <strong>Corpus Callosum:</strong> Central orchestrator managing agent selection, coordination, and load balancing</figcaption>
+</figure>
+
+<p><strong>Agent Roles:</strong>
+- ⚡ <strong>Executor</strong>: Code implementation and file operations
+- 🧪 <strong>Tester</strong>: Test generation and validation
+- 🏗️ <strong>Architect</strong>: System design and technical decisions
+- 📚 <strong>Documenter</strong>: Documentation generation and maintenance
+- 🏥 <strong>Health Validator</strong>: System health monitoring
+- 🔍 <strong>Pattern Matcher</strong>: Pattern recognition from conversation history
+- 📋 <strong>Work Planner</strong>: Feature planning and task breakdown
+- 🎯 <strong>Intent Detector</strong>: Natural language intent classification
+- 💬 <strong>Conversation Manager</strong>: Tier 1 conversation import and export
+- 🔒 <strong>Security Auditor</strong>: OWASP validation and vulnerability detection</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../HELP-SYSTEM/">HELP-SYSTEM.md</a> - Agent interaction guide
+- <a href="../FEATURES/">FEATURES.md</a> - Agent capabilities</p>
+<hr />
+<h2 id="complete-system-architecture">Complete System Architecture<a class="headerlink" href="#complete-system-architecture" title="Permanent link">&para;</a></h2>
+<p>End-to-end view of CORTEX showing all components, integrations, and data flows.</p>
+<figure>
+  <img src="images/diagrams/architectural/14-system-architecture.png" alt="Complete System Architecture" style="border: 3px solid #3498db; border-radius: 8px; width: 100%;"/>
+  <figcaption><strong>Complete CORTEX Ecosystem:</strong> GitHub Copilot Chat interface → Intent Router → Agent Coordinator → Three-Tier Memory → Plugin System → External Integrations<br/>
+  <strong>Data Flow:</strong> User input → Natural language processing → Agent execution → Memory persistence → Response generation</figcaption>
+</figure>
+
+<p><strong>System Components:</strong>
+- 🎯 <strong>Entry Point</strong>: GitHub Copilot Chat with natural language interface
+- 🧭 <strong>Intent Router</strong>: Template matching and natural language routing
+- 🎭 <strong>Agent System</strong>: 10 specialized agents with Corpus Callosum orchestration
+- 🧠 <strong>Memory System</strong>: Three-tier architecture (SKULL, Conversations, Patterns)
+- 🔌 <strong>Plugin System</strong>: Extensible architecture for custom functionality
+- 🔗 <strong>Integrations</strong>: Git monitoring, ADO planning, documentation generation</p>
+<p><strong>Related Documentation:</strong>
+- <a href="../">index.md</a> - Getting started guide
+- <a href="../CAPABILITIES-MATRIX/">CAPABILITIES-MATRIX.md</a> - Complete system capabilities</p>
+<hr />
+<h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="../">Home</a></strong> - Return to documentation home</li>
+<li><strong><a href="../integration-diagrams/">Integration Diagrams</a></strong> - Data flows and integrations</li>
+<li><strong><a href="../operational-diagrams/">Operational Diagrams</a></strong> - Workflows and processes</li>
+<li><strong><a href="../planning-diagrams/">Planning Diagrams</a></strong> - Strategic and planning systems</li>
+</ul>
+<hr />
+<p><strong>Image Source:</strong> Generated from DALL-E 3 prompts created by Enterprise Documentation Orchestrator<br />
+<strong>Diagram Metadata:</strong> See <a href="../images/diagrams/IMAGE-CATALOG.yaml">IMAGE-CATALOG.yaml</a><br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../governance/THE-RULEBOOK/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> The Rulebook
+                        </a>
+                        
+                        
+                        <a href="../integration-diagrams/" class="btn btn-default pull-right">
+                            Integration Diagrams <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

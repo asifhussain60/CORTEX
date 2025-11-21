@@ -1,0 +1,32 @@
+```mermaid
+graph TB
+    User[User Request] --> IntentDetector[Intent Detector]
+    IntentDetector --> Tier0[Tier 0: Brain Protection]
+    Tier0 --> Router[Corpus Callosum Router]
+    
+    Router --> LeftHem[Left Hemisphere]
+    Router --> RightHem[Right Hemisphere]
+    
+    LeftHem --> Executor[Code Executor]
+    LeftHem --> Tester[Test Generator]
+    LeftHem --> Validator[Health Validator]
+    LeftHem --> Reviewer[Code Reviewer]
+    
+    RightHem --> Architect[System Architect]
+    RightHem --> Planner[Work Planner]
+    RightHem --> Documenter[Documentation Writer]
+    RightHem --> Governor[Change Governor]
+    
+    Executor --> Tier1[Tier 1: Working Memory]
+    Tester --> Tier1
+    Architect --> Tier2[Tier 2: Knowledge Graph]
+    Planner --> Tier2
+    
+    Tier1 --> Response[Coordinated Response]
+    Tier2 --> Response
+    
+    style Tier0 fill:#ff6b6b
+    style Tier1 fill:#ffd93d
+    style Tier2 fill:#6bcf7f
+    style Router fill:#4ecdc4
+```

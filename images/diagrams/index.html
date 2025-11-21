@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX Diagram Image Generation Guide - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../.." id="logo">
+                        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../..">Home</a></li>
+                        <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../CAPABILITIES-MATRIX/" >Capabilities Matrix</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Getting Started</a></li>
+                                
+                                    <li><a href="../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-diagram-image-generation-guide">CORTEX Diagram Image Generation Guide<a class="headerlink" href="#cortex-diagram-image-generation-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Purpose:</strong> Generate professional technical diagrams for CORTEX documentation using DALL-E<br />
+<strong>Last Updated:</strong> 2025-11-20 18:09:50<br />
+<strong>Status:</strong> Production Ready</p>
+<hr />
+<h2 id="overview">📋 Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This directory contains:
+- <strong>Enhanced DALL-E prompts</strong> (500-800 words each) in <code>../prompts/</code>
+- <strong>Placeholder markers</strong> for pending image generation
+- <strong>Generated PNG images</strong> (after DALL-E generation)</p>
+<hr />
+<h2 id="how-to-generate-images">🎨 How to Generate Images<a class="headerlink" href="#how-to-generate-images" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-access-dall-e">Step 1: Access DALL-E<a class="headerlink" href="#step-1-access-dall-e" title="Permanent link">&para;</a></h3>
+<p>Use ChatGPT Plus (includes DALL-E 3 access):
+1. Go to https://chat.openai.com/
+2. Ensure you have ChatGPT Plus subscription
+3. Select GPT-4 model with DALL-E capabilities</p>
+<h3 id="step-2-use-enhanced-prompts">Step 2: Use Enhanced Prompts<a class="headerlink" href="#step-2-use-enhanced-prompts" title="Permanent link">&para;</a></h3>
+<p>For each diagram:</p>
+<ol>
+<li><strong>Open prompt file:</strong> <code>docs/diagrams/prompts/[NN]-[name]-prompt.md</code></li>
+<li><strong>Copy DALL-E Generation Instruction</strong> (last section of prompt)</li>
+<li><strong>Paste into ChatGPT</strong> with prefix: "Generate an image using DALL-E:"</li>
+<li><strong>Review output</strong> - regenerate if needed with adjustments</li>
+<li><strong>Download image</strong> (right-click → Save Image As)</li>
+<li><strong>Save to appropriate subfolder:</strong></li>
+<li><code>architectural/</code> - Core architecture diagrams</li>
+<li><code>strategic/</code> - Conceptual/strategic diagrams</li>
+<li><code>operational/</code> - Workflow/process diagrams</li>
+<li><code>integration/</code> - Integration/interaction diagrams</li>
+</ol>
+<h3 id="step-3-optimize-images">Step 3: Optimize Images<a class="headerlink" href="#step-3-optimize-images" title="Permanent link">&para;</a></h3>
+<p>Before committing:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install optimization tools</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pillow
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Run optimization script (reduces file size)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>python<span class="w"> </span>scripts/optimize_images.py<span class="w"> </span>docs/images/diagrams/
+</span></code></pre></div>
+<p><strong>Requirements:</strong>
+- Format: PNG with transparency
+- Resolution: 1920x1080 (Full HD minimum)
+- Max Size: 500KB (optimized)
+- Color Space: sRGB</p>
+<h3 id="step-4-verify-integration">Step 4: Verify Integration<a class="headerlink" href="#step-4-verify-integration" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Build MkDocs to check image references</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>docs
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdocs<span class="w"> </span>build
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Serve locally to preview</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>mkdocs<span class="w"> </span>serve
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Visit http://localhost:8000</span>
+</span></code></pre></div>
+<hr />
+<h2 id="image-mapping">📂 Image Mapping<a class="headerlink" href="#image-mapping" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>DALL-E Prompt</th>
+<th>Output Path</th>
+<th>Category</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01-tier-architecture-prompt.md</td>
+<td>architectural/tier-architecture.png</td>
+<td>Architectural</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>02-agent-coordination-prompt.md</td>
+<td>strategic/agent-coordination.png</td>
+<td>Strategic</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>03-information-flow-prompt.md</td>
+<td>strategic/information-flow.png</td>
+<td>Strategic</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>04-conversation-tracking-prompt.md</td>
+<td>strategic/conversation-tracking.png</td>
+<td>Strategic</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>05-plugin-system-prompt.md</td>
+<td>strategic/plugin-system.png</td>
+<td>Strategic</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>06-brain-protection-prompt.md</td>
+<td>strategic/brain-protection.png</td>
+<td>Strategic</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>07-operation-pipeline-prompt.md</td>
+<td>operational/operation-pipeline.png</td>
+<td>Operational</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>08-setup-orchestration-prompt.md</td>
+<td>operational/setup-orchestration.png</td>
+<td>Operational</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>09-documentation-generation-prompt.md</td>
+<td>operational/documentation-generation.png</td>
+<td>Operational</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>10-feature-planning-prompt.md</td>
+<td>operational/feature-planning.png</td>
+<td>Operational</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>11-testing-strategy-prompt.md</td>
+<td>integration/testing-strategy.png</td>
+<td>Integration</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>12-deployment-pipeline-prompt.md</td>
+<td>operational/deployment-pipeline.png</td>
+<td>Operational</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>13-user-journey-prompt.md</td>
+<td>integration/user-journey.png</td>
+<td>Integration</td>
+<td>📝 Pending</td>
+</tr>
+<tr>
+<td>14-system-architecture-prompt.md</td>
+<td>integration/system-architecture.png</td>
+<td>Integration</td>
+<td>📝 Pending</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Update status:</strong> Change <code>📝 Pending</code> to <code>✅ Complete</code> after generating</p>
+<hr />
+<h2 id="quality-checklist">🎯 Quality Checklist<a class="headerlink" href="#quality-checklist" title="Permanent link">&para;</a></h2>
+<p>Before finalizing each image:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> High resolution (1920x1080 minimum)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Clear labels (readable at 100% zoom)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Color palette matches prompt specifications</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Technical accuracy verified</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Professional aesthetic maintained</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> File size optimized (&lt;500KB)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Alt text added in documentation</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Referenced in appropriate architecture doc</li>
+</ul>
+<hr />
+<h2 id="regeneration-process">🔄 Regeneration Process<a class="headerlink" href="#regeneration-process" title="Permanent link">&para;</a></h2>
+<p>If an image needs updates:</p>
+<ol>
+<li><strong>Update DALL-E prompt</strong> with refinements</li>
+<li><strong>Regenerate image</strong> using updated prompt</li>
+<li><strong>Replace old image</strong> (keep filename same)</li>
+<li><strong>Commit changes</strong> with clear message</li>
+<li><strong>Verify documentation</strong> still renders correctly</li>
+</ol>
+<hr />
+<h2 id="naming-convention">📝 Naming Convention<a class="headerlink" href="#naming-convention" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Lowercase with hyphens: <code>tier-architecture.png</code></li>
+<li>Descriptive: <code>agent-coordination.png</code></li>
+<li>No version numbers (use git for versioning)</li>
+<li>Match prompt file names (without <code>-prompt</code> suffix)</li>
+</ul>
+<hr />
+<h2 id="troubleshooting">🛠️ Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<p><strong>DALL-E won't generate:</strong> Prompt too long<br />
+→ Use "DALL-E Generation Instruction" section only (condensed version)</p>
+<p><strong>Image quality poor:</strong> Resolution too low<br />
+→ Request "high resolution, 4K quality" in prompt</p>
+<p><strong>Colors don't match:</strong> DALL-E interpretation varies<br />
+→ Specify hex codes explicitly: "Use #ff6b6b for red components"</p>
+<p><strong>File size too large:</strong> Over 500KB<br />
+→ Run optimization script: <code>python scripts/optimize_images.py</code></p>
+<hr />
+<h2 id="progress-tracking">📊 Progress Tracking<a class="headerlink" href="#progress-tracking" title="Permanent link">&para;</a></h2>
+<p>Total Images: 14<br />
+Generated: 0<br />
+Pending: 14<br />
+Completion: 0%</p>
+<p><strong>Next Steps:</strong>
+1. Generate all 14 images using DALL-E
+2. Optimize images for web
+3. Update architecture documentation with image references
+4. Build and preview MkDocs site
+5. Commit images to repository</p>
+<hr />
+<p><strong>Author:</strong> Asif Hussain<br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.<br />
+<strong>Generated:</strong> 2025-11-20 18:09:50</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../search/main.js"></script>
+</body>
+</html>
