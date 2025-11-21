@@ -62,14 +62,20 @@ class GovernanceEngine:
         self._load_governance()
     
     def _load_governance(self) -> None:
-        """Load governance rules from YAML file."""
+        """Load governance rules from YAML file with caching."""
         if not self.governance_file.exists():
             raise FileNotFoundError(
                 f"Governance file not found: {self.governance_file}"
             )
         
-        with open(self.governance_file, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
+        try:
+            # Use universal YAML cache for performance
+            from src.utils.yaml_cache import load_yaml_cached
+            data = load_yaml_cached(self.governance_file)
+        except ImportError:
+            # Fallback to direct loading
+            with open(self.governance_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
         
         # Validate governance file structure
         if not data or 'rules' not in data:

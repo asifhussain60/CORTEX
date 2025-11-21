@@ -43,16 +43,23 @@ class TemplateValidator:
                 break
     
     def _load_meta_template(self) -> Dict:
-        """Load meta-template definition"""
+        """Load meta-template definition with caching"""
         if not self.meta_template_path.exists():
             raise FileNotFoundError(f"Meta-template not found: {self.meta_template_path}")
         
-        with open(self.meta_template_path, 'r', encoding='utf-8') as f:
-            meta = yaml.safe_load(f)
-            # Ensure validation_rules structure exists
-            if 'validation_rules' not in meta:
-                meta['validation_rules'] = {'content': []}
-            return meta
+        try:
+            # Use universal YAML cache for performance
+            from src.utils.yaml_cache import load_yaml_cached
+            meta = load_yaml_cached(self.meta_template_path)
+        except ImportError:
+            # Fallback to direct loading
+            with open(self.meta_template_path, 'r', encoding='utf-8') as f:
+                meta = yaml.safe_load(f)
+        
+        # Ensure validation_rules structure exists
+        if 'validation_rules' not in meta:
+            meta['validation_rules'] = {'content': []}
+        return meta
     
     def validate_file(self, template_file: str, template_name: str = None) -> List[ValidationResult]:
         """
@@ -69,8 +76,14 @@ class TemplateValidator:
         if not template_path.exists():
             raise FileNotFoundError(f"Template file not found: {template_path}")
         
-        with open(template_path, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
+        try:
+            # Use universal YAML cache for response-templates.yaml
+            from src.utils.yaml_cache import load_yaml_cached
+            data = load_yaml_cached(template_path)
+        except ImportError:
+            # Fallback to direct loading
+            with open(template_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
         
         templates = data.get('templates', {})
         results = []

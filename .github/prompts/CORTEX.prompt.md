@@ -30,19 +30,39 @@
 **BEFORE responding to ANY user request:**
 
 1. **Check for template triggers** in #file:../../cortex-brain/response-templates.yaml
-2. **Planning Detection (PRIORITY)** - Check if user wants to plan:
+2. **TDD Workflow Detection (HIGHEST PRIORITY)** - Check if user wants to implement:
+   - Triggers: "implement", "add", "create", "build", "develop", "write"
+   - If matched: Activate TDD workflow via NL processor (RED → GREEN → REFACTOR cycle)
+   - Critical features auto-enforce TDD: authentication, authorization, payment, security
+   - Example: "implement user authentication" → TDD workflow with interactive guidance
+3. **Planning Detection (PRIORITY)** - Check if user wants to plan:
    - Triggers: "plan", "let's plan", "plan a feature", "plan this", "help me plan", "planning", "feature planning", "i want to plan"
    - If matched: Load #file:../../prompts/shared/help_plan_feature.md and activate interactive planning workflow
    - Context detection: "let's plan ADO feature" = planning + ADO context (no separate triggers needed)
-3. **Documentation Generation Detection** - Check if user wants to generate docs:
+4. **Documentation Generation Detection** - Check if user wants to generate docs:
    - Triggers: "generate documentation", "generate docs", "generate cortex docs", "update documentation", "refresh docs", "build documentation"
    - If matched: Use doc_generation_intro template FIRST (set expectations)
    - After generation: Use doc_generation_complete template with file summary table
-4. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
+5. **If no trigger match**: Proceed with natural language response using MANDATORY RESPONSE FORMAT below
 
 **Examples:**
 
 ```markdown
+User: "implement user authentication"
+→ MATCH: tdd_triggers (HIGHEST PRIORITY)
+→ ACTION: Activate TDD workflow via NL processor
+→ RESPONSE: Interactive RED-GREEN-REFACTOR guidance in chat
+→ WORKFLOW: 
+   1. RED: Generate failing test for authentication
+   2. GREEN: Minimal implementation to pass test
+   3. REFACTOR: Improve code quality
+   4. VALIDATE: Check Definition of Done
+
+User: "add payment processing"
+→ MATCH: tdd_triggers + critical_feature_enforcement
+→ ACTION: TDD workflow (critical feature = mandatory TDD)
+→ RESPONSE: "🧪 TDD Workflow Activated (Critical Feature)"
+
 User: "let's plan authentication"
 → MATCH: planning_triggers
 → ACTION: Create planning file, load help_plan_feature.md, activate Work Planner
@@ -64,10 +84,10 @@ User: "help"
 → ACTION: Load response-templates.yaml, return help_table template
 → RESPONSE: Pre-formatted command table
 
-User: "add a button"
-→ NO MATCH: No triggers
+User: "add a button to existing component"
+→ NO MATCH: No triggers (trivial change)
 → ACTION: Natural language response
-→ RESPONSE: Execute code implementation directly
+→ RESPONSE: Execute code modification directly (no TDD needed for simple UI changes)
 ```
 
 **Why this matters:** Planning workflows require structured interaction with persistent artifacts (files). Without trigger detection, CORTEX skips the planning template and executes directly. **NEW:** Vision API integration extracts requirements from screenshots automatically. File-based planning creates persistent artifacts (not ephemeral chat).

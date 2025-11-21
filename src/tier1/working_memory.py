@@ -991,7 +991,7 @@ class WorkingMemory:
                     'turns_imported': 0
                 }
             except Exception as e:
-                print(f"[DEBUG] Database insert failed: {e}")  # DEBUG
+                logger.error(f"Database insert failed for empty conversation: {e}", exc_info=True)
                 return {
                     'success': False,
                     'error': f'Failed to store empty conversation: {e}',

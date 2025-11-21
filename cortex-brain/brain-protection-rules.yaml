@@ -44,9 +44,13 @@ critical_paths:
 tier0_instincts:
   - "INCREMENTAL_PLAN_GENERATION"  # TOP PRIORITY: Generate YAML plans incrementally to avoid response length limits
   - "TDD_ENFORCEMENT"
+  - "RED_PHASE_VALIDATION"  # NEW: Tests MUST fail before implementation (RED → GREEN)
+  - "GREEN_PHASE_VALIDATION"  # NEW: Implementation MUST pass previously failing tests
   - "DEFINITION_OF_READY"
   - "DEFINITION_OF_DONE"
   - "SOLID_PRINCIPLES"
+  - "SOLID_SRP"  # NEW: Single Responsibility Principle enforcement
+  - "SOLID_DIP"  # NEW: Dependency Inversion Principle enforcement
   - "CODE_STYLE_CONSISTENCY"  # Adopt user's code style while maintaining best practices
   - "LOCAL_FIRST"
   - "BRAIN_PROTECTION_TESTS_MANDATORY"
@@ -62,6 +66,9 @@ tier0_instincts:
   - "DISTRIBUTED_DATABASE_ARCHITECTURE"  # CRITICAL: Use tier-specific databases, never monolithic
   - "CORTEX_PROMPT_FILE_PROTECTION"  # CRITICAL: CORTEX.prompt.md NEVER renamed, safe update procedure enforced
   - "GIT_CHECKPOINT_ENFORCEMENT"  # CRITICAL: Create git checkpoint before starting development work
+  - "SECURITY_INJECTION"  # NEW: Prevent SQL injection, XSS, command injection
+  - "SECURITY_AUTHENTICATION"  # NEW: Enforce authentication/authorization best practices
+  - "BRAIN_ARCHITECTURE_INTEGRITY"  # NEW: Protect 4-tier brain architecture from degradation
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -270,6 +277,246 @@ protection_layers:
           - "Use TDD cycle: RED → GREEN → REFACTOR"
         
         evidence_template: "Intent: '{intent}'"
+      
+      - rule_id: "RED_PHASE_VALIDATION"
+        name: "RED Phase Validation (Test Must Fail First)"
+        severity: "blocked"
+        description: "Tests must fail before implementation exists (RED → GREEN enforcement)"
+        
+        detection:
+          keywords:
+            - "implement before test"
+            - "code first then test"
+            - "skip red phase"
+            - "test after implementation"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Write failing test first (RED phase)"
+          - "Verify test fails with 'no implementation' error"
+          - "Only proceed to GREEN phase after RED confirmed"
+        
+        evidence_template: "Intent: '{intent}'"
+        
+        rationale: |
+          RED Phase Purpose:
+          - Validates test actually tests something (not false positive)
+          - Forces specification before implementation
+          - Prevents over-engineering (only implement what's needed)
+          
+          Workflow:
+          1. Write test for desired behavior
+          2. Run test → MUST FAIL (no implementation yet)
+          3. Confirm failure message is meaningful
+          4. Only then proceed to GREEN phase
+      
+      - rule_id: "GREEN_PHASE_VALIDATION"
+        name: "GREEN Phase Validation (Minimal Implementation)"
+        severity: "blocked"
+        description: "Implementation must pass previously failing tests with minimal code"
+        
+        detection:
+          keywords:
+            - "skip green phase"
+            - "implement everything at once"
+            - "over-engineer"
+            - "add features not in test"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Implement ONLY what makes test pass"
+          - "Resist adding extra features (YAGNI)"
+          - "Save improvements for REFACTOR phase"
+        
+        evidence_template: "Intent: '{intent}'"
+        
+        rationale: |
+          GREEN Phase Purpose:
+          - Minimal implementation (simplest code to pass test)
+          - Prevents over-engineering and scope creep
+          - Forces incremental development
+          
+          Workflow:
+          1. Test is RED (failing)
+          2. Write simplest code to make test GREEN (passing)
+          3. Run test → MUST PASS
+          4. Do NOT add features beyond test requirements
+          5. Proceed to REFACTOR phase for improvements
+      
+      - rule_id: "SOLID_SRP"
+        name: "Single Responsibility Principle"
+        severity: "blocked"
+        description: "Class/function violates Single Responsibility Principle"
+        
+        detection:
+          keywords:
+            - "class does too much"
+            - "multiple responsibilities"
+            - "god class"
+            - "long method"
+          scope: ["analysis", "description"]
+        
+        alternatives:
+          - "Extract separate classes for each responsibility"
+          - "Split into smaller, focused functions"
+          - "Use composition over inheritance"
+        
+        evidence_template: "Violation: '{description}'"
+        
+        rationale: |
+          SRP Enforcement:
+          - Each class should have ONE reason to change
+          - Functions should do ONE thing well
+          - Improves testability and maintainability
+          
+          Indicators of Violation:
+          - Class > 250 lines
+          - Function > 30 lines
+          - Class name contains "And" or "Manager"
+          - Multiple import groups (data, network, UI)
+      
+      - rule_id: "SOLID_DIP"
+        name: "Dependency Inversion Principle"
+        severity: "blocked"
+        description: "Code depends on concrete implementations instead of abstractions"
+        
+        detection:
+          keywords:
+            - "concrete dependency"
+            - "tight coupling"
+            - "cannot mock"
+            - "hard to test"
+          scope: ["analysis", "description"]
+        
+        alternatives:
+          - "Depend on interfaces/protocols, not classes"
+          - "Inject dependencies via constructor"
+          - "Use dependency injection framework"
+        
+        evidence_template: "Violation: '{description}'"
+        
+        rationale: |
+          DIP Enforcement:
+          - High-level modules shouldn't depend on low-level modules
+          - Both should depend on abstractions (interfaces)
+          - Enables testing with mocks
+          
+          Example:
+          ❌ BAD:
+          class UserService:
+              def __init__(self):
+                  self.db = PostgresDatabase()  # Concrete dependency
+          
+          ✅ GOOD:
+          class UserService:
+              def __init__(self, db: IDatabase):  # Abstract dependency
+                  self.db = db
+      
+      - rule_id: "SECURITY_INJECTION"
+        name: "Security - Injection Prevention"
+        severity: "blocked"
+        description: "Code vulnerable to SQL injection, XSS, or command injection"
+        
+        detection:
+          keywords:
+            - "string concatenation"
+            - "execute raw sql"
+            - "eval("
+            - "exec("
+            - "innerHTML"
+          scope: ["code", "description"]
+        
+        alternatives:
+          - "Use parameterized queries (SQL)"
+          - "Use prepared statements"
+          - "Sanitize user input"
+          - "Use template engines with auto-escaping"
+        
+        evidence_template: "Security risk: '{description}'"
+        
+        rationale: |
+          Injection Prevention:
+          - NEVER concatenate user input into SQL/commands
+          - ALWAYS use parameterized queries
+          - ALWAYS validate and sanitize input
+          
+          Example:
+          ❌ BAD:
+          query = f"SELECT * FROM users WHERE id = {user_id}"  # SQL injection
+          
+          ✅ GOOD:
+          query = "SELECT * FROM users WHERE id = ?"
+          cursor.execute(query, (user_id,))  # Parameterized
+      
+      - rule_id: "SECURITY_AUTHENTICATION"
+        name: "Security - Authentication Best Practices"
+        severity: "blocked"
+        description: "Authentication/authorization implementation has security issues"
+        
+        detection:
+          keywords:
+            - "plaintext password"
+            - "hardcoded secret"
+            - "no authentication"
+            - "skip authorization"
+          scope: ["code", "description"]
+        
+        alternatives:
+          - "Hash passwords with bcrypt/argon2"
+          - "Use environment variables for secrets"
+          - "Implement proper authentication middleware"
+          - "Check authorization before resource access"
+        
+        evidence_template: "Security risk: '{description}'"
+        
+        rationale: |
+          Authentication Security:
+          - NEVER store plaintext passwords
+          - NEVER hardcode secrets in code
+          - ALWAYS verify authentication before protected operations
+          - ALWAYS check authorization (user can access resource)
+          
+          Example:
+          ❌ BAD:
+          password = user_input  # Plaintext storage
+          API_KEY = "sk-1234567890"  # Hardcoded secret
+          
+          ✅ GOOD:
+          hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+          API_KEY = os.getenv("API_KEY")  # Environment variable
+      
+      - rule_id: "BRAIN_ARCHITECTURE_INTEGRITY"
+        name: "Brain Architecture Integrity"
+        severity: "blocked"
+        description: "Changes threaten 4-tier brain architecture integrity"
+        
+        detection:
+          keywords:
+            - "merge tiers"
+            - "monolithic database"
+            - "skip tier"
+            - "bypass brain"
+          scope: ["intent", "description"]
+        
+        alternatives:
+          - "Preserve Tier 0-3 separation"
+          - "Use distributed database architecture"
+          - "Follow brain integration patterns"
+        
+        evidence_template: "Architecture risk: '{description}'"
+        
+        rationale: |
+          Brain Architecture Protection:
+          - Tier 0: Instincts (immutable, <10ms)
+          - Tier 1: Working memory (conversation context, <100ms)
+          - Tier 2: Knowledge graph (learned patterns, <150ms)
+          - Tier 3: Development context (project-specific, <1ms cached)
+          
+          Threats:
+          - Merging tiers into monolithic database
+          - Bypassing tier hierarchy
+          - Direct access to tier internals
+          - Synchronous blocking on slow tiers
       
       - rule_id: "DEFINITION_OF_DONE"
         name: "Definition of Done"

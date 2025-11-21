@@ -675,6 +675,28 @@ routing:
   quick_start_triggers:
   - quick start
   - get started
+  tdd_workflow_triggers:
+  - implement
+  - add
+  - create
+  - build
+  - develop
+  - write
+  - implement feature
+  - add feature
+  - create feature
+  test_generation_triggers:
+  - test
+  - write tests
+  - generate tests
+  - add tests
+  - create tests
+  refactor_triggers:
+  - refactor
+  - improve code
+  - clean up
+  - restructure
+  - optimize code
   planning_triggers:
   - plan
   - let's plan
