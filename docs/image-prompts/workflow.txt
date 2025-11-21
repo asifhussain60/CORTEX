@@ -1,0 +1,24 @@
+Create a flowchart visualization showing a typical CORTEX feature implementation workflow.
+
+Style: Clean, professional flowchart with modern UI elements
+Color Scheme: Sequential rainbow (ROYGBIV) showing progression
+
+Flow Steps:
+1. **User Request** (Red) - Chat bubble with "Plan user authentication"
+2. **Intent Detection** (Orange) - AI analyzing request
+3. **Planning Phase** (Yellow) - Work Planner creating structured plan
+4. **Approval Gate** (Green) - User reviewing and approving
+5. **Implementation** (Blue) - Code Executor writing code
+6. **Testing** (Indigo) - Test Generator creating tests
+7. **Validation** (Violet) - Health Validator checking quality
+8. **Documentation** (Pink) - Auto-generated docs
+9. **Complete** (Green checkmark) - Feature ready
+
+Visual Elements:
+- Decision diamonds for approval gates
+- Parallel tracks showing concurrent agent work
+- Success/failure paths
+- Time estimates for each phase
+- Agent avatars at relevant steps
+
+Mood: Clear, professional, step-by-step, encouraging

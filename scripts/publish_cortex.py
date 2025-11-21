@@ -48,7 +48,6 @@ USER_OPERATIONS = {
 ADMIN_OPERATIONS = {
     'design_sync',           # Admin development tool
     'interactive_planning',  # Not yet implemented
-    'refresh_cortex_story',  # ❌ Admin-only: Updates CORTEX's own story documentation
     'enterprise_documentation'  # ❌ Admin-only: Enterprise doc generator (EPM system)
 }
 

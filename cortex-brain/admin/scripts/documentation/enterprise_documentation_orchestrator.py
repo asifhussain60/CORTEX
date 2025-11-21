@@ -16,6 +16,8 @@ Purpose:
 - Generate DALL-E prompts for sophisticated diagrams (10+)
 - Generate narratives (1:1 with prompts) explaining images
 - Create "The Awakening of CORTEX" story (hilarious technical narrative)
+  Master Source: cortex-brain/documents/stories/hilarious.md
+  Style: Codenstein (Asif) first-person narrative with Mrs. Codenstein, Roomba, coffee mug timeline
 - Generate executive summary listing ALL features
 - Build complete MkDocs documentation site
 - Discover features from Git history and YAML configs
@@ -1042,8 +1044,9 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
                     "file_created": True,
                     "total_size": total_size,
                     "main_file_size": main_story_file.stat().st_size,
-                    "source": "cortex-brain/documents/narratives/THE-AWAKENING-OF-CORTEX-MASTER.md",
-                    "output": "docs/story/CORTEX-STORY/chapters/"
+                    "source": "cortex-brain/documents/stories/hilarious.md (MASTER SOURCE)",
+                    "output": "docs/story/CORTEX-STORY/chapters/",
+                    "style": "Hilarious technical narrative (Codenstein first-person)"
                 }
             }
             
@@ -1059,8 +1062,8 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
     
     def _write_awakening_story(self, features: Dict) -> str:
         """Write the hilarious technical story with Mrs. Codenstein touches"""
-        # Load from single master source
-        master_story_path = self.workspace_root / "cortex-brain" / "documents" / "narratives" / "THE-AWAKENING-OF-CORTEX-MASTER.md"
+        # Load from single master source (hilarious.md) - ORGANIZED LOCATION
+        master_story_path = self.workspace_root / "cortex-brain" / "documents" / "stories" / "hilarious.md"
         
         if not master_story_path.exists():
             raise FileNotFoundError(
@@ -1069,6 +1072,7 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
             )
         
         logger.info(f"   📖 Loading story from master source: {master_story_path}")
+        logger.info(f"   ✨ Using hilarious narration style (Codenstein + Mrs. Codenstein + Roomba + Coffee Mugs)")
         story_content = master_story_path.read_text(encoding='utf-8')
         
         # Apply Mrs. Codenstein personality injection
@@ -1093,6 +1097,8 @@ CORTEX is designed as a distributed cognitive system, not a monolithic applicati
         #     )
         
         logger.info(f"   ✅ Narrative perspective valid (first-person throughout)")
+        logger.info(f"   📝 Story Style: Codenstein voice, 10 chapters + prologue + epilogue + disclaimer")
+        logger.info(f"   ☕ Features: Coffee mug timeline, Roomba sidekick, Mrs. Codenstein British commentary")
         
         return story_content
     
@@ -1540,8 +1546,28 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
 
 This directory contains:
 - **Enhanced DALL-E prompts** (500-800 words each) in `../prompts/`
-- **Placeholder markers** for pending image generation
-- **Generated PNG images** (after DALL-E generation)
+- **IMAGE-CATALOG.yaml** - Complete metadata for all 14 generated images (paths, categories, MkDocs references)
+- **Generated PNG images** organized in 4 category folders:
+  - `architectural/` - Core architecture diagrams (3 images)
+  - `integration/` - Data flows and integrations (3 images)
+  - `operational/` - Workflows and processes (4 images)
+  - `strategic/` - Planning and strategic systems (4 images)
+
+---
+
+## 📊 Image Catalog Reference
+
+**All image metadata is maintained in `IMAGE-CATALOG.yaml`:**
+- Image IDs, filenames, and category assignments
+- DALL-E prompt file references
+- Narrative file associations
+- MkDocs page mappings
+- Color themes and dimensions
+- Generation metadata
+
+**Usage patterns** (from catalog):
+- MkDocs: `![{title}](../images/diagrams/{category}/{filename})`
+- HTML with styling: `<img src='../images/diagrams/{category}/{filename}' style='border: 3px solid {color};'/>`
 
 ---
 

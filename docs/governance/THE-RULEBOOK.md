@@ -1,29 +1,47 @@
+<div class="rulebook-hero">
+
 # THE CORTEX RULEBOOK
-**The Primary Bible of CORTEX**
 
-*Author: Asif Hussain | © 2024-2025*  
-*Last Updated: November 19, 2025*  
-*Version: 2.1*
+<p class="subtitle">The Primary Bible of CORTEX</p>
 
----
+<p class="metadata">
+<strong>Author:</strong> Asif Hussain | © 2024-2025<br>
+<strong>Last Updated:</strong> November 19, 2025<br>
+<strong>Version:</strong> 2.1
+</p>
+
+</div>
+
+<div class="rulebook-toc">
+
+## 📖 Table of Contents
+
+- [About This Document](#about-this-document)
+- [I. Core Principles (Tier 0 Instinct)](#i-core-principles-tier-0-instinct)
+- [II. Test-Driven Development (TDD)](#ii-test-driven-development-tdd)
+- [III. Brain Protection System (SKULL Rules)](#iii-brain-protection-system-skull-rules)
+
+</div>
 
 ## About This Document
 
 This is **THE** authoritative source of truth for all CORTEX governance, rules, standards, and principles. Every rule, constraint, and best practice is derived from live brain sources - no placeholders, no mock data.
 
 **Brain Sources (Live Data):**
+
 - `cortex-brain/brain-protection-rules.yaml` - 27 protection rules across 10 layers
 - `cortex-brain/documents/implementation-guides/test-strategy.yaml` - TDD philosophy, test categories
 - `cortex-brain/documents/analysis/optimization-principles.yaml` - Pragmatic MVP approach, validated patterns
 
 **Wired Into CORTEX Operations:**  
 This rulebook is not documentation for documentation's sake. Every rule here is enforced by:
+
 - Brain Protector agent (automated architectural protection)
 - Test suite (SKULL rules validation)
 - Design Sync orchestrator (commit-time validation)
 - Health monitoring (continuous governance checks)
 
----
+<div class="section-tier0">
 
 ## I. Core Principles (Tier 0 Instinct)
 
@@ -32,8 +50,11 @@ This rulebook is not documentation for documentation's sake. Every rule here is 
 Balance aspirational goals with shipping reality. Block on critical issues,
 warn on future optimizations. Ship working software incrementally.
 
+</div>
 
-### Tier 0 Immutable Instincts
+<div class="rule-box rule-immutable">
+
+### <i class="fa fa-lock"></i> Tier 0 Immutable Instincts
 
 **These instincts CANNOT be bypassed.** They are hardwired into CORTEX's brain and enforced automatically.
 
@@ -59,7 +80,11 @@ warn on future optimizations. Ship working software incrementally.
 
 **Total Instincts:** 19
 
-### Core Development Principles
+</div>
+
+<div class="rule-box rule-guideline">
+
+### <i class="fa fa-compass"></i> Core Development Principles
 
 - Working software > perfect architecture
 - Fail on blocking issues, warn on future work
@@ -67,17 +92,21 @@ warn on future optimizations. Ship working software incrementally.
 - Incremental progress > all-or-nothing
 - Backward compatibility > breaking changes
 
----
+</div>
+
+<div class="section-standards">
 
 ## II. Test-Driven Development (TDD)
 
 ### Test Strategy Philosophy
 
+</div>
+
 ### Performance Budgets
 
 Phase 0 calibrated thresholds for realistic MVP expectations:
 
----
+<div class="section-protection">
 
 ## III. Brain Protection System (SKULL Rules)
 
@@ -85,7 +114,11 @@ Phase 0 calibrated thresholds for realistic MVP expectations:
 
 The Brain Protection System implements **10 protection layers** with **27 automated rules** to prevent architectural degradation.
 
-### Critical System Paths
+</div>
+
+<div class="rule-box rule-immutable">
+
+### <i class="fa fa-shield"></i> Critical System Paths
 
 These paths trigger high-level protection:
 
@@ -94,11 +127,17 @@ These paths trigger high-level protection:
 - `governance/rules.md`
 - `cortex-brain/tier0/`
 
+</div>
+
 ### Protection Layers
+
+<div class="rule-box rule-standard">
 
 #### Layer 1: Instinct Immutability
 
 Tier 0 governance rules cannot be bypassed
+
+</div>
 
 **Rules:**
 

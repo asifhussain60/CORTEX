@@ -549,7 +549,7 @@ lessons:
   subcategory: response-format
   severity: critical
   date: '2025-11-16'
-  problem: 'AList.md conversation responses violated CORTEX.prompt.md mandatory format:
+  problem: 'Conversation responses violated CORTEX.prompt.md mandatory format:
     missing "Your Request" echo section, using forbidden separator lines, showing
     verbose tool calls, improper Smart Hint placement, duplicate headers.'
   root_cause: Response format rules not consistently enforced during conversation
@@ -611,7 +611,6 @@ lessons:
     total_minutes: 65
   related_files:
   - .github/prompts/CORTEX.prompt.md
-  - .github/CopilotChats/AList.md
   - cortex-brain/response-templates.yaml
   tags:
   - response-format

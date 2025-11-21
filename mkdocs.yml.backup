@@ -1,0 +1,85 @@
+site_name: CORTEX
+site_description: Cognitive Operation & Reasoning Through EXtension for Copilot
+site_author: Asif Hussain
+copyright: "2024-2025 Asif Hussain. All rights reserved."
+repo_url: https://github.com/asifhussain60/CORTEX
+repo_name: asifhussain60/CORTEX
+
+# GitHub Pages Configuration
+site_url: https://asifhussain60.github.io/CORTEX/
+use_directory_urls: true
+
+# Custom Tales Theme
+theme:
+  name: null
+  custom_dir: docs/themes/cortex-tales
+  
+# Theme does not use extra_css (CSS is in theme)
+
+# ============================================
+# NAVIGATION STRUCTURE - Chapter-Based
+# Home | The CORTEX Story | Visual Diagrams (with chapter navigation)
+# ============================================
+nav:
+- Home: index.md
+- The CORTEX Story:
+  - Story Home: story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX.md
+  - Prologue: story/CORTEX-STORY/chapters/prologue.md
+  - Chapter 1 - The Amnesia Crisis: story/CORTEX-STORY/chapters/chapter-01.md
+  - Chapter 2 - Tier 0: story/CORTEX-STORY/chapters/chapter-02.md
+  - Chapter 3 - Tier 1: story/CORTEX-STORY/chapters/chapter-03.md
+  - Chapter 4 - The Agent Uprising: story/CORTEX-STORY/chapters/chapter-04.md
+  - Chapter 5 - The Knowledge Graph: story/CORTEX-STORY/chapters/chapter-05.md
+  - Chapter 6 - The Token Crisis: story/CORTEX-STORY/chapters/chapter-06.md
+  - Chapter 7 - Conversation Capture: story/CORTEX-STORY/chapters/chapter-07.md
+  - Chapter 8 - Cross-Platform: story/CORTEX-STORY/chapters/chapter-08.md
+  - Chapter 9 - Performance: story/CORTEX-STORY/chapters/chapter-09.md
+  - Chapter 10 - The Awakening: story/CORTEX-STORY/chapters/chapter-10.md
+  - Epilogue: story/CORTEX-STORY/chapters/epilogue.md
+  - Disclaimer: story/CORTEX-STORY/chapters/disclaimer.md
+- Visual Diagrams:
+  - Architecture Diagrams: architecture-diagrams.md
+  - Integration Diagrams: integration-diagrams.md
+  - Operational Diagrams: operational-diagrams.md
+  - Planning & Strategic Diagrams: planning-diagrams.md
+markdown_extensions:
+- abbr
+- admonition
+- attr_list
+- def_list
+- footnotes
+- meta
+- md_in_html
+- tables
+- toc:
+    permalink: true
+    toc_depth: 2
+    title: "On This Page"
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.betterem:
+    smart_enable: all
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.details
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.snippets
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+
+plugins:
+- search:
+    lang: en

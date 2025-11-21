@@ -732,10 +732,10 @@ cortex --log-level=DEBUG <operation>
 
 ## References
 
-- [Operations Reference](../OPERATIONS-REFERENCE.md) - Complete operation catalog
-- [Configuration Guide](../reference/configuration.md) - Advanced configuration
-- [Architecture Overview](../architecture/overview.md) - System architecture details
-- [Test Strategy](../guides/best-practices.md#testing) - Testing best practices
+- [Operations Reference](../coming-soon.md) - Complete operation catalog
+- [Configuration Guide](../coming-soon.md) - Advanced configuration
+- [Architecture Overview](../coming-soon.md) - System architecture details
+- [Test Strategy](../coming-soon.md) - Testing best practices
 
 ---
 

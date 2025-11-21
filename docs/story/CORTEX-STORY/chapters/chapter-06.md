@@ -1,70 +1,8 @@
 # Chapter 6: The Token Crisis
 
-# Chapter 6: The Token Crisis
-
-"We have a problem," Codenstein announced at breakfast (an actual breakfast, at an actual morning time—his wife had implemented a strict "no coding after midnight" rule after the fourth 3 AM breakthrough).
-
-"Define 'we,'" she said, not looking up from her phone.
-
-"CORTEX is becoming expensive."
-
-That got her attention. "Expensive how?"
-
-He pulled up his laptop, showing her the token analytics. "The main prompt file. It started at 8,000 tokens. Then I added the agent definitions—12,000 tokens. Then Tier architecture documentation—19,000 tokens. Then response templates—"
-
-"How many tokens is it now?"
-
-"Seventy-four thousand."
-
-She set down her coffee. "Tokens are... expensive?"
-
-"Very. And every request loads the full prompt. Seventy-four thousand tokens, every single time. We're burning through API costs like—"
-
-"Like you burn through coffee?"
-
-"Worse. Coffee is cheap. Tokens are not." He showed her the cost analysis. "At current usage, CORTEX would cost about $8,000 a month to run."
-
-"For one user?"
-
-"For one user."
-
-She was quiet for a moment, processing. "So your brilliant AI assistant that gives Copilot perfect memory and specialized agents and knowledge graphs... costs more per month than our mortgage?"
-
-"Technically yes, but—"
-
-"No buts. That's not sustainable." She took his laptop, scrolling through the token breakdown. "What's taking up the most space?"
-
-"Response templates. Thirty-two templates, each with examples, variations, conditions—"
-
-"Do you load all thirty-two templates every time?"
-
-"Yes? They're in the main prompt file—"
-
-"Why?"
-
-He opened his mouth. Closed it. Opened it again. "...Because that's where I put them?"
-
-"That's not a reason. That's a tautology." She stood, grabbing her own laptop. "Show me these templates."
-
----
-
-## The Great Token Purge
-
-What followed was three hours of his wife systematically dismantling his beautiful, elegant, completely unsustainable prompt architecture.
-
-"Response templates don't need to be in the main prompt," she declared, highlighting thirty-two templates for deletion. "They're static. Move them to a YAML file. Load on demand."
-
-"But then we need logic to—"
-
-"Yes. Write logic. That's what developers do." She moved to the next section. "Agent definitions. Do you need the full implementation details in the prompt?"
-
-"It helps Copilot understand—"
-
 "Does it? Or does it help YOU feel like you've documented everything?" She didn't wait for an answer. "Move implementations to separate files. Keep only the interface contracts in the main prompt."
 
-"But—"
-
-"No buts. We're cutting fat. This is liposuction for your prompt." She scrolled faster, ruthlessly identifying bloat. "Example conversations. Why are there seventeen example conversations in here?"
+He started to protest but she cut him off. "No buts. We're cutting fat. This is liposuction for your prompt." She scrolled faster, ruthlessly identifying bloat. "Example conversations. Why are there seventeen example conversations in here?"
 
 "To show Copilot how to respond—"
 
@@ -111,7 +49,7 @@ But 97% more efficient.
 
 "Because you're not loading seventy-four thousand tokens every request," his wife observed from the thinking chair. She'd taken to supervising his late-night coding sessions—not participating, just being present. A reminder that 2 AM breakthroughs were fine, but 4 AM exhaustion was not.
 
-"Cost projections dropped from $8,000 a month to $530," he continued, still scrolling through metrics.
+"Cost projections dropped from $8,000 a month to $530." He kept scrolling through metrics, watching the numbers validate the refactoring.
 
 "That's still expensive."
 
@@ -119,7 +57,7 @@ But 97% more efficient.
 
 "You're getting ahead of yourself." But she was smiling. "First make it work for one user. You. Then worry about scale."
 
-He saved his work, committed with a message that read `CORTEX 2.0 - 97% token reduction - modular architecture complete`, and turned off his monitors.
+He saved his work, committed with a message that read `CORTEX 2.0 - 97% token reduction - modular architecture complete`, and turned off his monitors. The basement grew dark except for the coffee mug timeline, which glowed ominously in the corner.
 
 "You know what the best part is?" he said, heading for the stairs.
 
@@ -144,6 +82,69 @@ But that was a problem for tomorrow.
 Tonight, CORTEX had learned efficiency.
 
 ---
+
+# Chapter 7: The Conversation Capture
+
+The breakthrough came from an unlikely source: his wife's journaling habit.
+
+"Why do you write in that thing every night?" Codenstein asked one evening, watching her fill pages in a leather-bound notebook.
+
+She didn't look up from her writing. "Memory. If I don't write it down, I forget the details. The conversations, the insights, the funny moments."
+
+"But you have good memory."
+
+"I have human memory. Which means I remember the big things and forget the small things. Unless I capture them." She closed the notebook, setting it on the nightstand beside a stack of others—five years of journals, each one a record of thoughts, conversations, decisions.
+
+Codenstein stared at the stack. A realization struck him like lightning. "That's... that's Tier 1. Your journals. They're working memory. You capture recent events, tag them, organize them. Then later they become long-term reference. Tier 3."
+
+She looked at him with mild exasperation. "Are you analyzing my journaling habit?"
+
+"I'm having an epiphany." He was already pulling out his phone, sketching diagrams. The idea crystallized with perfect clarity: CORTEX tracks conversations automatically, but what if users could capture important conversations deliberately? Tag them, annotate them, mark them as significant? Not bookmarking—journaling. Intentional memory capture. Most conversations were ephemeral, just daily work. But some conversations mattered: design decisions, architecture discussions, bug investigations. Those needed to be preserved, tagged, searchable.
+
+She watched him spiral into focus. "You're going to build a conversation journaling system."
+
+"I'm going to let USERS journal their own conversations. Make CORTEX's memory collaborative." He looked up, eyes bright with possibility. "Can I use your journaling system as a model?"
+
+"My journaling system is a notebook and a pen."
+
+"Perfect. Simple. Effective. That's exactly the interface paradigm I need."
+
+She handed him one of her old journals. "Read the March entries. See how I structure things."
+
+He spent the next hour reading, discovering his wife's documentation style: dates, context, key insights, follow-up notes. Simple. Scannable. Useful for future reference.
+
+"This is better than any knowledge management system I've designed," he admitted.
+
+"Because it's designed for humans, not databases." She reclaimed her journal. "Now go build it. And come back to bed at a reasonable hour."
+
+"Define reasonable."
+
+"Before 1 AM."
+
+"I can do that." He kissed her forehead, grabbed his laptop, and headed downstairs.
+
+He didn't make it back before 1 AM. But he did build a working prototype by 2:17 (of course it was 2:17).
+
+---
+
+## The Capture Protocol
+
+```python
+# cortex-brain/tier1/conversation_capture.py
+
+class ConversationCapture:
+    """Intentional memory preservation - user-initiated journaling"""
+    
+    def capture_conversation(self, conv_id: str, tags: List[str], notes: str):
+        """
+        User marks a conversation as significant.
+        Like writing in a journal: this matters, remember it.
+        """
+        pass
+```
+
+The implementation was elegant. Users could mark any conversation as "worth remembering" with tags, notes, and context. CORTEX would then:
+1. Store it in Tier 1 with elevated importance
 
 
 ---

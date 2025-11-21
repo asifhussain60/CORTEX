@@ -24,7 +24,7 @@ CORTEX is an AI-powered development assistant with memory, context, and speciali
 ## Documentation
 
 This site contains:
-- 117 discovered features
+- 106 discovered features
 - 14+ Mermaid diagrams
 - 10+ DALL-E prompts
 - Technical narratives

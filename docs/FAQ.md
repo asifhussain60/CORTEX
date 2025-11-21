@@ -32,7 +32,7 @@
 - Knowledge preservation (never lose important insights)
 - Performance optimization (fast lookups, minimal overhead)
 
-**Learn more:** [Architecture Overview](CAPABILITIES-MATRIX.md#architecture-overview)
+**Learn more:** [Architecture Overview](coming-soon.md)
 
 ---
 
@@ -58,7 +58,7 @@
 
 **Example workflow:** "Add authentication" → Work Planner (plan) → Architect (design) → Executor (implement) → Tester (verify) → Validator (quality check)
 
-**Learn more:** [Agent System Guide](FEATURES.md#agent-system)
+**Learn more:** [Agent System Guide](coming-soon.md)
 
 ---
 
@@ -76,7 +76,7 @@
 
 These rules ensure CORTEX can improve itself without accidentally destroying its own memory or capabilities.
 
-**Learn more:** [Brain Protection Rules](cortex-brain/brain-protection-rules.yaml)
+**Learn more:** [Brain Protection Rules](coming-soon.md)
 
 ---
 
@@ -101,7 +101,7 @@ You (Wednesday): "Implement the caching layer"
 CORTEX: "Based on your PostgreSQL + Redis decision from Monday, here's the caching implementation..."
 ```
 
-**Learn more:** [Conversation Tracking Guide](FEATURES.md#conversation-tracking)
+**Learn more:** [Conversation Tracking Guide](coming-soon.md)
 
 ---
 
@@ -145,7 +145,7 @@ class CodeReviewerAgent(BaseAgent):
         pass
 ```
 
-**Learn more:** [Agent Development Guide](guides/developer-guide.md#custom-agents)
+**Learn more:** [Agent Development Guide](coming-soon.md)
 
 ---
 
@@ -168,7 +168,7 @@ class CodeReviewerAgent(BaseAgent):
 - 16GB RAM (for large knowledge graphs)
 - SSD storage (faster database operations)
 
-**Learn more:** [Installation Guide](getting-started/installation.md)
+**Learn more:** [Installation Guide](coming-soon.md)
 
 ---
 
@@ -204,7 +204,7 @@ python -m pytest tests/
 - **Mac:** May need `python3` instead of `python`
 - **Linux:** Ensure `python3-dev` installed
 
-**Learn more:** [Quick Start Guide](getting-started/quick-start.md)
+**Learn more:** [Quick Start Guide](coming-soon.md)
 
 ---
 
@@ -251,7 +251,7 @@ Open Copilot Chat and type:
 
 You should see CORTEX's formatted response with command table.
 
-**Learn more:** [Configuration Reference](reference/configuration.md)
+**Learn more:** [Configuration Reference](coming-soon.md)
 
 ---
 
@@ -278,7 +278,7 @@ python --version
 - **Mac:** `brew install python@3.11`
 - **Linux:** `sudo apt install python3.11`
 
-**Learn more:** [Setup Guide](getting-started/installation.md#python-requirements)
+**Learn more:** [Setup Guide](coming-soon.md)
 
 ---
 
@@ -338,7 +338,7 @@ mkdocs serve
 # Visit http://localhost:8000
 ```
 
-**Learn more:** [Documentation Operations](operations/workflows.md#documentation-generation)
+**Learn more:** [Documentation Operations](coming-soon.md)
 
 ---
 
@@ -367,7 +367,7 @@ plan login feature
 
 CORTEX extracts UI elements (buttons, inputs, labels) and auto-generates acceptance criteria.
 
-**Learn more:** [Feature Planning Guide](operations/workflows.md#feature-planning)
+**Learn more:** [Feature Planning Guide](coming-soon.md)
 
 ---
 
@@ -395,7 +395,7 @@ capture conversation #file:conversation.md
 
 **Privacy:** All data stored locally (no cloud sync). You control what's captured.
 
-**Learn more:** [Tracking Guide](CORTEX.prompt.md#conversation-tracking)
+**Learn more:** [Tracking Guide](coming-soon.md)
 
 ---
 
@@ -464,7 +464,7 @@ show context
 
 Lists all captured conversations with relevance scores.
 
-**Learn more:** [Conversation Import Guide](operations/workflows.md#conversation-import)
+**Learn more:** [Conversation Import Guide](coming-soon.md)
 
 ---
 
@@ -500,7 +500,7 @@ Lists all captured conversations with relevance scores.
 - `health check`
 - `optimize performance`
 
-**Learn more:** [Operations Reference](operations/overview.md)
+**Learn more:** [Operations Reference](coming-soon.md)
 
 ---
 
@@ -551,7 +551,7 @@ python scripts/reset_brain.py --tier all
 }
 ```
 
-**Learn more:** [Troubleshooting Guide](guides/troubleshooting.md)
+**Learn more:** [Troubleshooting Guide](coming-soon.md)
 
 ---
 
@@ -638,7 +638,7 @@ pip install --upgrade certifi
 # Linux: sudo apt install python3-dev build-essential
 ```
 
-**Learn more:** [Installation Troubleshooting](getting-started/installation.md#troubleshooting)
+**Learn more:** [Installation Troubleshooting](coming-soon.md)
 
 ---
 
@@ -682,7 +682,7 @@ pip install pymdown-extensions mkdocs-mermaid2-plugin
 iconv -f ISO-8859-1 -t UTF-8 file.md > file_utf8.md
 ```
 
-**Learn more:** [MkDocs Configuration](reference/configuration.md#mkdocs)
+**Learn more:** [MkDocs Configuration](coming-soon.md)
 
 ---
 
@@ -723,7 +723,7 @@ python scripts/reset_brain.py --soft --tier all
 python scripts/restore_brain.py --backup backups/cortex-brain-2025-11-20.zip
 ```
 
-**Learn more:** [Brain Management](guides/admin-guide.md#brain-management)
+**Learn more:** [Brain Management](coming-soon.md)
 
 ---
 
@@ -773,7 +773,7 @@ python scripts/benchmark.py
 # Should show <500ms for context injection
 ```
 
-**Learn more:** [Performance Optimization](guides/best-practices.md#performance)
+**Learn more:** [Performance Optimization](coming-soon.md)
 
 ---
 
@@ -821,7 +821,7 @@ custom command
 - Report generator (PDF/HTML/JSON)
 - Code analyzer (complexity metrics)
 
-**Learn more:** [Plugin Development](guides/developer-guide.md#plugins)
+**Learn more:** [Plugin Development](coming-soon.md)
 
 ---
 
@@ -859,7 +859,7 @@ def upgrade():
     conn.commit()
 ```
 
-**Learn more:** [Architecture Customization](guides/developer-guide.md#architecture)
+**Learn more:** [Architecture Customization](coming-soon.md)
 
 ---
 
@@ -910,7 +910,7 @@ python scripts/restore_brain.py --backup backups/tier2-backup.zip --tier 2
 python scripts/sync_brain.py --provider onedrive --remote-path CORTEX-Backup/
 ```
 
-**Learn more:** [Backup & Recovery](guides/admin-guide.md#backup-recovery)
+**Learn more:** [Backup & Recovery](coming-soon.md)
 
 ---
 
@@ -950,7 +950,7 @@ Vs. old monolithic: 74,047 tokens
 Reduction: 96.8%
 ```
 
-**Learn more:** [Optimization Principles](cortex-brain/optimization-principles.yaml)
+**Learn more:** [Optimization Principles](coming-soon.md)
 
 ---
 
@@ -1002,7 +1002,7 @@ git pull
 - Tier 2 (knowledge graph) can be shared (patterns, no raw conversations)
 - Tier 3 (long-term storage) optional (historical archive)
 
-**Learn more:** [Team Deployment](guides/admin-guide.md#team-deployment)
+**Learn more:** [Team Deployment](coming-soon.md)
 
 ---
 
@@ -1044,7 +1044,7 @@ git push origin feature/my-feature
 - Community discussions
 - Conference talks
 
-**Contribution Guidelines:** [CONTRIBUTING.md](../CONTRIBUTING.md)
+**Contribution Guidelines:** [CONTRIBUTING.md](coming-soon.md)
 
 ---
 
@@ -1091,7 +1091,7 @@ pytest --cov=src --cov-report=html
 
 **Test-Driven Development (TDD):** Write tests before implementation.
 
-**Learn more:** [Testing Strategy](cortex-brain/test-strategy.yaml)
+**Learn more:** [Testing Strategy](coming-soon.md)
 
 ---
 
@@ -1143,7 +1143,7 @@ pip install pytest-watch
 ptw tests/ -- --cov=src
 ```
 
-**Learn more:** [Developer Guide](guides/developer-guide.md#testing)
+**Learn more:** [Developer Guide](coming-soon.md)
 
 ---
 
@@ -1177,7 +1177,7 @@ ptw tests/ -- --cov=src
 - Vote on features in [GitHub Discussions](https://github.com/asifhussain60/CORTEX/discussions)
 - Feature requests: [GitHub Issues](https://github.com/asifhussain60/CORTEX/issues)
 
-**Learn more:** [ROADMAP.md](../ROADMAP.md)
+**Learn more:** [ROADMAP.md](coming-soon.md)
 
 ---
 
@@ -1228,7 +1228,7 @@ ptw tests/ -- --cov=src
 - **Source code available:** Read, study, modify for personal use
 - **Contributions welcome:** Contributors retain rights, grant MIT license to project
 
-**Full License:** [LICENSE](../LICENSE)
+**Full License:** [LICENSE](coming-soon.md)
 
 **Contact:** For commercial licensing inquiries, email: asif@example.com
 

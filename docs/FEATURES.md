@@ -1,143 +1,398 @@
 # CORTEX Features
 
-**Version:** 3.0  
-**Status:** Production Ready  
-**Last Updated:** 2025
+**Generated:** 2025-11-21 08:51:59
 
----
+## Operations (23)
 
-## Overview
+- ⏳ **application_onboarding** - One-command CORTEX deployment with intelligent codebase discovery and contextual questioning
+- ⏳ **architecture_planning** - [FUTURE] Collaborative architecture design with guided questions - Advanced planning feature
+- ⏳ **brain_health_check** - [DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations
+- ⏳ **brain_protection_check** - [EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically
+- ⏳ **command_help** - [INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface
+- ⏳ **command_search** - [INTEGRATED] Command search integrated into CORTEX help system and natural language interface
+- ⏳ **comprehensive_self_review** - [EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature
+- ✅ **cortex_tutorial** - Hands-on walkthrough of CORTEX capabilities with live execution
+- ⏳ **deploy_to_app** - [FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature
+- ✅ **design_sync** - Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas
+- ✅ **document_cortex** - Comprehensive CORTEX documentation management combining story refresh and documentation updates
+- ✅ **enterprise_documentation** - EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows
+- ✅ **environment_setup** - Configure CORTEX development environment on Mac/Windows/Linux
+- ✅ **feature_planning** - Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
+- ⏳ **interactive_planning** - [INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities
+- ✅ **maintain_cortex** - Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics
+- ⏳ **optimize_cortex** - [DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations
+- ✅ **publish_cortex** - Build production-ready package and publish to cortex-publish branch for user deployment
+- ⏳ **refactoring_planning** - [FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance
+- ✅ **regenerate_diagrams** - Analyze CORTEX design and regenerate all visual assets from scratch
+- ⏳ **run_tests** - [INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation
+- ⏳ **update_documentation** - [DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site
+- ⏳ **user_onboarding** - Guided new user experience with interactive learning and hands-on validation
 
-CORTEX is a multi-tier AI development assistant with persistent memory, intelligent context management, and natural language operations.
+## Modules (45)
 
-## Core Features
+- ⏳ **apply_narrator_voice** - Transform story with narrator voice
+- ⏳ **brain_initialization** - Initialize CORTEX brain tiers
+- ⏳ **brain_tests** - Run brain integrity tests
+- ⏳ **build_mkdocs_site** - Build complete documentation site
+- ⏳ **build_story_preview** - Generate HTML preview of transformed story
+- ⏳ **clear_python_cache** - Remove __pycache__ directories
+- ⏳ **compress_old_files** - Compress large old files
+- ⏳ **conversation_tracking** - Configure conversation capture daemon
+- ⏳ **demo_cleanup** - Demonstrate cleanup operation
+- ⏳ **demo_completion** - Summary and next steps
+- ⏳ **demo_conversation** - Demonstrate conversation memory
+- ⏳ **demo_help_system** - Demonstrate help command capabilities
+- ⏳ **demo_introduction** - Welcome message and demo flow explanation
+- ⏳ **demo_story_refresh** - Show story transformation in action
+- ⏳ **deploy_docs_preview** - Deploy story preview to docs site
+- ⏳ **deploy_docs_site** - Deploy docs to GitHub Pages
+- ⏳ **docs_completion** - Finalize documentation with summary
+- ⏳ **generate_api_docs** - Generate API reference documentation
+- ⏳ **generate_cleanup_report** - Create cleanup summary report
+- ⏳ **generate_diagrams** - Generate architecture diagrams
+- ⏳ **git_sync** - Sync project with remote git repository
+- ⏳ **load_story_source** - Load original CORTEX story markdown
+- ⏳ **load_story_template** - Load story template for transformation
+- ⏳ **platform_detection** - Detect OS and configure platform-specific settings
+- ⏳ **project_validation** - Validate CORTEX project structure
+- ⏳ **python_dependencies** - Install required Python packages
+- ⏳ **refresh_design_docs** - Update design documentation files
+- ⏳ **remove_old_logs** - Clean up old log files
+- ⏳ **remove_orphaned_files** - Clean up orphaned temporary files
+- ⏳ **save_story_markdown** - Write transformed story to file
+- ⏳ **scan_docstrings** - Extract docstrings from source code
+- ⏳ **scan_temporary_files** - Identify temporary files for removal
+- ⏳ **setup_completion** - Finalize setup and provide summary
+- ⏳ **story_length_manager** - Manage story length and token optimization
+- ⏳ **story_refresh_completion** - Finalize story refresh with summary
+- ⏳ **tooling_verification** - Verify required tools are available
+- ⏳ **update_changelog** - Update CHANGELOG.md
+- ⏳ **update_mkdocs_index** - Update documentation index
+- ⏳ **update_story_docs** - Update story in documentation site
+- ⏳ **vacuum_sqlite_databases** - Optimize SQLite database files
+- ⏳ **validate_cleanup_safety** - Ensure cleanup didn't break anything
+- ⏳ **validate_doc_links** - Check for broken links in docs
+- ⏳ **validate_story_structure** - Ensure story meets structural requirements
+- ⏳ **virtual_environment** - Create and configure Python virtual environment
+- ⏳ **vision_api** - Configure Google Cloud Vision API
 
-### Memory & Context
+## Plugins (25)
 
-<div class="feature-list">
+- ✅ **BasePlugin** - Abstract base class for all CORTEX plugins.
 
-- **4-Tier Memory Architecture:** Working memory, knowledge graph, context intelligence, and long-term storage
-- **Automatic Context Injection:** Relevant past conversations auto-loaded based on keywords, files, and intent
-- **Semantic Search:** Find related discussions using natural language queries
-- **Conversation Scoring:** Relevance algorithms prioritize most useful context (0.0-1.0 confidence)
-- **Cross-Session Continuity:** Maintain context across days, files, and projects
-- **Entity Extraction:** Automatic identification of classes, functions, patterns from conversations
+All plugins must:
+1. Inherit from BasePlugin
+2. Implement _get_metadata() method
+3. Implement initialize() method
+4. Implement execute() method
+5. Implement cleanup() method
 
-</div>
+Example:
+```python
+class MyPlugin(BasePlugin):
+    def _get_metadata(self) -> PluginMetadata:
+        return PluginMetadata(
+            plugin_id="my_plugin",
+            name="My Plugin",
+            version="1.0.0",
+            category=PluginCategory.WORKFLOW,
+            priority=PluginPriority.MEDIUM,
+            description="Does something useful",
+            author="Your Name",
+            dependencies=[],
+            hooks=[HookPoint.ON_WORKFLOW_START.value],
+            config_schema={}
+        )
+    
+    def initialize(self) -> bool:
+        # Setup plugin resources
+        return True
+    
+    def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        # Main plugin logic
+        return {"success": True}
+    
+    def cleanup(self) -> bool:
+        # Cleanup plugin resources
+        return True
+```
+- ✅ **BrainTransferPlugin** - Brain Transfer Plugin for CORTEX.
 
-### Documentation Generation
+Provides:
+- Export brain patterns to YAML
+- Import brain patterns from YAML
+- Intelligent conflict resolution
+- Namespace-aware merging
+- ✅ **CodeReviewPlugin** - Automated code review plugin for pull requests
 
-<div class="feature-list">
+Features:
+- SOLID principle violation detection
+- Security vulnerability scanning
+- Performance anti-pattern detection
+- Test coverage regression checking
+- Code style consistency validation
+- Duplicate code detection
+- Integration with Azure DevOps, GitHub, GitLab, BitBucket
+- ✅ **ConfigurationWizardPlugin** - Configuration Wizard Plugin
 
-- **Enterprise Documentation Orchestrator:** One-command comprehensive docs generation
-- **Mermaid Diagram Generation:** Architecture, workflow, and dependency diagrams from YAML
-- **Story Generation:** "The Awakening of CORTEX" narrative with chapter structure
-- **MkDocs Integration:** Automated site build with custom Tales dark theme
-- **Cross-Reference Links:** Automatic linking between related documentation pages
-- **Live Brain Sources:** Documentation generated from actual CORTEX brain data (no placeholders)
+Provides incremental, post-setup configuration with intelligent
+auto-discovery. Does NOT block initial setup.
 
-</div>
+Architecture:
+- Phase 1: Auto-discovery (scan environment, files, code)
+- Phase 2: User confirmation (review discovered items)
+- Phase 3: Manual entry (fill gaps)
+- Phase 4: Validation (test connections)
+- Phase 5: Save to cortex.config.json
+- ✅ **ConversationImportPlugin** - Plugin for importing Copilot conversations to CORTEX brain.
 
-### Code Analysis
+Provides dual-channel learning:
+- Channel 1: Ambient daemon (execution-focused)
+- Channel 2: Manual conversations (strategy-focused)
+- ✅ **DocRefreshPlugin** - Orchestrates documentation refresh operations using modular services
+- ✅ **InvestigationHtmlIdMappingPlugin** - HTML element ID mapping plugin for investigation router
+- ✅ **InvestigationRefactoringPlugin** - Refactoring analysis plugin for investigation router
+- ✅ **InvestigationSecurityPlugin** - Security analysis plugin for investigation router
+- ✅ **PerformanceTelemetryPlugin** - Collects CORTEX performance and business value metrics for team analytics.
 
-<div class="feature-list">
+Tracked Metrics:
+1. Performance: Latency, success rates, error patterns, trends
+2. Cost Savings: Token optimization ($$$), API cost avoidance
+3. Productivity: Commits, PRs, velocity, code quality
+4. Copilot Enhancement: Memory hits, context utilization, suggestion quality
+5. Quality: Bug reduction, test coverage, code review efficiency
 
-- **Codebase Crawler:** Systematic scanning of source files, dependencies, API endpoints
-- **Dependency Graph:** Visual representation of module relationships and import chains
-- **Architecture Discovery:** Automatic identification of patterns, anti-patterns, tech stack
-- **File Relationship Mapping:** Track which files depend on each other
-- **Health Monitoring:** Continuous validation of code quality, test coverage, performance
-- **Integration Detection:** Identify API contracts, external services, database schemas
+Engineer Attribution:
+- Name, email, machine hostname
+- Machine specs (CPU, RAM, platform)
+- Installation date, CORTEX version
 
-</div>
+Use Case: Internal team analytics and executive ROI reporting
+- ✅ **PhaseTrackerPlugin** - Phase tracking plugin for CORTEX workflow management.
 
-### Natural Language Interface
+Features:
+- Create and manage phase tracking for projects
+- Track progress, blockers, time estimates
+- Support multi-track development
+- Integration with CORTEX agents and operations
+- ✅ **PlatformSwitchPlugin** - Handles platform switching for CORTEX development.
 
-<div class="feature-list">
+Automates:
+1. Git pull latest code
+2. Environment setup for platform
+3. Brain tests validation
+4. Tooling and dependencies verification
+- ✅ **Plugin** - Comprehensive Cleanup Plugin for CORTEX
+- ✅ **PluginCategory** - Plugin categories for organization
+- ✅ **PluginCommandRegistry** - Central registry for all plugin commands.
 
-- **Zero Commands:** No slash commands or syntax to memorize - just natural language
-- **Intent Detection:** Automatic routing to appropriate agent (PLAN, EXECUTE, TEST, etc.)
-- **Template-Based Responses:** Pre-formatted responses for common operations
-- **Context-Aware Replies:** Response style adapts to work type (feature, debug, docs)
-- **Multi-Turn Conversations:** Maintain conversation state across multiple interactions
-- **Question Clarification:** Interactive Q&A for feature planning and requirements
+Features:
+- Automatic conflict detection
+- O(1) command lookup
+- Auto-generated help text
+- Plugin discovery
 
-</div>
+Usage:
+    registry = PluginCommandRegistry()
+    
+    # Plugin registers commands during initialization
+    registry.register_command(CommandMetadata(
+        command="/mac",
+        natural_language_equivalent="switched to mac",
+        plugin_id="platform_switch",
+        ...
+    ))
+    
+    # Router expands commands
+    expanded = registry.expand_command("/mac")
+    # → "switched to mac"
+- ✅ **PluginConfig** - Complete plugin configuration
+- ✅ **PluginManager** - Manages plugin lifecycle and execution.
 
-### Testing & Validation
+Responsibilities:
+- Plugin discovery and loading
+- Hook registration and execution
+- Plugin dependency resolution
+- Configuration management
+- ✅ **PluginMetadata** - Standardized metadata for all plugins
+- ✅ **PluginPriority** - Plugin execution priority
+- ✅ **PluginProcessor** - Process and execute YAML-based plugins
+- ✅ **PluginRegistry** - Central registry for plugin management.
 
-<div class="feature-list">
+Responsibilities:
+- Plugin discovery and loading
+- Plugin lifecycle management (init, execute, cleanup)
+- Plugin metadata and capability tracking
+- Natural language command routing
+- ✅ **PluginRegistryCrawler** - Inventories CORTEX plugin system to analyze:
+- Registered plugins (active/inactive)
+- Natural language patterns
+- Command registry entries
+- Plugin health and initialization
+- ✅ **PluginType** - Plugin categories
+- ✅ **SweeperPlugin** - Aggressive file sweeper - moves clutter to Recycle Bin (reversible).
 
-- **TDD Enforcement:** Test-first development required by Tier 0 instinct
-- **SKULL Rules:** 7 protection rules preventing common testing mistakes
-- **834/897 Tests Passing:** 100% pass rate for non-skipped tests (93% overall)
-- **Three-Tier Test Strategy:** BLOCKING (fix immediately), WARNING (skip with reason), PRAGMATIC (adjust thresholds)
-- **Performance Budgets:** Reality-based thresholds for file sizes, load times, execution speed
-- **Integration Testing:** End-to-end workflow validation across all tiers
+Usage:
+    sweeper = SweeperPlugin()
+    sweeper.initialize()
+    results = sweeper.execute({"workspace_root": "/path/to/cortex"})
+- ✅ **SystemRefactorPlugin** - Plugin for critical system review and automated refactoring.
 
-</div>
+Capabilities:
+- Analyze test coverage across all layers
+- Identify gaps in brain protection, plugins, modules
+- Execute REFACTOR phase for tests in GREEN state
+- Generate comprehensive review reports
+- Automate gap-filling through test generation
 
-### Security & Governance
+## Agents (25)
 
-<div class="feature-list">
+- ✅ **AgentExecutionError** - Raised when agent execution fails
+- ✅ **AgentExecutor** - Executes specific agents based on routing decisions.
 
-- **Brain Protection System:** 10 layers with 27 automated rules
-- **Tier 0 Instinct:** 19 immutable rules that cannot be bypassed
-- **SOLID Principles:** Automated enforcement of design principles
-- **Git Isolation:** Separate CORTEX data from user application code
-- **Privacy First:** All data stays local, no cloud sync, no telemetry
-- **Commit Validation:** Pre-commit hooks validate quality before push
+This class takes routing decisions from IntentRouter and actually
+instantiates and executes the appropriate specialist agents.
+- ✅ **AgentMessage** - Message format for agent-to-agent communication in workflows.
 
-</div>
+Used for orchestrating multi-agent workflows like TDD cycle.
 
-### Operations & Workflows
+Attributes:
+    from_agent: Name of the sending agent
+    to_agent: Name of the receiving agent
+    command: Command/action to perform
+    payload: Data payload for the command
+    correlation_id: Optional ID to correlate related messages
 
-<div class="feature-list">
+Example:
+    message = AgentMessage(
+        from_agent="workflow-orchestrator",
+        to_agent="test-generator",
+        command="create_test",
+        payload={"task": "auth", "expect_failure": True}
+    )
+- ✅ **AgentMetrics** - Metrics for agent performance tracking
+- ✅ **AgentNotFoundError** - Raised when no agent can handle a request
+- ✅ **AgentRequest** - Standard request format for all agents.
 
-- **24 Operations Available:** Setup, maintenance, documentation, planning, deployment
-- **Plugin System:** Extensible architecture with zero external dependencies
-- **Work Planner:** Interactive feature planning with DoR/DoD/Acceptance Criteria
-- **Design Sync:** Automatic synchronization between design docs and implementation
-- **Health Diagnostics:** Comprehensive system validation and optimization
-- **Cleanup Orchestrator:** Automated workspace cleanup with safety rules
+Attributes:
+    intent: The classified user intent (e.g., "plan", "code", "test")
+    context: Additional context information (files, settings, etc.)
+    user_message: Original user message text
+    conversation_id: Optional ID linking to Tier 1 conversation
+    priority: Request priority level (default: NORMAL)
+    metadata: Additional metadata for the request
 
-</div>
+Example:
+    request = AgentRequest(
+        intent="plan",
+        context={"feature": "authentication"},
+        user_message="Add user authentication"
+    )
+- ✅ **AgentResponse** - Standard response format for all agents.
 
+Attributes:
+    success: Whether the agent executed successfully
+    result: The main result/output from the agent
+    message: Human-readable message describing the outcome
+    metadata: Additional metadata about the execution
+    agent_name: Name of the agent that generated this response
+    duration_ms: Execution time in milliseconds
+    next_actions: Suggested follow-up actions
+    error: Optional error message if execution failed
 
-## Operations
+Example:
+    response = AgentResponse(
+        success=True,
+        result={"tasks": ["Create auth model", "Add login route"]},
+        message="Feature broken down into 2 tasks",
+        agent_name="WorkPlanner"
+    )
+- ✅ **AgentRole** - Enhanced agent roles for 3.0
+- ✅ **AgentTask** - Task for agent execution
+- ✅ **AgentTier** - Agent hierarchy tiers
+- ✅ **AgentTimeoutError** - Raised when agent execution exceeds timeout
+- ✅ **AgentType** - Categories of specialist agents
+- ✅ **ArchitectAgent** - Strategic agent for architectural analysis with automatic brain saving.
 
-Total operations available: **24**
+Performs deep architectural analysis including:
+- Shell structure analysis (layout, navigation, panels)
+- Routing system mapping (states, URLs, templates)
+- View injection pattern documentation
+- Feature directory structure analysis
+- Component interaction flows
 
-- ✅ **Publish CORTEX to Branch**: Build production-ready package and publish to cortex-publish branch for user deployment
-- ✅ **Regenerate All Diagrams**: Analyze CORTEX design and regenerate all visual assets from scratch
-- ✅ **CORTEX Interactive Demo**: Hands-on walkthrough of CORTEX capabilities with live execution
-- ✅ **Environment Setup**: Configure CORTEX development environment on Mac/Windows/Linux
-- ✅ **CORTEX Documentation**: Comprehensive CORTEX documentation management combining story refresh and documentation updates
-- ✅ **Enterprise Documentation Generator**: EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows
-- ⏸️ **Refresh CORTEX Story**: [DEPRECATED] Use 'document_cortex' instead - Update CORTEX story documentation with narrator voice transformation
-- ✅ **CORTEX Maintenance**: Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics
-- ✅ **Feature Planning**: Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
-- ⏸️ **Update Documentation**: [DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site
-- ⏸️ **Brain Protection Validation**: [EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically
-- ⏸️ **Brain Health Check & Self-Optimization**: [DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations
-- ⏸️ **Comprehensive Self-Review**: [EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature
-- ⏸️ **Test Suite Execution**: [INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation
-- ⏸️ **CORTEX Optimization**: [DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations
-- ⏸️ **Deploy CORTEX to Application**: [FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature
-- ✅ **Design-Implementation Synchronization**: Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas
-- ⏸️ **Interactive Feature Planning**: [INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities
-- ⏸️ **Architecture Solution Planning**: [FUTURE] Collaborative architecture design with guided questions - Advanced planning feature
-- ✅ **Application Onboarding & Intelligent Analysis**: One-command CORTEX deployment with intelligent codebase discovery and contextual questioning
-- ✅ **User Onboarding & CORTEX Introduction**: Guided new user experience with interactive learning and hands-on validation
-- ⏸️ **Refactoring Module Planning**: [FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance
-- ⏸️ **Command Discovery & Help**: [INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface
-- ⏸️ **Command Search**: [INTEGRATED] Command search integrated into CORTEX help system and natural language interface
+Key Features:
+- Automatic namespace detection (e.g., ksessions_architecture)
+- Structured analysis data persistence
+- Cross-session memory via Tier 2 Knowledge Graph
+- User confirmation of brain saves
 
-## Modules
+Example:
+    architect = ArchitectAgent("Architect", tier1_api, tier2_kg, tier3_context)
+    
+    request = AgentRequest(
+        intent="analyze_architecture",
+        context={"workspace_path": "/path/to/KSESSIONS"},
+        user_message="crawl shell.html to understand KSESSIONS architecture"
+    )
+    
+    response = architect.execute(request)
+    # Analysis automatically saved to brain with namespace: ksessions_architecture
+- ✅ **BaseAgent** - Base class for all CORTEX agents.
 
-Total modules implemented: **45**
+Provides common functionality including:
+- Logging configuration
+- Metrics tracking  
+- Error handling
+- Execution timing
+- Health monitoring
+- ✅ **BrainIngestionAdapterAgent** - Adapter to bridge interface differences
+- ✅ **BrainIngestionAgent** - Abstract base class for brain ingestion agent
+- ✅ **BrainIngestionAgentImpl** - Implementation of Brain Ingestion Agent that extracts feature intelligence
+and stores it in CORTEX brain tiers.
+- ✅ **CodeReviewerAgent** - Specialized agent for code quality analysis
+- ✅ **CortexAgentError** - Base exception for all CORTEX agent errors
+- ✅ **DependencyAnalyzerAgent** - Specialized agent for dependency analysis
+- ✅ **EnhancedAgentSystem** - Main enhanced agent system for CORTEX 3.0
+- ✅ **InteractivePlannerAgent** - Interactive Planning Agent - CORTEX 2.1
 
+Collaborative planning through guided dialogue. Detects ambiguity
+in user requests, asks up to 5 clarifying questions, and creates
+refined implementation plans based on answers.
 
----
+Features:
+- Confidence-based routing (auto-detect when to ask questions)
+- Question budget (max 5 questions per session)
+- User controls: skip, done, back, restart, abort
+- Session persistence (can resume interrupted sessions)
+- User preference learning (adapts over time)
 
-*Generated by CORTEX Documentation System*
+Workflow:
+1. Detect ambiguity in user request
+2. If confidence < 60%, enter interactive mode
+3. Ask up to 5 clarifying questions (one at a time)
+4. Build refined plan from answers
+5. Confirm plan with user
+6. Execute or save for later
+
+Example:
+    planner = InteractivePlannerAgent("Planner", tier1, tier2, tier3)
+    
+    request = AgentRequest(
+        intent="plan",
+        context={},
+        user_message="Refactor authentication"
+    )
+    
+    response = planner.execute(request)
+    # Returns session with questions to ask
+- ✅ **LearningCaptureAgent** - Agent that automatically captures lessons learned from various sources.
+
+Sources:
+- Operation execution results (success/failure patterns)
+- Error traces and exceptions
+- Git commit messages and diffs
+- Ambient daemon events (file changes, terminal output, errors)
+- SKULL protection violations
+- ✅ **MultiAgentOrchestrator** - Orchestrates multi-agent workflows
+- ✅ **SubAgent** - Base class for specialized sub-agents

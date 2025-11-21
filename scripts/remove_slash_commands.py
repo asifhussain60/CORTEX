@@ -60,7 +60,7 @@ Natural Language Examples (Still Work):
 - "demo" → cortex_tutorial
 - "setup environment" → environment_setup  
 - "cleanup" → workspace_cleanup
-- "refresh story" → refresh_cortex_story
+- "generate documentation" → enterprise_documentation
 
 Next Steps:
 1. Update CORTEX.prompt.md (remove slash command sections)

@@ -268,7 +268,6 @@ custom_exclusions:
   # Artifact protection (crawler outputs and data products)
   - ".*artifacts/.*"         # All files in artifacts directory
   - ".*crawler-outputs/.*"   # Crawler data products
-  - "ALIST-.*\\.md"          # ALIST crawler output files
   
   # Active work-in-progress (adjust as needed)
   # - "WIP-feature-X.md"

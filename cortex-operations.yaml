@@ -276,7 +276,6 @@ operations:
       estimated_hours: 20
       completion_date: "2025-11-14"
       consolidation_from:
-        - refresh_cortex_story
         - update_documentation
   enterprise_documentation:
     name: Enterprise Documentation Generator
@@ -335,36 +334,6 @@ operations:
         - modules/diagram_generator.py
         - modules/page_generator.py
         - modules/cross_reference_builder.py
-  refresh_cortex_story:
-    name: Refresh CORTEX Story
-    description: "Generate comprehensive 9-chapter CORTEX story with Asif Codeinstein narrative from source files"
-    deployment_tier: admin  # ✅ Admin-only (updates CORTEX's own docs)
-    status: active
-    natural_language:
-    - refresh story
-    - refresh cortex story
-    - update story
-    - regenerate story
-    - update cortex story
-    - generate story
-    - build story
-    - create awakening story
-    category: documentation
-    modules:
-    - build_consolidated_story
-    profiles:
-      quick:
-        description: Generate consolidated story from 9 chapter files
-        modules:
-        - build_consolidated_story
-      standard:
-        description: Generate consolidated story (same as quick)
-        modules:
-        - build_consolidated_story
-      full:
-        description: Generate consolidated story (same as quick)
-        modules:
-        - build_consolidated_story
   maintain_cortex:
     name: CORTEX Maintenance
     description: Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics

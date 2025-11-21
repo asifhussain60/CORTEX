@@ -1,0 +1,1888 @@
+{
+  "generated_at": "2025-11-21T08:51:59.312524",
+  "total_capabilities": 129,
+  "by_type": {
+    "module": 45,
+    "capability": 11,
+    "operation": 23,
+    "agent": 25,
+    "plugin": 25
+  },
+  "capabilities": {
+    "module:demo_introduction": {
+      "name": "demo_introduction",
+      "type": "module",
+      "description": "Welcome message and demo flow explanation",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:demo_help_system": {
+      "name": "demo_help_system",
+      "type": "module",
+      "description": "Demonstrate help command capabilities",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "demo_introduction"
+        ],
+        "exports": []
+      }
+    },
+    "module:demo_story_refresh": {
+      "name": "demo_story_refresh",
+      "type": "module",
+      "description": "Show story transformation in action",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "demo_introduction",
+          "demo_help_system"
+        ],
+        "exports": []
+      }
+    },
+    "module:demo_cleanup": {
+      "name": "demo_cleanup",
+      "type": "module",
+      "description": "Demonstrate cleanup operation",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "demo_introduction",
+          "demo_help_system"
+        ],
+        "exports": []
+      }
+    },
+    "module:demo_conversation": {
+      "name": "demo_conversation",
+      "type": "module",
+      "description": "Demonstrate conversation memory",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "demo_introduction"
+        ],
+        "exports": []
+      }
+    },
+    "module:demo_completion": {
+      "name": "demo_completion",
+      "type": "module",
+      "description": "Summary and next steps",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "demo_introduction"
+        ],
+        "exports": []
+      }
+    },
+    "module:project_validation": {
+      "name": "project_validation",
+      "type": "module",
+      "description": "Validate CORTEX project structure",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:platform_detection": {
+      "name": "platform_detection",
+      "type": "module",
+      "description": "Detect OS and configure platform-specific settings",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "project_validation"
+        ],
+        "exports": []
+      }
+    },
+    "module:git_sync": {
+      "name": "git_sync",
+      "type": "module",
+      "description": "Sync project with remote git repository",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "platform_detection"
+        ],
+        "exports": []
+      }
+    },
+    "module:virtual_environment": {
+      "name": "virtual_environment",
+      "type": "module",
+      "description": "Create and configure Python virtual environment",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "platform_detection"
+        ],
+        "exports": []
+      }
+    },
+    "module:python_dependencies": {
+      "name": "python_dependencies",
+      "type": "module",
+      "description": "Install required Python packages",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "virtual_environment"
+        ],
+        "exports": []
+      }
+    },
+    "module:vision_api": {
+      "name": "vision_api",
+      "type": "module",
+      "description": "Configure Google Cloud Vision API",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "python_dependencies"
+        ],
+        "exports": []
+      }
+    },
+    "module:conversation_tracking": {
+      "name": "conversation_tracking",
+      "type": "module",
+      "description": "Configure conversation capture daemon",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "python_dependencies"
+        ],
+        "exports": []
+      }
+    },
+    "module:brain_initialization": {
+      "name": "brain_initialization",
+      "type": "module",
+      "description": "Initialize CORTEX brain tiers",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "python_dependencies"
+        ],
+        "exports": []
+      }
+    },
+    "module:brain_tests": {
+      "name": "brain_tests",
+      "type": "module",
+      "description": "Run brain integrity tests",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "brain_initialization"
+        ],
+        "exports": []
+      }
+    },
+    "module:tooling_verification": {
+      "name": "tooling_verification",
+      "type": "module",
+      "description": "Verify required tools are available",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "platform_detection"
+        ],
+        "exports": []
+      }
+    },
+    "module:setup_completion": {
+      "name": "setup_completion",
+      "type": "module",
+      "description": "Finalize setup and provide summary",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "brain_initialization"
+        ],
+        "exports": []
+      }
+    },
+    "module:scan_temporary_files": {
+      "name": "scan_temporary_files",
+      "type": "module",
+      "description": "Identify temporary files for removal",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:remove_old_logs": {
+      "name": "remove_old_logs",
+      "type": "module",
+      "description": "Clean up old log files",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "scan_temporary_files"
+        ],
+        "exports": []
+      }
+    },
+    "module:clear_python_cache": {
+      "name": "clear_python_cache",
+      "type": "module",
+      "description": "Remove __pycache__ directories",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:vacuum_sqlite_databases": {
+      "name": "vacuum_sqlite_databases",
+      "type": "module",
+      "description": "Optimize SQLite database files",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:remove_orphaned_files": {
+      "name": "remove_orphaned_files",
+      "type": "module",
+      "description": "Clean up orphaned temporary files",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "scan_temporary_files"
+        ],
+        "exports": []
+      }
+    },
+    "module:compress_old_files": {
+      "name": "compress_old_files",
+      "type": "module",
+      "description": "Compress large old files",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:validate_cleanup_safety": {
+      "name": "validate_cleanup_safety",
+      "type": "module",
+      "description": "Ensure cleanup didn't break anything",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:generate_cleanup_report": {
+      "name": "generate_cleanup_report",
+      "type": "module",
+      "description": "Create cleanup summary report",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:load_story_source": {
+      "name": "load_story_source",
+      "type": "module",
+      "description": "Load original CORTEX story markdown",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:load_story_template": {
+      "name": "load_story_template",
+      "type": "module",
+      "description": "Load story template for transformation",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "load_story_source"
+        ],
+        "exports": []
+      }
+    },
+    "module:validate_story_structure": {
+      "name": "validate_story_structure",
+      "type": "module",
+      "description": "Ensure story meets structural requirements",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "load_story_source"
+        ],
+        "exports": []
+      }
+    },
+    "module:apply_narrator_voice": {
+      "name": "apply_narrator_voice",
+      "type": "module",
+      "description": "Transform story with narrator voice",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "validate_story_structure"
+        ],
+        "exports": []
+      }
+    },
+    "module:story_length_manager": {
+      "name": "story_length_manager",
+      "type": "module",
+      "description": "Manage story length and token optimization",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "apply_narrator_voice"
+        ],
+        "exports": []
+      }
+    },
+    "module:build_story_preview": {
+      "name": "build_story_preview",
+      "type": "module",
+      "description": "Generate HTML preview of transformed story",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "apply_narrator_voice"
+        ],
+        "exports": []
+      }
+    },
+    "module:deploy_docs_preview": {
+      "name": "deploy_docs_preview",
+      "type": "module",
+      "description": "Deploy story preview to docs site",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "build_story_preview"
+        ],
+        "exports": []
+      }
+    },
+    "module:update_story_docs": {
+      "name": "update_story_docs",
+      "type": "module",
+      "description": "Update story in documentation site",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "apply_narrator_voice"
+        ],
+        "exports": []
+      }
+    },
+    "module:save_story_markdown": {
+      "name": "save_story_markdown",
+      "type": "module",
+      "description": "Write transformed story to file",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "apply_narrator_voice"
+        ],
+        "exports": []
+      }
+    },
+    "module:story_refresh_completion": {
+      "name": "story_refresh_completion",
+      "type": "module",
+      "description": "Finalize story refresh with summary",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "apply_narrator_voice"
+        ],
+        "exports": []
+      }
+    },
+    "module:scan_docstrings": {
+      "name": "scan_docstrings",
+      "type": "module",
+      "description": "Extract docstrings from source code",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:generate_api_docs": {
+      "name": "generate_api_docs",
+      "type": "module",
+      "description": "Generate API reference documentation",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "scan_docstrings"
+        ],
+        "exports": []
+      }
+    },
+    "module:build_mkdocs_site": {
+      "name": "build_mkdocs_site",
+      "type": "module",
+      "description": "Build complete documentation site",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:update_mkdocs_index": {
+      "name": "update_mkdocs_index",
+      "type": "module",
+      "description": "Update documentation index",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "build_mkdocs_site"
+        ],
+        "exports": []
+      }
+    },
+    "module:validate_doc_links": {
+      "name": "validate_doc_links",
+      "type": "module",
+      "description": "Check for broken links in docs",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "build_mkdocs_site"
+        ],
+        "exports": []
+      }
+    },
+    "module:refresh_design_docs": {
+      "name": "refresh_design_docs",
+      "type": "module",
+      "description": "Update design documentation files",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:generate_diagrams": {
+      "name": "generate_diagrams",
+      "type": "module",
+      "description": "Generate architecture diagrams",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:update_changelog": {
+      "name": "update_changelog",
+      "type": "module",
+      "description": "Update CHANGELOG.md",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "module:deploy_docs_site": {
+      "name": "deploy_docs_site",
+      "type": "module",
+      "description": "Deploy docs to GitHub Pages",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [
+          "build_mkdocs_site"
+        ],
+        "exports": []
+      }
+    },
+    "module:docs_completion": {
+      "name": "docs_completion",
+      "type": "module",
+      "description": "Finalize documentation with summary",
+      "status": "pending",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "tier": "",
+        "dependencies": [],
+        "exports": []
+      }
+    },
+    "capability:Code Writing": {
+      "name": "Code Writing",
+      "type": "capability",
+      "description": "",
+      "status": "implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Code Review": {
+      "name": "Code Review",
+      "type": "capability",
+      "description": "",
+      "status": "partial",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Code Rewrite": {
+      "name": "Code Rewrite",
+      "type": "capability",
+      "description": "",
+      "status": "implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Backend Testing": {
+      "name": "Backend Testing",
+      "type": "capability",
+      "description": "",
+      "status": "implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Mobile Testing": {
+      "name": "Mobile Testing",
+      "type": "capability",
+      "description": "",
+      "status": "not_implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Web Testing": {
+      "name": "Web Testing",
+      "type": "capability",
+      "description": "",
+      "status": "implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Code Documentation": {
+      "name": "Code Documentation",
+      "type": "capability",
+      "description": "",
+      "status": "implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:Reverse Engineering": {
+      "name": "Reverse Engineering",
+      "type": "capability",
+      "description": "",
+      "status": "partial",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:UI from Figma": {
+      "name": "UI from Figma",
+      "type": "capability",
+      "description": "",
+      "status": "not_implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:UI from Server Spec": {
+      "name": "UI from Server Spec",
+      "type": "capability",
+      "description": "",
+      "status": "partial",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "capability:A/B Testing": {
+      "name": "A/B Testing",
+      "type": "capability",
+      "description": "",
+      "status": "not_implemented",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "capabilities"
+      }
+    },
+    "operation:publish_cortex": {
+      "name": "publish_cortex",
+      "type": "operation",
+      "description": "Build production-ready package and publish to cortex-publish branch for user deployment",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "deployment",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:regenerate_diagrams": {
+      "name": "regenerate_diagrams",
+      "type": "operation",
+      "description": "Analyze CORTEX design and regenerate all visual assets from scratch",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "documentation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:cortex_tutorial": {
+      "name": "cortex_tutorial",
+      "type": "operation",
+      "description": "Hands-on walkthrough of CORTEX capabilities with live execution",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "onboarding",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:environment_setup": {
+      "name": "environment_setup",
+      "type": "operation",
+      "description": "Configure CORTEX development environment on Mac/Windows/Linux",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "environment",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:document_cortex": {
+      "name": "document_cortex",
+      "type": "operation",
+      "description": "Comprehensive CORTEX documentation management combining story refresh and documentation updates",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "documentation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:enterprise_documentation": {
+      "name": "enterprise_documentation",
+      "type": "operation",
+      "description": "EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "documentation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:maintain_cortex": {
+      "name": "maintain_cortex",
+      "type": "operation",
+      "description": "Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "maintenance",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:feature_planning": {
+      "name": "feature_planning",
+      "type": "operation",
+      "description": "Interactive feature planning with Work Planner agent - breaks down requirements into executable phases",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "planning",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:update_documentation": {
+      "name": "update_documentation",
+      "type": "operation",
+      "description": "[DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site",
+      "status": "deprecated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "documentation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:brain_protection_check": {
+      "name": "brain_protection_check",
+      "type": "operation",
+      "description": "[EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically",
+      "status": "experimental",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "validation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:brain_health_check": {
+      "name": "brain_health_check",
+      "type": "operation",
+      "description": "[DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations",
+      "status": "deprecated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "validation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:comprehensive_self_review": {
+      "name": "comprehensive_self_review",
+      "type": "operation",
+      "description": "[EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature",
+      "status": "experimental",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "validation",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:run_tests": {
+      "name": "run_tests",
+      "type": "operation",
+      "description": "[INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation",
+      "status": "integrated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "testing",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:optimize_cortex": {
+      "name": "optimize_cortex",
+      "type": "operation",
+      "description": "[DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations",
+      "status": "deprecated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "maintenance",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:deploy_to_app": {
+      "name": "deploy_to_app",
+      "type": "operation",
+      "description": "[FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature",
+      "status": "future",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "deployment",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:design_sync": {
+      "name": "design_sync",
+      "type": "operation",
+      "description": "Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas",
+      "status": "active",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "maintenance",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:interactive_planning": {
+      "name": "interactive_planning",
+      "type": "operation",
+      "description": "[INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities",
+      "status": "integrated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "planning",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:architecture_planning": {
+      "name": "architecture_planning",
+      "type": "operation",
+      "description": "[FUTURE] Collaborative architecture design with guided questions - Advanced planning feature",
+      "status": "future",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "planning",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:application_onboarding": {
+      "name": "application_onboarding",
+      "type": "operation",
+      "description": "One-command CORTEX deployment with intelligent codebase discovery and contextual questioning",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "setup",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:user_onboarding": {
+      "name": "user_onboarding",
+      "type": "operation",
+      "description": "Guided new user experience with interactive learning and hands-on validation",
+      "status": "ready",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "onboarding",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:refactoring_planning": {
+      "name": "refactoring_planning",
+      "type": "operation",
+      "description": "[FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance",
+      "status": "future",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "planning",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:command_help": {
+      "name": "command_help",
+      "type": "operation",
+      "description": "[INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface",
+      "status": "integrated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "discovery",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "operation:command_search": {
+      "name": "command_search",
+      "type": "operation",
+      "description": "[INTEGRATED] Command search integrated into CORTEX help system and natural language interface",
+      "status": "integrated",
+      "files": [],
+      "git_added": null,
+      "git_modified": null,
+      "dependencies": [],
+      "metadata": {
+        "category": "discovery",
+        "agents": [],
+        "trigger_patterns": []
+      }
+    },
+    "agent:AgentMetrics": {
+      "name": "AgentMetrics",
+      "type": "agent",
+      "description": "Metrics for agent performance tracking",
+      "status": "active",
+      "files": [
+        "src\\agents\\base_agent.py"
+      ],
+      "git_added": "2025-11-17",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:BaseAgent": {
+      "name": "BaseAgent",
+      "type": "agent",
+      "description": "Base class for all CORTEX agents.\n\nProvides common functionality including:\n- Logging configuration\n- Metrics tracking  \n- Error handling\n- Execution timing\n- Health monitoring",
+      "status": "active",
+      "files": [
+        "src\\agents\\base_agent.py"
+      ],
+      "git_added": "2025-11-17",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:BrainIngestionAgentImpl": {
+      "name": "BrainIngestionAgentImpl",
+      "type": "agent",
+      "description": "Implementation of Brain Ingestion Agent that extracts feature intelligence\nand stores it in CORTEX brain tiers.",
+      "status": "active",
+      "files": [
+        "src\\agents\\brain_ingestion_agent.py"
+      ],
+      "git_added": "2025-11-17",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:BrainIngestionAgent": {
+      "name": "BrainIngestionAgent",
+      "type": "agent",
+      "description": "Abstract base class for brain ingestion agent",
+      "status": "active",
+      "files": [
+        "src\\agents\\feature_completion_orchestrator.py"
+      ],
+      "git_added": "2025-11-17",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:BrainIngestionAdapterAgent": {
+      "name": "BrainIngestionAdapterAgent",
+      "type": "agent",
+      "description": "Adapter to bridge interface differences",
+      "status": "active",
+      "files": [
+        "src\\agents\\feature_completion_orchestrator_concrete.py"
+      ],
+      "git_added": "2025-11-17",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:BrainTransferPlugin": {
+      "name": "BrainTransferPlugin",
+      "type": "plugin",
+      "description": "Brain Transfer Plugin for CORTEX.\n\nProvides:\n- Export brain patterns to YAML\n- Import brain patterns from YAML\n- Intelligent conflict resolution\n- Namespace-aware merging",
+      "status": "active",
+      "files": [
+        "src\\brain_transfer\\plugin.py"
+      ],
+      "git_added": "2025-11-18",
+      "git_modified": "2025-11-18",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginProcessor": {
+      "name": "PluginProcessor",
+      "type": "plugin",
+      "description": "Process and execute YAML-based plugins",
+      "status": "active",
+      "files": [
+        "src\\core\\plugin_processor.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-08",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginType": {
+      "name": "PluginType",
+      "type": "plugin",
+      "description": "Plugin categories",
+      "status": "active",
+      "files": [
+        "src\\core\\plugin_schema.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-08",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginConfig": {
+      "name": "PluginConfig",
+      "type": "plugin",
+      "description": "Complete plugin configuration",
+      "status": "active",
+      "files": [
+        "src\\core\\plugin_schema.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-08",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentTier": {
+      "name": "AgentTier",
+      "type": "agent",
+      "description": "Agent hierarchy tiers",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentRole": {
+      "name": "AgentRole",
+      "type": "agent",
+      "description": "Enhanced agent roles for 3.0",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentTask": {
+      "name": "AgentTask",
+      "type": "agent",
+      "description": "Task for agent execution",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:SubAgent": {
+      "name": "SubAgent",
+      "type": "agent",
+      "description": "Base class for specialized sub-agents",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:CodeReviewerAgent": {
+      "name": "CodeReviewerAgent",
+      "type": "agent",
+      "description": "Specialized agent for code quality analysis",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:DependencyAnalyzerAgent": {
+      "name": "DependencyAnalyzerAgent",
+      "type": "agent",
+      "description": "Specialized agent for dependency analysis",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:MultiAgentOrchestrator": {
+      "name": "MultiAgentOrchestrator",
+      "type": "agent",
+      "description": "Orchestrates multi-agent workflows",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:EnhancedAgentSystem": {
+      "name": "EnhancedAgentSystem",
+      "type": "agent",
+      "description": "Main enhanced agent system for CORTEX 3.0",
+      "status": "active",
+      "files": [
+        "src\\cortex_3_0\\enhanced_agents.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentType": {
+      "name": "AgentType",
+      "type": "agent",
+      "description": "Categories of specialist agents",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\agent_types.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-18",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentRequest": {
+      "name": "AgentRequest",
+      "type": "agent",
+      "description": "Standard request format for all agents.\n\nAttributes:\n    intent: The classified user intent (e.g., \"plan\", \"code\", \"test\")\n    context: Additional context information (files, settings, etc.)\n    user_message: Original user message text\n    conversation_id: Optional ID linking to Tier 1 conversation\n    priority: Request priority level (default: NORMAL)\n    metadata: Additional metadata for the request\n\nExample:\n    request = AgentRequest(\n        intent=\"plan\",\n        context={\"feature\": \"authentication\"},\n        user_message=\"Add user authentication\"\n    )",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\base_agent.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentResponse": {
+      "name": "AgentResponse",
+      "type": "agent",
+      "description": "Standard response format for all agents.\n\nAttributes:\n    success: Whether the agent executed successfully\n    result: The main result/output from the agent\n    message: Human-readable message describing the outcome\n    metadata: Additional metadata about the execution\n    agent_name: Name of the agent that generated this response\n    duration_ms: Execution time in milliseconds\n    next_actions: Suggested follow-up actions\n    error: Optional error message if execution failed\n\nExample:\n    response = AgentResponse(\n        success=True,\n        result={\"tasks\": [\"Create auth model\", \"Add login route\"]},\n        message=\"Feature broken down into 2 tasks\",\n        agent_name=\"WorkPlanner\"\n    )",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\base_agent.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentMessage": {
+      "name": "AgentMessage",
+      "type": "agent",
+      "description": "Message format for agent-to-agent communication in workflows.\n\nUsed for orchestrating multi-agent workflows like TDD cycle.\n\nAttributes:\n    from_agent: Name of the sending agent\n    to_agent: Name of the receiving agent\n    command: Command/action to perform\n    payload: Data payload for the command\n    correlation_id: Optional ID to correlate related messages\n\nExample:\n    message = AgentMessage(\n        from_agent=\"workflow-orchestrator\",\n        to_agent=\"test-generator\",\n        command=\"create_test\",\n        payload={\"task\": \"auth\", \"expect_failure\": True}\n    )",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\base_agent.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:CortexAgentError": {
+      "name": "CortexAgentError",
+      "type": "agent",
+      "description": "Base exception for all CORTEX agent errors",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\exceptions.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-07",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentNotFoundError": {
+      "name": "AgentNotFoundError",
+      "type": "agent",
+      "description": "Raised when no agent can handle a request",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\exceptions.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-07",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentExecutionError": {
+      "name": "AgentExecutionError",
+      "type": "agent",
+      "description": "Raised when agent execution fails",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\exceptions.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-07",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentTimeoutError": {
+      "name": "AgentTimeoutError",
+      "type": "agent",
+      "description": "Raised when agent execution exceeds timeout",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\exceptions.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-07",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:LearningCaptureAgent": {
+      "name": "LearningCaptureAgent",
+      "type": "agent",
+      "description": "Agent that automatically captures lessons learned from various sources.\n\nSources:\n- Operation execution results (success/failure patterns)\n- Error traces and exceptions\n- Git commit messages and diffs\n- Ambient daemon events (file changes, terminal output, errors)\n- SKULL protection violations",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\learning_capture_agent.py"
+      ],
+      "git_added": "2025-11-11",
+      "git_modified": "2025-11-11",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:AgentExecutor": {
+      "name": "AgentExecutor",
+      "type": "agent",
+      "description": "Executes specific agents based on routing decisions.\n\nThis class takes routing decisions from IntentRouter and actually\ninstantiates and executes the appropriate specialist agents.",
+      "status": "active",
+      "files": [
+        "src\\entry_point\\agent_executor.py"
+      ],
+      "git_added": "2025-11-14",
+      "git_modified": "2025-11-17",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginCategory": {
+      "name": "PluginCategory",
+      "type": "plugin",
+      "description": "Plugin categories for organization",
+      "status": "active",
+      "files": [
+        "src\\plugins\\base_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginPriority": {
+      "name": "PluginPriority",
+      "type": "plugin",
+      "description": "Plugin execution priority",
+      "status": "active",
+      "files": [
+        "src\\plugins\\base_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginMetadata": {
+      "name": "PluginMetadata",
+      "type": "plugin",
+      "description": "Standardized metadata for all plugins",
+      "status": "active",
+      "files": [
+        "src\\plugins\\base_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:BasePlugin": {
+      "name": "BasePlugin",
+      "type": "plugin",
+      "description": "Abstract base class for all CORTEX plugins.\n\nAll plugins must:\n1. Inherit from BasePlugin\n2. Implement _get_metadata() method\n3. Implement initialize() method\n4. Implement execute() method\n5. Implement cleanup() method\n\nExample:\n```python\nclass MyPlugin(BasePlugin):\n    def _get_metadata(self) -> PluginMetadata:\n        return PluginMetadata(\n            plugin_id=\"my_plugin\",\n            name=\"My Plugin\",\n            version=\"1.0.0\",\n            category=PluginCategory.WORKFLOW,\n            priority=PluginPriority.MEDIUM,\n            description=\"Does something useful\",\n            author=\"Your Name\",\n            dependencies=[],\n            hooks=[HookPoint.ON_WORKFLOW_START.value],\n            config_schema={}\n        )\n    \n    def initialize(self) -> bool:\n        # Setup plugin resources\n        return True\n    \n    def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:\n        # Main plugin logic\n        return {\"success\": True}\n    \n    def cleanup(self) -> bool:\n        # Cleanup plugin resources\n        return True\n```",
+      "status": "active",
+      "files": [
+        "src\\plugins\\base_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginManager": {
+      "name": "PluginManager",
+      "type": "plugin",
+      "description": "Manages plugin lifecycle and execution.\n\nResponsibilities:\n- Plugin discovery and loading\n- Hook registration and execution\n- Plugin dependency resolution\n- Configuration management",
+      "status": "active",
+      "files": [
+        "src\\plugins\\base_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:Plugin": {
+      "name": "Plugin",
+      "type": "plugin",
+      "description": "Comprehensive Cleanup Plugin for CORTEX",
+      "status": "active",
+      "files": [
+        "src\\plugins\\cleanup_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-16",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:CodeReviewPlugin": {
+      "name": "CodeReviewPlugin",
+      "type": "plugin",
+      "description": "Automated code review plugin for pull requests\n\nFeatures:\n- SOLID principle violation detection\n- Security vulnerability scanning\n- Performance anti-pattern detection\n- Test coverage regression checking\n- Code style consistency validation\n- Duplicate code detection\n- Integration with Azure DevOps, GitHub, GitLab, BitBucket",
+      "status": "active",
+      "files": [
+        "src\\plugins\\code_review_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-16",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginCommandRegistry": {
+      "name": "PluginCommandRegistry",
+      "type": "plugin",
+      "description": "Central registry for all plugin commands.\n\nFeatures:\n- Automatic conflict detection\n- O(1) command lookup\n- Auto-generated help text\n- Plugin discovery\n\nUsage:\n    registry = PluginCommandRegistry()\n    \n    # Plugin registers commands during initialization\n    registry.register_command(CommandMetadata(\n        command=\"/mac\",\n        natural_language_equivalent=\"switched to mac\",\n        plugin_id=\"platform_switch\",\n        ...\n    ))\n    \n    # Router expands commands\n    expanded = registry.expand_command(\"/mac\")\n    # \u2192 \"switched to mac\"",
+      "status": "active",
+      "files": [
+        "src\\plugins\\command_registry.py"
+      ],
+      "git_added": "2025-11-09",
+      "git_modified": "2025-11-13",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:ConfigurationWizardPlugin": {
+      "name": "ConfigurationWizardPlugin",
+      "type": "plugin",
+      "description": "Configuration Wizard Plugin\n\nProvides incremental, post-setup configuration with intelligent\nauto-discovery. Does NOT block initial setup.\n\nArchitecture:\n- Phase 1: Auto-discovery (scan environment, files, code)\n- Phase 2: User confirmation (review discovered items)\n- Phase 3: Manual entry (fill gaps)\n- Phase 4: Validation (test connections)\n- Phase 5: Save to cortex.config.json",
+      "status": "active",
+      "files": [
+        "src\\plugins\\configuration_wizard_plugin.py"
+      ],
+      "git_added": "2025-11-08",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:ConversationImportPlugin": {
+      "name": "ConversationImportPlugin",
+      "type": "plugin",
+      "description": "Plugin for importing Copilot conversations to CORTEX brain.\n\nProvides dual-channel learning:\n- Channel 1: Ambient daemon (execution-focused)\n- Channel 2: Manual conversations (strategy-focused)",
+      "status": "active",
+      "files": [
+        "src\\plugins\\conversation_import_plugin.py"
+      ],
+      "git_added": "2025-11-13",
+      "git_modified": "2025-11-13",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:DocRefreshPlugin": {
+      "name": "DocRefreshPlugin",
+      "type": "plugin",
+      "description": "Orchestrates documentation refresh operations using modular services",
+      "status": "active",
+      "files": [
+        "src\\plugins\\doc_refresh_plugin.py"
+      ],
+      "git_added": "2025-11-07",
+      "git_modified": "2025-11-16",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:InvestigationHtmlIdMappingPlugin": {
+      "name": "InvestigationHtmlIdMappingPlugin",
+      "type": "plugin",
+      "description": "HTML element ID mapping plugin for investigation router",
+      "status": "active",
+      "files": [
+        "src\\plugins\\investigation_html_id_mapping_plugin.py"
+      ],
+      "git_added": "2025-11-14",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:InvestigationRefactoringPlugin": {
+      "name": "InvestigationRefactoringPlugin",
+      "type": "plugin",
+      "description": "Refactoring analysis plugin for investigation router",
+      "status": "active",
+      "files": [
+        "src\\plugins\\investigation_refactoring_plugin.py"
+      ],
+      "git_added": "2025-11-14",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:InvestigationSecurityPlugin": {
+      "name": "InvestigationSecurityPlugin",
+      "type": "plugin",
+      "description": "Security analysis plugin for investigation router",
+      "status": "active",
+      "files": [
+        "src\\plugins\\investigation_security_plugin.py"
+      ],
+      "git_added": "2025-11-14",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PerformanceTelemetryPlugin": {
+      "name": "PerformanceTelemetryPlugin",
+      "type": "plugin",
+      "description": "Collects CORTEX performance and business value metrics for team analytics.\n\nTracked Metrics:\n1. Performance: Latency, success rates, error patterns, trends\n2. Cost Savings: Token optimization ($$$), API cost avoidance\n3. Productivity: Commits, PRs, velocity, code quality\n4. Copilot Enhancement: Memory hits, context utilization, suggestion quality\n5. Quality: Bug reduction, test coverage, code review efficiency\n\nEngineer Attribution:\n- Name, email, machine hostname\n- Machine specs (CPU, RAM, platform)\n- Installation date, CORTEX version\n\nUse Case: Internal team analytics and executive ROI reporting",
+      "status": "active",
+      "files": [
+        "src\\plugins\\performance_telemetry_plugin.py"
+      ],
+      "git_added": "2025-11-12",
+      "git_modified": "2025-11-12",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PhaseTrackerPlugin": {
+      "name": "PhaseTrackerPlugin",
+      "type": "plugin",
+      "description": "Phase tracking plugin for CORTEX workflow management.\n\nFeatures:\n- Create and manage phase tracking for projects\n- Track progress, blockers, time estimates\n- Support multi-track development\n- Integration with CORTEX agents and operations",
+      "status": "active",
+      "files": [
+        "src\\plugins\\phase_tracker_plugin.py"
+      ],
+      "git_added": "2025-11-15",
+      "git_modified": "2025-11-15",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PlatformSwitchPlugin": {
+      "name": "PlatformSwitchPlugin",
+      "type": "plugin",
+      "description": "Handles platform switching for CORTEX development.\n\nAutomates:\n1. Git pull latest code\n2. Environment setup for platform\n3. Brain tests validation\n4. Tooling and dependencies verification",
+      "status": "active",
+      "files": [
+        "src\\plugins\\platform_switch_plugin.py"
+      ],
+      "git_added": "2025-11-09",
+      "git_modified": "2025-11-13",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginRegistry": {
+      "name": "PluginRegistry",
+      "type": "plugin",
+      "description": "Central registry for plugin management.\n\nResponsibilities:\n- Plugin discovery and loading\n- Plugin lifecycle management (init, execute, cleanup)\n- Plugin metadata and capability tracking\n- Natural language command routing",
+      "status": "active",
+      "files": [
+        "src\\plugins\\plugin_registry.py"
+      ],
+      "git_added": "2025-11-13",
+      "git_modified": "2025-11-13",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:SweeperPlugin": {
+      "name": "SweeperPlugin",
+      "type": "plugin",
+      "description": "Aggressive file sweeper - moves clutter to Recycle Bin (reversible).\n\nUsage:\n    sweeper = SweeperPlugin()\n    sweeper.initialize()\n    results = sweeper.execute({\"workspace_root\": \"/path/to/cortex\"})",
+      "status": "active",
+      "files": [
+        "src\\plugins\\sweeper_plugin.py"
+      ],
+      "git_added": "2025-11-12",
+      "git_modified": "2025-11-12",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:SystemRefactorPlugin": {
+      "name": "SystemRefactorPlugin",
+      "type": "plugin",
+      "description": "Plugin for critical system review and automated refactoring.\n\nCapabilities:\n- Analyze test coverage across all layers\n- Identify gaps in brain protection, plugins, modules\n- Execute REFACTOR phase for tests in GREEN state\n- Generate comprehensive review reports\n- Automate gap-filling through test generation",
+      "status": "active",
+      "files": [
+        "src\\plugins\\system_refactor_plugin.py"
+      ],
+      "git_added": "2025-11-09",
+      "git_modified": "2025-11-09",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "plugin:PluginRegistryCrawler": {
+      "name": "PluginRegistryCrawler",
+      "type": "plugin",
+      "description": "Inventories CORTEX plugin system to analyze:\n- Registered plugins (active/inactive)\n- Natural language patterns\n- Command registry entries\n- Plugin health and initialization",
+      "status": "active",
+      "files": [
+        "src\\operations\\crawlers\\plugin_registry.py"
+      ],
+      "git_added": null,
+      "git_modified": "2025-11-10",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:ArchitectAgent": {
+      "name": "ArchitectAgent",
+      "type": "agent",
+      "description": "Strategic agent for architectural analysis with automatic brain saving.\n\nPerforms deep architectural analysis including:\n- Shell structure analysis (layout, navigation, panels)\n- Routing system mapping (states, URLs, templates)\n- View injection pattern documentation\n- Feature directory structure analysis\n- Component interaction flows\n\nKey Features:\n- Automatic namespace detection (e.g., ksessions_architecture)\n- Structured analysis data persistence\n- Cross-session memory via Tier 2 Knowledge Graph\n- User confirmation of brain saves\n\nExample:\n    architect = ArchitectAgent(\"Architect\", tier1_api, tier2_kg, tier3_context)\n    \n    request = AgentRequest(\n        intent=\"analyze_architecture\",\n        context={\"workspace_path\": \"/path/to/KSESSIONS\"},\n        user_message=\"crawl shell.html to understand KSESSIONS architecture\"\n    )\n    \n    response = architect.execute(request)\n    # Analysis automatically saved to brain with namespace: ksessions_architecture",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\strategic\\architect.py"
+      ],
+      "git_added": "2025-11-14",
+      "git_modified": "2025-11-14",
+      "dependencies": [],
+      "metadata": {}
+    },
+    "agent:InteractivePlannerAgent": {
+      "name": "InteractivePlannerAgent",
+      "type": "agent",
+      "description": "Interactive Planning Agent - CORTEX 2.1\n\nCollaborative planning through guided dialogue. Detects ambiguity\nin user requests, asks up to 5 clarifying questions, and creates\nrefined implementation plans based on answers.\n\nFeatures:\n- Confidence-based routing (auto-detect when to ask questions)\n- Question budget (max 5 questions per session)\n- User controls: skip, done, back, restart, abort\n- Session persistence (can resume interrupted sessions)\n- User preference learning (adapts over time)\n\nWorkflow:\n1. Detect ambiguity in user request\n2. If confidence < 60%, enter interactive mode\n3. Ask up to 5 clarifying questions (one at a time)\n4. Build refined plan from answers\n5. Confirm plan with user\n6. Execute or save for later\n\nExample:\n    planner = InteractivePlannerAgent(\"Planner\", tier1, tier2, tier3)\n    \n    request = AgentRequest(\n        intent=\"plan\",\n        context={},\n        user_message=\"Refactor authentication\"\n    )\n    \n    response = planner.execute(request)\n    # Returns session with questions to ask",
+      "status": "active",
+      "files": [
+        "src\\cortex_agents\\strategic\\interactive_planner.py"
+      ],
+      "git_added": "2025-11-10",
+      "git_modified": "2025-11-19",
+      "dependencies": [],
+      "metadata": {}
+    }
+  }
+}

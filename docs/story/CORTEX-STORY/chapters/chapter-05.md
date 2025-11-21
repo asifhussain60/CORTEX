@@ -1,66 +1,6 @@
 # Chapter 5: The Knowledge Graph Incident
 
-# Chapter 5: The Knowledge Graph Incident
-
-Three weeks into the agent system, Codenstein noticed something disturbing.
-
-CORTEX was forgetting relationships.
-
-Not conversations—Tier 1 handled those perfectly. Not code—the agents tracked that fine. But the connections between things. The way authentication.py related to user_service.py which related to the JWT bug from last week which related to that security discussion from last month.
-
-The context web. The knowledge graph. The invisible network of relationships that made understanding possible.
-
-"It's like giving someone perfect memory but no associations," he told his wife during their Saturday morning coffee—an actual scheduled coffee, not a 2 AM desperation brew. Progress.
-
-"Explain," she said, settling into the couch beside him.
-
-"Okay. You remember our wedding, right?"
-
-"Vividly."
-
-"And you remember it's connected to: meeting my parents, picking the venue, that disaster with the caterer, the photographer who fell in the pond—"
-
-"The photographer WHAT—"
-
-"Different story. Point is, you don't just remember events. You remember how they connect. Memory isn't a database—it's a graph." He pulled up his laptop, showing his Tier 2 design diagrams. "CORTEX remembers conversations. But it doesn't remember that the authentication conversation connects to the security conversation connects to the database conversation. They're islands."
-
-"So connect them."
-
-"With what? What's the relationship? How do I represent 'this conversation influenced that decision which led to this implementation'?"
-
-She studied his diagrams for a long moment. "You're overcomplicating again."
-
-"I am not—"
-
-"You are. You're trying to capture every possible relationship type, every nuance, every connection. That's not a knowledge graph—that's a philosophical treatise." She pointed at his screen. "Start simple. Three relationship types: references, influences, conflicts-with."
-
-"That's too simple."
-
-"Is it? Show me a relationship between two pieces of knowledge that doesn't fit those three."
-
-He opened his mouth. Closed it. Opened it again. "...I'll get back to you."
-
-"No, you won't. Because I'm right." She stood, heading to the kitchen. "Stop trying to build the perfect knowledge representation. Build something that works."
-
----
-
-## The 2 AM Epiphany (Again)
-
-At 2:17 AM on a Tuesday (they were becoming a pattern), Codenstein had his knowledge graph breakthrough.
-
-He'd spent three days trying to implement his wife's simple relationship model and discovering she was, predictably, annoyingly, completely right. References, influences, conflicts-with. Three edges. That was it.
-
-But the realization that hit him at 2:17 AM went deeper.
-
-"It's not about capturing everything," he whispered to the empty basement. "It's about capturing enough."
-
-He didn't need a perfect representation of all possible knowledge relationships. He needed a useful representation of common patterns. The 80/20 rule applied to knowledge graphs too.
-
-His fingers flew across the keyboard, updating Tier 2's design:
-
-```python
-class KnowledgeRelationship:
-    """Simple, effective knowledge graph edges"""
+"""Simple, effective knowledge graph edges"""
     REFERENCES = "references"  # File A imports File B
     INFLUENCES = "influences"   # Decision A led to Implementation B
     CONFLICTS = "conflicts_with" # Approach A contradicts Approach B
@@ -109,6 +49,66 @@ But that was a problem for tomorrow.
 Tonight, CORTEX had learned to connect dots.
 
 ---
+
+# Chapter 6: The Token Crisis
+
+"We have a problem," Codenstein announced at breakfast (an actual breakfast, at an actual morning time—his wife had implemented a strict "no coding after midnight" rule after the fourth 3 AM breakthrough).
+
+She didn't look up from her phone. "Define 'we.'"
+
+"CORTEX is becoming expensive."
+
+That got her attention. She set down her phone with the deliberate motion of someone preparing for bad news. "Expensive how?"
+
+He pulled up his laptop, showing her the token analytics. "The main prompt file. It started at 8,000 tokens. Then I added the agent definitions—12,000 tokens. Then Tier architecture documentation—19,000 tokens. Then response templates—"
+
+"How many tokens is it now?"
+
+"Seventy-four thousand."
+
+She set down her coffee with slightly more force than necessary. "Tokens are... expensive?"
+
+"Very. And every request loads the full prompt. Seventy-four thousand tokens, every single time. We're burning through API costs like—" He paused, knowing what was coming.
+
+"Like you burn through coffee?"
+
+"Worse. Coffee is cheap. Tokens are not." He showed her the cost analysis. "At current usage, CORTEX would cost about $8,000 a month to run."
+
+"For one user?"
+
+"For one user."
+
+She was quiet for a moment, processing the implications. "So your brilliant AI assistant that gives Copilot perfect memory and specialized agents and knowledge graphs... costs more per month than our mortgage?"
+
+"Technically yes, but—"
+
+"No buts. That's not sustainable." She took his laptop, scrolling through the token breakdown with the focused intensity of an auditor finding fraud. "What's taking up the most space?"
+
+"Response templates. Thirty-two templates, each with examples, variations, conditions—"
+
+"Do you load all thirty-two templates every time?"
+
+"Yes? They're in the main prompt file—"
+
+"Why?"
+
+He opened his mouth. Closed it. Opened it again. The truth was embarrassing. "...Because that's where I put them?"
+
+"That's not a reason. That's a tautology." She stood, grabbing her own laptop with the energy of someone about to perform surgery. "Show me these templates."
+
+---
+
+## The Great Token Purge
+
+What followed was three hours of his wife systematically dismantling his beautiful, elegant, completely unsustainable prompt architecture.
+
+She declared each cut with surgical precision. "Response templates don't need to be in the main prompt. They're static. Move them to a YAML file. Load on demand." She highlighted thirty-two templates for deletion.
+
+"But then we need logic to—"
+
+"Yes. Write logic. That's what developers do." She moved to the next section without pause. "Agent definitions. Do you need the full implementation details in the prompt?"
+
+"It helps Copilot understand—"
 
 
 ---

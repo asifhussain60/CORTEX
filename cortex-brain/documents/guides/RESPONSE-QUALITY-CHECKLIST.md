@@ -184,7 +184,7 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 ```markdown
 💬 **Response:** I've completed the analysis...
 
-📝 **Your Request:** Analyze the AList application architecture
+📝 **Your Request:** Analyze the application architecture
 
 🔍 Next Steps:
    1. Review the results
@@ -216,14 +216,14 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 **Wrong:**
 ```markdown
-Read [](file:///d%3A/PROJECTS/ALIST/AList.sln)
-Read [](file:///d%3A/PROJECTS/ALIST/AList.Domain/AList.Domain.csproj)
-Searched text for `namespace|class|public` (`**/AList.Domain/**/*.cs`), 20 results
+Read [](file:///path/to/project/solution.sln)
+Read [](file:///path/to/project/Domain/Domain.csproj)
+Searched text for `namespace|class|public` (`**/Domain/**/*.cs`), 20 results
 ```
 
 **Correct:**
 ```markdown
-💬 **Response:** I analyzed the solution structure, examining 9 projects across the AList.Domain namespace and infrastructure layers. Found 20 key classes implementing the core business logic.
+💬 **Response:** I analyzed the solution structure, examining 9 projects across the Domain namespace and infrastructure layers. Found 20 key classes implementing the core business logic.
 ```
 
 ---
@@ -312,14 +312,14 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
-   You want comprehensive analysis and onboarding documentation for the AList application
+   You want comprehensive analysis and onboarding documentation for the application
 
 ⚠️ **Challenge:** ✓ **Accept**
    This is a comprehensive .NET solution requiring systematic analysis across multiple layers and projects.
 
 💬 **Response:** I've completed a comprehensive onboarding analysis spanning 9 projects, created architecture diagrams with 11 Mermaid visualizations, documented the technology stack (10+ year old), and built a modernization roadmap with 4 phases over 19 months. All documents stored in proper CORTEX brain structure under documents/analysis/ and documents/planning/.
 
-📝 **Your Request:** Onboard the AList application
+📝 **Your Request:** Onboard the application
 
 🔍 Next Steps:
    ☐ Phase 1: Review Documentation (Tasks 1-3)
@@ -358,7 +358,6 @@ Planned tools:
 - **Master Template:** `.github/prompts/CORTEX.prompt.md` (Mandatory Response Format section)
 - **Lessons Learned:** `cortex-brain/lessons-learned.yaml` (lesson: response-format-001)
 - **Response Templates:** `cortex-brain/response-templates.yaml`
-- **Example Violations:** `.github/CopilotChats/AList.md` (analyzed 2025-11-16)
 
 ---
 

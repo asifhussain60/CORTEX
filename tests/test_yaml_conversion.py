@@ -274,12 +274,11 @@ class TestYAMLConversion:
             "feature_planning",
             "application_onboarding",
             "maintain_cortex",  # Consolidated: workspace_cleanup + optimize_cortex + brain_health_check
-            "document_cortex",  # Consolidated: refresh_cortex_story + update_documentation
+            "document_cortex",  # Consolidated: update_documentation
             "design_sync"
         ]
         
         deprecated_operations = [
-            "refresh_cortex_story",  # → document_cortex
             "workspace_cleanup",     # → maintain_cortex
             "update_documentation",  # → document_cortex
             "brain_health_check",    # → maintain_cortex 

@@ -221,8 +221,8 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 **Wrong:**
 ```markdown
-Read [](file:///d%3A/PROJECTS/ALIST/AList.sln)
-Read [](file:///d%3A/PROJECTS/ALIST/AList.Domain/AList.Domain.csproj)
+Read [](file:///path/to/project/solution.sln)
+Read [](file:///path/to/project/Domain/Domain.csproj)
 Searched text for `namespace|class` (`**/*.cs`), 20 results
 Let me continue gathering information...
 ```

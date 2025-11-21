@@ -1,0 +1,36 @@
+Create a detailed visualization of CORTEX's 10-agent coordination system.
+
+Style: Network diagram with animated feel, modern technical illustration
+Color Scheme: Each agent type has its own color (logical=blue, creative=purple, central=cyan)
+
+Main Elements:
+1. **Center: Corpus Callosum Router** (large glowing hub)
+   - Rotating data streams
+   - Request distribution pathways
+   
+2. **Left Hemisphere (Logical Agents):**
+   - Code Executor (bright blue)
+   - Test Generator (electric blue)
+   - Health Validator (steel blue)
+   - Code Reviewer (deep blue)
+   
+3. **Right Hemisphere (Creative Agents):**
+   - System Architect (purple)
+   - Work Planner (magenta)
+   - Documentation Writer (violet)
+   - Change Governor (lavender)
+   
+4. **Central Coordination:**
+   - Intent Detector (cyan)
+   - Pattern Matcher (teal)
+   
+5. **Information Flow:**
+   - Show user request entering Intent Detector
+   - Request being routed to appropriate agents
+   - Agents collaborating (connecting lines)
+   - Coordinated response being assembled
+   - Response returning to user
+
+Add floating labels showing what each agent does in 3-4 words.
+
+Mood: Collaborative, intelligent, synchronized, efficient

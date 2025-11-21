@@ -241,6 +241,14 @@ blockquote {
   border-bottom-color: var(--accent-primary);
 }
 
+/* Active section highlighting (from navigation.js) */
+.nav-menu li a.active-section {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-hover);
+  border-bottom-color: var(--accent-primary);
+  font-weight: 700;
+}
+
 /* ============================================
    Main Content Area
    ============================================ */

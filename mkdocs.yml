@@ -17,12 +17,12 @@ theme:
 # Theme does not use extra_css (CSS is in theme)
 
 # ============================================
-# NAVIGATION STRUCTURE - Chapter-Based
-# Home | The CORTEX Story (with chapter navigation)
+# NAVIGATION STRUCTURE - Section-Based
+# Home | The CORTEX Birth | Cortex Bible | Architecture | Technical Docs | User Guides | Examples
 # ============================================
 nav:
 - Home: index.md
-- The CORTEX Story:
+- The CORTEX Birth:
   - Story Home: story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX.md
   - Prologue: story/CORTEX-STORY/chapters/prologue.md
   - Chapter 1 - The Amnesia Crisis: story/CORTEX-STORY/chapters/chapter-01.md
@@ -37,6 +37,24 @@ nav:
   - Chapter 10 - The Awakening: story/CORTEX-STORY/chapters/chapter-10.md
   - Epilogue: story/CORTEX-STORY/chapters/epilogue.md
   - Disclaimer: story/CORTEX-STORY/chapters/disclaimer.md
+- Cortex Bible:
+  - The Rulebook: governance/THE-RULEBOOK.md
+- Architecture:
+  - Architecture Diagrams: architecture-diagrams.md
+  - Integration Diagrams: integration-diagrams.md
+  - Operational Diagrams: operational-diagrams.md
+  - Planning & Strategic Diagrams: planning-diagrams.md
+- Technical Docs:
+  - Executive Summary: EXECUTIVE-SUMMARY.md
+  - Features Overview: FEATURES.md
+  - Capabilities Matrix: CAPABILITIES-MATRIX.md
+- User Guides:
+  - Getting Started: getting-started/quick-start.md
+  - Navigation Guide: NAVIGATION-GUIDE.md
+  - Help System: HELP-SYSTEM.md
+- Examples:
+  - Quick Start: getting-started/quick-start.md
+  - Feature Comparison: FEATURE-COMPARISON.md
 markdown_extensions:
 - abbr
 - admonition

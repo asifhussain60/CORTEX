@@ -7,17 +7,15 @@
 ```
 artifacts/
 ├── README.md (this file)
-└── crawler-outputs/      # ALIST and other crawler artifacts
-    ├── ALIST-BRAIN-STATE-VISUAL.md
-    ├── alist-simulation-*.md
-    └── (future crawler outputs)
+└── crawler-outputs/      # Crawler artifacts from automated analysis
+    └── (crawler outputs will be stored here)
 ```
 
 ## What Goes Here
 
 ### Crawler Outputs (`crawler-outputs/`)
-- **ALIST Files:** Brain state visualizations and simulations
-- **Future Crawlers:** Any automated analysis/crawling outputs
+- **Analysis Files:** Brain state visualizations and simulations
+- **Automated Outputs:** Any automated analysis/crawling results
 - **Retention:** Permanent (these are data products, not temporary files)
 
 ### Other Artifacts (Future)
@@ -28,8 +26,7 @@ artifacts/
 ## Protection Status
 
 ✅ **Directory Protection:** `artifacts/` is in `cleanup-detection-patterns.yaml` protected_directories  
-✅ **Pattern Exclusions:** Multiple regex patterns prevent accidental cleanup  
-✅ **File-Level Protection:** Specific ALIST patterns excluded
+✅ **Pattern Exclusions:** Multiple regex patterns prevent accidental cleanup
 
 ## When to Add Files
 

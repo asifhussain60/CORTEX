@@ -93,17 +93,12 @@ tests/ambient/test_vscode_monitor.py::TestVSCodeMonitor::test_monitor_initializa
 tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py::TestHardcodedPathPatterns::test_ignore_relative_paths 
 tests/integration/test_planning_integration.py::TestPlannerRouting::test_plan_intent_keywords 
 [gw5] [  4%] PASSED tests/integration/test_planning_integration.py::TestPlannerRouting::test_plan_intent_keywords 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_published_package_exists 
 [gw0] [  4%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_single_event 
 tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_multiple_events 
-[gw5] [  4%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_published_package_exists 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_critical_files_present_in_publish 
 [gw3] [  4%] PASSED tests/cortex_agents/strategic/test_interactive_planner.py::TestAgentInterface::test_execute_returns_agent_response 
 tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_empty_string_operation 
-[gw5] [  4%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_critical_files_present_in_publish 
 [gw6] [  4%] PASSED tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py::TestHardcodedDataCleanerModule::test_module_metadata 
 [gw7] [  4%] PASSED tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py::TestHardcodedPathPatterns::test_ignore_relative_paths 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_response_templates_included 
 [gw3] [  5%] PASSED tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_empty_string_operation 
 tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py::TestHardcodedDataCleanerModule::test_detect_hardcoded_windows_path 
 tests/operations/modules/optimization/test_hardcoded_data_cleaner_module.py::TestEdgeCases::test_handle_syntax_error_file 
@@ -334,11 +329,9 @@ tests/plugins/test_narrative_flow_implicit_parts.py::TestStructureClassification
 [gw2] [ 17%] PASSED tests/plugins/test_narrative_flow_implicit_parts.py::TestStructureClassification::test_implicit_part_affects_structure_classification 
 [gw7] [ 17%] PASSED tests/plugins/test_command_registry.py::TestHelpGeneration::test_help_includes_aliases 
 tests/integration/test_component_wiring.py::TestTierWiring::test_tier2_knowledge_graph_integration 
-[gw5] [ 17%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_response_templates_included 
 tests/plugins/test_narrative_flow_implicit_parts.py::TestInterludeToPartRatioValidation::test_balanced_interludes_and_parts 
 tests/plugins/test_command_registry.py::TestIsCommand::test_is_command_registered 
 [gw7] [ 17%] PASSED tests/plugins/test_command_registry.py::TestIsCommand::test_is_command_registered 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_copy_to_alist 
 tests/plugins/test_narrative_flow_implicit_parts.py::TestRecommendedFix::test_recommended_implementation_pattern 
 [gw2] [ 18%] PASSED tests/plugins/test_narrative_flow_implicit_parts.py::TestInterludeToPartRatioValidation::test_balanced_interludes_and_parts 
 [gw4] [ 18%] PASSED tests/integration/test_component_wiring.py::TestTierWiring::test_tier2_knowledge_graph_integration 
@@ -554,8 +547,6 @@ tests/test_ambient_security.py::TestMaliciousPatternDetection::test_sanitizes_to
 tests/test_ambient_security.py::TestMaliciousPatternDetection::test_allows_safe_commands 
 [gw2] [ 29%] PASSED tests/test_ambient_security.py::TestMaliciousPatternDetection::test_allows_safe_commands 
 tests/test_ambient_security.py::TestInputValidation::test_rejects_oversized_files 
-[gw5] [ 30%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_copy_to_alist 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_entry_point_copy 
 [gw2] [ 30%] PASSED tests/test_ambient_security.py::TestInputValidation::test_rejects_oversized_files 
 tests/test_ambient_security.py::TestInputValidation::test_rejects_long_commands 
 [gw4] [ 30%] PASSED tests/integration/test_component_wiring.py::TestTokenEfficiencyMetricsFileWiring::test_contains_token_efficiency_metrics 
@@ -828,8 +819,6 @@ tests/plugins/test_sweeper_plugin.py::TestSweeperPlugin::test_deletion_execution
 [gw4] [ 45%] PASSED tests/test_yaml_conversion.py::TestYAMLConversion::test_no_duplicate_commands 
 tests/test_yaml_conversion.py::TestYAMLConversion::test_aliases_reference_valid_commands 
 tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_git_hooks_installed_on_start 
-[gw5] [ 45%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_entry_point_copy 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_no_privacy_leaks_in_publish 
 [gw7] [ 45%] PASSED tests/plugins/test_sweeper_plugin.py::TestSweeperPlugin::test_deletion_execution 
 tests/plugins/test_sweeper_plugin.py::TestSweeperPlugin::test_audit_log_creation 
 [gw4] [ 45%] PASSED tests/test_yaml_conversion.py::TestYAMLConversion::test_aliases_reference_valid_commands 
@@ -842,16 +831,12 @@ tests/test_yaml_conversion.py::TestYAMLConversion::test_slash_commands_load_perf
 tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_have_module_structure 
 [gw4] [ 45%] PASSED tests/test_yaml_conversion.py::TestYAMLConversion::test_slash_commands_load_performance 
 tests/test_yaml_conversion.py::TestYAMLConversion::test_cortex_operations_load_performance 
-[gw5] [ 46%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_no_privacy_leaks_in_publish 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_no_excluded_directories_in_publish 
 [gw3] [ 46%] PASSED tests/operations/test_parallel_execution.py::TestParallelExecution::test_max_workers_limit 
 tests/operations/test_parallel_execution.py::TestParallelExecution::test_performance_metrics_tracking 
 [gw0] [ 46%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_writes_to_tier1_on_flush 
 tests/ambient/test_debouncer.py::TestDebouncer::test_concurrent_event_handling 
 [gw7] [ 46%] PASSED tests/plugins/test_sweeper_plugin.py::TestSweeperPlugin::test_full_execution 
 tests/plugins/test_sweeper_plugin.py::TestSweeperPlugin::test_no_backup_creation 
-[gw5] [ 46%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_no_excluded_directories_in_publish 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_user_operations_only_in_publish 
 [gw1] [ 46%] PASSED tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_git_hooks_installed_on_start 
 tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_captures_file_changes 
 [gw3] [ 46%] PASSED tests/operations/test_parallel_execution.py::TestParallelExecution::test_performance_metrics_tracking 
@@ -874,12 +859,8 @@ tests/operations/test_parallel_execution.py::TestParallelExecutionEdgeCases::tes
 tests/staleness/test_template_schema_validation.py::TestTemplateSchemaValidation::test_collector_includes_schema_version 
 [gw7] [ 47%] PASSED tests/staleness/test_template_schema_validation.py::TestTemplateSchemaValidation::test_collector_includes_schema_version 
 tests/staleness/test_template_schema_validation.py::TestTemplateSchemaValidation::test_fallback_template_exists 
-[gw5] [ 47%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_user_operations_only_in_publish 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_package_size_reasonable 
 [gw0] [ 47%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_concurrent_event_handling 
 tests/ambient/test_debouncer.py::TestDebouncer::test_clears_buffer_after_flush 
-[gw5] [ 48%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_package_size_reasonable 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_brain_initialization 
 [gw0] [ 48%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_clears_buffer_after_flush 
 tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_watcher_initialization 
 [gw0] [ 48%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_watcher_initialization 
@@ -984,10 +965,6 @@ tests/tier0/test_brain_protector.py::TestYAMLConfiguration::test_has_all_protect
 tests/operations/test_optimize_system_orchestrator.py::TestSystemHealthReport::test_report_serialization 
 [gw6] [ 53%] PASSED tests/operations/test_optimize_system_orchestrator.py::TestSystemHealthReport::test_report_serialization 
 tests/operations/test_parallel_execution.py::TestParallelExecution::test_independent_modules_run_in_parallel 
-[gw5] [ 54%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_simulate_brain_initialization 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_cortex_3_0_design_docs_excluded 
-[gw5] [ 54%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_cortex_3_0_design_docs_excluded 
-tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_all_python_modules_importable 
 [gw2] [ 54%] PASSED tests/test_yaml_loading.py::TestYAMLLoading::test_operations_config_loads 
 tests/test_yaml_loading.py::TestYAMLLoading::test_operations_config_structure 
 [gw3] [ 54%] PASSED tests/tier0/test_brain_protector.py::TestYAMLConfiguration::test_has_all_protection_layers 
@@ -1000,7 +977,6 @@ tests/staleness/test_template_schema_validation.py::TestDocumentationStaleness::
 tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_match_yaml_definitions 
 [gw3] [ 54%] PASSED tests/tier0/test_brain_protector.py::TestYAMLConfiguration::test_critical_paths_loaded 
 tests/tier0/test_brain_protector.py::TestYAMLConfiguration::test_application_paths_loaded 
-[gw5] [ 54%] PASSED tests/integration/test_publish_simulation.py::TestPublishSimulationALIST::test_all_python_modules_importable 
 tests/integration/test_publish_simulation.py::TestPublishIntegrity::test_readme_not_truncated 
 [gw2] [ 55%] PASSED tests/test_yaml_loading.py::TestYAMLLoading::test_operations_config_structure 
 tests/test_yaml_loading.py::TestYAMLLoading::test_operations_config_content 
@@ -1251,8 +1227,6 @@ tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_tier2_knowledge
 [gw3] [ 68%] PASSED tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_tier2_knowledge_graph_exists 
 tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_tier3_development_context_exists 
 [gw3] [ 68%] PASSED tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_tier3_development_context_exists 
-tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_specialist_agents_exist 
-[gw3] [ 68%] PASSED tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_specialist_agents_exist 
 tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_operations_framework_exists 
 [gw3] [ 69%] PASSED tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_operations_framework_exists 
 tests/tier0/test_publish_faculties.py::TestCORTEXFaculties::test_user_operations_exist 
@@ -1706,8 +1680,6 @@ tests/tier3/metrics/test_brain_metrics_collector.py::TestTokenEfficiencyMetricsF
 [gw2] [ 94%] PASSED tests/tier3/metrics/test_brain_metrics_collector.py::TestTokenEfficiencyMetricsFile::test_token_efficiency_metrics_file_exists 
 tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_backward_compatibility_aliases 
 [gw2] [ 94%] PASSED tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_backward_compatibility_aliases 
-tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_format_minimalist_header 
-[gw2] [ 94%] PASSED tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_format_minimalist_header 
 tests/tier3/metrics/test_brain_metrics_collector.py::TestTokenEfficiencyMetricsFile::test_old_efficiency_metrics_removed 
 tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_format_completion_footer 
 [gw2] [ 94%] PASSED tests/tier3/metrics/test_brain_metrics_collector.py::TestOperationHeaderFormatter::test_format_completion_footer 
