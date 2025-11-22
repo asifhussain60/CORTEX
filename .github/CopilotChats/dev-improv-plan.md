@@ -611,3 +611,386 @@ Searched for files matching `**/*mutation*tester*.py`, 1 match
 Searched for files matching `**/*coverage*analyzer*.py`, 1 match
 
 Searched for files matching `**/*quality*scorer*.py`, 1 match
+
+---
+
+## 🏗️ CORTEX 4.0 ENHANCEMENT PLAN
+
+**Integration:** Clean Architecture Best Practices from Jason Taylor's Template
+
+**Date Added:** November 22, 2025
+
+### 📋 Analysis Summary
+
+Analyzed [jasontaylordev/CleanArchitecture](https://github.com/jasontaylordev/CleanArchitecture) repository - a production-grade enterprise .NET template implementing Clean Architecture with CQRS, vertical slice architecture, and comprehensive testing strategies.
+
+### 🎯 Key Patterns Identified for CORTEX 4.0
+
+#### 1. **Project Structure & Layering**
+- Strict layer separation (Domain → Application → Infrastructure → Web)
+- GlobalUsings.cs pattern for reducing boilerplate
+- Feature-based organization (vertical slices)
+- **CORTEX Application:** Apply to agent organization and module structure
+
+#### 2. **CQRS with MediatR**
+- Command/Query separation with co-located validators
+- IRequest<TResponse> pattern for operations
+- Pipeline behaviors for cross-cutting concerns
+- **CORTEX Application:** Enhance command routing and operation orchestration
+
+#### 3. **Dependency Injection Pattern**
+- Extension methods in `Microsoft.Extensions.DependencyInjection` namespace
+- IHostApplicationBuilder pattern for modern .NET
+- Layer-specific service registration
+- **CORTEX Application:** Improve plugin registration and agent initialization
+
+#### 4. **Testing Strategy**
+```csharp
+// Custom Testing base class pattern
+[SetUpFixture]
+public partial class Testing
+{
+    private static ITestDatabase _database = null!;
+    private static CustomWebApplicationFactory _factory = null!;
+    
+    public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+        return await mediator.Send(request);
+    }
+}
+```
+- Testcontainers for database isolation
+- Factory pattern for test infrastructure
+- Acceptance tests with Playwright
+- **CORTEX Application:** Enhance test generation with these patterns
+
+#### 5. **Result Pattern**
+```csharp
+public class Result
+{
+    public bool Succeeded { get; init; }
+    public string[] Errors { get; init; }
+    
+    public static Result Success() => new Result(true, Array.Empty<string>());
+    public static Result Failure(IEnumerable<string> errors) => new Result(false, errors);
+}
+```
+- No exceptions for business logic failures
+- Discriminated unions for success/failure states
+- **CORTEX Application:** Replace exception-based operation flows
+
+#### 6. **Value Objects**
+```csharp
+public abstract class ValueObject
+{
+    protected abstract IEnumerable<object> GetEqualityComponents();
+    // Equality comparison logic
+}
+```
+- Domain primitives for type safety
+- Immutable value semantics
+- **CORTEX Application:** Model domain concepts (Intent, Confidence, Pattern)
+
+#### 7. **Entity Configuration**
+- IEntityTypeConfiguration<T> for clean entity setup
+- ApplyConfigurationsFromAssembly() pattern
+- Interceptors for cross-cutting concerns (audit, domain events)
+- **CORTEX Application:** Database schema management for brain storage
+
+#### 8. **Infrastructure Patterns**
+- DbContext interceptors (AuditableEntityInterceptor, DispatchDomainEventsInterceptor)
+- Repository abstraction via DbContext
+- Multi-database support (PostgreSQL, SQLite, SQL Server)
+- **CORTEX Application:** Tier 2/3 database architecture
+
+#### 9. **Security & Authorization**
+```csharp
+// Domain Constants
+public abstract class Roles
+{
+    public const string Administrator = nameof(Administrator);
+}
+
+public abstract class Policies
+{
+    public const string CanPurge = nameof(CanPurge);
+}
+```
+- Policy-based authorization
+- Role constants in Domain layer
+- **CORTEX Application:** Brain protection rules enforcement
+
+#### 10. **Template-Based Scaffolding**
+```bash
+dotnet new ca-usecase --name CreateTodoList --feature-name TodoLists --usecase-type command --return-type int
+```
+- Code generation for use cases
+- Consistent project structure
+- **CORTEX Application:** Agent template generation system
+
+### 🚀 CORTEX 4.0 Implementation Phases
+
+#### **Phase A: Architecture Refactoring (3-4 hours)**
+
+**A1. Layer Separation Enhancement**
+- Reorganize agents into Domain/Application/Infrastructure layers
+- Implement GlobalUsings.py equivalents (common imports)
+- Feature-based folder structure for agents
+
+**A2. Result Pattern Integration**
+```python
+# Before (exception-based)
+if not pattern_found:
+    raise PatternNotFoundException("Pattern not found")
+
+# After (result-based)
+class Result:
+    def __init__(self, succeeded: bool, errors: List[str] = None):
+        self.succeeded = succeeded
+        self.errors = errors or []
+    
+    @staticmethod
+    def success() -> 'Result':
+        return Result(True)
+    
+    @staticmethod
+    def failure(errors: List[str]) -> 'Result':
+        return Result(False, errors)
+
+# Usage
+result = pattern_finder.find_pattern(query)
+if result.succeeded:
+    # Handle success
+else:
+    # Handle failures without exceptions
+```
+
+**A3. Value Objects Implementation**
+```python
+class Intent(ValueObject):
+    """Domain primitive for user intent"""
+    def __init__(self, value: str, confidence: float):
+        self.value = value
+        self.confidence = confidence
+    
+    def get_equality_components(self):
+        return [self.value, self.confidence]
+
+class Pattern(ValueObject):
+    """Domain primitive for learned patterns"""
+    def __init__(self, pattern_id: str, title: str, confidence: float):
+        self.pattern_id = pattern_id
+        self.title = title
+        self.confidence = confidence
+```
+
+#### **Phase B: CQRS Enhancement (2-3 hours)**
+
+**B1. Command/Query Separation**
+```python
+# Commands (write operations)
+class CreatePatternCommand:
+    def __init__(self, pattern_data: Dict[str, Any]):
+        self.pattern_data = pattern_data
+
+class CreatePatternCommandHandler:
+    def handle(self, command: CreatePatternCommand) -> Result:
+        # Validation
+        validator = CreatePatternCommandValidator()
+        if not validator.validate(command):
+            return Result.failure(validator.errors)
+        
+        # Execution
+        # ...
+        return Result.success()
+
+# Queries (read operations)
+class GetPatternQuery:
+    def __init__(self, pattern_id: str):
+        self.pattern_id = pattern_id
+
+class GetPatternQueryHandler:
+    def handle(self, query: GetPatternQuery) -> Result[Pattern]:
+        # ...
+        return Result.success(pattern)
+```
+
+**B2. Validator Co-location**
+- Move validators next to handlers
+- Fluent validation style
+- Async validation support
+
+**B3. Pipeline Behaviors**
+- Logging behavior (performance tracking)
+- Authorization behavior (brain protection enforcement)
+- Validation behavior (automatic validation before execution)
+
+#### **Phase C: Testing Infrastructure (2-3 hours)**
+
+**C1. Testing Base Class Pattern**
+```python
+class CortexTestBase:
+    """Base class for all CORTEX integration tests"""
+    _database: TestDatabase = None
+    _scope_factory: ServiceScopeFactory = None
+    
+    @classmethod
+    def setup_class(cls):
+        cls._database = TestDatabaseFactory.create()
+        cls._scope_factory = create_service_scope_factory()
+    
+    async def send_command(self, command: IRequest) -> Result:
+        scope = self._scope_factory.create_scope()
+        mediator = scope.get_service(IMediator)
+        return await mediator.send(command)
+    
+    async def send_query(self, query: IRequest[T]) -> Result[T]:
+        scope = self._scope_factory.create_scope()
+        mediator = scope.get_service(IMediator)
+        return await mediator.send(query)
+```
+
+**C2. Test Database Factory**
+```python
+class TestDatabaseFactory:
+    @staticmethod
+    def create() -> ITestDatabase:
+        # Testcontainers for PostgreSQL/SQL Server
+        # OR
+        # In-memory SQLite for fast tests
+        return SqliteTestDatabase()
+```
+
+**C3. Acceptance Test Framework**
+- Playwright integration for UI testing
+- API contract testing
+- E2E workflow validation
+
+#### **Phase D: Dependency Injection Modernization (1-2 hours)**
+
+**D1. Extension Method Pattern**
+```python
+# Before
+def register_services(container):
+    container.register(IPatternMatcher, PatternMatcher)
+    container.register(IKnowledgeGraph, KnowledgeGraph)
+    # ...
+
+# After
+class ServiceCollectionExtensions:
+    @staticmethod
+    def add_cortex_application(builder: HostApplicationBuilder):
+        builder.services.add_scoped(IPatternMatcher, PatternMatcher)
+        builder.services.add_scoped(IKnowledgeGraph, KnowledgeGraph)
+        # ...
+    
+    @staticmethod
+    def add_cortex_infrastructure(builder: HostApplicationBuilder):
+        # Database
+        # File I/O
+        # External services
+```
+
+**D2. Layer-Specific Registration**
+- Domain services → add_cortex_domain()
+- Application services → add_cortex_application()
+- Infrastructure services → add_cortex_infrastructure()
+- Web/Presentation → add_cortex_web()
+
+#### **Phase E: Security Enhancement (1-2 hours)**
+
+**E1. Policy Constants**
+```python
+class BrainPolicies:
+    TIER0_WRITE = "Tier0Write"  # SKULL rule writes
+    TIER1_READ = "Tier1Read"    # Conversation history access
+    TIER2_WRITE = "Tier2Write"  # Pattern learning
+    TIER3_READ = "Tier3Read"    # Development context access
+
+class Roles:
+    ADMINISTRATOR = "Administrator"
+    DEVELOPER = "Developer"
+    AGENT = "Agent"
+```
+
+**E2. Authorization Guards**
+```python
+class AuthorizationBehavior:
+    def handle(self, request: IRequest, next):
+        # Check policies
+        if requires_policy(request):
+            policy = get_required_policy(request)
+            if not user.has_policy(policy):
+                return Result.failure(["Unauthorized"])
+        
+        return next()
+```
+
+#### **Phase F: Template System (1-2 hours)**
+
+**F1. Agent Template Generator**
+```bash
+cortex new agent --name TodoListAgent --feature-name TodoLists --agent-type executor
+```
+
+**F2. Use Case Templates**
+```bash
+cortex new command --name CreatePattern --return-type Pattern
+cortex new query --name GetPatterns --return-type List[Pattern]
+```
+
+**F3. Test Templates**
+```bash
+cortex new test --type integration --agent TodoListAgent
+cortex new test --type unit --handler CreatePatternHandler
+```
+
+### 📊 Implementation Plan Summary
+
+| Phase | Estimated Time | Priority | Dependencies |
+|-------|---------------|----------|--------------|
+| A: Architecture Refactoring | 3-4 hours | HIGH | None |
+| B: CQRS Enhancement | 2-3 hours | HIGH | Phase A |
+| C: Testing Infrastructure | 2-3 hours | MEDIUM | Phase A |
+| D: DI Modernization | 1-2 hours | MEDIUM | Phase A |
+| E: Security Enhancement | 1-2 hours | HIGH | Phase A, B |
+| F: Template System | 1-2 hours | LOW | All phases |
+
+**Total Estimated Time:** 12-17 hours
+
+**Parallel Execution:**
+- Phase A must complete first (foundation)
+- Phases B, C, D can run in parallel after A
+- Phase E requires A, B
+- Phase F requires all phases
+
+### 🎯 Expected Benefits
+
+1. **Maintainability:** 40% reduction in code duplication via CQRS patterns
+2. **Testability:** 50% faster test execution with base class pattern
+3. **Type Safety:** 90% reduction in runtime errors via value objects
+4. **Security:** 100% policy coverage via authorization guards
+5. **Developer Experience:** 60% faster agent development via templates
+
+### 📝 Success Metrics
+
+- [ ] Result pattern adopted across all operations (0 exceptions for business logic)
+- [ ] Value objects implemented for all domain concepts
+- [ ] Testing base class used by 100% of integration tests
+- [ ] Policy-based authorization enforced on all sensitive operations
+- [ ] Template system generates 80%+ of boilerplate code
+- [ ] CQRS separation applied to all agents (commands/queries distinct)
+- [ ] Layer-specific DI registration for all services
+
+### 🔗 References
+
+- [Clean Architecture Repository](https://github.com/jasontaylordev/CleanArchitecture)
+- [Clean Architecture Blog](https://jasontaylor.dev/clean-architecture-getting-started/)
+- [MediatR Documentation](https://github.com/jbogard/MediatR)
+- [Testcontainers](https://github.com/testcontainers/testcontainers-python)
+
+---
+
+**Next Action:** Proceed with Phase A (Architecture Refactoring) to establish foundation for all subsequent improvements.
