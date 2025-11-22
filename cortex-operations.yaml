@@ -1,4 +1,42 @@
 operations:
+  
+  # ========== Conversation Management Operations ==========
+  
+  resume_conversation:
+    name: Resume Conversation
+    description: Resume previous conversation from new chat session with full context restoration
+    deployment_tier: user  # User-facing operation
+    natural_language:
+    - resume {topic}
+    - continue {topic}
+    - resume our {topic} work
+    - continue our {topic} work
+    - resume my {topic}
+    - continue my {topic}
+    - resume conversation {id}
+    - resume the {topic} conversation
+    - continue the {topic} conversation
+    category: conversation
+    modules:
+    - resume_conversation_orchestrator
+    profiles:
+      standard:
+        description: Resume conversation with full context
+        modules:
+        - resume_conversation_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: SQLite-based conversation resume with planning doc sync
+    examples:
+    - resume authentication feature
+    - continue our dark mode work
+    - resume planning session
+    - continue the API refactoring
+    - resume conversation conv-20251122-001
+  
   publish_cortex:
     name: Publish CORTEX to Branch
     description: Build production-ready package and publish to cortex-publish branch for user deployment
