@@ -1,104 +1,220 @@
-# CORTEX Deploy - Production Deployment Workflow
+# CORTEX Deploy - Production Package Publisher
 
-**Purpose:** Deploy production-ready CORTEX user prompts to the `publish/` folder. This command packages ONLY user-facing prompt files and essential documentation for clean distribution.
+**Purpose:** Deploy production-ready CORTEX 3.0 to `publish/CORTEX` folder with complete verification. This creates a clean, self-contained package that users can copy to their applications.
 
-**Version:** 1.0  
+**Version:** 3.0  
 **Status:** 🚀 ACTIVE  
-**Command:** `/CORTEX deploy`
+**Commands:** `/CORTEX deploy` or `/CORTEX publish`
 
 ---
 
 ## 🎯 What This Does
 
 This workflow:
-1. ✅ Creates a clean `publish/` folder structure
-2. ✅ Copies ONLY user-facing prompt files (8 prompts)
-3. ✅ Includes essential documentation (CORTEX-DNA.md, README.md)
-4. ✅ Includes configuration (kds.config.json)
-5. ✅ Creates a production README with quick start guide
-6. ✅ Tags the deployment for version tracking
+1. ✅ Cleans `publish/CORTEX` folder
+2. ✅ Copies complete CORTEX 3.0 source (407 files, ~4 MB)
+3. ✅ Includes all core components (brain, agents, operations, prompts)
+4. ✅ Creates SETUP-FOR-COPILOT.md user guide
+5. ✅ Creates production README.md
+6. ✅ **VERIFIES package integrity** (15+ verification checks)
+7. ✅ Confirms package is production-ready
 
-**📦 OUTPUT:** Clean production package in `publish/` folder ready for distribution.
+**📦 OUTPUT:** Verified production package in `publish/CORTEX/` ready for distribution.
 
 ---
 
 ## 📋 Prerequisites
 
-Before deploying, ensure:
-- ✅ All user prompt files are complete in `prompts/user/`
-- ✅ CORTEX-DNA.md is up to date with current version
-- ✅ Configuration file (kds.config.json) is correct
-- ✅ All prompts are tested and working
-- ✅ README.md reflects current features
+Before deploying:
+- ✅ In CORTEX root directory (D:\PROJECTS\CORTEX)
+- ✅ All source files present and tested
+- ✅ No uncommitted critical changes
+- ✅ Version updated if needed
 
 ---
 
-## 🚀 Deployment Process
-
-### Quick Deploy
+## 🚀 Quick Deploy
 
 ```powershell
-# Simple deployment (recommended)
-.\scripts\deploy-cortex-prompts.ps1
+# Run deployment with verification
+.\scripts\publish-cortex.ps1 -Force
 
-# Deploy with specific version
-.\scripts\deploy-cortex-prompts.ps1 -Version "1.1"
-
-# Preview without changes (dry run)
-.\scripts\deploy-cortex-prompts.ps1 -DryRun
-
-# Skip confirmations
-.\scripts\deploy-cortex-prompts.ps1 -Force
-
-# Custom output path
-.\scripts\deploy-cortex-prompts.ps1 -OutputPath "release"
+# Or use CORTEX command
+/CORTEX deploy
+/CORTEX publish
 ```
 
-### What Gets Deployed
+---
 
-The script creates a clean `publish/` folder with:
+## 📦 What Gets Published
 
-**📦 User Prompts (publish/prompts/):**
-- `kds.md` - Master command (one command for everything)
-- `plan.md` - Create multi-phase implementation plans
-- `execute.md` - Execute tasks from plans
-- `test.md` - Generate and run Playwright tests
-- `validate.md` - System health checks
-- `resume.md` - Resume interrupted work
-- `correct.md` - Fix issues and errors
-- `govern.md` - Enforce governance rules
+The `publish/CORTEX/` package includes:
 
-**📄 Documentation (publish/docs/):**
-- `CORTEX-DNA.md` - Core design principles
-- `README.md` - Project overview
+**🔹 Entry Point:**
+- `.github/prompts/CORTEX.prompt.md` - Copilot integration
 
-**⚙️ Configuration (publish/):**
-- `kds.config.json` - System configuration
-- `README.md` - Production quick start guide
+**🔹 Brain System:**
+- `cortex-brain/` - Brain rules, knowledge graph, capabilities, templates
 
-### Step-by-Step Process
+**🔹 Source Code:**
+- `src/` - Complete Python source (tier1, tier2, tier3, agents, operations)
 
-1. **Pre-Deployment Validation**
-   - Verifies CORTEX root directory
-   - Extracts version from CORTEX-DNA.md
-   - Validates required directories exist
-   - Shows deployment plan
+**🔹 Prompts:**
+- `prompts/shared/` - All shared prompt modules
 
-2. **Confirmation** (unless `-Force`)
-   - Displays deployment summary
-   - Requires "yes" to proceed
+**🔹 Scripts:**
+- `scripts/cortex/` - Utility scripts for brain management
 
-3. **Clean Output Directory**
-   - Removes existing `publish/` folder (if exists)
-   - Creates clean directory structure
-   - Creates subdirectories: `prompts/`, `docs/`, `templates/`
+**🔹 Configuration:**
+- `requirements.txt` - Python dependencies
+- `cortex-operations.yaml` - Operations configuration
+- `cortex.config.template.json` - Config template
+- `setup.py` - Setup script
 
-4. **Copy User Prompts**
-   - Copies 8 user-facing prompt files
-   - Shows progress for each file
+**🔹 Documentation:**
+- `SETUP-FOR-COPILOT.md` - User setup guide
+- `README.md` - Package overview
 
-5. **Copy Documentation**
-   - Copies CORTEX-DNA.md
+---
+
+## ✅ Verification Checks
+
+The script performs comprehensive verification:
+
+### Critical Checks (Must Pass)
+1. ✓ Directory structure (`.github/prompts`, `cortex-brain`, `src`, etc.)
+2. ✓ Entry point exists (`.github/prompts/CORTEX.prompt.md`)
+3. ✓ All required files present (SETUP, README, requirements.txt, etc.)
+4. ✓ Files are not empty
+5. ✓ No KDS-named files
+6. ✓ File count in range (300-600 files)
+7. ✓ Package size reasonable (1-10 MB)
+8. ✓ Setup guide has correct instructions
+
+### Quality Checks (Warnings if Failed)
+- Source code presence (50+ Python files expected)
+- No test/cache files included
+- Package size optimization
+
+### Verification Report
+
+After deployment, you'll see:
+
+```
+╔════════════════════════════════════════════╗
+║      PACKAGE VERIFICATION REPORT          ║
+╚════════════════════════════════════════════╝
+
+✅ Passed Checks (15):
+   ✓ Directory: .github/prompts
+   ✓ Directory: cortex-brain
+   ✓ Entry Point: .github/prompts/CORTEX.prompt.md
+   ✓ Setup Guide: SETUP-FOR-COPILOT.md
+   ✓ Source code: 387 Python files
+   ✓ No KDS-named files
+   ✓ File count: 407 (expected range: 300-600)
+   ✓ Package size: 3.95 MB (expected 1-10 MB)
+   ... (and more)
+
+╔════════════════════════════════════════════╗
+║    ✅ PACKAGE READY FOR PRODUCTION        ║
+╚════════════════════════════════════════════╝
+
+📦 Package Details:
+  Location:    publish/CORTEX/
+  Files:       407
+  Size:        3.95 MB
+  Pass Rate:   100%
+
+🚀 Deployment Instructions:
+  1. Copy to target:
+     xcopy /E /I /H /Y publish\CORTEX C:\target-app\cortex
+
+  2. In target app, open VS Code Copilot Chat:
+     'onboard this application'
+
+✨ CORTEX preserves existing knowledge - upgrades are safe!
+```
+
+---
+
+## 🎯 How Users Deploy
+
+Once published, users follow these simple steps:
+
+### Step 1: Copy CORTEX Folder
+
+```powershell
+# Windows
+xcopy /E /I /H /Y D:\PROJECTS\CORTEX\publish\CORTEX C:\their-app\cortex
+
+# Mac/Linux
+cp -r /path/to/publish/CORTEX ./cortex
+```
+
+### Step 2: Onboard with Copilot
+
+Open their application in VS Code, then in Copilot Chat:
+
+```
+onboard this application
+```
+
+**That's it!** CORTEX will:
+- Detect existing installations and preserve knowledge
+- Copy entry points to their app's `.github/` folder
+- Initialize brain databases (if needed)
+- Configure for their application
+- Start helping immediately
+
+---
+
+## 🔍 Troubleshooting
+
+**Verification fails:**
+- Review failed checks in the report
+- Fix issues in source files
+- Re-run publish script
+
+**Package size too small:**
+- Check if source files copied correctly
+- Verify `src/` directory has Python files
+
+**Missing files:**
+- Check source directory structure
+- Ensure all required files exist in workspace
+
+---
+
+## 📝 After Publishing
+
+1. **Test the package locally**
+   ```powershell
+   cd publish/CORTEX
+   ls  # Verify structure
+   ```
+
+2. **Deploy to test application**
+   - Copy to a test app
+   - Run onboarding
+   - Verify functionality
+
+3. **Commit to repository**
+   ```bash
+   git add publish/CORTEX
+   git commit -m "Publish CORTEX 3.0 - Verified production package"
+   git push
+   ```
+
+---
+
+## ✨ Key Benefits
+
+- **Single Command:** `/CORTEX deploy` does everything
+- **Verified:** 15+ checks ensure package integrity
+- **Safe:** Preserves existing knowledge during upgrades
+- **Complete:** All components included (407 files)
+- **Ready:** Production-verified and tested
    - Copies README.md
 
 6. **Copy Configuration**
