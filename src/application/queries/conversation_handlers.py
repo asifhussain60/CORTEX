@@ -22,6 +22,7 @@ from src.domain.value_objects import (
     Namespace,
     PatternConfidence
 )
+from src.infrastructure.persistence.unit_of_work import IUnitOfWork
 import logging
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,15 @@ class SearchContextHandler(IRequestHandler[SearchContextQuery, Result[List[Conve
     - Filter by namespace and relevance
     - Return ranked results
     """
+    
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
     
     async def handle(self, request: SearchContextQuery) -> Result[List[ConversationDto]]:
         """Search conversations by text
@@ -56,30 +66,54 @@ class SearchContextHandler(IRequestHandler[SearchContextQuery, Result[List[Conve
             if request.namespace_filter:
                 namespace = Namespace(value=request.namespace_filter)
             
-            # TODO: Execute search in database
-            # For now, return mock results
-            logger.info(
-                f"Searching context: '{request.search_text}' "
-                f"(namespace: {request.namespace_filter}, "
-                f"min_relevance: {request.min_relevance}, "
-                f"max_results: {request.max_results})"
-            )
-            
-            # Mock results
-            results = [
-                ConversationDto(
-                    conversation_id="conv-001",
-                    title="Sample conversation 1",
-                    content="This is a sample conversation matching the search",
-                    file_path="/path/to/conv1.json",
-                    quality_score=0.85,
-                    entity_count=15,
-                    relevance_score=0.90,
-                    captured_at="2024-12-20T10:00:00Z"
-                )
-            ]
-            
-            return Result.success(results)
+            # Search conversations in database
+            try:
+                async with self._uow as uow:
+                    # Get high-quality conversations first
+                    conversations = await uow.conversations.get_high_quality(request.min_relevance)
+                    
+                    # Filter by namespace if specified
+                    if request.namespace_filter:
+                        conversations = [c for c in conversations if c.namespace == request.namespace_filter]
+                    
+                    # Simple text search (filter by title/content containing search text)
+                    search_lower = request.search_text.lower()
+                    filtered_conversations = [
+                        c for c in conversations
+                        if search_lower in c.title.lower() or search_lower in c.content.lower()
+                    ]
+                    
+                    # Sort by quality (best first) and limit results
+                    filtered_conversations.sort(key=lambda c: c.quality, reverse=True)
+                    results = filtered_conversations[:request.max_results]
+                    
+                    # Convert to DTOs
+                    dtos = [
+                        ConversationDto(
+                            conversation_id=c.conversation_id,
+                            title=c.title,
+                            content=c.content[:500],  # Truncate content for preview
+                            file_path=f"tier1/{c.namespace}/{c.conversation_id}.json",
+                            quality_score=c.quality,
+                            entity_count=c.entity_count,
+                            relevance_score=c.quality,  # Use quality as relevance proxy
+                            captured_at=c.captured_at.isoformat()
+                        )
+                        for c in results
+                    ]
+                    
+                    logger.info(
+                        f"Searching context: '{request.search_text}' "
+                        f"(namespace: {request.namespace_filter}, "
+                        f"min_relevance: {request.min_relevance}, "
+                        f"found: {len(dtos)}/{len(conversations)} conversations)"
+                    )
+                    
+                    return Result.success(dtos)
+                    
+            except Exception as db_error:
+                logger.error(f"Database error searching context: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to search conversations: {str(db_error)}"])
             
         except ValueError as e:
             logger.error(f"Validation error searching context: {e}")
@@ -215,6 +249,15 @@ class GetConversationByIdHandler(IRequestHandler[GetConversationByIdQuery, Resul
     - Return conversation details
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: GetConversationByIdQuery) -> Result[Optional[ConversationDto]]:
         """Get conversation by ID
         
@@ -228,22 +271,33 @@ class GetConversationByIdHandler(IRequestHandler[GetConversationByIdQuery, Resul
             # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             
-            # TODO: Get conversation from database
-            logger.info(f"Getting conversation: {request.conversation_id}")
-            
-            # Mock result
-            conversation = ConversationDto(
-                conversation_id=request.conversation_id,
-                title="Sample conversation",
-                content="This is a sample conversation",
-                file_path="/path/to/conv.json",
-                quality_score=0.85,
-                entity_count=15,
-                relevance_score=0.90,
-                captured_at="2024-12-20T10:00:00Z"
-            )
-            
-            return Result.success(conversation)
+            # Get conversation from database
+            try:
+                async with self._uow as uow:
+                    conversation = await uow.conversations.get_by_id(request.conversation_id)
+                    
+                    if not conversation:
+                        logger.info(f"Conversation not found: {request.conversation_id}")
+                        return Result.success(None)
+                    
+                    # Convert to DTO
+                    dto = ConversationDto(
+                        conversation_id=conversation.conversation_id,
+                        title=conversation.title,
+                        content=conversation.content,
+                        file_path=f"tier1/{conversation.namespace}/{conversation.conversation_id}.json",
+                        quality_score=conversation.quality,
+                        entity_count=conversation.entity_count,
+                        relevance_score=conversation.quality,
+                        captured_at=conversation.captured_at.isoformat()
+                    )
+                    
+                    logger.info(f"Retrieved conversation: {request.conversation_id}")
+                    return Result.success(dto)
+                    
+            except Exception as db_error:
+                logger.error(f"Database error getting conversation: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to get conversation: {str(db_error)}"])
             
         except ValueError as e:
             logger.error(f"Validation error getting conversation: {e}")
@@ -262,6 +316,15 @@ class GetPatternByIdHandler(IRequestHandler[GetPatternByIdQuery, Result[Optional
     - Return pattern details
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: GetPatternByIdQuery) -> Result[Optional[PatternDto]]:
         """Get pattern by ID
         
@@ -275,23 +338,34 @@ class GetPatternByIdHandler(IRequestHandler[GetPatternByIdQuery, Result[Optional
             # Validate input
             Guard.against_empty(request.pattern_id, "pattern_id")
             
-            # TODO: Get pattern from database
-            logger.info(f"Getting pattern: {request.pattern_id}")
-            
-            # Mock result
-            pattern = PatternDto(
-                pattern_id=request.pattern_id,
-                pattern_name="Sample Pattern",
-                pattern_type="code_structure",
-                pattern_content="# Sample pattern\n...",
-                namespace="workspace.sample",
-                confidence_score=0.85,
-                observation_count=15,
-                success_rate=0.90,
-                learned_at="2024-12-15T10:00:00Z"
-            )
-            
-            return Result.success(pattern)
+            # Get pattern from database
+            try:
+                async with self._uow as uow:
+                    pattern = await uow.patterns.get_by_id(request.pattern_id)
+                    
+                    if not pattern:
+                        logger.info(f"Pattern not found: {request.pattern_id}")
+                        return Result.success(None)
+                    
+                    # Convert to DTO
+                    dto = PatternDto(
+                        pattern_id=pattern.pattern_id,
+                        pattern_name=pattern.pattern_name,
+                        pattern_type=pattern.pattern_type,
+                        pattern_content=pattern.pattern_content,
+                        namespace="tier2.knowledge_graph",  # Patterns are in Tier 2
+                        confidence_score=pattern.confidence,
+                        observation_count=pattern.observation_count,
+                        success_rate=pattern.success_rate,
+                        learned_at=pattern.learned_at.isoformat()
+                    )
+                    
+                    logger.info(f"Retrieved pattern: {request.pattern_id}")
+                    return Result.success(dto)
+                    
+            except Exception as db_error:
+                logger.error(f"Database error getting pattern: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to get pattern: {str(db_error)}"])
             
         except ValueError as e:
             logger.error(f"Validation error getting pattern: {e}")
@@ -311,6 +385,15 @@ class GetRecentConversationsHandler(IRequestHandler[GetRecentConversationsQuery,
     - Return sorted results
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: GetRecentConversationsQuery) -> Result[List[ConversationDto]]:
         """Get recent conversations
         
@@ -328,16 +411,47 @@ class GetRecentConversationsHandler(IRequestHandler[GetRecentConversationsQuery,
             if request.namespace_filter:
                 namespace = Namespace(value=request.namespace_filter)
             
-            # TODO: Get recent conversations from database
-            logger.info(
-                f"Getting recent conversations: namespace={request.namespace_filter}, "
-                f"max={request.max_results}"
-            )
-            
-            # Mock results
-            results = []
-            
-            return Result.success(results)
+            # Get recent conversations from database
+            try:
+                async with self._uow as uow:
+                    # Get all conversations
+                    conversations = await uow.conversations.get_all()
+                    
+                    # Filter by namespace if specified
+                    if request.namespace_filter:
+                        conversations = [c for c in conversations if c.namespace == request.namespace_filter]
+                    
+                    # Sort by captured_at (most recent first)
+                    conversations.sort(key=lambda c: c.captured_at, reverse=True)
+                    
+                    # Limit results
+                    results = conversations[:request.max_results]
+                    
+                    # Convert to DTOs
+                    dtos = [
+                        ConversationDto(
+                            conversation_id=c.conversation_id,
+                            title=c.title,
+                            content=c.content[:200],  # Preview only
+                            file_path=f"tier1/{c.namespace}/{c.conversation_id}.json",
+                            quality_score=c.quality,
+                            entity_count=c.entity_count,
+                            relevance_score=c.quality,
+                            captured_at=c.captured_at.isoformat()
+                        )
+                        for c in results
+                    ]
+                    
+                    logger.info(
+                        f"Retrieved {len(dtos)} recent conversations "
+                        f"(namespace={request.namespace_filter})"
+                    )
+                    
+                    return Result.success(dtos)
+                    
+            except Exception as db_error:
+                logger.error(f"Database error getting recent conversations: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to get recent conversations: {str(db_error)}"])
             
         except ValueError as e:
             logger.error(f"Validation error getting recent conversations: {e}")
@@ -357,6 +471,15 @@ class GetPatternsByNamespaceHandler(IRequestHandler[GetPatternsByNamespaceQuery,
     - Return sorted results
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: GetPatternsByNamespaceQuery) -> Result[List[PatternDto]]:
         """Get patterns by namespace
         
@@ -375,16 +498,42 @@ class GetPatternsByNamespaceHandler(IRequestHandler[GetPatternsByNamespaceQuery,
             # Validate namespace
             namespace = Namespace(value=request.namespace)
             
-            # TODO: Get patterns from database
-            logger.info(
-                f"Getting patterns for namespace: {namespace.value} "
-                f"(min_confidence={request.min_confidence})"
-            )
-            
-            # Mock results
-            results = []
-            
-            return Result.success(results)
+            # Get patterns from database
+            try:
+                async with self._uow as uow:
+                    # Get patterns with minimum confidence
+                    patterns = await uow.patterns.get_by_confidence(request.min_confidence)
+                    
+                    # Sort by confidence (highest first) and limit results
+                    patterns.sort(key=lambda p: p.confidence, reverse=True)
+                    results = patterns[:request.max_results]
+                    
+                    # Convert to DTOs
+                    dtos = [
+                        PatternDto(
+                            pattern_id=p.pattern_id,
+                            pattern_name=p.pattern_name,
+                            pattern_type=p.pattern_type,
+                            pattern_content=p.pattern_content,
+                            namespace="tier2.knowledge_graph",
+                            confidence_score=p.confidence,
+                            observation_count=p.observation_count,
+                            success_rate=p.success_rate,
+                            learned_at=p.learned_at.isoformat()
+                        )
+                        for p in results
+                    ]
+                    
+                    logger.info(
+                        f"Retrieved {len(dtos)} patterns for namespace: {namespace.value} "
+                        f"(min_confidence={request.min_confidence})"
+                    )
+                    
+                    return Result.success(dtos)
+                    
+            except Exception as db_error:
+                logger.error(f"Database error getting patterns: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to get patterns: {str(db_error)}"])
             
         except ValueError as e:
             logger.error(f"Validation error getting patterns: {e}")

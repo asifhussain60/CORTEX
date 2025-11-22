@@ -1,1 +1,12 @@
-[]
+[
+  "tests/performance/benchmark_mediator.py::TestMediatorPerformance::test_command_dispatch_latency",
+  "tests/performance/benchmark_mediator.py::TestMediatorPerformance::test_concurrent_command_throughput",
+  "tests/performance/benchmark_mediator.py::TestMediatorPerformance::test_mixed_workload_performance",
+  "tests/performance/benchmark_mediator.py::TestMediatorPerformance::test_query_dispatch_latency",
+  "tests/performance/benchmark_mediator.py::TestMediatorPerformance::test_search_query_performance",
+  "tests/performance/benchmark_search.py::TestSearchPerformance::test_concurrent_search_operations",
+  "tests/performance/benchmark_search.py::TestSearchPerformance::test_search_large_dataset",
+  "tests/performance/benchmark_search.py::TestSearchPerformance::test_search_no_results",
+  "tests/performance/benchmark_search.py::TestSearchPerformance::test_search_with_relevance_filter",
+  "tests/performance/benchmark_search.py::TestSearchPerformance::test_simple_text_search"
+]

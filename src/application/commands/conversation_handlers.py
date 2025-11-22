@@ -22,6 +22,10 @@ from src.domain.events import (
     PatternLearnedEvent,
     ContextRelevanceUpdatedEvent
 )
+from src.infrastructure.persistence.unit_of_work import IUnitOfWork
+from src.infrastructure.persistence.repositories.conversation_repository import Conversation
+from src.infrastructure.persistence.repositories.pattern_repository import Pattern
+from src.infrastructure.persistence.repositories.context_repository import ContextItem
 import logging
 
 logger = logging.getLogger(__name__)
@@ -37,6 +41,15 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
     - Raise ConversationCapturedEvent
     - Return conversation ID
     """
+    
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
     
     async def handle(self, request: CaptureConversationCommand) -> Result[str]:
         """Capture a conversation
@@ -87,12 +100,49 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
                     f"Minimum quality: Good (0.70), actual: {quality.score:.2f}"
                 ])
             
-            # TODO: Store in database (Tier 1 Working Memory)
-            # For now, just log
-            logger.info(
-                f"Captured conversation: {request.conversation_id} "
-                f"(quality: {quality.quality_level} {quality.quality_emoji})"
-            )
+            # Store in database using Unit of Work
+            try:
+                async with self._uow as uow:
+                    # Create conversation entity
+                    conversation = Conversation(
+                        conversation_id=request.conversation_id,
+                        title=request.title,
+                        content=request.content,
+                        quality=quality.score,
+                        participant_count=quality.turn_count,
+                        entity_count=quality.entity_count,
+                        captured_at=request.captured_at or datetime.now(),
+                        namespace="general"  # Default namespace for conversations
+                    )
+                    
+                    # Check if conversation already exists
+                    existing = await uow.conversations.get_by_id(request.conversation_id)
+                    if existing:
+                        # Update existing conversation
+                        existing.title = conversation.title
+                        existing.content = conversation.content
+                        existing.quality = conversation.quality
+                        existing.participant_count = conversation.participant_count
+                        existing.entity_count = conversation.entity_count
+                        existing.updated_at = datetime.now()
+                        await uow.conversations.update(existing)
+                        logger.info(f"Updated existing conversation: {request.conversation_id}")
+                    else:
+                        # Add new conversation
+                        await uow.conversations.add(conversation)
+                        logger.info(f"Added new conversation: {request.conversation_id}")
+                    
+                    # Commit transaction
+                    await uow.commit()
+                    
+                    logger.info(
+                        f"Captured conversation: {request.conversation_id} "
+                        f"(quality: {quality.quality_level} {quality.quality_emoji})"
+                    )
+                    
+            except Exception as db_error:
+                logger.error(f"Database error capturing conversation: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to store conversation: {str(db_error)}"])
             
             # TODO: Raise domain event
             # event = ConversationCapturedEvent(
@@ -126,6 +176,15 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
     - Raise PatternLearnedEvent
     - Return pattern ID
     """
+    
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
     
     async def handle(self, request: LearnPatternCommand) -> Result[str]:
         """Learn a new pattern
@@ -163,11 +222,57 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
                     f"{confidence.confidence_level} {confidence.confidence_emoji}"
                 )
             
-            # TODO: Store in database (Tier 2 Knowledge Graph)
-            logger.info(
-                f"Learned pattern: {request.pattern_id} "
-                f"(namespace: {namespace.value}, confidence: {confidence.confidence_level})"
-            )
+            # Store in database using Unit of Work
+            try:
+                async with self._uow as uow:
+                    # Create pattern entity
+                    pattern = Pattern(
+                        pattern_id=request.pattern_id,
+                        pattern_name=request.pattern_name,
+                        pattern_type=request.pattern_type,
+                        pattern_content=request.pattern_content,
+                        confidence=confidence.score,
+                        source_conversation_id=request.source_conversation_id,
+                        observation_count=confidence.observation_count,
+                        success_rate=confidence.success_rate,
+                        tags=request.tags or [],
+                        examples=[],  # No examples field in command
+                        related_patterns=[],  # No related_patterns field in command
+                        learned_at=request.learned_at or datetime.now()
+                    )
+                    
+                    # Check if pattern already exists
+                    existing = await uow.patterns.get_by_id(request.pattern_id)
+                    if existing:
+                        # Update existing pattern
+                        existing.pattern_name = pattern.pattern_name
+                        existing.pattern_type = pattern.pattern_type
+                        existing.pattern_content = pattern.pattern_content
+                        existing.confidence = pattern.confidence
+                        existing.observation_count = pattern.observation_count
+                        existing.success_rate = pattern.success_rate
+                        existing.tags = pattern.tags
+                        existing.examples = pattern.examples
+                        existing.related_patterns = pattern.related_patterns
+                        existing.updated_at = datetime.now()
+                        await uow.patterns.update(existing)
+                        logger.info(f"Updated existing pattern: {request.pattern_id}")
+                    else:
+                        # Add new pattern
+                        await uow.patterns.add(pattern)
+                        logger.info(f"Added new pattern: {request.pattern_id}")
+                    
+                    # Commit transaction
+                    await uow.commit()
+                    
+                    logger.info(
+                        f"Learned pattern: {request.pattern_id} "
+                        f"(type: {request.pattern_type}, confidence: {confidence.confidence_level})"
+                    )
+                    
+            except Exception as db_error:
+                logger.error(f"Database error learning pattern: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to store pattern: {str(db_error)}"])
             
             # TODO: Raise domain event
             # event = PatternLearnedEvent(
@@ -262,6 +367,15 @@ class UpdatePatternConfidenceHandler(IRequestHandler[UpdatePatternConfidenceComm
     - Return success status
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: UpdatePatternConfidenceCommand) -> Result[bool]:
         """Update pattern confidence
         
@@ -276,26 +390,47 @@ class UpdatePatternConfidenceHandler(IRequestHandler[UpdatePatternConfidenceComm
             Guard.against_empty(request.pattern_id, "pattern_id")
             Guard.against_empty(request.context_id, "context_id")
             
-            # TODO: Get current confidence from database
-            # For now, create placeholder
-            current_confidence = PatternConfidence(
-                score=0.75,
-                observation_count=10,
-                success_rate=0.80
-            )
-            
-            # Update with new observation
-            updated_confidence = current_confidence.with_new_observation(
-                was_successful=request.was_successful
-            )
-            
-            # TODO: Store updated confidence in database
-            logger.info(
-                f"Updated confidence for {request.pattern_id}: "
-                f"{current_confidence.confidence_level} -> {updated_confidence.confidence_level} "
-                f"(observations: {current_confidence.observation_count} -> {updated_confidence.observation_count}, "
-                f"success rate: {current_confidence.success_rate:.2%} -> {updated_confidence.success_rate:.2%})"
-            )
+            # Get current pattern and update confidence
+            try:
+                async with self._uow as uow:
+                    # Retrieve existing pattern
+                    pattern = await uow.patterns.get_by_id(request.pattern_id)
+                    
+                    if not pattern:
+                        return Result.failure([f"Pattern not found: {request.pattern_id}"])
+                    
+                    # Create current confidence value object
+                    current_confidence = PatternConfidence(
+                        score=pattern.confidence,
+                        observation_count=pattern.observation_count,
+                        success_rate=pattern.success_rate
+                    )
+                    
+                    # Update with new observation
+                    updated_confidence = current_confidence.with_new_observation(
+                        was_successful=request.was_successful
+                    )
+                    
+                    # Update pattern entity
+                    pattern.confidence = updated_confidence.score
+                    pattern.observation_count = updated_confidence.observation_count
+                    pattern.success_rate = updated_confidence.success_rate
+                    pattern.updated_at = datetime.now()
+                    
+                    # Save to database
+                    await uow.patterns.update(pattern)
+                    await uow.commit()
+                    
+                    logger.info(
+                        f"Updated confidence for {request.pattern_id}: "
+                        f"{current_confidence.confidence_level} -> {updated_confidence.confidence_level} "
+                        f"(observations: {current_confidence.observation_count} -> {updated_confidence.observation_count}, "
+                        f"success rate: {current_confidence.success_rate:.2%} -> {updated_confidence.success_rate:.2%})"
+                    )
+                    
+            except Exception as db_error:
+                logger.error(f"Database error updating pattern confidence: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to update pattern confidence: {str(db_error)}"])
             
             return Result.success(True)
             
@@ -317,6 +452,15 @@ class DeleteConversationHandler(IRequestHandler[DeleteConversationCommand, Resul
     - Return success status
     """
     
+    def __init__(self, unit_of_work: IUnitOfWork):
+        """
+        Initialize handler with Unit of Work.
+        
+        Args:
+            unit_of_work: Unit of Work for database access
+        """
+        self._uow = unit_of_work
+    
     async def handle(self, request: DeleteConversationCommand) -> Result[bool]:
         """Delete a conversation
         
@@ -330,14 +474,45 @@ class DeleteConversationHandler(IRequestHandler[DeleteConversationCommand, Resul
             # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             
-            # TODO: Check if conversation exists
-            # TODO: Delete from database
-            # TODO: Cascade delete patterns if requested
-            
-            logger.info(
-                f"Deleted conversation: {request.conversation_id} "
-                f"(cascade patterns: {request.delete_related_patterns})"
-            )
+            # Delete conversation from database
+            try:
+                async with self._uow as uow:
+                    # Check if conversation exists
+                    conversation = await uow.conversations.get_by_id(request.conversation_id)
+                    
+                    if not conversation:
+                        return Result.failure([f"Conversation not found: {request.conversation_id}"])
+                    
+                    # Delete conversation
+                    await uow.conversations.delete(conversation)
+                    
+                    # Cascade delete patterns if requested
+                    if request.delete_related_patterns:
+                        # Get all patterns that reference this conversation
+                        all_patterns = await uow.patterns.get_all()
+                        patterns_to_delete = [
+                            p for p in all_patterns 
+                            if p.source_conversation_id == request.conversation_id
+                        ]
+                        
+                        for pattern in patterns_to_delete:
+                            await uow.patterns.delete(pattern)
+                        
+                        logger.info(
+                            f"Deleted {len(patterns_to_delete)} related patterns for conversation: {request.conversation_id}"
+                        )
+                    
+                    # Commit transaction
+                    await uow.commit()
+                    
+                    logger.info(
+                        f"Deleted conversation: {request.conversation_id} "
+                        f"(cascade patterns: {request.delete_related_patterns})"
+                    )
+                    
+            except Exception as db_error:
+                logger.error(f"Database error deleting conversation: {db_error}", exc_info=True)
+                return Result.failure([f"Failed to delete conversation: {str(db_error)}"])
             
             return Result.success(True)
             
