@@ -9,7 +9,7 @@ Duration: 2 hours
 import sqlite3
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from contextlib import contextmanager
 import json
 import logging
@@ -884,11 +884,11 @@ class ConversationManager:
                 
                 return session_data
                 
-            except Exception as e:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Error loading planning session: {e}")
-                return None
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error loading planning session: {e}")
+            return None
     
     def list_planning_sessions(
         self, 

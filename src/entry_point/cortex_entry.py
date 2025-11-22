@@ -35,6 +35,7 @@ from src.tier2.knowledge_graph import KnowledgeGraph
 from src.tier3.context_intelligence import ContextIntelligence
 from src.config import config
 from src.core.context_management.unified_context_manager import UnifiedContextManager
+from src.response_templates import TemplateLoader
 
 
 class CortexEntry:
@@ -99,6 +100,17 @@ class CortexEntry:
         self.formatter = ResponseFormatter()
         self.session_manager = SessionManager(db_path=str(self.brain_path / "tier1" / "conversations.db"))
         
+        # Initialize template system for instant responses
+        template_file = self.brain_path / "response-templates.yaml"
+        self.template_loader = None
+        if template_file.exists():
+            try:
+                self.template_loader = TemplateLoader(template_file)
+                self.template_loader.load_templates()
+                self.logger.info("Template system initialized successfully")
+            except Exception as e:
+                self.logger.warning(f"Template system initialization failed: {e}")
+        
         # Initialize router with tier APIs
         self.router = IntentRouter(
             name="IntentRouter",
@@ -145,6 +157,11 @@ class CortexEntry:
             Formatted response string
         """
         try:
+            # Check for template-eligible requests FIRST (instant response)
+            template_response = self._try_template_response(user_message, format_type)
+            if template_response:
+                return template_response
+            
             # Check for setup command first
             if self._is_setup_command(user_message):
                 return self._handle_setup_command(user_message, format_type)
@@ -261,6 +278,49 @@ class CortexEntry:
                 e,
                 context={"user_message": user_message}
             )
+    
+    def _try_template_response(self, message: str, format_type: str) -> Optional[str]:
+        """
+        Check if message can be handled by template system (instant response).
+        
+        This provides zero-execution responses for common queries like:
+        - help, /help, what can cortex do
+        - status, where are we
+        - quick start, get started
+        
+        Args:
+            message: User message
+            format_type: Output format
+            
+        Returns:
+            Formatted template response if matched, None otherwise
+        """
+        if not self.template_loader:
+            return None
+        
+        # Clean message for matching
+        message_clean = message.lower().strip()
+        
+        # Remove common prefixes
+        if message_clean.startswith("/"):
+            message_clean = message_clean[1:]
+        
+        # Try to find template by trigger
+        try:
+            template = self.template_loader.find_by_trigger(message_clean)
+            if template:
+                self.logger.info(f"Template matched: {template.template_id}")
+                
+                # Render template with formatter
+                return self.formatter.format_from_template(
+                    template.template_id,
+                    context={},
+                    verbosity="concise" if format_type == "text" else "detailed"
+                )
+        except Exception as e:
+            self.logger.warning(f"Template rendering failed: {e}")
+        
+        return None
     
     def _is_setup_command(self, message: str) -> bool:
         """Check if message is a setup command."""

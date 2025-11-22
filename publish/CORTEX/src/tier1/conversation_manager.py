@@ -9,9 +9,18 @@ Duration: 2 hours
 import sqlite3
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from contextlib import contextmanager
 import json
+import logging
+
+# Import planning doc sync engine
+try:
+    from .planning_doc_sync import PlanningDocSyncEngine
+    PLANNING_SYNC_AVAILABLE = True
+except ImportError:
+    PLANNING_SYNC_AVAILABLE = False
+    logging.warning("PlanningDocSyncEngine not available - planning doc sync disabled")
 
 
 class ConversationManager:
@@ -25,19 +34,30 @@ class ConversationManager:
     - File modification tracking
     - Active conversation management
     - FIFO queue enforcement (20 conversation limit)
+    - Planning document synchronization (auto-sync to markdown)
     """
     
     MAX_CONVERSATIONS = 20
     
-    def __init__(self, db_path: Path):
+    def __init__(self, db_path: Path, enable_planning_sync: bool = True):
         """
         Initialize conversation manager
         
         Args:
             db_path: Path to conversations.db SQLite database
+            enable_planning_sync: Enable auto-sync to planning documents
         """
         self.db_path = db_path
         self._ensure_schema()
+        
+        # Initialize planning doc sync engine
+        self.sync_engine = None
+        if enable_planning_sync and PLANNING_SYNC_AVAILABLE:
+            try:
+                self.sync_engine = PlanningDocSyncEngine()
+                logging.info("Planning doc sync engine initialized")
+            except Exception as e:
+                logging.warning(f"Failed to initialize planning doc sync engine: {e}")
     
     @contextmanager
     def _get_connection(self):
@@ -288,9 +308,14 @@ class ConversationManager:
             """, (conversation_id,))
             
             conn.commit()
-            return msg_id
             
-            conn.commit()
+            # Auto-sync planning document (if available)
+            if self.sync_engine:
+                try:
+                    self.sync_engine.sync_planning_doc(conversation_id, self)
+                except Exception as e:
+                    logging.warning(f"Planning doc sync failed for {conversation_id}: {e}")
+            
             return msg_id
     
     def add_entity(
@@ -371,6 +396,13 @@ class ConversationManager:
             ))
             
             conn.commit()
+            
+            # Final sync of planning document with completed status
+            if self.sync_engine:
+                try:
+                    self.sync_engine.sync_planning_doc(conversation_id, self, force=True)
+                except Exception as e:
+                    logging.warning(f"Final planning doc sync failed for {conversation_id}: {e}")
     
     def get_conversation(self, conversation_id: str) -> Optional[Dict]:
         """
@@ -879,7 +911,7 @@ class ConversationManager:
                 
                 if state:
                     cursor.execute("""
-                        SELECT session_id, user_request, confidence, state, 
+                        SELECT session_id, user_request, confidence, state,
                                started_at, completed_at
                         FROM planning_sessions
                         WHERE state = ?
@@ -902,5 +934,22 @@ class ConversationManager:
             logger = logging.getLogger(__name__)
             logger.error(f"Error listing planning sessions: {e}")
             return []
-
-
+    
+    def _update_conversation_context(self, conversation_id: str, context: Dict[str, Any]):
+        """
+        Update conversation context (internal helper for planning doc sync)
+        
+        Args:
+            conversation_id: Conversation to update
+            context: Updated context dictionary
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                UPDATE conversations
+                SET context = ?
+                WHERE conversation_id = ?
+            """, (json.dumps(context), conversation_id))
+            
+            conn.commit()

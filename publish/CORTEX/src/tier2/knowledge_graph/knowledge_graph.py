@@ -89,18 +89,13 @@ class KnowledgeGraph:
         Query patterns with namespace filtering.
         
         Wrapper that provides namespace-based filtering on top of search.
+        DB-level filtering for optimal performance (O(log n) vs O(n)).
         """
-        import fnmatch
+        # Push namespace filtering to database layer for performance
+        if namespace_filter != "*":
+            kwargs['namespace_filter'] = namespace_filter
         
-        # Get all patterns (TODO: optimize with DB-level filtering)
-        all_patterns = self.pattern_store.list_patterns(**kwargs)
-        
-        # Filter by namespace
-        if namespace_filter == "*":
-            return all_patterns
-        
-        # Use _namespace field for filtering (primary namespace)
-        return [p for p in all_patterns if fnmatch.fnmatch(p.get("_namespace", ""), namespace_filter)]
+        return self.pattern_store.list_patterns(**kwargs)
 
     def get_pattern(self, pattern_id: str) -> Optional[Dict[str, Any]]:
         return self.pattern_store.get_pattern(pattern_id)

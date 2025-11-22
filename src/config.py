@@ -305,6 +305,9 @@ class CortexConfig:
 # Global configuration instance
 config = CortexConfig()
 
+# Alias for backward compatibility
+ConfigManager = CortexConfig
+
 
 # Convenience function for quick access
 def get_brain_path() -> Path:

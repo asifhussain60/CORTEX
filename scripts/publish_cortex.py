@@ -1100,6 +1100,92 @@ def generate_report(
     logger.info("")
 
 
+def run_validation_gate(source_root: Path, skip_validation: bool = False) -> bool:
+    """
+    Run pre-deployment validation gate.
+    
+    Args:
+        source_root: CORTEX source root
+        skip_validation: Skip validation (DANGEROUS - admin only)
+        
+    Returns:
+        True if validation passed, False if blocked
+    """
+    if skip_validation:
+        logger.warning("" + "=" * 80)
+        logger.warning("⚠️  VALIDATION SKIPPED (--skip-validation flag)")
+        logger.warning("=" * 80)
+        logger.warning("This is DANGEROUS and should only be used for testing!")
+        logger.warning("Deployment may fail if critical issues exist.")
+        logger.warning("" + "=" * 80)
+        return True
+    
+    logger.info("" + "=" * 80)
+    logger.info("Step 0/8: Pre-Deployment Validation Gate")
+    logger.info("" + "=" * 80)
+    logger.info("Running comprehensive validation checks...")
+    logger.info("")
+    
+    validate_script = source_root / "scripts" / "validate_deployment.py"
+    
+    if not validate_script.exists():
+        logger.warning(f"Validation script not found: {validate_script}")
+        logger.warning("Proceeding without validation (not recommended)")
+        return True
+    
+    try:
+        result = subprocess.run(
+            [sys.executable, str(validate_script)],
+            cwd=source_root,
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        # Print validation output
+        for line in result.stdout.split('\n'):
+            if line.strip():
+                logger.info(line)
+        
+        if result.returncode == 0:
+            logger.info("")
+            logger.info("✅ Validation passed - proceeding with publish")
+            logger.info("")
+            return True
+        elif result.returncode == 2:
+            logger.warning("")
+            logger.warning("⚠️  Validation completed with warnings")
+            logger.warning("Warnings are non-blocking - proceeding with publish")
+            logger.warning("Review warnings above before deployment")
+            logger.warning("")
+            return True
+        else:
+            logger.error("")
+            logger.error("❌ VALIDATION FAILED - DEPLOYMENT BLOCKED")
+            logger.error("")
+            logger.error("Critical issues detected that must be fixed before deployment:")
+            logger.error("")
+            for line in result.stdout.split('\n'):
+                if '🔴' in line or '🟠' in line or 'CRITICAL' in line or 'HIGH' in line:
+                    logger.error(f"  {line}")
+            logger.error("")
+            logger.error("Fix all CRITICAL and HIGH issues, then retry publish.")
+            logger.error("See full validation output above for details.")
+            logger.error("")
+            return False
+    
+    except subprocess.TimeoutExpired:
+        logger.error("")
+        logger.error("❌ Validation timeout (>60 seconds)")
+        logger.error("This may indicate system issues - aborting publish")
+        return False
+    except Exception as e:
+        logger.error(f"")
+        logger.error(f"❌ Validation error: {e}")
+        logger.error("Aborting publish due to validation failure")
+        return False
+
+
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
@@ -1109,6 +1195,11 @@ def main():
         '--dry-run',
         action='store_true',
         help='Preview changes without making them'
+    )
+    parser.add_argument(
+        '--skip-validation',
+        action='store_true',
+        help='⚠️  SKIP validation gate (DANGEROUS - admin testing only)'
     )
     parser.add_argument(
         '--skip-tests',
@@ -1134,6 +1225,20 @@ def main():
     publish_cortex = publish_root / 'CORTEX'
     
     print_header()
+    
+    # Run validation gate (unless dry-run)
+    if not args.dry_run:
+        validation_passed = run_validation_gate(source_root, args.skip_validation)
+        if not validation_passed:
+            logger.error("")
+            logger.error("❌ PUBLISH ABORTED DUE TO VALIDATION FAILURES")
+            logger.error("")
+            logger.error("Next steps:")
+            logger.error("  1. Fix all CRITICAL and HIGH issues listed above")
+            logger.error("  2. Run validation manually: python scripts/validate_deployment.py")
+            logger.error("  3. Once validation passes, retry: python scripts/publish_cortex.py")
+            logger.error("")
+            return 1
     
     if args.dry_run:
         logger.info("🔍 DRY RUN MODE - No changes will be made")

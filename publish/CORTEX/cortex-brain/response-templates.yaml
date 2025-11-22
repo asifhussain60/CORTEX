@@ -8,7 +8,10 @@ optimization:
 templates:
   help_table:
     name: Help Table
-    trigger:
+    triggers:
+    - help
+    - /help
+    - what can cortex do
     - help_table
     response_type: table
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -28,7 +31,7 @@ templates:
       \ for detailed view*\n</details>\n"
   help_detailed:
     name: Help Detailed
-    trigger:
+    triggers:
     - help_detailed
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -39,7 +42,9 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   quick_start:
     name: Quick Start
-    trigger:
+    triggers:
+    - quick start
+    - get started
     - quick_start
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -50,7 +55,9 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   status_check:
     name: Status Check
-    trigger:
+    triggers:
+    - status
+    - where are we
     - status_check
     response_type: table
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -61,7 +68,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   success_general:
     name: Success General
-    trigger:
+    triggers:
     - success_general
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -72,7 +79,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   error_general:
     name: Error General
-    trigger:
+    triggers:
     - error_general
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -83,7 +90,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   not_implemented:
     name: Not Implemented
-    trigger:
+    triggers:
     - not_implemented
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -94,7 +101,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   executor_success:
     name: Executor Success
-    trigger:
+    triggers:
     - executor_success
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -105,7 +112,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   executor_error:
     name: Executor Error
-    trigger:
+    triggers:
     - executor_error
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -116,7 +123,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   tester_success:
     name: Tester Success
-    trigger:
+    triggers:
     - tester_success
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -127,7 +134,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   operation_started:
     name: Operation Started
-    trigger:
+    triggers:
     - operation_started
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -138,7 +145,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   operation_progress:
     name: Operation Progress
-    trigger:
+    triggers:
     - operation_progress
     response_type: narrative
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -149,7 +156,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   operation_complete:
     name: Operation Complete
-    trigger:
+    triggers:
     - operation_complete
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -160,7 +167,7 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   question_documentation_issues:
     name: Question Documentation Issues
-    trigger:
+    triggers:
     - question_documentation_issues
     response_type: detailed
     content: "\U0001F9E0 **CORTEX [Operation Type]**\nAuthor: Asif Hussain | © 2024-2025\
@@ -171,7 +178,15 @@ templates:
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
   work_planner_success:
     name: Work Planner Success
-    trigger:
+    triggers:
+    - plan
+    - let's plan
+    - plan a feature
+    - plan this
+    - help me plan
+    - planning
+    - feature planning
+    - i want to plan
     - work_planner_success
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Feature Planning**\nAuthor: Asif Hussain | © 2024-2025\
@@ -213,7 +228,7 @@ templates:
       \ and run security review before generating the plan."
   planning_dor_incomplete:
     name: Planning DoR Incomplete
-    trigger:
+    triggers:
     - planning_dor_incomplete
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Planning - DoR Incomplete**\nAuthor: Asif Hussain\
@@ -243,7 +258,7 @@ templates:
       \   \n   ⚠️ I will not approve this plan until DoR is met."
   planning_dor_complete:
     name: Planning DoR Complete
-    trigger:
+    triggers:
     - planning_dor_complete
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Planning - DoR Complete**\nAuthor: Asif Hussain\
@@ -274,7 +289,7 @@ templates:
       \ **Review the planning document and say \"approve plan\" when ready.**"
   planning_security_review:
     name: Planning Security Review
-    trigger:
+    triggers:
     - planning_security_review
     - security review
     - owasp review
@@ -316,7 +331,7 @@ templates:
       \ complete, or \"security concerns: [describe]\" to discuss risks."
   ado_created:
     name: ADO Created
-    trigger:
+    triggers:
     - ado_created
     response_type: detailed
     content: "\U0001F9E0 **CORTEX ADO Planning**\nAuthor: Asif Hussain | © 2024-2025\
@@ -332,7 +347,7 @@ templates:
       \ [number]'\n   5. Start implementation: 'resume ado [number]'"
   ado_resumed:
     name: ADO Resumed
-    trigger:
+    triggers:
     - ado_resumed
     response_type: detailed
     content: "\U0001F9E0 **CORTEX ADO Resume**\nAuthor: Asif Hussain | © 2024-2025\
@@ -347,7 +362,7 @@ templates:
       \ when milestones reached\n   5. Mark complete when DoD satisfied"
   ado_search_results:
     name: ADO Search Results
-    trigger:
+    triggers:
     - ado_search_results
     response_type: table
     content: "\U0001F9E0 **CORTEX ADO Search**\nAuthor: Asif Hussain | © 2024-2025\
@@ -361,7 +376,7 @@ templates:
       \ status: 'show ados planning' or 'show ados in-progress'"
   fallback:
     name: Fallback Response
-    trigger:
+    triggers:
     - '*'
     response_type: structured
     content: "\U0001F9E0 **CORTEX Response**\nAuthor: Asif Hussain | © 2024-2025 |\
@@ -373,7 +388,21 @@ templates:
       \   3. [Third recommendation]"
   enhance_existing:
     name: Enhancement Workflow
-    trigger:
+    triggers:
+    - enhance
+    - improve
+    - extend
+    - enhance existing
+    - improve existing
+    - extend existing
+    - modify existing
+    - update existing
+    - optimize
+    - refactor
+    - upgrade
+    - enhance the
+    - improve the
+    - extend the
     - enhance_existing
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Enhancement Analysis**\nAuthor: Asif Hussain | ©\
@@ -397,7 +426,7 @@ templates:
       \ implementation?"
   brain_export_guide:
     name: Brain Implants - Export Guide
-    trigger:
+    triggers:
     - export brain
     - brain export
     - share brain
@@ -455,7 +484,7 @@ templates:
       \ for you."
   brain_import_guide:
     name: Brain Implants - Import Guide
-    trigger:
+    triggers:
     - import brain
     - brain import
     - load brain
@@ -526,7 +555,7 @@ templates:
       \ dry-run preview first to show you what will change."
   generate_documentation_intro:
     name: Generate Documentation - Introduction
-    trigger:
+    triggers:
     - generate_documentation_intro
     - doc_generation_intro
     response_type: detailed
@@ -556,7 +585,7 @@ templates:
       \ cross-references and navigation\n   4. Optionally publish to GitHub Pages"
   admin_help:
     name: Admin Help
-    trigger:
+    triggers:
     - admin help
     - help admin
     - /admin help
@@ -590,7 +619,7 @@ templates:
       \ After changes, run focused tests to verify registry health"
   generate_documentation_completion:
     name: Generate Documentation - Completion
-    trigger:
+    triggers:
     - generate_documentation_completion
     - doc_generation_completion
     response_type: detailed
@@ -675,6 +704,28 @@ routing:
   quick_start_triggers:
   - quick start
   - get started
+  tdd_workflow_triggers:
+  - implement
+  - add
+  - create
+  - build
+  - develop
+  - write
+  - implement feature
+  - add feature
+  - create feature
+  test_generation_triggers:
+  - test
+  - write tests
+  - generate tests
+  - add tests
+  - create tests
+  refactor_triggers:
+  - refactor
+  - improve code
+  - clean up
+  - restructure
+  - optimize code
   planning_triggers:
   - plan
   - let's plan

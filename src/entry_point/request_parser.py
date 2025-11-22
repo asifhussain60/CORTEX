@@ -50,6 +50,9 @@ class RequestParser:
     INTENT_KEYWORDS = {
         "setup": ["setup", "initialize", "install", "configure", "run setup"],
         "health_check": ["health", "status", "check system", "validate system"],
+        "help": ["help", "/help", "what can cortex do", "show commands"],
+        "status": ["status", "where are we", "show status", "what's the status"],
+        "info": ["info", "information", "tell me about", "explain cortex"],
         "plan": ["plan", "design", "architect", "outline", "breakdown", "organize"],
         "code": ["code", "implement", "create", "build", "develop", "write"],
         "test": ["test", "tdd", "verify", "validate", "check"],

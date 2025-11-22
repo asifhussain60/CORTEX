@@ -737,6 +737,57 @@ def publish_to_branch(
     logger.info(f"Resume mode: {resume}")
     logger.info("")
     
+    # Run validation gate first (unless resuming or dry-run)
+    if not resume and not dry_run:
+        logger.info("" + "=" * 80)
+        logger.info("STAGE 0: Pre-Deployment Validation Gate")
+        logger.info("" + "=" * 80)
+        logger.info("")
+        
+        validate_script = project_root / "scripts" / "validate_deployment.py"
+        if validate_script.exists():
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(validate_script)],
+                    cwd=project_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=60
+                )
+                
+                # Print validation output
+                for line in result.stdout.split('\n'):
+                    if line.strip():
+                        logger.info(line)
+                
+                if result.returncode != 0 and result.returncode != 2:
+                    logger.error("")
+                    logger.error("❌ VALIDATION FAILED - BRANCH PUBLISH BLOCKED")
+                    logger.error("")
+                    logger.error("Fix all CRITICAL and HIGH issues before publishing.")
+                    logger.error("Run: python scripts/validate_deployment.py")
+                    logger.error("")
+                    return False
+                elif result.returncode == 2:
+                    logger.warning("")
+                    logger.warning("⚠️  Validation warnings detected (non-blocking)")
+                    logger.warning("Review warnings above before proceeding")
+                    logger.warning("")
+                
+                logger.info("✅ Validation passed - proceeding with branch publish")
+                logger.info("")
+            
+            except subprocess.TimeoutExpired:
+                logger.error("❌ Validation timeout - aborting publish")
+                return False
+            except Exception as e:
+                logger.warning(f"⚠️  Validation check failed: {e}")
+                logger.warning("Proceeding with caution...")
+        else:
+            logger.warning("⚠️  Validation script not found - proceeding without validation")
+        
+        logger.info("")
+    
     # Initialize checkpoint manager
     checkpoint = CheckpointManager(project_root)
     
