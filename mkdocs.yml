@@ -22,8 +22,14 @@ theme:
 # ============================================
 nav:
 - Home: index.md
+- Getting Started:
+  - Quick Start: QUICK-START.md
+  - Installation: getting-started/installation.md
+  - Configuration: getting-started/configuration.md
+  - Quick Reference: getting-started/quick-start.md
 - The CORTEX Birth:
   - Story Home: story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX.md
+  - Full Story: THE-AWAKENING-OF-CORTEX.md
   - Prologue: story/CORTEX-STORY/chapters/prologue.md
   - Chapter 1 - The Amnesia Crisis: story/CORTEX-STORY/chapters/chapter-01.md
   - Chapter 2 - Tier 0: story/CORTEX-STORY/chapters/chapter-02.md
@@ -40,20 +46,50 @@ nav:
 - Cortex Bible:
   - The Rulebook: governance/THE-RULEBOOK.md
 - Architecture:
+  - Overview: architecture/overview.md
   - Architecture Diagrams: architecture-diagrams.md
   - Integration Diagrams: integration-diagrams.md
   - Operational Diagrams: operational-diagrams.md
   - Planning & Strategic Diagrams: planning-diagrams.md
+  - Tier System: architecture/tier-system.md
+  - Agents: architecture/agents.md
+  - Brain Protection: architecture/brain-protection.md
 - Technical Docs:
   - Executive Summary: EXECUTIVE-SUMMARY.md
+  - Capabilities Matrix: CORTEX-CAPABILITIES.md
   - Features Overview: FEATURES.md
-  - Capabilities Matrix: CAPABILITIES-MATRIX.md
+  - Modules Reference: MODULES-REFERENCE.md
+  - Operations Reference: OPERATIONS-REFERENCE.md
+  - Technical Documentation: TECHNICAL-DOCUMENTATION.md
+  - CORTEX vs Copilot: CORTEX-VS-COPILOT.md
+  - FAQ: FAQ.md
+- Operations:
+  - Overview: operations/overview.md
+  - Workflows: operations/workflows.md
+  - Entry Point Modules: operations/entry-point-modules.md
+  - Health Monitoring: operations/health-monitoring.md
 - User Guides:
-  - Getting Started: getting-started/quick-start.md
+  - Getting Started Guide: GETTING-STARTED.md
   - Navigation Guide: NAVIGATION-GUIDE.md
   - Help System: HELP-SYSTEM.md
+  - Response Templates: response-template-user-guide.md
+  - Knowledge Graph Import: KNOWLEDGE-GRAPH-IMPORT-GUIDE.md
+  - Developer Guide: guides/developer-guide.md
+  - Admin Guide: guides/admin-guide.md
+  - Best Practices: guides/best-practices.md
+  - Troubleshooting: guides/troubleshooting.md
+- Reference:
+  - API Reference: reference/api.md
+  - Configuration Reference: reference/configuration.md
+  - Response Templates: reference/response-templates.md
+- Plugins:
+  - Development: plugins/development.md
+  - VS Code Extension: plugins/vscode-extension.md
+- Performance:
+  - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
+  - CI/CD Integration: performance/CI-CD-INTEGRATION.md
+  - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
 - Examples:
-  - Quick Start: getting-started/quick-start.md
   - Feature Comparison: FEATURE-COMPARISON.md
 markdown_extensions:
 - abbr
@@ -68,6 +104,9 @@ markdown_extensions:
     permalink: true
     toc_depth: 2
     title: "On This Page"
+- pymdownx.emoji:
+    emoji_index: !!python/name:material.extensions.emoji.twemoji
+    emoji_generator: !!python/name:material.extensions.emoji.to_svg
 - pymdownx.arithmatex:
     generic: true
 - pymdownx.betterem:

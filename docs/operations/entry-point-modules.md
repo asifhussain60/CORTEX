@@ -23,7 +23,7 @@ The EPM architecture enables CORTEX to:
 
 CORTEX operates on a 4-tier cognitive architecture that separates concerns and enables efficient data flow:
 
-![CORTEX Tier Architecture](../images/diagrams/01-tier-architecture-prompt.png)
+![CORTEX Tier Architecture](../images/diagrams/architectural/01-tier-architecture.png)
 
 #### Tier 0: Entry Point Layer
 
@@ -57,7 +57,7 @@ CORTEX operates on a 4-tier cognitive architecture that separates concerns and e
 
 EPM coordinates multiple specialized agents to accomplish complex tasks:
 
-![Agent Coordination](../images/diagrams/02-agent-coordination-prompt.png)
+![Agent Coordination](../images/diagrams/architectural/02-agent-coordination.png)
 
 #### Core Agents
 
@@ -85,7 +85,7 @@ The Corpus Callosum acts as the communication bus between agents, enabling:
 
 Data flows through CORTEX tiers with intelligent caching and context management:
 
-![Information Flow](../images/diagrams/03-information-flow-prompt.png)
+![Information Flow](../images/diagrams/integration/03-information-flow.png)
 
 #### Request Flow
 
@@ -110,7 +110,7 @@ Data flows through CORTEX tiers with intelligent caching and context management:
 
 CORTEX maintains conversation continuity across sessions:
 
-![Conversation Tracking](../images/diagrams/04-conversation-tracking-prompt.png)
+![Conversation Tracking](../images/diagrams/integration/04-conversation-tracking.png)
 
 #### Features
 
@@ -133,7 +133,7 @@ clear memory                                # Reset all context
 
 Extensible plugin architecture for custom functionality:
 
-![Plugin System](../images/diagrams/05-plugin-system-prompt.png)
+![Plugin System](../images/diagrams/integration/05-plugin-system.png)
 
 #### Plugin Types
 
@@ -154,7 +154,7 @@ Extensible plugin architecture for custom functionality:
 
 Multi-layered security protecting CORTEX cognitive functions:
 
-![Brain Protection](../images/diagrams/06-brain-protection-prompt.png)
+![Brain Protection](../images/diagrams/strategic/06-brain-protection.png)
 
 #### Protection Layers
 
@@ -192,7 +192,7 @@ Multi-layered security protecting CORTEX cognitive functions:
 
 Standardized execution pipeline for all EPM operations:
 
-![Operation Pipeline](../images/diagrams/07-operation-pipeline-prompt.png)
+![Operation Pipeline](../images/diagrams/operational/07-operation-pipeline.png)
 
 #### Pipeline Stages
 
@@ -248,8 +248,8 @@ Standardized execution pipeline for all EPM operations:
 
 Automated environment setup and configuration:
 
-![Setup Orchestration - Part 1](../images/diagrams/08a-setup-orchestration-prompt.png)
-![Setup Orchestration - Part 2](../images/diagrams/08b-setup-orchestration-prompt.png)
+![Setup Orchestration - Part 1](../images/diagrams/operational/08a-setup-orchestration.png)
+![Setup Orchestration - Part 2](../images/diagrams/operational/08b-setup-orchestration.png)
 
 #### Setup Phases
 
@@ -300,7 +300,7 @@ setup validate                 # Run health checks only
 
 Comprehensive documentation generation from live brain sources:
 
-![Documentation Generation](../images/diagrams/09-documentation-generation-prompt.png)
+![Documentation Generation](../images/diagrams/operational/09-documentation-generation.png)
 
 #### Generation Pipeline
 
@@ -357,7 +357,7 @@ refresh docs                   # Update existing documentation
 
 Interactive feature planning with Definition of Ready (DoR) enforcement:
 
-![Feature Planning](../images/diagrams/10-feature-planning-prompt.png)
+![Feature Planning](../images/diagrams/strategic/10-feature-planning.png)
 
 #### Planning Workflow
 
@@ -390,7 +390,7 @@ approve plan                            # Finalize and hook into pipeline
 resume plan authentication              # Continue existing plan
 ```
 
-![Testing Strategy](../images/diagrams/11-testing-strategy-prompt.png)
+![Testing Strategy](../images/diagrams/strategic/11-testing-strategy.png)
 
 #### Test Categories
 
@@ -415,7 +415,7 @@ resume plan authentication              # Continue existing plan
 - Execution time max: 40s (full suite)
 
 ### Deployment Pipeline
-![Deployment Pipeline](../images/diagrams/12-deployment-pipeline-prompt.png)
+![Deployment Pipeline](../images/diagrams/strategic/12-deployment-pipeline.png)
 
 #### Pipeline Stages
 
@@ -435,7 +435,7 @@ resume plan authentication              # Continue existing plan
 ### System Architecture
 
 Complete system architecture overview:
-![System Architecture](../images/diagrams/14-system-architecture-prompt.png)
+![System Architecture](../images/diagrams/architectural/14-system-architecture.png)
 
 #### Key Components
 

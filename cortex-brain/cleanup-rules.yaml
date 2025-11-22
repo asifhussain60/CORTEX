@@ -430,7 +430,7 @@ categories:
       # Implementation summaries that should be archived
       - "src/tier1/IMPLEMENTATION-SUMMARY.md"
       - "src/tier3/IMPLEMENTATION-SUMMARY.md"
-      - "publish/CORTEX/src/tier3/IMPLEMENTATION-SUMMARY.md"
+      - "publish/CORTEX/src/tier1/IMPLEMENTATION-SUMMARY.md"
       
       # Test summaries
       - "tests/tier1/TEST_CONVERSATION_MANAGER_SUMMARY.md"
@@ -460,6 +460,75 @@ categories:
     scan_rules:
       pattern_type: glob
       include_hidden: false
+    
+    safety:
+      require_confirmation: true
+      create_manifest: true
+      allow_rollback: true
+  
+  # --------------------------------------------------------------------------
+  # Category 17: Documentation Pattern Cleanup (NEW!)
+  # --------------------------------------------------------------------------
+  doc_pattern_cleanup:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      # Summary/Status/Report patterns (comprehensive scan)
+      - "**/*-SUMMARY.md"
+      - "**/*SUMMARY*.md"
+      - "**/*-STATUS.md"
+      - "**/*-REPORT.md"
+      - "**/*REPORT*.md"
+      - "**/*-ANALYSIS.md"
+      - "**/*-REVIEW.md"
+      - "**/*-COMPLETE.md"
+      - "**/*COMPLETION*.md"
+      - "**/*INVESTIGATION*.md"
+      - "**/*-PROGRESS*.md"
+      - "**/*-NOTES.md"
+      - "**/*-GUIDE.md"
+      - "temp-*.md"
+      - "temp_*.md"
+      - "TEMP*.md"
+      - "DIRECT-*.md"
+      - "**/*-FIX-*.md"
+      - "**/*FIX*.md"
+      - "**/*RESTORATION*.md"
+      - "**/*ENHANCEMENT*.md"
+      - "**/*-INTEGRATION-GUIDE.md"
+      - "**/*INTEGRATION*.md"
+      - "**/*AMBIENT*.md"
+      - "**/*RESOLUTION*.md"
+      - "QUICK-*.md"
+      - "**/*-SESSION*.md"
+      - "**/*SESSION*.md"
+    
+    # Exclude essential files and directories
+    exclude_patterns:
+      - "README.md"
+      - "CHANGELOG.md"
+      - "LICENSE.md"
+      - "PHASE-3-COMMIT-GUIDE.md"
+      - "PHASE-3-SUMMARY.md"
+      - "PHASE-3-VISUAL-SUMMARY.md"
+      - "PHASE-4-PRODUCTION-READY.md"
+      - "GIT-SYNC-COMPLETE.md"
+      - "cortex-brain/documents/**"  # Keep organized structure
+      - "cortex-brain/archives/**"   # Already archived
+      - "cortex-3.0-design/**"       # Design docs
+      - ".github/prompts/**"         # Prompt system
+      - "docs/api/**"                # API docs
+      - "docs/reference/**"          # Reference docs
+    
+    action: delete_all
+    reason: "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+      recursive: true
     
     safety:
       require_confirmation: true

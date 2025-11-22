@@ -78,12 +78,12 @@ CORTEX implements a sophisticated multi-tier architecture with specialized agent
 
 ## Architecture Diagrams
 
-For detailed visual representations:
+For detailed visual representations, see:
 
-- [Tier Architecture](../images/diagrams/strategic/tier-architecture.md)
-- [Agent Coordination](../images/diagrams/strategic/agent-coordination.md)
-- [Information Flow](../images/diagrams/strategic/information-flow.md)
-- [Module Structure](../images/diagrams/architectural/module-structure.md)
+- [Architecture Diagrams Page](../architecture-diagrams.md)
+- [Integration Diagrams](../integration-diagrams.md)
+- [Operational Diagrams](../operational-diagrams.md)
+- [Planning & Strategic Diagrams](../planning-diagrams.md)
 
 ## Design Principles
 

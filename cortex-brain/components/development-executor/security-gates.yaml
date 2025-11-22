@@ -205,7 +205,7 @@ owasp_top_10:
     automated_checks:
       - check: "Detect missing authentication logging"
         tool: "custom_linter"
-        pattern: "logger\.(info|warning|error)"
+        pattern: "logger\\.(info|warning|error)"
         context: "login/logout functions"
         severity: "medium"
         
@@ -242,7 +242,7 @@ owasp_top_10:
         
       - check: "Detect requests to user-supplied URLs"
         tool: "custom_linter"
-        pattern: "requests\.get\(.*user.*\)"
+        pattern: "requests\\.get\\(.*user.*\\)"
         severity: "high"
         message: "Validate and whitelist URLs before fetching"
     

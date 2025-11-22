@@ -380,12 +380,20 @@ class BrainProtector:
         evidence = rule.get('evidence', '')
         evidence_template = rule.get('evidence_template', '')
         
-        # Format evidence template
+        # Format evidence template with available context
         if evidence_template:
-            evidence = evidence_template.format(
-                intent=request.intent,
-                description=request.description
-            )
+            try:
+                evidence = evidence_template.format(
+                    intent=request.intent,
+                    description=request.description,
+                    operation=request.intent,  # Alias for intent
+                    git_status="<checked during analysis>",  # Placeholder
+                    match=request.description  # Alias for description
+                )
+            except KeyError as e:
+                # If template has unknown placeholder, use it as-is
+                logger.warning(f"Template formatting error for rule {rule.get('rule_id')}: {e}")
+                evidence = evidence_template
         
         # Find affected file
         file_path = None

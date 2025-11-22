@@ -10,7 +10,7 @@
 
 **CORTEX is not just another AI assistant** - it's a complete cognitive framework that transforms GitHub Copilot from a code autocompleter into a persistent, memory-enabled development partner.
 
-> **[Read why CORTEX beats standalone Copilot →](CORTEX-VS-COPILOT.md)**
+> **[Read why CORTEX beats standalone Copilot →](../../CORTEX-VS-COPILOT.md)**
 
 **Key Differentiators:**
 
@@ -31,16 +31,16 @@
 
 ### Essential Guides
 
-- **[CORTEX vs COPILOT](CORTEX-VS-COPILOT.md)** - Why choose CORTEX over standalone Copilot
-- **[Getting Started](GETTING-STARTED.md)** - Setup, onboarding, demo, and first steps
-- **[Architecture](ARCHITECTURE.md)** - Deep dive into 4-tier brain and 10-agent system
-- **[Technical Documentation](TECHNICAL-DOCUMENTATION.md)** - API reference and configuration
+- **[CORTEX vs COPILOT](../../CORTEX-VS-COPILOT.md)** - Why choose CORTEX over standalone Copilot
+- **[Getting Started](../../GETTING-STARTED.md)** - Setup, onboarding, demo, and first steps
+- **[Architecture](../../ARCHITECTURE.md)** - Deep dive into 4-tier brain and 10-agent system
+- **[Technical Documentation](../../TECHNICAL-DOCUMENTATION.md)** - API reference and configuration
 
 ### Narrative Documentation
 
-- **[Tier Architecture Narrative](narratives/01-tier-architecture-narrative.md)** - How the brain tiers work
-- **[Agent Coordination Narrative](narratives/02-agent-coordination-narrative.md)** - Split-brain agent system
-- **[The Awakening of CORTEX](narratives/THE-AWAKENING-OF-CORTEX.md)** - Origin story
+- **[Tier Architecture Narrative](../narratives/01-tier-architecture-narrative.md)** - How the brain tiers work
+- **[Agent Coordination Narrative](../narratives/02-agent-coordination-narrative.md)** - Split-brain agent system
+- **[The Awakening of CORTEX](../narratives/THE-AWAKENING-OF-CORTEX.md)** - Origin story
 
 ### Diagrams & Visualizations
 
@@ -70,7 +70,7 @@ help
 
 If you see the CORTEX help table, you're ready! ✅
 
-**[Complete setup guide →](GETTING-STARTED.md)**
+**[Complete setup guide →](../../GETTING-STARTED.md)**
 
 ---
 
@@ -110,10 +110,10 @@ If you see the CORTEX help table, you're ready! ✅
 
 ## 🎓 Next Steps
 
-1. ✅ **[See why CORTEX beats standalone Copilot →](CORTEX-VS-COPILOT.md)**
-2. ✅ **[Get started in under 5 minutes →](GETTING-STARTED.md)**
-3. ✅ **[Explore the architecture →](ARCHITECTURE.md)**
-4. ✅ **[Read the technical docs →](TECHNICAL-DOCUMENTATION.md)**
+1. ✅ **[See why CORTEX beats standalone Copilot →](../../CORTEX-VS-COPILOT.md)**
+2. ✅ **[Get started in under 5 minutes →](../../GETTING-STARTED.md)**
+3. ✅ **[Explore the architecture →](../../ARCHITECTURE.md)**
+4. ✅ **[Read the technical docs →](../../TECHNICAL-DOCUMENTATION.md)**
 
 ---
 

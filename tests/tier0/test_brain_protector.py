@@ -57,7 +57,7 @@ class TestYAMLConfiguration:
         """Verify YAML rules are loaded successfully."""
         assert protector.rules_config is not None
         assert 'protection_layers' in protector.rules_config
-        assert len(protector.rules_config['protection_layers']) == 10  # Updated: includes all protection layers (namespace_protection + database_architecture added)
+        assert len(protector.rules_config['protection_layers']) == 13  # Updated: includes all protection layers (13 total)
     
     def test_has_all_protection_layers(self, protector):
         """Verify all 10 protection layers are configured."""
@@ -464,19 +464,16 @@ class TestGitCheckpointEnforcement:
         """Verify BLOCKS development work without git checkpoint."""
         request = ModificationRequest(
             intent="implement authentication feature",
-            description="Start development of user authentication system",
+            description="Start development of user authentication system without commit",
             files=[str(src_path / "tier1" / "auth.py")]
         )
         
         result = protector.analyze_request(request)
         
-        # Note: This will only block if uncommitted changes exist
-        # In CI environment with clean repo, this may pass
-        # Test validates the rule exists and can be triggered
-        if result.violations:
-            assert any(v.rule == "GIT_CHECKPOINT_ENFORCEMENT" for v in result.violations)
-            if any(v.severity == Severity.BLOCKED for v in result.violations):
-                assert result.decision == "BLOCK"
+        # Test validates the rule exists and triggers on development keywords
+        # with explicit "without commit" language
+        assert any(v.rule == "GIT_CHECKPOINT_ENFORCEMENT" for v in result.violations), \
+            f"Expected GIT_CHECKPOINT_ENFORCEMENT violation, got: {[v.rule for v in result.violations]}"
     
     def test_detects_refactor_without_checkpoint(self, protector, src_path):
         """Verify BLOCKS refactoring without git checkpoint."""
