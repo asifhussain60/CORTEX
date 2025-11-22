@@ -4,3 +4,39 @@ tests/fixtures/**/bin/
 
 # Brain backups
 kds-brain/backups/
+
+# Node modules
+node_modules/
+**/node_modules/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Build outputs
+bin/
+obj/
+dist/
+build/
+*.egg-info/
+site/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.log
+
+# IDE settings
+.vscode/settings.json
+
+# Logs
+logs/
+*.log
+
+# Workspace content (third-party/external)
+workspace/
