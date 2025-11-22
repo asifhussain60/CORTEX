@@ -43,9 +43,13 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Architecture:
-      - Overview: narratives/01-tier-architecture-narrative.md
-      - Agent System: narratives/02-agent-coordination-narrative.md
+  - CORTEX vs COPILOT: CORTEX-VS-COPILOT.md
+  - Getting Started: GETTING-STARTED.md
+  - Documentation:
+      - Architecture: ARCHITECTURE.md
+      - Technical Documentation: TECHNICAL-DOCUMENTATION.md
+      - Narrative Overview: narratives/01-tier-architecture-narrative.md
+      - Agent Coordination: narratives/02-agent-coordination-narrative.md
   - Story:
       - The Awakening: narratives/THE-AWAKENING-OF-CORTEX.md
   - Diagrams:
