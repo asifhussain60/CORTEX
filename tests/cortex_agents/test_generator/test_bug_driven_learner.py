@@ -273,9 +273,9 @@ class TestConfidenceUpdates:
         
         assert result is True
         
-        # Verify confidence decreased: 0.70 - 0.05 = 0.65
+        # Verify confidence decreased: 0.70 - 0.05 = 0.65 (with float tolerance)
         call_kwargs = mock_pattern_store.update_pattern.call_args[1]
-        assert call_kwargs["confidence"] == 0.65
+        assert abs(call_kwargs["confidence"] - 0.65) < 0.001  # Floating point tolerance
     
     def test_confidence_capped_at_1_0(self, learner, mock_pattern_store):
         """Test confidence doesn't exceed 1.0"""
@@ -338,7 +338,7 @@ class TestCompleteWorkflow:
         # Verify bug event
         bug = result["bug_event"]
         assert bug["test_name"] == "test_jwt_expiration"
-        assert bug["bug_category"] == "security"
+        assert bug["bug_category"] == BugCategory.SECURITY  # Enum comparison
         
         # Verify pattern
         pattern = result["pattern"]
