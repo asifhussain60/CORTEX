@@ -131,7 +131,7 @@ class Phase4Validator:
             # Check tables
             cursor.execute("""
                 SELECT name FROM sqlite_master 
-                WHERE type='table' AND name LIKE 'tier2_element%'
+                WHERE type='table' AND name LIKE 'tier2_%'
             """)
             tables = [row[0] for row in cursor.fetchall()]
             
@@ -226,14 +226,13 @@ class Phase4Validator:
             agent = FeedbackAgent()
             temp_dir = Path(tempfile.mkdtemp())
             
-            report_path = agent.create_feedback_report(
+            result = agent.create_feedback_report(
+                user_input="Test bug report: Steps 1. Test step 2. Another step. Expected: Should work. Actual: Does not work",
                 feedback_type="bug",
-                description="Test bug report",
-                steps_to_reproduce="1. Test step\n2. Another step",
-                expected_behavior="Should work",
-                actual_behavior="Does not work",
-                output_dir=temp_dir
+                severity="high",
+                context={"temp_dir": str(temp_dir)}
             )
+            report_path = Path(result['file_path']) if result else None
             
             if report_path and report_path.exists():
                 print(f"  ✅ Feedback report created: {report_path.name}")
@@ -244,11 +243,10 @@ class Phase4Validator:
                     content = f.read()
                     required_sections = [
                         "# CORTEX Feedback Report",
-                        "## Issue Description",
-                        "## Steps to Reproduce",
-                        "## Expected Behavior",
-                        "## Actual Behavior",
-                        "## Context"
+                        "**Report ID:**",
+                        "**Type:**",
+                        "**Severity:**",
+                        "## 📋 User Feedback"
                     ]
                     
                     for section in required_sections:
@@ -395,8 +393,8 @@ class Phase4Validator:
             integrator = TDDWorkflowIntegrator(project_root=project_dir)
             
             discovery_report = integrator.run_discovery_phase(
-                view_paths=[test_razor],
-                output_path=temp_dir / "discovery_report.json"
+                target_views=[test_razor],
+                cache_results=False
             )
             
             if discovery_report and 'elements_discovered' in discovery_report:
@@ -404,7 +402,7 @@ class Phase4Validator:
                 self.result.add_pass()
                 
                 # Test selector retrieval
-                selector = integrator.get_selector_for_element('loginButton')
+                selector = integrator.get_selector_for_element('loginButton', discovery_report)
                 if selector:
                     print(f"  ✅ Selector retrieval functional: {selector}")
                     self.result.add_pass()
@@ -505,12 +503,10 @@ class Phase4Validator:
             # Step 1: User reports feedback
             feedback_agent = FeedbackAgent()
             feedback_report = feedback_agent.create_feedback_report(
+                user_input="Tests fail due to missing element IDs. Steps: 1. Generate test 2. Run test 3. Test fails with selector not found",
                 feedback_type="improvement",
-                description="Tests fail due to missing element IDs",
-                steps_to_reproduce="1. Generate test\n2. Run test\n3. Test fails with selector not found",
-                expected_behavior="Test should find element",
-                actual_behavior="Selector not found error",
-                output_dir=temp_dir
+                severity="high",
+                context={"issue": "test_generation_failure", "temp_dir": str(temp_dir)}
             )
             
             if feedback_report:
@@ -535,11 +531,11 @@ class Phase4Validator:
             
             integrator = TDDWorkflowIntegrator(project_root=project_dir)
             discovery = integrator.run_discovery_phase(
-                view_paths=[test_view],
-                output_path=temp_dir / "discovery.json"
+                target_views=[test_view],
+                cache_results=False
             )
             
-            if discovery and discovery['elements_discovered'] >= 2:
+            if discovery and len(discovery) >= 2:
                 print(f"  ✅ Step 2: View discovery successful ({discovery['elements_discovered']} elements)")
                 self.result.add_pass()
             else:
@@ -547,8 +543,8 @@ class Phase4Validator:
                 return
             
             # Step 3: Selector retrieval for test generation
-            refresh_selector = integrator.get_selector_for_element('refreshBtn')
-            grid_selector = integrator.get_selector_for_element('dataGrid')
+            refresh_selector = integrator.get_selector_for_element('refreshBtn', discovery)
+            grid_selector = integrator.get_selector_for_element('dataGrid', discovery)
             
             if refresh_selector and grid_selector:
                 print(f"  ✅ Step 3: Selectors retrieved for test generation")
@@ -567,7 +563,7 @@ class Phase4Validator:
             
             all_correct = True
             for element_id, expected in expected_selectors.items():
-                actual = integrator.get_selector_for_element(element_id)
+                actual = integrator.get_selector_for_element(element_id, discovery)
                 if actual == expected:
                     print(f"  ✅ Selector correct: {element_id} → {actual}")
                     self.result.add_pass()
