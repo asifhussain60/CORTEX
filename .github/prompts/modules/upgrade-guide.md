@@ -12,13 +12,102 @@
 
 **What It Does:**
 1. **Version Check:** Compares local vs remote version
-2. **Download Updates:** Pulls latest code if new version exists
-3. **Apply Migrations:** Runs database schema updates
-4. **Preserve Brain:** Keeps all knowledge graphs, conversations, configs
-5. **Update Documentation:** Auto-updates CORTEX.prompt.md and copilot-instructions.md
-6. **Install Tooling:** Ensures all dependencies available
-7. **Validate .gitignore:** Confirms CORTEX excluded from user repo
-8. **Comprehensive Validation:** Tests all features functional
+2. **Installation Type Detection:** Standalone vs Embedded
+3. **Download Updates:** Pulls latest code if new version exists
+4. **Apply Migrations:** Runs database schema updates
+5. **Preserve Brain:** Keeps all knowledge graphs, conversations, configs
+6. **Update Documentation:** Auto-updates CORTEX.prompt.md and copilot-instructions.md
+7. **Install Tooling:** Ensures all dependencies available
+8. **Validate .gitignore:** Confirms CORTEX excluded from user repo
+9. **Comprehensive Validation:** Tests all features functional
+
+---
+
+## 🔒 Embedded Installation Safety
+
+**CRITICAL:** CORTEX can be installed standalone OR embedded in your project. The upgrade system automatically detects installation type and applies appropriate safety measures.
+
+### Embedded vs Standalone Detection
+
+**Embedded Installation (e.g., NOOR-CANVAS/CORTEX/):**
+- CORTEX directory inside another project
+- Parent directory has `.git`, `package.json`, etc.
+- Uses safe file-copy upgrade method
+- Prevents files escaping CORTEX directory
+
+**Standalone Installation (e.g., CORTEX/):**
+- CORTEX directory is the project root
+- Has its own `.git` directory
+- Can use faster git-based upgrade
+
+**Auto-Detection Methods:**
+1. `.cortex-embedded` marker file (explicit)
+2. Parent has `.git` but CORTEX doesn't (implicit)
+3. Parent has project files (`package.json`, `.sln`, etc.)
+
+### Creating Embedded Installation Marker
+
+**For explicit embedded marking:**
+```bash
+# Navigate to CORTEX directory
+cd /path/to/YOUR-PROJECT/CORTEX
+
+# Create embedded marker
+echo "# CORTEX Embedded Installation" > .cortex-embedded
+echo "# Parent Project: YOUR-PROJECT" >> .cortex-embedded
+echo "# Created: $(date)" >> .cortex-embedded
+```
+
+**Benefits of Explicit Marker:**
+- ✅ Guarantees embedded detection
+- ✅ Documents installation type
+- ✅ Survives git operations
+- ✅ Self-documenting for team
+
+### Embedded Upgrade Safety Features
+
+**Path Validation:**
+- ✅ Pre-flight check validates all file paths
+- ✅ Detects files that would escape CORTEX/
+- ✅ Aborts upgrade if unsafe paths detected
+- ✅ Shows warning with escaping file list
+
+**Example Output:**
+```
+[3/8] Choosing Upgrade Method
+   🔒 Embedded installation detected
+   Using safe file-copy method to preserve directory structure
+
+   Validating file paths...
+   ⚠️  WARNING: 2 files would escape CORTEX directory:
+      - ../parent-file.txt
+      - ../backups/old-file.py
+   🔒 Switching to safe file-copy method
+```
+
+**Safe Upgrade Process (Embedded):**
+1. **Fetch Updates** - Download to temp directory
+2. **Validate Paths** - Check all files stay in CORTEX/
+3. **Selective Copy** - Copy only files within CORTEX/
+4. **Preserve Structure** - Maintain directory hierarchy
+5. **Skip Git Merge** - Avoid unrelated history conflicts
+
+### Troubleshooting Embedded Upgrades
+
+**Issue: "Git merge failed - unrelated histories"**
+- **Cause:** Upstream CORTEX has different structure
+- **Solution:** System auto-fallbacks to file-copy method
+- **Status:** ✅ Handled automatically
+
+**Issue: "Files would escape CORTEX directory"**
+- **Cause:** Upstream has files in parent directories
+- **Solution:** Path validation blocks unsafe upgrade
+- **Action:** Report to GitHub issues (design problem)
+
+**Issue: "Embedded installation not detected"**
+- **Solution 1:** Create `.cortex-embedded` marker (see above)
+- **Solution 2:** Ensure parent has `.git` or project files
+- **Solution 3:** Check CORTEX directory name is exactly "CORTEX"
 
 ---
 
@@ -172,59 +261,98 @@ if git ls-files | grep -q "CORTEX/"; then
 fi
 ```
 
-### Phase 7: Comprehensive Validation (Automated)
+### Phase 7: Comprehensive Validation (Automated - Enhanced v2.0)
 **Validation runs automatically in Phase 3 after migrations complete.**
+
+**NEW in v2.0:**
+- **All Agents Wired** - Auto-discovers and validates all agents in src/agents/
+- **Response Templates Complete** - Validates 11 critical templates loadable
+- **Documentation Synchronized** - Ensures entry point and modules in sync
 
 **Manual Validation (Optional):**
 ```bash
-# Run validation suite manually anytime
+# Run full validation suite (10 categories)
 python validate_issue3_phase4.py
 
-# Run specific validation categories
-python validate_issue3_phase4.py --category=brain_protection
-python validate_issue3_phase4.py --category=database
-python validate_issue3_phase4.py --category=agents
+# Run deployment pipeline tests (comprehensive)
+pytest tests/test_deployment_pipeline.py -v
+
+# Run post-upgrade smoke tests (fast <30s)
+pytest tests/test_post_upgrade_smoke.py -v
 ```
 
 **Expected Output:** `✅ ALL VALIDATIONS PASSED - READY FOR PRODUCTION`
 
 **Validation Categories:**
 
-**1. Brain Protection (SKULL Rules)**
-- ✅ All 22 brain protection tests pass
-- ✅ YAML rule validation (brain-protection-rules.yaml)
-- ✅ File system protections active
-- ✅ Memory isolation verified
-
-**2. Database Schema**
+**1. Database Schema**
 - ✅ 4 tables created (element_mappings, navigation_flows, discovery_runs, element_changes)
 - ✅ 14 indexes applied for performance
 - ✅ 4 views created for querying
-- ✅ Foreign key constraints validated
+- ✅ Insert/query operations functional
 
-**3. Agent Functionality**
-- ✅ FeedbackAgent imports and initializes
-- ✅ ViewDiscoveryAgent discovers elements
-- ✅ Agent context injection works
-- ✅ Database persistence functional
+**2. FeedbackAgent**
+- ✅ Agent imports and initializes
+- ✅ Feedback report creation works
+- ✅ Report structure valid (all sections present)
 
-**4. Workflow Integration**
-- ✅ TDD workflow integrator imports
+**3. ViewDiscoveryAgent**
+- ✅ Agent imports and initializes
+- ✅ View discovery functional
+- ✅ Element extraction correct
+- ✅ Selector strategies generated
+- ✅ Database persistence works
+
+**4. TDD Workflow Integration**
+- ✅ TDDWorkflowIntegrator imports
+- ✅ Discovery phase runs successfully
+- ✅ Selector retrieval works
+- ✅ Report generation functional
+
+**5. Upgrade Compatibility**
+- ✅ Brain data preserved (Tier 1, Tier 2, configs)
+- ✅ Database integrity maintained
+- ✅ New tables coexist with old
+- ✅ Conversation history intact
+
+**6. End-to-End Workflow**
+- ✅ Feedback collection works
 - ✅ View discovery runs before test generation
-- ✅ Element mappings cached correctly
-- ✅ End-to-end workflow validated
+- ✅ Selectors retrieved correctly
+- ✅ Selector strategies match expectations
 
-**5. Entry Point Modules**
-- ✅ upgrade-guide.md present
-- ✅ feedback-guide.md present (if implemented)
-- ✅ view-discovery-guide.md present (if implemented)
-- ✅ Documentation synchronized
+**7. All Agents Wired (NEW v2.0)**
+- ✅ All agent modules in src/agents/ discovered
+- ✅ Each agent imports successfully
+- ✅ Failed imports reported with details
+- ✅ Agent count validated
 
-**6. Configuration Integrity**
-- ✅ .gitignore excludes CORTEX/
-- ✅ cortex.config.json valid
-- ✅ response-templates.yaml valid
-- ✅ capabilities.yaml valid
+**8. Response Templates Complete (NEW v2.0)**
+- ✅ response-templates.yaml loads
+- ✅ 11 critical templates present:
+  - help_table, fallback, work_planner_success
+  - planning_dor_complete, planning_dor_incomplete
+  - planning_security_review, ado_created, ado_resumed
+  - enhance_existing, brain_export_guide, brain_import_guide
+- ✅ All templates have required fields (content, triggers)
+
+**9. Documentation Synchronized (NEW v2.0)**
+- ✅ CORTEX.prompt.md exists
+- ✅ All required modules present:
+  - response-format.md
+  - planning-system-guide.md
+  - template-guide.md
+  - upgrade-guide.md
+- ✅ Entry point references all modules
+- ✅ Key commands documented:
+  - help, plan, feedback, discover views
+  - upgrade, optimize, healthcheck
+
+**10. Feature Completeness (NEW v2.0)**
+- ✅ Feedback system fully wired (agent + documentation)
+- ✅ View discovery system complete (agent + workflow + docs)
+- ✅ Planning system complete (templates + guide)
+- ✅ Brain export/import complete (templates + functionality)
 
 ---
 

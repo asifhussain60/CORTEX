@@ -44,6 +44,46 @@ class UpgradeOrchestrator:
         
         self.backup_path = None
         self.upgrade_successful = False
+        self.is_embedded = self._detect_embedded_installation()
+    
+    def _detect_embedded_installation(self) -> bool:
+        """
+        Detect if CORTEX is embedded in another project.
+        
+        Returns:
+            True if CORTEX is embedded (subfolder of another project)
+        """
+        # Check for explicit embedded marker
+        marker_file = self.cortex_path / ".cortex-embedded"
+        if marker_file.exists():
+            return True
+        
+        # Check if parent directory is a git repository
+        parent_git = self.cortex_path.parent / ".git"
+        cortex_git = self.cortex_path / ".git"
+        
+        # If parent has .git but CORTEX doesn't, it's embedded
+        if parent_git.exists() and not cortex_git.exists():
+            return True
+        
+        # Check if parent directory name suggests it's a project root
+        # (e.g., NOOR-CANVAS, MY-PROJECT, etc.)
+        parent_name = self.cortex_path.parent.name
+        cortex_name = self.cortex_path.name
+        
+        if cortex_name == "CORTEX" and parent_name != "CORTEX":
+            # CORTEX is a subdirectory with a different parent name
+            # Check if parent has typical project files
+            project_indicators = [
+                ".git", "package.json", "requirements.txt", 
+                ".sln", ".csproj", "Cargo.toml", "go.mod"
+            ]
+            
+            for indicator in project_indicators:
+                if (self.cortex_path.parent / indicator).exists():
+                    return True
+        
+        return False
     
     def _is_git_repository(self) -> bool:
         """Check if CORTEX is a git repository."""
@@ -63,6 +103,61 @@ class UpgradeOrchestrator:
         )
         return result.returncode == 0
     
+    def _validate_file_paths(self, base_path: Path) -> Dict[str, bool]:
+        """
+        Validate that all files in upgrade stay within CORTEX directory.
+        
+        Args:
+            base_path: Base path to check files against
+            
+        Returns:
+            Dict with validation results
+        """
+        import subprocess
+        
+        results = {
+            "all_safe": True,
+            "escaping_files": [],
+            "total_files": 0
+        }
+        
+        # Get list of files that would be added/modified
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "HEAD..cortex-upstream/CORTEX-3.0"],
+            cwd=self.cortex_path,
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            files = result.stdout.strip().split('\n')
+            results["total_files"] = len([f for f in files if f])
+            
+            for file in files:
+                if not file:
+                    continue
+                
+                # Check if file path tries to escape CORTEX directory
+                # Look for paths starting with ../ or absolute paths
+                if file.startswith('../') or Path(file).is_absolute():
+                    results["all_safe"] = False
+                    results["escaping_files"].append(file)
+                
+                # Check if file would be created outside CORTEX
+                full_path = self.cortex_path / file
+                try:
+                    # Resolve to absolute path and check if it's under CORTEX
+                    resolved = full_path.resolve()
+                    if not str(resolved).startswith(str(self.cortex_path.resolve())):
+                        results["all_safe"] = False
+                        results["escaping_files"].append(file)
+                except Exception:
+                    # If we can't resolve, assume it's unsafe
+                    results["all_safe"] = False
+                    results["escaping_files"].append(file)
+        
+        return results
+    
     def _git_upgrade(self, branch: str = "CORTEX-3.0", dry_run: bool = False) -> bool:
         """
         Upgrade using git pull (preferred method).
@@ -75,6 +170,13 @@ class UpgradeOrchestrator:
             True if upgrade successful
         """
         import subprocess
+        
+        # Check if this is an embedded installation
+        if self.is_embedded:
+            print(f"⚠️  Detected embedded CORTEX installation")
+            print(f"   Git merge not supported for embedded installations")
+            print(f"   Falling back to selective file copy method")
+            return False
         
         print(f"🔄 Using git-based upgrade (faster, cleaner)")
         
@@ -203,15 +305,35 @@ class UpgradeOrchestrator:
         else:
             print(f"\n[2/8] Backup (skipped)")
         
-        # Step 3: Choose upgrade method (git-aware)
+        # Step 3: Choose upgrade method (git-aware, embedded-aware)
         print(f"\n[3/8] Choosing Upgrade Method")
         
-        use_git = False
-        if self._is_git_repository() and self._has_git_remote():
+        # Check for embedded installation
+        if self.is_embedded:
+            print(f"   🔒 Embedded installation detected")
+            print(f"   Using safe file-copy method to preserve directory structure")
+            use_git = False
+        elif self._is_git_repository() and self._has_git_remote():
             print(f"   ✅ Detected git repository with upstream remote")
-            use_git = True
+            
+            # Validate paths before attempting git merge
+            print(f"\n   Validating file paths...")
+            validation = self._validate_file_paths(self.cortex_path)
+            
+            if not validation["all_safe"]:
+                print(f"   ⚠️  WARNING: {len(validation['escaping_files'])} files would escape CORTEX directory:")
+                for file in validation["escaping_files"][:5]:  # Show first 5
+                    print(f"      - {file}")
+                if len(validation["escaping_files"]) > 5:
+                    print(f"      ... and {len(validation['escaping_files']) - 5} more")
+                print(f"   🔒 Switching to safe file-copy method")
+                use_git = False
+            else:
+                print(f"   ✅ All {validation['total_files']} files are safe")
+                use_git = True
         else:
             print(f"   ℹ️  No git remote, using download method")
+            use_git = False
         
         # Git-based upgrade (preferred)
         if use_git:

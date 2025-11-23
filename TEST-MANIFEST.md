@@ -1,7 +1,7 @@
 # CORTEX Test Manifest
 
 **Purpose:** Required test files for deployment package validation  
-**Version:** 1.0  
+**Version:** 2.0 (Enhanced Pipeline Validation)  
 **Status:** ✅ PRODUCTION
 
 ---
@@ -10,9 +10,160 @@
 
 **CRITICAL:** These test files MUST be included in ALL CORTEX deployments to ensure brain protection and system integrity after upgrades.
 
+**NEW in v2.0:**
+- Comprehensive deployment pipeline validation
+- All agents discovery and wiring checks
+- Response template completeness validation
+- Documentation synchronization checks
+- Post-upgrade smoke tests (<30 seconds)
+
 ---
 
-## 📦 Required Test Files
+### Deployment Validation
+
+```plaintext
+tests/test_deployment_pipeline.py         # Comprehensive feature wiring validation
+```
+
+**Purpose:** Validate all CORTEX features properly wired before deployment  
+**Tests:**
+
+- All agents discoverable and importable
+- All workflows integrated (TDD, Planning, Feature)
+- Response templates load correctly
+- Database schema complete (tables, indexes, views)
+- Entry points documented and functional
+- Documentation synchronized
+- Configuration files valid
+- Dependencies available
+
+**Usage:**
+
+```bash
+pytest tests/test_deployment_pipeline.py -v
+```
+
+---
+
+### Post-Upgrade Smoke Tests
+
+```plaintext
+tests/test_post_upgrade_smoke.py          # Fast post-upgrade validation (<30s)
+```
+
+**Purpose:** Quick smoke tests immediately after upgrade  
+**Tests:**
+
+- Critical imports (FeedbackAgent, ViewDiscoveryAgent, TDDWorkflowIntegrator)
+- Entry points accessible (CORTEX.prompt.md, help documentation)
+- Database connectivity (Tier 2 connectable)
+- Template loading (response-templates.yaml)
+- Configuration valid (capabilities.yaml, brain-protection-rules.yaml)
+- Version information present
+
+**Usage:**
+
+```bash
+pytest tests/test_post_upgrade_smoke.py -v --tb=line -x
+```
+
+**Expected Runtime:** <30 seconds
+
+---
+
+## 🔄 Enhanced Validation Script
+
+### Core Validation Script (Enhanced v2.0)
+
+```plaintext
+validate_issue3_phase4.py                  # Enhanced with pipeline validation
+```
+
+**NEW in v2.0:**
+
+- [7/10] All Agents Wired Validation
+  - Auto-discovers all agent modules in src/agents/
+  - Validates each agent imports successfully
+  - Reports failed imports with error details
+
+- [8/10] Response Templates Validation
+  - Loads response-templates.yaml
+  - Checks all critical templates present (11 required)
+  - Validates template structure (content, triggers)
+
+- [9/10] Documentation Sync Validation
+  - Verifies CORTEX.prompt.md exists
+  - Checks all required modules present
+  - Validates modules referenced in entry point
+  - Ensures key commands documented
+
+**Usage:**
+
+```bash
+python validate_issue3_phase4.py
+```
+
+**Validation Categories:** 10 total (was 6)
+
+---
+
+## 📊 Test Execution Flow
+
+**Post-Upgrade Validation (Automated):**
+
+```text
+Upgrade Process:
+1. Pull latest code ✅
+2. Apply database migrations ✅
+3. Run validate_issue3_phase4.py ⏳
+   ├─ [1/10] Database Schema (4 tables, 14 indexes, 4 views)
+   ├─ [2/10] FeedbackAgent (import, initialization, report creation)
+   ├─ [3/10] ViewDiscoveryAgent (discovery, database persistence)
+   ├─ [4/10] TDD Workflow Integrator (integration, selector retrieval)
+   ├─ [5/10] Upgrade Compatibility (brain preservation)
+   ├─ [6/10] End-to-End Workflow (feedback → discovery → test gen)
+   ├─ [7/10] All Agents Wired (auto-discover all agents) ← NEW
+   ├─ [8/10] Response Templates (11 critical templates) ← NEW
+   ├─ [9/10] Documentation Sync (entry point + modules) ← NEW
+   └─ [10/10] Comprehensive feature validation
+4. If ALL tests pass ✅ → Upgrade complete
+5. If ANY test fails ❌ → Recommend rollback
+```
+
+**Exit Codes:**
+
+- `0` - All tests passed (upgrade successful)
+- `1` - One or more tests failed (upgrade incomplete)
+- `2` - Critical failure (brain protection compromised)
+
+**Post-Upgrade Smoke Tests (Manual):**
+
+```bash
+# Quick validation (<30s)
+pytest tests/test_post_upgrade_smoke.py -v
+
+# Full deployment validation (comprehensive)
+pytest tests/test_deployment_pipeline.py -v
+```
+
+---
+
+## 📏 Deployment Size Impact
+
+**Test Package Size:**
+
+- `validate_issue3_phase4.py`: ~30 KB (enhanced)
+- `test_brain_protector.py`: ~15 KB
+- `test_issue3_fixes.py`: ~8 KB
+- `test_deploy_issue3_fixes.py`: ~6 KB
+- `test_deployment_pipeline.py`: ~16 KB ← NEW
+- `test_post_upgrade_smoke.py`: ~5 KB ← NEW
+- **Total:** ~80 KB
+
+**Package Increase:** <100 KB  
+**Value:** Priceless (prevents brain corruption, ensures all features wired, smooth upgrades)
+
+---
 
 ### Core Validation Script
 ```

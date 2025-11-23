@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-23T15:29:21.547762",
+  "timestamp": "2025-11-23T17:53:48.743717",
   "phases": {
     "Pre-Deployment Validation": "PASSED",
     "Entry Point Validation": "PASSED",
@@ -27,7 +27,7 @@
   },
   "summary": {
     "failures": 0,
-    "warnings": 0,
+    "warnings": 2,
     "status": "PASSED"
   }
 }

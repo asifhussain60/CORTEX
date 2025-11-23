@@ -663,7 +663,8 @@ templates:
   
   confidence_high:
     name: "Confidence Display - High"
-    trigger: []
+    trigger:
+    - confidence_high
     response_type: "confidence_indicator"
     content: "\U0001F3AF **Pattern Match Confidence:** {confidence_display}\n\nI'm\
       \ applying learned patterns from {pattern_count} similar conversations.\n{detailed_explanation}"
@@ -674,7 +675,8 @@ templates:
   
   confidence_medium:
     name: "Confidence Display - Medium"
-    trigger: []
+    trigger:
+    - confidence_medium
     response_type: "confidence_indicator"
     content: "\U0001F7E1 **Pattern Match Confidence:** {confidence_display}\n\nI\
       \ found {pattern_count} related patterns, applying with moderate confidence.\n\
@@ -686,7 +688,8 @@ templates:
   
   confidence_low:
     name: "Confidence Display - Low"
-    trigger: []
+    trigger:
+    - confidence_low
     response_type: "confidence_indicator"
     content: "\U0001F7E0 **Pattern Match Confidence:** {confidence_display}\n\nLimited\
       \ pattern history available. Response based on {pattern_count} patterns.\n{detailed_explanation}"
@@ -696,8 +699,9 @@ templates:
     - detailed_explanation
   
   confidence_none:
-    name: "Confidence Display - No Patterns"
-    trigger: []
+    name: "Confidence Display - None"
+    trigger:
+    - confidence_none
     response_type: "confidence_indicator"
     content: "\u2139\uFE0F **New Territory:** No learned patterns available for this\
       \ request.\n\nGenerating fresh response using CORTEX capabilities."
