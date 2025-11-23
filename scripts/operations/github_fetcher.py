@@ -273,6 +273,53 @@ class GitHubFetcher:
             shutil.rmtree(self.temp_dir)
             print(f"✅ Cleanup complete")
     
+    def validate_extracted_package(self, extracted_path: Path) -> Dict[str, bool]:
+        """
+        Validate extracted CORTEX package has required structure.
+        
+        Args:
+            extracted_path: Path to extracted CORTEX directory
+            
+        Returns:
+            Dictionary of validation results
+        """
+        print(f"🔍 Validating extracted package...")
+        
+        required_files = [
+            "VERSION",
+            ".github/prompts/CORTEX.prompt.md",
+            "cortex-brain/response-templates.yaml",
+            "cortex-brain/capabilities.yaml",
+            "scripts/cortex-upgrade.py"
+        ]
+        
+        required_dirs = [
+            ".github/prompts",
+            "cortex-brain",
+            "scripts"
+        ]
+        
+        results = {}
+        
+        # Check files
+        for file_path in required_files:
+            full_path = extracted_path / file_path
+            results[f"file:{file_path}"] = full_path.exists()
+            status = "✅" if results[f"file:{file_path}"] else "❌"
+            print(f"   {status} {file_path}")
+        
+        # Check directories
+        for dir_path in required_dirs:
+            full_path = extracted_path / dir_path
+            results[f"dir:{dir_path}"] = full_path.exists() and full_path.is_dir()
+            status = "✅" if results[f"dir:{dir_path}"] else "❌"
+            print(f"   {status} {dir_path}/")
+        
+        all_valid = all(results.values())
+        print(f"\n{'✅' if all_valid else '❌'} Package validation: {'PASSED' if all_valid else 'FAILED'}")
+        
+        return results
+    
     def _github_api_request(self, url: str) -> Dict:
         """
         Make authenticated GitHub API request.

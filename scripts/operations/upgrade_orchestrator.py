@@ -44,6 +44,114 @@ class UpgradeOrchestrator:
         
         self.backup_path = None
         self.upgrade_successful = False
+    
+    def _is_git_repository(self) -> bool:
+        """Check if CORTEX is a git repository."""
+        return (self.cortex_path / ".git").exists()
+    
+    def _has_git_remote(self, remote_name: str = "cortex-upstream") -> bool:
+        """Check if git remote is configured."""
+        if not self._is_git_repository():
+            return False
+        
+        import subprocess
+        result = subprocess.run(
+            ["git", "remote", "get-url", remote_name],
+            cwd=self.cortex_path,
+            capture_output=True,
+            text=True
+        )
+        return result.returncode == 0
+    
+    def _git_upgrade(self, branch: str = "CORTEX-3.0", dry_run: bool = False) -> bool:
+        """
+        Upgrade using git pull (preferred method).
+        
+        Args:
+            branch: Branch to pull from
+            dry_run: If True, only check for updates
+            
+        Returns:
+            True if upgrade successful
+        """
+        import subprocess
+        
+        print(f"🔄 Using git-based upgrade (faster, cleaner)")
+        
+        # Fetch latest
+        print(f"   Fetching from upstream...")
+        if not dry_run:
+            result = subprocess.run(
+                ["git", "fetch", "cortex-upstream"],
+                cwd=self.cortex_path,
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode != 0:
+                print(f"❌ Git fetch failed: {result.stderr}")
+                return False
+        else:
+            print(f"   [DRY RUN] Would fetch cortex-upstream")
+        
+        # Check if there are updates
+        result = subprocess.run(
+            ["git", "log", "--oneline", f"HEAD..cortex-upstream/{branch}"],
+            cwd=self.cortex_path,
+            capture_output=True,
+            text=True
+        )
+        
+        commits_behind = len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
+        
+        if commits_behind == 0:
+            print(f"✅ Already up to date with upstream")
+            return True
+        
+        print(f"   Found {commits_behind} new commits")
+        
+        if dry_run:
+            print(f"   [DRY RUN] Would merge {commits_behind} commits")
+            return True
+        
+        # Save current HEAD for rollback
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.cortex_path,
+            capture_output=True,
+            text=True
+        )
+        original_head = result.stdout.strip()
+        
+        # Merge with conflict resolution
+        print(f"   Merging updates...")
+        result = subprocess.run(
+            ["git", "merge", f"cortex-upstream/{branch}", "-X", "theirs", "--no-edit"],
+            cwd=self.cortex_path,
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode != 0:
+            # Try allow-unrelated-histories
+            print(f"   Standard merge failed, trying with --allow-unrelated-histories...")
+            result = subprocess.run(
+                ["git", "merge", f"cortex-upstream/{branch}", "-X", "theirs", "--allow-unrelated-histories", "--no-edit"],
+                cwd=self.cortex_path,
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode != 0:
+                print(f"❌ Git merge failed")
+                print(f"   Error: {result.stderr}")
+                # Reset to clean state
+                subprocess.run(["git", "merge", "--abort"], cwd=self.cortex_path)
+                subprocess.run(["git", "reset", "--hard", original_head], cwd=self.cortex_path)
+                return False
+        
+        print(f"✅ Git upgrade complete")
+        return True
         
     def upgrade(
         self,
@@ -95,22 +203,84 @@ class UpgradeOrchestrator:
         else:
             print(f"\n[2/8] Backup (skipped)")
         
-        # Step 3: Fetch latest release
-        print(f"\n[3/8] Fetching Release")
-        try:
-            if not dry_run:
-                zip_path = self.fetcher.download_release(version)
-                extracted_path = self.fetcher.extract_package(zip_path)
-            else:
-                print(f"   [DRY RUN] Would download version {version or 'latest'}")
-                extracted_path = self.cortex_path  # Use current for dry run analysis
-        except Exception as e:
-            print(f"❌ Download failed: {e}")
-            self._rollback()
-            return False
+        # Step 3: Choose upgrade method (git-aware)
+        print(f"\n[3/8] Choosing Upgrade Method")
+        
+        use_git = False
+        if self._is_git_repository() and self._has_git_remote():
+            print(f"   ✅ Detected git repository with upstream remote")
+            use_git = True
+        else:
+            print(f"   ℹ️  No git remote, using download method")
+        
+        # Git-based upgrade (preferred)
+        if use_git:
+            print(f"\n[4/8] Git-Based Upgrade")
+            try:
+                git_success = self._git_upgrade(dry_run=dry_run)
+                
+                if git_success:
+                    # Skip to validation (steps 5-8)
+                    print(f"\n[5/8] Skipping file copy (git handled)")
+                    print(f"\n[6/8] Skipping config merge (git handled)")
+                    
+                    # Apply schema migrations
+                    print(f"\n[7/8] Applying Schema Migrations")
+                    if not dry_run:
+                        migration_results = self.migrator.migrate_all_databases(dry_run=False)
+                        if not all(migration_results.values()):
+                            print(f"❌ Some migrations failed")
+                            self._rollback()
+                            return False
+                    else:
+                        print(f"   [DRY RUN] Would apply database migrations")
+                    
+                    # Validate brain integrity
+                    print(f"\n[8/8] Validating Brain Integrity")
+                    if not dry_run:
+                        validation_results = self.preserver.validate_brain_integrity()
+                        if not all(validation_results.values()):
+                            print(f"❌ Brain integrity validation failed")
+                            self._rollback()
+                            return False
+                    else:
+                        print(f"   [DRY RUN] Would validate brain integrity")
+                    
+                    # Success
+                    self._print_success_message(info, version, dry_run)
+                    self.upgrade_successful = True
+                    return True
+                else:
+                    print(f"⚠️  Git upgrade failed, falling back to download method")
+                    use_git = False
+            except Exception as e:
+                print(f"❌ Git upgrade error: {e}")
+                print(f"   Falling back to download method")
+                use_git = False
+        
+        # Download-based upgrade (fallback)
+        if not use_git:
+            print(f"\n[4/8] Fetching Release")
+            try:
+                if not dry_run:
+                    zip_path = self.fetcher.download_release(version)
+                    extracted_path = self.fetcher.extract_package(zip_path)
+                    
+                    # Validate extracted package
+                    print(f"\n   Validating package integrity...")
+                    validation = self.fetcher.validate_extracted_package(extracted_path)
+                    if not all(validation.values()):
+                        raise RuntimeError("Downloaded package is incomplete or corrupted")
+                else:
+                    print(f"   [DRY RUN] Would download version {version or 'latest'}")
+                    extracted_path = self.cortex_path  # Use current for dry run analysis
+            except Exception as e:
+                print(f"❌ Download failed: {e}")
+                self._rollback()
+                return False
         
         # Step 4: Selective file copy (preserve brain)
-        print(f"\n[4/8] Updating Core Files")
+        print(f"\n[5/8] Updating Core Files")
         try:
             results = self.preserver.selective_copy(extracted_path, dry_run=dry_run)
             
@@ -125,7 +295,7 @@ class UpgradeOrchestrator:
             return False
         
         # Step 5: Merge configurations
-        print(f"\n[5/8] Merging Configurations")
+        print(f"\n[6/8] Merging Configurations")
         try:
             config_files = [
                 ("response-templates.yaml", self.merger.merge_response_templates),
@@ -148,7 +318,7 @@ class UpgradeOrchestrator:
             return False
         
         # Step 6: Apply schema migrations
-        print(f"\n[6/8] Applying Schema Migrations")
+        print(f"\n[7/8] Applying Schema Migrations")
         try:
             migration_results = self.migrator.migrate_all_databases(dry_run=dry_run)
             
@@ -163,7 +333,7 @@ class UpgradeOrchestrator:
             return False
         
         # Step 7: Validate brain integrity
-        print(f"\n[7/8] Validating Brain Integrity")
+        print(f"\n[8/8] Validating Brain Integrity")
         try:
             validation_results = self.preserver.validate_brain_integrity()
             
@@ -177,25 +347,17 @@ class UpgradeOrchestrator:
             self._rollback()
             return False
         
-        # Step 8: Update version file
-        print(f"\n[8/8] Updating Version File")
-        try:
-            if not dry_run:
-                new_version = version or self.detector.get_latest_version()
-                self.detector.create_version_file(
-                    version=new_version,
-                    deployment_type="upgrade"
-                )
-        except Exception as e:
-            print(f"❌ Version update failed: {e}")
-            self._rollback()
-            return False
-        
         # Cleanup
         if not dry_run:
             self.fetcher.cleanup()
         
         # Success
+        self._print_success_message(info, version, dry_run)
+        self.upgrade_successful = True
+        return True
+    
+    def _print_success_message(self, info: Dict, version: Optional[str], dry_run: bool) -> None:
+        """Print upgrade success message."""
         print(f"\n" + "=" * 60)
         if dry_run:
             print(f"✅ DRY RUN COMPLETE - No changes were made")
@@ -211,9 +373,6 @@ class UpgradeOrchestrator:
                 print(f"   (Can be removed after verifying upgrade)")
         
         print(f"=" * 60 + "\n")
-        
-        self.upgrade_successful = True
-        return True
     
     def _rollback(self) -> None:
         """Rollback failed upgrade."""

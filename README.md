@@ -43,8 +43,8 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 
 **CORTEX is Copilot's brain** — a sophisticated dual-hemisphere cognitive system that:
 
-- **Remembers** - Last 20 conversations preserved, "make it purple" references work across sessions
-- **Learns** - 3,247+ patterns accumulated from your project, each feature teaches the next
+- **Remembers** - 70-conversation FIFO capacity (growing with usage), "make it purple" references work across sessions
+- **Learns** - Pattern learning from your project, each feature teaches the next
 - **Protects** - Challenges risky proposals with data ("Test-first has 94% success rate vs 67% without")
 - **Coordinates** - LEFT BRAIN (tactical execution) + RIGHT BRAIN (strategic planning) work together
 - **Projects** - Knows your entire codebase, warns about hotspots, suggests optimal work times
@@ -52,8 +52,8 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 ### From Forgetful Intern to Expert Team Member
 
 **Week 1:** Copilot has amnesia, needs constant guidance, you explain architecture repeatedly  
-**Week 4:** Remembers 20 conversations, knows 500+ patterns, reuses workflows automatically  
-**Week 12:** Expert on YOUR project, 3,247 patterns, proactive warnings prevent issues  
+**Week 4:** Remembers recent conversations, learns patterns, reuses workflows automatically  
+**Week 12:** Expert on YOUR project, accumulated patterns, proactive warnings prevent issues  
 **Week 24:** Feels like a senior developer, challenges bad ideas with evidence, suggests similar features from months ago
 
 **CORTEX transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
@@ -135,7 +135,7 @@ CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhance
 1. **4-Tier Brain Architecture** - Instinct, Working Memory, Knowledge Graph, Development Context
 2. **10 Specialist Agents** - Intent routing, planning, execution, testing, validation, governance
 3. **Dual-Hemisphere Processing** - LEFT BRAIN (tactical) + RIGHT BRAIN (strategic)
-4. **Context Continuity** - "Make it purple" works across sessions (20 conversation memory)
+4. **Context Continuity** - "Make it purple" works across sessions (70-conversation FIFO capacity)
 5. **Pattern Learning** - Accumulates wisdom from every interaction
 6. **Quality Protection** - Challenges risky changes with evidence-based recommendations
 

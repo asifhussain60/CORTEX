@@ -61,6 +61,7 @@ class RequestParser:
         "commit": ["commit", "save", "checkin"],
         "resume": ["resume", "continue", "restore", "recover"],
         "analyze": ["analyze", "examine", "study", "investigate"],
+        "feedback": ["feedback", "report issue", "report bug", "report problem", "suggest improvement", "cortex issue", "cortex bug", "cortex improvement"],
     }
     
     # Context extraction patterns

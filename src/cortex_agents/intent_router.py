@@ -303,6 +303,15 @@ class IntentRouter(BaseAgent):
             # Step 2: Query Tier 2 for similar past intents
             similar_patterns = self._find_similar_intents(request)
             
+            # Step 2.5: Suggest relevant patterns before execution (NEW - Pattern Utilization)
+            pattern_suggestions = self._suggest_patterns(request, classification_result.intent)
+            if pattern_suggestions:
+                # Store suggestions in request context for agent use
+                if not request.context:
+                    request.context = {}
+                request.context['pattern_suggestions'] = pattern_suggestions
+                self.logger.info(f"Injected {len(pattern_suggestions)} pattern suggestions into request context")
+            
             # Step 3: Make routing decision with rule context
             routing_decision = self._make_routing_decision(
                 classification_result.intent,  # Extract intent for backward compatibility
@@ -880,3 +889,58 @@ class IntentRouter(BaseAgent):
         
         else:
             return f"Investigation in progress for {target} (phase: {phase})"
+    
+    def _suggest_patterns(
+        self,
+        request: AgentRequest,
+        intent_type: IntentType
+    ) -> List[Dict[str, Any]]:
+        """
+        Suggest relevant patterns before agent execution.
+        
+        Integrates PatternSuggestionEngine to increase pattern utilization.
+        This is part of Task 2.1: Increase Pattern Utilization (CORTEX Fix Plan).
+        
+        Args:
+            request: The agent request
+            intent_type: Classified intent type
+        
+        Returns:
+            List of pattern suggestions (top 3)
+        """
+        try:
+            # Import pattern suggestion engine
+            from src.tier2.pattern_suggestion_engine import PatternSuggestionEngine
+            
+            # Initialize engine (cached instance could be stored in self for performance)
+            if not hasattr(self, '_pattern_engine'):
+                self._pattern_engine = PatternSuggestionEngine()
+            
+            # Get current namespace from context (if available)
+            current_namespace = None
+            if request.context and 'workspace_name' in request.context:
+                current_namespace = f"workspace.{request.context['workspace_name']}"
+            elif request.context and 'namespace' in request.context:
+                current_namespace = request.context['namespace']
+            
+            # Suggest patterns
+            suggestions = self._pattern_engine.suggest_patterns(
+                task_description=request.user_message,
+                intent_type=intent_type.value if intent_type else None,
+                current_namespace=current_namespace,
+                limit=3
+            )
+            
+            if suggestions:
+                self.logger.info(
+                    f"Pattern suggestion engine returned {len(suggestions)} patterns "
+                    f"(top relevance: {suggestions[0]['relevance_score']:.2f})"
+                )
+            else:
+                self.logger.debug("No relevant patterns found for this request")
+            
+            return suggestions
+        
+        except Exception as e:
+            self.logger.warning(f"Pattern suggestion failed: {e}")
+            return []

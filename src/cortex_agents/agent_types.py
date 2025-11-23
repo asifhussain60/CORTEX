@@ -22,6 +22,7 @@ class AgentType(Enum):
     RESUMER = auto()         # SessionResumer
     ANALYZER = auto()        # ScreenshotAnalyzer
     COMMITTER = auto()       # CommitHandler
+    FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
 
 
 class IntentType(Enum):
@@ -78,6 +79,10 @@ class IntentType(Enum):
     # Conversation tracking (CORTEX 3.0 Feature 5.1)
     CAPTURE = "capture"
     IMPORT = "import"
+    
+    # Feedback collection (CORTEX Fix - Issue #4)
+    FEEDBACK = "feedback"
+    REPORT_ISSUE = "report_issue"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -155,6 +160,9 @@ INTENT_AGENT_MAP = {
     
     IntentType.COMMIT: AgentType.COMMITTER,
     IntentType.GIT: AgentType.COMMITTER,
+    
+    IntentType.FEEDBACK: AgentType.FEEDBACK,
+    IntentType.REPORT_ISSUE: AgentType.FEEDBACK,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

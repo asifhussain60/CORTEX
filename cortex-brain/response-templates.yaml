@@ -583,6 +583,17 @@ templates:
       \ documentation\n\n\U0001F50D **Next Steps:**\n   1. Review generated documentation\
       \ in docs/ directory\n   2. Verify all modules documented correctly\n   3. Check\
       \ cross-references and navigation\n   4. Optionally publish to GitHub Pages"
+  feedback_received:
+    name: Feedback Received
+    triggers:
+    - feedback
+    - report issue
+    - report bug
+    - report problem
+    - suggest improvement
+    - cortex feedback
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Feedback Collection**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your Request:**\n   You want to provide feedback about CORTEX (bug report, feature request, or improvement suggestion).\n\n⚠️ **Challenge:** ✓ **Accept**\n   Feedback collection helps improve CORTEX. I'll gather context automatically and create a structured report.\n\n\U0001F4AC **Response:**\n   Starting feedback collection process...\n   \n   **Feedback Types:**\n   • Bug Report - Something isn't working correctly\n   • Feature Request - New capability you'd like to see\n   • Improvement - Enhancement to existing features\n   • Question - Unclear documentation or behavior\n   \n   **What I'll Collect:**\n   • Your description of the issue/suggestion\n   • Automatic context (conversation, files, workflow)\n   • Environment information\n   • Steps to reproduce (for bugs)\n   \n   All feedback is saved locally and helps prioritize development.\n\n\U0001F4DD **Your Request:** Provide feedback about CORTEX\n\n\U0001F50D **Next Steps:**\n   1. **Describe the feedback** - What happened or what you'd like to see\n   2. **Provide details** - Steps to reproduce (bugs) or use case (features)\n   3. **Review report** - I'll generate a structured feedback report\n   4. **Report saved** - Stored in cortex-brain/documents/reports/ for review\n   \n   Please describe your feedback and I'll create the report."
   admin_help:
     name: Admin Help
     triggers:

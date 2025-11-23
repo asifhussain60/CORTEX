@@ -29,7 +29,7 @@ def check_tier1_utilization():
         }
     
     # Connect to Tier 1 database
-    db_path = Path('cortex-brain/tier1/working_memory.db')
+    db_path = Path('cortex-brain/tier1-working-memory.db')
     if not db_path.exists():
         print("❌ Tier 1 database not found")
         return
@@ -56,6 +56,10 @@ def check_tier1_utilization():
     avg_quality = quality_stats[0] if quality_stats[0] else 0
     min_quality = quality_stats[1] if quality_stats[1] else 0
     max_quality = quality_stats[2] if quality_stats[2] else 0
+    
+    # Data validation - check for NULL titles
+    cursor.execute('''\n        SELECT COUNT(*) FROM conversations WHERE title IS NULL\n    ''')
+    null_titles = cursor.fetchone()[0]
     
     # Calculate metrics
     valid_rate = (valid_convs / total_convs * 100) if total_convs > 0 else 0

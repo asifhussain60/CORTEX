@@ -18,6 +18,7 @@ from src.cortex_agents.strategic.architect import ArchitectAgent
 from src.cortex_agents.work_planner.agent import WorkPlanner
 from src.cortex_agents.health_validator.agent import HealthValidator
 from src.cortex_agents.tactical.code_executor import CodeExecutor
+from src.agents.feedback_agent import FeedbackAgent
 
 
 class AgentExecutor:
@@ -155,6 +156,10 @@ class AgentExecutor:
                 tier1_api=self.tier1,
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3
+            )
+        elif agent_type == AgentType.FEEDBACK:
+            agent = FeedbackAgent(
+                name="FeedbackAgent"
             )
         # Add other agents as needed
         else:
