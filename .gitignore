@@ -61,3 +61,7 @@ logs/ambient_capture.log
 
 # Workspace directory (external project files)
 workspace/
+
+# Temporary publish directories
+.temp-publish/
+publish/CORTEX-v*/
