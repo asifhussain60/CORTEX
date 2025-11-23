@@ -141,6 +141,23 @@ intent_patterns:
       - "help"
       - "Show me the docs"
       - "How do I start a new feature?"
+  
+  FEEDBACK:
+    description: "User wants to provide feedback or report issues"
+    route_to: "feedback-agent.py"
+    patterns:
+      - "feedback"
+      - "report issue"
+      - "report bug"
+      - "cortex issue"
+      - "cortex bug"
+      - "cortex improvement"
+      - "report problem"
+    examples:
+      - "feedback: The TDD workflow is missing view discovery"
+      - "report issue with test generation"
+      - "cortex bug: feedback command doesn't exist"
+      - "I want to report an improvement"
 
 routing_rules:
   multi_intent_handling:

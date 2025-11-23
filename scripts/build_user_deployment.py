@@ -96,6 +96,15 @@ CRITICAL_FILES = {
     '.github/prompts/modules/response-format.md',
     '.github/prompts/modules/planning-system-guide.md',
     
+    # Issue #3 Fixes (v3.1.0) - CRITICAL
+    'src/agents/feedback_agent.py',
+    'src/agents/view_discovery_agent.py',
+    'src/workflows/tdd_workflow_integrator.py',
+    'cortex-brain/tier2/schema/element_mappings.sql',
+    'cortex-brain/agents/intent-patterns.yaml',
+    'apply_element_mappings_schema.py',
+    'validate_issue3_phase4.py',
+    
     # Legal
     'README.md',
     'LICENSE',

@@ -789,6 +789,20 @@ routing:
   - create documentation
   - doc generation
   - generate cortex docs
+  feedback_triggers:
+  - feedback
+  - report issue
+  - report bug
+  - cortex issue
+  - cortex bug
+  - cortex improvement
+  - report problem
+  view_discovery_triggers:
+  - discover views
+  - crawl views
+  - find element ids
+  - map elements
+  - scan razor files
 
 formatting:
   mandatory_sections:

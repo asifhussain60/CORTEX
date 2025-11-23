@@ -1,4 +1,4 @@
-/CORTEX Review the following and follow the implementation plan with safety checks to maintain boundary separation while enabling automated crawling capabilities. Update the deploy package to include these new functionalities
+
 
 # CORTEX Architecture Review Report
 
