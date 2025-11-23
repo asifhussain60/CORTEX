@@ -180,30 +180,65 @@ class EdgeCaseAnalyzer:
         """Add edge cases for numeric parameters."""
         func_name = func_info["name"]
         
-        # Zero
+        # Analyze function name for domain context
+        allows_negative = any(word in func_name.lower() for word in ['difference', 'subtract', 'delta', 'change'])
+        
+        # Zero (always important)
         self.edge_cases.append(EdgeCase(
             name=f"test_{func_name}_{param_name}_zero",
             description=f"Edge case: {param_name} is zero",
             input_values={param_name: 0},
             expected_behavior="return",
-            confidence=0.9
+            confidence=0.95
         ))
         
-        # Negative value
+        # Negative value (higher confidence if function suggests it shouldn't allow it)
+        negative_confidence = 0.6 if allows_negative else 0.85
         self.edge_cases.append(EdgeCase(
             name=f"test_{func_name}_{param_name}_negative",
-            description=f"Edge case: {param_name} is negative",
+            description=f"Edge case: {param_name} is negative (-1)",
             input_values={param_name: -1},
-            expected_behavior="raise",
-            expected_exception="ValueError",
+            expected_behavior="raise" if not allows_negative else "return",
+            expected_exception="ValueError" if not allows_negative else None,
+            confidence=negative_confidence
+        ))
+        
+        # Maximum integer value
+        import sys
+        self.edge_cases.append(EdgeCase(
+            name=f"test_{func_name}_{param_name}_max_int",
+            description=f"Edge case: {param_name} is maximum integer",
+            input_values={param_name: sys.maxsize},
+            expected_behavior="return",
             confidence=0.7
         ))
         
-        # Large value
+        # Infinity (for float parameters)
+        if func_info.get("parameters", [{}])[0].get("type") == "float":
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_infinity",
+                description=f"Edge case: {param_name} is positive infinity",
+                input_values={param_name: float('inf')},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.8
+            ))
+            
+            # NaN
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_nan",
+                description=f"Edge case: {param_name} is NaN",
+                input_values={param_name: float('nan')},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.85
+            ))
+        
+        # Floating point precision
         self.edge_cases.append(EdgeCase(
-            name=f"test_{func_name}_{param_name}_large",
-            description=f"Edge case: {param_name} is very large",
-            input_values={param_name: 999999999},
+            name=f"test_{func_name}_{param_name}_float_precision",
+            description=f"Edge case: {param_name} has floating point precision issues",
+            input_values={param_name: 0.1 + 0.2},  # Famous 0.30000000000000004
             expected_behavior="return",
             confidence=0.6
         ))
@@ -212,14 +247,21 @@ class EdgeCaseAnalyzer:
         """Add edge cases for string parameters."""
         func_name = func_info["name"]
         
-        # Empty string
+        # Detect parameter purpose from name
+        is_email = 'email' in param_name.lower()
+        is_url = 'url' in param_name.lower() or 'link' in param_name.lower()
+        is_path = 'path' in param_name.lower() or 'file' in param_name.lower()
+        is_sql = 'query' in param_name.lower() or 'sql' in param_name.lower()
+        is_html = 'html' in param_name.lower() or 'content' in param_name.lower()
+        
+        # Empty string (high confidence for most functions)
         self.edge_cases.append(EdgeCase(
             name=f"test_{func_name}_{param_name}_empty",
             description=f"Edge case: {param_name} is empty string",
             input_values={param_name: ""},
             expected_behavior="raise",
             expected_exception="ValueError",
-            confidence=0.8
+            confidence=0.9
         ))
         
         # Whitespace only
@@ -229,40 +271,114 @@ class EdgeCaseAnalyzer:
             input_values={param_name: "   "},
             expected_behavior="raise",
             expected_exception="ValueError",
+            confidence=0.85
+        ))
+        
+        # Unicode characters (important for internationalization)
+        self.edge_cases.append(EdgeCase(
+            name=f"test_{func_name}_{param_name}_unicode",
+            description=f"Edge case: {param_name} contains Unicode characters",
+            input_values={param_name: "こんにちは🎉"},
+            expected_behavior="return",
             confidence=0.7
         ))
         
-        # Unicode characters
+        # Very long string (DoS protection)
         self.edge_cases.append(EdgeCase(
-            name=f"test_{func_name}_{param_name}_unicode",
-            description=f"Edge case: {param_name} contains Unicode",
-            input_values={param_name: "こんにちは"},
+            name=f"test_{func_name}_{param_name}_very_long",
+            description=f"Edge case: {param_name} exceeds reasonable length (10000 chars)",
+            input_values={param_name: "x" * 10000},
+            expected_behavior="raise",
+            expected_exception="ValueError",
+            confidence=0.75
+        ))
+        
+        # Special characters
+        self.edge_cases.append(EdgeCase(
+            name=f"test_{func_name}_{param_name}_special_chars",
+            description=f"Edge case: {param_name} contains special characters",
+            input_values={param_name: "!@#$%^&*(){}[]|\\:;<>?,./~`"},
             expected_behavior="return",
             confidence=0.6
         ))
         
-        # Very long string
-        self.edge_cases.append(EdgeCase(
-            name=f"test_{func_name}_{param_name}_very_long",
-            description=f"Edge case: {param_name} is very long",
-            input_values={param_name: "x" * 10000},
-            expected_behavior="return",
-            confidence=0.5
-        ))
+        # Security: SQL Injection (high confidence if SQL-related parameter)
+        if is_sql or 'user' in param_name.lower() or 'input' in param_name.lower():
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_sql_injection",
+                description=f"Security: {param_name} contains SQL injection attempt",
+                input_values={param_name: "'; DROP TABLE users; --"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.95 if is_sql else 0.7
+            ))
+        
+        # Security: XSS (high confidence if HTML-related parameter)
+        if is_html or 'comment' in param_name.lower() or 'text' in param_name.lower():
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_xss_attack",
+                description=f"Security: {param_name} contains XSS attack vector",
+                input_values={param_name: "<script>alert('XSS')</script>"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.9 if is_html else 0.6
+            ))
+        
+        # Security: Path Traversal (high confidence for path parameters)
+        if is_path:
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_path_traversal",
+                description=f"Security: {param_name} contains path traversal attempt",
+                input_values={param_name: "../../../etc/passwd"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.95
+            ))
+        
+        # Email-specific edge cases
+        if is_email:
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_missing_at",
+                description=f"Email validation: {param_name} missing @ symbol",
+                input_values={param_name: "userexample.com"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.95
+            ))
+            
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_missing_domain",
+                description=f"Email validation: {param_name} missing domain",
+                input_values={param_name: "user@"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.95
+            ))
+        
+        # URL-specific edge cases
+        if is_url:
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_invalid_protocol",
+                description=f"URL validation: {param_name} has invalid protocol",
+                input_values={param_name: "ftp://example.com"},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.8
+            ))
     
     def _add_collection_edge_cases(self, param_name: str, param_type: str, func_info: Dict[str, Any]):
         """Add edge cases for collection parameters."""
         func_name = func_info["name"]
         
-        # Empty collection
+        # Empty collection (highest confidence)
         empty_value = [] if "list" in param_type.lower() else {}
         self.edge_cases.append(EdgeCase(
             name=f"test_{func_name}_{param_name}_empty",
-            description=f"Edge case: {param_name} is empty",
+            description=f"Edge case: {param_name} is empty collection",
             input_values={param_name: empty_value},
             expected_behavior="return",
             expected_value=0 if "total" in func_name.lower() or "count" in func_name.lower() else None,
-            confidence=0.9
+            confidence=0.95
         ))
         
         # Single item
@@ -272,18 +388,78 @@ class EdgeCaseAnalyzer:
                 description=f"Edge case: {param_name} has single item",
                 input_values={param_name: [1]},
                 expected_behavior="return",
+                confidence=0.85
+            ))
+            
+            # Collection with None items
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_contains_none",
+                description=f"Edge case: {param_name} contains None items",
+                input_values={param_name: [1, None, 3]},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.8
+            ))
+            
+            # Collection with all None
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_all_none",
+                description=f"Edge case: {param_name} contains only None items",
+                input_values={param_name: [None, None, None]},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.75
+            ))
+            
+            # Collection with duplicates
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_duplicates",
+                description=f"Edge case: {param_name} contains duplicate items",
+                input_values={param_name: [1, 2, 2, 3, 3, 3]},
+                expected_behavior="return",
                 confidence=0.7
             ))
+            
+            # Nested collections
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_nested",
+                description=f"Edge case: {param_name} is nested collection",
+                input_values={param_name: [[1, 2], [3, 4], [5, 6]]},
+                expected_behavior="return",
+                confidence=0.65
+            ))
         
-        # Large collection
-        large_value = list(range(10000)) if "list" in param_type.lower() else {str(i): i for i in range(10000)}
+        # Large collection (memory/performance test)
+        large_size = 100000
+        large_value = list(range(large_size)) if "list" in param_type.lower() else {str(i): i for i in range(large_size)}
         self.edge_cases.append(EdgeCase(
-            name=f"test_{func_name}_{param_name}_large",
-            description=f"Edge case: {param_name} is very large",
+            name=f"test_{func_name}_{param_name}_large_collection",
+            description=f"Edge case: {param_name} is very large ({large_size} items)",
             input_values={param_name: large_value},
             expected_behavior="return",
-            confidence=0.5
+            confidence=0.6
         ))
+        
+        # Dictionary-specific edge cases
+        if "dict" in param_type.lower():
+            # Empty keys
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_empty_keys",
+                description=f"Edge case: {param_name} has empty string keys",
+                input_values={param_name: {"": "value"}},
+                expected_behavior="raise",
+                expected_exception="ValueError",
+                confidence=0.8
+            ))
+            
+            # None values
+            self.edge_cases.append(EdgeCase(
+                name=f"test_{func_name}_{param_name}_none_values",
+                description=f"Edge case: {param_name} has None values",
+                input_values={param_name: {"key": None}},
+                expected_behavior="return",
+                confidence=0.7
+            ))
     
     def _add_boolean_edge_cases(self, param_name: str, func_info: Dict[str, Any]):
         """Add edge cases for boolean parameters."""

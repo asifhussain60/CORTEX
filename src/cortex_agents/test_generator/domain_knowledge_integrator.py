@@ -59,6 +59,9 @@ class DomainKnowledgeIntegrator:
         self._seed_authentication_patterns()
         self._seed_validation_patterns()
         self._seed_calculation_patterns()
+        self._seed_payment_patterns()
+        self._seed_data_access_patterns()
+        self._seed_security_patterns()
         self._seed_assertion_patterns()
         
         # Load learned patterns from Tier 2 storage (Phase 2)
@@ -178,6 +181,142 @@ class DomainKnowledgeIntegrator:
                 "test_calculate_total_with_tax",
             ],
             confidence=0.90
+        ))
+    
+    def _seed_payment_patterns(self):
+        """Seed payment processing domain patterns."""
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="payment",
+            operation="process_payment",
+            expected_behavior={
+                "valid_card": "return_success",
+                "invalid_card": "raise_PaymentError",
+                "insufficient_funds": "raise_InsufficientFundsError",
+                "expired_card": "raise_CardExpiredError",
+                "zero_amount": "raise_ValueError",
+                "negative_amount": "raise_ValueError",
+            },
+            test_patterns=[
+                "test_process_payment_valid_card",
+                "test_process_payment_invalid_card_number",
+                "test_process_payment_insufficient_funds",
+                "test_process_payment_expired_card",
+                "test_process_payment_zero_amount",
+                "test_process_payment_negative_amount",
+            ],
+            confidence=0.96
+        ))
+        
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="payment",
+            operation="refund",
+            expected_behavior={
+                "valid_transaction": "process_refund",
+                "already_refunded": "raise_RefundError",
+                "refund_window_expired": "raise_RefundWindowExpiredError",
+                "partial_refund_exceeds": "raise_ValueError",
+            },
+            test_patterns=[
+                "test_refund_valid_transaction",
+                "test_refund_already_refunded",
+                "test_refund_expired_window",
+                "test_refund_amount_exceeds_original",
+            ],
+            confidence=0.94
+        ))
+    
+    def _seed_data_access_patterns(self):
+        """Seed data access domain patterns (CRUD operations)."""
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="data_access",
+            operation="create",
+            expected_behavior={
+                "valid_data": "insert_and_return_id",
+                "duplicate_key": "raise_DuplicateKeyError",
+                "missing_required_field": "raise_ValueError",
+                "invalid_data_type": "raise_TypeError",
+            },
+            test_patterns=[
+                "test_create_valid_record",
+                "test_create_duplicate_key",
+                "test_create_missing_required_field",
+                "test_create_invalid_data_type",
+            ],
+            confidence=0.93
+        ))
+        
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="data_access",
+            operation="update",
+            expected_behavior={
+                "existing_record": "update_and_return",
+                "nonexistent_record": "raise_NotFoundError",
+                "optimistic_lock_conflict": "raise_ConcurrencyError",
+                "invalid_field": "raise_ValueError",
+            },
+            test_patterns=[
+                "test_update_existing_record",
+                "test_update_nonexistent_record",
+                "test_update_concurrent_modification",
+                "test_update_invalid_field",
+            ],
+            confidence=0.92
+        ))
+        
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="data_access",
+            operation="delete",
+            expected_behavior={
+                "existing_record": "delete_and_return_success",
+                "nonexistent_record": "raise_NotFoundError",
+                "cascade_constraint": "delete_related_records",
+                "soft_delete": "mark_as_deleted",
+            },
+            test_patterns=[
+                "test_delete_existing_record",
+                "test_delete_nonexistent_record",
+                "test_delete_with_cascade",
+                "test_soft_delete_marks_not_removes",
+            ],
+            confidence=0.91
+        ))
+    
+    def _seed_security_patterns(self):
+        """Seed security domain patterns."""
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="security",
+            operation="hash_password",
+            expected_behavior={
+                "valid_password": "return_hashed",
+                "empty_password": "raise_ValueError",
+                "weak_password": "raise_WeakPasswordError",
+                "same_input_different_hash": "true_with_salt",
+            },
+            test_patterns=[
+                "test_hash_password_valid",
+                "test_hash_password_empty",
+                "test_hash_password_too_weak",
+                "test_hash_password_produces_different_hashes",
+            ],
+            confidence=0.97
+        ))
+        
+        self.business_patterns.append(BusinessLogicPattern(
+            domain="security",
+            operation="verify_token",
+            expected_behavior={
+                "valid_token": "return_user_data",
+                "expired_token": "raise_TokenExpiredError",
+                "invalid_signature": "raise_TokenInvalidError",
+                "tampered_token": "raise_TokenInvalidError",
+            },
+            test_patterns=[
+                "test_verify_token_valid",
+                "test_verify_token_expired",
+                "test_verify_token_invalid_signature",
+                "test_verify_token_tampered",
+            ],
+            confidence=0.96
         ))
     
     def _seed_assertion_patterns(self):
@@ -456,3 +595,4 @@ class DomainKnowledgeIntegrator:
             # Parse test code and extract patterns
             # This would integrate with Tier 2 Knowledge Graph in production
             pass
+
