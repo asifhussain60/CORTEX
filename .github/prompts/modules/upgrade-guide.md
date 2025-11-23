@@ -73,6 +73,19 @@ done
 
 # Specific Issue #3 migration
 python apply_element_mappings_schema.py
+
+# Automated Post-Migration Testing (CRITICAL)
+echo "\n🧪 Running post-migration validation tests..."
+python validate_issue3_phase4.py
+
+if [ $? -ne 0 ]; then
+    echo "❌ VALIDATION FAILED - Upgrade incomplete"
+    echo "   Brain protection may be compromised"
+    echo "   Run: python validate_issue3_phase4.py for details"
+    exit 1
+fi
+
+echo "✅ All validation tests passed - CORTEX fully functional"
 ```
 
 **Brain Data Preservation:**
@@ -81,6 +94,13 @@ python apply_element_mappings_schema.py
 - ✅ User configs (cortex.config.json) - Backed up before changes
 - ✅ Custom capabilities - Merged with new defaults
 - ✅ Response templates - User overrides preserved
+
+**Post-Migration Validation (Automated):**
+- ✅ Brain protection rules (SKULL) - All 22 tests pass
+- ✅ Database schema integrity - Tables, indexes, views verified
+- ✅ Agent functionality - FeedbackAgent, ViewDiscoveryAgent tested
+- ✅ Workflow integration - TDD workflow end-to-end validation
+- ✅ Entry point modules - All required modules present
 
 ### Phase 4: Update Documentation (30 sec)
 **Auto-update entry point documentation:**
@@ -152,30 +172,106 @@ if git ls-files | grep -q "CORTEX/"; then
 fi
 ```
 
-### Phase 7: Comprehensive Validation (2 min)
-**Run full validation suite:**
+### Phase 7: Comprehensive Validation (Automated)
+**Validation runs automatically in Phase 3 after migrations complete.**
+
+**Manual Validation (Optional):**
 ```bash
+# Run validation suite manually anytime
 python validate_issue3_phase4.py
+
+# Run specific validation categories
+python validate_issue3_phase4.py --category=brain_protection
+python validate_issue3_phase4.py --category=database
+python validate_issue3_phase4.py --category=agents
 ```
 
-**Expected:** `✅ ALL VALIDATIONS PASSED - READY FOR PRODUCTION`
+**Expected Output:** `✅ ALL VALIDATIONS PASSED - READY FOR PRODUCTION`
 
-**Validates:**
-- ✅ Database schema applied (4 tables, 14 indexes, 4 views)
-- ✅ FeedbackAgent functional
-- ✅ ViewDiscoveryAgent functional  
-- ✅ TDD workflow integration functional
-- ✅ Brain data preserved (verified checksums)
-- ✅ Entry point modules updated
-- ✅ Documentation updated
-- ✅ Tooling installed
-- ✅ .gitignore configured
+**Validation Categories:**
+
+**1. Brain Protection (SKULL Rules)**
+- ✅ All 22 brain protection tests pass
+- ✅ YAML rule validation (brain-protection-rules.yaml)
+- ✅ File system protections active
+- ✅ Memory isolation verified
+
+**2. Database Schema**
+- ✅ 4 tables created (element_mappings, navigation_flows, discovery_runs, element_changes)
+- ✅ 14 indexes applied for performance
+- ✅ 4 views created for querying
+- ✅ Foreign key constraints validated
+
+**3. Agent Functionality**
+- ✅ FeedbackAgent imports and initializes
+- ✅ ViewDiscoveryAgent discovers elements
+- ✅ Agent context injection works
+- ✅ Database persistence functional
+
+**4. Workflow Integration**
+- ✅ TDD workflow integrator imports
+- ✅ View discovery runs before test generation
+- ✅ Element mappings cached correctly
+- ✅ End-to-end workflow validated
+
+**5. Entry Point Modules**
+- ✅ upgrade-guide.md present
+- ✅ feedback-guide.md present (if implemented)
+- ✅ view-discovery-guide.md present (if implemented)
+- ✅ Documentation synchronized
+
+**6. Configuration Integrity**
+- ✅ .gitignore excludes CORTEX/
+- ✅ cortex.config.json valid
+- ✅ response-templates.yaml valid
+- ✅ capabilities.yaml valid
 
 ---
 
 ## 📊 Upgrade Validation Enforcement
 
 **Deploy Pipeline Checks:**
+
+### Test Package Requirements
+**CRITICAL: Validation tests MUST be deployed with CORTEX package**
+
+**Required Test Files:**
+```
+validate_issue3_phase4.py           # Main validation orchestrator
+tests/
+├── tier0/
+│   └── test_brain_protector.py    # Brain protection (22 tests)
+├── integration/
+│   └── test_issue3_fixes.py       # Agent integration tests
+└── test_deploy_issue3_fixes.py    # Deployment validation
+```
+
+**Why Tests Are Deployed:**
+1. **Brain Protection Verification** - Ensures SKULL rules active post-upgrade
+2. **Zero-Trust Validation** - User machine validates upgrade success
+3. **Regression Prevention** - Catches compatibility issues immediately
+4. **Rollback Decision** - Automated test failures trigger rollback recommendation
+5. **Confidence Assurance** - Users know CORTEX is 100% functional after upgrade
+
+**Test Execution Flow:**
+```
+Upgrade Process:
+1. Pull latest code ✅
+2. Apply migrations ✅
+3. Run validate_issue3_phase4.py ⏳
+   ├─ Brain protection tests (22/22 must pass)
+   ├─ Database schema validation (100% coverage)
+   ├─ Agent functionality tests (all agents)
+   ├─ Workflow integration tests (end-to-end)
+   └─ Entry point validation (all modules)
+4. If ALL tests pass ✅ → Upgrade complete
+5. If ANY test fails ❌ → Recommend rollback
+```
+
+**Deployment Size Impact:**
+- Test files: ~50 KB (validate_issue3_phase4.py + dependencies)
+- Total package increase: <100 KB
+- Value: Priceless (prevents brain corruption)
 
 ### Entry Point Module Validation
 **Required modules for deployment:**
@@ -222,12 +318,17 @@ python scripts/validate_documentation_sync.py
 - [ ] CORTEX.prompt.md updated with new modules
 - [ ] copilot-instructions.md updated
 - [ ] Migration scripts present (if DB changes)
-- [ ] Validation scripts pass (50+ tests)
+- [ ] **Validation scripts included in package (CRITICAL)**
+  - [ ] validate_issue3_phase4.py deployed
+  - [ ] Brain protection tests (tests/tier0/test_brain_protector.py)
+  - [ ] Agent tests (tests/integration/test_issue3_fixes.py)
+  - [ ] All tests pass locally (100% pass rate required)
 - [ ] .gitignore template updated
 - [ ] requirements.txt updated (if new deps)
 - [ ] VERSION file incremented
 - [ ] Release notes drafted
 - [ ] Rollback procedure documented
+- [ ] **Post-upgrade validation automated (runs after Phase 3)**
 
 ---
 
