@@ -1,0 +1,11 @@
+{
+  "cortex_version": "5.3.0",
+  "schema_version": 1,
+  "installed_date": "2025-11-23T00:00:00",
+  "last_upgrade": null,
+  "upgrade_history": [],
+  "workspace_id": "cortex-main-repo",
+  "customizations": [],
+  "deployment_type": "setup",
+  "github_release_url": "https://github.com/asifhussain60/CORTEX/releases/tag/v5.3.0"
+}

@@ -49,4 +49,4 @@ Users can interact with CORTEX using natural language:
 **Version:** 2.0  
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Proprietary
+**License:** Source-Available (Use Allowed, No Contributions)

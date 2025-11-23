@@ -129,6 +129,8 @@ CRITICAL_FILES = {
     'scripts/cortex/cortex_cli.py',  # Manual tracking
     'scripts/cortex/migrate-all-tiers.py',  # Database setup
     'scripts/launchers/run-cortex.sh',  # Unix/Mac setup
+    'scripts/setup_git_exclude.sh',  # Git exclude setup (Bash)
+    'scripts/setup_git_exclude.ps1',  # Git exclude setup (PowerShell)
     
     # Legal & README
     'README.md',
@@ -779,6 +781,14 @@ And it remembers everything from past conversations! 🧠
 - Verify CORTEX copied to `cortex/` folder: `ls cortex/`
 - Try manual setup above
 
+**Git shows hundreds of untracked files:**
+- CORTEX files are properly ignored but still visible in git status
+- Run: `pwsh CORTEX/scripts/setup_git_exclude.ps1` (Windows)
+- Or: `bash CORTEX/scripts/setup_git_exclude.sh` (Mac/Linux)
+- This configures `.git/info/exclude` to hide them completely
+- After running: `git status` should show clean working tree
+- More info: See "Why `.git/info/exclude`?" section below
+
 **Copilot doesn't recognize CORTEX:**
 - Ensure `cortex/.github/prompts/CORTEX.prompt.md` exists
 - Restart VS Code
@@ -797,6 +807,13 @@ And it remembers everything from past conversations! 🧠
 **Questions?**
 - Check documentation: `cortex/prompts/shared/`
 - GitHub: https://github.com/asifhussain60/CORTEX
+
+**Why `.git/info/exclude` instead of just `.gitignore`?**
+- **`.gitignore`**: Committed file, prevents files from being tracked (✅ done automatically)
+- **`.git/info/exclude`**: Local-only file, hides files from `git status` entirely (⚠️ optional UX enhancement)
+- **Both needed**: `.gitignore` prevents commits, `.git/info/exclude` prevents "untracked" warnings in Git UI tools
+- **Safe**: Non-destructive, only affects your local clone, preserves existing patterns
+- **Result**: Clean `git status` output, no hundreds of "untracked files" in Git Extensions/GitKraken
 
 ---
 

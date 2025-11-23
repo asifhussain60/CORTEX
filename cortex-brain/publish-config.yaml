@@ -2,13 +2,19 @@
 # CORTEX Publish Configuration
 # 
 # Defines what gets published to users vs admin-only content
-# Version: 3.0.0 (CORTEX 3.0 admin/user separation)
+# Version: 3.1.0 (CORTEX 3.0 + Deployment Architecture)
 # Author: Asif Hussain
 # Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 #######################################################
 
-version: "3.0.0"
-last_updated: "2025-11-13"
+version: "3.1.0"
+last_updated: "2025-11-23"
+
+# Deployment Architecture Updates
+# - Added .cortex-version requirement
+# - Added migration files requirement
+# - Enhanced validation for brain data exclusion
+# - Added deployment integrity checks
 
 # Deployment Tiers
 # - user: Included in publish package (core CORTEX operations)
@@ -148,6 +154,11 @@ user_content_patterns:
     - "cortex-brain/capabilities.yaml"
     - "cortex-brain/migrate_brain_db.py"
     
+    # Version Tracking & Deployment (NEW)
+    - ".cortex-version"                      # Version metadata (MANDATORY)
+    - "cortex-brain/migrations/"             # Schema migration files
+    - "cortex-brain/schema.sql"              # Database schema definitions
+    
     # Entry Points
     - ".github/prompts/CORTEX.prompt.md"
     - ".github/copilot-instructions.md"
@@ -205,6 +216,9 @@ validation:
     - "**/system-design-prompts/**"
     - "**/*<HOSTNAME>*"  # Hostname leak (example: AHHOME)
     - "**/*<USERNAME>*"  # Username leak (example: asifhussain)
+    - "**/*.db"           # Brain data (NEVER publish)
+    - "**/conversation-history.jsonl"  # Private conversations
+    - "**/cortex.config.json"  # Machine-specific config
   
   # Files that MUST be present in publish package
   required_files:
@@ -214,6 +228,27 @@ validation:
     - "src/cortex_agents/__init__.py"
     - "requirements.txt"
     - "LICENSE"
+    - ".cortex-version"  # Version tracking (MANDATORY)
+    - "cortex-brain/schema.sql"  # Database schema
+    - "cortex-brain/migrations/"  # Migration files directory
+  
+  # Deployment integrity checks (NEW)
+  deployment_validation:
+    - check: "version_file_valid"
+      description: ".cortex-version file must have valid JSON structure"
+      required_fields: ["cortex_version", "schema_version", "installed_date"]
+    
+    - check: "no_brain_data"
+      description: "No brain database files in package"
+      forbidden_extensions: [".db", ".db-shm", ".db-wal"]
+    
+    - check: "migration_files_present"
+      description: "Migration files directory exists"
+      required_path: "cortex-brain/migrations/"
+    
+    - check: "schema_file_valid"
+      description: "Schema SQL file is valid and parseable"
+      required_path: "cortex-brain/schema.sql"
   
   # Size constraints
   max_package_size_mb: 50

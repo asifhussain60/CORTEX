@@ -23,38 +23,24 @@ cp -r /path/to/CORTEX ./cortex
 **Open your application in VS Code, then in Copilot Chat:**
 
 ```
-execute CORTEX/SETUP-CORTEX.md
+onboard this application
 ```
 
-**That's it!** CORTEX will **automatically**:
+**That's it!** CORTEX will:
 
-1. ✅ **Configure .gitignore** - Adds CORTEX to .gitignore and commits it
-   - Prevents CORTEX brain data from being committed to your repository
-   - Validates patterns work using `git check-ignore`
-   - No manual `.gitignore` editing needed!
-
-2. ✅ **Copy entry points** from `cortex/.github/` to your app's `.github/` folder
+1. ✅ Copy entry points from `cortex/.github/` to your app's `.github/` folder
    - **Non-Destructive:** Existing `.github/copilot-instructions.md` is backed up and merged
    - **Your configs preserved:** CORTEX instructions appended, not replaced
-
-3. ✅ **Install required tooling** (Python, Vision API, etc.)
-
-4. ✅ **Initialize brain databases** (Tier 1, 2, 3)
-
-5. ✅ **Onboard your application** - Automatic codebase analysis
-   - Crawls and indexes your codebase
-   - Analyzes project structure and tech stack
-   - Identifies improvement opportunities
-   - Generates onboarding analysis document in `CORTEX/cortex-brain/documents/analysis/`
-
-6. ✅ **Interactive improvement recommendations:**
+2. ✅ Install required tooling (Python, Vision API, etc.)
+3. ✅ Initialize brain databases (Tier 1, 2, 3)
+4. ✅ Crawl and index your codebase
+5. ✅ Analyze your project structure and tech stack
+6. ✅ Ask intelligent questions about improvements:
    - "I see React but no test files - shall I help set up Jest + React Testing Library?"
    - "You have ESLint configured but not running on commit - want me to add pre-commit hooks?"
    - "No TypeScript detected - would you like me to migrate for better type safety?"
 
 **Then just answer the questions** and CORTEX will implement everything with tests!
-
-**No manual steps required!** Everything is automated through the setup orchestrator.
 
 ---
 
@@ -151,6 +137,14 @@ And it remembers everything from past conversations! 🧠
 - Verify CORTEX copied to `cortex/` folder: `ls cortex/`
 - Try manual setup above
 
+**Git shows hundreds of untracked files:**
+- CORTEX files are properly ignored but still visible in git status
+- Run: `pwsh CORTEX/scripts/setup_git_exclude.ps1` (Windows)
+- Or: `bash CORTEX/scripts/setup_git_exclude.sh` (Mac/Linux)
+- This configures `.git/info/exclude` to hide them completely
+- After running: `git status` should show clean working tree
+- More info: See "Why `.git/info/exclude`?" section below
+
 **Copilot doesn't recognize CORTEX:**
 - Ensure `cortex/.github/prompts/CORTEX.prompt.md` exists
 - Restart VS Code
@@ -169,6 +163,13 @@ And it remembers everything from past conversations! 🧠
 **Questions?**
 - Check documentation: `cortex/prompts/shared/`
 - GitHub: https://github.com/asifhussain60/CORTEX
+
+**Why `.git/info/exclude` instead of just `.gitignore`?**
+- **`.gitignore`**: Committed file, prevents files from being tracked (✅ done automatically)
+- **`.git/info/exclude`**: Local-only file, hides files from `git status` entirely (⚠️ optional UX enhancement)
+- **Both needed**: `.gitignore` prevents commits, `.git/info/exclude` prevents "untracked" warnings in Git UI tools
+- **Safe**: Non-destructive, only affects your local clone, preserves existing patterns
+- **Result**: Clean `git status` output, no hundreds of "untracked files" in Git Extensions/GitKraken
 
 ---
 

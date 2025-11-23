@@ -2,8 +2,36 @@
 
 **Version:** 5.2.0 (Response Template Architecture)  
 **Status:** ✅ ACTIVE - Production Ready  
+**License:** 📖 Source-Available (Use Allowed, No Contributions)  
 **Framework:** Browser-Native (SQL.js + TypeScript) + PowerShell  
-**Last Updated:** 2025-11-10
+**Last Updated:** 2025-11-23
+
+[![GitHub](https://img.shields.io/badge/GitHub-asifhussain60%2FCORTEX-blue)](https://github.com/asifhussain60/CORTEX)
+[![License](https://img.shields.io/badge/License-Source--Available-green)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success)](https://github.com/asifhussain60/CORTEX)
+
+---
+
+## 📜 License & Usage
+
+**CORTEX is Source-Available:** This means the code is publicly viewable and usable, but external contributions are not accepted.
+
+✅ **You Can:**
+- Use CORTEX in your personal or commercial projects
+- Study the architecture and learn from the codebase
+- Deploy CORTEX as your GitHub Copilot enhancement
+- Fork for private experimentation and learning
+- Reference CORTEX in your work with attribution
+
+❌ **You Cannot:**
+- Submit pull requests or contributions (not accepted)
+- Create public derivatives or competing products
+- Remove copyright or attribution notices
+- Redistribute modified versions publicly
+
+**Why No Contributions?** CORTEX is a single-author project with a specific architectural vision. To maintain consistency and quality, development remains centralized. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+**Attribution:** When using CORTEX, please credit: "CORTEX by Asif Hussain (https://github.com/asifhussain60/CORTEX)"
 
 ---
 
@@ -38,7 +66,34 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 
 **In GitHub Copilot Chat:**
 ```
-## 🚀 Quick Start
+/CORTEX help
+```
+
+### Upgrading CORTEX
+
+Keep CORTEX up-to-date with the latest features and bug fixes:
+
+```bash
+# Upgrade to latest version
+python scripts/cortex-upgrade.py
+
+# Preview upgrade without changes
+python scripts/cortex-upgrade.py --dry-run
+
+# Or from Copilot Chat
+/CORTEX upgrade
+```
+
+**Upgrade System Features:**
+- ✅ Preserves all brain data (conversations, learned patterns)
+- ✅ Auto-backup before upgrade with rollback capability
+- ✅ Intelligent config merging (preserves customizations)
+- ✅ Schema migrations for database upgrades
+- ✅ Zero data loss guarantee
+
+See **[Upgrade Guide](cortex-brain/documents/implementation-guides/UPGRADE-GUIDE.md)** for details.
+
+### First Time Setup
 
 In GitHub Copilot Chat, use the simple entry point:
 

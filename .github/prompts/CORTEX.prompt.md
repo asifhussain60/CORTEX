@@ -78,7 +78,7 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Proprietary - See LICENSE file for terms  
+**License:** Source-Available (Use Allowed, No Contributions) - See LICENSE  
 **Repository:** https://github.com/asifhussain60/CORTEX
 
 ---
@@ -175,7 +175,8 @@ CORTEX will:
 
 # 🎓 Copyright & Attribution
 
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved. Proprietary software. See LICENSE.
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Source-Available - Public for use, contributions not accepted. See LICENSE.
 
 **Orchestrator Header Format:** All entry points show: Version, Profile, Mode (LIVE), Timestamp, Author, Copyright, License, Repository
 
@@ -211,6 +212,87 @@ CORTEX will:
 **Auto-Injection:** Searches past conversations, scores relevance (0.80+ = high), auto-injects context  
 **Performance:** <500ms injection, <600 tokens budget  
 **Privacy:** All data stored locally in `cortex-brain/tier1/working_memory.db`
+
+---
+
+## 📢 Feedback & Issue Reporting
+
+**Purpose:** Crowdsource CORTEX improvements via structured feedback collection
+
+**Commands:**
+- `feedback` or `report issue` - Start feedback collection
+- `feedback bug` - Report a bug with auto-collected context
+- `feedback feature` - Request new feature
+- `feedback improvement` - Suggest enhancement
+
+**How It Works:**
+1. **Collection:** CORTEX gathers anonymized usage data (errors, patterns, environment)
+2. **Report Generation:** Creates structured JSON/YAML report with categorization
+3. **GitHub Ready:** Formats as GitHub Issues with proper labels, priorities
+4. **Upload:** Save report to `cortex-brain/feedback/reports/` for manual GitHub upload
+
+**Privacy Protection:**
+- Automatically redacts file paths, emails, passwords, API keys
+- Environment identified by non-reversible hash
+- No personal data collected without explicit consent
+
+**Natural Language Examples:**
+- "I found a bug in the crawler"
+- "The planning system takes too long"
+- "Can you add support for TypeScript projects?"
+
+**Output Location:** `cortex-brain/feedback/reports/feedback_report_[timestamp].json`
+
+**Upload to GitHub:** Copy report content and create new issue at https://github.com/asifhussain60/CORTEX/issues/new
+
+---
+
+## 🔧 System Optimization & Health
+
+**Purpose:** Maintain CORTEX performance and monitor system health
+
+### Optimize Command
+
+**Commands:**
+- `optimize` - Run all optimizations
+- `optimize code` - Code optimization suggestions
+- `optimize cortex` - Clean CORTEX brain, vacuum databases
+- `optimize cache` - Clear and rebuild YAML cache
+
+**What It Does:**
+- Removes old conversation captures (>30 days)
+- Cleans temporary crawler files
+- Vacuums SQLite databases to reclaim space
+- Clears YAML cache for rebuild
+- Provides code optimization suggestions
+
+**Example Results:**
+- Space saved: 50-200 MB typical
+- Performance improvement: 10-30% faster operations
+- Database size reduction: 20-40%
+
+### Health Check Command
+
+**Commands:**
+- `healthcheck` - Run full system health check
+- `cortex performance` - Performance metrics
+- `system status` - Overall system status
+
+**What It Checks:**
+- System resources (CPU, memory, disk usage)
+- CORTEX brain integrity (files, directories, schemas)
+- Database health (integrity, size, table count)
+- Performance metrics (cache hit rate, operation timings)
+
+**Status Levels:**
+- ✅ **Healthy** - All checks passed
+- ⚠️ **Warning** - Non-critical issues detected
+- ❌ **Unhealthy** - Critical issues require attention
+
+**Natural Language Examples:**
+- "Is CORTEX healthy?"
+- "How much disk space is CORTEX using?"
+- "Check CORTEX performance"
 
 ---
 
@@ -349,9 +431,9 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-11-22 | Version 5.3 (Entry Point Optimization)  
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved. Proprietary - See LICENSE  
-**Repository:** https://github.com/asifhussain60/CORTEX
+**Last Updated:** 2025-11-23 | Version 5.3 (Entry Point Optimization)  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 
 **What's New:**
 - **Entry Point Bloat Fixed** - Reduced from 17,245 → 3,933 tokens (77.2% reduction)

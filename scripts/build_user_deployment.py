@@ -89,6 +89,13 @@ CRITICAL_FILES = {
     'prompts/shared/plugin-system.md',
     'prompts/shared/operations-reference.md',
     
+    # TDD Mastery Components (CRITICAL)
+    'cortex-brain/documents/implementation-guides/test-strategy.yaml',
+    'cortex-brain/response-templates.yaml',
+    '.github/prompts/modules/template-guide.md',
+    '.github/prompts/modules/response-format.md',
+    '.github/prompts/modules/planning-system-guide.md',
+    
     # Legal
     'README.md',
     'LICENSE',

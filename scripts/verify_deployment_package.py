@@ -47,6 +47,13 @@ CRITICAL_FILES = {
     'prompts/shared/plugin-system.md': 'Plugin development',
     'prompts/shared/operations-reference.md': 'Operations reference',
     
+    # TDD Mastery Components
+    'cortex-brain/documents/implementation-guides/test-strategy.yaml': 'TDD test strategy',
+    'cortex-brain/response-templates.yaml': 'Response templates (includes TDD workflows)',
+    '.github/prompts/modules/template-guide.md': 'Template guide (TDD templates)',
+    '.github/prompts/modules/response-format.md': 'Response format guide',
+    '.github/prompts/modules/planning-system-guide.md': 'Planning system (DoR/DoD)',
+    
     # Ambient Daemon
     'scripts/cortex/auto_capture_daemon.py': 'Ambient conversation capture daemon',
     
@@ -63,6 +70,14 @@ CORE_MODULES = {
     'src/plugins/base_plugin.py': 'Plugin base class',
     'src/operations/base_operation_module.py': 'Operation module base class',
     'src/operations/operations_orchestrator.py': 'Operations orchestrator',
+    'src/operations/optimize_operation.py': 'Optimize operation (entry point)',
+    'src/operations/healthcheck_operation.py': 'Health check operation (entry point)',
+    'src/feedback/feedback_collector.py': 'Feedback collector',
+    'src/feedback/report_generator.py': 'Feedback report generator',
+    'src/feedback/github_formatter.py': 'GitHub Issue formatter',
+    'src/feedback/entry_point.py': 'Feedback entry point',
+    'src/application/validation/validator_registry.py': 'Validator registry (TDD infrastructure)',
+    'src/application/validation/validator.py': 'Base validator',
 }
 
 # Files that should NOT be in user package
