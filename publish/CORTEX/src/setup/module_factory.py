@@ -150,6 +150,18 @@ def _auto_register_modules():
         register_module_class('smart_refactoring_recommender', SmartRefactoringRecommender)
     except ImportError as e:
         logger.warning(f"Could not load SmartRefactoringRecommender: {e}")
+    
+    try:
+        from .modules.gitignore_setup_module import GitIgnoreSetupModule
+        register_module_class('gitignore_setup', GitIgnoreSetupModule)
+    except ImportError as e:
+        logger.warning(f"Could not load GitIgnoreSetupModule: {e}")
+    
+    try:
+        from .modules.onboarding_module import OnboardingModule
+        register_module_class('onboarding', OnboardingModule)
+    except ImportError as e:
+        logger.warning(f"Could not load OnboardingModule: {e}")
 
 
 # Run auto-registration on module load

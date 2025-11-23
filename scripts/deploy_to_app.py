@@ -243,7 +243,10 @@ def install_entry_point(
     target_root: Path,
     dry_run: bool = False
 ) -> bool:
-    """Install CORTEX entry point in target's .github/prompts/ folder."""
+    """Install CORTEX entry point in target's .github/prompts/ folder.
+    
+    NON-DESTRUCTIVE: Backs up and merges with existing Copilot instructions.
+    """
     logger.info("Installing CORTEX entry point...")
     
     # Source files from CORTEX repo (NOT from cortex package)
@@ -262,19 +265,52 @@ def install_entry_point(
     
     if dry_run:
         logger.info(f"[DRY RUN] Would install entry point to {target_entry}")
+        if target_instructions.exists():
+            logger.info(f"[DRY RUN] Would merge with existing: {target_instructions}")
         return True
     
     # Ensure target .github/prompts/ exists
     target_prompts.mkdir(parents=True, exist_ok=True)
     
-    # Copy entry point and instructions
     try:
+        # CORTEX.prompt.md - Always safe to copy (CORTEX-specific file)
         shutil.copy2(source_entry, target_entry)
         logger.info(f"✓ Installed entry point: {target_entry}")
         
+        # copilot-instructions.md - MERGE with existing to preserve user configs
         if source_instructions.exists():
-            shutil.copy2(source_instructions, target_instructions)
-            logger.info(f"✓ Installed instructions: {target_instructions}")
+            if target_instructions.exists():
+                # Backup existing file
+                backup_path = target_github / 'copilot-instructions.md.backup'
+                shutil.copy2(target_instructions, backup_path)
+                logger.info(f"✓ Backed up existing instructions: {backup_path}")
+                
+                # Read existing content
+                with open(target_instructions, 'r', encoding='utf-8') as f:
+                    existing_content = f.read()
+                
+                # Check if CORTEX already referenced
+                if 'CORTEX' in existing_content and '.github/prompts/CORTEX.prompt.md' in existing_content:
+                    logger.info(f"✓ CORTEX already referenced in {target_instructions}")
+                else:
+                    # Append CORTEX reference to existing instructions
+                    with open(source_instructions, 'r', encoding='utf-8') as f:
+                        cortex_instructions = f.read()
+                    
+                    merged_content = existing_content.rstrip() + "\n\n" + \
+                        "# CORTEX AI Assistant\n\n" + \
+                        "CORTEX entry point added during onboarding. See .github/prompts/CORTEX.prompt.md\n\n" + \
+                        cortex_instructions
+                    
+                    with open(target_instructions, 'w', encoding='utf-8') as f:
+                        f.write(merged_content)
+                    
+                    logger.info(f"✓ Merged CORTEX instructions into existing file: {target_instructions}")
+                    logger.info(f"   Original preserved in: {backup_path}")
+            else:
+                # No existing file, safe to copy
+                shutil.copy2(source_instructions, target_instructions)
+                logger.info(f"✓ Installed instructions: {target_instructions}")
         
         return True
     except Exception as e:
@@ -383,6 +419,7 @@ def verify_deployment(
         'cortex/cortex-operations.yaml',
         'cortex/requirements.txt',
         '.github/prompts/CORTEX.prompt.md',
+        '.github/copilot-instructions.md',  # CRITICAL: Copilot entry point
         'cortex/src/tier1/conversation_manager.py',
         'cortex/src/tier2/__init__.py',
         'cortex/src/cortex_agents/__init__.py'
@@ -392,6 +429,49 @@ def verify_deployment(
         full_path = target_root / file_path
         if not full_path.exists():
             issues.append(f"Missing critical file: {file_path}")
+    
+    # Validate GitHub Copilot instruction files content
+    copilot_instructions = target_root / '.github' / 'copilot-instructions.md'
+    cortex_prompt = target_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+    backup_instructions = target_root / '.github' / 'copilot-instructions.md.backup'
+    
+    # Check if backup exists (indicates merge happened)
+    if backup_instructions.exists():
+        logger.info(f"ℹ️  Existing instructions were merged (backup: {backup_instructions.name})")
+    
+    if copilot_instructions.exists():
+        try:
+            with open(copilot_instructions, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Validate references to CORTEX.prompt.md
+            if 'CORTEX.prompt.md' not in content:
+                issues.append("copilot-instructions.md does not reference CORTEX.prompt.md")
+            
+            if '.github/prompts/CORTEX.prompt.md' not in content:
+                issues.append("copilot-instructions.md missing correct path to main prompt")
+                
+        except Exception as e:
+            issues.append(f"Failed to validate copilot-instructions.md: {e}")
+    
+    if cortex_prompt.exists():
+        try:
+            with open(cortex_prompt, 'r', encoding='utf-8') as f:
+                prompt_content = f.read()
+            
+            # Validate essential CORTEX sections
+            required_sections = [
+                'CORTEX Universal Entry Point',
+                'RESPONSE TEMPLATES',
+                'Quick Start'
+            ]
+            
+            missing_sections = [s for s in required_sections if s not in prompt_content]
+            if missing_sections:
+                issues.append(f"CORTEX.prompt.md missing sections: {', '.join(missing_sections)}")
+                
+        except Exception as e:
+            issues.append(f"Failed to validate CORTEX.prompt.md: {e}")
     
     if issues:
         return False, issues

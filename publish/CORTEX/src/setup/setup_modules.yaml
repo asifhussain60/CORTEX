@@ -51,6 +51,23 @@ modules:
   # Phase 2: ENVIRONMENT
   # ============================================
   
+  - module_id: gitignore_setup
+    name: GitIgnore Configuration
+    description: Configure .gitignore to exclude CORTEX from user's repository
+    phase: ENVIRONMENT
+    priority: 15
+    dependencies: [platform_detection]
+    optional: false
+    enabled_by_default: true
+    config:
+      patterns:
+        - "CORTEX/"
+        - ".github/prompts/CORTEX.prompt.md"
+        - ".github/prompts/cortex-story-builder.md"
+        - ".github/prompts/modules/"
+      validate_patterns: true
+      commit_automatically: true
+  
   - module_id: platform_detection
     name: Platform Detection & Configuration
     description: Detect current platform (Mac/Windows/Linux) and configure environment
@@ -253,11 +270,26 @@ modules:
   # Phase 6: POST_SETUP
   # ============================================
   
+  - module_id: onboarding
+    name: Application Onboarding
+    description: Analyze user's application and generate improvement recommendations
+    phase: POST_SETUP
+    priority: 10
+    dependencies: [brain_initialization]
+    optional: true
+    enabled_by_default: true
+    config:
+      analyze_tech_stack: true
+      analyze_testing: true
+      identify_improvements: true
+      generate_document: true
+      document_path: cortex-brain/documents/analysis/
+  
   - module_id: setup_completion
     name: Setup Completion
     description: Mark setup as complete and display next steps
     phase: POST_SETUP
-    priority: 10
+    priority: 20
     dependencies: []
     optional: false
     enabled_by_default: true
@@ -273,16 +305,19 @@ profiles:
     description: Minimal setup - only required modules
     modules:
       - project_validation
+      - gitignore_setup
       - platform_detection
       - virtual_environment
       - python_dependencies
       - brain_initialization
+      - onboarding
       - setup_completion
   
   standard:
     description: Standard setup - recommended for most users
     modules:
       - project_validation
+      - gitignore_setup
       - platform_detection
       - git_sync
       - virtual_environment
@@ -291,12 +326,14 @@ profiles:
       - smart_refactoring_recommender
       - brain_tests
       - tooling_verification
+      - onboarding
       - setup_completion
   
   full:
     description: Full setup - all modules including optional features
     modules:
       - project_validation
+      - gitignore_setup
       - platform_detection
       - git_sync
       - virtual_environment
@@ -309,6 +346,7 @@ profiles:
       - mkdocs_setup
       - brain_tests
       - tooling_verification
+      - onboarding
       - setup_completion
 
 # Default profile to use

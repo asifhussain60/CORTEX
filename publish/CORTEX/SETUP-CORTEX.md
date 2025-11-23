@@ -23,22 +23,38 @@ cp -r /path/to/CORTEX ./cortex
 **Open your application in VS Code, then in Copilot Chat:**
 
 ```
-onboard this application
+execute CORTEX/SETUP-CORTEX.md
 ```
 
-**That's it!** CORTEX will:
+**That's it!** CORTEX will **automatically**:
 
-1. ✅ Copy entry points from `cortex/.github/` to your app's `.github/` folder
-2. ✅ Install required tooling (Python, Vision API, etc.)
-3. ✅ Initialize brain databases (Tier 1, 2, 3)
-4. ✅ Crawl and index your codebase
-5. ✅ Analyze your project structure and tech stack
-6. ✅ Ask intelligent questions about improvements:
+1. ✅ **Configure .gitignore** - Adds CORTEX to .gitignore and commits it
+   - Prevents CORTEX brain data from being committed to your repository
+   - Validates patterns work using `git check-ignore`
+   - No manual `.gitignore` editing needed!
+
+2. ✅ **Copy entry points** from `cortex/.github/` to your app's `.github/` folder
+   - **Non-Destructive:** Existing `.github/copilot-instructions.md` is backed up and merged
+   - **Your configs preserved:** CORTEX instructions appended, not replaced
+
+3. ✅ **Install required tooling** (Python, Vision API, etc.)
+
+4. ✅ **Initialize brain databases** (Tier 1, 2, 3)
+
+5. ✅ **Onboard your application** - Automatic codebase analysis
+   - Crawls and indexes your codebase
+   - Analyzes project structure and tech stack
+   - Identifies improvement opportunities
+   - Generates onboarding analysis document in `CORTEX/cortex-brain/documents/analysis/`
+
+6. ✅ **Interactive improvement recommendations:**
    - "I see React but no test files - shall I help set up Jest + React Testing Library?"
    - "You have ESLint configured but not running on commit - want me to add pre-commit hooks?"
    - "No TypeScript detected - would you like me to migrate for better type safety?"
 
 **Then just answer the questions** and CORTEX will implement everything with tests!
+
+**No manual steps required!** Everything is automated through the setup orchestrator.
 
 ---
 
@@ -83,9 +99,14 @@ If automatic onboarding fails, run these steps manually:
 cd /path/to/your/application
 cp -r /path/to/publish/CORTEX ./cortex
 
-# 2. Copy entry points to app root
+# 2. Copy entry points to app root (non-destructive merge)
 mkdir -p .github/prompts
 cp cortex/.github/prompts/CORTEX.prompt.md .github/prompts/
+
+# If you have existing .github/copilot-instructions.md:
+# - It will be backed up to .github/copilot-instructions.md.backup
+# - CORTEX instructions will be APPENDED (not overwrite)
+# - Your existing instructions are preserved
 
 # 3. Install dependencies
 cd cortex
@@ -138,6 +159,12 @@ And it remembers everything from past conversations! 🧠
 **Entry points not found:**
 - Check workspace root: VS Code should be opened at application root, not inside `cortex/`
 - Copilot searches recursively, will find `cortex/.github/prompts/CORTEX.prompt.md`
+
+**Existing Copilot instructions:**
+- CORTEX preserves your existing `.github/copilot-instructions.md`
+- Backup created at `.github/copilot-instructions.md.backup`
+- CORTEX instructions appended to existing file (non-destructive merge)
+- To restore original: `cp .github/copilot-instructions.md.backup .github/copilot-instructions.md`
 
 **Questions?**
 - Check documentation: `cortex/prompts/shared/`

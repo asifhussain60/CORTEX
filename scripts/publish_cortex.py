@@ -13,7 +13,7 @@ Key Differences from build_user_deployment.py:
 - Simpler: Just copies to publish/ folder (no compression, no dist/)
 - User operations only: Excludes design_sync, interactive_planning (admin)
 - Manual deployment: User copies publish/CORTEX to their app manually
-- Ultra-simple setup: SETUP-FOR-COPILOT.md is one-line instruction
+- Ultra-simple setup: SETUP-CORTEX.md is one-line instruction
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -624,12 +624,12 @@ def copy_critical_files(
     return True
 
 
-def create_setup_for_copilot(
+def create_setup_cortex(
     publish_cortex: Path,
     dry_run: bool = False
 ) -> bool:
     """
-    Create ultra-simple SETUP-FOR-COPILOT.md INSIDE publish/CORTEX folder.
+    Create ultra-simple SETUP-CORTEX.md INSIDE publish/CORTEX folder.
     
     Args:
         publish_cortex: Path to publish/CORTEX directory
@@ -638,7 +638,7 @@ def create_setup_for_copilot(
     Returns:
         True if successful
     """
-    logger.info("Step 4/5: Creating SETUP-FOR-COPILOT.md...")
+    logger.info("Step 4/5: Creating SETUP-CORTEX.md...")
     
     setup_content = """# CORTEX Setup for Your Application
 
@@ -671,6 +671,8 @@ onboard this application
 **That's it!** CORTEX will:
 
 1. ✅ Copy entry points from `cortex/.github/` to your app's `.github/` folder
+   - **Non-Destructive:** Existing `.github/copilot-instructions.md` is backed up and merged
+   - **Your configs preserved:** CORTEX instructions appended, not replaced
 2. ✅ Install required tooling (Python, Vision API, etc.)
 3. ✅ Initialize brain databases (Tier 1, 2, 3)
 4. ✅ Crawl and index your codebase
@@ -725,9 +727,14 @@ If automatic onboarding fails, run these steps manually:
 cd /path/to/your/application
 cp -r /path/to/publish/CORTEX ./cortex
 
-# 2. Copy entry points to app root
+# 2. Copy entry points to app root (non-destructive merge)
 mkdir -p .github/prompts
 cp cortex/.github/prompts/CORTEX.prompt.md .github/prompts/
+
+# If you have existing .github/copilot-instructions.md:
+# - It will be backed up to .github/copilot-instructions.md.backup
+# - CORTEX instructions will be APPENDED (not overwrite)
+# - Your existing instructions are preserved
 
 # 3. Install dependencies
 cd cortex
@@ -781,6 +788,12 @@ And it remembers everything from past conversations! 🧠
 - Check workspace root: VS Code should be opened at application root, not inside `cortex/`
 - Copilot searches recursively, will find `cortex/.github/prompts/CORTEX.prompt.md`
 
+**Existing Copilot instructions:**
+- CORTEX preserves your existing `.github/copilot-instructions.md`
+- Backup created at `.github/copilot-instructions.md.backup`
+- CORTEX instructions appended to existing file (non-destructive merge)
+- To restore original: `cp .github/copilot-instructions.md.backup .github/copilot-instructions.md`
+
 **Questions?**
 - Check documentation: `cortex/prompts/shared/`
 - GitHub: https://github.com/asifhussain60/CORTEX
@@ -793,7 +806,7 @@ And it remembers everything from past conversations! 🧠
 **License:** Proprietary
 """
     
-    setup_file = publish_cortex / 'SETUP-FOR-COPILOT.md'
+    setup_file = publish_cortex / 'SETUP-CORTEX.md'
     
     if dry_run:
         logger.info(f"[DRY RUN] Would create {setup_file}")
@@ -1095,7 +1108,7 @@ def generate_report(
     logger.info("")
     logger.info("📋 Next Steps:")
     logger.info("1. Manually copy publish/CORTEX to your target application")
-    logger.info("2. Follow instructions in publish/CORTEX/SETUP-FOR-COPILOT.md")
+    logger.info("2. Follow instructions in publish/CORTEX/SETUP-CORTEX.md")
     logger.info("3. In Copilot Chat: 'onboard this application'")
     logger.info("")
 
@@ -1275,7 +1288,7 @@ def main():
         logger.error("Failed to copy critical files")
         return 1
     
-    if not create_setup_for_copilot(publish_cortex, args.dry_run):
+    if not create_setup_cortex(publish_cortex, args.dry_run):
         logger.error("Failed to create setup file")
         return 1
     
