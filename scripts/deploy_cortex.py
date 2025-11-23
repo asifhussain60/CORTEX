@@ -2,18 +2,21 @@
 CORTEX Automated Deployment Script
 ===================================
 
-Purpose: Deploy CORTEX with comprehensive validation and enforcement
+Purpose: Deploy CORTEX with comprehensive validation and production package creation
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
 
 Deployment Phases:
 1. Pre-deployment validation (entry points, docs, tests)
-2. Build production package
-3. Run comprehensive test suite
-4. Validate upgrade compatibility
-5. Create deployment bundle
+2. Entry point validation (module verification)
+3. Run comprehensive test suite (44 tests)
+4. Validate upgrade compatibility (brain preservation)
+5. Create production package (PHYSICALLY BUILDS PACKAGE)
 6. Generate deployment report
+
+CRITICAL: Phase 5 MUST create actual production package in publish/ directory
+This is enforced by validation that verifies package physically exists.
 
 Usage: python scripts/deploy_cortex.py
 """
@@ -57,7 +60,7 @@ class CortexDeployer:
             ('Entry Point Validation', self.phase2_entry_points),
             ('Comprehensive Testing', self.phase3_testing),
             ('Upgrade Compatibility', self.phase4_upgrade),
-            ('Package Creation', self.phase5_package),
+            ('Production Package Creation', self.phase5_package),
             ('Deployment Report', self.phase6_report)
         ]
         
@@ -180,36 +183,99 @@ class CortexDeployer:
         return all_passed
     
     def phase5_package(self) -> bool:
-        """Phase 5: Create deployment package"""
+        """Phase 5: Create deployment package - PHYSICALLY CREATES PRODUCTION PACKAGE"""
         print(f"\n{Colors.BLUE}Creating deployment package...{Colors.RESET}")
         
-        package_contents = [
+        # CRITICAL: Read VERSION file to get current version
+        version_file = self.root / 'VERSION'
+        if not version_file.exists():
+            print(f"  ❌ VERSION file not found")
+            self.failures.append("VERSION file missing - cannot determine package version")
+            return False
+        
+        version = version_file.read_text(encoding='utf-8').strip()
+        print(f"  📦 Package version: {version}")
+        
+        # Define output directory for production package
+        output_dir = self.root / 'publish' / f'CORTEX-{version}'
+        
+        print(f"  📂 Output directory: {output_dir}")
+        
+        # CRITICAL VALIDATION: Run build_user_deployment.py to create actual package
+        print(f"\n  🔨 Building production package...")
+        
+        build_script = self.root / 'scripts' / 'build_user_deployment.py'
+        if not build_script.exists():
+            print(f"  ❌ build_user_deployment.py not found")
+            self.failures.append("Production packaging script missing")
+            return False
+        
+        # Execute build script
+        result = subprocess.run(
+            [sys.executable, str(build_script), '--output', str(output_dir)],
+            cwd=self.root,
+            capture_output=True,
+            text=True
+        )
+        
+        print(result.stdout)
+        
+        if result.returncode != 0:
+            print(f"  ❌ Package build failed")
+            if result.stderr:
+                print(f"  Error: {result.stderr}")
+            self.failures.append("Production package build failed")
+            return False
+        
+        # CRITICAL VALIDATION: Verify package was actually created
+        if not output_dir.exists():
+            print(f"  ❌ Package directory not created: {output_dir}")
+            self.failures.append(f"Package directory not created: {output_dir}")
+            return False
+        
+        # Verify key files exist in package
+        required_package_files = [
             'src/',
-            'scripts/',
-            'cortex-brain/tier2/schema/',
-            '.github/prompts/',
-            'apply_element_mappings_schema.py',
-            'validate_issue3_phase4.py',
+            'cortex-brain/',
+            '.github/prompts/CORTEX.prompt.md',
+            'cortex-operations.yaml',
             'requirements.txt',
-            'VERSION',
             'LICENSE',
             'README.md'
         ]
         
-        missing = []
-        for item in package_contents:
-            path = self.root / item
-            if path.exists():
-                print(f"  ✅ {item}")
+        print(f"\n  ✅ Validating package contents...")
+        missing_in_package = []
+        for item in required_package_files:
+            package_path = output_dir / item
+            if package_path.exists():
+                print(f"    ✅ {item}")
             else:
-                print(f"  ❌ {item} - Missing")
-                missing.append(item)
+                print(f"    ❌ {item} - Missing in package")
+                missing_in_package.append(item)
         
-        if missing:
-            self.failures.extend([f"Missing package item: {item}" for item in missing])
+        if missing_in_package:
+            self.failures.extend([f"Missing in package: {item}" for item in missing_in_package])
             return False
         
-        self.deployment_report['package_info']['contents'] = package_contents
+        # Calculate and report package size
+        total_size = sum(f.stat().st_size for f in output_dir.rglob('*') if f.is_file())
+        size_mb = total_size / (1024 * 1024)
+        
+        print(f"\n  📊 Package successfully created:")
+        print(f"    Location: {output_dir}")
+        print(f"    Size: {size_mb:.2f} MB")
+        print(f"    Files: {sum(1 for _ in output_dir.rglob('*') if _.is_file())}")
+        
+        # Store package info in deployment report
+        self.deployment_report['package_info'] = {
+            'version': version,
+            'location': str(output_dir),
+            'size_mb': round(size_mb, 2),
+            'files_count': sum(1 for _ in output_dir.rglob('*') if _.is_file()),
+            'validation': 'PASSED'
+        }
+        
         return True
     
     def phase6_report(self) -> bool:
