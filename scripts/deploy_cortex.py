@@ -117,13 +117,16 @@ class CortexDeployer:
         )
         
         print(result.stdout)
+        if result.stderr:
+            print(f"{Colors.RED}STDERR:{Colors.RESET}")
+            print(result.stderr)
         
         if result.returncode == 0:
             self.deployment_report['validation_results']['entry_points'] = 'PASSED'
             return True
         else:
             self.deployment_report['validation_results']['entry_points'] = 'FAILED'
-            self.failures.append('Entry point validation failed')
+            self.failures.append(f'Entry point validation failed (exit code: {result.returncode})')
             return False
     
     def phase3_testing(self) -> bool:

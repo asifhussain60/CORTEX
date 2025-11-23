@@ -26,6 +26,15 @@ import shutil
 from pathlib import Path
 from typing import Dict, List, Any, Tuple
 
+# Set UTF-8 encoding for Windows console
+if sys.platform == 'win32':
+    try:
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+    except:
+        pass  # Fallback if encoding setup fails
+
 # Add src to path for imports
 sys.path.insert(0, 'src')
 

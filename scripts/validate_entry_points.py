@@ -18,8 +18,18 @@ Usage: python scripts/validate_entry_points.py
 """
 
 import sys
+import os
 from pathlib import Path
 from typing import List, Dict, Tuple
+
+# Set UTF-8 encoding for Windows console
+if sys.platform == 'win32':
+    try:
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+    except:
+        pass  # Fallback if encoding setup fails
 
 class Colors:
     GREEN = '\033[92m'
