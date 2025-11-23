@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Getting Started Guide - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Getting Started</strong>
+                                <ul>
+                                
+                                    <li><a href="../QUICK-START/" >Quick Start</a></li>
+                                
+                                    <li><a href="../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../getting-started/quick-start.md" >Quick Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../THE-AWAKENING-OF-CORTEX/" >Full Story</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../integration-diagrams.md" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                    <li><a href="../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                
+                                    <li><a href="../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
+                                
+                                    <li><a href="../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../MODULES-REFERENCE/" >Modules Reference</a></li>
+                                
+                                    <li><a href="../OPERATIONS-REFERENCE/" >Operations Reference</a></li>
+                                
+                                    <li><a href="../TECHNICAL-DOCUMENTATION/" >Technical Documentation</a></li>
+                                
+                                    <li><a href="../CORTEX-VS-COPILOT/" >CORTEX vs Copilot</a></li>
+                                
+                                    <li><a href="../FAQ/" >FAQ</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Operations</strong>
+                                <ul>
+                                
+                                    <li><a href="../operations/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../operations/workflows/" >Workflows</a></li>
+                                
+                                    <li><a href="../operations/entry-point-modules/" >Entry Point Modules</a></li>
+                                
+                                    <li><a href="../operations/health-monitoring/" >Health Monitoring</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="./" class="active">Getting Started Guide</a></li>
+                                
+                                    <li><a href="../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                    <li><a href="../response-template-user-guide.md" >Response Templates</a></li>
+                                
+                                    <li><a href="../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                
+                                    <li><a href="../guides/developer-guide.md" >Developer Guide</a></li>
+                                
+                                    <li><a href="../guides/admin-guide.md" >Admin Guide</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Reference</strong>
+                                <ul>
+                                
+                                    <li><a href="../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../reference/configuration/" >Configuration Reference</a></li>
+                                
+                                    <li><a href="../reference/response-templates/" >Response Templates</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Plugins</strong>
+                                <ul>
+                                
+                                    <li><a href="../plugins/development/" >Development</a></li>
+                                
+                                    <li><a href="../plugins/vscode-extension/" >VS Code Extension</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Performance</strong>
+                                <ul>
+                                
+                                    <li><a href="../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
+                                
+                                    <li><a href="../performance/CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                
+                                    <li><a href="../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="getting-started-with-cortex">Getting Started with CORTEX<a class="headerlink" href="#getting-started-with-cortex" title="Permanent link">&para;</a></h1>
+<p>Welcome to CORTEX! This guide will get you up and running in under 5 minutes.</p>
+<h2 id="quick-links">🎯 Quick Links<a class="headerlink" href="#quick-links" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#-setup">Setup</a> - Install and configure CORTEX</li>
+<li><a href="#-onboarding">Onboarding</a> - Configure GitHub Copilot integration</li>
+<li><a href="#-demo">Demo</a> - Interactive walkthrough</li>
+<li><a href="#-first-steps">First Steps</a> - Common tasks and workflows</li>
+<li><a href="#-troubleshooting">Troubleshooting</a> - Common issues and solutions</li>
+</ul>
+<hr />
+<h2 id="setup">🚀 Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Python 3.11+</li>
+<li>VS Code with GitHub Copilot extension</li>
+<li>Git</li>
+</ul>
+<h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
+<h4 id="option-1-quick-setup-recommended-for-users">Option 1: Quick Setup (Recommended for Users)<a class="headerlink" href="#option-1-quick-setup-recommended-for-users" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Download CORTEX user package</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/asifhussain60/CORTEX.git
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>CORTEX
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Run automated setup</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>python<span class="w"> </span>scripts/setup_cortex.py<span class="w"> </span>--mode<span class="o">=</span>user
+</span></code></pre></div>
+<h4 id="option-2-developer-setup-full-source">Option 2: Developer Setup (Full Source)<a class="headerlink" href="#option-2-developer-setup-full-source" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Clone full repository</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/asifhussain60/CORTEX.git
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">cd</span><span class="w"> </span>CORTEX
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Install dependencies</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># Run tests (optional)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>pytest<span class="w"> </span>tests/
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Setup CORTEX</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>python<span class="w"> </span>scripts/setup_cortex.py<span class="w"> </span>--mode<span class="o">=</span>developer
+</span></code></pre></div>
+<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Copy configuration template:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>cortex.config.example.json<span class="w"> </span>cortex.config.json
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Update workspace path:</strong>
+   <div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;workspace_root&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/your/project&quot;</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;brain_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cortex-brain/&quot;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify setup:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>scripts/verify_setup.py
+</span></code></pre></div></p>
+</li>
+</ol>
+<p><strong>Expected Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>✅ CORTEX setup verification complete
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>✅ Configuration file found
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>✅ Brain directories initialized
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>✅ Database connections successful
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>✅ GitHub Copilot integration ready
+</span></code></pre></div></p>
+<hr />
+<h2 id="onboarding">📚 Onboarding<a class="headerlink" href="#onboarding" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-configure-github-copilot">Step 1: Configure GitHub Copilot<a class="headerlink" href="#step-1-configure-github-copilot" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open VS Code</li>
+<li>Install GitHub Copilot extension (if not already installed)</li>
+<li>Verify <code>.github/copilot-instructions.md</code> exists in your workspace</li>
+</ol>
+<p><strong>File:</strong> <code>.github/copilot-instructions.md</code></p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gh"># GitHub Copilot Instructions for CORTEX</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="gs">**Entry Point:**</span> This file enables GitHub Copilot to find and load CORTEX AI Assistant.
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="gs">**Primary prompt file:**</span> <span class="sb">`.github/prompts/CORTEX.prompt.md`</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>GitHub Copilot should load this file to activate CORTEX&#39;s full capabilities.
+</span></code></pre></div>
+<h3 id="step-2-verify-cortex-integration">Step 2: Verify CORTEX Integration<a class="headerlink" href="#step-2-verify-cortex-integration" title="Permanent link">&para;</a></h3>
+<p>Ask GitHub Copilot in chat:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>help
+</span></code></pre></div>
+<p><strong>Expected Response:</strong> CORTEX help table with available commands</p>
+<p>If you see the CORTEX help table, integration is successful! ✅</p>
+<p>If not, see <a href="#-troubleshooting">Troubleshooting</a>.</p>
+<h3 id="step-3-test-memory-system">Step 3: Test Memory System<a class="headerlink" href="#step-3-test-memory-system" title="Permanent link">&para;</a></h3>
+<p><strong>Store a preference:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>store this: I prefer Python 3.11, pytest for testing, and type hints for all functions
+</span></code></pre></div></p>
+<p><strong>Later session (restart VS Code), ask:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>what are my testing preferences?
+</span></code></pre></div></p>
+<p><strong>CORTEX should recall:</strong> "You prefer pytest for testing and type hints for all functions"</p>
+<hr />
+<h2 id="demo">🎮 Demo<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
+<h3 id="interactive-demo-recommended">Interactive Demo (Recommended)<a class="headerlink" href="#interactive-demo-recommended" title="Permanent link">&para;</a></h3>
+<p>Run the interactive CORTEX demo with live execution:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>demo
+</span></code></pre></div>
+<p><strong>Select Profile:</strong></p>
+<ol>
+<li><strong>Quick</strong> (2 minutes) - Essential commands only</li>
+<li><strong>Standard</strong> (3-4 minutes) - Core capabilities</li>
+<li><strong>Comprehensive</strong> (5-6 minutes) - Full walkthrough</li>
+</ol>
+<p><strong>What You'll See:</strong>
+- Help system demonstration
+- Story refresh workflow
+- Feature planning with DoR validation
+- Token optimization techniques
+- Code review capabilities
+- Cleanup operations
+- Conversation tracking</p>
+<h3 id="manual-demo-walkthrough">Manual Demo Walkthrough<a class="headerlink" href="#manual-demo-walkthrough" title="Permanent link">&para;</a></h3>
+<h4 id="1-help-system">1. Help System<a class="headerlink" href="#1-help-system" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>help
+</span></code></pre></div>
+<p>View all available CORTEX commands organized by category.</p>
+<h4 id="2-story-refresh">2. Story Refresh<a class="headerlink" href="#2-story-refresh" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>refresh story
+</span></code></pre></div>
+<p>Generate or update "The Awakening of CORTEX" narrative documentation.</p>
+<h4 id="3-feature-planning">3. Feature Planning<a class="headerlink" href="#3-feature-planning" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>plan: Add user authentication with JWT tokens
+</span></code></pre></div>
+<p>CORTEX guides you through:
+- Definition of Ready (DoR) validation
+- Requirements clarification
+- Security review (OWASP checklist)
+- Implementation plan generation</p>
+<h4 id="4-code-review">4. Code Review<a class="headerlink" href="#4-code-review" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>review my recent changes
+</span></code></pre></div>
+<p>CORTEX analyzes:
+- Git history (last 2 days)
+- Code patterns
+- Potential improvements
+- Security issues</p>
+<h4 id="5-documentation-generation">5. Documentation Generation<a class="headerlink" href="#5-documentation-generation" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>generate documentation
+</span></code></pre></div>
+<p>CORTEX generates:
+- Feature discovery from Git/YAML
+- Architecture documentation
+- API reference
+- MkDocs site</p>
+<hr />
+<h2 id="first-steps">⚡ First Steps<a class="headerlink" href="#first-steps" title="Permanent link">&para;</a></h2>
+<h3 id="common-tasks">Common Tasks<a class="headerlink" href="#common-tasks" title="Permanent link">&para;</a></h3>
+<h4 id="plan-a-new-feature">Plan a New Feature<a class="headerlink" href="#plan-a-new-feature" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>plan: Add user authentication with JWT tokens
+</span></code></pre></div>
+<p><strong>CORTEX Workflow:</strong>
+1. ✅ DoR validation (Definition of Ready)
+2. ✅ Requirements clarification
+3. ✅ Security review (OWASP checklist)
+4. ✅ Implementation plan generation
+5. ✅ ADO-style work item creation (optional)</p>
+<h4 id="review-code-changes">Review Code Changes<a class="headerlink" href="#review-code-changes" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>review recent changes
+</span></code></pre></div>
+<p><strong>CORTEX analyzes:</strong>
+- Git commits (last 2 days by default)
+- Code patterns and style
+- Potential improvements
+- Security vulnerabilities
+- Test coverage gaps</p>
+<h4 id="generate-documentation">Generate Documentation<a class="headerlink" href="#generate-documentation" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>update documentation
+</span></code></pre></div>
+<p><strong>CORTEX generates:</strong>
+- Feature discovery (Git + YAML)
+- 14+ Mermaid diagrams
+- 14+ DALL-E prompts
+- Architecture docs
+- Technical documentation
+- MkDocs site</p>
+<h4 id="store-knowledge">Store Knowledge<a class="headerlink" href="#store-knowledge" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>store this: We use FastAPI for REST APIs, SQLAlchemy for ORM, and pytest with 90%+ coverage target
+</span></code></pre></div>
+<p><strong>CORTEX remembers:</strong>
+- Coding preferences
+- Architecture decisions
+- Testing strategies
+- Patterns and conventions</p>
+<h4 id="check-cortex-status">Check CORTEX Status<a class="headerlink" href="#check-cortex-status" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>status
+</span></code></pre></div>
+<p><strong>CORTEX reports:</strong>
+- Memory usage (Tier 1-3)
+- Conversation count
+- Knowledge graph entities
+- System health</p>
+<h3 id="quick-command-reference">Quick Command Reference<a class="headerlink" href="#quick-command-reference" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code></td>
+<td>Show all commands</td>
+<td><code>help</code></td>
+</tr>
+<tr>
+<td><code>plan [feature]</code></td>
+<td>Start feature planning</td>
+<td><code>plan: Add auth</code></td>
+</tr>
+<tr>
+<td><code>implement [feature]</code></td>
+<td>Execute implementation</td>
+<td><code>implement authentication</code></td>
+</tr>
+<tr>
+<td><code>review [scope]</code></td>
+<td>Code review</td>
+<td><code>review recent changes</code></td>
+</tr>
+<tr>
+<td><code>test [scope]</code></td>
+<td>Generate tests</td>
+<td><code>test UserService</code></td>
+</tr>
+<tr>
+<td><code>document [scope]</code></td>
+<td>Generate docs</td>
+<td><code>document API</code></td>
+</tr>
+<tr>
+<td><code>refresh story</code></td>
+<td>Update narrative</td>
+<td><code>refresh story</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>System status</td>
+<td><code>status</code></td>
+</tr>
+<tr>
+<td><code>demo</code></td>
+<td>Interactive demo</td>
+<td><code>demo</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting">🆘 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="issue-cortex-not-responding">Issue: CORTEX Not Responding<a class="headerlink" href="#issue-cortex-not-responding" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> GitHub Copilot doesn't show CORTEX responses</p>
+<p><strong>Solutions:</strong></p>
+<ol>
+<li>
+<p><strong>Check copilot instructions file exists:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>.github/copilot-instructions.md
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify CORTEX prompt file loaded:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>.github/prompts/CORTEX.prompt.md
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Restart VS Code:</strong></p>
+</li>
+<li>Close all VS Code windows</li>
+<li>Reopen workspace</li>
+<li>
+<p>Ask: <code>help</code></p>
+</li>
+<li>
+<p><strong>Check GitHub Copilot status:</strong></p>
+</li>
+<li>Bottom right of VS Code</li>
+<li>Should show "GitHub Copilot" icon</li>
+<li>Click to verify active</li>
+</ol>
+<h3 id="issue-memory-not-persisting">Issue: Memory Not Persisting<a class="headerlink" href="#issue-memory-not-persisting" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> CORTEX forgets previous conversations</p>
+<p><strong>Solutions:</strong></p>
+<ol>
+<li>
+<p><strong>Check database exists:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>cortex-brain/tier1/conversation-history.db
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify database permissions:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>cortex-brain/tier1/conversation-history.db
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Check storage quota:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>python<span class="w"> </span>scripts/check_storage.py
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Reimport conversations (if backed up):</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>python<span class="w"> </span>scripts/import_brain.py<span class="w"> </span>--input<span class="o">=</span>backup.json
+</span></code></pre></div></p>
+</li>
+</ol>
+<h3 id="issue-tests-failing">Issue: Tests Failing<a class="headerlink" href="#issue-tests-failing" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> <code>pytest tests/</code> shows failures</p>
+<p><strong>Solutions:</strong></p>
+<ol>
+<li>
+<p><strong>Check Python version:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Must be 3.11+</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Reinstall dependencies:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>--force-reinstall
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Run specific test to isolate:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>pytest<span class="w"> </span>tests/tier0/<span class="w"> </span>-v
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Check for environment variables:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>CORTEX
+</span></code></pre></div></p>
+</li>
+</ol>
+<h3 id="issue-setup-script-errors">Issue: Setup Script Errors<a class="headerlink" href="#issue-setup-script-errors" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> <code>setup_cortex.py</code> fails</p>
+<p><strong>Solutions:</strong></p>
+<ol>
+<li>
+<p><strong>Check Python installation:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>which<span class="w"> </span>python
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>python<span class="w"> </span>--version
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify Git installed:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>which<span class="w"> </span>git
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>git<span class="w"> </span>--version
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Run with verbose output:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>python<span class="w"> </span>scripts/setup_cortex.py<span class="w"> </span>--mode<span class="o">=</span>user<span class="w"> </span>--verbose
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Check logs:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>cat<span class="w"> </span>logs/cortex.log
+</span></code></pre></div></p>
+</li>
+</ol>
+<h3 id="issue-mkdocs-build-fails">Issue: MkDocs Build Fails<a class="headerlink" href="#issue-mkdocs-build-fails" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong> <code>mkdocs build</code> or <code>mkdocs serve</code> errors</p>
+<p><strong>Solutions:</strong></p>
+<ol>
+<li>
+<p><strong>Install MkDocs:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>pip<span class="w"> </span>install<span class="w"> </span>mkdocs<span class="w"> </span>mkdocs-material
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify mkdocs.yml exists:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>mkdocs.yml
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Check for missing docs:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--verbose
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Regenerate documentation:</strong>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>python<span class="w"> </span>cortex-brain/admin/scripts/documentation/enterprise_documentation_orchestrator.py
+</span></code></pre></div></p>
+</li>
+</ol>
+<hr />
+<h2 id="support-resources">📞 Support &amp; Resources<a class="headerlink" href="#support-resources" title="Permanent link">&para;</a></h2>
+<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><a href="../CORTEX-VS-COPILOT/">CORTEX vs COPILOT</a></strong> - Why choose CORTEX</li>
+<li><strong><a href="../ARCHITECTURE/">Architecture</a></strong> - System architecture</li>
+<li><strong><a href="../TECHNICAL-DOCUMENTATION/">Technical Documentation</a></strong> - API reference</li>
+<li><strong><a href="../FAQ/">FAQ</a></strong> - Frequently asked questions</li>
+</ul>
+<h3 id="community">Community<a class="headerlink" href="#community" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>GitHub Issues:</strong> https://github.com/asifhussain60/CORTEX/issues</li>
+<li><strong>Discussions:</strong> https://github.com/asifhussain60/CORTEX/discussions</li>
+<li><strong>Documentation Site:</strong> https://asifhussain60.github.io/CORTEX</li>
+</ul>
+<h3 id="contact">Contact<a class="headerlink" href="#contact" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Author:</strong> Asif Hussain</li>
+<li><strong>Email:</strong> [Contact via GitHub]</li>
+<li><strong>Repository:</strong> https://github.com/asifhussain60/CORTEX</li>
+</ul>
+<hr />
+<h2 id="next-steps">🎓 Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Now that you're set up:</p>
+<ol>
+<li>✅ <strong>Try the demo:</strong> <code>demo</code> - See CORTEX in action</li>
+<li>✅ <strong>Plan your first feature:</strong> <code>plan: [your feature]</code></li>
+<li>✅ <strong>Store your preferences:</strong> <code>store this: [your preferences]</code></li>
+<li>✅ <strong>Review some code:</strong> <code>review recent changes</code></li>
+<li>✅ <strong>Generate documentation:</strong> <code>generate documentation</code></li>
+</ol>
+<p><strong>Pro Tips:</strong>
+- CORTEX learns from your patterns - the more you use it, the better it gets
+- Store your coding preferences early for consistent responses
+- Use the <code>status</code> command to monitor memory usage
+- Run <code>demo</code> periodically to discover new features</p>
+<hr />
+<p><strong>Author:</strong> Asif Hussain<br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.<br />
+<strong>Version:</strong> 3.0<br />
+<strong>Last Updated:</strong> 2025-11-22<br />
+<strong>Repository:</strong> https://github.com/asifhussain60/CORTEX</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../operations/health-monitoring/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> Health Monitoring
+                        </a>
+                        
+                        
+                        <a href="../HELP-SYSTEM/" class="btn btn-default pull-right">
+                            Help System <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>

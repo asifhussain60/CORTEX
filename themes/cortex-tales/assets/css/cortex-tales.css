@@ -713,6 +713,33 @@ table tbody tr:last-child td {
 }
 
 /* ============================================
+   Material Design Icon Sizes (Fix HUGE icons)
+   ============================================ */
+.md-typeset .lg {
+  font-size: 1.8em !important;
+  width: 1.8em !important;
+  height: 1.8em !important;
+  line-height: 1.8em !important;
+}
+
+.md-typeset .middle {
+  vertical-align: middle !important;
+}
+
+.md-typeset svg.lg {
+  font-size: 1.8em !important;
+  width: 1.8em !important;
+  height: 1.8em !important;
+}
+
+/* Ensure icons inside grid cards don't get oversized */
+.grid.cards svg,
+.grid.cards img {
+  max-width: 2em !important;
+  max-height: 2em !important;
+}
+
+/* ============================================
    Smooth Scrolling
    ============================================ */
 html {

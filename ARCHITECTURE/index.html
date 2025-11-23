@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CORTEX Architecture - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href=".." id="logo">
+                        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="..">Home</a></li>
+                        <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../getting-started/quick-start/">Examples</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href=".." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Getting Started</strong>
+                                <ul>
+                                
+                                    <li><a href="../QUICK-START/" >Quick Start</a></li>
+                                
+                                    <li><a href="../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../getting-started/quick-start.md" >Quick Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../THE-AWAKENING-OF-CORTEX/" >Full Story</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../integration-diagrams.md" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                    <li><a href="../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                
+                                    <li><a href="../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
+                                
+                                    <li><a href="../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../MODULES-REFERENCE/" >Modules Reference</a></li>
+                                
+                                    <li><a href="../OPERATIONS-REFERENCE/" >Operations Reference</a></li>
+                                
+                                    <li><a href="../TECHNICAL-DOCUMENTATION/" >Technical Documentation</a></li>
+                                
+                                    <li><a href="../CORTEX-VS-COPILOT/" >CORTEX vs Copilot</a></li>
+                                
+                                    <li><a href="../FAQ/" >FAQ</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Operations</strong>
+                                <ul>
+                                
+                                    <li><a href="../operations/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../operations/workflows/" >Workflows</a></li>
+                                
+                                    <li><a href="../operations/entry-point-modules/" >Entry Point Modules</a></li>
+                                
+                                    <li><a href="../operations/health-monitoring/" >Health Monitoring</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../GETTING-STARTED/" >Getting Started Guide</a></li>
+                                
+                                    <li><a href="../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                    <li><a href="../response-template-user-guide.md" >Response Templates</a></li>
+                                
+                                    <li><a href="../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                
+                                    <li><a href="../guides/developer-guide.md" >Developer Guide</a></li>
+                                
+                                    <li><a href="../guides/admin-guide.md" >Admin Guide</a></li>
+                                
+                                    <li><a href="../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Reference</strong>
+                                <ul>
+                                
+                                    <li><a href="../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../reference/configuration/" >Configuration Reference</a></li>
+                                
+                                    <li><a href="../reference/response-templates/" >Response Templates</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Plugins</strong>
+                                <ul>
+                                
+                                    <li><a href="../plugins/development/" >Development</a></li>
+                                
+                                    <li><a href="../plugins/vscode-extension/" >VS Code Extension</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Performance</strong>
+                                <ul>
+                                
+                                    <li><a href="../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
+                                
+                                    <li><a href="../performance/CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                
+                                    <li><a href="../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Examples</strong>
+                                <ul>
+                                
+                                    <li><a href="../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="cortex-architecture">CORTEX Architecture<a class="headerlink" href="#cortex-architecture" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 3.0<br />
+<strong>Status:</strong> Production Ready<br />
+<strong>Author:</strong> Asif Hussain</p>
+<hr />
+<h2 id="system-overview">🎯 System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
+<p>CORTEX is built on a <strong>4-tier brain architecture</strong> inspired by human cognition, with a <strong>split-brain agent system</strong> (10 specialized agents) and <strong>persistent memory</strong> across sessions.</p>
+<pre class="mermaid"><code>graph TD
+    User[User Request] --&gt; T0[Tier 0: Brain Protection]
+    T0 --&gt; T1[Tier 1: Working Memory]
+    T1 --&gt; T2[Tier 2: Knowledge Graph]
+    T2 --&gt; T3[Tier 3: Long-term Storage]
+    T3 --&gt; Agent[Agent System]
+    Agent --&gt; LH[Left Hemisphere - Analytical]
+    Agent --&gt; RH[Right Hemisphere - Creative]
+    LH --&gt; Response[Coordinated Response]
+    RH --&gt; Response</code></pre>
+<p><strong>Architecture Principles:</strong>
+- <strong>Memory-First Design:</strong> All interactions persist across sessions
+- <strong>Agent Specialization:</strong> 10 agents with specific roles (no overlap)
+- <strong>Protection Layer:</strong> Brain protection rules prevent context overflow
+- <strong>Extensibility:</strong> Plugin system for custom operations</p>
+<hr />
+<h2 id="tier-0-brain-protection-skull-rules">🧠 Tier 0: Brain Protection (SKULL Rules)<a class="headerlink" href="#tier-0-brain-protection-skull-rules" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Entry point validation and token budget enforcement</p>
+<h3 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h3>
+<p><strong>1. Entry Point (<code>CORTEX.prompt.md</code>)</strong>
+- Token budget: 5,000 tokens (hard limit)
+- Template-based responses (no Python execution)
+- Module architecture (external documentation references)
+- Performance target: &lt;3,500 tokens</p>
+<p><strong>2. Brain Protection Rules (<code>brain-protection-rules.yaml</code>)</strong>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">skull_rules</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">S01_token_budget</span><span class="p">:</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCKING</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">penalty</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Reject</span><span class="nv"> </span><span class="s">request</span><span class="nv"> </span><span class="s">exceeding</span><span class="nv"> </span><span class="s">token</span><span class="nv"> </span><span class="s">budget&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">K02_modular_architecture</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use</span><span class="nv"> </span><span class="s">#file:</span><span class="nv"> </span><span class="s">references</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">documentation&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WARNING</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">U03_no_python_execution</span><span class="p">:</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Template-based</span><span class="nv"> </span><span class="s">responses</span><span class="nv"> </span><span class="s">only&quot;</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BLOCKING</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nt">L04_performance_target</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3500 tokens</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IDEAL</span>
+</span></code></pre></div></p>
+<p><strong>3. Template System</strong>
+- 31+ response templates
+- Trigger-based selection
+- YAML-driven configuration
+- AI-readable instructions embedded in prompt</p>
+<h3 id="protection-mechanisms">Protection Mechanisms<a class="headerlink" href="#protection-mechanisms" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Token Budget</td>
+<td>Prevent context overflow</td>
+<td>BLOCKING</td>
+</tr>
+<tr>
+<td>Modular Architecture</td>
+<td>Keep prompt maintainable</td>
+<td>WARNING</td>
+</tr>
+<tr>
+<td>No Python Execution</td>
+<td>AI compatibility</td>
+<td>BLOCKING</td>
+</tr>
+<tr>
+<td>Performance Target</td>
+<td>Optimize response time</td>
+<td>IDEAL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>References:</strong>
+- Mermaid Diagram: <code>diagrams/mermaid/brain-protection.mmd</code>
+- DALL-E Prompt: <code>diagrams/prompts/06-brain-protection-prompt.md</code></p>
+<hr />
+<h2 id="tier-1-working-memory-conversation-manager">💾 Tier 1: Working Memory (Conversation Manager)<a class="headerlink" href="#tier-1-working-memory-conversation-manager" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Recent conversation storage and context retrieval</p>
+<h3 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Simplified architecture</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ConversationManager</span><span class="p">:</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="o">-</span> <span class="n">store_conversation</span><span class="p">(</span><span class="n">user_msg</span><span class="p">,</span> <span class="n">assistant_msg</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="o">-</span> <span class="n">retrieve_recent</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="o">-</span> <span class="n">search_conversations</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="o">-</span> <span class="n">import_conversations</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="o">-</span> <span class="n">export_conversations</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="database-schema">Database Schema<a class="headerlink" href="#database-schema" title="Permanent link">&para;</a></h3>
+<p><strong>SQLite Storage</strong> (<code>cortex-brain/tier1/conversation-history.db</code>)</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">conversations</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">user_message</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">assistant_response</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">context_data</span><span class="w"> </span><span class="n">JSON</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">workspace</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="n">tokens_used</span><span class="w"> </span><span class="nb">INTEGER</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">);</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_timestamp</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">conversations</span><span class="p">(</span><span class="k">timestamp</span><span class="p">);</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_workspace</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">conversations</span><span class="p">(</span><span class="n">workspace</span><span class="p">);</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_session</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">conversations</span><span class="p">(</span><span class="n">session_id</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">&para;</a></h3>
+<p><strong>Storage:</strong>
+- Auto-save every conversation
+- Context metadata (workspace, file, line)
+- Token usage tracking</p>
+<p><strong>Retrieval:</strong>
+- Recent conversations (last N)
+- Search by keyword
+- Filter by workspace/session</p>
+<p><strong>Import/Export:</strong>
+- JSON format for portability
+- Conversation vault for backups
+- Cross-workspace transfer</p>
+<p><strong>Capacity:</strong>
+- Unlimited conversations
+- Automatic cleanup (configurable retention)
+- Compression for old conversations</p>
+<p><strong>References:</strong>
+- Mermaid Diagram: <code>diagrams/mermaid/conversation-tracking.mmd</code>
+- DALL-E Prompt: <code>diagrams/prompts/04-conversation-tracking-prompt.md</code></p>
+<hr />
+<h2 id="tier-2-knowledge-graph-pattern-learning">🕸️ Tier 2: Knowledge Graph (Pattern Learning)<a class="headerlink" href="#tier-2-knowledge-graph-pattern-learning" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Semantic pattern learning and relationship extraction</p>
+<h3 id="architecture_1">Architecture<a class="headerlink" href="#architecture_1" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">knowledge_graph</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">entities</span><span class="p">:</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">class</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">protected</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">function</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.85</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">public</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">relationships</span><span class="p">:</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UserService</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Database</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">depends_on</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.90</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="nt">patterns</span><span class="p">:</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;authentication</span><span class="nv"> </span><span class="s">workflow&quot;</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="nt">occurrences</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="nt">confidence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.93</span>
+</span></code></pre></div>
+<h3 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h3>
+<p><strong>1. Entity Extraction</strong>
+- Classes, functions, modules
+- Confidence scoring (0.0 - 1.0)
+- Namespace protection (CORTEX internals off-limits)</p>
+<p><strong>2. Relationship Mapping</strong>
+- Dependencies (imports, calls)
+- Inheritance hierarchies
+- Data flow paths</p>
+<p><strong>3. Pattern Recognition</strong>
+- Coding style patterns
+- Architecture patterns
+- Naming conventions</p>
+<h3 id="confidence-weighting">Confidence Weighting<a class="headerlink" href="#confidence-weighting" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Confidence</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.9 - 1.0</td>
+<td>High certainty</td>
+<td>Use without confirmation</td>
+</tr>
+<tr>
+<td>0.7 - 0.89</td>
+<td>Medium certainty</td>
+<td>Use with validation</td>
+</tr>
+<tr>
+<td>0.5 - 0.69</td>
+<td>Low certainty</td>
+<td>Suggest, don't assume</td>
+</tr>
+<tr>
+<td>&lt; 0.5</td>
+<td>No certainty</td>
+<td>Ignore or ask user</td>
+</tr>
+</tbody>
+</table>
+<h3 id="smart-context-retrieval">Smart Context Retrieval<a class="headerlink" href="#smart-context-retrieval" title="Permanent link">&para;</a></h3>
+<p><strong>Algorithm:</strong>
+1. Extract entities from user request
+2. Find related entities in knowledge graph
+3. Score relevance based on relationships
+4. Inject top N entities into context
+5. Track retrieval success for learning</p>
+<p><strong>References:</strong>
+- Mermaid Diagram: <code>diagrams/mermaid/information-flow.mmd</code>
+- DALL-E Prompt: <code>diagrams/prompts/03-information-flow-prompt.md</code></p>
+<hr />
+<h2 id="tier-3-long-term-storage-development-context">📚 Tier 3: Long-term Storage (Development Context)<a class="headerlink" href="#tier-3-long-term-storage-development-context" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Workspace-specific patterns and historical archive</p>
+<h3 id="storage-structure">Storage Structure<a class="headerlink" href="#storage-structure" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cortex-brain/tier3/
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├── workspace-contexts/
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│   ├── project-a.yaml      # Project A patterns
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│   ├── project-b.yaml      # Project B patterns
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│   └── project-c.yaml      # Project C patterns
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>├── historical-archive/
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│   ├── 2024-11/            # Monthly archives
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>│   ├── 2024-12/
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>│   └── 2025-01/
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>└── pattern-evolution/
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    ├── authentication.yaml  # How auth patterns evolved
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    ├── testing.yaml         # Testing strategy evolution
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    └── deployment.yaml      # Deployment pattern evolution
+</span></code></pre></div>
+<h3 id="context-files">Context Files<a class="headerlink" href="#context-files" title="Permanent link">&para;</a></h3>
+<p><strong>Example:</strong> <code>project-a.yaml</code></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">workspace</span><span class="p">:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Project</span><span class="nv"> </span><span class="s">A&quot;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/project-a&quot;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Python&quot;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FastAPI&quot;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="nt">patterns</span><span class="p">:</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">coding_style</span><span class="p">:</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Type</span><span class="nv"> </span><span class="s">hints</span><span class="nv"> </span><span class="s">required</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">all</span><span class="nv"> </span><span class="s">functions&quot;</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Docstrings</span><span class="nv"> </span><span class="s">follow</span><span class="nv"> </span><span class="s">Google</span><span class="nv"> </span><span class="s">style&quot;</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Max</span><span class="nv"> </span><span class="s">line</span><span class="nv"> </span><span class="s">length:</span><span class="nv"> </span><span class="s">100</span><span class="nv"> </span><span class="s">characters&quot;</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="nt">testing</span><span class="p">:</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Pytest</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">unit</span><span class="nv"> </span><span class="s">tests&quot;</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Coverage</span><span class="nv"> </span><span class="s">target:</span><span class="nv"> </span><span class="s">90%+&quot;</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Integration</span><span class="nv"> </span><span class="s">tests</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">tests/integration/&quot;</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="nt">architecture</span><span class="p">:</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Layered</span><span class="nv"> </span><span class="s">architecture</span><span class="nv"> </span><span class="s">(routes,</span><span class="nv"> </span><span class="s">services,</span><span class="nv"> </span><span class="s">models)&quot;</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Dependency</span><span class="nv"> </span><span class="s">injection</span><span class="nv"> </span><span class="s">via</span><span class="nv"> </span><span class="s">FastAPI</span><span class="nv"> </span><span class="s">Depends&quot;</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;SQLAlchemy</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">ORM&quot;</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="nt">preferences</span><span class="p">:</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">  </span><span class="nt">error_handling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Raise</span><span class="nv"> </span><span class="s">custom</span><span class="nv"> </span><span class="s">exceptions,</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">generic</span><span class="nv"> </span><span class="s">Exception&quot;</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">  </span><span class="nt">logging</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Structured</span><span class="nv"> </span><span class="s">logging</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">loguru&quot;</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">  </span><span class="nt">documentation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Auto-generate</span><span class="nv"> </span><span class="s">API</span><span class="nv"> </span><span class="s">docs</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">Swagger&quot;</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="nt">historical_decisions</span><span class="p">:</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-01&quot;</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="nt">decision</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Migrated</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">Flask</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">FastAPI&quot;</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Better</span><span class="nv"> </span><span class="s">async</span><span class="nv"> </span><span class="s">support</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">type</span><span class="nv"> </span><span class="s">safety&quot;</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-12-15&quot;</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="nt">decision</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Adopted</span><span class="nv"> </span><span class="s">Pydantic</span><span class="nv"> </span><span class="s">v2&quot;</span>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Performance</span><span class="nv"> </span><span class="s">improvements</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">validation</span><span class="nv"> </span><span class="s">features&quot;</span>
+</span></code></pre></div>
+<h3 id="pattern-evolution">Pattern Evolution<a class="headerlink" href="#pattern-evolution" title="Permanent link">&para;</a></h3>
+<p><strong>Tracks how patterns change over time:</strong></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;authentication&quot;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">evolution</span><span class="p">:</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-01-15&quot;</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nt">approach</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Session-based</span><span class="nv"> </span><span class="s">auth&quot;</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Simple</span><span class="nv"> </span><span class="s">monolithic</span><span class="nv"> </span><span class="s">app&quot;</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-06-20&quot;</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nt">approach</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">tokens&quot;</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Migrated</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">microservices&quot;</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-11-10&quot;</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="nt">approach</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OAuth2</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">refresh</span><span class="nv"> </span><span class="s">tokens&quot;</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Security</span><span class="nv"> </span><span class="s">audit</span><span class="nv"> </span><span class="s">recommendations&quot;</span>
+</span></code></pre></div>
+<p><strong>References:</strong>
+- Pattern storage in <code>cortex-brain/tier3/</code>
+- Archive compression for old data
+- Cross-session learning enabled</p>
+<hr />
+<h2 id="agent-system-split-brain-architecture">🤖 Agent System (Split-Brain Architecture)<a class="headerlink" href="#agent-system-split-brain-architecture" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Specialized agents collaborate like a development team</p>
+<h3 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph LR
+    CC[Corpus Callosum Router] --&gt; LH[Left Hemisphere]
+    CC --&gt; RH[Right Hemisphere]
+
+    LH --&gt; A1[Analyst Agent]
+    LH --&gt; A2[Architect Agent]
+    LH --&gt; A3[Code Review Agent]
+    LH --&gt; A4[Test Designer Agent]
+    LH --&gt; A5[Documentation Agent]
+
+    RH --&gt; A6[Storyteller Agent]
+    RH --&gt; A7[Diagram Designer Agent]
+    RH --&gt; A8[UX Designer Agent]
+    RH --&gt; A9[Innovation Agent]
+    RH --&gt; A10[Integration Agent]</code></pre>
+<h3 id="left-hemisphere-analytical-tasks">Left Hemisphere (Analytical Tasks)<a class="headerlink" href="#left-hemisphere-analytical-tasks" title="Permanent link">&para;</a></h3>
+<p><strong>1. Analyst Agent</strong>
+- Requirement analysis
+- User story decomposition
+- Acceptance criteria definition
+- DoR validation</p>
+<p><strong>2. Architect Agent</strong>
+- System design
+- Architecture decisions
+- Component specifications
+- Integration patterns</p>
+<p><strong>3. Code Review Agent</strong>
+- Quality assurance
+- SOLID principles enforcement
+- Security review (OWASP)
+- Performance optimization</p>
+<p><strong>4. Test Designer Agent</strong>
+- Test strategy
+- TDD workflow
+- Coverage analysis
+- Integration test planning</p>
+<p><strong>5. Documentation Agent</strong>
+- Technical writing
+- API documentation
+- Code comments
+- README maintenance</p>
+<h3 id="right-hemisphere-creative-tasks">Right Hemisphere (Creative Tasks)<a class="headerlink" href="#right-hemisphere-creative-tasks" title="Permanent link">&para;</a></h3>
+<p><strong>6. Storyteller Agent</strong>
+- Narrative documentation
+- "The Awakening of CORTEX" story
+- Executive summaries
+- User-friendly guides</p>
+<p><strong>7. Diagram Designer Agent</strong>
+- Mermaid diagram generation
+- DALL-E prompt creation
+- Visual documentation
+- Architecture diagrams</p>
+<p><strong>8. UX Designer Agent</strong>
+- User experience optimization
+- Interface design recommendations
+- Accessibility considerations
+- User journey mapping</p>
+<p><strong>9. Innovation Agent</strong>
+- Novel solution proposals
+- Alternative approaches
+- Creative problem-solving
+- Future possibilities</p>
+<p><strong>10. Integration Agent</strong>
+- Agent coordination
+- Context sharing
+- Conflict resolution
+- Workflow orchestration</p>
+<h3 id="corpus-callosum-router">Corpus Callosum (Router)<a class="headerlink" href="#corpus-callosum-router" title="Permanent link">&para;</a></h3>
+<p><strong>Routing Algorithm:</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">route_request</span><span class="p">(</span><span class="n">user_request</span><span class="p">):</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="c1"># Analyze request intent</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">intent</span> <span class="o">=</span> <span class="n">detect_intent</span><span class="p">(</span><span class="n">user_request</span><span class="p">)</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># Determine hemisphere</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">if</span> <span class="n">intent</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;analyze&#39;</span><span class="p">,</span> <span class="s1">&#39;design&#39;</span><span class="p">,</span> <span class="s1">&#39;review&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">]:</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>  <span class="c1"># Analytical</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">elif</span> <span class="n">intent</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;create&#39;</span><span class="p">,</span> <span class="s1">&#39;visualize&#39;</span><span class="p">,</span> <span class="s1">&#39;innovate&#39;</span><span class="p">]:</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>        <span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span>  <span class="c1"># Creative</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;both&#39;</span>  <span class="c1"># Requires collaboration</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="c1"># Select specialized agents</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="n">agents</span> <span class="o">=</span> <span class="n">select_agents</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">)</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="c1"># Coordinate execution</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="k">return</span> <span class="n">coordinate_agents</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">user_request</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>References:</strong>
+- Mermaid Diagram: <code>diagrams/mermaid/agent-coordination.mmd</code>
+- DALL-E Prompt: <code>diagrams/prompts/02-agent-coordination-prompt.md</code></p>
+<hr />
+<h2 id="plugin-system">🔌 Plugin System<a class="headerlink" href="#plugin-system" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Extend CORTEX functionality without modifying core</p>
+<h3 id="architecture_2">Architecture<a class="headerlink" href="#architecture_2" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Base plugin interface</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">BasePlugin</span><span class="p">:</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plugin initialization&quot;&quot;&quot;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="k">pass</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plugin execution&quot;&quot;&quot;</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        <span class="k">pass</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plugin cleanup&quot;&quot;&quot;</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="k">pass</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="c1"># Plugin registry</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="k">class</span><span class="w"> </span><span class="nc">PluginRegistry</span><span class="p">:</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">register_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin</span><span class="p">:</span> <span class="n">BasePlugin</span><span class="p">):</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Register custom plugin&quot;&quot;&quot;</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>        <span class="k">pass</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">unregister_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unregister plugin&quot;&quot;&quot;</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>        <span class="k">pass</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_plugins</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all registered plugins&quot;&quot;&quot;</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>        <span class="k">pass</span>
+</span></code></pre></div>
+<h3 id="plugin-types">Plugin Types<a class="headerlink" href="#plugin-types" title="Permanent link">&para;</a></h3>
+<p><strong>1. Operation Plugins</strong>
+- Custom operations beyond core CORTEX
+- Example: Slack integration, JIRA sync</p>
+<p><strong>2. Agent Plugins</strong>
+- Additional specialized agents
+- Example: Security audit agent, performance profiler agent</p>
+<p><strong>3. Memory Plugins</strong>
+- Custom memory backends
+- Example: PostgreSQL instead of SQLite, Redis cache</p>
+<p><strong>4. Template Plugins</strong>
+- Custom response templates
+- Example: Company-specific formats</p>
+<h3 id="plugin-discovery">Plugin Discovery<a class="headerlink" href="#plugin-discovery" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> <code>cortex-brain/plugins/</code></p>
+<p><strong>Structure:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cortex-brain/plugins/
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>├── __init__.py
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>├── slack_integration/
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>│   ├── __init__.py
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>│   ├── plugin.py
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>│   └── config.yaml
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>└── jira_sync/
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    ├── __init__.py
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    ├── plugin.py
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    └── config.yaml
+</span></code></pre></div></p>
+<p><strong>Auto-loading:</strong>
+- Plugins discovered on startup
+- Configuration via <code>cortex.config.json</code>
+- Enable/disable per plugin</p>
+<p><strong>References:</strong>
+- Mermaid Diagram: <code>diagrams/mermaid/plugin-system.mmd</code>
+- DALL-E Prompt: <code>diagrams/prompts/05-plugin-system-prompt.md</code></p>
+<hr />
+<h2 id="memory-persistence">💾 Memory Persistence<a class="headerlink" href="#memory-persistence" title="Permanent link">&para;</a></h2>
+<h3 id="database-architecture">Database Architecture<a class="headerlink" href="#database-architecture" title="Permanent link">&para;</a></h3>
+<p><strong>Primary Storage:</strong> SQLite (Tier 1, Tier 2)<br />
+<strong>File Storage:</strong> YAML (Tier 3, Configuration)<br />
+<strong>Temporary Storage:</strong> In-memory (Active context)</p>
+<p><strong>Database Files:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cortex-brain/
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>├── tier1/
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>│   └── conversation-history.db    # Working memory
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>├── tier2/
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>│   └── knowledge-graph.db         # Pattern learning
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>└── tier3/
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    └── workspace-contexts/        # Long-term YAML files
+</span></code></pre></div>
+<h3 id="schema-evolution">Schema Evolution<a class="headerlink" href="#schema-evolution" title="Permanent link">&para;</a></h3>
+<p><strong>Migration System:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Migration tracking</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">schema_migrations</span> <span class="p">(</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">version</span> <span class="n">INTEGER</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">,</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">applied_at</span> <span class="n">DATETIME</span><span class="p">,</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">description</span> <span class="n">TEXT</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">);</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># Apply migrations</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">migrate_database</span><span class="p">():</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="n">current_version</span> <span class="o">=</span> <span class="n">get_schema_version</span><span class="p">()</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    <span class="n">target_version</span> <span class="o">=</span> <span class="n">LATEST_VERSION</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">get_pending_migrations</span><span class="p">():</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="n">apply_migration</span><span class="p">(</span><span class="n">migration</span><span class="p">)</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="n">update_schema_version</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+</span></code></pre></div></p>
+<h3 id="backup-recovery">Backup &amp; Recovery<a class="headerlink" href="#backup-recovery" title="Permanent link">&para;</a></h3>
+<p><strong>Automated Backups:</strong>
+- Daily backups to <code>cortex-brain/backups/</code>
+- Retention: 30 days
+- Compression: gzip</p>
+<p><strong>Export/Import:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Export all data</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>python<span class="w"> </span>scripts/export_brain.py<span class="w"> </span>--output<span class="o">=</span>brain-backup-2025-11-22.json
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Import data</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>python<span class="w"> </span>scripts/import_brain.py<span class="w"> </span>--input<span class="o">=</span>brain-backup-2025-11-22.json
+</span></code></pre></div></p>
+<p><strong>Disaster Recovery:</strong>
+1. Stop CORTEX
+2. Restore database files from backup
+3. Verify integrity: <code>python scripts/verify_brain.py</code>
+4. Restart CORTEX</p>
+<hr />
+<h2 id="security-architecture">🔐 Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="data-protection">Data Protection<a class="headerlink" href="#data-protection" title="Permanent link">&para;</a></h3>
+<p><strong>1. Sensitive Data Exclusion</strong>
+- API keys never stored in brain
+- Credentials excluded from conversations
+- PII detection and masking</p>
+<p><strong>2. Namespace Protection</strong>
+- CORTEX internals off-limits for learning
+- User workspace only for pattern extraction
+- No cross-workspace contamination</p>
+<p><strong>3. Access Control</strong>
+- Admin operations require explicit approval
+- User operations sandboxed
+- Plugin permissions configurable</p>
+<h3 id="owasp-integration">OWASP Integration<a class="headerlink" href="#owasp-integration" title="Permanent link">&para;</a></h3>
+<p><strong>Automated Security Review:</strong></p>
+<table>
+<thead>
+<tr>
+<th>OWASP Category</th>
+<th>CORTEX Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A01: Access Control</td>
+<td>Permission validation in planning</td>
+</tr>
+<tr>
+<td>A02: Cryptographic Failures</td>
+<td>Encryption requirements</td>
+</tr>
+<tr>
+<td>A03: Injection</td>
+<td>Input sanitization review</td>
+</tr>
+<tr>
+<td>A04: Insecure Design</td>
+<td>Architecture review</td>
+</tr>
+<tr>
+<td>A05: Security Misconfiguration</td>
+<td>Config validation</td>
+</tr>
+<tr>
+<td>A06: Vulnerable Components</td>
+<td>Dependency scanning</td>
+</tr>
+<tr>
+<td>A07: Authentication Failures</td>
+<td>Auth pattern review</td>
+</tr>
+<tr>
+<td>A08: Data Integrity Failures</td>
+<td>Integrity checks</td>
+</tr>
+<tr>
+<td>A09: Logging Failures</td>
+<td>Logging adequacy</td>
+</tr>
+<tr>
+<td>A10: SSRF</td>
+<td>Network boundary review</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Security Checklist:</strong>
+- Integrated into feature planning (DoR)
+- Enforced in code review agent
+- Tracked in implementation DoD</p>
+<hr />
+<h2 id="performance-characteristics">📊 Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<h3 id="response-time">Response Time<a class="headerlink" href="#response-time" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Target</th>
+<th>Typical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Context Injection</td>
+<td>&lt;100ms</td>
+<td>50ms</td>
+</tr>
+<tr>
+<td>Template Selection</td>
+<td>&lt;50ms</td>
+<td>25ms</td>
+</tr>
+<tr>
+<td>Agent Routing</td>
+<td>&lt;100ms</td>
+<td>75ms</td>
+</tr>
+<tr>
+<td>Knowledge Graph Query</td>
+<td>&lt;200ms</td>
+<td>150ms</td>
+</tr>
+<tr>
+<td>Full Response Generation</td>
+<td>&lt;500ms</td>
+<td>400ms</td>
+</tr>
+</tbody>
+</table>
+<h3 id="memory-usage">Memory Usage<a class="headerlink" href="#memory-usage" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>RAM Usage</th>
+<th>Disk Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tier 1 (SQLite)</td>
+<td>10MB</td>
+<td>50MB (1000 conversations)</td>
+</tr>
+<tr>
+<td>Tier 2 (Knowledge Graph)</td>
+<td>20MB</td>
+<td>100MB (large codebase)</td>
+</tr>
+<tr>
+<td>Tier 3 (YAML Files)</td>
+<td>5MB</td>
+<td>10MB (5 workspaces)</td>
+</tr>
+<tr>
+<td>Template System</td>
+<td>2MB</td>
+<td>1MB</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~40MB</strong></td>
+<td><strong>~160MB</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="scalability">Scalability<a class="headerlink" href="#scalability" title="Permanent link">&para;</a></h3>
+<p><strong>Conversation Storage:</strong>
+- Tested: 10,000 conversations
+- Performance: &lt;200ms queries
+- Cleanup: Auto-archive after 90 days</p>
+<p><strong>Knowledge Graph:</strong>
+- Tested: 50,000 entities
+- Performance: &lt;300ms traversal
+- Optimization: Index on confidence scores</p>
+<hr />
+<h2 id="deployment-architecture">🚀 Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="user-package-lightweight">User Package (Lightweight)<a class="headerlink" href="#user-package-lightweight" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>CORTEX-user-package/
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>├── .github/
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>│   ├── copilot-instructions.md    # Entry point setup
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>│   └── prompts/
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>│       └── CORTEX.prompt.md       # Main prompt
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>├── cortex-brain/
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>│   ├── response-templates.yaml
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>│   ├── operations-config.yaml
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>│   ├── tier1/ (empty - created on first run)
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>│   ├── tier2/ (empty - created on first run)
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>│   └── tier3/ (empty - created on first run)
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>├── scripts/
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>│   ├── setup_cortex.py
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>│   └── verify_setup.py
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>└── cortex.config.json
+</span></code></pre></div>
+<p><strong>Size:</strong> ~5MB (core only, no test/admin files)</p>
+<h3 id="admin-package-full">Admin Package (Full)<a class="headerlink" href="#admin-package-full" title="Permanent link">&para;</a></h3>
+<p><strong>Includes:</strong>
+- All user package contents
+- Test suites (834 tests)
+- Admin scripts (doc generator, sweeper, etc.)
+- Development tools
+- CI/CD configurations</p>
+<p><strong>Size:</strong> ~50MB (complete repository)</p>
+<hr />
+<h2 id="related-documentation">📖 Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="../CORTEX-VS-COPILOT/">CORTEX vs COPILOT</a></strong> - Why choose CORTEX</li>
+<li><strong><a href="../GETTING-STARTED/">Getting Started</a></strong> - Setup and onboarding</li>
+<li><strong><a href="../TECHNICAL-DOCUMENTATION/">Technical Documentation</a></strong> - API reference</li>
+<li><strong>[MkDocs Site]</strong> - Complete documentation portal</li>
+</ul>
+<hr />
+<p><strong>Author:</strong> Asif Hussain<br />
+<strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.<br />
+<strong>Version:</strong> 3.0<br />
+<strong>Last Updated:</strong> 2025-11-22<br />
+<strong>Repository:</strong> https://github.com/asifhussain60/CORTEX</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../search/main.js"></script>
+</body>
+</html>
