@@ -287,25 +287,50 @@ CORTEX will:
 
 ## 🔄 Upgrade CORTEX
 
-**Purpose:** Upgrade CORTEX to latest version while preserving brain data
+**Purpose:** Automated upgrade system that pulls release code, applies enhancements, and validates CORTEX integrity
 
 **Complete Guide:** #file:modules/upgrade-guide.md
 
 **Commands:**
+- `/cortex upgrade` - Full automated upgrade with validation
 - `upgrade` or `upgrade cortex` - Start upgrade process
 - `update cortex` - Check for updates and upgrade
 - `cortex version` - Show current version
 
-**Quick Upgrade (3 steps):**
+**Automated Upgrade Process:**
+
+When you run `/cortex upgrade`, CORTEX automatically:
+
+1. **Pulls Release Code** - Fetches latest stable release from GitHub
+2. **Applies Database Migrations** - Updates schema preserving all brain data
+3. **Runs Validation Tests** - Executes comprehensive test suite automatically
+4. **Verifies Brain Protection** - Ensures all 22 SKULL tests pass
+5. **Confirms Functionality** - Validates agents, workflows, and integrations
+
+**Validation Happens Automatically:**
+After applying enhancements, CORTEX runs `validate_issue3_phase4.py` which tests:
+- ✅ Brain protection (SKULL rules intact)
+- ✅ Database schema (all tables, indexes, views)
+- ✅ Agent functionality (FeedbackAgent, ViewDiscoveryAgent)
+- ✅ Workflow integration (TDD workflow end-to-end)
+- ✅ Configuration integrity (all configs valid)
+
+**Exit Codes:**
+- `0` - Upgrade successful, all tests passed ✅
+- `1` - Upgrade failed, tests failed ❌ (rollback recommended)
+- `2` - Critical failure, brain protection compromised 🚨
+
+**Manual Upgrade (Advanced Users):**
 ```bash
-# 1. Pull latest code
+# 1. Pull latest release code
 git pull origin CORTEX-3.0
 
-# 2. Apply migrations
+# 2. Apply database migrations
 python apply_element_mappings_schema.py
 
-# 3. Validate upgrade
-python validate_issue3_phase4.py
+# 3. Validation runs automatically after migrations
+# If validation passes: Upgrade complete ✅
+# If validation fails: Review errors and rollback ❌
 ```
 
 **What Gets Preserved:**
@@ -321,9 +346,19 @@ python validate_issue3_phase4.py
 - ✅ Performance improvements
 - ✅ New commands and capabilities
 
-**Rollback:** See upgrade-guide.md for rollback procedures if needed
+**Test Package Deployed:**
+All validation tests (~54 KB) are included in the CORTEX package to ensure:
+- Zero-trust validation on user machine
+- Brain protection verified post-upgrade
+- Immediate rollback if any test fails
+- 100% confidence CORTEX is functional
 
-**See Also:** Full upgrade instructions in `modules/upgrade-guide.md`
+**Rollback:** See upgrade-guide.md for rollback procedures if validation fails
+
+**See Also:** 
+- Full upgrade instructions: `modules/upgrade-guide.md`
+- Test manifest: `TEST-MANIFEST.md`
+- Validation details: `cortex-brain/documents/reports/ISSUE-3-PHASE-4-COMPLETE.md`
 
 ---
 
