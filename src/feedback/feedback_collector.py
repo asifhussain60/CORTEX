@@ -8,6 +8,7 @@ Safety Features:
 - Privacy Protection: Removes file paths, usernames, emails
 - Selective Collection: Only gathers non-sensitive metrics
 - Opt-In: User controls what data is collected
+- Automatic Gist Upload: Uploads feedback with user consent
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -16,7 +17,7 @@ License: Proprietary
 
 import hashlib
 import logging
-import platform
+import sys
 import re
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
@@ -24,6 +25,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 import json
+
+# Import platform from stdlib explicitly
+import importlib
+platform_module = importlib.import_module('platform')
 
 
 logger = logging.getLogger(__name__)
@@ -164,6 +169,7 @@ class FeedbackCollector:
         frequency: str = "once",
         workaround_exists: bool = False,
         tags: Optional[List[str]] = None,
+        auto_upload: bool = True,
     ) -> FeedbackItem:
         """
         Submit manual feedback.
@@ -176,6 +182,7 @@ class FeedbackCollector:
             frequency: How often it occurs
             workaround_exists: Is there a workaround?
             tags: Optional tags for categorization
+            auto_upload: Attempt automatic upload to Gist
         
         Returns:
             Created FeedbackItem
@@ -187,7 +194,7 @@ class FeedbackCollector:
             description=self._anonymize(description),
             timestamp=datetime.now().isoformat(),
             cortex_version=self._get_cortex_version(),
-            platform=platform.system(),
+            platform=platform_module.system(),
             frequency=frequency,
             workaround_exists=workaround_exists,
             environment_hash=self._get_environment_hash(),
@@ -199,6 +206,11 @@ class FeedbackCollector:
         self._save_feedback()
         
         logger.info(f"Feedback submitted: {title}")
+        
+        # Attempt automatic upload if enabled
+        if auto_upload:
+            self._upload_feedback_item(item)
+        
         return item
     
     def collect_error(
@@ -239,7 +251,7 @@ class FeedbackCollector:
             description=f"Error occurred during {operation}: {error_message}",
             timestamp=datetime.now().isoformat(),
             cortex_version=self._get_cortex_version(),
-            platform=platform.system(),
+            platform=platform_module.system(),
             error_message=error_message,
             stack_trace=stack_trace,
             operation_attempted=operation,
@@ -381,7 +393,7 @@ class FeedbackCollector:
             Hash of machine ID (not reversible)
         """
         # Create hash from platform info (not user-specific)
-        env_string = f"{platform.system()}_{platform.release()}_{platform.machine()}"
+        env_string = f"{platform_module.system()}_{platform_module.release()}_{platform_module.machine()}"
         return hashlib.sha256(env_string.encode()).hexdigest()[:16]
     
     def _get_cortex_version(self) -> str:
@@ -444,3 +456,64 @@ class FeedbackCollector:
             )
         except Exception as e:
             logger.error(f"Failed to save feedback: {e}")
+    
+    def _upload_feedback_item(self, item: FeedbackItem) -> None:
+        """
+        Upload single feedback item to GitHub Gist.
+        
+        Args:
+            item: FeedbackItem to upload
+        """
+        try:
+            # Import here to avoid circular dependency
+            from .gist_uploader import get_gist_uploader
+            from .github_formatter import GitHubIssueFormatter
+            
+            # Format as GitHub Issue
+            formatter = GitHubIssueFormatter()
+            issue = formatter.format_feedback_item(item, include_metadata=True)
+            
+            # Generate markdown report
+            report_content = f"# {issue.title}\n\n{issue.body}"
+            
+            # Generate filename
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            category = item.category.value
+            filename = f"cortex-feedback-{category}-{timestamp}.md"
+            
+            # Upload to Gist
+            uploader = get_gist_uploader()
+            result = uploader.upload_report(
+                report_content=report_content,
+                filename=filename,
+                description=f"CORTEX Feedback: {item.title}",
+                is_public=True,
+                auto_prompt=True
+            )
+            
+            # Handle result
+            from .gist_uploader import UploadStatus
+            
+            if result.status == UploadStatus.SUCCESS:
+                print(f"\n✅ Feedback uploaded to Gist: {result.gist_url}")
+                logger.info(f"Feedback uploaded: {result.gist_url}")
+            
+            elif result.status == UploadStatus.MANUAL:
+                print(f"\n{result.manual_instructions}")
+            
+            elif result.status == UploadStatus.NO_TOKEN:
+                print(f"\n{result.manual_instructions}")
+            
+            elif result.status == UploadStatus.DECLINED:
+                print("\n✅ Feedback saved locally (upload declined)")
+            
+            elif result.status == UploadStatus.FAILED:
+                print(f"\n⚠️  Upload failed: {result.error_message}")
+                if result.manual_instructions:
+                    print(f"\n{result.manual_instructions}")
+        
+        except Exception as e:
+            logger.error(f"Failed to upload feedback: {e}")
+            print(f"\n⚠️  Upload error: {e}")
+            print("\nFeedback saved locally. Please report manually at:")
+            print("https://github.com/asifhussain60/CORTEX/issues/new")

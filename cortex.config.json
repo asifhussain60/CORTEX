@@ -121,6 +121,12 @@
     "enforce_validation": true,
     "fail_on_critical_length": false
   },
+  "github": {
+    "comment": "GitHub Personal Access Token for automatic Gist upload",
+    "token": "",
+    "repository_owner": "asifhussain60",
+    "repository_name": "CORTEX"
+  },
   "plugins": {
     "cleanup_plugin": {
       "enabled": true,

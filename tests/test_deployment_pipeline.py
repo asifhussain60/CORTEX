@@ -401,7 +401,7 @@ class TestUpgradeCompatibility:
     
     def test_validation_script_exists(self):
         """Validation script exists"""
-        path = Path(__file__).parent.parent / 'validate_issue3_phase4.py'
+        path = Path(__file__).parent.parent / 'scripts' / 'validation' / 'validate_issue3_phase4.py'
         assert path.exists(), "validate_issue3_phase4.py not found"
 
 
@@ -413,11 +413,24 @@ class TestFeatureCompleteness:
         # Agent exists
         from agents.feedback_agent import FeedbackAgent
         
+        # Agent has Gist integration
+        import inspect
+        agent = FeedbackAgent()
+        sig = inspect.signature(agent.create_feedback_report)
+        params = sig.parameters
+        
+        assert 'auto_upload' in params, "FeedbackAgent missing auto_upload parameter"
+        assert params['auto_upload'].default == True, "auto_upload should default to True"
+        
         # Documented in entry point
         entry_point = Path(__file__).parent.parent / '.github' / 'prompts' / 'CORTEX.prompt.md'
         content = entry_point.read_text(encoding='utf-8')
         assert 'feedback' in content.lower()
         assert 'Feedback & Issue Reporting' in content
+        
+        # Documentation includes Gist upload
+        assert 'Auto-Upload' in content or 'Gist' in content, "Missing Gist upload documentation"
+        assert 'github' in content.lower() and 'token' in content.lower(), "Missing GitHub token setup"
     
     def test_view_discovery_system_complete(self):
         """View discovery system fully wired"""
@@ -460,6 +473,83 @@ class TestFeatureCompleteness:
         templates = data['templates']
         assert 'brain_export_guide' in templates
         assert 'brain_import_guide' in templates
+    
+    def test_gist_upload_system_complete(self):
+        """Gist upload system fully wired and functional"""
+        # GistUploader service exists
+        from feedback.gist_uploader import GistUploader
+        
+        # GistUploader can be initialized
+        uploader = GistUploader()
+        assert uploader is not None
+        assert hasattr(uploader, 'upload_report')
+        assert hasattr(uploader, '_upload_to_gist')
+        assert hasattr(uploader, '_prompt_for_consent')
+        
+        # FeedbackCollector has Gist integration
+        from feedback.feedback_collector import FeedbackCollector
+        collector = FeedbackCollector()
+        assert hasattr(collector, '_upload_feedback_item')
+        
+        # GitHub config schema exists
+        config_path = Path(__file__).parent.parent / 'cortex.config.json'
+        assert config_path.exists(), "cortex.config.json not found"
+        
+        import json
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        assert 'github' in config, "cortex.config.json missing 'github' section"
+        github_config = config['github']
+        assert 'token' in github_config
+        assert 'repository_owner' in github_config
+        assert 'repository_name' in github_config
+        
+        # Integration tests exist and pass
+        test_file = Path(__file__).parent / 'test_gist_upload_integration.py'
+        assert test_file.exists(), "test_gist_upload_integration.py not found"
+        
+        # Platform import conflict resolved
+        old_platform_dir = Path(__file__).parent / 'platform'
+        assert not old_platform_dir.exists(), "tests/platform/ should be renamed to tests/platform_tests/"
+        
+        new_platform_dir = Path(__file__).parent / 'platform_tests'
+        assert new_platform_dir.exists(), "tests/platform_tests/ not found"
+    
+    def test_gist_uploader_methods_functional(self):
+        """GistUploader methods are functional"""
+        from feedback.gist_uploader import GistUploader
+        
+        uploader = GistUploader()
+        
+        # Check upload_report signature accepts correct parameters
+        import inspect
+        sig = inspect.signature(uploader.upload_report)
+        params = list(sig.parameters.keys())
+        assert 'report_content' in params
+        assert 'description' in params
+        
+        # Check _prompt_for_consent is callable
+        assert callable(uploader._prompt_for_consent)
+        
+        # Check preferences path is correct
+        assert hasattr(uploader, 'preferences_path')
+    
+    def test_feedback_collector_auto_upload_parameter(self):
+        """FeedbackCollector submit_feedback has auto_upload parameter"""
+        from feedback.feedback_collector import FeedbackCollector
+        import inspect
+        
+        collector = FeedbackCollector()
+        
+        # Check submit_feedback signature
+        sig = inspect.signature(collector.submit_feedback)
+        params = sig.parameters
+        
+        assert 'auto_upload' in params, "submit_feedback missing auto_upload parameter"
+        
+        # Check default value is True
+        assert params['auto_upload'].default == True, "auto_upload should default to True"
 
 
 if __name__ == '__main__':

@@ -10,6 +10,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional
 import uuid
+import sys
+
+# Add src to path for FeedbackCollector import
+src_path = Path(__file__).parent.parent
+if str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
 
 
 class FeedbackAgent:
@@ -33,7 +39,8 @@ class FeedbackAgent:
         user_input: str, 
         feedback_type: str = "general",
         severity: str = "medium",
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        auto_upload: bool = True
     ) -> Dict[str, Any]:
         """
         Create structured feedback report in documents/reports/
@@ -43,6 +50,7 @@ class FeedbackAgent:
             feedback_type: Type of feedback (bug, gap, improvement, question)
             severity: Severity level (critical, high, medium, low)
             context: Optional context (files, conversation_id, etc.)
+            auto_upload: Automatically upload to GitHub Gist (default: True)
             
         Returns:
             Dictionary with report metadata and file path
@@ -71,6 +79,51 @@ class FeedbackAgent:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(report)
         
+        # Upload to Gist if requested
+        gist_url = None
+        if auto_upload:
+            try:
+                from feedback.feedback_collector import FeedbackCollector, FeedbackCategory, FeedbackPriority
+                
+                collector = FeedbackCollector()
+                
+                # Map severity to priority
+                priority_map = {
+                    "critical": FeedbackPriority.CRITICAL,
+                    "high": FeedbackPriority.HIGH,
+                    "medium": FeedbackPriority.MEDIUM,
+                    "low": FeedbackPriority.LOW
+                }
+                
+                # Map feedback type to category
+                category_map = {
+                    "bug": FeedbackCategory.BUG,
+                    "gap": FeedbackCategory.FEATURE_REQUEST,
+                    "improvement": FeedbackCategory.IMPROVEMENT,
+                    "question": FeedbackCategory.DOCUMENTATION
+                }
+                
+                priority = priority_map.get(severity, FeedbackPriority.MEDIUM)
+                category = category_map.get(feedback_type, FeedbackCategory.BUG)
+                
+                # Submit feedback with auto-upload
+                result = collector.submit_feedback(
+                    category=category,
+                    title=user_input[:100],  # First 100 chars as title
+                    description=user_input,
+                    priority=priority,
+                    context=context or {},
+                    auto_upload=True
+                )
+                
+                if result and hasattr(result, 'gist_url'):
+                    gist_url = result.gist_url
+                    
+            except Exception as e:
+                # Log error but don't fail - file still saved
+                print(f"⚠️  Could not upload to Gist: {e}")
+                print(f"📝 Feedback saved locally: {file_path}")
+        
         # Return confirmation
         return {
             "success": True,
@@ -78,7 +131,8 @@ class FeedbackAgent:
             "file_path": str(file_path),
             "feedback_type": feedback_type,
             "severity": severity,
-            "message": f"Feedback report created: {filename}"
+            "gist_url": gist_url,
+            "message": f"Feedback report created: {filename}" + (f" (Uploaded to Gist: {gist_url})" if gist_url else "")
         }
     
     def _detect_feedback_type(self, user_input: str) -> str:

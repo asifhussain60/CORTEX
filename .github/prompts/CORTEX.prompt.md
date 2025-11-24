@@ -233,22 +233,38 @@ CORTEX will:
 **How It Works:**
 1. **Collection:** CORTEX gathers anonymized usage data (errors, patterns, environment)
 2. **Report Generation:** Creates structured JSON/YAML report with categorization
-3. **GitHub Ready:** Formats as GitHub Issues with proper labels, priorities
-4. **Upload:** Save report to `cortex-brain/feedback/reports/` for manual GitHub upload
+3. **Auto-Upload:** Automatically uploads to GitHub Gist (with your consent)
+4. **GitHub Ready:** Formats as GitHub Issues with proper labels, priorities
+
+**Setup (One-Time):**
+1. Generate GitHub personal access token (Settings → Developer settings → Personal access tokens)
+2. Add to `cortex.config.json`:
+   ```json
+   {
+     "github": {
+       "token": "your_token_here",
+       "repository_owner": "asifhussain60",
+       "repository_name": "CORTEX"
+     }
+   }
+   ```
+3. First feedback upload will ask for consent (choose "always" for automatic uploads)
 
 **Privacy Protection:**
 - Automatically redacts file paths, emails, passwords, API keys
 - Environment identified by non-reversible hash
 - No personal data collected without explicit consent
+- User controls upload preferences (always/never/ask/manual)
 
 **Natural Language Examples:**
 - "I found a bug in the crawler"
 - "The planning system takes too long"
 - "Can you add support for TypeScript projects?"
 
-**Output Location:** `cortex-brain/feedback/reports/feedback_report_[timestamp].json`
-
-**Upload to GitHub:** Copy report content and create new issue at https://github.com/asifhussain60/CORTEX/issues/new
+**Output:**
+- Local: `cortex-brain/documents/reports/CORTEX-FEEDBACK-[timestamp].md`
+- GitHub Gist: Automatic upload with returned URL (if configured)
+- Manual fallback: Instructions provided if token not configured
 
 ---
 

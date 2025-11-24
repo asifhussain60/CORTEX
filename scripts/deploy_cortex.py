@@ -166,6 +166,11 @@ class CortexDeployer:
             ('Migration scripts present', self.check_migration_scripts),
             ('Rollback procedure documented', self.check_rollback_docs),
             ('.gitignore template present', self.check_gitignore_template),
+            ('Gist uploader service exists', self.check_gist_uploader_service),
+            ('Feedback collector Gist integration', self.check_feedback_gist_integration),
+            ('GitHub config schema present', self.check_github_config_schema),
+            ('Platform import conflict resolved', self.check_platform_import_resolved),
+            ('Gist upload integration tests', self.check_gist_upload_tests),
         ]
         
         all_passed = True
@@ -238,12 +243,20 @@ class CortexDeployer:
         # Verify key files exist in package
         required_package_files = [
             'src/',
+            'src/feedback/gist_uploader.py',
+            'src/feedback/feedback_collector.py',
+            'src/feedback/github_formatter.py',
             'cortex-brain/',
             '.github/prompts/CORTEX.prompt.md',
             'cortex-operations.yaml',
             'requirements.txt',
             'LICENSE',
             'README.md'
+        ]
+        
+        # Optional files (nice to have but not required for deployment)
+        optional_package_files = [
+            'tests/test_gist_upload_integration.py',
         ]
         
         print(f"\n  ✅ Validating package contents...")
@@ -255,6 +268,15 @@ class CortexDeployer:
             else:
                 print(f"    ❌ {item} - Missing in package")
                 missing_in_package.append(item)
+        
+        # Check optional files (warn but don't fail)
+        for item in optional_package_files:
+            package_path = output_dir / item
+            if package_path.exists():
+                print(f"    ✅ {item} (optional)")
+            else:
+                print(f"    ⚠️  {item} - Optional file not in package")
+                self.warnings.append(f"Optional file not in package: {item}")
         
         if missing_in_package:
             self.failures.extend([f"Missing in package: {item}" for item in missing_in_package])
@@ -355,6 +377,106 @@ class CortexDeployer:
             content = upgrade_guide.read_text(encoding='utf-8')
             return '.gitignore' in content.lower()
         return False
+    
+    def check_gist_uploader_service(self) -> bool:
+        """Check Gist uploader service exists"""
+        gist_uploader = self.root / 'src' / 'feedback' / 'gist_uploader.py'
+        if not gist_uploader.exists():
+            raise FileNotFoundError("src/feedback/gist_uploader.py not found")
+        
+        # Verify key classes/methods exist
+        content = gist_uploader.read_text(encoding='utf-8')
+        required_elements = [
+            'class GistUploader',
+            'def upload_report',
+            'def _upload_to_gist',
+            'def _prompt_for_consent',
+        ]
+        
+        missing = [elem for elem in required_elements if elem not in content]
+        if missing:
+            raise ValueError(f"GistUploader missing elements: {missing}")
+        
+        return True
+    
+    def check_feedback_gist_integration(self) -> bool:
+        """Check FeedbackCollector has Gist upload integration"""
+        feedback_collector = self.root / 'src' / 'feedback' / 'feedback_collector.py'
+        if not feedback_collector.exists():
+            raise FileNotFoundError("src/feedback/feedback_collector.py not found")
+        
+        content = feedback_collector.read_text(encoding='utf-8')
+        
+        # Check for Gist integration (either direct import or factory function)
+        required_elements = [
+            'gist_uploader',  # Module imported
+            'def _upload_feedback_item',  # Upload method exists
+            'auto_upload',  # Auto upload parameter
+        ]
+        
+        missing = [elem for elem in required_elements if elem not in content]
+        if missing:
+            raise ValueError(f"FeedbackCollector missing Gist integration: {missing}")
+        
+        return True
+    
+    def check_github_config_schema(self) -> bool:
+        """Check cortex.config.json has GitHub section"""
+        config_file = self.root / 'cortex.config.json'
+        if not config_file.exists():
+            raise FileNotFoundError("cortex.config.json not found")
+        
+        import json
+        with open(config_file, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        if 'github' not in config:
+            raise ValueError("cortex.config.json missing 'github' section")
+        
+        github_config = config['github']
+        required_keys = ['token', 'repository_owner', 'repository_name']
+        missing = [key for key in required_keys if key not in github_config]
+        
+        if missing:
+            raise ValueError(f"GitHub config missing keys: {missing}")
+        
+        return True
+    
+    def check_platform_import_resolved(self) -> bool:
+        """Check platform import conflict resolved (tests/platform/ renamed)"""
+        # Old conflicting directory should NOT exist
+        old_platform_dir = self.root / 'tests' / 'platform'
+        if old_platform_dir.exists():
+            raise ValueError("tests/platform/ still exists (should be renamed to tests/platform_tests/)")
+        
+        # New directory should exist
+        new_platform_dir = self.root / 'tests' / 'platform_tests'
+        if not new_platform_dir.exists():
+            raise FileNotFoundError("tests/platform_tests/ not found (renamed from tests/platform/)")
+        
+        return True
+    
+    def check_gist_upload_tests(self) -> bool:
+        """Check Gist upload integration tests exist"""
+        test_file = self.root / 'tests' / 'test_gist_upload_integration.py'
+        if not test_file.exists():
+            raise FileNotFoundError("tests/test_gist_upload_integration.py not found")
+        
+        content = test_file.read_text(encoding='utf-8')
+        
+        # Verify key test cases exist
+        required_tests = [
+            'def test_gist_uploader_initialization',
+            'def test_feedback_collector_integration',
+            'def test_preferences_management',
+            'def test_github_formatter_integration',
+        ]
+        
+        missing = [test for test in required_tests if test not in content]
+        if missing:
+            raise ValueError(f"Gist upload tests missing: {missing}")
+        
+        return True
     
     def print_summary(self) -> bool:
         """Print deployment summary"""
