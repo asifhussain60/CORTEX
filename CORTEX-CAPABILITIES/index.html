@@ -425,6 +425,38 @@
 </tr>
 </tbody>
 </table>
+<h3 id="analytics-feedback"><strong>Analytics &amp; Feedback</strong><a class="headerlink" href="#analytics-feedback" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Performance Analytics</strong></td>
+<td>✅ 100%</td>
+<td>8-category metrics collection (coverage, velocity, security, etc.)</td>
+</tr>
+<tr>
+<td><strong>Real-Time Dashboards</strong></td>
+<td>✅ 100%</td>
+<td>Chart.js visualizations, health scores (0-100), trend analysis</td>
+</tr>
+<tr>
+<td><strong>GitHub Gist Integration</strong></td>
+<td>✅ 100%</td>
+<td>Optional sharing via personal Gists, privacy-first (3 levels)</td>
+</tr>
+<tr>
+<td><strong>Cross-Project Aggregation</strong></td>
+<td>✅ 100%</td>
+<td>Admin review module, multi-repo trend analysis (admin-only)</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Legend:</strong><br />
 ✅ = Production Ready | 🟡 = Partial (enhancements planned) | ⏳ = Not implemented (roadmap)</p>
 <hr />
@@ -468,6 +500,168 @@
 - Pattern library for reusable solutions
 - Lessons learned from past projects</p>
 <hr />
+<h2 id="real-time-performance-analytics">📊 Real-Time Performance Analytics<a class="headerlink" href="#real-time-performance-analytics" title="Permanent link">&para;</a></h2>
+<p><strong>New in Version 3.0</strong> - Community-driven feedback and analytics system that tracks project health, shares insights, and aggregates cross-project trends.</p>
+<h3 id="how-it-works"><strong>How It Works</strong><a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<p><strong>For Users (Any Repository):</strong>
+1. Collect metrics: <code>feedback</code> or <code>report issue</code>
+2. Choose privacy level (full/medium/minimal)
+3. Optionally share via GitHub Gist
+4. View dashboards in MkDocs documentation</p>
+<p><strong>For CORTEX Admins (CORTEX Repo Only):</strong>
+1. Maintain Gist registry (<code>gist-sources.yaml</code>)
+2. Aggregate reports: <code>review feedback</code>
+3. Analyze trends across all projects
+4. Generate insights and improvements</p>
+<h3 id="8-metric-categories"><strong>8 Metric Categories</strong><a class="headerlink" href="#8-metric-categories" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Metrics Tracked</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Application Metrics</strong></td>
+<td>Project size, LOC, test coverage, tech stack</td>
+<td>Overall project health</td>
+</tr>
+<tr>
+<td><strong>Crawler Performance</strong></td>
+<td>Discovery success rate, file scanning efficiency</td>
+<td>CORTEX's understanding of your codebase</td>
+</tr>
+<tr>
+<td><strong>CORTEX Performance</strong></td>
+<td>Operation timings, brain DB sizes (Tier 1/2/3)</td>
+<td>System performance monitoring</td>
+</tr>
+<tr>
+<td><strong>Knowledge Graph</strong></td>
+<td>Entity count, relationship density</td>
+<td>Pattern learning effectiveness</td>
+</tr>
+<tr>
+<td><strong>Development Hygiene</strong></td>
+<td>Security vulnerabilities, clean commit rate</td>
+<td>Code quality indicators</td>
+</tr>
+<tr>
+<td><strong>TDD Mastery</strong></td>
+<td>Test coverage, test-first adherence</td>
+<td>Testing discipline</td>
+</tr>
+<tr>
+<td><strong>Commit Metrics</strong></td>
+<td>Build success rate, deployment frequency</td>
+<td>CI/CD health</td>
+</tr>
+<tr>
+<td><strong>Velocity Metrics</strong></td>
+<td>Sprint velocity, cycle time</td>
+<td>Development speed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="privacy-protection-3-levels"><strong>Privacy Protection (3 Levels)</strong><a class="headerlink" href="#privacy-protection-3-levels" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>What's Kept</th>
+<th>What's Removed</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Full</strong></td>
+<td>All metrics, paths, names</td>
+<td>Passwords, API keys, tokens</td>
+<td>Internal use, trusted teams</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>Metrics, project structure</td>
+<td>Emails, usernames, personal info, paths</td>
+<td>Team sharing</td>
+</tr>
+<tr>
+<td><strong>Minimal</strong></td>
+<td>Only metrics (no identifying info)</td>
+<td>All paths, names, personal data</td>
+<td>Public sharing, GitHub Issues</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Collect with minimal privacy for public sharing</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>feedback<span class="w"> </span>minimal<span class="w"> </span>privacy<span class="w"> </span>upload<span class="w"> </span>to<span class="w"> </span>gist
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Share URL with CORTEX project</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>https://gist.github.com/username/abc123
+</span></code></pre></div></p>
+<h3 id="real-live-data-dashboards"><strong>Real Live Data Dashboards</strong><a class="headerlink" href="#real-live-data-dashboards" title="Permanent link">&para;</a></h3>
+<p><strong>Conditional Navigation:</strong> "Real Live Data" menu appears in MkDocs ONLY if analytics data exists.</p>
+<p><strong>Per-Application Dashboards:</strong>
+- 🎯 Health Score (0-100) with color coding
+- 📊 Key Metrics Cards (coverage, build success, velocity, security)
+- 📈 Trends Chart (Chart.js interactive visualization)
+- ⚠️ Critical Issues Table with severity levels</p>
+<p><strong>Aggregate Dashboard:</strong>
+- 📊 Health Score Comparison (all projects)
+- 📋 Application Summary Table
+- 🌐 Cross-project statistics</p>
+<p><strong>Health Score Formula (Weighted 0-100):</strong>
+- Test Coverage: 25% weight
+- Build Success Rate: 20% weight
+- Crawler Success: 15% weight
+- Security (vulnerability count): 15% weight
+- Sprint Velocity: 15% weight
+- Knowledge Graph Density: 10% weight</p>
+<p><strong>Color Coding:</strong>
+- 🟢 Green: ≥80 (excellent)
+- 🟡 Yellow: 60-79 (good)
+- 🔴 Red: &lt;60 (needs improvement)</p>
+<h3 id="database-architecture"><strong>Database Architecture</strong><a class="headerlink" href="#database-architecture" title="Permanent link">&para;</a></h3>
+<p><strong>Per-Application Databases:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cortex-brain/analytics/per-app/
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── MyWebApp/metrics.db
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── MobileApp/metrics.db
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>└── ...
+</span></code></pre></div></p>
+<p><strong>Aggregate Database (Admin Only):</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cortex-brain/analytics/aggregate/
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>└── cross-app-metrics.db
+</span></code></pre></div></p>
+<p><strong>Schema (11 Tables):</strong>
+1. feedback_reports - Master registry with SHA256 deduplication
+2-9. Metric tables (8 categories)
+10. trend_analysis - Metric trends over time
+11. issues_reported - Categorized by severity</p>
+<p><strong>3 Views:</strong>
+- <code>latest_metrics</code> - Most recent per app
+- <code>critical_issues_summary</code> - Unresolved critical issues
+- <code>application_health_scores</code> - Weighted 0-100 scores</p>
+<h3 id="commands"><strong>Commands</strong><a class="headerlink" href="#commands" title="Permanent link">&para;</a></h3>
+<p><strong>User Commands:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>feedback<span class="w">                          </span><span class="c1"># Collect metrics (local only)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>feedback<span class="w"> </span>upload<span class="w"> </span>to<span class="w"> </span>gist<span class="w">           </span><span class="c1"># Collect + upload to Gist</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>feedback<span class="w"> </span>minimal<span class="w"> </span>privacy<span class="w">          </span><span class="c1"># Public-safe sharing</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>report<span class="w"> </span>issue<span class="w">                      </span><span class="c1"># Alias for feedback</span>
+</span></code></pre></div></p>
+<p><strong>Admin Commands (CORTEX Repo Only):</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>review<span class="w"> </span>feedback<span class="w">                   </span><span class="c1"># Aggregate all Gist reports</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>feedback<span class="w"> </span>review<span class="w">                   </span><span class="c1"># Alias</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>analyze<span class="w"> </span>user<span class="w"> </span>feedback<span class="w">             </span><span class="c1"># Alias</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>show<span class="w"> </span>feedback<span class="w"> </span>reports<span class="w">             </span><span class="c1"># Alias</span>
+</span></code></pre></div></p>
+<p><strong>Documentation:</strong>
+- User Guide: <code>cortex-brain/documents/implementation-guides/user-feedback-guide.md</code>
+- Admin Guide: <code>cortex-brain/documents/implementation-guides/admin-feedback-guide.md</code></p>
+<hr />
 <h2 id="architecture-overview">🏗️ Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>graph TB
     User[User Request] --&gt; IntentDetector[Intent Detector]
@@ -510,24 +704,24 @@
 <ol>
 <li>
 <p><strong>Clone Repository:</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/asifhussain60/CORTEX.git
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>CORTEX
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/asifhussain60/CORTEX.git
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">cd</span><span class="w"> </span>CORTEX
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Install Dependencies:</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Configure:</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cp<span class="w"> </span>cortex.config.template.json<span class="w"> </span>cortex.config.json
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Edit cortex.config.json with your settings</span>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cp<span class="w"> </span>cortex.config.template.json<span class="w"> </span>cortex.config.json
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># Edit cortex.config.json with your settings</span>
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Verify Installation:</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-v
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-v
 </span></code></pre></div></p>
 </li>
 </ol>
@@ -535,14 +729,14 @@
 <ol>
 <li>
 <p><strong>Enable Conversation Tracking</strong> (optional but recommended):
-   <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>setup cortex tracking
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>setup cortex tracking
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Try Natural Language Commands:</strong>
-   <div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>help
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>show me what cortex can do
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>plan a feature for user authentication
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>help
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>show me what cortex can do
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>plan a feature for user authentication
 </span></code></pre></div></p>
 </li>
 <li>
