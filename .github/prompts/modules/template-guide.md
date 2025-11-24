@@ -26,29 +26,55 @@
 Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:**
-   You want administrative-level help including internal documentation generation component triggers.
+   You want administrative-level help for CORTEX development and deployment operations.
 
 ⚠️ **Challenge:** ✓ **Accept**
-   Admin operations expose internal generators not shown to general users. Use responsibly; they mutate documentation artifacts directly.
+   Admin operations manage CORTEX itself - deployment, documentation, and internal tools. These are only available in CORTEX development repository.
 
 💬 **Response:**
-   Below are natural language triggers reserved for admin usage along with their effects.
+   **CORTEX Admin Operations** (Development Repository Only)
 
-   | Trigger | Purpose | Component | Notes |
-   | generate diagrams | Build/refresh architecture & workflow diagrams | diagrams | Uses centralized config YAMLs |
-   | generate mkdocs | Recreate mkdocs.yml & navigation pages | mkdocs | Overwrites nav sections |
-   | generate feature list | Produce capabilities & modules reference set | feature_list | Writes FEATURES.md & related refs |
-   | generate executive summary | Create high-level project summary page | executive_summary | Implemented - Writes EXECUTIVE-SUMMARY.md |
-   | publish docs | Build & publish MkDocs site to GitHub Pages | publish | Implemented - Requires mkdocs installed |
-   | generate documentation | Run full pipeline (all components) | all | Aggregates results table |
-   | refresh docs | Alias for generate documentation | all | Safe regeneration |
+   **🚀 Deployment Operations**
+   | Trigger | Purpose | Notes |
+   |---------|---------|-----|
+   | deploy cortex | Build clean production package | Creates downloadable CORTEX release |
+   | deploy production | Same as deploy cortex | Publishes to cortex-publish branch |
+   | create production build | Preview/dry-run deployment | Use for validation before release |
 
-📝 **Your Request:** Show administrative documentation commands
+   **📚 Documentation Operations**
+   | Trigger | Purpose | Notes |
+   |---------|---------|-----|
+   | generate docs | Build MkDocs documentation | Runs Enterprise Documentation Orchestrator |
+   | build documentation | Same as generate docs | Creates diagrams, guides, API refs |
+   | generate mkdocs | Generate MkDocs site | Full documentation pipeline |
+   | refresh documentation | Regenerate all docs | Safe regeneration with validation |
+
+   **🔧 Development Operations**
+   | Trigger | Purpose | Notes |
+   |---------|---------|-----|
+   | regenerate diagrams | Rebuild architecture diagrams | Uses centralized YAML configs |
+   | design sync | Sync design documentation | Maintains design consistency |
+   | cleanup | Clean development artifacts | Safe cleanup with validation |
+
+   **📊 All User Operations** (also available to admins)
+   - Feature Planning (`plan feature`)
+   - TDD Workflow (`discover views`, test generation)
+   - View Discovery (`discover views in project`)
+   - Feedback System (`feedback`, `report issue`)
+   - System Optimization (`optimize cortex`)
+   - Health Check (`healthcheck`, `system status`)
+   - Conversation Management (`resume conversation`)
+   - Upgrade System (`upgrade cortex`)
+
+   **Access Control:** Admin operations only route in CORTEX development repository (detects cortex-brain/admin/). User operations work in all repositories.
+
+📝 **Your Request:** Show all admin operations for CORTEX development
 
 🔍 **Next Steps:**
-   1. Choose specific generator or run full pipeline
-   2. Review generated artifacts
-   3. Commit changes to repository
+   1. Use deployment operations to create production releases
+   2. Use documentation operations to rebuild docs/diagrams
+   3. Run validation tests after major changes
+   4. Check SKULL tests pass before deployment
 ```
 
 ---

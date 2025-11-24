@@ -117,11 +117,16 @@ CORTEX will:
 
 # 📚 Documentation & Help
 
-**Quick commands:** `help` shows available commands | `what can cortex do` shows capabilities
+**Quick commands:** `help` shows available commands | `what can cortex do` shows capabilities  
+**Admin commands:** `admin help` shows admin operations (deployment, docs generation) - **CORTEX repo only**
 
 **Modules:** All detailed documentation extracted to separate guide files  
 **Plugin system:** Extensible architecture for custom agents and workflows  
 **Platform:** Auto-detects Mac/Windows/Linux on startup (`setup environment` for manual config)
+
+**Context Detection:**
+- In CORTEX development repository (has `cortex-brain/admin/`): Shows admin operations (`deploy cortex`, `generate docs`)
+- In user repositories: Shows only user-facing operations (planning, TDD, crawlers, etc.)
 
 ---
 

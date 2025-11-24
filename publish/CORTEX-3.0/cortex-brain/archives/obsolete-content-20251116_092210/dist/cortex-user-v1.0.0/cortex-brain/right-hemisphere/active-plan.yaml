@@ -1,0 +1,347 @@
+# Right Hemisphere - Active Strategic Plan
+# Purpose: Current multi-phase plan with pattern matching and risk assessment
+#
+# Format: YAML
+# Updated by: work-planner.md
+# Read by: code-executor.md, session-resumer.md
+#
+# Schema:
+# session_id: "string"
+# feature_name: "string"
+# created_at: "ISO-8601"
+# updated_at: "ISO-8601"
+# matched_patterns: []
+# estimated_effort_hours: float
+# risk_assessment:
+#   hotspot_files: []
+#   complexity_score: float
+# phases:
+#   - id: "string"
+#     name: "string"
+#     tasks: []
+#     status: "not-started|in-progress|complete"
+
+# Active Plan: Week 2 - Left Brain TDD Automation
+session_id: "20251104-week2-tdd-automation"
+feature_name: "Implement Left Brain TDD Automation (RED→GREEN→REFACTOR)"
+created_at: "2025-11-04T00:00:00Z"
+updated_at: "2025-11-04T00:00:00Z"
+matched_patterns: []  # Week 1: No pattern matching yet (Week 3 feature)
+estimated_effort_hours: 0  # Week 1: No historical estimation yet (Week 3 feature)
+risk_assessment:
+  hotspot_files:
+    - "KDS/prompts/internal/code-executor.md"
+    - "KDS/prompts/internal/test-generator.md"
+  complexity_score: 7.5  # High complexity: Core TDD automation
+phases:
+  - id: "phase-0"
+    name: "Test Infrastructure for TDD Automation"
+    description: "Create validation tests for TDD cycle before implementing automation"
+    status: "not-started"
+    tasks:
+      - id: "0.1"
+        description: "Create Week 2 validation test suite"
+        files:
+          - "KDS/tests/v6-progressive/week2-validation.ps1"
+        tests:
+          - "Test RED phase automation"
+          - "Test GREEN phase automation"
+          - "Test REFACTOR phase automation"
+          - "Test rollback on failure"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "0.2"
+        description: "Create test fixtures for TDD cycle validation"
+        files:
+          - "KDS/tests/fixtures/sample-feature.yaml"
+          - "KDS/tests/fixtures/sample-tests.ps1"
+        tests:
+          - "Fixture schema validation"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "0.3"
+        description: "Define TDD cycle execution state schema"
+        files:
+          - "KDS/kds-brain/left-hemisphere/schemas/tdd-execution-state.schema.json"
+        tests:
+          - "Schema validation test"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-1"
+    name: "RED Phase Automation"
+    description: "Automate test creation before code implementation"
+    status: "not-started"
+    tasks:
+      - id: "1.1"
+        description: "Create test creation automation script"
+        files:
+          - "KDS/scripts/left-brain/create-tests.ps1"
+        tests:
+          - "KDS/tests/v6-progressive/week2-validation.ps1::Test-RedPhaseAutomation"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "1.2"
+        description: "Update test-generator.md with RED phase logging"
+        files:
+          - "KDS/prompts/internal/test-generator.md"
+        tests:
+          - "Verify RED phase logged to execution-state.jsonl"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "1.3"
+        description: "Implement test execution framework"
+        files:
+          - "KDS/scripts/left-brain/execute-tests.ps1"
+        tests:
+          - "Test execution captures results"
+          - "Test failures properly reported"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "1.4"
+        description: "Verify tests FAIL initially (RED phase)"
+        files:
+          - "KDS/scripts/left-brain/verify-red-phase.ps1"
+        tests:
+          - "RED phase validation test"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-2"
+    name: "GREEN Phase Automation"
+    description: "Automate code implementation to make tests pass"
+    status: "not-started"
+    tasks:
+      - id: "2.1"
+        description: "Create code implementation automation script"
+        files:
+          - "KDS/scripts/left-brain/implement-code.ps1"
+        tests:
+          - "KDS/tests/v6-progressive/week2-validation.ps1::Test-GreenPhaseAutomation"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "2.2"
+        description: "Update code-executor.md with GREEN phase logging"
+        files:
+          - "KDS/prompts/internal/code-executor.md"
+        tests:
+          - "Verify GREEN phase logged to execution-state.jsonl"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "2.3"
+        description: "Implement automatic test re-execution after code changes"
+        files:
+          - "KDS/scripts/left-brain/auto-test-runner.ps1"
+        tests:
+          - "Auto-rerun validates GREEN phase"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "2.4"
+        description: "Verify tests PASS after implementation (GREEN phase)"
+        files:
+          - "KDS/scripts/left-brain/verify-green-phase.ps1"
+        tests:
+          - "GREEN phase validation test"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-3"
+    name: "REFACTOR Phase Automation"
+    description: "Automate code optimization while maintaining test coverage"
+    status: "not-started"
+    tasks:
+      - id: "3.1"
+        description: "Create refactoring automation script"
+        files:
+          - "KDS/scripts/left-brain/refactor-code.ps1"
+        tests:
+          - "KDS/tests/v6-progressive/week2-validation.ps1::Test-RefactorPhaseAutomation"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "3.2"
+        description: "Implement code quality checks for refactoring"
+        files:
+          - "KDS/scripts/left-brain/quality-checks.ps1"
+        tests:
+          - "Quality improvements detected"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "3.3"
+        description: "Ensure tests still pass during refactoring"
+        files:
+          - "KDS/scripts/left-brain/verify-refactor-safety.ps1"
+        tests:
+          - "Tests remain green during refactor"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "3.4"
+        description: "Update code-executor.md with REFACTOR phase logging"
+        files:
+          - "KDS/prompts/internal/code-executor.md"
+        tests:
+          - "Verify REFACTOR phase logged to execution-state.jsonl"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-4"
+    name: "Validation & Rollback System"
+    description: "Automate validation and rollback on test failures"
+    status: "not-started"
+    tasks:
+      - id: "4.1"
+        description: "Create validation automation script"
+        files:
+          - "KDS/scripts/left-brain/validate-implementation.ps1"
+        tests:
+          - "Validation detects broken tests"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "4.2"
+        description: "Implement Git-based rollback mechanism"
+        files:
+          - "KDS/scripts/left-brain/rollback-changes.ps1"
+        tests:
+          - "KDS/tests/v6-progressive/week2-validation.ps1::Test-RollbackOnFailure"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "4.3"
+        description: "Create rollback point tracking in execution state"
+        files:
+          - "KDS/kds-brain/left-hemisphere/execution-state.jsonl"
+        tests:
+          - "Rollback points properly logged"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "4.4"
+        description: "Update code-executor.md with rollback integration"
+        files:
+          - "KDS/prompts/internal/code-executor.md"
+        tests:
+          - "Failed tests trigger automatic rollback"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-5"
+    name: "Full TDD Cycle Integration"
+    description: "Integrate RED→GREEN→REFACTOR into code-executor.md workflow"
+    status: "not-started"
+    tasks:
+      - id: "5.1"
+        description: "Create orchestrator script for full TDD cycle"
+        files:
+          - "KDS/scripts/left-brain/run-tdd-cycle.ps1"
+        tests:
+          - "KDS/tests/v6-progressive/week2-validation.ps1::Test-FullTDDCycle"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "5.2"
+        description: "Update code-executor.md with TDD cycle workflow"
+        files:
+          - "KDS/prompts/internal/code-executor.md"
+        tests:
+          - "code-executor invokes full TDD cycle automatically"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "5.3"
+        description: "Add coordination messages to right hemisphere"
+        files:
+          - "KDS/scripts/corpus-callosum/send-message.ps1"
+        tests:
+          - "LEFT→RIGHT messages on TDD completion"
+        rules:
+          - "Week 1 coordination protocol"
+        status: "not-started"
+      
+      - id: "5.4"
+        description: "Create comprehensive execution state logging"
+        files:
+          - "KDS/kds-brain/left-hemisphere/execution-state.jsonl"
+        tests:
+          - "All TDD phases logged"
+          - "Execution metrics captured"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+  
+  - id: "phase-6"
+    name: "Week 2 Validation & Documentation"
+    description: "Validate Week 2 capabilities and prepare for Week 3"
+    status: "not-started"
+    tasks:
+      - id: "6.1"
+        description: "Run complete Week 2 validation test suite"
+        files:
+          - "KDS/tests/v6-progressive/week2-validation.ps1"
+        tests:
+          - "All 25+ Week 2 tests passing"
+        rules:
+          - "Rule #8 (Test-First)"
+        status: "not-started"
+      
+      - id: "6.2"
+        description: "Generate Week 2 completion report"
+        files:
+          - "KDS/KDS-V6-WEEK2-COMPLETE.md"
+        tests:
+          - "Report documents all capabilities"
+        rules:
+          - "Documentation standards"
+        status: "not-started"
+      
+      - id: "6.3"
+        description: "Validate brain can implement Week 3 using TDD automation"
+        files:
+          - "KDS/tests/e2e/week2-to-week3-handoff.ps1"
+        tests:
+          - "Brain uses TDD automation for Week 3 planning"
+        rules:
+          - "Progressive intelligence validation"
+        status: "not-started"
+      
+      - id: "6.4"
+        description: "Update KDS documentation with Week 2 capabilities"
+        files:
+          - "KDS/prompts/user/kds.md"
+          - "KDS/KDS-V6-QUICK-START.md"
+        tests:
+          - "Documentation reflects TDD automation"
+        rules:
+          - "Documentation standards"
+        status: "not-started"

@@ -78,6 +78,15 @@ No slash commands or syntax to memorize. Just tell CORTEX what you need:
 | **Feature Planning** | ✅ 100% | Interactive planning workflow, vision API (screenshots), file-based artifacts |
 | **ADO Integration** | ✅ 90% | Work item templates, DoR/DoD/AC generation |
 
+### **Analytics & Feedback**
+
+| Capability | Status | Description |
+|------------|--------|-------------|
+| **Performance Analytics** | ✅ 100% | 8-category metrics collection (coverage, velocity, security, etc.) |
+| **Real-Time Dashboards** | ✅ 100% | Chart.js visualizations, health scores (0-100), trend analysis |
+| **GitHub Gist Integration** | ✅ 100% | Optional sharing via personal Gists, privacy-first (3 levels) |
+| **Cross-Project Aggregation** | ✅ 100% | Admin review module, multi-repo trend analysis (admin-only) |
+
 
 **Legend:**  
 ✅ = Production Ready | 🟡 = Partial (enhancements planned) | ⏳ = Not implemented (roadmap)
@@ -133,6 +142,133 @@ Based on your previous JWT setup, here's how to add refresh...
 - Historical archive for trend analysis
 - Pattern library for reusable solutions
 - Lessons learned from past projects
+
+---
+
+## 📊 Real-Time Performance Analytics
+
+**New in Version 3.0** - Community-driven feedback and analytics system that tracks project health, shares insights, and aggregates cross-project trends.
+
+### **How It Works**
+
+**For Users (Any Repository):**
+1. Collect metrics: `feedback` or `report issue`
+2. Choose privacy level (full/medium/minimal)
+3. Optionally share via GitHub Gist
+4. View dashboards in MkDocs documentation
+
+**For CORTEX Admins (CORTEX Repo Only):**
+1. Maintain Gist registry (`gist-sources.yaml`)
+2. Aggregate reports: `review feedback`
+3. Analyze trends across all projects
+4. Generate insights and improvements
+
+### **8 Metric Categories**
+
+| Category | Metrics Tracked | Purpose |
+|----------|----------------|---------|
+| **Application Metrics** | Project size, LOC, test coverage, tech stack | Overall project health |
+| **Crawler Performance** | Discovery success rate, file scanning efficiency | CORTEX's understanding of your codebase |
+| **CORTEX Performance** | Operation timings, brain DB sizes (Tier 1/2/3) | System performance monitoring |
+| **Knowledge Graph** | Entity count, relationship density | Pattern learning effectiveness |
+| **Development Hygiene** | Security vulnerabilities, clean commit rate | Code quality indicators |
+| **TDD Mastery** | Test coverage, test-first adherence | Testing discipline |
+| **Commit Metrics** | Build success rate, deployment frequency | CI/CD health |
+| **Velocity Metrics** | Sprint velocity, cycle time | Development speed |
+
+### **Privacy Protection (3 Levels)**
+
+| Level | What's Kept | What's Removed | Best For |
+|-------|-------------|----------------|----------|
+| **Full** | All metrics, paths, names | Passwords, API keys, tokens | Internal use, trusted teams |
+| **Medium** | Metrics, project structure | Emails, usernames, personal info, paths | Team sharing |
+| **Minimal** | Only metrics (no identifying info) | All paths, names, personal data | Public sharing, GitHub Issues |
+
+**Example:**
+```bash
+# Collect with minimal privacy for public sharing
+feedback minimal privacy upload to gist
+
+# Share URL with CORTEX project
+https://gist.github.com/username/abc123
+```
+
+### **Real Live Data Dashboards**
+
+**Conditional Navigation:** "Real Live Data" menu appears in MkDocs ONLY if analytics data exists.
+
+**Per-Application Dashboards:**
+- 🎯 Health Score (0-100) with color coding
+- 📊 Key Metrics Cards (coverage, build success, velocity, security)
+- 📈 Trends Chart (Chart.js interactive visualization)
+- ⚠️ Critical Issues Table with severity levels
+
+**Aggregate Dashboard:**
+- 📊 Health Score Comparison (all projects)
+- 📋 Application Summary Table
+- 🌐 Cross-project statistics
+
+**Health Score Formula (Weighted 0-100):**
+- Test Coverage: 25% weight
+- Build Success Rate: 20% weight
+- Crawler Success: 15% weight
+- Security (vulnerability count): 15% weight
+- Sprint Velocity: 15% weight
+- Knowledge Graph Density: 10% weight
+
+**Color Coding:**
+- 🟢 Green: ≥80 (excellent)
+- 🟡 Yellow: 60-79 (good)
+- 🔴 Red: <60 (needs improvement)
+
+### **Database Architecture**
+
+**Per-Application Databases:**
+```
+cortex-brain/analytics/per-app/
+├── MyWebApp/metrics.db
+├── MobileApp/metrics.db
+└── ...
+```
+
+**Aggregate Database (Admin Only):**
+```
+cortex-brain/analytics/aggregate/
+└── cross-app-metrics.db
+```
+
+**Schema (11 Tables):**
+1. feedback_reports - Master registry with SHA256 deduplication
+2-9. Metric tables (8 categories)
+10. trend_analysis - Metric trends over time
+11. issues_reported - Categorized by severity
+
+**3 Views:**
+- `latest_metrics` - Most recent per app
+- `critical_issues_summary` - Unresolved critical issues
+- `application_health_scores` - Weighted 0-100 scores
+
+### **Commands**
+
+**User Commands:**
+```bash
+feedback                          # Collect metrics (local only)
+feedback upload to gist           # Collect + upload to Gist
+feedback minimal privacy          # Public-safe sharing
+report issue                      # Alias for feedback
+```
+
+**Admin Commands (CORTEX Repo Only):**
+```bash
+review feedback                   # Aggregate all Gist reports
+feedback review                   # Alias
+analyze user feedback             # Alias
+show feedback reports             # Alias
+```
+
+**Documentation:**
+- User Guide: `cortex-brain/documents/implementation-guides/user-feedback-guide.md`
+- Admin Guide: `cortex-brain/documents/implementation-guides/admin-feedback-guide.md`
 
 ---
 

@@ -1,0 +1,267 @@
+# Page Definitions Configuration
+# Defines all documentation pages to be generated for CORTEX 3.0
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+version: "1.0"
+description: "Page generation definitions for CORTEX 3.0"
+
+pages:
+  # Getting Started Pages
+  - name: "Quick Start Guide"
+    template: "quick-start.md.j2"
+    output_path: getting-started/quick-start.md
+    data_sources:
+      - cortex_config
+      - readme
+      - operations_config
+    priority: high
+  
+  - name: "Installation Guide"
+    template: "installation.md.j2"
+    output_path: getting-started/installation.md
+    data_sources:
+      - setup_py
+      - package_json
+      - readme
+    priority: high
+  
+  - name: "Configuration Guide"
+    template: "configuration.md.j2"
+    output_path: getting-started/configuration.md
+    data_sources:
+      - cortex_config
+      - mkdocs_config
+    priority: high
+  
+  # Architecture Pages
+  - name: "Architecture Overview"
+    template: "architecture-overview.md.j2"
+    output_path: architecture/overview.md
+    data_sources:
+      - capabilities
+      - module_definitions
+      - development_context
+    priority: high
+  
+  - name: "Tier System"
+    template: "tier-system.md.j2"
+    output_path: architecture/tier-system.md
+    data_sources:
+      - capabilities
+      - module_definitions
+    priority: high
+  
+  - name: "Agent Architecture"
+    template: "agent-architecture.md.j2"
+    output_path: architecture/agents.md
+    data_sources:
+      - capabilities
+      - operations_config
+      - agents
+    priority: high
+  
+  - name: "Brain Protection"
+    template: "brain-protection.md.j2"
+    output_path: architecture/brain-protection.md
+    data_sources:
+      - module_definitions
+      - operations_config
+    priority: medium
+  
+  # Operations Pages
+  - name: "Operations Overview"
+    template: "operations-overview.md.j2"
+    output_path: operations/overview.md
+    data_sources:
+      - operations_config
+      - response_templates
+    priority: high
+  
+  - name: "Entry Point Modules"
+    template: "epm-guide.md.j2"
+    output_path: operations/entry-point-modules.md
+    data_sources:
+      - epm_modules
+      - operations_config
+    priority: high
+  
+  - name: "Workflow Management"
+    template: "workflow-management.md.j2"
+    output_path: operations/workflows.md
+    data_sources:
+      - operations_config
+      - lessons_learned
+    priority: medium
+  
+  - name: "Health Monitoring"
+    template: "health-monitoring.md.j2"
+    output_path: operations/health-monitoring.md
+    data_sources:
+      - operations_config
+      - module_definitions
+    priority: medium
+  
+  # Plugin/Extension Pages
+  - name: "VS Code Extension"
+    template: "vscode-extension.md.j2"
+    output_path: plugins/vscode-extension.md
+    data_sources:
+      - package_json
+      - development_context
+    priority: medium
+  
+  - name: "Extension Development"
+    template: "extension-development.md.j2"
+    output_path: plugins/development.md
+    data_sources:
+      - package_json
+      - development_context
+    priority: low
+  
+  # Reference Pages
+  - name: "API Reference"
+    template: "api-reference.md.j2"
+    output_path: reference/api.md
+    data_sources:
+      - epm_modules
+      - agents
+      - utilities
+    priority: medium
+  
+  - name: "Configuration Reference"
+    template: "config-reference.md.j2"
+    output_path: reference/configuration.md
+    data_sources:
+      - cortex_config
+      - operations_config
+    priority: medium
+  
+  - name: "Response Templates Reference"
+    template: "response-templates-ref.md.j2"
+    output_path: reference/response-templates.md
+    data_sources: []
+    priority: low
+  
+  # Guide Pages
+  - name: "Admin Guide"
+    template: "admin-guide.md.j2"
+    output_path: guides/admin-guide.md
+    data_sources:
+      - operations_config
+      - epm_modules
+      - lessons_learned
+    priority: high
+  
+  - name: "Developer Guide"
+    template: "developer-guide.md.j2"
+    output_path: guides/developer-guide.md
+    data_sources:
+      - development_context
+      - module_definitions
+      - tests
+    priority: high
+  
+  - name: "Troubleshooting Guide"
+    template: "troubleshooting.md.j2"
+    output_path: guides/troubleshooting.md
+    data_sources:
+      - lessons_learned
+      - operations_config
+    priority: medium
+  
+  - name: "Best Practices"
+    template: "best-practices.md.j2"
+    output_path: guides/best-practices.md
+    data_sources:
+      - lessons_learned
+      - development_context
+    priority: medium
+
+# Page Generation Settings
+settings:
+  # Template settings
+  template_engine: "jinja2"
+  template_extension: ".j2"
+  
+  # Output settings
+  output_format: "markdown"
+  include_frontmatter: true
+  include_toc: true
+  
+  # Content settings
+  max_heading_level: 4
+  include_timestamps: true
+  include_author: true
+  
+  # Frontmatter defaults
+  frontmatter:
+    author: "CORTEX Documentation Generator"
+    generated: true
+    version: "3.0.0"
+
+# Priority levels determine generation order
+priority_levels:
+  high: 1
+  medium: 2
+  low: 3
+
+# Visual Assets Configuration
+visual_assets:
+  mermaid_diagrams:
+    enabled: true
+    output_path: "docs/diagrams/mermaid"
+    description: "Auto-generated Mermaid diagrams from code analysis"
+  
+  image_prompts:
+    enabled: true  # Activated for 'comprehensive' and 'full' profiles
+    output_path: "docs/diagrams"
+    description: "Gemini-compatible image generation prompts with narratives"
+    
+    structure:
+      prompts_dir: "docs/diagrams/prompts"
+      narratives_dir: "docs/diagrams/narratives"
+      generated_dir: "docs/diagrams/generated"
+    
+    diagrams:
+      - id: "01-tier-architecture"
+        name: "4-Tier Brain Architecture"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "critical"
+      
+      - id: "02-agent-system"
+        name: "Dual Hemisphere Agent System"
+        aspect_ratio: "1:1"
+        size: "2160x2160"
+        priority: "critical"
+      
+      - id: "03-plugin-architecture"
+        name: "Hub-and-Spoke Plugin Architecture"
+        aspect_ratio: "1:1"
+        size: "2160x2160"
+        priority: "high"
+      
+      - id: "04-memory-flow"
+        name: "Conversation to Knowledge Flow"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "high"
+      
+      - id: "05-agent-coordination"
+        name: "Multi-Agent Workflow Sequence"
+        aspect_ratio: "9:16"
+        size: "1620x2880"
+        priority: "medium"
+      
+      - id: "06-basement-scene"
+        name: "Origin Story Illustration"
+        aspect_ratio: "16:9"
+        size: "3840x2160"
+        priority: "optional"
+    
+    profiles:
+      standard: false      # No image prompts
+      comprehensive: true  # Generate all image prompts
+      full: true          # Generate all image prompts

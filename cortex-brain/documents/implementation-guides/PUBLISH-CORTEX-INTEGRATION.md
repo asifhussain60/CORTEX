@@ -1,6 +1,6 @@
-# Publish CORTEX Integration - Implementation Complete
+# Deploy CORTEX Production Build - Implementation Complete
 
-**Date:** 2025-11-17  
+**Date:** 2025-11-24 (Updated)  
 **Status:** ✅ COMPLETE  
 **Implementation Time:** ~30 minutes  
 **Author:** Asif Hussain
@@ -9,7 +9,9 @@
 
 ## 🎯 What Was Implemented
 
-Integrated the existing `scripts/publish_to_branch.py` script into CORTEX's natural language operations system, enabling users to publish production-ready code via simple commands like "publish cortex".
+Integrated the existing `scripts/publish_to_branch.py` script into CORTEX's natural language operations system, enabling admins to deploy production-ready builds via simple commands like "deploy cortex" or "deploy production".
+
+**Latest Update (2025-11-24):** Renamed operation from `publish_cortex` to `deploy_cortex_production` for clarity.
 
 ---
 
@@ -19,31 +21,34 @@ Integrated the existing `scripts/publish_to_branch.py` script into CORTEX's natu
 
 **File:** `cortex-operations.yaml`
 
-**Added:**
+**Current Configuration:**
 ```yaml
-publish_cortex:
-  name: Publish CORTEX to Branch
-  description: Build production-ready package and publish to cortex-publish branch for user deployment
-  deployment_tier: admin  # Admin operation (publishes CORTEX itself)
+deploy_cortex_production:
+  name: Deploy CORTEX Production Build
+  description: Build clean production package and publish to downloadable repository for user deployment
+  deployment_tier: admin  # Admin operation (deploys CORTEX itself)
   natural_language:
-  - publish cortex
-  - publish to branch
-  - create publish branch
-  - build production package
   - deploy cortex
+  - deploy production
+  - deploy production build
+  - create production build
+  - build production package
   - release cortex
+  - create cortex release
+  - publish cortex production
+  - package for deployment
   category: deployment
   modules:
   - publish_branch_orchestrator
   profiles:
     dry_run:
-      description: Preview publish without git operations
+      description: Preview deployment without git operations
       modules:
       - publish_branch_orchestrator
       options:
         dry_run: true
     standard:
-      description: Full publish to cortex-publish branch
+      description: Full deployment to cortex-publish branch
       modules:
       - publish_branch_orchestrator
       options:
@@ -108,15 +113,15 @@ report = execute_operation('publish cortex', resume=True)
 Just say what you want:
 
 ```
-"publish cortex"
-"publish to branch"
-"build production package"
+"deploy cortex"
+"deploy production"
+"create production build"
 "release cortex"
 ```
 
 CORTEX will:
 1. Detect the intent
-2. Route to publish operation
+2. Route to deploy_cortex_production operation
 3. Execute `publish_to_branch.py` script
 4. Return formatted results
 
@@ -125,12 +130,12 @@ CORTEX will:
 ### Preview Mode (Dry Run)
 
 ```
-"publish cortex dry run"
+"deploy cortex dry run"
 ```
 
 Or programmatically:
 ```python
-report = execute_operation('publish cortex', dry_run=True)
+report = execute_operation('deploy cortex', dry_run=True)
 ```
 
 This creates `.temp-publish/` folder with preview content (no git operations).

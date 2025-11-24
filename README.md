@@ -130,14 +130,14 @@ cdcortex
 
 CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhancement system designed to give GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. It provides:
 
-CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhancement system designed to give GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. It provides:
-
 1. **4-Tier Brain Architecture** - Instinct, Working Memory, Knowledge Graph, Development Context
 2. **10 Specialist Agents** - Intent routing, planning, execution, testing, validation, governance
 3. **Dual-Hemisphere Processing** - LEFT BRAIN (tactical) + RIGHT BRAIN (strategic)
 4. **Context Continuity** - "Make it purple" works across sessions (70-conversation FIFO capacity)
 5. **Pattern Learning** - Accumulates wisdom from every interaction
 6. **Quality Protection** - Challenges risky changes with evidence-based recommendations
+7. **Real-Time Performance Analytics** - Track metrics, health scores, and trends across projects
+8. **Community Feedback Loop** - Share insights via GitHub Gists, aggregate cross-project data
 
 ---
 

@@ -38,3 +38,6 @@ vulture>=2.14  # Dead code detection
 
 # Track A: Conversation Import (CORTEX 3.0)
 pyperclip>=1.9.0  # Optional: Clipboard support for conversation import
+
+# Enhanced Feedback System (CORTEX 3.0)
+PyGithub>=2.5.0  # GitHub Gist integration for feedback sharing

@@ -606,28 +606,38 @@ templates:
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Admin Operations Help**\nAuthor: Asif Hussain |\
       \ © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
-      \ Of Your Request:**\n   You want administrative-level help including internal\
-      \ documentation generation component triggers.\n\n⚠️ **Challenge:** ✓ **Accept**\n\
-      \   Admin operations expose internal generators not shown to general users.\
-      \ Use responsibly; they mutate documentation artifacts directly.\n\n\U0001F4AC\
-      \ **Response:**\n   Below are natural language triggers reserved for admin usage\
-      \ along with their effects.\n\n   | Trigger | Purpose | Component | Notes |\n\
-      \   | generate diagrams | Build/refresh architecture & workflow diagrams | diagrams\
-      \ | Uses centralized config YAMLs |\n   | generate mkdocs | Recreate mkdocs.yml\
-      \ & navigation pages | mkdocs | Overwrites nav sections |\n   | generate feature\
-      \ list | Produce capabilities & modules reference set | feature_list | Writes\
-      \ FEATURES.md & related refs |\n   | generate executive summary | Create high-level\
-      \ project summary page | executive_summary | Implemented - Writes EXECUTIVE-SUMMARY.md\
-      \ |\n   | publish docs | Build & publish MkDocs site to GitHub Pages | publish\
-      \ | Implemented - Requires mkdocs installed |\n   | generate documentation |\
-      \ Run full pipeline (all components) | all | Aggregates results table |\n  \
-      \ | refresh docs | Alias for generate documentation | all | Safe regeneration\
-      \ |\n\n   Access Control: These triggers are routed only when admin context\
-      \ is detected (user explicitly invokes admin help or privileged workflow).\n\
-      \n\U0001F4DD **Your Request:** Access admin-only help & triggers\n\n\U0001F50D\
-      \ **Next Steps:**\n   1. Use any trigger above to run a single component or\
-      \ full pipeline\n   2. All generators now implemented and ready to use\n   3.\
-      \ After changes, run focused tests to verify registry health"
+      \ Of Your Request:**\n   You want administrative-level help for CORTEX development\
+      \ and deployment operations.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Admin operations\
+      \ manage CORTEX itself - deployment, documentation, and internal tools. These\
+      \ are only available in CORTEX development repository.\n\n\U0001F4AC **Response:**\n\
+      \   **CORTEX Admin Operations** (Development Repository Only)\n\n   **🚀 Deployment\
+      \ Operations**\n   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n\
+      \   | deploy cortex | Build clean production package | Creates downloadable\
+      \ CORTEX release |\n   | deploy production | Same as deploy cortex | Publishes\
+      \ to cortex-publish branch |\n   | create production build | Preview/dry-run\
+      \ deployment | Use for validation before release |\n\n   **📚 Documentation\
+      \ Operations**\n   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n\
+      \   | generate docs | Build MkDocs documentation | Runs Enterprise Documentation\
+      \ Orchestrator |\n   | build documentation | Same as generate docs | Creates\
+      \ diagrams, guides, API refs |\n   | generate mkdocs | Generate MkDocs site\
+      \ | Full documentation pipeline |\n   | refresh documentation | Regenerate all\
+      \ docs | Safe regeneration with validation |\n\n   **🔧 Development Operations**\n\
+      \   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n   | regenerate\
+      \ diagrams | Rebuild architecture diagrams | Uses centralized YAML configs\
+      \ |\n   | design sync | Sync design documentation | Maintains design consistency\
+      \ |\n   | cleanup | Clean development artifacts | Safe cleanup with validation\
+      \ |\n\n   **📊 All User Operations** (also available to admins)\n   - Feature\
+      \ Planning (`plan feature`)\n   - TDD Workflow (`discover views`, test generation)\n\
+      \   - View Discovery (`discover views in project`)\n   - Feedback System (`feedback`,\
+      \ `report issue`)\n   - System Optimization (`optimize cortex`)\n   - Health\
+      \ Check (`healthcheck`, `system status`)\n   - Conversation Management (`resume\
+      \ conversation`)\n   - Upgrade System (`upgrade cortex`)\n\n   **Access Control:**\
+      \ Admin operations only route in CORTEX development repository (detects cortex-brain/admin/).\
+      \ User operations work in all repositories.\n\n\U0001F4DD **Your Request:**\
+      \ Show all admin operations for CORTEX development\n\n\U0001F50D **Next Steps:**\n\
+      \   1. Use deployment operations to create production releases\n   2. Use documentation\
+      \ operations to rebuild docs/diagrams\n   3. Run validation tests after major\
+      \ changes\n   4. Check SKULL tests pass before deployment"
   generate_documentation_completion:
     name: Generate Documentation - Completion
     triggers:
@@ -812,6 +822,18 @@ routing:
   - cortex bug
   - cortex improvement
   - report problem
+  - generate feedback report
+  - share performance metrics
+  - cortex feedback
+  admin_feedback_review_triggers:
+  - review feedback
+  - feedback review
+  - analyze feedback
+  - process feedback
+  - sync feedback
+  - import feedback
+  - review user feedback
+  - process user reports
   view_discovery_triggers:
   - discover views
   - crawl views

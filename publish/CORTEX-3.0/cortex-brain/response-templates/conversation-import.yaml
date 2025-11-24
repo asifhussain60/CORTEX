@@ -1,0 +1,174 @@
+# Conversation Import Response Template
+# 
+# Trigger: User says "/CORTEX Import this conversation" after pasting content
+# Purpose: Confirm successful import to Tier 1 with statistics
+# Handler: src/operations/modules/conversations/import_handler.py
+# Version: CORTEX 3.0 Feature 5 Phase 5.1
+
+conversation_import_complete:
+  trigger_patterns:
+    - "/CORTEX Import this conversation"
+    - "/CORTEX Import"
+    - "import this conversation"
+    - "import conversation"
+  
+  intent: "IMPORT_CONVERSATION"
+  agent: "import_handler"
+  priority: "high"
+  
+  response_format: |
+    🧠 **CORTEX Conversation Import**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:**
+       You've pasted conversation content into the capture file and want to import it into CORTEX brain
+    
+    ⚠️ **Challenge:** ✓ **Accept**
+       This is the second step of the two-step capture workflow. I'll parse the conversation and import it to Tier 1.
+    
+    💬 **Response:**
+    
+    ## ✅ Conversation Imported Successfully!
+    
+    **File processed:** `{{file_name}}`
+    
+    📊 **Import Statistics:**
+    - **Messages imported:** {{messages_imported}}
+    - **Entities tracked:** {{entities_tracked}}
+    - **Quality score:** {{quality_score}}/10
+    - **Conversation ID:** `{{conversation_id}}`
+    
+    ---
+    
+    ## 💾 Storage Details
+    
+    **Tier 1 Working Memory:**
+    - Location: `cortex-brain/tier1/conversations.db`
+    - SQLite database with indexed search
+    - Available for context continuity
+    
+    **Entities Extracted:**
+    {{#if entities_list}}
+    {{#entities_list}}
+    - `{{entity}}`
+    {{/entities_list}}
+    {{else}}
+    - (No specific entities detected - general conversation)
+    {{/if}}
+    
+    **Quality Assessment:**
+    {{#if quality_score >= 7}}
+    ⭐ **HIGH** - Strategic/valuable conversation ({{quality_score}}/10)
+    {{else if quality_score >= 5}}
+    ✅ **MEDIUM** - Useful reference material ({{quality_score}}/10)
+    {{else}}
+    📝 **LOW** - Brief exchange, limited context ({{quality_score}}/10)
+    {{/if}}
+    
+    ---
+    
+    ## 🧠 What Happens Next
+    
+    **Tier 1 (Working Memory):**
+    - Conversation available for "Make it purple" context continuity
+    - Can reference this conversation in future chats
+    - FIFO queue: Last 20 conversations kept
+    
+    **Tier 2 (Knowledge Graph):**
+    - Patterns extracted for learning
+    - File relationships tracked
+    - Intent patterns updated
+    - Workflow templates identified
+    
+    **Future Benefit:**
+    When you work on similar tasks, CORTEX will:
+    - Suggest "We did something similar before..."
+    - Reuse proven patterns from this conversation
+    - Avoid repeating mistakes
+    - Speed up implementation with learned workflows
+    
+    📝 **Your Request:** Import pasted conversation to CORTEX brain
+    
+    🔍 **Next Steps:**
+       1. Conversation is now part of CORTEX memory
+       2. Continue working - CORTEX remembers this context
+       3. For valuable conversations, consider capturing more often
+       4. Use `/CORTEX Capture` + `/CORTEX Import` workflow anytime
+  
+  placeholders:
+    file_name:
+      type: "string"
+      description: "Source capture filename"
+    
+    messages_imported:
+      type: "integer"
+      description: "Number of messages in conversation"
+    
+    entities_tracked:
+      type: "integer"
+      description: "Number of extracted entities (files, classes)"
+    
+    quality_score:
+      type: "float"
+      description: "Calculated quality score (0-10)"
+    
+    conversation_id:
+      type: "string"
+      description: "Unique conversation identifier"
+    
+    entities_list:
+      type: "array"
+      description: "List of extracted entity names"
+  
+  error_scenarios:
+    empty_file:
+      response: |
+        ❌ **Import Failed: Empty Content**
+        
+        The capture file appears to be empty or too short.
+        
+        Please:
+        1. Open the capture file
+        2. Paste conversation after the marker line
+        3. Save the file
+        4. Try import again
+    
+    no_capture_file:
+      response: |
+        ❌ **Import Failed: No Capture File Found**
+        
+        No conversation capture files detected.
+        
+        Please:
+        1. Say `/CORTEX Capture this conversation` first
+        2. Paste conversation into created file
+        3. Then say `/CORTEX Import this conversation`
+    
+    parse_error:
+      response: |
+        ❌ **Import Failed: Parse Error**
+        
+        Could not parse conversation structure.
+        
+        Ensure conversation format has:
+        - User messages (User: or You:)
+        - Copilot responses (Copilot: or Assistant:)
+        - Clear message boundaries
+  
+  success_metrics:
+    - "Import time: <10 seconds"
+    - "All messages parsed correctly"
+    - "Entities extracted accurately"
+    - "Quality score meaningful"
+  
+  integration:
+    track_a_pipeline:
+      status: "Partial - awaiting Phase 5.2 quality scoring fix"
+      current: "Simplified parser with quality estimation"
+      future: "Full CopilotConversationParser integration"
+      note: "When Track A Phase 5.2 completes (20/20 tests passing), this will use full parser"
+  
+  notes: |
+    This completes Method 1 (Manual Capture) workflow from CORTEX 3.0 roadmap.
+    Import integrates with Track A conversation import pipeline (simplified version
+    until Phase 5.2 quality scoring fix completes).

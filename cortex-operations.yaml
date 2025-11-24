@@ -37,36 +37,32 @@ operations:
     - continue the API refactoring
     - resume conversation conv-20251122-001
   
-  publish_cortex:
-    name: Publish CORTEX to Branch
-    description: Build production-ready package and publish to cortex-publish branch for user deployment
-    deployment_tier: admin  # Admin operation (publishes CORTEX itself)
+  deploy_cortex_production:
+    name: Deploy CORTEX Production Build
+    description: Build clean production package and publish to downloadable repository for user deployment
+    deployment_tier: admin  # Admin operation (deploys CORTEX itself)
     natural_language:
-    - publish cortex
-    - publish to branch
-    - create publish branch
-    - build production package
     - deploy cortex
+    - deploy production
+    - deploy production build
+    - create production build
+    - build production package
     - release cortex
-    - create production ready version of cortex
-    - create production version
-    - build production ready cortex
-    - prepare cortex for deployment
-    - package cortex for production
-    - export cortex to production branch
     - create cortex release
+    - publish cortex production
+    - package for deployment
     category: deployment
     modules:
     - publish_branch_orchestrator
     profiles:
       dry_run:
-        description: Preview publish without git operations
+        description: Preview deployment without git operations
         modules:
         - publish_branch_orchestrator
         options:
           dry_run: true
       standard:
-        description: Full publish to cortex-publish branch
+        description: Full deployment to cortex-publish branch
         modules:
         - publish_branch_orchestrator
         options:
@@ -76,7 +72,7 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Integrates existing publish_to_branch.py script into CORTEX operations system
+      notes: Builds clean production package and publishes to downloadable repository
   
   regenerate_diagrams:
     name: Regenerate All Diagrams
@@ -315,27 +311,22 @@ operations:
       completion_date: "2025-11-14"
       consolidation_from:
         - update_documentation
-  enterprise_documentation:
-    name: Enterprise Documentation Generator
-    description: EPM-based comprehensive documentation generation using Entry Point Module (EPM) system for enterprise-grade documentation workflows
-    deployment_tier: admin  # ❌ Admin-only (uses EPM system for comprehensive documentation generation)
+  generate_cortex_docs:
+    name: Generate CORTEX Documentation
+    description: Run CORTEX Enterprise Documentation Orchestrator to generate comprehensive MkDocs documentation with diagrams, guides, and API references
+    deployment_tier: admin  # Admin operation (generates CORTEX's own documentation)
     module: "src.operations.modules.enterprise_documentation_orchestrator_module"
     class: "EnterpriseDocumentationOrchestratorModule"
     natural_language:
-    - /CORTEX Generate documentation
-    - /CORTEX generate documentation
+    - generate docs
     - generate documentation
-    - generate cortex docs
+    - build documentation
+    - build mkdocs
+    - generate mkdocs
+    - refresh documentation
+    - regenerate docs
+    - build cortex docs
     - generate cortex documentation
-    - enterprise documentation
-    - epm documentation
-    - documentation generator
-    - doc generator
-    - create enterprise docs
-    - build enterprise documentation
-    - generate enterprise documentation
-    - run documentation generator
-    - execute documentation epm
     category: documentation
     modules:
     # Uses EPM system - single orchestrator module
@@ -347,12 +338,12 @@ operations:
         options:
           dry_run: true
       standard:
-        description: Full documentation generation using EPM system
+        description: Full documentation generation with MkDocs build
         execution_mode: live
         options:
           profile: standard
       comprehensive:
-        description: Complete enterprise documentation with all EPM stages
+        description: Complete documentation with all diagrams and guides
         execution_mode: live
         options:
           profile: comprehensive
@@ -361,7 +352,7 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: "Enterprise Documentation EPM orchestrator implemented. Integrates with existing EPM doc_generator system for comprehensive documentation generation workflow."
+      notes: "Runs Enterprise Documentation Orchestrator to generate MkDocs site with all documentation components"
       estimated_hours: 8
       completion_date: "2025-11-16"
       epm_integration: true
@@ -666,6 +657,73 @@ operations:
       completion_percentage: 100
       notes: "Single orchestrator module coordinates: (1) Live implementation discovery, (2) Design-implementation gap analysis, (3) Optimization integration, (4) MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking. Always works on LATEST design version (currently CORTEX 2.0)."
       estimated_hours: 14
+  
+  # ========== Feedback & Analytics Operations ==========
+  
+  feedback_report:
+    name: Generate Comprehensive Feedback Report
+    description: Generate detailed performance and metrics report covering 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity)
+    deployment_tier: user  # User-facing operation
+    natural_language:
+    - feedback
+    - generate feedback
+    - generate feedback report
+    - share performance metrics
+    - cortex feedback
+    - performance report
+    - metrics report
+    - how is cortex performing
+    - cortex status report
+    category: feedback
+    modules:
+    - enhanced_feedback_module
+    profiles:
+      standard:
+        description: Complete feedback report with all 8 metric categories
+        modules:
+        - enhanced_feedback_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "8-category metrics collection with GitHub Gist integration and privacy sanitization"
+    examples:
+    - feedback
+    - generate feedback report
+    - share performance metrics with team
+    - how is cortex performing
+  
+  admin_feedback_review:
+    name: Review Feedback from Multiple Applications
+    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple user repositories. Only works in CORTEX repo"
+    deployment_tier: admin  # Admin operation (CORTEX repo only)
+    natural_language:
+    - review feedback
+    - feedback review
+    - analyze feedback
+    - process feedback
+    - sync feedback
+    - import feedback
+    - review user feedback
+    - process user reports
+    - aggregate feedback
+    - feedback analytics
+    category: feedback
+    modules:
+    - admin_feedback_review_module
+    profiles:
+      standard:
+        description: Sync Gist registry and process all feedback reports
+        modules:
+        - admin_feedback_review_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Phase 2 - Admin feedback aggregation with Gist sync, analytics DB storage, and trend analysis. CORTEX repo only."
+  
   interactive_planning:
     name: Interactive Feature Planning
     description: "[INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities"
@@ -2227,14 +2285,66 @@ modules:
     estimated_hours: 0
     cortex_version: '3.0'
     notes: Wraps existing publish_to_branch.py script for integration with CORTEX operations system
+  
+  # Feedback & Analytics Modules (CORTEX 3.0)
+  enhanced_feedback_module:
+    name: Enhanced Feedback Module
+    description: Collect comprehensive metrics across 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity) with privacy sanitization and GitHub Gist integration
+    phase: EXECUTION
+    priority: 100
+    class: EnhancedFeedbackModule
+    file: modules/feedback/enhanced_feedback_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - feedback
+    - metrics
+    - analytics
+    - gist
+    - privacy
+    status: implemented
+    estimated_hours: 8
+    cortex_version: '3.0'
+    notes: "8 metrics collectors: ApplicationMetricsCollector, CrawlerPerformanceCollector, CortexPerformanceCollector, KnowledgeGraphCollector, DevelopmentHygieneCollector, TDDMasteryCollector, CommitMetricsCollector, VelocityMetricsCollector. Privacy sanitization with 3 levels (full/medium/minimal). GitHub Gist upload with registry tracking"
+  
+  admin_feedback_review_module:
+    name: Admin Feedback Review Module
+    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple applications. Sync Gist registry, process reports, generate trend analysis, categorize issues"
+    phase: EXECUTION
+    priority: 100
+    class: AdminFeedbackReviewModule
+    file: admin/scripts/feedback/admin_feedback_review.py
+    dependencies: []
+    optional: false
+    tags:
+    - feedback
+    - admin
+    - analytics
+    - aggregation
+    - trends
+    status: implemented
+    estimated_hours: 6
+    cortex_version: '3.0'
+    notes: "CORTEX repo only. Natural language triggers: review feedback, feedback review, analyze feedback, process feedback, sync feedback, import feedback. Auto-syncs Gist registry by default. Stores in cortex-brain/analytics/ databases"
+    implemented_date: '2025-11-24'
     
 metadata:
   version: '2.1'
   schema_version: '1.0'
   author: Asif Hussain
   last_updated: '2025-11-13'
-  description: Universal operations registry for CORTEX 2.0 + 2.1
+  description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
+  - version: '3.0'
+    date: '2025-11-23'
+    changes:
+    - Added Feedback & Analytics System (feedback_report and admin_feedback_review operations)
+    - Added enhanced_feedback_module with 8-category metrics collection
+    - Added admin_feedback_review_module for aggregation and analytics
+    - Added 2 new feedback operations (1 user-facing, 1 admin-only)
+    - Added 2 new feedback modules (1 implemented, 1 pending)
+    - Enhanced feedback_triggers in response-templates.yaml
+    - GitHub Gist integration with privacy sanitization
   - version: '2.1'
     date: '2025-11-10'
     changes:
@@ -2265,13 +2375,15 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 15
-  total_modules: 99
+  total_operations: 17
+  total_modules: 101
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
+  cortex_3_0_operations: 2
   cortex_2_0_modules: 67
   cortex_2_1_modules: 22
-  modules_implemented: 39
+  cortex_3_0_modules: 2
+  modules_implemented: 41
   modules_pending: 60
-  implementation_percentage: 39
+  implementation_percentage: 41
