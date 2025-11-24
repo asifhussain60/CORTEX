@@ -1,21 +1,20 @@
 # CORTEX Brain Protection Rules
 # Architectural Integrity Guardian Configuration
 # 
-# Implements 7 protection layers to prevent degradation of CORTEX intelligence
+# Implements 8 protection layers to prevent degradation of CORTEX intelligence
 # Replaces hardcoded rules in brain_protector.py for easier maintenance
 #
-# Version: 2.2
-# Last Updated: 2025-11-23
+# Version: 2.3
+# Last Updated: 2025-11-24
 # Created: 2025-11-08
 # Author: CORTEX Team
 # 
-# Latest Change: Added Layer 7 (Deployment Architecture Protection)
-#   - Version tracking enforcement (.cortex-version)
-#   - Brain preservation during upgrades
-#   - Schema migration requirements
-#   - Config merge intelligence
-#   - Deployment type detection
-#   - Publish package validation
+# Latest Change: Added Layer 8 (Test Location Isolation)
+#   - TEST_LOCATION_SEPARATION Tier 0 instinct
+#   - Application tests in user repo, CORTEX tests in CORTEX folder
+#   - Auto-detect test location based on source file
+#   - Brain learning from user test patterns (without storing user code)
+#   - Framework detection and adaptation
 
 version: "2.2"
 type: "governance"
@@ -24,8 +23,8 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all layers
 rules:
-  total_count: 38  # Updated: Added 7 deployment architecture rules
-  layers: 14  # Updated: Added Layer 7 (Deployment Architecture Protection)
+  total_count: 39  # Updated: Added 1 test location separation rule
+  layers: 15  # Updated: Added Layer 8 (Test Location Isolation)
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
   
@@ -34,8 +33,9 @@ rules:
   critical_path_protection: "Core CORTEX paths trigger high-level protection"
   application_isolation: "Application-specific code isolated from CORTEX core"
   brain_state_protection: "Brain state files protected from unintended commits"
-  multi_layer_defense: "6 protection layers provide comprehensive coverage"
+  multi_layer_defense: "8 protection layers provide comprehensive coverage"
   incremental_planning: "YAML plans created incrementally to avoid response length limits"
+  test_location_isolation: "Application tests in user repo, CORTEX tests in CORTEX folder"
 # Critical system paths that trigger high-level protection
 critical_paths:
   - "CORTEX/src/tier0/"
@@ -77,6 +77,7 @@ tier0_instincts:
   - "DEPLOYMENT_VERSION_TRACKING"  # NEW: Enforce .cortex-version file presence and validity
   - "UPGRADE_BRAIN_PRESERVATION"  # NEW: Never overwrite brain data during upgrades
   - "SCHEMA_MIGRATION_ENFORCEMENT"  # NEW: Database schema changes require migration files
+  - "TEST_LOCATION_SEPARATION"  # NEW: Application tests in user repo, CORTEX tests in CORTEX folder
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -4775,6 +4776,128 @@ challenge_template: |
           - Machine paths reveal private directory structure
           - Conversation history is confidential
           - Published packages = clean core only
+
+  # Layer 8: Test Location Isolation
+  - layer_id: "test_location_isolation"
+    name: "Test Location Isolation"
+    description: "Application tests in user repo, CORTEX tests in CORTEX folder - maintain brain knowledge from both"
+    priority: 8
+    
+    rules:
+      - rule_id: "TEST_LOCATION_SEPARATION"
+        name: "Test Location Separation"
+        severity: "blocked"
+        description: "When running in development environments, application tests MUST be created in user repo (NOT CORTEX folder). Only CORTEX-related tests reside in CORTEX. CORTEX MUST use user's existing test framework and feed brain with knowledge learned from application tests."
+        
+        detection:
+          combined_keywords:
+            test_generation:
+              - "generate test"
+              - "create test"
+              - "write test"
+              - "tdd workflow"
+            application_code:
+              - "user application"
+              - "user code"
+              - "application feature"
+              - "business logic"
+            wrong_location:
+              - "tests/fixtures"
+              - "CORTEX/tests"
+              - "cortex-brain/tests"
+          scope: ["intent", "target_path"]
+          logic: "AND"
+        
+        alternatives:
+          - "STEP 1: Detect user repository root (outside CORTEX folder)"
+          - "STEP 2: Discover user's existing test framework (pytest, jest, xunit, etc.)"
+          - "STEP 3: Create tests in user repo following their conventions"
+          - "STEP 4: Run tests using user's framework"
+          - "STEP 5: Capture test patterns, framework usage, and insights"
+          - "STEP 6: Store learned patterns in CORTEX brain (Tier 1/Tier 2)"
+          - "EXAMPLE: User app at /Users/user/myapp → Tests at /Users/user/myapp/tests/"
+          - "EXAMPLE: CORTEX tests → Stay in /CORTEX/tests/"
+        
+        evidence_template: |
+          Test location violation detected!
+          
+          Target: '{target_path}'
+          Test Type: '{test_type}'
+          
+          ❌ WRONG: Application test being created in CORTEX folder
+          - Path: CORTEX/tests/test_user_feature.py
+          - Reason: Application tests don't belong in CORTEX
+          - Impact: Pollutes CORTEX with application-specific code
+          
+          ✅ CORRECT: Application test in user repository
+          - Path: /Users/user/myapp/tests/test_user_feature.py
+          - Framework: {user's framework} (pytest/jest/xunit/etc.)
+          - Conventions: {user's naming patterns}
+          - Brain Learning: Test patterns stored in cortex-brain/tier2/
+          
+          **CORTEX Tests (stay in CORTEX folder):**
+          - Brain protection tests
+          - Agent functionality tests
+          - Workflow orchestration tests
+          - CORTEX infrastructure tests
+          
+          **Application Tests (go in user repo):**
+          - Business logic tests
+          - Feature tests
+          - Integration tests
+          - E2E tests
+          
+          **Knowledge Capture (automatic):**
+          - Test framework detection → Tier 2
+          - Naming conventions → Tier 2
+          - Test patterns → Tier 2
+          - Code coverage insights → Tier 1
+          - Common failure patterns → Tier 2
+        
+        rationale: |
+          TEST_LOCATION_SEPARATION: Architectural Clarity & Brain Intelligence
+          
+          Problem Scenario:
+          - User developing "payment processing" feature
+          - CORTEX generates test_payment.py in CORTEX/tests/
+          - Test contains application-specific logic
+          - CORTEX repo polluted with user's business logic
+          - User can't find tests in their own repo
+          - Tests don't use user's existing framework
+          
+          Correct Approach:
+          1. **Detect Context:**
+             - Working directory: /Users/user/myapp
+             - Test framework: pytest (detected from requirements.txt)
+             - Convention: tests/ folder with test_*.py pattern
+          
+          2. **Generate Tests in User Repo:**
+             - Path: /Users/user/myapp/tests/test_payment.py
+             - Framework: pytest (user's choice)
+             - Style: Matches user's existing tests
+          
+          3. **Capture Knowledge for Brain:**
+             - Pattern: "Payment tests use mock stripe API"
+             - Pattern: "User prefers parametrized fixtures"
+             - Insight: "Payment tests fail when DB not seeded"
+             - Store: cortex-brain/tier2/knowledge-graph.yaml
+          
+          4. **Benefits:**
+             - User repo self-contained with its tests
+             - CORTEX stays focused on CORTEX functionality
+             - Brain learns from user patterns (not polluted with user code)
+             - User's test framework honored
+             - Proper separation of concerns
+          
+          Brain Learning Mechanism:
+          - Monitor test execution results
+          - Track framework usage patterns
+          - Identify common anti-patterns
+          - Store generalized insights (not specific code)
+          - Use insights to improve future test generation
+          
+          Exception:
+          Only CORTEX-related tests (brain, agents, workflows) stay in CORTEX folder.
 
 # Logging configuration
 logging:

@@ -51,12 +51,17 @@
 3. **REFACTOR State:** Suggest improvements → Performance-based code smell detection
 
 **Key Features:**
+- ✅ **Terminal Integration (Phase 1):** Auto-detects test execution from #terminal_last_command, #get_terminal_output
+- ✅ **Workspace Discovery (Phase 2):** Auto-discovers project structure via @workspace context
+- ✅ **Brain Memory (Phase 3):** Stores sessions in Tier 1, learns from failures in Tier 2
+- ✅ **Programmatic Execution (Phase 4):** Runs pytest/jest/xunit programmatically with JSON parsing
 - ✅ **Auto-Debug on RED:** Debug session starts automatically when tests fail
 - ✅ **Performance-Based Refactoring:** Uses debug timing data to identify bottlenecks
 - ✅ **View Discovery Integration:** Auto-discovers element IDs before test generation
 - ✅ **Auto-Feedback Collection:** Gathers feedback on GREEN state transitions
 - ✅ **Smart Code Smell Detection:** 11 smell types including performance-based
 - ✅ **Data-Driven Optimization:** Identifies slow functions (>100ms), hot paths (>10 calls), bottlenecks (>500ms)
+- ✅ **Test Location Isolation (Layer 8):** Application tests in user repo, CORTEX tests in CORTEX folder
 
 **Natural Language Examples:**
 - "start TDD workflow for user authentication"
@@ -78,10 +83,23 @@ COMPLETE → validate improvements
 **Configuration Options:**
 ```python
 TDDWorkflowConfig(
-    enable_view_discovery=True,      # Auto-discover element IDs
-    enable_debug_integration=True,   # Auto-debug on failures
-    enable_feedback_collection=True, # Auto-collect feedback
-    debug_timing_to_refactoring=True # Use timing data for refactoring
+    # Phase 1: Terminal Integration
+    enable_terminal_integration=True,    # Use GitHub Copilot terminal tools
+    # Phase 2: Workspace Discovery
+    enable_workspace_discovery=True,     # Auto-discover project structure
+    # Phase 3: Brain Memory Integration
+    enable_session_tracking=True,        # Store in Tier 1/2
+    # Phase 4: Programmatic Execution
+    enable_programmatic_execution=True,  # Run tests automatically
+    # Layer 8: Test Location Isolation
+    auto_detect_test_location=True,      # Auto-detect user repo vs CORTEX
+    enable_brain_learning=True,          # Capture patterns from user tests
+    user_repo_root=None,                 # Auto-detected from source file
+    # Legacy Features
+    enable_view_discovery=True,          # Auto-discover element IDs
+    enable_debug_integration=True,       # Auto-debug on failures
+    enable_feedback_collection=True,     # Auto-collect feedback
+    debug_timing_to_refactoring=True     # Use timing data for refactoring
 )
 ```
 
@@ -113,13 +131,17 @@ TDDWorkflowConfig(
 **Natural Language Workflow:**
 ```
 You: "start tdd workflow for login page"
-CORTEX: ✅ Discovering views... Found 12 elements in Login.razor
+CORTEX: ✅ Workspace discovered: Python project with pytest
+        ✅ Test framework: pytest
         ✅ Ready for RED state - write your failing test
 
 You: "run tests"
-CORTEX: ❌ 3 tests failed
-        🔧 Debug session started automatically (session-abc123)
-        📊 Captured 15 function calls, identified 2 slow functions
+CORTEX: 🔧 Running tests with pytest...
+        ✅ Tests completed in 2.50s
+           Passed: 5 ✓
+           Failed: 2 ✗
+        ❌ Entering RED state
+        📊 Stored test results in brain (Tier 2)
 
 You: "suggest refactorings"
 CORTEX: 🎯 Found 3 performance issues:
@@ -127,6 +149,76 @@ CORTEX: 🎯 Found 3 performance issues:
         2. CheckPermissions() - HOT_PATH (called 23 times) - Batch calls
         3. DatabaseQuery() - BOTTLENECK (total 850ms) - Add indexes
 ```
+
+**Complete Integration Example:**
+```python
+# Initialize with all phases enabled
+config = TDDWorkflowConfig(
+    project_root="/path/to/project",
+    enable_terminal_integration=True,       # Phase 1
+    enable_workspace_discovery=True,        # Phase 2
+    enable_session_tracking=True,           # Phase 3
+    enable_programmatic_execution=True      # Phase 4
+)
+
+orchestrator = TDDWorkflowOrchestrator(config)
+
+# Start session (Phase 3: Brain integration)
+session_id = orchestrator.start_session("user_authentication")
+
+# Generate tests (Phase 2: Workspace discovery)
+tests = orchestrator.generate_tests(source_file="src/login.py")
+
+# Run tests programmatically (Phase 4: Test execution)
+result = orchestrator.run_and_verify_tests()
+# Output:
+# 🔧 Running tests with pytest...
+# ✅ Tests completed in 2.50s
+#    Passed: 5 ✓
+#    Failed: 2 ✗
+
+# Result stored in Tier 2, session updated in Tier 1
+```
+
+**Test Location Isolation (Layer 8 - NEW):**
+
+**Rule:** Application tests ALWAYS go in user repo, CORTEX tests stay in CORTEX folder.
+
+**How It Works:**
+1. **Auto-Detection:** CORTEX detects if you're testing application code vs CORTEX code
+2. **User Repo Tests:** Generated in your project's test directory (e.g., `/Users/you/myapp/tests/`)
+3. **Framework Detection:** Uses YOUR existing test framework (pytest, jest, xunit, etc.)
+4. **Brain Learning:** CORTEX captures patterns and insights without storing your code
+5. **CORTEX Tests:** Only CORTEX infrastructure tests stay in CORTEX folder
+
+**Example Workflow:**
+```
+You: "Create tests for my payment processing feature"
+Working Dir: /Users/you/myapp/src/payments.py
+
+CORTEX:
+✅ Detected user application code (outside CORTEX)
+✅ Found existing framework: pytest
+✅ Test location: /Users/you/myapp/tests/test_payments.py
+✅ Following your naming convention: test_*.py
+🧠 Learning: User prefers parametrized fixtures for payment tests
+🧠 Stored patterns in cortex-brain/tier2/ (NOT your code)
+```
+
+**What Gets Stored in Brain:**
+- ✅ "User prefers mock stripe API for payment tests"
+- ✅ "Test framework: pytest with fixtures"
+- ✅ "Naming pattern: test_<feature>.py"
+- ✅ "Common failure: DB not seeded before tests"
+- ❌ NOT your actual test code
+- ❌ NOT your business logic
+
+**Benefits:**
+- ✅ Your repo stays self-contained with its own tests
+- ✅ CORTEX learns from your patterns
+- ✅ No pollution of CORTEX folder with application tests
+- ✅ Proper separation of concerns
+- ✅ Your test framework is honored
 
 **See Also:**
 - Implementation: `cortex-brain/documents/implementation-guides/TDD-MASTERY-INTEGRATION-PLAN.md`
