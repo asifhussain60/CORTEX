@@ -9,7 +9,7 @@ Date: 2025-11-08
 
 from typing import Dict, Any, List
 from datetime import datetime
-from src.workflows.workflow_engine import (
+from workflows.workflow_engine import (
     BaseWorkflowStage,
     WorkflowState,
     StageResult,

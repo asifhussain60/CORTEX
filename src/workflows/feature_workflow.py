@@ -11,7 +11,7 @@ Version: 1.0
 """
 
 from typing import Dict, Any, List
-from src.cortex_agents.base_agent import AgentMessage
+from cortex_agents.base_agent import AgentMessage
 from .tdd_workflow import TDDWorkflow
 
 

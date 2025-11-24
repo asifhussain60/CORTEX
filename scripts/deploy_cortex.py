@@ -138,10 +138,12 @@ class CortexDeployer:
         
         # Run Issue #3 validation
         result = subprocess.run(
-            [sys.executable, 'validate_issue3_phase4.py'],
+            [sys.executable, 'scripts/validation/validate_issue3_phase4.py'],
             cwd=self.root,
             capture_output=True,
-            text=True
+            text=True,
+            encoding='utf-8',
+            errors='replace'
         )
         
         print(result.stdout)

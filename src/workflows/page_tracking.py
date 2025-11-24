@@ -15,7 +15,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from src.workflows.tdd_state_machine import TDDStateMachine, TDDState
+from workflows.tdd_state_machine import TDDStateMachine, TDDState
 
 
 @dataclass

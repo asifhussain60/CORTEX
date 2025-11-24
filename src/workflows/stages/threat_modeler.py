@@ -11,7 +11,7 @@ from typing import Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum
 
-from src.workflows.workflow_pipeline import WorkflowStage, WorkflowState, StageResult, StageStatus
+from workflows.workflow_pipeline import WorkflowStage, WorkflowState, StageResult, StageStatus
 
 
 class ThreatCategory(Enum):
