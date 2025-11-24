@@ -467,7 +467,66 @@ categories:
       allow_rollback: true
   
   # --------------------------------------------------------------------------
-  # Category 17: Documentation Pattern Cleanup (NEW!)
+  # Category 17: Root Directory Phase Documentation (NEW!)
+  # --------------------------------------------------------------------------
+  root_phase_documentation:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      # Phase documentation in root
+      - "PHASE-*-COMMIT-GUIDE.md"
+      - "PHASE-*-SUMMARY.md"
+      - "PHASE-*-PRODUCTION-READY.md"
+      - "TEST-MANIFEST.md"
+    
+    action: archive
+    archive_to: "cortex-brain/archives/phase-documentation"
+    
+    reason: "Phase documentation should be archived, not in root"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+      allow_rollback: true
+  
+  # --------------------------------------------------------------------------
+  # Category 18: Root Directory Validation Scripts (NEW!)
+  # --------------------------------------------------------------------------
+  root_validation_scripts:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      # Validation scripts in root (except migration scripts)
+      - "validate_*.py"
+    
+    # Exclude migration scripts that should stay in root
+    exclude_patterns:
+      - "apply_element_mappings_schema.py"
+    
+    action: move
+    move_to: "scripts/validation"
+    
+    reason: "Validation scripts should be in scripts/validation/, not root"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+      allow_rollback: true
+  
+  # --------------------------------------------------------------------------
+  # Category 19: Documentation Pattern Cleanup
   # --------------------------------------------------------------------------
   doc_pattern_cleanup:
     enabled: true
