@@ -45,6 +45,40 @@
 2. Parent has `.git` but CORTEX doesn't (implicit)
 3. Parent has project files (`package.json`, `.sln`, etc.)
 
+### Dedicated Embedded Upgrade Script
+
+**For embedded installations experiencing git history conflicts:**
+
+```bash
+# Navigate to your project (parent of CORTEX/)
+cd /path/to/YOUR-PROJECT
+
+# Run embedded upgrade script
+python CORTEX/scripts/embedded_upgrade.py --cortex-path CORTEX
+
+# Or from within CORTEX directory
+cd CORTEX
+python scripts/embedded_upgrade.py
+```
+
+**What the script does:**
+1. ✅ Auto-detects embedded installation
+2. ✅ Downloads latest release to temp directory
+3. ✅ Validates no files escape CORTEX/ boundary
+4. ✅ Backs up all brain data before changes
+5. ✅ Copies updated files selectively
+6. ✅ Preserves brain databases and configs
+7. ✅ Runs database migrations automatically
+8. ✅ Validates upgrade with test suite
+9. ✅ Cleans up temp files
+
+**Safety Features:**
+- Pre-flight path validation (aborts if unsafe)
+- Automatic brain backup (timestamped)
+- Selective file copying (never overwrites brain)
+- Post-upgrade validation (all tests run)
+- Detailed upgrade summary
+
 ### Creating Embedded Installation Marker
 
 **For explicit embedded marking:**

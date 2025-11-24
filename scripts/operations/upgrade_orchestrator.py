@@ -272,7 +272,7 @@ class UpgradeOrchestrator:
         Returns:
             True if upgrade successful
         """
-        print(f"\n🧠 CORTEX Upgrade System v5.3.0")
+        print(f"\n🧠 CORTEX Upgrade System v3.2.0")
         print(f"=" * 60)
         
         if dry_run:

@@ -20,8 +20,8 @@ import re
 class VersionDetector:
     """Detects CORTEX deployment type and manages version tracking."""
     
-    VERSION_FILE = ".cortex-version"
-    CURRENT_VERSION = "5.3.0"  # Update this with each CORTEX release
+    VERSION_FILE = "VERSION"
+    LEGACY_VERSION_FILE = ".cortex-version"  # For backward compatibility
     
     def __init__(self, cortex_path: Optional[Path] = None):
         """
@@ -72,32 +72,32 @@ class VersionDetector:
             return "upgrade"
         return "setup"
     
-    def get_current_version(self) -> Optional[Dict]:
+    def get_current_version(self) -> Optional[str]:
         """
-        Read current installed version from .cortex-version file.
+        Read current installed version from VERSION file.
         
         Returns:
-            Dictionary with version info, or None if file doesn't exist
+            Version string (e.g., "v3.1.1"), or None if file doesn't exist
         """
         if not self.version_file_path.exists():
             return None
             
         try:
             with open(self.version_file_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except (json.JSONDecodeError, IOError) as e:
+                return f.read().strip()
+        except IOError as e:
             print(f"⚠️  Warning: Could not read version file: {e}")
             return None
     
     def get_latest_version(self) -> str:
         """
-        Get latest available CORTEX version.
+        Get latest available CORTEX version from VERSION file.
         
         Returns:
-            Version string (e.g., "5.3.0")
+            Version string (e.g., "v3.1.1")
         """
-        # This will be enhanced in Phase 2 (GitHub Fetcher) to query GitHub API
-        return self.CURRENT_VERSION
+        version = self.get_current_version()
+        return version if version else "unknown"
     
     def create_version_file(
         self,

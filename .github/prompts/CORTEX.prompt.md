@@ -2,9 +2,9 @@
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 5.3 (Interactive Planning Integration)  
+**Version:** 3.2.0  
 **Status:** ✅ PRODUCTION  
-**Architecture:** Template-based responses + Modular documentation + Interactive Planning + Work Planner Integration
+**Architecture:** Template-based responses + Modular documentation + Interactive Planning + Universal Upgrade System
 
 ---
 
@@ -292,78 +292,58 @@ CORTEX will:
 
 ## 🔄 Upgrade CORTEX
 
-**Purpose:** Automated upgrade system that pulls release code, applies enhancements, and validates CORTEX integrity
-
-**Complete Guide:** #file:modules/upgrade-guide.md
+**One Command. All Repositories. Zero Confusion.**
 
 **Commands:**
-- `/cortex upgrade` - Full automated upgrade with validation
-- `upgrade` or `upgrade cortex` - Start upgrade process
-- `update cortex` - Check for updates and upgrade
+- `upgrade` or `upgrade cortex` - Universal upgrade for all installations
 - `cortex version` - Show current version
 
-**Automated Upgrade Process:**
+**How Upgrade Works:**
 
-When you run `/cortex upgrade`, CORTEX automatically:
+```
+You: "upgrade cortex"
 
-1. **Pulls Release Code** - Fetches latest stable release from GitHub
-2. **Applies Database Migrations** - Updates schema preserving all brain data
-3. **Runs Validation Tests** - Executes comprehensive test suite automatically
-4. **Verifies Brain Protection** - Ensures all 22 SKULL tests pass
-5. **Confirms Functionality** - Validates agents, workflows, and integrations
+CORTEX:
+  ✅ Auto-detects installation type (standalone/embedded)
+  ✅ Downloads latest release from GitHub
+  ✅ Validates all file paths stay within CORTEX directory
+  ✅ Backs up brain data automatically
+  ✅ Updates code while preserving your data
+  ✅ Runs database migrations
+  ✅ Validates everything works
+  ✅ Reports success or issues
 
-**Validation Happens Automatically:**
-After applying enhancements, CORTEX runs `validate_issue3_phase4.py` which tests:
-- ✅ Brain protection (SKULL rules intact)
-- ✅ Database schema (all tables, indexes, views)
-- ✅ Agent functionality (FeedbackAgent, ViewDiscoveryAgent)
-- ✅ Workflow integration (TDD workflow end-to-end)
-- ✅ Configuration integrity (all configs valid)
-
-**Exit Codes:**
-- `0` - Upgrade successful, all tests passed ✅
-- `1` - Upgrade failed, tests failed ❌ (rollback recommended)
-- `2` - Critical failure, brain protection compromised 🚨
-
-**Manual Upgrade (Advanced Users):**
-```bash
-# 1. Pull latest release code
-git pull origin CORTEX-3.0
-
-# 2. Apply database migrations
-python apply_element_mappings_schema.py
-
-# 3. Validation runs automatically after migrations
-# If validation passes: Upgrade complete ✅
-# If validation fails: Review errors and rollback ❌
+Result: CORTEX upgraded with zero data loss
 ```
 
 **What Gets Preserved:**
-- ✅ Knowledge graphs (Tier 2 database)
-- ✅ Conversation history (Tier 1 working memory)
-- ✅ User configurations (cortex.config.json)
-- ✅ Development context (learned patterns)
+- ✅ All brain databases (conversations, knowledge, context)
+- ✅ Your configurations and customizations
+- ✅ Feedback reports and planning documents
 - ✅ Custom capabilities and templates
 
-**What Gets Added:**
-- ✅ New features (FeedbackAgent, ViewDiscoveryAgent)
-- ✅ Database enhancements (new tables, indexes, views)
-- ✅ Performance improvements
-- ✅ New commands and capabilities
+**What Gets Updated:**
+- ✅ Core CORTEX code and agents
+- ✅ Database schemas (migrations applied automatically)
+- ✅ New features and performance improvements
 
-**Test Package Deployed:**
-All validation tests (~54 KB) are included in the CORTEX package to ensure:
-- Zero-trust validation on user machine
-- Brain protection verified post-upgrade
-- Immediate rollback if any test fails
-- 100% confidence CORTEX is functional
+**Safety Features:**
+- Automatic brain backup before any changes
+- Path validation prevents file corruption
+- Post-upgrade validation confirms everything works
+- Rollback available if issues detected
 
-**Rollback:** See upgrade-guide.md for rollback procedures if validation fails
+**Exit Codes:**
+- `0` - Upgrade successful ✅
+- `1` - Upgrade failed (rollback recommended) ❌
 
-**See Also:** 
-- Full upgrade instructions: `modules/upgrade-guide.md`
-- Test manifest: `TEST-MANIFEST.md`
-- Validation details: `cortex-brain/documents/reports/ISSUE-3-PHASE-4-COMPLETE.md`
+**Complete Guide:** #file:modules/upgrade-guide.md
+
+**Technical Details:**
+- Embedded installations (CORTEX inside your project): Uses safe file-copy method
+- Standalone installations: Can use git-based upgrade
+- Detection automatic via `.cortex-embedded` marker or project structure
+- All validation tests run automatically post-upgrade
 
 ---
 
@@ -551,15 +531,16 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-11-23 | Version 5.3 (Entry Point Optimization)  
+**Last Updated:** 2025-11-24 | Version 3.2.0 (Version Unification)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 
-**What's New:**
-- **Entry Point Bloat Fixed** - Reduced from 17,245 → 3,933 tokens (77.2% reduction)
-- **Modular Architecture** - Template & planning guides extracted to separate modules
-- **SKULL Compliance** - All token budget tests passing
-- **Phase 0 Complete** - 100% test pass rate with pragmatic test strategy
+**What's New in 3.2.0:**
+- **Version Cleanup** - Removed all legacy 5.3.x references, unified to 3.2.0 scheme
+- **Universal Upgrade System** - One command works for all repositories (standalone/embedded)
+- **Smart Detection** - Auto-detects installation type and applies appropriate upgrade method
+- **Zero Data Loss** - Automatic brain backup, path validation, post-upgrade verification
+- **Issue #3 Fixes** - ViewDiscoveryAgent, FeedbackAgent, enhanced TDD workflow
 
 ## ⚠️ CRITICAL RULES
 
