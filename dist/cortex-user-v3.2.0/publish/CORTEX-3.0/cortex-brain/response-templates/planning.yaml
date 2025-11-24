@@ -1,0 +1,397 @@
+# CORTEX Response Templates - PLANNING Category
+# Auto-generated from response-templates.yaml
+# Template count: 11
+
+category: planning
+last_updated: '2025-11-13'
+schema_version: 2.1.0
+templates:
+  architect_error:
+    content: '❌ **Architecture Design Failed**
+
+
+      Error: {{error_message}}
+
+      '
+    context_needed: true
+    metadata:
+      agent: architect
+      category: agent
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  architect_success:
+    content: '✅ **Architecture Design Complete**
+
+
+      Components: {{components_count}}
+
+
+      {{#components}}
+
+      • {{name}}: {{description}}
+
+      {{/components}}
+
+
+      [expert]
+
+      Technical Details:
+
+      {{technical_notes}}
+
+      [/expert]
+
+      '
+    context_needed: true
+    metadata:
+      agent: architect
+      category: agent
+    response_type: detailed
+    triggers: []
+    verbosity: detailed
+  planning_aborted:
+    content: '🎯 **CORTEX Planning**
+
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+
+      ⏹️  **Planning Cancelled**
+
+
+      Session aborted by user.
+
+
+      Restart anytime with: "let''s plan a feature"
+
+      '
+    context_needed: true
+    metadata:
+      category: planning
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  planning_activation:
+    content: "\U0001F3AF **CORTEX Interactive Planning**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\U0001F3AF **My Understanding Of Your Request:**\n   You want to plan {{feature_description}}\n\n⚠️ **My Challenge:**\
+      \ {{#if high_confidence}}✓ **Accept**{{else}}⚡ **Challenge**{{/if}}\n   {{challenge_rationale}}\n\n\U0001F4AC **My Response:**\n\
+      \   {{response_message}}\n\n\n\U0001F4DD **Your Request:** {{user_request}}\n\n\U0001F50D **Next Steps:**\n   {{next_steps}}\n"
+    context_needed: true
+    metadata:
+      category: planning
+      operation: activation
+    response_type: narrative
+    triggers:
+    - plan a feature
+    - plan this feature
+    - plan this
+    - let's plan
+    - lets plan
+    - let's plan together
+    - lets plan together
+    - help me plan
+    - help me plan this
+    - help me plan a feature
+    - need help planning
+    - need your help planning
+    - can you help me plan
+    - can you help plan
+    - I want to plan
+    - i want to plan
+    - I need to plan
+    - i need to plan
+    - planning
+    - start planning
+    - begin planning
+    - let's create a plan
+    - lets create a plan
+    - create a plan
+    - make a plan
+    - build a plan
+    - we need to plan
+    - plan authentication
+    - plan user dashboard
+    - plan API endpoint
+    - plan the API
+    - plan database schema
+    - plan frontend
+    - plan backend
+    - plan integration
+    - plan deployment
+    - plan testing
+    - plan migration
+    - plan refactor
+    - plan new feature
+    - how do I plan
+    - how do i plan
+    - how should I plan
+    - how should i plan
+    - how to plan this
+    - what's the best way to plan
+    - whats the best way to plan
+    - help planning this
+    - help planning this out
+    - help me plan this out
+    - let's plan a feature together
+    - lets plan a feature together
+    - plan together
+    - work with me to plan
+    - collaborate on planning
+    - help me break this down
+    - break this down for me
+    - help me structure this
+    - I need a roadmap
+    - i need a roadmap
+    - create a roadmap
+    - build a roadmap
+    - help me organize this work
+    - how should I approach this
+    - how should i approach this
+    - what's the best approach
+    - whats the best approach
+    - how do I tackle this
+    - how do i tackle this
+    verbosity: concise
+  planning_complete:
+    content: '🎯 **CORTEX Planning Complete**
+
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+
+      ✅ **Planning Session Complete**
+
+
+      Plan saved to Tier 1 memory
+
+      Session ID: {{session_id}}
+
+
+      Ready to begin Phase 1!
+
+      '
+    context_needed: true
+    metadata:
+      category: planning
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  planning_plan_ready:
+    content: '🎯 **CORTEX Implementation Plan**
+
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+
+      ✅ **Plan Ready**
+
+
+      Title: {{plan_title}}
+
+      Total Estimate: {{total_hours}} hours
+
+      Complexity: {{complexity}}
+
+
+      ## 📋 Phases
+
+
+      {{#phases}}
+
+      ### Phase {{phase_num}}: {{phase_name}} ({{phase_hours}}h)
+
+      {{#tasks}}
+
+      • {{task_name}}
+
+      {{/tasks}}
+
+      {{/phases}}
+
+
+      {{#risks}}
+
+      ## ⚠️ Risks
+
+      {{#risk_items}}
+
+      • {{risk_text}}
+
+      {{/risk_items}}
+
+      {{/risks}}
+
+
+      {{#considerations}}
+
+      ## 💡 Key Decisions
+
+      {{#decision_items}}
+
+      • {{decision_text}}
+
+      {{/decision_items}}
+
+      {{/considerations}}
+
+
+      🔍 **Next:** Proceed with implementation? (yes/no/modify)
+
+      '
+    context_needed: true
+    metadata:
+      category: planning
+    response_type: detailed
+    triggers: []
+    verbosity: detailed
+  planning_question:
+    content: '🎯 **CORTEX Interactive Planning**
+
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+
+      ❓ **Question {{question_num}}/{{total_questions}}**
+
+
+      {{question_text}}
+
+
+      {{#options}}
+
+      {{option_letter}}) {{option_text}}
+
+      {{/options}}
+
+
+      {{#default}}
+
+      [Default: {{default_value}}]
+
+      {{/default}}
+
+
+      💡 Commands: ''skip'' (use default) | ''done'' (finish early) | ''abort'' (cancel)
+
+      '
+    context_needed: true
+    metadata:
+      category: planning
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  planning_started:
+    content: '🎯 **CORTEX Interactive Planning**
+
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+
+      🚀 **Planning Session Started**
+
+
+      Request: {{user_request}}
+
+      Confidence: {{confidence}}%
+
+      Mode: {{mode}}
+
+      '
+    context_needed: true
+    metadata:
+      category: planning
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  question_can_cortex_do:
+    content: '🔍 **Capability Check: {{requested_capability}}**
+
+
+      {{#if capability_exists}}
+
+      ✅ **YES** - CORTEX can {{requested_capability}}
+
+
+      **How to use:**
+
+      {{usage_example}}
+
+
+      **Related operations:**
+
+      {{#related_operations}}
+
+      • {{operation_name}}: {{description}}
+
+      {{/related_operations}}
+
+      {{else}}
+
+      ❌ **NOT YET** - {{requested_capability}} is not implemented
+
+
+      **Status:** {{implementation_status}}
+
+      **Planned for:** {{planned_version}}
+
+
+      **Alternatives:**
+
+      {{#alternatives}}
+
+      • {{alternative_description}}
+
+      {{/alternatives}}
+
+      {{/if}}
+
+      '
+    context_needed: true
+    data_collectors:
+    - capability_checker
+    metadata:
+      category: system
+      question_type: capability_check
+    response_type: narrative
+    triggers:
+    - can cortex
+    - does cortex support
+    - is cortex able to
+    - cortex capability check
+    verbosity: concise
+  work_planner_error:
+    content: '❌ **Planning Failed**
+
+
+      Error: {{error_message}}
+
+
+      Needs: More context about the task
+
+      '
+    context_needed: true
+    metadata:
+      agent: work_planner
+      category: agent
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  work_planner_success:
+    content: '✅ **Work Plan Created**
+
+
+      Tasks: {{tasks_count}}
+
+      Estimated Time: {{estimated_hours}}h
+
+
+      {{#tasks}}
+
+      {{order}}. {{title}} ({{effort}})
+
+      {{/tasks}}
+
+      '
+    context_needed: true
+    metadata:
+      agent: work_planner
+      category: agent
+    response_type: detailed
+    triggers: []
+    verbosity: concise

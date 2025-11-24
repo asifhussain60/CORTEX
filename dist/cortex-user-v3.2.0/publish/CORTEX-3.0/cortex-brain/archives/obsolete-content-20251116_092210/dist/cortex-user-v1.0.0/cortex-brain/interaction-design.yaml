@@ -1,0 +1,61 @@
+interaction_design:
+  philosophy: Natural language only - intuitive, flexible, maintainable
+  decision_date: '2025-11-10'
+  rationale:
+  - Simpler mental model (one way to interact)
+  - More intuitive for all user levels
+  - Less documentation overhead
+  - Natural language already works perfectly
+  - Eliminates syntax errors
+  - Reduces maintenance burden
+  natural_language_patterns:
+    terse:
+      description: Single word commands (fast for power users)
+      examples:
+      - setup
+      - cleanup
+      - demo
+      - help
+    clear:
+      description: Clear intent phrases (recommended)
+      examples:
+      - setup environment
+      - clean workspace
+      - show me what cortex can do
+      - refresh cortex story
+    conversational:
+      description: Natural conversation (most flexible)
+      examples:
+      - I want to set up my environment
+      - Can you clean up temporary files?
+      - Show me how to use CORTEX
+      - Let's plan a new feature
+  intent_detection:
+    method: Semantic matching on natural_language field
+    fallback: If no match, show help with suggestions
+    confidence_threshold: 0.75
+    fuzzy_matching: true
+  command_discovery:
+    primary: help command shows all operations
+    search: Semantic search through operation descriptions
+    suggestions: Context-aware based on project state
+    examples: Every operation lists natural language examples
+  vs_code_extension:
+    note: VS Code extension MAY use slash commands internally
+    reason: UI conventions (e.g., /resume, /history)
+    scope: Extension only, not core CORTEX
+    documentation: Documented separately from main operations
+  migration_notes:
+    removed: All slash_command fields from cortex-operations.yaml
+    kept: All natural_language arrays (primary interaction method)
+    impact: None - natural language already working
+    documentation_cleanup:
+    - CORTEX.prompt.md - remove slash command sections
+    - Help system - remove slash command column
+    - Technical docs - emphasize natural language only
+metadata:
+  version: '2.0'
+  last_updated: '2025-11-10'
+  author: Asif Hussain
+  replaces: slash-commands-guide.yaml (concept abandoned)
+  architectural_decision: Natural language only interaction model

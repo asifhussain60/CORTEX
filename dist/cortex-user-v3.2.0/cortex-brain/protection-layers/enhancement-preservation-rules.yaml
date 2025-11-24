@@ -1,0 +1,266 @@
+###############################################################################
+# CORTEX Enhancement Preservation Rules
+# 
+# Protects all CORTEX 3.0 enhancements from accidental deletion or modification
+# during cleanup, optimization, or refactoring operations.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+###############################################################################
+
+version: "1.0.0"
+last_updated: "2025-11-19"
+
+# CRITICAL: Protected enhancement files (NEVER delete/modify without approval)
+protected_files:
+  meta_template_system:
+    - path: "cortex-brain/templates/meta-template.yaml"
+      reason: "Meta-template specification - defines template structure for entire system"
+      protection_level: "critical"
+      requires_approval: true
+    
+    - path: "src/validators/template_validator.py"
+      reason: "Template validation engine - enforces meta-template rules"
+      protection_level: "critical"
+      requires_approval: true
+    
+    - path: "tests/cognitive/test_confidence_scorer.py"
+      reason: "Confidence scoring test suite - 29/29 passing tests"
+      protection_level: "high"
+      requires_approval: true
+  
+  confidence_display:
+    - path: "src/cognitive/confidence_scorer.py"
+      reason: "Confidence scoring module - calculates pattern reliability (Feature 2)"
+      protection_level: "critical"
+      requires_approval: true
+    
+    - path: "src/cognitive/__init__.py"
+      reason: "Cognitive module initialization - exports confidence scorer"
+      protection_level: "high"
+      requires_approval: false
+  
+  response_templates:
+    - path: "cortex-brain/response-templates.yaml"
+      reason: "Response template database - 32 validated templates"
+      protection_level: "critical"
+      requires_approval: true
+      backup_required: true
+  
+  planning_system:
+    - path: "src/operations/modules/planning/plan_sync_manager.py"
+      reason: "Planning sync manager - two-way file/DB sync (Feature 3)"
+      protection_level: "high"
+      requires_approval: true
+  
+  integration_tests:
+    - path: "tests/integration/test_cortex_enhancements.py"
+      reason: "Enhancement test harness - validates all CORTEX 3.0 features"
+      protection_level: "critical"
+      requires_approval: true
+
+# Protected directories (require special handling)
+protected_directories:
+  - path: "src/cognitive/"
+    reason: "Cognitive framework directory - confidence scoring and pattern recognition"
+    protection_level: "high"
+    allow_additions: true
+    allow_deletions: false
+  
+  - path: "src/validators/"
+    reason: "Validation framework - template validators and quality checks"
+    protection_level: "high"
+    allow_additions: true
+    allow_deletions: false
+  
+  - path: "cortex-brain/templates/"
+    reason: "Template definitions - meta-templates and structure specs"
+    protection_level: "critical"
+    allow_additions: true
+    allow_deletions: false
+  
+  - path: "cortex-brain/documents/planning/"
+    reason: "Active planning files - work plans and feature designs"
+    protection_level: "medium"
+    allow_additions: true
+    allow_deletions: true  # Old plans can be archived
+
+# Validation rules (run during optimize/health checks)
+validation_rules:
+  - rule_id: "ENHANCE-001"
+    name: "Meta-Template Validation"
+    description: "All response templates must pass meta-template validation"
+    check_command: "python src/validators/template_validator.py --file cortex-brain/response-templates.yaml"
+    expected_result: "All templates passed validation"
+    severity: "critical"
+    auto_fix: false
+  
+  - rule_id: "ENHANCE-002"
+    name: "Confidence Scoring Tests"
+    description: "All confidence scorer tests must pass (29/29)"
+    check_command: "pytest tests/cognitive/test_confidence_scorer.py -v"
+    expected_result: "29 passed"
+    severity: "high"
+    auto_fix: false
+  
+  - rule_id: "ENHANCE-003"
+    name: "Enhancement Integration Tests"
+    description: "All enhancement integration tests must pass"
+    check_command: "pytest tests/integration/test_cortex_enhancements.py -v"
+    expected_result: "All tests passed"
+    severity: "critical"
+    auto_fix: false
+  
+  - rule_id: "ENHANCE-004"
+    name: "Response Template Count"
+    description: "Response templates file must contain at least 32 templates"
+    check_type: "yaml_count"
+    file: "cortex-brain/response-templates.yaml"
+    path: "templates"
+    min_count: 32
+    severity: "high"
+    auto_fix: false
+  
+  - rule_id: "ENHANCE-005"
+    name: "Confidence Templates Presence"
+    description: "Confidence display templates must exist (high/medium/low/none)"
+    check_type: "yaml_keys_exist"
+    file: "cortex-brain/response-templates.yaml"
+    path: "templates"
+    required_keys:
+      - "confidence_high"
+      - "confidence_medium"
+      - "confidence_low"
+      - "confidence_none"
+    severity: "high"
+    auto_fix: false
+
+# Cleanup exemptions (files excluded from cleanup operations)
+cleanup_exemptions:
+  - pattern: "src/cognitive/**/*.py"
+    reason: "Cognitive framework - enhancement code"
+  
+  - pattern: "src/validators/**/*.py"
+    reason: "Validation framework - enhancement code"
+  
+  - pattern: "tests/cognitive/**/*.py"
+    reason: "Cognitive tests - enhancement validation"
+  
+  - pattern: "tests/integration/test_cortex_enhancements.py"
+    reason: "Enhancement test harness - critical validation"
+  
+  - pattern: "cortex-brain/templates/*.yaml"
+    reason: "Template definitions - system specifications"
+  
+  - pattern: "cortex-brain/protection-layers/enhancement-preservation-rules.yaml"
+    reason: "Self-protection - this file itself"
+
+# Backup requirements (files that must be backed up before modification)
+backup_requirements:
+  - file: "cortex-brain/response-templates.yaml"
+    backup_frequency: "on_modification"
+    retention_days: 30
+    reason: "Critical template database - 32 validated templates"
+  
+  - file: "cortex-brain/templates/meta-template.yaml"
+    backup_frequency: "on_modification"
+    retention_days: 90
+    reason: "System specification - defines template structure"
+
+# Health check integration
+health_checks:
+  - check_id: "HEALTH-ENHANCE-001"
+    name: "Enhancement Files Integrity"
+    description: "Verify all protected enhancement files exist"
+    frequency: "on_optimize"
+    severity: "critical"
+  
+  - check_id: "HEALTH-ENHANCE-002"
+    name: "Template Validation Status"
+    description: "Run template validator and report issues"
+    frequency: "on_optimize"
+    severity: "high"
+  
+  - check_id: "HEALTH-ENHANCE-003"
+    name: "Confidence Scorer Functionality"
+    description: "Run confidence scorer tests"
+    frequency: "on_optimize"
+    severity: "high"
+  
+  - check_id: "HEALTH-ENHANCE-004"
+    name: "Enhancement Test Suite"
+    description: "Run full enhancement test harness"
+    frequency: "daily"
+    severity: "critical"
+
+# Optimization integration
+optimization_rules:
+  - rule_id: "OPT-ENHANCE-001"
+    name: "Preserve Enhancement Modules"
+    description: "Never optimize away cognitive or validator modules"
+    applies_to:
+      - "src/cognitive/"
+      - "src/validators/"
+    action: "skip_optimization"
+  
+  - rule_id: "OPT-ENHANCE-002"
+    name: "Preserve Template Tests"
+    description: "Never mark enhancement tests as obsolete"
+    applies_to:
+      - "tests/cognitive/"
+      - "tests/integration/test_cortex_enhancements.py"
+    action: "skip_obsolete_detection"
+  
+  - rule_id: "OPT-ENHANCE-003"
+    name: "Validate After Optimization"
+    description: "Run enhancement validation after any optimization"
+    trigger: "post_optimization"
+    validation_command: "pytest tests/integration/test_cortex_enhancements.py -v"
+
+# Alerts and notifications
+alert_configuration:
+  protected_file_modification:
+    severity: "high"
+    notification: "Email + Console"
+    message: "Protected enhancement file modified: {file_path}"
+  
+  validation_failure:
+    severity: "critical"
+    notification: "Email + Console + Block"
+    message: "Enhancement validation failed: {validation_rule}"
+  
+  cleanup_attempted:
+    severity: "medium"
+    notification: "Console"
+    message: "Cleanup skipped protected enhancement: {file_path}"
+
+# Recovery procedures
+recovery_procedures:
+  template_corruption:
+    steps:
+      - "Stop all template-dependent operations"
+      - "Restore response-templates.yaml from latest backup"
+      - "Run template validator to verify restoration"
+      - "Restart affected services"
+    automation: "semi_automatic"
+  
+  confidence_scorer_failure:
+    steps:
+      - "Check confidence_scorer.py for syntax errors"
+      - "Run test suite to identify failures"
+      - "Restore from git if needed"
+      - "Re-run integration tests"
+    automation: "manual"
+
+# Deprecation policy
+deprecation:
+  notice_period_days: 90
+  requires_migration_guide: true
+  requires_approval_from: "System Architect"
+  affected_components:
+    - "Any protected enhancement file"
+    - "Any protected directory"
+
+###############################################################################
+# END: Enhancement Preservation Rules
+###############################################################################

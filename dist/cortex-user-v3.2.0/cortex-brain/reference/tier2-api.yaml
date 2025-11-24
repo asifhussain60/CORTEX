@@ -1,0 +1,318 @@
+tier2_knowledge_graph_api:
+  name: "Tier 2 Knowledge Graph API"
+  version: "2.0"
+  purpose: "Long-term pattern learning and relationship tracking"
+  
+  overview:
+    storage: 
+      primary: "cortex-brain/tier2/knowledge-graph.db (SQLite)"
+      export: "knowledge-graph.yaml" 
+    performance_target: "<150ms per search"
+    actual_performance: "92ms average"
+    
+  core_classes:
+    KnowledgeGraph:
+      location: "src/tier2/knowledge_graph.py"
+      purpose: "Pattern storage, search, and relationship management"
+      
+      pattern_methods:
+        store_pattern:
+          parameters:
+            title: "string"
+            pattern_type: "string (workflow|intent|validation)"
+            confidence: "float (0.0-1.0)"
+            context: "dict"
+            scope: "string (cortex|application)"
+            namespaces: "list"
+          returns: "pattern_id"
+          example: |
+            pattern_id = kg.store_pattern(
+                title="Invoice Export Workflow",
+                pattern_type="workflow",
+                confidence=0.85,
+                context={
+                    "files": ["InvoiceService.cs", "ExportController.cs"],
+                    "steps": ["validate_data", "format_invoice", "generate_pdf"],
+                    "success_rate": 0.94,
+                    "common_issues": ["missing data validation"]
+                },
+                scope="application",
+                namespaces=["KSESSIONS", "accounting"]
+            )
+            
+        search_patterns:
+          parameters:
+            query: "string"
+            filters: "dict (optional)"
+            limit: "integer (default: 5)"
+          returns: "list of matching patterns"
+          example: |
+            patterns = kg.search_patterns(
+                query="export feature",
+                filters={
+                    "pattern_type": "workflow",
+                    "scope": "application", 
+                    "min_confidence": 0.7
+                },
+                limit=5
+            )
+
+  file_relationship_methods:
+    track_relationship:
+      parameters:
+        file_a: "string"
+        file_b: "string" 
+        relationship_type: "string (co_modification|dependency)"
+        strength: "float (0.0-1.0)"
+        context: "string (optional)"
+      example: |
+        kg.track_relationship(
+            file_a="HostControlPanel.razor",
+            file_b="noor-canvas.css",
+            relationship_type="co_modification",
+            strength=0.75,
+            context="UI styling changes"
+        )
+        
+    get_file_relationships:
+      parameters:
+        file_path: "string"
+        relationship_types: "list (optional)"
+        min_strength: "float (default: 0.5)"
+      returns: "list of relationships"
+      example: |
+        relationships = kg.get_file_relationships(
+            file_path="HostControlPanel.razor",
+            relationship_types=["co_modification", "dependency"],
+            min_strength=0.5
+        )
+
+  intent_pattern_learning:
+    learn_intent_pattern:
+      parameters:
+        user_phrase: "string"
+        detected_intent: "string"
+        confidence: "float"
+        context: "dict"
+      example: |
+        kg.learn_intent_pattern(
+            user_phrase="add a button",
+            detected_intent="PLAN", 
+            confidence=0.88,
+            context={
+                "agent_routed": "work-planner",
+                "workflow_created": True,
+                "success": True
+            }
+        )
+        
+    predict_intent:
+      parameters:
+        user_phrase: "string"
+        context_hints: "list (optional)"
+      returns: "dict with prediction details"
+      example: |
+        intent = kg.predict_intent(
+            user_phrase="create a new export feature",
+            context_hints=["feature", "export"]
+        )
+        # Returns: predicted_intent, confidence, matching_patterns, suggested_agent
+
+  workflow_templates:
+    store_workflow_template:
+      parameters:
+        name: "string"
+        phases: "list of phase dicts"
+        success_rate: "float"
+        avg_duration_hours: "float"
+      returns: "template_id"
+      example: |
+        template_id = kg.store_workflow_template(
+            name="feature_development_workflow",
+            phases=[
+                {
+                    "phase": 1,
+                    "name": "Planning", 
+                    "tasks": ["Define requirements", "Create test scenarios"],
+                    "agent": "work-planner"
+                },
+                {
+                    "phase": 2,
+                    "name": "Implementation",
+                    "tasks": ["Write failing tests", "Implement feature"],
+                    "agent": "code-executor"
+                }
+            ],
+            success_rate=0.94,
+            avg_duration_hours=2.5
+        )
+        
+    apply_workflow_template:
+      parameters:
+        template_name: "string"
+        context: "dict"
+      returns: "instantiated workflow"
+      example: |
+        workflow = kg.apply_workflow_template(
+            template_name="feature_development_workflow",
+            context={
+                "feature_name": "User Authentication",
+                "complexity": "medium"
+            }
+        )
+
+  pattern_decay:
+    configuration:
+      enabled: true
+      decay_rate: 0.05  # 5% confidence drop per 30 days unused
+      min_confidence: 0.3  # Delete patterns below this threshold
+      check_interval_days: 7
+      
+    methods:
+      configure_decay:
+        parameters:
+          enabled: "boolean"
+          decay_rate: "float"
+          min_confidence: "float" 
+          check_interval_days: "integer"
+        example: |
+          kg.configure_decay(
+              enabled=True,
+              decay_rate=0.05,
+              min_confidence=0.3,
+              check_interval_days=7
+          )
+          
+      apply_decay:
+        returns: "dict with decay results"
+        example: |
+          result = kg.apply_decay()
+          # Returns: patterns_decayed, patterns_pruned, average_decay, etc.
+          
+      boost_pattern:
+        parameters:
+          pattern_id: "string"
+          boost_amount: "float"
+          context: "string (optional)"
+        example: |
+          kg.boost_pattern(
+              pattern_id="pattern_invoice_export_workflow_a1b2",
+              boost_amount=0.05,
+              context="Successfully applied to receipt export"
+          )
+
+  database_schema:
+    patterns_table:
+      fields:
+        pattern_id: "TEXT PRIMARY KEY"
+        title: "TEXT NOT NULL"
+        pattern_type: "TEXT (workflow|intent|validation)"
+        confidence: "REAL DEFAULT 0.5"
+        context_json: "TEXT"
+        scope: "TEXT (cortex|application)"
+        namespaces: "TEXT (JSON array)"
+        created_at: "DATETIME DEFAULT CURRENT_TIMESTAMP"
+        last_used: "DATETIME"
+        usage_count: "INTEGER DEFAULT 0"
+        
+    relationships_table:
+      fields:
+        relationship_id: "TEXT PRIMARY KEY"
+        file_a: "TEXT"
+        file_b: "TEXT"
+        relationship_type: "TEXT (co_modification|dependency)"
+        strength: "REAL (0.0-1.0)"
+        co_modification_count: "INTEGER DEFAULT 0"
+        context: "TEXT"
+        last_observed: "DATETIME DEFAULT CURRENT_TIMESTAMP"
+        
+    workflows_table:
+      fields:
+        workflow_id: "TEXT PRIMARY KEY"
+        name: "TEXT UNIQUE NOT NULL"
+        phases_json: "TEXT (JSON array)"
+        success_rate: "REAL"
+        avg_duration_hours: "REAL"
+        usage_count: "INTEGER DEFAULT 0"
+        created_at: "DATETIME DEFAULT CURRENT_TIMESTAMP"
+
+    fts5_search:
+      table: "patterns_fts"
+      engine: "fts5"
+      indexed_fields: ["title", "context_json"]
+      configuration: "content='patterns', content_rowid='rowid'"
+
+  performance_optimizations:
+    indexing:
+      - "CREATE INDEX idx_patterns_confidence ON patterns(confidence DESC)"
+      - "CREATE INDEX idx_patterns_type_scope ON patterns(pattern_type, scope)"
+      - "CREATE INDEX idx_patterns_last_used ON patterns(last_used DESC)"
+      - "CREATE INDEX idx_relationships_files ON relationships(file_a, file_b)"
+      
+    query_optimization:
+      pattern_search: "Uses FTS5 with confidence ranking"
+      relationship_queries: "Covering indexes on file pairs"
+      decay_processing: "Batch operations with transactions"
+      
+    caching:
+      frequently_used_patterns: "LRU cache (100 patterns)"
+      file_relationships: "Cache by file path"
+      workflow_templates: "Full template caching"
+
+  namespace_isolation:
+    cortex_namespace:
+      scope: "cortex"
+      protection: "read-only for users"
+      content: "framework knowledge and patterns"
+      
+    application_namespace:
+      scope: "application" 
+      protection: "read/write enabled"
+      content: "project-specific patterns"
+      
+    isolation_rules:
+      cross_scope_access: false
+      namespace_validation: true
+      pattern_separation: "enforced at storage level"
+
+  example_usage:
+    initialization: |
+      from src.tier2.knowledge_graph import KnowledgeGraph
+      kg = KnowledgeGraph()
+      
+    learning_workflow: |
+      # Learn from successful interaction
+      pattern_id = kg.store_pattern(
+          title="Add Button Workflow",
+          pattern_type="workflow", 
+          confidence=0.82,
+          context={
+              "user_request": "add a button",
+              "intent": "EXECUTE",
+              "files_modified": ["Panel.razor", "styles.css"],
+              "success": True
+          }
+      )
+      
+      # Track file relationships
+      kg.track_relationship(
+          file_a="Panel.razor",
+          file_b="styles.css", 
+          relationship_type="co_modification",
+          strength=0.85
+      )
+      
+    pattern_application: |
+      # Search for similar patterns
+      patterns = kg.search_patterns("add button component")
+      
+      # Apply learned workflow
+      if patterns:
+          best_pattern = patterns[0]
+          workflow = kg.apply_workflow_template(
+              template_name=best_pattern["title"],
+              context={"component_type": "navigation"}
+          )
+          
+      # Boost pattern on success
+      kg.boost_pattern(pattern_id, 0.05, "Applied to navigation")

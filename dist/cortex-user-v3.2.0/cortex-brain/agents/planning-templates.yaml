@@ -1,0 +1,182 @@
+# Work Planner Templates & Patterns
+# Version: 6.0
+# Purpose: Planning templates, phase structures, and task breakdown patterns
+
+planning_templates:
+  
+  phase_template:
+    structure:
+      phase_number: "integer"
+      name: "string (descriptive phase name)"
+      description: "string (what this phase accomplishes)"
+      tasks: "array of task objects"
+      status: "not_started|in_progress|complete"
+    
+    example:
+      phase_number: 1
+      name: "Foundation & Test Setup"
+      description: "Establish test infrastructure and define success criteria"
+      tasks: []
+      status: "not_started"
+  
+  task_template:
+    structure:
+      task_id: "string (phase.task format: 1.1, 1.2)"
+      description: "string (what to implement)"
+      files: "array (files to modify/create)"
+      tests: "array (tests to write)"
+      rules: "array (KDS rules to follow)"
+      status: "not_started|in_progress|complete"
+    
+    example:
+      task_id: "1.1"
+      description: "Create Playwright test for PDF export button"
+      files: ["Tests/UI/PDFExport.spec.ts"]
+      tests: ["PDF button renders", "Click triggers export"]
+      rules: ["#8 Test-First", "#15 Hybrid UI Identifiers"]
+      status: "not_started"
+
+breakdown_patterns:
+  
+  test_first_pattern:
+    phases:
+      phase_1:
+        name: "Foundation & Test Setup"
+        tasks:
+          - "Create test files (Playwright/xUnit)"
+          - "Define success criteria"
+          - "Set up test data"
+      
+      phase_2:
+        name: "Core Implementation"
+        tasks:
+          - "Implement feature logic"
+          - "Wire up UI components"
+          - "Handle edge cases"
+      
+      phase_3:
+        name: "Testing & Validation"
+        tasks:
+          - "Run tests (ensure failures before implementation)"
+          - "Implement until tests pass"
+          - "Visual regression testing"
+      
+      phase_4:
+        name: "Integration & Deployment"
+        tasks:
+          - "Integration testing"
+          - "Feature flag configuration"
+          - "Deploy to staging"
+  
+  feature_complexity:
+    small_feature:
+      phases: 2
+      tasks_per_phase: "1-3"
+      example: "Add a button with click handler"
+    
+    medium_feature:
+      phases: 3
+      tasks_per_phase: "3-5"
+      example: "Add PDF export functionality"
+    
+    large_feature:
+      phases: 4
+      tasks_per_phase: "5-8"
+      example: "Implement session sharing with real-time sync"
+
+context_analysis:
+  
+  file_analysis:
+    examine:
+      - "File type and framework"
+      - "Existing patterns and conventions"
+      - "Related files (imports, dependencies)"
+      - "Test coverage gaps"
+    
+    output:
+      - "Suggested files to modify"
+      - "Related test files to create/update"
+      - "Potential conflicts or dependencies"
+  
+  rule_application:
+    analyze:
+      - "Which KDS rules apply to this feature"
+      - "Rule priority and dependencies"
+      - "Potential rule violations to avoid"
+    
+    output:
+      - "Applicable rules per task"
+      - "Rule compliance checklist"
+      - "Warning about conflicting rules"
+  
+  pattern_matching:
+    search_brain:
+      - "Similar features implemented before"
+      - "Proven patterns for this scenario"
+      - "Known pitfalls and solutions"
+    
+    output:
+      - "Recommended patterns"
+      - "Reference implementations"
+      - "Lessons learned from past work"
+
+task_breakdown_rules:
+  
+  granularity:
+    - "Each task should be completable in 30-60 minutes"
+    - "Task should have clear success criteria"
+    - "Task should result in testable outcome"
+  
+  sequencing:
+    - "Tests before implementation (Rule #8)"
+    - "Foundation before features"
+    - "Core functionality before edge cases"
+    - "UI after business logic"
+  
+  testability:
+    - "Every task must have associated test"
+    - "Tests should fail initially (TDD)"
+    - "Visual regression for UI changes"
+    - "Integration tests for multi-component features"
+
+output_formats:
+  
+  yaml_plan:
+    path: "cortex-brain/tier1/plans/{session_id}-plan.yaml"
+    structure: "Complete phase/task breakdown"
+    usage: "Execution tracking, progress monitoring"
+  
+  markdown_summary:
+    path: "cortex-brain/tier1/plans/{session_id}-summary.md"
+    structure: "Human-readable overview"
+    usage: "User review, documentation"
+  
+  json_api:
+    structure: "Machine-readable format"
+    usage: "Tool integration, automation"
+
+planning_agents:
+  
+  right_hemisphere:
+    role: "Strategic planning, pattern matching, holistic view"
+    responsibilities:
+      - "Identify similar past implementations"
+      - "Suggest proven patterns"
+      - "Consider architectural impact"
+      - "Predict potential challenges"
+  
+  left_hemisphere:
+    role: "Tactical execution, detail-oriented, sequential"
+    responsibilities:
+      - "Break down into specific tasks"
+      - "Define file-level changes"
+      - "Create test specifications"
+      - "Sequence task dependencies"
+  
+  corpus_callosum:
+    role: "Coordinate between strategic and tactical"
+    responsibilities:
+      - "Translate vision into tasks"
+      - "Ensure task alignment with strategy"
+      - "Resolve conflicts between approaches"
+      - "Maintain plan coherence"

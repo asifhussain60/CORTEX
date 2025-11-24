@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 # Package metadata
-PACKAGE_VERSION = "5.2.0"  # Updated for CORTEX 2.0 Response Template Architecture
+PACKAGE_VERSION = "3.2.0"  # TDD Mastery integration complete
 PUBLISH_BRANCH = "cortex-publish"
 
 # Checkpoint file for fault tolerance

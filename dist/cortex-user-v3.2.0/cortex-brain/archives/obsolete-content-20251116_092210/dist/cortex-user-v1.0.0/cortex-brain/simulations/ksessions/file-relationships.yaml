@@ -1,0 +1,269 @@
+relationships:
+- relationship: test-coverage
+  related_file: Components/**/hcp-collapsible-panel-phase1.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/hcp/tests/hcp-collapsible-panel-phase1.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/hcp-session-controls-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/clickable-elements-sanitization.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/hcp-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/html-cleaner-validation.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/qa-panel-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-section-share-sanitization.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-share-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/test-transcript-section-broadcast.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/sharebutton-injection-validation.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/question-submission-broadcast.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-canvas-screenshot.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-modal-submit-console.razor
+  primary_file: C:/TEMP/ksessions-simulation/.github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/admin-session-dropdown-refresh.razor
+  primary_file: C:/TEMP/ksessions-simulation/tests/admin-session-dropdown-refresh.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/example.razor
+  primary_file: C:/TEMP/ksessions-simulation/tests/example.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/hcp-collapsible-panel-phase1.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/hcp/tests/hcp-collapsible-panel-phase1.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/hcp-session-controls-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/clickable-elements-sanitization.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/hcp-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/html-cleaner-validation.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/qa-panel-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-section-share-sanitization.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-share-overflow-visual.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/test-transcript-section-broadcast.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/sharebutton-injection-validation.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/question-submission-broadcast.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-canvas-screenshot.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/transcript-modal-submit-console.razor
+  primary_file: C:/TEMP/ksessions-simulation/Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionReaderApi.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Api/SessionReaderApiTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/H2SummarizationAndCleanup.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Business/H2SummarizationAndCleanupTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionReaderBusiness.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Business/SessionReaderBusinessTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/H2SummarizationAndCleanupData.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Database/H2SummarizationAndCleanupDataTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionReaderDatabase.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Database/SessionReaderDatabaseTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/DashboardDemo.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Demo/DashboardDemoTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionReader.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Frontend/SessionReaderTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/JwtAuthenticationIntegration.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Integration/Auth/JwtAuthenticationIntegrationTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SiteAvailability.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Integration/SiteAvailability/SiteAvailabilityTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/AdminController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Api/Controllers/AdminControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/GroupController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Api/Controllers/GroupControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/PublicController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Api/Controllers/PublicControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Api/Controllers/SessionControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/BusinessLogic.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Business/BusinessLogicTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/GroupController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Controllers/Api/GroupControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/SessionController.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Controllers/Api/SessionControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/DataRepository.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Database/DataRepositoryTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/StoredProcedure.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Database/StoredProcedureTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/Controller.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Frontend/AngularJS/ControllerTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/Directive.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Frontend/AngularJS/DirectiveTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/Service.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Frontend/AngularJS/ServiceTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/DatabaseIntegration.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Integration/DatabaseIntegrationTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/EndToEnd.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Integration/EndToEndTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/Performance.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Performance/PerformanceTests.cs
+  confidence: 0.8
+  source: test-crawler
+- relationship: test-coverage
+  related_file: Components/**/Security.razor
+  primary_file: C:/TEMP/ksessions-simulation/Source Code/Sessions.Tests/Tests/Security/SecurityTests.cs
+  confidence: 0.8
+  source: test-crawler
+last_updated: 2025-11-06T12:40:39Z
+source: multi-threaded-crawler
+

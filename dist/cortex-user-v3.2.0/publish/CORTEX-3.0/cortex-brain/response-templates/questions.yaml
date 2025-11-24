@@ -1,0 +1,736 @@
+# CORTEX 3.0 Enhanced Question Response Templates
+# ===============================================
+# 
+# Intelligent question routing templates for namespace-aware responses.
+# Eliminates confusion between CORTEX framework and workspace code questions.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# Feature: Quick Win #2 (Week 1) - Enhanced response template routing
+# Updated: 2025-11-16
+
+schema_version: "3.0.0"
+feature: "intelligent_question_routing" 
+status: "production"
+created: "2025-11-13"
+updated: "2025-11-16"
+category: questions
+templates:
+  question_about_cortex_general:
+    content: '🧠 **CORTEX Framework Status**
+
+
+      **Capabilities (Operations):**
+
+      {{#operations}}
+
+      • {{operation_name}}: {{status}} ({{modules_ready}}/{{modules_total}} modules)
+
+      {{/operations}}
+
+
+      **Plugins:** {{plugins_active}}/{{plugins_total}} active
+
+
+      **Current Session:**
+
+      • Conversations: {{tier1_conversations}}/20 ({{tier1_memory_usage}}%)
+
+      • Patterns learned: {{tier2_patterns_count}} in {{current_namespace}}
+
+      • Session duration: {{session_duration_hours}}h
+
+
+      **Brain Health:** {{brain_health_score}}/100
+
+
+      [detailed]
+
+      **Tier Status:**
+
+      • Tier 0 (Protection): {{tier0_status}}
+
+      • Tier 1 (Memory): {{tier1_status}}
+
+      • Tier 2 (Knowledge): {{tier2_status}}
+
+      • Tier 3 (Context): {{tier3_status}}
+
+      [/detailed]
+
+
+      💡 **Recommendation:** {{cortex_recommendation}}
+
+      '
+    context_needed: true
+    data_collectors:
+    - brain_metrics_collector
+    - token_optimization_collector
+    - cortex_capabilities_collector
+    metadata:
+      category: system
+      question_type: cortex_status
+      tier: framework
+    namespace: cortex.*
+    required_fields:
+    - operations_count
+    - modules_implemented
+    - plugins_count
+    response_type: detailed
+    schema_version: 2.0.0
+    triggers:
+    - how is cortex
+    - how's cortex doing
+    - what can cortex do
+    - tell me about cortex
+    - cortex capabilities
+    - what does cortex know
+    - cortex features
+    verbosity: concise
+  question_about_workspace:
+    content: "\U0001F4CA **Your Workspace: {{workspace_name}}**\n\n**Code Quality:**\n• Test coverage: {{coverage_percent}}%\
+      \ ({{tests_passing}}/{{tests_total}})\n• Code health: {{code_health_score}}/100\n• Static analysis: {{lint_issues}}\
+      \ issues\n\n**Git Activity:**\n• Last commit: {{last_commit_time}}\n• Commits today: {{commits_today}}\n• Active branch:\
+      \ {{current_branch}}\n\n**CORTEX Learning:**\n• Workspace patterns: {{workspace_patterns_count}}\n• File relationships:\
+      \ {{file_relationships_count}}\n• Active namespace: {{workspace_namespace}}\n\n[detailed]\n**Pattern Breakdown:**\n\
+      {{#top_patterns}}\n• {{pattern_name}}: used {{usage_count}}x (confidence: {{confidence}}%)\n{{/top_patterns}}\n[/detailed]\n\
+      \n\U0001F4A1 **Recommendation:** {{workspace_recommendation}}\n\n\U0001F50D **Next Steps:**\n   ☐ Phase 1: Quick Wins\
+      \ (Fix critical issues)\n   ☐ Phase 2: Improvements (Enhance code quality)\n   ☐ Phase 3: Optimization (Performance\
+      \ & architecture)\n   \n   Ready to proceed with all phases, or focus on a specific phase?\n"
+    context_needed: true
+    data_collectors:
+    - workspace_health_collector
+    - test_coverage_collector
+    - git_metrics_collector
+    metadata:
+      category: system
+      question_type: workspace_status
+      tier: application
+    namespace: workspace.*
+    required_fields:
+    - workspace_name
+    - test_coverage
+    - git_commits_today
+    response_type: detailed
+    schema_version: 2.0.0
+    triggers:
+    - how is the project
+    - how's my project doing
+    - what's my code quality
+    - application status
+    - workspace health
+    - project metrics
+    - how is my code
+    verbosity: concise
+  question_cortex_cost_savings:
+    content: '💰 **CORTEX Token Optimization - Cost Savings**
+
+
+      **Your Savings (This Session):**
+
+      • Requests: {{session_requests}}
+
+      • Tokens saved: {{session_tokens_saved}} ({{session_savings_percent}}%)
+
+      • Cost saved: ${{session_cost_saved}}
+
+
+      **Optimization Techniques:**
+
+      ✅ Context caching: {{context_cache_savings}} tokens
+
+      ✅ Pattern reuse: {{pattern_reuse_savings}} tokens
+
+      ✅ Smart summarization: {{summary_savings}} tokens
+
+      ✅ ML optimization: {{ml_savings}} tokens
+
+
+      **Architecture Comparison:**
+
+
+      Old Monolithic (Pre-2.0):
+
+      • 74,047 tokens per request
+
+      • $2.22 per request (GPT-4)
+
+      • 2-3 seconds to parse
+
+
+      CORTEX 2.0 Modular:
+
+      • 2,078 tokens per request (97.2% reduction)
+
+      • $0.06 per request
+
+      • 80ms to parse
+
+
+      **Annual Savings:**
+
+      • 1,000 requests/month: $25,920/year
+
+      • Enterprise use (10k/month): $259,200/year
+
+
+      **ROI Multiplier:** {{roi_multiplier}}x
+
+      '
+    context_needed: true
+    data_collectors:
+    - token_optimization_collector
+    - cost_calculator
+    metadata:
+      category: system
+      question_type: cost_analysis
+    namespace: cortex.*
+    response_type: detailed
+    triggers:
+    - cortex cost
+    - token savings
+    - how much does cortex save
+    - cortex efficiency
+    - token optimization impact
+    verbosity: detailed
+  question_cortex_differences:
+    content: '🆚 **CORTEX vs Standard GitHub Copilot**
+
+
+      **GitHub Copilot (Standard):**
+
+      ❌ No memory across chats (amnesia)
+
+      ❌ No learned patterns from your code
+
+      ❌ No project-specific context
+
+      ❌ Limited to current conversation
+
+      ❌ No strategic planning
+
+
+      **CORTEX Enhancement:**
+
+      ✅ Long-term memory (last 20 conversations)
+
+      ✅ Learns patterns from every interaction
+
+      ✅ Project-specific knowledge graph
+
+      ✅ 4-tier brain architecture
+
+      ✅ 10 specialist agents coordinating
+
+      ✅ Strategic + tactical planning
+
+
+      **Concrete Example:**
+
+
+      Without CORTEX:
+
+      You: "Add a login button"
+
+      Copilot: Creates button ✅
+
+
+      [Next chat - Copilot forgets]
+
+      You: "Make it purple"
+
+      Copilot: "Make what purple?" ❌
+
+
+      With CORTEX:
+
+      You: "Add a login button"
+
+      CORTEX: Creates button, stores context ✅
+
+
+      [Next chat - CORTEX remembers]
+
+      You: "Make it purple"
+
+      CORTEX: "Making login button purple" ✅
+
+
+      **Architecture:**
+
+      • Tier 1: Working Memory (20 conversations)
+
+      • Tier 2: Knowledge Graph (learned patterns)
+
+      • Tier 3: Development Context (git, tests, metrics)
+
+      • Tier 0: Protection Layer (governance rules)
+
+      '
+    context_needed: false
+    metadata:
+      category: system
+      question_type: comparison
+    response_type: detailed
+    triggers:
+    - difference between cortex and
+    - cortex vs copilot
+    - how is cortex different
+    - why use cortex
+    - cortex advantages
+    verbosity: detailed
+  question_cortex_learning_rate:
+    content: '📈 **CORTEX Learning Rate**
+
+
+      **Current Session:**
+
+      • Duration: {{session_duration_hours}}h
+
+      • Patterns learned: {{patterns_learned}}
+
+      • Learning rate: {{patterns_per_hour}}/hour
+
+
+      **Pattern Quality:**
+
+      • High confidence (>80%): {{high_confidence_count}}
+
+      • Medium confidence (60-80%): {{medium_confidence_count}}
+
+      • Low confidence (<60%): {{low_confidence_count}}
+
+
+      **Learning Trends:**
+
+      {{#learning_trend}}
+
+      • {{period}}: {{patterns_count}} patterns ({{trend_direction}})
+
+      {{/learning_trend}}
+
+
+      **Pattern Reuse Rate:** {{pattern_reuse_rate}}%
+
+      (Higher = better learning efficiency)
+
+
+      **Context Retention:** {{context_retention_percent}}%
+
+
+      [expert]
+
+      **Learning Algorithm:**
+
+      • Confidence decay: {{decay_rate}}/day
+
+      • Reinforcement: +{{reinforcement_boost}}% per use
+
+      • Pruning threshold: <{{pruning_threshold}}% confidence
+
+      [/expert]
+
+      '
+    context_needed: true
+    data_collectors:
+    - learning_rate_calculator
+    - tier2_pattern_collector
+    metadata:
+      category: system
+      question_type: learning_metrics
+    response_type: detailed
+    triggers:
+    - how fast is cortex learning
+    - learning rate
+    - cortex learning speed
+    - pattern acquisition rate
+    verbosity: detailed
+  question_cortex_vs_application:
+    content: '🎯 **Namespace Detection**
+
+
+      **Current Context:** {{detected_namespace}}
+
+
+      {{#if is_cortex_question}}
+
+      Your question is about **CORTEX framework** (cortex.* namespace)
+
+      {{else}}
+
+      Your question is about **your workspace** (workspace.{{project_name}}.* namespace)
+
+      {{/if}}
+
+
+      **Detection Reasoning:**
+
+      {{detection_reasoning}}
+
+
+      **Keywords Found:**
+
+      {{#cortex_keywords}}
+
+      • {{keyword}} (CORTEX framework indicator)
+
+      {{/cortex_keywords}}
+
+      {{#workspace_keywords}}
+
+      • {{keyword}} (workspace indicator)
+
+      {{/workspace_keywords}}
+
+      '
+    context_needed: true
+    data_collectors:
+    - namespace_detector
+    metadata:
+      category: system
+      question_type: namespace_detection
+    response_type: narrative
+    triggers:
+    - cortex or application
+    - framework vs workspace
+    - what namespace am I in
+    - am I asking about cortex or my code
+    verbosity: concise
+  question_documentation_issues:
+    content: "\U0001F4DA **Documentation Health Analysis**\n\n**Issues Identified:**\n• Configuration: {{config_issues_count}}\
+      \ issues\n• Broken links: {{broken_links_count}} links\n• Structure: {{structure_issues_count}} issues\n• Missing pages:\
+      \ {{missing_pages_count}} pages\n\n**Impact:**\n• Documentation build: {{build_status}}\n• User experience: {{ux_impact}}\n\
+      • Search functionality: {{search_status}}\n\n\U0001F50D **Next Steps:**\n   Track A: Configuration & Build (Independent)\n\
+      \      • Fix Python/MkDocs configuration\n      • Resolve dependency conflicts\n      • Test build pipeline\n   \n \
+      \  Track B: Content Quality (Independent)\n      • Address broken links systematically\n      • Update outdated content\n\
+      \      • Fix formatting issues\n   \n   Track C: Structure & Navigation (Independent)\n      • Reorganize documentation\
+      \ hierarchy\n      • Update table of contents\n      • Improve search indexing\n   \n   These tracks can run in parallel.\
+      \ Which track(s) shall I start with?\n   (Or say \"all\" to tackle everything)\n"
+    context_needed: true
+    data_collectors:
+    - docs_analyzer
+    metadata:
+      category: system
+      question_type: documentation_work
+    namespace: workspace.*
+    response_type: detailed
+    triggers:
+    - fix documentation
+    - documentation issues
+    - broken links
+    - mkdocs problems
+    verbosity: concise
+  question_how_cortex_works:
+    content: '🧠 **How CORTEX Works - Simple Explanation**
+
+
+      **The Problem:**
+
+      GitHub Copilot is like an amnesiac intern - brilliant but forgets everything after each chat.
+
+
+      **The Solution:**
+
+      CORTEX gives Copilot a brain with long-term memory and learning capabilities.
+
+
+      **4-Tier Brain Architecture:**
+
+
+      **Tier 0: Instinct (Protection)**
+
+      • Immutable governance rules
+
+      • SKULL protection (test validation)
+
+      • Prevents untested changes
+
+
+      **Tier 1: Working Memory**
+
+      • Last 20 conversations stored
+
+      • FIFO queue (oldest removed)
+
+      • SQLite database
+
+
+      **Tier 2: Knowledge Graph**
+
+      • Learned patterns from interactions
+
+      • File relationships
+
+      • Anti-patterns detected
+
+      • Pattern decay (confidence decreases over time)
+
+
+      **Tier 3: Development Context**
+
+      • Git metrics (commits, velocity)
+
+      • Test coverage
+
+      • Project health
+
+
+      **10 Specialist Agents:**
+
+
+      LEFT BRAIN (Tactical):
+
+      • Executor - Implements features
+
+      • Tester - Creates tests
+
+      • Validator - Quality checks
+
+      • Work Planner - Task breakdown
+
+      • Documenter - Auto-docs
+
+
+      RIGHT BRAIN (Strategic):
+
+      • Intent Detector - Routes requests
+
+      • Architect - System design
+
+      • Health Validator - Project diagnosis
+
+      • Pattern Matcher - Finds solutions
+
+      • Learner - Accumulates wisdom
+
+
+      **Workflow:**
+
+      1. You ask question → Intent Detector routes
+
+      2. Appropriate agent activates
+
+      3. Context injected from Tiers 1-3
+
+      4. Response generated with memory
+
+      5. Interaction stored for future learning
+
+      '
+    context_needed: false
+    metadata:
+      category: system
+      question_type: architecture_explanation
+    response_type: narrative
+    triggers:
+    - how does cortex work
+    - explain cortex
+    - cortex architecture
+    - how cortex thinks
+    verbosity: detailed
+  question_namespace_status:
+    content: '📁 **Namespace Status**
+
+
+      **Active Namespace:** {{current_namespace}}
+
+      **Type:** {{namespace_type}}
+
+
+      {{#if is_cortex_namespace}}
+
+      🧠 **CORTEX Framework Namespace**
+
+      • Protected: Read-only for users
+
+      • Contains: Framework knowledge
+
+      • Patterns: {{cortex_patterns_count}}
+
+      {{else}}
+
+      📊 **Workspace Namespace**
+
+      • Project: {{workspace_name}}
+
+      • Read/Write: Enabled
+
+      • Patterns: {{workspace_patterns_count}}
+
+      {{/if}}
+
+
+      **All Namespaces:**
+
+      {{#namespaces}}
+
+      • {{namespace_name}}: {{pattern_count}} patterns ({{status}})
+
+      {{/namespaces}}
+
+      '
+    context_needed: true
+    data_collectors:
+    - namespace_detector
+    - tier2_namespace_stats
+    metadata:
+      category: system
+      question_type: namespace_info
+    response_type: narrative
+    triggers:
+    - what namespace
+    - current namespace
+    - which namespace am i in
+    - namespace info
+    verbosity: concise
+  question_test_coverage:
+    content: '🧪 **Test Coverage - {{workspace_name}}**
+
+
+      **Overall Coverage:** {{coverage_percent}}%
+
+
+      **Test Breakdown:**
+
+      • Total tests: {{tests_total}}
+
+      • Passing: {{tests_passing}} ({{pass_rate}}%)
+
+      • Failing: {{tests_failing}}
+
+      • Skipped: {{tests_skipped}}
+
+
+      **Coverage by Type:**
+
+      • Unit tests: {{unit_coverage}}%
+
+      • Integration tests: {{integration_coverage}}%
+
+      • E2E tests: {{e2e_coverage}}%
+
+
+      **Recent Test Activity:**
+
+      • Last run: {{last_test_run}}
+
+      • Duration: {{test_duration}}s
+
+      • Status: {{test_status}}
+
+
+      {{#if low_coverage_files}}
+
+      ⚠️ **Files Needing Tests:**
+
+      {{#low_coverage_files}}
+
+      • {{file_path}}: {{coverage}}% coverage
+
+      {{/low_coverage_files}}
+
+      {{/if}}
+
+
+      💡 **Recommendation:** {{test_recommendation}}
+
+      '
+    context_needed: true
+    data_collectors:
+    - test_coverage_collector
+    - tier3_test_metrics
+    metadata:
+      category: system
+      question_type: test_metrics
+    namespace: workspace.*
+    response_type: detailed
+    triggers:
+    - test coverage
+    - how much is tested
+    - testing status
+    - test metrics
+    verbosity: concise
+  question_what_cortex_learned:
+    content: "\U0001F9E0 **CORTEX Learning - Workspace Patterns**\n\n**Total Patterns Learned:** {{total_patterns}}\n**Namespace:**\
+      \ {{workspace_namespace}}\n\n**Pattern Categories:**\n{{#pattern_categories}}\n• {{category_name}}: {{pattern_count}}\
+      \ patterns\n{{/pattern_categories}}\n\n**Most Confident Patterns:**\n{{#top_confident_patterns}}\n{{rank}}. {{pattern_title}}\n\
+      \   • Confidence: {{confidence}}%\n   • Used: {{usage_count}} times\n   • Last used: {{last_used}}\n   • Category: {{category}}\n\
+      {{/top_confident_patterns}}\n\n**Recent Learning (Last 7 Days):**\n{{#recent_patterns}}\n• {{date}}: {{pattern_title}}\
+      \ ({{confidence}}%)\n{{/recent_patterns}}\n\n[expert]\n**Pattern Decay Status:**\n• Active patterns: {{active_patterns}}\
+      \ (confidence > 70%)\n• Decaying patterns: {{decaying_patterns}} (confidence 40-70%)\n• Archived patterns: {{archived_patterns}}\
+      \ (confidence < 40%)\n[/expert]\n"
+    context_needed: true
+    data_collectors:
+    - tier2_pattern_collector
+    - workspace_learning_collector
+    metadata:
+      category: system
+      question_type: learned_patterns
+      tier: knowledge
+    namespace: workspace.*
+    response_type: detailed
+    schema_version: 2.0.0
+    triggers:
+    - what has cortex learned
+    - what did cortex learn
+    - show cortex knowledge
+    - cortex patterns about my code
+    - what does cortex know about this project
+    verbosity: detailed
+
+# ========================================
+# CORTEX 3.0 ENHANCED ROUTING TEMPLATES
+# ========================================
+# New intelligent question routing templates
+
+  cortex_system_health_v3:
+    name: "CORTEX 3.0 System Health Status"
+    description: "Comprehensive CORTEX framework health with 3.0 capabilities"
+    namespace: "cortex"
+    triggers:
+      - "how is cortex"
+      - "cortex status" 
+      - "cortex health"
+      - "system status"
+    content: |
+      🧠 **CORTEX 3.0 System Status**
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+      🎯 **My Understanding Of Your Request:**
+         You want to check the health and status of the CORTEX 3.0 framework
+
+      ⚠️ **Challenge:** ✓ **Accept**
+         Providing CORTEX system status with real-time 3.0 metrics and capabilities.
+
+      💬 **Response:**
+         
+         **🧠 CORTEX 3.0 Health Score: {{brain_health_score}}/100** ⚡
+         
+         **Core Architecture:**
+         - Unified Interface: ✅ Active (Mode: {{cortex_mode}})
+         - Enhanced Agents: ✅ {{active_agents}}/{{total_agents}} operational
+         - Dual-Channel Memory: ✅ {{memory_channels}} channels active
+         - Smart Context Intelligence: ✅ Learning rate {{learning_rate}}/hour
+
+      📝 **Your Request:** Check CORTEX 3.0 framework status
+
+      🔍 **Next Steps:**
+         1. All systems operational - excellent health
+         2. Continue monitoring performance metrics
+
+  workspace_intelligence_v3:
+    name: "Workspace Intelligence Analysis (CORTEX 3.0)"
+    description: "Intelligent analysis of user's workspace with 3.0 enhancements"
+    namespace: "workspace"
+    triggers:
+      - "how is the code"
+      - "code quality"
+      - "workspace health" 
+      - "my code status"
+
+# CORTEX 3.0 Routing Metadata
+routing_metadata_v3:
+  version: "3.0.0"
+  feature: "intelligent_question_routing"
+  accuracy_target: 0.92
+  response_time_target: 75

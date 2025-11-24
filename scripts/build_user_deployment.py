@@ -26,7 +26,7 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 # Package metadata
-PACKAGE_VERSION = "2.0.0"  # Updated for CORTEX 2.0 architecture
+PACKAGE_VERSION = "3.2.0"  # Updated for TDD Mastery integration
 PACKAGE_NAME = f"cortex-user-v{PACKAGE_VERSION}"
 
 # Operations to include in user package
@@ -89,12 +89,30 @@ CRITICAL_FILES = {
     'prompts/shared/plugin-system.md',
     'prompts/shared/operations-reference.md',
     
-    # TDD Mastery Components (CRITICAL)
+    # TDD Mastery Components (CRITICAL - v3.2.0)
     'cortex-brain/documents/implementation-guides/test-strategy.yaml',
+    'cortex-brain/documents/implementation-guides/TDD-MASTERY-INTEGRATION-PLAN.md',
+    'cortex-brain/documents/implementation-guides/TDD-MASTERY-QUICKSTART.md',
+    'cortex-brain/documents/reports/TDD-MASTERY-PHASE1-2-COMPLETE.md',
+    'cortex-brain/documents/reports/TDD-MASTERY-PHASE4-COMPLETE.md',
+    'cortex-brain/documents/reports/TDD-MASTERY-PHASE5-COMPLETE.md',
+    'cortex-brain/capabilities.yaml',
     'cortex-brain/response-templates.yaml',
     '.github/prompts/modules/template-guide.md',
     '.github/prompts/modules/response-format.md',
     '.github/prompts/modules/planning-system-guide.md',
+    
+    # TDD Mastery - Source Files (v3.2.0)
+    'src/workflows/tdd_workflow_orchestrator.py',
+    'src/workflows/tdd_state_machine.py',
+    'src/workflows/refactoring_intelligence.py',
+    'src/agents/view_discovery_agent.py',
+    'src/agents/feedback_agent.py',
+    'cortex-brain/agents/debug_agent.py',
+    'cortex-brain/agents/debug_session_manager.py',
+    
+    # TDD Mastery - Integration Tests (v3.2.0)
+    'tests/test_tdd_phase4_integration.py',
     
     # Issue #3 Fixes (v3.1.0) - CRITICAL
     'src/agents/feedback_agent.py',

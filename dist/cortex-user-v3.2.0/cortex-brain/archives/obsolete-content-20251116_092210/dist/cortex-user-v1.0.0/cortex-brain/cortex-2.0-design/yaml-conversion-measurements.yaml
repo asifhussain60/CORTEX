@@ -1,0 +1,35 @@
+timestamp: '2025-11-10T11:15:40.967651'
+phase: 5.5 - YAML Conversion
+target: 40-60% reduction
+measurements:
+- file: operations-config.yaml
+  yaml_tokens: 11367
+  estimated_markdown_tokens: 45468
+  reduction_percentage: 75.0
+  target_met: true
+  status: PASS
+- file: module-definitions.yaml
+  yaml_tokens: 6407
+  estimated_markdown_tokens: 22424
+  reduction_percentage: 71.4
+  target_met: true
+  status: PASS
+- file: design-metadata.yaml
+  yaml_tokens: 4546
+  estimated_markdown_tokens: 13638
+  reduction_percentage: 66.7
+  target_met: true
+  status: PASS
+- file: brain-protection-rules.yaml
+  yaml_tokens: 6407
+  estimated_markdown_tokens: 25628
+  reduction_percentage: 75.0
+  target_met: true
+  status: PASS
+summary:
+  total_yaml_tokens: 28727
+  estimated_markdown_tokens: 107158
+  overall_reduction: 73.2
+  target_met: true
+  files_measured: 4
+  all_passed: true
