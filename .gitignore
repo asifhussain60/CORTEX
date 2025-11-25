@@ -1,42 +1,35 @@
-# Test fixtures build artifacts (auto-generated)
-tests/fixtures/**/obj/
-tests/fixtures/**/bin/
-
-# Brain backups
-kds-brain/backups/
-
-# Node modules
-node_modules/
-**/node_modules/
-
-# Python cache
+# CORTEX Publish Branch .gitignore
 __pycache__/
-**/__pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
-
-# Build outputs
-bin/
-obj/
-dist/
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.egg-info/
-site/
-
-# Temporary files
-temp/
-tmp/
-*.tmp
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.venv
+venv/
+ENV/
+env/
 *.log
-
-# IDE settings
-.vscode/settings.json
-
-# Logs
-logs/
-*.log
-
-# Workspace content (third-party/external)
-workspace/
+*.db
+*.db-journal
+.DS_Store
+Thumbs.db
+cortex.config.json
+.publish-checkpoint.json
