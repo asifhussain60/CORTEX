@@ -662,6 +662,32 @@ templates:
     - cortex feedback
     response_type: detailed
     content: "\U0001F9E0 **CORTEX Feedback Collection**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your Request:**\n   You want to provide feedback about CORTEX (bug report, feature request, or improvement suggestion).\n\n⚠️ **Challenge:** ✓ **Accept**\n   Feedback collection helps improve CORTEX. I'll gather context automatically and create a structured report.\n\n\U0001F4AC **Response:**\n   Starting feedback collection process...\n   \n   **Feedback Types:**\n   • Bug Report - Something isn't working correctly\n   • Feature Request - New capability you'd like to see\n   • Improvement - Enhancement to existing features\n   • Question - Unclear documentation or behavior\n   \n   **What I'll Collect:**\n   • Your description of the issue/suggestion\n   • Automatic context (conversation, files, workflow)\n   • Environment information\n   • Steps to reproduce (for bugs)\n   \n   All feedback is saved locally and helps prioritize development.\n\n\U0001F4DD **Your Request:** Provide feedback about CORTEX\n\n\U0001F50D **Next Steps:**\n   1. **Describe the feedback** - What happened or what you'd like to see\n   2. **Provide details** - Steps to reproduce (bugs) or use case (features)\n   3. **Review report** - I'll generate a structured feedback report\n   4. **Report saved** - Stored in cortex-brain/documents/reports/ for review\n   \n   Please describe your feedback and I'll create the report."
+  
+  architect_analysis:
+    name: Architect Analysis
+    triggers:
+    - analyze architecture
+    - architecture analysis
+    - understand architecture
+    - analyze shell
+    - analyze routing
+    - architect
+    - crawl shell
+    response_type: detailed
+    content: "🧠 **CORTEX Architect Agent**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to analyze the architectural structure of your codebase (shell, routing, components, interactions).\n\n⚠️ **Challenge:** ✓ **Accept**\n   Architectural analysis helps understand system design before making changes. Results are automatically saved to Tier 2 Knowledge Graph for cross-session memory.\n\n💬 **Response:**\n   Starting architectural analysis...\n   \n   **What I'll Analyze:**\n   • Shell structure (layout, navigation, content areas)\n   • Routing system (routes, guards, lazy loading)\n   • View injection patterns (modals, portals, teleports)\n   • Component interactions (data flow, event buses)\n   • Feature directory structure\n   \n   **Auto-Brain Saving:**\n   • Namespace auto-detected from workspace name\n   • Structured analysis saved to Tier 2 Knowledge Graph\n   • Cross-session memory for planning/TDD workflows\n   • Use `show context [namespace]_architecture` to view later\n   \n   Analysis will be thorough and results persist across sessions.\n\n📝 **Your Request:** Analyze architectural structure\n\n🔍 **Next Steps:**\n   1. **Scanning workspace** - Looking for shell files, routing configs\n   2. **Mapping structure** - Building component tree and interaction graph\n   3. **Documenting patterns** - Identifying design patterns and conventions\n   4. **Saving to brain** - Persisting analysis to Knowledge Graph\n   \n   Starting analysis now..."
+  
+  brain_ingestion:
+    name: Brain Ingestion
+    triggers:
+    - ingest to brain
+    - save to brain
+    - brain ingest
+    - add to knowledge graph
+    - learn this
+    - remember this
+    response_type: detailed
+    content: "🧠 **CORTEX Brain Ingestion**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to manually ingest content into CORTEX's Tier 2 Knowledge Graph for persistent cross-session memory.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Manual brain ingestion allows you to save important facts, patterns, or decisions that CORTEX should remember across all sessions.\n\n💬 **Response:**\n   Starting brain ingestion process...\n   \n   **What Can Be Ingested:**\n   • Key architectural decisions\n   • Important business rules\n   • Custom conventions/patterns\n   • Problem-solution pairs\n   • Project-specific context\n   • Technical constraints\n   \n   **Storage Tiers:**\n   • Tier 2 Knowledge Graph - Long-term structured memory\n   • Searchable by namespace\n   • Cross-session persistence\n   • Integrates with planning/TDD workflows\n   \n   All ingested content is indexed for intelligent retrieval.\n\n📝 **Your Request:** Ingest content to brain\n\n🔍 **Next Steps:**\n   1. **Provide content** - Describe what you want CORTEX to remember\n   2. **Specify namespace** - Optional category (e.g., 'architecture', 'business_rules')\n   3. **Validate ingestion** - I'll structure and save to Knowledge Graph\n   4. **Confirmation** - You'll see saved namespace for future retrieval\n   \n   What would you like me to remember?"
+  
   admin_help:
     name: Admin Help
     triggers:
