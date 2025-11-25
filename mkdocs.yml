@@ -99,6 +99,9 @@ nav:
       - Methodology: case-studies/noor-canvas/signalr-refactoring/methodology.md
       - Technical Deep Dive: case-studies/noor-canvas/signalr-refactoring/technical.md
       - Lessons Learned: case-studies/noor-canvas/signalr-refactoring/lessons.md
+    - Canvas Components Refactoring:
+      - Executive Summary: case-studies/noor-canvas/canvas-refactoring/index.md
+      - Methodology: case-studies/noor-canvas/canvas-refactoring/methodology.md
       - Timeline: case-studies/noor-canvas/signalr-refactoring/timeline.md
 markdown_extensions:
 - abbr

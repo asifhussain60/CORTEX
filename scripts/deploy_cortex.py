@@ -19,6 +19,29 @@ Deployment Phases:
 CRITICAL: Phase 5 MUST create actual production package in publish/ directory
 This is enforced by validation that verifies package physically exists.
 
+⚠️ CRITICAL RULE - VALIDATOR-ENFORCED FIXES:
+===============================================
+ALL bug fixes and system improvements MUST be enforced through validator tests.
+NEVER apply direct code patches without corresponding validator tests.
+
+Why:
+  1. Validator tests catch regressions during deployment
+  2. Fixes persist across versions (not lost in merges)
+  3. Post-upgrade validation ensures system health
+  4. Self-healing: validators detect and block broken deployments
+
+Process:
+  1. Identify issue (e.g., VERSION file not updating)
+  2. Create validator test (e.g., test_version_updates_after_upgrade)
+  3. Fix code to pass validator
+  4. Validator runs automatically in Phase 3
+  5. Deployment blocked if validator fails
+
+Example Validators:
+  - scripts/validation/validate_issue3_phase4.py (44 tests)
+  - scripts/validation/validate_version_management.py (NEW)
+  - scripts/validation/validate_upgrade_system.py (NEW)
+
 Usage: 
     python scripts/deploy_cortex.py [--bump-type major|minor|patch]
     python scripts/deploy_cortex.py --bump-type minor --reason "Add TDD workflow"
@@ -207,6 +230,7 @@ class CortexDeployer:
         print(f"\n{Colors.BLUE}Running comprehensive test suite...{Colors.RESET}")
         
         # Run Issue #3 validation
+        print(f"\n{Colors.BLUE}Issue #3 Fixes Validation{Colors.RESET}")
         result = subprocess.run(
             [sys.executable, 'scripts/validation/validate_issue3_phase4.py'],
             cwd=self.root,
@@ -218,14 +242,36 @@ class CortexDeployer:
         
         print(result.stdout)
         
-        if result.returncode == 0:
-            self.deployment_report['validation_results']['issue3_fixes'] = 'PASSED'
-            print(f"  ✅ Issue #3 validation passed")
-            return True
-        else:
+        if result.returncode != 0:
             self.deployment_report['validation_results']['issue3_fixes'] = 'FAILED'
             self.failures.append('Issue #3 validation failed')
             return False
+        
+        self.deployment_report['validation_results']['issue3_fixes'] = 'PASSED'
+        print(f"  ✅ Issue #3 validation passed")
+        
+        # Run upgrade system validation
+        print(f"\n{Colors.BLUE}Upgrade System Validation{Colors.RESET}")
+        result = subprocess.run(
+            [sys.executable, 'scripts/validation/validate_upgrade_system.py'],
+            cwd=self.root,
+            capture_output=True,
+            text=True,
+            encoding='utf-8',
+            errors='replace'
+        )
+        
+        print(result.stdout)
+        
+        if result.returncode != 0:
+            self.deployment_report['validation_results']['upgrade_system'] = 'FAILED'
+            self.failures.append('Upgrade system validation failed')
+            return False
+        
+        self.deployment_report['validation_results']['upgrade_system'] = 'PASSED'
+        print(f"  ✅ Upgrade system validation passed")
+        
+        return True
     
     def phase4_upgrade(self) -> bool:
         """Phase 4: Upgrade compatibility validation"""
@@ -318,6 +364,7 @@ class CortexDeployer:
             'src/feedback/github_formatter.py',
             'cortex-brain/',
             '.github/prompts/CORTEX.prompt.md',
+            'CORTEX.prompt.md',  # Bootstrap prompt for user repos
             'cortex-operations.yaml',
             'requirements.txt',
             'LICENSE',

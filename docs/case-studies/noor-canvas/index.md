@@ -34,6 +34,21 @@ Multi-phase refactoring transforming inline SignalR handlers into a service-orie
 
 ---
 
+### [Canvas Components Refactoring](canvas-refactoring/index.md)
+**Duration:** Week 1 Complete (Phase 1/3) | **Type:** Code Quality | **Year:** 2025
+
+Systematic elimination of massive code duplication across three canvas components (HostControlPanel, SessionCanvas, TranscriptCanvas). Week 1 achieved 67% of total reduction goal through CSS extraction and component creation.
+
+**Highlights:**
+- 📉 **Duplication:** 2,360 lines eliminated (67% of 3,510 target)
+- ⚡ **Efficiency:** 98.8% code reduction in refactored sections
+- 🎨 **Architecture:** 3 new shared components created
+- ✅ **Quality:** 100% visual parity maintained
+
+[Read Full Case Study →](canvas-refactoring/index.md)
+
+---
+
 ## 📈 Cumulative Impact
 
 Across all Noor Canvas engagements:

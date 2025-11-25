@@ -473,10 +473,28 @@ class UpgradeOrchestrator:
         if not dry_run:
             self.fetcher.cleanup()
         
-        # Success
+        # Success - Update VERSION file
+        if not dry_run:
+            self._update_version_file(version or self.detector.get_latest_version())
+        
         self._print_success_message(info, version, dry_run)
         self.upgrade_successful = True
         return True
+    
+    def _update_version_file(self, new_version: str) -> None:
+        """Update VERSION file after successful upgrade."""
+        version_file = self.cortex_path / "VERSION"
+        
+        # Ensure version has v prefix
+        if not new_version.startswith('v'):
+            new_version = f'v{new_version}'
+        
+        try:
+            with open(version_file, 'w', encoding='utf-8') as f:
+                f.write(f"{new_version}\n")
+            print(f"   ✅ VERSION file updated: {new_version}")
+        except Exception as e:
+            print(f"   ⚠️  Could not update VERSION file: {e}")
     
     def _print_success_message(self, info: Dict, version: Optional[str], dry_run: bool) -> None:
         """Print upgrade success message."""

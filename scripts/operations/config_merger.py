@@ -227,6 +227,22 @@ class ConfigMerger:
         Returns:
             Merged dictionary
         """
+        # Handle None values
+        if base is None:
+            base = {}
+        if local is None:
+            local = {}
+        if upgrade is None:
+            upgrade = {}
+        
+        # Type safety: ensure all are dicts
+        if not isinstance(base, dict):
+            base = {}
+        if not isinstance(local, dict):
+            local = {}
+        if not isinstance(upgrade, dict):
+            upgrade = {}
+        
         merged = {}
         all_keys = set(base.keys()) | set(local.keys()) | set(upgrade.keys())
         
@@ -250,6 +266,7 @@ class ConfigMerger:
                 continue
             
             # Key in all three - analyze changes
+            # Only recurse if ALL three are dicts (not just two)
             if isinstance(base_val, dict) and isinstance(local_val, dict) and isinstance(upgrade_val, dict):
                 # Recursive merge for nested dicts
                 merged[key] = self._three_way_merge(base_val, local_val, upgrade_val)
@@ -264,7 +281,10 @@ class ConfigMerger:
                 merged[key] = local_val
             else:
                 # Conflict: both changed differently
-                self.conflicts.append(f"{key}: local='{local_val}' vs upgrade='{upgrade_val}'")
+                # Handle non-dict conflicts gracefully
+                local_str = str(local_val)[:50] if local_val else "None"
+                upgrade_str = str(upgrade_val)[:50] if upgrade_val else "None"
+                self.conflicts.append(f"{key}: local='{local_str}' vs upgrade='{upgrade_str}'")
                 # Prefer upgrade version (new features)
                 merged[key] = upgrade_val
         

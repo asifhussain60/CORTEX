@@ -1,0 +1,942 @@
+# CORTEX Gap Analysis & Root Cause Analysis (RCA)
+# Date: 2025-11-25
+# Project: NOOR CANVAS Application
+# CORTEX Version: 3.2.0
+# Author: Asif Hussain
+
+metadata:
+  analysis_type: "Root Cause Analysis + Comprehensive Implementation Plan"
+  scope: "TDD Mastery, Response Templates, Feedback System"
+  priority: "HIGH"
+  estimated_effort: "16-20 hours"
+  status: "PLANNED"
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary:
+  findings: |
+    After running CORTEX in NOOR CANVAS application, 6 critical gaps identified:
+    1. TDD Mastery lacks git checkpoint automation (rollback rule failure)
+    2. No automated git commits after phase completion
+    3. No real timestamps/metrics tracking (configs, git, databases)
+    4. Missing lint check validation after each phase
+    5. No holistic session review after all phases complete
+    6. Plans created as .md files instead of .yaml (consistency issue)
+    7. Response templates missing mandatory header formatting
+    8. "Challenge: Accept" confusing - should be "Challenge: None" or state challenge
+    9. Feedback system creates reports but no push/pull mechanism for CORTEX review
+
+  impact:
+    - Development safety compromised (no rollback capability)
+    - Quality risks (no lint validation between phases)
+    - Poor audit trail (no timestamps/metrics)
+    - User confusion (template formatting inconsistencies)
+    - Feedback loop broken (no centralized review mechanism)
+
+  recommendation:
+    phase: "Implement automated workflow orchestration with validation gates"
+    timeline: "2-3 weeks (16-20 hours total effort)"
+    approach: "Test-driven implementation with SKULL protection"
+
+# ==============================================================================
+# ROOT CAUSE ANALYSIS
+# ==============================================================================
+
+root_cause_analysis:
+  
+  gap_1_git_checkpoints:
+    issue: "No git checkpoint before implementation starts"
+    root_cause: |
+      TDD Mastery workflow lacks pre-implementation safety gate.
+      GitHub Copilot executes refactoring/implementation without creating
+      restore points, violating CORTEX Brain Protection Rule #8:
+      "Always create git checkpoint before major refactoring"
+    
+    evidence:
+      - observation: "Canvas refactoring Week 1-2 had no git commits between tasks"
+      - impact: "When CSS extraction caused 10 build errors, no easy rollback"
+      - workaround: "Manual fix session required (15 minutes, 15 tool calls)"
+    
+    consequences:
+      - risk_level: "HIGH"
+      - failure_mode: "User manually reverting changes if implementation fails"
+      - user_impact: "Lost time, potential data loss, frustration"
+    
+    contributing_factors:
+      - "TDD workflow implementation predates SKULL brain protection rules"
+      - "No orchestrator-level git integration in current architecture"
+      - "GitHub Copilot Chat lacks native git checkpoint API"
+
+  gap_2_phase_commits:
+    issue: "No automated git commit after phase completion"
+    root_cause: |
+      TDD Mastery orchestrator marks phases complete in memory but doesn't
+      persist checkpoints to git. Each phase completion should trigger:
+      1. Git commit with phase number and summary
+      2. Update phase tracker (cortex-brain/tier1/working_memory.db)
+      3. Tag commit for easy rollback (e.g., "tdd-session-123-phase-2-green")
+    
+    evidence:
+      - observation: "Refactoring sessions span hours with zero commits"
+      - issue: "If Copilot session crashes, progress lost"
+      - workaround: "User manually commits at session end"
+    
+    consequences:
+      - risk_level: "MEDIUM"
+      - failure_mode: "Session crash = lost work"
+      - user_impact: "Rework required, diminished trust in CORTEX"
+    
+    contributing_factors:
+      - "Phase completion hooks don't call git integration"
+      - "CORTEX assumes user manages git manually"
+      - "No validation gate between phases"
+
+  gap_3_timestamp_metrics:
+    issue: "No real timestamps or metrics tracking"
+    root_cause: |
+      TDD Mastery workflow tracks phases in memory (Tier 1 database) but:
+      - No wall-clock timestamps for phase start/end
+      - No duration metrics per phase
+      - No git commit timestamps for correlation
+      - No performance baseline (before/after refactoring)
+      
+      This prevents:
+      - Real productivity measurement
+      - Bottleneck identification
+      - ROI calculation for CORTEX usage
+      - Historical trend analysis
+    
+    evidence:
+      - observation: "Canvas refactoring report says '8 hours' but no breakdown"
+      - issue: "Can't prove which task took longest"
+      - workaround: "Manual estimation based on chat history"
+    
+    consequences:
+      - risk_level: "LOW"
+      - failure_mode: "Inability to optimize workflow"
+      - user_impact: "Can't justify CORTEX ROI to stakeholders"
+    
+    contributing_factors:
+      - "Tier 1 database schema lacks timestamp columns"
+      - "No integration with system performance counters"
+      - "Git commit messages don't include timing metadata"
+
+  gap_4_lint_validation:
+    issue: "No lint check after each phase"
+    root_cause: |
+      TDD Mastery completes phases (RED, GREEN, REFACTOR) without running
+      code quality validation. This allows:
+      - Duplicate code to accumulate
+      - Unused imports to proliferate
+      - Formatting inconsistencies
+      - Security vulnerabilities to slip through
+      
+      Example: CSS extraction (Week 1) created duplicate closing tags,
+      but no linter would have caught this before moving to next task.
+    
+    evidence:
+      - observation: "Build errors only discovered when user ran 'fix build'"
+      - impact: "10 compilation errors required dedicated fix session"
+      - workaround: "Manual dotnet build + Roslynator analysis"
+    
+    consequences:
+      - risk_level: "HIGH"
+      - failure_mode: "Cascading errors across phases"
+      - user_impact: "Technical debt accumulation, brittle codebase"
+    
+    contributing_factors:
+      - "No linter integration in TDD orchestrator"
+      - "CORTEX assumes dotnet build is sufficient"
+      - "No Roslynator/ESLint/Pylint hooks in workflow"
+
+  gap_5_holistic_review:
+    issue: "No session review after all phases complete"
+    root_cause: |
+      When TDD session completes all phases, CORTEX marks todo as done
+      but doesn't perform holistic validation:
+      - Run full test suite (not just modified tests)
+      - Compare before/after metrics (lines, complexity, coverage)
+      - Generate diff summary (files changed, additions, deletions)
+      - Check for regressions (performance, functionality)
+      - Validate brain protection rules (SKULL)
+      
+      This means user may discover issues days/weeks later.
+    
+    evidence:
+      - observation: "Canvas refactoring completed with 89% reduction claimed"
+      - issue: "No automated verification of reduction percentage"
+      - workaround: "User manually reviewed files to confirm accuracy"
+    
+    consequences:
+      - risk_level: "MEDIUM"
+      - failure_mode: "Undetected regressions"
+      - user_impact: "False confidence in refactoring quality"
+    
+    contributing_factors:
+      - "No session completion orchestrator"
+      - "Metrics calculated manually, not programmatically"
+      - "No integration with code coverage tools"
+
+  gap_6_plan_file_format:
+    issue: "Plans created as .md instead of .yaml"
+    root_cause: |
+      CORTEX planning system creates human-readable Markdown plans,
+      but these are:
+      - Hard to parse programmatically
+      - Not validated against schema
+      - Don't integrate with phase tracker
+      - Require manual parsing for status updates
+      
+      YAML plans would enable:
+      - Schema validation (DoR/DoD enforcement)
+      - Automated phase tracking
+      - Better integration with Tier 1 database
+      - Machine-readable metrics extraction
+    
+    evidence:
+      - observation: "Planning files in cortex-brain/documents/planning/ are all .md"
+      - issue: "Phase completion requires manual Markdown updates"
+      - workaround: "CORTEX manually edits Markdown checkboxes"
+    
+    consequences:
+      - risk_level: "LOW"
+      - failure_mode: "Plan desync with actual progress"
+      - user_impact: "Maintenance burden, error-prone updates"
+    
+    contributing_factors:
+      - "Planning System 2.0 prioritized human readability"
+      - "No YAML schema defined for plans"
+      - "Markdown easier to edit in VS Code for users"
+
+  gap_7_response_template_header:
+    issue: "Response templates missing mandatory header"
+    root_cause: |
+      response-templates.yaml defines template content but doesn't enforce
+      the larger title requirement for main operation heading.
+      
+      Example: User showed screenshot with "CORTEX Feature Planning" title
+      that should be larger font (e.g., # vs ##).
+      
+      Current template: "🧠 **CORTEX [Operation Type]**"
+      Expected: "# 🧠 CORTEX [Operation Type]" (H1 heading)
+    
+    evidence:
+      - observation: "User screenshot shows small title font"
+      - issue: "Visual hierarchy unclear"
+      - workaround: "User manually enlarges font in rendered Markdown"
+    
+    consequences:
+      - risk_level: "LOW"
+      - failure_mode: "User confusion, poor readability"
+      - user_impact: "Diminished professional appearance"
+    
+    contributing_factors:
+      - "Template system uses ** bold instead of # heading"
+      - "No visual design guidelines for templates"
+      - "GitHub Copilot Chat rendering inconsistent"
+
+  gap_8_challenge_accept_confusing:
+    issue: "'Challenge: Accept' is confusing wording"
+    root_cause: |
+      Current template format:
+      "⚠️ **Challenge:** [✓ Accept with rationale OR ⚡ Challenge with alternatives]"
+      
+      User feedback: "Either Challenge or Accept, not both"
+      
+      This creates cognitive dissonance:
+      - If accepting, why call it "Challenge"?
+      - If challenging, why show checkmark?
+      
+      Clearer format:
+      - "Challenge: None" (if accepting)
+      - "Challenge: [Specific concern]" (if challenging)
+    
+    evidence:
+      - observation: "User explicitly requested change"
+      - issue: "All templates use confusing 'Challenge: Accept' format"
+      - impact: "User unsure if CORTEX agrees or disagrees"
+    
+    consequences:
+      - risk_level: "LOW"
+      - failure_mode: "User misinterprets CORTEX intent"
+      - user_impact: "Communication clarity reduced"
+    
+    contributing_factors:
+      - "Template designed for dual-mode (accept/challenge)"
+      - "No user testing of template readability"
+      - "Emoji usage (✓/⚡) insufficient for clarity"
+
+  gap_9_feedback_push_pull:
+    issue: "Feedback created but no push/pull mechanism"
+    root_cause: |
+      FeedbackAgent (src/agents/feedback_agent.py) creates feedback reports
+      and stores in cortex-brain/feedback/feedback.json, but:
+      - No automatic upload to GitHub Gist (despite config option)
+      - No centralized repository for cross-project feedback
+      - No admin review workflow (despite admin_feedback_review.py existing)
+      - No pull mechanism for CORTEX to learn from aggregated feedback
+      
+      This breaks the feedback loop:
+      User reports issue → Stored locally → Never reviewed → No improvement
+    
+    evidence:
+      - observation: "User ran feedback in NOOR CANVAS, reports created"
+      - issue: "Reports stayed in local CORTEX folder"
+      - expectation: "Reports should sync to central CORTEX dev repo"
+    
+    consequences:
+      - risk_level: "MEDIUM"
+      - failure_mode: "Feedback siloed per project"
+      - user_impact: "Repeated issues, no continuous improvement"
+    
+    contributing_factors:
+      - "GitHub token config optional, not enforced"
+      - "Gist upload disabled by default"
+      - "No automated feedback aggregation pipeline"
+      - "Admin review tool exists but never runs automatically"
+
+# ==============================================================================
+# COMPREHENSIVE IMPLEMENTATION PLAN
+# ==============================================================================
+
+implementation_plan:
+  
+  overview:
+    phases: 3
+    total_effort_hours: "16-20 hours"
+    timeline: "2-3 weeks"
+    approach: "Test-Driven Development with SKULL validation"
+    deliverables:
+      - "Enhanced TDD Mastery workflow with git integration"
+      - "Automated validation gates (lint, build, test)"
+      - "Metrics tracking system (timestamps, performance)"
+      - "YAML-based planning system with schema validation"
+      - "Revised response templates with correct formatting"
+      - "Centralized feedback system with push/pull mechanism"
+
+  # --------------------------------------------------------------------------
+  # PHASE 1: TDD MASTERY ENHANCEMENTS (8-10 hours)
+  # --------------------------------------------------------------------------
+  
+  phase_1_tdd_mastery:
+    name: "TDD Mastery Workflow Automation"
+    effort_hours: "8-10"
+    priority: "CRITICAL"
+    dependencies: []
+    
+    tasks:
+      
+      task_1_1_git_integration:
+        name: "Add Git Checkpoint Orchestrator"
+        effort_hours: "3"
+        description: |
+          Create GitCheckpointOrchestrator to handle:
+          - Pre-implementation checkpoint (before RED state)
+          - Phase completion commits (after GREEN/REFACTOR)
+          - Automatic tagging for easy rollback
+          - Commit message generation with phase metadata
+        
+        deliverables:
+          - file: "src/orchestrators/git_checkpoint_orchestrator.py"
+            lines: "~200"
+            features:
+              - "create_checkpoint(session_id, phase, message)"
+              - "commit_phase_completion(session_id, phase, metrics)"
+              - "rollback_to_checkpoint(session_id, checkpoint_id)"
+              - "list_checkpoints(session_id)"
+        
+        integration_points:
+          - "TDD Mastery workflow calls before RED state"
+          - "Phase completion hooks trigger commits"
+          - "SKULL Rule #8 validation"
+        
+        testing:
+          - "Unit tests: test_git_checkpoint_orchestrator.py"
+          - "Integration test: TDD session with rollback"
+          - "SKULL test: Verify rule #8 compliance"
+        
+        acceptance_criteria:
+          - "Git commit created before implementation starts"
+          - "Phase commits include timestamp, duration, metrics"
+          - "Rollback restores exact state without data loss"
+          - "SKULL Rule #8 test passes (100%)"
+
+      task_1_2_timestamp_metrics:
+        name: "Add Metrics Tracking System"
+        effort_hours: "2"
+        description: |
+          Enhance Tier 1 database schema to track:
+          - Phase start/end timestamps (ISO 8601 format)
+          - Duration per phase (seconds)
+          - Git commit SHAs for correlation
+          - Before/after metrics (lines, complexity)
+        
+        deliverables:
+          - migration: "cortex-brain/migrations/add_tdd_metrics.sql"
+          - columns: 
+              - "phase_start_time TIMESTAMP"
+              - "phase_end_time TIMESTAMP"
+              - "phase_duration_seconds REAL"
+              - "git_commit_sha TEXT"
+              - "metrics_before JSON"
+              - "metrics_after JSON"
+          - orchestrator: "src/orchestrators/metrics_tracker.py"
+        
+        integration_points:
+          - "TDD Mastery workflow records timestamps"
+          - "Git integration stores commit SHAs"
+          - "Metrics exported to JSON for reporting"
+        
+        testing:
+          - "Migration test: Schema updated without data loss"
+          - "Unit tests: MetricsTracker class"
+          - "Integration test: Full TDD session with metrics"
+        
+        acceptance_criteria:
+          - "All phases have start/end timestamps"
+          - "Duration calculated correctly (±1 second)"
+          - "Git commit SHA stored for correlation"
+          - "Metrics export to JSON works"
+
+      task_1_3_lint_validation:
+        name: "Add Lint Validation Gate"
+        effort_hours: "2"
+        description: |
+          Create LintValidationOrchestrator to run after each phase:
+          - .NET: Roslynator analysis
+          - Python: Pylint + Black
+          - JavaScript: ESLint + Prettier
+          - Report violations with severity
+          - Block next phase if critical violations found
+        
+        deliverables:
+          - file: "src/orchestrators/lint_validation_orchestrator.py"
+          - config: "cortex-brain/config/lint-rules.yaml"
+          - integration: "TDD Mastery phase completion hooks"
+        
+        integration_points:
+          - "Run after GREEN state (before REFACTOR)"
+          - "Run after REFACTOR state (before COMPLETE)"
+          - "Store violations in Tier 1 database"
+          - "Generate violation report"
+        
+        testing:
+          - "Unit tests: LintValidationOrchestrator"
+          - "Integration test: Detect duplicate code"
+          - "Integration test: Block on critical violation"
+        
+        acceptance_criteria:
+          - "Roslynator runs after .NET refactoring"
+          - "Critical violations block next phase"
+          - "Violation report generated automatically"
+          - "Zero false positives in test suite"
+
+      task_1_4_holistic_review:
+        name: "Add Session Completion Orchestrator"
+        effort_hours: "2"
+        description: |
+          Create SessionCompletionOrchestrator to run when all phases done:
+          - Run full test suite (not just modified tests)
+          - Calculate before/after metrics (lines, complexity, coverage)
+          - Generate diff summary (git diff --stat)
+          - Check for regressions (performance, functionality)
+          - Validate SKULL rules (all 22 brain protection rules)
+          - Create completion report
+        
+        deliverables:
+          - file: "src/orchestrators/session_completion_orchestrator.py"
+          - report_template: "cortex-brain/templates/session-completion-report.md"
+        
+        integration_points:
+          - "TDD Mastery workflow calls after COMPLETE state"
+          - "Metrics tracker provides before/after data"
+          - "SKULL validator runs all rules"
+          - "Report saved to cortex-brain/documents/reports/"
+        
+        testing:
+          - "Unit tests: SessionCompletionOrchestrator"
+          - "Integration test: Full TDD session end-to-end"
+          - "SKULL test: All 22 rules validated"
+        
+        acceptance_criteria:
+          - "Full test suite runs automatically"
+          - "Metrics reduction percentage calculated accurately"
+          - "Diff summary matches git diff --stat"
+          - "SKULL validation runs (22/22 rules)"
+          - "Completion report generated"
+
+  # --------------------------------------------------------------------------
+  # PHASE 2: PLANNING & TEMPLATES (4-5 hours)
+  # --------------------------------------------------------------------------
+  
+  phase_2_planning_templates:
+    name: "Planning System & Response Template Fixes"
+    effort_hours: "4-5"
+    priority: "HIGH"
+    dependencies: []
+    
+    tasks:
+      
+      task_2_1_yaml_planning:
+        name: "Convert Planning to YAML Format"
+        effort_hours: "2"
+        description: |
+          Create YAML schema for planning documents:
+          - Define plan structure (metadata, phases, tasks, DoR, DoD)
+          - Validate against schema (jsonschema library)
+          - Auto-generate Markdown view for human readability
+          - Integrate with phase tracker (Tier 1 database)
+        
+        deliverables:
+          - schema: "cortex-brain/schemas/plan-schema.yaml"
+          - orchestrator: "src/orchestrators/yaml_plan_orchestrator.py"
+          - migration: "Migrate existing .md plans to .yaml"
+        
+        plan_structure:
+          metadata:
+            - "plan_id: UUID"
+            - "title: string"
+            - "created_at: timestamp"
+            - "updated_at: timestamp"
+            - "status: [planning, approved, in-progress, complete]"
+          
+          definition_of_ready:
+            - "requirements_documented: boolean"
+            - "dependencies_identified: boolean"
+            - "technical_design_agreed: boolean"
+            - "test_strategy_defined: boolean"
+            - "acceptance_criteria_measurable: boolean"
+            - "security_review_complete: boolean"
+          
+          phases:
+            - "phase_id: integer"
+            - "name: string"
+            - "status: [not-started, in-progress, complete]"
+            - "tasks: array"
+            - "estimated_hours: float"
+            - "actual_hours: float"
+          
+          definition_of_done:
+            - "code_reviewed: boolean"
+            - "tests_passing: boolean"
+            - "documentation_updated: boolean"
+            - "security_validated: boolean"
+        
+        integration_points:
+          - "Planning System 2.0 creates .yaml instead of .md"
+          - "Auto-generate Markdown view for user"
+          - "Phase tracker syncs with YAML status"
+        
+        testing:
+          - "Schema validation tests"
+          - "YAML → Markdown generation test"
+          - "Round-trip test (YAML → MD → YAML)"
+        
+        acceptance_criteria:
+          - "All new plans created as .yaml"
+          - "Schema validation catches invalid plans"
+          - "Markdown view generated automatically"
+          - "Phase tracker syncs with YAML status"
+
+      task_2_2_response_template_fixes:
+        name: "Fix Response Template Formatting"
+        effort_hours: "2"
+        description: |
+          Update response-templates.yaml to fix formatting issues:
+          1. Change main title from ** bold to # H1 heading
+          2. Fix "Challenge: Accept" to "Challenge: None" or state challenge
+          3. Add font size guidelines to template system
+          4. Update all 30+ templates consistently
+        
+        changes:
+          
+          change_1_title_size:
+            before: "🧠 **CORTEX [Operation Type]**"
+            after: "# 🧠 CORTEX [Operation Type]"
+            reason: "H1 heading provides larger, clearer visual hierarchy"
+          
+          change_2_challenge_clarity:
+            before: "⚠️ **Challenge:** [✓ Accept with rationale OR ⚡ Challenge with alternatives]"
+            after: |
+              If accepting:
+                "⚠️ **Challenge:** None (request is viable)"
+              
+              If challenging:
+                "⚠️ **Challenge:** [Specific concern with alternatives]"
+            reason: "Eliminates cognitive dissonance of 'Challenge: Accept'"
+          
+          change_3_remove_accept_emoji:
+            before: "✓ Accept with rationale"
+            after: "None" or "[challenge description]"
+            reason: "Clearer binary: either no challenge or specific challenge"
+        
+        files_to_update:
+          - "cortex-brain/response-templates.yaml (all 30+ templates)"
+          - ".github/prompts/modules/template-guide.md"
+          - ".github/prompts/modules/response-format.md"
+        
+        testing:
+          - "Visual test: Render all templates in GitHub Copilot Chat"
+          - "Consistency test: All templates follow new format"
+          - "User acceptance test: Show to user for approval"
+        
+        acceptance_criteria:
+          - "All templates use # H1 for main title"
+          - "No templates show 'Challenge: Accept'"
+          - "Challenge section shows 'None' or specific challenge"
+          - "Template guide updated with new format"
+
+  # --------------------------------------------------------------------------
+  # PHASE 3: FEEDBACK SYSTEM ENHANCEMENT (4-5 hours)
+  # --------------------------------------------------------------------------
+  
+  phase_3_feedback_system:
+    name: "Centralized Feedback System with Push/Pull"
+    effort_hours: "4-5"
+    priority: "MEDIUM"
+    dependencies: []
+    
+    tasks:
+      
+      task_3_1_feedback_push:
+        name: "Add Automated Gist Upload"
+        effort_hours: "2"
+        description: |
+          Enhance FeedbackAgent to automatically push feedback to GitHub Gist:
+          - Check for GitHub token in cortex.config.json
+          - Auto-upload feedback.json after each submission
+          - Create/update Gist with timestamped entries
+          - Provide Gist URL to user
+          - Respect privacy settings (anonymize paths)
+        
+        deliverables:
+          - enhancement: "src/agents/feedback_agent.py"
+          - config_validation: "Enforce GitHub token presence"
+          - gist_client: "src/utils/gist_client.py"
+        
+        gist_structure:
+          - "filename: noor-canvas-feedback-{date}.json"
+          - "content: Anonymized feedback entries"
+          - "description: CORTEX Feedback - NOOR CANVAS ({session_count} sessions)"
+          - "visibility: public or secret (user choice)"
+        
+        integration_points:
+          - "FeedbackAgent calls GistClient.upload()"
+          - "Upload happens after feedback.json updated"
+          - "User notified with Gist URL"
+        
+        testing:
+          - "Unit tests: GistClient class"
+          - "Integration test: Upload to test Gist"
+          - "Privacy test: Verify path anonymization"
+        
+        acceptance_criteria:
+          - "Feedback auto-uploads to Gist after submission"
+          - "Gist URL returned to user"
+          - "Paths anonymized correctly"
+          - "No GitHub token = graceful failure (local only)"
+
+      task_3_2_feedback_pull:
+        name: "Add Feedback Aggregation Pipeline"
+        effort_hours: "2"
+        description: |
+          Create pipeline to aggregate feedback from all user Gists:
+          - Scan CORTEX GitHub organization for feedback Gists
+          - Download and merge into central database
+          - Categorize by priority/frequency
+          - Generate trend reports (most common issues)
+          - Feed back into CORTEX brain (Tier 2 patterns)
+        
+        deliverables:
+          - pipeline: "cortex-brain/admin/scripts/feedback/feedback_aggregator.py"
+          - database: "cortex-brain/admin/feedback-aggregate.db"
+          - report_generator: "src/orchestrators/feedback_report_orchestrator.py"
+        
+        aggregation_schema:
+          - "feedback_id: UUID"
+          - "user_hash: string (anonymized)"
+          - "cortex_version: string"
+          - "category: enum"
+          - "priority: enum"
+          - "frequency: enum"
+          - "first_reported: timestamp"
+          - "occurrences: integer"
+          - "status: [new, investigating, resolved, wont-fix]"
+        
+        integration_points:
+          - "Admin runs aggregator weekly/monthly"
+          - "Trends fed into Tier 2 (pattern learning)"
+          - "High-priority issues auto-create GitHub Issues"
+        
+        testing:
+          - "Unit tests: FeedbackAggregator"
+          - "Integration test: Aggregate from test Gists"
+          - "Trend analysis test: Generate report"
+        
+        acceptance_criteria:
+          - "Aggregator downloads all user feedback Gists"
+          - "Duplicate detection works (same issue reported N times)"
+          - "Trend report shows top 10 issues"
+          - "High-priority issues auto-create GitHub Issues"
+
+      task_3_3_admin_review_workflow:
+        name: "Automated Admin Review Workflow"
+        effort_hours: "1"
+        description: |
+          Enhance admin_feedback_review.py to run automatically:
+          - Scheduled task (weekly/monthly)
+          - Email digest to CORTEX maintainers
+          - Slack/Teams notification for critical issues
+          - Dashboard view of feedback health
+        
+        deliverables:
+          - scheduler: "cortex-brain/admin/scripts/feedback/scheduler.py"
+          - dashboard: "cortex-brain/admin/dashboard/feedback-dashboard.html"
+          - notifications: "src/utils/notification_client.py"
+        
+        workflow:
+          - "Cron job runs aggregator weekly"
+          - "Report generated with trends"
+          - "Email sent to admin@cortex.ai"
+          - "Critical issues posted to Slack #cortex-feedback"
+          - "Dashboard updated with latest data"
+        
+        integration_points:
+          - "GitHub Actions runs aggregator on schedule"
+          - "SendGrid API for emails"
+          - "Slack Webhooks for notifications"
+        
+        testing:
+          - "Unit tests: Scheduler, NotificationClient"
+          - "Integration test: End-to-end workflow"
+          - "Smoke test: Run once manually"
+        
+        acceptance_criteria:
+          - "Aggregator runs weekly via GitHub Actions"
+          - "Email digest sent to admin"
+          - "Critical issues posted to Slack within 5 minutes"
+          - "Dashboard shows latest feedback trends"
+
+# ==============================================================================
+# TESTING STRATEGY
+# ==============================================================================
+
+testing_strategy:
+  
+  approach: "Test-Driven Development (TDD)"
+  coverage_target: "≥80% for all new orchestrators"
+  frameworks:
+    python: "pytest + pytest-cov"
+    dotnet: "xUnit + coverlet"
+    javascript: "Jest"
+  
+  test_levels:
+    
+    unit_tests:
+      - "All orchestrators have unit test files"
+      - "Mock external dependencies (git, gist, filesystem)"
+      - "Test success and failure paths"
+      - "Target: 90%+ coverage per module"
+    
+    integration_tests:
+      - "Full TDD session (RED → GREEN → REFACTOR → COMPLETE)"
+      - "Git integration (checkpoint, commit, rollback)"
+      - "Feedback upload (local → Gist)"
+      - "Metrics tracking (start → end)"
+      - "Target: All critical paths covered"
+    
+    skull_tests:
+      - "Brain protection rules enforced (22/22)"
+      - "Rule #8: Git checkpoint before refactoring"
+      - "Rule #15: No data loss during operations"
+      - "Target: 100% SKULL compliance"
+    
+    acceptance_tests:
+      - "User can run TDD session end-to-end"
+      - "Rollback restores exact state"
+      - "Lint violations block next phase"
+      - "Feedback uploads to Gist successfully"
+      - "Target: All user stories pass"
+  
+  validation:
+    - "All tests pass before merge (CI/CD)"
+    - "Code review required for orchestrators"
+    - "Performance regression tests (timing)"
+    - "User acceptance testing (UAT) in NOOR CANVAS"
+
+# ==============================================================================
+# RISKS & MITIGATION
+# ==============================================================================
+
+risks_and_mitigation:
+  
+  risk_1_git_integration_complexity:
+    description: "Git operations may fail in edge cases (merge conflicts, detached HEAD)"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation:
+      - "Extensive error handling in GitCheckpointOrchestrator"
+      - "Graceful degradation (local backup if git fails)"
+      - "User notification with manual steps"
+      - "Integration tests cover edge cases"
+  
+  risk_2_lint_false_positives:
+    description: "Lint rules may flag valid code as violations"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation:
+      - "Configurable lint rules (lint-rules.yaml)"
+      - "User can override/skip violations"
+      - "Machine learning to tune rules over time"
+      - "Feedback system captures false positives"
+  
+  risk_3_feedback_privacy:
+    description: "Gist uploads may leak sensitive paths/data"
+    probability: "LOW"
+    impact: "HIGH"
+    mitigation:
+      - "Path anonymization mandatory"
+      - "Sensitive data redaction (API keys, passwords)"
+      - "User opt-in for Gist upload"
+      - "Audit logs for uploaded content"
+  
+  risk_4_metrics_performance_overhead:
+    description: "Metrics tracking may slow down TDD workflow"
+    probability: "LOW"
+    impact: "LOW"
+    mitigation:
+      - "Async metrics recording"
+      - "Database indexing for performance"
+      - "Lightweight JSON serialization"
+      - "Benchmarking to measure overhead"
+  
+  risk_5_yaml_migration_breakage:
+    description: "Migrating .md plans to .yaml may lose data"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation:
+      - "Backup all .md files before migration"
+      - "Round-trip test (MD → YAML → MD)"
+      - "Manual review of migrated plans"
+      - "Rollback plan if issues found"
+
+# ==============================================================================
+# SUCCESS CRITERIA
+# ==============================================================================
+
+success_criteria:
+  
+  phase_1_tdd_mastery:
+    - "Git checkpoint created before every TDD session"
+    - "Phase commits include timestamp, duration, metrics"
+    - "Lint validation blocks on critical violations"
+    - "Session completion report generated with metrics"
+    - "SKULL Rule #8 test passes (100%)"
+    - "Zero data loss during rollback"
+  
+  phase_2_planning_templates:
+    - "All new plans created as .yaml with schema validation"
+    - "Markdown view auto-generated from YAML"
+    - "Response templates show # H1 title (larger font)"
+    - "Challenge section shows 'None' or specific challenge"
+    - "Template guide updated with new format"
+  
+  phase_3_feedback_system:
+    - "Feedback auto-uploads to Gist after submission"
+    - "Aggregator downloads all user feedback weekly"
+    - "Trend report shows top 10 issues"
+    - "Admin dashboard displays feedback health"
+    - "Critical issues auto-create GitHub Issues"
+  
+  overall:
+    - "User confidence in CORTEX increased (survey)"
+    - "Development safety improved (rollback capability)"
+    - "Quality risks reduced (lint validation)"
+    - "Audit trail complete (timestamps, metrics)"
+    - "Feedback loop closed (push/pull mechanism)"
+
+# ==============================================================================
+# DEPLOYMENT PLAN
+# ==============================================================================
+
+deployment_plan:
+  
+  rollout_strategy: "Phased rollout with user opt-in"
+  
+  phase_1_alpha:
+    audience: "CORTEX maintainers only"
+    duration: "1 week"
+    features:
+      - "Git integration (checkpoint, commit)"
+      - "Metrics tracking (timestamps)"
+    validation:
+      - "Test in CORTEX development repository"
+      - "Verify no data loss, no performance degradation"
+  
+  phase_2_beta:
+    audience: "Selected power users (NOOR CANVAS)"
+    duration: "2 weeks"
+    features:
+      - "Lint validation (Roslynator)"
+      - "Session completion report"
+      - "YAML planning (opt-in)"
+    validation:
+      - "User feedback via built-in system"
+      - "Monitor Gist uploads, aggregation"
+  
+  phase_3_production:
+    audience: "All CORTEX users"
+    duration: "Ongoing"
+    features:
+      - "Response template fixes"
+      - "Feedback aggregation pipeline"
+      - "Admin review workflow"
+    validation:
+      - "Metrics dashboard shows uptake"
+      - "Feedback trends improve over time"
+  
+  rollback_plan:
+    - "Feature flags for each enhancement"
+    - "Disable git integration if issues found"
+    - "Revert to Markdown plans if YAML migration fails"
+    - "Local-only feedback if Gist upload breaks"
+
+# ==============================================================================
+# DOCUMENTATION UPDATES
+# ==============================================================================
+
+documentation_updates:
+  
+  files_to_update:
+    - ".github/prompts/CORTEX.prompt.md"
+    - ".github/prompts/modules/tdd-mastery-guide.md"
+    - ".github/prompts/modules/planning-system-guide.md"
+    - ".github/prompts/modules/template-guide.md"
+    - ".github/prompts/modules/response-format.md"
+    - "cortex-brain/response-templates.yaml"
+    - "README.md"
+  
+  new_documentation:
+    - "docs/git-integration-guide.md"
+    - "docs/metrics-tracking-guide.md"
+    - "docs/lint-validation-guide.md"
+    - "docs/yaml-planning-guide.md"
+    - "docs/feedback-system-guide.md"
+  
+  changelog:
+    version: "3.3.0"
+    release_date: "2025-12-15 (target)"
+    highlights:
+      - "Automated git checkpoints and phase commits"
+      - "Real-time metrics tracking with timestamps"
+      - "Lint validation gates between TDD phases"
+      - "Session completion reports with before/after metrics"
+      - "YAML-based planning with schema validation"
+      - "Revised response templates for clarity"
+      - "Centralized feedback system with push/pull"
+
+# ==============================================================================
+# END OF PLAN
+# ==============================================================================

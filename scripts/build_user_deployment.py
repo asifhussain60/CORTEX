@@ -436,6 +436,25 @@ Proprietary software - See LICENSE file for terms.
         logger.info("Created user README.md")
 
 
+def copy_bootstrap_prompt(project_root: Path, output_dir: Path, dry_run: bool = False):
+    """Copy bootstrap CORTEX.prompt.md to package root for user repos."""
+    bootstrap_source = project_root / 'publish' / 'CORTEX.prompt.md'
+    
+    if not bootstrap_source.exists():
+        logger.warning(f"Bootstrap prompt not found: {bootstrap_source}")
+        logger.warning("Users will need to manually create .github/prompts/CORTEX.prompt.md")
+        return
+    
+    if not dry_run:
+        bootstrap_dest = output_dir / 'CORTEX.prompt.md'
+        shutil.copy2(bootstrap_source, bootstrap_dest)
+        logger.info(f"Copied bootstrap CORTEX.prompt.md to package root")
+        logger.info("  Users can copy this to .github/prompts/ in their repo")
+    else:
+        logger.info(f"Would copy: {bootstrap_source} -> {output_dir / 'CORTEX.prompt.md'}")
+
+
+
 def build_deployment_package(
     project_root: Path,
     output_dir: Path,
@@ -483,6 +502,7 @@ def build_deployment_package(
     logger.info("\nCreating user-specific files...")
     create_user_requirements(project_root, output_dir, dry_run)
     create_user_readme(output_dir, dry_run)
+    copy_bootstrap_prompt(project_root, output_dir, dry_run)
     
     # Calculate package size
     if not dry_run:

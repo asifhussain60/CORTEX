@@ -75,16 +75,36 @@ class VersionDetector:
     def get_current_version(self) -> Optional[str]:
         """
         Read current installed version from VERSION file.
+        Handles both plain text format (v3.3.0) and legacy JSON format.
         
         Returns:
-            Version string (e.g., "v3.1.1"), or None if file doesn't exist
+            Version string (e.g., "v3.3.0") for plain text format,
+            or dict for legacy JSON format
         """
         if not self.version_file_path.exists():
+            # Try legacy .cortex-version file
+            legacy_file = self.cortex_path / self.LEGACY_VERSION_FILE
+            if legacy_file.exists():
+                try:
+                    with open(legacy_file, 'r', encoding='utf-8') as f:
+                        return json.load(f)
+                except (IOError, json.JSONDecodeError):
+                    pass
             return None
             
         try:
             with open(self.version_file_path, 'r', encoding='utf-8') as f:
-                return f.read().strip()
+                content = f.read().strip()
+                
+                # Try JSON format first (legacy)
+                if content.startswith('{'):
+                    try:
+                        return json.loads(content)
+                    except json.JSONDecodeError:
+                        pass
+                
+                # Plain text format (current)
+                return content
         except IOError as e:
             print(f"⚠️  Warning: Could not read version file: {e}")
             return None
@@ -92,12 +112,22 @@ class VersionDetector:
     def get_latest_version(self) -> str:
         """
         Get latest available CORTEX version from VERSION file.
+        Always returns the version string, even if VERSION contains JSON.
         
         Returns:
-            Version string (e.g., "v3.1.1")
+            Version string (e.g., "v3.3.0") or "unknown"
         """
         version = self.get_current_version()
-        return version if version else "unknown"
+        
+        if not version:
+            return "unknown"
+        
+        # Extract string from dict format
+        if isinstance(version, dict):
+            return version.get("cortex_version", "unknown")
+        
+        # Already a string
+        return version if isinstance(version, str) else "unknown"
     
     def create_version_file(
         self,
@@ -226,11 +256,27 @@ class VersionDetector:
         current = self.get_current_version()
         if not current:
             return False  # Fresh install, not an upgrade
-            
-        current_ver = current.get("cortex_version")
-        latest_ver = self.get_latest_version()
         
-        return self.compare_versions(current_ver, latest_ver) < 0
+        # Handle both string and dict formats
+        if isinstance(current, str):
+            current_ver = current
+        elif isinstance(current, dict):
+            current_ver = current.get("cortex_version")
+        else:
+            return False
+        
+        if not current_ver or not isinstance(current_ver, str):
+            return False
+            
+        latest_ver = self.get_latest_version()
+        if not latest_ver:
+            return False
+        
+        # Strip 'v' prefix for comparison
+        current_clean = current_ver.lstrip('v') if isinstance(current_ver, str) else current_ver
+        latest_clean = latest_ver.lstrip('v') if isinstance(latest_ver, str) else latest_ver
+        
+        return self.compare_versions(current_clean, latest_clean) < 0
     
     def get_upgrade_info(self) -> Dict:
         """
@@ -243,15 +289,35 @@ class VersionDetector:
         latest = self.get_latest_version()
         deployment_type = self.detect_deployment_type()
         
+        # Handle both string and dict formats for current version
+        if isinstance(current, str):
+            current_version = current
+            installed_date = None
+            last_upgrade = None
+            upgrade_history_count = 0
+            workspace_id = None
+        elif isinstance(current, dict):
+            current_version = current.get("cortex_version")
+            installed_date = current.get("installed_date")
+            last_upgrade = current.get("last_upgrade")
+            upgrade_history_count = len(current.get("upgrade_history", []))
+            workspace_id = current.get("workspace_id")
+        else:
+            current_version = None
+            installed_date = None
+            last_upgrade = None
+            upgrade_history_count = 0
+            workspace_id = None
+        
         info = {
             "deployment_type": deployment_type,
-            "current_version": current.get("cortex_version") if current else None,
+            "current_version": current_version,
             "latest_version": latest,
             "upgrade_available": False,
-            "installed_date": current.get("installed_date") if current else None,
-            "last_upgrade": current.get("last_upgrade") if current else None,
-            "upgrade_history_count": len(current.get("upgrade_history", [])) if current else 0,
-            "workspace_id": current.get("workspace_id") if current else None
+            "installed_date": installed_date,
+            "last_upgrade": last_upgrade,
+            "upgrade_history_count": upgrade_history_count,
+            "workspace_id": workspace_id
         }
         
         if deployment_type == "upgrade" and current:
