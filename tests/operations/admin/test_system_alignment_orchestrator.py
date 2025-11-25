@@ -349,7 +349,7 @@ class TestRemediationSuggestion:
             feature_name="TestFeature",
             suggestion_type="wiring",
             content="Add template to response-templates.yaml",
-            file_path="cortex-brain/response-templates.yaml"
+            file_path="cortex-brain/templates/response-templates.yaml"
         )
         
         assert suggestion.feature_name == "TestFeature"

@@ -23,7 +23,7 @@ import json
 # CRITICAL files that MUST be present in deployment package
 CRITICAL_FILES = {
     # Brain Protection (Tier 0)
-    'cortex-brain/brain-protection-rules.yaml': 'Brain governance rules',
+    'cortex-brain/protection/brain-protection-rules.yaml': 'Brain governance rules',
     
     # Database Schema (Combined)
     'cortex-brain/schema.sql': 'Combined database schema (Tier 0, 1, 2, 3)',
@@ -49,7 +49,7 @@ CRITICAL_FILES = {
     
     # TDD Mastery Components
     'cortex-brain/documents/implementation-guides/test-strategy.yaml': 'TDD test strategy',
-    'cortex-brain/response-templates.yaml': 'Response templates (includes TDD workflows)',
+    'cortex-brain/templates/response-templates.yaml': 'Response templates (includes TDD workflows)',
     '.github/prompts/modules/template-guide.md': 'Template guide (TDD templates)',
     '.github/prompts/modules/response-format.md': 'Response format guide',
     '.github/prompts/modules/planning-system-guide.md': 'Planning system (DoR/DoD)',

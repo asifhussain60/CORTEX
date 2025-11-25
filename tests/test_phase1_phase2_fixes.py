@@ -34,7 +34,7 @@ class TestPhase1Fixes:
         
         # Test 2: Check response template exists
         import yaml
-        with open('cortex-brain/response-templates.yaml', 'r', encoding='utf-8') as f:
+        with open('cortex-brain/templates/response-templates.yaml', 'r', encoding='utf-8') as f:
             templates = yaml.safe_load(f)
         
         assert 'feedback_received' in templates['templates'], "feedback_received template missing"

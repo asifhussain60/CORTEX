@@ -633,8 +633,8 @@ class DeploymentValidator:
             "requirements.txt",
             "README.md",
             "LICENSE",
-            "cortex-brain/brain-protection-rules.yaml",
-            "cortex-brain/response-templates.yaml",
+            "cortex-brain/protection/brain-protection-rules.yaml",
+            "cortex-brain/templates/response-templates.yaml",
         ]
         
         missing = []
@@ -1004,7 +1004,7 @@ class DeploymentValidator:
                     wiring_issues.append("CORTEX.prompt.md does not reference response-templates.yaml")
                 
                 if '#file:../../cortex-brain/response-templates.yaml' not in prompt_content and \
-                   'cortex-brain/response-templates.yaml' not in prompt_content:
+                   'cortex-brain/templates/response-templates.yaml' not in prompt_content:
                     wiring_issues.append("CORTEX.prompt.md missing correct path to response-templates.yaml")
                 
                 if 'RESPONSE TEMPLATES' not in prompt_content:

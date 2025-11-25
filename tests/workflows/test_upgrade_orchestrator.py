@@ -59,7 +59,7 @@ class TestUpgradeOrchestrator:
         brain_paths = [
             Path("cortex-brain/tier1/working_memory.db"),
             Path("cortex-brain/tier2/knowledge_graph.db"),
-            Path("cortex-brain/capabilities.yaml")
+            Path("cortex-brain/metadata/capabilities.yaml")
         ]
         
         orchestrator.backup_brain = Mock(return_value={

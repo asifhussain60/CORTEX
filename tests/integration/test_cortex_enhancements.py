@@ -34,7 +34,7 @@ class TestMetaTemplateSystem:
     @pytest.fixture
     def response_templates(self):
         """Load response templates"""
-        path = Path("cortex-brain/response-templates.yaml")
+        path = Path("cortex-brain/templates/response-templates.yaml")
         with open(path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
@@ -52,7 +52,7 @@ class TestMetaTemplateSystem:
     
     def test_all_templates_pass_validation(self, validator):
         """Verify all response templates pass meta-template validation"""
-        results = validator.validate_file('cortex-brain/response-templates.yaml')
+        results = validator.validate_file('cortex-brain/templates/response-templates.yaml')
         
         # Exclude confidence templates (they're mixins, not full standalone templates)
         invalid = [r for r in results if not r.valid and 'confidence_' not in r.template_name]
@@ -159,7 +159,7 @@ class TestConfidenceDisplay:
     
     def test_confidence_templates_exist(self):
         """Verify confidence templates added to response-templates.yaml"""
-        path = Path("cortex-brain/response-templates.yaml")
+        path = Path("cortex-brain/templates/response-templates.yaml")
         with open(path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
         
@@ -194,7 +194,7 @@ class TestTemplateRefactoring:
     @pytest.fixture
     def templates(self):
         """Load response templates"""
-        path = Path("cortex-brain/response-templates.yaml")
+        path = Path("cortex-brain/templates/response-templates.yaml")
         with open(path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
@@ -349,7 +349,7 @@ class TestEnhancementPreservation:
             'src/validators/template_validator.py',
             'src/cognitive/confidence_scorer.py',
             'cortex-brain/templates/meta-template.yaml',
-            'cortex-brain/response-templates.yaml'
+            'cortex-brain/templates/response-templates.yaml'
         ]
         
         for file_path in critical_files:

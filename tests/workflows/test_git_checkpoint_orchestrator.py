@@ -173,7 +173,7 @@ class TestGitCheckpointOrchestrator:
     @pytest.mark.parametrize("file_path,should_block", [
         ("cortex-brain/tier1/working_memory.db", True),
         ("cortex-brain/tier2/knowledge-graph.db", True),
-        ("cortex-brain/capabilities.yaml", False),  # Config files allowed
+        ("cortex-brain/metadata/capabilities.yaml", False),  # Config files allowed
         ("src/agents/new_agent.py", False),
         ("tests/test_agent.py", False)
     ])

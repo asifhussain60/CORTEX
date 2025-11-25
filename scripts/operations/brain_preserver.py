@@ -32,7 +32,7 @@ class BrainPreserver:
         "cortex-brain/tier3/*.db-shm",
         "cortex-brain/tier3/*.db-wal",
         "cortex-brain/documents/**/*",
-        "cortex-brain/user-dictionary.yaml",
+        "cortex-brain/learning/user-dictionary.yaml",
         "cortex-brain/conversation-history.jsonl",
         "cortex-brain/conversation-context.jsonl",
         "cortex.config.json",
@@ -41,9 +41,9 @@ class BrainPreserver:
     
     # Files that need intelligent merging (not simple overwrite)
     MERGE_REQUIRED = [
-        "cortex-brain/response-templates.yaml",
-        "cortex-brain/capabilities.yaml",
-        "cortex-brain/operations-config.yaml"
+        "cortex-brain/templates/response-templates.yaml",
+        "cortex-brain/metadata/capabilities.yaml",
+        "cortex-brain/operations/operations-config.yaml"
     ]
     
     # Files/directories that are safe to overwrite (core CORTEX files)
@@ -52,8 +52,8 @@ class BrainPreserver:
         "scripts/**/*",
         "src/**/*",
         "cortex-brain/schema.sql",
-        "cortex-brain/brain-protection-rules.yaml",
-        "cortex-brain/publish-config.yaml"
+        "cortex-brain/protection/brain-protection-rules.yaml",
+        "cortex-brain/operations/publish-config.yaml"
     ]
     
     def __init__(self, target_path: Path):
@@ -99,9 +99,9 @@ class BrainPreserver:
         config_files = [
             "cortex.config.json",
             ".cortex-version",
-            "cortex-brain/user-dictionary.yaml",
-            "cortex-brain/response-templates.yaml",
-            "cortex-brain/capabilities.yaml"
+            "cortex-brain/learning/user-dictionary.yaml",
+            "cortex-brain/templates/response-templates.yaml",
+            "cortex-brain/metadata/capabilities.yaml"
         ]
         
         for file_name in config_files:

@@ -28,8 +28,8 @@ def fix_encoding(filepath: str):
 
 if __name__ == "__main__":
     files = [
-        "cortex-brain/brain-protection-rules.yaml",
-        "cortex-brain/knowledge-graph.yaml"
+        "cortex-brain/protection/brain-protection-rules.yaml",
+        "cortex-brain/learning/knowledge-graph.yaml"
     ]
     
     success_count = 0

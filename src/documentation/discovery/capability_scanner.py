@@ -54,8 +54,8 @@ class CapabilityScanner:
         
         yaml_files = [
             'cortex-brain/cortex-operations.yaml',
-            'cortex-brain/module-definitions.yaml',
-            'cortex-brain/capabilities.yaml',
+            'cortex-brain/metadata/module-definitions.yaml',
+            'cortex-brain/metadata/capabilities.yaml',
             'cortex-operations.yaml'
         ]
         

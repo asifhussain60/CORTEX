@@ -50,7 +50,7 @@ def validate_tdd_mastery_deployment() -> bool:
         "cortex-brain/documents/reports/TDD-MASTERY-PHASE4-COMPLETE.md",
         "cortex-brain/documents/reports/TDD-MASTERY-PHASE5-COMPLETE.md",
         ".github/prompts/CORTEX.prompt.md",  # Updated with TDD Mastery section
-        "cortex-brain/capabilities.yaml",     # Updated with tdd_mastery capability
+        "cortex-brain/metadata/capabilities.yaml",     # Updated with tdd_mastery capability
     ]
     
     for doc_path in docs:
@@ -147,7 +147,7 @@ def validate_tdd_mastery_deployment() -> bool:
     print()
     
     # Check capabilities.yaml for tdd_mastery
-    capabilities_file = project_root / "cortex-brain/capabilities.yaml"
+    capabilities_file = project_root / "cortex-brain/metadata/capabilities.yaml"
     if capabilities_file.exists():
         content = capabilities_file.read_text()
         

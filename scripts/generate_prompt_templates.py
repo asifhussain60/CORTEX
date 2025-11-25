@@ -33,7 +33,7 @@ from datetime import datetime
 
 def load_templates():
     """Load templates from response-templates.yaml"""
-    template_file = Path("cortex-brain/response-templates.yaml")
+    template_file = Path("cortex-brain/templates/response-templates.yaml")
     
     if not template_file.exists():
         print(f"❌ Error: {template_file} not found")

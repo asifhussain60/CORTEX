@@ -253,7 +253,7 @@ class SweeperPlugin(BasePlugin):
     def _load_protected_items(self) -> None:
         """Load protected directories and patterns from cleanup-rules.yaml"""
         try:
-            rules_file = Path("cortex-brain/cleanup-rules.yaml")
+            rules_file = Path("cortex-brain/operations/cleanup-rules.yaml")
             
             if not rules_file.exists():
                 # Use defaults

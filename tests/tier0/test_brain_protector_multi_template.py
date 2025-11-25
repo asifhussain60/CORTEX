@@ -187,7 +187,7 @@ class TestSectionMergeRules:
         """Validate merge rule types remain valid."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             section_merge_rules:
               Response: combine  # VIOLATION: Should be merge/replace/keep_first
@@ -206,7 +206,7 @@ class TestSectionMergeRules:
         """Detect improper Challenge section merging."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             section_merge_rules:
               Challenge: merge  # VIOLATION: Challenge should use keep_first
@@ -225,7 +225,7 @@ class TestSectionMergeRules:
         """Validate section merge rules cover all sections."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             section_merge_rules:
               Response: merge
@@ -310,7 +310,7 @@ class TestTemplateCompatibilityMatrix:
         """Validate compatible_with declarations are reciprocal."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             template_a:
               composability:
@@ -333,7 +333,7 @@ class TestTemplateCompatibilityMatrix:
         """Detect circular conflict declarations."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             template_a:
               composability:
@@ -353,7 +353,7 @@ class TestTemplateCompatibilityMatrix:
         """Validate composability level values."""
         request = ModificationRequest(
             operation="modify",
-            target_path=project_root / "cortex-brain/response-templates-enhanced.yaml",
+            target_path=project_root / "cortex-brain/templates/response-templates-enhanced.yaml",
             content="""
             template:
               composability:
@@ -513,7 +513,7 @@ class TestMultiTemplateProtectionIntegration:
         """Verify multi-template critical paths are defined."""
         orchestrator_paths = [
             'src/response_templates/multi_template_orchestrator.py',
-            'cortex-brain/response-templates-enhanced.yaml'
+            'cortex-brain/templates/response-templates-enhanced.yaml'
         ]
         
         # Will be true once Layer 13 is added to brain-protection-rules.yaml

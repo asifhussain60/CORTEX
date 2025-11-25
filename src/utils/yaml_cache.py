@@ -39,14 +39,14 @@ class YAMLCache:
         >>> cache = YAMLCache()
         >>> 
         >>> # First load (cold cache)
-        >>> data = cache.load('cortex-brain/response-templates.yaml')  # ~200ms
+        >>> data = cache.load('cortex-brain/templates/response-templates.yaml')  # ~200ms
         >>> 
         >>> # Second load (warm cache, file unchanged)
-        >>> data = cache.load('cortex-brain/response-templates.yaml')  # ~0.1ms
+        >>> data = cache.load('cortex-brain/templates/response-templates.yaml')  # ~0.1ms
         >>> 
         >>> # Different file
-        >>> rules = cache.load('cortex-brain/brain-protection-rules.yaml')  # ~150ms
-        >>> rules = cache.load('cortex-brain/brain-protection-rules.yaml')  # ~0.1ms
+        >>> rules = cache.load('cortex-brain/protection/brain-protection-rules.yaml')  # ~150ms
+        >>> rules = cache.load('cortex-brain/protection/brain-protection-rules.yaml')  # ~0.1ms
     """
     
     def __init__(self):
@@ -336,7 +336,7 @@ def get_global_cache() -> YAMLCache:
     Example:
         >>> from src.utils.yaml_cache import get_global_cache
         >>> cache = get_global_cache()
-        >>> data = cache.load('cortex-brain/response-templates.yaml')
+        >>> data = cache.load('cortex-brain/templates/response-templates.yaml')
     """
     global _global_cache
     if _global_cache is None:
@@ -357,7 +357,7 @@ def load_yaml_cached(file_path: Union[str, Path], force_reload: bool = False) ->
     
     Example:
         >>> from src.utils.yaml_cache import load_yaml_cached
-        >>> data = load_yaml_cached('cortex-brain/response-templates.yaml')
+        >>> data = load_yaml_cached('cortex-brain/templates/response-templates.yaml')
     """
     cache = get_global_cache()
     return cache.load(file_path, force_reload=force_reload)
@@ -406,7 +406,7 @@ def benchmark_cache_performance(file_path: Union[str, Path], iterations: int = 1
         - improvement_percent: Performance improvement percentage
     
     Example:
-        >>> results = benchmark_cache_performance('cortex-brain/response-templates.yaml')
+        >>> results = benchmark_cache_performance('cortex-brain/templates/response-templates.yaml')
         >>> print(f"Speedup: {results['speedup']:.1f}x")
     """
     import time

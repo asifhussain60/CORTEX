@@ -32,7 +32,7 @@ class TestCORTEXFaculties:
     def test_tier0_brain_protection_exists(self, publish_cortex):
         """Tier 0: Brain protection rules and protector."""
         tier0_files = [
-            'cortex-brain/brain-protection-rules.yaml',  # SKULL rules
+            'cortex-brain/protection/brain-protection-rules.yaml',  # SKULL rules
             'src/tier0/__init__.py',
             'src/tier0/brain_protector.py',
         ]
@@ -67,7 +67,7 @@ class TestCORTEXFaculties:
             'src/tier2/__init__.py',
             'src/tier2/knowledge_graph/__init__.py',
             'src/tier2/knowledge_graph/database/schema.py',
-            'cortex-brain/knowledge-graph.yaml',
+            'cortex-brain/learning/knowledge-graph.yaml',
         ]
         
         for file_path in tier2_files:
@@ -235,7 +235,7 @@ class TestCORTEXFaculties:
         """Configuration files and templates."""
         config_files = [
             'cortex.config.template.json',  # Template only (no machine paths)
-            'cortex-brain/response-templates.yaml',
+            'cortex-brain/templates/response-templates.yaml',
             'requirements.txt',
         ]
         

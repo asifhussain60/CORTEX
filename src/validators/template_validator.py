@@ -422,7 +422,7 @@ def main():
     )
     parser.add_argument(
         '--file',
-        default='cortex-brain/response-templates.yaml',
+        default='cortex-brain/templates/response-templates.yaml',
         help='Path to templates file (default: cortex-brain/response-templates.yaml)'
     )
     parser.add_argument(

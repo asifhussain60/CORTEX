@@ -22,7 +22,7 @@ class TestTemplateTriggerRouting:
     @pytest.fixture
     def loader(self):
         """Initialize template loader"""
-        template_file = Path("cortex-brain/response-templates.yaml")
+        template_file = Path("cortex-brain/templates/response-templates.yaml")
         loader = TemplateLoader(template_file)
         loader.load_templates()
         return loader
@@ -150,7 +150,7 @@ class TestTemplateLoadingPerformance:
     @pytest.fixture
     def loader(self):
         """Initialize template loader"""
-        template_file = Path("cortex-brain/response-templates.yaml")
+        template_file = Path("cortex-brain/templates/response-templates.yaml")
         return TemplateLoader(template_file)
     
     def test_lazy_loading(self, loader):

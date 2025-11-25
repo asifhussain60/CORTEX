@@ -100,10 +100,10 @@ EXCLUDE_PATTERNS = {
 # Critical files that MUST be included
 CRITICAL_FILES = {
     # Brain Protection (Tier 0)
-    'cortex-brain/brain-protection-rules.yaml',
+    'cortex-brain/protection/brain-protection-rules.yaml',
     
     # Publish Configuration (CORTEX 3.0)
-    'cortex-brain/publish-config.yaml',
+    'cortex-brain/operations/publish-config.yaml',
     
     # Database Schema Code (Python-based initialization)
     'src/tier2/knowledge_graph/database/schema.py',
@@ -123,7 +123,7 @@ CRITICAL_FILES = {
     # No separate standalone guide files
     
     # Response Templates (NEW - 2025-11-12: 13 intelligent question routing templates)
-    'cortex-brain/response-templates.yaml',
+    'cortex-brain/templates/response-templates.yaml',
     
     # User Tools (ESSENTIAL for conversation tracking & setup)
     'scripts/cortex/cortex_cli.py',  # Manual tracking
@@ -498,13 +498,13 @@ def copy_essential_directories(
     
     # Copy cortex-brain/ files selectively (YAML configs only, no dev docs)
     cortex_brain_files = [
-        'cortex-brain/brain-protection-rules.yaml',
-        'cortex-brain/response-templates.yaml',
-        'cortex-brain/knowledge-graph.yaml',
-        'cortex-brain/development-context.yaml',
-        'cortex-brain/capabilities.yaml',
+        'cortex-brain/protection/brain-protection-rules.yaml',
+        'cortex-brain/templates/response-templates.yaml',
+        'cortex-brain/learning/knowledge-graph.yaml',
+        'cortex-brain/metadata/development-context.yaml',
+        'cortex-brain/metadata/capabilities.yaml',
         'cortex-brain/migrate_brain_db.py',
-        'cortex-brain/publish-config.yaml',
+        'cortex-brain/operations/publish-config.yaml',
     ]
     
     for brain_file in cortex_brain_files:

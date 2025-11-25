@@ -149,7 +149,7 @@ def measure_token_context() -> Dict[str, Any]:
     # NEW: Just load YAML template
     new_context = """
     # Load pre-formatted template
-    with open('cortex-brain/response-templates.yaml') as f:
+    with open('cortex-brain/templates/response-templates.yaml') as f:
         templates = yaml.safe_load(f)
     
     # Return template directly

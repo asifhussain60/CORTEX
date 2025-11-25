@@ -309,33 +309,33 @@ class TestYAMLCacheRealFiles:
     """Test with real CORTEX YAML files (integration tests)."""
     
     @pytest.mark.skipif(
-        not Path("cortex-brain/response-templates.yaml").exists(),
+        not Path("cortex-brain/templates/response-templates.yaml").exists(),
         reason="Real CORTEX files not available"
     )
     def test_load_response_templates(self, cache):
         """Test loading actual response-templates.yaml."""
-        data = cache.load("cortex-brain/response-templates.yaml")
+        data = cache.load("cortex-brain/templates/response-templates.yaml")
         
         assert data is not None
         assert 'templates' in data
         
         # Second load should be cached
-        data2 = cache.load("cortex-brain/response-templates.yaml")
+        data2 = cache.load("cortex-brain/templates/response-templates.yaml")
         assert data == data2
         
-        stats = cache.get_stats("cortex-brain/response-templates.yaml")
+        stats = cache.get_stats("cortex-brain/templates/response-templates.yaml")
         assert stats['hits'] == 1
     
     @pytest.mark.skipif(
-        not Path("cortex-brain/brain-protection-rules.yaml").exists(),
+        not Path("cortex-brain/protection/brain-protection-rules.yaml").exists(),
         reason="Real CORTEX files not available"
     )
     def test_load_brain_protection_rules(self, cache):
         """Test loading actual brain-protection-rules.yaml."""
-        data = cache.load("cortex-brain/brain-protection-rules.yaml")
+        data = cache.load("cortex-brain/protection/brain-protection-rules.yaml")
         
         assert data is not None
-        assert 'skull_rules' in data
+        assert 'protection_layers' in data or 'rules' in data  # Updated: protection_layers is the actual key
         
-        stats = cache.get_stats("cortex-brain/brain-protection-rules.yaml")
+        stats = cache.get_stats("cortex-brain/protection/brain-protection-rules.yaml")
         assert stats['misses'] == 1

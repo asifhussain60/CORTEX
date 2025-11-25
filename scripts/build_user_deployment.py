@@ -62,7 +62,7 @@ INCLUDED_DIRS = {
 # CRITICAL files that MUST be included (brain protection, schemas, etc.)
 CRITICAL_FILES = {
     # Brain Protection (Tier 0)
-    'cortex-brain/brain-protection-rules.yaml',
+    'cortex-brain/protection/brain-protection-rules.yaml',
     
     # Database Schemas
     'cortex-brain/schemas/tier1-schema.sql',
@@ -96,8 +96,8 @@ CRITICAL_FILES = {
     'cortex-brain/documents/reports/TDD-MASTERY-PHASE1-2-COMPLETE.md',
     'cortex-brain/documents/reports/TDD-MASTERY-PHASE4-COMPLETE.md',
     'cortex-brain/documents/reports/TDD-MASTERY-PHASE5-COMPLETE.md',
-    'cortex-brain/capabilities.yaml',
-    'cortex-brain/response-templates.yaml',
+    'cortex-brain/metadata/capabilities.yaml',
+    'cortex-brain/templates/response-templates.yaml',
     '.github/prompts/modules/template-guide.md',
     '.github/prompts/modules/response-format.md',
     '.github/prompts/modules/planning-system-guide.md',

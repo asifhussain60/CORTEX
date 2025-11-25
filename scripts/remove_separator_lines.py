@@ -29,7 +29,7 @@ SEPARATOR_PATTERNS = [
 
 # Files to process
 FILES_TO_CLEAN = [
-    'cortex-brain/response-templates.yaml',
+    'cortex-brain/templates/response-templates.yaml',
     '.github/copilot-instructions.md',
 ]
 

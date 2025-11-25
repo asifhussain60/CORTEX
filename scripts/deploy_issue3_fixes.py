@@ -457,7 +457,7 @@ class Issue3Deployer:
             'src/workflows/tdd_workflow_integrator.py',
             'cortex-brain/tier2/schema/element_mappings.sql',
             'cortex-brain/agents/intent-patterns.yaml',
-            'cortex-brain/response-templates.yaml',
+            'cortex-brain/templates/response-templates.yaml',
             '.github/prompts/CORTEX.prompt.md',
             '.github/prompts/modules/response-format.md',
             '.github/prompts/modules/planning-system-guide.md',

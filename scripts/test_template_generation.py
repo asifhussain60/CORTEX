@@ -20,7 +20,7 @@ def test_yaml_loads():
     """Test that response-templates.yaml is valid"""
     print("🧪 Test 1: YAML Loading...")
     
-    template_file = Path("cortex-brain/response-templates.yaml")
+    template_file = Path("cortex-brain/templates/response-templates.yaml")
     
     try:
         with open(template_file, 'r', encoding='utf-8') as f:
@@ -40,7 +40,7 @@ def test_template_structure():
     """Test that templates have required fields"""
     print("🧪 Test 2: Template Structure...")
     
-    template_file = Path("cortex-brain/response-templates.yaml")
+    template_file = Path("cortex-brain/templates/response-templates.yaml")
     
     try:
         with open(template_file, 'r', encoding='utf-8') as f:
@@ -114,7 +114,7 @@ def test_all_templates_represented():
     
     try:
         # Load YAML
-        template_file = Path("cortex-brain/response-templates.yaml")
+        template_file = Path("cortex-brain/templates/response-templates.yaml")
         with open(template_file, 'r', encoding='utf-8') as f:
             yaml_data = yaml.safe_load(f)
         

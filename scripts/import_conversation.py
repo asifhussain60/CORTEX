@@ -111,7 +111,7 @@ def import_conversation(doc_path: str):
             'src/epm/doc_generator.py',
             'tests/epm/test_capability_coverage_validation.py',
             'test_real_coverage.py',
-            'cortex-brain/capabilities.yaml'
+            'cortex-brain/metadata/capabilities.yaml'
         ],
         'reusable_artifacts': [
             'validate_documentation_coverage() method',
