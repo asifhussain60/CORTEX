@@ -932,10 +932,15 @@ def publish_to_branch(
             logger.info("⏩ Skipping validation (already completed)")
         
         # STAGE 2: Build Content
-        # STAGE 2: Build Content
         stats = None
-        if not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT):
-            logger.info("\n🔨 STAGE 2: Building Package Content")
+        # Always rebuild if temp_dir missing (branch switch deleted it)
+        needs_rebuild = not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT) or not temp_dir.exists()
+        
+        if needs_rebuild:
+            if not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT):
+                logger.info("\n🔨 STAGE 2: Building Package Content")
+            else:
+                logger.info("\n🔨 STAGE 2: Rebuilding Package Content (temp dir missing after branch switch)")
             
             # Build package content
             stats = build_publish_content(project_root, temp_dir)
