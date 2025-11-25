@@ -1,0 +1,3 @@
+# DALL-E Prompt: User Journey
+
+Create a user journey map showing CORTEX interaction...

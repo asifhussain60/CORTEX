@@ -76,12 +76,23 @@ nav:
   - Knowledge Graph Import: KNOWLEDGE-GRAPH-IMPORT-GUIDE.md
   - Developer Guide: guides/developer-guide.md
   - Admin Guide: guides/admin-guide.md
+  - Admin Operations: guides/admin-operations.md
   - Best Practices: guides/best-practices.md
   - Troubleshooting: guides/troubleshooting.md
 - Reference:
   - API Reference: reference/api.md
   - Configuration Reference: reference/configuration.md
   - Response Templates: reference/response-templates.md
+  - Scripts Reference:
+    - Overview: reference/scripts/index.md
+    - Upgrade Orchestrator: reference/scripts/operations/upgrade-orchestrator.md
+    - Version Detector: reference/scripts/operations/version-detector.md
+    - Config Merger: reference/scripts/operations/config-merger.md
+    - Deployment: reference/scripts/deploy-cortex.md
+    - Build User Deployment: reference/scripts/build-user-deployment.md
+    - Validation:
+      - Upgrade System: reference/scripts/validation/validate-upgrade-system.md
+      - Embedded Installation: reference/scripts/validation/validate-embedded-installation.md
 - Plugins:
   - Development: plugins/development.md
   - VS Code Extension: plugins/vscode-extension.md
@@ -90,7 +101,7 @@ nav:
   - CI/CD Integration: performance/CI-CD-INTEGRATION.md
   - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
 - Case Studies:
-  - Overview: case-studies/README.md
+  - Overview: case-studies/index.md
   - NOOR CANVAS:
     - Overview: case-studies/noor-canvas/index.md
     - SignalR Refactoring:

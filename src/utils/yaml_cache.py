@@ -22,7 +22,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 import os
 import yaml
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 from datetime import datetime
 import logging
 
@@ -57,7 +57,7 @@ class YAMLCache:
         
     def load(
         self, 
-        file_path: str | Path, 
+        file_path: Union[str, Path], 
         force_reload: bool = False,
         encoding: str = 'utf-8'
     ) -> Dict[str, Any]:
@@ -130,7 +130,7 @@ class YAMLCache:
         
         return data
     
-    def get_stats(self, file_path: Optional[str | Path] = None) -> Dict[str, Any]:
+    def get_stats(self, file_path: Optional[Union[str, Path]] = None) -> Dict[str, Any]:
         """
         Get cache performance statistics.
         
@@ -227,7 +227,7 @@ class YAMLCache:
                 'files': files_stats
             }
     
-    def clear(self, file_path: Optional[str | Path] = None):
+    def clear(self, file_path: Optional[Union[str, Path]] = None):
         """
         Clear cache for specific file or all files.
         
@@ -255,7 +255,7 @@ class YAMLCache:
             self._cache.clear()
             logger.debug("Cleared entire YAML cache")
     
-    def reset_stats(self, file_path: Optional[str | Path] = None):
+    def reset_stats(self, file_path: Optional[Union[str, Path]] = None):
         """
         Reset statistics counters.
         
@@ -281,7 +281,7 @@ class YAMLCache:
             for path_str in self._stats:
                 self._stats[path_str] = {'hits': 0, 'misses': 0}
     
-    def is_cached(self, file_path: str | Path) -> bool:
+    def is_cached(self, file_path: Union[str, Path]) -> bool:
         """
         Check if file is currently cached.
         
@@ -298,7 +298,7 @@ class YAMLCache:
         
         return str(path) in self._cache
     
-    def get_cache_age_seconds(self, file_path: str | Path) -> Optional[float]:
+    def get_cache_age_seconds(self, file_path: Union[str, Path]) -> Optional[float]:
         """
         Get age of cached data in seconds.
         
@@ -344,7 +344,7 @@ def get_global_cache() -> YAMLCache:
     return _global_cache
 
 
-def load_yaml_cached(file_path: str | Path, force_reload: bool = False) -> Dict[str, Any]:
+def load_yaml_cached(file_path: Union[str, Path], force_reload: bool = False) -> Dict[str, Any]:
     """
     Convenience function to load YAML with global cache.
     
@@ -363,7 +363,7 @@ def load_yaml_cached(file_path: str | Path, force_reload: bool = False) -> Dict[
     return cache.load(file_path, force_reload=force_reload)
 
 
-def get_cache_stats(file_path: Optional[str | Path] = None) -> Dict[str, Any]:
+def get_cache_stats(file_path: Optional[Union[str, Path]] = None) -> Dict[str, Any]:
     """
     Convenience function to get cache stats from global cache.
     
@@ -377,7 +377,7 @@ def get_cache_stats(file_path: Optional[str | Path] = None) -> Dict[str, Any]:
     return cache.get_stats(file_path)
 
 
-def clear_cache(file_path: Optional[str | Path] = None):
+def clear_cache(file_path: Optional[Union[str, Path]] = None):
     """
     Convenience function to clear global cache.
     
@@ -390,7 +390,7 @@ def clear_cache(file_path: Optional[str | Path] = None):
 
 # Performance testing utilities
 
-def benchmark_cache_performance(file_path: str | Path, iterations: int = 10) -> Dict[str, Any]:
+def benchmark_cache_performance(file_path: Union[str, Path], iterations: int = 10) -> Dict[str, Any]:
     """
     Benchmark cache performance for a file.
     

@@ -12,7 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 
 class ArchiveDecision(str, Enum):
@@ -25,8 +25,8 @@ class ArchiveDecision(str, Enum):
 class CleanupAction:
     path: Path
     action: str  # "archive" | "move" | "noop"
-    target: Path | None = None
-    reason: str | None = None
+    target: Optional[Path] = None
+    reason: Optional[str] = None
 
 
 class SmartCleanupHook:
