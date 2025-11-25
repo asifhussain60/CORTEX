@@ -53,8 +53,10 @@ scripts/temp/cortex-optimization.log
 .pytest_cache/v/cache/lastfailed
 
 # Database files (working state, not configuration)
-cortex-brain/tier1/conversations.db
-cortex-brain/tier1/working_memory.db
+# Exclude ALL database files in cortex-brain (brain data should not be committed)
+cortex-brain/**/*.db
+cortex-brain/**/*.db-shm
+cortex-brain/**/*.db-wal
 
 # Ambient capture logs (runtime state)
 logs/ambient_capture.log
