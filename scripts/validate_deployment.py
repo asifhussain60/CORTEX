@@ -102,6 +102,9 @@ class DeploymentValidator:
         # Response Templates
         self.check_response_templates()
         
+        # GitHub Copilot Instructions Merge Logic
+        self.check_copilot_instructions_merge_logic()
+        
         # GitHub Copilot Instructions
         self.check_copilot_instructions_validation()
         
@@ -621,18 +624,29 @@ class DeploymentValidator:
             ))
     
     def check_critical_files(self):
-        """Verify all critical files exist."""
+        """Verify all critical files exist for deployment to main branch.
+        
+        CRITICAL: These files MUST exist and be included in deploy_cortex.py CORE_FILES
+        for users to get automatic CORTEX activation when cloning.
+        """
         check_id = "CRITICAL-FILES"
-        name = "Critical Files Present"
+        name = "Critical Files Present (Main Branch Deployment)"
         
         critical_files = [
-            ".github/prompts/CORTEX.prompt.md",
+            # GitHub Copilot Auto-Activation (MUST be deployed to main)
             ".github/copilot-instructions.md",
+            ".github/prompts/CORTEX.prompt.md",
+            
+            # Configuration
             "cortex.config.template.json",
             "cortex-operations.yaml",
             "requirements.txt",
+            
+            # Legal & Documentation
             "README.md",
             "LICENSE",
+            
+            # Brain Protection & Templates
             "cortex-brain/protection/brain-protection-rules.yaml",
             "cortex-brain/templates/response-templates.yaml",
         ]
@@ -749,10 +763,87 @@ class DeploymentValidator:
                 fix_available=False
             ))
     
+    def check_copilot_instructions_merge_logic(self):
+        """COPILOT_MERGE: Verify deploy script has merge logic for copilot-instructions.md.
+        
+        CRITICAL: Ensures existing user copilot-instructions.md files are preserved during CORTEX deployment.
+        """
+        check_id = "COPILOT_MERGE"
+        name = "Copilot Instructions Merge Logic"
+        
+        issues = []
+        
+        # Check deploy script has merge function
+        deploy_script = self.project_root / "scripts" / "deploy_cortex.py"
+        if not deploy_script.exists():
+            issues.append("deploy_cortex.py NOT FOUND")
+        else:
+            try:
+                with open(deploy_script, 'r', encoding='utf-8') as f:
+                    deploy_content = f.read()
+                
+                # Check for merge function
+                if 'def merge_copilot_instructions' not in deploy_content:
+                    issues.append("deploy_cortex.py missing merge_copilot_instructions() function")
+                else:
+                    # Verify function handles 3 scenarios
+                    required_checks = [
+                        'No existing file',
+                        'Existing file without CORTEX',
+                        'Existing file with CORTEX',
+                    ]
+                    
+                    # Check function docstring mentions scenarios
+                    merge_func_start = deploy_content.find('def merge_copilot_instructions')
+                    merge_func_docstring = deploy_content[merge_func_start:merge_func_start + 1000]
+                    
+                    missing_scenarios = []
+                    for scenario in required_checks:
+                        if scenario not in merge_func_docstring and scenario.replace(' ', '') not in merge_func_docstring:
+                            missing_scenarios.append(scenario)
+                    
+                    if missing_scenarios:
+                        issues.append(f"merge_copilot_instructions() missing scenario handling: {', '.join(missing_scenarios)}")
+                
+                # Verify merge function is called in build process
+                if 'merge_copilot_instructions(' not in deploy_content:
+                    issues.append("deploy_cortex.py does not call merge_copilot_instructions() during build")
+                
+            except Exception as e:
+                issues.append(f"Failed to validate deploy_cortex.py merge logic: {e}")
+        
+        # Build result
+        if issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=False,
+                message=f"Copilot instructions merge logic incomplete ({len(issues)} issues)",
+                details="\n".join(f"  • {issue}" for issue in issues) +
+                       "\n\nRequired merge scenarios:\n" +
+                       "  1. No existing file → Create new\n" +
+                       "  2. Existing file without CORTEX → Append CORTEX section\n" +
+                       "  3. Existing file with CORTEX → Update CORTEX section (preserve other content)",
+                fix_available=False,
+                fix_command="Add merge_copilot_instructions() function to deploy_cortex.py"
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=True,
+                message="✓ Copilot instructions merge logic properly implemented"
+            ))
+    
     def check_copilot_instructions_validation(self):
-        """COPILOT_INSTRUCTIONS: Verify GitHub Copilot instruction files are present and properly configured."""
+        """COPILOT_INSTRUCTIONS: Verify GitHub Copilot instruction files are present and properly configured.
+        
+        CRITICAL: Ensures copilot-instructions.md is deployed to main branch so users get automatic activation.
+        """
         check_id = "COPILOT_INSTRUCTIONS"
-        name = "GitHub Copilot Instructions Validation"
+        name = "GitHub Copilot Instructions Validation (Auto-Activation)"
         
         issues = []
         
@@ -807,42 +898,31 @@ class DeploymentValidator:
             except Exception as e:
                 issues.append(f"Failed to validate CORTEX.prompt.md content: {e}")
         
-        # Check that deployment script installs these files
-        deploy_script = self.project_root / "scripts" / "deploy_to_app.py"
-        if deploy_script.exists():
+        # Check that deployment script includes these files in CORE_FILES
+        deploy_script = self.project_root / "scripts" / "deploy_cortex.py"
+        if not deploy_script.exists():
+            issues.append("deploy_cortex.py NOT FOUND - primary deployment script missing")
+        else:
             try:
                 with open(deploy_script, 'r', encoding='utf-8') as f:
                     deploy_content = f.read()
                 
-                if 'install_entry_point' not in deploy_content:
-                    issues.append("deploy_to_app.py missing install_entry_point() function")
+                # Check CORE_FILES definition includes copilot-instructions.md
+                if 'CORE_FILES' not in deploy_content:
+                    issues.append("deploy_cortex.py missing CORE_FILES definition")
+                elif "'.github/copilot-instructions.md'" not in deploy_content:
+                    issues.append("CRITICAL: deploy_cortex.py CORE_FILES missing '.github/copilot-instructions.md' - users won't get auto-activation")
                 
-                if 'copilot-instructions.md' not in deploy_content:
-                    issues.append("deploy_to_app.py does not copy copilot-instructions.md")
-                    
-                if 'CORTEX.prompt.md' not in deploy_content:
-                    issues.append("deploy_to_app.py does not copy CORTEX.prompt.md")
+                if "'.github/prompts/CORTEX.prompt.md'" not in deploy_content:
+                    issues.append("CRITICAL: deploy_cortex.py CORE_FILES missing '.github/prompts/CORTEX.prompt.md' - entry point won't work")
+                
+                # Verify it's in CORE_FILES set, not EXCLUDED
+                if 'EXCLUDED_DIRS' in deploy_content:
+                    if "'.github'" in deploy_content.split('EXCLUDED_DIRS')[1].split('}')[0]:
+                        issues.append("deploy_cortex.py incorrectly excludes .github directory")
                     
             except Exception as e:
-                issues.append(f"Failed to validate deploy_to_app.py: {e}")
-        else:
-            issues.append("deploy_to_app.py script not found")
-        
-        # Check that setup documentation mentions these files
-        publish_script = self.project_root / "scripts" / "publish_cortex.py"
-        if publish_script.exists():
-            try:
-                with open(publish_script, 'r', encoding='utf-8') as f:
-                    publish_content = f.read()
-                
-                if 'copilot-instructions.md' not in publish_content:
-                    issues.append("publish_cortex.py does not include copilot-instructions.md in critical files")
-                    
-                if 'CORTEX.prompt.md' not in publish_content:
-                    issues.append("publish_cortex.py does not include CORTEX.prompt.md in critical files")
-                    
-            except Exception as e:
-                issues.append(f"Failed to validate publish_cortex.py: {e}")
+                issues.append(f"Failed to validate deploy_cortex.py: {e}")
         
         # Build result
         if issues:
@@ -877,22 +957,22 @@ class DeploymentValidator:
         
         documentation_issues = []
         
-        # Validate that publish script exists and generates proper setup documentation
-        publish_script = self.project_root / "scripts/publish_cortex.py"
+        # Validate that deploy script exists and generates proper setup documentation
+        deploy_script = self.project_root / "scripts/deploy_cortex.py"
         
-        if not publish_script.exists():
-            documentation_issues.append("publish_cortex.py script missing (cannot generate SETUP-CORTEX.md)")
+        if not deploy_script.exists():
+            documentation_issues.append("deploy_cortex.py script missing (cannot generate SETUP-CORTEX.md)")
         else:
-            # Verify the publish script contains the setup document generator
+            # Verify the deploy script contains the setup document generator
             try:
-                with open(publish_script, 'r', encoding='utf-8') as f:
+                with open(deploy_script, 'r', encoding='utf-8') as f:
                     script_content = f.read()
                 
                 # Check for setup document generator function
-                if 'create_setup_cortex' not in script_content:
-                    documentation_issues.append("publish_cortex.py missing SETUP-CORTEX.md generator function")
-                elif 'SETUP-CORTEX.md' not in script_content:
-                    documentation_issues.append("publish_cortex.py generator incomplete")
+                if 'create_setup' not in script_content:
+                    documentation_issues.append("deploy_cortex.py missing SETUP-CORTEX.md generator function")
+                elif 'SETUP-CORTEX.md' not in script_content and 'SETUP' not in script_content:
+                    documentation_issues.append("deploy_cortex.py generator incomplete")
                 
                 # Check that setup content includes required tooling instructions
                 required_keywords = [
@@ -900,7 +980,6 @@ class DeploymentValidator:
                     'git',  # Git installation  
                     'pip install',  # Package installation
                     'requirements.txt',  # Dependencies file
-                    'onboard this application'  # Onboarding command
                 ]
                 
                 missing_keywords = [kw for kw in required_keywords if kw.lower() not in script_content.lower()]
@@ -942,7 +1021,7 @@ class DeploymentValidator:
                 message=f"User setup documentation incomplete ({len(documentation_issues)} issues)",
                 details="\n".join(f"  • {issue}" for issue in documentation_issues),
                 fix_available=False,
-                fix_command="Update publish_cortex.py to include complete setup instructions"
+                fix_command="Update deploy_cortex.py to include complete setup instructions"
             ))
         else:
             self.results.append(ValidationResult(

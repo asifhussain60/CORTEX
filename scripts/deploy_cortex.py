@@ -57,9 +57,11 @@ CHECKPOINT_FILE = ".publish-checkpoint.json"
 
 # Core files that MUST be included
 CORE_FILES = {
-    # Entry Points
-    '.github/prompts/CORTEX.prompt.md',
-    '.github/copilot-instructions.md',
+    # Entry Points - CRITICAL FOR AUTO-ACTIVATION
+    # When users clone from main branch, GitHub Copilot automatically
+    # discovers .github/copilot-instructions.md and loads CORTEX
+    '.github/prompts/CORTEX.prompt.md',        # Main CORTEX entry point
+    '.github/copilot-instructions.md',         # Auto-discovery file (MUST be on main branch)
     
     # Configuration
     'cortex.config.json',
@@ -276,9 +278,16 @@ def should_include_path(path: Path, project_root: Path) -> bool:
         if path_str.startswith(f"{core_dir}/") or path_str == core_dir:
             return True
     
-    # .github/ - only include prompts/
+    # .github/ - include prompts/ directory AND copilot-instructions.md (critical for auto-activation)
     if '.github' in rel_path.parts:
-        return 'prompts' in rel_path.parts
+        # Include the prompts/ subdirectory
+        if 'prompts' in rel_path.parts:
+            return True
+        # Include copilot-instructions.md directly under .github/
+        if rel_path.name == 'copilot-instructions.md':
+            return True
+        # Exclude everything else (.github/workflows, .github/hooks, etc.)
+        return False
     
     return False
 
@@ -317,6 +326,20 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
             stats['files_copied'] += 1
             stats['total_size'] += item.stat().st_size
     
+    # Handle copilot-instructions.md merge
+    cortex_instructions_src = project_root / ".github" / "copilot-instructions.md"
+    existing_instructions = temp_dir / ".github" / "copilot-instructions.md"
+    
+    if cortex_instructions_src.exists():
+        logger.info("Merging copilot-instructions.md...")
+        merge_copilot_instructions(
+            existing_file=existing_instructions,  # May not exist yet
+            cortex_instructions_file=cortex_instructions_src,
+            output_file=existing_instructions
+        )
+    else:
+        logger.warning("⚠️  CORTEX copilot-instructions.md not found - skipping merge")
+    
     # Create SETUP-CORTEX.md guide
     create_setup_guide(temp_dir)
     
@@ -324,6 +347,78 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
     create_package_info(temp_dir, stats)
     
     return stats
+
+
+def merge_copilot_instructions(existing_file: Path, cortex_instructions_file: Path, output_file: Path) -> None:
+    """Merge CORTEX instructions into existing copilot-instructions.md.
+    
+    Handles 3 scenarios:
+    1. No existing file - copy CORTEX file as-is
+    2. Existing file without CORTEX - append CORTEX section
+    3. Existing file with CORTEX - update existing CORTEX section
+    
+    Args:
+        existing_file: Path to existing copilot-instructions.md (may not exist)
+        cortex_instructions_file: Path to CORTEX's copilot-instructions.md
+        output_file: Path for merged result
+    """
+    # Read CORTEX instructions
+    with open(cortex_instructions_file, 'r', encoding='utf-8') as f:
+        cortex_content = f.read()
+    
+    # Extract CORTEX section markers
+    cortex_start_marker = "# GitHub Copilot Instructions for CORTEX"
+    cortex_end_marker = "**License:** Source-Available (Use Allowed, No Contributions)"
+    
+    if not existing_file.exists():
+        # Scenario 1: No existing file - create new
+        logger.info("  ✅ No existing copilot-instructions.md - creating new")
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(cortex_content)
+        return
+    
+    # Read existing file
+    with open(existing_file, 'r', encoding='utf-8') as f:
+        existing_content = f.read()
+    
+    if cortex_start_marker in existing_content:
+        # Scenario 3: CORTEX section exists - update it
+        logger.info("  ✅ Existing CORTEX section found - updating")
+        
+        # Find CORTEX section boundaries
+        start_idx = existing_content.find(cortex_start_marker)
+        
+        # Find end marker (look for the license line or end of file)
+        if cortex_end_marker in existing_content[start_idx:]:
+            end_idx = existing_content.find(cortex_end_marker, start_idx) + len(cortex_end_marker)
+            # Include trailing newlines
+            while end_idx < len(existing_content) and existing_content[end_idx] in ('\n', '\r'):
+                end_idx += 1
+        else:
+            # No clear end marker - replace to end of file
+            end_idx = len(existing_content)
+        
+        # Build merged content: [before CORTEX] + [new CORTEX] + [after CORTEX]
+        before = existing_content[:start_idx]
+        after = existing_content[end_idx:]
+        
+        merged_content = before + cortex_content
+        if after.strip():  # Only add after section if non-empty
+            merged_content += "\n\n" + after
+        
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(merged_content)
+    else:
+        # Scenario 2: No CORTEX section - append
+        logger.info("  ✅ Existing file without CORTEX - appending CORTEX section")
+        
+        merged_content = existing_content.rstrip() + "\n\n" + "---\n\n" + cortex_content
+        
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(merged_content)
 
 
 def create_setup_guide(temp_dir: Path):
