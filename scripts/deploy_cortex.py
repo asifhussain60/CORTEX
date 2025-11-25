@@ -50,7 +50,7 @@ logger = logging.getLogger(__name__)
 
 # Package metadata
 PACKAGE_VERSION = "3.3.0"  # Unified deployment system
-PUBLISH_BRANCH = "cortex-publish"
+PUBLISH_BRANCH = "main"
 
 # Checkpoint file for fault tolerance
 CHECKPOINT_FILE = ".publish-checkpoint.json"
