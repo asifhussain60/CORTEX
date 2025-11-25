@@ -190,6 +190,15 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                     errors=metrics.errors
                 )
             
+            # Phase 2.5: Silent System Alignment Check (admin-only)
+            if self._is_admin_environment(project_root):
+                logger.info("\n[Phase 2.5] Running system alignment check...")
+                alignment_result = self._run_alignment_check(project_root, metrics)
+                # Only show output if issues detected
+                if alignment_result and not alignment_result.get('is_healthy', True):
+                    logger.warning(f"⚠️ System alignment issues detected: {alignment_result.get('message', 'Unknown')}")
+                    logger.info("Run 'align' command for detailed analysis and remediation options")
+            
             # Phase 3: Analyze architecture
             logger.info("\n[Phase 3] Analyzing CORTEX architecture...")
             analysis_result = self._analyze_architecture(project_root, metrics)
@@ -245,6 +254,88 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 data={'metrics': metrics.__dict__},
                 errors=metrics.errors
             )
+    
+    def _is_admin_environment(self, project_root: Path) -> bool:
+        """
+        Check if running in CORTEX admin/development environment.
+        
+        Admin environment indicators:
+        - src/operations/modules/admin/ directory exists
+        - cortex-brain/admin/ directory exists
+        - This is the CORTEX dev repo (not a user application)
+        
+        Args:
+            project_root: Project root directory
+        
+        Returns:
+            True if admin environment, False otherwise
+        """
+        # Check for admin directories
+        admin_ops = project_root / "src" / "operations" / "modules" / "admin"
+        admin_brain = project_root / "cortex-brain" / "admin"
+        
+        return admin_ops.exists() or admin_brain.exists()
+    
+    def _run_alignment_check(
+        self,
+        project_root: Path,
+        metrics: OptimizationMetrics
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Run silent system alignment validation (admin-only).
+        
+        This method:
+        - Runs SystemAlignmentOrchestrator validation
+        - Only outputs messages if issues are detected
+        - Does not fail the optimization workflow
+        - Provides gentle nudge to run 'align' for details
+        
+        Args:
+            project_root: Project root directory
+            metrics: Metrics collector
+        
+        Returns:
+            Dict with alignment results or None if not admin environment
+        """
+        try:
+            # Lazy import to avoid dependency in user environments
+            from src.operations.modules.admin.system_alignment_orchestrator import (
+                SystemAlignmentOrchestrator
+            )
+            
+            # Create orchestrator
+            alignment_orch = SystemAlignmentOrchestrator(project_root=project_root)
+            
+            # Run silent validation (no verbose output)
+            result = alignment_orch.execute({})
+            
+            if not result.success:
+                return {
+                    'is_healthy': False,
+                    'message': result.message,
+                    'report': result.data.get('report') if result.data else None
+                }
+            
+            # Check if report indicates issues
+            report = result.data.get('report') if result.data else None
+            if report:
+                is_healthy = report.is_healthy if hasattr(report, 'is_healthy') else True
+                return {
+                    'is_healthy': is_healthy,
+                    'message': f"{report.critical_issues} critical issues, {report.warnings} warnings" if not is_healthy else "System healthy",
+                    'report': report
+                }
+            
+            return {'is_healthy': True, 'message': 'System healthy'}
+        
+        except ImportError:
+            # SystemAlignmentOrchestrator not available (user environment)
+            logger.debug("System alignment not available (user environment)")
+            return None
+        except Exception as e:
+            logger.debug(f"Alignment check failed: {e}")
+            metrics.errors.append(f"Alignment check error: {str(e)}")
+            return None
     
     def _validate_planning_rules(
         self,

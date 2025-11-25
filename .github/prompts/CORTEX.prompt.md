@@ -35,195 +35,18 @@
 
 ---
 
-## 🎯 TDD Mastery (NEW)
+## 🎯 TDD Mastery
 
-**Purpose:** Complete Test-Driven Development workflow with RED→GREEN→REFACTOR cycle automation
+**Complete Guide:** #file:modules/tdd-mastery-guide.md
 
-**Commands:**
-- `start tdd` or `tdd workflow` - Start TDD workflow
+**Quick Start:**
+- `start tdd` or `tdd workflow` - Start TDD workflow with RED→GREEN→REFACTOR automation
 - `run tests` - Execute tests and analyze results
-- `suggest refactorings` - Get refactoring recommendations
-- `tdd status` - Show current TDD state and progress
+- `suggest refactorings` - Get performance-based refactoring recommendations
 
-**How It Works:**
-1. **RED State:** Write failing test → Auto-triggers debug session on failure
-2. **GREEN State:** Implement code → Captures timing data → Auto-collects feedback
-3. **REFACTOR State:** Suggest improvements → Performance-based code smell detection
+**Key Features:** Terminal integration, workspace discovery, brain memory, auto-debug on RED, performance-based refactoring, test location isolation (user repo vs CORTEX)
 
-**Key Features:**
-- ✅ **Terminal Integration (Phase 1):** Auto-detects test execution from #terminal_last_command, #get_terminal_output
-- ✅ **Workspace Discovery (Phase 2):** Auto-discovers project structure via @workspace context
-- ✅ **Brain Memory (Phase 3):** Stores sessions in Tier 1, learns from failures in Tier 2
-- ✅ **Programmatic Execution (Phase 4):** Runs pytest/jest/xunit programmatically with JSON parsing
-- ✅ **Auto-Debug on RED:** Debug session starts automatically when tests fail
-- ✅ **Performance-Based Refactoring:** Uses debug timing data to identify bottlenecks
-- ✅ **View Discovery Integration:** Auto-discovers element IDs before test generation
-- ✅ **Auto-Feedback Collection:** Gathers feedback on GREEN state transitions
-- ✅ **Smart Code Smell Detection:** 11 smell types including performance-based
-- ✅ **Data-Driven Optimization:** Identifies slow functions (>100ms), hot paths (>10 calls), bottlenecks (>500ms)
-- ✅ **Test Location Isolation (Layer 8):** Application tests in user repo, CORTEX tests in CORTEX folder
-
-**Natural Language Examples:**
-- "start TDD workflow for user authentication"
-- "run tests and debug failures"
-- "suggest refactorings based on performance"
-- "what's my TDD status?"
-
-**State Machine:**
-```
-IDLE → RED (test fails) → auto-debug session
-  ↓
-GREEN (test passes) → capture timing data → collect feedback
-  ↓
-REFACTOR → performance analysis → suggest optimizations
-  ↓
-COMPLETE → validate improvements
-```
-
-**Configuration Options:**
-```python
-TDDWorkflowConfig(
-    # Phase 1: Terminal Integration
-    enable_terminal_integration=True,    # Use GitHub Copilot terminal tools
-    # Phase 2: Workspace Discovery
-    enable_workspace_discovery=True,     # Auto-discover project structure
-    # Phase 3: Brain Memory Integration
-    enable_session_tracking=True,        # Store in Tier 1/2
-    # Phase 4: Programmatic Execution
-    enable_programmatic_execution=True,  # Run tests automatically
-    # Layer 8: Test Location Isolation
-    auto_detect_test_location=True,      # Auto-detect user repo vs CORTEX
-    enable_brain_learning=True,          # Capture patterns from user tests
-    user_repo_root=None,                 # Auto-detected from source file
-    # Legacy Features
-    enable_view_discovery=True,          # Auto-discover element IDs
-    enable_debug_integration=True,       # Auto-debug on failures
-    enable_feedback_collection=True,     # Auto-collect feedback
-    debug_timing_to_refactoring=True     # Use timing data for refactoring
-)
-```
-
-**Performance Smell Detection:**
-- **Slow Function:** Functions averaging >100ms execution time (0.95 confidence)
-- **Hot Path:** Functions called >10 times in a session (0.95 confidence)
-- **Performance Bottleneck:** Functions consuming >500ms total time (0.95 confidence)
-- **8 Traditional Smells:** Long method, complex method, duplicate code, dead code, etc. (0.70-0.85 confidence)
-
-**Output:**
-- Debug data: `cortex-brain/tier1-working-memory.db` (debug_sessions table)
-- Feedback reports: `cortex-brain/documents/reports/CORTEX-FEEDBACK-*.md`
-- View mappings: `cortex-brain/tier2-knowledge-graph.db` (element_mappings table)
-- Test results: `cortex-brain/tier1-working-memory.db` (test_results table)
-
-**Integration Points:**
-- **ViewDiscoveryAgent:** Scans .razor/.cshtml files for element IDs (runs before test gen)
-- **DebugAgent:** Runtime instrumentation with zero source modification (auto-starts on RED)
-- **FeedbackAgent:** Structured feedback collection with Gist auto-upload (triggers on GREEN)
-- **RefactoringIntelligence:** AST-based smell detection with performance data (REFACTOR state)
-
-**Benefits:**
-- **Time Savings:** 60+ min manual discovery → <5 min automated (View Discovery)
-- **Accuracy:** 95%+ test reliability with real element IDs vs text-based selectors
-- **Performance:** Auto-identifies bottlenecks using measured timing data
-- **Quality:** 11 code smell types with actionable refactoring suggestions
-- **Automation:** Zero-intervention workflow (auto-debug, auto-feedback, auto-optimize)
-
-**Natural Language Workflow:**
-```
-You: "start tdd workflow for login page"
-CORTEX: ✅ Workspace discovered: Python project with pytest
-        ✅ Test framework: pytest
-        ✅ Ready for RED state - write your failing test
-
-You: "run tests"
-CORTEX: 🔧 Running tests with pytest...
-        ✅ Tests completed in 2.50s
-           Passed: 5 ✓
-           Failed: 2 ✗
-        ❌ Entering RED state
-        📊 Stored test results in brain (Tier 2)
-
-You: "suggest refactorings"
-CORTEX: 🎯 Found 3 performance issues:
-        1. ValidateUser() - SLOW_FUNCTION (avg 145ms) - Consider caching
-        2. CheckPermissions() - HOT_PATH (called 23 times) - Batch calls
-        3. DatabaseQuery() - BOTTLENECK (total 850ms) - Add indexes
-```
-
-**Complete Integration Example:**
-```python
-# Initialize with all phases enabled
-config = TDDWorkflowConfig(
-    project_root="/path/to/project",
-    enable_terminal_integration=True,       # Phase 1
-    enable_workspace_discovery=True,        # Phase 2
-    enable_session_tracking=True,           # Phase 3
-    enable_programmatic_execution=True      # Phase 4
-)
-
-orchestrator = TDDWorkflowOrchestrator(config)
-
-# Start session (Phase 3: Brain integration)
-session_id = orchestrator.start_session("user_authentication")
-
-# Generate tests (Phase 2: Workspace discovery)
-tests = orchestrator.generate_tests(source_file="src/login.py")
-
-# Run tests programmatically (Phase 4: Test execution)
-result = orchestrator.run_and_verify_tests()
-# Output:
-# 🔧 Running tests with pytest...
-# ✅ Tests completed in 2.50s
-#    Passed: 5 ✓
-#    Failed: 2 ✗
-
-# Result stored in Tier 2, session updated in Tier 1
-```
-
-**Test Location Isolation (Layer 8 - NEW):**
-
-**Rule:** Application tests ALWAYS go in user repo, CORTEX tests stay in CORTEX folder.
-
-**How It Works:**
-1. **Auto-Detection:** CORTEX detects if you're testing application code vs CORTEX code
-2. **User Repo Tests:** Generated in your project's test directory (e.g., `/Users/you/myapp/tests/`)
-3. **Framework Detection:** Uses YOUR existing test framework (pytest, jest, xunit, etc.)
-4. **Brain Learning:** CORTEX captures patterns and insights without storing your code
-5. **CORTEX Tests:** Only CORTEX infrastructure tests stay in CORTEX folder
-
-**Example Workflow:**
-```
-You: "Create tests for my payment processing feature"
-Working Dir: /Users/you/myapp/src/payments.py
-
-CORTEX:
-✅ Detected user application code (outside CORTEX)
-✅ Found existing framework: pytest
-✅ Test location: /Users/you/myapp/tests/test_payments.py
-✅ Following your naming convention: test_*.py
-🧠 Learning: User prefers parametrized fixtures for payment tests
-🧠 Stored patterns in cortex-brain/tier2/ (NOT your code)
-```
-
-**What Gets Stored in Brain:**
-- ✅ "User prefers mock stripe API for payment tests"
-- ✅ "Test framework: pytest with fixtures"
-- ✅ "Naming pattern: test_<feature>.py"
-- ✅ "Common failure: DB not seeded before tests"
-- ❌ NOT your actual test code
-- ❌ NOT your business logic
-
-**Benefits:**
-- ✅ Your repo stays self-contained with its own tests
-- ✅ CORTEX learns from your patterns
-- ✅ No pollution of CORTEX folder with application tests
-- ✅ Proper separation of concerns
-- ✅ Your test framework is honored
-
-**See Also:**
-- Implementation: `cortex-brain/documents/implementation-guides/TDD-MASTERY-INTEGRATION-PLAN.md`
-- Phase Reports: `cortex-brain/documents/reports/TDD-MASTERY-PHASE*.md`
-- Test Strategy: `cortex-brain/documents/implementation-guides/test-strategy.yaml`
+**See tdd-mastery-guide.md for complete documentation, configuration options, and integration examples.**
 
 ---
 
@@ -322,15 +145,43 @@ CORTEX will:
 # 📚 Documentation & Help
 
 **Quick commands:** `help` shows available commands | `what can cortex do` shows capabilities  
-**Admin commands:** `admin help` shows admin operations (deployment, docs generation) - **CORTEX repo only**
+**Admin commands:** `admin help` shows admin operations (deployment, docs generation, system alignment) - **CORTEX repo only**
 
 **Modules:** All detailed documentation extracted to separate guide files  
 **Plugin system:** Extensible architecture for custom agents and workflows  
 **Platform:** Auto-detects Mac/Windows/Linux on startup (`setup environment` for manual config)
 
 **Context Detection:**
-- In CORTEX development repository (has `cortex-brain/admin/`): Shows admin operations (`deploy cortex`, `generate docs`)
+- In CORTEX development repository (has `cortex-brain/admin/`): Shows admin operations (`deploy cortex`, `generate docs`, `align`)
 - In user repositories: Shows only user-facing operations (planning, TDD, crawlers, etc.)
+
+---
+
+## 🔧 System Alignment (Admin Only)
+
+**Complete Guide:** #file:modules/system-alignment-guide.md
+
+**Quick Start:**
+- `align` - Run full system alignment validation with convention-based discovery
+- `align report` - Generate detailed alignment report with auto-remediation suggestions
+
+**Integration Scoring:** 7 layers (0-100%) - Discovered, Importable, Instantiable, Documented, Tested, Wired, Optimized
+
+**Benefits:** Zero maintenance when adding features, auto-generates wiring/tests/docs templates, prevents deployment of partially-integrated features
+
+**See system-alignment-guide.md for complete architecture, phases, and remediation workflows.**
+
+---
+
+## 🧹 Cleanup & Design Sync (Admin Only)
+
+**Cleanup Commands:**
+- `cleanup` or `clean up` - Clean brain data, remove old files (50-200 MB saved)
+
+**Design Sync Commands:**
+- `design sync` - Synchronize design documentation with implementation
+
+**See:** Documentation in CORTEX.prompt.md or use `admin help` for details
 
 ---
 
@@ -426,228 +277,47 @@ CORTEX will:
 
 ## 📢 Feedback & Issue Reporting
 
-**Purpose:** Crowdsource CORTEX improvements via structured feedback collection
+**Commands:** `feedback` or `report issue` - Structured bug/feature/improvement reporting with auto-upload to GitHub Gist
 
-**Commands:**
-- `feedback` or `report issue` - Start feedback collection
-- `feedback bug` - Report a bug with auto-collected context
-- `feedback feature` - Request new feature
-- `feedback improvement` - Suggest enhancement
+**Features:** Anonymized data collection, privacy protection (auto-redacts sensitive info), GitHub Issues formatting
 
-**How It Works:**
-1. **Collection:** CORTEX gathers anonymized usage data (errors, patterns, environment)
-2. **Report Generation:** Creates structured JSON/YAML report with categorization
-3. **Auto-Upload:** Automatically uploads to GitHub Gist (with your consent)
-4. **GitHub Ready:** Formats as GitHub Issues with proper labels, priorities
-
-**Setup (One-Time):**
-1. Generate GitHub personal access token (Settings → Developer settings → Personal access tokens)
-2. Add to `cortex.config.json`:
-   ```json
-   {
-     "github": {
-       "token": "your_token_here",
-       "repository_owner": "asifhussain60",
-       "repository_name": "CORTEX"
-     }
-   }
-   ```
-3. First feedback upload will ask for consent (choose "always" for automatic uploads)
-
-**Privacy Protection:**
-- Automatically redacts file paths, emails, passwords, API keys
-- Environment identified by non-reversible hash
-- No personal data collected without explicit consent
-- User controls upload preferences (always/never/ask/manual)
-
-**Natural Language Examples:**
-- "I found a bug in the crawler"
-- "The planning system takes too long"
-- "Can you add support for TypeScript projects?"
-
-**Output:**
-- Local: `cortex-brain/documents/reports/CORTEX-FEEDBACK-[timestamp].md`
-- GitHub Gist: Automatic upload with returned URL (if configured)
-- Manual fallback: Instructions provided if token not configured
+**Setup:** Add GitHub token to `cortex.config.json` for auto-upload
 
 ---
 
-## 🔍 View Discovery (TDD Workflow Enhancement)
+## 🔍 View Discovery
 
-**Purpose:** Auto-discover element IDs BEFORE test generation (Issue #3 Fix)
+**Commands:** `discover views` - Auto-discover element IDs from Razor/Blazor files before test generation
 
-**Commands:**
-- `discover views` - Scan Razor/Blazor files for element IDs
-- `discover views [path]` - Scan specific directory
-- `show discovered elements` - View cached element mappings
-
-**How It Works:**
-1. **Scan:** Parses .razor/.cshtml files for element IDs
-2. **Extract:** Finds id="...", data-testid="...", class="..." attributes
-3. **Persist:** Saves to Tier 2 database for 10x speedup
-4. **Generate:** Creates selector strategies (priority: ID > data-testid > class > text)
-
-**Benefits:**
-- **Time Savings:** 60+ min manual work → <5 min automated (92% reduction)
-- **Accuracy:** 0% first-run success → 95%+ with real IDs
-- **Reliability:** Text-based selectors → ID-based (10x more stable)
-- **Annual Savings:** $15,000-$22,500 (100-150 hours saved)
-
-**Natural Language Examples:**
-- "discover views in my project"
-- "what elements are in the login page?"
-- "show me the element IDs for testing"
-
-**Integration:**
-- Automatically runs before test generation in TDD workflow
-- Caches results in Tier 2 database for reuse
-- Updates cache when component files change
-- Validates selectors against discovered elements
-
-**Database Schema:** 4 tables (element_mappings, navigation_flows, discovery_runs, element_changes), 14 indexes, 4 views
-
-**See Also:** Issue #3 implementation in `cortex-brain/documents/reports/ISSUE-3-PHASE-4-COMPLETE.md`
+**Benefits:** 60+ min → <5 min (92% time savings), 95%+ test accuracy with real IDs, integrated with TDD workflow
 
 ---
 
 ## 🔄 Upgrade CORTEX
 
-**One Command. All Repositories. Zero Confusion.**
-
 **Commands:**
-- `upgrade` or `upgrade cortex` - Universal upgrade for all installations
+- `upgrade` or `upgrade cortex` - Universal upgrade for all installations with auto-detection
 - `cortex version` - Show current version
 
-**How Upgrade Works:**
-
-```
-You: "upgrade cortex"
-
-CORTEX:
-  ✅ Auto-detects installation type (standalone/embedded)
-  ✅ Downloads latest release from GitHub
-  ✅ Validates all file paths stay within CORTEX directory
-  ✅ Backs up brain data automatically
-  ✅ Updates code while preserving your data
-  ✅ Runs database migrations
-  ✅ Validates everything works
-  ✅ Reports success or issues
-
-Result: CORTEX upgraded with zero data loss
-```
-
-**What Gets Preserved:**
-- ✅ All brain databases (conversations, knowledge, context)
-- ✅ Your configurations and customizations
-- ✅ Feedback reports and planning documents
-- ✅ Custom capabilities and templates
-
-**What Gets Updated:**
-- ✅ Core CORTEX code and agents
-- ✅ Database schemas (migrations applied automatically)
-- ✅ New features and performance improvements
-
-**Safety Features:**
-- Automatic brain backup before any changes
-- Path validation prevents file corruption
-- Post-upgrade validation confirms everything works
-- Rollback available if issues detected
-
-**Exit Codes:**
-- `0` - Upgrade successful ✅
-- `1` - Upgrade failed (rollback recommended) ❌
+**One Command Works Everywhere:** Auto-detects standalone/embedded, backs up brain data, validates paths, runs migrations, zero data loss
 
 **Complete Guide:** #file:modules/upgrade-guide.md
-
-**Technical Details:**
-- Embedded installations (CORTEX inside your project): Uses safe file-copy method
-- Standalone installations: Can use git-based upgrade
-- Detection automatic via `.cortex-embedded` marker or project structure
-- All validation tests run automatically post-upgrade
 
 ---
 
 ## 🔧 System Optimization & Health
 
-**Purpose:** Maintain CORTEX performance and monitor system health
+**Commands:** `optimize` - Clean brain/vacuum DBs (50-200 MB saved) | `healthcheck` - System health validation
 
-### Optimize Command
-
-**Commands:**
-- `optimize` - Run all optimizations
-- `optimize code` - Code optimization suggestions
-- `optimize cortex` - Clean CORTEX brain, vacuum databases
-- `optimize cache` - Clear and rebuild YAML cache
-
-**What It Does:**
-- Removes old conversation captures (>30 days)
-- Cleans temporary crawler files
-- Vacuums SQLite databases to reclaim space
-- Clears YAML cache for rebuild
-- Provides code optimization suggestions
-
-**Example Results:**
-- Space saved: 50-200 MB typical
-- Performance improvement: 10-30% faster operations
-- Database size reduction: 20-40%
-
-### Health Check Command
-
-**Commands:**
-- `healthcheck` - Run full system health check
-- `cortex performance` - Performance metrics
-- `system status` - Overall system status
-
-**What It Checks:**
-- System resources (CPU, memory, disk usage)
-- CORTEX brain integrity (files, directories, schemas)
-- Database health (integrity, size, table count)
-- Performance metrics (cache hit rate, operation timings)
-
-**Status Levels:**
-- ✅ **Healthy** - All checks passed
-- ⚠️ **Warning** - Non-critical issues detected
-- ❌ **Unhealthy** - Critical issues require attention
-
-**Natural Language Examples:**
-- "Is CORTEX healthy?"
-- "How much disk space is CORTEX using?"
-- "Check CORTEX performance"
+**Status Levels:** ✅ Healthy | ⚠️ Warning | ❌ Unhealthy
 
 ---
 
-## � Debug System (NEW)
+## 🐛 Debug System
 
-**Purpose:** Runtime instrumentation and debug logging without source file modification
+**Commands:** `debug [target]` - Runtime instrumentation without source modification | `stop debug` - End session
 
-**Commands:**
-- `debug [target]` - Start debug session for module/function
-- `stop debug` - Stop active debug session
-- `debug status` - Show active debug sessions
-- `debug report [session_id]` - Get detailed debug report
-- `debug history` - Show recent debug sessions
-
-**How It Works:**
-1. **Intent Detection:** CORTEX detects debug keywords (debug, trace, instrument)
-2. **Auto-Discovery:** Finds target module/function automatically
-3. **Runtime Instrumentation:** Wraps functions with logging decorators (zero source modification)
-4. **Logging:** Captures function calls, arguments, return values, timing, errors
-5. **Auto-Cleanup:** All instrumentation removed when session ends
-
-**Key Features:**
-- ✅ Zero source file modification (no merge conflicts)
-- ✅ Automatic cleanup on session end (no manual scripts)
-- ✅ Function call tracking and timing
-- ✅ Variable capture (args, returns, locals)
-- ✅ Error tracking and logging
-- ✅ Session history and replay
-- ✅ Multi-session support
-
-**Natural Language Examples:**
-- "debug the planner agent"
-- "trace authentication flow"
-- "instrument payment processing"
-- "stop debug"
+**Features:** Zero source changes, auto-cleanup, function tracking, timing capture, error logging
 - "show debug status"
 
 **Output:**

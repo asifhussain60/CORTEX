@@ -716,6 +716,93 @@ templates:
     content: "\u2139\uFE0F **New Territory:** No learned patterns available for this\
       \ request.\n\nGenerating fresh response using CORTEX capabilities."
     placeholders: []
+  
+  system_alignment_report:
+    name: "System Alignment Report"
+    triggers:
+    - align
+    - align report
+    - system alignment
+    - validate alignment
+    - run system alignment
+    response_type: "detailed"
+    content: "\U0001F9E0 **CORTEX System Alignment Validation**\nAuthor: Asif Hussain\
+      \ | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   You want to run system alignment validation to auto-discover\
+      \ and validate all CORTEX features.\n\n⚠️ **Challenge:** ✓ **Accept**\n   System\
+      \ alignment is an admin-only feature that validates integration depth of all\
+      \ CORTEX features. Convention-based discovery.\n\n\U0001F4AC **Response:**\n\
+      \   [Alignment results with overall health, critical issues, warnings, and remediation\
+      \ suggestions]\n\n\U0001F4DD **Your Request:** Run system alignment validation\n\
+      \n\U0001F50D **Next Steps:**\n   1. Review alignment report\n   2. Address critical\
+      \ issues (<70% integration)\n   3. Address warnings (70-89% integration)\n \
+      \  4. Re-run validation after fixes\n   5. Target: >80% overall health for deployment"
+  
+  cleanup_operation:
+    name: "Cleanup Operation"
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    response_type: "detailed"
+    content: "\U0001F9E0 **CORTEX Cleanup Operation**\nAuthor: Asif Hussain | © 2024-2025\
+      \ | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding Of Your\
+      \ Request:**\n   You want to clean up CORTEX brain data and temporary files.\n\
+      \n⚠️ **Challenge:** ✓ **Accept**\n   Cleanup removes old conversations, temporary\
+      \ files, and vacuums databases to reclaim space.\n\n\U0001F4AC **Response:**\n\
+      \   [Cleanup results with space saved and items removed]\n\n\U0001F4DD **Your\
+      \ Request:** Run cleanup operation\n\n\U0001F50D **Next Steps:**\n   1. Review\
+      \ cleanup summary\n   2. Verify important data preserved\n   3. Check space\
+      \ savings achieved"
+  
+  design_sync_operation:
+    name: "Design Sync Operation"
+    triggers:
+    - design sync
+    - sync design
+    - synchronize design
+    - align design
+    response_type: "detailed"
+    content: "\U0001F9E0 **CORTEX Design Sync Operation**\nAuthor: Asif Hussain |\
+      \ © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **My Understanding\
+      \ Of Your Request:**\n   You want to synchronize design documentation with implementation.\n\
+      \n⚠️ **Challenge:** ✓ **Accept**\n   Design sync ensures architecture diagrams\
+      \ and documentation match current implementation.\n\n\U0001F4AC **Response:**\n\
+      \   [Sync results with changes detected and files updated]\n\n\U0001F4DD **Your\
+      \ Request:** Synchronize design documentation\n\n\U0001F50D **Next Steps:**\n\
+      \   1. Review sync report\n   2. Validate documentation accuracy\n   3. Commit\
+      \ updated documentation"
+
+  tdd_workflow_start:
+    name: "TDD Workflow Start"
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - start tdd workflow
+    response_type: "detailed"
+    content: "🧠 **CORTEX TDD Workflow**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to start a Test-Driven Development workflow with RED→GREEN→REFACTOR cycle automation.\n\n⚠️ **Challenge:** ✓ **Accept**\n   TDD Mastery provides complete workflow automation with terminal integration, workspace discovery, and brain memory.\n\n💬 **Response:**\n   [Workspace discovered, test framework detected, TDD session initialized]\n\n📝 **Your Request:** Start TDD workflow\n\n🔍 **Next Steps:**\n   1. Write failing test (RED state)\n   2. Run tests with 'run tests' command\n   3. Implement code to pass tests (GREEN state)\n   4. Request refactoring suggestions\n   5. Validate improvements"
+
+  optimize_system:
+    name: "Optimize System"
+    triggers:
+    - optimize
+    - optimize cortex
+    - optimize system
+    - clean and optimize
+    response_type: "detailed"
+    content: "🧠 **CORTEX System Optimization**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to optimize CORTEX performance by cleaning brain data and vacuuming databases.\n\n⚠️ **Challenge:** ✓ **Accept**\n   System optimization removes old files, vacuums databases, and improves performance.\n\n💬 **Response:**\n   [Optimization results with space saved, performance improvement, database size reduction]\n\n📝 **Your Request:** Optimize CORTEX system\n\n🔍 **Next Steps:**\n   1. Review optimization results\n   2. Run healthcheck to validate improvements\n   3. Monitor performance metrics"
+
+  workflow_execution:
+    name: "Workflow Execution"
+    triggers:
+    - workflow
+    - execute workflow
+    - run workflow
+    - start workflow
+    response_type: "detailed"
+    content: "🧠 **CORTEX Workflow Execution**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to execute a CORTEX workflow operation.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Workflow orchestrator coordinates multi-step operations with validation and checkpoints.\n\n💬 **Response:**\n   [Workflow execution results with steps completed and validation status]\n\n📝 **Your Request:** Execute workflow\n\n🔍 **Next Steps:**\n   1. Review workflow results\n   2. Validate all steps completed\n   3. Check for any warnings or errors"
 
 routing:
   default: fallback
@@ -840,6 +927,22 @@ routing:
   - find element ids
   - map elements
   - scan razor files
+  system_alignment_triggers:
+  - align
+  - align report
+  - system alignment
+  - validate alignment
+  - run system alignment
+  cleanup_triggers:
+  - cleanup
+  - clean up
+  - cleanup cortex
+  - clean cortex
+  design_sync_triggers:
+  - design sync
+  - sync design
+  - synchronize design
+  - align design
 
 formatting:
   mandatory_sections:

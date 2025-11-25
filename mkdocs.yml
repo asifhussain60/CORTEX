@@ -89,8 +89,17 @@ nav:
   - Performance Budgets: performance/PERFORMANCE-BUDGETS.md
   - CI/CD Integration: performance/CI-CD-INTEGRATION.md
   - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
-- Examples:
-  - Feature Comparison: FEATURE-COMPARISON.md
+- Case Studies:
+  - Overview: case-studies/README.md
+  - NOOR CANVAS:
+    - Overview: case-studies/noor-canvas/index.md
+    - SignalR Refactoring:
+      - Executive Summary: case-studies/noor-canvas/signalr-refactoring/index.md
+      - Success Metrics: case-studies/noor-canvas/signalr-refactoring/metrics.md
+      - Methodology: case-studies/noor-canvas/signalr-refactoring/methodology.md
+      - Technical Deep Dive: case-studies/noor-canvas/signalr-refactoring/technical.md
+      - Lessons Learned: case-studies/noor-canvas/signalr-refactoring/lessons.md
+      - Timeline: case-studies/noor-canvas/signalr-refactoring/timeline.md
 markdown_extensions:
 - abbr
 - admonition

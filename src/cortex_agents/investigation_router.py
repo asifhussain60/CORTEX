@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from src.cortex_agents.intent_router import IntentRouter
 
 from src.cortex_agents.health_validator.agent import HealthValidator
-from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
+from src.tier2.knowledge_graph import KnowledgeGraph
 
 
 class InvestigationPhase(Enum):

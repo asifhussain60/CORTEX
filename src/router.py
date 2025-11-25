@@ -35,7 +35,7 @@ except ImportError:
     logging.getLogger(__name__).warning("Tier1 not available - working memory features disabled")
 
 try:
-    from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
+    from src.tier2.knowledge_graph import KnowledgeGraph
     TIER2_AVAILABLE = True
 except ImportError:
     TIER2_AVAILABLE = False
