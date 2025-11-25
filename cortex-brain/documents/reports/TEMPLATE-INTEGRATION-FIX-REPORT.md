@@ -287,7 +287,7 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 🎯 **My Understanding Of Your Request:**
    [State understanding]
 
-⚠️ **Challenge:** [✓ Accept with rationale OR ⚡ Challenge with alternatives]
+⚠️ **Challenge:** [Specific challenge or "None"]
 
 💬 **Response:**
    [Natural language explanation]

@@ -34,6 +34,28 @@ Users can interact with CORTEX using natural language:
 - `plan a feature` - Start interactive feature planning
 - `setup environment` - Configure CORTEX environment
 - `cleanup` - Clean up old files
+- `upgrade cortex` - Upgrade to latest version from origin/main
+
+---
+
+## 🚀 Installation & Upgrade
+
+### Fresh Install
+```bash
+git clone https://github.com/asifhussain60/CORTEX.git
+cd CORTEX
+# Copy .github/copilot-instructions.md to your project
+```
+
+### Upgrade Existing Installation
+```bash
+cd CORTEX
+python src/orchestrators/upgrade_orchestrator.py --check
+python src/orchestrators/upgrade_orchestrator.py --upgrade
+```
+
+### Automatic Upgrade (from CORTEX CLI)
+Simply say: `upgrade cortex` or `check for cortex updates`
 
 ---
 

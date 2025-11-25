@@ -100,6 +100,47 @@ Track B Phase 5 focuses on comprehensive quality assurance, documentation comple
 
 ### Phase 5.2: Documentation & Compatibility (Days 6-10)
 
+#### Branch Preservation Requirement (NEW)
+
+**Critical Principle:** CORTEX SHOULD BEGIN AND END ON THE BRANCH IT IS ON.
+
+When CORTEX performs deployment operations:
+
+1. **Save Current Branch** - Record the branch before any operations
+2. **Switch to Main** - Only if needed to publish/commit package updates  
+3. **Commit & Push** - Update remote main branch with latest publish package
+4. **Return to Original** - Always switch back to the original branch
+
+**Rationale:** Users working on feature branches (e.g., CORTEX-3.0) should not be left on main branch after deployment. This maintains workflow continuity and prevents confusion.
+
+**Implementation Location:** `src/operations/modules/publish/publish_branch_orchestrator.py`
+
+**User Experience:**
+
+```bash
+# User is on CORTEX-3.0 branch
+$ git branch
+* CORTEX-3.0
+  main
+
+# User deploys CORTEX
+$ cortex publish
+
+# CORTEX:
+# 1. Saves current branch (CORTEX-3.0)
+# 2. Switches to main
+# 3. Commits publish/ folder
+# 4. Pushes to origin/main  
+# 5. Switches back to CORTEX-3.0
+
+# User is still on CORTEX-3.0 branch
+$ git branch
+* CORTEX-3.0
+  main
+```
+
+#### Day 6-7: API Documentation
+
 #### Day 6-7: API Documentation Creation
 - [ ] Complete API documentation for narrative engine components
 - [ ] Document integration system interfaces

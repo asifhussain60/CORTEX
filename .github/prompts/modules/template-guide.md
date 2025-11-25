@@ -55,6 +55,8 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
    | regenerate diagrams | Rebuild architecture diagrams | Uses centralized YAML configs |
    | design sync | Sync design documentation | Maintains design consistency |
    | cleanup | Clean development artifacts | Safe cleanup with validation |
+   | align | System alignment validation | Convention-based feature discovery |
+   | align report | Detailed alignment with remediation | Auto-generates wiring/test/doc templates |
 
    **📊 All User Operations** (also available to admins)
    - Feature Planning (`plan feature`)

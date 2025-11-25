@@ -1,10 +1,15 @@
 schema_version: '2.1'
-last_updated: '2025-11-18'
+last_updated: '2025-11-25'
 optimization:
   type: aggressive_minimal
   original_templates: 107
   minimal_templates: 18
   reduction_strategy: Core essentials only + fallback pattern
+
+# Shared header template for all responses
+shared:
+  copyright_header: &copyright_header "Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
+
 templates:
   help_table:
     name: Help Table
@@ -626,7 +631,9 @@ templates:
       \ diagrams | Rebuild architecture diagrams | Uses centralized YAML configs\
       \ |\n   | design sync | Sync design documentation | Maintains design consistency\
       \ |\n   | cleanup | Clean development artifacts | Safe cleanup with validation\
-      \ |\n\n   **📊 All User Operations** (also available to admins)\n   - Feature\
+      \ |\n   | align | System alignment validation | Convention-based feature discovery\
+      \ |\n   | align report | Detailed alignment with remediation | Auto-generates\
+      \ wiring/test/doc templates |\n\n   **📊 All User Operations** (also available to admins)\n   - Feature\
       \ Planning (`plan feature`)\n   - TDD Workflow (`discover views`, test generation)\n\
       \   - View Discovery (`discover views in project`)\n   - Feedback System (`feedback`,\
       \ `report issue`)\n   - System Optimization (`optimize cortex`)\n   - Health\
@@ -676,7 +683,7 @@ templates:
     trigger:
     - confidence_high
     response_type: "confidence_indicator"
-    content: "\U0001F3AF **Pattern Match Confidence:** {confidence_display}\n\nI'm\
+    content: "\U0001F9E0 **CORTEX Pattern Confidence**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F3AF **Pattern Match Confidence:** {confidence_display}\n\nI'm\
       \ applying learned patterns from {pattern_count} similar conversations.\n{detailed_explanation}"
     placeholders:
     - confidence_display
@@ -688,7 +695,7 @@ templates:
     trigger:
     - confidence_medium
     response_type: "confidence_indicator"
-    content: "\U0001F7E1 **Pattern Match Confidence:** {confidence_display}\n\nI\
+    content: "\U0001F9E0 **CORTEX Pattern Confidence**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F7E1 **Pattern Match Confidence:** {confidence_display}\n\nI\
       \ found {pattern_count} related patterns, applying with moderate confidence.\n\
       {detailed_explanation}"
     placeholders:
@@ -701,7 +708,7 @@ templates:
     trigger:
     - confidence_low
     response_type: "confidence_indicator"
-    content: "\U0001F7E0 **Pattern Match Confidence:** {confidence_display}\n\nLimited\
+    content: "\U0001F9E0 **CORTEX Pattern Confidence**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\U0001F7E0 **Pattern Match Confidence:** {confidence_display}\n\nLimited\
       \ pattern history available. Response based on {pattern_count} patterns.\n{detailed_explanation}"
     placeholders:
     - confidence_display
@@ -713,7 +720,7 @@ templates:
     trigger:
     - confidence_none
     response_type: "confidence_indicator"
-    content: "\u2139\uFE0F **New Territory:** No learned patterns available for this\
+    content: "\U0001F9E0 **CORTEX Pattern Confidence**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n\u2139\uFE0F **New Territory:** No learned patterns available for this\
       \ request.\n\nGenerating fresh response using CORTEX capabilities."
     placeholders: []
   
@@ -803,6 +810,60 @@ templates:
     - start workflow
     response_type: "detailed"
     content: "🧠 **CORTEX Workflow Execution**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to execute a CORTEX workflow operation.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Workflow orchestrator coordinates multi-step operations with validation and checkpoints.\n\n💬 **Response:**\n   [Workflow execution results with steps completed and validation status]\n\n📝 **Your Request:** Execute workflow\n\n🔍 **Next Steps:**\n   1. Review workflow results\n   2. Validate all steps completed\n   3. Check for any warnings or errors"
+  
+  git_checkpoint:
+    name: "Git Checkpoint"
+    triggers:
+    - git checkpoint
+    - create checkpoint
+    - save checkpoint
+    response_type: "detailed"
+    handler: "src.orchestrators.git_checkpoint_orchestrator.GitCheckpointOrchestrator"
+    content: "🧠 **CORTEX Git Checkpoint**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   Create git checkpoint to preserve current work state.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Git checkpoint will save current state with SKULL Rule #8 compliance.\n\n💬 **Response:**\n   [Checkpoint creation results with commit SHA and timestamp]\n\n📝 **Your Request:** Create git checkpoint\n\n🔍 **Next Steps:**\n   1. Review checkpoint commit message\n   2. Continue with implementation\n   3. Create additional checkpoints as needed"
+  
+  lint_validation:
+    name: "Lint Validation"
+    triggers:
+    - validate lint
+    - check code quality
+    - run linter
+    - lint validation
+    response_type: "detailed"
+    handler: "src.orchestrators.lint_validation_orchestrator.LintValidationOrchestrator"
+    content: "🧠 **CORTEX Lint Validation**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   Run code quality validation before continuing TDD workflow.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Lint validation will check for critical violations that block phase progression.\n\n💬 **Response:**\n   [Validation results with violation count and severity breakdown]\n\n📝 **Your Request:** Validate code quality\n\n🔍 **Next Steps:**\n   1. Review violations (if any)\n   2. Fix critical violations before continuing\n   3. Proceed to next TDD phase if clean"
+  
+  session_completion:
+    name: "Session Completion"
+    triggers:
+    - complete session
+    - finish session
+    - session report
+    - end session
+    response_type: "detailed"
+    handler: "src.orchestrators.session_completion_orchestrator.SessionCompletionOrchestrator"
+    content: "🧠 **CORTEX Session Completion**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   Generate session completion report with before/after metrics.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Session report will include timestamps, test results, and code changes.\n\n💬 **Response:**\n   [Session report with duration, test pass rate, and accomplishments]\n\n📝 **Your Request:** Complete TDD session\n\n🔍 **Next Steps:**\n   1. Review session metrics\n   2. Commit final changes\n   3. Push to remote repository"
+  
+  upgrade_cortex:
+    name: "Upgrade CORTEX"
+    triggers:
+    - upgrade
+    - upgrade cortex
+    - cortex version
+    - check version
+    response_type: "detailed"
+    handler: "src.orchestrators.upgrade_orchestrator.UpgradeOrchestrator"
+    content: "🧠 **CORTEX Upgrade**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   Check for CORTEX updates and upgrade to latest version.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Upgrade will backup brain data and pull latest from origin/main.\n\n💬 **Response:**\n   [Version check results and upgrade status]\n\n📝 **Your Request:** Upgrade CORTEX\n\n🔍 **Next Steps:**\n   1. Review upgrade results\n   2. Check changelog for new features\n   3. Restart workflow if needed"
+  
+  tdd_workflow:
+    name: "TDD Workflow"
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - tdd session
+    response_type: "detailed"
+    handler: "src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator"
+    content: "🧠 **CORTEX TDD Workflow**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   Start TDD workflow with RED→GREEN→REFACTOR automation.\n\n⚠️ **Challenge:** ✓ **Accept**\n   TDD orchestrator will guide you through test-driven development cycle.\n\n💬 **Response:**\n   [TDD workflow started with phase tracking and automation]\n\n📝 **Your Request:** Start TDD workflow\n\n🔍 **Next Steps:**\n   1. Write failing test (RED phase)\n   2. Implement feature to pass test (GREEN phase)\n   3. Refactor code with quality checks (REFACTOR phase)"
 
 routing:
   default: fallback
@@ -816,6 +877,30 @@ routing:
   quick_start_triggers:
   - quick start
   - get started
+  git_checkpoint_triggers:
+  - git checkpoint
+  - create checkpoint
+  - save checkpoint
+  lint_validation_triggers:
+  - validate lint
+  - check code quality
+  - run linter
+  - lint validation
+  session_completion_triggers:
+  - complete session
+  - finish session
+  - session report
+  - end session
+  upgrade_cortex_triggers:
+  - upgrade
+  - upgrade cortex
+  - cortex version
+  - check version
+  tdd_workflow_start_triggers:
+  - start tdd
+  - tdd workflow
+  - begin tdd
+  - tdd session
   tdd_workflow_triggers:
   - implement
   - add

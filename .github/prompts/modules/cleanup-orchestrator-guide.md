@@ -1,272 +1,338 @@
-# Cleanup Orchestrator
+# Cleanup Guide
 
-**Purpose:** Comprehensive workspace cleanup - remove backups, reorganize files, consolidate duplicates, detect bloat
+**Purpose:** Orchestrates comprehensive workspace cleanup with:
 
-**Version:** 3.2.0  
-**Status:** ✅ PRODUCTION
-
----
-
-## Commands
-
-- `cleanup` - Run full cleanup operation
-- `cleanup --dry-run` - Preview changes without executing
-- `cleanup backups` - Remove only backup files
-- `cleanup duplicates` - Consolidate duplicate MD files
+**Author:** Asif Hussain  
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Source-Available (Use Allowed, No Contributions)
 
 ---
 
-## What It Does
+## Overview
 
-1. **Backup Management:** Archives then deletes old backup folders (GitHub tracked)
-2. **File Reorganization:** Moves misplaced files to correct locations
-3. **Duplicate Consolidation:** Merges redundant MD files
-4. **Bloat Detection:** Scans entry points and orchestrators for size issues
-5. **Root Cleanup:** Organizes root folder files
-6. **Auto-Optimization:** Triggers OptimizeCortexOrchestrator after cleanup
+Orchestrates comprehensive workspace cleanup with:
 
----
-
-## Safety Features
-
-### Protected Paths
-**NEVER touches these:**
-- `src/`, `tests/`, `cortex-brain/`, `docs/`
-- `.git/`, `.github/`, `.vscode/`
-- `package.json`, `pytest.ini`, `requirements.txt`
-- `LICENSE`, `README.md`, `CHANGELOG.md`
-- All configuration files
-
-### Git Tracking
-- Every deletion tracked in Git before removal
-- Creates GitHub archive commits
-- Maintains full audit trail
-- Enables rollback if needed
-
-### Dry Run Mode
-- Preview all changes before execution
-- Shows what will be deleted/moved
-- No actual modifications made
-- Safe exploration of cleanup impact
+**Key Features:**
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
 
 ---
 
-## Cleanup Workflow
+## Usage
 
+### Basic Usage
+
+```python
+from src.operations.orchestrators import CleanupOrchestrator
+
+# Initialize
+orchestrator = CleanupOrchestrator()
+
+# Execute
+result = orchestrator.execute()
 ```
-1. Discovery Phase
-   ↓
-2. Analysis & Planning
-   - Identify backups (age > 7 days)
-   - Find duplicates (hash comparison)
-   - Detect misplaced files
-   - Scan for bloat
-   ↓
-3. Git Archival
-   - Commit backups to Git
-   - Push to GitHub
-   - Verify archive success
-   ↓
-4. Execution
-   - Delete archived backups
-   - Reorganize files
-   - Consolidate duplicates
-   - Clean root folder
-   ↓
-5. Verification
-   - Run bloat tests
-   - Validate organization
-   - Check Git status
-   ↓
-6. Optimization Trigger
-   - Launch OptimizeCortexOrchestrator
-   - Vacuum databases
-   - Rebuild caches
+
+### Natural Language Commands
+
+**Commands:**
+- `[command 1]` - [Description]
+- `[command 2]` - [Description]
+
+**Examples:**
+```
+User: "[example command]"
+CORTEX: [Expected response]
 ```
 
 ---
 
-## Metrics Tracked
+## API Reference
 
-**Cleanup Metrics:**
-- Backups deleted: count + bytes freed
-- Files reorganized: source → destination
-- MD files consolidated: count + duplicates removed
-- Root files cleaned: count
-- Bloated files found: count + sizes
-- Space freed: MB/GB
-- Git commits created: count
-- Duration: seconds
+### Class: `CleanupOrchestrator`
 
-**Output Location:** `cortex-brain/cleanup-reports/CLEANUP-[timestamp].json`
+Orchestrates comprehensive workspace cleanup with:
 
----
+#### Methods
 
-## File Reorganization Rules
+**`__init__()`**
 
-### Root Folder → Correct Location
-- Test files → `tests/`
-- Source files → `src/`
-- Documentation → `docs/`
-- Scripts → `scripts/`
-- Configuration → appropriate config folder
+No description available
 
-### Duplicate Detection
-- Uses SHA-256 hash comparison
-- Keeps newest version
-- Moves duplicates to archive
-- Updates all references
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
 
 ---
 
-## Backup Management
+**`get_metadata()`**
 
-**Archival Process:**
-1. Scan for backup folders (`.bak`, `.backup`, `backup-*`, etc.)
-2. Filter by age (default: >7 days)
-3. Create Git commit with backup contents
-4. Push to GitHub remote
-5. Verify archive exists on GitHub
-6. Delete local backup folder
-7. Log deletion in cleanup report
+No description available
 
-**Exclusions:**
-- Recent backups (<7 days)
-- Active restore points
-- Checkpoint files from workflows
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
 
 ---
 
-## Bloat Detection
+**`check_prerequisites()`**
 
-**Entry Point Checks:**
-- Line count (limit: 500)
-- Token count (limit: 5000)
-- Excessive inline documentation
-- Missing modular architecture
+No description available
 
-**Orchestrator Checks:**
-- File size (warning: >10KB)
-- Method count (warning: >20)
-- Code complexity metrics
-- Import bloat
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`execute()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_verify_safety()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_is_protected()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_manage_backups()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_cleanup_root_folder()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_cleanup_legacy_kds_files()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_reorganize_files()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_consolidate_md_files()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_detect_bloat()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_git_commit_cleanup()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_trigger_optimization()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_remove_marked_obsolete_tests()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_remove_obsolete_tests()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_archive_backups_to_github()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_log_action()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
+
+---
+
+**`_generate_report()`**
+
+No description available
+
+**Parameters:**
+- [param]: [description]
+
+**Returns:**
+- [return type]: [description]
 
 ---
 
 ## Configuration
 
-**Configurable via cortex.config.json:**
-```json
-{
-  "cleanup": {
-    "backup_age_days": 7,
-    "enable_git_tracking": true,
-    "enable_auto_optimization": true,
-    "dry_run_default": false,
-    "protected_extensions": [".py", ".md", ".json", ".yaml"],
-    "exclude_patterns": ["node_modules", "__pycache__", ".pytest_cache"]
-  }
-}
+**Required:**
+- [Configuration item 1]
+- [Configuration item 2]
+
+**Optional:**
+- [Configuration item 3]
+
+---
+
+## Examples
+
+### Example 1: [Scenario Name]
+
+```python
+# [Example code]
+```
+
+**Output:**
+```
+[Expected output]
 ```
 
 ---
 
-## Integration Points
+## Integration
 
-- **OptimizeCortexOrchestrator:** Auto-triggered after cleanup
-- **Git:** All deletions archived via commits
-- **GitHub:** Backup verification on remote
-- **Bloat Tests:** Validates cleanup effectiveness
-- **File Organization:** Uses project structure conventions
+**Entry Points:**
+- [Entry point 1]
+- [Entry point 2]
 
----
+**Dependencies:**
+- [Dependency 1]
+- [Dependency 2]
 
-## Natural Language Examples
-
-- "cleanup the workspace"
-- "run cleanup in dry-run mode"
-- "remove old backups"
-- "consolidate duplicate files"
-- "organize root folder"
+**See Also:**
+- [Related documentation]
 
 ---
 
-## Output
+## Troubleshooting
 
-**Console:**
-```
-🧹 CORTEX Workspace Cleanup
+**Issue:** [Common problem]  
+**Solution:** [How to fix]
 
-✅ Backup Management:
-   Archived: 5 folders (342 MB)
-   Deleted: 5 folders after GitHub backup
-
-✅ File Reorganization:
-   Moved: 23 files to correct locations
-
-✅ Duplicate Consolidation:
-   Consolidated: 12 MD files
-   Removed duplicates: 18 files
-
-✅ Root Cleanup:
-   Organized: 15 root files
-
-✅ Bloat Detection:
-   No bloated files found
-
-✅ Space Freed: 425 MB
-
-⚡ Triggering optimization...
-```
-
-**Files Created:**
-- `cortex-brain/cleanup-reports/CLEANUP-[timestamp].json`
-- `cortex-brain/cleanup-logs/actions-[timestamp].log`
-- Git commits with backup archives
+**Issue:** [Another problem]  
+**Solution:** [How to fix]
 
 ---
 
-## Error Handling
-
-**Git Archival Failures:**
-- Aborts deletion if GitHub backup fails
-- Retries archive push (max 3 attempts)
-- Logs failure and preserves backup
-- User notified of manual intervention needed
-
-**File Operation Failures:**
-- Logs error with file path and reason
-- Continues with remaining operations
-- Reports all failures in cleanup report
-- Suggests manual fixes
-
----
-
-## Testing
-
-**Test File:** `tests/operations/modules/cleanup/test_cleanup_orchestrator.py`
-
-**Coverage:** >70% required for deployment
-
-**Key Tests:**
-- Backup archival and deletion
-- File reorganization accuracy
-- Duplicate detection algorithm
-- Protected path enforcement
-- Git tracking verification
-- Bloat detection accuracy
-
----
-
-## See Also
-
-- Optimize Cortex: `.github/prompts/modules/optimize-cortex-guide.md`
-- Entry Point Bloat Tests: `tests/tier0/test_entry_point_bloat.py`
-- File Organization: `cortex-brain/documents/file-relationships.yaml`
-
----
-
-**Author:** Asif Hussain  
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Repository:** <https://github.com/asifhussain60/CORTEX>
+**Last Updated:** [Date]  
+**Version:** 1.0

@@ -163,6 +163,9 @@ class AgentScanner:
         relative_path = file_path.relative_to(self.project_root)
         module_path = str(relative_path.with_suffix("")).replace("\\", ".").replace("/", ".")
         
+        # Classify feature (production/admin/internal)
+        classification = self._classify_agent(class_node.name, docstring)
+        
         return {
             "path": file_path,
             "module_path": module_path,
@@ -171,5 +174,34 @@ class AgentScanner:
             "methods": methods,
             "has_docstring": docstring is not None,
             "has_process_method": has_process_method,
-            "has_execute_method": has_execute_method
+            "has_execute_method": has_execute_method,
+            "classification": classification
         }
+    
+    def _classify_agent(self, class_name: str, docstring: str = None) -> str:
+        """
+        Classify agent as production, admin, or internal.
+        
+        Args:
+            class_name: Agent class name
+            docstring: Class docstring (may be None)
+        
+        Returns:
+            Classification: 'production', 'admin', or 'internal'
+        """
+        # Internal utility agents (not user-facing)
+        internal_keywords = ["Ingestion", "Adapter", "Base", "Abstract", "Utility"]
+        
+        if any(keyword in class_name for keyword in internal_keywords):
+            return "internal"
+        
+        # Check docstring for internal/admin indicators
+        if docstring:
+            docstring_lower = docstring.lower()
+            if "internal" in docstring_lower or "utility" in docstring_lower:
+                return "internal"
+            if "admin-only" in docstring_lower:
+                return "admin"
+        
+        # Default: production (user-facing agents)
+        return "production"

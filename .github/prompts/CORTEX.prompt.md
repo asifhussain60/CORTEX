@@ -189,11 +189,30 @@ CORTEX will:
 
 **CRITICAL:** All informational documents MUST be created in organized folder structure within CORTEX brain.
 
+## ⛔ STRICTLY FORBIDDEN
+
+**NEVER create documentation files in repository root:**
+
+❌ **BLOCKED OPERATIONS:**
+- Creating summary files in root: `d:\PROJECTS\CORTEX\summary.md`
+- Creating reports in root: `d:\PROJECTS\NOOR CANVAS\report.md`
+- Creating updates in root: `/Users/asifhussain/PROJECTS/CORTEX/update.md`
+- Creating analysis in root: `repository_root / "analysis.md"`
+- Creating ANY `.md` documentation files directly in repository root
+
+**Applies to ALL installations:**
+- Standalone CORTEX (CORTEX/ repository)
+- Embedded CORTEX (NOOR-CANVAS/CORTEX/)
+- Development environments
+- Production deployments
+
 ## Document Creation Rules
 
-**✅ ALWAYS USE:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/[category]/[filename].md`
+**✅ ALWAYS USE:** `CORTEX/cortex-brain/documents/[category]/[filename].md`
 
 **❌ NEVER CREATE:** Documents in repository root or unorganized locations
+
+**Severity:** BLOCKED (hard enforcement, not warning)
 
 ## Pre-Flight Checklist (MANDATORY)
 
@@ -488,6 +507,10 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ## ⚠️ CRITICAL RULES
 
-**Document Organization:** ALL `.md` files MUST use `cortex-brain/documents/[category]/` structure  
+**Document Organization:** ALL `.md` files MUST use `CORTEX/cortex-brain/documents/[category]/` structure  
+**ROOT FILES FORBIDDEN:** NEVER create summaries, reports, updates, or any documentation in repository root  
+**Severity:** BLOCKED enforcement (operations will fail if attempting root-level document creation)  
 **Validation:** Check paths before creation | Use DocumentValidator when available  
 **Categories:** reports/, analysis/, summaries/, investigations/, planning/, conversation-captures/, implementation-guides/
+
+**Enforcement:** Brain Protector actively blocks root-level document creation with NO_ROOT_SUMMARY_DOCUMENTS rule

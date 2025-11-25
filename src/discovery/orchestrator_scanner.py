@@ -41,7 +41,8 @@ class OrchestratorScanner:
         # Scan paths (convention-based)
         self.scan_paths = [
             self.src_root / "operations" / "modules",
-            self.src_root / "workflows"
+            self.src_root / "workflows",
+            self.src_root / "orchestrators"  # NEW: Gap remediation orchestrators
         ]
         
         # Exclusion patterns
@@ -169,6 +170,9 @@ class OrchestratorScanner:
         relative_path = file_path.relative_to(self.project_root)
         module_path = str(relative_path.with_suffix("")).replace("\\", ".").replace("/", ".")
         
+        # Classify feature (production/admin/internal)
+        classification = self._classify_feature(class_node.name, file_path, docstring)
+        
         return {
             "path": file_path,
             "module_path": module_path,
@@ -177,7 +181,8 @@ class OrchestratorScanner:
             "methods": methods,
             "dependencies": dependencies,
             "has_docstring": docstring is not None,
-            "inherits_base": inherits_base
+            "inherits_base": inherits_base,
+            "classification": classification
         }
     
     def _is_base_class(self, base_node: ast.expr) -> bool:
@@ -233,3 +238,52 @@ class OrchestratorScanner:
             logger.warning(f"Failed to extract dependencies from {file_path}: {e}")
         
         return dependencies
+    
+    def _classify_feature(self, class_name: str, file_path: Path, docstring: Optional[str]) -> str:
+        """
+        Classify feature as production, admin, or internal.
+        
+        Production: User-facing orchestrators for core workflows
+        Admin: CORTEX maintainer tools (alignment, cleanup, deployment)
+        Internal: Utility classes, base classes, adapters
+        
+        Args:
+            class_name: Orchestrator class name
+            file_path: Path to source file
+            docstring: Class docstring (may be None)
+        
+        Returns:
+            Classification: 'production', 'admin', or 'internal'
+        """
+        # Admin orchestrators (maintainer tools only)
+        admin_keywords = [
+            "SystemAlignment", "Cleanup", "DesignSync", "OptimizeSystem",
+            "OptimizeCortex", "PublishBranch", "Deployment"
+        ]
+        
+        if any(keyword in class_name for keyword in admin_keywords):
+            return "admin"
+        
+        # Internal utilities (not direct user interaction)
+        # Base/parent orchestrators that other orchestrators inherit from
+        internal_keywords = ["Adapter", "Ingestion", "Base", "Abstract", "Utility"]
+        
+        # WorkflowOrchestrator is a base class for TDD workflows
+        if class_name == "WorkflowOrchestrator" or "Base" in class_name:
+            return "internal"
+        
+        if any(keyword in class_name for keyword in internal_keywords):
+            return "internal"
+        
+        # Check file path for admin modules
+        if "admin" in file_path.parts:
+            return "admin"
+        
+        # Check docstring for admin indicators
+        if docstring:
+            docstring_lower = docstring.lower()
+            if "admin-only" in docstring_lower or "maintainer" in docstring_lower:
+                return "admin"
+        
+        # Default: production (user-facing)
+        return "production"

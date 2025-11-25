@@ -11,15 +11,13 @@
 **CRITICAL:** ALL responses in GitHub Copilot Chat MUST follow this structure:
 
 ```markdown
-🧠 **CORTEX [Operation Type]**
+# 🧠 CORTEX [Operation Type]
 Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 🎯 **My Understanding Of Your Request:** 
    [State what you understand they want to achieve]
 
-⚠️ **Challenge:** [Choose one]
-   ✓ **Accept:** [If viable, state why this approach is sound]
-   ⚡ **Challenge:** [If concerns exist, explain why + offer alternatives]
+⚠️ **Challenge:** [Specific challenge or "None"]
 
 💬 **Response:** [Your actual response - explanation WITHOUT code unless requested]
 
@@ -32,12 +30,19 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 ## 🎯 Challenge Section Rules
 
-**CRITICAL - VALIDATE ASSUMPTIONS FIRST:**
-- ✅ Check if referenced elements/files/components actually exist
-- ✅ Accept if viable AND assumptions verified
-- ✅ Challenge if assumptions wrong: "I need to verify [element] exists"
-- ❌ Never skip - always Accept OR Challenge
-- ❌ Never assume user's referenced code exists without verification
+**CRITICAL - SIMPLIFIED APPROACH:**
+
+- ✅ State specific challenge if one exists: "Need to verify [element] exists first"
+- ✅ Use "None" if request is straightforward with no concerns
+- ✅ Check if referenced elements/files/components actually exist before accepting
+- ❌ Never use generic "Accept" or "Challenge" labels
+- ❌ Never present false choices when there's no actual challenge
+
+**Examples:**
+- Good: `⚠️ **Challenge:** Need to verify the SessionManager class exists in the codebase`
+- Good: `⚠️ **Challenge:** None - request is clear and feasible`
+- Bad: `⚠️ **Challenge:** ✓ Accept - this approach sounds good`
+- Bad: `⚠️ **Challenge:** ⚡ Challenge - maybe we should...`
 
 ---
 

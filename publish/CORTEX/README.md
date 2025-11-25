@@ -74,22 +74,29 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 Keep CORTEX up-to-date with the latest features and bug fixes:
 
 ```bash
-# Upgrade to latest version
+# Method 1: From Copilot Chat (Recommended)
+/CORTEX upgrade
+
+# Method 2: Using upgrade script
 python scripts/cortex-upgrade.py
+
+# Method 3: Manual git pull from main branch
+cd CORTEX
+git pull origin main
 
 # Preview upgrade without changes
 python scripts/cortex-upgrade.py --dry-run
-
-# Or from Copilot Chat
-/CORTEX upgrade
 ```
 
 **Upgrade System Features:**
+- ✅ Pulls latest stable release from `main` branch
 - ✅ Preserves all brain data (conversations, learned patterns)
 - ✅ Auto-backup before upgrade with rollback capability
 - ✅ Intelligent config merging (preserves customizations)
 - ✅ Schema migrations for database upgrades
 - ✅ Zero data loss guarantee
+
+**Note:** The `main` branch always contains the latest stable release. Development work happens on feature branches.
 
 See **[Upgrade Guide](cortex-brain/documents/implementation-guides/UPGRADE-GUIDE.md)** for details.
 

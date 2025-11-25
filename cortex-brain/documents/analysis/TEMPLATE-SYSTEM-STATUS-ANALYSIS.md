@@ -232,17 +232,13 @@ Looking at `CORTEX.prompt.md` (lines 117-145):
 **CRITICAL:** ALL responses in GitHub Copilot Chat MUST follow this 5-part structure:
 
 ```markdown
-🧠 **CORTEX [Operation Type]**
+# 🧠 CORTEX [Operation Type]
 Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-🎯 **My Understanding Of Your Request:** 
+🎯 **My Understanding Of Your Request:**
    [State what you understand they want to achieve]
 
-⚠️ **Challenge:** [Choose one]
-   ✓ **Accept:** [If viable, state why this approach is sound]
-   ⚡ **Challenge:** [If concerns exist, explain why + offer alternatives]
-
-💬 **Response:** [Your actual response]
+⚠️ **Challenge:** [Specific challenge or "None"]💬 **Response:** [Your actual response]
 
 📝 **Your Request:** [Echo user's request]
 

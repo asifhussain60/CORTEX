@@ -73,8 +73,27 @@ Expected: CORTEX responds with system health and capabilities
 
 ---
 
+## Upgrading CORTEX
+
+To upgrade to the latest version:
+
+```bash
+# Navigate to your project's CORTEX directory
+cd CORTEX
+
+# Pull latest from main branch
+git pull origin main
+
+# Or download latest release
+# Visit: https://github.com/asifhussain60/CORTEX/tree/main
+```
+
+**Note:** The `main` branch contains the latest stable release. Your brain data (conversations, learned patterns) is preserved during upgrades.
+
+---
+
 **Version:** 3.2.0  
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available (Use Allowed, No Contributions)  
-**Repository:** https://github.com/asifhussain60/CORTEX
+**Repository:** https://github.com/asifhussain60/CORTEX (main branch)

@@ -254,7 +254,7 @@ templates:
 
 ### Standard 5-Section Structure (21/29 templates)
 
-1. **Header:** `🧠 **CORTEX [Operation Type]**` + Author/Copyright
+1. **Header:** `# 🧠 CORTEX [Operation Type]` + Author/Copyright
 2. **Understanding:** `🎯 **My Understanding Of Your Request:**`
 3. **Challenge:** `⚠️ **Challenge:**` (Accept or Challenge)
 4. **Response:** `💬 **Response:**` (Main content)

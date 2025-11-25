@@ -46,7 +46,27 @@ Users can interact with CORTEX using natural language:
 
 ---
 
+## 📦 Installation & Upgrades
+
+CORTEX is distributed via the `main` branch:
+
+```bash
+# Clone CORTEX (initial installation)
+git clone -b main --single-branch https://github.com/asifhussain60/CORTEX.git
+
+# Upgrade to latest version (from within CORTEX directory)
+git pull origin main
+```
+
+**Branch Strategy:**
+- `main` - Latest stable release (for user installations and upgrades)
+- `CORTEX-3.0` - Active development branch
+- Feature branches - Specific feature development
+
+---
+
 **Version:** 2.0  
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)
+**License:** Source-Available (Use Allowed, No Contributions)  
+**Repository:** https://github.com/asifhussain60/CORTEX (main branch)
