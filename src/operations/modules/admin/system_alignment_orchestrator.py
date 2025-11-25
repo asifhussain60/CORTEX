@@ -464,7 +464,8 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         import re
         # First, handle common acronyms by converting them to lowercase
         name_base = name_base.replace("TDD", "Tdd").replace("API", "Api").replace("HTTP", "Http")
-        kebab_name = re.sub(r'(?<!^)(?=[A-Z])', '-', name_base).lower()
+        # Insert hyphen before uppercase letters, then remove leading hyphen if present
+        kebab_name = re.sub(r'([A-Z])', r'-\1', name_base).lstrip('-').lower()
         
         # Construct guide filename
         guide_name = f"{kebab_name}-{feature_type}-guide.md"
