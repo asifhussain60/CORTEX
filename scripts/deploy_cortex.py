@@ -1002,6 +1002,12 @@ def publish_to_branch(
         if not checkpoint.should_skip_stage(PublishStage.CONTENT_COPY):
             logger.info("\n📂 STAGE 4: Copying Content to Branch")
             
+            # Rebuild if temp_dir missing (branch switch deleted it)
+            if not temp_dir.exists():
+                logger.info("⚠️  Temp directory missing after branch switch - rebuilding...")
+                stats = build_publish_content(project_root, temp_dir)
+                logger.info(f"✅ Rebuild complete: {stats['files_copied']} files, {stats['total_size'] / 1024 / 1024:.2f} MB")
+            
             # Copy new content
             for item in temp_dir.iterdir():
                 dest = project_root / item.name
