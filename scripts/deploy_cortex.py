@@ -8,6 +8,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
 
 Deployment Phases:
+0. Version management (bump version, validate consistency)
 1. Pre-deployment validation (entry points, docs, tests)
 2. Entry point validation (module verification)
 3. Run comprehensive test suite (44 tests)
@@ -18,15 +19,18 @@ Deployment Phases:
 CRITICAL: Phase 5 MUST create actual production package in publish/ directory
 This is enforced by validation that verifies package physically exists.
 
-Usage: python scripts/deploy_cortex.py
+Usage: 
+    python scripts/deploy_cortex.py [--bump-type major|minor|patch]
+    python scripts/deploy_cortex.py --bump-type minor --reason "Add TDD workflow"
 """
 
 import sys
 import subprocess
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import json
 from datetime import datetime
+import argparse
 
 class Colors:
     GREEN = '\033[92m'
@@ -39,15 +43,18 @@ class Colors:
 class CortexDeployer:
     """Automated CORTEX deployment with validation enforcement"""
     
-    def __init__(self):
+    def __init__(self, bump_type: Optional[str] = None, bump_reason: Optional[str] = None):
         self.root = Path(__file__).parent.parent
         self.failures: List[str] = []
         self.warnings: List[str] = []
+        self.bump_type = bump_type or "minor"  # Default to minor release
+        self.bump_reason = bump_reason
         self.deployment_report = {
             'timestamp': datetime.now().isoformat(),
             'phases': {},
             'validation_results': {},
-            'package_info': {}
+            'package_info': {},
+            'version_info': {}
         }
     
     def deploy(self) -> bool:
@@ -56,6 +63,7 @@ class CortexDeployer:
         print("=" * 70)
         
         phases = [
+            ('Version Management', self.phase0_version_management),
             ('Pre-Deployment Validation', self.phase1_validation),
             ('Entry Point Validation', self.phase2_entry_points),
             ('Comprehensive Testing', self.phase3_testing),
@@ -79,6 +87,68 @@ class CortexDeployer:
             print(f"\n{Colors.GREEN}✅ {phase_name} PASSED{Colors.RESET}")
         
         return True
+    
+    def phase0_version_management(self) -> bool:
+        """Phase 0: Version management and consistency validation"""
+        print(f"\n{Colors.BLUE}Managing version for deployment...{Colors.RESET}")
+        
+        try:
+            # Import version manager
+            sys.path.insert(0, str(self.root / "scripts"))
+            from version_manager import VersionManager, Version
+            
+            manager = VersionManager(self.root)
+            
+            # Get current version
+            current_version = manager.get_current_version()
+            print(f"  📦 Current version: {current_version}")
+            
+            # Validate version consistency
+            is_valid, issues = manager.validate_version_consistency()
+            if not is_valid:
+                print(f"  ⚠️  Version consistency issues detected:")
+                for issue in issues:
+                    print(f"     - {issue}")
+                self.warnings.extend(issues)
+            else:
+                print(f"  ✅ Version consistency validated")
+            
+            # Bump version if requested
+            if self.bump_type:
+                print(f"\n  🔼 Bumping version: {self.bump_type} release")
+                
+                # Determine reason
+                if not self.bump_reason:
+                    if self.bump_type == "major":
+                        self.bump_reason = "Major release (breaking changes)"
+                    elif self.bump_type == "minor":
+                        self.bump_reason = "Minor release (new features)"
+                    else:
+                        self.bump_reason = "Patch release (bug fixes)"
+                
+                new_version = manager.bump_version(self.bump_type, self.bump_reason)
+                print(f"  ✅ Version bumped: {current_version} → {new_version}")
+                
+                # Store in deployment report
+                self.deployment_report['version_info'] = {
+                    'previous': str(current_version),
+                    'current': str(new_version),
+                    'bump_type': self.bump_type,
+                    'reason': self.bump_reason
+                }
+            else:
+                print(f"  ℹ️  No version bump requested (use --bump-type to bump)")
+                self.deployment_report['version_info'] = {
+                    'current': str(current_version),
+                    'bump_type': 'none'
+                }
+            
+            return True
+            
+        except Exception as e:
+            print(f"  ❌ Version management failed: {e}")
+            self.failures.append(f"Version management failed: {e}")
+            return False
     
     def phase1_validation(self) -> bool:
         """Phase 1: Pre-deployment validation"""
@@ -506,7 +576,49 @@ class CortexDeployer:
 
 def main():
     """Run CORTEX deployment"""
-    deployer = CortexDeployer()
+    parser = argparse.ArgumentParser(
+        description='CORTEX Automated Deployment with Version Management',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Deploy with default minor version bump
+  python scripts/deploy_cortex.py
+  
+  # Deploy with major version bump (breaking changes)
+  python scripts/deploy_cortex.py --bump-type major --reason "New TDD workflow API"
+  
+  # Deploy with patch version bump (bug fixes)
+  python scripts/deploy_cortex.py --bump-type patch --reason "Fix entry point bloat"
+  
+  # Deploy without version bump (testing)
+  python scripts/deploy_cortex.py --no-bump
+        """
+    )
+    
+    parser.add_argument(
+        '--bump-type',
+        choices=['major', 'minor', 'patch'],
+        default='minor',
+        help='Version bump type (default: minor)'
+    )
+    
+    parser.add_argument(
+        '--no-bump',
+        action='store_true',
+        help='Skip version bump (for testing)'
+    )
+    
+    parser.add_argument(
+        '--reason',
+        help='Reason for version change'
+    )
+    
+    args = parser.parse_args()
+    
+    # Determine bump type
+    bump_type = None if args.no_bump else args.bump_type
+    
+    deployer = CortexDeployer(bump_type=bump_type, bump_reason=args.reason)
     success = deployer.deploy()
     
     deployer.print_summary()

@@ -1,6 +1,7 @@
 {
-  "timestamp": "2025-11-24T08:21:32.278504",
+  "timestamp": "2025-11-25T09:18:24.622663",
   "phases": {
+    "Version Management": "PASSED",
     "Pre-Deployment Validation": "PASSED",
     "Entry Point Validation": "PASSED",
     "Comprehensive Testing": "PASSED",
@@ -12,15 +13,21 @@
     "issue3_fixes": "PASSED"
   },
   "package_info": {
-    "version": "v3.1.1",
-    "location": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX-v3.1.1",
-    "size_mb": 17.21,
-    "files_count": 1142,
+    "version": "v3.3.0",
+    "location": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX-v3.3.0",
+    "size_mb": 13.02,
+    "files_count": 943,
     "validation": "PASSED"
+  },
+  "version_info": {
+    "previous": "v3.2.0",
+    "current": "v3.3.0",
+    "bump_type": "minor",
+    "reason": "Production deployment v3.2.0"
   },
   "summary": {
     "failures": 0,
-    "warnings": 2,
+    "warnings": 8,
     "status": "PASSED"
   }
 }
