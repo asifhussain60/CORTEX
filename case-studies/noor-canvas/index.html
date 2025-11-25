@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Tier System - CORTEX</title>
+    <title>Overview - CORTEX</title>
     <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -145,7 +145,7 @@
                                 <strong>Architecture</strong>
                                 <ul>
                                 
-                                    <li><a href="../overview/" >Overview</a></li>
+                                    <li><a href="../../architecture/overview/" >Overview</a></li>
                                 
                                     <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
@@ -155,11 +155,11 @@
                                 
                                     <li><a href="../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
                                 
-                                    <li><a href="./" class="active">Tier System</a></li>
+                                    <li><a href="../../architecture/tier-system/" >Tier System</a></li>
                                 
-                                    <li><a href="../agents/" >Agents</a></li>
+                                    <li><a href="../../architecture/agents/" >Agents</a></li>
                                 
-                                    <li><a href="../brain-protection/" >Brain Protection</a></li>
+                                    <li><a href="../../architecture/brain-protection/" >Brain Protection</a></li>
                                 
                                 </ul>
                             </li>
@@ -279,10 +279,12 @@
                         
                             
                             <li class="nav-group">
-                                <strong>Examples</strong>
+                                <strong>Case Studies</strong>
                                 <ul>
                                 
-                                    <li><a href="../../FEATURE-COMPARISON/" >Feature Comparison</a></li>
+                                    <li><a href="../" >Overview</a></li>
+                                
+                                    <li><a href="../.." class="active">NOOR CANVAS</a></li>
                                 
                                 </ul>
                             </li>
@@ -296,30 +298,130 @@
                 <!-- Main Content Area (No Right Sidebar) -->
                 <div class="col-md-9 content-main">
                     <article>
-                        <h1 id="tier-system">Tier System<a class="headerlink" href="#tier-system" title="Permanent link">&para;</a></h1>
-<p>This page documents Tier System.</p>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>Tier System provides essential functionality for CORTEX.</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+                        <h1 id="noor-canvas">Noor Canvas<a class="headerlink" href="#noor-canvas" title="Permanent link">&para;</a></h1>
+<p><strong>Live Q&amp;A Platform | Blazor Server | SignalR</strong></p>
+<hr />
+<h2 id="overview">📋 Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Noor Canvas is a Blazor Server application providing real-time Q&amp;A capabilities for live interactive sessions. The platform enables hosts to manage sessions, participants to submit questions, and real-time voting via SignalR.</p>
+<p><strong>Technology Stack:</strong>
+- <strong>Frontend:</strong> Blazor Server (C#)
+- <strong>Backend:</strong> ASP.NET Core 6.0+
+- <strong>Real-Time:</strong> SignalR
+- <strong>Testing:</strong> xUnit, Playwright
+- <strong>Deployment:</strong> Continuous Deployment</p>
+<hr />
+<h2 id="cortex-engagements">🎯 CORTEX Engagements<a class="headerlink" href="#cortex-engagements" title="Permanent link">&para;</a></h2>
+<h3 id="signalr-architecture-refactoring"><a href="signalr-refactoring/">SignalR Architecture Refactoring</a><a class="headerlink" href="#signalr-architecture-refactoring" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> 3.5 days | <strong>Type:</strong> Refactoring | <strong>Year:</strong> 2025</p>
+<p>Multi-phase refactoring transforming inline SignalR handlers into a service-oriented architecture with comprehensive test coverage. Included critical bug fix achieving 100% participant connection success.</p>
+<p><strong>Highlights:</strong>
+- 🏗️ <strong>Architecture:</strong> Inline handlers → Service-oriented design
+- ✅ <strong>Testing:</strong> 0% → 100% coverage (33 unit tests)
+- 🔧 <strong>Critical Fix:</strong> 45-minute turnaround, 15 lines changed
+- 📊 <strong>Code Quality:</strong> 1,520 lines duplication removed</p>
+<p><a href="signalr-refactoring/">Read Full Case Study →</a></p>
+<hr />
+<h2 id="cumulative-impact">📈 Cumulative Impact<a class="headerlink" href="#cumulative-impact" title="Permanent link">&para;</a></h2>
+<p>Across all Noor Canvas engagements:</p>
+<div class="metric-cards">
+  <div class="metric-card">
+    <div class="metric-value">3.5</div>
+    <div class="metric-label">Days Total Engagement</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-value">1,520</div>
+    <div class="metric-label">Lines Duplication Removed</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-value">100%</div>
+    <div class="metric-label">Test Coverage Achieved</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-value">100%</div>
+    <div class="metric-label">Connection Success Rate</div>
+  </div>
+</div>
+
+<hr />
+<h2 id="architecture-evolution">🏛️ Architecture Evolution<a class="headerlink" href="#architecture-evolution" title="Permanent link">&para;</a></h2>
+<p><strong>Before CORTEX:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>HostControlPanel.razor (4,951 lines)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── InitializeSignalRAsync() - 350+ lines inline handlers
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Mixed UI logic + SignalR handling
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── Duplicated across 3 components
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>SessionCanvas.razor (4,056 lines)
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── HubConnectionBuilder - Inline configuration
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── 12+ inline event handlers
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>└── Duplicated SignalR patterns
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>TranscriptCanvas.razor (4,871 lines)
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── Duplicated SessionCanvas patterns
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>└── Type incompatibilities (nested classes)
+</span></code></pre></div></p>
+<p><strong>After CORTEX:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>HostControlPanel.razor (4,636 lines, -315)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>└── IHostSignalREventHandler (service injection)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>SessionCanvas.razor (3,740 lines, -316)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>└── ISessionCanvasSignalRService (service injection)
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>TranscriptCanvas.razor (3,982 lines, -889)
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>└── Type adapter + ISessionCanvasSignalRService
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Services/ (NEW, 637 lines)
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>├── IHostSignalREventHandler (5 methods, 287 lines)
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>├── ISessionCanvasSignalRService (8 methods, 336 lines)
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>└── HubConnectionFactory (absolute URL resolution)
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>Tests/ (NEW, 755 lines)
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>├── HostSignalREventHandlerTests (21 tests, 100% pass)
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>└── SessionCanvasSignalRServiceTests (12 tests, 100% pass)
+</span></code></pre></div></p>
+<hr />
+<h2 id="technology-breakdown">🔍 Technology Breakdown<a class="headerlink" href="#technology-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Blazor Server Architecture:</strong>
+- Server-side rendering with SignalR circuits
+- Real-time UI updates via SignalR
+- Component-based architecture</p>
+<p><strong>SignalR Hub Design:</strong>
+- Hub-based pub/sub messaging
+- Host → Participant communication
+- Real-time question submission and voting</p>
+<p><strong>Testing Strategy:</strong>
+- TDD approach (tests before implementation)
+- xUnit for unit testing
+- Playwright for integration testing
+- 100% coverage for critical paths</p>
+<hr />
+<h2 id="documentation">📚 Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Feature 1</li>
-<li>Feature 2</li>
-<li>Feature 3</li>
+<li><a href="signalr-refactoring/">SignalR Refactoring Case Study</a></li>
+<li><a href="signalr-refactoring/methodology/">Methodology Deep Dive</a></li>
+<li><a href="signalr-refactoring/metrics/">Success Metrics</a></li>
+<li><a href="signalr-refactoring/technical/">Technical Architecture</a></li>
+<li><a href="signalr-refactoring/lessons/">Lessons Learned</a></li>
 </ul>
 <hr />
-<p><em>This page was automatically generated by CORTEX Documentation System.</em></p>
+<p><strong>Application Type:</strong> Web Application<br />
+<strong>Domain:</strong> Live Q&amp;A Platform<br />
+<strong>Status:</strong> Production<br />
+<strong>CORTEX Version:</strong> 3.2.0</p>
                     </article>
                     
                     <!-- Page Navigation -->
                     <div class="page-navigation">
                         
-                        <a href="../../planning-diagrams/" class="btn btn-default">
-                            <i class="fa fa-arrow-left"></i> Planning & Strategic Diagrams
+                        <a href="../" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> Overview
                         </a>
                         
                         
-                        <a href="../agents/" class="btn btn-default pull-right">
-                            Agents <i class="fa fa-arrow-right"></i>
+                        <a href="signalr-refactoring/" class="btn btn-default pull-right">
+                            Executive Summary <i class="fa fa-arrow-right"></i>
                         </a>
                         
                     </div>
