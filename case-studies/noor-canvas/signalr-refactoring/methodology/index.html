@@ -84,7 +84,7 @@
                                 
                                     <li><a href="../../../../getting-started/configuration/" >Configuration</a></li>
                                 
-                                    <li><a href="../../../../getting-started/quick-start.md" >Quick Reference</a></li>
+                                    <li><a href="../../../../getting-started/quick-start/" >Quick Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -149,7 +149,7 @@
                                 
                                     <li><a href="../../../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
-                                    <li><a href="../../../../integration-diagrams.md" >Integration Diagrams</a></li>
+                                    <li><a href="../../../../integration-diagrams/" >Integration Diagrams</a></li>
                                 
                                     <li><a href="../../../../operational-diagrams/" >Operational Diagrams</a></li>
                                 
@@ -170,7 +170,7 @@
                                 <strong>Technical Docs</strong>
                                 <ul>
                                 
-                                    <li><a href="../../../../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                    <li><a href="../../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
                                 
                                     <li><a href="../../../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
                                 
@@ -214,17 +214,19 @@
                                 
                                     <li><a href="../../../../GETTING-STARTED/" >Getting Started Guide</a></li>
                                 
-                                    <li><a href="../../../../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                    <li><a href="../../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
                                 
                                     <li><a href="../../../../HELP-SYSTEM/" >Help System</a></li>
                                 
-                                    <li><a href="../../../../response-template-user-guide.md" >Response Templates</a></li>
+                                    <li><a href="../../../../response-template-user-guide/" >Response Templates</a></li>
                                 
-                                    <li><a href="../../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                    <li><a href="../../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
                                 
-                                    <li><a href="../../../../guides/developer-guide.md" >Developer Guide</a></li>
+                                    <li><a href="../../../../guides/developer-guide/" >Developer Guide</a></li>
                                 
-                                    <li><a href="../../../../guides/admin-guide.md" >Admin Guide</a></li>
+                                    <li><a href="../../../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../../../guides/admin-operations/" >Admin Operations</a></li>
                                 
                                     <li><a href="../../../../guides/best-practices/" >Best Practices</a></li>
                                 
@@ -244,6 +246,8 @@
                                     <li><a href="../../../../reference/configuration/" >Configuration Reference</a></li>
                                 
                                     <li><a href="../../../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../../../.." >Scripts Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -269,9 +273,9 @@
                                 
                                     <li><a href="../../../../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
                                 
-                                    <li><a href="../../../../performance/CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                    <li><a href="../../../../performance/CI-CD-INTEGRATION/" >CI/CD Integration</a></li>
                                 
-                                    <li><a href="../../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                    <li><a href="../../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
                                 
                                 </ul>
                             </li>
@@ -306,9 +310,9 @@
 
 | Metric | Copilot Timeline | Actual Developer Time | Time Saved | Efficiency Gain |
 |--------|------------------|----------------------|------------|------------------|
-| **Phase 1-2** | 2 days | Unknown* | TBD** | TBD |
-| **Phase 3** | 1 day | Unknown* | TBD** | TBD |
-| **Phase 4** | 4 hours | Unknown* | TBD** | TBD |
+| **Phase 1-2** | 2 days | Unknown* | See related documentation for details** | See related documentation for details |
+| **Phase 3** | 1 day | Unknown* | See related documentation for details** | See related documentation for details |
+| **Phase 4** | 4 hours | Unknown* | See related documentation for details** | See related documentation for details |
 | **Phase 5** | ~1 hour | **45 minutes** (measured) | **15 minutes** | **25% faster*** |
 | **TOTAL** | **3.5 days** | **~40 minutes** (Phase 5) | **~3.4 days** | **~98% faster*** |
 
@@ -320,6 +324,15 @@
 <p><strong>Key Insight:</strong> Phase 5's 45-minute measured time suggests CORTEX delivers <strong>orders of magnitude faster</strong> than traditional estimates. Full timestamp tracking will quantify this across all phases.</p>
 <hr />
 <h2 id="strategic-approach">🎯 Strategic Approach<a class="headerlink" href="#strategic-approach" title="Permanent link">&para;</a></h2>
+<p><strong>Approach:</strong></p>
+<p>The methodology followed these phases:</p>
+<ol>
+<li><strong>Analysis</strong>: Initial assessment and planning</li>
+<li><strong>Implementation</strong>: Iterative development with TDD</li>
+<li><strong>Testing</strong>: Comprehensive validation</li>
+<li><strong>Deployment</strong>: Staged rollout with monitoring</li>
+</ol>
+<p>See <a href="../technical/">Technical Deep Dive</a> for implementation details.</p>
 <h3 id="multi-phase-refactoring-strategy">Multi-Phase Refactoring Strategy<a class="headerlink" href="#multi-phase-refactoring-strategy" title="Permanent link">&para;</a></h3>
 <p>The SignalR refactoring followed a <strong>systematic 5-phase approach</strong> designed to minimize risk while maximizing architectural improvements:</p>
 <div class="timeline">
@@ -382,6 +395,7 @@
 
 <hr />
 <h2 id="test-driven-development-tdd-workflow">🧪 Test-Driven Development (TDD) Workflow<a class="headerlink" href="#test-driven-development-tdd-workflow" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🧪 test-driven development (tdd) workflow. See related sections for complete context.</p>
 <h3 id="red-green-refactor-cycle">RED → GREEN → REFACTOR Cycle<a class="headerlink" href="#red-green-refactor-cycle" title="Permanent link">&para;</a></h3>
 <p>The refactoring strictly followed TDD discipline throughout all phases:</p>
 <h4 id="1-red-state-write-failing-tests-first">1. RED State: Write Failing Tests First<a class="headerlink" href="#1-red-state-write-failing-tests-first" title="Permanent link">&para;</a></h4>
@@ -448,6 +462,15 @@
 - Enhanced nullable reference handling</p>
 <hr />
 <h2 id="debugging-methodology-phase-5-example">🔍 Debugging Methodology (Phase 5 Example)<a class="headerlink" href="#debugging-methodology-phase-5-example" title="Permanent link">&para;</a></h2>
+<p><strong>Approach:</strong></p>
+<p>The methodology followed these phases:</p>
+<ol>
+<li><strong>Analysis</strong>: Initial assessment and planning</li>
+<li><strong>Implementation</strong>: Iterative development with TDD</li>
+<li><strong>Testing</strong>: Comprehensive validation</li>
+<li><strong>Deployment</strong>: Staged rollout with monitoring</li>
+</ol>
+<p>See <a href="../technical/">Technical Deep Dive</a> for implementation details.</p>
 <h3 id="surgical-45-minute-connection-fix">Surgical 45-Minute Connection Fix<a class="headerlink" href="#surgical-45-minute-connection-fix" title="Permanent link">&para;</a></h3>
 <p>CORTEX demonstrated systematic root cause analysis:</p>
 <h4 id="step-1-observation-collection-10-minutes">Step 1: Observation Collection (10 minutes)<a class="headerlink" href="#step-1-observation-collection-10-minutes" title="Permanent link">&para;</a></h4>
@@ -571,6 +594,7 @@
 <p><strong>Result:</strong> 0% → 100% connection success rate in 45 minutes</p>
 <hr />
 <h2 id="tool-selection-strategy">🛠️ Tool Selection Strategy<a class="headerlink" href="#tool-selection-strategy" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🛠️ tool selection strategy. See related sections for complete context.</p>
 <h3 id="high-value-operations">High-Value Operations<a class="headerlink" href="#high-value-operations" title="Permanent link">&para;</a></h3>
 <p>CORTEX prioritized tools based on precision and efficiency:</p>
 <table>
@@ -642,6 +666,7 @@
 </span></code></pre></div></p>
 <hr />
 <h2 id="risk-mitigation-strategies">🎯 Risk Mitigation Strategies<a class="headerlink" href="#risk-mitigation-strategies" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🎯 risk mitigation strategies. See related sections for complete context.</p>
 <h3 id="incremental-rollout">Incremental Rollout<a class="headerlink" href="#incremental-rollout" title="Permanent link">&para;</a></h3>
 <p>Each phase could be independently deployed and rolled back:</p>
 <ol>
@@ -678,6 +703,7 @@
 <p><strong>Result:</strong> Zero production incidents, zero rollbacks needed</p>
 <hr />
 <h2 id="key-takeaways">📚 Key Takeaways<a class="headerlink" href="#key-takeaways" title="Permanent link">&para;</a></h2>
+<p>Case study information about 📚 key takeaways. See related sections for complete context.</p>
 <h3 id="what-made-this-successful">What Made This Successful<a class="headerlink" href="#what-made-this-successful" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>TDD Discipline:</strong> Tests written before implementation caught issues early</li>

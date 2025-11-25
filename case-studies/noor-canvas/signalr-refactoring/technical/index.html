@@ -84,7 +84,7 @@
                                 
                                     <li><a href="../../../../getting-started/configuration/" >Configuration</a></li>
                                 
-                                    <li><a href="../../../../getting-started/quick-start.md" >Quick Reference</a></li>
+                                    <li><a href="../../../../getting-started/quick-start/" >Quick Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -149,7 +149,7 @@
                                 
                                     <li><a href="../../../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
-                                    <li><a href="../../../../integration-diagrams.md" >Integration Diagrams</a></li>
+                                    <li><a href="../../../../integration-diagrams/" >Integration Diagrams</a></li>
                                 
                                     <li><a href="../../../../operational-diagrams/" >Operational Diagrams</a></li>
                                 
@@ -170,7 +170,7 @@
                                 <strong>Technical Docs</strong>
                                 <ul>
                                 
-                                    <li><a href="../../../../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                    <li><a href="../../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
                                 
                                     <li><a href="../../../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
                                 
@@ -214,17 +214,19 @@
                                 
                                     <li><a href="../../../../GETTING-STARTED/" >Getting Started Guide</a></li>
                                 
-                                    <li><a href="../../../../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                    <li><a href="../../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
                                 
                                     <li><a href="../../../../HELP-SYSTEM/" >Help System</a></li>
                                 
-                                    <li><a href="../../../../response-template-user-guide.md" >Response Templates</a></li>
+                                    <li><a href="../../../../response-template-user-guide/" >Response Templates</a></li>
                                 
-                                    <li><a href="../../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                    <li><a href="../../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
                                 
-                                    <li><a href="../../../../guides/developer-guide.md" >Developer Guide</a></li>
+                                    <li><a href="../../../../guides/developer-guide/" >Developer Guide</a></li>
                                 
-                                    <li><a href="../../../../guides/admin-guide.md" >Admin Guide</a></li>
+                                    <li><a href="../../../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../../../guides/admin-operations/" >Admin Operations</a></li>
                                 
                                     <li><a href="../../../../guides/best-practices/" >Best Practices</a></li>
                                 
@@ -244,6 +246,8 @@
                                     <li><a href="../../../../reference/configuration/" >Configuration Reference</a></li>
                                 
                                     <li><a href="../../../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../../../.." >Scripts Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -269,9 +273,9 @@
                                 
                                     <li><a href="../../../../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
                                 
-                                    <li><a href="../../../../performance/CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                    <li><a href="../../../../performance/CI-CD-INTEGRATION/" >CI/CD Integration</a></li>
                                 
-                                    <li><a href="../../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                    <li><a href="../../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
                                 
                                 </ul>
                             </li>
@@ -302,6 +306,7 @@
 <p><a href="../metrics/">← Back to Success Metrics</a> | <a href="../lessons/">Next: Lessons Learned →</a></p>
 <hr />
 <h2 id="architecture-evolution">🏗️ Architecture Evolution<a class="headerlink" href="#architecture-evolution" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🏗️ architecture evolution. See related sections for complete context.</p>
 <h3 id="before-monolithic-inline-pattern">Before: Monolithic Inline Pattern<a class="headerlink" href="#before-monolithic-inline-pattern" title="Permanent link">&para;</a></h3>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ HostControlPanel.razor (4,951 LOC)                          │
@@ -419,6 +424,7 @@
 </span></code></pre></div>
 <hr />
 <h2 id="design-patterns-applied">🔧 Design Patterns Applied<a class="headerlink" href="#design-patterns-applied" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🔧 design patterns applied. See related sections for complete context.</p>
 <h3 id="1-service-layer-pattern">1. Service Layer Pattern<a class="headerlink" href="#1-service-layer-pattern" title="Permanent link">&para;</a></h3>
 <p><strong>Purpose:</strong> Separate business logic from UI components</p>
 <p><strong>Implementation:</strong>
@@ -648,6 +654,7 @@
 <p><strong>Impact:</strong> 0% → 100% participant connection success</p>
 <hr />
 <h2 id="testing-architecture">🧪 Testing Architecture<a class="headerlink" href="#testing-architecture" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🧪 testing architecture. See related sections for complete context.</p>
 <h3 id="unit-test-structure">Unit Test Structure<a class="headerlink" href="#unit-test-structure" title="Permanent link">&para;</a></h3>
 <p><strong>Test Hierarchy:</strong>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Tests/Unit/NoorCanvas.Tests.Unit.csproj
@@ -716,6 +723,7 @@
 <p><strong>Result:</strong> 100% coverage for service layer (33/33 tests passing)</p>
 <hr />
 <h2 id="code-examples-before-vs-after">🔍 Code Examples: Before vs After<a class="headerlink" href="#code-examples-before-vs-after" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🔍 code examples: before vs after. See related sections for complete context.</p>
 <h3 id="example-1-question-received-handler">Example 1: Question Received Handler<a class="headerlink" href="#example-1-question-received-handler" title="Permanent link">&para;</a></h3>
 <p><strong>BEFORE (Inline, 80+ lines):</strong>
 <div class="language-csharp highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// Inside HostControlPanel.razor InitializeSignalRAsync()</span>
@@ -900,6 +908,7 @@
 - ⏱️ Time to fix: 45 minutes (15 lines changed)</p>
 <hr />
 <h2 id="deployment-considerations">📦 Deployment Considerations<a class="headerlink" href="#deployment-considerations" title="Permanent link">&para;</a></h2>
+<p>Case study information about 📦 deployment considerations. See related sections for complete context.</p>
 <h3 id="rollout-strategy">Rollout Strategy<a class="headerlink" href="#rollout-strategy" title="Permanent link">&para;</a></h3>
 <p><strong>Phase-by-Phase Deployment:</strong></p>
 <ol>

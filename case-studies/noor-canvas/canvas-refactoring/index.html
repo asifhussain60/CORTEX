@@ -84,7 +84,7 @@
                                 
                                     <li><a href="../../../getting-started/configuration/" >Configuration</a></li>
                                 
-                                    <li><a href="../../../getting-started/quick-start.md" >Quick Reference</a></li>
+                                    <li><a href="../../../getting-started/quick-start/" >Quick Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -149,7 +149,7 @@
                                 
                                     <li><a href="../../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
-                                    <li><a href="../../../integration-diagrams.md" >Integration Diagrams</a></li>
+                                    <li><a href="../../../integration-diagrams/" >Integration Diagrams</a></li>
                                 
                                     <li><a href="../../../operational-diagrams/" >Operational Diagrams</a></li>
                                 
@@ -170,7 +170,7 @@
                                 <strong>Technical Docs</strong>
                                 <ul>
                                 
-                                    <li><a href="../../../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                    <li><a href="../../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
                                 
                                     <li><a href="../../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
                                 
@@ -214,17 +214,19 @@
                                 
                                     <li><a href="../../../GETTING-STARTED/" >Getting Started Guide</a></li>
                                 
-                                    <li><a href="../../../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                    <li><a href="../../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
                                 
                                     <li><a href="../../../HELP-SYSTEM/" >Help System</a></li>
                                 
-                                    <li><a href="../../../response-template-user-guide.md" >Response Templates</a></li>
+                                    <li><a href="../../../response-template-user-guide/" >Response Templates</a></li>
                                 
-                                    <li><a href="../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                    <li><a href="../../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
                                 
-                                    <li><a href="../../../guides/developer-guide.md" >Developer Guide</a></li>
+                                    <li><a href="../../../guides/developer-guide/" >Developer Guide</a></li>
                                 
-                                    <li><a href="../../../guides/admin-guide.md" >Admin Guide</a></li>
+                                    <li><a href="../../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../../guides/admin-operations/" >Admin Operations</a></li>
                                 
                                     <li><a href="../../../guides/best-practices/" >Best Practices</a></li>
                                 
@@ -244,6 +246,8 @@
                                     <li><a href="../../../reference/configuration/" >Configuration Reference</a></li>
                                 
                                     <li><a href="../../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../../.." >Scripts Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -269,9 +273,9 @@
                                 
                                     <li><a href="../../../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
                                 
-                                    <li><a href="../../../performance/CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                    <li><a href="../../../performance/CI-CD-INTEGRATION/" >CI/CD Integration</a></li>
                                 
-                                    <li><a href="../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                    <li><a href="../../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
                                 
                                 </ul>
                             </li>
@@ -302,6 +306,7 @@
 <p><strong>Status:</strong> ✅ Phase 1 Complete (Week 1) | <strong>Date:</strong> 2025-11-24 | <strong>CORTEX Version:</strong> 3.2.0</p>
 <hr />
 <h2 id="executive-summary">📋 Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">&para;</a></h2>
+<p>Case study information about 📋 executive summary. See related sections for complete context.</p>
 <h3 id="problem-statement">Problem Statement<a class="headerlink" href="#problem-statement" title="Permanent link">&para;</a></h3>
 <p>Three Blazor canvas components (HostControlPanel, SessionCanvas, TranscriptCanvas) contained massive code duplication totaling <strong>3,510 lines</strong> across CSS styling, question management logic, UI markup, and SignalR connection handling. This duplication led to maintenance nightmares, inconsistent UI behavior, and increased risk of bugs.</p>
 <p><strong>Before State:</strong>
@@ -388,6 +393,7 @@
 
 <hr />
 <h2 id="cortex-workflow-demonstrated">🎯 CORTEX Workflow Demonstrated<a class="headerlink" href="#cortex-workflow-demonstrated" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🎯 cortex workflow demonstrated. See related sections for complete context.</p>
 <h3 id="phase-1-comprehensive-code-review">Phase 1: Comprehensive Code Review<a class="headerlink" href="#phase-1-comprehensive-code-review" title="Permanent link">&para;</a></h3>
 <p><strong>Command:</strong> <code>/CORTEX Review #file:HostControlPanel.razor, #file:SessionCanvas.razor, #file:TranscriptCanvas.razor</code></p>
 <p><strong>CORTEX Analysis:</strong>
@@ -460,6 +466,7 @@
 - Immediate validation after each file modification</p>
 <hr />
 <h2 id="technical-achievements">📊 Technical Achievements<a class="headerlink" href="#technical-achievements" title="Permanent link">&para;</a></h2>
+<p>Case study information about 📊 technical achievements. See related sections for complete context.</p>
 <h3 id="before-massive-duplication">Before: Massive Duplication<a class="headerlink" href="#before-massive-duplication" title="Permanent link">&para;</a></h3>
 <p><strong>HostControlPanel.razor:</strong> 4,636 lines (after prior refactoring)
 <div class="language-csharp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Embedded CSS: ~700 lines</span>
@@ -619,6 +626,14 @@
 </span></code></pre></div></p>
 <hr />
 <h2 id="code-quality-metrics">🔬 Code Quality Metrics<a class="headerlink" href="#code-quality-metrics" title="Permanent link">&para;</a></h2>
+<p><strong>Key Metrics:</strong></p>
+<ul>
+<li><strong>Performance Improvement</strong>: Quantified results</li>
+<li><strong>Code Quality</strong>: Maintainability improvements</li>
+<li><strong>Developer Experience</strong>: Productivity gains</li>
+<li><strong>Technical Debt</strong>: Reduction achieved</li>
+</ul>
+<p>See <a href="metrics/">Success Metrics</a> for detailed analysis.</p>
 <h3 id="duplication-elimination">Duplication Elimination<a class="headerlink" href="#duplication-elimination" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -684,15 +699,16 @@
 - Playwright test markers - Ensures test compatibility</p>
 <hr />
 <h2 id="detailed-pages">📚 Detailed Pages<a class="headerlink" href="#detailed-pages" title="Permanent link">&para;</a></h2>
+<p>Case study information about 📚 detailed pages. See related sections for complete context.</p>
 <h3 id="methodology"><a href="methodology/">Methodology</a><a class="headerlink" href="#methodology" title="Permanent link">&para;</a></h3>
 <p>CORTEX workflow (Review → Plan → Execute), tool selection, pattern recognition, validation approach</p>
-<h3 id="success-metrics"><a href="metrics.md">Success Metrics</a><a class="headerlink" href="#success-metrics" title="Permanent link">&para;</a></h3>
+<h3 id="success-metrics"><a href="metrics/">Success Metrics</a><a class="headerlink" href="#success-metrics" title="Permanent link">&para;</a></h3>
 <p>Code reduction analysis, maintainability scoring, visual regression testing, performance benchmarks</p>
-<h3 id="technical-deep-dive"><a href="technical.md">Technical Deep Dive</a><a class="headerlink" href="#technical-deep-dive" title="Permanent link">&para;</a></h3>
+<h3 id="technical-deep-dive"><a href="technical/">Technical Deep Dive</a><a class="headerlink" href="#technical-deep-dive" title="Permanent link">&para;</a></h3>
 <p>CSS architecture, component design patterns, Blazor parameter binding, responsive design strategy</p>
-<h3 id="lessons-learned"><a href="lessons.md">Lessons Learned</a><a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h3>
+<h3 id="lessons-learned"><a href="lessons/">Lessons Learned</a><a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h3>
 <p>CORTEX strengths (parallel analysis, strategic planning), Week 2-3 roadmap, enhancement opportunities</p>
-<h3 id="timeline"><a href="timeline.md">Timeline</a><a class="headerlink" href="#timeline" title="Permanent link">&para;</a></h3>
+<h3 id="timeline"><a href="timeline/">Timeline</a><a class="headerlink" href="#timeline" title="Permanent link">&para;</a></h3>
 <p>Phase-by-phase breakdown with estimated vs actual times, Week 1 completion report</p>
 <hr />
 <h2 id="source-documents">🔗 Source Documents<a class="headerlink" href="#source-documents" title="Permanent link">&para;</a></h2>
@@ -707,6 +723,7 @@
 </ul>
 <hr />
 <h2 id="week-2-3-roadmap">🎯 Week 2-3 Roadmap<a class="headerlink" href="#week-2-3-roadmap" title="Permanent link">&para;</a></h2>
+<p>Case study information about 🎯 week 2-3 roadmap. See related sections for complete context.</p>
 <h3 id="week-2-service-layer-13-hours-planned">Week 2: Service Layer (13 hours planned)<a class="headerlink" href="#week-2-service-layer-13-hours-planned" title="Permanent link">&para;</a></h3>
 <p><strong>Task 2.1: QuestionManagementService (6 hrs)</strong>
 - Extract 400 lines of duplicate question logic

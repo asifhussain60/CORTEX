@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Admin Operations - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../.." id="logo">
+                        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../..">Home</a></li>
+                        <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../case-studies/">Case Studies</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Getting Started</strong>
+                                <ul>
+                                
+                                    <li><a href="../../QUICK-START/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../../THE-AWAKENING-OF-CORTEX/" >Full Story</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                    <li><a href="../../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
+                                
+                                    <li><a href="../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../MODULES-REFERENCE/" >Modules Reference</a></li>
+                                
+                                    <li><a href="../../OPERATIONS-REFERENCE/" >Operations Reference</a></li>
+                                
+                                    <li><a href="../../TECHNICAL-DOCUMENTATION/" >Technical Documentation</a></li>
+                                
+                                    <li><a href="../../CORTEX-VS-COPILOT/" >CORTEX vs Copilot</a></li>
+                                
+                                    <li><a href="../../FAQ/" >FAQ</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Operations</strong>
+                                <ul>
+                                
+                                    <li><a href="../../operations/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../operations/workflows/" >Workflows</a></li>
+                                
+                                    <li><a href="../../operations/entry-point-modules/" >Entry Point Modules</a></li>
+                                
+                                    <li><a href="../../operations/health-monitoring/" >Health Monitoring</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../GETTING-STARTED/" >Getting Started Guide</a></li>
+                                
+                                    <li><a href="../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                    <li><a href="../../response-template-user-guide/" >Response Templates</a></li>
+                                
+                                    <li><a href="../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
+                                
+                                    <li><a href="../developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="./" class="active">Admin Operations</a></li>
+                                
+                                    <li><a href="../best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Reference</strong>
+                                <ul>
+                                
+                                    <li><a href="../../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../../reference/configuration/" >Configuration Reference</a></li>
+                                
+                                    <li><a href="../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../.." >Scripts Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Plugins</strong>
+                                <ul>
+                                
+                                    <li><a href="../../plugins/development/" >Development</a></li>
+                                
+                                    <li><a href="../../plugins/vscode-extension/" >VS Code Extension</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Performance</strong>
+                                <ul>
+                                
+                                    <li><a href="../../performance/PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
+                                
+                                    <li><a href="../../performance/CI-CD-INTEGRATION/" >CI/CD Integration</a></li>
+                                
+                                    <li><a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Case Studies</strong>
+                                <ul>
+                                
+                                    <li><a href="../../case-studies/" >Overview</a></li>
+                                
+                                    <li><a href="../.." >NOOR CANVAS</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="admin-operations-guide">Admin Operations Guide<a class="headerlink" href="#admin-operations-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Last Updated:</strong> November 25, 2025<br />
+<strong>Author:</strong> Asif Hussain<br />
+<strong>Status:</strong> Production</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>CORTEX provides admin-only operations for CORTEX development repository maintenance and optimization. These operations are <strong>only available in the CORTEX development repository</strong> (contains <code>cortex-brain/admin/</code> directory).</p>
+<p><strong>Admin Detection:</strong> CORTEX auto-detects admin environment by checking for:
+- <code>cortex-brain/admin/</code> directory
+- <code>src/operations/modules/admin/</code> directory</p>
+<hr />
+<h2 id="system-alignment-align">System Alignment (<code>align</code>)<a class="headerlink" href="#system-alignment-align" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Convention-based discovery and validation of all CORTEX enhancements without hardcoded lists.</p>
+<p><strong>Commands:</strong>
+- <code>align</code> - Run full system alignment validation
+- <code>align report</code> - Generate detailed alignment report with auto-remediation suggestions</p>
+<h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<p><strong>7-Layer Integration Scoring (0-100%):</strong>
+1. <strong>Discovered</strong> (20 pts) - Feature file exists in expected location
+2. <strong>Imported</strong> (20 pts) - Module imports successfully
+3. <strong>Instantiable</strong> (20 pts) - Class can be instantiated
+4. <strong>Documented</strong> (10 pts) - Has user-facing documentation
+5. <strong>Tested</strong> (10 pts) - Has test coverage
+6. <strong>Wired</strong> (10 pts) - Connected to entry point
+7. <strong>Optimized</strong> (10 pts) - Performance validated</p>
+<p><strong>Health Status:</strong>
+- ✅ <strong>Healthy</strong> (90-100%) - Fully integrated
+- ⚠️ <strong>Warning</strong> (70-89%) - Minor issues
+- ❌ <strong>Critical</strong> (&lt;70%) - Requires attention</p>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h3>
+<p><strong>Convention-Based Discovery:</strong>
+- Auto-scans <code>src/operations/modules/</code> for orchestrators
+- Auto-scans <code>src/agents/</code> for agents<br />
+- Zero maintenance when adding features</p>
+<p><strong>Auto-Remediation:</strong>
+- Generates wiring templates for unconnected features
+- Creates test skeletons for untested modules
+- Suggests documentation structure for undocumented features</p>
+<p><strong>Integration with Optimize:</strong>
+- Runs silently during <code>optimize</code> command
+- Reports critical issues only
+- Non-blocking (doesn't fail optimize on warnings)</p>
+<h3 id="example-output">Example Output<a class="headerlink" href="#example-output" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>🧠 CORTEX System Alignment
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>==========================================
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>📊 Discovery Results:
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  Orchestrators: 12 found
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  Agents: 8 found
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  Entry Points: 5 found
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>🎯 Integration Scores:
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  ✅ SystemAlignmentOrchestrator: 100% (Healthy)
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  ⚠️  ViewDiscoveryAgent: 80% (Warning - Missing tests)
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  ❌ NewFeature: 40% (Critical - Not wired)
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>⚙️ Auto-Remediation Suggestions:
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  1. Add test: tests/agents/test_view_discovery_agent.py
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  2. Wire NewFeature to cortex-operations.yaml
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  3. Document NewFeature in docs/reference/
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Overall Health: 87% (Warning)
+</span></code></pre></div>
+<p><strong>Reference:</strong> <code>docs/reference/scripts/operations/system-alignment-orchestrator.md</code></p>
+<hr />
+<h2 id="cleanup-operations-cleanup">Cleanup Operations (<code>cleanup</code>)<a class="headerlink" href="#cleanup-operations-cleanup" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Clean CORTEX brain data, remove old files, vacuum databases.</p>
+<p><strong>Commands:</strong>
+- <code>cleanup</code> or <code>clean up</code> - Run all cleanup operations
+- <code>cleanup dry run</code> - Preview what would be cleaned without changes</p>
+<h3 id="what-gets-cleaned">What Gets Cleaned<a class="headerlink" href="#what-gets-cleaned" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Old conversation captures</strong> (&gt;30 days in <code>cortex-brain/conversation-captures/</code>)</li>
+<li><strong>Temporary crawler files</strong> (<code>cortex-brain/crawler-temp/</code>)</li>
+<li><strong>Old logs</strong> (&gt;7 days in <code>logs/</code>, <code>sweeper-logs/</code>)</li>
+<li><strong>SQLite databases</strong> (VACUUM to reclaim space)</li>
+<li><strong>Orphaned files</strong> (files without corresponding database entries)</li>
+</ol>
+<h3 id="space-savings">Space Savings<a class="headerlink" href="#space-savings" title="Permanent link">&para;</a></h3>
+<p><strong>Typical Results:</strong>
+- Space saved: 50-200 MB
+- Database size reduction: 20-40%
+- Performance improvement: 10-30% faster operations</p>
+<p><strong>Reference:</strong> <code>docs/reference/scripts/operations/cleanup-orchestrator.md</code></p>
+<hr />
+<h2 id="design-sync-design-sync">Design Sync (<code>design sync</code>)<a class="headerlink" href="#design-sync-design-sync" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Synchronize design documentation with implementation.</p>
+<p><strong>Commands:</strong>
+- <code>design sync</code> - Sync all design documentation
+- <code>design sync [module]</code> - Sync specific module documentation</p>
+<h3 id="what-gets-synced">What Gets Synced<a class="headerlink" href="#what-gets-synced" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Architecture diagrams</strong> - Updated with latest module structure</li>
+<li><strong>Integration diagrams</strong> - Updated with current wiring</li>
+<li><strong>API documentation</strong> - Regenerated from docstrings</li>
+<li><strong>Module references</strong> - Updated with new features</li>
+</ol>
+<p><strong>Reference:</strong> <code>docs/reference/scripts/operations/design-sync-orchestrator.md</code></p>
+<hr />
+<h2 id="documentation-generation-generate-docs">Documentation Generation (<code>generate docs</code>)<a class="headerlink" href="#documentation-generation-generate-docs" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Generate comprehensive MkDocs documentation with diagrams and guides.</p>
+<p><strong>Commands:</strong>
+- <code>generate docs</code> - Standard documentation generation
+- <code>generate docs dry run</code> - Preview generation without changes
+- <code>generate docs quick</code> - Fast generation (skip diagrams)
+- <code>generate docs comprehensive</code> - Full generation with all features</p>
+<h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Architecture diagrams</strong> - Auto-generated from code structure</li>
+<li><strong>API reference</strong> - Extracted from docstrings</li>
+<li><strong>Real Live Data dashboards</strong> (if analytics data exists)</li>
+<li><strong>Cross-references</strong> - Automatic link validation</li>
+</ol>
+<h3 id="profiles">Profiles<a class="headerlink" href="#profiles" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>quick</strong> (30 sec) - Basic docs, no diagrams</li>
+<li><strong>standard</strong> (2 min) - Full docs with key diagrams</li>
+<li><strong>comprehensive</strong> (5 min) - Everything including optional features</li>
+</ul>
+<p><strong>Reference:</strong> <code>src/operations/modules/documentation/enterprise_documentation_orchestrator_module.py</code></p>
+<hr />
+<h2 id="feedback-review-review-feedback">Feedback Review (<code>review feedback</code>)<a class="headerlink" href="#feedback-review-review-feedback" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Aggregate and analyze feedback reports from multiple user repositories.</p>
+<p><strong>Commands:</strong>
+- <code>review feedback</code> - Sync Gist registry and process all feedback
+- <code>feedback analytics</code> - Show aggregated analytics dashboard</p>
+<h3 id="features_1">Features<a class="headerlink" href="#features_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Gist Sync</strong> - Downloads feedback from GitHub Gists</li>
+<li><strong>Analytics DB</strong> - Stores feedback in <code>cortex-brain/analytics/analytics.db</code></li>
+<li><strong>Trend Analysis</strong> - Identifies common issues and patterns</li>
+<li><strong>Admin Dashboard</strong> - Visualizes feedback metrics</li>
+</ol>
+<p><strong>Prerequisites:</strong>
+- GitHub token configured in <code>cortex.config.json</code>
+- Admin environment (CORTEX repo only)</p>
+<p><strong>Reference:</strong> <code>src/operations/modules/feedback/enhanced_feedback_module.py</code></p>
+<hr />
+<h2 id="upgrade-system">Upgrade System<a class="headerlink" href="#upgrade-system" title="Permanent link">&para;</a></h2>
+<p><strong>Purpose:</strong> Manage CORTEX upgrades with zero data loss.</p>
+<h3 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>upgrade</code> or <code>upgrade cortex</code> - Upgrade to latest version</li>
+<li><code>upgrade --version X.Y.Z</code> - Upgrade to specific version</li>
+<li><code>upgrade --dry-run</code> - Preview upgrade without changes</li>
+</ul>
+<h3 id="features_2">Features<a class="headerlink" href="#features_2" title="Permanent link">&para;</a></h3>
+<p><strong>Intelligent Upgrade Method:</strong>
+- Git-based (if git repository with remote configured)
+- Download-based (file copy for embedded installations)
+- Auto-detects installation type</p>
+<p><strong>Safety Features:</strong>
+- Automatic brain backup before upgrade
+- Path validation (prevents file corruption)
+- Post-upgrade validation
+- Rollback on failure</p>
+<p><strong>Version Detection:</strong>
+- Supports plain text VERSION file (<code>v3.2.0</code>)
+- Supports legacy JSON VERSION file
+- Auto-strips <code>v</code> prefix for comparison</p>
+<p><strong>Reference:</strong> <code>docs/reference/scripts/operations/upgrade-orchestrator.md</code></p>
+<hr />
+<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<p><strong>User Guide:</strong></p>
+<p>Step-by-step instructions for this feature:</p>
+<ol>
+<li><strong>Prerequisites</strong>: Required setup and dependencies</li>
+<li><strong>Getting Started</strong>: Initial configuration</li>
+<li><strong>Usage</strong>: Common operations and workflows</li>
+<li><strong>Advanced</strong>: Expert-level features and customization</li>
+</ol>
+<p>See related guides in the navigation menu for additional help.</p>
+<h3 id="when-to-use-admin-operations">When to Use Admin Operations<a class="headerlink" href="#when-to-use-admin-operations" title="Permanent link">&para;</a></h3>
+<p><strong>Daily Development:</strong>
+- Run <code>align</code> after adding new features
+- Run <code>cleanup</code> weekly to reclaim space
+- Run <code>design sync</code> before documentation releases</p>
+<p><strong>Before Deployment:</strong>
+- Run <code>align</code> to verify all features integrated
+- Run <code>generate docs</code> to update public documentation
+- Run <code>review feedback</code> to address user issues</p>
+<p><strong>After Major Changes:</strong>
+- Run <code>align</code> to detect integration gaps
+- Run <code>cleanup</code> to remove obsolete files
+- Run <code>upgrade</code> to test upgrade path</p>
+<h3 id="admin-environment-setup">Admin Environment Setup<a class="headerlink" href="#admin-environment-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Required Directory Structure:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>CORTEX/
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── cortex-brain/
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── admin/                    # Admin marker
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── src/
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   └── operations/
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│       └── modules/
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│           └── admin/            # Admin operations
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>└── docs/
+</span></code></pre></div></p>
+<p><strong>Not Available In:</strong>
+- User repositories (embedded CORTEX installations)
+- Standalone CORTEX installations without admin directory</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<p><strong>User Guide:</strong></p>
+<p>Step-by-step instructions for this feature:</p>
+<ol>
+<li><strong>Prerequisites</strong>: Required setup and dependencies</li>
+<li><strong>Getting Started</strong>: Initial configuration</li>
+<li><strong>Usage</strong>: Common operations and workflows</li>
+<li><strong>Advanced</strong>: Expert-level features and customization</li>
+</ol>
+<p>See related guides in the navigation menu for additional help.</p>
+<h3 id="admin-only-operation-error">"Admin-only operation" Error<a class="headerlink" href="#admin-only-operation-error" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> Operation attempted in non-admin environment.</p>
+<p><strong>Solution:</strong> These operations only work in CORTEX development repository with <code>cortex-brain/admin/</code> directory.</p>
+<h3 id="alignment-reports-issues">Alignment Reports Issues<a class="headerlink" href="#alignment-reports-issues" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> Missing discovery scanners or database schema.</p>
+<p><strong>Solution:</strong> Run <code>setup environment</code> to verify all dependencies installed.</p>
+<h3 id="feedback-review-empty">Feedback Review Empty<a class="headerlink" href="#feedback-review-empty" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> No GitHub token configured or no feedback Gists found.</p>
+<p><strong>Solution:</strong> 
+1. Add GitHub token to <code>cortex.config.json</code>
+2. Ensure users have uploaded feedback via <code>feedback</code> command</p>
+<hr />
+<h2 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>System Alignment Reference:</strong> <code>docs/reference/scripts/operations/system-alignment-orchestrator.md</code></li>
+<li><strong>Upgrade Guide:</strong> <code>.github/prompts/modules/upgrade-guide.md</code></li>
+<li><strong>Feedback System:</strong> <code>.github/prompts/CORTEX.prompt.md</code> (Feedback section)</li>
+<li><strong>Cleanup Rules:</strong> <code>cortex-brain/cleanup-rules.yaml</code></li>
+</ul>
+<hr />
+<p><strong>Copyright:</strong> © 2024-2025 Asif Hussain. All rights reserved.<br />
+<strong>License:</strong> Source-Available (Use Allowed, No Contributions)</p>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../admin-guide/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> Admin Guide
+                        </a>
+                        
+                        
+                        <a href="../best-practices/" class="btn btn-default pull-right">
+                            Best Practices <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../search/main.js"></script>
+</body>
+</html>

@@ -84,7 +84,7 @@
                                 
                                     <li><a href="../../getting-started/configuration/" >Configuration</a></li>
                                 
-                                    <li><a href="../../getting-started/quick-start.md" >Quick Reference</a></li>
+                                    <li><a href="../../getting-started/quick-start/" >Quick Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -149,7 +149,7 @@
                                 
                                     <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
                                 
-                                    <li><a href="../../integration-diagrams.md" >Integration Diagrams</a></li>
+                                    <li><a href="../../integration-diagrams/" >Integration Diagrams</a></li>
                                 
                                     <li><a href="../../operational-diagrams/" >Operational Diagrams</a></li>
                                 
@@ -170,7 +170,7 @@
                                 <strong>Technical Docs</strong>
                                 <ul>
                                 
-                                    <li><a href="../../EXECUTIVE-SUMMARY.md" >Executive Summary</a></li>
+                                    <li><a href="../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
                                 
                                     <li><a href="../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
                                 
@@ -214,17 +214,19 @@
                                 
                                     <li><a href="../../GETTING-STARTED/" >Getting Started Guide</a></li>
                                 
-                                    <li><a href="../../NAVIGATION-GUIDE.md" >Navigation Guide</a></li>
+                                    <li><a href="../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
                                 
                                     <li><a href="../../HELP-SYSTEM/" >Help System</a></li>
                                 
-                                    <li><a href="../../response-template-user-guide.md" >Response Templates</a></li>
+                                    <li><a href="../../response-template-user-guide/" >Response Templates</a></li>
                                 
-                                    <li><a href="../../KNOWLEDGE-GRAPH-IMPORT-GUIDE.md" >Knowledge Graph Import</a></li>
+                                    <li><a href="../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
                                 
-                                    <li><a href="../../guides/developer-guide.md" >Developer Guide</a></li>
+                                    <li><a href="../../guides/developer-guide/" >Developer Guide</a></li>
                                 
-                                    <li><a href="../../guides/admin-guide.md" >Admin Guide</a></li>
+                                    <li><a href="../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../guides/admin-operations/" >Admin Operations</a></li>
                                 
                                     <li><a href="../../guides/best-practices/" >Best Practices</a></li>
                                 
@@ -244,6 +246,8 @@
                                     <li><a href="../../reference/configuration/" >Configuration Reference</a></li>
                                 
                                     <li><a href="../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../.." >Scripts Reference</a></li>
                                 
                                 </ul>
                             </li>
@@ -269,9 +273,9 @@
                                 
                                     <li><a href="./" class="active">Performance Budgets</a></li>
                                 
-                                    <li><a href="../CI-CD-INTEGRATION.md" >CI/CD Integration</a></li>
+                                    <li><a href="../CI-CD-INTEGRATION/" >CI/CD Integration</a></li>
                                 
-                                    <li><a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE.md" >Telemetry Guide</a></li>
+                                    <li><a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
                                 
                                 </ul>
                             </li>
@@ -349,6 +353,7 @@
 </table>
 <hr />
 <h2 id="performance-targets">🎯 Performance Targets<a class="headerlink" href="#performance-targets" title="Permanent link">&para;</a></h2>
+<p>Performance information about 🎯 performance targets. See related documentation for complete details.</p>
 <h3 id="tier-1-working-memory-conversation-manager">Tier 1: Working Memory (Conversation Manager)<a class="headerlink" href="#tier-1-working-memory-conversation-manager" title="Permanent link">&para;</a></h3>
 <p><strong>Target:</strong> ≤50ms per query<br />
 <strong>Baseline:</strong> 3.00ms average (94% under target)<br />
@@ -633,6 +638,15 @@
 </ul>
 <hr />
 <h2 id="cicd-performance-gates">🔬 CI/CD Performance Gates<a class="headerlink" href="#cicd-performance-gates" title="Permanent link">&para;</a></h2>
+<p><strong>CI/CD Integration:</strong></p>
+<p>Integrate performance monitoring into your pipeline:</p>
+<ul>
+<li><strong>Automated Testing</strong>: Performance test execution</li>
+<li><strong>Metrics Collection</strong>: Telemetry data gathering</li>
+<li><strong>Threshold Validation</strong>: Budget enforcement</li>
+<li><strong>Reporting</strong>: Dashboard and alerts</li>
+</ul>
+<p>See <a href="../../guides/admin-operations/">Operations Guide</a> for setup instructions.</p>
 <h3 id="automated-testing">Automated Testing<a class="headerlink" href="#automated-testing" title="Permanent link">&para;</a></h3>
 <p><strong>Location:</strong> <code>.github/workflows/performance.yml</code><br />
 <strong>Trigger:</strong> Push to main/CORTEX-2.0/develop, PRs, daily schedule (2 AM UTC)</p>
@@ -687,6 +701,7 @@
 - Comprehensive JSON report</p>
 <hr />
 <h2 id="performance-trends">📈 Performance Trends<a class="headerlink" href="#performance-trends" title="Permanent link">&para;</a></h2>
+<p>Performance information about 📈 performance trends. See related documentation for complete details.</p>
 <h3 id="historical-baselines">Historical Baselines<a class="headerlink" href="#historical-baselines" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -735,6 +750,7 @@
 - Week 2: Lazy metadata loading (-22ms est.)</p>
 <hr />
 <h2 id="optimization-priorities">🎯 Optimization Priorities<a class="headerlink" href="#optimization-priorities" title="Permanent link">&para;</a></h2>
+<p>Performance information about 🎯 optimization priorities. See related documentation for complete details.</p>
 <h3 id="completed">Completed ✅<a class="headerlink" href="#completed" title="Permanent link">&para;</a></h3>
 <ol>
 <li>✅ <strong>Tier 3 Hotspot Caching</strong> (Priority 1)</li>
@@ -780,6 +796,15 @@
 </ol>
 <hr />
 <h2 id="performance-budget-violations">📊 Performance Budget Violations<a class="headerlink" href="#performance-budget-violations" title="Permanent link">&para;</a></h2>
+<p><strong>Performance Budgets:</strong></p>
+<p>Define acceptable performance thresholds:</p>
+<ul>
+<li><strong>Response Time</strong>: Maximum latency targets</li>
+<li><strong>Resource Usage</strong>: Memory and CPU limits</li>
+<li><strong>Token Consumption</strong>: API usage budgets</li>
+<li><strong>Quality Metrics</strong>: Minimum quality thresholds</li>
+</ul>
+<p>See <a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/">Performance Telemetry Guide</a> for monitoring.</p>
 <h3 id="resolution-process">Resolution Process<a class="headerlink" href="#resolution-process" title="Permanent link">&para;</a></h3>
 <p><strong>When a performance test fails:</strong></p>
 <ol>
@@ -819,8 +844,8 @@
                         </a>
                         
                         
-                        <a href="../../case-studies/" class="btn btn-default pull-right">
-                            Overview <i class="fa fa-arrow-right"></i>
+                        <a href="../CI-CD-INTEGRATION/" class="btn btn-default pull-right">
+                            CI/CD Integration <i class="fa fa-arrow-right"></i>
                         </a>
                         
                     </div>

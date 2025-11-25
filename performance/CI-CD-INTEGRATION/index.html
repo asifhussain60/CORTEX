@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>CI/CD Integration - CORTEX</title>
+    <meta name="description" content="Cognitive Operation & Reasoning Through EXtension for Copilot">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Webfonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/cortex-tales.css">
+    
+    <!-- Rulebook Stylesheet (conditional - governance pages only) -->
+    
+    
+    <!-- Syntax Highlighting - Dark Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Wide Header with Centered Logo -->
+        <div class="widewrapper masthead">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="../.." id="logo">
+                        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX" style="width: 300px; height: 300px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation Bar -->
+        <div class="widewrapper subheader">
+            <div class="container">
+                <nav class="horizontal-nav">
+                    <ul class="nav-menu">
+                        <li><a href="../..">Home</a></li>
+                        <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/">The CORTEX Birth</a></li>
+                        <li><a href="../../governance/THE-RULEBOOK/">Cortex Bible</a></li>
+                        <li><a href="../../architecture-diagrams/">Architecture</a></li>
+                        <li><a href="../../EXECUTIVE-SUMMARY/">Technical Docs</a></li>
+                        <li><a href="../../getting-started/quick-start/">User Guides</a></li>
+                        <li><a href="../../case-studies/">Case Studies</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar Navigation (Table of Contents) -->
+                <div class="col-md-3 sidebar-left">
+                    <!-- Navigation Tree -->
+                    
+                    <div class="nav-tree">
+                        <h4>Navigation</h4>
+                        <ul>
+                        
+                            
+                            <li><a href="../.." >Home</a></li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Getting Started</strong>
+                                <ul>
+                                
+                                    <li><a href="../../QUICK-START/" >Quick Start</a></li>
+                                
+                                    <li><a href="../../getting-started/installation/" >Installation</a></li>
+                                
+                                    <li><a href="../../getting-started/configuration/" >Configuration</a></li>
+                                
+                                    <li><a href="../../getting-started/quick-start/" >Quick Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>The CORTEX Birth</strong>
+                                <ul>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/THE-AWAKENING-OF-CORTEX/" >Story Home</a></li>
+                                
+                                    <li><a href="../../THE-AWAKENING-OF-CORTEX/" >Full Story</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/prologue/" >Prologue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-01/" >Chapter 1 - The Amnesia Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-02/" >Chapter 2 - Tier 0</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-03/" >Chapter 3 - Tier 1</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-04/" >Chapter 4 - The Agent Uprising</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-05/" >Chapter 5 - The Knowledge Graph</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-06/" >Chapter 6 - The Token Crisis</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-07/" >Chapter 7 - Conversation Capture</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-08/" >Chapter 8 - Cross-Platform</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-09/" >Chapter 9 - Performance</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/chapter-10/" >Chapter 10 - The Awakening</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/epilogue/" >Epilogue</a></li>
+                                
+                                    <li><a href="../../story/CORTEX-STORY/chapters/disclaimer/" >Disclaimer</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Cortex Bible</strong>
+                                <ul>
+                                
+                                    <li><a href="../../governance/THE-RULEBOOK/" >The Rulebook</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Architecture</strong>
+                                <ul>
+                                
+                                    <li><a href="../../architecture/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../architecture-diagrams/" >Architecture Diagrams</a></li>
+                                
+                                    <li><a href="../../integration-diagrams/" >Integration Diagrams</a></li>
+                                
+                                    <li><a href="../../operational-diagrams/" >Operational Diagrams</a></li>
+                                
+                                    <li><a href="../../planning-diagrams/" >Planning & Strategic Diagrams</a></li>
+                                
+                                    <li><a href="../../architecture/tier-system/" >Tier System</a></li>
+                                
+                                    <li><a href="../../architecture/agents/" >Agents</a></li>
+                                
+                                    <li><a href="../../architecture/brain-protection/" >Brain Protection</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Technical Docs</strong>
+                                <ul>
+                                
+                                    <li><a href="../../EXECUTIVE-SUMMARY/" >Executive Summary</a></li>
+                                
+                                    <li><a href="../../CORTEX-CAPABILITIES/" >Capabilities Matrix</a></li>
+                                
+                                    <li><a href="../../FEATURES/" >Features Overview</a></li>
+                                
+                                    <li><a href="../../MODULES-REFERENCE/" >Modules Reference</a></li>
+                                
+                                    <li><a href="../../OPERATIONS-REFERENCE/" >Operations Reference</a></li>
+                                
+                                    <li><a href="../../TECHNICAL-DOCUMENTATION/" >Technical Documentation</a></li>
+                                
+                                    <li><a href="../../CORTEX-VS-COPILOT/" >CORTEX vs Copilot</a></li>
+                                
+                                    <li><a href="../../FAQ/" >FAQ</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Operations</strong>
+                                <ul>
+                                
+                                    <li><a href="../../operations/overview/" >Overview</a></li>
+                                
+                                    <li><a href="../../operations/workflows/" >Workflows</a></li>
+                                
+                                    <li><a href="../../operations/entry-point-modules/" >Entry Point Modules</a></li>
+                                
+                                    <li><a href="../../operations/health-monitoring/" >Health Monitoring</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>User Guides</strong>
+                                <ul>
+                                
+                                    <li><a href="../../GETTING-STARTED/" >Getting Started Guide</a></li>
+                                
+                                    <li><a href="../../NAVIGATION-GUIDE/" >Navigation Guide</a></li>
+                                
+                                    <li><a href="../../HELP-SYSTEM/" >Help System</a></li>
+                                
+                                    <li><a href="../../response-template-user-guide/" >Response Templates</a></li>
+                                
+                                    <li><a href="../../KNOWLEDGE-GRAPH-IMPORT-GUIDE/" >Knowledge Graph Import</a></li>
+                                
+                                    <li><a href="../../guides/developer-guide/" >Developer Guide</a></li>
+                                
+                                    <li><a href="../../guides/admin-guide/" >Admin Guide</a></li>
+                                
+                                    <li><a href="../../guides/admin-operations/" >Admin Operations</a></li>
+                                
+                                    <li><a href="../../guides/best-practices/" >Best Practices</a></li>
+                                
+                                    <li><a href="../../guides/troubleshooting/" >Troubleshooting</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Reference</strong>
+                                <ul>
+                                
+                                    <li><a href="../../reference/api/" >API Reference</a></li>
+                                
+                                    <li><a href="../../reference/configuration/" >Configuration Reference</a></li>
+                                
+                                    <li><a href="../../reference/response-templates/" >Response Templates</a></li>
+                                
+                                    <li><a href="../.." >Scripts Reference</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Plugins</strong>
+                                <ul>
+                                
+                                    <li><a href="../../plugins/development/" >Development</a></li>
+                                
+                                    <li><a href="../../plugins/vscode-extension/" >VS Code Extension</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Performance</strong>
+                                <ul>
+                                
+                                    <li><a href="../PERFORMANCE-BUDGETS/" >Performance Budgets</a></li>
+                                
+                                    <li><a href="./" class="active">CI/CD Integration</a></li>
+                                
+                                    <li><a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" >Telemetry Guide</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                            
+                            <li class="nav-group">
+                                <strong>Case Studies</strong>
+                                <ul>
+                                
+                                    <li><a href="../../case-studies/" >Overview</a></li>
+                                
+                                    <li><a href="../.." >NOOR CANVAS</a></li>
+                                
+                                </ul>
+                            </li>
+                            
+                        
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <!-- Main Content Area (No Right Sidebar) -->
+                <div class="col-md-9 content-main">
+                    <article>
+                        <h1 id="performance-ci-cd-integration">Performance &gt; Ci Cd Integration<a class="headerlink" href="#performance-ci-cd-integration" title="Permanent link">&para;</a></h1>
+<h2 id="performance-ci-cd-integration_1">Performance &gt; Ci Cd Integration<a class="headerlink" href="#performance-ci-cd-integration_1" title="Permanent link">&para;</a></h2>
+<p><strong>CI/CD Integration:</strong></p>
+<p>Integrate performance monitoring into your pipeline:</p>
+<ul>
+<li><strong>Automated Testing</strong>: Performance test execution</li>
+<li><strong>Metrics Collection</strong>: Telemetry data gathering</li>
+<li><strong>Threshold Validation</strong>: Budget enforcement</li>
+<li><strong>Reporting</strong>: Dashboard and alerts</li>
+</ul>
+<p>See <a href="../../guides/admin-operations/">Operations Guide</a> for setup instructions.</p>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
+<p>This section covers CI/CD integration and performance telemetry for CORTEX.</p>
+<h3 id="see-related-documentation-in-the-navigation-menu">See related documentation in the navigation menu<a class="headerlink" href="#see-related-documentation-in-the-navigation-menu" title="Permanent link">&para;</a></h3>
+<p>Full documentation for this section is under development. Key topics will include:</p>
+<ul>
+<li>Integration with GitHub Actions</li>
+<li>Automated testing pipelines</li>
+<li>Performance monitoring</li>
+<li>Deployment automation</li>
+<li>Telemetry data collection</li>
+<li>Analytics and reporting</li>
+</ul>
+<h3 id="current-implementation">Current Implementation<a class="headerlink" href="#current-implementation" title="Permanent link">&para;</a></h3>
+<p>CORTEX includes:
+- Automated test suite (834+ tests)
+- Performance budgets tracking
+- System health monitoring
+- Deployment validation gates</p>
+<h3 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../PERFORMANCE-BUDGETS/">Performance Budgets</a></li>
+<li><a href="../../operations/health-monitoring/">Operations: Health Monitoring</a></li>
+</ul>
+                    </article>
+                    
+                    <!-- Page Navigation -->
+                    <div class="page-navigation">
+                        
+                        <a href="../PERFORMANCE-BUDGETS/" class="btn btn-default">
+                            <i class="fa fa-arrow-left"></i> Performance Budgets
+                        </a>
+                        
+                        
+                        <a href="../../telemetry/PERFORMANCE-TELEMETRY-GUIDE/" class="btn btn-default pull-right">
+                            Telemetry Guide <i class="fa fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            © 2024-2025 Asif Hussain. All rights reserved.
+                            <span class="separator">|</span>
+                            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                                <i class="fa fa-github"></i> GitHub
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <!-- CORTEX Navigation Controller -->
+    <script src="../../assets/js/navigation.js"></script>
+    
+    <!-- MkDocs Search -->
+    <script src="../../search/main.js"></script>
+</body>
+</html>
