@@ -1,0 +1,16 @@
+======================================================================
+CORTEX PERFORMANCE PROFILER
+======================================================================
+
+Target Metrics:
+Traceback (most recent call last):
+  File "D:\PROJECTS\CORTEX\scripts\profile_performance.py", line 506, in <module>
+    main()
+    ~~~~^^
+  File "D:\PROJECTS\CORTEX\scripts\profile_performance.py", line 477, in main
+    print("  ò Tier 1 queries: \u226450ms")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2264' in position 20: character maps to <undefined>

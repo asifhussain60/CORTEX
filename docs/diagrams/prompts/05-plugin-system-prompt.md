@@ -1,0 +1,3 @@
+# DALL-E Prompt: Plugin System
+
+Create a modular plugin architecture diagram...

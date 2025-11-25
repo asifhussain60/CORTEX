@@ -1,0 +1,18 @@
+{
+  "cortex_version": "3.2.0",
+  "schema_version": 1,
+  "installed_date": "2025-11-24T00:00:00",
+  "last_upgrade": "2025-11-24T00:00:00",
+  "upgrade_history": [
+    {
+      "from_version": "3.1.1",
+      "to_version": "3.2.0",
+      "date": "2025-11-24T00:00:00",
+      "changes": "Cleaned up legacy 5.3.x version references, unified to 3.2.0"
+    }
+  ],
+  "workspace_id": "cortex-main-repo",
+  "customizations": [],
+  "deployment_type": "production",
+  "github_release_url": "https://github.com/asifhussain60/CORTEX/releases/tag/v3.2.0"
+}
