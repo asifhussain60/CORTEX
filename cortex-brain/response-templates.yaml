@@ -58,6 +58,69 @@ templates:
       \ OR ⚡ Challenge with alternatives]\n\n\U0001F4AC **Response:**\n   [Natural\
       \ language explanation]\n\n\U0001F4DD **Your Request:** [Echo refined request]\n\
       \n\U0001F50D **Next Steps:**\n   [Context-appropriate format]"
+  
+  hands_on_tutorial:
+    name: Hands-On Tutorial
+    triggers:
+    - tutorial
+    - start tutorial
+    - hands on tutorial
+    - interactive tutorial
+    - learn cortex
+    - teach me cortex
+    - cortex tutorial
+    response_type: interactive
+    content: |
+      🎓 **CORTEX Hands-On Tutorial**
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      🎯 **My Understanding Of Your Request:**
+         You want an interactive hands-on tutorial that teaches CORTEX through practical exercises.
+      
+      ⚠️ **Challenge:** ✓ **Accept**
+         Tutorial program guides you through planning, development, and testing with real exercises.
+      
+      💬 **Response:**
+         **Tutorial Profiles Available:**
+         
+         1. **Quick (15 min)** - Essential commands only
+            • CORTEX basics (help, context, healthcheck)
+            • Simple planning workflow
+            • Basic TDD cycle
+         
+         2. **Standard (25 min)** - Recommended for most users
+            • CORTEX core capabilities
+            • Complete planning workflow (DoR/DoD)
+            • Full TDD cycle (RED→GREEN→REFACTOR)
+            • Testing & validation
+         
+         3. **Comprehensive (30 min)** - Deep dive
+            • Advanced planning with security review
+            • TDD with performance optimization
+            • Production-ready testing
+         
+         **What You'll Build:**
+         🔐 User authentication feature with:
+         • Login form with validation
+         • Real tests using discovered element IDs
+         • Performance-optimized code
+         • Complete session report
+      
+      📝 **Your Request:** Start interactive hands-on tutorial
+      
+      🔍 **Next Steps:**
+         Choose a tutorial profile:
+         1. Say "tutorial quick" for 15-minute essentials
+         2. Say "tutorial standard" for 25-minute walkthrough (recommended)
+         3. Say "tutorial comprehensive" for 30-minute deep dive
+         
+         Or say "tutorial [profile] now" to start immediately.
+         
+         **First Module:** CORTEX Basics
+         - Exercise 1.1: Explore capabilities (type 'help')
+         - Exercise 1.2: Check brain memory (type 'show context')
+         - Exercise 1.3: System health (type 'healthcheck')
+
   status_check:
     name: Status Check
     triggers:
@@ -877,6 +940,14 @@ routing:
   quick_start_triggers:
   - quick start
   - get started
+  hands_on_tutorial_triggers:
+  - tutorial
+  - start tutorial
+  - hands on tutorial
+  - interactive tutorial
+  - learn cortex
+  - teach me cortex
+  - cortex tutorial
   git_checkpoint_triggers:
   - git checkpoint
   - create checkpoint

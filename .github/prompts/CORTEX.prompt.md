@@ -50,6 +50,28 @@
 
 ---
 
+## 🎓 Hands-On Tutorial
+
+**Complete Guide:** #file:modules/hands-on-tutorial-guide.md
+
+**Quick Start:**
+- `tutorial` or `start tutorial` - Begin interactive hands-on tutorial
+- `tutorial quick` - 15-minute quick start
+- `tutorial standard` - 25-minute standard walkthrough (recommended)
+- `tutorial comprehensive` - 30-minute deep dive
+
+**What You'll Learn:**
+- CORTEX basics (help, context, healthcheck)
+- Planning workflow (DoR/DoD validation)
+- TDD development (RED→GREEN→REFACTOR)
+- Testing & validation (lint, reports)
+
+**What You'll Build:** User authentication feature with real tests and production-ready code
+
+**See hands-on-tutorial-guide.md for complete program structure and exercises.**
+
+---
+
 ## 📋 Planning Commands (Legacy - Use Natural Language Above)
 
 **No slash commands needed.** Just natural language.
@@ -113,6 +135,12 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 ## 🚀 Quick Start
 
 ### How to Use CORTEX
+
+**🎓 New to CORTEX? Start with the hands-on tutorial:**
+```
+tutorial
+```
+Interactive 15-30 minute program teaching CORTEX through practical exercises.
 
 **Need a quick reminder?**
 ```
