@@ -1,0 +1,308 @@
+name: Feedback Aggregation & Review
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Number of days to analyze'
+        required: false
+        default: '30'
+      send_email:
+        description: 'Send email digest'
+        required: false
+        default: 'true'
+      send_slack:
+        description: 'Send Slack notification'
+        required: false
+        default: 'true'
+
+jobs:
+  aggregate_feedback:
+    name: Aggregate Feedback from Gists
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Fetch feedback from Gists
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python src/feedback/feedback_aggregator.py --fetch --report --output reports/feedback-trend-report.md
+      
+      - name: Generate statistics
+        id: stats
+        run: |
+          # Count feedback items
+          COUNT=$(python -c "import sqlite3; conn = sqlite3.connect('cortex-brain/feedback/feedback-aggregate.db'); cursor = conn.cursor(); cursor.execute('SELECT COUNT(*) FROM feedback_items'); print(cursor.fetchone()[0]); conn.close()")
+          echo "feedback_count=$COUNT" >> $GITHUB_OUTPUT
+          
+          # Get critical issues count
+          CRITICAL=$(python -c "import sqlite3; conn = sqlite3.connect('cortex-brain/feedback/feedback-aggregate.db'); cursor = conn.cursor(); cursor.execute('SELECT COUNT(*) FROM feedback_items WHERE priority = \"critical\"'); print(cursor.fetchone()[0]); conn.close()")
+          echo "critical_count=$CRITICAL" >> $GITHUB_OUTPUT
+      
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: feedback-trend-report
+          path: reports/feedback-trend-report.md
+      
+      - name: Commit updated database
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add cortex-brain/feedback/feedback-aggregate.db
+          git add reports/feedback-trend-report.md
+          git commit -m "chore: update feedback aggregation [skip ci]" || echo "No changes to commit"
+          git push
+  
+  send_email_digest:
+    name: Send Email Digest
+    needs: aggregate_feedback
+    runs-on: ubuntu-latest
+    if: github.event.inputs.send_email != 'false'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download report
+        uses: actions/download-artifact@v4
+        with:
+          name: feedback-trend-report
+          path: reports/
+      
+      - name: Send email via SendGrid
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: |
+          # Read report content
+          REPORT_CONTENT=$(cat reports/feedback-trend-report.md)
+          
+          # Create email payload
+          cat > email_payload.json <<EOF
+          {
+            "personalizations": [{
+              "to": [{"email": "$ADMIN_EMAIL"}],
+              "subject": "CORTEX Weekly Feedback Report"
+            }],
+            "from": {"email": "noreply@cortex.dev", "name": "CORTEX Feedback System"},
+            "content": [{
+              "type": "text/html",
+              "value": "<html><body><pre>$REPORT_CONTENT</pre></body></html>"
+            }]
+          }
+          EOF
+          
+          # Send via SendGrid API
+          curl -X POST https://api.sendgrid.com/v3/mail/send \
+            -H "Authorization: Bearer $SENDGRID_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @email_payload.json
+  
+  send_slack_notification:
+    name: Send Slack Notification
+    needs: aggregate_feedback
+    runs-on: ubuntu-latest
+    if: github.event.inputs.send_slack != 'false'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests
+      
+      - name: Get top issues
+        id: top_issues
+        run: |
+          python -c "
+          import sqlite3
+          from datetime import datetime, timedelta
+          
+          conn = sqlite3.connect('cortex-brain/feedback/feedback-aggregate.db')
+          cursor = conn.cursor()
+          
+          cutoff = (datetime.now() - timedelta(days=7)).isoformat()
+          
+          cursor.execute('''
+              SELECT f.title, f.priority, COUNT(DISTINCT o.user_hash) as users
+              FROM feedback_items f
+              JOIN feedback_occurrences o ON f.issue_signature = o.issue_signature
+              WHERE o.timestamp >= ?
+              GROUP BY f.issue_signature
+              ORDER BY users DESC
+              LIMIT 5
+          ''', (cutoff,))
+          
+          issues = []
+          for row in cursor.fetchall():
+              emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡', 'low': '🟢'}.get(row[1], '⚪')
+              issues.append(f'{emoji} {row[0]} ({row[2]} users)')
+          
+          conn.close()
+          
+          # Output for GitHub Actions
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('issues<<EOF\n')
+              f.write('\n'.join(issues))
+              f.write('\nEOF\n')
+          "
+      
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          # Create Slack message payload
+          cat > slack_payload.json <<EOF
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "🧠 CORTEX Weekly Feedback Report"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Top 5 Issues This Week:*\n${{ steps.top_issues.outputs.issues }}"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Full Report"
+                    },
+                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+          
+          # Send to Slack
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @slack_payload.json
+  
+  create_github_issues:
+    name: Create GitHub Issues for Critical Feedback
+    needs: aggregate_feedback
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Find critical feedback without issues
+        id: critical
+        run: |
+          python -c "
+          import sqlite3
+          import json
+          
+          conn = sqlite3.connect('cortex-brain/feedback/feedback-aggregate.db')
+          cursor = conn.cursor()
+          
+          cursor.execute('''
+              SELECT DISTINCT f.title, f.description, f.category, COUNT(DISTINCT o.user_hash) as users
+              FROM feedback_items f
+              JOIN feedback_occurrences o ON f.issue_signature = o.issue_signature
+              WHERE f.priority = 'critical'
+              GROUP BY f.issue_signature
+              HAVING users >= 2
+          ''')
+          
+          issues = []
+          for row in cursor.fetchall():
+              issues.append({
+                  'title': f'[CRITICAL] {row[0]}',
+                  'description': row[1],
+                  'category': row[2],
+                  'users': row[3]
+              })
+          
+          conn.close()
+          
+          # Output for GitHub Actions
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('count=' + str(len(issues)) + '\n')
+              f.write('issues=' + json.dumps(issues) + '\n')
+          "
+      
+      - name: Create GitHub Issues
+        if: steps.critical.outputs.count > 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUES='${{ steps.critical.outputs.issues }}'
+          
+          echo "$ISSUES" | jq -c '.[]' | while read issue; do
+            TITLE=$(echo "$issue" | jq -r '.title')
+            DESCRIPTION=$(echo "$issue" | jq -r '.description')
+            CATEGORY=$(echo "$issue" | jq -r '.category')
+            USERS=$(echo "$issue" | jq -r '.users')
+            
+            # Check if issue already exists
+            EXISTING=$(gh issue list --search "$TITLE" --json number --jq '.[0].number')
+            
+            if [ -z "$EXISTING" ]; then
+              # Create new issue
+              gh issue create \
+                --title "$TITLE" \
+                --body "**Category:** $CATEGORY
+          **Affected Users:** $USERS
+          **Source:** Automated feedback aggregation
+          
+          ## Description
+          
+          $DESCRIPTION
+          
+          ---
+          
+          This issue was automatically created from aggregated user feedback." \
+                --label "bug,critical,auto-generated"
+              
+              echo "✅ Created issue: $TITLE"
+            else
+              echo "⏭️  Issue already exists: $TITLE (#$EXISTING)"
+            fi
+          done
