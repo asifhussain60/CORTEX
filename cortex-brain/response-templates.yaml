@@ -958,6 +958,39 @@ templates:
       \ Orchestrator initialization\n   - Adapter created automatically during sub-agent\
       \ setup\n   - No direct user interaction needed\n   \n   Which option interests\
       \ you?"
+  cleanup_validation_failed:
+    name: Cleanup Validation Failed
+    triggers:
+    - cleanup_validation_failed
+    - validation_failed
+    - cleanup_blocked
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Cleanup Validation Failed\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You attempted to run cleanup, but pre-execution validation\
+      \ detected issues that would break CORTEX functionality.\n\n## ⚠️ Challenge\n\
+      \n   **Challenge:** Proposed cleanup would delete critical files or break import\
+      \ dependencies\n\n## \U0001F4AC Response\n   ❌ **Cleanup Blocked for Safety**\n\
+      \   \n   Pre-execution validation detected {error_count} critical issues:\n\
+      \   \n   {error_details}\n   \n   **Why Blocked:**\n   These issues would cause\
+      \ CORTEX to become non-functional after cleanup. The validation system prevented\
+      \ execution to protect your system.\n   \n   **Validation Report:** {validation_report_path}\n\
+      \   \n   **What Validation Checks:**\n   1. **Import Dependencies** - Ensures\
+      \ no Python module imports deleted files\n   2. **Critical Files** - Protects\
+      \ src/, tests/, tier databases, config files\n   3. **Test Discovery** - Validates\
+      \ pytest can still find all tests\n   4. **Entry Points** - Ensures main.py,\
+      \ cortex_entry.py remain functional\n   \n   **Common Issues:**\n   - File is\
+      \ imported by other modules (check importers list)\n   - File is in protected\
+      \ src/ or tests/ directory\n   - File is critical to CORTEX entry points\n \
+      \  - Test file would break test discovery\n\n## \U0001F4DD Your Request Execute\
+      \ cleanup operation\n\n## \U0001F50D Next Steps\n   1. Review validation report\
+      \ at {validation_report_path}\n   2. Fix critical issues (remove files from\
+      \ cleanup or update references)\n   3. Re-run cleanup after issues resolved\n\
+      \   4. Alternative: Skip validation with cleanup --skip-validation (not recommended)\n\
+      \   \n   **How to Fix:**\n   - **Import errors**: Update imports before deleting\
+      \ files\n   - **Protected files**: Do not delete files in src/, tests/, or cortex-brain/tier*/\n\
+      \   - **Test files**: Keep test files or update test discovery configuration\n\
+      \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
   admin_help:
     name: Admin Help
     triggers:
@@ -1551,6 +1584,10 @@ routing:
   - clean up
   - cleanup cortex
   - clean cortex
+  cleanup_validation_failed_triggers:
+  - cleanup_validation_failed
+  - validation_failed
+  - cleanup_blocked
   design_sync_triggers:
   - design sync
   - sync design

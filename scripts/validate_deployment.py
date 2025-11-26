@@ -117,6 +117,9 @@ class DeploymentValidator:
         # Git Exclude Configuration
         self.check_git_exclude_setup()
         
+        # GitIgnore Enforcement
+        self.check_gitignore_enforcement()
+        
         # Feedback System
         self.check_feedback_system()
         
@@ -1148,6 +1151,98 @@ class DeploymentValidator:
                 severity="CRITICAL",
                 passed=True,
                 message="✓ Response template system properly wired (Phase 4 complete)"
+            ))
+    
+    def check_gitignore_enforcement(self):
+        """GITIGNORE_ENFORCEMENT: Verify GitIgnore setup module exists and adds CORTEX/ to .gitignore."""
+        check_id = "GITIGNORE_ENFORCEMENT"
+        name = "GitIgnore Enforcement Module"
+        
+        gitignore_issues = []
+        
+        # Check GitIgnore setup module exists
+        gitignore_module = self.project_root / "src" / "setup" / "modules" / "gitignore_setup_module.py"
+        
+        if not gitignore_module.exists():
+            gitignore_issues.append("src/setup/modules/gitignore_setup_module.py NOT FOUND - .gitignore enforcement missing")
+        else:
+            # Check module has required functionality
+            try:
+                with open(gitignore_module, 'r', encoding='utf-8') as f:
+                    module_content = f.read()
+                
+                required_features = {
+                    'CORTEX_PATTERNS': '.gitignore patterns definition',
+                    'def execute': 'Execute method implementation',
+                    '_add_cortex_patterns': 'Pattern addition method',
+                    '_validate_gitignore_patterns': 'Pattern validation method',
+                    '_commit_gitignore': 'Auto-commit functionality',
+                    '_verify_no_cortex_staged': 'Staged files verification',
+                    'CORTEX/': 'CORTEX folder exclusion pattern'
+                }
+                
+                for feature, description in required_features.items():
+                    if feature not in module_content:
+                        gitignore_issues.append(f"GitIgnore module missing {description} ({feature})")
+                        
+            except Exception as e:
+                gitignore_issues.append(f"Failed to validate GitIgnore module: {e}")
+        
+        # Check module is registered in setup orchestrator
+        setup_init = self.project_root / "src" / "setup" / "__init__.py"
+        if setup_init.exists():
+            try:
+                with open(setup_init, 'r', encoding='utf-8') as f:
+                    init_content = f.read()
+                
+                if 'GitIgnoreSetupModule' not in init_content:
+                    gitignore_issues.append("GitIgnoreSetupModule not exported in src/setup/__init__.py")
+                    
+            except Exception as e:
+                gitignore_issues.append(f"Failed to check setup __init__.py: {e}")
+        
+        # Check documentation mentions .gitignore enforcement
+        setup_guide = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+        if setup_guide.exists():
+            try:
+                with open(setup_guide, 'r', encoding='utf-8') as f:
+                    guide_content = f.read()
+                
+                if '.gitignore' not in guide_content:
+                    gitignore_issues.append("CORTEX.prompt.md missing .gitignore documentation")
+                    
+                if 'CORTEX/' not in guide_content:
+                    gitignore_issues.append("CORTEX.prompt.md missing CORTEX/ exclusion explanation")
+                    
+            except Exception as e:
+                gitignore_issues.append(f"Failed to validate documentation: {e}")
+        
+        # Build result
+        if gitignore_issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",  # High priority - prevents brain leakage
+                passed=False,
+                message=f"GitIgnore enforcement incomplete ({len(gitignore_issues)} issues)",
+                details="\n".join(f"  • {issue}" for issue in gitignore_issues) +
+                       "\n\nRequired components:\n" +
+                       "  • src/setup/modules/gitignore_setup_module.py (GitIgnore enforcement module)\n" +
+                       "  • CORTEX/ pattern in .gitignore\n" +
+                       "  • Auto-commit functionality\n" +
+                       "  • Validation of patterns work\n" +
+                       "  • Verification no CORTEX files staged\n" +
+                       "  • Documentation in CORTEX.prompt.md",
+                fix_available=False,
+                fix_command="Ensure GitIgnoreSetupModule is implemented and registered"
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",
+                passed=True,
+                message="✓ GitIgnore enforcement module present and documented"
             ))
     
     def check_git_exclude_setup(self):

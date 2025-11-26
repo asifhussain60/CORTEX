@@ -8,10 +8,14 @@ Features:
 - Before/after metrics comparison
 - Git diff summary generation
 - SKULL rule validation (22 rules)
+- CODE QUALITY ENFORCEMENT (NEW v2.0)
+  - Debug statement detection
+  - Lint validation
+  - Production readiness checklist
 - Completion report generation
 - Regression detection
 
-Version: 1.0.0
+Version: 2.0.0
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
@@ -23,6 +27,11 @@ from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 import json
 import logging
+
+# NEW v2.0: Code quality enforcement imports
+from workflows.code_cleanup_validator import CodeCleanupValidator
+from workflows.lint_integration import LintIntegration
+from workflows.production_readiness import ProductionReadinessChecklist
 
 logger = logging.getLogger(__name__)
 
@@ -39,15 +48,23 @@ class SessionCompletionOrchestrator:
     - Quality standards met
     """
     
-    def __init__(self, project_root: Path):
+    def __init__(self, project_root: Path, enable_quality_enforcement: bool = True):
         """
         Initialize SessionCompletionOrchestrator.
         
         Args:
             project_root: Path to project repository root
+            enable_quality_enforcement: Enable code quality validation (v2.0 feature)
         """
         self.project_root = Path(project_root)
         self.report_template_path = Path(__file__).parent.parent.parent / "cortex-brain" / "templates" / "session-completion-report.md"
+        self.enable_quality_enforcement = enable_quality_enforcement
+        
+        # NEW v2.0: Initialize quality validators
+        if self.enable_quality_enforcement:
+            self.cleanup_validator = CodeCleanupValidator()
+            self.lint_integration = LintIntegration()
+            self.readiness_checker = ProductionReadinessChecklist(project_root=project_root)
     
     def _run_command(self, args: List[str], cwd: Optional[Path] = None) -> Tuple[bool, str]:
         """Run command and return success status and output."""
@@ -434,6 +451,8 @@ class SessionCompletionOrchestrator:
         """
         Complete TDD session with full validation.
         
+        NEW v2.0: Includes code quality enforcement pipeline
+        
         Args:
             session_id: TDD session identifier
             start_commit: Starting git commit SHA
@@ -445,24 +464,81 @@ class SessionCompletionOrchestrator:
         """
         logger.info(f"🎯 Completing TDD session: {session_id}")
         
-        # Run full test suite
+        # Phase 1: Run full test suite
         test_results = self.run_full_test_suite()
         
-        # Compare metrics
+        # NEW v2.0: Code Quality Enforcement
+        if self.enable_quality_enforcement:
+            logger.info("🔍 Running code quality enforcement...")
+            
+            # Code cleanup validation
+            cleanup_issues = self.cleanup_validator.scan_directory(self.project_root, recursive=True)
+            all_cleanup_issues = []
+            if cleanup_issues:
+                for file_issues in cleanup_issues.values():
+                    all_cleanup_issues.extend(file_issues)
+            
+            blocking_cleanup = [i for i in all_cleanup_issues if i.severity in ['CRITICAL', 'BLOCKED']]
+            
+            if blocking_cleanup:
+                logger.error(f"❌ {len(blocking_cleanup)} blocking cleanup issues")
+                return {
+                    "success": False,
+                    "session_id": session_id,
+                    "error": "Code cleanup validation failed",
+                    "cleanup_report": self.cleanup_validator.generate_report(cleanup_issues),
+                    "test_results": test_results
+                }
+            
+            # Lint validation
+            lint_results = self.lint_integration.run_lint_directory(self.project_root, recursive=True)
+            blocking_lint = self.lint_integration.get_blocking_violations(lint_results)
+            
+            if blocking_lint:
+                logger.error(f"❌ {len(blocking_lint)} blocking lint violations")
+                return {
+                    "success": False,
+                    "session_id": session_id,
+                    "error": "Lint validation failed",
+                    "lint_report": self.lint_integration.generate_report(lint_results),
+                    "test_results": test_results
+                }
+            
+            # Production readiness
+            readiness_result = self.readiness_checker.validate_session({
+                'test_results': test_results,
+                'cleanup_issues': cleanup_issues,
+                'lint_results': lint_results,
+                'code_smells': []
+            })
+            
+            if not readiness_result.passed:
+                logger.error(f"❌ Production readiness failed")
+                return {
+                    "success": False,
+                    "session_id": session_id,
+                    "error": "Production readiness validation failed",
+                    "readiness_report": self.readiness_checker.generate_report(readiness_result),
+                    "test_results": test_results
+                }
+            
+            logger.info("✅ Code quality enforcement passed")
+        
+        # Phase 2: Compare metrics
         metrics_comparison = {}
         if metrics_before and metrics_after:
             metrics_comparison = self.calculate_metrics_comparison(metrics_before, metrics_after)
         
-        # Generate diff summary
+        # Phase 3: Generate diff summary
         end_commit_success, end_commit = self._run_command(["git", "rev-parse", "HEAD"])
         diff_summary = {}
         if end_commit_success:
             diff_summary = self.generate_diff_summary(start_commit, end_commit.strip())
         
-        # Validate SKULL rules
+        # Phase 4: Validate SKULL rules
         skull_validation = self.validate_skull_rules()
         
-        # Generate report
+        # Phase 5: Generate report
         report_path = self.project_root / "cortex-brain" / "documents" / "reports" / f"session-{session_id}-completion.md"
         self.generate_completion_report(
             session_id,

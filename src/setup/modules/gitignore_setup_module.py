@@ -224,11 +224,17 @@ class GitIgnoreSetupModule(BaseSetupModule):
             return SetupResult(
                 module_id=self.metadata.module_id,
                 status=SetupStatus.SUCCESS,
-                message="GitIgnore configured and committed successfully",
+                message=f"✓ GitIgnore configured and committed successfully\n" +
+                        f"   ✓ Added CORTEX/ to .gitignore at {gitignore_path}\n" +
+                        f"   ✓ Committed with message: {commit_message}\n" +
+                        f"   ✓ Validated {len(self.CORTEX_PATTERNS)} exclusion patterns work\n" +
+                        f"   ✓ Verified no CORTEX files are staged",
                 details={
                     'gitignore_path': str(gitignore_path),
                     'commit_message': commit_message,
-                    'patterns_added': len(self.CORTEX_PATTERNS)
+                    'patterns_added': len(self.CORTEX_PATTERNS),
+                    'patterns_validated': True,
+                    'no_cortex_staged': True
                 }
             )
         

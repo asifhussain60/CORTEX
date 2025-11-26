@@ -30,6 +30,15 @@ from src.operations.base_operation_module import (
     OperationModuleMetadata, OperationStatus
 )
 
+try:
+    from .cleanup_validator import CleanupValidator
+    from .cleanup_verifier import CleanupVerifier
+    VALIDATION_AVAILABLE = True
+except ImportError:
+    VALIDATION_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Cleanup validation modules not available - validation will be skipped")
+
 logger = logging.getLogger(__name__)
 
 
@@ -541,7 +550,62 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             logger.info(f"✅ Report saved: {report_path.relative_to(self.project_root)}")
             logger.info("")
             
-            # Phase 4: Summary
+            # NEW: Phase 4: Dry-Run Validation
+            if VALIDATION_AVAILABLE and dry_run and len(manifest.proposed_actions) > 0:
+                logger.info("Phase 4: Dry-Run Validation")
+                logger.info("-" * 70)
+                
+                validator = CleanupValidator(self.project_root)
+                validation_result = validator.validate_proposed_cleanup(manifest.to_dict())
+                
+                if validation_result.has_critical_errors:
+                    logger.error("❌ VALIDATION FAILED - Proposed cleanup would break CORTEX")
+                    logger.error("")
+                    logger.error("Critical Issues:")
+                    for error in validation_result.critical_errors:
+                        logger.error(f"  • {error.message}")
+                        logger.error(f"    File: {error.file.relative_to(self.project_root)}")
+                        if error.details:
+                            for key, value in error.details.items():
+                                logger.error(f"    {key}: {value}")
+                        logger.error("")
+                    
+                    # Save validation report
+                    validation_report = self._generate_validation_report(validation_result)
+                    validation_report_path = self.project_root / 'cortex-brain' / 'documents' / 'reports' / f'cleanup-validation-{datetime.now().strftime("%Y%m%d-%H%M%S")}.md'
+                    validation_report_path.parent.mkdir(parents=True, exist_ok=True)
+                    validation_report_path.write_text(validation_report, encoding='utf-8')
+                    
+                    logger.error(f"📄 Validation report: {validation_report_path.relative_to(self.project_root)}")
+                    logger.error("")
+                    logger.error("⚠️  Cleanup BLOCKED to protect CORTEX functionality")
+                    logger.error("    Fix critical issues before proceeding")
+                    
+                    return OperationResult(
+                        success=False,
+                        status=OperationStatus.FAILED,
+                        message=f"Cleanup validation failed: {len(validation_result.critical_errors)} critical issues",
+                        data={
+                            'validation_errors': [
+                                {
+                                    'severity': e.severity,
+                                    'category': e.category,
+                                    'message': e.message,
+                                    'file': str(e.file),
+                                    'details': e.details
+                                }
+                                for e in validation_result.errors
+                            ],
+                            'validation_report': str(validation_report_path)
+                        },
+                        errors=[f"{e.severity}: {e.message}" for e in validation_result.critical_errors]
+                    )
+                
+                logger.info(f"✅ Validation passed in {validation_result.validation_time:.2f}s")
+                logger.info("   Cleanup is safe to execute")
+                logger.info("")
+            
+            # Phase 5: Summary
             logger.info("=" * 70)
             logger.info("CLEANUP MANIFEST SUMMARY")
             logger.info("=" * 70)
@@ -637,6 +701,35 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             if errors:
                 logger.warning(f"Errors: {len(errors)}")
             logger.info("")
+            
+            # NEW: Post-Cleanup Verification
+            if VALIDATION_AVAILABLE:
+                logger.info("")
+                verifier = CleanupVerifier(self.project_root)
+                verification_result = verifier.verify_cleanup(use_health_validator=True)
+                
+                if not verification_result.passed:
+                    logger.error("❌ POST-CLEANUP VERIFICATION FAILED")
+                    logger.error("   Some CORTEX functionality may be compromised")
+                    logger.warning("   Manual review recommended")
+                    
+                    return OperationResult(
+                        success=False,
+                        status=OperationStatus.WARNING,
+                        message="Cleanup completed but verification detected issues",
+                        data={
+                            'execution_summary': {
+                                'files_deleted': files_deleted,
+                                'files_renamed': files_renamed,
+                                'space_freed_mb': space_freed,
+                                'errors_count': len(errors)
+                            },
+                            'verification_checks': verification_result.checks,
+                            'verification_passed': False
+                        },
+                        errors=errors if errors else [],
+                        warnings=["Post-cleanup verification failed - manual review recommended"]
+                    )
             
             return OperationResult(
                 success=True,
@@ -739,3 +832,65 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
         lines.append("To execute cleanup, say: **'approve cleanup'** or run with `dry_run=False`")
         
         return "\n".join(lines)
+    
+    def _generate_validation_report(self, validation_result) -> str:
+        """Generate markdown validation report"""
+        lines = []
+        
+        lines.append("# CORTEX Cleanup Validation Report")
+        lines.append("")
+        lines.append(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"**Validation Type:** Pre-Cleanup Dry-Run")
+        lines.append(f"**Result:** {'✅ PASSED' if validation_result.passed else '❌ FAILED'}")
+        lines.append(f"**Validation Time:** {validation_result.validation_time:.2f} seconds")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        if validation_result.critical_errors:
+            lines.append("## ⚠️ Critical Issues (MUST FIX)")
+            lines.append("")
+            
+            for i, error in enumerate(validation_result.critical_errors, 1):
+                lines.append(f"### Issue {i}: {error.category}")
+                lines.append(f"**File:** `{error.file.relative_to(self.project_root)}`")
+                lines.append(f"**Problem:** {error.message}")
+                lines.append("")
+                
+                if error.details:
+                    lines.append("**Details:**")
+                    for key, value in error.details.items():
+                        if isinstance(value, list):
+                            lines.append(f"- **{key}:**")
+                            for item in value[:10]:  # Limit to first 10
+                                lines.append(f"  - {item}")
+                            if len(value) > 10:
+                                lines.append(f"  - ... and {len(value) - 10} more")
+                        else:
+                            lines.append(f"- **{key}:** {value}")
+                    lines.append("")
+                
+                lines.append(f"**Impact:** {error.severity}")
+                lines.append("")
+        
+        if validation_result.errors and not validation_result.critical_errors:
+            lines.append("## ⚠️ Issues Detected")
+            lines.append("")
+            for error in validation_result.errors:
+                lines.append(f"- **{error.severity}**: {error.message} (`{error.file.name}`)")
+            lines.append("")
+        
+        if validation_result.passed:
+            lines.append("## ✅ Validation Passed")
+            lines.append("")
+            lines.append("All validation checks passed successfully. Cleanup is safe to execute.")
+            lines.append("")
+        else:
+            lines.append("## 🚫 Cleanup Blocked")
+            lines.append("")
+            lines.append("Cleanup has been blocked to protect CORTEX functionality.")
+            lines.append("Please review and fix the critical issues listed above before proceeding.")
+            lines.append("")
+        
+        return "\n".join(lines)
+

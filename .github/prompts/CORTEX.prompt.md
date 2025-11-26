@@ -219,6 +219,12 @@ CORTEX will:
 
 **Integration Scoring:** 7 layers (0-100%) - Discovered, Importable, Instantiable, Documented, Tested, Wired, Optimized
 
+**Key Validations:**
+- ✅ **GitIgnore Enforcement** (HIGH priority) - Validates `.gitignore` setup module exists, has required features, is registered, and is documented
+  - Prevents brain data leakage to user repositories
+  - Ensures CORTEX/ folder automatically excluded during setup
+  - Deployment blocked if enforcement missing or incomplete
+
 **Benefits:** Zero maintenance when adding features, auto-generates wiring/tests/docs templates, prevents deployment of partially-integrated features
 
 **See system-alignment-guide.md for complete architecture, phases, and remediation workflows.**
@@ -459,6 +465,13 @@ Recommendations: Cache is performing well
 - Project conventions (learned over time)
 - Critical files reference
 - Brain status indicator
+
+**GitIgnore Configuration:**
+- ✅ Automatically adds CORTEX/ to `.gitignore` during setup
+- ✅ Validates exclusion patterns work with `git check-ignore`
+- ✅ Commits changes with descriptive message
+- ✅ Confirms no CORTEX files accidentally staged
+- ✅ Explicit confirmation message with 5 validation checkmarks
 
 **Brain Learning (Phase 2):**
 - Observes your coding patterns during normal CORTEX usage
