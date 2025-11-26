@@ -43,6 +43,10 @@ from .module_factory import (
     register_module_class,
     load_setup_config
 )
+from .post_installation_handler import (
+    PostInstallationHandler,
+    handle_post_installation_choice
+)
 
 
 def create_setup_orchestrator(
@@ -131,6 +135,10 @@ __all__ = [
     'create_orchestrator_from_yaml',
     'register_module_class',
     'load_setup_config',
+    
+    # Post-installation
+    'PostInstallationHandler',
+    'handle_post_installation_choice',
     
     # Convenience function
     'run_setup',
