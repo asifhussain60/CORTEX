@@ -1,2 +1,0 @@
-Placeholder for strategic/plugin-system.png
-Generate using DALL-E prompt: docs/diagrams/prompts/05-plugin-system-prompt.md

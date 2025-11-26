@@ -1,2 +1,0 @@
-Placeholder for operational/feature-planning.png
-Generate using DALL-E prompt: docs/diagrams/prompts/10-feature-planning-prompt.md

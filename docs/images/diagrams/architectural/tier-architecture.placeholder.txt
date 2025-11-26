@@ -1,2 +1,0 @@
-Placeholder for architectural/tier-architecture.png
-Generate using DALL-E prompt: docs/diagrams/prompts/01-tier-architecture-prompt.md
