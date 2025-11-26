@@ -36,7 +36,7 @@ class TestIntegrationScore:
         )
         
         assert score.score == 100
-        assert score.status == "✅ Healthy"
+        assert score.status.endswith("Healthy")  # Accepts both "[OK] Healthy" and "✅ Healthy"
         assert len(score.issues) == 0
     
     def test_score_calculation_partial_integration(self):
@@ -54,7 +54,7 @@ class TestIntegrationScore:
         )
         
         assert score.score == 60
-        assert score.status == "❌ Critical"
+        assert score.status.endswith("Critical")  # Accepts both "[CRIT] Critical" and "❌ Critical"
         assert "Missing documentation" in score.issues
         assert "No test coverage" in score.issues
         assert "Not wired to entry point" in score.issues
@@ -74,7 +74,7 @@ class TestIntegrationScore:
         )
         
         assert score.score == 80
-        assert score.status == "⚠️ Warning"
+        assert score.status.endswith("Warning")  # Accepts both "[WARN] Warning" and "⚠️ Warning"
 
 
 class TestAlignmentReport:
