@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayrollManager Enhancement Analysis - CORTEX Interactive Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-medium: #1e293b;
+            --bg-light: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #475569;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .header .meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .header .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header .meta-item .icon {
+            font-size: 1.25rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--bg-medium);
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: var(--bg-light);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+
+        .metric-card.success::before {
+            background: linear-gradient(90deg, var(--success), #059669);
+        }
+
+        .metric-card.warning::before {
+            background: linear-gradient(90deg, var(--warning), #d97706);
+        }
+
+        .metric-card.danger::before {
+            background: linear-gradient(90deg, var(--danger), #dc2626);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-trend {
+            font-size: 0.875rem;
+            color: var(--success);
+        }
+
+        .metric-trend.negative {
+            color: var(--danger);
+        }
+
+        .chart-container {
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .chart-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        #architecture-graph {
+            width: 100%;
+            height: 600px;
+            background: var(--bg-dark);
+            border-radius: 0.5rem;
+        }
+
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node circle {
+            stroke: var(--border);
+            stroke-width: 2px;
+        }
+
+        .node text {
+            font-size: 12px;
+            fill: var(--text-primary);
+            pointer-events: none;
+        }
+
+        .link {
+            stroke: var(--border);
+            stroke-opacity: 0.6;
+            stroke-width: 2px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .issue-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .issue-card {
+            background: var(--bg-medium);
+            border-left: 4px solid var(--danger);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .issue-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .issue-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .issue-card.info {
+            border-left-color: var(--primary);
+        }
+
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .issue-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .issue-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .issue-badge.critical {
+            background: var(--danger);
+            color: white;
+        }
+
+        .issue-badge.high {
+            background: var(--warning);
+            color: white;
+        }
+
+        .issue-badge.medium {
+            background: var(--primary);
+            color: white;
+        }
+
+        .issue-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .issue-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .code-snippet {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .tabs {
+                padding: 0.5rem 1rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .hero-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 PayrollManager Enhancement Analysis</h1>
+        <div class="subtitle">CORTEX Interactive Dashboard - Generated November 26, 2025</div>
+        <div class="meta">
+            <div class="meta-item">
+                <span class="icon">📁</span>
+                <span>47 files analyzed (12,847 lines)</span>
+            </div>
+            <div class="meta-item">
+                <span class="icon">⚡</span>
+                <span>Analysis time: 14.3 seconds</span>
+            </div>
+            <div class="meta-item">
+                <span class="icon">🎯</span>
+                <span>C# .NET Core + React</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('executive')">📊 Executive Summary</button>
+        <button class="tab" onclick="showTab('architecture')">🏗️ Architecture Vision</button>
+        <button class="tab" onclick="showTab('quality')">🔍 Code Quality</button>
+        <button class="tab" onclick="showTab('roadmap')">🗓️ Enhancement Roadmap</button>
+        <button class="tab" onclick="showTab('journeys')">👤 User Journeys</button>
+        <button class="tab" onclick="showTab('security')">🔒 Security & Compliance</button>
+    </div>
+
+    <div id="executive" class="tab-content active">
+        <div class="hero-metrics">
+            <div class="metric-card success">
+                <div class="metric-label">Quality Score</div>
+                <div class="metric-value">73/100</div>
+                <div class="metric-trend">↑ Good - Potential for HIGH improvement</div>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">Enhancement Potential</div>
+                <div class="metric-value">🎯 HIGH</div>
+                <div class="metric-trend">47 enhancements identified</div>
+            </div>
+            <div class="metric-card success">
+                <div class="metric-label">Estimated ROI</div>
+                <div class="metric-value">340%</div>
+                <div class="metric-trend">↑ Over 6 months</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Implementation Effort</div>
+                <div class="metric-value">3 weeks</div>
+                <div class="metric-trend">3 phased approach</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Enhancement Impact Heatmap</div>
+            <div class="chart-subtitle">Size = Effort Required | Color = Business Impact</div>
+            <div id="enhancement-heatmap" style="height: 400px;"></div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Priority Matrix</div>
+            <div class="chart-subtitle">Quick Wins (High Impact, Low Effort) vs Strategic Investments</div>
+            <div id="priority-matrix" style="height: 400px;"></div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Top 5 Critical Issues</div>
+            <div class="issue-list">
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-title">🔥 PaymentProcessor - Performance Bottleneck</div>
+                        <span class="issue-badge critical">Critical</span>
+                    </div>
+                    <div class="issue-description">
+                        Average execution time: 847ms (threshold: 500ms). Blocking main thread during payment processing.
+                    </div>
+                    <div class="issue-meta">
+                        <span>📁 PaymentProcessor.cs:123</span>
+                        <span>⚡ Impact: HIGH</span>
+                        <span>🛠️ Effort: 3 hours</span>
+                    </div>
+                    <div class="code-snippet">
+                        <div style="color: #ef4444;">// Current: Synchronous gateway call</div>
+                        <div>var result = await _gateway.ProcessPayment(request);</div>
+                        <div style="margin-top: 0.5rem; color: #10b981;">// Fix: Add caching + async batching</div>
+                        <div>var result = await _cache.GetOrAddAsync(key, </div>
+                        <div>    async () => await _gateway.ProcessPaymentBatch(requests));</div>
+                    </div>
+                </div>
+
+                <div class="issue-card warning">
+                    <div class="issue-header">
+                        <div class="issue-title">⚠️ LoginService.Validate() - Complex Method</div>
+                        <span class="issue-badge high">High</span>
+                    </div>
+                    <div class="issue-description">
+                        Cyclomatic complexity: 18 (threshold: 10). Method handles validation, authentication, and session creation.
+                    </div>
+                    <div class="issue-meta">
+                        <span>📁 LoginService.cs:45</span>
+                        <span>⚡ Impact: MEDIUM</span>
+                        <span>🛠️ Effort: 2 hours</span>
+                    </div>
+                </div>
+
+                <div class="issue-card warning">
+                    <div class="issue-header">
+                        <div class="issue-title">⚠️ SQL Injection Risk - User Input Concatenation</div>
+                        <span class="issue-badge high">High</span>
+                    </div>
+                    <div class="issue-description">
+                        User input concatenated directly into SQL query. OWASP A03 violation.
+                    </div>
+                    <div class="issue-meta">
+                        <span>📁 UserRepository.cs:67</span>
+                        <span>⚡ Impact: HIGH (Security)</span>
+                        <span>🛠️ Effort: 1 hour</span>
+                    </div>
+                </div>
+
+                <div class="issue-card info">
+                    <div class="issue-header">
+                        <div class="issue-title">💡 N+1 Query Pattern - Employee Dashboard</div>
+                        <span class="issue-badge medium">Medium</span>
+                    </div>
+                    <div class="issue-description">
+                        Loading 150+ employees with individual queries. Recommendation: Use eager loading with Include().
+                    </div>
+                    <div class="issue-meta">
+                        <span>📁 EmployeeController.cs:89</span>
+                        <span>⚡ Impact: MEDIUM</span>
+                        <span>🛠️ Effort: 1 hour</span>
+                    </div>
+                </div>
+
+                <div class="issue-card info">
+                    <div class="issue-header">
+                        <div class="issue-title">💡 Missing Database Indexes</div>
+                        <span class="issue-badge medium">Medium</span>
+                    </div>
+                    <div class="issue-description">
+                        Frequently queried columns (Email, EmployeeId) missing indexes. Query time: 340ms → 45ms with indexes.
+                    </div>
+                    <div class="issue-meta">
+                        <span>📁 Database Schema</span>
+                        <span>⚡ Impact: MEDIUM</span>
+                        <span>🛠️ Effort: 30 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+            <button class="btn btn-primary" onclick="alert('Export functionality would generate PDF report')">
+                📄 Export Executive Summary (PDF)
+            </button>
+            <button class="btn btn-primary" onclick="alert('Export functionality would generate technical deep-dive')">
+                🔬 Export Technical Deep Dive
+            </button>
+        </div>
+    </div>
+
+    <div id="architecture" class="tab-content">
+        <div class="chart-container">
+            <div class="chart-title">Current vs Proposed Architecture</div>
+            <div class="chart-subtitle">Interactive visualization - Hover for details | Red nodes = bottlenecks | Green = optimized</div>
+            <div id="architecture-graph"></div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Component Health Radial Tree</div>
+            <div class="chart-subtitle">Coming soon - Inner ring: Core components | Outer ring: Dependencies</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Interactive radial tree visualization will be rendered here
+            </div>
+        </div>
+    </div>
+
+    <div id="quality" class="tab-content">
+        <div class="chart-container">
+            <div class="chart-title">Code Smell Density Heatmap</div>
+            <div class="chart-subtitle">Size = Lines of Code | Color = Smell Density</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Treemap visualization showing code smell distribution across files
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Performance Flamegraph</div>
+            <div class="chart-subtitle">Width = Execution Time | Interactive drill-down</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Interactive flamegraph showing function call hierarchy and timing
+            </div>
+        </div>
+    </div>
+
+    <div id="roadmap" class="tab-content">
+        <div class="chart-container">
+            <div class="chart-title">Implementation Timeline (Gantt Chart)</div>
+            <div class="chart-subtitle">3-phase approach with dependencies and blockers</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Interactive Gantt chart showing 3 phases over 3 weeks
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Impact Projection</div>
+            <div class="chart-subtitle">Expected improvement over time</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Line chart showing performance, quality, and satisfaction metrics improving over 6 months
+            </div>
+        </div>
+    </div>
+
+    <div id="journeys" class="tab-content">
+        <div class="chart-container">
+            <div class="chart-title">Current User Flows (Sequence Diagrams)</div>
+            <div class="chart-subtitle">Pain points highlighted in red</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Sequence diagrams showing 5 main user journeys with timing data
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Proposed Improvements (Before/After)</div>
+            <div class="chart-subtitle">7 steps → 4 steps | 2.3s → 0.8s average</div>
+            <div style="height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                Side-by-side comparison of current vs proposed user flows
+            </div>
+        </div>
+    </div>
+
+    <div id="security" class="tab-content">
+        <div class="chart-container">
+            <div class="chart-title">OWASP Top 10 Security Matrix</div>
+            <div class="chart-subtitle">Automated security scan results</div>
+            <div style="padding: 1rem;">
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 0.5rem;">
+                        <span style="font-size: 1.5rem;">✅</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">A01 - Broken Access Control</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Authentication and authorization properly implemented</div>
+                        </div>
+                        <span style="color: var(--success); font-weight: 600;">PASSED</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 0.5rem;">
+                        <span style="font-size: 1.5rem;">⚠️</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">A02 - Cryptographic Failures</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Some sensitive data transmitted without HTTPS</div>
+                        </div>
+                        <span style="color: var(--warning); font-weight: 600;">WARNING</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 0.5rem;">
+                        <span style="font-size: 1.5rem;">❌</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">A03 - Injection</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">SQL injection vulnerability detected in UserRepository.cs</div>
+                        </div>
+                        <span style="color: var(--danger); font-weight: 600;">CRITICAL</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 0.5rem;">
+                        <span style="font-size: 1.5rem;">✅</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">A07 - Identification & Authentication Failures</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Strong password policies and MFA implemented</div>
+                        </div>
+                        <span style="color: var(--success); font-weight: 600;">PASSED</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 0.5rem;">
+                        <span style="font-size: 1.5rem;">✅</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">A09 - Security Logging & Monitoring</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Comprehensive logging implemented</div>
+                        </div>
+                        <span style="color: var(--success); font-weight: 600;">PASSED</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Render visualizations for the active tab
+            if (tabName === 'executive') {
+                renderHeatmap();
+                renderPriorityMatrix();
+            } else if (tabName === 'architecture') {
+                renderArchitectureGraph();
+            }
+        }
+
+        // Sample data
+        const enhancements = [
+            { name: "Cache Payment Gateway", impact: 9, effort: 3, category: "performance" },
+            { name: "Add Database Indexes", impact: 8, effort: 1, category: "performance" },
+            { name: "Fix SQL Injection", impact: 10, effort: 2, category: "security" },
+            { name: "Reduce Method Complexity", impact: 6, effort: 4, category: "quality" },
+            { name: "Implement Eager Loading", impact: 7, effort: 2, category: "performance" },
+            { name: "Add Unit Tests", impact: 8, effort: 6, category: "quality" },
+            { name: "Optimize React Rendering", impact: 7, effort: 3, category: "performance" },
+            { name: "Add Input Validation", impact: 9, effort: 2, category: "security" },
+            { name: "Refactor LoginService", impact: 6, effort: 5, category: "quality" },
+            { name: "Implement HTTPS", impact: 10, effort: 1, category: "security" }
+        ];
+
+        // Render Enhancement Heatmap (Treemap)
+        function renderHeatmap() {
+            const container = d3.select('#enhancement-heatmap');
+            container.selectAll('*').remove();
+
+            const width = container.node().getBoundingClientRect().width;
+            const height = 400;
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const colors = {
+                performance: '#10b981',
+                security: '#ef4444',
+                quality: '#6366f1'
+            };
+
+            // Simple grid layout for mock
+            const cols = 5;
+            const rows = 2;
+            const cellWidth = width / cols - 10;
+            const cellHeight = height / rows - 10;
+
+            enhancements.forEach((e, i) => {
+                const x = (i % cols) * (cellWidth + 10);
+                const y = Math.floor(i / cols) * (cellHeight + 10);
+                const size = e.effort * 15; // Size based on effort
+
+                const g = svg.append('g')
+                    .attr('transform', `translate(${x}, ${y})`);
+
+                g.append('rect')
+                    .attr('width', cellWidth)
+                    .attr('height', cellHeight)
+                    .attr('fill', colors[e.category])
+                    .attr('opacity', e.impact / 10)
+                    .attr('rx', 8)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function(event) {
+                        d3.select(this).attr('opacity', 1);
+                        showTooltip(event, e);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).attr('opacity', e.impact / 10);
+                        hideTooltip();
+                    });
+
+                g.append('text')
+                    .attr('x', cellWidth / 2)
+                    .attr('y', cellHeight / 2)
+                    .attr('text-anchor', 'middle')
+                    .attr('dominant-baseline', 'middle')
+                    .attr('fill', 'white')
+                    .attr('font-size', '12px')
+                    .text(e.name);
+            });
+        }
+
+        // Render Priority Matrix (Scatter Plot)
+        function renderPriorityMatrix() {
+            const container = d3.select('#priority-matrix');
+            container.selectAll('*').remove();
+
+            const width = container.node().getBoundingClientRect().width;
+            const height = 400;
+            const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const xScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([margin.left, width - margin.right]);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([height - margin.bottom, margin.top]);
+
+            const colors = {
+                performance: '#10b981',
+                security: '#ef4444',
+                quality: '#6366f1'
+            };
+
+            // Add quadrant backgrounds
+            svg.append('rect')
+                .attr('x', xScale(5))
+                .attr('y', margin.top)
+                .attr('width', xScale(10) - xScale(5))
+                .attr('height', yScale(5) - margin.top)
+                .attr('fill', '#10b981')
+                .attr('opacity', 0.1);
+
+            // Add axes
+            svg.append('g')
+                .attr('transform', `translate(0, ${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .style('color', 'var(--text-secondary)');
+
+            svg.append('g')
+                .attr('transform', `translate(${margin.left}, 0)`)
+                .call(d3.axisLeft(yScale))
+                .style('color', 'var(--text-secondary)');
+
+            // Add axis labels
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height - 5)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'var(--text-secondary)')
+                .text('Implementation Effort →');
+
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'var(--text-secondary)')
+                .text('← Business Impact');
+
+            // Add data points
+            svg.selectAll('circle')
+                .data(enhancements)
+                .enter()
+                .append('circle')
+                .attr('cx', d => xScale(d.effort))
+                .attr('cy', d => yScale(d.impact))
+                .attr('r', 8)
+                .attr('fill', d => colors[d.category])
+                .attr('stroke', 'var(--border)')
+                .attr('stroke-width', 2)
+                .style('cursor', 'pointer')
+                .on('mouseover', function(event, d) {
+                    d3.select(this).attr('r', 12);
+                    showTooltip(event, d);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('r', 8);
+                    hideTooltip();
+                });
+        }
+
+        // Render Architecture Graph
+        function renderArchitectureGraph() {
+            const container = d3.select('#architecture-graph');
+            container.selectAll('*').remove();
+
+            const width = container.node().getBoundingClientRect().width;
+            const height = 600;
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            // Sample architecture data
+            const nodes = [
+                { id: 'PayrollAPI', group: 1, smells: 3 },
+                { id: 'PaymentProcessor', group: 2, smells: 8 },
+                { id: 'LoginService', group: 1, smells: 6 },
+                { id: 'UserRepository', group: 2, smells: 5 },
+                { id: 'EmployeeController', group: 1, smells: 4 },
+                { id: 'Database', group: 3, smells: 2 },
+                { id: 'React Frontend', group: 1, smells: 3 }
+            ];
+
+            const links = [
+                { source: 'PayrollAPI', target: 'PaymentProcessor' },
+                { source: 'PayrollAPI', target: 'LoginService' },
+                { source: 'LoginService', target: 'UserRepository' },
+                { source: 'UserRepository', target: 'Database' },
+                { source: 'PayrollAPI', target: 'EmployeeController' },
+                { source: 'EmployeeController', target: 'Database' },
+                { source: 'React Frontend', target: 'PayrollAPI' }
+            ];
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2));
+
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('class', 'link');
+
+            const node = svg.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            node.append('circle')
+                .attr('r', 30)
+                .attr('fill', d => {
+                    if (d.smells > 7) return '#ef4444';
+                    if (d.smells > 4) return '#f59e0b';
+                    return '#10b981';
+                })
+                .on('mouseover', function(event, d) {
+                    showTooltip(event, d);
+                })
+                .on('mouseout', hideTooltip);
+
+            node.append('text')
+                .attr('dy', 4)
+                .attr('text-anchor', 'middle')
+                .text(d => d.id);
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+        }
+
+        // Tooltip functions
+        function showTooltip(event, data) {
+            const tooltip = d3.select('#tooltip');
+            let content = '';
+
+            if (data.name) {
+                content = `
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">${data.name}</div>
+                    <div style="font-size: 0.875rem;">
+                        <div>Impact: ${data.impact}/10</div>
+                        <div>Effort: ${data.effort} hours</div>
+                        <div>Category: ${data.category}</div>
+                    </div>
+                `;
+            } else if (data.id) {
+                content = `
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">${data.id}</div>
+                    <div style="font-size: 0.875rem;">
+                        <div>Code smells: ${data.smells}</div>
+                        <div>Status: ${data.smells > 7 ? 'Critical' : data.smells > 4 ? 'Warning' : 'Healthy'}</div>
+                    </div>
+                `;
+            }
+
+            tooltip.html(content)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 10) + 'px')
+                .classed('visible', true);
+        }
+
+        function hideTooltip() {
+            d3.select('#tooltip').classed('visible', false);
+        }
+
+        // Initial render
+        renderHeatmap();
+        renderPriorityMatrix();
+    </script>
+</body>
+</html>

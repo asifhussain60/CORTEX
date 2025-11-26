@@ -102,6 +102,9 @@ class DeploymentValidator:
         # Response Templates
         self.check_response_templates()
         
+        # Response Template Format Validation
+        self.check_response_template_format()
+        
         # GitHub Copilot Instructions Merge Logic
         self.check_copilot_instructions_merge_logic()
         
@@ -623,6 +626,84 @@ class DeploymentValidator:
                 severity="MEDIUM",
                 passed=False,
                 message=f"Failed to validate response templates: {e}",
+                fix_available=False
+            ))
+    
+    def check_response_template_format(self):
+        """RESPONSE_TEMPLATE_FORMAT: Verify all response templates have Next Steps as last section."""
+        check_id = "RESPONSE_TEMPLATE_FORMAT"
+        name = "Response Template Format (Next Steps Last)"
+        
+        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        
+        if not templates_file.exists():
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="MEDIUM",
+                passed=False,
+                message="response-templates.yaml not found",
+                fix_available=False
+            ))
+            return
+        
+        try:
+            with open(templates_file, 'r', encoding='utf-8') as f:
+                templates_data = yaml.safe_load(f)
+            
+            templates = templates_data.get('templates', {})
+            invalid_templates = []
+            
+            # Check each template for proper section ordering
+            for template_name, template_data in templates.items():
+                content = template_data.get('content', '')
+                
+                # Skip empty templates
+                if not content.strip():
+                    continue
+                
+                # Find all H2 section headers (## with emoji) - NOT H3 (###)
+                import re
+                # Use negative lookahead to exclude ### (H3 headers)
+                sections = re.findall(r'^## (?!#)[\U0001F300-\U0001F9FF]\s*(.+?)$', content, re.MULTILINE | re.UNICODE)
+                
+                if not sections:
+                    continue
+                
+                # Check if last H2 section is "Next Steps"
+                last_section = sections[-1].strip() if sections else ""
+                
+                # Valid last sections: "Next Steps", "Next Steps - ...", etc.
+                if "Next Steps" not in last_section:
+                    invalid_templates.append(template_name)
+            
+            if not invalid_templates:
+                self.results.append(ValidationResult(
+                    check_id=check_id,
+                    name=name,
+                    severity="MEDIUM",
+                    passed=True,
+                    message=f"✓ All {len(templates)} response templates have Next Steps as last section"
+                ))
+            else:
+                self.results.append(ValidationResult(
+                    check_id=check_id,
+                    name=name,
+                    severity="MEDIUM",
+                    passed=False,
+                    message=f"Templates with incorrect format: {', '.join(invalid_templates)}",
+                    details=f"{len(invalid_templates)} template(s) do not have 'Next Steps' as the final section. "
+                            f"Per CORTEX.prompt.md, 'Next Steps' MUST be the last section so users don't have to scroll to find it.",
+                    fix_available=False
+                ))
+        
+        except Exception as e:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="MEDIUM",
+                passed=False,
+                message=f"Failed to validate response template format: {e}",
                 fix_available=False
             ))
     

@@ -126,6 +126,23 @@ class IntentRouter(BaseAgent):
             IntentType.SCREENSHOT: ["screenshot", "ui", "screen", "visual"],
             IntentType.COMMIT: ["commit", "git", "push", "save changes"],
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
+            # ADO (Azure DevOps) operations (NEW - ADO Integration)
+            IntentType.ADO_STORY: [
+                "plan ado story", "create ado story", "new ado story", "plan user story",
+                "create user story", "new user story", "ado story", "user story"
+            ],
+            IntentType.ADO_FEATURE: [
+                "plan ado feature", "create ado feature", "new ado feature", "plan feature",
+                "ado feature"
+            ],
+            IntentType.ADO_SUMMARY: [
+                "generate ado summary", "create work summary", "ado work summary",
+                "complete ado work", "ado summary", "work summary"
+            ],
+            IntentType.CODE_REVIEW: [
+                "code review", "review code", "pr review", "review pr", "pull request review",
+                "review pull request"
+            ],
         }
         
         # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
@@ -226,6 +243,30 @@ class IntentRouter(BaseAgent):
                 'enable_vision_api': True,
                 'skip_summary_generation': False,
                 'requires_documentation': False
+            },
+            # ADO operations rule context (NEW - ADO Integration)
+            IntentType.ADO_STORY: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'ACCEPTANCE_CRITERIA'],
+                'skip_summary_generation': False,  # Stories need summaries
+                'requires_documentation': True,
+                'create_persistent_artifact': True
+            },
+            IntentType.ADO_FEATURE: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'ACCEPTANCE_CRITERIA'],
+                'skip_summary_generation': False,  # Features need summaries
+                'requires_documentation': True,
+                'create_persistent_artifact': True
+            },
+            IntentType.ADO_SUMMARY: {
+                'rules_to_consider': ['DEFINITION_OF_DONE'],
+                'skip_summary_generation': False,  # Summary generation is the point
+                'requires_documentation': True,
+                'requires_dod_validation': True
+            },
+            IntentType.CODE_REVIEW: {
+                'rules_to_consider': ['CODE_QUALITY', 'SECURITY', 'DEFINITION_OF_DONE'],
+                'skip_summary_generation': False,  # Reviews need detailed reports
+                'requires_documentation': True
             }
         }
 

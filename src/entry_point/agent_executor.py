@@ -19,6 +19,7 @@ from src.cortex_agents.work_planner.agent import WorkPlanner
 from src.cortex_agents.health_validator.agent import HealthValidator
 from src.cortex_agents.tactical.code_executor import CodeExecutor
 from src.agents.feedback_agent import FeedbackAgent
+from src.cortex_agents.ado_agent import ADOAgent
 
 
 class AgentExecutor:
@@ -160,6 +161,13 @@ class AgentExecutor:
         elif agent_type == AgentType.FEEDBACK:
             agent = FeedbackAgent(
                 name="FeedbackAgent"
+            )
+        elif agent_type == AgentType.ADO_ORCHESTRATOR:
+            agent = ADOAgent(
+                name="ADOAgent",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
             )
         # Add other agents as needed
         else:

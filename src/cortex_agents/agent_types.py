@@ -23,6 +23,7 @@ class AgentType(Enum):
     ANALYZER = auto()        # ScreenshotAnalyzer
     COMMITTER = auto()       # CommitHandler
     FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
+    ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
 
 
 class IntentType(Enum):
@@ -83,6 +84,13 @@ class IntentType(Enum):
     # Feedback collection (CORTEX Fix - Issue #4)
     FEEDBACK = "feedback"
     REPORT_ISSUE = "report_issue"
+    
+    # ADO (Azure DevOps) operations (NEW - ADO Integration)
+    ADO_WORKITEM = "ado_workitem"
+    ADO_STORY = "ado_story"
+    ADO_FEATURE = "ado_feature"
+    ADO_SUMMARY = "ado_summary"
+    CODE_REVIEW = "code_review"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -163,6 +171,13 @@ INTENT_AGENT_MAP = {
     
     IntentType.FEEDBACK: AgentType.FEEDBACK,
     IntentType.REPORT_ISSUE: AgentType.FEEDBACK,
+    
+    # ADO operations mapping (NEW - ADO Integration)
+    IntentType.ADO_WORKITEM: AgentType.ADO_ORCHESTRATOR,
+    IntentType.ADO_STORY: AgentType.ADO_ORCHESTRATOR,
+    IntentType.ADO_FEATURE: AgentType.ADO_ORCHESTRATOR,
+    IntentType.ADO_SUMMARY: AgentType.ADO_ORCHESTRATOR,
+    IntentType.CODE_REVIEW: AgentType.ADO_ORCHESTRATOR,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,
