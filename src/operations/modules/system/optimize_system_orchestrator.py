@@ -52,6 +52,7 @@ from src.operations.base_operation_module import (
     ExecutionMode
 )
 from src.operations.operation_header_formatter import OperationHeaderFormatter
+from src.caching import get_cache
 
 logger = logging.getLogger(__name__)
 
@@ -230,6 +231,21 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         self.metrics = OptimizationMetrics()
         self.start_time = None
         self._config_cache = None  # Cache for YAML config
+        self._validation_cache = get_cache()  # ValidationCache for caching expensive operations
+        
+        # Track files for cache invalidation
+        self._tracked_files = []
+        governance_file = self.project_root / "src" / "tier0" / "governance.yaml"
+        if governance_file.exists():
+            self._tracked_files.append(governance_file)
+        
+        documents_dir = self.project_root / "cortex-brain" / "documents"
+        if documents_dir.exists():
+            self._tracked_files.extend([
+                documents_dir / "reports",
+                documents_dir / "analysis", 
+                documents_dir / "summaries"
+            ])
     
     def _load_optimization_config(self, project_root: Path) -> Dict[str, Any]:
         """
@@ -627,6 +643,9 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         """
         Check EPMO health metrics.
         
+        Uses ValidationCache to cache EPMO health analysis results.
+        Cache is invalidated when any orchestrator file changes.
+        
         Implements CORTEX 3.1 EPMO drift detection:
         - Size metrics (line count, token count)
         - Duplication detection (class name similarity)
@@ -640,11 +659,10 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 - epmo_count: int
                 - health_score: float (0-100)
         """
-        issues = []
-        epmo_files = []
-        
         # Find all orchestrator files
         operations_dir = self.project_root / "src" / "operations" / "modules"
+        epmo_files = []
+        
         if operations_dir.exists():
             for py_file in operations_dir.rglob("*_orchestrator.py"):
                 epmo_files.append(py_file)
@@ -656,6 +674,22 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 'epmo_count': 0,
                 'health_score': 100.0
             }
+        
+        # Try cache first
+        cache_key = "epmo_health_analysis"
+        cached_result = self._validation_cache.get(
+            "optimize",
+            cache_key,
+            files=epmo_files
+        )
+        
+        if cached_result is not None:
+            logger.info("✅ EPMO health analysis retrieved from cache")
+            self.metrics.warnings.append(f"EPMO health cache hit (saved ~1-2s)")
+            return cached_result
+        
+        logger.info("🔄 Running EPMO health analysis (cache miss)...")
+        issues = []
         
         # Load configuration from YAML (no hardcoded limits!)
         config = self._load_optimization_config(self.project_root)
@@ -718,12 +752,24 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         health_score -= len([i for i in issues if 'VIOLATION' in i]) * 10
         health_score = max(0.0, health_score)
         
-        return {
+        result = {
             'has_issues': len(issues) > 0,
             'issues': issues,
             'epmo_count': len(epmo_files),
             'health_score': health_score
         }
+        
+        # Cache the result for future runs
+        self._validation_cache.set(
+            "optimize",
+            cache_key,
+            result,
+            files=epmo_files,
+            ttl_seconds=3600  # Cache for 1 hour
+        )
+        logger.info("✅ EPMO health analysis cached")
+        
+        return result
     
     def _run_test_suite_optimization(self, context: Dict[str, Any]) -> None:
         """Run test suite optimization (Phase 6)."""
@@ -733,6 +779,9 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     
     def _check_governance_drift(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Check governance.yaml for ordering drift and inefficiencies (Phase 7).
+        
+        Uses ValidationCache to cache governance analysis results for faster execution.
+        Cache is invalidated when governance.yaml file changes.
         
         Monitors:
         - Rule position drift (rules moved from optimal positions)
@@ -755,6 +804,21 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 'health_score': 0.0,
                 'recommendations': ["Create governance.yaml in src/tier0/"]
             }
+        
+        # Try cache first
+        cache_key = "governance_drift_analysis"
+        cached_result = self._validation_cache.get(
+            "optimize",
+            cache_key,
+            files=[governance_path]
+        )
+        
+        if cached_result is not None:
+            logger.info("✅ Governance drift analysis retrieved from cache")
+            self.metrics.warnings.append(f"Governance drift cache hit (saved ~2-3s)")
+            return cached_result
+        
+        logger.info("🔄 Running governance drift analysis (cache miss)...")
         
         issues = []
         recommendations = []
@@ -866,7 +930,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             self.metrics.governance_forward_refs = len(forward_refs)
             self.metrics.governance_orphaned_rules = len(orphaned)
             
-            return {
+            result = {
                 'has_issues': len(issues) > 0,
                 'issues': issues,
                 'health_score': health_score,
@@ -875,15 +939,29 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 'forward_refs': len(forward_refs),
                 'orphaned_rules': len(orphaned)
             }
+            
+            # Cache the result for future runs
+            self._validation_cache.set(
+                "optimize",
+                cache_key,
+                result,
+                files=[governance_path],
+                ttl_seconds=3600  # Cache for 1 hour
+            )
+            logger.info("✅ Governance drift analysis cached")
+            
+            return result
         
         except Exception as e:
             logger.error(f"Governance drift check failed: {e}", exc_info=True)
-            return {
+            error_result = {
                 'has_issues': True,
                 'issues': [f"ERROR: {str(e)}"],
                 'health_score': 0.0,
                 'recommendations': ["Fix governance.yaml parsing errors"]
             }
+            # Don't cache errors
+            return error_result
     
     def _calculate_total_improvements(self) -> int:
         """Calculate total improvements made across all phases."""
@@ -1049,7 +1127,27 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
 - **Errors encountered:** {len(report.metrics.errors_encountered)}
 - **Warnings:** {len(report.metrics.warnings)}
 
----
+## 🚀 Cache Performance
+
+"""
+        
+        # Add cache statistics
+        cache_stats = self._validation_cache.get_stats("optimize")
+        if cache_stats:
+            hit_rate = cache_stats.get('hit_rate', 0.0)
+            hits = cache_stats.get('hits', 0)
+            misses = cache_stats.get('misses', 0)
+            
+            content += f"""- **Cache hit rate:** {hit_rate * 100:.1f}%
+- **Cache hits:** {hits}
+- **Cache misses:** {misses}
+- **Time saved:** ~{hits * 2:.1f}s (estimated)
+
+"""
+        else:
+            content += "- Cache statistics not available\n\n"
+        
+        content += """---
 
 *Generated by CORTEX System Optimizer v{self.VERSION}*
 """
@@ -1061,6 +1159,14 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         """Format completion footer for display."""
         mode_display = "LIVE" if self.mode == ExecutionMode.LIVE else "DRY RUN"
         
+        # Get cache statistics
+        cache_stats = self._validation_cache.get_stats("optimize")
+        cache_summary = ""
+        if cache_stats:
+            hit_rate = cache_stats.get('hit_rate', 0.0)
+            hits = cache_stats.get('hits', 0)
+            cache_summary = f"\nCache Hit Rate:   {hit_rate * 100:.1f}% ({hits} hits, saved ~{hits * 2:.1f}s)"
+        
         return f"""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   System Optimization ✅ COMPLETED
@@ -1068,7 +1174,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
 
 Health Score:     {report.health_score:.1f}/100 ({report.overall_health.upper()})
 Total Improvements: {report.metrics.total_improvements}
-Execution Time:   {report.metrics.execution_time_seconds:.1f}s
+Execution Time:   {report.metrics.execution_time_seconds:.1f}s{cache_summary}
 Mode:             {mode_display}
 
 Recommendations:  {len(report.recommendations)} items

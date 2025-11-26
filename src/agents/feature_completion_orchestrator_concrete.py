@@ -24,6 +24,7 @@ from .feature_completion_orchestrator import (
     HealthReport,
     AlignmentReport
 )
+from .brain_ingestion_adapter_agent import BrainIngestionAdapterAgent
 from .brain_ingestion_agent import BrainIngestionAgentImpl
 from .implementation_discovery_engine import ImplementationDiscoveryEngine
 from .documentation_intelligence_system import DocumentationIntelligenceSystem  
@@ -36,15 +37,7 @@ logger = logging.getLogger(__name__)
 # ADAPTER CLASSES FOR INTERFACE COMPATIBILITY
 # ====================================================================================
 
-class BrainIngestionAdapterAgent(BrainIngestionAgent):
-    """Adapter to bridge interface differences"""
-    
-    def __init__(self, workspace_path: str):
-        self.workspace_path = workspace_path
-        self.impl = BrainIngestionAgentImpl(workspace_path)
-    
-    async def ingest_feature(self, feature_description: str) -> BrainData:
-        return await self.impl.ingest_feature(feature_description)
+# BrainIngestionAdapterAgent moved to brain_ingestion_adapter_agent.py
 
 class ImplementationDiscoveryAdapterEngine(AbstractImplementationDiscoveryEngine):
     """Adapter to bridge interface differences"""

@@ -17,7 +17,7 @@ import sys
 sys.modules['src.utils.entity_extractor'] = MagicMock()
 sys.modules['src.utils.metrics_collector'] = MagicMock()
 
-from src.agents.feature_completion_orchestrator_concrete import BrainIngestionAdapterAgent
+from src.agents.brain_ingestion_adapter_agent import BrainIngestionAdapterAgent
 from src.agents.brain_ingestion_agent import BrainIngestionAgentImpl
 
 

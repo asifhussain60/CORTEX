@@ -28,8 +28,8 @@ from abc import ABC, abstractmethod
 from src.agents.base_agent import BaseAgent
 from src.tier2.knowledge_graph import KnowledgeGraph  
 from src.tier3.context_intelligence import ContextIntelligence
-from src.utils.entity_extractor import EntityExtractor
-from src.utils.metrics_collector import MetricsCollector
+from src.tier1.entity_extractor import EntityExtractor
+from src.epmo.monitoring.metrics_collector import MetricsCollector
 
 logger = logging.getLogger(__name__)
 

@@ -11,10 +11,7 @@ from datetime import datetime
 import sys
 import os
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-
-from orchestrators.planning_orchestrator import PlanningOrchestrator
+from src.orchestrators.planning_orchestrator import PlanningOrchestrator
 
 
 @pytest.fixture

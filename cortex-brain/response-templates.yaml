@@ -777,6 +777,58 @@ templates:
       \ existing structure\n\n   \U0001F4A1 **Tip:** Documentation is automatically\
       \ validated and cross-referenced. Check the validation report at `docs/validation-report.md`"
   
+  hands_on_tutorial:
+    name: "Hands-On Tutorial Orchestrator"
+    triggers:
+    - hands on tutorial
+    - start hands on tutorial
+    - run on tutorial
+    response_type: detailed
+    content: "🧠 **CORTEX Hands-On Tutorial**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to start the interactive hands-on CORTEX tutorial.\n\n⚠️ **Challenge:** ✓ **Accept**\n   The hands-on tutorial provides practical exercises to learn CORTEX workflows.\n\n💬 **Response:**\n   Starting interactive CORTEX tutorial. This 15-30 minute program teaches CORTEX through practical exercises including planning, TDD, and testing.\n\n📝 **Your Request:** Start hands-on tutorial\n\n🔍 **Next Steps:**\n   See `.github/prompts/modules/hands-on-tutorial-guide.md` for complete tutorial program."
+  
+  publish_branch:
+    name: "Publish Branch Orchestrator"
+    triggers:
+    - publish branch
+    - start publish branch
+    - run branch
+    response_type: detailed
+    content: "🧠 **CORTEX Branch Publishing**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to publish CORTEX to the remote main branch.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Publishing orchestrates deployment validation and remote push.\n\n💬 **Response:**\n   This orchestrator handles CORTEX deployment to remote main branch with pre-deployment validation.\n\n📝 **Your Request:** Publish branch\n\n🔍 **Next Steps:**\n   1. Run deployment gates validation\n   2. Execute git push to origin/main\n   3. Verify deployment success"
+  
+  optimize_system:
+    name: "Optimize System Orchestrator"
+    triggers:
+    - optimize system
+    - start optimize system
+    - run system
+    response_type: detailed
+    content: "🧠 **CORTEX System Optimization**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to run comprehensive system optimization.\n\n⚠️ **Challenge:** ✓ **Accept**\n   System optimization cleans brain data, vacuums databases, and validates health.\n\n💬 **Response:**\n   Meta-level orchestrator for comprehensive CORTEX system optimization including database cleanup and health validation.\n\n📝 **Your Request:** Optimize system\n\n🔍 **Next Steps:**\n   1. Clean brain data (50-200 MB saved)\n   2. Vacuum SQLite databases\n   3. Run health check validation"
+  
+  planning_orchestrator:
+    name: "Planning Orchestrator"
+    triggers:
+    - planning
+    response_type: detailed
+    content: "🧠 **CORTEX Planning Orchestrator**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to use the planning orchestrator for feature planning.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Planning orchestrator provides YAML-based feature planning with DoR/DoD validation.\n\n💬 **Response:**\n   Orchestrates YAML-based feature planning with validation and Markdown generation. See Planning System 2.0 section in CORTEX.prompt.md for details.\n\n📝 **Your Request:** Start planning\n\n🔍 **Next Steps:**\n   Use `plan [feature]` to start feature planning workflow."
+  
+  view_discovery_agent:
+    name: "View Discovery Agent"
+    triggers:
+    - view discovery
+    - start view discovery
+    - run discovery
+    response_type: detailed
+    content: "🧠 **CORTEX View Discovery**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to discover element IDs from Razor/Blazor views.\n\n⚠️ **Challenge:** ✓ **Accept**\n   View discovery auto-discovers element IDs for test generation.\n\n💬 **Response:**\n   Discovers element IDs and structure from Razor/Blazor views. Provides 92% time savings (60+ min → <5 min) with 95%+ test accuracy.\n\n📝 **Your Request:** Discover views\n\n🔍 **Next Steps:**\n   Use `discover views` to scan Razor/Blazor files and extract element IDs."
+  
+  learning_capture:
+    name: "Learning Capture Agent"
+    triggers:
+    - learning capture
+    - start learning capture
+    - run capture
+    response_type: detailed
+    content: "🧠 **CORTEX Learning Capture**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n🎯 **My Understanding Of Your Request:**\n   You want to capture lessons learned automatically.\n\n⚠️ **Challenge:** ✓ **Accept**\n   Learning capture agent automatically extracts and stores patterns.\n\n💬 **Response:**\n   Agent that automatically captures lessons learned from various sources including conversations, implementations, and workflows.\n\n📝 **Your Request:** Capture learning\n\n🔍 **Next Steps:**\n   Learning capture runs automatically during CORTEX operations."
+  
   confidence_high:
     name: "Confidence Display - High"
     trigger:
@@ -1135,6 +1187,35 @@ routing:
   - sync design
   - synchronize design
   - align design
+  hands_on_tutorial_triggers:
+  - hands on tutorial
+  - start hands on tutorial
+  - run on tutorial
+  publish_branch_triggers:
+  - publish branch
+  - start publish branch
+  - run branch
+  - deploy cortex
+  optimize_system_triggers:
+  - optimize system
+  - start optimize system
+  - run system
+  planning_orchestrator_triggers:
+  - planning
+  - start planning
+  - plan feature
+  view_discovery_agent_triggers:
+  - view discovery
+  - start view discovery
+  - run discovery
+  - discover views
+  - crawl views
+  - find element ids
+  learning_capture_triggers:
+  - learning capture
+  - start learning capture
+  - run capture
+  - capture learning
 
 formatting:
   mandatory_sections:
