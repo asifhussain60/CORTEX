@@ -331,6 +331,47 @@ CORTEX will:
 
 ---
 
+## 🔧 Setup Entry Point Module
+
+**Complete Guide:** #file:modules/setup-epm-guide.md
+
+**Purpose:** Auto-generate `.github/copilot-instructions.md` for user repositories with brain-assisted learning
+
+**Key Features:**
+- **Fast Detection:** <5 seconds via file system scan (7 languages, 6 frameworks, 6 build systems, 4 test frameworks)
+- **Lightweight Template:** ~150 tokens vs 2000+ for semantic analysis (93% token savings)
+- **Brain Learning:** Improves accuracy over time (65% initial → 90% after learning)
+- **Namespace Isolation:** Each repo gets own Tier 3 storage, prevents cross-contamination
+
+**Quick Commands:**
+- `setup copilot instructions` - Generate new instructions file
+- `generate copilot instructions` - Alternative trigger
+- `cortex refresh instructions` - Update with learned patterns (Phase 2)
+
+**What Gets Generated:**
+- Entry point guidance (how to use CORTEX)
+- Architecture overview (detected language/framework)
+- Build/test commands (detected from package.json/Makefile/etc.)
+- Project conventions (learned over time)
+- Critical files reference
+- Brain status indicator
+
+**Brain Learning (Phase 2):**
+- Observes your coding patterns during normal CORTEX usage
+- Stores patterns in Tier 3 (workspace.{repo_name}.copilot_instructions)
+- Auto-updates instructions weekly or on-demand via `refresh instructions`
+- 30-day TTL prevents brain bloat
+
+**Merge Strategy (Phase 3):**
+- Detects existing copilot-instructions.md
+- Preserves user sections (no 🧠 prefix)
+- Updates CORTEX sections (with 🧠 prefix)
+- Offers backup before merge
+
+**See setup-epm-guide.md for architecture, detection tables, template structure, and phase roadmap.**
+
+---
+
 
 ## 🧠 Conversation Capture & Context
 

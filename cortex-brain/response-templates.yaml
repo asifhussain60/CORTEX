@@ -1069,6 +1069,40 @@ templates:
       \ [Sync results with changes detected and files updated]\n\n## Your Request\
       \ Synchronize design documentation\n\n## \U0001F50D Next Steps\n   1. Review\
       \ sync report\n   2. Validate documentation accuracy\n   3. Commit updated documentation"
+  setup_epm:
+    name: Setup Entry Point Module
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Setup Entry Point Module\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to generate .github/copilot-instructions.md for\
+      \ your repository using CORTEX brain-assisted learning.\n\n## Challenge No Challenge\
+      \ - CORTEX will analyze your codebase and generate AI instructions that improve\
+      \ over time through pattern learning.\n\n## \U0001F4AC Response\n   Starting\
+      \ Setup Entry Point Module...\n   \n   **What CORTEX will do:**\n   1. ⚡ Fast\
+      \ Detection (<10 seconds)\n      • Scan file system for language, framework,\
+      \ build system\n      • Detect test framework and project structure\n      •\
+      \ No deep code analysis (keeps token usage low)\n   \n   2. 📝 Generate Template\n\
+      \      • Create minimal but functional instructions\n      • Include detected\
+      \ metadata (language, framework, commands)\n      • Add learning placeholders\
+      \ for future improvements\n   \n   3. 🧠 Enable Brain Learning\n      • Store\
+      \ initial patterns in Tier 3 (namespace isolated)\n      • Observe your coding\
+      \ patterns during normal CORTEX usage\n      • Auto-update instructions weekly\
+      \ (or on-demand)\n   \n   4. ✅ Write File\n      • Location: .github/copilot-instructions.md\n\
+      \      • Immediately usable by GitHub Copilot\n      • Improves automatically\
+      \ as you work\n   \n   **If file already exists:**\n   I'll offer merge options\
+      \ to preserve your existing content.\n\n## Your Request Generate copilot-instructions.md\
+      \ for my repository\n\n## \U0001F50D Next Steps\n   1. **Detection Phase** -\
+      \ Scanning your project structure...\n   2. **Template Generation** - Creating\
+      \ instructions based on detected patterns\n   3. **File Creation** - Writing\
+      \ to .github/copilot-instructions.md\n   4. **Brain Learning** - Enabling pattern\
+      \ observation\n   \n   Executing now..."
   tdd_workflow_start:
     name: TDD Workflow Start
     triggers:
@@ -1377,6 +1411,13 @@ routing:
   - sync design
   - synchronize design
   - align design
+  setup_epm_triggers:
+  - setup copilot instructions
+  - setup instructions
+  - generate copilot instructions
+  - create copilot instructions
+  - setup epm
+  - copilot instructions
 formatting:
   mandatory_sections:
   - understanding
