@@ -143,20 +143,17 @@ class ConversationCaptureManager:
                 'capture_id': capture_id,
                 'file_path': str(capture_file),
                 'instructions': f"""
-📋 **CORTEX Conversation Capture Created**
+📋 **Capture file created and ready!**
 
-**Step 1 Complete!** ✅
+**File location:** `{capture_file.name}`
 
 **Next Steps:**
-1. **Copy your Copilot conversation** from VS Code chat panel
-2. **Open file:** `{capture_file.name}` 
-3. **Replace the template** with your actual conversation
-4. **Save the file** 
-5. **Run:** `/CORTEX Import {capture_id}`
+1. Copy this conversation from Copilot Chat (right-click → Copy Conversation)
+2. Paste into the opened capture file in VS Code
+3. Save the file (Cmd+S)
+4. Say "proceed" to import and process
 
-**File Location:** `{file_location}`
-
-The capture file has been pre-filled with a template. Just replace the example conversation with your real one!
+CORTEX will extract patterns, entities, and successful approaches for future use.
                 """.strip(),
                 'ready_for_paste': True
             }
@@ -169,17 +166,30 @@ The capture file has been pre-filled with a template. Just replace the example c
                 'instructions': 'Failed to create capture file. Please check logs.'
             }
     
-    def import_conversation(self, capture_id: str) -> Dict[str, Any]:
+    def import_conversation(self, capture_id: str = None) -> Dict[str, Any]:
         """
         Step 2: Import pasted conversation from capture file into CORTEX brain
         
         Args:
-            capture_id: ID returned from create_capture_file
+            capture_id: ID returned from create_capture_file (optional - will find most recent if omitted)
             
         Returns:
             Dict with import results and memory integration status
         """
         try:
+            # If no capture_id provided, find most recent capture file
+            if not capture_id:
+                capture_id = self._find_most_recent_capture()
+                if not capture_id:
+                    return {
+                        'success': False,
+                        'error': 'No capture file found. Please run "capture conversation" first.',
+                        'suggestions': [
+                            'Say "capture conversation" to create a new capture file',
+                            'Check conversation-captures directory for existing files'
+                        ]
+                    }
+            
             # Validate capture ID
             if capture_id not in self.active_captures:
                 return {
@@ -210,11 +220,13 @@ The capture file has been pre-filled with a template. Just replace the example c
             if self._is_still_template(content):
                 return {
                     'success': False,
-                    'error': 'Capture file still contains template. Please paste your actual conversation.',
+                    'error': 'Capture file is still blank. Please paste your conversation first.',
                     'suggestions': [
-                        f'Open {capture_file.name} and replace template with your conversation',
-                        'Copy your conversation from VS Code chat panel',
-                        'Save the file and try importing again'
+                        f'Open {capture_file.name} in VS Code',
+                        'Right-click in Copilot Chat and select "Copy Conversation"',
+                        'Paste the conversation into the blank file',
+                        'Save the file (Cmd+S / Ctrl+S)',
+                        f'Then run: import conversation {capture_id}'
                     ]
                 }
             
@@ -363,104 +375,116 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             }
             
         except Exception as e:
+            self.logger.error(f"Failed to get capture status: {e}")
             return {
                 'success': False,
                 'error': str(e)
             }
     
+    def _find_most_recent_capture(self) -> Optional[str]:
+        """Find the most recently created capture file that hasn't been imported yet"""
+        try:
+            # Check active captures first
+            awaiting_captures = [
+                (cid, info) for cid, info in self.active_captures.items()
+                if info['status'] == 'awaiting_paste'
+            ]
+            
+            if awaiting_captures:
+                # Sort by creation time, most recent first
+                awaiting_captures.sort(key=lambda x: x[1]['created_at'], reverse=True)
+                return awaiting_captures[0][0]
+            
+            # If no active captures, scan directory for capture files
+            capture_files = list(self.capture_dir.glob("capture_*.md"))
+            if not capture_files:
+                return None
+            
+            # Sort by modification time, most recent first
+            capture_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+            
+            # Return the capture_id from the filename
+            most_recent = capture_files[0]
+            capture_id = most_recent.stem  # Remove .md extension
+            
+            # Add to active captures if not already there
+            if capture_id not in self.active_captures:
+                self.active_captures[capture_id] = {
+                    'file_path': str(most_recent),
+                    'created_at': datetime.fromtimestamp(most_recent.stat().st_ctime, tz=timezone.utc).isoformat(),
+                    'user_hint': '',
+                    'status': 'awaiting_paste'
+                }
+            
+            return capture_id
+            
+        except Exception as e:
+            self.logger.error(f"Failed to find most recent capture: {e}")
+            return None
+    
+    def _get_next_action(self, status: str, has_conversation: bool) -> str:
+        """Determine the next action based on capture status"""
+        if status == 'imported':
+            return 'Conversation already imported'
+        elif has_conversation:
+            return 'Ready to import - say "proceed"'
+        else:
+            return 'Paste conversation and save file'
+    
     # Private helper methods
     
     def _generate_capture_instructions(self, user_hint: str) -> str:
-        """Generate capture file template with instructions"""
-        template = f"""# CORTEX Conversation Capture
+        """Generate blank capture file with instructions"""
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
-**Instructions:**
-1. REPLACE this entire template with your GitHub Copilot conversation
-2. Copy your conversation from VS Code chat panel  
-3. Paste it here, keeping the format: "You: ..." and "Copilot: ..."
-4. Save this file
-5. Run: /CORTEX Import [capture_id] to import into brain
+        blank_template = f"""# Conversation Capture
 
-**User Hint:** {user_hint if user_hint else "General conversation"}
-**Created:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+**Created:** {timestamp}
+**Status:** Awaiting paste
+**Topic:** {user_hint if user_hint else "General conversation"}
 
 ---
 
-## EXAMPLE FORMAT (REPLACE WITH YOUR CONVERSATION)
+## Instructions
 
-**You:** Add a purple button to the dashboard
-
-**Copilot:** I'll add a purple button to the dashboard for you. Let me create a styled button component.
-
-```html
-<button class="purple-button" onclick="handleClick()">
-  Click Me
-</button>
-```
-
-```css
-.purple-button {{
-  background-color: #8A2BE2;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}}
-```
-
-I've created a purple button with proper styling. The button uses a vibrant purple color (#8A2BE2) and includes hover effects for better user interaction.
-
-**You:** Make it bigger and add a shadow
-
-**Copilot:** I'll increase the button size and add a shadow effect:
-
-```css
-.purple-button {{
-  background-color: #8A2BE2;
-  color: white;
-  border: none;
-  padding: 15px 30px;  /* Increased padding */
-  border-radius: 8px;   /* Slightly larger border radius */
-  cursor: pointer;
-  font-size: 16px;      /* Larger text */
-  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.3);  /* Purple shadow */
-  transition: transform 0.2s, box-shadow 0.2s;
-}}
-
-.purple-button:hover {{
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(138, 43, 226, 0.4);
-}}
-```
-
-The button is now larger with increased padding and font size, plus it has a purple shadow that enhances on hover with a subtle lift effect.
+1. Right-click in GitHub Copilot Chat panel
+2. Select "Copy Conversation"
+3. Paste conversation below this line
+4. Save file (Cmd+S)
+5. Return to chat and say: `proceed`
 
 ---
 
-**REPLACE THE EXAMPLE ABOVE WITH YOUR ACTUAL CONVERSATION**
+<!-- PASTE CONVERSATION BELOW THIS LINE -->
+
 """
-        return template
+        return blank_template
     
     def _is_still_template(self, content: str) -> bool:
-        """Check if the capture file still contains the template"""
-        template_indicators = [
-            "REPLACE this entire template",
-            "EXAMPLE FORMAT (REPLACE WITH YOUR CONVERSATION)",
-            "REPLACE THE EXAMPLE ABOVE",
-            "I'll add a purple button",  # Example content
+        """Check if the capture file is still blank/empty"""
+        # Remove the header section to check actual content
+        lines = content.split('\n')
+        
+        # Skip header lines (anything before the separator or first few lines)
+        content_start_idx = 0
+        for i, line in enumerate(lines):
+            if line.strip() == '---':
+                content_start_idx = i + 1
+                break
+        
+        # Get content after header
+        actual_content = '\n'.join(lines[content_start_idx:]).strip()
+        
+        # Check if there's meaningful conversation content
+        conversation_lines = [
+            line.strip() for line in actual_content.split('\n') 
+            if line.strip() and (
+                line.strip().startswith(('You:', 'Copilot:', '**You:**', '**Copilot:**', 'User:', 'Assistant:'))
+            )
         ]
         
-        content_lower = content.lower()
-        for indicator in template_indicators:
-            if indicator.lower() in content_lower:
-                return True
-        
-        # Also check if it's suspiciously short (just instructions)
-        lines = [line.strip() for line in content.split('\n') if line.strip()]
-        conversation_lines = [line for line in lines if line.startswith(('You:', 'Copilot:', '**You:**', '**Copilot:**'))]
-        
-        return len(conversation_lines) < 2  # Need at least user + copilot message
+        # Need at least 2 conversation lines (one exchange)
+        return len(conversation_lines) < 2
     
     def _parse_conversation(self, content: str, user_hint: str) -> Dict[str, Any]:
         """Parse conversation content and extract structured data"""
