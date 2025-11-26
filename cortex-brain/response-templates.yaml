@@ -599,24 +599,24 @@ templates:
       \nHello! I'm CORTEX, your AI assistant enhancement system with long-term memory,\
       \ context awareness, and strategic planning capabilities.\n\n**Available Operations\
       \ (choose by letter or describe what you need):**\n\nA. **Planning System 2.0**\
-      \ - Vision API, DoR/DoD validation, file-based plans\nB. **TDD Mastery** -\
-      \ RED→GREEN→REFACTOR workflow with auto-debug\nC. **Hands-On Tutorial** - Interactive\
-      \ 15-30 min learning program\nD. **View Discovery** - Auto-extract element\
-      \ IDs from UI files\nE. **Feedback System** - Structured bug/feature reporting\n\
-      F. **Upgrade System** - Safe CORTEX upgrades with brain preservation\nG. **Admin\
-      \ Operations** (detected: CORTEX dev repo) - Deploy, generate docs, system\
-      \ alignment\n\n**I'm operating with:**\n- ✅ 4-tier brain architecture (Tier\
-      \ 0-3 databases)\n- ✅ 10 specialist agents (tactical + strategic)\n- ✅ Dual-hemisphere\
-      \ processing\n- ✅ Brain protection (SKULL rules)\n- ✅ Response template system\n\
-      \n## \U0001F4DD Your Request\n\nInitial greeting\n\n## \U0001F50D Next Steps\n\
-      \n**Quick Selection:**\n- Say the **letter** (e.g., \"C\" for tutorial, \"B\"\
-      \ for TDD)\n- Say the **name** (e.g., \"start tutorial\", \"plan feature\"\
-      )\n- **Ask anything** - \"How do I...?\", \"Show me...\", \"Help with...\"\n\
-      \n**Popular Choices:**\n- \U0001F195 **First time?** → Try **C** (tutorial)\
-      \ for hands-on learning\n- \U0001F4CB **Need to plan?** → Try **A** (planning)\
-      \ for feature planning\n- \U0001F9EA **Writing tests?** → Try **B** (TDD) for\
-      \ test-driven development\n- ❓ **Not sure?** → Say **\"help\"** for full command\
-      \ reference\n\nWhat would you like to accomplish today?"
+      \ - Vision API, DoR/DoD validation, file-based plans\n\nB. **TDD Mastery** -\
+      \ RED→GREEN→REFACTOR workflow with auto-debug\n\nC. **Hands-On Tutorial** -\
+      \ Interactive 15-30 min learning program\n\nD. **View Discovery** - Auto-extract\
+      \ element IDs from UI files\n\nE. **Feedback System** - Structured bug/feature\
+      \ reporting\n\nF. **Upgrade System** - Safe CORTEX upgrades with brain preservation\n\
+      \nG. **Admin Operations** (detected: CORTEX dev repo) - Deploy, generate docs,\
+      \ system alignment\n\n**I'm operating with:**\n- ✅ 4-tier brain architecture\
+      \ (Tier 0-3 databases)\n- ✅ 10 specialist agents (tactical + strategic)\n-\
+      \ ✅ Dual-hemisphere processing\n- ✅ Brain protection (SKULL rules)\n- ✅ Response\
+      \ template system\n\n## \U0001F4DD Your Request\n\nInitial greeting\n\n## \U0001F50D\
+      \ Next Steps\n\n**Quick Selection:**\n- Say the **letter** (e.g., \"C\" for\
+      \ tutorial, \"B\" for TDD)\n- Say the **name** (e.g., \"start tutorial\", \"\
+      plan feature\")\n- **Ask anything** - \"How do I...?\", \"Show me...\", \"Help\
+      \ with...\"\n\n**Popular Choices:**\n- \U0001F195 **First time?** → Try **C**\
+      \ (tutorial) for hands-on learning\n- \U0001F4CB **Need to plan?** → Try **A**\
+      \ (planning) for feature planning\n- \U0001F9EA **Writing tests?** → Try **B**\
+      \ (TDD) for test-driven development\n- ❓ **Not sure?** → Say **\"help\"** for\
+      \ full command reference\n\nWhat would you like to accomplish today?"
   fallback:
     name: Fallback Response
     triggers:
