@@ -220,6 +220,75 @@ templates:
       \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
       \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
       \ Steps\n   [Context-appropriate format]"
+  introduction_discovery:
+    name: CORTEX Discovery & Introduction
+    triggers:
+    - discover cortex
+    - explore cortex
+    - cortex demo
+    - show me what cortex can do
+    - cortex tour
+    - guided tour
+    - what can you do
+    - cortex capabilities
+    - cortex features
+    - show capabilities
+    response_type: interactive
+    content: "# \U0001F9E0 CORTEX Discovery & Introduction\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My\
+      \ Understanding Of Your Request\n\nYou want to explore CORTEX capabilities\
+      \ and discover what it can do for your development workflow.\n\n## ⚠️ Challenge\n\
+      \nNo Challenge - Discovery mode helps you understand CORTEX's full potential\
+      \ and find the features that best match your needs.\n\n## \U0001F4AC Response\n\
+      \nCORTEX is an AI-enhanced development assistant with **long-term memory**,\
+      \ **strategic planning**, and **automated workflows**.\n\n**Core Philosophy:**\n\
+      - \U0001F9E0 **Brain Architecture** - 4-tier memory system (Tier 0: Governance,\
+      \ Tier 1: Working Memory, Tier 2: Knowledge Graph, Tier 3: Dev Context)\n-\
+      \ \U0001F3AF **Zero Ambiguity** - Planning with Definition of Ready (DoR) and\
+      \ Definition of Done (DoD) enforcement\n- \U0001F534\U0001F7E2\U0001F535 **TDD\
+      \ Mastery** - RED→GREEN→REFACTOR automation with performance-based refactoring\n\
+      - \U0001F4CA **Pattern Learning** - Learns from your coding patterns and improves\
+      \ accuracy over time\n- \U0001F6E1️ **Brain Protection** - SKULL rules prevent\
+      \ degradation and enforce best practices\n\n**Key Differentiators:**\n- **97.2%\
+      \ token reduction** (74,047 → 2,078 avg) through intelligent memory management\n\
+      - **Universal upgrade system** works across all installation types with zero\
+      \ data loss\n- **Vision API integration** extracts requirements from screenshots\
+      \ (UI mockups, errors, ADO items)\n- **Convention-based feature validation**\
+      \ ensures complete integration (7-layer scoring)\n\n## \U0001F4DD Your Request\n\
+      \nDiscover CORTEX capabilities and learn how to use them effectively\n\n##\
+      \ \U0001F50D Next Steps - Interactive Discovery\n\n**Choose your exploration\
+      \ path:**\n\n### \U0001F680 Quick Demos (5-10 min each)\n1. **`demo planning`**\
+      \ - See Planning System 2.0 with DoR/DoD enforcement and Vision API\n2. **`demo\
+      \ tdd`** - Watch RED→GREEN→REFACTOR cycle with auto-debug and performance refactoring\n\
+      3. **`demo view discovery`** - Auto-extract UI elements for testing (60+ min\
+      \ → <5 min, 92% time savings)\n4. **`demo feedback`** - Structured issue reporting\
+      \ with privacy protection and GitHub Gist upload\n5. **`demo upgrade`** - Universal\
+      \ upgrade system with brain preservation and auto-detection\n\n### \U0001F393\
+      \ Deep Dives (15-30 min each)\n6. **`tutorial`** - Hands-on interactive tutorial\
+      \ (build real authentication feature with tests)\n7. **`show brain architecture`**\
+      \ - Understand 4-tier memory system and SKULL protection rules\n8. **`explain\
+      \ upgrade system`** - Universal upgrade with brain preservation and path validation\n\
+      9. **`system alignment demo`** - Convention-based feature validation (admin\
+      \ only - CORTEX repo)\n10. **`show context`** - See what CORTEX remembers about\
+      \ your project and conversations\n\n### \U0001F4D6 Documentation (Read at your\
+      \ pace)\n11. **Planning Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)\
+      \ (Coming Soon)\n12. **TDD Mastery** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/tdd/)\
+      \ (Coming Soon)\n13. **Response Format** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/format/)\
+      \ (Coming Soon)\n14. **Brain Architecture** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/architecture/)\
+      \ (Coming Soon)\n15. **Full Documentation** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/)\
+      \ (Coming Soon)\n\n### \U0001F393 Learning Paths\n16. **`beginner path`** -\
+      \ New to CORTEX? → Start here: `help` → `tutorial` → `demo planning`\n17. **`advanced\
+      \ path`** - Experienced user? → Explore: `system alignment` → `show context`\
+      \ → `admin help` (CORTEX repo only)\n18. **`developer path`** - Building features?\
+      \ → Learn: `demo tdd` → `demo view discovery` → `git checkpoint`\n\n---\n\n\
+      **Pro Tips:**\n- Say **`help`** anytime to see all available commands\n- Use\
+      \ **`show context`** to see what CORTEX remembers about your project\n- Try\
+      \ **`healthcheck`** to validate your CORTEX installation\n- Use **`feedback`**\
+      \ to report issues or suggest improvements\n\n**Quick Start Recommendations:**\n\
+      - \U0001F195 **First time?** → Try `tutorial` for hands-on learning\n- \U0001F4CB\
+      \ **Need to plan?** → Use `demo planning` to see planning in action\n- \U0001F9EA\
+      \ **Writing tests?** → Start with `demo tdd` for TDD workflow\n- \U0001F50D\
+      \ **Need help?** → Say `help` for command reference"
   not_implemented:
     name: Not Implemented
     triggers:
@@ -510,6 +579,44 @@ templates:
       \ Steps\n   1. Review search results\n   2. Open specific ADO: 'resume ado [number]'\n\
       \   3. Refine search if needed\n   4. Filter by status: 'show ados planning'\
       \ or 'show ados in-progress'"
+  greeting:
+    name: Greeting Response
+    triggers:
+    - hello
+    - hi
+    - hey
+    - greetings
+    - good morning
+    - good afternoon
+    - good evening
+    - hello cortex
+    - hi cortex
+    - hey cortex
+    response_type: interactive
+    content: "# \U0001F9E0 CORTEX Initialization\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n\nYou want to start working with CORTEX.\n\n## \U0001F4AC Response\n\
+      \nHello! I'm CORTEX, your AI assistant enhancement system with long-term memory,\
+      \ context awareness, and strategic planning capabilities.\n\n**Available Operations\
+      \ (choose by letter or describe what you need):**\n\nA. **Planning System 2.0**\
+      \ - Vision API, DoR/DoD validation, file-based plans\nB. **TDD Mastery** -\
+      \ RED→GREEN→REFACTOR workflow with auto-debug\nC. **Hands-On Tutorial** - Interactive\
+      \ 15-30 min learning program\nD. **View Discovery** - Auto-extract element\
+      \ IDs from UI files\nE. **Feedback System** - Structured bug/feature reporting\n\
+      F. **Upgrade System** - Safe CORTEX upgrades with brain preservation\nG. **Admin\
+      \ Operations** (detected: CORTEX dev repo) - Deploy, generate docs, system\
+      \ alignment\n\n**I'm operating with:**\n- ✅ 4-tier brain architecture (Tier\
+      \ 0-3 databases)\n- ✅ 10 specialist agents (tactical + strategic)\n- ✅ Dual-hemisphere\
+      \ processing\n- ✅ Brain protection (SKULL rules)\n- ✅ Response template system\n\
+      \n## \U0001F4DD Your Request\n\nInitial greeting\n\n## \U0001F50D Next Steps\n\
+      \n**Quick Selection:**\n- Say the **letter** (e.g., \"C\" for tutorial, \"B\"\
+      \ for TDD)\n- Say the **name** (e.g., \"start tutorial\", \"plan feature\"\
+      )\n- **Ask anything** - \"How do I...?\", \"Show me...\", \"Help with...\"\n\
+      \n**Popular Choices:**\n- \U0001F195 **First time?** → Try **C** (tutorial)\
+      \ for hands-on learning\n- \U0001F4CB **Need to plan?** → Try **A** (planning)\
+      \ for feature planning\n- \U0001F9EA **Writing tests?** → Try **B** (TDD) for\
+      \ test-driven development\n- ❓ **Not sure?** → Say **\"help\"** for full command\
+      \ reference\n\nWhat would you like to accomplish today?"
   fallback:
     name: Fallback Response
     triggers:
@@ -1242,6 +1349,17 @@ templates:
       \ (REFACTOR phase)"
 routing:
   default: fallback
+  greeting_triggers:
+  - hello
+  - hi
+  - hey
+  - greetings
+  - good morning
+  - good afternoon
+  - good evening
+  - hello cortex
+  - hi cortex
+  - hey cortex
   help_triggers:
   - help
   - /help
@@ -1418,6 +1536,17 @@ routing:
   - create copilot instructions
   - setup epm
   - copilot instructions
+  discovery_triggers:
+  - discover cortex
+  - explore cortex
+  - cortex demo
+  - show me what cortex can do
+  - cortex tour
+  - guided tour
+  - what can you do
+  - cortex capabilities
+  - cortex features
+  - show capabilities
 formatting:
   mandatory_sections:
   - understanding
