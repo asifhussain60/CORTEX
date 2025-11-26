@@ -1028,6 +1028,39 @@ templates:
       \ Orchestrator initialization\n   - Adapter created automatically during sub-agent\
       \ setup\n   - No direct user interaction needed\n   \n   Which option interests\
       \ you?"
+  cleanup_validation_failed:
+    name: Cleanup Validation Failed
+    triggers:
+    - cleanup_validation_failed
+    - validation_failed
+    - cleanup_blocked
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Cleanup Validation Failed\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You attempted to run cleanup, but pre-execution validation\
+      \ detected issues that would break CORTEX functionality.\n\n## ⚠️ Challenge\n\
+      \n   **Challenge:** Proposed cleanup would delete critical files or break import\
+      \ dependencies\n\n## \U0001F4AC Response\n   ❌ **Cleanup Blocked for Safety**\n\
+      \   \n   Pre-execution validation detected {error_count} critical issues:\n\
+      \   \n   {error_details}\n   \n   **Why Blocked:**\n   These issues would cause\
+      \ CORTEX to become non-functional after cleanup. The validation system prevented\
+      \ execution to protect your system.\n   \n   **Validation Report:** {validation_report_path}\n\
+      \   \n   **What Validation Checks:**\n   1. **Import Dependencies** - Ensures\
+      \ no Python module imports deleted files\n   2. **Critical Files** - Protects\
+      \ src/, tests/, tier databases, config files\n   3. **Test Discovery** - Validates\
+      \ pytest can still find all tests\n   4. **Entry Points** - Ensures main.py,\
+      \ cortex_entry.py remain functional\n   \n   **Common Issues:**\n   - File is\
+      \ imported by other modules (check importers list)\n   - File is in protected\
+      \ src/ or tests/ directory\n   - File is critical to CORTEX entry points\n \
+      \  - Test file would break test discovery\n\n## \U0001F4DD Your Request Execute\
+      \ cleanup operation\n\n## \U0001F50D Next Steps\n   1. Review validation report\
+      \ at {validation_report_path}\n   2. Fix critical issues (remove files from\
+      \ cleanup or update references)\n   3. Re-run cleanup after issues resolved\n\
+      \   4. Alternative: Skip validation with cleanup --skip-validation (not recommended)\n\
+      \   \n   **How to Fix:**\n   - **Import errors**: Update imports before deleting\
+      \ files\n   - **Protected files**: Do not delete files in src/, tests/, or cortex-brain/tier*/\n\
+      \   - **Test files**: Keep test files or update test discovery configuration\n\
+      \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
   admin_help:
     name: Admin Help
     triggers:
@@ -1215,21 +1248,48 @@ templates:
       \   3. Address warnings (70-89% integration)\n   4. Re-run validation after\
       \ fixes\n   5. Target: >80% overall health for deployment"
   cleanup_operation:
-    name: Cleanup Operation
+    name: Holistic Cleanup Operation
     triggers:
     - cleanup
     - clean up
     - cleanup cortex
     - clean cortex
+    - holistic cleanup
+    - repository cleanup
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Cleanup Operation\n**Author:** Asif Hussain | **GitHub:**\
+    content: "# \U0001F9E0 CORTEX Holistic Cleanup\n**Author:** Asif Hussain | **GitHub:**\
       \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to clean up CORTEX brain data and temporary files.\n\
-      \n## Challenge No Challenge - Cleanup removes old conversations, temporary files,\
-      \ and vacuums databases to reclaim space.\n\n## \U0001F4AC Response\n   [Cleanup\
-      \ results with space saved and items removed]\n\n## Your Request Run cleanup\
-      \ operation\n\n## \U0001F50D Next Steps\n   1. Review cleanup summary\n   2.\
-      \ Verify important data preserved\n   3. Check space savings achieved"
+      \ Your Request\n   You want to perform a holistic cleanup of the CORTEX repository,\
+      \ identifying and removing:\n   • Non-production files (temporary naming patterns)\n\
+      \   • Redundant/backup files\n   • Deprecated/obsolete content\n   • Orphaned\
+      \ files with no references\n\n## ⚠️ Challenge\n\nNo Challenge - Holistic cleanup\
+      \ will scan entire repository recursively, categorize all files, validate production\
+      \ readiness, and generate detailed manifest for review before execution.\n\n\
+      ## \U0001F4AC Response\n   Starting holistic repository cleanup...\n   \n  \
+      \ **Phase 1: Repository Scan** (30-60s)\n   • Recursively scan all directories\n\
+      \   • Categorize files by type and purpose\n   • Detect naming pattern violations\n\
+      \   • Identify redundancies and orphaned files\n   \n   **Phase 2: Production\
+      \ Validation** (10-20s)\n   • Check file naming standards\n   • Detect temporary/versioned\
+      \ patterns\n   • Suggest production-ready names\n   • Flag files requiring attention\n\
+      \   \n   **Phase 3: Report Generation** (5s)\n   • Comprehensive cleanup manifest\n\
+      \   • Categorized file listings\n   • Recommended actions\n   • Space savings\
+      \ projection\n   \n   **Phase 4: Safe Execution** (with approval)\n   • DRY\
+      \ RUN: Preview all changes\n   • USER APPROVAL: Review manifest\n   • BACKUP:\
+      \ Create git backup point\n   • EXECUTE: Perform cleanup\n   • COMMIT: Document\
+      \ changes\n   • ROLLBACK: Available if needed\n\n## \U0001F4DD Your Request\n\
+      \   Perform holistic cleanup with production-ready validation\n\n## \U0001F50D\
+      \ Next Steps\n   \n   1. **Review Manifest** - Cleanup manifest will be generated\
+      \ and saved to:\n      `cortex-brain/documents/reports/cleanup-manifest-[timestamp].json`\n\
+      \      `cortex-brain/documents/reports/cleanup-report-[timestamp].md`\n   \n\
+      \   2. **Open Report** - Markdown report opens automatically in VS Code\n  \
+      \ \n   3. **Approve Changes** - After reviewing:\n      • Say \"approve cleanup\"\
+      \ to execute\n      • Say \"cancel cleanup\" to abort\n   \n   4. **Monitor\
+      \ Progress** - Real-time progress shown during execution\n   \n   5. **Review\
+      \ Results** - Cleanup summary with:\n      • Files deleted/renamed\n      •\
+      \ Space freed\n      • Git commit created\n      • Rollback instructions if\
+      \ needed\n   \n   **Safety Features:**\n   ✅ Dry-run preview before execution\n\
+      \   ✅ Git backup before changes\n   ✅ Rollback capability if issues\n   ✅\
+      \ Protected paths never touched\n   ✅ Detailed action logging"
   design_sync_operation:
     name: Design Sync Operation
     triggers:
@@ -1594,6 +1654,10 @@ routing:
   - clean up
   - cleanup cortex
   - clean cortex
+  cleanup_validation_failed_triggers:
+  - cleanup_validation_failed
+  - validation_failed
+  - cleanup_blocked
   design_sync_triggers:
   - design sync
   - sync design

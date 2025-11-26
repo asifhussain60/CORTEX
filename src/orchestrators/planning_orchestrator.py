@@ -20,6 +20,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
 import logging
 import re
+from src.workflows.document_organizer import DocumentOrganizer
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,10 @@ class PlanningOrchestrator:
         self.active_plans_dir = self.plans_dir / "active"
         self.completed_plans_dir = self.plans_dir / "completed"
         self.schema = self._load_schema()
+        
+        # NEW Sprint 2: Initialize document organizer
+        brain_path = self.cortex_root / "cortex-brain"
+        self.document_organizer = DocumentOrganizer(brain_path)
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -439,6 +444,17 @@ class PlanningOrchestrator:
             with open(output_path, 'w', encoding='utf-8') as f:
                 yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
             
+            # NEW Sprint 2: Auto-organize plan into correct category
+            try:
+                organized_path, organize_message = self.document_organizer.organize_document(output_path)
+                if organized_path:
+                    logger.info(f"📁 {organize_message}")
+                    output_path = organized_path
+                else:
+                    logger.warning(f"⚠️ Plan organization skipped: {organize_message}")
+            except Exception as org_error:
+                logger.warning(f"⚠️ Plan organization failed: {org_error}")
+            
             logger.info(f"Plan saved to {output_path}")
             return (True, f"Plan saved to {output_path}")
         except Exception as e:
@@ -611,6 +627,17 @@ class PlanningOrchestrator:
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(markdown)
+            
+            # NEW Sprint 2: Auto-organize markdown view into correct category
+            try:
+                organized_path, organize_message = self.document_organizer.organize_document(output_path)
+                if organized_path:
+                    logger.info(f"📁 {organize_message}")
+                    output_path = organized_path
+                else:
+                    logger.warning(f"⚠️ Markdown organization skipped: {organize_message}")
+            except Exception as org_error:
+                logger.warning(f"⚠️ Markdown organization failed: {org_error}")
             
             logger.info(f"Markdown view saved to {output_path}")
             return (True, f"Markdown view saved to {output_path}")

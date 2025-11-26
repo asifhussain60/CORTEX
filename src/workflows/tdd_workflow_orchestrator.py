@@ -17,32 +17,32 @@ from dataclasses import dataclass
 from datetime import datetime
 
 # Phase 1 imports
-from cortex_agents.test_generator.generators.function_test_generator import FunctionTestGenerator
-from cortex_agents.test_generator.templates import TemplateManager
-from cortex_agents.test_generator.edge_case_analyzer import EdgeCaseAnalyzer
-from cortex_agents.test_generator.domain_knowledge_integrator import DomainKnowledgeIntegrator
-from cortex_agents.test_generator.error_condition_generator import ErrorConditionGenerator
-from cortex_agents.test_generator.parametrized_test_generator import ParametrizedTestGenerator
+from src.cortex_agents.test_generator.generators.function_test_generator import FunctionTestGenerator
+from src.cortex_agents.test_generator.templates import TemplateManager
+from src.cortex_agents.test_generator.edge_case_analyzer import EdgeCaseAnalyzer
+from src.cortex_agents.test_generator.domain_knowledge_integrator import DomainKnowledgeIntegrator
+from src.cortex_agents.test_generator.error_condition_generator import ErrorConditionGenerator
+from src.cortex_agents.test_generator.parametrized_test_generator import ParametrizedTestGenerator
 
 # Phase 2 imports
-from workflows.tdd_state_machine import TDDStateMachine, TDDState
-from workflows.refactoring_intelligence import CodeSmellDetector, RefactoringEngine, CodeSmell
-from workflows.page_tracking import PageTracker, TDDContext, PageLocation
+from src.workflows.tdd_state_machine import TDDStateMachine, TDDState
+from src.workflows.refactoring_intelligence import CodeSmellDetector, RefactoringEngine, CodeSmell
+from src.workflows.page_tracking import PageTracker, TDDContext, PageLocation
 
 # Phase 3 - M3.2: Performance optimization imports
-from workflows.ast_cache import ASTCache, get_ast_cache
-from workflows.pattern_cache import PatternCache, get_pattern_cache
-from workflows.smell_cache import SmellCache, get_smell_cache
-from workflows.batch_processor import BatchTestGenerator, BatchSmellDetector
+from src.workflows.ast_cache import ASTCache, get_ast_cache
+from src.workflows.pattern_cache import PatternCache, get_pattern_cache
+from src.workflows.smell_cache import SmellCache, get_smell_cache
+from src.workflows.batch_processor import BatchTestGenerator, BatchSmellDetector
 
 # Phase 3 - Brain Memory Integration (2025-11-24)
-from tier1.sessions.session_manager import SessionManager, Session
-from tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
+from src.tier1.sessions.session_manager import SessionManager, Session
+from src.tier2.knowledge_graph.knowledge_graph import KnowledgeGraph
 
 # Phase 4 - Test Execution Manager (2025-11-24)
-from workflows.test_execution_manager import TestExecutionManager
-from workflows.terminal_integration import TerminalIntegration
-from workflows.workspace_context_manager import WorkspaceContextManager
+from src.workflows.test_execution_manager import TestExecutionManager
+from src.workflows.terminal_integration import TerminalIntegration
+from src.workflows.workspace_context_manager import WorkspaceContextManager
 
 # Phase 4 - TDD Mastery Integration (2025-11-24)
 import sys

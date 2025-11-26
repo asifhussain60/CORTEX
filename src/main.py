@@ -97,12 +97,12 @@ Examples:
             enable_logging=args.verbose
         )
     except Exception as e:
-        print(f"❌ Failed to initialize CORTEX: {e}")
+        print(f"[ERROR] Failed to initialize CORTEX: {e}")
         return 1
     
     # Handle setup mode
     if args.setup:
-        print("🧠 CORTEX Setup Wizard\n")
+        print("CORTEX Setup Wizard\n")
         results = entry.setup(repo_path=args.repo, verbose=True)
         return 0 if results.get("success") else 1
     
@@ -117,11 +117,11 @@ Examples:
             print(response)
             return 0
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"[ERROR] {e}")
             return 1
     
     # Interactive mode
-    print("🧠 CORTEX Interactive Mode")
+    print("CORTEX Interactive Mode")
     print("=" * 60)
     print("Enter your requests in natural language.")
     print("Type 'exit', 'quit', or press Ctrl+C to exit.")
@@ -140,7 +140,7 @@ Examples:
                 
                 # Check for exit commands
                 if user_input.lower() in ["exit", "quit", "q"]:
-                    print("\n👋 Goodbye!")
+                    print("\nGoodbye!")
                     break
                 
                 # Process message
@@ -153,13 +153,13 @@ Examples:
                 print(f"\n{response}\n")
                 
             except KeyboardInterrupt:
-                print("\n\n👋 Goodbye!")
+                print("\n\nGoodbye!")
                 break
             except EOFError:
-                print("\n\n👋 Goodbye!")
+                print("\n\nGoodbye!")
                 break
             except Exception as e:
-                print(f"\n❌ Error: {e}\n")
+                print(f"\n[ERROR] {e}\n")
                 if args.verbose:
                     import traceback
                     traceback.print_exc()

@@ -246,8 +246,8 @@ class IntentRouter(BaseAgent):
         # Initialize investigation router for deep dive analysis
         from src.cortex_agents.health_validator.agent import HealthValidator
         try:
-            health_validator = HealthValidator("health-validator", self.tier1_api, self.tier2_kg, self.tier3_context)
-            self.investigation_router = InvestigationRouter(self, health_validator, self.tier2_kg)
+            health_validator = HealthValidator("health-validator", self.tier1, self.tier2, self.tier3)
+            self.investigation_router = InvestigationRouter(self, health_validator, self.tier2)
         except Exception as e:
             self.logger.warning(f"Could not initialize investigation router: {e}")
             self.investigation_router = None
