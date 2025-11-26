@@ -422,6 +422,23 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         logger.info(f"System Optimization started | Profile: {profile} | Mode: {mode_display}")
         
         try:
+            # Phase 0: Quick health check (use cached results if recent)
+            logger.info("\n[Phase 0/7] Checking system health...")
+            health_status = self._check_cached_health_status()
+            
+            if health_status and health_status.get('score', 0) > 0:
+                logger.info(f"✅ Using cached health status (score: {health_status['score']}/100)")
+            else:
+                # Run quick health check (system + brain only)
+                from src.operations.healthcheck_operation import HealthCheckOperation
+                health_check = HealthCheckOperation()
+                result = health_check.execute(component='brain', quick=True)
+                
+                if not result.success:
+                    logger.warning(f"⚠️ Health check warning: {result.message}")
+                else:
+                    logger.info(f"✅ Health check passed")
+            
             # Phase 1: Validate prerequisites
             logger.info("\n[Phase 1/6] Validating prerequisites...")
             prereq_result = self.validate_prerequisites(context)
@@ -592,6 +609,32 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             error_msg = f"Code health analysis error: {e}"
             logger.error(error_msg, exc_info=True)
             self.metrics.errors_encountered.append(error_msg)
+    
+    def _check_cached_health_status(self) -> Optional[Dict[str, Any]]:
+        """
+        Check for recent cached health status.
+        
+        Returns:
+            Cached health status if recent (<5 min), None otherwise
+        """
+        try:
+            cache_key = 'status'
+            cached = self._validation_cache.get('healthcheck', cache_key)
+            
+            if cached:
+                timestamp = cached.get('timestamp')
+                if timestamp:
+                    cached_time = datetime.fromisoformat(timestamp)
+                    age_minutes = (datetime.now() - cached_time).total_seconds() / 60
+                    
+                    if age_minutes < 5:
+                        return cached
+            
+            return None
+            
+        except Exception as e:
+            logger.debug(f"Failed to retrieve cached health status: {e}")
+            return None
     
     def _run_brain_tuning(self, context: Dict[str, Any]) -> None:
         """Run brain tuning operations (Phase 4)."""

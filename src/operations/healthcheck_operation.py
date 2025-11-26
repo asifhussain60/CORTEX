@@ -23,6 +23,7 @@ from .base_operation_module import (
     OperationPhase,
     OperationModuleMetadata,
 )
+from .modules.healthcheck.brain_analytics_collector import BrainAnalyticsCollector
 
 
 logger = logging.getLogger(__name__)
@@ -80,16 +81,18 @@ class HealthCheckOperation(BaseOperationModule):
         Execute health check.
         
         Args:
-            detailed: Include detailed diagnostics
+            detailed: Include detailed diagnostics (default: False)
             component: Specific component to check (brain/database/system/all)
+            quick: Skip expensive operations for fast validation (default: False)
         
         Returns:
             OperationResult with health report
         """
         detailed = kwargs.get('detailed', False)
         component = kwargs.get('component', 'all')
+        quick = kwargs.get('quick', False)
         
-        logger.info(f"Running health check (component={component}, detailed={detailed})")
+        logger.info(f"Running health check (component={component}, detailed={detailed}, quick={quick})")
         
         health_report = {
             'timestamp': datetime.now().isoformat(),
@@ -134,6 +137,22 @@ class HealthCheckOperation(BaseOperationModule):
             if component in ['performance', 'all'] or detailed:
                 perf_check = self._check_performance()
                 health_report['checks']['performance'] = perf_check
+            
+            # Brain analytics (comprehensive brain tier analysis)
+            if component in ['brain', 'all'] and not quick:
+                logger.info("Collecting brain analytics...")
+                brain_analytics = self._check_brain_analytics()
+                health_report['checks']['brain_analytics'] = brain_analytics
+                
+                # Add brain-specific warnings/errors
+                if brain_analytics.get('health_score', 100) < 70:
+                    health_report['warnings'].append(
+                        f"Brain health score below threshold: {brain_analytics.get('health_score')}%"
+                    )
+                
+                # Add brain recommendations
+                if brain_analytics.get('recommendations'):
+                    health_report['warnings'].extend(brain_analytics['recommendations'])
             
             # Determine final status
             if health_report['errors']:
@@ -358,6 +377,34 @@ class HealthCheckOperation(BaseOperationModule):
             suggestions.append("High disk usage - run 'optimize' to reclaim space")
         
         return suggestions
+    
+    def _check_brain_analytics(self) -> Dict[str, Any]:
+        """
+        Check comprehensive brain analytics across all tiers.
+        
+        Returns:
+            Dict with brain analytics from all tiers
+        """
+        try:
+            collector = BrainAnalyticsCollector()
+            analytics = collector.collect_all_analytics()
+            
+            logger.info(
+                f"Brain health score: {analytics.get('health_score')}% "
+                f"(Tier1: {analytics.get('tier1', {}).get('status')}, "
+                f"Tier2: {analytics.get('tier2', {}).get('status')}, "
+                f"Tier3: {analytics.get('tier3', {}).get('status')})"
+            )
+            
+            return analytics
+            
+        except Exception as e:
+            logger.error(f"Brain analytics collection failed: {e}", exc_info=True)
+            return {
+                'status': 'error',
+                'error': str(e),
+                'health_score': 0
+            }
     
     def rollback(self) -> OperationResult:
         """
