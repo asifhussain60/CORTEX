@@ -212,7 +212,18 @@ class DocumentOrganizer:
         
         # Detect category if not provided
         if category is None:
-            content = source_path.read_text(encoding='utf-8') if source_path.stat().st_size < 1_000_000 else None
+            # Try to read content for detection, handle encoding errors gracefully
+            content = None
+            if source_path.stat().st_size < 1_000_000:
+                try:
+                    content = source_path.read_text(encoding='utf-8')
+                except UnicodeDecodeError:
+                    # Try with latin-1 encoding as fallback
+                    try:
+                        content = source_path.read_text(encoding='latin-1')
+                    except Exception:
+                        # Skip content detection if encoding fails
+                        content = None
             category = self.detect_category(source_path.name, content)
         
         if category is None:
