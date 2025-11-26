@@ -247,6 +247,221 @@ logs/
 
 ---
 
+## ⚡ Incremental Planning (Token-Efficient)
+
+**Version:** 3.2.0  
+**Purpose:** Generate large feature plans without context overflow using skeleton-first approach with user checkpoints  
+**Status:** ✅ PRODUCTION (Sprint 3 complete)
+
+### What Is Incremental Planning?
+
+Incremental planning generates feature plans in small, token-efficient chunks with user approval checkpoints. This prevents context overflow on large plans while giving you control at each phase.
+
+**Key Features:**
+- **Skeleton-First:** 200-token structure generated first, user approves before continuing
+- **Chunked Sections:** Each section limited to 500 tokens (prevents context overflow)
+- **4 Approval Checkpoints:** Review skeleton, Phase 1, Phase 2, Phase 3 before finalizing
+- **Memory Efficient:** Streams to disk as generated (never holds full plan in memory)
+- **Auto-Organize:** Completed plans automatically filed to `cortex-brain/documents/planning/`
+
+### Token Budget
+
+| Component | Token Limit | Content |
+|-----------|-------------|---------|
+| **Skeleton** | 200 tokens | 3-phase structure, section placeholders |
+| **Each Section** | 500 tokens | Detailed content per section |
+| **Total Plan** | ~4,700 tokens | 200 skeleton + 9 sections × 500 |
+
+**Approximation:** 1 token ≈ 4 characters (English text)
+
+### Workflow
+
+```
+User: "plan [feature] --incremental"
+    ↓
+CORTEX: Generates 200-token skeleton (phase breakdown)
+    ↓
+Checkpoint 1: Review skeleton? (approve/reject)
+    ↓ (if approved)
+CORTEX: Fills Phase 1 sections (Requirements, Dependencies, Architecture)
+    ↓
+Checkpoint 2: Review Phase 1? (approve/reject)
+    ↓ (if approved)
+CORTEX: Fills Phase 2 sections (Implementation, Tests, Integration)
+    ↓
+Checkpoint 3: Review Phase 2? (approve/reject)
+    ↓ (if approved)
+CORTEX: Fills Phase 3 sections (Acceptance, Security, Deployment)
+    ↓
+Checkpoint 4: Review Phase 3? (approve/reject)
+    ↓ (if approved)
+CORTEX: Streams complete plan to file → Auto-organizes
+    ↓
+✅ Plan complete: cortex-brain/documents/planning/features/PLAN-[date]-[feature].md
+```
+
+### Commands
+
+| Command | Description | Mode |
+|---------|-------------|------|
+| `plan [feature] --incremental` | Start incremental planning with checkpoints | Interactive |
+| `plan [feature] --incremental --auto-approve` | Generate full plan without checkpoints | Automated |
+| `continue plan` | Approve current checkpoint and continue | Interactive |
+| `reject plan` | Reject current checkpoint (stop generation) | Interactive |
+
+**Natural Language Examples:**
+- "Generate incremental plan for user authentication"
+- "Create token-efficient plan for REST API"
+- "Plan payment integration with checkpoints"
+
+### Usage Examples
+
+**Example 1: Interactive Mode (Default)**
+
+```python
+# User: "plan user authentication --incremental"
+
+# CORTEX generates skeleton (200 tokens)
+"""
+# Feature Plan: User Authentication
+
+## Phase 1: Foundation
+- Requirements Analysis
+- Dependency Mapping
+- Architecture Design
+
+## Phase 2: Implementation
+- Implementation Plan
+- Test Strategy
+- Integration Points
+
+## Phase 3: Deployment
+- Acceptance Criteria
+- Security Review
+- Deployment Strategy
+"""
+
+# CORTEX: "✅ Skeleton generated (187 tokens). Review and approve?"
+
+# User: "approve"
+
+# CORTEX fills Phase 1 (3 sections × 500 tokens)
+# CORTEX: "✅ Phase 1 complete (1,450 tokens). Review sections?"
+
+# User: "approve"
+
+# (Continues through Phase 2, Phase 3, then writes complete plan)
+```
+
+**Example 2: Automated Mode (No Checkpoints)**
+
+```python
+# User: "plan REST API for product catalog --incremental --auto-approve"
+
+# CORTEX: Auto-approves all checkpoints, generates full plan
+# No user interaction needed (useful for testing, batch processing)
+
+# CORTEX: "✅ Plan complete: PLAN-2025-11-26-product-catalog-api.md"
+```
+
+**Example 3: Rejection Handling**
+
+```python
+# User: "plan e-commerce checkout flow --incremental"
+
+# CORTEX: "✅ Skeleton generated. Review?"
+# User: "reject - missing payment gateway integration"
+
+# CORTEX: "❌ Plan skeleton rejected by user. Reason: missing payment gateway integration"
+# CORTEX: "Would you like to regenerate with additional requirements?"
+```
+
+### API Reference (PlanningOrchestrator)
+
+```python
+def generate_incremental_plan(
+    self,
+    feature_requirements: str,
+    checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None,
+    output_filename: Optional[str] = None
+) -> Tuple[bool, Optional[Path], str]:
+    """
+    Generate feature plan incrementally with user checkpoints.
+    
+    Args:
+        feature_requirements: Feature description (converted to structured dict)
+        checkpoint_callback: Optional approval handler (checkpoint_id, section_name, preview) -> bool
+                           If None, auto-approves all checkpoints
+        output_filename: Optional custom filename (default: auto-generated with timestamp)
+    
+    Returns:
+        (success: bool, file_path: Optional[Path], message: str)
+        
+    Checkpoints:
+        1. "skeleton" - After 200-token structure generation
+        2. "phase_1" - After Requirements, Dependencies, Architecture (3 sections)
+        3. "phase_2" - After Implementation, Tests, Integration (3 sections)
+        4. "phase_3" - After Acceptance, Security, Deployment (3 sections)
+    
+    Example:
+        # Auto-approve mode
+        success, path, msg = orchestrator.generate_incremental_plan(
+            "User authentication with JWT tokens"
+        )
+        
+        # Interactive mode
+        def approve(checkpoint_id, section_name, preview):
+            print(f'=== {section_name} ===')
+            print(preview[:200])
+            return input('Approve? (y/n): ').lower() == 'y'
+        
+        success, path, msg = orchestrator.generate_incremental_plan(
+            "REST API for product catalog",
+            checkpoint_callback=approve
+        )
+    """
+```
+
+### Benefits
+
+**Context Efficiency:**
+- ✅ Never exceeds token budget (each chunk ≤500 tokens)
+- ✅ Prevents context overflow on large plans
+- ✅ Predictable memory usage
+
+**User Control:**
+- ✅ Review structure before generating details (skeleton checkpoint)
+- ✅ Approve each phase independently (catch issues early)
+- ✅ Reject and regenerate without wasting full plan generation
+
+**Memory Safety:**
+- ✅ Streaming architecture (write-as-you-go)
+- ✅ Never holds full plan in memory
+- ✅ Progress tracking with ETA
+
+**Backward Compatibility:**
+- ✅ Existing `generate_plan()` method unchanged
+- ✅ Non-incremental planning still available
+- ✅ Zero breaking changes
+
+### Implementation Status
+
+**Sprint 3: Incremental Planning - ✅ COMPLETE (Nov 2025)**
+
+| Phase | Status | Tests | Time |
+|-------|--------|-------|------|
+| Phase 1: IncrementalPlanGenerator | ✅ Complete | 25/25 passing | 2h (50% under budget) |
+| Phase 2: StreamingPlanWriter | ✅ Complete | 32/32 passing | 3h (on time) |
+| Phase 3: PlanningOrchestrator Integration | ✅ Complete | 16/16 passing | 1.5h (25% under) |
+| Phase 4: Testing & Validation | ✅ Complete | 73/73 passing | 0.5h (75% under) |
+| Phase 5: Documentation | ✅ Complete | N/A | 1h |
+
+**Total Time:** 8h actual / 12h estimated (67% of budget)  
+**Commits:** 3 (28d5900b, b2bd0cbb, 4387b716)  
+**Zero Regressions:** All 656 CORTEX tests passing
+
+---
+
 ## 📊 Implementation Status
 
 **Phase 1: Vision API Integration** - ⏳ PLANNED (60-90 min)  

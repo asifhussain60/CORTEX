@@ -1,7 +1,7 @@
 """
 Setup Completion Module
 
-Generates comprehensive setup summary report.
+Generates comprehensive setup summary report and provides post-installation options.
 
 SOLID Principles:
 - Single Responsibility: Only handles setup completion and reporting
@@ -97,6 +97,7 @@ class SetupCompletionModule(BaseOperationModule):
             
             context['setup_complete'] = True
             context['setup_summary'] = summary
+            context['awaiting_user_choice'] = True  # Flag for post-installation interaction
             
             duration_seconds = (datetime.now() - start_time).total_seconds()
             
@@ -255,13 +256,35 @@ class SetupCompletionModule(BaseOperationModule):
         
         # Add general next steps
         if not venv_active and context.get('activation_command'):
-            summary['next_steps'].append("1. Activate virtual environment")
-        if venv_active:
-            summary['next_steps'].append("1. Start using CORTEX!")
-            summary['next_steps'].append("2. Try: '/CORTEX' in GitHub Copilot Chat")
-            summary['next_steps'].append("3. Or say: 'setup environment' in natural language")
+            summary['next_steps'].append(f"Activate virtual environment: {context.get('activation_command')}")
+        else:
+            summary['next_steps'].append("Start using CORTEX!")
         
         return summary
+    
+    def _generate_post_installation_prompt(self, context: Dict[str, Any]) -> str:
+        """
+        Generate post-installation options prompt.
+        
+        Args:
+            context: Operation context
+        
+        Returns:
+            Formatted prompt string
+        """
+        prompt = "\n\n" + "="*60 + "\n"
+        prompt += "🎉 CORTEX INSTALLATION COMPLETE!\n"
+        prompt += "="*60 + "\n\n"
+        prompt += "What would you like to do next?\n\n"
+        prompt += "1. 📚 **See a demo** - Interactive demo of CORTEX capabilities\n"
+        prompt += "   Say: 'show me a demo' or 'demo cortex'\n\n"
+        prompt += "2. 🔍 **Analyze current repository** - Get insights and improvement recommendations\n"
+        prompt += "   Say: 'analyze this repo' or 'onboard application'\n\n"
+        prompt += "3. 🚀 **Start working** - Jump right in with CORTEX\n"
+        prompt += "   Say: 'help' to see all available commands\n\n"
+        prompt += "="*60 + "\n"
+        
+        return prompt
     
     def _generate_report(self, summary: Dict[str, Any]) -> str:
         """
@@ -316,5 +339,9 @@ class SetupCompletionModule(BaseOperationModule):
             for step in summary['next_steps']:
                 lines.append(f"  {step}")
             lines.append("")
+        
+        # Add post-installation prompt
+        if summary.get('post_installation_prompt'):
+            lines.append(summary['post_installation_prompt'])
         
         return '\n'.join(lines)
