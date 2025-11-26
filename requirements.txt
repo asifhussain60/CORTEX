@@ -41,3 +41,8 @@ pyperclip>=1.9.0  # Optional: Clipboard support for conversation import
 
 # Enhanced Feedback System (CORTEX 3.0)
 PyGithub>=2.5.0  # GitHub Gist integration for feedback sharing
+
+# Multi-Language Refactoring System (CORTEX 3.2)
+tree-sitter>=0.20.1  # Universal parser for C#, TypeScript, Java, Go
+esprima>=4.0.1  # JavaScript AST parser
+tree-sitter-languages>=1.10.2  # Pre-built language grammars
