@@ -430,14 +430,23 @@ Recommendations: Cache is performing well
 - **File-Based Workflow:** Planning outputs to persistent `.md` files (git-trackable, resumable)
 - **Unified Core:** ADO/Feature/Vision planning share 80% of code
 - **DoR/DoD Enforcement:** Zero-ambiguity requirement validation with OWASP security review
+- **Incremental Planning:** Token-efficient generation with skeleton-first approach and user checkpoints
 
 **Quick Commands:**
 - `plan [feature]` - Start feature planning (attach screenshot for Vision API)
+- `plan [feature] --incremental` - Token-efficient planning with checkpoints (NEW in v3.2.0)
 - `plan ado` - ADO work item planning with form template
-- `approve plan` - Finalize and hook into pipeline
+- `approve plan` / `continue plan` - Approve checkpoint and continue generation
+- `reject plan` - Reject checkpoint and stop generation
 - `resume plan [name]` - Continue existing plan with context restoration
 
-**See planning-system-guide.md for scenarios, file structure, backup strategy, and DoR/DoD checklists.**
+**Incremental Planning Benefits:**
+- ✅ Never exceeds token budget (200 skeleton + 9 sections × 500 tokens = ~4,700 max)
+- ✅ User control at 4 checkpoints (skeleton, Phase 1, Phase 2, Phase 3)
+- ✅ Memory efficient (streams to disk, never holds full plan in memory)
+- ✅ Auto-organized to `cortex-brain/documents/planning/features/`
+
+**See planning-system-guide.md for scenarios, file structure, incremental planning workflow, and DoR/DoD checklists.**
 
 ---
 
