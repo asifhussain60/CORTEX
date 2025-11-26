@@ -464,15 +464,34 @@ Recommendations: Cache is performing well
 
 ## 🧠 Conversation Capture & Context
 
-**Commands:**
-- `capture conversation` - Import conversation to CORTEX brain
+**Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/conversation-capture-guide.md
+
+**Quick Commands:**
+- `capture conversation` - Create blank file for conversation capture (opens in VS Code)
+- `import conversation [id]` - Process captured conversation and learn patterns
+- `list captures` - Show all active capture files
 - `show context` - View what CORTEX remembers
 - `forget [topic]` - Remove specific conversations  
 - `clear all context` - Fresh start
 
+**New Workflow (Simplified):**
+1. Say `capture conversation` → CORTEX creates blank file and opens in VS Code
+2. Right-click in Copilot Chat → "Copy Conversation"
+3. Paste into blank file and save
+4. Say `import conversation [id]` → CORTEX learns from your conversation
+
+**What CORTEX Learns:**
+- ✅ Successful patterns and approaches
+- ✅ Context references ("it", "this", "that")
+- ✅ Code entities (files, classes, functions)
+- ✅ Problem-solution pairs
+- ✅ Failure patterns (to avoid repeating)
+
 **Auto-Injection:** Searches past conversations, scores relevance (0.80+ = high), auto-injects context  
 **Performance:** <500ms injection, <600 tokens budget  
 **Privacy:** All data stored locally in `cortex-brain/tier1/working_memory.db`
+
+**See conversation-capture-guide.md for complete documentation, troubleshooting, and best practices.**
 
 ---
 

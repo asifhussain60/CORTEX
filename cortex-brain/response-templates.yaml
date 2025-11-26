@@ -1547,6 +1547,24 @@ routing:
   - cortex capabilities
   - cortex features
   - show capabilities
+  capture_conversation_triggers:
+  - capture conversation
+  - capture chat
+  - save conversation
+  - capture this conversation
+  - save this chat
+  - capture copilot chat
+  import_conversation_triggers:
+  - import conversation
+  - import capture
+  - process capture
+  - load conversation
+  - proceed
+  list_captures_triggers:
+  - list captures
+  - show captures
+  - active captures
+  - capture files
 formatting:
   mandatory_sections:
   - understanding

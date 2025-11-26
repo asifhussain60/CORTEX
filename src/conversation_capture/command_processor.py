@@ -164,17 +164,22 @@ class CaptureCommandProcessor:
         result = self.capture_manager.create_capture_file(user_hint)
         
         if result['success']:
+            # Prepare VS Code file opening
+            file_path = result['file_path']
+            
             return {
                 'handled': True,
                 'success': True,
                 'operation': 'capture_created',
                 'capture_id': result['capture_id'],
-                'file_path': result['file_path'],  # Add for backward compatibility
+                'file_path': file_path,
+                'open_in_vscode': True,  # Signal to open file in VS Code
                 'response': self._format_capture_success_response(result),
                 'next_steps': [
-                    f"Open file: {Path(result['file_path']).name}",
-                    "Replace template with your actual conversation",
-                    "Save the file",
+                    f"File opened: {Path(file_path).name}",
+                    "Right-click in Copilot Chat and select 'Copy Conversation'",
+                    "Paste conversation into the blank file",
+                    "Save the file (Cmd+S / Ctrl+S)",
                     f"Run: import conversation {result['capture_id']}"
                 ]
             }
@@ -310,53 +315,90 @@ class CaptureCommandProcessor:
     
     def _format_capture_success_response(self, result: Dict[str, Any]) -> str:
         """Format success response for capture creation"""
-        file_name = Path(result['file_path']).name
+        file_path = Path(result['file_path'])
+        file_name = file_path.name
+        
+        # Create vscode:// link for opening file
+        vscode_link = f"vscode://file/{file_path.absolute()}"
+        
         return f"""
-🎯 **Conversation Capture File Created Successfully!**
+🎯 **Blank Conversation Capture File Created!**
 
-📋 **Step 1 Complete** ✅
-
+📋 **Capture Details**
 **Capture ID:** `{result['capture_id']}`
-**File Created:** `{file_name}`
+**File Name:** `{file_name}`
+
+� **File Location:** 
+`{result['file_path']}`
+
+🔗 **Quick Actions:**
+• [📝 Open File in VS Code]({vscode_link})
+• File has been opened automatically in VS Code
 
 📝 **Next Steps:**
-1. **Open the capture file** (it has a template to guide you)
-2. **Copy your Copilot conversation** from VS Code chat panel
-3. **Replace the template** with your actual conversation
-4. **Save the file**
-5. **Run:** `import conversation {result['capture_id']}`
 
-💡 **Tip:** The capture file includes an example format. Just replace the example with your real conversation!
+1. **Right-click in the GitHub Copilot Chat panel**
+2. **Select "Copy Conversation"** from the context menu
+3. **Switch to the opened blank file** in VS Code
+4. **Paste (Cmd+V / Ctrl+V)** the conversation into the file
+5. **Save the file** (Cmd+S / Ctrl+S)
+6. **Return here and say:** `import conversation {result['capture_id']}`
 
-🚀 **Ready for Step 2:** Once you've pasted your conversation, run the import command to add it to CORTEX brain.
+💡 **Tips:**
+• The file is completely blank - just paste your conversation directly
+• Include the entire conversation for best context learning
+• CORTEX will extract patterns, entities, and intents automatically
+• Your conversation will be indexed for future reference
+
+⚡ **Why This Matters:**
+CORTEX learns from your successful conversations to improve accuracy and provide better suggestions in future interactions.
+
+✅ **Ready:** Waiting for you to paste and save the conversation...
         """.strip()
     
     def _format_import_success_response(self, result: Dict[str, Any]) -> str:
         """Format success response for conversation import"""
         return f"""
-🧠 **Conversation Successfully Imported to CORTEX Brain!** 
+🧠 **Conversation Successfully Captured & Learned!** 
 
-✅ **Memory Integration Complete**
+✅ **Brain Learning Complete**
 
-**📊 Import Summary:**
+**📊 Capture Summary:**
 - **Conversation ID:** `{result['conversation_id']}`
-- **Messages Imported:** {result['messages_imported']} 
-- **Entities Extracted:** {result['entities_extracted']} (files, classes, functions)
+- **Messages Processed:** {result['messages_imported']} 
+- **Entities Extracted:** {result['entities_extracted']} (files, classes, functions, patterns)
 - **Storage Location:** Tier 1 Working Memory
-- **Intent Detected:** Auto-classified for better routing
+- **Intent Classified:** Auto-detected for smart routing
+
+🎓 **What CORTEX Learned:**
+• **Successful Patterns** - Your working approaches and solutions
+• **Context References** - What "it", "this", "that" refer to
+• **Code Entities** - Files, classes, functions you're working with
+• **Problem-Solution Pairs** - How you solved specific issues
+• **Conversation Flow** - How you interact with AI assistants
 
 🔗 **Context Continuity NOW ACTIVE**
-CORTEX now remembers this conversation! Future requests like:
-- "Make it purple" → CORTEX knows what "it" refers to
-- "Continue with the next feature" → CORTEX has full context
-- "Fix that bug we discussed" → CORTEX remembers the bug
+CORTEX now remembers this conversation! Future requests benefit from:
+- **Reference Resolution:** "Make it purple" → CORTEX knows what "it" is
+- **Context Continuation:** "Continue with next feature" → Full context available
+- **Pattern Recognition:** Similar requests get better suggestions
+- **Smart Routing:** Requests automatically routed to right agent
 
-📈 **Memory Status:**
-- Available for next **20 conversation sessions** (FIFO queue)
-- Automatically linked to related conversations
-- Entities indexed for smart routing
+📈 **Memory Integration:**
+- Available for next **20 conversation sessions** (FIFO rotation)
+- Automatically linked to related past conversations
+- Entities indexed for instant lookup and smart suggestions
+- Patterns learned to improve future accuracy
 
-🎉 **Amnesia Problem SOLVED!** Your conversations now have persistent memory.
+🎯 **Learning Impact:**
+• **Accuracy Improvement:** Your patterns help CORTEX understand your style
+• **Faster Responses:** Pre-learned context speeds up processing
+• **Better Suggestions:** Past successes inform future recommendations
+• **Failure Avoidance:** CORTEX learns what didn't work to avoid repeating
+
+🎉 **Amnesia Problem SOLVED!** Persistent memory across all future sessions.
+
+💡 **Pro Tip:** Capture successful conversations regularly to continuously improve CORTEX's accuracy and personalization to your workflow.
         """.strip()
     
     def _format_list_captures_response(self, result: Dict[str, Any]) -> str:
