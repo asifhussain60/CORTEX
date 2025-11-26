@@ -16,11 +16,13 @@ import os
 import yaml
 import json
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import logging
 import re
 from src.workflows.document_organizer import DocumentOrganizer
+from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
+from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +47,13 @@ class PlanningOrchestrator:
         # NEW Sprint 2: Initialize document organizer
         brain_path = self.cortex_root / "cortex-brain"
         self.document_organizer = DocumentOrganizer(brain_path)
+        
+        # NEW Sprint 3: Initialize incremental planning components
+        self.incremental_generator = IncrementalPlanGenerator(
+            brain_path=str(brain_path),
+            skeleton_token_limit=200,
+            section_token_limit=500
+        )
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -645,3 +654,284 @@ class PlanningOrchestrator:
             error_msg = f"Failed to save Markdown: {e}"
             logger.error(error_msg)
             return (False, error_msg)
+    
+    def generate_incremental_plan(
+        self,
+        feature_requirements: str,
+        checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None,
+        output_filename: Optional[str] = None
+    ) -> Tuple[bool, Optional[Path], str]:
+        """
+        Generate feature plan incrementally with token budgets and user checkpoints.
+        
+        This method implements token-efficient planning by:
+        1. Generating a 200-token skeleton → user approval checkpoint
+        2. Filling Phase 1 sections (500 tokens each) → user approval checkpoint
+        3. Filling Phase 2 sections (500 tokens each) → user approval checkpoint
+        4. Filling Phase 3 sections (500 tokens each) → user approval checkpoint
+        5. Writing complete plan to disk using streaming writer
+        
+        Args:
+            feature_requirements: Natural language description of feature to plan
+            checkpoint_callback: Optional callback(checkpoint_id, section_name, preview) -> approved
+                                 If None, auto-approves all checkpoints
+            output_filename: Optional custom filename (default: auto-generated from session ID)
+        
+        Returns:
+            Tuple of (success, output_path, message)
+        
+        Example:
+            >>> def my_checkpoint_handler(cp_id, section, preview):
+            ...     print(f"Checkpoint: {section}")
+            ...     print(preview[:100])
+            ...     return input("Approve? (y/n): ").lower() == 'y'
+            ...
+            >>> success, path, msg = orchestrator.generate_incremental_plan(
+            ...     "User authentication system with JWT tokens",
+            ...     checkpoint_callback=my_checkpoint_handler
+            ... )
+        """
+        try:
+            # Step 1: Generate skeleton (200-token structure)
+            logger.info("🧠 Generating plan skeleton (200-token limit)...")
+            
+            # Convert feature_requirements string to dict format expected by generator
+            requirements_dict = {
+                'feature_name': feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+            }
+            
+            skeleton, token_count = self.incremental_generator.generate_skeleton(requirements_dict)
+            
+            # Checkpoint 1: Skeleton approval
+            skeleton_preview = self.incremental_generator._serialize_skeleton(skeleton)
+            skeleton_approved = self._handle_checkpoint(
+                checkpoint_callback,
+                "skeleton",
+                "Plan Skeleton",
+                skeleton_preview
+            )
+            
+            if not skeleton_approved:
+                return (False, None, "Plan skeleton rejected by user")
+            
+            # Approve the checkpoint in generator
+            checkpoints = [cp for cp in self.incremental_generator.checkpoints if cp.status == 'pending_approval']
+            if checkpoints:
+                self.incremental_generator.approve_checkpoint(checkpoints[0].checkpoint_id)
+            
+            # Step 2: Fill Phase 1 sections (Requirements, Dependencies, Architecture)
+            logger.info("📝 Filling Phase 1 sections (500 tokens per section)...")
+            phase_1_sections = ["Requirements", "Dependencies", "Architecture"]
+            for section in phase_1_sections:
+                self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Checkpoint 2: Phase 1 approval
+            phase_1_approved = self._handle_phase_checkpoint(
+                checkpoint_callback,
+                "phase-1",
+                "Phase 1: Foundation",
+                phase_1_sections
+            )
+            
+            if not phase_1_approved:
+                return (False, None, "Phase 1 rejected by user")
+            
+            # Step 3: Fill Phase 2 sections (Implementation, Tests, Integration)
+            logger.info("📝 Filling Phase 2 sections (500 tokens per section)...")
+            phase_2_sections = ["Implementation", "Tests", "Integration"]
+            for section in phase_2_sections:
+                self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Checkpoint 3: Phase 2 approval
+            phase_2_approved = self._handle_phase_checkpoint(
+                checkpoint_callback,
+                "phase-2",
+                "Phase 2: Development",
+                phase_2_sections
+            )
+            
+            if not phase_2_approved:
+                return (False, None, "Phase 2 rejected by user")
+            
+            # Step 4: Fill Phase 3 sections (Acceptance, Security, Deployment)
+            logger.info("📝 Filling Phase 3 sections (500 tokens per section)...")
+            phase_3_sections = ["Acceptance", "Security", "Deployment"]
+            for section in phase_3_sections:
+                self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Checkpoint 4: Phase 3 approval
+            phase_3_approved = self._handle_phase_checkpoint(
+                checkpoint_callback,
+                "phase-3",
+                "Phase 3: Validation & Deployment",
+                phase_3_sections
+            )
+            
+            if not phase_3_approved:
+                return (False, None, "Phase 3 rejected by user")
+            
+            # Step 5: Write complete plan to disk using streaming writer
+            logger.info("💾 Writing complete plan to disk...")
+            output_path = self._write_incremental_plan(output_filename)
+            
+            # Auto-organize using DocumentOrganizer
+            try:
+                organized_path, organize_message = self.document_organizer.organize_document(output_path)
+                if organized_path:
+                    logger.info(f"📁 {organize_message}")
+                    output_path = organized_path
+            except Exception as org_error:
+                logger.warning(f"⚠️ Plan organization failed: {org_error}")
+            
+            logger.info(f"✅ Incremental plan generation complete: {output_path}")
+            return (True, output_path, f"Plan generated successfully: {output_path}")
+            
+        except Exception as e:
+            error_msg = f"Failed to generate incremental plan: {e}"
+            logger.error(error_msg)
+            return (False, None, error_msg)
+    
+    def _handle_checkpoint(
+        self,
+        callback: Optional[Callable[[str, str, str], bool]],
+        checkpoint_id: str,
+        section_name: str,
+        content_preview: str
+    ) -> bool:
+        """
+        Handle checkpoint approval via callback or auto-approve.
+        
+        Args:
+            callback: User-provided checkpoint handler
+            checkpoint_id: Unique checkpoint identifier
+            section_name: Name of section at checkpoint
+            content_preview: Preview of content to approve
+        
+        Returns:
+            True if approved, False if rejected
+        """
+        if callback is None:
+            logger.info(f"✅ Auto-approving checkpoint: {section_name}")
+            return True
+        
+        try:
+            approved = callback(checkpoint_id, section_name, content_preview)
+            if approved:
+                logger.info(f"✅ User approved checkpoint: {section_name}")
+            else:
+                logger.warning(f"❌ User rejected checkpoint: {section_name}")
+            return approved
+        except Exception as e:
+            logger.error(f"Checkpoint callback error: {e}")
+            return False
+    
+    def _handle_phase_checkpoint(
+        self,
+        callback: Optional[Callable[[str, str, str], bool]],
+        checkpoint_id: str,
+        phase_name: str,
+        section_names: List[str]
+    ) -> bool:
+        """
+        Handle phase completion checkpoint.
+        
+        Args:
+            callback: User-provided checkpoint handler
+            checkpoint_id: Unique checkpoint identifier
+            phase_name: Name of completed phase
+            section_names: List of section names in phase
+        
+        Returns:
+            True if approved, False if rejected
+        """
+        # Build preview of all sections in phase
+        preview_parts = [f"# {phase_name}\n"]
+        for section_name in section_names:
+            section = self.incremental_generator.sections.get(section_name)
+            if section:
+                preview_parts.append(f"\n## {section_name}")
+                preview_parts.append(f"Token count: {section.token_count}")
+                preview_parts.append(f"Status: {section.status}")
+                preview_parts.append(section.content[:200] + "..." if len(section.content) > 200 else section.content)
+        
+        preview = "\n".join(preview_parts)
+        return self._handle_checkpoint(callback, checkpoint_id, phase_name, preview)
+    
+    def _write_incremental_plan(self, output_filename: Optional[str] = None) -> Path:
+        """
+        Write complete plan using StreamingPlanWriter.
+        
+        Args:
+            output_filename: Optional custom filename
+        
+        Returns:
+            Path to written plan file
+        """
+        # Determine output path
+        if output_filename is None:
+            session_id = self.incremental_generator.session_id
+            output_filename = f"{session_id}.md"
+        
+        output_path = self.active_plans_dir / output_filename
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Create writer with checkpoint support
+        writer = CheckpointedPlanWriter(output_path)
+        
+        try:
+            # Extract metadata
+            skeleton = self.incremental_generator.skeleton
+            feature_name = skeleton.get("feature_name", "Feature Plan")
+            
+            # Write header
+            writer.write_header(
+                feature_name,
+                {
+                    "Session ID": self.incremental_generator.session_id,
+                    "Generated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "Token Budget": "200 skeleton + 500 per section"
+                }
+            )
+            
+            # Write Phase 1
+            writer.write_phase("Phase 1: Foundation", [
+                {"name": "Requirements", "content": self._get_section_content("Requirements")},
+                {"name": "Dependencies", "content": self._get_section_content("Dependencies")},
+                {"name": "Architecture", "content": self._get_section_content("Architecture")}
+            ])
+            writer.write_checkpoint_marker("phase-1-complete", "Phase 1 sections completed")
+            
+            # Write Phase 2
+            writer.write_phase("Phase 2: Development", [
+                {"name": "Implementation", "content": self._get_section_content("Implementation")},
+                {"name": "Tests", "content": self._get_section_content("Tests")},
+                {"name": "Integration", "content": self._get_section_content("Integration")}
+            ])
+            writer.write_checkpoint_marker("phase-2-complete", "Phase 2 sections completed")
+            
+            # Write Phase 3
+            writer.write_phase("Phase 3: Validation & Deployment", [
+                {"name": "Acceptance", "content": self._get_section_content("Acceptance")},
+                {"name": "Security", "content": self._get_section_content("Security")},
+                {"name": "Deployment", "content": self._get_section_content("Deployment")}
+            ])
+            writer.write_checkpoint_marker("phase-3-complete", "Phase 3 sections completed")
+            
+            # Finalize
+            writer.finalize()
+            
+            logger.info(f"📄 Plan written: {writer.get_progress_summary()}")
+            return output_path
+            
+        finally:
+            # Ensure writer is finalized even if error occurs
+            if not writer.is_finalized:
+                writer.finalize()
+    
+    def _get_section_content(self, section_name: str) -> str:
+        """Get content for a section from incremental generator."""
+        section = self.incremental_generator.sections.get(section_name)
+        if section:
+            return section.content
+        return f"(Section {section_name} not found)"
+
