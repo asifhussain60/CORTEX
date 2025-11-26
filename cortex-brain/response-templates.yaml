@@ -617,6 +617,76 @@ templates:
       \ (planning) for feature planning\n- \U0001F9EA **Writing tests?** → Try **B**\
       \ (TDD) for test-driven development\n- ❓ **Not sure?** → Say **\"help\"** for\
       \ full command reference\n\nWhat would you like to accomplish today?"
+  code_review_planning:
+    name: Code Review Planning
+    triggers:
+    - code review
+    - review pr
+    - pr review
+    - review pull request
+    - pull request review
+    - ado pr review
+    - review code
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Code Review Planning\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to perform a code review on a Pull Request from\
+      \ Azure DevOps.\n\n## ⚠️ Challenge\n\n   No Challenge - Code review workflow\
+      \ will guide you through PR analysis with dependency-driven context building\
+      \ and tiered analysis depth.\n\n## \U0001F4AC Response\n   \n   Starting Code\
+      \ Review workflow...\n   \n   **What I Need From You:**\n   \n   1. **PR Information**\n\
+      \      • ADO PR link or work item ID\n      • Or paste PR diff/description directly\n\
+      \   \n   2. **Review Depth** (choose one)\n      • **Quick Review** (30s) -\
+      \ Critical issues only (breaking changes, critical smells)\n      • **Standard\
+      \ Review** (2 min) - + Best practices + edge cases\n      • **Deep Review**\
+      \ (5 min) - + TDD patterns + security scan + performance analysis\n   \n   3.\
+      \ **Focus Areas** (optional - select any)\n      • \U0001F512 Security vulnerabilities\n\
+      \      • \U0001F680 Performance optimization\n      • \U0001F9F9 Code maintainability\n\
+      \      • \U0001F9EA Test coverage\n      • \U0001F4D0 Architecture patterns\n\
+      \      • ✅ All areas (comprehensive)\n   \n   **What CORTEX Will Do:**\n  \
+      \ \n   **Phase 1: Context Building** (dependency-driven)\n   • Scan changed\
+      \ files in PR\n   • Crawl direct imports/references\n   • Locate related test\
+      \ files\n   • Build dependency graph (typically 5-15 files)\n   \n   **Phase\
+      \ 2: Analysis** (based on depth)\n   • Run selected analysis tier\n   • Check\
+      \ code smells and patterns\n   • Validate against best practices\n   • Assess\
+      \ risk score (0-100)\n   \n   **Phase 3: Reporting with Developer Disclaimer**\n\
+      \   • Executive summary (3 sentences)\n   • Risk score with explanation\n  \
+      \ • Priority matrix: Critical → Warnings → Suggestions\n   • Copy-paste ready\
+      \ fix templates\n   • **⚠️ DEVELOPER DISCLAIMER** (see below)\n   \n   **Two-Tier\
+      \ Response:**\n   \n   **Tier 1 - Findings Report** (you always get this):\n\
+      \   • Analysis results with confidence scores\n   • Issue categorization by\
+      \ severity\n   • Manual fix suggestions with code examples\n   • TDD violation\
+      \ analysis (if applicable)\n   \n   **Tier 2 - Auto-Fix Orchestration** (optional,\
+      \ you choose):\n   After reviewing the findings, I'll ask:\n   \"Would you\
+      \ like me to:\n   • A) Generate fix plan for ALL issues (Planning System 2.0)\n\
+      \   • B) Generate fix plan for CRITICAL issues only\n   • C) Exit (you'll fix\
+      \ manually)\"\n   \n   If you choose A or B:\n   • I'll create formal plan\
+      \ with DoR/DoD validation\n   • Show TDD workflow (RED → GREEN → REFACTOR)\n\
+      \   • Get your approval before executing\n   • Apply fixes with test-first\
+      \ approach\n   \n   **⚠️ DEVELOPER DISCLAIMER:**\n   \n   ```\n   This code\
+      \ review is AI-generated guidance based on pattern analysis.\n   \n   CORTEX\
+      \ findings may include:\n   • False positives (~15-20% industry standard)\n\
+      \   • Missed issues (no tool is perfect)\n   • Context-unaware suggestions\n\
+      \   • Confidence scores (shown per issue)\n   \n   YOU MUST:\n   ✓ Verify\
+      \ all findings before acting on them\n   ✓ Test all suggested fixes in isolation\n\
+      \   ✓ Consult your team for architectural changes\n   ✓ Use your engineering\
+      \ judgment as final decision\n   ✓ Review TDD violations in context of your\
+      \ workflow\n   \n   CORTEX assists and accelerates, YOU decide and validate.\n\
+      \   \n   Average confidence: Shown in report (typically 70-90%)\n   High confidence\
+      \ (>85%): Strong recommendation\n   Low confidence (<70%): Investigate carefully\n\
+      \   ```\n   \n   **Token Budget:** 5-10K tokens (efficient analysis)\n   **Estimated\
+      \ Time:** 30s - 5 min depending on depth\n\n## \U0001F4DD Your Request\n\n \
+      \  Perform code review on ADO Pull Request with guided analysis workflow and\
+      \ optional auto-fix orchestration\n\n## \U0001F50D Next Steps\n   \n   Please\
+      \ provide:\n   \n   1. **PR Information** - ADO link, work item ID, or paste\
+      \ PR details\n   2. **Choose Review Depth** - Quick / Standard / Deep\n   3.\
+      \ **Select Focus Areas** (optional) - Security / Performance / Maintainability\
+      \ / Tests / Architecture / All\n   \n   Example:\n   ```\n   PR: https://dev.azure.com/org/project/_git/repo/pullrequest/1234\n\
+      \   Depth: Standard\n   Focus: Security + Performance\n   ```\n   \n   Or simply\
+      \ say:\n   - \"Review PR 1234 with standard depth\"\n   - \"Deep review focusing\
+      \ on security\"\n   - \"Quick review of this PR: [paste diff]\"\n   \n   Once\
+      \ I have this information, I'll begin the analysis and show you the findings\
+      \ report first (Tier 1), then offer the auto-fix option (Tier 2)."
   fallback:
     name: Fallback Response
     triggers:
@@ -1565,6 +1635,14 @@ routing:
   - show captures
   - active captures
   - capture files
+  code_review_triggers:
+  - code review
+  - review pr
+  - pr review
+  - review pull request
+  - pull request review
+  - ado pr review
+  - review code
 formatting:
   mandatory_sections:
   - understanding

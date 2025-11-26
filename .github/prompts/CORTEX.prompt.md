@@ -513,7 +513,45 @@ Recommendations: Cache is performing well
 
 ---
 
-## 🔄 Upgrade CORTEX
+## � Code Review (Pull Request Analysis)
+
+**Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/code-review-feature-guide.md
+
+**Commands:**
+- `code review` or `review pr` - Start interactive code review workflow
+- `review pull request` or `pr review` - Alternative triggers
+- `ado pr review` - Review Azure DevOps Pull Request
+
+**Key Features:**
+- **Dependency-Driven Crawling:** Only scans files directly referenced by PR (5-10K tokens vs 45K+ percentage-based)
+- **Tiered Analysis:** Choose depth - Quick (30s) / Standard (2 min) / Deep (5 min)
+- **Actionable Reports:** Priority matrix with copy-paste fix templates
+- **Token Efficiency:** 83% reduction in analysis cost
+
+**Workflow:**
+1. **Provide PR Info:** ADO link, work item ID, or paste diff
+2. **Choose Depth:** Quick (critical only) / Standard (+ best practices) / Deep (+ security/TDD)
+3. **Select Focus:** Security / Performance / Maintainability / Tests / Architecture / All
+4. **Receive Report:** Executive summary, risk score, priority matrix, fix templates
+
+**Analysis Tiers:**
+- **Quick Review (30s):** Breaking changes + critical smells only
+- **Standard Review (2 min):** + Best practices + edge cases
+- **Deep Review (5 min):** + TDD patterns + OWASP security + performance analysis
+
+**Report Format:**
+- Executive summary (3 sentences)
+- Risk score (0-100) with explanation
+- Critical issues (must fix before merge)
+- Warnings (should fix soon)
+- Suggestions (nice to have)
+- Copy-paste ready fix templates
+
+**See code-review-feature-guide.md for complete implementation details, architecture, and configuration options.**
+
+---
+
+## �🔄 Upgrade CORTEX
 
 **Commands:**
 - `upgrade` or `upgrade cortex` - Universal upgrade for all installations with auto-detection
