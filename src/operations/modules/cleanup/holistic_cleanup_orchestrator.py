@@ -488,6 +488,7 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
     def execute(self, context: Dict[str, Any]) -> OperationResult:
         """Execute holistic cleanup"""
         dry_run = context.get('dry_run', True)
+        manifest_data = context.get('manifest')
         
         try:
             logger.info("=" * 70)
@@ -496,6 +497,10 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             logger.info(f"Mode: {'DRY RUN' if dry_run else 'LIVE EXECUTION'}")
             logger.info(f"Project Root: {self.project_root}")
             logger.info("")
+            
+            # If manifest provided, execute actions directly
+            if manifest_data and not dry_run:
+                return self._execute_cleanup_actions(manifest_data)
             
             # Phase 1: Holistic scan
             logger.info("Phase 1: Holistic Repository Scan")
@@ -562,7 +567,8 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
                     'manifest': manifest.to_dict(),
                     'manifest_path': str(manifest_path),
                     'report_path': str(report_path),
-                    'dry_run': dry_run
+                    'dry_run': dry_run,
+                    'statistics': scan_results['statistics']
                 }
             )
             
@@ -572,6 +578,87 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message=f"Cleanup failed: {str(e)}",
+                data={'error': str(e)}
+            )
+    
+    def _execute_cleanup_actions(self, manifest_data: Dict[str, Any]) -> OperationResult:
+        """Execute actual cleanup actions from manifest"""
+        try:
+            logger.info("Phase 4: Executing Cleanup Actions")
+            logger.info("-" * 70)
+            
+            proposed_actions = manifest_data.get('proposed_actions', [])
+            
+            files_deleted = 0
+            files_renamed = 0
+            space_freed = 0.0
+            errors = []
+            
+            for action in proposed_actions:
+                try:
+                    file_path = Path(action['file'])
+                    
+                    if not file_path.exists():
+                        logger.warning(f"File not found, skipping: {file_path}")
+                        continue
+                    
+                    if action['action'] == 'delete':
+                        # Delete file
+                        file_size_mb = file_path.stat().st_size / (1024 * 1024)
+                        file_path.unlink()
+                        files_deleted += 1
+                        space_freed += file_size_mb
+                        logger.info(f"  ✅ Deleted: {file_path.name} ({file_size_mb:.2f} MB)")
+                        
+                    elif action['action'] == 'rename':
+                        # Rename file
+                        new_name = action.get('new_name')
+                        if new_name:
+                            new_path = file_path.parent / new_name
+                            if not new_path.exists():
+                                file_path.rename(new_path)
+                                files_renamed += 1
+                                logger.info(f"  ✅ Renamed: {file_path.name} → {new_name}")
+                            else:
+                                logger.warning(f"Target exists, skipping rename: {new_name}")
+                        
+                except Exception as e:
+                    error_msg = f"Failed to process {action['file']}: {str(e)}"
+                    errors.append(error_msg)
+                    logger.error(f"  ❌ {error_msg}")
+            
+            logger.info("")
+            logger.info("=" * 70)
+            logger.info("CLEANUP EXECUTION COMPLETE")
+            logger.info("=" * 70)
+            logger.info(f"Files Deleted: {files_deleted}")
+            logger.info(f"Files Renamed: {files_renamed}")
+            logger.info(f"Space Freed: {space_freed:.2f} MB")
+            if errors:
+                logger.warning(f"Errors: {len(errors)}")
+            logger.info("")
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message=f"Cleanup executed: {files_deleted} deleted, {files_renamed} renamed, {space_freed:.2f} MB freed",
+                data={
+                    'execution_summary': {
+                        'files_deleted': files_deleted,
+                        'files_renamed': files_renamed,
+                        'space_freed_mb': space_freed,
+                        'errors_count': len(errors)
+                    }
+                },
+                errors=errors if errors else []
+            )
+            
+        except Exception as e:
+            logger.error(f"Cleanup execution failed: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Cleanup execution failed: {str(e)}",
                 data={'error': str(e)}
             )
     
