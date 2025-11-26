@@ -33,6 +33,9 @@ from workflows.code_cleanup_validator import CodeCleanupValidator
 from workflows.lint_integration import LintIntegration
 from workflows.production_readiness import ProductionReadinessChecklist
 
+# NEW Sprint 2: Document organization imports
+from workflows.document_organizer import DocumentOrganizer
+
 logger = logging.getLogger(__name__)
 
 
@@ -65,6 +68,10 @@ class SessionCompletionOrchestrator:
             self.cleanup_validator = CodeCleanupValidator()
             self.lint_integration = LintIntegration()
             self.readiness_checker = ProductionReadinessChecklist(project_root=project_root)
+        
+        # NEW Sprint 2: Initialize document organizer
+        brain_path = Path(__file__).parent.parent.parent / "cortex-brain"
+        self.document_organizer = DocumentOrganizer(brain_path)
     
     def _run_command(self, args: List[str], cwd: Optional[Path] = None) -> Tuple[bool, str]:
         """Run command and return success status and output."""
@@ -436,6 +443,20 @@ class SessionCompletionOrchestrator:
             
             output_path.write_text("\n".join(report_lines))
             logger.info(f"✅ Completion report generated: {output_path}")
+            
+            # NEW Sprint 2: Auto-organize report into correct category
+            try:
+                organized_path, organize_message = self.document_organizer.organize_document(output_path)
+                if organized_path:
+                    logger.info(f"📁 {organize_message}")
+                    # Update output_path reference for caller
+                    output_path = organized_path
+                else:
+                    logger.warning(f"⚠️ Document organization skipped: {organize_message}")
+            except Exception as org_error:
+                logger.warning(f"⚠️ Document organization failed: {org_error}")
+                # Don't fail the whole report generation if organization fails
+            
             return True
         except Exception as e:
             logger.error(f"❌ Failed to generate report: {e}")
