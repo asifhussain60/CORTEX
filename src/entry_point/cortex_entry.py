@@ -679,16 +679,21 @@ class CortexEntry:
                     content=f"Resuming from conversation: {active_conv.conversation_id}"
                 )
                 
-                return f"""🧠 **CORTEX Context Loaded**
+                return f"""# CORTEX Context Loaded
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-**Previous Conversation:** {active_conv.title}
+---
+
+## Previous Conversation
+**Title:** {active_conv.title}
 **Started:** {active_conv.created_at.strftime('%Y-%m-%d %H:%M')}
 **Messages:** {active_conv.message_count}
 
-**Context:**
+## Context
 {context_summary}
 
-**Ready to continue!** What would you like to do next?
+## Next Steps
+Ready to continue! What would you like to do next?
 """
             
             # Priority 2: Recent conversation (within 2 hours)
@@ -705,16 +710,21 @@ class CortexEntry:
                     # Mark as active for future resumes
                     wm.set_active_conversation(most_recent.conversation_id)
                     
-                    return f"""🧠 **CORTEX Context Loaded**
+                    return f"""# CORTEX Context Loaded
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-**Previous Conversation:** {most_recent.title}
+---
+
+## Previous Conversation
+**Title:** {most_recent.title}
 **Time:** {time_diff.seconds // 60} minutes ago
 **Messages:** {most_recent.message_count}
 
-**Context:**
+## Context
 {context_summary}
 
-**Ready to continue!** What would you like to do next?
+## Next Steps
+Ready to continue! What would you like to do next?
 """
             
             # Priority 3: No recent context

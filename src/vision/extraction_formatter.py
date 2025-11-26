@@ -99,10 +99,11 @@ class VisionExtractionFormatter:
             Formatted header string
         """
         return (
-            f"🧠 **CORTEX Interactive Planning** 🖼️ **[Vision API Active]**\n"
-            f"Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n"
-            f"📸 **Vision Analysis:**\n"
-            f"   Analyzing attached image: `{result.image_path}` "
+            f"# CORTEX Interactive Planning 🖼️ [Vision API Active]\n"
+            f"**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n"
+            f"---\n\n"
+            f"## Vision Analysis\n\n"
+            f"Analyzing attached image: `{result.image_path}` "
             f"({result.image_width}x{result.image_height}, {result.image_size_kb:.0f} KB)\n"
         )
     

@@ -135,18 +135,24 @@ class WiringGenerator:
         yaml += f"""  response_type: "detailed"
   orchestrator: "{feature_name}"
   content: |
-    🧠 **CORTEX {feature_name}**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    # 🧠 CORTEX {feature_name}
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
     
-    🎯 **My Understanding Of Your Request:** {{{{understanding}}}}
+    ---
     
-    ⚠️ **Challenge:** {{{{challenge}}}}
+    ## My Understanding Of Your Request
+    {{{{understanding}}}}
     
-    💬 **Response:** {purpose}
+    ## Challenge
+    {{{{challenge}}}}
     
-    📝 **Your Request:** {{{{user_request}}}}
+    ## Response
+    {purpose}
     
-    🔍 **Next Steps:**
+    ## Your Request
+    {{{{user_request}}}}
+    
+    ## Next Steps
     {{{{next_steps}}}}
 """
         return yaml

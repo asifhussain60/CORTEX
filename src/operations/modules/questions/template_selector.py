@@ -129,7 +129,7 @@ class TemplateSelector:
                 "trigger": ["status", "health", "how is cortex"],
                 "response_type": "structured",
                 "namespace": "cortex",
-                "content": "🧠 **CORTEX Status:** System operational. All brain tiers functional."
+                "content": "## CORTEX Status\n\nSystem operational. All brain tiers functional."
             },
             "workspace_help": {
                 "name": "Workspace Help",

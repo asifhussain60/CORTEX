@@ -71,6 +71,16 @@ def _generate_concise_help(registry, category: Optional[CommandCategory] = None)
     help_text = title
     help_text += "💡 *Tip: Natural language works everywhere! Commands are optional shortcuts.*\n\n"
     
+    # Add discovery section only for full help (not category-filtered)
+    if not category:
+        help_text += "## 🎯 New to CORTEX?\n\n"
+        help_text += "**Quick Discovery:**\n"
+        help_text += "• `discover cortex` - Interactive guide to explore CORTEX capabilities\n"
+        help_text += "• `cortex demo` - See live demonstrations of key features\n"
+        help_text += "• `tutorial` - 15-30 min hands-on learning (build real authentication feature)\n\n"
+        help_text += "**Try saying:** *\"discover cortex\"* or *\"show me what cortex can do\"*\n\n"
+        help_text += "---\n\n"
+    
     # Group by category
     by_category: Dict[CommandCategory, List] = {}
     for cmd in commands:
@@ -125,6 +135,26 @@ def _generate_detailed_help(registry, category: Optional[CommandCategory] = None
     
     help_text = title
     help_text += "**Commands are shortcuts. Natural language works everywhere!**\n\n"
+    
+    # Add discovery section only for full help (not category-filtered)
+    if not category:
+        help_text += "## 🚀 Getting Started\n\n"
+        help_text += "**New to CORTEX?** Start with these interactive guides:\n\n"
+        help_text += "• **`discover cortex`** - Explore all capabilities with interactive choices\n"
+        help_text += "• **`cortex demo`** - See live demonstrations of features:\n"
+        help_text += "  - `demo planning` - Planning System 2.0 with DoR/DoD enforcement\n"
+        help_text += "  - `demo tdd` - RED→GREEN→REFACTOR automation\n"
+        help_text += "  - `demo view discovery` - Auto-extract UI elements (92% time savings)\n"
+        help_text += "  - `demo feedback` - Structured issue reporting\n"
+        help_text += "  - `demo upgrade` - Universal upgrade system\n"
+        help_text += "• **`tutorial`** - 15-30 minute hands-on learning program\n"
+        help_text += "  - Build real authentication feature with tests\n"
+        help_text += "  - Learn planning, TDD, validation workflows\n\n"
+        help_text += "**Quick paths:**\n"
+        help_text += "- *Beginner:* `help` → `tutorial` → `demo planning`\n"
+        help_text += "- *Advanced:* `discover cortex` → `system alignment` → `admin help`\n"
+        help_text += "- *Developer:* `demo tdd` → `demo view discovery` → `git checkpoint`\n\n"
+        help_text += "---\n\n"
     
     # Group by category
     by_category: Dict[CommandCategory, List] = {}
