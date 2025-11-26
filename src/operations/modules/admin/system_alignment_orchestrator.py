@@ -214,6 +214,22 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         try:
             logger.info("🔍 Running system alignment validation...")
             
+            # Phase 0: Validate brain accessibility
+            logger.info("Validating brain accessibility...")
+            brain_check = self._validate_brain_accessibility()
+            
+            if not brain_check['healthy']:
+                logger.error(f"❌ Brain validation failed: {', '.join(brain_check['issues'])}")
+                return OperationResult(
+                    success=False,
+                    status=OperationStatus.FAILED,
+                    message=f"Brain validation failed: {', '.join(brain_check['issues'])}",
+                    errors=brain_check['issues'],
+                    duration_seconds=(datetime.now() - start_time).total_seconds()
+                )
+            
+            logger.info(f"✅ Brain accessibility verified")
+            
             # Run full validation
             report = self.run_full_validation()
             
@@ -1006,6 +1022,63 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             lines.append("Run 'align report' for details and auto-remediation")
         
         return "\n".join(lines)
+    
+    def _validate_brain_accessibility(self) -> Dict[str, Any]:
+        """
+        Validate brain databases are accessible and healthy.
+        
+        Lightweight check for alignment pre-flight validation.
+        
+        Returns:
+            Dict with 'healthy' bool and 'issues' list
+        """
+        issues = []
+        
+        # Check Tier 1 database
+        tier1_db = self.cortex_brain / "tier1" / "working_memory.db"
+        if not tier1_db.exists():
+            issues.append("Tier 1 database not found")
+        else:
+            try:
+                import sqlite3
+                conn = sqlite3.connect(str(tier1_db))
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA integrity_check")
+                result = cursor.fetchone()[0]
+                conn.close()
+                
+                if result != 'ok':
+                    issues.append("Tier 1 database integrity check failed")
+            except Exception as e:
+                issues.append(f"Tier 1 database error: {str(e)}")
+        
+        # Check Tier 2 database
+        tier2_db = self.cortex_brain / "tier2" / "knowledge_graph.db"
+        if not tier2_db.exists():
+            issues.append("Tier 2 database not found")
+        else:
+            try:
+                import sqlite3
+                conn = sqlite3.connect(str(tier2_db))
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA integrity_check")
+                result = cursor.fetchone()[0]
+                conn.close()
+                
+                if result != 'ok':
+                    issues.append("Tier 2 database integrity check failed")
+            except Exception as e:
+                issues.append(f"Tier 2 database error: {str(e)}")
+        
+        # Check brain protection rules
+        brain_rules = self.cortex_brain / "brain-protection-rules.yaml"
+        if not brain_rules.exists():
+            issues.append("Brain protection rules not found")
+        
+        return {
+            'healthy': len(issues) == 0,
+            'issues': issues
+        }
     
     def rollback(self, context: Dict[str, Any]) -> bool:
         """No rollback needed for read-only validation."""
