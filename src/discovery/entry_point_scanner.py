@@ -131,7 +131,22 @@ class EntryPointScanner:
             "design": "DesignSyncOrchestrator",
             "sync": "DesignSyncOrchestrator",
             "publish": "PublishBranchOrchestrator",
-            "workflow": "WorkflowOrchestrator"
+            "workflow": "WorkflowOrchestrator",
+            "architect": "ArchitectAgent",
+            "analyze architecture": "ArchitectAgent",
+            "architecture analysis": "ArchitectAgent",
+            "crawl shell": "ArchitectAgent",
+            "feedback": "FeedbackAgent",
+            "report issue": "FeedbackAgent",
+            "report bug": "FeedbackAgent",
+            "ingest to brain": "BrainIngestionAgent",
+            "save to brain": "BrainIngestionAgent",
+            "brain ingest": "BrainIngestionAgent",
+            "learn this": "BrainIngestionAgent",
+            "plan": "InteractivePlannerAgent",
+            "planning": "InteractivePlannerAgent",
+            "plan a feature": "InteractivePlannerAgent",
+            "feature planning": "InteractivePlannerAgent"
         }
         
         # Check trigger keywords
