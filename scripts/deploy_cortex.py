@@ -909,11 +909,8 @@ def publish_to_branch(
     
     logger.info(f"Current branch: {original_branch}")
     
-    # Create temp directory OUTSIDE git working tree to survive branch switches
-    import tempfile
-    temp_parent = Path(tempfile.gettempdir()) / 'cortex-publish-temp'
-    temp_parent.mkdir(exist_ok=True)
-    temp_dir = temp_parent / f'build-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
+    # Create temp directory for build
+    temp_dir = project_root / '.temp-publish'
     
     try:
         # STAGE 1: Validation

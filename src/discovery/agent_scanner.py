@@ -117,18 +117,55 @@ class AgentScanner:
                 if not isinstance(node, ast.ClassDef):
                     continue
                 
-                # Check if name ends with 'Agent'
-                if not node.name.endswith("Agent"):
+                # Check if name ends with 'Agent' or 'AgentImpl' (concrete implementations)
+                if not (node.name.endswith("Agent") or node.name.endswith("AgentImpl")):
                     continue
                 
-                # Extract metadata
+                # Skip abstract base classes (classes with ABC base or containing @abstractmethod)
+                if self._is_abstract_class(node):
+                    logger.debug(f"Skipping abstract class: {node.name}")
+                    continue
+                
+                # Extract metadata (normalize name by removing 'Impl' suffix for display)
                 metadata = self._extract_metadata(node, file_path)
-                agents[node.name] = metadata
+                
+                # Use normalized name without 'Impl' suffix as the key
+                display_name = node.name.replace("AgentImpl", "Agent") if node.name.endswith("AgentImpl") else node.name
+                agents[display_name] = metadata
         
         except Exception as e:
             logger.warning(f"Failed to scan {file_path}: {e}")
         
         return agents
+    
+    def _is_abstract_class(self, class_node: ast.ClassDef) -> bool:
+        """
+        Check if class is abstract (has ABC base or @abstractmethod decorators).
+        
+        Args:
+            class_node: AST ClassDef node
+        
+        Returns:
+            True if class is abstract
+        """
+        # Check if inherits from ABC
+        for base in class_node.bases:
+            if isinstance(base, ast.Name):
+                if base.id in ("ABC", "ABCMeta"):
+                    return True
+        
+        # Check for @abstractmethod decorators on any method
+        for node in ast.walk(class_node):
+            if isinstance(node, ast.FunctionDef):
+                for decorator in node.decorator_list:
+                    if isinstance(decorator, ast.Name):
+                        if decorator.id == "abstractmethod":
+                            return True
+                    elif isinstance(decorator, ast.Attribute):
+                        if decorator.attr == "abstractmethod":
+                            return True
+        
+        return False
     
     def _extract_metadata(
         self,

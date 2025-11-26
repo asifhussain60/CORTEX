@@ -42,19 +42,28 @@ class TestCoverageValidator:
         Find test file for feature using naming conventions.
         
         Args:
-            feature_name: Feature class name (e.g., "TDDWorkflowOrchestrator")
+            feature_name: Feature class name (e.g., "TDDWorkflowOrchestrator" or "BrainIngestionAgentImpl")
             feature_type: 'orchestrator' or 'agent'
         
         Returns:
             Path to test file or None
         """
+        # Strip "Impl" suffix if present (e.g., BrainIngestionAgentImpl → BrainIngestionAgent)
+        # This allows tests to be named after the abstract interface rather than concrete implementation
+        base_name = feature_name
+        if feature_name.endswith("Impl"):
+            base_name = feature_name[:-4]
+            logger.debug(f"Stripped 'Impl' suffix: {feature_name} → {base_name}")
+        
         # Convert class name to test file name
         # TDDWorkflowOrchestrator → test_tdd_workflow_orchestrator.py
-        test_name = "test_" + self._snake_case(feature_name) + ".py"
+        # BrainIngestionAgent → test_brain_ingestion_agent.py
+        test_name = "test_" + self._snake_case(base_name) + ".py"
         
         # Search in appropriate test directory
         if feature_type == "orchestrator":
             search_paths = [
+                self.tests_root / "orchestrators",
                 self.tests_root / "operations" / "modules",
                 self.tests_root / "workflows",
                 self.tests_root / "operations"
@@ -115,8 +124,11 @@ class TestCoverageValidator:
         # Count test functions
         test_count = self._count_tests(test_file)
         
+        # Find source module to measure coverage for
+        source_module = self._find_source_module(feature_name, feature_type)
+        
         # Try to get actual coverage if pytest-cov is available
-        coverage_pct = self._get_pytest_coverage(test_file)
+        coverage_pct = self._get_pytest_coverage(test_file, source_module)
         
         return {
             "has_tests": True,
@@ -148,26 +160,77 @@ class TestCoverageValidator:
             logger.warning(f"Failed to count tests in {test_file}: {e}")
             return 0
     
-    def _get_pytest_coverage(self, test_file: Path) -> float:
+    def _find_source_module(self, feature_name: str, feature_type: str) -> Optional[str]:
+        """
+        Find source module path for feature.
+        
+        Args:
+            feature_name: Feature class name (e.g., "BrainIngestionAgent")
+            feature_type: 'orchestrator' or 'agent'
+        
+        Returns:
+            Module path for pytest --cov (e.g., "src.agents.brain_ingestion_agent")
+        """
+        # Strip "Impl" suffix if present
+        base_name = feature_name[:-4] if feature_name.endswith("Impl") else feature_name
+        
+        # Convert to snake_case filename
+        snake_name = self._snake_case(base_name)
+        
+        # Determine search paths based on type
+        if feature_type == "agent":
+            search_paths = [
+                self.project_root / "src" / "agents" / f"{snake_name}.py",
+                self.project_root / "src" / "cortex_agents" / f"{snake_name}.py"
+            ]
+        elif feature_type == "orchestrator":
+            search_paths = [
+                self.project_root / "src" / "orchestrators" / f"{snake_name}.py",
+                self.project_root / "src" / "operations" / "modules" / f"{snake_name}.py",
+                self.project_root / "src" / "workflows" / f"{snake_name}.py"
+            ]
+        else:
+            search_paths = []
+        
+        # Find existing source file
+        for path in search_paths:
+            if path.exists():
+                # Convert to module path (e.g., src/agents/brain_ingestion_agent.py → src.agents.brain_ingestion_agent)
+                relative = path.relative_to(self.project_root)
+                module_path = str(relative).replace("\\", ".").replace("/", ".")[:-3]  # Remove .py
+                return module_path
+        
+        return None
+    
+    def _get_pytest_coverage(self, test_file: Path, source_module: Optional[str] = None) -> float:
         """
         Get pytest coverage for test file.
         
         Args:
             test_file: Path to test file
+            source_module: Specific module to measure coverage for (e.g., "src.agents.brain_ingestion_agent")
         
         Returns:
             Coverage percentage (0-100)
         """
         try:
+            # Build pytest command
+            cmd = [
+                "python", "-m", "pytest",
+                str(test_file),
+                "--cov-report=json",
+                "--quiet"
+            ]
+            
+            # Add specific module coverage if available
+            if source_module:
+                cmd.insert(4, f"--cov={source_module}")
+            else:
+                cmd.insert(4, "--cov")
+            
             # Try running pytest with coverage
             result = subprocess.run(
-                [
-                    "python", "-m", "pytest",
-                    str(test_file),
-                    "--cov",
-                    "--cov-report=json",
-                    "--quiet"
-                ],
+                cmd,
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,

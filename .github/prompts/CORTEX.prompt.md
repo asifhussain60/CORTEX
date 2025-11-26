@@ -237,6 +237,95 @@ CORTEX will:
 
 ---
 
+## 📦 Cache Management (Admin Only)
+
+**Complete Guide:** #file:modules/cache-management-guide.md (Coming Soon)  
+**Troubleshooting:** #file:../cortex-brain/documents/guides/cache-troubleshooting-guide.md
+
+**Quick Commands:**
+- `cache status` or `show cache` - Display cache effectiveness metrics (hit rates, entries, age)
+- `cache dashboard` - Rich visualization with effectiveness/health/performance tables
+- `cache health` - Health report (healthy/warning/critical status, recommendations)
+- `cache clear` or `clear cache` - Clear all cached validation results
+- `cache clear [operation]` - Clear cache for specific operation (optimize, cleanup, align, deploy)
+- `cache invalidate <operation> <key>` - Invalidate specific cache key
+
+**What Gets Cached:**
+- **Optimize Operation:**
+  - Governance drift analysis (5-10s → 0.003s)
+  - EPMO health checks (10-15s → 0.005s)
+  - **Speedup:** 6.4x (45s → 7s on cache hit)
+- **Cleanup Operation:**
+  - Temp files scan (5-10s → 0.002s)
+  - Old logs scan (2-5s → 0.003s)
+  - Large cache files scan (3-5s → 0.004s)
+  - **Speedup:** 5.5x (22s → 4s on cache hit)
+
+**Cache Architecture:**
+- SQLite-backed persistence (survives restarts)
+- SHA256 file hash tracking (automatic invalidation on file changes)
+- TTL support (1 hour default for optimization results)
+- Background warming via git hooks (7.3s, non-blocking)
+
+**Natural Language Triggers:**
+- "show cache stats" → `cache dashboard`
+- "check cache health" → `cache health`
+- "is cache working?" → `cache status`
+- "clear the cache" → `cache clear`
+- "reset cache" → `cache clear`
+
+**Example Output:**
+
+```
+Cache Status:
+  Overall Hit Rate: 60.0%
+  Total Entries: 5
+  Total Size: 0.40 MB
+  
+Operations:
+  optimize: 2 entries, 100.0% hit rate, 0.25 MB
+  cleanup: 3 entries, 66.7% hit rate, 0.15 MB
+  
+Time Saved: ~20-25 seconds per operation
+```
+
+**Dashboard Output (Rich Tables):**
+- **Effectiveness Table:** Hit rates by operation (green >80%, yellow >60%, red <40%)
+- **Health Table:** Cache size, age distribution, staleness warnings
+- **Performance Table:** Time saved, speedup ratios, projected savings
+
+**Health Report Output:**
+```
+Cache Health Report
+Status: healthy
+Size: 0.40 MB (healthy - under 100MB limit)
+Age: 5 entries, 0 stale (>7 days)
+Hit Rate: 60.0% (acceptable - target 70-90%)
+Issues: None
+Recommendations: Cache is performing well
+```
+
+**When to Clear Cache:**
+- After major refactoring (changed many files)
+- Low hit rate (<30%) with no clear cause
+- Suspected corruption (database errors)
+- Disk space concerns (cache >100MB)
+
+**Automatic Invalidation:**
+- Cache automatically invalidates when tracked files change
+- No manual clearing needed for normal development
+- File hash (SHA256) tracking ensures fresh results
+
+**Background Warming:**
+- Git hooks auto-warm cache after checkout/merge
+- 7.3s warming time (5 keys: governance, EPMO, temp files, old logs, large cache)
+- Non-blocking (doesn't slow down git operations)
+- Graceful error handling (failures don't break git)
+
+**See:** `cortex-brain/documents/guides/cache-troubleshooting-guide.md` for complete troubleshooting procedures, common issues, recovery steps, and debugging techniques.
+
+---
+
 # 📁 Document Organization (MANDATORY)
 
 **CRITICAL:** All informational documents MUST be created in organized folder structure within CORTEX brain.

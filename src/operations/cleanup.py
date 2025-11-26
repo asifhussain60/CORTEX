@@ -16,6 +16,10 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Any
 from datetime import datetime, timedelta
 from enum import Enum
+from src.caching import get_cache
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CleanupCategory(Enum):
@@ -141,9 +145,10 @@ def is_safe_to_delete(path: Path, project_root: Path) -> Tuple[bool, str]:
     return True, "Safe to delete"
 
 
-def find_temp_files(project_root: Path) -> List[Path]:
+def find_temp_files(project_root: Path, cache_instance=None) -> List[Path]:
     """
     Find temporary files in project.
+    Uses ValidationCache to cache scan results.
     
     Targets:
         - *.tmp, *.temp
@@ -154,10 +159,21 @@ def find_temp_files(project_root: Path) -> List[Path]:
     
     Args:
         project_root: Project root directory
+        cache_instance: ValidationCache instance (optional)
     
     Returns:
         List of temporary file/directory paths
     """
+    # Try cache first
+    if cache_instance:
+        cache_key = f"temp_files_scan_{project_root.name}"
+        tracked_dirs = [project_root / "cortex-brain", project_root / "src"]
+        cached_result = cache_instance.get("cleanup", cache_key, files=[d for d in tracked_dirs if d.exists()])
+        if cached_result is not None:
+            logger.info("✅ Temp files scan retrieved from cache")
+            return [Path(p) for p in cached_result]
+        logger.info("🔄 Running temp files scan (cache miss)...")
+    
     temp_items = []
     
     # Patterns to find
@@ -179,26 +195,45 @@ def find_temp_files(project_root: Path) -> List[Path]:
                 if safe:
                     temp_items.append(item)
     
+    # Cache the result
+    if cache_instance:
+        cache_key = f"temp_files_scan_{project_root.name}"
+        tracked_dirs = [project_root / "cortex-brain", project_root / "src"]
+        cache_instance.set("cleanup", cache_key, [str(p) for p in temp_items], 
+                          files=[d for d in tracked_dirs if d.exists()], ttl_seconds=3600)
+        logger.info("✅ Temp files scan cached")
+    
     return temp_items
 
 
-def find_old_logs(project_root: Path, days_old: int = 30) -> List[Path]:
+def find_old_logs(project_root: Path, days_old: int = 30, cache_instance=None) -> List[Path]:
     """
     Find log files older than specified days.
+    Uses ValidationCache to cache scan results.
     
     Args:
         project_root: Project root directory
         days_old: Consider files older than this many days
+        cache_instance: ValidationCache instance (optional)
     
     Returns:
         List of old log file paths
     """
-    old_logs = []
-    cutoff_time = datetime.now() - timedelta(days=days_old)
-    
     logs_dir = project_root / 'logs'
     if not logs_dir.exists():
-        return old_logs
+        return []
+    
+    # Try cache first
+    if cache_instance:
+        cache_key = f"old_logs_scan_{project_root.name}_{days_old}days"
+        cached_result = cache_instance.get("cleanup", cache_key, files=[logs_dir])
+        if cached_result is not None:
+            logger.info("✅ Old logs scan retrieved from cache")
+            return [Path(p) for p in cached_result]
+        logger.info("🔄 Running old logs scan (cache miss)...")
+    
+    old_logs = []
+    cutoff_time = datetime.now() - timedelta(days=days_old)
     
     for log_file in logs_dir.rglob('*.log'):
         if log_file.is_file():
@@ -212,20 +247,39 @@ def find_old_logs(project_root: Path, days_old: int = 30) -> List[Path]:
                 # Skip files we can't read
                 continue
     
+    # Cache the result
+    if cache_instance:
+        cache_key = f"old_logs_scan_{project_root.name}_{days_old}days"
+        cache_instance.set("cleanup", cache_key, [str(p) for p in old_logs],
+                          files=[logs_dir], ttl_seconds=3600)
+        logger.info("✅ Old logs scan cached")
+    
     return old_logs
 
 
-def find_large_cache_files(project_root: Path, min_size_mb: int = 10) -> List[Path]:
+def find_large_cache_files(project_root: Path, min_size_mb: int = 10, cache_instance=None) -> List[Path]:
     """
     Find large cache files (>10MB by default).
+    Uses ValidationCache to cache scan results.
     
     Args:
         project_root: Project root directory
         min_size_mb: Minimum file size in MB
+        cache_instance: ValidationCache instance (optional)
     
     Returns:
         List of large cache file paths
     """
+    # Try cache first
+    if cache_instance:
+        cache_key = f"large_cache_files_scan_{project_root.name}_{min_size_mb}mb"
+        tracked_dirs = [project_root / "cortex-brain", project_root / ".cache"]
+        cached_result = cache_instance.get("cleanup", cache_key, files=[d for d in tracked_dirs if d.exists()])
+        if cached_result is not None:
+            logger.info("✅ Large cache files scan retrieved from cache")
+            return [Path(p) for p in cached_result]
+        logger.info("🔄 Running large cache files scan (cache miss)...")
+    
     large_files = []
     min_size_bytes = min_size_mb * 1024 * 1024
     
@@ -241,6 +295,14 @@ def find_large_cache_files(project_root: Path, min_size_mb: int = 10) -> List[Pa
                             large_files.append(item)
                 except OSError:
                     continue
+    
+    # Cache the result
+    if cache_instance:
+        cache_key = f"large_cache_files_scan_{project_root.name}_{min_size_mb}mb"
+        tracked_dirs = [project_root / "cortex-brain", project_root / ".cache"]
+        cache_instance.set("cleanup", cache_key, [str(p) for p in large_files],
+                          files=[d for d in tracked_dirs if d.exists()], ttl_seconds=3600)
+        logger.info("✅ Large cache files scan cached")
     
     return large_files
 
@@ -305,6 +367,9 @@ def cleanup_workspace(
     if categories is None:
         categories = list(CleanupCategory)
     
+    # Initialize cache
+    cache = get_cache()
+    
     result = CleanupResult()
     items_to_delete = []
     
@@ -314,21 +379,32 @@ def cleanup_workspace(
     
     if CleanupCategory.TEMP_FILES in categories:
         print("Searching for temporary files...")
-        temp_items = find_temp_files(project_root)
+        temp_items = find_temp_files(project_root, cache_instance=cache)
         items_to_delete.extend([(item, CleanupCategory.TEMP_FILES) for item in temp_items])
         print(f"  Found {len(temp_items)} temporary items")
     
     if CleanupCategory.OLD_LOGS in categories:
         print("Searching for old log files (>30 days)...")
-        old_logs = find_old_logs(project_root, days_old=30)
+        old_logs = find_old_logs(project_root, days_old=30, cache_instance=cache)
         items_to_delete.extend([(item, CleanupCategory.OLD_LOGS) for item in old_logs])
         print(f"  Found {len(old_logs)} old log files")
     
     if CleanupCategory.CACHE_DIRS in categories:
         print("Searching for large cache files (>10MB)...")
-        large_caches = find_large_cache_files(project_root, min_size_mb=10)
+        large_caches = find_large_cache_files(project_root, min_size_mb=10, cache_instance=cache)
         items_to_delete.extend([(item, CleanupCategory.CACHE_DIRS) for item in large_caches])
         print(f"  Found {len(large_caches)} large cache files")
+    
+    # Get cache statistics
+    cache_stats = cache.get_stats("cleanup")
+    if cache_stats:
+        hit_rate = cache_stats.get('hit_rate', 0.0)
+        hits = cache_stats.get('hits', 0)
+        misses = cache_stats.get('misses', 0)
+        if hits > 0 or misses > 0:
+            print(f"\n🚀 Cache Performance: {hit_rate * 100:.1f}% hit rate ({hits} hits, {misses} misses)")
+            if hits > 0:
+                print(f"   Time saved: ~{hits * 3:.1f}s (estimated)")
     
     print("━" * 80)
     

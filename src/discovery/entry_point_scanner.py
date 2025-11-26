@@ -148,9 +148,24 @@ class EntryPointScanner:
             "run ingestion adapter": "BrainIngestionAdapterAgent",
             "adapter brain ingestion": "BrainIngestionAdapterAgent",
             "plan": "InteractivePlannerAgent",
-            "planning": "InteractivePlannerAgent",
+            "planning": "PlanningOrchestrator",
             "plan a feature": "InteractivePlannerAgent",
-            "feature planning": "InteractivePlannerAgent"
+            "feature planning": "InteractivePlannerAgent",
+            "hands on tutorial": "HandsOnTutorialOrchestrator",
+            "start hands on tutorial": "HandsOnTutorialOrchestrator",
+            "run on tutorial": "HandsOnTutorialOrchestrator",
+            "publish branch": "PublishBranchOrchestrator",
+            "start publish branch": "PublishBranchOrchestrator",
+            "run branch": "PublishBranchOrchestrator",
+            "optimize system": "OptimizeSystemOrchestrator",
+            "start optimize system": "OptimizeSystemOrchestrator",
+            "run system": "OptimizeSystemOrchestrator",
+            "view discovery": "ViewDiscoveryAgent",
+            "start view discovery": "ViewDiscoveryAgent",
+            "run discovery": "ViewDiscoveryAgent",
+            "learning capture": "LearningCaptureAgent",
+            "start learning capture": "LearningCaptureAgent",
+            "run capture": "LearningCaptureAgent"
         }
         
         # Check trigger keywords

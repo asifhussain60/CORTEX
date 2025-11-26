@@ -30,6 +30,7 @@ from src.operations.base_operation_module import (
 )
 from src.validation.file_organization_validator import FileOrganizationValidator
 from src.validation.template_header_validator import TemplateHeaderValidator
+from src.caching import get_cache
 
 logger = logging.getLogger(__name__)
 
@@ -251,23 +252,58 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         Returns:
             AlignmentReport with all validation results
         """
+        cache = get_cache()
+        
         report = AlignmentReport(
             timestamp=datetime.now(),
             overall_health=0
         )
         
-        # Phase 1: Discover all features
-        orchestrators = self._discover_orchestrators()
-        agents = self._discover_agents()
+        # Phase 1: Discover all features (with caching)
+        operations_dir = self.project_root / 'src' / 'operations'
+        agents_dir = self.project_root / 'src' / 'agents'
+        
+        # Try cache for orchestrators
+        orchestrators = cache.get('align', 'orchestrators', [operations_dir])
+        if orchestrators is None:
+            logger.info("Cache MISS: orchestrators - running discovery")
+            orchestrators = self._discover_orchestrators()
+            cache.set('align', 'orchestrators', orchestrators, [operations_dir], ttl_seconds=0)
+        else:
+            logger.info("Cache HIT: orchestrators - using cached discovery")
+        
+        # Try cache for agents
+        agents = cache.get('align', 'agents', [agents_dir])
+        if agents is None:
+            logger.info("Cache MISS: agents - running discovery")
+            agents = self._discover_agents()
+            cache.set('align', 'agents', agents, [agents_dir], ttl_seconds=0)
+        else:
+            logger.info("Cache HIT: agents - using cached discovery")
         
         # Phase 1.5: Discover entry points and validate wiring
         orphaned, ghost = self._validate_entry_points(orchestrators)
         report.orphaned_triggers = orphaned
         report.ghost_features = ghost
         
-        # Phase 2: Validate integration depth
+        # Phase 2: Validate integration depth (with caching)
         for name, metadata in orchestrators.items():
-            score = self._calculate_integration_score(name, metadata, "orchestrator")
+            # Get feature files for cache tracking
+            feature_files = self._get_feature_files(name, metadata)
+            
+            # Try cache for integration score
+            cache_key = f'integration_score:{name}'
+            score = cache.get('align', cache_key, feature_files)
+            
+            if score is None:
+                logger.debug(f"Cache MISS: {cache_key} - calculating score")
+                score = self._calculate_integration_score(name, metadata, "orchestrator")
+                # Convert dataclass to dict for JSON serialization
+                cache.set('align', cache_key, self._score_to_dict(score), feature_files, ttl_seconds=0)
+            else:
+                logger.debug(f"Cache HIT: {cache_key} - using cached score")
+                score = self._dict_to_score(score)
+            
             report.feature_scores[name] = score
             
             # Categorize issues
@@ -277,13 +313,30 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 report.warnings += 1
         
         for name, metadata in agents.items():
-            score = self._calculate_integration_score(name, metadata, "agent")
+            feature_files = self._get_feature_files(name, metadata)
+            cache_key = f'integration_score:{name}'
+            
+            score = cache.get('align', cache_key, feature_files)
+            if score is None:
+                logger.debug(f"Cache MISS: {cache_key} - calculating score")
+                score = self._calculate_integration_score(name, metadata, "agent")
+                cache.set('align', cache_key, self._score_to_dict(score), feature_files, ttl_seconds=0)
+            else:
+                logger.debug(f"Cache HIT: {cache_key} - using cached score")
+                score = self._dict_to_score(score)
+            
             report.feature_scores[name] = score
             
             if score.score < 70:
                 report.critical_issues += 1
             elif score.score < 90:
                 report.warnings += 1
+        
+        # Share integration scores with deploy operation
+        cache.share_result('align', 'deploy', 'orchestrators')
+        cache.share_result('align', 'deploy', 'agents')
+        for name in list(orchestrators.keys()) + list(agents.keys()):
+            cache.share_result('align', 'deploy', f'integration_score:{name}')
         
         # Phase 3: REMOVED - Documentation validation now done in _calculate_integration_score()
         # Old _validate_documentation() used incorrect logic (checking CORTEX.prompt.md mentions)
@@ -1024,4 +1077,63 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             optional=True,
             author="Asif Hussain",
             tags=["admin", "validation", "alignment"]
+        )
+    
+    def _get_feature_files(self, feature_name: str, metadata: Dict[str, Any]) -> List[Path]:
+        """
+        Get list of files to track for cache invalidation.
+        
+        Args:
+            feature_name: Feature name
+            metadata: Feature metadata with file paths
+        
+        Returns:
+            List of Paths to track for this feature
+        """
+        files = []
+        
+        # Add main implementation file
+        if 'file_path' in metadata:
+            file_path = Path(metadata['file_path'])
+            if file_path.exists():
+                files.append(file_path)
+        
+        # Add test file if exists
+        test_path = self.project_root / 'tests' / f'test_{feature_name}.py'
+        if test_path.exists():
+            files.append(test_path)
+        
+        # Add module guide if exists
+        guide_path = self.project_root / '.github' / 'prompts' / 'modules' / f'{feature_name}-guide.md'
+        if guide_path.exists():
+            files.append(guide_path)
+        
+        return files
+    
+    def _score_to_dict(self, score: IntegrationScore) -> Dict[str, Any]:
+        """Convert IntegrationScore dataclass to dict for cache serialization."""
+        return {
+            'feature_name': score.feature_name,
+            'feature_type': score.feature_type,
+            'discovered': score.discovered,
+            'imported': score.imported,
+            'instantiated': score.instantiated,
+            'documented': score.documented,
+            'tested': score.tested,
+            'wired': score.wired,
+            'optimized': score.optimized
+        }
+    
+    def _dict_to_score(self, data: Dict[str, Any]) -> IntegrationScore:
+        """Convert dict back to IntegrationScore dataclass."""
+        return IntegrationScore(
+            feature_name=data['feature_name'],
+            feature_type=data['feature_type'],
+            discovered=data['discovered'],
+            imported=data['imported'],
+            instantiated=data['instantiated'],
+            documented=data['documented'],
+            tested=data['tested'],
+            wired=data['wired'],
+            optimized=data['optimized']
         )

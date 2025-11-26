@@ -2,6 +2,63 @@
 # Add these to cortex-brain/response-templates.yaml
 
 
+# === HandsOnTutorialOrchestrator ===
+# Suggested wiring for HandsOnTutorialOrchestrator
+# Add to cortex-brain/response-templates.yaml
+
+hands_on_tutorial:
+  name: "HandsOnTutorialOrchestrator"
+  triggers:
+    - "hands on tutorial"
+    - "start hands on tutorial"
+    - "run on tutorial"
+  response_type: "detailed"
+  orchestrator: "HandsOnTutorialOrchestrator"
+  content: |
+    🧠 **CORTEX HandsOnTutorialOrchestrator**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Orchestrates interactive hands-on tutorial for CORTEX.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for HandsOnTutorialOrchestrator
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 HandsOnTutorial
+
+**Purpose:** Orchestrates interactive hands-on tutorial for CORTEX.
+
+**Commands:**
+- `hands on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+- `start hands on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+- `run on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+
+**Natural Language Examples:**
+- "hands on tutorial"
+- "start hands on tutorial"
+- "run on tutorial"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
 # === PublishBranchOrchestrator ===
 # Suggested wiring for PublishBranchOrchestrator
 # Add to cortex-brain/response-templates.yaml
@@ -116,120 +173,6 @@ optimize_system:
 
 
 
-# === GitCheckpointOrchestrator ===
-# Suggested wiring for GitCheckpointOrchestrator
-# Add to cortex-brain/response-templates.yaml
-
-git_checkpoint:
-  name: "GitCheckpointOrchestrator"
-  triggers:
-    - "git checkpoint"
-    - "start git checkpoint"
-    - "run checkpoint"
-  response_type: "detailed"
-  orchestrator: "GitCheckpointOrchestrator"
-  content: |
-    🧠 **CORTEX GitCheckpointOrchestrator**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Orchestrates git checkpoint creation and management for TDD workflows.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for GitCheckpointOrchestrator
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 GitCheckpoint
-
-**Purpose:** Orchestrates git checkpoint creation and management for TDD workflows.
-
-**Commands:**
-- `git checkpoint` - Orchestrates git checkpoint creation and management for TDD workflows.
-- `start git checkpoint` - Orchestrates git checkpoint creation and management for TDD workflows.
-- `run checkpoint` - Orchestrates git checkpoint creation and management for TDD workflows.
-
-**Natural Language Examples:**
-- "git checkpoint"
-- "start git checkpoint"
-- "run checkpoint"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === LintValidationOrchestrator ===
-# Suggested wiring for LintValidationOrchestrator
-# Add to cortex-brain/response-templates.yaml
-
-lint_validation:
-  name: "LintValidationOrchestrator"
-  triggers:
-    - "lint validation"
-    - "start lint validation"
-    - "run validation"
-  response_type: "detailed"
-  orchestrator: "LintValidationOrchestrator"
-  content: |
-    🧠 **CORTEX LintValidationOrchestrator**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Orchestrates code quality validation across multiple languages.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for LintValidationOrchestrator
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 LintValidation
-
-**Purpose:** Orchestrates code quality validation across multiple languages.
-
-**Commands:**
-- `lint validation` - Orchestrates code quality validation across multiple languages.
-- `start lint validation` - Orchestrates code quality validation across multiple languages.
-- `run validation` - Orchestrates code quality validation across multiple languages.
-
-**Natural Language Examples:**
-- "lint validation"
-- "start lint validation"
-- "run validation"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
 # === PlanningOrchestrator ===
 # Suggested wiring for PlanningOrchestrator
 # Add to cortex-brain/response-templates.yaml
@@ -268,279 +211,6 @@ planning:
 
 **Natural Language Examples:**
 - "planning"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === SessionCompletionOrchestrator ===
-# Suggested wiring for SessionCompletionOrchestrator
-# Add to cortex-brain/response-templates.yaml
-
-session_completion:
-  name: "SessionCompletionOrchestrator"
-  triggers:
-    - "session completion"
-    - "start session completion"
-    - "run completion"
-  response_type: "detailed"
-  orchestrator: "SessionCompletionOrchestrator"
-  content: |
-    🧠 **CORTEX SessionCompletionOrchestrator**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Orchestrates comprehensive validation at TDD session completion.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for SessionCompletionOrchestrator
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 SessionCompletion
-
-**Purpose:** Orchestrates comprehensive validation at TDD session completion.
-
-**Commands:**
-- `session completion` - Orchestrates comprehensive validation at TDD session completion.
-- `start session completion` - Orchestrates comprehensive validation at TDD session completion.
-- `run completion` - Orchestrates comprehensive validation at TDD session completion.
-
-**Natural Language Examples:**
-- "session completion"
-- "start session completion"
-- "run completion"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === UpgradeOrchestrator ===
-# Suggested wiring for UpgradeOrchestrator
-# Add to cortex-brain/response-templates.yaml
-
-upgrade:
-  name: "UpgradeOrchestrator"
-  triggers:
-    - "upgrade"
-  response_type: "detailed"
-  orchestrator: "UpgradeOrchestrator"
-  content: |
-    🧠 **CORTEX UpgradeOrchestrator**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Orchestrates CORTEX auto-upgrade from remote repository.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for UpgradeOrchestrator
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 Upgrade
-
-**Purpose:** Orchestrates CORTEX auto-upgrade from remote repository.
-
-**Commands:**
-- `upgrade` - Orchestrates CORTEX auto-upgrade from remote repository.
-
-**Natural Language Examples:**
-- "upgrade"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === BrainIngestionAgent ===
-# Suggested wiring for BrainIngestionAgent
-# Add to cortex-brain/response-templates.yaml
-
-brain_ingestion:
-  name: "BrainIngestionAgent"
-  triggers:
-    - "brain ingestion"
-    - "start brain ingestion"
-    - "run ingestion"
-  response_type: "detailed"
-  orchestrator: "BrainIngestionAgent"
-  content: |
-    🧠 **CORTEX BrainIngestionAgent**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Abstract base class for brain ingestion agent
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for BrainIngestionAgent
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 BrainIngestion
-
-**Purpose:** Abstract base class for brain ingestion agent
-
-**Commands:**
-- `brain ingestion` - Abstract base class for brain ingestion agent
-- `start brain ingestion` - Abstract base class for brain ingestion agent
-- `run ingestion` - Abstract base class for brain ingestion agent
-
-**Natural Language Examples:**
-- "brain ingestion"
-- "start brain ingestion"
-- "run ingestion"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === BrainIngestionAdapterAgent ===
-# Suggested wiring for BrainIngestionAdapterAgent
-# Add to cortex-brain/response-templates.yaml
-
-brain_ingestion_adapter:
-  name: "BrainIngestionAdapterAgent"
-  triggers:
-    - "brain ingestion adapter"
-    - "start brain ingestion adapter"
-    - "run ingestion adapter"
-  response_type: "detailed"
-  orchestrator: "BrainIngestionAdapterAgent"
-  content: |
-    🧠 **CORTEX BrainIngestionAdapterAgent**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Adapter to bridge interface differences
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for BrainIngestionAdapterAgent
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 BrainIngestionAdapter
-
-**Purpose:** Adapter to bridge interface differences
-
-**Commands:**
-- `brain ingestion adapter` - Adapter to bridge interface differences
-- `start brain ingestion adapter` - Adapter to bridge interface differences
-- `run ingestion adapter` - Adapter to bridge interface differences
-
-**Natural Language Examples:**
-- "brain ingestion adapter"
-- "start brain ingestion adapter"
-- "run ingestion adapter"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === FeedbackAgent ===
-# Suggested wiring for FeedbackAgent
-# Add to cortex-brain/response-templates.yaml
-
-feedback:
-  name: "FeedbackAgent"
-  triggers:
-    - "feedback"
-  response_type: "detailed"
-  orchestrator: "FeedbackAgent"
-  content: |
-    🧠 **CORTEX FeedbackAgent**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Handles feedback command routing and structured report generation.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for FeedbackAgent
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 Feedback
-
-**Purpose:** Handles feedback command routing and structured report generation.
-
-**Commands:**
-- `feedback` - Handles feedback command routing and structured report generation.
-
-**Natural Language Examples:**
-- "feedback"
 
 **How It Works:**
 1. [Step 1 description]
@@ -655,114 +325,6 @@ learning_capture:
 - "learning capture"
 - "start learning capture"
 - "run capture"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === ArchitectAgent ===
-# Suggested wiring for ArchitectAgent
-# Add to cortex-brain/response-templates.yaml
-
-architect:
-  name: "ArchitectAgent"
-  triggers:
-    - "architect"
-  response_type: "detailed"
-  orchestrator: "ArchitectAgent"
-  content: |
-    🧠 **CORTEX ArchitectAgent**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Strategic agent for architectural analysis with automatic brain saving.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for ArchitectAgent
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 Architect
-
-**Purpose:** Strategic agent for architectural analysis with automatic brain saving.
-
-**Commands:**
-- `architect` - Strategic agent for architectural analysis with automatic brain saving.
-
-**Natural Language Examples:**
-- "architect"
-
-**How It Works:**
-1. [Step 1 description]
-2. [Step 2 description]
-3. [Step 3 description]
-
-**Output:**
-- [Output description]
-
-**See Also:** [Related documentation]
-
-
-
-# === InteractivePlannerAgent ===
-# Suggested wiring for InteractivePlannerAgent
-# Add to cortex-brain/response-templates.yaml
-
-interactive_planner:
-  name: "InteractivePlannerAgent"
-  triggers:
-    - "interactive planner"
-    - "start interactive planner"
-    - "run planner"
-  response_type: "detailed"
-  orchestrator: "InteractivePlannerAgent"
-  content: |
-    🧠 **CORTEX InteractivePlannerAgent**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-    
-    🎯 **My Understanding Of Your Request:** {{understanding}}
-    
-    ⚠️ **Challenge:** {{challenge}}
-    
-    💬 **Response:** Interactive Planning Agent - CORTEX 2.
-    
-    📝 **Your Request:** {{user_request}}
-    
-    🔍 **Next Steps:**
-    {{next_steps}}
-
-
-# Suggested documentation for InteractivePlannerAgent
-# Add to .github/prompts/CORTEX.prompt.md
-
-## 🔧 InteractivePlanner
-
-**Purpose:** Interactive Planning Agent - CORTEX 2.
-
-**Commands:**
-- `interactive planner` - Interactive Planning Agent - CORTEX 2.
-- `start interactive planner` - Interactive Planning Agent - CORTEX 2.
-- `run planner` - Interactive Planning Agent - CORTEX 2.
-
-**Natural Language Examples:**
-- "interactive planner"
-- "start interactive planner"
-- "run planner"
 
 **How It Works:**
 1. [Step 1 description]

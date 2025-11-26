@@ -1,6 +1,6 @@
 {
   "name": "cortex-performance-tests",
-  "version": "1.0.0",
+  "version": "3.4.0",
   "description": "Phase -1 performance validation for CORTEX sql.js",
   "private": true,
   "scripts": {

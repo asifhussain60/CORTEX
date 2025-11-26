@@ -1,6 +1,6 @@
-# SystemAlignment Guide
+# LearningCapture Guide
 
-**Purpose:** Convention-based system alignment validator.
+**Purpose:** Agent that automatically captures lessons learned from various sources.
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
@@ -10,7 +10,7 @@
 
 ## Overview
 
-Convention-based system alignment validator.
+Agent that automatically captures lessons learned from various sources.
 
 **Key Features:**
 - [Feature 1]
@@ -24,10 +24,10 @@ Convention-based system alignment validator.
 ### Basic Usage
 
 ```python
-from src.operations.orchestrators import SystemAlignmentOrchestrator
+from src.agents import LearningCaptureAgent
 
 # Initialize
-orchestrator = SystemAlignmentOrchestrator()
+orchestrator = LearningCaptureAgent()
 
 # Execute
 result = orchestrator.execute()
@@ -49,9 +49,9 @@ CORTEX: [Expected response]
 
 ## API Reference
 
-### Class: `SystemAlignmentOrchestrator`
+### Class: `LearningCaptureAgent`
 
-Convention-based system alignment validator.
+Agent that automatically captures lessons learned from various sources.
 
 #### Methods
 
@@ -67,7 +67,7 @@ No description available
 
 ---
 
-**`_is_admin_environment()`**
+**`capture_from_operation_result()`**
 
 No description available
 
@@ -79,7 +79,7 @@ No description available
 
 ---
 
-**`validate()`**
+**`capture_from_exception()`**
 
 No description available
 
@@ -91,7 +91,7 @@ No description available
 
 ---
 
-**`validate_prerequisites()`**
+**`capture_from_ambient_events()`**
 
 No description available
 
@@ -103,7 +103,7 @@ No description available
 
 ---
 
-**`execute()`**
+**`capture_from_git_commit()`**
 
 No description available
 
@@ -115,7 +115,7 @@ No description available
 
 ---
 
-**`run_full_validation()`**
+**`save_lesson()`**
 
 No description available
 
@@ -127,7 +127,7 @@ No description available
 
 ---
 
-**`_discover_orchestrators()`**
+**`_parse_error_for_learning()`**
 
 No description available
 
@@ -139,7 +139,7 @@ No description available
 
 ---
 
-**`_discover_agents()`**
+**`_analyze_ambient_event()`**
 
 No description available
 
@@ -151,7 +151,7 @@ No description available
 
 ---
 
-**`_validate_entry_points()`**
+**`_infer_problem_from_commit()`**
 
 No description available
 
@@ -163,7 +163,7 @@ No description available
 
 ---
 
-**`_validate_documentation()`**
+**`_infer_category_from_files()`**
 
 No description available
 
@@ -175,7 +175,7 @@ No description available
 
 ---
 
-**`_calculate_integration_score()`**
+**`_generate_unique_id()`**
 
 No description available
 
@@ -187,139 +187,7 @@ No description available
 
 ---
 
-**`_check_guide_file_exists()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_get_entry_points()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_validate_deployment_readiness()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_validate_gap_remediation_components()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_validate_file_organization()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_validate_template_headers()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_generate_remediation_suggestions()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_format_report_summary()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`rollback()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_is_production_feature()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`_get_classification()`**
-
-No description available
-
-**Parameters:**
-- [param]: [description]
-
-**Returns:**
-- [return type]: [description]
-
----
-
-**`get_metadata()`**
+**`_is_duplicate_lesson()`**
 
 No description available
 
