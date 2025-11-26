@@ -18,6 +18,11 @@ import re
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
+# Import template validator
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from validation.template_header_validator import TemplateHeaderValidator
+
 logger = logging.getLogger(__name__)
 
 
@@ -91,6 +96,15 @@ class DeploymentGates:
         if gate5["severity"] == "ERROR" and not gate5["passed"]:
             results["passed"] = False
             results["errors"].append(gate5["message"])
+        
+        # Gate 6: Template format validation (NEW)
+        gate6 = self._validate_template_format()
+        results["gates"].append(gate6)
+        if gate6["severity"] == "ERROR" and not gate6["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate6["message"])
+        elif gate6["severity"] == "WARNING" and not gate6["passed"]:
+            results["warnings"].append(gate6["message"])
         
         return results
     
@@ -331,5 +345,65 @@ class DeploymentGates:
         else:
             gate["message"] = f"Version consistent: {list(unique_versions)[0]}"
             gate["details"] = versions
+        
+        return gate
+    
+    def _validate_template_format(self) -> Dict[str, Any]:
+        """
+        Gate 6: All response templates use new format (v3.0).
+        
+        Returns:
+            Gate result with template validation details
+        """
+        gate = {
+            "name": "Template Format Validation",
+            "passed": True,
+            "severity": "ERROR",
+            "message": "",
+            "details": {}
+        }
+        
+        try:
+            templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+            
+            if not templates_path.exists():
+                gate["passed"] = False
+                gate["severity"] = "ERROR"
+                gate["message"] = "response-templates.yaml not found"
+                return gate
+            
+            # Use TemplateHeaderValidator to check format
+            validator = TemplateHeaderValidator(templates_path)
+            results = validator.validate()
+            
+            # Check if any critical violations exist
+            critical_count = results.get('critical_count', 0)
+            warning_count = results.get('warning_count', 0)
+            score = results.get('score', 0)
+            
+            gate["details"] = {
+                "score": score,
+                "compliant_templates": results.get('compliant_templates', 0),
+                "total_templates": results.get('total_templates', 0),
+                "critical_violations": critical_count,
+                "warning_violations": warning_count
+            }
+            
+            # Gate fails if critical violations exist or score < 80%
+            if critical_count > 0:
+                gate["passed"] = False
+                gate["severity"] = "ERROR"
+                gate["message"] = f"Template format has {critical_count} critical violations (old format detected)"
+            elif score < 80:
+                gate["passed"] = False
+                gate["severity"] = "WARNING"
+                gate["message"] = f"Template compliance below 80% ({score:.1f}%)"
+            else:
+                gate["message"] = f"All templates use new format v3.0 ({score:.1f}% compliant)"
+            
+        except Exception as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Template validation failed: {str(e)}"
         
         return gate

@@ -227,24 +227,28 @@ class ConfidenceResponseGenerator:
             response_text = self.template_renderer.render(template, context=full_context)
         except Exception as e:
             # Fallback response if template fails
-            response_text = f"""🧠 **CORTEX {operation_type}**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+            response_text = f"""# CORTEX {operation_type}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
 
 {confidence_indicator}
 
-🎯 **My Understanding Of Your Request:**
-   {user_request}
+## My Understanding Of Your Request
+{user_request}
 
-⚠️ **Challenge:** ✓ **Accept**
-   Processing your request using learned patterns.
+## Challenge
+✓ **Accept**
+Processing your request using learned patterns.
 
-💬 **Response:**
-   [Response content]
+## Response
+[Response content]
 
-📝 **Your Request:** {user_request}
+## Your Request
+{user_request}
 
-🔍 **Next Steps:**
-   [Next steps]
+## Next Steps
+[Next steps]
 """
         
         return {
@@ -298,24 +302,28 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
             template = self.template_loader.load_template(base_template_name)
             response_text = self.template_renderer.render(template, context=full_context)
         except Exception:
-            response_text = f"""🧠 **CORTEX {operation_type}**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+            response_text = f"""# CORTEX {operation_type}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
 
 {confidence_indicator}
 
-🎯 **My Understanding Of Your Request:**
-   {user_request}
+## My Understanding Of Your Request
+{user_request}
 
-⚠️ **Challenge:** ⚡ **Challenge**
-   This is new territory for CORTEX. No previous patterns exist.
+## Challenge
+⚡ **Challenge**
+This is new territory for CORTEX. No previous patterns exist.
 
-💬 **Response:**
-   [Fresh response content]
+## Response
+[Fresh response content]
 
-📝 **Your Request:** {user_request}
+## Your Request
+{user_request}
 
-🔍 **Next Steps:**
-   [Next steps]
+## Next Steps
+[Next steps]
 """
         
         return {

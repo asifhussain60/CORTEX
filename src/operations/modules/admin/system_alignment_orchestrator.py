@@ -300,7 +300,8 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         report.organization_violations = org_results.get('violations', [])
         report.organization_score = org_results.get('score', 100)
         
-        # Phase 3.8: Validate template headers (legal compliance)
+        # Phase 3.8: Validate template headers (v3.2 format enforcement + old format detection)
+        # Enforces: Brain emoji (🧠), section icons (🎯 ⚠️ 💬 📝 🔍), NO old format (✓ Accept, ⚡ Challenge)
         header_results = self._validate_template_headers()
         report.header_violations = header_results.get('violations', [])
         report.header_compliance_score = header_results.get('score', 100)
@@ -768,7 +769,13 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
     
     def _validate_template_headers(self) -> Dict[str, Any]:
         """
-        Validate response template headers for legal compliance.
+        Validate response template headers for v3.2 format compliance.
+        
+        Enforces:
+        - Brain emoji (🧠) in all titles: "# 🧠 CORTEX [Title]"
+        - Section icons: 🎯 Understanding | ⚠️ Challenge | 💬 Response | 📝 Request | 🔍 Next Steps
+        - Author & GitHub attribution
+        - NO old format: "✓ Accept" or "⚡ Challenge" in headers
         
         Returns:
             Dict with validation results and violations

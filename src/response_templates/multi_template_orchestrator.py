@@ -509,12 +509,12 @@ class MultiTemplateOrchestrator:
             max_templates=3,
             min_relevance_score=0.3,
             section_priority={
-                '🧠 **CORTEX': 100,  # Header always first
-                '🎯 **My Understanding': 90,
-                '⚠️ **Challenge:': 80,
-                '💬 **Response:': 70,
-                '📝 **Your Request:': 60,
-                '🔍 **Next Steps:': 50
+                '# CORTEX': 100,  # Header always first
+                '## My Understanding': 90,
+                '## Challenge': 80,
+                '## Response': 70,
+                '## Your Request': 60,
+                '## Next Steps': 50
             }
         )
     

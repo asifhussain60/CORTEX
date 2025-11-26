@@ -4,13 +4,14 @@ Template Header Validator - Response Template Compliance Checker
 Validates that all response templates include:
 1. CORTEX title header with 🧠 emoji
 2. Author attribution (Asif Hussain)
-3. Copyright notice (© 2024-2025)
-4. GitHub repository link
+3. GitHub repository link
+4. Professional section icons (🎯 ⚠️ 💬 📝 🔍)
+5. NO old format markers ('✓ Accept', '⚡ Challenge')
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-Version: 1.0
-Status: IMPLEMENTATION
+Version: 3.2 (Icon Enhancement + Old Format Detection)
+Status: PRODUCTION
 """
 
 import logging
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 class HeaderViolation:
     """Represents a template header compliance violation."""
     template_name: str
-    violation_type: str  # 'missing_header', 'outdated_copyright', 'missing_author', 'missing_repo_link'
+    violation_type: str  # 'missing_header', 'outdated_copyright', 'missing_author', 'missing_repo_link', 'old_format', 'missing_icon'
     current_value: Optional[str]
     expected_value: str
     severity: str  # 'critical', 'warning'
@@ -37,23 +38,49 @@ class TemplateHeaderValidator:
     """
     Validates response template headers for legal compliance and attribution.
     
-    Required header format:
+    Required header format (v3.2):
     ```
-    🧠 **CORTEX [Operation Type]**
-    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    # 🧠 CORTEX [Title]
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+    
+    ---
+    
+    ## 🎯 My Understanding Of Your Request
+    ## ⚠️ Challenge
+    ## 💬 Response
+    ## 📝 Your Request
+    ## 🔍 Next Steps
     ```
+    
+    FORBIDDEN (Old Format):
+    - ✓ Accept
+    - ⚡ Challenge
+    - Missing section icons
+    - Missing brain emoji (🧠)
     """
     
-    # Header component patterns
-    TITLE_PATTERN = r'🧠\s*\*\*CORTEX\s+\[.*?\]\*\*'
-    AUTHOR_PATTERN = r'Author:\s*Asif\s+Hussain'
-    COPYRIGHT_PATTERN = r'©\s*2024-2025'
-    REPO_PATTERN = r'github\.com/asifhussain60/CORTEX'
+    # Header component patterns (v3.2)
+    TITLE_PATTERN = r'^#\s+🧠\s+CORTEX\s+.+'
+    AUTHOR_PATTERN = r'\*\*Author:\*\*\s*Asif\s+Hussain'
+    GITHUB_PATTERN = r'\*\*GitHub:\*\*\s*github\.com/asifhussain60/CORTEX'
+    SEPARATOR_PATTERN = r'---'
     
-    # Expected header template
+    # Section icon patterns (v3.2)
+    UNDERSTANDING_ICON = r'##\s+🎯\s+My\s+Understanding'
+    CHALLENGE_ICON = r'##\s+⚠️\s+Challenge'
+    RESPONSE_ICON = r'##\s+💬\s+Response'
+    REQUEST_ICON = r'##\s+📝\s+Your\s+Request'
+    NEXT_STEPS_ICON = r'##\s+🔍\s+Next\s+Steps'
+    
+    # Old format detection patterns (FORBIDDEN - only in headers/labels)
+    OLD_CHALLENGE_ACCEPT = r'##\s+Challenge\s+✓\s+\*\*Accept'
+    OLD_CHALLENGE_EMOJI = r'##\s+Challenge\s+⚡\s+\*\*Challenge'
+    
+    # Expected header template (v3.2)
     EXPECTED_HEADER = (
-        "🧠 **CORTEX [Operation Type]**\n"
-        "Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
+        "# 🧠 CORTEX [Title]\n"
+        "**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n"
+        "---"
     )
     
     def __init__(self, templates_path: Path):
@@ -129,17 +156,17 @@ class TemplateHeaderValidator:
             logger.error(f"Failed to load templates: {e}")
     
     def _validate_template_header(self, template_name: str, template_content: str):
-        """Validate individual template header compliance."""
+        """Validate individual template header compliance (v3.2 format)."""
         if not template_content:
             return
             
-        # Check for CORTEX title header
-        if not re.search(self.TITLE_PATTERN, template_content):
+        # Check for CORTEX title header with brain emoji (# 🧠 CORTEX [Title])
+        if not re.search(self.TITLE_PATTERN, template_content, re.MULTILINE):
             self.violations.append(HeaderViolation(
                 template_name=template_name,
                 violation_type='missing_header',
                 current_value=None,
-                expected_value='🧠 **CORTEX [Operation Type]**',
+                expected_value='# 🧠 CORTEX [Title]',
                 severity='critical'
             ))
         
@@ -149,31 +176,73 @@ class TemplateHeaderValidator:
                 template_name=template_name,
                 violation_type='missing_author',
                 current_value=None,
-                expected_value='Author: Asif Hussain',
+                expected_value='**Author:** Asif Hussain',
                 severity='critical'
             ))
         
-        # Check for copyright notice with current year
-        if not re.search(self.COPYRIGHT_PATTERN, template_content):
-            # Check if there's an outdated copyright
-            old_copyright_match = re.search(r'©\s*\d{4}(?:-\d{4})?', template_content)
-            current_value = old_copyright_match.group(0) if old_copyright_match else None
-            
+        # Check for GitHub link
+        if not re.search(self.GITHUB_PATTERN, template_content):
             self.violations.append(HeaderViolation(
                 template_name=template_name,
-                violation_type='outdated_copyright',
-                current_value=current_value,
-                expected_value='© 2024-2025',
+                violation_type='missing_github_link',
+                current_value=None,
+                expected_value='**GitHub:** github.com/asifhussain60/CORTEX',
+                severity='critical'
+            ))
+        
+        # Check for horizontal rule separator
+        if not re.search(self.SEPARATOR_PATTERN, template_content):
+            self.violations.append(HeaderViolation(
+                template_name=template_name,
+                violation_type='missing_separator',
+                current_value=None,
+                expected_value='---',
                 severity='warning'
             ))
         
-        # Check for GitHub repository link
-        if not re.search(self.REPO_PATTERN, template_content):
+        # v3.2: Check for OLD FORMAT markers (FORBIDDEN)
+        if re.search(self.OLD_CHALLENGE_ACCEPT, template_content):
             self.violations.append(HeaderViolation(
                 template_name=template_name,
-                violation_type='missing_repo_link',
-                current_value=None,
-                expected_value='github.com/asifhussain60/CORTEX',
+                violation_type='old_format_accept',
+                current_value='✓ Accept',
+                expected_value='Remove old "✓ Accept" format - use "No Challenge" or state challenge',
+                severity='critical'
+            ))
+        
+        if re.search(self.OLD_CHALLENGE_EMOJI, template_content):
+            self.violations.append(HeaderViolation(
+                template_name=template_name,
+                violation_type='old_format_challenge',
+                current_value='⚡ Challenge',
+                expected_value='Remove old "⚡ Challenge" format - use "No Challenge" or state challenge',
+                severity='critical'
+            ))
+        
+        # v3.2: Check for section icons (at least 3 of 5 should be present)
+        icon_checks = {
+            'understanding': self.UNDERSTANDING_ICON,
+            'challenge': self.CHALLENGE_ICON,
+            'response': self.RESPONSE_ICON,
+            'request': self.REQUEST_ICON,
+            'next_steps': self.NEXT_STEPS_ICON
+        }
+        
+        icons_found = 0
+        missing_icons = []
+        for icon_name, icon_pattern in icon_checks.items():
+            if re.search(icon_pattern, template_content, re.IGNORECASE):
+                icons_found += 1
+            else:
+                missing_icons.append(icon_name)
+        
+        # If less than 3 icons found, flag as missing icons (warning)
+        if icons_found < 3:
+            self.violations.append(HeaderViolation(
+                template_name=template_name,
+                violation_type='missing_section_icons',
+                current_value=f'{icons_found}/5 icons found',
+                expected_value=f'Add section icons: 🎯 Understanding | ⚠️ Challenge | 💬 Response | 📝 Request | 🔍 Next Steps (missing: {", ".join(missing_icons)})',
                 severity='warning'
             ))
     
@@ -212,10 +281,9 @@ class TemplateHeaderValidator:
                 # Need to update existing header components
                 updates = []
                 for violation in violations:
-                    if violation.violation_type == 'outdated_copyright':
+                    if violation.violation_type == 'missing_github_link':
                         updates.append({
-                            'component': 'copyright',
-                            'old_value': violation.current_value,
+                            'component': 'github_link',
                             'new_value': violation.expected_value
                         })
                     elif violation.violation_type == 'missing_author':
@@ -223,9 +291,9 @@ class TemplateHeaderValidator:
                             'component': 'author',
                             'new_value': violation.expected_value
                         })
-                    elif violation.violation_type == 'missing_repo_link':
+                    elif violation.violation_type == 'missing_separator':
                         updates.append({
-                            'component': 'repo_link',
+                            'component': 'separator',
                             'new_value': violation.expected_value
                         })
                 

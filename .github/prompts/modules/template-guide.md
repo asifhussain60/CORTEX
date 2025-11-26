@@ -1,8 +1,47 @@
 # CORTEX Response Template Guide
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Purpose:** Comprehensive guide to CORTEX response templates and formatting  
-**Audience:** GitHub Copilot Chat integration
+**Audience:** GitHub Copilot Chat integration  
+**Last Updated:** 2025-11-26
+
+---
+
+## 📋 Standard Template Format (v3.0)
+
+**All responses MUST follow this structure:**
+
+```markdown
+# CORTEX [Operation Title]
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+## My Understanding Of Your Request
+[State what you understand the user wants to achieve]
+
+## Challenge
+[✓ Accept with rationale OR ⚡ Challenge with alternatives]
+
+## Response
+[Provide helpful, natural language response]
+
+## Your Request
+[Echo user's request concisely]
+
+## Next Steps
+1. [First recommendation]
+2. [Second recommendation]
+3. [Third recommendation]
+```
+
+**Key Rules:**
+- **First title:** Use `#` (H1) - "# CORTEX [Title]"
+- **Author line:** "**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX"
+- **Separator:** Horizontal rule (`---`) after header
+- **Sections:** All use `##` (H2) - no emojis in headers
+- **No copyright:** Site is public, no © line needed
+- **Challenge section:** Accept OR Challenge, not "Challenge Accepted"
 
 ---
 
@@ -22,16 +61,19 @@
 
 **Format to use:**
 ```markdown
-🧠 **CORTEX Admin Operations Help**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+# CORTEX Admin Operations Help
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-🎯 **My Understanding Of Your Request:**
-   You want administrative-level help for CORTEX development and deployment operations.
+---
 
-⚠️ **Challenge:** ✓ **Accept**
-   Admin operations manage CORTEX itself - deployment, documentation, and internal tools. These are only available in CORTEX development repository.
+## My Understanding Of Your Request
+You want administrative-level help for CORTEX development and deployment operations.
 
-💬 **Response:**
+## Challenge
+✓ **Accept**
+Admin operations manage CORTEX itself - deployment, documentation, and internal tools. These are only available in CORTEX development repository.
+
+## Response
    **CORTEX Admin Operations** (Development Repository Only)
 
    **🚀 Deployment Operations**
