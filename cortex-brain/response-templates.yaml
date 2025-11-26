@@ -1145,21 +1145,48 @@ templates:
       \   3. Address warnings (70-89% integration)\n   4. Re-run validation after\
       \ fixes\n   5. Target: >80% overall health for deployment"
   cleanup_operation:
-    name: Cleanup Operation
+    name: Holistic Cleanup Operation
     triggers:
     - cleanup
     - clean up
     - cleanup cortex
     - clean cortex
+    - holistic cleanup
+    - repository cleanup
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Cleanup Operation\n**Author:** Asif Hussain | **GitHub:**\
+    content: "# \U0001F9E0 CORTEX Holistic Cleanup\n**Author:** Asif Hussain | **GitHub:**\
       \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to clean up CORTEX brain data and temporary files.\n\
-      \n## Challenge No Challenge - Cleanup removes old conversations, temporary files,\
-      \ and vacuums databases to reclaim space.\n\n## \U0001F4AC Response\n   [Cleanup\
-      \ results with space saved and items removed]\n\n## Your Request Run cleanup\
-      \ operation\n\n## \U0001F50D Next Steps\n   1. Review cleanup summary\n   2.\
-      \ Verify important data preserved\n   3. Check space savings achieved"
+      \ Your Request\n   You want to perform a holistic cleanup of the CORTEX repository,\
+      \ identifying and removing:\n   • Non-production files (temporary naming patterns)\n\
+      \   • Redundant/backup files\n   • Deprecated/obsolete content\n   • Orphaned\
+      \ files with no references\n\n## ⚠️ Challenge\n\nNo Challenge - Holistic cleanup\
+      \ will scan entire repository recursively, categorize all files, validate production\
+      \ readiness, and generate detailed manifest for review before execution.\n\n\
+      ## \U0001F4AC Response\n   Starting holistic repository cleanup...\n   \n  \
+      \ **Phase 1: Repository Scan** (30-60s)\n   • Recursively scan all directories\n\
+      \   • Categorize files by type and purpose\n   • Detect naming pattern violations\n\
+      \   • Identify redundancies and orphaned files\n   \n   **Phase 2: Production\
+      \ Validation** (10-20s)\n   • Check file naming standards\n   • Detect temporary/versioned\
+      \ patterns\n   • Suggest production-ready names\n   • Flag files requiring attention\n\
+      \   \n   **Phase 3: Report Generation** (5s)\n   • Comprehensive cleanup manifest\n\
+      \   • Categorized file listings\n   • Recommended actions\n   • Space savings\
+      \ projection\n   \n   **Phase 4: Safe Execution** (with approval)\n   • DRY\
+      \ RUN: Preview all changes\n   • USER APPROVAL: Review manifest\n   • BACKUP:\
+      \ Create git backup point\n   • EXECUTE: Perform cleanup\n   • COMMIT: Document\
+      \ changes\n   • ROLLBACK: Available if needed\n\n## \U0001F4DD Your Request\n\
+      \   Perform holistic cleanup with production-ready validation\n\n## \U0001F50D\
+      \ Next Steps\n   \n   1. **Review Manifest** - Cleanup manifest will be generated\
+      \ and saved to:\n      `cortex-brain/documents/reports/cleanup-manifest-[timestamp].json`\n\
+      \      `cortex-brain/documents/reports/cleanup-report-[timestamp].md`\n   \n\
+      \   2. **Open Report** - Markdown report opens automatically in VS Code\n  \
+      \ \n   3. **Approve Changes** - After reviewing:\n      • Say \"approve cleanup\"\
+      \ to execute\n      • Say \"cancel cleanup\" to abort\n   \n   4. **Monitor\
+      \ Progress** - Real-time progress shown during execution\n   \n   5. **Review\
+      \ Results** - Cleanup summary with:\n      • Files deleted/renamed\n      •\
+      \ Space freed\n      • Git commit created\n      • Rollback instructions if\
+      \ needed\n   \n   **Safety Features:**\n   ✅ Dry-run preview before execution\n\
+      \   ✅ Git backup before changes\n   ✅ Rollback capability if issues\n   ✅\
+      \ Protected paths never touched\n   ✅ Detailed action logging"
   design_sync_operation:
     name: Design Sync Operation
     triggers:

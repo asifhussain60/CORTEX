@@ -228,7 +228,22 @@ CORTEX will:
 ## 🧹 Cleanup & Design Sync (Admin Only)
 
 **Cleanup Commands:**
-- `cleanup` or `clean up` - Clean brain data, remove old files (50-200 MB saved)
+- `cleanup` or `clean up` - Holistic repository cleanup (recursive scan, production validation, detailed manifest)
+- `holistic cleanup` - Same as cleanup (explicit holistic mode)
+- `cleanup cortex` - Clean CORTEX repository specifically
+
+**What Holistic Cleanup Does:**
+1. **Recursive Scan** - Scans entire repository structure
+2. **File Categorization** - Identifies production/non-production/redundant/deprecated/report files
+3. **Production Validation** - Detects non-production naming patterns (temp_, _v1, -20250101, clean/modified/updated, backup/old, copy, SUMMARY/REPORT)
+4. **Manifest Generation** - Creates detailed JSON + Markdown report with recommendations
+5. **Safe Execution** - Dry-run preview, user approval required, git backup, rollback available
+
+**Expected Results:**
+- Space savings: 50-200 MB typical (350+ MB for major cleanups)
+- File reduction: Removes 20-40% non-production files
+- Production naming: Suggests production-ready names for all violations
+- Protected paths: Never touches src/, tests/, cortex-brain/tier*, .git/, package.json
 
 **Design Sync Commands:**
 - `design sync` - Synchronize design documentation with implementation
