@@ -367,53 +367,53 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   operation_started:
+    <<: *standard_5_part_base
     name: Operation Started
     triggers:
     - operation_started
     response_type: narrative
-    content: "# \U0001F9E0 CORTEX Operation Started\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Operation Started
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   operation_progress:
+    <<: *standard_5_part_base
     name: Operation Progress
     triggers:
     - operation_progress
     response_type: narrative
-    content: "# \U0001F9E0 CORTEX Operation Progress\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n   \n   **Operation Progress:**\n   ```\n   Phase 1: [██████████]\
-      \ 100% ✅ Complete\n   Phase 2: [████████░░] 75% ⏳ In Progress\n   Phase 3: [░░░░░░░░░░]\
-      \ 0% ⏸️  Not Started\n   ```\n\n## Your Request [Echo refined request]\n\n##\
-      \ \U0001F50D Next Steps\n   [Context-appropriate format]"
+    operation_name: Operation Progress
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Operation Progress:**\n   ```\n   Phase 1: [██████████] 100% ✅ Complete\n   Phase 2: [████████░░] 75% ⏳ In Progress\n   Phase 3: [░░░░░░░░░░] 0% ⏸️  Not Started\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   operation_complete:
+    <<: *standard_5_part_base
     name: Operation Complete
     triggers:
     - operation_complete
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Operation Complete\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n   \n   **Completion Metrics:**\n   ```\n   Overall: [██████████]\
-      \ 100% ✅\n   Quality: [█████████░] 95%\n   Coverage: [████████░░] 85%\n   Performance:\
-      \ [█████████░] 90%\n   ```\n\n## Your Request [Echo refined request]\n\n## \U0001F50D\
-      \ Next Steps\n   [Context-appropriate format]"
+    operation_name: Operation Complete
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Completion Metrics:**\n   ```\n   Overall: [██████████] 100% ✅\n   Quality: [█████████░] 95%\n   Coverage: [████████░░] 85%\n   Performance: [█████████░] 90%\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   question_documentation_issues:
+    <<: *standard_5_part_base
     name: Question Documentation Issues
     triggers:
     - question_documentation_issues
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Question Documentation Issues\n**Author:** Asif\
-      \ Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF\
-      \ My Understanding Of Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\
-      \n[State specific challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n\
-      \   [Natural language explanation]\n\n## Your Request [Echo refined request]\n\
-      \n## \U0001F50D Next Steps\n   [Context-appropriate format]"
+    operation_name: Question Documentation Issues
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   work_planner_success:
     name: Work Planner Success
     triggers:
