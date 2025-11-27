@@ -1181,7 +1181,7 @@ class DeploymentValidator:
         if not modules_dir.exists():
             wiring_issues.append(".github/prompts/modules/ directory NOT FOUND")
         else:
-            required_modules = ['template-guide.md', 'response-format.md', 'planning-system-guide.md']
+            required_modules = ['template-guide.md', 'response-format.md', 'planning-orchestrator-guide.md']
             missing_modules = [m for m in required_modules if not (modules_dir / m).exists()]
             if missing_modules:
                 wiring_issues.append(f"Missing template guide modules: {', '.join(missing_modules)}")
