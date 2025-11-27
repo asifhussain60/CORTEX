@@ -119,14 +119,16 @@ class MasterSetupOrchestrator:
             phase_results['detection'] = detected
             logger.info(f"✅ Detected: {detected['language']} / {detected['framework']}")
             
-            # Phase 2: User Consent
+            # Phase 2: User Consent (excluding onboarding - will ask separately)
             logger.info("\nPhase 2: Requesting user consent...")
             consent_mgr = UserConsentManager(self.project_name, self.interactive)
+            # Note: Onboarding will be offered as post-setup option
             consent = consent_mgr.request_onboarding_consent(detected)
             phase_results['consent'] = {
                 'action': consent.action.value,
                 'approved_steps': consent.approved_steps,
-                'skipped_steps': consent.skipped_steps
+                'skipped_steps': consent.skipped_steps,
+                'onboarding_deferred': True  # Onboarding will be asked separately
             }
             
             if consent.action == ConsentAction.CANCEL:
@@ -269,30 +271,13 @@ class MasterSetupOrchestrator:
                 logger.info("\nPhase 3.6: Skipped (user choice)")
                 phase_results['realignment'] = {'skipped': True}
             
-            # Phase 4: Onboard Application
-            if self._step_approved("quality", consent):
-                logger.info("\nPhase 4: Onboarding application...")
-                onboarding = OnboardingOrchestrator(self.cortex_root)
-                onboard_result = onboarding.onboard_application(
-                    self.project_root,
-                    self.project_name
-                )
-                phase_results['onboarding'] = {
-                    'success': onboard_result.success,
-                    'quality_score': onboard_result.quality_score,
-                    'security_issues': onboard_result.security_issues,
-                    'performance_metrics': onboard_result.performance_metrics,
-                    'dashboard_url': onboard_result.dashboard_url
-                }
-                
-                if not onboard_result.success:
-                    errors.extend(onboard_result.errors)
-                    logger.error("❌ Onboarding failed")
-                else:
-                    logger.info(f"✅ Analysis complete (Quality: {onboard_result.quality_score:.1f}%)")
-            else:
-                logger.info("\nPhase 4: Skipped (user choice)")
-                phase_results['onboarding'] = {'skipped': True}
+            # Phase 4: Onboard Application - DEFERRED
+            # Note: Onboarding will be offered after setup completes (Phase 8)
+            logger.info("\nPhase 4: Onboarding deferred to post-setup")
+            phase_results['onboarding'] = {
+                'deferred': True,
+                'message': 'Will be offered after setup completes'
+            }
             
             # Phase 5: Setup GitIgnore
             if self._step_approved("gitignore", consent):
@@ -329,6 +314,79 @@ class MasterSetupOrchestrator:
             logger.info("")
             logger.info("="*70)
             logger.info(f"✅ CORTEX Setup Complete! ({elapsed:.1f}s)")
+            logger.info("="*70)
+            
+            # Phase 8: Post-Setup Onboarding Prompt (Enhanced Flow)
+            logger.info("")
+            logger.info("="*70)
+            logger.info("📊 Application Onboarding (Optional)")
+            logger.info("="*70)
+            logger.info("\nOnboarding analyzes your application and provides:")
+            logger.info("  • Code quality score and improvement recommendations")
+            logger.info("  • Security vulnerability scan (OWASP)")
+            logger.info("  • Performance metrics and bottleneck detection")
+            logger.info("  • Interactive dashboard with visualizations")
+            logger.info("\nEstimated time: 3-5 minutes")
+            logger.info("\nNote: You can run onboarding later with 'onboard application' command")
+            
+            if self.interactive:
+                logger.info("")
+                onboard_now = input("Would you like to onboard your application now? (y/n): ").lower().strip()
+                
+                if onboard_now == 'y':
+                    logger.info("\nPhase 8: Onboarding application...")
+                    logger.info("="*70)
+                    
+                    try:
+                        onboarding = OnboardingOrchestrator(self.cortex_root)
+                        onboard_result = onboarding.onboard_application(
+                            self.project_root,
+                            self.project_name
+                        )
+                        phase_results['post_setup_onboarding'] = {
+                            'success': onboard_result.success,
+                            'quality_score': onboard_result.quality_score,
+                            'security_issues': onboard_result.security_issues,
+                            'performance_metrics': onboard_result.performance_metrics,
+                            'dashboard_url': onboard_result.dashboard_url
+                        }
+                        
+                        if not onboard_result.success:
+                            errors.extend(onboard_result.errors)
+                            logger.error("\n❌ Onboarding failed")
+                            logger.info("   You can retry later with: onboard application")
+                        else:
+                            logger.info(f"\n✅ Onboarding complete!")
+                            logger.info(f"   Quality Score: {onboard_result.quality_score:.1f}%")
+                            logger.info(f"   Security Issues: {onboard_result.security_issues}")
+                            logger.info(f"   Dashboard: {onboard_result.dashboard_url}")
+                    except Exception as e:
+                        logger.error(f"\n❌ Onboarding error: {e}")
+                        logger.info("   You can retry later with: onboard application")
+                        errors.append(f"Onboarding error: {e}")
+                        phase_results['post_setup_onboarding'] = {
+                            'success': False,
+                            'error': str(e)
+                        }
+                else:
+                    logger.info("\n⏸️  Onboarding skipped")
+                    logger.info("   Run later with: onboard application")
+                    phase_results['post_setup_onboarding'] = {
+                        'skipped': True,
+                        'user_choice': 'deferred'
+                    }
+            else:
+                logger.info("\n⏸️  Onboarding skipped (non-interactive mode)")
+                logger.info("   Run later with: onboard application")
+                phase_results['post_setup_onboarding'] = {
+                    'skipped': True,
+                    'reason': 'non-interactive mode'
+                }
+            
+            # Final summary
+            logger.info("")
+            logger.info("="*70)
+            logger.info("🎉 Setup Complete - CORTEX is ready!")
             logger.info("="*70)
             
             return SetupResult(
