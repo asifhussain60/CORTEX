@@ -23,8 +23,10 @@ class AgentType(Enum):
     RESUMER = auto()         # SessionResumer
     ANALYZER = auto()        # ScreenshotAnalyzer
     COMMITTER = auto()       # CommitHandler
-    FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
-    ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
+    FEEDBACK_INTERACTIVE = auto()     # FeedbackInteractiveAgent (NEW - Interactive feedback collection)
+    CODE_REVIEW_INTERACTIVE = auto()  # CodeReviewInteractiveAgent (NEW - Interactive PR review)
+    ADO_INTERACTIVE = auto()          # ADOInteractiveAgent (NEW - Interactive ADO planning)
+    ADO_ORCHESTRATOR = auto()         # ADO/Unified Entry Point (Legacy - kept for compatibility)
 
 
 class IntentType(Enum):
@@ -33,6 +35,7 @@ class IntentType(Enum):
     PLAN = "plan"
     FEATURE = "feature"
     TASK_BREAKDOWN = "task_breakdown"
+    ADO_PLANNING = "ado_planning"  # NEW - Interactive ADO work item planning
     
     # Enhancement intents (NEW - for improving existing features)
     ENHANCE = "enhance"
@@ -90,12 +93,14 @@ class IntentType(Enum):
     FEEDBACK = "feedback"
     REPORT_ISSUE = "report_issue"
     
-    # ADO (Azure DevOps) operations (NEW - ADO Integration)
+    # Interactive Q&A workflows (NEW - Template-based → Interactive)
+    CODE_REVIEW = "code_review"  # Interactive PR review workflow
+    
+    # ADO (Azure DevOps) operations (Legacy - kept for backward compatibility)
     ADO_WORKITEM = "ado_workitem"
     ADO_STORY = "ado_story"
     ADO_FEATURE = "ado_feature"
     ADO_SUMMARY = "ado_summary"
-    CODE_REVIEW = "code_review"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -137,6 +142,7 @@ INTENT_AGENT_MAP = {
     IntentType.PLAN: AgentType.PLANNER,
     IntentType.FEATURE: AgentType.PLANNER,
     IntentType.TASK_BREAKDOWN: AgentType.PLANNER,
+    IntentType.ADO_PLANNING: AgentType.ADO_INTERACTIVE,  # NEW - Interactive ADO planning
     
     # Enhancement mapping (NEW - crawl existing + plan changes)
     IntentType.ENHANCE: AgentType.ARCHITECT,  # First discovers existing, then routes to PLANNER
@@ -178,15 +184,16 @@ INTENT_AGENT_MAP = {
     IntentType.COMMIT: AgentType.COMMITTER,
     IntentType.GIT: AgentType.COMMITTER,
     
-    IntentType.FEEDBACK: AgentType.FEEDBACK,
-    IntentType.REPORT_ISSUE: AgentType.FEEDBACK,
+    # Interactive Q&A workflows (NEW)
+    IntentType.FEEDBACK: AgentType.FEEDBACK_INTERACTIVE,
+    IntentType.REPORT_ISSUE: AgentType.FEEDBACK_INTERACTIVE,
+    IntentType.CODE_REVIEW: AgentType.CODE_REVIEW_INTERACTIVE,
     
-    # ADO operations mapping (NEW - ADO Integration)
+    # ADO operations mapping (Legacy - kept for compatibility)
     IntentType.ADO_WORKITEM: AgentType.ADO_ORCHESTRATOR,
     IntentType.ADO_STORY: AgentType.ADO_ORCHESTRATOR,
     IntentType.ADO_FEATURE: AgentType.ADO_ORCHESTRATOR,
     IntentType.ADO_SUMMARY: AgentType.ADO_ORCHESTRATOR,
-    IntentType.CODE_REVIEW: AgentType.ADO_ORCHESTRATOR,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

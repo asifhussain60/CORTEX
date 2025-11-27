@@ -166,37 +166,32 @@
 
 ### How to Use CORTEX
 
-**🎓 New to CORTEX? Start with the hands-on tutorial:**
+**Just talk naturally - CORTEX figures out what you need:**
+
+```
+"plan authentication feature"
+"start tdd workflow"
+"review architecture"
+"Add a purple button to the HostControlPanel"
+```
+
+**First time?** Start with interactive tutorial:
 ```
 tutorial
 ```
-Interactive 15-30 minute program teaching CORTEX through practical exercises.
 
-**Need a quick reminder?**
+**Need command list?** Quick reference:
 ```
-/CORTEX help
-```
-Shows all available commands in a concise table.
-
-Just tell CORTEX what you want in natural language:
-
-```
-Add a purple button to the HostControlPanel
+help
 ```
 
-**Or use optional slash commands for speed:**
+**How it works:**
+1. You describe what you want in natural language
+2. CORTEX detects intent and routes to specialist agent
+3. Executes workflow with memory of past conversations
+4. Tracks progress for future reference
 
-```
-/setup
-/resume
-/status
-```
-
-CORTEX will:
-- ✅ Detect your intent (PLAN, EXECUTE, TEST, VALIDATE, etc.)
-- ✅ Route to appropriate specialist agent
-- ✅ Execute workflow with memory of past conversations
-- ✅ Track progress for future reference
+**No syntax to memorize** - context-aware, intuitive, conversation-based
 
 ---
 
@@ -251,108 +246,37 @@ CORTEX will:
 
 ---
 
-## 🔧 System Alignment (Admin Only)
+## 🔧 Admin Operations (CORTEX Repo Only)
 
-**Complete Guide:** #file:modules/system-alignment-guide.md
+**Context Detection:** Admin operations only available in CORTEX development repository (detects `cortex-brain/admin/`)
 
-**Quick Start:**
-- `align` - Run full system alignment validation with convention-based discovery
-- `align report` - Generate detailed alignment report with auto-remediation suggestions
+**System Validation:**
+- `align` - Full system alignment with convention-based discovery (7-layer integration scoring)
+- `align report` - Detailed report with auto-remediation templates
+- **Guide:** #file:modules/system-alignment-guide.md
 
-**Integration Scoring:** 7 layers (0-100%) - Discovered, Importable, Instantiable, Documented, Tested, Wired, Optimized
+**Architecture Health:**
+- `review architecture` - Strategic health analysis with trend tracking and debt forecasting
+- **Guide:** #file:modules/architecture-intelligence-guide.md
 
-**Key Validations:**
-- ✅ **GitIgnore Enforcement** (HIGH priority) - Validates `.gitignore` setup module exists, has required features, is registered, and is documented
-  - Prevents brain data leakage to user repositories
-  - Ensures CORTEX/ folder automatically excluded during setup
-  - Deployment blocked if enforcement missing or incomplete
+**Repository Maintenance:**
+- `cleanup` - Holistic cleanup (50-200 MB savings typical)
+- `design sync` - Synchronize design docs with implementation
 
-**Benefits:** Zero maintenance when adding features, auto-generates wiring/tests/docs templates, prevents deployment of partially-integrated features
+**Deployment:**
+- `deploy cortex` - Build production package
+- `generate docs` - Build MkDocs documentation
 
-**See system-alignment-guide.md for complete architecture, phases, and remediation workflows.**
+**Setup & Configuration:**
+- `setup copilot instructions` - Generate entry point module for user repositories
+- **Guide:** #file:modules/setup-epm-guide.md
 
----
+**Planning:**
+- `plan ado` - Create ADO work items (stories, features, bugs, tasks, epics)
 
-## 🧹 Cleanup & Design Sync (Admin Only)
-
-**Cleanup Commands:**
-- `cleanup` or `clean up` - Holistic repository cleanup (recursive scan, production validation, detailed manifest)
-- `holistic cleanup` - Same as cleanup (explicit holistic mode)
-- `cleanup cortex` - Clean CORTEX repository specifically
-
-**What Holistic Cleanup Does:**
-1. **Recursive Scan** - Scans entire repository structure
-2. **File Categorization** - Identifies production/non-production/redundant/deprecated/report files
-3. **Production Validation** - Detects non-production naming patterns (temp_, _v1, -20250101, clean/modified/updated, backup/old, copy, SUMMARY/REPORT)
-4. **Manifest Generation** - Creates detailed JSON + Markdown report with recommendations
-5. **Safe Execution** - Dry-run preview, user approval required, git backup, rollback available
-
-**Expected Results:**
-- Space savings: 50-200 MB typical (350+ MB for major cleanups)
-- File reduction: Removes 20-40% non-production files
-- Production naming: Suggests production-ready names for all violations
-- Protected paths: Never touches src/, tests/, cortex-brain/tier*, .git/, package.json
-
-**Design Sync Commands:**
-- `design sync` - Synchronize design documentation with implementation
-
-**See:** Documentation in CORTEX.prompt.md or use `admin help` for details
+**All admin commands accessible via:** `admin help`
 
 ---
-
-## 🔧 Setup Entry Point Module (Admin Only)
-
-**Complete Guide:** #file:modules/setup-epm-guide.md
-
-**Purpose:** Auto-generate `.github/copilot-instructions.md` for user repositories with brain-assisted learning
-
-**Quick Commands:**
-- `setup copilot instructions` - Generate new instructions file
-- `generate copilot instructions` - Alternative trigger
-- `cortex refresh instructions` - Update with learned patterns (Phase 2)
-
-**Key Features:**
-- **Fast Detection:** <5 seconds via file system scan (7 languages, 6 frameworks, 6 build systems, 4 test frameworks)
-- **Lightweight Template:** ~150 tokens vs 2000+ for semantic analysis (93% token savings)
-- **Brain Learning:** Improves accuracy over time (65% initial → 90% after learning)
-- **Namespace Isolation:** Each repo gets own Tier 3 storage, prevents cross-contamination
-
-**What Gets Generated:**
-- Entry point guidance (how to use CORTEX)
-- Architecture overview (detected language/framework)
-- Build/test commands (detected from package.json/Makefile/etc.)
-- Project conventions (learned over time)
-- Critical files reference
-- Brain status indicator
-
-**GitIgnore Configuration:**
-- ✅ Automatically adds CORTEX/ to `.gitignore` during setup
-- ✅ Validates exclusion patterns work with `git check-ignore`
-- ✅ Commits changes with descriptive message
-- ✅ Confirms no CORTEX files accidentally staged
-- ✅ Explicit confirmation message with 5 validation checkmarks
-
-**See setup-epm-guide.md for architecture, detection tables, template structure, and phase roadmap.**
-
----
-
-## 📋 ADO Work Item Planning (Admin Only)
-
-**Commands:** `plan ado` - Create Azure DevOps work items with structured planning
-
-**Available Work Item Types:**
-- User Story (default)
-- Feature
-- Bug
-- Task
-- Epic
-
-**Form Template Includes:**
-- Title and description
-- Priority (1=High, 2=Medium, 3=Low, 4=Very Low)
-- Assigned to (optional)
-- Iteration and area path
-- Tags
 - Acceptance criteria (checklist)
 - Related work items
 
@@ -413,120 +337,23 @@ cortex-brain/documents/planning/ado/
 
 ---
 
-## 🔌 Unified Entry Point
 
-**Purpose:** Single command interface for ALL CORTEX operations with automatic intent detection and routing
-
-**Routing Capabilities:**
-- Planning operations (feature, ADO, vision)
-- TDD workflows (start, test, refactor)
-- Brain operations (capture, import, context)
-- Admin operations (align, cleanup, optimize)
-- Discovery operations (views, demo, tutorial)
-
-**How It Works:**
-1. You say what you want in natural language
-2. Intent detection identifies operation
-3. Routes to specialist orchestrator
-4. Returns formatted response
-5. Tracks context for next interaction
-
-**Integration:**
-- Response templates for 30+ operations
-- Brain memory for context
-- Tier system for data persistence
-- Agent framework for execution
-
-**Benefits:** No need to remember specific commands - just describe what you want and the unified entry point routes to the appropriate handler.
-
----
 
 ## 📦 Cache Management (Admin Only)
 
-**Complete Guide:** #file:modules/cache-management-guide.md (Coming Soon)  
-**Troubleshooting:** #file:../cortex-brain/documents/guides/cache-troubleshooting-guide.md
-
-**Quick Commands:**
-- `cache status` or `show cache` - Display cache effectiveness metrics (hit rates, entries, age)
-- `cache dashboard` - Rich visualization with effectiveness/health/performance tables
-- `cache health` - Health report (healthy/warning/critical status, recommendations)
-- `cache clear` or `clear cache` - Clear all cached validation results
-- `cache clear [operation]` - Clear cache for specific operation (optimize, cleanup, align, deploy)
-- `cache invalidate <operation> <key>` - Invalidate specific cache key
+**Essential Commands:**
+- `cache status` - Show effectiveness metrics and performance gains
+- `cache clear` - Clear all cached results (or `cache clear [operation]` for specific)
 
 **What Gets Cached:**
-- **Optimize Operation:**
-  - Governance drift analysis (5-10s → 0.003s)
-  - EPMO health checks (10-15s → 0.005s)
-  - **Speedup:** 6.4x (45s → 7s on cache hit)
-- **Cleanup Operation:**
-  - Temp files scan (5-10s → 0.002s)
-  - Old logs scan (2-5s → 0.003s)
-  - Large cache files scan (3-5s → 0.004s)
-  - **Speedup:** 5.5x (22s → 4s on cache hit)
+- Optimize: 6.4x speedup (45s → 7s)
+- Cleanup: 5.5x speedup (22s → 4s)
 
-**Cache Architecture:**
-- SQLite-backed persistence (survives restarts)
-- SHA256 file hash tracking (automatic invalidation on file changes)
-- TTL support (1 hour default for optimization results)
-- Background warming via git hooks (7.3s, non-blocking)
+**Auto-Invalidation:** Cache updates automatically when files change (SHA256 tracking)
 
-**Natural Language Triggers:**
-- "show cache stats" → `cache dashboard`
-- "check cache health" → `cache health`
-- "is cache working?" → `cache status`
-- "clear the cache" → `cache clear`
-- "reset cache" → `cache clear`
+**When to Clear:** After major refactoring, low hit rates (<30%), or suspected corruption
 
-**Example Output:**
-
-```
-Cache Status:
-  Overall Hit Rate: 60.0%
-  Total Entries: 5
-  Total Size: 0.40 MB
-  
-Operations:
-  optimize: 2 entries, 100.0% hit rate, 0.25 MB
-  cleanup: 3 entries, 66.7% hit rate, 0.15 MB
-  
-Time Saved: ~20-25 seconds per operation
-```
-
-**Dashboard Output (Rich Tables):**
-- **Effectiveness Table:** Hit rates by operation (green >80%, yellow >60%, red <40%)
-- **Health Table:** Cache size, age distribution, staleness warnings
-- **Performance Table:** Time saved, speedup ratios, projected savings
-
-**Health Report Output:**
-```
-Cache Health Report
-Status: healthy
-Size: 0.40 MB (healthy - under 100MB limit)
-Age: 5 entries, 0 stale (>7 days)
-Hit Rate: 60.0% (acceptable - target 70-90%)
-Issues: None
-Recommendations: Cache is performing well
-```
-
-**When to Clear Cache:**
-- After major refactoring (changed many files)
-- Low hit rate (<30%) with no clear cause
-- Suspected corruption (database errors)
-- Disk space concerns (cache >100MB)
-
-**Automatic Invalidation:**
-- Cache automatically invalidates when tracked files change
-- No manual clearing needed for normal development
-- File hash (SHA256) tracking ensures fresh results
-
-**Background Warming:**
-- Git hooks auto-warm cache after checkout/merge
-- 7.3s warming time (5 keys: governance, EPMO, temp files, old logs, large cache)
-- Non-blocking (doesn't slow down git operations)
-- Graceful error handling (failures don't break git)
-
-**See:** `cortex-brain/documents/guides/cache-troubleshooting-guide.md` for complete troubleshooting procedures, common issues, recovery steps, and debugging techniques.
+**Complete Guide:** See cache-troubleshooting-guide.md in cortex-brain/documents/guides/
 
 ---
 
@@ -791,76 +618,34 @@ Recommendations: Cache is performing well
 
 ---
 
-## � Git Checkpoint System
+## 🔖 Git Checkpoint System
+
+**Core Commands:**
+- `create checkpoint [name]` - Manual safety checkpoint before risky changes
+- `rollback to [checkpoint]` - Restore to previous checkpoint (with confirmation)
+
+**What Happens Automatically:**
+- CORTEX creates checkpoints before/after operations (pre-work, post-work, tdd-red, tdd-green, refactoring)
+- Dirty state detection warns about uncommitted changes (user chooses: commit/stash/proceed/cancel)
+- 30-day retention with auto-cleanup
+
+**Why Checkpoints Not Branches:** Simpler, faster, safer, uses standard git commands, no branch proliferation
 
 **Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/git-checkpoint-guide.md
 
-**Purpose:** Automatic safety snapshots before/after development work for instant rollback capability
-
-**Quick Commands:**
-- `create checkpoint [name]` - Manual checkpoint with custom name
-- `show checkpoints` - List all CORTEX checkpoints with timestamps
-- `rollback to [checkpoint]` - Reset to specific checkpoint (with confirmation)
-- `rollback last` - Undo last CORTEX operation
-- `cleanup checkpoints` - Remove old checkpoints (30+ days)
-
-**Key Features:**
-- ✅ **Auto-Checkpoints** - Created before/after all CORTEX operations
-- ✅ **Dirty State Detection** - Warns about uncommitted changes, requires user consent
-- ✅ **Retention Policy** - 30-day/50-count automatic cleanup
-- ✅ **Tag-Based Storage** - Uses git tags (not branches) to avoid proliferation
-- ✅ **Rollback Safety** - Shows changes to be lost, requires confirmation
-
-**Why Checkpoints Over Branches:**
-- Simpler (no branch management complexity)
-- Faster (no switching overhead, changes appear immediately)
-- Safer (git tags more reliable than auto-branch cleanup)
-- User-friendly (standard git commands: `git reset --hard`)
-- Production-ready (existing Git Checkpoint Orchestrator)
-
-**Auto-Checkpoint Triggers:**
-- Before/after implementation
-- Before/after refactoring
-- RED/GREEN/REFACTOR phases (TDD workflow)
-- Test failures (debugging aid)
-
-**Dirty State Workflow:**
-When uncommitted changes detected:
-1. **Option A:** Commit first (recommended)
-2. **Option B:** Stash changes
-3. **Option C:** Proceed with checkpoint
-4. **Option X:** Cancel operation
-
-**Configuration:** `cortex-brain/git-checkpoint-rules.yaml`
-
-**See git-checkpoint-guide.md for complete documentation, workflows, troubleshooting, and best practices.**
-
 ---
 
-## �🐛 Debug System
+## 🐛 Debug System
 
-**Commands:** `debug [target]` - Runtime instrumentation without source modification | `stop debug` - End session
+**Commands:**
+- `debug [target]` - Runtime instrumentation without source modification
+- `stop debug` - End debug session
 
-**Features:** Zero source changes, auto-cleanup, function tracking, timing capture, error logging
-- "show debug status"
+**Key Feature:** Zero source changes, auto-cleanup after restart
 
-**Output:**
-- Logs: `cortex-brain/debug-sessions/[session-id]/debug.log`
+**Output Locations:**
+- Logs: `cortex-brain/debug-sessions/[session-id]/`
 - Database: `cortex-brain/tier1-working-memory.db` (debug_sessions, debug_logs tables)
-- Summary: `cortex-brain/debug-sessions/[session-id]/summary.json`
-
-**Use Cases:**
-- Troubleshooting production issues
-- Performance profiling
-- Understanding execution flow
-- Debugging complex interactions
-- Learning how CORTEX agents work
-
-**Safety:**
-- Production-safe (only activates when explicitly requested)
-- Isolated sessions (no cross-contamination)
-- Rollback-safe (restart process = pristine state)
-- Privacy-safe (all data stored locally)
 
 ---
 
