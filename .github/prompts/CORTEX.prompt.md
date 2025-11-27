@@ -644,7 +644,53 @@ Recommendations: Cache is performing well
 
 ---
 
-## 🐛 Debug System
+## � Git Checkpoint System
+
+**Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/git-checkpoint-guide.md
+
+**Purpose:** Automatic safety snapshots before/after development work for instant rollback capability
+
+**Quick Commands:**
+- `create checkpoint [name]` - Manual checkpoint with custom name
+- `show checkpoints` - List all CORTEX checkpoints with timestamps
+- `rollback to [checkpoint]` - Reset to specific checkpoint (with confirmation)
+- `rollback last` - Undo last CORTEX operation
+- `cleanup checkpoints` - Remove old checkpoints (30+ days)
+
+**Key Features:**
+- ✅ **Auto-Checkpoints** - Created before/after all CORTEX operations
+- ✅ **Dirty State Detection** - Warns about uncommitted changes, requires user consent
+- ✅ **Retention Policy** - 30-day/50-count automatic cleanup
+- ✅ **Tag-Based Storage** - Uses git tags (not branches) to avoid proliferation
+- ✅ **Rollback Safety** - Shows changes to be lost, requires confirmation
+
+**Why Checkpoints Over Branches:**
+- Simpler (no branch management complexity)
+- Faster (no switching overhead, changes appear immediately)
+- Safer (git tags more reliable than auto-branch cleanup)
+- User-friendly (standard git commands: `git reset --hard`)
+- Production-ready (existing Git Checkpoint Orchestrator)
+
+**Auto-Checkpoint Triggers:**
+- Before/after implementation
+- Before/after refactoring
+- RED/GREEN/REFACTOR phases (TDD workflow)
+- Test failures (debugging aid)
+
+**Dirty State Workflow:**
+When uncommitted changes detected:
+1. **Option A:** Commit first (recommended)
+2. **Option B:** Stash changes
+3. **Option C:** Proceed with checkpoint
+4. **Option X:** Cancel operation
+
+**Configuration:** `cortex-brain/git-checkpoint-rules.yaml`
+
+**See git-checkpoint-guide.md for complete documentation, workflows, troubleshooting, and best practices.**
+
+---
+
+## �🐛 Debug System
 
 **Commands:** `debug [target]` - Runtime instrumentation without source modification | `stop debug` - End session
 
