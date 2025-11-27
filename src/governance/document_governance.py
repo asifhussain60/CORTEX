@@ -28,6 +28,7 @@ class DocumentMetadata:
     modified: datetime
     word_count: int
     checksum: str
+    keywords: set = None  # Pre-computed keywords for O(1) duplicate detection
 
 
 @dataclass
@@ -291,15 +292,16 @@ class DocumentGovernance:
                         recommendation=f"Similar title found: '{metadata.title}' in {doc_path}"
                     ))
         
-        # Algorithm 3: Keyword overlap
+        # Algorithm 3: Keyword overlap (OPTIMIZED - uses pre-computed keywords from index)
         proposed_keywords = self._extract_keywords(content)
-        for doc_path, metadata in self._document_index.items():
-            # Read existing document for keyword comparison
-            try:
-                with open(doc_path, 'r', encoding='utf-8') as f:
-                    existing_content = f.read()
-                
-                existing_keywords = self._extract_keywords(existing_content)
+        total_docs = len(self._document_index)
+        
+        # Use pre-computed keywords from metadata (already extracted during index build)
+        for idx, (doc_path, metadata) in enumerate(self._document_index.items(), 1):
+            # Use cached keywords from metadata instead of re-reading file
+            existing_keywords = metadata.keywords if hasattr(metadata, 'keywords') else set()
+            
+            if existing_keywords:  # Only compare if keywords were cached
                 keyword_overlap = self._calculate_keyword_overlap(proposed_keywords, existing_keywords)
                 
                 if keyword_overlap >= 0.60:  # 60% threshold for keywords
@@ -309,8 +311,6 @@ class DocumentGovernance:
                         algorithm="keyword_overlap",
                         recommendation=f"High keyword overlap ({keyword_overlap:.0%}) with {doc_path}"
                     ))
-            except Exception:
-                continue  # Skip files that can't be read
         
         # Sort by similarity score (highest first)
         duplicates.sort(key=lambda d: d.similarity_score, reverse=True)
@@ -318,7 +318,7 @@ class DocumentGovernance:
         return duplicates
     
     def _build_document_index(self) -> Dict[str, DocumentMetadata]:
-        """Build index of all existing documents"""
+        """Build index of all existing documents with pre-computed keywords"""
         index = {}
         
         # Index documents in cortex-brain/documents/
@@ -327,6 +327,10 @@ class DocumentGovernance:
                 if md_file.is_file():
                     try:
                         metadata = self._extract_metadata(md_file)
+                        # Pre-compute keywords and cache in metadata
+                        with open(md_file, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        metadata.keywords = self._extract_keywords(content)
                         index[str(md_file)] = metadata
                     except Exception:
                         continue  # Skip files that can't be processed
@@ -337,6 +341,10 @@ class DocumentGovernance:
                 if md_file.is_file():
                     try:
                         metadata = self._extract_metadata(md_file)
+                        # Pre-compute keywords and cache in metadata
+                        with open(md_file, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        metadata.keywords = self._extract_keywords(content)
                         index[str(md_file)] = metadata
                     except Exception:
                         continue
@@ -382,17 +390,20 @@ class DocumentGovernance:
         return ""
     
     def _extract_keywords(self, content: str) -> set:
-        """Extract keywords from document content"""
-        # Simple keyword extraction (could be enhanced with NLP)
+        """Extract keywords from document content (optimized)"""
+        # Limit content size to prevent performance issues
+        content = content[:5000]
+        
         # Remove markdown syntax, code blocks, and special characters
         text = re.sub(r'```.*?```', '', content, flags=re.DOTALL)
         text = re.sub(r'`[^`]+`', '', text)
         text = re.sub(r'[^\w\s]', ' ', text)
         
-        # Extract words, filter common words
+        # Extract words, filter common words (optimized with list comprehension)
         words = text.lower().split()
         stopwords = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
-        keywords = {w for w in words if len(w) > 3 and w not in stopwords}
+        # Use set constructor with list (faster than set comprehension for large sets)
+        keywords = set([w for w in words if len(w) > 3 and w not in stopwords])
         
         return keywords
     

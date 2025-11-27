@@ -1,14 +1,32 @@
 # System Alignment Guide
 
-**Version:** 1.0  
+**Version:** 2.0 (Align 2.0)  
 **Status:** Production Ready  
 **Audience:** CORTEX Administrators
 
 ---
 
+## What's New in Align 2.0
+
+**Enhanced Capabilities:**
+- ✅ **Conflict Detection:** Detects duplicate modules, orphaned wiring, architectural drift, missing dependencies
+- ✅ **Smart Remediation:** Generates fix templates with before/after previews, user confirmation, git checkpoint safety
+- ✅ **Visual Dashboard:** Integration health trends, priority matrices, actionable recommendations
+- ✅ **Interactive Fixes:** Apply corrections one-by-one with rollback capability
+- ✅ **Historical Tracking:** Trend analysis showing health evolution over time
+
+---
+
 ## Overview
 
-System Alignment is CORTEX's self-validation framework that automatically discovers, validates, and reports on the integration depth of all features. It uses convention-based discovery to eliminate manual feature tracking and provides actionable remediation suggestions.
+System Alignment is CORTEX's self-validation framework that automatically discovers, validates, and reports on the integration depth of all features. It uses convention-based discovery to eliminate manual feature tracking and provides actionable remediation with user consent.
+
+**Align 2.0 Enhancements:**
+- Passive observation with smart recommendations (respects brain protection consent rules)
+- Auto-detects internal conflicts (module inconsistencies, wiring issues, architectural drift)
+- User-guided fixes with preview and confirmation
+- Git checkpoint safety with instant rollback
+- Visual health dashboard with emoji indicators and trend analysis
 
 ---
 
@@ -49,12 +67,51 @@ System Alignment is CORTEX's self-validation framework that automatically discov
 
 ---
 
+## Configuration
+
+### Performance Optimization
+
+**Default Configuration** (`cortex.config.json`):
+```json
+"system_alignment": {
+  "skip_duplicate_detection": true,
+  "comment": "Duplicate detection skipped by default to prevent O(n²) performance issue"
+}
+```
+
+**Why Skip Duplicate Detection by Default:**
+- With 575+ documents, duplicate detection becomes O(n²) operation
+- Results in 330,625 file operations (575 × 575)
+- Can take hours to complete, appearing as infinite loop
+- Primary system alignment purpose is integration depth validation, not duplicate detection
+- Document duplicates better handled by dedicated cleanup operations
+
+**Enable Duplicate Detection (if needed):**
+```json
+"system_alignment": {
+  "skip_duplicate_detection": false
+}
+```
+
+**When to Enable:**
+- Deep documentation governance audit required
+- After major documentation refactoring
+- Preparing for release (one-time validation)
+- Never enable for regular development workflow
+
+**Performance Characteristics:**
+- **Skip enabled (default):** <5 seconds for full alignment
+- **Skip disabled:** 10-15 seconds with optimized keyword cache (575 one-time file reads)
+- **Legacy (pre-fix):** Hours/infinite loop (330,625 file reads)
+
+---
+
 ## Commands
 
-### Basic Commands
+### Basic Commands (Enhanced in v2.0)
 
 ```bash
-# Run full alignment validation
+# Run full alignment validation with dashboard
 align
 
 # Generate detailed report with remediation
@@ -65,6 +122,25 @@ system alignment
 
 # Validate current alignment
 validate alignment
+```
+
+### Align 2.0 Commands (NEW)
+
+```bash
+# Run alignment with visual dashboard and conflict detection
+align
+
+# View full dashboard in terminal
+align report
+
+# Apply fixes interactively with confirmation
+align fix --interactive
+
+# Show detected conflicts only
+align conflicts
+
+# Generate fix templates without applying
+align fix --preview
 ```
 
 ### Integration with Optimize

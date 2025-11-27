@@ -45,6 +45,10 @@
     "requireGitValidation": true,
     "testQualityThreshold": 70
   },
+  "system_alignment": {
+    "skip_duplicate_detection": true,
+    "comment": "Duplicate detection skipped by default to prevent O(n²) performance issue (330k+ file ops with 575 docs). Enable only for deep validation: set to false"
+  },
   "token_optimization": {
     "enabled": true,
     "soft_limit": 40000,
