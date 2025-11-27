@@ -215,8 +215,10 @@ class TestCoverageValidator:
         """
         try:
             # Build pytest command
+            # Use sys.executable to get current Python interpreter (python3 on macOS)
+            import sys
             cmd = [
-                "python", "-m", "pytest",
+                sys.executable, "-m", "pytest",
                 str(test_file),
                 "--cov-report=json",
                 "--quiet"

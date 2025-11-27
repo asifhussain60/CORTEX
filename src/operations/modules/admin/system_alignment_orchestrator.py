@@ -500,7 +500,21 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         from src.validation.wiring_validator import WiringValidator
         wiring_validator = WiringValidator(self.project_root)
         entry_points = self._get_entry_points()
-        score.wired = wiring_validator.check_orchestrator_wired(name, entry_points)
+        
+        # For agents, check entry_point_scanner.py mappings
+        # For orchestrators, check response template entry points
+        if feature_type == "agent":
+            # Check if agent is in entry_point_scanner.py mappings
+            scanner_path = self.project_root / "src" / "discovery" / "entry_point_scanner.py"
+            if scanner_path.exists():
+                scanner_content = scanner_path.read_text(encoding='utf-8')
+                # Check if agent name appears in the mappings dict
+                score.wired = f'"{name}"' in scanner_content or f"'{name}'" in scanner_content
+            else:
+                score.wired = False
+        else:
+            # Orchestrators use the original method
+            score.wired = wiring_validator.check_orchestrator_wired(name, entry_points)
         
         # Layer 7: Performance validation (check for benchmark files)
         if module_path and class_name:
