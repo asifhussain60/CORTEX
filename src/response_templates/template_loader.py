@@ -56,12 +56,20 @@ class TemplateLoader:
         templates_data = data['templates']
         
         for template_id, template_config in templates_data.items():
+            # Check if template uses base template structure (YAML anchor inheritance)
+            if 'base_structure' in template_config:
+                # Compose content from base_structure + placeholder fields
+                content = self._compose_template_content(template_config)
+            else:
+                # Traditional template with direct content
+                content = template_config.get('content', '')
+            
             template = Template(
                 template_id=template_id,
                 triggers=template_config.get('triggers', []),
                 response_type=template_config.get('response_type', 'narrative'),
                 context_needed=template_config.get('context_needed', False),
-                content=template_config.get('content', ''),
+                content=content,
                 verbosity=template_config.get('verbosity', 'concise'),
                 metadata=template_config.get('metadata', {})
             )
@@ -73,6 +81,38 @@ class TemplateLoader:
                 self._trigger_index[trigger.lower()] = template_id
         
         self._loaded = True
+    
+    def _compose_template_content(self, template_config: Dict[str, Any]) -> str:
+        """Compose final template content from base structure + placeholders.
+        
+        This method handles templates that use YAML anchor inheritance with base_structure.
+        It substitutes placeholder fields like {understanding_content} with their actual values.
+        
+        Args:
+            template_config: Template configuration with base_structure
+            
+        Returns:
+            Composed template content with placeholders substituted
+            
+        Example:
+            base_structure: "## 🎯 {understanding_content}"
+            understanding_content: "You want help"
+            Result: "## 🎯 You want help"
+        """
+        base = template_config.get('base_structure', '')
+        
+        # Substitute placeholder fields (anything ending in _content, _name, etc.)
+        for key, value in template_config.items():
+            # Skip non-content fields
+            if key in ['base_structure', 'triggers', 'response_type', '<<']:
+                continue
+            
+            # Replace {key} with value
+            placeholder = f'{{{key}}}'
+            if placeholder in base and value:
+                base = base.replace(placeholder, str(value))
+        
+        return base
     
     def load_template(self, template_id: str) -> Optional[Template]:
         """Load a specific template by ID.
