@@ -129,6 +129,12 @@ class DeploymentValidator:
         # TDD Mastery Components
         self.check_tdd_mastery_components()
         
+        # TDD Mastery Enhancements (NEW)
+        self.check_tdd_mastery_enhancements()
+        
+        # Admin Feature Exclusion (NEW)
+        self.check_admin_feature_exclusion()
+        
         # User Entry Point Operations
         self.check_entry_point_operations()
         
@@ -1650,6 +1656,276 @@ class DeploymentValidator:
                 severity="HIGH",
                 passed=True,
                 message="✓ TDD Mastery components present and validated"
+            ))
+    
+    def check_tdd_mastery_enhancements(self):
+        """TDD_MASTERY_ENHANCEMENTS: Verify all new TDD Mastery enhancements are packaged."""
+        check_id = "TDD_MASTERY_ENHANCEMENTS"
+        name = "TDD Mastery Enhancements (Issue #3 Features)"
+        
+        enhancement_issues = []
+        
+        # Check TDD Mastery Guide exists
+        tdd_guide = self.project_root / ".github" / "prompts" / "modules" / "tdd-mastery-guide.md"
+        if not tdd_guide.exists():
+            enhancement_issues.append("tdd-mastery-guide.md NOT FOUND - TDD documentation missing")
+        else:
+            try:
+                with open(tdd_guide, 'r', encoding='utf-8') as f:
+                    guide_content = f.read()
+                
+                # Check for key Issue #3 enhancements
+                required_features = {
+                    'RED→GREEN→REFACTOR': 'TDD workflow automation',
+                    'auto-debug': 'Automatic debugging on test failures',
+                    'performance refactoring': 'Performance-based refactoring',
+                    'test isolation': 'Test location separation (user repo vs CORTEX)',
+                    'Terminal integration': 'Terminal command execution',
+                    'workspace discovery': 'Auto-detection of test frameworks'
+                }
+                
+                missing_features = []
+                for feature, description in required_features.items():
+                    if feature.lower() not in guide_content.lower():
+                        missing_features.append(f"{description} ({feature})")
+                
+                if missing_features:
+                    enhancement_issues.append(f"tdd-mastery-guide.md missing Issue #3 features: {', '.join(missing_features)}")
+            except Exception as e:
+                enhancement_issues.append(f"Failed to validate tdd-mastery-guide.md: {e}")
+        
+        # Check brain memory integration
+        working_memory_schema = self.project_root / "cortex-brain" / "tier1" / "working_memory_schema.sql"
+        if not working_memory_schema.exists():
+            enhancement_issues.append("working_memory_schema.sql NOT FOUND - Brain memory infrastructure missing")
+        
+        # Check response templates have TDD workflow support
+        templates = self.project_root / "cortex-brain" / "response-templates.yaml"
+        if templates.exists():
+            try:
+                with open(templates, 'r', encoding='utf-8') as f:
+                    templates_content = f.read()
+                
+                # Check for TDD workflow templates
+                tdd_workflow_templates = [
+                    'tdd_start',
+                    'tdd_red_phase',
+                    'tdd_green_phase',
+                    'tdd_refactor_phase',
+                    'tester_success',
+                    'tester_failure'
+                ]
+                
+                missing_templates = [t for t in tdd_workflow_templates if t not in templates_content]
+                
+                if missing_templates:
+                    enhancement_issues.append(f"response-templates.yaml missing TDD workflow templates: {', '.join(missing_templates)}")
+            except Exception as e:
+                enhancement_issues.append(f"Failed to validate TDD workflow templates: {e}")
+        
+        # Check CORTEX.prompt.md references TDD Mastery Guide
+        prompt_file = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+        if prompt_file.exists():
+            try:
+                with open(prompt_file, 'r', encoding='utf-8') as f:
+                    prompt_content = f.read()
+                
+                if 'tdd-mastery-guide.md' not in prompt_content:
+                    enhancement_issues.append("CORTEX.prompt.md does not reference tdd-mastery-guide.md")
+                
+                # Check for TDD Mastery section
+                if '## 🎯 TDD Mastery' not in prompt_content:
+                    enhancement_issues.append("CORTEX.prompt.md missing TDD Mastery section")
+                
+                # Check for quick start commands
+                tdd_commands = ['start tdd', 'run tests', 'suggest refactorings']
+                missing_commands = [cmd for cmd in tdd_commands if cmd not in prompt_content]
+                
+                if missing_commands:
+                    enhancement_issues.append(f"CORTEX.prompt.md missing TDD commands: {', '.join(missing_commands)}")
+            except Exception as e:
+                enhancement_issues.append(f"Failed to validate CORTEX.prompt.md TDD references: {e}")
+        
+        # Build result
+        if enhancement_issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",  # Block deployment if TDD enhancements missing
+                passed=False,
+                message=f"TDD Mastery enhancements validation failed ({len(enhancement_issues)} issues)",
+                details="\n".join(f"  • {issue}" for issue in enhancement_issues) +
+                       "\n\nRequired Issue #3 enhancements:\n" +
+                       "  • tdd-mastery-guide.md (Complete guide with all features)\n" +
+                       "  • RED→GREEN→REFACTOR automation\n" +
+                       "  • Auto-debug on test failures\n" +
+                       "  • Performance-based refactoring\n" +
+                       "  • Test location isolation\n" +
+                       "  • Terminal integration\n" +
+                       "  • Workspace discovery\n" +
+                       "  • Brain memory integration\n" +
+                       "  • Response template support\n" +
+                       "  • CORTEX.prompt.md documentation",
+                fix_available=False,
+                fix_command="Ensure all Issue #3 TDD Mastery enhancements are implemented and documented"
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=True,
+                message="✓ All TDD Mastery enhancements (Issue #3) present and validated"
+            ))
+    
+    def check_admin_feature_exclusion(self):
+        """ADMIN_EXCLUSION: Verify NO admin features or CORTEX-modifying commands in user deployment."""
+        check_id = "ADMIN_EXCLUSION"
+        name = "Admin Feature Exclusion (Zero CORTEX Modification Access)"
+        
+        admin_issues = []
+        
+        # Check 1: No cortex-brain/admin/ directory in package
+        admin_dir = self.project_root / "cortex-brain" / "admin"
+        if admin_dir.exists():
+            admin_issues.append("⚠️ cortex-brain/admin/ directory MUST BE EXCLUDED from user deployments")
+        
+        # Check 2: No admin orchestrators in src/operations/modules/admin/
+        admin_operations_dir = self.project_root / "src" / "operations" / "modules" / "admin"
+        if admin_operations_dir.exists():
+            admin_files = list(admin_operations_dir.glob("*.py"))
+            if admin_files:
+                admin_issues.append(f"⚠️ {len(admin_files)} admin operation files found in src/operations/modules/admin/ - MUST BE EXCLUDED")
+        
+        # Check 3: No scripts/admin/ directory
+        scripts_admin_dir = self.project_root / "scripts" / "admin"
+        if scripts_admin_dir.exists():
+            admin_scripts = list(scripts_admin_dir.glob("*.py"))
+            if admin_scripts:
+                admin_issues.append(f"⚠️ {len(admin_scripts)} admin scripts found in scripts/admin/ - MUST BE EXCLUDED")
+        
+        # Check 4: No deployment scripts accessible
+        deployment_scripts = [
+            'scripts/deploy_cortex.py',
+            'scripts/validate_deployment.py',
+            'scripts/publish_to_branch.py'
+        ]
+        
+        for script_path in deployment_scripts:
+            if (self.project_root / script_path).exists():
+                admin_issues.append(f"⚠️ {script_path} MUST BE EXCLUDED from user deployments")
+        
+        # Check 5: CORTEX.prompt.md has NO admin commands in user deployment
+        prompt_file = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+        if prompt_file.exists():
+            try:
+                with open(prompt_file, 'r', encoding='utf-8') as f:
+                    prompt_content = f.read()
+                
+                # Admin-only commands that MUST NOT appear
+                forbidden_commands = [
+                    'deploy cortex',
+                    'deploy CORTEX',
+                    'publish cortex',
+                    'validate_deployment',
+                    'system alignment',
+                    'align report',
+                    'generate docs',
+                    'cortex_optimizer'
+                ]
+                
+                # Check context detection mentions admin features
+                if 'cortex-brain/admin/' in prompt_content:
+                    # This is OK - it's explaining admin features are only available in dev repo
+                    # But verify it says "CORTEX repo only" or similar
+                    if 'CORTEX repo only' not in prompt_content and 'Admin Only' not in prompt_content:
+                        admin_issues.append("CORTEX.prompt.md mentions admin features without 'CORTEX repo only' or 'Admin Only' disclaimer")
+                
+            except Exception as e:
+                admin_issues.append(f"Failed to validate CORTEX.prompt.md admin exclusion: {e}")
+        
+        # Check 6: No admin modules in cortex-operations.yaml
+        operations_config = self.project_root / "cortex-operations.yaml"
+        if operations_config.exists():
+            try:
+                with open(operations_config, 'r', encoding='utf-8') as f:
+                    config_content = yaml.safe_load(f)
+                
+                if 'operations' in config_content:
+                    admin_operations = []
+                    for op_name, op_config in config_content['operations'].items():
+                        if isinstance(op_config, dict):
+                            # Check if operation is marked as admin-only
+                            if op_config.get('admin_only', False):
+                                admin_operations.append(op_name)
+                            
+                            # Check operation name patterns
+                            if any(pattern in op_name.lower() for pattern in ['deploy', 'align', 'publish', 'admin']):
+                                if op_name not in admin_operations:
+                                    admin_operations.append(op_name)
+                    
+                    if admin_operations:
+                        admin_issues.append(f"⚠️ cortex-operations.yaml contains {len(admin_operations)} admin operations: {', '.join(admin_operations)} - MUST BE EXCLUDED or marked admin_only")
+                        
+            except Exception as e:
+                admin_issues.append(f"Failed to validate cortex-operations.yaml: {e}")
+        
+        # Check 7: User cannot modify CORTEX source
+        # Verify no commands that edit src/, cortex-brain/tier*, or core CORTEX files
+        forbidden_edit_patterns = [
+            'edit CORTEX',
+            'modify CORTEX',
+            'change CORTEX code',
+            'update CORTEX source',
+            'refactor CORTEX'
+        ]
+        
+        if prompt_file.exists():
+            try:
+                with open(prompt_file, 'r', encoding='utf-8') as f:
+                    prompt_content = f.read().lower()
+                
+                # These patterns should NOT appear as user commands
+                for pattern in forbidden_edit_patterns:
+                    if pattern.lower() in prompt_content:
+                        # Check if it's in a warning/disclaimer context
+                        if 'cannot' not in prompt_content[max(0, prompt_content.find(pattern.lower())-100):prompt_content.find(pattern.lower())+100]:
+                            admin_issues.append(f"CORTEX.prompt.md may allow '{pattern}' - verify users CANNOT modify CORTEX source")
+                        
+            except Exception as e:
+                pass  # Already logged file read errors above
+        
+        # Build result
+        if admin_issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",  # BLOCK deployment if admin features leak
+                passed=False,
+                message=f"Admin feature exclusion validation FAILED ({len(admin_issues)} issues)",
+                details="\n".join(f"  {issue}" for issue in admin_issues) +
+                       "\n\n🔒 SECURITY REQUIREMENT:\n" +
+                       "  Users MUST NOT have access to:\n" +
+                       "  • cortex-brain/admin/ (admin configs/scripts)\n" +
+                       "  • src/operations/modules/admin/ (system alignment, deployment)\n" +
+                       "  • scripts/admin/ (optimizer, deployment tools)\n" +
+                       "  • scripts/deploy_cortex.py (deployment script)\n" +
+                       "  • scripts/validate_deployment.py (validation script)\n" +
+                       "  • Any commands that modify CORTEX source code\n" +
+                       "  • Admin operations in cortex-operations.yaml\n" +
+                       "\n" +
+                       "  Admin features ONLY available in CORTEX development repository.\n" +
+                       "  User deployments get CORTEX as read-only AI assistant.",
+                fix_available=False,
+                fix_command="Exclude all admin directories/files from deployment package (see deploy_cortex.py EXCLUDED_DIRS)"
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=True,
+                message="✓ Admin features properly excluded - Zero CORTEX modification access for users"
             ))
     
     def check_entry_point_operations(self):
