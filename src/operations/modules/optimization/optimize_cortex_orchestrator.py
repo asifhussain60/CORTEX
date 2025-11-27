@@ -19,7 +19,6 @@ Version: 1.0
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
 from datetime import datetime
 import subprocess
 import json
@@ -35,28 +34,13 @@ from src.operations.modules.validation.planning_rules_validator import (
     PlanningRulesValidator,
     PlanningValidationReport
 )
+from src.operations.modules.optimization.cortex_optimization_models import OptimizationMetrics
+from src.operations.modules.optimization.doc_deduplicator import DocumentDeduplicator
+from src.operations.modules.optimization.code_quality_analyzer import CodeQualityAnalyzer
+from src.operations.modules.optimization.hardcoded_data_analyzer import HardcodedDataAnalyzer
 from src.governance import DocumentGovernance
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class OptimizationMetrics:
-    """Metrics collected during optimization execution."""
-    optimization_id: str
-    timestamp: datetime
-    tests_run: int = 0
-    tests_passed: int = 0
-    tests_failed: int = 0
-    issues_identified: int = 0
-    optimizations_applied: int = 0
-    optimizations_succeeded: int = 0
-    optimizations_failed: int = 0
-    doc_deduplication_count: int = 0
-    git_commits: List[str] = field(default_factory=list)
-    duration_seconds: float = 0.0
-    improvements: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
 
 
 class OptimizeCortexOrchestrator(BaseOperationModule):
@@ -477,81 +461,9 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             return {'success': False, 'error': str(e)}
     
     def _analyze_hardcoded_data(self, project_root: Path) -> Dict[str, Any]:
-        """
-        AGGRESSIVE hardcoded data detection.
-        
-        Scans for:
-        - Hardcoded file paths (absolute paths, platform-specific)
-        - Mock data in production code
-        - Fallback mechanisms returning fake values
-        - Test fixtures with hardcoded values
-        - Placeholder data masquerading as real data
-        
-        Args:
-            project_root: Project root directory
-        
-        Returns:
-            Dict with hardcoded data violations
-        """
-        logger.info("Running AGGRESSIVE hardcoded data scan...")
-        
-        try:
-            from .hardcoded_data_cleaner_module import HardcodedDataCleanerModule
-            
-            cleaner = HardcodedDataCleanerModule(project_root=project_root)
-            result = cleaner.execute({
-                'project_root': project_root,
-                'scan_paths': ['src', 'tests'],
-                'exclude_patterns': ['__pycache__', '.git', 'dist', '.venv', 'node_modules'],
-                'fail_on_critical': False  # Don't fail optimization, just report
-            })
-            
-            if result.success or result.status.name == 'FAILED':  # Both success and fail states have data
-                metrics_data = result.data.get('metrics', {})
-                violations = result.data.get('violations', [])
-                
-                insights = []
-                issues = []
-                
-                # Summarize findings
-                total_violations = metrics_data.get('violations_found', 0)
-                critical = metrics_data.get('critical_violations', 0)
-                high = metrics_data.get('high_violations', 0)
-                
-                if total_violations == 0:
-                    insights.append("✅ No hardcoded data violations found!")
-                else:
-                    if critical > 0:
-                        issues.append(f"CRITICAL: {critical} hardcoded paths or mock data in production")
-                    if high > 0:
-                        issues.append(f"HIGH: {high} fallback values or hardcoded returns")
-                    
-                    insights.append(f"Scanned {metrics_data.get('files_scanned', 0)} files")
-                    insights.append(f"Found {total_violations} violations")
-                    
-                    # Top violation types
-                    violations_by_type = metrics_data.get('violations_by_type', {})
-                    for v_type, count in sorted(violations_by_type.items(), key=lambda x: x[1], reverse=True)[:3]:
-                        insights.append(f"  - {v_type}: {count}")
-                
-                logger.info(f"Hardcoded data scan complete: {total_violations} violations")
-                
-                return {
-                    'insights': insights,
-                    'issues': issues,
-                    'stats': metrics_data,
-                    'violations': violations[:10],  # Top 10 violations for context
-                    'full_report': result.data.get('report', '')
-                }
-            else:
-                return {'issues': ['Hardcoded data scan failed']}
-        
-        except ImportError as e:
-            logger.warning(f"Hardcoded data cleaner module not available: {e}")
-            return {'issues': ['Hardcoded data cleaner not installed']}
-        except Exception as e:
-            logger.error(f"Error during hardcoded data scan: {e}")
-            return {'issues': [f'Hardcoded data scan error: {str(e)}']}
+        """Analyze hardcoded data violations (delegated to HardcodedDataAnalyzer)."""
+        analyzer = HardcodedDataAnalyzer(project_root)
+        return analyzer.analyze()
     
     def _analyze_architecture(
         self,
@@ -722,106 +634,9 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             return {'issues': [f"Error reading brain protection: {str(e)}"]}
     
     def _analyze_code_quality(self, project_root: Path) -> Dict[str, Any]:
-        """
-        Analyze code quality metrics using CORTEX admin optimizer.
-        
-        Runs the comprehensive CORTEX optimizer tool which provides:
-        - Token usage analysis (prompt efficiency, YAML optimization)
-        - YAML validation (brain file integrity, schema compliance)
-        - Plugin health checks (metadata completeness, registration)
-        - Database optimization (SQLite performance, indexes)
-        """
-        insights = []
-        issues = []
-        stats = {}
-        
-        logger.info("Running CORTEX admin optimizer for code quality metrics...")
-        
-        try:
-            # Run the admin optimizer tool
-            import subprocess
-            import json
-            
-            result = subprocess.run(
-                ['python', 'scripts/admin/cortex_optimizer.py', 'analyze', '--report', 'json'],
-                cwd=project_root,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
-            
-            if result.returncode == 0:
-                # Parse JSON output
-                try:
-                    optimizer_results = json.loads(result.stdout)
-                    overall_score = optimizer_results.get('overall_score', 0)
-                    
-                    insights.append(f"Overall optimization score: {overall_score}/100")
-                    
-                    # Process individual analyzer results
-                    for analyzer_result in optimizer_results.get('results', []):
-                        category = analyzer_result.get('category', 'Unknown')
-                        score = analyzer_result.get('score', 0)
-                        analyzer_issues = analyzer_result.get('issues', [])
-                        recommendations = analyzer_result.get('recommendations', [])
-                        
-                        # Add score to insights
-                        status_emoji = "✅" if score >= 80 else "⚠️" if score >= 60 else "❌"
-                        insights.append(f"{status_emoji} {category}: {score}/100")
-                        
-                        # Add issues
-                        if analyzer_issues:
-                            issues.extend(analyzer_issues[:3])  # Top 3 issues per category
-                        
-                        # Store stats
-                        stats[category.lower().replace(' ', '_')] = {
-                            'score': score,
-                            'issue_count': len(analyzer_issues),
-                            'recommendations': len(recommendations)
-                        }
-                    
-                    # Overall health
-                    if overall_score < 60:
-                        issues.append(f"CRITICAL: Overall optimization score below 60 ({overall_score}/100)")
-                    elif overall_score < 80:
-                        issues.append(f"WARNING: Overall optimization score below 80 ({overall_score}/100)")
-                    
-                except json.JSONDecodeError as e:
-                    logger.warning(f"Failed to parse optimizer JSON output: {e}")
-                    insights.append("Optimizer ran but output parse failed")
-            else:
-                # Optimizer failed, fall back to basic analysis
-                logger.warning(f"CORTEX optimizer failed (exit code {result.returncode}), using fallback analysis")
-                insights.append("⚠️ Optimizer failed, using basic analysis")
-                
-                # Fallback: Basic file counting
-                src_dir = project_root / 'src'
-                if src_dir.exists():
-                    py_files = list(src_dir.rglob('*.py'))
-                    insights.append(f"{len(py_files)} Python files")
-                    
-                    init_files = list(src_dir.rglob('__init__.py'))
-                    insights.append(f"{len(init_files)} package markers")
-                    
-                    stats = {
-                        'python_files': len(py_files),
-                        'packages': len(init_files)
-                    }
-                else:
-                    issues.append("Source directory not found")
-        
-        except subprocess.TimeoutExpired:
-            logger.error("CORTEX optimizer timed out")
-            issues.append("Optimizer execution timeout")
-        except Exception as e:
-            logger.error(f"Error running CORTEX optimizer: {e}")
-            issues.append(f"Optimizer error: {str(e)}")
-        
-        return {
-            'insights': insights,
-            'issues': issues,
-            'stats': stats
-        }
+        """Analyze code quality metrics (delegated to CodeQualityAnalyzer)."""
+        analyzer = CodeQualityAnalyzer(project_root)
+        return analyzer.analyze()
     
     def _analyze_test_coverage(self, project_root: Path) -> Dict[str, Any]:
         """Analyze test coverage."""
@@ -1103,164 +918,9 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         project_root: Path,
         metrics: OptimizationMetrics
     ) -> Dict[str, Any]:
-        """
-        Deduplicate documentation using DocumentGovernance.
-        
-        This method:
-        1. Instantiates DocumentGovernance
-        2. Scans all markdown files in cortex-brain/documents/
-        3. Finds duplicates using 3 algorithms (exact, title, keyword)
-        4. Applies consolidation suggestions (keeps older, archives newer)
-        5. Logs consolidation actions
-        6. Updates metrics with deduplicated count
-        
-        Args:
-            project_root: Project root directory
-            metrics: Metrics collector
-        
-        Returns:
-            Dict with success status, consolidated count, and details
-        """
-        logger.info("Scanning documentation for duplicates...")
-        
-        try:
-            # Instantiate DocumentGovernance
-            governance = DocumentGovernance(project_root)
-            
-            # Scan all markdown files
-            docs_dir = project_root / "cortex-brain" / "documents"
-            prompts_dir = project_root / ".github" / "prompts" / "modules"
-            
-            if not docs_dir.exists():
-                return {'success': False, 'message': 'Documents directory not found'}
-            
-            # Collect all .md files
-            scanned_docs = list(docs_dir.rglob("*.md"))
-            if prompts_dir.exists():
-                scanned_docs.extend(prompts_dir.rglob("*.md"))
-            
-            logger.info(f"Scanning {len(scanned_docs)} markdown files...")
-            
-            # Track duplicates
-            duplicates_found = []
-            consolidated_pairs = set()
-            
-            for doc_path in scanned_docs:
-                try:
-                    content = doc_path.read_text(encoding='utf-8')
-                    duplicates = governance.find_duplicates(doc_path, content)
-                    
-                    # Filter by 0.75 threshold (from governance rules)
-                    high_similarity = [
-                        d for d in duplicates 
-                        if d.similarity_score >= 0.75
-                    ]
-                    
-                    for dup in high_similarity:
-                        # Create unique pair key (sorted to avoid double-reporting)
-                        pair_key = tuple(sorted([
-                            str(doc_path.relative_to(project_root)),
-                            str(dup.existing_path.relative_to(project_root))
-                        ]))
-                        
-                        if pair_key not in consolidated_pairs:
-                            consolidated_pairs.add(pair_key)
-                            duplicates_found.append({
-                                'file1': str(doc_path.relative_to(project_root)),
-                                'file2': str(dup.existing_path.relative_to(project_root)),
-                                'similarity': dup.similarity_score,
-                                'algorithm': dup.algorithm,
-                                'recommendation': dup.recommendation
-                            })
-                
-                except Exception as e:
-                    logger.debug(f"Error processing {doc_path}: {e}")
-                    continue
-            
-            if not duplicates_found:
-                logger.info("✅ No duplicate documentation found")
-                return {
-                    'success': True,
-                    'consolidated_count': 0,
-                    'message': 'No duplicates found'
-                }
-            
-            # Log duplicates for user review
-            logger.info(f"Found {len(duplicates_found)} duplicate pairs:")
-            for dup in duplicates_found[:5]:  # Show top 5
-                logger.info(
-                    f"  • {dup['file1']} <-> {dup['file2']} "
-                    f"({dup['similarity']:.0%} via {dup['algorithm']})"
-                )
-            
-            if len(duplicates_found) > 5:
-                logger.info(f"  ... and {len(duplicates_found) - 5} more")
-            
-            # Auto-consolidate if similarity ≥90% (critical duplicates)
-            auto_consolidated = 0
-            for dup in duplicates_found:
-                if dup['similarity'] >= 0.90:
-                    # Determine keep vs archive (keep older file)
-                    file1_path = project_root / dup['file1']
-                    file2_path = project_root / dup['file2']
-                    
-                    if file1_path.exists() and file2_path.exists():
-                        file1_mtime = file1_path.stat().st_mtime
-                        file2_mtime = file2_path.stat().st_mtime
-                        
-                        # Keep older file, archive newer
-                        if file1_mtime < file2_mtime:
-                            keep_file = file1_path
-                            archive_file = file2_path
-                        else:
-                            keep_file = file2_path
-                            archive_file = file1_path
-                        
-                        # Create archive directory
-                        archive_dir = docs_dir / "archive"
-                        archive_dir.mkdir(exist_ok=True)
-                        
-                        # Move duplicate to archive
-                        archive_dest = archive_dir / archive_file.name
-                        
-                        try:
-                            archive_file.rename(archive_dest)
-                            logger.info(
-                                f"  ✅ Archived: {archive_file.relative_to(project_root)} "
-                                f"(kept {keep_file.relative_to(project_root)})"
-                            )
-                            auto_consolidated += 1
-                        except Exception as e:
-                            logger.warning(f"Failed to archive {archive_file}: {e}")
-            
-            # Update metrics
-            metrics.doc_deduplication_count = auto_consolidated
-            metrics.optimizations_succeeded += auto_consolidated
-            
-            # Commit if changes made
-            if auto_consolidated > 0:
-                commit_hash = self._git_commit(
-                    project_root,
-                    f"[OPTIMIZATION/DOC] Consolidated {auto_consolidated} duplicate documents"
-                )
-                
-                if commit_hash:
-                    metrics.git_commits.append(commit_hash)
-            
-            return {
-                'success': True,
-                'consolidated_count': auto_consolidated,
-                'duplicates_found': len(duplicates_found),
-                'details': duplicates_found
-            }
-        
-        except Exception as e:
-            logger.error(f"Documentation deduplication failed: {e}", exc_info=True)
-            metrics.errors.append(f"Doc deduplication error: {str(e)}")
-            return {
-                'success': False,
-                'message': f'Error: {str(e)}'
-            }
+        """Deduplicate documentation (delegated to DocumentDeduplicator)."""
+        deduplicator = DocumentDeduplicator(project_root, self._git_commit)
+        return deduplicator.deduplicate(metrics)
     
     def _generate_optimization_report(
         self,

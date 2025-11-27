@@ -18,7 +18,6 @@ License: Proprietary - See LICENSE file for terms
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List, Set, Tuple, Optional
-from dataclasses import dataclass, asdict
 import json
 import shutil
 import subprocess
@@ -29,50 +28,14 @@ from collections import defaultdict
 
 from src.operations.base_operation_module import BaseOperationModule, OperationPhase, OperationResult, OperationModuleMetadata, OperationStatus
 from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
+from src.operations.modules.cleanup.cleanup_models import CleanupMetrics
+from src.operations.modules.cleanup.legacy_kds_cleaner import LegacyKDSCleaner
+from src.operations.modules.cleanup.doc_archive_cleaner import DocumentArchiveCleaner
+from src.operations.modules.cleanup.backup_archiver import BackupArchiver
 from .remove_obsolete_tests_module import RemoveObsoleteTestsModule
 from src.governance import DocumentGovernance
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class CleanupMetrics:
-    """Metrics from cleanup operation"""
-    timestamp: datetime
-    backups_deleted: int = 0
-    backups_archived: int = 0
-    files_reorganized: int = 0
-    md_files_consolidated: int = 0
-    root_files_cleaned: int = 0
-    bloated_files_found: int = 0
-    archived_docs_removed: int = 0
-    space_freed_bytes: int = 0
-    git_commits_created: int = 0
-    duration_seconds: float = 0.0
-    optimization_triggered: bool = False
-    warnings: List[str] = None
-    errors: List[str] = None
-    
-    def __post_init__(self):
-        if self.warnings is None:
-            self.warnings = []
-        if self.errors is None:
-            self.errors = []
-    
-    @property
-    def space_freed_mb(self) -> float:
-        return self.space_freed_bytes / (1024 * 1024)
-    
-    @property
-    def space_freed_gb(self) -> float:
-        return self.space_freed_bytes / (1024 * 1024 * 1024)
-    
-    def to_dict(self) -> Dict[str, Any]:
-        data = asdict(self)
-        data['timestamp'] = self.timestamp.isoformat()
-        data['space_freed_mb'] = self.space_freed_mb
-        data['space_freed_gb'] = self.space_freed_gb
-        return data
 
 
 class CleanupOrchestrator(BaseOperationModule):
@@ -501,126 +464,9 @@ class CleanupOrchestrator(BaseOperationModule):
             logger.info(f"  Moved: {file_path.name} → scripts/temp/")
     
     def _cleanup_legacy_kds_files(self, dry_run: bool) -> int:
-        """
-        Clean up legacy KDS prompt files and directories.
-        
-        Removes old Key Data Streams (KDS) prompts and folders that are no longer
-        needed after CORTEX 2.0 deployment. Only keeps CORTEX.prompt.md and
-        copilot-instructions.md in .github/prompts/.
-        
-        Legacy files removed:
-        - Old prompt files: ask.prompt.md, continue.prompt.md, task.prompt.md, etc.
-        - Old subdirectories: comm/, knowledge/, ops/, quality/, shared/, util/
-        - Old root directories: _Portable, instructions, key-data-streams, learning, prompts.keys
-        
-        Returns:
-            int: Number of legacy files/directories removed
-        """
-        logger.info("Scanning for legacy KDS files...")
-        
-        cleaned_count = 0
-        github_dir = self.project_root / '.github'
-        
-        if not github_dir.exists():
-            logger.info("  No .github directory found - skipping")
-            return 0
-        
-        # Define legacy prompt files to remove (keep only CORTEX.prompt.md and copilot-instructions.md)
-        legacy_prompt_files = [
-            'ask.prompt.md',
-            'continue.prompt.md',
-            'create-plan.prompt.md',
-            'handoff.prompt.md',
-            'healthcheck.prompt.md',
-            'port-instructions.prompt.md',
-            'stash.prompt.md',
-            'task.prompt.md',
-            'test-generation.prompt.md',
-            'question.prompt.md',
-            'analyze-learning.prompt.md',
-            'data-streams.prompt.md',
-            'total-recall.prompt.md',
-            'commit.prompt.md',
-            'sync.prompt.md',
-            'cohesion-review.prompt.md',
-            'refactor.prompt.md',
-            'cleanup.prompt.md'
-        ]
-        
-        # Define legacy directories to remove
-        legacy_directories = [
-            '.github/_Portable',
-            '.github/instructions',
-            '.github/key-data-streams',
-            '.github/learning',
-            '.github/prompts.keys',
-            '.github/prompts/comm',
-            '.github/prompts/knowledge',
-            '.github/prompts/ops',
-            '.github/prompts/quality',
-            '.github/prompts/shared',
-            '.github/prompts/util',
-            '.github/prompts/prompts.keys',
-            '.github/prompts/internal'
-        ]
-        
-        # Remove legacy prompt files
-        prompts_dir = github_dir / 'prompts'
-        if prompts_dir.exists():
-            for prompt_file in legacy_prompt_files:
-                prompt_path = prompts_dir / prompt_file
-                if prompt_path.exists():
-                    if not dry_run:
-                        try:
-                            prompt_path.unlink()
-                            logger.info(f"  Removed: {prompt_path.relative_to(self.project_root)}")
-                            cleaned_count += 1
-                            self._log_action('legacy_removed', prompt_path, "Legacy KDS prompt file")
-                        except Exception as e:
-                            self.metrics.errors.append(f"Failed to remove {prompt_path}: {e}")
-                            logger.error(f"  ❌ Failed to remove {prompt_file}: {e}")
-                    else:
-                        logger.info(f"  [DRY RUN] Would remove: {prompt_path.relative_to(self.project_root)}")
-                        cleaned_count += 1
-        
-        # Remove legacy directories
-        for legacy_dir_str in legacy_directories:
-            legacy_dir = self.project_root / legacy_dir_str
-            if legacy_dir.exists() and legacy_dir.is_dir():
-                if not dry_run:
-                    try:
-                        shutil.rmtree(legacy_dir)
-                        logger.info(f"  Removed directory: {legacy_dir.relative_to(self.project_root)}")
-                        cleaned_count += 1
-                        self._log_action('legacy_removed', legacy_dir, "Legacy KDS directory")
-                    except Exception as e:
-                        self.metrics.errors.append(f"Failed to remove {legacy_dir}: {e}")
-                        logger.error(f"  ❌ Failed to remove directory {legacy_dir.name}: {e}")
-                else:
-                    logger.info(f"  [DRY RUN] Would remove directory: {legacy_dir.relative_to(self.project_root)}")
-                    cleaned_count += 1
-        
-        # Remove old .github.zip if it exists
-        github_zip = github_dir / '.github.zip'
-        if github_zip.exists():
-            if not dry_run:
-                try:
-                    github_zip.unlink()
-                    logger.info(f"  Removed: {github_zip.relative_to(self.project_root)}")
-                    cleaned_count += 1
-                    self._log_action('legacy_removed', github_zip, "Legacy archive file")
-                except Exception as e:
-                    self.metrics.errors.append(f"Failed to remove {github_zip}: {e}")
-            else:
-                logger.info(f"  [DRY RUN] Would remove: {github_zip.relative_to(self.project_root)}")
-                cleaned_count += 1
-        
-        if cleaned_count == 0:
-            logger.info("  ✓ No legacy KDS files found")
-        else:
-            logger.info(f"  ✓ Cleaned {cleaned_count} legacy items")
-        
-        return cleaned_count
+        """Clean up legacy KDS prompt files and directories (delegated to LegacyKDSCleaner)."""
+        cleaner = LegacyKDSCleaner(self.project_root, self._log_action, self.metrics)
+        return cleaner.cleanup(dry_run)
     
     def _reorganize_files(self, dry_run: bool) -> None:
         """Reorganize files to correct locations - OPTIMIZED"""
@@ -743,95 +589,9 @@ class CleanupOrchestrator(BaseOperationModule):
                 logger.info(f"    Archived: {dup.name}")
     
     def _cleanup_doc_archives(self, dry_run: bool) -> None:
-        """
-        Clean up old archived documentation files.
-        
-        Removes archived duplicate documents older than 30 days from:
-        - cortex-brain/documents/archive/
-        - docs/archive/consolidated/
-        
-        Args:
-            dry_run: If True, only preview without deleting
-        """
-        logger.info("Scanning for old archived documents...")
-        
-        # Define archive directories
-        archive_dirs = [
-            self.project_root / 'cortex-brain' / 'documents' / 'archive',
-            self.project_root / 'docs' / 'archive' / 'consolidated'
-        ]
-        
-        # Define age threshold (30 days in seconds)
-        age_threshold_seconds = 30 * 24 * 60 * 60
-        current_time = datetime.now().timestamp()
-        
-        archived_files = []
-        
-        for archive_dir in archive_dirs:
-            if not archive_dir.exists():
-                continue
-            
-            # Find all .md files in archive
-            for archive_file in archive_dir.rglob('*.md'):
-                if not archive_file.is_file():
-                    continue
-                
-                # Check file age
-                try:
-                    file_mtime = archive_file.stat().st_mtime
-                    file_age_seconds = current_time - file_mtime
-                    
-                    if file_age_seconds >= age_threshold_seconds:
-                        archived_files.append(archive_file)
-                
-                except Exception as e:
-                    logger.warning(f"Failed to check file age {archive_file}: {e}")
-                    continue
-        
-        if not archived_files:
-            logger.info("  No old archived documents found (older than 30 days)")
-            return
-        
-        logger.info(f"Found {len(archived_files)} old archived documents (>30 days):")
-        
-        total_size_freed = 0
-        
-        for archive_file in archived_files:
-            try:
-                relative_path = archive_file.relative_to(self.project_root)
-                file_size = archive_file.stat().st_size
-                file_age_days = (current_time - archive_file.stat().st_mtime) / (24 * 60 * 60)
-                
-                logger.info(f"  - {relative_path} ({file_age_days:.0f} days old, {file_size / 1024:.1f}KB)")
-                
-                if not dry_run:
-                    archive_file.unlink()
-                    total_size_freed += file_size
-                    self.metrics.archived_docs_removed += 1
-                    self._log_action('archive_cleanup', archive_file, f"Removed old archive (age: {file_age_days:.0f} days)")
-                else:
-                    self.metrics.archived_docs_removed += 1
-            
-            except Exception as e:
-                logger.warning(f"Failed to remove {archive_file}: {e}")
-                self.metrics.errors.append(f"Failed to remove {archive_file}: {e}")
-        
-        if not dry_run:
-            self.metrics.space_freed_bytes += total_size_freed
-            logger.info(f"  ✓ Removed {self.metrics.archived_docs_removed} archived documents ({total_size_freed / 1024:.1f}KB freed)")
-            
-            # Clean up empty archive directories
-            for archive_dir in archive_dirs:
-                if archive_dir.exists():
-                    try:
-                        # Check if directory is empty
-                        if not any(archive_dir.iterdir()):
-                            archive_dir.rmdir()
-                            logger.info(f"  🗑️  Removed empty archive directory: {archive_dir.relative_to(self.project_root)}")
-                    except Exception as e:
-                        logger.debug(f"Could not remove directory {archive_dir}: {e}")
-        else:
-            logger.info(f"  [DRY RUN] Would remove {self.metrics.archived_docs_removed} archived documents")
+        """Clean up old archived documentation files (delegated to DocumentArchiveCleaner)."""
+        cleaner = DocumentArchiveCleaner(self.project_root, self._log_action, self.metrics)
+        return cleaner.cleanup(dry_run)
     
     def _detect_bloat(self) -> None:
         """Detect bloated entry points and orchestrators"""
@@ -1127,89 +887,9 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
             )
     
     def _archive_backups_to_github(self, backup_files: List[Path]) -> Dict[str, Any]:
-        """Archive backup files to GitHub before deletion"""
-        if not backup_files:
-            return {'success': True, 'message': 'No backups to archive'}
-        
-        try:
-            # Create backup archive directory
-            archive_dir = self.project_root / '.backup-archive'
-            archive_dir.mkdir(exist_ok=True)
-            
-            # Create timestamped manifest
-            timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-            manifest_file = archive_dir / f'backup-manifest-{timestamp}.json'
-            
-            # Build manifest
-            manifest = {
-                'timestamp': datetime.now().isoformat(),
-                'backup_count': len(backup_files),
-                'total_size_bytes': sum(f.stat().st_size for f in backup_files if f.exists()),
-                'files': []
-            }
-            
-            # Copy backups to archive
-            for backup_path in backup_files:
-                try:
-                    if not backup_path.exists():
-                        continue
-                    
-                    relative_path = backup_path.relative_to(self.project_root)
-                    archive_subdir = archive_dir / relative_path.parent
-                    archive_subdir.mkdir(parents=True, exist_ok=True)
-                    
-                    dest_path = archive_dir / relative_path
-                    shutil.copy2(backup_path, dest_path)
-                    
-                    manifest['files'].append({
-                        'original_path': str(relative_path),
-                        'archived_path': str(dest_path.relative_to(self.project_root)),
-                        'size_bytes': backup_path.stat().st_size,
-                        'modified_time': datetime.fromtimestamp(backup_path.stat().st_mtime).isoformat()
-                    })
-                    
-                except Exception as e:
-                    logger.warning(f"Failed to copy backup {backup_path}: {e}")
-                    continue
-            
-            # Save manifest
-            with open(manifest_file, 'w', encoding='utf-8') as f:
-                json.dump(manifest, f, indent=2)
-            
-            # Git operations
-            subprocess.run(['git', 'add', '.backup-archive/'], cwd=str(self.project_root), check=True)
-            
-            commit_msg = f"Archive {len(backup_files)} backup files before cleanup - {timestamp}"
-            subprocess.run(['git', 'commit', '-m', commit_msg], cwd=str(self.project_root), check=True)
-            
-            # Get commit SHA
-            result = subprocess.run(
-                ['git', 'rev-parse', 'HEAD'],
-                cwd=str(self.project_root),
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            commit_sha = result.stdout.strip()
-            
-            # Push to GitHub
-            subprocess.run(['git', 'push'], cwd=str(self.project_root), check=True)
-            
-            logger.info(f"Archived {len(backup_files)} backups to GitHub (commit: {commit_sha[:8]})")
-            
-            return {
-                'success': True,
-                'commit_sha': commit_sha,
-                'manifest_file': str(manifest_file.relative_to(self.project_root)),
-                'archived_count': len(manifest['files'])
-            }
-            
-        except Exception as e:
-            logger.error(f"Failed to archive backups to GitHub: {e}")
-            return {
-                'success': False,
-                'error': str(e)
-            }
+        """Archive backup files to GitHub before deletion (delegated to BackupArchiver)."""
+        archiver = BackupArchiver(self.project_root)
+        return archiver.archive_to_github(backup_files)
     
     def _log_action(self, action: str, path: Path, reason: str) -> None:
         """Log a cleanup action"""
