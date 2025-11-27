@@ -508,6 +508,35 @@ cortex-brain/documents/planning/ado/
 
 ---
 
+## 📊 Application Health Dashboard
+
+**Quick Commands:**
+- `show health dashboard` or `health dashboard` - Generate application health dashboard
+- `application health` or `app health` - View your application's health metrics
+- `onboard application` - Full setup with dashboard generation
+- `dashboard` - Quick access to dashboard view
+
+**What Gets Analyzed (Your Application):**
+- **Code Quality:** Issues, metrics, overall quality score (0-100)
+- **Security:** Vulnerabilities and OWASP security checks
+- **Performance:** File sizes, complexity, performance data
+
+**Dashboard Features:**
+- Interactive D3.js visualization
+- Quality/Security/Performance breakdown
+- Project metadata (files, lines, languages)
+- Saved to `cortex-brain/documents/analysis/dashboard/dashboard.html`
+
+**Workflow:**
+1. Say `show health dashboard` or `onboard application`
+2. CORTEX analyzes your project (3-5 minutes)
+3. Generates interactive dashboard
+4. Opens dashboard in browser
+
+**Note:** This dashboard shows **your application's health**, not CORTEX's internal health. For CORTEX system health, use `healthcheck` command.
+
+---
+
 
 ## 🧠 Conversation Capture & Context
 

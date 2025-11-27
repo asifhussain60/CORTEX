@@ -505,6 +505,12 @@ templates:
     - start onboarding
     - begin setup
     - initialize cortex
+    - show health dashboard
+    - health dashboard
+    - application health
+    - app health
+    - show app health
+    - dashboard
     response_type: interactive
     content: '# 🧠 CORTEX Setup & Onboarding
 
@@ -1489,6 +1495,12 @@ routing:
   - start onboarding
   - begin setup
   - initialize cortex
+  - show health dashboard
+  - health dashboard
+  - application health
+  - app health
+  - show app health
+  - dashboard
   ado_work_item_triggers:
   - plan ado
   - create work item
