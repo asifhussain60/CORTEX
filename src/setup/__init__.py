@@ -47,6 +47,7 @@ from .post_installation_handler import (
     PostInstallationHandler,
     handle_post_installation_choice
 )
+from .modules import GitIgnoreSetupModule
 
 
 def create_setup_orchestrator(
@@ -139,6 +140,9 @@ __all__ = [
     # Post-installation
     'PostInstallationHandler',
     'handle_post_installation_choice',
+    
+    # Setup modules
+    'GitIgnoreSetupModule',
     
     # Convenience function
     'run_setup',
