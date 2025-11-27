@@ -71,42 +71,6 @@ class IntentRouter(BaseAgent):
                 "let's plan", "plan a feature", "plan this", "help me plan",
                 "planning", "interactive planning", "create plan"
             ],
-            IntentType.ADO_PLANNING: [
-                # Core ADO terms
-                "ado", "azure devops", "devops",
-                # Work item types
-                "work item", "workitem", "work-item",
-                "user story", "user-story", "story",
-                "pbi", "product backlog item",
-                "bug", "defect", "issue",
-                "task", "subtask", "sub-task",
-                "epic", "feature request",
-                # Actions
-                "plan ado", "create ado", "ado item", "ado planning",
-                "create work item", "new work item", "add work item"
-            ],
-            IntentType.CODE_REVIEW: [
-                # Core review terms
-                "code review", "review code", "code-review",
-                "pr review", "review pr", "pull request review",
-                "review pull request",
-                # ADO PR specific
-                "ado pr", "azure pr", "devops pr",
-                # Actions
-                "check pr", "analyze pr", "inspect code",
-                "review changes", "diff review"
-            ],
-            IntentType.FEEDBACK: [
-                # Core feedback terms
-                "feedback", "report", "submit feedback",
-                # Issue types
-                "report bug", "bug report", "report issue",
-                "report problem", "report error",
-                "suggest feature", "feature request", "feature suggestion",
-                "improvement", "suggest improvement",
-                # Actions
-                "give feedback", "provide feedback", "send feedback"
-            ],
             IntentType.ENHANCE: [
                 # Direct enhancement verbs
                 "enhance", "improve", "extend", "augment", "upgrade",
