@@ -98,6 +98,19 @@ class HandsOnTutorialOrchestrator:
                 ],
                 prerequisites=["basics"]
             ),
+            "ado_planning": TutorialModule(
+                id="ado_planning",
+                name="ADO Work Item Planning",
+                duration_min=6,
+                exercises=[
+                    "create_ado_work_item",
+                    "review_git_context",
+                    "understand_quality_scoring",
+                    "analyze_high_risk_files",
+                    "review_sme_suggestions"
+                ],
+                prerequisites=["basics", "planning"]
+            ),
             "tdd": TutorialModule(
                 id="tdd",
                 name="Development with TDD",
@@ -321,6 +334,153 @@ You need to build a login page with:
                     "commands": ["approve plan"],
                     "expected_output": "Plan approved and moved to approved/",
                     "next_command": "Type 'approve plan' to proceed"
+                }
+            },
+            "ado_planning": {
+                "create_ado_work_item": {
+                    "title": "Exercise 3.1: Create ADO Work Item",
+                    "task": "Create Azure DevOps work item with git history integration",
+                    "commands": ["plan ado"],
+                    "scenario": """
+You need to fix a bug in the authentication system:
+- File: `src/auth/login.py` (or equivalent in your repo)
+- Issue: OAuth users cannot log in after session timeout
+- Priority: High
+- Type: Bug
+                    """,
+                    "expected_output": "Work item created with automatic git context enrichment",
+                    "learning_objectives": [
+                        "Understand work item types (Bug/Story/Task/Feature/Epic)",
+                        "Learn priority system (1=High, 2=Medium, 3=Low)",
+                        "See automatic file reference detection (backticks)",
+                        "Experience Phase 1 git integration"
+                    ],
+                    "next_command": "Type 'plan ado' and describe the bug"
+                },
+                "review_git_context": {
+                    "title": "Exercise 3.2: Review Git History Context",
+                    "task": "Examine the Git History Context section in generated work item",
+                    "file_location": "cortex-brain/documents/planning/ado/active/Bug-*.md",
+                    "what_to_look_for": [
+                        "Quality Score (0-100%) with label",
+                        "High-Risk Files Detected section",
+                        "SME Suggestions section",
+                        "Contributors list with commit counts",
+                        "Related Commits with messages"
+                    ],
+                    "understanding_check": [
+                        "What is the quality score for this work item?",
+                        "Are any files flagged as high-risk?",
+                        "Who is the suggested SME?",
+                        "How many contributors worked on related files?",
+                        "What were the most recent related commits?"
+                    ],
+                    "next_command": "Open the generated ADO work item file in VS Code"
+                },
+                "understand_quality_scoring": {
+                    "title": "Exercise 3.3: Understand Quality Scoring",
+                    "task": "Learn how git history quality is calculated",
+                    "concepts": [
+                        "90-100% = Excellent (deep history, active contributors)",
+                        "70-89% = Good (solid history, multiple contributors)",
+                        "50-69% = Adequate (basic history, few contributors)",
+                        "<50% = Weak (sparse or no history)"
+                    ],
+                    "scoring_factors": [
+                        "Number of commits (30 points)",
+                        "Number of contributors (25 points)",
+                        "Recency of activity (20 points)",
+                        "Security scan results (10 points)",
+                        "Test coverage (15 points)"
+                    ],
+                    "real_example": """
+For `src/auth/login.py`:
+- Recent commits: 18 in 6 months → 30 points
+- Contributors: 5 people → 25 points
+- Recent activity: 12 days ago → 20 points
+- Security scans: Pass → 10 points
+- **Total: 85% (Good)**
+                    """,
+                    "next_command": "Review quality score in your work item"
+                },
+                "analyze_high_risk_files": {
+                    "title": "Exercise 3.4: Analyze High-Risk Files",
+                    "task": "Understand why files are flagged as high-risk",
+                    "detection_criteria": [
+                        "High Churn: >15 commits in 6 months",
+                        "Hotfix Pattern: >3 emergency fixes",
+                        "Recent Security Fix: <30 days ago",
+                        "High Complexity: >500 lines or many dependencies"
+                    ],
+                    "what_happens": [
+                        "Auto-added to acceptance criteria with ⚠️ warning",
+                        "Detailed risk analysis in Git History Context",
+                        "Recommended actions provided",
+                        "SME assignment suggested"
+                    ],
+                    "example": """
+**⚠️ High-Risk Files Detected:**
+- `src/auth/login.py` - Requires extra attention
+  - **Churn:** 18 commits (threshold: 15)
+  - **Hotfixes:** 4 emergency patches (threshold: 3)
+  - **Recent Security Fix:** 12 days ago (threshold: 30)
+
+**Recommended Actions:**
+- Assign to experienced developer (SME suggestion: John Doe)
+- Require code review from 2+ people
+- Add comprehensive test coverage
+- Consider pair programming
+                    """,
+                    "understanding_check": [
+                        "Why was this file flagged as high-risk?",
+                        "What are the specific risk factors?",
+                        "What actions are recommended?",
+                        "Should this influence work assignment?"
+                    ],
+                    "next_command": "Review high-risk warnings in your work item"
+                },
+                "review_sme_suggestions": {
+                    "title": "Exercise 3.5: Review SME Suggestions",
+                    "task": "Learn how CORTEX identifies subject matter experts",
+                    "identification_method": [
+                        "Git shortlog analysis: git shortlog -sn -- file.py",
+                        "Rank by commit count to specific files",
+                        "Consider recency (recent contributors weighted higher)",
+                        "Analyze related file expertise"
+                    ],
+                    "benefits": [
+                        "Auto-suggests best person for assignment",
+                        "Reduces assignment decision time",
+                        "Improves code quality (expert handles complex areas)",
+                        "Identifies who should review PR",
+                        "Facilitates knowledge transfer"
+                    ],
+                    "example": """
+**💡 Subject Matter Expert Suggestions:**
+- **John Doe** (top contributor to authentication module)
+  - 42 commits to `src/auth/login.py` (48% of total)
+  - Author of recent security fixes
+  - Recommended for work assignment
+
+**Contributors to Related Files:**
+- John Doe (42 commits) - Primary maintainer
+- Jane Smith (28 commits) - Security specialist
+- Bob Wilson (15 commits) - OAuth integration
+- Alice Johnson (8 commits) - Testing
+- Charlie Brown (5 commits) - Documentation
+                    """,
+                    "understanding_check": [
+                        "Who is the suggested SME for this work item?",
+                        "Why was this person recommended?",
+                        "Who else contributed to related files?",
+                        "Who should review the PR?"
+                    ],
+                    "next_steps": [
+                        "Assign work item to suggested SME",
+                        "Tag backup SME for code review",
+                        "Consult specialized contributors as needed"
+                    ],
+                    "next_command": "Review SME suggestions in your work item"
                 }
             },
             "tdd": {
