@@ -37,7 +37,6 @@ Date: November 12, 2025
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Set
-from dataclasses import dataclass, field
 import logging
 import json
 import subprocess
@@ -52,112 +51,11 @@ from src.operations.base_operation_module import (
     ExecutionMode
 )
 from src.operations.operation_header_formatter import OperationHeaderFormatter
+from src.operations.modules.system.optimization_models import OptimizationMetrics, SystemHealthReport
+from src.operations.modules.system.governance_drift_checker import GovernanceDriftChecker
 from src.caching import get_cache
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class OptimizationMetrics:
-    """Comprehensive optimization metrics from all phases."""
-    # Phase 1: Design Sync
-    design_drift_resolved: int = 0
-    modules_synced: int = 0
-    status_files_consolidated: int = 0
-    
-    # Phase 2: Code Health
-    obsolete_tests_identified: int = 0
-    dead_code_removed: int = 0
-    coverage_gaps_identified: int = 0
-    
-    # Phase 3: Brain Tuning
-    tier_violations_fixed: int = 0
-    low_confidence_patterns_pruned: int = 0
-    duplicate_patterns_merged: int = 0
-    protection_rules_validated: bool = False
-    
-    # Phase 4: Entry Point Alignment
-    orchestrators_aligned: int = 0
-    commands_registered: int = 0
-    entry_points_synced: int = 0
-    
-    # Phase 5: Test Suite Optimization
-    tests_removed: int = 0
-    tests_fixed: int = 0
-    final_pass_rate: float = 0.0
-    skull_007_compliant: bool = False
-    
-    # Phase 7: Governance Health Check
-    governance_drift_score: float = 100.0
-    governance_position_drifts: int = 0
-    governance_forward_refs: int = 0
-    governance_orphaned_rules: int = 0
-    
-    # Overall
-    total_improvements: int = 0
-    execution_time_seconds: float = 0.0
-    errors_encountered: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
-
-
-@dataclass
-class SystemHealthReport:
-    """Comprehensive system health report."""
-    timestamp: datetime
-    overall_health: str  # excellent, good, fair, poor, critical
-    health_score: float  # 0.0 to 100.0
-    metrics: OptimizationMetrics
-    recommendations: List[str] = field(default_factory=list)
-    next_actions: List[str] = field(default_factory=list)
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            'timestamp': self.timestamp.isoformat(),
-            'overall_health': self.overall_health,
-            'health_score': self.health_score,
-            'metrics': {
-                'design_sync': {
-                    'drift_resolved': self.metrics.design_drift_resolved,
-                    'modules_synced': self.metrics.modules_synced,
-                    'status_files_consolidated': self.metrics.status_files_consolidated
-                },
-                'code_health': {
-                    'obsolete_tests_identified': self.metrics.obsolete_tests_identified,
-                    'dead_code_removed': self.metrics.dead_code_removed,
-                    'coverage_gaps_identified': self.metrics.coverage_gaps_identified
-                },
-                'brain_tuning': {
-                    'tier_violations_fixed': self.metrics.tier_violations_fixed,
-                    'patterns_pruned': self.metrics.low_confidence_patterns_pruned,
-                    'patterns_merged': self.metrics.duplicate_patterns_merged,
-                    'protection_rules_validated': self.metrics.protection_rules_validated
-                },
-                'entry_point_alignment': {
-                    'orchestrators_aligned': self.metrics.orchestrators_aligned,
-                    'commands_registered': self.metrics.commands_registered,
-                    'entry_points_synced': self.metrics.entry_points_synced
-                },
-                'test_suite': {
-                    'tests_removed': self.metrics.tests_removed,
-                    'tests_fixed': self.metrics.tests_fixed,
-                    'final_pass_rate': self.metrics.final_pass_rate,
-                    'skull_007_compliant': self.metrics.skull_007_compliant
-                },
-                'governance': {
-                    'health_score': self.metrics.governance_drift_score,
-                    'position_drifts': self.metrics.governance_position_drifts,
-                    'forward_refs': self.metrics.governance_forward_refs,
-                    'orphaned_rules': self.metrics.governance_orphaned_rules
-                }
-            },
-            'total_improvements': self.metrics.total_improvements,
-            'execution_time': self.metrics.execution_time_seconds,
-            'errors': self.metrics.errors_encountered,
-            'warnings': self.metrics.warnings,
-            'recommendations': self.recommendations,
-            'next_actions': self.next_actions
-        }
 
 
 class OptimizeSystemOrchestrator(BaseOperationModule):
@@ -545,12 +443,13 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             logger.info("🔄 Initializing design synchronization...")
             
             # Create orchestrator
-            design_sync = DesignSyncOrchestrator(project_root=self.project_root)
+            design_sync = DesignSyncOrchestrator()
             
-            # Execute with current mode
+            # Execute with current mode and project root in context
             sync_context = {
                 'profile': context.get('profile', 'standard'),
-                'mode': 'live'  # Always use live mode
+                'mode': 'live',  # Always use live mode
+                'project_root': self.project_root
             }
             
             result = design_sync.execute(sync_context)
@@ -578,7 +477,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     def _run_code_health_analysis(self, context: Dict[str, Any]) -> None:
         """Run code health analysis (Phase 3)."""
         try:
-            from src.operations.modules.optimize.optimize_cortex_orchestrator import OptimizeCortexOrchestrator
+            from src.operations.modules.optimization.optimize_cortex_orchestrator import OptimizeCortexOrchestrator
             
             logger.info("🔍 Analyzing code health...")
             
@@ -821,190 +720,17 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         self.metrics.warnings.append("Test suite optimization not yet implemented")
     
     def _check_governance_drift(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Check governance.yaml for ordering drift and inefficiencies (Phase 7).
+        """Check governance.yaml for ordering drift and inefficiencies (delegated to GovernanceDriftChecker)."""
+        checker = GovernanceDriftChecker(self.project_root, self._validation_cache)
+        result = checker.check()
         
-        Uses ValidationCache to cache governance analysis results for faster execution.
-        Cache is invalidated when governance.yaml file changes.
+        # Update metrics from result
+        self.metrics.governance_drift_score = result.get('health_score', 0.0)
+        self.metrics.governance_position_drifts = result.get('position_drifts', 0)
+        self.metrics.governance_forward_refs = result.get('forward_refs', 0)
+        self.metrics.governance_orphaned_rules = result.get('orphaned_rules', 0)
         
-        Monitors:
-        - Rule position drift (rules moved from optimal positions)
-        - Forward reference count (rules referencing later rules)
-        - File bloat (excessive line count)
-        - Orphaned rules (never referenced by other rules)
-        - Missing metadata (copilot_position, reference_count missing)
-        
-        Returns:
-            Dict with has_issues, issues list, health_score, and recommendations
-        """
-        import yaml
-        
-        governance_path = self.project_root / "src" / "tier0" / "governance.yaml"
-        
-        if not governance_path.exists():
-            return {
-                'has_issues': True,
-                'issues': ["CRITICAL: governance.yaml not found"],
-                'health_score': 0.0,
-                'recommendations': ["Create governance.yaml in src/tier0/"]
-            }
-        
-        # Try cache first
-        cache_key = "governance_drift_analysis"
-        cached_result = self._validation_cache.get(
-            "optimize",
-            cache_key,
-            files=[governance_path]
-        )
-        
-        if cached_result is not None:
-            logger.info("✅ Governance drift analysis retrieved from cache")
-            self.metrics.warnings.append(f"Governance drift cache hit (saved ~2-3s)")
-            return cached_result
-        
-        logger.info("🔄 Running governance drift analysis (cache miss)...")
-        
-        issues = []
-        recommendations = []
-        
-        try:
-            # Load governance rules
-            with open(governance_path, 'r', encoding='utf-8') as f:
-                governance = yaml.safe_load(f)
-            
-            rules = governance.get('rules', [])
-            if not rules:
-                return {
-                    'has_issues': True,
-                    'issues': ["CRITICAL: No rules found in governance.yaml"],
-                    'health_score': 0.0,
-                    'recommendations': ["Add governance rules"]
-                }
-            
-            # Check 1: Rule position drift (compare actual vs optimal positions)
-            optimal_order = [
-                'DEFINITION_OF_DONE', 'DEFINITION_OF_READY', 'BRAIN_PROTECTION',
-                'TEST_FIRST_TDD', 'CHALLENGE_USER_CHANGES_TO_BRAIN',
-                'SINGLE_RESPONSIBILITY_PRINCIPLE', 'INTERFACE_SEGREGATION_PRINCIPLE',
-                'DEPENDENCY_INVERSION_PRINCIPLE', 'DESIGN_PATTERNS_OVER_IMPROVISATION',
-                'MODULAR_STRUCTURE', 'HEMISPHERE_SEPARATION', 'PLUGIN_ARCHITECTURE_FIRST',
-                'TIER_BOUNDARIES', 'FIFO_QUEUE_MANAGEMENT', 'PATTERN_DECAY',
-                'ANOMALY_DETECTION', 'DEV_CONTEXT_THROTTLING',
-                'AUTO_BRAIN_STATE_UPDATE', 'AUTO_RECORDING', 'AUTO_GIT_COMMIT',
-                'CHECKPOINT_STRATEGY', 'YAML_FOR_PLANNING', 'DUAL_INTERFACE',
-                'LIVE_DESIGN_DOC', 'DELETE_NOT_ARCHIVE', 'ONE_PROMPT_PER_FILE',
-                'GOVERNANCE_SELF_ENFORCEMENT', 'SYSTEM_LIMITS'
-            ]
-            
-            actual_order = [rule.get('id') for rule in rules]
-            position_drifts = []
-            
-            for idx, rule_id in enumerate(actual_order, start=1):
-                if rule_id in optimal_order:
-                    optimal_pos = optimal_order.index(rule_id) + 1
-                    if abs(idx - optimal_pos) > 3:  # More than 3 positions off
-                        position_drifts.append(f"{rule_id}: actual pos {idx}, optimal pos {optimal_pos} (drift: {idx - optimal_pos})")
-            
-            if position_drifts:
-                issues.append(f"POSITION DRIFT: {len(position_drifts)} rules out of optimal position")
-                recommendations.append(f"Reorder {len(position_drifts)} drifted rules to optimal positions")
-            
-            # Check 2: Forward reference count (rule X references rule Y appearing later)
-            forward_refs = []
-            rule_ids = {rule.get('id'): idx for idx, rule in enumerate(rules)}
-            
-            for idx, rule in enumerate(rules):
-                rule_id = rule.get('id')
-                referenced_by = rule.get('referenced_by', [])
-                
-                for ref_id in referenced_by:
-                    if ref_id in rule_ids:
-                        ref_idx = rule_ids[ref_id]
-                        if ref_idx < idx:  # Referencing rule appears BEFORE current rule
-                            forward_refs.append(f"{ref_id} → {rule_id} (forward: {idx - ref_idx} positions)")
-            
-            if len(forward_refs) > 3:
-                issues.append(f"FORWARD REFERENCES: {len(forward_refs)} detected (target: <3)")
-                recommendations.append(f"Reduce forward references from {len(forward_refs)} to <3")
-            
-            # Check 3: File bloat (excessive line count)
-            with open(governance_path, 'r', encoding='utf-8') as f:
-                line_count = len(f.readlines())
-            
-            if line_count > 1500:
-                issues.append(f"FILE BLOAT: {line_count} lines (target: <1200)")
-                recommendations.append("Remove redundant comments or split into focused sections")
-            
-            # Check 4: Orphaned rules (never referenced)
-            all_referenced = set()
-            for rule in rules:
-                all_referenced.update(rule.get('referenced_by', []))
-            
-            orphaned = [rule.get('id') for rule in rules if rule.get('id') not in all_referenced and rule.get('reference_count', 0) == 0]
-            
-            if orphaned:
-                issues.append(f"ORPHANED RULES: {len(orphaned)} never referenced")
-                recommendations.append(f"Review orphaned rules: {', '.join(orphaned[:3])}")
-            
-            # Check 5: Missing metadata
-            missing_metadata = []
-            for rule in rules:
-                rule_id = rule.get('id')
-                if 'copilot_position' not in rule:
-                    missing_metadata.append(f"{rule_id}: missing copilot_position")
-                if 'reference_count' not in rule:
-                    missing_metadata.append(f"{rule_id}: missing reference_count")
-            
-            if missing_metadata:
-                issues.append(f"MISSING METADATA: {len(missing_metadata)} fields missing")
-                recommendations.append(f"Add copilot_position and reference_count to all rules")
-            
-            # Calculate health score
-            health_score = 100.0
-            health_score -= len(position_drifts) * 2.0  # -2 per drifted rule
-            health_score -= max(0, len(forward_refs) - 3) * 5.0  # -5 per forward ref over 3
-            health_score -= max(0, (line_count - 1200) / 30)  # -1 per 30 lines over 1200
-            health_score -= len(orphaned) * 3.0  # -3 per orphaned rule
-            health_score -= len(missing_metadata) * 1.0  # -1 per missing field
-            health_score = max(0.0, min(100.0, health_score))
-            
-            # Store metrics for reporting
-            self.metrics.governance_drift_score = health_score
-            self.metrics.governance_position_drifts = len(position_drifts)
-            self.metrics.governance_forward_refs = len(forward_refs)
-            self.metrics.governance_orphaned_rules = len(orphaned)
-            
-            result = {
-                'has_issues': len(issues) > 0,
-                'issues': issues,
-                'health_score': health_score,
-                'recommendations': recommendations,
-                'position_drifts': len(position_drifts),
-                'forward_refs': len(forward_refs),
-                'orphaned_rules': len(orphaned)
-            }
-            
-            # Cache the result for future runs
-            self._validation_cache.set(
-                "optimize",
-                cache_key,
-                result,
-                files=[governance_path],
-                ttl_seconds=3600  # Cache for 1 hour
-            )
-            logger.info("✅ Governance drift analysis cached")
-            
-            return result
-        
-        except Exception as e:
-            logger.error(f"Governance drift check failed: {e}", exc_info=True)
-            error_result = {
-                'has_issues': True,
-                'issues': [f"ERROR: {str(e)}"],
-                'health_score': 0.0,
-                'recommendations': ["Fix governance.yaml parsing errors"]
-            }
-            # Don't cache errors
-            return error_result
+        return result
     
     def _calculate_total_improvements(self) -> int:
         """Calculate total improvements made across all phases."""

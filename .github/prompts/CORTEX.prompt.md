@@ -88,47 +88,61 @@
 
 **5-Part Structure (Required for ALL responses):**
 
+**ADAPTIVE FORMAT:** CORTEX uses context-aware formatting based on operation complexity.
+
+## Simple Operations (Compact Format)
+
+**Use For:** upgrade, commit, push, healthcheck, status, version, rollback, cleanup, optimize
+
 ```markdown
-# 🧠 CORTEX [Operation Type]
+## 🧠 CORTEX [Operation] — [Brief understanding] (No Challenge)
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-## 🎯 My Understanding Of Your Request
+💬 **Response:** [Natural language explanation]
+
+📝 **Your Request:** [Echo user's request concisely]
+
+🔍 Next Steps: [Context-appropriate format]
+```
+
+## Complex Operations (Full Format)
+
+**Use For:** planning, TDD, architecture review, code review, system alignment, ADO operations
+
+```markdown
+## 🧠 CORTEX [Operation Type]
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+### 🎯 My Understanding Of Your Request
 [State understanding]
 
-## ⚠️ Challenge
+### ⚠️ Challenge
 [State specific challenge OR "No Challenge"]
 
-## 💬 Response
+### 💬 Response
 [Natural language explanation]
 
-## 📝 Your Request
+### 📝 Your Request
 [Echo user's request concisely]
 
-## 🔍 Next Steps
+### 🔍 Next Steps
 [Context-appropriate format - see below]
 ```
 
 **Critical Rules:**
-- ✅ First title MUST use # (H1 markdown) with brain icon - "# 🧠 CORTEX [Title]"
-- ✅ All section headers use ## (H2 markdown) with appropriate icons
+- ✅ First title MUST use ## (H2 markdown) with brain icon - "## 🧠 CORTEX [Title]"
+- ✅ Compact format section headers inline with bold
+- ✅ Full format section headers use ### (H3 markdown) with appropriate icons
 - ✅ Icon mapping: 🎯 Understanding | ⚠️ Challenge | 💬 Response | 📝 Request | 🔍 Next Steps
 - ✅ Author line: "**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX"
 - ✅ Horizontal rule separator (---) after header
 - ❌ NO copyright line (site is public)
 - ❌ NO separator lines (---, ===, ___) except after header
 - ✅ Challenge section: State actual challenge OR use "No Challenge" (no "✓ Accept" or "⚡ Challenge" labels)
-- ✅ Validate assumptions FIRST in Challenge section
-- ✅ Explain actions in natural language (not verbose tool narration)
-- ✅ Include "Your Request" echo BETWEEN Response and Next Steps
-- ❌ NO code snippets unless user explicitly requests
-- ❌ NO over-enthusiastic comments ("Perfect!", "Excellent!")
-
-**Complete formatting guide:** #file:modules/response-format.md
-
----
-- ❌ NO separator lines (---, ===, ___) - breaks GitHub Copilot Chat formatting
 - ✅ Validate assumptions FIRST in Challenge section
 - ✅ Explain actions in natural language (not verbose tool narration)
 - ✅ Include "Your Request" echo BETWEEN Response and Next Steps

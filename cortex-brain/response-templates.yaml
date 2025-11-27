@@ -6,7 +6,7 @@ optimization:
   minimal_templates: 18
   reduction_strategy: Core essentials only + fallback pattern
 shared:
-  standard_header: '# 🧠 CORTEX {title}
+  standard_header: '## 🧠 CORTEX {title}
 
     **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
@@ -17,25 +17,41 @@ shared:
 base_templates:
   standard_5_part: &standard_5_part_base
     base_structure: |
-      # 🧠 CORTEX {operation}
+      ## 🧠 CORTEX {operation}
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
-      ## 🎯 My Understanding Of Your Request
+      ### 🎯 My Understanding Of Your Request
       {understanding_content}
       
-      ## ⚠️ Challenge
+      ### ⚠️ Challenge
       {challenge_content}
       
-      ## 💬 Response
+      ### 💬 Response
       {response_content}
       
-      ## 📝 Your Request
+      ### 📝 Your Request
       {request_echo_content}
       
-      ## 🔍 Next Steps
+      ### 🔍 Next Steps
       {next_steps_content}
+  
+  compact_format: &compact_format_base
+    base_structure: |
+      ## 🧠 CORTEX {operation}
+      **{understanding_brief}** | *No Challenge*
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      💬 **Response:**
+      {response_content}
+      
+      📝 **Your Request:** {request_echo_content}
+      
+      🔍 Next Steps: {next_steps_content}
 templates:
   help_table:
     <<: *standard_5_part_base

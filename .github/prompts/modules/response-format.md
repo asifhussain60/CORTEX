@@ -1,29 +1,104 @@
 # CORTEX Response Format Guidelines
 
 **Purpose:** Mandatory 5-part response structure for all GitHub Copilot Chat interactions  
-**Version:** 1.0  
+**Version:** 2.0 (Adaptive Format)  
 **Status:** ✅ PRODUCTION
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT
+## 📋 ADAPTIVE RESPONSE FORMAT
 
-**CRITICAL:** ALL responses in GitHub Copilot Chat MUST follow this structure:
+**CRITICAL:** CORTEX uses **context-aware formatting** that adapts based on operation complexity.
+
+### Format Selection Logic
+
+**Simple Operations** (upgrade, commit, healthcheck, status checks):
+- Use **Compact Format** (3-4 lines before response)
+- Inline understanding and challenge
+- Minimal overhead
+
+**Complex Operations** (planning, TDD, architecture review, code review):
+- Use **Full Format** (5 distinct sections)
+- Detailed validation and context
+- Comprehensive structure
+
+---
+
+## 🎯 COMPACT FORMAT (Simple Operations)
+
+**Use For:** upgrade, commit, push, healthcheck, status, version, rollback, cleanup, optimize
+
+**Structure:**
 
 ```markdown
-# 🧠 CORTEX [Operation Type]
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+## 🧠 CORTEX [Operation] — [Brief understanding] (No Challenge)
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-🎯 **My Understanding Of Your Request:** 
-   [State what you understand they want to achieve]
-
-⚠️ **Challenge:** [Specific challenge or "None"]
+---
 
 💬 **Response:** [Your actual response - explanation WITHOUT code unless requested]
 
 📝 **Your Request:** [Echo user's request in concise, refined manner]
 
 🔍 Next Steps: [Context-appropriate format - see below]
+```
+
+**Example:**
+```markdown
+## 🧠 CORTEX Git Push — Push local commits to remote (No Challenge)
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+💬 **Response:**
+Pushing 3 commits to origin/CORTEX-3.0...
+
+✅ Successfully pushed to GitHub
+   • feat: Add adaptive response format
+   • docs: Update response-format.md
+   • fix: Template inheritance
+
+📝 **Your Request:** Push local commits to GitHub repository
+
+🔍 Next Steps:
+   1. Verify commits appear on GitHub
+   2. Check CI/CD pipeline status
+   3. Continue development work
+```
+
+**Benefits:**
+- ✅ 57% reduction (7 lines → 3 lines before response)
+- ✅ Still maintains 5-part structure (inline format)
+- ✅ Clear and scannable
+- ✅ Professional tone
+
+---
+
+## 📋 FULL FORMAT (Complex Operations)
+
+**Use For:** planning, TDD, architecture review, code review, system alignment, ADO operations
+
+**Structure:**
+```markdown
+## 🧠 CORTEX [Operation Type]
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+### 🎯 My Understanding Of Your Request
+[State what you understand they want to achieve]
+
+### ⚠️ Challenge
+[State specific challenge OR "No Challenge"]
+
+### 💬 Response
+[Natural language explanation]
+
+### 📝 Your Request
+[Echo user's request concisely]
+
+### 🔍 Next Steps
+[Context-appropriate format - see below]
 ```
 
 ---
@@ -88,6 +163,12 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 ## ❌ CRITICAL FORMATTING RULES
 
+**Header Sizes:**
+- ✅ Main title uses ## (H2 markdown): "## 🧠 CORTEX [Operation]"
+- ✅ Compact format uses inline bold for sections
+- ✅ Full format uses ### (H3 markdown) for sections
+- ❌ NEVER use # (H1) - reserved for document titles only
+
 **Separator Lines:**
 - ❌ NEVER use separator lines (━━━, ═══, ───, ___, -----) 
 - ✅ Use section headers with emojis only
@@ -100,7 +181,8 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 **Request Echo:**
 - ✅ MUST appear between Response and Next Steps
-- ✅ Format: `📝 **Your Request:** [concise summary]`
+- ✅ Compact format: `📝 **Your Request:** [concise summary]`
+- ✅ Full format: `### 📝 Your Request` with content below
 - ❌ NEVER omit (most common violation in reviews)
 
 **Tone:**
@@ -112,12 +194,13 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 ## ✅ Quick Validation Checklist
 
 **Before sending any response (30 seconds):**
-1. ✅ Header present once at start?
-2. ✅ Sections in order: Understanding → Challenge → Response → **Your Request** → Next Steps?
-3. ❌ Any separator lines (---, ===, ___)?
-4. ❌ Any verbose tool narration visible?
-5. ❌ Any "Perfect!"/"Excellent!" comments?
-6. ✅ Next Steps format matches work type?
+1. ✅ Header uses ## (H2) with brain emoji?
+2. ✅ Compact format: Inline sections OR Full format: ### (H3) sections?
+3. ✅ Sections in order: Understanding → Challenge → Response → **Your Request** → Next Steps?
+4. ❌ Any separator lines (---, ===, ___)?
+5. ❌ Any verbose tool narration visible?
+6. ❌ Any "Perfect!"/"Excellent!" comments?
+7. ✅ Next Steps format matches work type (numbered/checkboxes/tracks)?
 
 **If ANY ❌ found → FIX before sending**
 

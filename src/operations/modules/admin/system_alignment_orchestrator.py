@@ -20,7 +20,6 @@ import logging
 import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
 from datetime import datetime
 
 from src.operations.base_operation_module import (
@@ -29,6 +28,14 @@ from src.operations.base_operation_module import (
     OperationStatus,
     OperationResult
 )
+from src.operations.modules.admin.alignment_models import (
+    IntegrationScore,
+    RemediationSuggestion,
+    AlignmentReport
+)
+from src.operations.modules.admin.alignment_validators import FullValidationRunner
+from src.operations.modules.admin.gap_remediation_validator import GapRemediationValidator
+from src.operations.modules.admin.remediation_suggestions_generator import RemediationSuggestionsGenerator
 from src.validation.file_organization_validator import FileOrganizationValidator
 from src.validation.template_header_validator import TemplateHeaderValidator
 from src.validation.conflict_detector import ConflictDetector, Conflict
@@ -41,142 +48,13 @@ from src.utils.progress_monitor import ProgressMonitor
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class IntegrationScore:
-    """Integration depth score for a feature (0-100%)."""
-    feature_name: str
-    feature_type: str  # 'orchestrator', 'agent', etc.
-    discovered: bool = False  # 20 points
-    imported: bool = False  # +20 points
-    instantiated: bool = False  # +20 points
-    documented: bool = False  # +10 points
-    tested: bool = False  # +10 points
-    wired: bool = False  # +10 points
-    optimized: bool = False  # +10 points
-    
-    @property
-    def score(self) -> int:
-        """Calculate 0-100 integration score."""
-        total = 0
-        if self.discovered:
-            total += 20
-        if self.imported:
-            total += 20
-        if self.instantiated:
-            total += 20
-        if self.documented:
-            total += 10
-        if self.tested:
-            total += 10
-        if self.wired:
-            total += 10
-        if self.optimized:
-            total += 10
-        return total
-    
-    @property
-    def status(self) -> str:
-        """Get status text based on score."""
-        score = self.score
-        if score >= 90:
-            return "[OK] Healthy"
-        elif score >= 70:
-            return "[WARN] Warning"
-        else:
-            return "[CRIT] Critical"
-    
-    @property
-    def issues(self) -> List[str]:
-        """List integration issues."""
-        issues = []
-        if not self.documented:
-            issues.append("Missing documentation")
-        if not self.tested:
-            issues.append("No test coverage")
-        if not self.wired:
-            issues.append("Not wired to entry point")
-        if not self.optimized:
-            issues.append("Performance not validated")
-        return issues
-
-
-@dataclass
-class RemediationSuggestion:
-    """Auto-remediation suggestion for a feature."""
-    feature_name: str
-    suggestion_type: str  # 'wiring', 'test', 'documentation'
-    content: str  # Generated code/template
-    file_path: Optional[str] = None  # Where to save suggestion
-
-
-@dataclass
-class AlignmentReport:
-    """System alignment validation report."""
-    timestamp: datetime
-    overall_health: int  # 0-100%
-    critical_issues: int = 0
-    warnings: int = 0
-    feature_scores: Dict[str, IntegrationScore] = field(default_factory=dict)
-    remediation_suggestions: List[RemediationSuggestion] = field(default_factory=list)
-    orphaned_triggers: List[str] = field(default_factory=list)  # Triggers without features
-    ghost_features: List[str] = field(default_factory=list)  # Features without triggers
-    deployment_gate_results: Optional[Dict[str, Any]] = None  # Deployment quality gates
-    package_purity_results: Optional[Dict[str, Any]] = None  # Admin leak detection
-    suggestions: List[Dict[str, str]] = field(default_factory=list)
-    # New validation fields
-    organization_violations: List[Any] = field(default_factory=list)  # File organization issues
-    organization_score: int = 100  # 0-100% file organization compliance
-    header_violations: List[Any] = field(default_factory=list)  # Template header issues
-    header_compliance_score: int = 100  # 0-100% template header compliance
-    # Document governance fields
-    doc_governance_violations: List[Any] = field(default_factory=list)  # Duplicate/overlapping docs
-    doc_governance_score: int = 100  # 0-100% documentation governance compliance
-    # Align 2.0 enhancements
-    conflicts: List[Conflict] = field(default_factory=list)  # Detected ecosystem conflicts
-    fix_templates: List[FixTemplate] = field(default_factory=list)  # Generated fix templates
-    dashboard_report: Optional[str] = None  # Visual dashboard HTML/text
-    
-    @property
-    def is_healthy(self) -> bool:
-        """Check if system is healthy (>80% overall)."""
-        return self.overall_health >= 80 and self.critical_issues == 0
-    
-    @property
-    def has_warnings(self) -> bool:
-        """Check if system has non-critical warnings."""
-        return self.warnings > 0 and self.critical_issues == 0
-    
-    @property
-    def has_errors(self) -> bool:
-        """Check if system has critical errors."""
-        return self.critical_issues > 0
-    
-    @property
-    def issues_found(self) -> int:
-        """Total issues (critical + warnings)."""
-        return self.critical_issues + self.warnings
-
-
 class SystemAlignmentOrchestrator(BaseOperationModule):
     """
     Convention-based system alignment validator.
     
-    Auto-discovers all CORTEX features and validates integration depth:
-    - Orchestrators (src/operations/modules/, src/workflows/)
-    - Agents (src/agents/)
-    - Entry points (response-templates.yaml)
-    - Documentation (prompts/modules/)
-    - Tests (tests/)
-    - Capabilities (cortex-brain/capabilities.yaml)
-    
-    Scoring Algorithm:
-        discovered: 20     # File exists in correct location
-        imported: 40       # Can be imported without errors
-        instantiated: 60   # Class can be instantiated
-        documented: 70     # Has documentation
-        tested: 80         # Has test coverage >70%
-        wired: 90          # Entry point trigger exists
-        optimized: 100     # Performance benchmarks pass
+    Auto-discovers features and validates integration depth.
+    Scoring: discovered(20), imported(40), instantiated(60), documented(70),
+    tested(80), wired(90), optimized(100)
     """
     
     def __init__(self, context: Optional[Dict[str, Any]] = None):
@@ -234,12 +112,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         return True, []
     
     def execute(self, context: Dict[str, Any]) -> OperationResult:
-        """
-        Execute system alignment validation.
-        
-        Returns:
-            OperationResult with alignment report
-        """
+        """Execute system alignment validation."""
         start_time = datetime.now()
         monitor = ProgressMonitor("System Alignment", hang_timeout_seconds=60.0)
         
@@ -336,219 +209,30 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             )
     
     def run_full_validation(self, monitor: Optional[ProgressMonitor] = None) -> AlignmentReport:
-        """
-        Run complete system alignment validation.
-        
-        Args:
-            monitor: Optional progress monitor for user feedback
-            
-        Returns:
-            AlignmentReport with all validation results
-        """
-        cache = get_cache()
-        
-        report = AlignmentReport(
-            timestamp=datetime.now(),
-            overall_health=0
+        """Run complete system alignment validation (delegated to FullValidationRunner)."""
+        runner = FullValidationRunner(
+            self.project_root,
+            self.config,
+            self._discover_orchestrators,
+            self._discover_agents,
+            self._validate_entry_points,
+            self._calculate_integration_score,
+            self._validate_deployment_readiness,
+            self._validate_gap_remediation_components,
+            self._validate_file_organization,
+            self._validate_template_headers,
+            self._validate_documentation_governance,
+            self._detect_conflicts,
+            self._generate_fix_templates,
+            self._generate_dashboard,
+            self._generate_remediation_suggestions,
+            self._is_production_feature,
+            self._get_classification,
+            self._get_feature_files,
+            self._score_to_dict,
+            self._dict_to_score
         )
-        
-        # Phase 1: Discover all features (with caching)
-        if monitor:
-            monitor.update("Discovering orchestrators and agents")
-        
-        operations_dir = self.project_root / 'src' / 'operations'
-        agents_dir = self.project_root / 'src' / 'agents'
-        
-        # Try cache for orchestrators
-        orchestrators = cache.get('align', 'orchestrators', [operations_dir])
-        if orchestrators is None:
-            logger.info("Cache MISS: orchestrators - running discovery")
-            orchestrators = self._discover_orchestrators()
-            cache.set('align', 'orchestrators', orchestrators, [operations_dir], ttl_seconds=0)
-        else:
-            logger.info("Cache HIT: orchestrators - using cached discovery")
-        
-        # Try cache for agents
-        agents = cache.get('align', 'agents', [agents_dir])
-        if agents is None:
-            logger.info("Cache MISS: agents - running discovery")
-            agents = self._discover_agents()
-            cache.set('align', 'agents', agents, [agents_dir], ttl_seconds=0)
-        else:
-            logger.info("Cache HIT: agents - using cached discovery")
-        
-        # Phase 1.5: Discover entry points and validate wiring
-        if monitor:
-            monitor.update("Validating entry point wiring")
-        orphaned, ghost = self._validate_entry_points(orchestrators)
-        report.orphaned_triggers = orphaned
-        report.ghost_features = ghost
-        
-        # Phase 2: Validate integration depth (with caching)
-        total_features = len(orchestrators) + len(agents.get('agents', {}))
-        current_idx = 0
-        
-        for name, metadata in orchestrators.items():
-            current_idx += 1
-            if monitor:
-                monitor.update(f"Scoring integrations", current_idx, total_features)
-            
-            # Get feature files for cache tracking
-            feature_files = self._get_feature_files(name, metadata)
-            
-            # Try cache for integration score
-            cache_key = f'integration_score:{name}'
-            score = cache.get('align', cache_key, feature_files)
-            
-            if score is None:
-                logger.debug(f"Cache MISS: {cache_key} - calculating score")
-                score = self._calculate_integration_score(name, metadata, "orchestrator")
-                # Convert dataclass to dict for JSON serialization
-                cache.set('align', cache_key, self._score_to_dict(score), feature_files, ttl_seconds=0)
-            else:
-                logger.debug(f"Cache HIT: {cache_key} - using cached score")
-                score = self._dict_to_score(score)
-            
-            report.feature_scores[name] = score
-            
-            # Categorize issues
-            if score.score < 70:
-                report.critical_issues += 1
-            elif score.score < 90:
-                report.warnings += 1
-        
-        for name, metadata in agents.items():
-            current_idx += 1
-            if monitor:
-                monitor.update(f"Scoring integrations", current_idx, total_features)
-            
-            feature_files = self._get_feature_files(name, metadata)
-            cache_key = f'integration_score:{name}'
-            
-            score = cache.get('align', cache_key, feature_files)
-            if score is None:
-                logger.debug(f"Cache MISS: {cache_key} - calculating score")
-                score = self._calculate_integration_score(name, metadata, "agent")
-                cache.set('align', cache_key, self._score_to_dict(score), feature_files, ttl_seconds=0)
-            else:
-                logger.debug(f"Cache HIT: {cache_key} - using cached score")
-                score = self._dict_to_score(score)
-            
-            report.feature_scores[name] = score
-            
-            if score.score < 70:
-                report.critical_issues += 1
-            elif score.score < 90:
-                report.warnings += 1
-        
-        # Share integration scores with deploy operation
-        cache.share_result('align', 'deploy', 'orchestrators')
-        cache.share_result('align', 'deploy', 'agents')
-        for name in list(orchestrators.keys()) + list(agents.keys()):
-            cache.share_result('align', 'deploy', f'integration_score:{name}')
-        
-        # Phase 3: REMOVED - Documentation validation now done in _calculate_integration_score()
-        # Old _validate_documentation() used incorrect logic (checking CORTEX.prompt.md mentions)
-        # New logic checks both docstrings AND guide files correctly
-        
-        # Phase 3.5: Validate deployment readiness (quality gates + package purity)
-        if monitor:
-            monitor.update("Validating deployment readiness")
-        self._validate_deployment_readiness(report)
-        
-        # Phase 3.6: Validate Phase 1-4 gap remediation components
-        if monitor:
-            monitor.update("Validating gap remediation")
-        self._validate_gap_remediation_components(report)
-        
-        # Phase 3.7: Validate file organization (CORTEX boundary)
-        if monitor:
-            monitor.update("Validating file organization")
-        org_results = self._validate_file_organization()
-        report.organization_violations = org_results.get('violations', [])
-        report.organization_score = org_results.get('score', 100)
-        
-        # Phase 3.8: Validate template headers (v3.2 format enforcement + old format detection)
-        if monitor:
-            monitor.update("Validating template headers")
-        # Enforces: Brain emoji (🧠), section icons (🎯 ⚠️ 💬 📝 🔍), NO old format (✓ Accept, ⚡ Challenge)
-        header_results = self._validate_template_headers()
-        report.header_violations = header_results.get('violations', [])
-        report.header_compliance_score = header_results.get('score', 100)
-        
-        # Phase 3.9: Validate documentation governance (duplicate/overlapping docs)
-        if monitor:
-            monitor.update("Checking documentation governance")
-        doc_gov_results = self._validate_documentation_governance()
-        report.doc_governance_violations = doc_gov_results.get('violations', [])
-        report.doc_governance_score = doc_gov_results.get('score', 100)
-        
-        # Phase 3.10: Align 2.0 - Detect internal conflicts
-        # Skip if configured to avoid O(n²) performance issue (330k+ file ops with 575+ docs)
-        skip_duplicate_detection = self.config.get('system_alignment', {}).get('skip_duplicate_detection', False)
-        
-        if skip_duplicate_detection:
-            if monitor:
-                monitor.update("Skipping conflict detection (config: skip_duplicate_detection=true)")
-            logger.info("Conflict detection skipped per configuration to avoid O(n²) performance issue")
-            conflicts = []
-        else:
-            if monitor:
-                monitor.update("Detecting ecosystem conflicts")
-            conflicts = self._detect_conflicts()
-        
-        report.conflicts = conflicts
-        
-        # Update critical/warning counts from conflicts
-        for conflict in conflicts:
-            if conflict.severity == 'critical':
-                report.critical_issues += 1
-            elif conflict.severity == 'warning':
-                report.warnings += 1
-        
-        # Phase 3.11: Align 2.0 - Generate fix templates
-        if monitor:
-            monitor.update("Generating fix templates")
-        fix_templates = self._generate_fix_templates(conflicts)
-        report.fix_templates = fix_templates
-        
-        # Phase 3.12: Align 2.0 - Generate dashboard
-        if monitor:
-            monitor.update("Generating health dashboard")
-        dashboard = self._generate_dashboard(report, conflicts)
-        report.dashboard_report = dashboard
-        
-        # Phase 4: Generate auto-remediation suggestions (legacy)
-        if monitor:
-            monitor.update("Generating remediation suggestions")
-        self._generate_remediation_suggestions(report, orchestrators, agents)
-        
-        # Calculate overall health (production features only for deployment threshold)
-        if report.feature_scores:
-            production_scores = [
-                s for s in report.feature_scores.values()
-                if self._is_production_feature(s.feature_name, orchestrators, agents)
-            ]
-            
-            if production_scores:
-                # Production health (used for deployment gates)
-                total_score = sum(s.score for s in production_scores)
-                report.overall_health = total_score // len(production_scores)
-                
-                # Log classification breakdown
-                admin_count = sum(1 for s in report.feature_scores.values() 
-                                 if self._get_classification(s.feature_name, orchestrators, agents) == "admin")
-                internal_count = sum(1 for s in report.feature_scores.values() 
-                                    if self._get_classification(s.feature_name, orchestrators, agents) == "internal")
-                production_count = len(production_scores)
-                
-                logger.info(f"Feature classification: {production_count} production, {admin_count} admin, {internal_count} internal")
-            else:
-                report.overall_health = 100  # No production features = healthy
-        else:
-            report.overall_health = 100  # No features = healthy
-        
-        return report
+        return runner.run(monitor)
     
     def _discover_orchestrators(self) -> Dict[str, Dict[str, Any]]:
         """Discover all orchestrators using convention-based scanning."""
@@ -770,227 +454,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                     })
     
     def _validate_gap_remediation_components(self, report: AlignmentReport) -> None:
-        """
-        Phase 3.6: Validate Phase 1-4 gap remediation components.
-        
-        Validates:
-        - GitHub Actions workflows (feedback-aggregation.yml)
-        - Template format compliance (H1 headers, Challenge field)
-        - Brain protection rule severity (NO_ROOT_FILES blocked enforcement)
-        - Configuration schemas (plan-schema.yaml, lint-rules.yaml)
-        
-        Args:
-            report: AlignmentReport to populate with gap remediation validation results
-        """
-        # 1. Validate GitHub Actions workflows
-        workflows_path = self.project_root / ".github" / "workflows"
-        feedback_workflow = workflows_path / "feedback-aggregation.yml"
-        
-        if not feedback_workflow.exists():
-            report.critical_issues += 1
-            report.suggestions.append({
-                "type": "missing_workflow",
-                "message": "Missing feedback-aggregation.yml workflow (Gap #7 - Feedback Automation)"
-            })
-        else:
-            # Validate workflow structure
-            try:
-                import yaml
-                with open(feedback_workflow, "r", encoding="utf-8") as f:
-                    workflow_content = yaml.safe_load(f)
-                    
-                if "schedule" not in workflow_content.get("on", {}):
-                    report.warnings += 1
-                    report.suggestions.append({
-                        "type": "workflow_config",
-                        "message": "feedback-aggregation.yml missing schedule trigger"
-                    })
-            except Exception as e:
-                report.warnings += 1
-                report.suggestions.append({
-                    "type": "workflow_parse",
-                    "message": f"Failed to parse feedback-aggregation.yml: {e}"
-                })
-        
-        # 2. Validate template format compliance
-        templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
-        
-        if not templates_path.exists():
-            report.critical_issues += 1
-            report.suggestions.append({
-                "type": "missing_templates",
-                "message": "Missing cortex-brain/response-templates.yaml"
-            })
-        else:
-            try:
-                import yaml
-                with open(templates_path, "r", encoding="utf-8") as f:
-                    templates = yaml.safe_load(f)
-                
-                # Validate new template architecture
-                template_issues = []
-                base_templates = templates.get("base_templates", {})
-                template_defs = templates.get("templates", {})
-                
-                # Check for base template architecture (v3.2+)
-                if not base_templates:
-                    template_issues.append("Missing base_templates section (v3.2 architecture)")
-                else:
-                    # Validate base templates have required structure
-                    for base_name, base_data in base_templates.items():
-                        if "base_structure" not in base_data:
-                            template_issues.append(f"Base template '{base_name}' missing base_structure")
-                
-                # Check for H1 header format in templates (# 🧠 CORTEX)
-                for template_name, template_data in template_defs.items():
-                    # New architecture: templates inherit from base_templates via YAML anchors
-                    if "base_structure" in template_data:
-                        # Using new composition model - validate placeholders
-                        base_structure = template_data.get("base_structure", "")
-                        if not base_structure.startswith("# "):
-                            template_issues.append(f"{template_name}: Base structure missing H1 header")
-                    else:
-                        # Traditional template with direct content
-                        content = template_data.get("content", "")
-                        if content and not content.startswith("# ") and not content.startswith("##"):
-                            template_issues.append(f"{template_name}: Missing H1 header")
-                    
-                    # Validate Challenge field format (should not have old [✓ Accept OR ⚡ Challenge])
-                    content_str = str(template_data.get("content", "")) + str(template_data.get("base_structure", ""))
-                    if "[✓ Accept OR ⚡ Challenge]" in content_str or "[Accept|Challenge]" in content_str:
-                        template_issues.append(f"{template_name}: Old Challenge format detected")
-                
-                # Check for schema version
-                schema_version = templates.get("schema_version", "unknown")
-                if schema_version not in ["3.2", "3.3"]:
-                    template_issues.append(f"Outdated schema_version: {schema_version} (expected 3.2+)")
-                
-                if template_issues:
-                    report.warnings += len(template_issues)
-                    for issue in template_issues[:3]:  # Show first 3
-                        report.suggestions.append({
-                            "type": "template_format",
-                            "message": f"Template format issue: {issue}"
-                        })
-                    
-                    if len(template_issues) > 3:
-                        report.suggestions.append({
-                            "type": "template_format",
-                            "message": f"...and {len(template_issues) - 3} more template format issues"
-                        })
-            
-            except Exception as e:
-                report.warnings += 1
-                report.suggestions.append({
-                    "type": "template_parse",
-                    "message": f"Failed to parse response-templates.yaml: {e}"
-                })
-        
-        # 3. Validate brain protection rule severity
-        brain_rules_path = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
-        
-        if not brain_rules_path.exists():
-            report.critical_issues += 1
-            report.suggestions.append({
-                "type": "missing_brain_rules",
-                "message": "Missing cortex-brain/brain-protection-rules.yaml"
-            })
-        else:
-            try:
-                import yaml
-                with open(brain_rules_path, "r", encoding="utf-8") as f:
-                    brain_rules = yaml.safe_load(f)
-                
-                # Check NO_ROOT_FILES protection level
-                layers = brain_rules.get("layers", {})
-                layer_8 = layers.get("layer_8_document_organization", {})
-                rules = layer_8.get("rules", [])
-                
-                no_root_files_rule = next(
-                    (r for r in rules if r.get("id") == "NO_ROOT_FILES"),
-                    None
-                )
-                
-                if no_root_files_rule:
-                    severity = no_root_files_rule.get("severity")
-                    if severity != "blocked":
-                        report.warnings += 1
-                        report.suggestions.append({
-                            "type": "brain_protection",
-                            "message": f"NO_ROOT_FILES protection is '{severity}', should be 'blocked' (Gap #5 strengthening)"
-                        })
-                else:
-                    report.warnings += 1
-                    report.suggestions.append({
-                        "type": "brain_protection",
-                        "message": "NO_ROOT_FILES protection rule not found in Layer 8"
-                    })
-                
-                # Verify DOCUMENT_ORGANIZATION_ENFORCEMENT in Tier 0 instincts
-                tier0_instincts = brain_rules.get("tier0_instincts", [])
-                if "DOCUMENT_ORGANIZATION_ENFORCEMENT" not in tier0_instincts:
-                    report.warnings += 1
-                    report.suggestions.append({
-                        "type": "brain_protection",
-                        "message": "DOCUMENT_ORGANIZATION_ENFORCEMENT missing from Tier 0 instincts"
-                    })
-            
-            except Exception as e:
-                report.warnings += 1
-                report.suggestions.append({
-                    "type": "brain_rules_parse",
-                    "message": f"Failed to parse brain-protection-rules.yaml: {e}"
-                })
-        
-        # 4. Validate configuration schemas
-        config_path = self.project_root / "cortex-brain" / "config"
-        plan_schema = config_path / "plan-schema.yaml"
-        lint_rules = config_path / "lint-rules.yaml"
-        
-        if not plan_schema.exists():
-            report.warnings += 1
-            report.suggestions.append({
-                "type": "missing_schema",
-                "message": "Missing cortex-brain/config/plan-schema.yaml (Gap #4 - Planning System)"
-            })
-        
-        if not lint_rules.exists():
-            report.warnings += 1
-            report.suggestions.append({
-                "type": "missing_config",
-                "message": "Missing cortex-brain/config/lint-rules.yaml (Gap #3 - Lint Validation)"
-            })
-        
-        # 5. Validate orchestrator presence (auto-discovered, but check key ones)
-        expected_orchestrators = [
-            "GitCheckpointOrchestrator",
-            "MetricsTracker",
-            "LintValidationOrchestrator",
-            "SessionCompletionOrchestrator",
-            "PlanningOrchestrator",
-            "UpgradeOrchestrator"
-        ]
-        
-        discovered_names = {score.feature_name for score in report.feature_scores.values()}
-        missing_orchestrators = [name for name in expected_orchestrators if name not in discovered_names]
-        
-        if missing_orchestrators:
-            report.critical_issues += len(missing_orchestrators)
-            for name in missing_orchestrators:
-                report.suggestions.append({
-                    "type": "missing_orchestrator",
-                    "message": f"Gap remediation orchestrator not discovered: {name}"
-                })
-        
-        # 6. Validate feedback aggregator
-        feedback_aggregator_path = self.project_root / "src" / "feedback" / "feedback_aggregator.py"
-        
-        if not feedback_aggregator_path.exists():
-            report.critical_issues += 1
-            report.suggestions.append({
-                "type": "missing_module",
-                "message": "Missing src/feedback/feedback_aggregator.py (Gap #7 - Feedback Automation)"
-            })
+        """Validate Phase 1-4 gap remediation components (delegated to GapRemediationValidator)."""
+        validator = GapRemediationValidator(self.project_root)
+        validator.validate(report)
     
     def _validate_file_organization(self) -> Dict[str, Any]:
         """
@@ -1067,126 +533,10 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             }
     
     def _validate_documentation_governance(self) -> Dict[str, Any]:
-        """
-        Validate documentation governance (duplicate/overlapping docs).
-        
-        Checks:
-        - Duplicate documents across cortex-brain/documents/ and .github/prompts/modules/
-        - Overlapping content detection (title similarity, keyword overlap)
-        - Canonical name violations for module guides
-        - Documents not referenced in index files
-        
-        Returns:
-            Dict with validation results and violations
-        """
-        # Check if duplicate detection should be skipped (performance optimization)
-        # DEFAULT: Skip duplicate detection in system alignment to prevent O(n²) catastrophe
-        # Can be explicitly enabled via context: {'skip_duplicate_detection': False}
-        if self.context.get('skip_duplicate_detection', True):  # Changed default from False to True
-            logger.info("Skipping duplicate document detection (skip_duplicate_detection=True) - prevents O(n²) performance issue")
-            return {
-                'score': 100,
-                'violations': [],
-                'total_docs_scanned': 0,
-                'duplicate_pairs': 0,
-                'warning': 'Duplicate detection skipped for performance (enable with skip_duplicate_detection=False if needed)'
-            }
-        
-        try:
-            governance = DocumentGovernance(self.project_root)
-            violations = []
-            score = 100
-            
-            # Scan all existing documents for duplicates
-            documents_path = self.project_root / "cortex-brain" / "documents"
-            modules_path = self.project_root / ".github" / "prompts" / "modules"
-            
-            scanned_docs = []
-            
-            # Collect all markdown files
-            if documents_path.exists():
-                for md_file in documents_path.rglob("*.md"):
-                    if md_file.is_file():
-                        scanned_docs.append(md_file)
-            
-            if modules_path.exists():
-                for md_file in modules_path.glob("*.md"):
-                    if md_file.is_file():
-                        scanned_docs.append(md_file)
-            
-            logger.info(f"Scanning {len(scanned_docs)} documents for duplicates...")
-            
-            # Track duplicates found (avoid reporting same pair twice)
-            reported_pairs = set()
-            
-            for doc_path in scanned_docs:
-                try:
-                    # Read document content
-                    with open(doc_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    
-                    # Find duplicates
-                    duplicates = governance.find_duplicates(doc_path, content)
-                    
-                    # Filter by threshold (0.75 from governance rules)
-                    high_similarity = [
-                        d for d in duplicates 
-                        if d.similarity_score >= 0.75
-                    ]
-                    
-                    for dup in high_similarity:
-                        # Create canonical pair identifier (alphabetically sorted to avoid duplicates)
-                        pair_key = tuple(sorted([str(doc_path), str(dup.existing_path)]))
-                        
-                        if pair_key not in reported_pairs:
-                            reported_pairs.add(pair_key)
-                            
-                            violations.append({
-                                'type': 'duplicate_document',
-                                'severity': 'warning' if dup.similarity_score < 0.90 else 'critical',
-                                'file': str(doc_path.relative_to(self.project_root)),
-                                'duplicate': str(dup.existing_path.relative_to(self.project_root)),
-                                'similarity': f"{dup.similarity_score:.0%}",
-                                'algorithm': dup.algorithm,
-                                'recommendation': dup.recommendation
-                            })
-                            
-                            # Deduct score based on severity
-                            if dup.similarity_score >= 0.90:
-                                score -= 10  # Critical: likely exact duplicate
-                            else:
-                                score -= 5   # Warning: high similarity
-                
-                except Exception as e:
-                    logger.debug(f"Error scanning {doc_path}: {e}")
-                    continue
-            
-            # Ensure score doesn't go below 0
-            score = max(0, score)
-            
-            logger.info(f"Documentation governance: {score}% ({len(violations)} issues found)")
-            
-            return {
-                'score': score,
-                'status': 'healthy' if score >= 80 else 'degraded',
-                'violations': violations,
-                'critical_count': sum(1 for v in violations if v.get('severity') == 'critical'),
-                'warning_count': sum(1 for v in violations if v.get('severity') == 'warning'),
-                'scanned_documents': len(scanned_docs),
-                'duplicate_pairs': len(reported_pairs)
-            }
-            
-        except Exception as e:
-            logger.error(f"Documentation governance validation failed: {e}")
-            return {
-                'score': 0,
-                'status': 'error',
-                'violations': [],
-                'critical_count': 0,
-                'warning_count': 0,
-                'scanned_documents': 0,
-                'duplicate_pairs': 0
-            }
+        """Validate documentation governance (delegated to GapRemediationValidator)."""
+        from src.operations.modules.admin.documentation_governance_validator import DocumentationGovernanceValidator
+        validator = DocumentationGovernanceValidator(self.project_root, self.context)
+        return validator.validate()
     
     def _generate_remediation_suggestions(
         self,
@@ -1194,152 +544,12 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         orchestrators: Dict[str, Dict[str, Any]],
         agents: Dict[str, Dict[str, Any]]
     ) -> None:
-        """
-        Phase 5: Generate auto-remediation suggestions for incomplete features.
-        
-        Args:
-            report: AlignmentReport to populate with remediation suggestions
-            orchestrators: Discovered orchestrators
-            agents: Discovered agents
-        """
-        # Lazy load remediation generators
-        from src.remediation.wiring_generator import WiringGenerator
-        from src.remediation.test_skeleton_generator import TestSkeletonGenerator
-        from src.remediation.documentation_generator import DocumentationGenerator
-        
-        wiring_gen = WiringGenerator(self.project_root)
-        test_gen = TestSkeletonGenerator(self.project_root)
-        doc_gen = DocumentationGenerator(self.project_root)
-        
-        # Collect features needing remediation
-        for name, score in report.feature_scores.items():
-            # Get feature metadata
-            metadata = orchestrators.get(name) or agents.get(name)
-            if not metadata:
-                continue
-            
-            feature_path = metadata.get("file_path", "")
-            docstring = metadata.get("docstring")
-            methods = metadata.get("methods", [])
-            
-            # Generate wiring suggestion if not wired
-            if not score.wired:
-                wiring_suggestion = wiring_gen.generate_wiring_suggestion(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    docstring=docstring
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="wiring",
-                    content=wiring_suggestion["yaml_template"] + "\n\n" + wiring_suggestion["prompt_section"],
-                    file_path=None  # Suggestions shown in report, not saved
-                ))
-            
-            # Generate test skeleton if not tested
-            if not score.tested:
-                test_skeleton = test_gen.generate_test_skeleton(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    methods=methods
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="test",
-                    content=test_skeleton["test_code"],
-                    file_path=test_skeleton["test_path"]
-                ))
-            
-            # Generate documentation if not documented
-            if not score.documented:
-                doc_template = doc_gen.generate_documentation_template(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    docstring=docstring,
-                    methods=methods
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="documentation",
-                    content=doc_template["doc_content"],
-                    file_path=doc_template["doc_path"]
-                ))
-        
-        # Add file organization remediation suggestions
-        if hasattr(report, 'organization_violations'):
-            org_validator = FileOrganizationValidator(self.project_root)
-            org_validator.violations = report.organization_violations
-            org_templates = org_validator.generate_remediation_templates()
-            
-            for template in org_templates:
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name="File Organization",
-                    suggestion_type="organization",
-                    content=f"{template['description']}\n\nCommand: {template.get('command', 'N/A')}",
-                    file_path=template.get('destination')
-                ))
-        
-        # Add template header remediation suggestions
-        if hasattr(report, 'header_violations'):
-            templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
-            header_validator = TemplateHeaderValidator(templates_path)
-            header_validator.violations = report.header_violations
-            header_templates = header_validator.generate_remediation_templates()
-            
-            for template in header_templates:
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=template['template_name'],
-                    suggestion_type="header_compliance",
-                    content=f"{template['description']}\n\n{template.get('header_content', '')}",
-                    file_path=None
-                ))
-        
-        # Add documentation governance remediation suggestions
-        if hasattr(report, 'doc_governance_violations'):
-            governance = DocumentGovernance(self.project_root)
-            
-            for violation in report.doc_governance_violations:
-                if violation.get('type') == 'duplicate_document':
-                    # Create consolidation suggestion
-                    file1 = self.project_root / violation['file']
-                    file2 = self.project_root / violation['duplicate']
-                    
-                    # Determine which file to keep (prefer older/more established)
-                    keep_file = file1 if file1.stat().st_mtime < file2.stat().st_mtime else file2
-                    remove_file = file2 if keep_file == file1 else file1
-                    
-                    suggestion_content = (
-                        f"Duplicate detected: {violation['similarity']} similarity via {violation['algorithm']}\n"
-                        f"File 1: {violation['file']}\n"
-                        f"File 2: {violation['duplicate']}\n\n"
-                        f"Recommended action:\n"
-                        f"1. Review both documents and merge unique content into: {keep_file.relative_to(self.project_root)}\n"
-                        f"2. Archive/delete: {remove_file.relative_to(self.project_root)}\n"
-                        f"3. Update any references to point to the consolidated document\n\n"
-                        f"{violation['recommendation']}"
-                    )
-                    
-                    report.remediation_suggestions.append(RemediationSuggestion(
-                        feature_name="Documentation Governance",
-                        suggestion_type="duplicate_consolidation",
-                        content=suggestion_content,
-                        file_path=str(keep_file)
-                    ))
+        """Generate auto-remediation suggestions (delegated to RemediationSuggestionsGenerator)."""
+        generator = RemediationSuggestionsGenerator(self.project_root)
+        generator.generate(report, orchestrators, agents)
     
     def _apply_auto_fixes(self, report: AlignmentReport, monitor: Optional[ProgressMonitor] = None) -> List[Dict[str, Any]]:
-        """
-        Apply auto-remediation fixes to features.
-        
-        Args:
-            report: AlignmentReport with remediation suggestions
-            monitor: Optional progress monitor for user feedback
-        
-        Returns:
-            List of applied fixes with success status
-        """
+        """Apply auto-remediation fixes to features."""
         fixes_applied = []
         
         for suggestion in report.remediation_suggestions:
@@ -1506,14 +716,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         return "\n".join(lines)
     
     def _validate_brain_accessibility(self) -> Dict[str, Any]:
-        """
-        Validate brain databases are accessible and healthy.
-        
-        Lightweight check for alignment pre-flight validation.
-        
-        Returns:
-            Dict with 'healthy' bool and 'issues' list
-        """
+        """Validate brain databases are accessible and healthy."""
         issues = []
         
         # Check Tier 1 database
@@ -1572,17 +775,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         orchestrators: Dict[str, Dict[str, Any]],
         agents: Dict[str, Dict[str, Any]]
     ) -> bool:
-        """
-        Check if feature is production (user-facing).
-        
-        Args:
-            feature_name: Feature name
-            orchestrators: Discovered orchestrators
-            agents: Discovered agents
-        
-        Returns:
-            True if feature is production
-        """
+        """Check if feature is production (user-facing)."""
         classification = self._get_classification(feature_name, orchestrators, agents)
         return classification == "production"
     
@@ -1592,17 +785,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         orchestrators: Dict[str, Dict[str, Any]],
         agents: Dict[str, Dict[str, Any]]
     ) -> str:
-        """
-        Get feature classification.
-        
-        Args:
-            feature_name: Feature name
-            orchestrators: Discovered orchestrators
-            agents: Discovered agents
-        
-        Returns:
-            Classification: 'production', 'admin', or 'internal'
-        """
+        """Get feature classification."""
         # Check orchestrators
         if feature_name in orchestrators:
             return orchestrators[feature_name].get("classification", "production")

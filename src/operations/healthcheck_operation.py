@@ -166,19 +166,19 @@ class HealthCheckOperation(BaseOperationModule):
                 message = "✅ Health check: HEALTHY"
             
             return OperationResult(
+                success=status == OperationStatus.SUCCESS,
                 status=status,
                 message=message,
-                phase=OperationPhase.COMPLETE,
                 data=health_report,
             )
             
         except Exception as e:
             logger.error(f"Health check failed: {e}", exc_info=True)
             return OperationResult(
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Health check failed: {str(e)}",
-                phase=OperationPhase.EXECUTION,
-                error=e,
+                errors=[str(e)],
             )
     
     def _check_system_resources(self) -> Dict[str, Any]:
@@ -288,7 +288,7 @@ class HealthCheckOperation(BaseOperationModule):
         
         databases = {
             'tier1': brain_path / "tier1" / "working_memory.db",
-            'tier2': brain_path / "tier2" / "knowledge-graph.db",
+            'tier2': brain_path / "tier2" / "knowledge_graph.db",
         }
         
         for db_name, db_path in databases.items():
@@ -344,10 +344,10 @@ class HealthCheckOperation(BaseOperationModule):
             
             return {
                 'yaml_cache': {
-                    'entries': cache_stats['total_entries'],
-                    'hit_rate': f"{cache_stats['hit_rate']*100:.1f}%",
-                    'total_hits': cache_stats['total_hits'],
-                    'total_misses': cache_stats['total_misses'],
+                    'entries': cache_stats.get('total_files', 0),
+                    'hit_rate': f"{cache_stats.get('overall_hit_rate', 0):.1f}%",
+                    'total_hits': cache_stats.get('total_hits', 0),
+                    'total_misses': cache_stats.get('total_misses', 0),
                 },
                 'suggestions': self._get_performance_suggestions(cache_stats),
             }
@@ -363,7 +363,8 @@ class HealthCheckOperation(BaseOperationModule):
         suggestions = []
         
         # Cache hit rate suggestions
-        if cache_stats['hit_rate'] < 0.5:
+        hit_rate = cache_stats.get('overall_hit_rate', 0)
+        if hit_rate < 50:
             suggestions.append("Low cache hit rate - consider preloading frequently used YAML files")
         
         # Memory suggestions
