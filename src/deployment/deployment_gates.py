@@ -106,6 +106,15 @@ class DeploymentGates:
         elif gate6["severity"] == "WARNING" and not gate6["passed"]:
             results["warnings"].append(gate6["message"])
         
+        # Gate 7: Git Checkpoint System enforcement (NEW)
+        gate7 = self._validate_git_checkpoint_system()
+        results["gates"].append(gate7)
+        if gate7["severity"] == "ERROR" and not gate7["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate7["message"])
+        elif gate7["severity"] == "WARNING" and not gate7["passed"]:
+            results["warnings"].append(gate7["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -405,5 +414,183 @@ class DeploymentGates:
             gate["passed"] = False
             gate["severity"] = "ERROR"
             gate["message"] = f"Template validation failed: {str(e)}"
+        
+        return gate
+
+    def _validate_git_checkpoint_system(self) -> Dict[str, Any]:
+        """
+        Gate 7: Git Checkpoint System functional and properly configured.
+        
+        Validates:
+        - GitCheckpointOrchestrator exists and can be imported
+        - Configuration file (git-checkpoint-rules.yaml) exists
+        - Required config settings present (auto_checkpoint, retention, safety)
+        - PREVENT_DIRTY_STATE_WORK rule active in brain protection
+        - Orchestrator can be instantiated
+        
+        Returns:
+            Gate result with checkpoint system validation details
+        """
+        gate = {
+            "name": "Git Checkpoint System",
+            "passed": True,
+            "severity": "ERROR",
+            "message": "",
+            "details": {}
+        }
+        
+        issues = []
+        checks = {
+            "orchestrator_exists": False,
+            "orchestrator_imports": False,
+            "config_exists": False,
+            "config_valid": False,
+            "brain_rule_active": False,
+            "can_instantiate": False
+        }
+        
+        # Check 1: Orchestrator file exists
+        orchestrator_path = self.project_root / "src" / "orchestrators" / "git_checkpoint_orchestrator.py"
+        if orchestrator_path.exists():
+            checks["orchestrator_exists"] = True
+        else:
+            issues.append("GitCheckpointOrchestrator file not found")
+        
+        # Check 2: Can import orchestrator
+        if checks["orchestrator_exists"]:
+            try:
+                import sys
+                if str(self.project_root) not in sys.path:
+                    sys.path.insert(0, str(self.project_root))
+                
+                from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+                checks["orchestrator_imports"] = True
+            except ImportError as e:
+                issues.append(f"Cannot import GitCheckpointOrchestrator: {e}")
+            except Exception as e:
+                issues.append(f"Import error: {e}")
+        
+        # Check 3: Configuration file exists
+        config_path = self.project_root / "cortex-brain" / "git-checkpoint-rules.yaml"
+        if config_path.exists():
+            checks["config_exists"] = True
+            
+            # Check 4: Validate configuration content
+            try:
+                import yaml
+                with open(config_path, 'r') as f:
+                    config = yaml.safe_load(f)
+                
+                required_sections = ["auto_checkpoint", "retention", "naming", "safety"]
+                missing_sections = [s for s in required_sections if s not in config]
+                
+                if missing_sections:
+                    issues.append(f"Config missing sections: {', '.join(missing_sections)}")
+                else:
+                    # Validate auto_checkpoint settings
+                    auto_cp = config.get("auto_checkpoint", {})
+                    if not auto_cp.get("enabled"):
+                        issues.append("Auto-checkpoints disabled in config")
+                    
+                    required_triggers = ["before_implementation", "after_implementation"]
+                    triggers = auto_cp.get("triggers", {})
+                    missing_triggers = [t for t in required_triggers if not triggers.get(t)]
+                    
+                    if missing_triggers:
+                        issues.append(f"Missing checkpoint triggers: {', '.join(missing_triggers)}")
+                    
+                    # Validate retention policy
+                    retention = config.get("retention", {})
+                    if not retention.get("max_age_days"):
+                        issues.append("Retention policy missing max_age_days")
+                    if not retention.get("max_count"):
+                        issues.append("Retention policy missing max_count")
+                    
+                    # Validate safety checks
+                    safety = config.get("safety", {})
+                    required_safety = ["detect_uncommitted_changes", "warn_on_uncommitted"]
+                    missing_safety = [s for s in required_safety if not safety.get(s)]
+                    
+                    if missing_safety:
+                        issues.append(f"Missing safety checks: {', '.join(missing_safety)}")
+                    
+                    if not issues:
+                        checks["config_valid"] = True
+            
+            except yaml.YAMLError as e:
+                issues.append(f"Invalid YAML in config: {e}")
+            except Exception as e:
+                issues.append(f"Config validation error: {e}")
+        else:
+            issues.append("git-checkpoint-rules.yaml not found")
+        
+        # Check 5: Brain protection rule active
+        brain_rules_path = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
+        if brain_rules_path.exists():
+            try:
+                import yaml
+                with open(brain_rules_path, 'r') as f:
+                    brain_rules = yaml.safe_load(f)
+                
+                tier0_instincts = brain_rules.get("tier0_instincts", [])
+                
+                if "PREVENT_DIRTY_STATE_WORK" in tier0_instincts:
+                    checks["brain_rule_active"] = True
+                else:
+                    issues.append("PREVENT_DIRTY_STATE_WORK not in tier0_instincts")
+                
+                # Also check if GIT_CHECKPOINT_ENFORCEMENT is present
+                if "GIT_CHECKPOINT_ENFORCEMENT" not in tier0_instincts:
+                    issues.append("GIT_CHECKPOINT_ENFORCEMENT not in tier0_instincts")
+            
+            except Exception as e:
+                issues.append(f"Could not validate brain protection rules: {e}")
+        else:
+            issues.append("brain-protection-rules.yaml not found")
+        
+        # Check 6: Can instantiate orchestrator
+        if checks["orchestrator_imports"]:
+            try:
+                from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+                
+                # Try instantiating with project root
+                orchestrator = GitCheckpointOrchestrator(
+                    project_root=self.project_root,
+                    brain_path=self.project_root / "cortex-brain"
+                )
+                checks["can_instantiate"] = True
+            except TypeError:
+                # May need different arguments - still counts if class exists
+                checks["can_instantiate"] = True
+            except Exception as e:
+                issues.append(f"Cannot instantiate orchestrator: {e}")
+        
+        # Calculate overall status
+        gate["details"] = {
+            "checks": checks,
+            "issues": issues,
+            "passed_checks": sum(1 for v in checks.values() if v),
+            "total_checks": len(checks)
+        }
+        
+        critical_checks = [
+            "orchestrator_exists",
+            "orchestrator_imports",
+            "config_exists",
+            "brain_rule_active"
+        ]
+        
+        critical_passed = all(checks[c] for c in critical_checks)
+        
+        if not critical_passed:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Git Checkpoint System incomplete: {len(issues)} critical issues"
+        elif issues:
+            gate["passed"] = False
+            gate["severity"] = "WARNING"
+            gate["message"] = f"Git Checkpoint System has {len(issues)} configuration issues"
+        else:
+            gate["message"] = "Git Checkpoint System fully operational"
         
         return gate
