@@ -865,6 +865,49 @@ templates:
     - optimize codebase
     response_type: guided
 
+  cleanup_orchestrator:
+    <<: *standard_5_part_base
+    name: Cleanup Orchestrator
+    expected_orchestrator: CleanupOrchestrator
+    triggers:
+    - legacy cleanup
+    - old cleanup
+    - basic cleanup
+    response_type: detailed
+
+  publish_branch:
+    <<: *standard_5_part_base
+    name: Publish Branch
+    expected_orchestrator: PublishBranchOrchestrator
+    triggers:
+    - publish branch
+    - publish to branch
+    - create publish branch
+    - deploy branch
+    response_type: detailed
+
+  master_setup:
+    <<: *standard_5_part_base
+    name: Master Setup
+    expected_orchestrator: MasterSetupOrchestrator
+    triggers:
+    - master setup
+    - setup master
+    - initialize master
+    - full setup
+    response_type: detailed
+
+  realignment:
+    <<: *standard_5_part_base
+    name: Realignment
+    expected_orchestrator: RealignmentOrchestrator
+    triggers:
+    - realign
+    - realignment
+    - re-align system
+    - system realignment
+    response_type: detailed
+
   fallback:
     <<: *standard_5_part_base
     name: Fallback Response
@@ -1077,16 +1120,41 @@ templates:
       ---
 
 
-      ## Pattern Match Confidence {confidence_display}
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - High confidence pattern match from {pattern_count} similar conversations.
+
+
+      ## 💬 Response
+
+      {confidence_display}
 
 
       I''m applying learned patterns from {pattern_count} similar conversations.
 
-      {detailed_explanation}'
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
     placeholders:
     - confidence_display
     - pattern_count
     - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
   confidence_medium:
     name: Confidence Display - Medium
     trigger:
@@ -1100,16 +1168,41 @@ templates:
       ---
 
 
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - Moderate confidence pattern match from {pattern_count} related conversations.
+
+
+      ## 💬 Response
+
       🟡 **Pattern Match Confidence:** {confidence_display}
 
 
       I found {pattern_count} related patterns, applying with moderate confidence.
 
-      {detailed_explanation}'
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
     placeholders:
     - confidence_display
     - pattern_count
     - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
   confidence_low:
     name: Confidence Display - Low
     trigger:
@@ -1123,16 +1216,41 @@ templates:
       ---
 
 
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - Limited pattern history, proceeding with available {pattern_count} patterns.
+
+
+      ## 💬 Response
+
       🟠 **Pattern Match Confidence:** {confidence_display}
 
 
       Limited pattern history available. Response based on {pattern_count} patterns.
 
-      {detailed_explanation}'
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
     placeholders:
     - confidence_display
     - pattern_count
     - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
   confidence_none:
     name: Confidence Display - None
     trigger:

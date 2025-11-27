@@ -17,6 +17,7 @@ Status: IMPLEMENTATION
 """
 
 import logging
+import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
@@ -185,11 +186,29 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         self.project_root = Path(self.context.get("project_root", Path.cwd()))
         self.cortex_brain = self.project_root / "cortex-brain"
         
+        # Load configuration
+        self.config = self._load_config()
+        
         # Discovery components (lazy loaded)
         self._orchestrator_scanner = None
         self._agent_scanner = None
         self._entry_point_scanner = None
         self._documentation_scanner = None
+    
+    def _load_config(self) -> Dict[str, Any]:
+        """Load configuration from cortex.config.json."""
+        config_path = self.project_root / "cortex.config.json"
+        
+        if not config_path.exists():
+            logger.warning(f"Config file not found at {config_path}, using defaults")
+            return {}
+        
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load config from {config_path}: {e}")
+            return {}
     
     def _is_admin_environment(self) -> bool:
         """Check if running in CORTEX admin environment."""
@@ -465,9 +484,19 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         report.doc_governance_score = doc_gov_results.get('score', 100)
         
         # Phase 3.10: Align 2.0 - Detect internal conflicts
-        if monitor:
-            monitor.update("Detecting ecosystem conflicts")
-        conflicts = self._detect_conflicts()
+        # Skip if configured to avoid O(n²) performance issue (330k+ file ops with 575+ docs)
+        skip_duplicate_detection = self.config.get('system_alignment', {}).get('skip_duplicate_detection', False)
+        
+        if skip_duplicate_detection:
+            if monitor:
+                monitor.update("Skipping conflict detection (config: skip_duplicate_detection=true)")
+            logger.info("Conflict detection skipped per configuration to avoid O(n²) performance issue")
+            conflicts = []
+        else:
+            if monitor:
+                monitor.update("Detecting ecosystem conflicts")
+            conflicts = self._detect_conflicts()
+        
         report.conflicts = conflicts
         
         # Update critical/warning counts from conflicts
