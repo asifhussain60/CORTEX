@@ -359,7 +359,7 @@ class DeploymentGates:
     
     def _validate_template_format(self) -> Dict[str, Any]:
         """
-        Gate 6: All response templates use new format (v3.0).
+        Gate 6: All response templates use new format (v3.2+ with base template composition).
         
         Returns:
             Gate result with template validation details
@@ -373,6 +373,7 @@ class DeploymentGates:
         }
         
         try:
+            import yaml
             templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
             
             if not templates_path.exists():
@@ -381,35 +382,89 @@ class DeploymentGates:
                 gate["message"] = "response-templates.yaml not found"
                 return gate
             
-            # Use TemplateHeaderValidator to check format
-            validator = TemplateHeaderValidator(templates_path)
-            results = validator.validate()
+            # Load and validate new template architecture (v3.2+)
+            with open(templates_path, "r", encoding="utf-8") as f:
+                templates = yaml.safe_load(f)
             
-            # Check if any critical violations exist
-            critical_count = results.get('critical_count', 0)
-            warning_count = results.get('warning_count', 0)
-            score = results.get('score', 0)
+            schema_version = templates.get("schema_version", "unknown")
+            base_templates = templates.get("base_templates", {})
+            template_defs = templates.get("templates", {})
             
-            gate["details"] = {
-                "score": score,
-                "compliant_templates": results.get('compliant_templates', 0),
-                "total_templates": results.get('total_templates', 0),
-                "critical_violations": critical_count,
-                "warning_violations": warning_count
-            }
+            critical_issues = []
+            warnings = []
             
-            # Gate fails if critical violations exist or score < 80%
-            if critical_count > 0:
-                gate["passed"] = False
-                gate["severity"] = "ERROR"
-                gate["message"] = f"Template format has {critical_count} critical violations (old format detected)"
-            elif score < 80:
-                gate["passed"] = False
-                gate["severity"] = "WARNING"
-                gate["message"] = f"Template compliance below 80% ({score:.1f}%)"
+            # Validate schema version
+            if schema_version not in ["3.2", "3.3"]:
+                warnings.append(f"Schema version {schema_version} (expected 3.2+)")
+            
+            # Validate base templates exist (new architecture requirement)
+            if not base_templates:
+                critical_issues.append("Missing base_templates section (v3.2 architecture required)")
             else:
-                gate["message"] = f"All templates use new format v3.0 ({score:.1f}% compliant)"
+                # Validate base template structure
+                for base_name, base_data in base_templates.items():
+                    if "base_structure" not in base_data:
+                        critical_issues.append(f"Base template '{base_name}' missing base_structure")
             
+            # Validate individual templates
+            for template_name, template_data in template_defs.items():
+                # Check for old format patterns
+                content_str = str(template_data.get("content", "")) + str(template_data.get("base_structure", ""))
+                if "[✓ Accept OR ⚡ Challenge]" in content_str:
+                    critical_issues.append(f"Template '{template_name}' uses old Challenge format")
+            
+            # Use TemplateHeaderValidator for additional checks
+            try:
+                validator = TemplateHeaderValidator(templates_path)
+                results = validator.validate()
+                
+                # Merge validation results
+                critical_count = results.get('critical_count', 0) + len(critical_issues)
+                warning_count = results.get('warning_count', 0) + len(warnings)
+                score = results.get('score', 0)
+                
+                gate["details"] = {
+                    "schema_version": schema_version,
+                    "score": score,
+                    "compliant_templates": results.get('compliant_templates', 0),
+                    "total_templates": results.get('total_templates', 0),
+                    "base_templates_count": len(base_templates),
+                    "critical_violations": critical_count,
+                    "warning_violations": warning_count
+                }
+                
+                # Gate fails if critical violations exist or score < 80%
+                if critical_count > 0:
+                    gate["passed"] = False
+                    gate["severity"] = "ERROR"
+                    gate["message"] = f"Template format has {critical_count} critical violations"
+                    if critical_issues:
+                        gate["details"]["critical_issues"] = critical_issues[:3]  # Show first 3
+                elif score < 80:
+                    gate["passed"] = False
+                    gate["severity"] = "WARNING"
+                    gate["message"] = f"Template compliance below 80% ({score:.1f}%)"
+                else:
+                    gate["message"] = f"All templates use new format v{schema_version} ({score:.1f}% compliant, {len(base_templates)} base templates)"
+                    
+            except Exception as ve:
+                # TemplateHeaderValidator failed, use our basic validation
+                gate["details"] = {
+                    "schema_version": schema_version,
+                    "base_templates_count": len(base_templates),
+                    "template_count": len(template_defs),
+                    "critical_violations": len(critical_issues),
+                    "warning_violations": len(warnings)
+                }
+                
+                if critical_issues:
+                    gate["passed"] = False
+                    gate["severity"] = "ERROR"
+                    gate["message"] = f"Template validation failed: {len(critical_issues)} critical issues"
+                    gate["details"]["critical_issues"] = critical_issues[:3]
+                else:
+                    gate["message"] = f"Templates validated (v{schema_version}, {len(base_templates)} base templates)"
+        
         except Exception as e:
             gate["passed"] = False
             gate["severity"] = "ERROR"

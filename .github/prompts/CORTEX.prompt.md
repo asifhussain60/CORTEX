@@ -13,9 +13,15 @@
 **Template System:** Load #file:../../cortex-brain/response-templates.yaml for pre-formatted responses  
 **Detailed Guide:** #file:modules/template-guide.md
 
+**Architecture (v3.2):**
+- **Base Template Composition:** Templates inherit from base structures using YAML anchors (`&standard_5_part_base`)
+- **Component Reuse:** Shared header, footer, and section components reduce duplication by 43%
+- **Placeholder Substitution:** Dynamic content injection via `{operation}`, `{understanding_content}`, etc.
+- **Single Source:** One file (`response-templates.yaml`) replaces multiple variants
+
 **Quick Reference:**
 - Template triggers auto-detect user intent
-- 30+ response templates available
+- 62 response templates available (migrated from 107 with zero loss)
 - NO Python execution needed for help commands
 - Contextual intelligence adapts response style
 

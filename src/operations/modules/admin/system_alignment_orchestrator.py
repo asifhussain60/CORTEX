@@ -691,18 +691,43 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 with open(templates_path, "r", encoding="utf-8") as f:
                     templates = yaml.safe_load(f)
                 
-                # Check for H1 header format (# 🧠 CORTEX)
+                # Validate new template architecture
                 template_issues = []
-                for template_name, template_data in templates.get("templates", {}).items():
-                    content = template_data.get("content", "")
+                base_templates = templates.get("base_templates", {})
+                template_defs = templates.get("templates", {})
+                
+                # Check for base template architecture (v3.2+)
+                if not base_templates:
+                    template_issues.append("Missing base_templates section (v3.2 architecture)")
+                else:
+                    # Validate base templates have required structure
+                    for base_name, base_data in base_templates.items():
+                        if "base_structure" not in base_data:
+                            template_issues.append(f"Base template '{base_name}' missing base_structure")
+                
+                # Check for H1 header format in templates (# 🧠 CORTEX)
+                for template_name, template_data in template_defs.items():
+                    # New architecture: templates inherit from base_templates via YAML anchors
+                    if "base_structure" in template_data:
+                        # Using new composition model - validate placeholders
+                        base_structure = template_data.get("base_structure", "")
+                        if not base_structure.startswith("# "):
+                            template_issues.append(f"{template_name}: Base structure missing H1 header")
+                    else:
+                        # Traditional template with direct content
+                        content = template_data.get("content", "")
+                        if content and not content.startswith("# ") and not content.startswith("##"):
+                            template_issues.append(f"{template_name}: Missing H1 header")
                     
-                    # Validate H1 header
-                    if not content.startswith("# ") and not content.startswith("##"):
-                        template_issues.append(f"{template_name}: Missing H1 header")
-                    
-                    # Validate Challenge field format
-                    if "Challenge:" in content and "[✓ Accept OR ⚡ Challenge]" in content:
+                    # Validate Challenge field format (should not have old [✓ Accept OR ⚡ Challenge])
+                    content_str = str(template_data.get("content", "")) + str(template_data.get("base_structure", ""))
+                    if "[✓ Accept OR ⚡ Challenge]" in content_str or "[Accept|Challenge]" in content_str:
                         template_issues.append(f"{template_name}: Old Challenge format detected")
+                
+                # Check for schema version
+                schema_version = templates.get("schema_version", "unknown")
+                if schema_version not in ["3.2", "3.3"]:
+                    template_issues.append(f"Outdated schema_version: {schema_version} (expected 3.2+)")
                 
                 if template_issues:
                     report.warnings += len(template_issues)
