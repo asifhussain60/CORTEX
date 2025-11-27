@@ -61,86 +61,33 @@ templates:
       \ ({token_percentage}%)\n- Storage health: {storage_health}\n\n*Use `show context`\
       \ for detailed view*\n</details>\n"
   help_detailed:
+    <<: *standard_5_part_base
     name: Help Detailed
     triggers:
     - help_detailed
     response_type: detailed
-    content: '# 🧠 CORTEX Help (Detailed)
-
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
-
-      ---
-
-
-      ## 🎯 My Understanding Of Your Request
-
-      [State understanding]
-
-
-      ## ⚠️ Challenge
-
-
-      [State specific challenge or "No Challenge"]
-
-
-      ## 💬 Response
-
-      [Natural language explanation]
-
-
-      ## 📝 Your Request
-
-      [Echo refined request]
-
-
-      ## 🔍 Next Steps
-
-      [Context-appropriate format]
-
-      '
+    operation_name: Help (Detailed)
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   quick_start:
+    <<: *standard_5_part_base
     name: Quick Start
     triggers:
     - quick start
     - get started
     - quick_start
     response_type: narrative
-    content: '# 🧠 CORTEX Quick Start
-
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
-
-      ---
-
-
-      ## 🎯 My Understanding Of Your Request
-
-      [State understanding]
-
-
-      ## ⚠️ Challenge
-
-
-      [State specific challenge or "No Challenge"]
-
-
-      ## 💬 Response
-
-      [Natural language explanation]
-
-
-      ## 📝 Your Request
-
-      [Echo refined request]
-
-
-      ## 🔍 Next Steps
-
-      [Context-appropriate format]
-
-      '
+    operation_name: Quick Start
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   hands_on_tutorial:
+    <<: *standard_5_part_base
     name: Hands-On Tutorial
     triggers:
     - tutorial
@@ -151,67 +98,50 @@ templates:
     - teach me cortex
     - cortex tutorial
     response_type: interactive
-    content: "# \U0001F9E0 CORTEX Hands On Tutorial\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n\U0001F393 **CORTEX Hands-On Tutorial**\n\
-      \n## \U0001F3AF My Understanding Of Your Request\n   You want an interactive\
-      \ hands-on tutorial that teaches CORTEX through practical exercises.\n\n## Challenge\
-      \ No Challenge - Tutorial program guides you through planning, development,\
-      \ and testing with real exercises.\n\n## \U0001F4AC Response\n   **Tutorial\
-      \ Profiles Available:**\n   \n   1. **Quick (15 min)** - Essential commands\
-      \ only\n      • CORTEX basics (help, context, healthcheck)\n      • Simple planning\
-      \ workflow\n      • Basic TDD cycle\n   \n   2. **Standard (25 min)** - Recommended\
-      \ for most users\n      • CORTEX core capabilities\n      • Complete planning\
-      \ workflow (DoR/DoD)\n      • Full TDD cycle (RED→GREEN→REFACTOR)\n      • Testing\
-      \ & validation\n   \n   3. **Comprehensive (30 min)** - Deep dive\n      • Advanced\
-      \ planning with security review\n      • TDD with performance optimization\n\
-      \      • Production-ready testing\n   \n   **What You'll Build:**\n   \U0001F510\
-      \ User authentication feature with:\n   • Login form with validation\n   • Real\
-      \ tests using discovered element IDs\n   • Performance-optimized code\n   •\
-      \ Complete session report\n\n## Your Request Start interactive hands-on tutorial\n\
-      \n## \U0001F50D Next Steps\n   Choose a tutorial profile:\n   1. Say \"tutorial\
-      \ quick\" for 15-minute essentials\n   2. Say \"tutorial standard\" for 25-minute\
-      \ walkthrough (recommended)\n   3. Say \"tutorial comprehensive\" for 30-minute\
-      \ deep dive\n   \n   Or say \"tutorial [profile] now\" to start immediately.\n\
-      \   \n   **First Module:** CORTEX Basics\n   - Exercise 1.1: Explore capabilities\
-      \ (type 'help')\n   - Exercise 1.2: Check brain memory (type 'show context')\n\
-      \   - Exercise 1.3: System health (type 'healthcheck')"
+    operation_name: Hands On Tutorial
+    understanding_content: "You want an interactive hands-on tutorial that teaches CORTEX through practical exercises."
+    challenge_content: "No Challenge - Tutorial program guides you through planning, development, and testing with real exercises."
+    response_content: "**Tutorial Profiles Available:**\n   \n   1. **Quick (15 min)** - Essential commands only\n      • CORTEX basics (help, context, healthcheck)\n      • Simple planning workflow\n      • Basic TDD cycle\n   \n   2. **Standard (25 min)** - Recommended for most users\n      • CORTEX core capabilities\n      • Complete planning workflow (DoR/DoD)\n      • Full TDD cycle (RED→GREEN→REFACTOR)\n      • Testing & validation\n   \n   3. **Comprehensive (30 min)** - Deep dive\n      • Advanced planning with security review\n      • TDD with performance optimization\n      • Production-ready testing\n   \n   **What You'll Build:**\n   🔐 User authentication feature with:\n   • Login form with validation\n   • Real tests using discovered element IDs\n   • Performance-optimized code\n   • Complete session report"
+    request_echo_content: "Start interactive hands-on tutorial"
+    next_steps_content: "Choose a tutorial profile:\n   1. Say \"tutorial quick\" for 15-minute essentials\n   2. Say \"tutorial standard\" for 25-minute walkthrough (recommended)\n   3. Say \"tutorial comprehensive\" for 30-minute deep dive\n   \n   Or say \"tutorial [profile] now\" to start immediately.\n   \n   **First Module:** CORTEX Basics\n   - Exercise 1.1: Explore capabilities (type 'help')\n   - Exercise 1.2: Check brain memory (type 'show context')\n   - Exercise 1.3: System health (type 'healthcheck')"
   status_check:
+    <<: *standard_5_part_base
     name: Status Check
     triggers:
     - status
     - where are we
     - status_check
     response_type: table
-    content: "# \U0001F9E0 CORTEX Status Check\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n   \n   **Progress Overview:**\n   ```\n   Overall Status: [████████░░]\
-      \ 85%\n   ✅ Completed: [██████████] 100%\n   ⏳ In Progress: [██████░░░░] 60%\n\
-      \   ⏸️  Not Started: [░░░░░░░░░░] 0%\n   ```\n\n## Your Request [Echo refined\
-      \ request]\n\n## \U0001F50D Next Steps\n   [Context-appropriate format]"
+    operation_name: Status Check
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Progress Overview:**\n   ```\n   Overall Status: [████████░░] 85%\n   ✅ Completed: [██████████] 100%\n   ⏳ In Progress: [██████░░░░] 60%\n   ⏸️  Not Started: [░░░░░░░░░░] 0%\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   success_general:
+    <<: *standard_5_part_base
     name: Success General
     triggers:
     - success_general
     response_type: narrative
-    content: "# \U0001F9E0 CORTEX Success General\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Success General
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   error_general:
+    <<: *standard_5_part_base
     name: Error General
     triggers:
     - error_general
     response_type: narrative
-    content: "# \U0001F9E0 CORTEX Error General\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Error General
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   introduction_discovery:
     name: CORTEX Discovery & Introduction
     triggers:
@@ -389,49 +319,53 @@ templates:
 
       - 🔍 **Need help?** → Say `help` for command reference'
   not_implemented:
+    <<: *standard_5_part_base
     name: Not Implemented
     triggers:
     - not_implemented
     response_type: narrative
-    content: "# \U0001F9E0 CORTEX Not Implemented\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Not Implemented
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   executor_success:
+    <<: *standard_5_part_base
     name: Executor Success
     triggers:
     - executor_success
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Executor Success\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Executor Success
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   executor_error:
+    <<: *standard_5_part_base
     name: Executor Error
     triggers:
     - executor_error
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Executor Error\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Executor Error
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   tester_success:
+    <<: *standard_5_part_base
     name: Tester Success
     triggers:
     - tester_success
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Tester Success\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
-      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
-      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
-      \ Steps\n   [Context-appropriate format]"
+    operation_name: Tester Success
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
   operation_started:
     name: Operation Started
     triggers:
