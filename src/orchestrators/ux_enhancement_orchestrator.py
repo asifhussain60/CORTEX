@@ -439,9 +439,10 @@ class UXEnhancementOrchestrator:
         discovery: Dict
     ) -> Dict[str, Any]:
         """
-        Export analysis results to dashboard JSON format.
+        Export analysis results to Phase 2 dashboard JSON format.
         
-        Matches structure of Phase 1 mock data files.
+        Transforms analysis data to match the structure expected by
+        the interactive dashboard with full visualization support.
         
         Args:
             codebase_info: Codebase metadata
@@ -452,28 +453,81 @@ class UXEnhancementOrchestrator:
             discovery: Discovery intelligence data
         
         Returns:
-            Complete dashboard data structure
+            Complete dashboard data structure matching analysis-data.json format
         """
+        # Extract scores
+        overall_score = quality.get("overall_score", 0)
+        
+        # Build metadata section
+        metadata = {
+            "projectName": codebase_info["name"],
+            "timestamp": codebase_info["timestamp"],
+            "fileCount": codebase_info["file_count"],
+            "lineCount": codebase_info.get("line_count", 0),
+            "language": "Python",  # TODO: Auto-detect
+            "version": "3.2.0",
+            "analysisVersion": "1.0.0",
+            "duration": 0  # TODO: Track analysis duration
+        }
+        
+        # Build scores section
+        scores = {
+            "overall": overall_score,
+            "quality": quality.get("overall_score", 0),
+            "performance": 0,  # TODO: Convert grade to score
+            "security": 0,  # TODO: Convert rating to score
+            "architecture": architecture.get("health_score", 0),
+            "maintainability": quality.get("maintainability", 0),
+            "testCoverage": quality.get("test_coverage", 0)
+        }
+        
+        # Build summary section with quick wins and critical issues
+        summary = {
+            "text": f"Analysis complete for {codebase_info['name']}. Overall quality score: {overall_score}%",
+            "quickWins": [],
+            "criticalIssues": architecture.get("issues", [])[:5]
+        }
+        
+        # Build roadmap section
+        roadmap = {
+            "tasks": [],
+            "dependencies": [],
+            "milestones": []
+        }
+        
+        # Build testCoverage section
+        testCoverage = {
+            "overall": quality.get("test_coverage", 0),
+            "byModule": {},
+            "untested": []
+        }
+        
+        # Build discoveries section
+        discoveries = discovery.get("suggestions", [])
+        
         return {
-            "metadata": {
-                "project_name": codebase_info["name"],
-                "analysis_date": codebase_info["timestamp"],
-                "file_count": codebase_info["file_count"],
-                "codebase_path": codebase_info["path"]
-            },
-            "quality": quality,
+            "metadata": metadata,
+            "scores": scores,
+            "summary": summary,
             "architecture": architecture,
+            "quality": quality,
+            "roadmap": roadmap,
             "performance": performance,
             "security": security,
-            "discovery": discovery
+            "discoveries": discoveries,
+            "testCoverage": testCoverage
         }
     
     def _generate_dashboard_html(self, dashboard_data: Dict, user_request: str) -> Path:
         """
-        Generate interactive HTML dashboard with Tailwind CSS.
+        Generate interactive HTML dashboard with Tailwind CSS and D3.js visualizations.
         
-        TODO: Phase 2 implementation - create actual HTML/CSS/JS dashboard
-        For now, creates placeholder HTML
+        Uses Phase 2 dashboard template with full feature set:
+        - 6-tab navigation (Executive, Architecture, Quality, Roadmap, Journey, Security)
+        - D3.js visualizations (force graphs, heatmaps, treemaps, Gantt charts)
+        - Discovery system with behavioral tracking
+        - Theme toggle (dark/light mode)
+        - Responsive design
         
         Args:
             dashboard_data: Complete dashboard data
@@ -484,7 +538,7 @@ class UXEnhancementOrchestrator:
         """
         # Create output directory
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        project_name = dashboard_data["metadata"]["project_name"]
+        project_name = dashboard_data.get("metadata", {}).get("projectName", "analysis")
         output_dir = self.analysis_output_dir / f"{project_name}-{timestamp}"
         output_dir.mkdir(parents=True, exist_ok=True)
         
@@ -493,12 +547,26 @@ class UXEnhancementOrchestrator:
         with open(json_path, 'w') as f:
             json.dump(dashboard_data, f, indent=2)
         
-        # Generate placeholder HTML (Phase 2 will replace with full dashboard)
+        # Copy Phase 2 dashboard template and assets
+        dashboard_template_dir = self.brain_path / "documents" / "analysis" / "INTELLIGENT-UX-DEMO"
         html_path = output_dir / "dashboard.html"
-        html_content = self._generate_placeholder_html(dashboard_data, user_request)
         
-        with open(html_path, 'w') as f:
-            f.write(html_content)
+        # Copy dashboard HTML
+        import shutil
+        template_html = dashboard_template_dir / "dashboard.html"
+        if template_html.exists():
+            shutil.copy(template_html, html_path)
+            
+            # Copy assets directory
+            template_assets = dashboard_template_dir / "assets"
+            output_assets = output_dir / "assets"
+            if template_assets.exists():
+                shutil.copytree(template_assets, output_assets, dirs_exist_ok=True)
+        else:
+            # Fallback to placeholder if Phase 2 template not found
+            html_content = self._generate_placeholder_html(dashboard_data, user_request)
+            with open(html_path, 'w') as f:
+                f.write(html_content)
         
         return html_path
     
@@ -513,17 +581,22 @@ class UXEnhancementOrchestrator:
         Returns:
             HTML string
         """
-        quality_score = data["quality"].get("overall_score", 0)
-        arch_health = data["architecture"].get("health_score", 0)
-        perf_grade = data["performance"].get("grade", "N/A")
-        security_rating = data["security"].get("rating", "N/A")
+        # Extract scores with fallbacks
+        quality_score = data.get("scores", {}).get("quality", 0)
+        arch_health = data.get("scores", {}).get("architecture", 0)
+        perf_score = data.get("scores", {}).get("performance", 0)
+        security_score = data.get("scores", {}).get("security", 0)
+        
+        # Get metadata
+        project_name = data.get("metadata", {}).get("projectName", "Unknown")
+        timestamp = data.get("metadata", {}).get("timestamp", "")
         
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UX Enhancement Dashboard - {data['metadata']['project_name']}</title>
+    <title>UX Enhancement Dashboard - {project_name}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
@@ -531,7 +604,7 @@ class UXEnhancementOrchestrator:
         <h1 class="text-4xl font-bold text-gray-900 mb-2">
             🎯 UX Enhancement Analysis
         </h1>
-        <p class="text-gray-600 mb-8">{data['metadata']['project_name']} - {data['metadata']['analysis_date']}</p>
+        <p class="text-gray-600 mb-8">{project_name} - {timestamp}</p>
         
         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
             <p class="text-blue-700">
@@ -549,12 +622,12 @@ class UXEnhancementOrchestrator:
                 <p class="text-3xl font-bold text-green-600">{arch_health}%</p>
             </div>
             <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-2">Performance Grade</h3>
-                <p class="text-3xl font-bold text-yellow-600">{perf_grade}</p>
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">Performance Score</h3>
+                <p class="text-3xl font-bold text-yellow-600">{perf_score}%</p>
             </div>
             <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-2">Security Rating</h3>
-                <p class="text-3xl font-bold text-purple-600">{security_rating}</p>
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">Security Score</h3>
+                <p class="text-3xl font-bold text-purple-600">{security_score}%</p>
             </div>
         </div>
         
