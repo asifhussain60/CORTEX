@@ -496,6 +496,239 @@ templates:
     - ado work summary
     - complete ado work
     response_type: detailed
+  onboarding_introduction:
+    name: CORTEX Onboarding Introduction
+    triggers:
+    - setup cortex
+    - onboard application
+    - cortex setup
+    - start onboarding
+    - begin setup
+    - initialize cortex
+    response_type: interactive
+    content: '# 🧠 CORTEX Setup & Onboarding
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to set up CORTEX for your project with full onboarding workflow including dependency installation, application analysis, and dashboard generation.
+
+
+      ## ⚠️ Challenge
+
+
+      No Challenge - This is your first time running CORTEX setup. Let me walk you through what will happen.
+
+
+      ## 💬 Response
+
+
+      Welcome to **CORTEX** - Your AI assistant enhancement system with long-term memory, strategic planning, and automated workflows!
+
+
+      **🚀 What This Setup Will Do:**
+
+
+      **Phase 1: Environment Setup (2-3 minutes)**
+
+      - ✅ Validate Python version (3.8+ required)
+
+      - ✅ Create/detect virtual environment
+
+      - ✅ Install dependencies from requirements.txt
+
+      - ✅ Verify critical packages (pytest, pyyaml, requests)
+
+
+      **Phase 2: Application Analysis (3-5 minutes)**
+
+      - 🔍 Detect project structure (language, framework, build system)
+
+      - 📊 Run code quality analysis (issues, metrics, score)
+
+      - 🔒 Perform security scan (vulnerabilities, OWASP checks)
+
+      - ⚡ Collect performance metrics (file sizes, complexity)
+
+
+      **Phase 3: Dashboard & Documentation (1-2 minutes)**
+
+      - 📈 Generate D3.js interactive dashboard (quality/security/performance)
+
+      - 📝 Create .github/copilot-instructions.md (auto-context for AI)
+
+      - 🛡️ Setup .gitignore (exclude CORTEX/ from git)
+
+      - 💾 Save completion report
+
+
+      **Phase 4: Brain Learning (Background)**
+
+      - 🧠 Initialize Tier 3 namespace for your project
+
+      - 📚 Setup pattern learning (improves over time)
+
+      - 🔗 Enable context injection for future sessions
+
+
+      **📋 Setup Checklist:**
+
+      - [ ] Dependencies installed
+
+      - [ ] Application analyzed
+
+      - [ ] Dashboard generated
+
+      - [ ] Documentation created
+
+      - [ ] GitIgnore configured
+
+      - [ ] Brain learning enabled
+
+
+      **⏱️ Estimated Total Time:** 6-10 minutes
+
+
+      **🔒 Privacy & Safety:**
+
+      - All data stored locally in `cortex-brain/` folder
+
+      - No cloud uploads or external API calls
+
+      - CORTEX/ folder automatically excluded from git
+
+      - Can pause/resume setup anytime
+
+
+      ## 📝 Your Request
+
+
+      Initialize CORTEX for my project with full setup and onboarding
+
+
+      ## 🔍 Next Steps
+
+
+      **Ready to begin? Choose an option:**
+
+
+      1. **Full Setup** (recommended) - All phases, ~10 minutes
+
+         - Say: `yes` or `full setup`
+
+
+      2. **Quick Setup** - Skip optional steps, ~5 minutes
+
+         - Say: `quick setup`
+
+
+      3. **Custom Setup** - Choose which phases to run
+
+         - Say: `customize` or `custom setup`
+
+
+      4. **Learn More** - Read detailed documentation
+
+         - Say: `setup guide` or `help setup`
+
+
+      5. **Cancel** - Exit setup (can restart anytime)
+
+         - Say: `cancel` or `exit`
+
+
+      **Most users choose:** Option 1 (Full Setup)
+
+
+      '
+  policy_validation:
+    <<: *standard_5_part_base
+    name: Policy Validation
+    triggers:
+    - validate policies
+    - check compliance
+    - policy validation
+    - policy check
+    - compliance check
+    - validate against policies
+    response_type: detailed
+    operation_name: Policy Validation
+    understanding_content: "You want CORTEX to validate itself against your organization's policies and coding standards."
+    challenge_content: "No Challenge - Policy validation ensures CORTEX aligns with your team's requirements and best practices."
+    response_content: |
+      **Policy Validation System**
+      
+      CORTEX will scan for policy documents in your repository and validate its configuration and implementation against your standards.
+      
+      **What Gets Validated:**
+      
+      ✅ **Naming Conventions** (25% weight)
+         • PascalCase for classes
+         • snake_case for functions/variables
+         • UPPER_CASE for constants
+         • Descriptive names (min 3 chars)
+      
+      ✅ **Security Practices** (35% weight)
+         • No hardcoded credentials
+         • Environment variables for secrets
+         • Input validation present
+         • Encryption at rest/transit
+      
+      ✅ **Code Standards** (25% weight)
+         • Docstrings for public functions
+         • Test coverage ≥70%
+         • Linter compliance
+         • Cyclomatic complexity <10
+      
+      ✅ **Architecture Patterns** (15% weight)
+         • SOLID principles
+         • Separation of concerns
+         • Error handling
+         • Max 50 lines per function
+      
+      **Policy Search Locations:**
+      • `.github/policies/` (recommended)
+      • `docs/policies/`
+      • `policies/`
+      • `POLICIES.yaml`, `POLICIES.json`, `POLICIES.md`
+      
+      **If No Policies Found:**
+      CORTEX can create a starter policy template with sensible defaults covering all 4 validation categories.
+      
+      **Compliance Reporting:**
+      • Overall compliance percentage (0-100%)
+      • Violations categorized by severity (Critical/Warning/Info)
+      • Specific recommendations for each violation
+      • Report saved to `cortex-brain/documents/reports/policy-compliance.md`
+      
+      **Critical Violations:**
+      Setup will pause if critical violations detected (e.g., hardcoded secrets, missing security practices). You can choose to:
+      • Fix violations and retry
+      • Continue anyway (not recommended)
+      • Skip policy validation
+    request_echo_content: "Validate CORTEX configuration against organizational policies"
+    next_steps_content: |
+      1. CORTEX will scan for policy documents (7 locations)
+      2. If policies found → Run validation across 4 categories
+      3. If no policies → Offer to create starter template
+      4. Generate compliance report with recommendations
+      5. Pause for critical violations (requires confirmation)
+      
+      **To start validation:**
+      • Say "validate policies" or "check compliance"
+      • During setup: Policy validation runs automatically in Phase 3.5
+      
+      **Expected output:**
+      • Compliance percentage (e.g., 87.5%)
+      • Violation count by severity
+      • Detailed report path
+      • Next steps for remediation
   greeting:
     name: Greeting Response
     triggers:
@@ -1249,6 +1482,13 @@ routing:
   - create copilot instructions
   - setup epm
   - copilot instructions
+  onboarding_introduction_triggers:
+  - setup cortex
+  - onboard application
+  - cortex setup
+  - start onboarding
+  - begin setup
+  - initialize cortex
   ado_work_item_triggers:
   - plan ado
   - create work item
