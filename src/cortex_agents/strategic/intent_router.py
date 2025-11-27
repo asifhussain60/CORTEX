@@ -95,6 +95,12 @@ class IntentRouter(BaseAgent):
             IntentType.SCREENSHOT: ["screenshot", "ui", "screen", "visual"],
             IntentType.COMMIT: ["commit", "git", "push", "save changes"],
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
+            IntentType.ARCHITECTURE_REVIEW: [
+                "review architecture", "architecture review", "analyze architecture",
+                "architectural health", "architecture intelligence", "system health",
+                "forecast technical debt", "track architecture evolution",
+                "cortex health", "health trends", "architecture trends"
+            ],
         }
 
     

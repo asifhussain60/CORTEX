@@ -13,6 +13,7 @@ class AgentType(Enum):
     """Categories of specialist agents"""
     ROUTER = auto()          # IntentRouter
     ARCHITECT = auto()       # ArchitectAgent (NEW - Strategic architectural analysis)
+    ARCHITECTURE_INTELLIGENCE = auto()  # ArchitectureIntelligenceAgent (NEW - Architecture health analysis)
     PLANNER = auto()         # WorkPlanner
     EXECUTOR = auto()        # CodeExecutor
     TESTER = auto()          # TestGenerator
@@ -42,6 +43,10 @@ class IntentType(Enum):
     ARCHITECTURE = "architecture"
     ANALYZE_STRUCTURE = "analyze_structure" 
     CRAWL_SYSTEM = "crawl_system"
+    ARCHITECTURE_REVIEW = "architecture_review"  # Architecture Intelligence Agent
+    ANALYZE_ARCHITECTURAL_HEALTH = "analyze_architectural_health"
+    FORECAST_TECHNICAL_DEBT = "forecast_technical_debt"
+    TRACK_ARCHITECTURE_EVOLUTION = "track_architecture_evolution"
     
     # Execution intents
     CODE = "code"
@@ -142,6 +147,10 @@ INTENT_AGENT_MAP = {
     IntentType.ARCHITECTURE: AgentType.ARCHITECT,
     IntentType.ANALYZE_STRUCTURE: AgentType.ARCHITECT,
     IntentType.CRAWL_SYSTEM: AgentType.ARCHITECT,
+    IntentType.ARCHITECTURE_REVIEW: AgentType.ARCHITECTURE_INTELLIGENCE,
+    IntentType.ANALYZE_ARCHITECTURAL_HEALTH: AgentType.ARCHITECTURE_INTELLIGENCE,
+    IntentType.FORECAST_TECHNICAL_DEBT: AgentType.ARCHITECTURE_INTELLIGENCE,
+    IntentType.TRACK_ARCHITECTURE_EVOLUTION: AgentType.ARCHITECTURE_INTELLIGENCE,
     
     IntentType.CODE: AgentType.EXECUTOR,
     IntentType.IMPLEMENT: AgentType.EXECUTOR,

@@ -15,8 +15,9 @@ This hands-on program guides you through CORTEX capabilities with real exercises
 2. **Planning Workflow** (5-7 min) - How to plan features
 3. **Development with TDD** (8-10 min) - Write tests, implement features
 4. **Testing & Validation** (5-7 min) - Verify your work
+5. **Architecture Intelligence** (5-7 min) - Strategic health analysis and trend tracking
 
-**What You'll Build:** A simple user authentication feature (login form with validation)
+**What You'll Build:** A simple user authentication feature (login form with validation) + architecture health tracking
 
 ---
 
@@ -25,19 +26,19 @@ This hands-on program guides you through CORTEX capabilities with real exercises
 ### Learning Path Options
 
 **🚀 Quick Start (15 min)**
-- Learn essentials only
+- Learn essentials only (Modules 1-3)
 - Skip theory, focus on commands
 - Build simplified version
 
-**📖 Standard (25 min)**
-- Balanced theory + practice
+**📖 Standard (30 min)**
+- Balanced theory + practice (Modules 1-4)
 - All core workflows covered
 - Complete feature implementation
 
-**🎓 Comprehensive (30 min)**
-- Deep understanding
+**🎓 Comprehensive (40 min)**
+- Deep understanding (Modules 1-5)
 - Advanced features included
-- Production-ready implementation
+- Production-ready implementation + architecture analysis
 
 ---
 
@@ -854,6 +855,299 @@ generate feedback report
 
 ---
 
+## 🏛️ Module 5: Architecture Intelligence (5-7 min)
+
+### What You'll Learn
+- Strategic architecture health analysis
+- Trend tracking and forecasting
+- Technical debt estimation
+- Using reports for sprint planning
+
+### Hands-On Exercise 5.1: Run Architecture Review
+
+**Task:** Generate comprehensive architecture health report
+
+**Commands to Try:**
+```
+review architecture
+```
+
+**Expected Output:**
+```
+🏛️ Architecture Review Complete
+
+Overall Health: 78/100 (Warning)
+
+Layer Breakdown:
+- Discovery: 95% (19 features) ✅
+- Import: 90% (18 features) ✅
+- Instantiation: 85% (17 features) ✅
+- Documentation: 75% (15 features) ⚠️
+- Testing: 70% (14 features) ⚠️
+- Wiring: 80% (16 features) ✅
+- Optimization: 65% (13 features) ❌
+
+Feature Status:
+- Healthy (90-100%): 13 features
+- Warning (70-89%): 5 features
+- Critical (<70%): 1 feature
+
+Report saved: cortex-brain/documents/analysis/architecture-review-20251127-143022.md
+```
+
+**Understanding Check:**
+- ✅ What's the overall health score?
+- ✅ Which layer has the lowest score?
+- ✅ How many features need attention (Warning + Critical)?
+
+---
+
+### Hands-On Exercise 5.2: Interpret Health Report
+
+**Task:** Open and analyze the generated report
+
+**File Location:**
+```
+cortex-brain/documents/analysis/architecture-review-[timestamp].md
+```
+
+**What to Look For:**
+
+**1. Executive Summary:**
+```markdown
+Current architecture health: 78% (Warning). System has improved 5% 
+over the last 30 days, showing consistent upward trend. Primary 
+recommendation: Address 12 features in Warning state (70-89%) to 
+reach Healthy threshold.
+```
+
+**2. Trend Analysis (if historical data exists):**
+```markdown
+Trend Analysis (Last 30 Days):
+- Velocity: +5.2% improvement
+- Direction: Improving ↗️
+- Volatility: 2.3 (Low - predictable changes)
+```
+
+**3. Technical Debt Forecast:**
+```markdown
+3-Month Projection:
+- Predicted Score: 83% (↗️ +5% from current)
+- Confidence: 0.85 (High)
+
+6-Month Projection:
+- Predicted Score: 88% (↗️ +10% from current)
+- Confidence: 0.72 (Medium)
+
+Current Debt Estimate: 14 hours
+```
+
+**4. CORTEX 4.0 Recommendations:**
+```markdown
+1. **Improve Testing Coverage** (HIGH Priority)
+   Expected Impact: +5% overall health
+   
+2. **Complete Documentation** (MEDIUM Priority)
+   Expected Impact: +3% overall health
+   
+3. **Optimize Benchmarks** (LOW Priority)
+   Expected Impact: +2% overall health
+```
+
+**Understanding Check:**
+- ✅ Is the system improving or degrading?
+- ✅ What's the debt estimate in hours?
+- ✅ What's the highest priority recommendation?
+
+---
+
+### Hands-On Exercise 5.3: Track Evolution Over Time
+
+**Task:** Run multiple reviews to build historical data
+
+**Workflow:**
+```
+Week 1: review architecture (baseline)
+Week 2: review architecture (after improvements)
+Week 3: review architecture (validate trend)
+```
+
+**Expected Progression:**
+```
+Week 1: 78% (Warning) - Baseline established
+Week 2: 80% (Warning) - +2% improvement, velocity detected
+Week 3: 82% (Warning) - +4% total, trend confirmed
+```
+
+**Commands to Check Trends:**
+```
+track architecture evolution
+```
+
+**Expected Output:**
+```
+Architecture Evolution Report
+
+Historical Snapshots: 3
+Date Range: 2025-11-20 to 2025-11-27 (7 days)
+
+Health Progression:
+- Week 1: 78% (Baseline)
+- Week 2: 80% (+2%)
+- Week 3: 82% (+2%)
+
+Trend Metrics:
+- Average Velocity: +2.0% per week
+- Direction: Improving ↗️
+- Volatility: 1.2 (Low - very consistent)
+
+Insights:
+✅ Consistent improvement maintained
+✅ Low volatility indicates stable development practices
+✅ On track to reach 85% (Warning → Healthy boundary) in 2 weeks
+```
+
+**Understanding Check:**
+- ✅ What's the average velocity?
+- ✅ Is the trend improving or degrading?
+- ✅ When will system reach 85% if trend continues?
+
+---
+
+### Hands-On Exercise 5.4: Use Forecasts for Sprint Planning
+
+**Task:** Plan remediation work based on debt forecast
+
+**Scenario:**
+Your architecture review shows:
+- Current health: 78%
+- Target: 90% (Healthy threshold)
+- Debt estimate: 14 hours
+- Sprint capacity: 2 hours/sprint for technical debt
+
+**Commands to Try:**
+```
+forecast technical debt
+```
+
+**Expected Output:**
+```
+Technical Debt Forecast
+
+Current State:
+- Health: 78%
+- Gap to Healthy (90%): 12%
+- Estimated Work: 14 hours
+
+3-Month Projection (Doing Nothing):
+- Predicted Health: 81% (natural drift)
+- Confidence: 0.88
+- Still in Warning zone
+
+3-Month Projection (With Remediation):
+- Add 14 hours work over 7 sprints (2h per sprint)
+- Predicted Health: 91% (Healthy threshold!)
+- Confidence: 0.92
+
+Sprint Plan Recommendation:
+- Sprint 1-2: Address 5 testing gaps (4h)
+- Sprint 3-4: Complete 3 documentation items (6h)
+- Sprint 5-6: Optimize 1 performance benchmark (4h)
+- Sprint 7: Validation and contingency
+
+Expected Outcome: Healthy status in 7 sprints (14 weeks)
+```
+
+**Create Sprint Plan:**
+```
+Sprint 1 (This Week):
+☐ Add tests for AuthenticationService (2h)
+
+Sprint 2 (Next Week):
+☐ Add tests for PaymentProcessor (2h)
+
+Sprint 3:
+☐ Write architecture-guide.md for API module (2h)
+
+... (continue for remaining sprints)
+```
+
+**Understanding Check:**
+- ✅ How many sprints to reach Healthy threshold?
+- ✅ What's the first remediation task?
+- ✅ Can you explain the confidence scores?
+
+---
+
+### Hands-On Exercise 5.5: Compare Strategic vs Tactical Analysis
+
+**Task:** Understand difference between Architecture Intelligence and System Alignment
+
+**Run Both:**
+```
+# Strategic (RIGHT BRAIN)
+review architecture
+
+# Tactical (LEFT BRAIN)
+align report
+```
+
+**Compare Outputs:**
+
+**Architecture Intelligence (Strategic):**
+```
+Focus: Where are we going?
+Output:
+- Trend analysis (velocity, direction, volatility)
+- Debt forecasting (3-month, 6-month projections)
+- ADR recommendations (prioritized improvements)
+- Historical tracking (evolution over time)
+
+Use Cases:
+- Sprint planning (allocate technical debt time)
+- Quarterly goals (set health targets)
+- Team retrospectives (measure improvement)
+- Leadership reporting (communicate architecture health)
+```
+
+**System Alignment (Tactical):**
+```
+Focus: What's broken right now?
+Output:
+- 7-layer integration validation
+- Auto-remediation templates (wiring, tests, docs)
+- Convention-based feature discovery
+- Deployment readiness checks
+
+Use Cases:
+- Pre-deployment validation (block if <80% health)
+- New feature validation (ensure fully wired)
+- Template generation (auto-fix specific issues)
+- CI/CD integration (automated quality gates)
+```
+
+**Understanding Check:**
+- ✅ When would you use Architecture Intelligence vs System Alignment?
+- ✅ Can they work together? How?
+- ✅ Which one tells you "what to fix"? Which tells you "how to fix it"?
+
+---
+
+### Module 5 Completion Checklist
+
+**You've mastered Architecture Intelligence when you can:**
+
+✅ **Run architecture review** and interpret health scores  
+✅ **Understand layer breakdown** (Discovery → Optimization)  
+✅ **Read trend analysis** (velocity, direction, volatility)  
+✅ **Use debt forecasts** for sprint planning  
+✅ **Track evolution** over multiple reviews  
+✅ **Apply ADR recommendations** to improve health  
+✅ **Distinguish strategic vs tactical** analysis  
+✅ **Combine both approaches** for comprehensive validation  
+
+---
+
 ## 📖 Reference Commands
 
 ### Quick Command Reference
@@ -870,6 +1164,9 @@ generate feedback report
 | `complete session` | Generate report | <1s |
 | `git checkpoint` | Save work | <1s |
 | `feedback` | Share metrics | <1s |
+| `review architecture` | Architecture health analysis | 1-2s |
+| `track architecture evolution` | Historical trend tracking | <1s |
+| `forecast technical debt` | 3/6-month projections | <1s |
 
 ---
 
@@ -938,11 +1235,15 @@ generate feedback report
 ✅ **Apply refactorings** based on performance data  
 ✅ **Complete sessions** with comprehensive reports  
 ✅ **Share feedback** with team via GitHub Gist  
+✅ **Run architecture reviews** and interpret health metrics  
+✅ **Track architecture evolution** over time  
+✅ **Use debt forecasts** for sprint planning  
+✅ **Apply strategic and tactical analysis** together  
 
 ---
 
-**Tutorial Version:** 1.0  
-**Last Updated:** November 25, 2025  
-**Author:** GitHub Copilot  
+**Tutorial Version:** 2.0 (Added Module 5: Architecture Intelligence)  
+**Last Updated:** November 27, 2025  
+**Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available (Use Allowed, No Contributions)

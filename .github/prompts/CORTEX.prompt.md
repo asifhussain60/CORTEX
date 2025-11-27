@@ -209,6 +209,42 @@ CORTEX will:
 
 ---
 
+## 🏛️ Architecture Review (Strategic Analysis)
+
+**Complete Guide:** #file:modules/architecture-intelligence-guide.md
+
+**Quick Commands:**
+- `review architecture` or `architecture review` - Comprehensive architecture health review with trend analysis
+- `analyze architecture` or `architectural health` - Current health metrics and scoring
+- `forecast technical debt` - 3-month and 6-month debt projections
+- `track architecture evolution` - Historical trend tracking and insights
+- `cortex health` or `system health` - Quick health status check
+
+**What You Get:**
+- **Current Health Metrics:** Overall score (0-100%), 7-layer breakdown, feature status counts
+- **Trend Analysis:** Velocity calculation, direction detection (improving/degrading/stable), volatility measurement
+- **Debt Forecasting:** 3-month and 6-month linear projections with confidence scoring
+- **ADR Recommendations:** Prioritized suggestions for CORTEX 4.0 enhancements based on health/trend/forecast data
+- **Report Generation:** Markdown reports saved to `cortex-brain/documents/analysis/architecture-review-*.md`
+
+**Natural Language Examples:**
+- "Review CORTEX architecture and show me health trends"
+- "How is our architecture health evolving?"
+- "Forecast technical debt for the next 6 months"
+- "Show me architecture trends over the last month"
+
+**Key Features:**
+- ✅ **Zero Redundancy:** Extends IntegrationScorer, doesn't duplicate System Alignment
+- ✅ **Strategic Focus:** Trend analysis and forecasting (not tactical validation)
+- ✅ **Historical Tracking:** Stores health snapshots in Tier 3 for evolution analysis
+- ✅ **Actionable Insights:** Generates specific recommendations with priority rankings
+
+**Integration:** Works alongside System Alignment (RIGHT BRAIN strategic vs LEFT BRAIN tactical)
+
+**See architecture-intelligence-guide.md for report interpretation, configuration options, and troubleshooting.**
+
+---
+
 ## 🔧 System Alignment (Admin Only)
 
 **Complete Guide:** #file:modules/system-alignment-guide.md
