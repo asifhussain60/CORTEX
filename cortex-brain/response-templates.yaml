@@ -495,37 +495,11 @@ templates:
       \ items checked\n   5. **Resubmit for Approval** - Once DoR is complete\n  \
       \ \n   ⚠️ I will not approve this plan until DoR is met."
   planning_dor_complete:
+    <<: *standard_5_part_base
     name: Planning DoR Complete
     triggers:
     - planning_dor_complete
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX Planning DoR Complete\n**Author:** Asif Hussain\
-      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
-      \ Of Your Request\n   All clarifying questions answered, DoR validation complete.\n\
-      \n## ⚠️ Challenge\n   **DoR Met** - All requirements validated\n   All requirements\
-      \ documented with zero ambiguity. Dependencies validated. Security review complete.\
-      \ Ready to generate detailed plan.\n\n## \U0001F4AC Response\n   ## DoR Status\
-      \ COMPLETE**\n   \n   ✓ Requirements documented (zero ambiguity)\n   ✓ Dependencies\
-      \ identified & validated\n   ✓ Technical design approach agreed\n   ✓ Test strategy\
-      \ defined\n   ✓ Acceptance criteria measurable\n   ✓ Security review passed\
-      \ (OWASP checklist complete)\n   ✓ User approval on scope\n   \n   Generating\
-      \ detailed plan with:\n   • Phase breakdown (Foundation → Core → Validation)\n\
-      \   • Risk analysis\n   • Security hardening tasks\n   • Task generation\n \
-      \  • Acceptance criteria\n\n## \U0001F4DD Your Request Generate plan with DoR\
-      \ validated\n\n## \U0001F50D Next Steps - Milestone-Based Implementation\n \
-      \  \n   ☐ Milestone 1: Planning & Security Baseline (Complete)\n      ✓ DoR\
-      \ validated\n      ✓ Security review passed\n      ✓ Plan generated\n      ⏳\
-      \ User review pending\n   \n   ☐ Milestone 2: Foundation & Discovery\n     \
-      \ ⏳ Awaiting plan approval\n      • Crawler will scan codebase\n      • Knowledge\
-      \ graph will be built\n      • Architecture analysis will be generated\n   \
-      \   • Security baseline tests created\n   \n   ☐ Milestone 3: Core Implementation\
-      \ (TDD)\n      ⏳ Awaiting foundation complete\n      • Write failing tests (RED)\n\
-      \      • Implement features (GREEN)\n      • Refactor for quality (REFACTOR)\n\
-      \      • Security hardening integrated\n   \n   ☐ Milestone 4: Validation &\
-      \ Security Audit\n      ⏳ Awaiting implementation complete\n      • Full test\
-      \ suite execution\n      • Security penetration testing\n      • Performance\
-      \ validation\n      • DoD enforcement\n   \n   **Review the planning document\
-      \ and say \"approve plan\" when ready.**"
   planning_security_review:
     name: Planning Security Review
     triggers:
@@ -569,51 +543,25 @@ templates:
       \ before development begins.\n   \n   Say \"security approved\" once checklist\
       \ complete, or \"security concerns: [describe]\" to discuss risks."
   ado_created:
+    <<: *standard_5_part_base
     name: ADO Created
     triggers:
     - ado_created
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO Planning\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to create a new ADO work item with planning template\n\
-      \n## Challenge No Challenge - This uses the ADO Planning System 2.0 with database\
-      \ storage and template-based workflow.\n\n## \U0001F4AC Response\n   Created\
-      \ ADO work item with complete planning template. File opened in VS Code for\
-      \ review and customization.\n\n## Your Request Create new ADO work item\n\n\
-      ## \U0001F50D Next Steps\n   1. Review and customize the planning template\n\
-      \   2. Fill in Definition of Ready (DoR) checkboxes\n   3. Define acceptance\
-      \ criteria\n   4. Approve plan when ready: 'approve ado [number]'\n   5. Start\
-      \ implementation: 'resume ado [number]'"
   ado_resumed:
+    <<: *standard_5_part_base
     name: ADO Resumed
     triggers:
     - ado_resumed
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO Resume\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to resume work on an existing ADO item\n\n## Challenge\
-      \ No Challenge - Context restored from database with recent activity, files,\
-      \ and smart suggestions.\n\n## \U0001F4AC Response\n   Restored ADO context\
-      \ with activity history and related files. All planning documents opened in\
-      \ VS Code.\n\n## Your Request Resume ADO work item\n\n## \U0001F50D Next Steps\n\
-      \   1. Review activity log and recent changes\n   2. Check DoR/DoD completion\
-      \ status\n   3. Continue implementation\n   4. Update status when milestones\
-      \ reached\n   5. Mark complete when DoD satisfied"
   ado_search_results:
+    <<: *standard_5_part_base
     name: ADO Search Results
     triggers:
     - ado_search_results
     response_type: table
-    content: "# \U0001F9E0 CORTEX ADO Search\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to search for ADO work items\n\n## Challenge No\
-      \ Challenge - Using FTS5 full-text search across all ADO fields (title, description,\
-      \ technical notes).\n\n## \U0001F4AC Response\n   [Display search results in\
-      \ table format]\n\n## Your Request Search ADO work items\n\n## \U0001F50D Next\
-      \ Steps\n   1. Review search results\n   2. Open specific ADO: 'resume ado [number]'\n\
-      \   3. Refine search if needed\n   4. Filter by status: 'show ados planning'\
-      \ or 'show ados in-progress'"
   ado_story_planning:
+    <<: *standard_5_part_base
     name: ADO User Story Planning
     triggers:
     - plan ado story
@@ -621,49 +569,8 @@ templates:
     - new ado story
     - plan user story
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO User Story Planning\n**Author:** Asif Hussain\
-      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
-      \ Of Your Request\n   You want to create an ADO User Story with structured planning.\n\
-      \n## ⚠️ Challenge\n   No Challenge - User Story template tracks implementation\
-      \ and generates copy-paste ready summaries for ADO.\n\n## \U0001F4AC Response\n\
-      \   Creating User Story with:\n   • Title and user story format capture\n  \
-      \ • Acceptance criteria tracking\n   • Implementation progress logging\n   •\
-      \ Technical decisions documentation\n   • Natural language summary generation\
-      \ for ADO paste\n   \n   Story file created in `cortex-brain/documents/planning/ado/active/`\n\
-      \   \n   **What the final copy-paste output looks like:**\n   \n   ```\n   User\
-      \ Authentication - Login with Email and Password\n   \n   Implemented user login\
-      \ functionality with email and password authentication. \n   Users can now securely\
-      \ log in to their accounts with automatic session \n   management and \"Remember\
-      \ Me\" capability.\n   \n   Key Technical Changes:\n   • Added JWT-based authentication\
-      \ with 30-minute token expiration\n   • Implemented bcrypt password hashing\
-      \ (10 salt rounds) for security\n   • Created LoginController with POST /api/auth/login\
-      \ endpoint\n   • Added session persistence using HTTP-only secure cookies\n\
-      \   \n   Files Changed:\n   • Created: src/controllers/AuthController.cs (145\
-      \ lines)\n   • Created: src/services/AuthenticationService.cs (89 lines)\n \
-      \  • Modified: src/routes/AppRoutes.tsx (added /login route)\n   • Created:\
-      \ tests/auth/LoginComponent.test.tsx (12 tests, 100% pass)\n   \n   Acceptance\
-      \ Criteria Met:\n   ✅ Login form accepts email and password input\n   ✅ Invalid\
-      \ credentials display error message\n   ✅ Successful login redirects to /dashboard\
-      \ with 200ms response\n   ✅ Session persists for 30 minutes with automatic\
-      \ renewal\n   ✅ \"Remember Me\" extends session to 30 days\n   \n   Technical\
-      \ Decisions:\n   • Chose JWT over session tokens for scalability\n   • Added\
-      \ MemoryCache for user lookups (67% fewer database queries)\n   • Implemented\
-      \ rate limiting (5 attempts = 15 min lockout)\n   \n   Test Coverage: 87% overall,\
-      \ 100% for authentication flow\n   Performance: Average login time 145ms →\
-      \ 48ms after optimization\n   ```\n\n## \U0001F4DD Your Request\n   Create ADO\
-      \ User Story with planning template\n\n## \U0001F50D Next Steps\n   \n   Please\
-      \ provide:\n   1. **Story Title** - Brief description of user need\n   2. **Story\
-      \ Description** - \"As a [user], I want [feature], so that [benefit]\"\n   3.\
-      \ **Acceptance Criteria** - Testable conditions (optional, add during work)\n\
-      \   4. **Priority** - High (1), Medium (2), Low (3), or Very Low (4)\n   \n\
-      \   Example:\n   ```\n   Title: User login with email and password\n   Description:\
-      \ As a registered user, I want to log in with my \n                email and\
-      \ password, so that I can access my account securely.\n   Criteria:\n   - Login\
-      \ form accepts email and password\n   - Invalid credentials show error message\n\
-      \   - Successful login redirects to dashboard\n   - Session persists for 30\
-      \ minutes\n   Priority: High\n   ```\n   \n   Provide details now or say \"\
-      create story\" with information above."
   ado_feature_planning:
+    <<: *standard_5_part_base
     name: ADO Feature Planning
     triggers:
     - plan ado feature
@@ -671,59 +578,8 @@ templates:
     - new ado feature
     - plan feature
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO Feature Planning\n**Author:** Asif Hussain |\
-      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
-      \ Of Your Request\n   You want to create an ADO Feature with comprehensive planning.\n\
-      \n## ⚠️ Challenge\n   No Challenge - Feature template tracks multiple stories\
-      \ and generates executive-level summaries for ADO.\n\n## \U0001F4AC Response\n\
-      \   Creating Feature with:\n   • High-level business value description\n   •\
-      \ Related user stories linking\n   • Technical architecture documentation\n\
-      \   • Implementation phases tracking\n   • Performance metrics capture\n   •\
-      \ Natural language summary for ADO paste\n   \n   Feature file created in `cortex-brain/documents/planning/ado/active/`\n\
-      \   \n   **What the final copy-paste output looks like:**\n   \n   ```\n   User\
-      \ Authentication System - Complete Implementation\n   \n   Delivered complete\
-      \ authentication system including login, registration, \n   password reset,\
-      \ and session management. The system supports ~10,000 \n   concurrent users\
-      \ with <100ms average authentication time.\n   \n   Business Value:\n   Users\
-      \ can now securely access their accounts with industry-standard \n   authentication\
-      \ practices. The system prevents unauthorized access while \n   providing seamless\
-      \ user experience with automatic session management.\n   \n   Technical Architecture:\n\
-      \   • JWT-based stateless authentication for horizontal scaling\n   • bcrypt\
-      \ password hashing with configurable salt rounds\n   • Redis session store for\
-      \ distributed session management\n   • Rate limiting middleware prevents brute\
-      \ force attacks\n   \n   Components Delivered:\n   • AuthController - Login,\
-      \ logout, token refresh endpoints\n   • AuthenticationService - Credential validation,\
-      \ token generation\n   • SessionManager - Distributed session handling via Redis\n\
-      \   • PasswordHasher - Secure password hashing and verification\n   • UserRepository\
-      \ - Database access layer with Entity Framework\n   \n   Related User Stories\
-      \ Completed:\n   ✅ UserStory-12345: User login with email/password\n   ✅ UserStory-12346:\
-      \ User registration with email verification\n   ✅ UserStory-12347: Password\
-      \ reset via email\n   ✅ UserStory-12348: Remember me functionality\n   \n \
-      \  Files Modified (15 total):\n   Created: src/controllers/AuthController.cs,\
-      \ src/services/*.cs\n   Modified: src/Startup.cs (auth middleware), src/appsettings.json\n\
-      \   Tests: tests/auth/*.test.tsx (47 tests, 94% pass rate)\n   \n   Performance\
-      \ Metrics:\n   • Login: 145ms → 48ms average (67% improvement with caching)\n\
-      \   • Token validation: 12ms average (Redis lookup)\n   • Concurrent users tested:\
-      \ 10,000 (no degradation observed)\n   \n   Known Limitations:\n   • Redis dependency\
-      \ required for session management\n   • Email service requires SendGrid API\
-      \ key configuration\n   • MFA currently supports TOTP only (SMS planned Phase\
-      \ 2)\n   \n   Deployment Notes:\n   • Requires Redis 6.0+ (connection string\
-      \ in appsettings.json)\n   • Database migration: Apply 20251126_AddAuthTables\
-      \ before deployment\n   • No breaking changes to existing API endpoints\n  \
-      \ ```\n\n## \U0001F4DD Your Request\n   Create ADO Feature with planning template\n\
-      \n## \U0001F50D Next Steps\n   \n   Please provide:\n   1. **Feature Title**\
-      \ - High-level capability description\n   2. **Feature Description** - Business\
-      \ value and scope\n   3. **Related Stories** - List of user stories (optional,\
-      \ link during work)\n   4. **Priority** - High (1), Medium (2), Low (3), or\
-      \ Very Low (4)\n   5. **Estimated Duration** - Rough timeline (optional)\n \
-      \  \n   Example:\n   ```\n   Title: User Authentication System\n   Description:\
-      \ Complete authentication system with login, \n                registration,\
-      \ password reset, and session management.\n   Related Stories:\n   - User login\
-      \ with email/password\n   - User registration with email verification\n   -\
-      \ Password reset via email\n   - Remember me functionality\n   Priority: High\n\
-      \   Duration: 2 weeks\n   ```\n   \n   Provide details now or say \"create feature\"\
-      \ with information above."
   ado_summary_generation:
+    <<: *standard_5_part_base
     name: ADO Work Summary Generation
     triggers:
     - generate ado summary
@@ -731,54 +587,6 @@ templates:
     - ado work summary
     - complete ado work
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO Work Summary\n**Author:** Asif Hussain | **GitHub:**\
-      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
-      \ Your Request\n   You want to generate a work summary for an ADO work item\
-      \ to copy-paste directly into Azure DevOps.\n\n## ⚠️ Challenge\n   No Challenge\
-      \ - Summary generator creates natural language summaries with key technical\
-      \ highlights, ready for direct paste into ADO Description or Comments.\n\n##\
-      \ \U0001F4AC Response\n   Generating work summary in natural language format\
-      \ with:\n   • Plain English description of what was accomplished\n   • Key technical\
-      \ changes highlighted inline (not verbose markdown)\n   • Files changed with\
-      \ context (created/modified/tested)\n   • Acceptance criteria validation\n \
-      \  • Technical decisions explained in business terms\n   • Performance metrics\
-      \ and test results\n   \n   Summary saved in `cortex-brain/documents/summaries/ado/`\
-      \ and opened in VS Code.\n   \n   **Output Format:**\n   Natural language paragraphs\
-      \ with bullet points for technical details, designed \n   to be read by both\
-      \ technical and non-technical stakeholders in ADO. \n   \n   Example for User\
-      \ Story:\n   ```\n   Implemented user login functionality with email and password\
-      \ authentication. \n   Users can now securely log in to their accounts with\
-      \ automatic session \n   management and \"Remember Me\" capability.\n   \n \
-      \  Key Technical Changes:\n   • Added JWT-based authentication with 30-minute\
-      \ token expiration\n   • Implemented bcrypt password hashing (10 salt rounds)\
-      \ for security\n   • Created LoginController with POST /api/auth/login endpoint\n\
-      \   \n   Files Changed:\n   • Created: src/controllers/AuthController.cs (145\
-      \ lines)\n   • Modified: src/routes/AppRoutes.tsx (added /login route)\n   •\
-      \ Created: tests/auth/LoginComponent.test.tsx (12 tests, 100% pass)\n   \n\
-      \   Acceptance Criteria Met:\n   ✅ Login form accepts email and password input\n\
-      \   ✅ Invalid credentials display error message\n   ✅ Successful login redirects\
-      \ to /dashboard\n   ```\n   \n   Example for Feature:\n   ```\n   Delivered\
-      \ complete authentication system including login, registration, \n   password\
-      \ reset, and session management. The system supports ~10,000 \n   concurrent\
-      \ users with <100ms average authentication time.\n   \n   Business Value:\n\
-      \   Users can now securely access their accounts with industry-standard \n \
-      \  authentication practices while maintaining seamless user experience.\n   \n\
-      \   Technical Architecture:\n   • JWT-based stateless authentication for horizontal\
-      \ scaling\n   • Redis session store for distributed session management\n   •\
-      \ Rate limiting middleware prevents brute force attacks\n   \n   Related User\
-      \ Stories Completed:\n   ✅ UserStory-12345: User login with email/password\n\
-      \   ✅ UserStory-12346: User registration with email verification\n   ```\n\n\
-      ## \U0001F4DD Your Request\n   Generate ADO work summary for copy-paste\n\n\
-      ## \U0001F50D Next Steps\n   \n   1. **Provide Work Item ID** - Story/Feature/Bug\
-      \ identifier\n      Example: \"UserStory-20251126123456\" or \"Feature-20251126123456\"\
-      \n   \n   2. **CORTEX Generates Summary** - Creates natural language summary\
-      \ and opens in VS Code\n   \n   3. **Copy Content** - Select all content from\
-      \ the summary file\n      (It's already formatted for direct paste - no markdown\
-      \ cleanup needed)\n   \n   4. **Paste to ADO** - Open your ADO work item\n\
-      \      • For in-progress work: Add to Comments section\n      • For completed\
-      \ work: Update Description with final summary\n   \n   5. **Update Work Item**\
-      \ - Mark status as Done/Resolved in ADO\n   \n   Say \"generate summary for\
-      \ [work-item-id]\" or provide work item ID now."
   greeting:
     name: Greeting Response
     triggers:
@@ -1415,26 +1223,7 @@ templates:
     - create bug
     - ado planning
     response_type: detailed
-    content: "# \U0001F9E0 CORTEX ADO Work Item Planning\n**Author:** Asif Hussain\
-      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
-      \ Of Your Request\n   You want to create an Azure DevOps work item with structured\
-      \ planning and ADO-formatted output.\n\n## ⚠️ Challenge\n\n   No Challenge -\
-      \ Unified planning core provides ADO-specific templates and formatting.\n\n\
-      ## \U0001F4AC Response\n   Starting ADO work item planning...\n   \n   **Available\
-      \ Work Item Types:**\n   • User Story (default)\n   • Feature\n   • Bug\n  \
-      \ • Task\n   • Epic\n   \n   **Form Template Includes:**\n   • Title and description\n\
-      \   • Priority (1=High, 2=Medium, 3=Low, 4=Very Low)\n   • Assigned to (optional)\n\
-      \   • Iteration and area path\n   • Tags\n   • Acceptance criteria (checklist)\n\
-      \   • Related work items\n   \n   **Output Formats:**\n   • ADO-formatted markdown\
-      \ (copy-paste ready)\n   • Planning file (.md) in cortex-brain/documents/planning/ado/\n\
-      \   • DoR/DoD validation\n   • OWASP security review (if applicable)\n   \n\
-      \   **File Organization:**\n   ```\n   cortex-brain/documents/planning/ado/\n\
-      \   ├── active/\n   ├── completed/\n   └── blocked/\n   ```\n\n## Your Request\
-      \ Create ADO work item\n\n## \U0001F50D Next Steps\n   1. **Choose work item\
-      \ type** - Story, Feature, Bug, Task, or Epic?\n   2. **Fill form template**\
-      \ - I'll provide structured template\n   3. **Generate plan** - DoR validation\
-      \ + ADO formatting\n   4. **Output files** - Planning .md + ADO copy-paste\
-      \ summary\n   \n   Which work item type would you like to create?"
+    <<: *standard_5_part_base
   demo_system:
     name: Demo System
     expected_orchestrator: DemoOrchestrator
