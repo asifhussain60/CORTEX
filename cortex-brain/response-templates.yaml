@@ -1398,19 +1398,184 @@ templates:
       \ CORTEX to become non-functional after cleanup. The validation system prevented\
       \ execution to protect your system.\n   \n   **Validation Report:** {validation_report_path}\n\
       \   \n   **What Validation Checks:**\n   1. **Import Dependencies** - Ensures\
-      \ no Python module imports deleted files\n   2. **Critical Files** - Protects\
-      \ src/, tests/, tier databases, config files\n   3. **Test Discovery** - Validates\
-      \ pytest can still find all tests\n   4. **Entry Points** - Ensures main.py,\
-      \ cortex_entry.py remain functional\n   \n   **Common Issues:**\n   - File is\
-      \ imported by other modules (check importers list)\n   - File is in protected\
-      \ src/ or tests/ directory\n   - File is critical to CORTEX entry points\n \
-      \  - Test file would break test discovery\n\n## \U0001F4DD Your Request Execute\
-      \ cleanup operation\n\n## \U0001F50D Next Steps\n   1. Review validation report\
-      \ at {validation_report_path}\n   2. Fix critical issues (remove files from\
-      \ cleanup or update references)\n   3. Re-run cleanup after issues resolved\n\
-      \   4. Alternative: Skip validation with cleanup --skip-validation (not recommended)\n\
-      \   \n   **How to Fix:**\n   - **Import errors**: Update imports before deleting\
-      \ files\n   - **Protected files**: Do not delete files in src/, tests/, or cortex-brain/tier*/\n\
+      \ no production imports broken\n   2. **Critical Files** - Protects tier databases,\
+      \ configs, core modules\n   3. **Test Coverage** - Validates test file integrity\n\
+      \   4. **Documentation** - Checks critical docs not removed\n   \n   All checks\
+      \ must pass before cleanup executes.\n\n## Your Request Run cleanup operation\n\
+      \n## \U0001F50D Next Steps\n   1. **Review validation report** - See {validation_report_path}\
+      \ for details\n   2. **Fix critical issues** - Address each blocker (remove\
+      \ from cleanup manifest)\n   3. **Re-run cleanup** - Validation will re-check\
+      \ automatically\n   4. **Alternative:** Use `cleanup --skip-validation` (NOT\
+      \ RECOMMENDED)\n   \n   Would you like to review the validation report?"
+  holistic_cleanup:
+    name: Holistic Cleanup
+    expected_orchestrator: HolisticCleanupOrchestrator
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    - holistic cleanup
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Holistic Cleanup\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to perform a comprehensive repository cleanup with\
+      \ recursive scanning, production validation, and detailed reporting.\n\n## ⚠️\
+      \ Challenge\n\n   No Challenge - Holistic cleanup performs safe, validated cleanup\
+      \ with backup and rollback capabilities.\n\n## \U0001F4AC Response\n   Starting\
+      \ holistic cleanup workflow...\n   \n   **What Holistic Cleanup Does:**\n \
+      \  1. **Recursive Scan** - Scans entire repository structure\n   2. **File Categorization**\
+      \ - Identifies production/non-production/redundant files\n   3. **Production\
+      \ Validation** - Detects non-production naming patterns\n   4. **Manifest Generation**\
+      \ - Creates detailed JSON + Markdown report\n   5. **Safe Execution** - Dry-run\
+      \ preview, user approval, git backup, rollback\n   \n   **Non-Production Patterns\
+      \ Detected:**\n   • temp_, _v1, _v2, -YYYYMMDD suffixes\n   • clean/modified/updated\
+      \ prefixes\n   • backup/old/copy in paths\n   • SUMMARY/REPORT caps files\n\
+      \   \n   **Protected Paths:**\n   • src/, tests/, cortex-brain/tier*\n   •\
+      \ .git/, package.json, requirements.txt\n   • Configuration files\n   \n   **Expected\
+      \ Results:**\n   • Space savings: 50-200 MB typical\n   • File reduction: 20-40%\
+      \ non-production files removed\n   • Production naming: Suggestions for all\
+      \ violations\n\n## Your Request Run holistic repository cleanup\n\n## \U0001F50D\
+      \ Next Steps\n   1. **Scanning** - Recursive directory scan in progress\n  \
+      \ 2. **Analysis** - Categorizing files and detecting patterns\n   3. **Manifest**\
+      \ - Generating detailed report\n   4. **Review** - You'll approve before any\
+      \ deletions\n   5. **Execute** - Safe cleanup with git backup\n   \n   Cleanup\
+      \ process starting now..."
+  setup_epm:
+    name: Setup Entry Point Module
+    expected_orchestrator: SetupEPMOrchestrator
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Setup Entry Point Module\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to generate .github/copilot-instructions.md\
+      \ for this repository with auto-detected project structure.\n\n## ⚠️ Challenge\n\
+      \n   No Challenge - Fast detection via file system scan (<5 seconds), brain-assisted\
+      \ learning improves accuracy over time.\n\n## \U0001F4AC Response\n   Starting\
+      \ Setup EPM workflow...\n   \n   **What Gets Generated:**\n   • Entry point\
+      \ guidance (how to use CORTEX)\n   • Architecture overview (detected language/framework)\n\
+      \   • Build/test commands (from package.json/Makefile)\n   • Project conventions\
+      \ (learned over time)\n   • Critical files reference\n   • Brain status indicator\n\
+      \   \n   **Detection Capabilities:**\n   • 7 languages (Python, C#, TypeScript,\
+      \ JavaScript, Go, Rust, Java)\n   • 6 frameworks (React, Angular, Vue, Blazor,\
+      \ ASP.NET, Express)\n   • 6 build systems (npm, yarn, pnpm, dotnet, cargo,\
+      \ maven)\n   • 4 test frameworks (pytest, jest, xunit, mocha)\n   \n   **GitIgnore\
+      \ Configuration:**\n   ✅ Automatically adds CORTEX/ to .gitignore\n   ✅ Validates\
+      \ exclusion works with git check-ignore\n   ✅ Commits changes with descriptive\
+      \ message\n   ✅ Confirms no CORTEX files staged\n   \n   **Brain Learning:**\n\
+      \   • Observes coding patterns during normal usage\n   • Stores in Tier 3 (workspace-specific)\n\
+      \   • Auto-updates weekly or on-demand\n   • 65% initial → 90% accuracy after\
+      \ learning\n\n## Your Request Generate copilot instructions for this repository\n\
+      \n## \U0001F50D Next Steps\n   1. **Detecting structure** - File system scan\
+      \ in progress\n   2. **Generating template** - Building instructions from detection\n\
+      \   3. **Configuring gitignore** - Adding CORTEX/ exclusion\n   4. **Writing\
+      \ file** - Creating .github/copilot-instructions.md\n   5. **Confirmation**\
+      \ - Success with 5 validation checkmarks\n   \n   Setup process starting now..."
+  ado_work_item:
+    name: ADO Work Item Planning
+    expected_orchestrator: ADOWorkItemOrchestrator
+    triggers:
+    - plan ado
+    - create work item
+    - ado work item
+    - create story
+    - create feature
+    - create bug
+    - ado planning
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Work Item Planning\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to create an Azure DevOps work item with structured\
+      \ planning and ADO-formatted output.\n\n## ⚠️ Challenge\n\n   No Challenge -\
+      \ Unified planning core provides ADO-specific templates and formatting.\n\n\
+      ## \U0001F4AC Response\n   Starting ADO work item planning...\n   \n   **Available\
+      \ Work Item Types:**\n   • User Story (default)\n   • Feature\n   • Bug\n  \
+      \ • Task\n   • Epic\n   \n   **Form Template Includes:**\n   • Title and description\n\
+      \   • Priority (1=High, 2=Medium, 3=Low, 4=Very Low)\n   • Assigned to (optional)\n\
+      \   • Iteration and area path\n   • Tags\n   • Acceptance criteria (checklist)\n\
+      \   • Related work items\n   \n   **Output Formats:**\n   • ADO-formatted markdown\
+      \ (copy-paste ready)\n   • Planning file (.md) in cortex-brain/documents/planning/ado/\n\
+      \   • DoR/DoD validation\n   • OWASP security review (if applicable)\n   \n\
+      \   **File Organization:**\n   ```\n   cortex-brain/documents/planning/ado/\n\
+      \   ├── active/\n   ├── completed/\n   └── blocked/\n   ```\n\n## Your Request\
+      \ Create ADO work item\n\n## \U0001F50D Next Steps\n   1. **Choose work item\
+      \ type** - Story, Feature, Bug, Task, or Epic?\n   2. **Fill form template**\
+      \ - I'll provide structured template\n   3. **Generate plan** - DoR validation\
+      \ + ADO formatting\n   4. **Output files** - Planning .md + ADO copy-paste\
+      \ summary\n   \n   Which work item type would you like to create?"
+  demo_system:
+    name: Demo System
+    expected_orchestrator: DemoOrchestrator
+    triggers:
+    - demo
+    - cortex demo
+    - show demo
+    - run demo
+    - demo cortex
+    - live demo
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Demo System\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to see a live demonstration of CORTEX capabilities\
+      \ with interactive examples.\n\n## ⚠️ Challenge\n\n   No Challenge - Demo system\
+      \ provides guided tour of planning, TDD, testing, and brain features.\n\n##\
+      \ \U0001F4AC Response\n   Starting CORTEX demo system...\n   \n   **Demo Modules\
+      \ Available:**\n   \n   **1. Planning Demo** (5 min)\n   • Feature planning\
+      \ workflow\n   • DoR/DoD validation\n   • Incremental planning with checkpoints\n\
+      \   • Vision API (screenshot → requirements)\n   \n   **2. TDD Demo** (7 min)\n\
+      \   • RED→GREEN→REFACTOR automation\n   • Auto-debug on test failures\n   •\
+      \ Performance-based refactoring\n   • Test location isolation\n   \n   **3.\
+      \ Brain Demo** (5 min)\n   • Conversation capture\n   • Context injection\n\
+      \   • Pattern learning\n   • Knowledge graph\n   \n   **4. Integration Demo**\
+      \ (8 min)\n   • View discovery\n   • Code review\n   • ADO work items\n   •\
+      \ Complete workflow\n   \n   **5. Full Tour** (25 min)\n   • All modules in\
+      \ sequence\n   • Hands-on exercises\n   • Q&A after each module\n\n## Your\
+      \ Request Show CORTEX demo\n\n## \U0001F50D Next Steps\n   Choose a demo module:\n\
+      \   1. Planning Demo\n   2. TDD Demo\n   3. Brain Demo\n   4. Integration Demo\n\
+      \   5. Full Tour (recommended)\n   \n   Say the number or module name to start."
+  unified_entry_point:
+    name: Unified Entry Point
+    expected_orchestrator: UnifiedEntryPointOrchestrator
+    triggers:
+    - unified entry
+    - entry point
+    - cortex entry
+    - unified interface
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Unified Entry Point\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You're asking about the unified entry point system that\
+      \ routes all CORTEX operations.\n\n## ⚠️ Challenge\n\n   No Challenge - Unified\
+      \ entry point provides single interface for all CORTEX capabilities.\n\n## \U0001F4AC\
+      \ Response\n   **Unified Entry Point Overview:**\n   \n   **Purpose:**\n   •\
+      \ Single command interface for ALL CORTEX operations\n   • Automatic intent\
+      \ detection and routing\n   • Consistent response format\n   • Integrated with\
+      \ response templates\n   \n   **Routing Capabilities:**\n   • Planning operations\
+      \ (feature, ADO, vision)\n   • TDD workflows (start, test, refactor)\n   • Brain\
+      \ operations (capture, import, context)\n   • Admin operations (align, cleanup,\
+      \ optimize)\n   • Discovery operations (views, demo, tutorial)\n   \n   **How\
+      \ It Works:**\n   1. You say what you want in natural language\n   2. Intent\
+      \ detection identifies operation\n   3. Routes to specialist orchestrator\n\
+      \   4. Returns formatted response\n   5. Tracks context for next interaction\n\
+      \   \n   **Integration:**\n   • Response templates for 30+ operations\n   •\
+      \ Brain memory for context\n   • Tier system for data persistence\n   • Agent\
+      \ framework for execution\n\n## Your Request Information about unified entry\
+      \ point\n\n## \U0001F50D Next Steps\n   **Available Options:**\n   \n   1.\
+      \ **View Documentation**\n      • See routing logic and intent detection\n \
+      \     • File: src/orchestrators/unified_entry_point_orchestrator.py\n   \n \
+      \  2. **See Available Commands**\n      • Type 'help' for command reference\n\
+      \      • 30+ operations with triggers\n   \n   3. **Try Natural Language**\n\
+      \      • Just describe what you want\n      • No commands needed\n      • Example:\
+      \ \"plan a login feature\"\n   \n   4. **Learn System**\n      • Type 'tutorial'\
+      \ for hands-on learning\n      • 15-30 minute interactive program\n   \n   What\
+      \ would you like to explore?"
+  brain_export:
       \   - **Test files**: Keep test files or update test discovery configuration\n\
       \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
   admin_help:
@@ -2020,6 +2185,7 @@ routing:
   - clean up
   - cleanup cortex
   - clean cortex
+  - holistic cleanup
   cleanup_validation_failed_triggers:
   - cleanup_validation_failed
   - validation_failed
@@ -2036,6 +2202,26 @@ routing:
   - create copilot instructions
   - setup epm
   - copilot instructions
+  ado_work_item_triggers:
+  - plan ado
+  - create work item
+  - ado work item
+  - create story
+  - create feature
+  - create bug
+  - ado planning
+  demo_triggers:
+  - demo
+  - cortex demo
+  - show demo
+  - run demo
+  - demo cortex
+  - live demo
+  unified_entry_point_triggers:
+  - unified entry
+  - entry point
+  - cortex entry
+  - unified interface
   discovery_triggers:
   - discover cortex
   - explore cortex

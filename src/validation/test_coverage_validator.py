@@ -87,11 +87,26 @@ class TestCoverageValidator:
         return None
     
     def _snake_case(self, name: str) -> str:
-        """Convert CamelCase to snake_case."""
+        """
+        Convert CamelCase to snake_case with proper acronym handling.
+        
+        Examples:
+            SetupEPMOrchestrator → setup_epm_orchestrator
+            ADOWorkItemOrchestrator → ado_work_item_orchestrator
+            TDDWorkflowOrchestrator → tdd_workflow_orchestrator
+        """
         result = []
         for i, char in enumerate(name):
-            if char.isupper() and i > 0:
-                result.append('_')
+            if char.isupper():
+                # Add underscore before uppercase letter if:
+                # - Not at start
+                # - Previous char was lowercase (CamelCase boundary)
+                # - Next char is lowercase (end of acronym, e.g., EPMOrchestrator)
+                if i > 0:
+                    prev_lower = name[i - 1].islower()
+                    next_lower = i + 1 < len(name) and name[i + 1].islower()
+                    if prev_lower or next_lower:
+                        result.append('_')
             result.append(char.lower())
         return ''.join(result)
     

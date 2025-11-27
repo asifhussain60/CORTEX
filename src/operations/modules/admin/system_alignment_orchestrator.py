@@ -31,6 +31,7 @@ from src.operations.base_operation_module import (
 from src.validation.file_organization_validator import FileOrganizationValidator
 from src.validation.template_header_validator import TemplateHeaderValidator
 from src.caching import get_cache
+from src.governance import DocumentGovernance
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +123,9 @@ class AlignmentReport:
     organization_score: int = 100  # 0-100% file organization compliance
     header_violations: List[Any] = field(default_factory=list)  # Template header issues
     header_compliance_score: int = 100  # 0-100% template header compliance
+    # Document governance fields
+    doc_governance_violations: List[Any] = field(default_factory=list)  # Duplicate/overlapping docs
+    doc_governance_score: int = 100  # 0-100% documentation governance compliance
     
     @property
     def is_healthy(self) -> bool:
@@ -375,6 +379,11 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         report.header_violations = header_results.get('violations', [])
         report.header_compliance_score = header_results.get('score', 100)
         
+        # Phase 3.9: Validate documentation governance (duplicate/overlapping docs)
+        doc_gov_results = self._validate_documentation_governance()
+        report.doc_governance_violations = doc_gov_results.get('violations', [])
+        report.doc_governance_score = doc_gov_results.get('score', 100)
+        
         # Phase 4: Generate auto-remediation suggestions
         self._generate_remediation_suggestions(report, orchestrators, agents)
         
@@ -547,7 +556,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         # Convert CamelCase to kebab-case (handle acronyms specially)
         import re
         # First, handle common acronyms by converting them to lowercase
-        name_base = name_base.replace("TDD", "Tdd").replace("API", "Api").replace("HTTP", "Http")
+        name_base = name_base.replace("TDD", "Tdd").replace("API", "Api").replace("HTTP", "Http").replace("EPM", "Epm").replace("ADO", "Ado")
         # Insert hyphen before uppercase letters, then remove leading hyphen if present
         kebab_name = re.sub(r'([A-Z])', r'-\1', name_base).lstrip('-').lower()
         
@@ -896,6 +905,115 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 'remediation_templates': []
             }
     
+    def _validate_documentation_governance(self) -> Dict[str, Any]:
+        """
+        Validate documentation governance (duplicate/overlapping docs).
+        
+        Checks:
+        - Duplicate documents across cortex-brain/documents/ and .github/prompts/modules/
+        - Overlapping content detection (title similarity, keyword overlap)
+        - Canonical name violations for module guides
+        - Documents not referenced in index files
+        
+        Returns:
+            Dict with validation results and violations
+        """
+        try:
+            governance = DocumentGovernance(self.project_root)
+            violations = []
+            score = 100
+            
+            # Scan all existing documents for duplicates
+            documents_path = self.project_root / "cortex-brain" / "documents"
+            modules_path = self.project_root / ".github" / "prompts" / "modules"
+            
+            scanned_docs = []
+            
+            # Collect all markdown files
+            if documents_path.exists():
+                for md_file in documents_path.rglob("*.md"):
+                    if md_file.is_file():
+                        scanned_docs.append(md_file)
+            
+            if modules_path.exists():
+                for md_file in modules_path.glob("*.md"):
+                    if md_file.is_file():
+                        scanned_docs.append(md_file)
+            
+            logger.info(f"Scanning {len(scanned_docs)} documents for duplicates...")
+            
+            # Track duplicates found (avoid reporting same pair twice)
+            reported_pairs = set()
+            
+            for doc_path in scanned_docs:
+                try:
+                    # Read document content
+                    with open(doc_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    # Find duplicates
+                    duplicates = governance.find_duplicates(doc_path, content)
+                    
+                    # Filter by threshold (0.75 from governance rules)
+                    high_similarity = [
+                        d for d in duplicates 
+                        if d.similarity_score >= 0.75
+                    ]
+                    
+                    for dup in high_similarity:
+                        # Create canonical pair identifier (alphabetically sorted to avoid duplicates)
+                        pair_key = tuple(sorted([str(doc_path), str(dup.existing_path)]))
+                        
+                        if pair_key not in reported_pairs:
+                            reported_pairs.add(pair_key)
+                            
+                            violations.append({
+                                'type': 'duplicate_document',
+                                'severity': 'warning' if dup.similarity_score < 0.90 else 'critical',
+                                'file': str(doc_path.relative_to(self.project_root)),
+                                'duplicate': str(dup.existing_path.relative_to(self.project_root)),
+                                'similarity': f"{dup.similarity_score:.0%}",
+                                'algorithm': dup.algorithm,
+                                'recommendation': dup.recommendation
+                            })
+                            
+                            # Deduct score based on severity
+                            if dup.similarity_score >= 0.90:
+                                score -= 10  # Critical: likely exact duplicate
+                            else:
+                                score -= 5   # Warning: high similarity
+                
+                except Exception as e:
+                    logger.debug(f"Error scanning {doc_path}: {e}")
+                    continue
+            
+            # Ensure score doesn't go below 0
+            score = max(0, score)
+            
+            logger.info(f"Documentation governance: {score}% ({len(violations)} issues found)")
+            
+            return {
+                'score': score,
+                'status': 'healthy' if score >= 80 else 'degraded',
+                'violations': violations,
+                'critical_count': sum(1 for v in violations if v.get('severity') == 'critical'),
+                'warning_count': sum(1 for v in violations if v.get('severity') == 'warning'),
+                'scanned_documents': len(scanned_docs),
+                'duplicate_pairs': len(reported_pairs)
+            }
+            
+        except Exception as e:
+            logger.error(f"Documentation governance validation failed: {e}")
+            return {
+                'score': 0,
+                'status': 'error',
+                'violations': [],
+                'critical_count': 0,
+                'warning_count': 0,
+                'scanned_documents': 0,
+                'duplicate_pairs': 0
+            }
+    
     def _generate_remediation_suggestions(
         self,
         report: AlignmentReport,
@@ -1004,6 +1122,38 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                     content=f"{template['description']}\n\n{template.get('header_content', '')}",
                     file_path=None
                 ))
+        
+        # Add documentation governance remediation suggestions
+        if hasattr(report, 'doc_governance_violations'):
+            governance = DocumentGovernance(self.project_root)
+            
+            for violation in report.doc_governance_violations:
+                if violation.get('type') == 'duplicate_document':
+                    # Create consolidation suggestion
+                    file1 = self.project_root / violation['file']
+                    file2 = self.project_root / violation['duplicate']
+                    
+                    # Determine which file to keep (prefer older/more established)
+                    keep_file = file1 if file1.stat().st_mtime < file2.stat().st_mtime else file2
+                    remove_file = file2 if keep_file == file1 else file1
+                    
+                    suggestion_content = (
+                        f"Duplicate detected: {violation['similarity']} similarity via {violation['algorithm']}\n"
+                        f"File 1: {violation['file']}\n"
+                        f"File 2: {violation['duplicate']}\n\n"
+                        f"Recommended action:\n"
+                        f"1. Review both documents and merge unique content into: {keep_file.relative_to(self.project_root)}\n"
+                        f"2. Archive/delete: {remove_file.relative_to(self.project_root)}\n"
+                        f"3. Update any references to point to the consolidated document\n\n"
+                        f"{violation['recommendation']}"
+                    )
+                    
+                    report.remediation_suggestions.append(RemediationSuggestion(
+                        feature_name="Documentation Governance",
+                        suggestion_type="duplicate_consolidation",
+                        content=suggestion_content,
+                        file_path=str(keep_file)
+                    ))
     
     def _format_report_summary(self, report: AlignmentReport) -> str:
         """Format alignment report summary for display."""

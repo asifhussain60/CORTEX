@@ -1,3 +1,0 @@
-# DALL-E Prompt: Documentation Generation
-
-Create a documentation pipeline diagram...

@@ -1,3 +1,0 @@
-# DALL-E Prompt: Testing Strategy
-
-Create a testing pyramid diagram...

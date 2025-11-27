@@ -294,6 +294,147 @@ CORTEX will:
 
 ---
 
+## 🔧 Setup Entry Point Module (Admin Only)
+
+**Complete Guide:** #file:modules/setup-epm-guide.md
+
+**Purpose:** Auto-generate `.github/copilot-instructions.md` for user repositories with brain-assisted learning
+
+**Quick Commands:**
+- `setup copilot instructions` - Generate new instructions file
+- `generate copilot instructions` - Alternative trigger
+- `cortex refresh instructions` - Update with learned patterns (Phase 2)
+
+**Key Features:**
+- **Fast Detection:** <5 seconds via file system scan (7 languages, 6 frameworks, 6 build systems, 4 test frameworks)
+- **Lightweight Template:** ~150 tokens vs 2000+ for semantic analysis (93% token savings)
+- **Brain Learning:** Improves accuracy over time (65% initial → 90% after learning)
+- **Namespace Isolation:** Each repo gets own Tier 3 storage, prevents cross-contamination
+
+**What Gets Generated:**
+- Entry point guidance (how to use CORTEX)
+- Architecture overview (detected language/framework)
+- Build/test commands (detected from package.json/Makefile/etc.)
+- Project conventions (learned over time)
+- Critical files reference
+- Brain status indicator
+
+**GitIgnore Configuration:**
+- ✅ Automatically adds CORTEX/ to `.gitignore` during setup
+- ✅ Validates exclusion patterns work with `git check-ignore`
+- ✅ Commits changes with descriptive message
+- ✅ Confirms no CORTEX files accidentally staged
+- ✅ Explicit confirmation message with 5 validation checkmarks
+
+**See setup-epm-guide.md for architecture, detection tables, template structure, and phase roadmap.**
+
+---
+
+## 📋 ADO Work Item Planning (Admin Only)
+
+**Commands:** `plan ado` - Create Azure DevOps work items with structured planning
+
+**Available Work Item Types:**
+- User Story (default)
+- Feature
+- Bug
+- Task
+- Epic
+
+**Form Template Includes:**
+- Title and description
+- Priority (1=High, 2=Medium, 3=Low, 4=Very Low)
+- Assigned to (optional)
+- Iteration and area path
+- Tags
+- Acceptance criteria (checklist)
+- Related work items
+
+**Output Formats:**
+- ADO-formatted markdown (copy-paste ready)
+- Planning file (.md) in cortex-brain/documents/planning/ado/
+- DoR/DoD validation
+- OWASP security review (if applicable)
+
+**File Organization:**
+```
+cortex-brain/documents/planning/ado/
+├── active/
+├── completed/
+└── blocked/
+```
+
+**Integration:** Shares planning core with PlanningOrchestrator, uses ADOClient for API communication
+
+---
+
+## 🎬 Demo System
+
+**Commands:** `demo` or `cortex demo` - Interactive demonstration of CORTEX capabilities
+
+**Demo Modules Available:**
+
+**1. Planning Demo** (5 min)
+- Feature planning workflow
+- DoR/DoD validation
+- Incremental planning with checkpoints
+- Vision API (screenshot → requirements)
+
+**2. TDD Demo** (7 min)
+- RED→GREEN→REFACTOR automation
+- Auto-debug on test failures
+- Performance-based refactoring
+- Test location isolation
+
+**3. Brain Demo** (5 min)
+- Conversation capture
+- Context injection
+- Pattern learning
+- Knowledge graph
+
+**4. Integration Demo** (8 min)
+- View discovery
+- Code review
+- ADO work items
+- Complete workflow
+
+**5. Full Tour** (25 min)
+- All modules in sequence
+- Hands-on exercises
+- Q&A after each module
+
+**Usage:** Say the module number or name to start a specific demo, or choose "Full Tour" for the complete experience.
+
+---
+
+## 🔌 Unified Entry Point
+
+**Purpose:** Single command interface for ALL CORTEX operations with automatic intent detection and routing
+
+**Routing Capabilities:**
+- Planning operations (feature, ADO, vision)
+- TDD workflows (start, test, refactor)
+- Brain operations (capture, import, context)
+- Admin operations (align, cleanup, optimize)
+- Discovery operations (views, demo, tutorial)
+
+**How It Works:**
+1. You say what you want in natural language
+2. Intent detection identifies operation
+3. Routes to specialist orchestrator
+4. Returns formatted response
+5. Tracks context for next interaction
+
+**Integration:**
+- Response templates for 30+ operations
+- Brain memory for context
+- Tier system for data persistence
+- Agent framework for execution
+
+**Benefits:** No need to remember specific commands - just describe what you want and the unified entry point routes to the appropriate handler.
+
+---
+
 ## 📦 Cache Management (Admin Only)
 
 **Complete Guide:** #file:modules/cache-management-guide.md (Coming Soon)  

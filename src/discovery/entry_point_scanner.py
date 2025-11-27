@@ -66,10 +66,16 @@ class EntryPointScanner:
             
             for template_name, template_data in templates.items():
                 triggers = template_data.get("triggers", [])
+                # Use explicit expected_orchestrator from YAML if available, otherwise infer
+                yaml_orchestrator = template_data.get("expected_orchestrator")
                 
                 for trigger in triggers:
-                    # Infer orchestrator from trigger/template name
-                    expected_orchestrator = self._infer_orchestrator(trigger, template_name)
+                    # Prefer explicit YAML mapping over inference
+                    if yaml_orchestrator:
+                        expected_orchestrator = yaml_orchestrator
+                    else:
+                        # Fall back to inference for backward compatibility
+                        expected_orchestrator = self._infer_orchestrator(trigger, template_name)
                     
                     entry_points[trigger] = {
                         "template": template_name,
@@ -122,8 +128,35 @@ class EntryPointScanner:
             "check version": "UpgradeOrchestrator",
             "optimize": "OptimizeCortexOrchestrator",
             "optimize cortex": "OptimizeCortexOrchestrator",
-            "cleanup": "CleanupOrchestrator",
+            "cleanup": "HolisticCleanupOrchestrator",
+            "clean up": "HolisticCleanupOrchestrator",
+            "cleanup cortex": "HolisticCleanupOrchestrator",
+            "clean cortex": "HolisticCleanupOrchestrator",
+            "holistic cleanup": "HolisticCleanupOrchestrator",
             "setup": "SetupOrchestrator",
+            "setup copilot instructions": "SetupEPMOrchestrator",
+            "setup instructions": "SetupEPMOrchestrator",
+            "generate copilot instructions": "SetupEPMOrchestrator",
+            "create copilot instructions": "SetupEPMOrchestrator",
+            "setup epm": "SetupEPMOrchestrator",
+            "copilot instructions": "SetupEPMOrchestrator",
+            "plan ado": "ADOWorkItemOrchestrator",
+            "create work item": "ADOWorkItemOrchestrator",
+            "ado work item": "ADOWorkItemOrchestrator",
+            "create story": "ADOWorkItemOrchestrator",
+            "create feature": "ADOWorkItemOrchestrator",
+            "create bug": "ADOWorkItemOrchestrator",
+            "ado planning": "ADOWorkItemOrchestrator",
+            "demo": "DemoOrchestrator",
+            "cortex demo": "DemoOrchestrator",
+            "show demo": "DemoOrchestrator",
+            "run demo": "DemoOrchestrator",
+            "demo cortex": "DemoOrchestrator",
+            "live demo": "DemoOrchestrator",
+            "unified entry": "UnifiedEntryPointOrchestrator",
+            "entry point": "UnifiedEntryPointOrchestrator",
+            "cortex entry": "UnifiedEntryPointOrchestrator",
+            "unified interface": "UnifiedEntryPointOrchestrator",
             "feedback": "FeedbackOrchestrator",
             "align": "SystemAlignmentOrchestrator",
             "healthcheck": "HealthCheckOrchestrator",

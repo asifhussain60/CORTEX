@@ -1,3 +1,0 @@
-# DALL-E Prompt: System Architecture
-
-Create a high-level system architecture diagram...
