@@ -28,8 +28,9 @@ def template_registry():
     # Add test templates
     help_template = Template(
         template_id='help_table',
-        name='Help Table',
         triggers=['help', 'help_table'],
+        response_type='table',
+        context_needed=False,
         content="""🧠 **CORTEX Help**
 
 🎯 **My Understanding Of Your Request:**
@@ -50,6 +51,7 @@ def template_registry():
    2. Say "help <command>" for details""",
         verbosity='concise',
         metadata={
+            'name': 'Help Table',
             'category': 'help',
             'response_type': 'table'
         }
@@ -57,8 +59,9 @@ def template_registry():
     
     status_template = Template(
         template_id='status_check',
-        name='Status Check',
         triggers=['status', 'where are we'],
+        response_type='table',
+        context_needed=False,
         content="""🧠 **CORTEX Status**
 
 🎯 **My Understanding Of Your Request:**
@@ -79,6 +82,7 @@ def template_registry():
    2. Review completed Phase 1""",
         verbosity='concise',
         metadata={
+            'name': 'Status Check',
             'category': 'status',
             'response_type': 'table'
         }
@@ -86,8 +90,9 @@ def template_registry():
     
     quick_start_template = Template(
         template_id='quick_start',
-        name='Quick Start',
         triggers=['quick start', 'get started'],
+        response_type='narrative',
+        context_needed=False,
         content="""🧠 **CORTEX Quick Start**
 
 🎯 **My Understanding Of Your Request:**
@@ -108,6 +113,7 @@ def template_registry():
    2. Explore features""",
         verbosity='concise',
         metadata={
+            'name': 'Quick Start',
             'category': 'help',
             'response_type': 'narrative'
         }
