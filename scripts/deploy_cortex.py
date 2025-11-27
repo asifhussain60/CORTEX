@@ -921,7 +921,8 @@ def publish_to_branch(
     project_root: Path,
     branch_name: str = PUBLISH_BRANCH,
     dry_run: bool = False,
-    resume: bool = False
+    resume: bool = False,
+    skip_validation: bool = False
 ) -> bool:
     """Publish CORTEX to dedicated branch with fault tolerance.
     
@@ -930,6 +931,7 @@ def publish_to_branch(
         branch_name: Name of publish branch
         dry_run: Preview mode (no git changes)
         resume: Resume from last checkpoint
+        skip_validation: Skip pre-deployment validation (use with caution)
         
     Returns:
         True if successful, False otherwise
@@ -942,10 +944,11 @@ def publish_to_branch(
     logger.info(f"Project root: {project_root}")
     logger.info(f"Dry run: {dry_run}")
     logger.info(f"Resume mode: {resume}")
+    logger.info(f"Skip validation: {skip_validation}")
     logger.info("")
     
-    # Run validation gate first (unless resuming or dry-run)
-    if not resume and not dry_run:
+    # Run validation gate first (unless resuming, dry-run, or skipped)
+    if not resume and not dry_run and not skip_validation:
         logger.info("" + "=" * 80)
         logger.info("STAGE 0: Pre-Deployment Validation Gate")
         logger.info("" + "=" * 80)
@@ -1369,6 +1372,11 @@ Fault Tolerance:
         action='store_true',
         help='Resume from last checkpoint (if publish was interrupted)'
     )
+    parser.add_argument(
+        '--skip-validation',
+        action='store_true',
+        help='Skip pre-deployment validation gate (use with caution - for documented known issues only)'
+    )
     
     args = parser.parse_args()
     
@@ -1377,7 +1385,8 @@ Fault Tolerance:
             project_root=args.project_root,
             branch_name=args.branch,
             dry_run=args.dry_run,
-            resume=args.resume
+            resume=args.resume,
+            skip_validation=args.skip_validation
         )
         return 0 if success else 1
     except KeyboardInterrupt:
