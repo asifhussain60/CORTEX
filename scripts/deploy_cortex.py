@@ -110,7 +110,9 @@ EXCLUDED_DIRS = {
     'scripts/admin',
     'tests/admin',
     'tests/operations/admin',
-    'tests/operations/modules/admin'
+    'tests/operations/modules/admin',
+    # Demo/Mock Data (PRODUCTION SAFETY: Real data generated at runtime)
+    'cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO',  # Mock data for Phase 1 demos only
 }
 
 # File patterns to exclude

@@ -138,6 +138,15 @@ class DeploymentValidator:
         # User Entry Point Operations
         self.check_entry_point_operations()
         
+        # Mock Data Detection (NEW - Production Safety)
+        self.check_no_mock_data_in_production()
+        
+        # Dashboard Data Integration (NEW - Production Readiness)
+        self.check_dashboard_data_integration()
+        
+        # ADO Enhancements Integration (NEW - Git History, DoR/DoD, Clarification)
+        self.check_ado_enhancements_integration()
+        
         # Additional critical checks
         self.check_critical_files()
         self.check_import_health()
@@ -2054,6 +2063,336 @@ class DeploymentValidator:
                 severity="CRITICAL",
                 passed=True,
                 message="✓ Entry point operations (optimize, healthcheck, feedback) present and functional"
+            ))
+    
+    def check_no_mock_data_in_production(self):
+        """MOCK_DATA_GATE: Verify no mock data files will be deployed to production."""
+        check_id = "MOCK_DATA_GATE"
+        name = "No Mock Data in Production"
+        
+        # Search for mock data files in dashboard directories
+        mock_data_patterns = [
+            "cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO/assets/data/mock-*.json",
+            "cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO/**/mock-*.json",
+            "cortex-brain/documents/analysis/dashboard/data/mock-*.json"
+        ]
+        
+        mock_files_found = []
+        for pattern in mock_data_patterns:
+            from glob import glob
+            pattern_path = str(self.project_root / pattern.replace('/', '\\'))
+            matches = glob(pattern_path, recursive=True)
+            mock_files_found.extend([Path(f).relative_to(self.project_root) for f in matches])
+        
+        if mock_files_found:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=False,
+                message=f"BLOCKED: {len(mock_files_found)} mock data file(s) detected",
+                details=(
+                    "Mock data files MUST NOT be deployed to production.\n\n"
+                    "Found mock files:\n" +
+                    "\n".join(f"  • {file}" for file in mock_files_found) +
+                    "\n\nThese files are for demonstration only. Production CORTEX must:\n"
+                    "  1. Use DashboardDataAdapter to generate real data\n"
+                    "  2. Run analysis during application onboarding\n"
+                    "  3. Feed D3.js dashboard with live analyzer outputs\n\n"
+                    "Action Required:\n"
+                    "  • Remove mock-*.json files from production build\n"
+                    "  • Keep mock files in demo/docs directories only\n"
+                    "  • Ensure deploy_cortex.py excludes INTELLIGENT-UX-DEMO/"
+                ),
+                fix_available=False
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=True,
+                message="✓ No mock data files detected in production paths"
+            ))
+    
+    def check_dashboard_data_integration(self):
+        """DASHBOARD_INTEGRATION: Verify dashboard data adapter and integration pipeline exist."""
+        check_id = "DASHBOARD_INTEGRATION"
+        name = "Dashboard Data Integration Complete"
+        
+        integration_issues = []
+        
+        # Check DashboardDataAdapter exists
+        adapter_file = self.project_root / "src" / "operations" / "dashboard_data_adapter.py"
+        if not adapter_file.exists():
+            integration_issues.append("dashboard_data_adapter.py NOT FOUND - data transformation layer missing")
+        else:
+            try:
+                with open(adapter_file, 'r', encoding='utf-8') as f:
+                    adapter_content = f.read()
+                
+                # Verify key methods exist
+                required_methods = [
+                    'transform_metadata',
+                    'transform_quality_data',
+                    'transform_security_data',
+                    'transform_performance_data',
+                    'generate_full_dashboard_data'
+                ]
+                
+                missing_methods = [m for m in required_methods if f"def {m}" not in adapter_content]
+                if missing_methods:
+                    integration_issues.append(f"DashboardDataAdapter missing methods: {', '.join(missing_methods)}")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate DashboardDataAdapter: {e}")
+        
+        # Check onboarding hook exists (will be created next)
+        onboarding_file = self.project_root / "src" / "operations" / "onboarding_orchestrator.py"
+        if not onboarding_file.exists():
+            integration_issues.append("onboarding_orchestrator.py NOT FOUND - onboarding workflow incomplete (will create next)")
+        
+        # Check dashboard directory exists
+        dashboard_dir = self.project_root / "cortex-brain" / "documents" / "analysis" / "dashboard"
+        if not dashboard_dir.exists():
+            integration_issues.append("dashboard/ directory NOT FOUND - production dashboard location missing (auto-created by adapter)")
+        
+        # Verify INTELLIGENT-UX-DEMO is excluded from production
+        deploy_script = self.project_root / "scripts" / "deploy_cortex.py"
+        if deploy_script.exists():
+            try:
+                with open(deploy_script, 'r', encoding='utf-8') as f:
+                    deploy_content = f.read()
+                
+                # Check if INTELLIGENT-UX-DEMO is excluded
+                if "INTELLIGENT-UX-DEMO" not in deploy_content:
+                    integration_issues.append("deploy_cortex.py does not exclude INTELLIGENT-UX-DEMO/ from production (will add)")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate deploy_cortex.py exclusions: {e}")
+        
+        if integration_issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",  # Changed from CRITICAL to HIGH since some are planned work
+                passed=False,
+                message=f"Dashboard integration incomplete ({len(integration_issues)} issues)",
+                details=(
+                    "Dashboard data integration is not production-ready.\n\n"
+                    "Issues found:\n" +
+                    "\n".join(f"  • {issue}" for issue in integration_issues) +
+                    "\n\nRequired components:\n"
+                    "  • DashboardDataAdapter (transforms CORTEX analyzers → JSON) ✓ CREATED\n"
+                    "  • OnboardingOrchestrator (triggers analysis on app onboarding) ⏳ TODO\n"
+                    "  • Production dashboard directory (cortex-brain/documents/analysis/dashboard/) ⏳ AUTO-CREATED\n"
+                    "  • Demo exclusion (INTELLIGENT-UX-DEMO/ kept for demos only) ⏳ TODO\n\n"
+                    "Expected workflow:\n"
+                    "  1. User onboards application\n"
+                    "  2. CORTEX runs CodeQualityAnalyzer, SecurityScanner, PerformanceMetrics\n"
+                    "  3. DashboardDataAdapter transforms outputs to dashboard JSON\n"
+                    "  4. Dashboard displays real data (not mock)\n"
+                ),
+                fix_available=False
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",
+                passed=True,
+                message="✓ Dashboard data integration complete and ready"
+            ))
+    
+    def check_ado_enhancements_integration(self):
+        """ADO_ENHANCEMENTS: Verify ADO work path enhancements (git history, DoR/DoD, clarification) are integrated."""
+        check_id = "ADO_ENHANCEMENTS"
+        name = "ADO Work Path Enhancements Integration"
+        
+        integration_issues = []
+        
+        # 1. Check GitHistoryValidator exists
+        validator_file = self.project_root / "src" / "validators" / "git_history_validator.py"
+        if not validator_file.exists():
+            integration_issues.append("GitHistoryValidator NOT FOUND - git history context enrichment missing")
+        else:
+            try:
+                with open(validator_file, 'r', encoding='utf-8') as f:
+                    validator_content = f.read()
+                
+                # Verify key methods exist
+                required_methods = [
+                    'validate_git_context',
+                    'analyze_recent_activity',
+                    'analyze_security_patterns',
+                    'analyze_contributors',
+                    'analyze_related_work'
+                ]
+                
+                missing_methods = [m for m in required_methods if f"def {m}" not in validator_content]
+                if missing_methods:
+                    integration_issues.append(f"GitHistoryValidator missing methods: {', '.join(missing_methods)}")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate GitHistoryValidator: {e}")
+        
+        # 2. Check git-history-rules.yaml exists
+        git_rules_file = self.project_root / "cortex-brain" / "config" / "git-history-rules.yaml"
+        if not git_rules_file.exists():
+            integration_issues.append("git-history-rules.yaml NOT FOUND - git history validation config missing")
+        else:
+            try:
+                with open(git_rules_file, 'r', encoding='utf-8') as f:
+                    git_rules = yaml.safe_load(f)
+                
+                # Verify enforcement level is BLOCKING
+                if git_rules.get('enforcement_level') != 'BLOCKING':
+                    integration_issues.append(f"git-history-rules.yaml enforcement_level is '{git_rules.get('enforcement_level')}', should be 'BLOCKING'")
+                
+                # Verify required checks exist
+                required_checks = git_rules.get('minimum_requirements', {}).get('required_checks', [])
+                expected_checks = ['recent_activity', 'security_patterns', 'contributor_analysis', 'related_work', 'temporal_patterns']
+                missing_checks = [c for c in expected_checks if c not in required_checks]
+                if missing_checks:
+                    integration_issues.append(f"git-history-rules.yaml missing required checks: {', '.join(missing_checks)}")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate git-history-rules.yaml: {e}")
+        
+        # 3. Check dor-dod-rules.yaml exists
+        dor_dod_file = self.project_root / "cortex-brain" / "config" / "dor-dod-rules.yaml"
+        if not dor_dod_file.exists():
+            integration_issues.append("dor-dod-rules.yaml NOT FOUND - DoR/DoD validation config missing")
+        else:
+            try:
+                with open(dor_dod_file, 'r', encoding='utf-8') as f:
+                    dor_dod_rules = yaml.safe_load(f)
+                
+                # Verify DoR is enabled
+                if not dor_dod_rules.get('definition_of_ready', {}).get('enabled', False):
+                    integration_issues.append("dor-dod-rules.yaml: Definition of Ready is not enabled")
+                
+                # Verify minimum score is set
+                min_score = dor_dod_rules.get('definition_of_ready', {}).get('minimum_score_to_approve')
+                if min_score is None or min_score < 80:
+                    integration_issues.append(f"dor-dod-rules.yaml: DoR minimum_score_to_approve is {min_score}, should be >= 80")
+                
+                # Verify DoD is enabled
+                if not dor_dod_rules.get('definition_of_done', {}).get('enabled', False):
+                    integration_issues.append("dor-dod-rules.yaml: Definition of Done is not enabled")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate dor-dod-rules.yaml: {e}")
+        
+        # 4. Check clarification-rules.yaml exists
+        clarification_file = self.project_root / "cortex-brain" / "config" / "clarification-rules.yaml"
+        if not clarification_file.exists():
+            integration_issues.append("clarification-rules.yaml NOT FOUND - interactive clarification config missing")
+        else:
+            try:
+                with open(clarification_file, 'r', encoding='utf-8') as f:
+                    clarification_rules = yaml.safe_load(f)
+                
+                # Verify max rounds is set (check both possible locations)
+                max_rounds = clarification_rules.get('conversation', {}).get('max_rounds')
+                if max_rounds is None:
+                    max_rounds = clarification_rules.get('clarification_settings', {}).get('max_rounds')
+                
+                if max_rounds is None or max_rounds < 3:
+                    integration_issues.append(f"clarification-rules.yaml: max_rounds is {max_rounds}, should be >= 3")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate clarification-rules.yaml: {e}")
+        
+        # 5. Check ADO orchestrator has git history integration
+        ado_orchestrator = self.project_root / "src" / "orchestrators" / "ado_work_item_orchestrator.py"
+        if not ado_orchestrator.exists():
+            integration_issues.append("ado_work_item_orchestrator.py NOT FOUND - ADO orchestrator missing")
+        else:
+            try:
+                with open(ado_orchestrator, 'r', encoding='utf-8') as f:
+                    ado_content = f.read()
+                
+                # Check for GitHistoryValidator import
+                if "from src.validators.git_history_validator import GitHistoryValidator" not in ado_content:
+                    integration_issues.append("ado_work_item_orchestrator.py does not import GitHistoryValidator")
+                
+                # Check for DoR/DoD validation methods
+                required_methods = [
+                    'validate_definition_of_ready',
+                    'validate_definition_of_done',
+                    'process_clarification_round'
+                ]
+                
+                missing_methods = [m for m in required_methods if f"def {m}" not in ado_content]
+                if missing_methods:
+                    integration_issues.append(f"ado_work_item_orchestrator.py missing methods: {', '.join(missing_methods)}")
+                
+                # Check for git context in WorkItemMetadata
+                if "git_context: Optional[Dict[str, Any]]" not in ado_content:
+                    integration_issues.append("ado_work_item_orchestrator.py: WorkItemMetadata missing git_context field")
+                
+            except Exception as e:
+                integration_issues.append(f"Failed to validate ado_work_item_orchestrator.py: {e}")
+        
+        # 6. Check tests exist for ADO enhancements
+        test_files = [
+            "tests/operations/test_ado_clarification.py",
+            "tests/operations/test_ado_dor_dod_validation.py",
+            "tests/operations/test_ado_yaml_tracking.py",
+            "tests/orchestrators/test_ado_git_integration.py"
+        ]
+        
+        missing_tests = []
+        for test_file in test_files:
+            test_path = self.project_root / test_file
+            if not test_path.exists():
+                missing_tests.append(test_file)
+        
+        if missing_tests:
+            integration_issues.append(f"Missing test files: {', '.join(missing_tests)}")
+        
+        # 7. Check implementation guide exists
+        impl_guide = self.project_root / "cortex-brain" / "documents" / "implementation-guides" / "ado-git-history-integration.md"
+        if not impl_guide.exists():
+            integration_issues.append("ado-git-history-integration.md NOT FOUND - implementation guide missing")
+        
+        if integration_issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",
+                passed=False,
+                message=f"ADO enhancements integration incomplete ({len(integration_issues)} issues)",
+                details=(
+                    "ADO work path enhancements are not production-ready.\n\n"
+                    "Issues found:\n" +
+                    "\n".join(f"  • {issue}" for issue in integration_issues) +
+                    "\n\nRequired components:\n"
+                    "  • GitHistoryValidator (universal git context enrichment)\n"
+                    "  • git-history-rules.yaml (BLOCKING enforcement config)\n"
+                    "  • dor-dod-rules.yaml (Definition of Ready/Done validation)\n"
+                    "  • clarification-rules.yaml (interactive clarification config)\n"
+                    "  • ado_work_item_orchestrator.py (enhanced with git history, DoR/DoD, clarification)\n"
+                    "  • Comprehensive test coverage (clarification, validation, git integration)\n"
+                    "  • Implementation guide (ado-git-history-integration.md)\n\n"
+                    "Expected workflow:\n"
+                    "  1. User creates ADO work item\n"
+                    "  2. CORTEX analyzes git history (commits, security patterns, contributors)\n"
+                    "  3. CORTEX validates DoR (requirements quality gate)\n"
+                    "  4. CORTEX asks interactive clarification questions\n"
+                    "  5. CORTEX validates DoD (completion quality gate)\n"
+                    "  6. Work item approved for production\n"
+                ),
+                fix_available=False
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="HIGH",
+                passed=True,
+                message="✓ ADO work path enhancements fully integrated and ready"
             ))
     
     def generate_summary(self) -> Tuple[int, int, int]:

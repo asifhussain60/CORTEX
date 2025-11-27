@@ -216,6 +216,29 @@ class GitHistoryValidator:
             quality_score=score
         )
     
+    def validate_git_context(self, request_context: Dict) -> ValidationResult:
+        """
+        Public API: Validate git context for a request.
+        Alias for validate_request() for clearer external API.
+        """
+        return self.validate_request(request_context)
+    
+    def analyze_recent_activity(self, file_path: str) -> Dict:
+        """Public API: Analyze recent commits (6 months) for the file"""
+        return self._analyze_recent_activity(Path(file_path))
+    
+    def analyze_security_patterns(self, file_path: str) -> Dict:
+        """Public API: Analyze security-related commits for the file"""
+        return self._analyze_security_patterns(Path(file_path))
+    
+    def analyze_contributors(self, file_path: str) -> Dict:
+        """Public API: Analyze contributors and SMEs for the file"""
+        return self._analyze_contributors(Path(file_path))
+    
+    def analyze_related_work(self, file_path: str) -> Dict:
+        """Public API: Discover related PRs, issues, and co-changing files"""
+        return self._discover_related_work(Path(file_path))
+    
     def analyze_file_history(self, file_path: str) -> Dict:
         """
         Analyze git history for a specific file.

@@ -1154,9 +1154,50 @@ class ADOWorkItemOrchestrator:
         logger.info(f"Integrated clarifications: {len(state.rounds)} rounds, {sum(len(r.selected_choices) for r in state.rounds)} choices")
         return metadata
     
+    def process_clarification_round(self, round: ClarificationRound, user_response: str) -> Tuple[bool, List[str], str]:
+        """
+        Process a single clarification round with user response.
+        Public API alias for parse_clarification_response().
+        
+        Args:
+            round: The clarification round to process
+            user_response: User's response text
+        
+        Returns:
+            Tuple of (success, selected_choices, error_message)
+        """
+        return self.parse_clarification_response(user_response, round)
+    
     # ========================================================================
     # PHASE 4: DOR/DOD VALIDATION METHODS
     # ========================================================================
+    
+    def validate_definition_of_ready(self, metadata: WorkItemMetadata, ambiguity_score: int = 0) -> ValidationResult:
+        """
+        Validate Definition of Ready for work item.
+        Public API alias for validate_dor().
+        
+        Args:
+            metadata: Work item metadata to validate
+            ambiguity_score: Ambiguity score from detection (0-10)
+        
+        Returns:
+            ValidationResult with overall score, category breakdowns, and recommendations
+        """
+        return self.validate_dor(metadata, ambiguity_score)
+    
+    def validate_definition_of_done(self, summary: WorkItemSummary) -> ValidationResult:
+        """
+        Validate Definition of Done for completed work.
+        Public API alias for validate_dod().
+        
+        Args:
+            summary: Work item summary to validate
+        
+        Returns:
+            ValidationResult with overall score, category breakdowns, and recommendations
+        """
+        return self.validate_dod(summary)
     
     def validate_dor(self, metadata: WorkItemMetadata, ambiguity_score: int = 0) -> ValidationResult:
         """
