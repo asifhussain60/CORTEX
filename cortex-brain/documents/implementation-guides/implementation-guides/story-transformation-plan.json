@@ -1,0 +1,73 @@
+{
+  "transformation_type": "complete_regeneration",
+  "actions": [
+    {
+      "action_type": "remove_deprecated",
+      "count": 5,
+      "sections": [
+        {
+          "line": 1302,
+          "content": "Asif Codeinstein stared at the billing report. Every interaction with CORTEX loaded a massive 74,047-token monolithic entry point file. At GPT-4 pricing, that was $2.22 *per interaction*. A thousand interactions per month meant $2,220 just in entry point costs.",
+          "deprecated_term": "monolithic entry",
+          "replacement": "Replaced by modular entry point",
+          "action": "remove_or_update"
+        },
+        {
+          "line": 1349,
+          "content": "**Before (Monolithic Entry):**",
+          "deprecated_term": "monolithic entry",
+          "replacement": "Replaced by modular entry point",
+          "action": "remove_or_update"
+        },
+        {
+          "line": 1584,
+          "content": "- From **KDS (Key Data Stream)** \u2192 forgetful event logger",
+          "deprecated_term": "KDS",
+          "replacement": "Replaced by Tier 1/2/3 terminology",
+          "action": "remove_or_update"
+        },
+        {
+          "line": 1584,
+          "content": "- From **KDS (Key Data Stream)** \u2192 forgetful event logger",
+          "deprecated_term": "Key Data Stream",
+          "replacement": "Replaced by CORTEX memory tiers",
+          "action": "remove_or_update"
+        },
+        {
+          "line": 1585,
+          "content": "- To **KDS (Knowledge Delivery System)** \u2192 learning partner",
+          "deprecated_term": "KDS",
+          "replacement": "Replaced by Tier 1/2/3 terminology",
+          "action": "remove_or_update"
+        }
+      ],
+      "priority": "high"
+    },
+    {
+      "action_type": "fix_narrator_voice",
+      "count": 6,
+      "passive_violations": 3,
+      "documentary_violations": 3,
+      "priority": "high"
+    },
+    {
+      "action_type": "regenerate_structure",
+      "parts": 3,
+      "total_chapters": 15,
+      "priority": "critical",
+      "note": "Complete story will be regenerated based on design documents"
+    },
+    {
+      "action_type": "validate_consistency",
+      "checks": [
+        "feature_continuity",
+        "chapter_numbering",
+        "capability_claims",
+        "timeline_logic"
+      ],
+      "priority": "critical"
+    }
+  ],
+  "estimated_changes": 11,
+  "review_required": true
+}

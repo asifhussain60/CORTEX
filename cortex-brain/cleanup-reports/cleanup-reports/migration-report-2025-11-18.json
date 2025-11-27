@@ -1,0 +1,90 @@
+{
+  "version": "1.0.0",
+  "created": "2025-11-18T18:47:18.649620",
+  "manifest_used": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cleanup-reports\\cleanup-manifest-2025-11-18.json",
+  "summary": {
+    "total_migrations": 12,
+    "successful": 12,
+    "failed": 0
+  },
+  "migrations": [
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+      "reason": "Generation report",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\GENERATION-REPORT-20251118-165516.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports\\GENERATION-REPORT-20251118-165516.md",
+      "reason": "Generation report",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\GENERATION-REPORT-20251118-165842.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports\\GENERATION-REPORT-20251118-165842.md",
+      "reason": "Generation report",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\GENERATION-REPORT-20251118-165914.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports\\GENERATION-REPORT-20251118-165914.md",
+      "reason": "Generation report",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\GENERATION-REPORT-20251118-174308.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports\\GENERATION-REPORT-20251118-174308.md",
+      "reason": "Generation report",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+      "reason": "User guide",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\NAVIGATION-GUIDE.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\NAVIGATION-GUIDE.md",
+      "reason": "User guide",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\guides\\admin-guide.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\admin-guide.md",
+      "reason": "User guide",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\guides\\developer-guide.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\developer-guide.md",
+      "reason": "User guide",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\index.md.backup",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\archives\\manual-docs-2025-11-18\\index.md.backup",
+      "reason": "Backup file",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\response-template-user-guide.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\response-template-user-guide.md",
+      "reason": "User guide",
+      "exists": true
+    },
+    {
+      "source": "D:\\PROJECTS\\CORTEX\\docs\\telemetry\\PERFORMANCE-TELEMETRY-GUIDE.md",
+      "destination": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides\\PERFORMANCE-TELEMETRY-GUIDE.md",
+      "reason": "User guide",
+      "exists": true
+    }
+  ],
+  "errors": [],
+  "destinations": {
+    "guides": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\guides",
+    "reports": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\reports",
+    "archive": "D:\\PROJECTS\\CORTEX\\cortex-brain\\archives\\manual-docs-2025-11-18"
+  }
+}

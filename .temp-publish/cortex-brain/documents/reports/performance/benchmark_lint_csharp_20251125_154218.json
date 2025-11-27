@@ -1,0 +1,17 @@
+{
+  "label": "lint_csharp",
+  "metrics": {
+    "response_time_ms": 0.003700028173625469,
+    "memory_peak_mb": 0.0012969970703125,
+    "memory_current_mb": 0.00095367431640625,
+    "cpu_percent": 0.0,
+    "timestamp": "2025-11-25T15:42:18.174826",
+    "passed": true,
+    "violations": []
+  },
+  "thresholds": {
+    "response_time_ms": 500.0,
+    "memory_mb": 100.0,
+    "cpu_percent": 50.0
+  }
+}

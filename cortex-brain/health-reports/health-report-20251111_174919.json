@@ -1,0 +1,1815 @@
+{
+  "timestamp": "2025-11-11T17:49:19.512520",
+  "overall_health": "critical",
+  "health_score": 0.0,
+  "issues": [
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_cortex_help.py",
+      "description": "Test imports non-existent modules: src.cortex_help, src.plugins.command_registry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\test_cortex_help.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_risk_mitigation.py",
+      "description": "Test imports non-existent modules: src.tier0.brain_protector, src.workflows.workflow_pipeline, src.tier1.tier1_api, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.context_injector",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\test_risk_mitigation.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_agent_framework.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.base_agent, src.cortex_agents.agent_types, src.cortex_agents.exceptions",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_agent_framework.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_change_governor.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.change_governor, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_change_governor.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_commit_handler.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.commit_handler, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_commit_handler.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_intent_router.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_intent_router.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_learning_capture_agent.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.learning_capture_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_learning_capture_agent.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_screenshot_analyzer.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.screenshot_analyzer, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_screenshot_analyzer.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_session_resumer.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.session_resumer, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_session_resumer.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_input_validation.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_input_validation.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_intent_routing.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_intent_routing.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_multi_agent_coordination_edge.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_multi_agent_coordination_edge.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_session_lifecycle.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_session_lifecycle.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_tier_failures.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_tier_failures.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_cortex_entry.py",
+      "description": "Test imports non-existent modules: src.entry_point, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_cortex_entry.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_request_parser.py",
+      "description": "Test imports non-existent modules: src.entry_point.request_parser, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_request_parser.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_response_formatter.py",
+      "description": "Test imports non-existent modules: src.entry_point.response_formatter, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_response_formatter.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_agent_coordination.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.architect, src.cortex_agents.work_planner, src.cortex_agents.executor, src.cortex_agents.learner, src.cortex_agents.pattern_matcher",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_agent_coordination.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_complex_intent_routing.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_complex_intent_routing.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_cross_tier_workflows.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier2.knowledge_graph_legacy, src.tier3.context_intelligence, src.tier0.brain_protector, src.cortex_agents.base_agent, src.tier3.context_intelligence",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_cross_tier_workflows.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_end_to_end_workflows.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_end_to_end_workflows.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_error_recovery.py",
+      "description": "Test imports non-existent modules: src.tier0.brain_protector, src.operations",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_error_recovery.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_multi_agent_coordination.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_multi_agent_coordination.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_phase_5_1_high_priority.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_phase_5_1_high_priority.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_phase_5_1_medium_priority.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_phase_5_1_medium_priority.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_session_boundaries.py",
+      "description": "Test imports non-existent modules: src.entry_point.cortex_entry",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_session_boundaries.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_documentation_workflow.py",
+      "description": "Test imports non-existent modules: src.operations.modules.scan_docstrings_module, src.operations.modules.build_documentation_module, src.operations.modules.publish_documentation_module, src.operations.base_operation_module",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_documentation_workflow.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_enhanced_headers.py",
+      "description": "Test imports non-existent modules: src.operations.header_utils",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_enhanced_headers.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_execution_mode.py",
+      "description": "Test imports non-existent modules: src.operations.base_operation_module, src.operations.execution_mode_parser, src.operations.dry_run_mixin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_execution_mode.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_help_command.py",
+      "description": "Test imports non-existent modules: src.operations, src.operations.help_command",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_help_command.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_optimize_cortex_orchestrator.py",
+      "description": "Test imports non-existent modules: src.operations.modules.optimization, src.operations.base_operation_module",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_optimize_cortex_orchestrator.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_story_refresh_integration.py",
+      "description": "Test imports non-existent modules: src.operations, src.config",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_story_refresh_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_workspace_cleanup.py",
+      "description": "Test imports non-existent modules: src.operations",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_workspace_cleanup.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_performance_regression.py",
+      "description": "Test imports non-existent modules: src.tier1.conversation_manager, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.operations, src.operations",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\performance\\test_performance_regression.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_macos_edge_cases.py",
+      "description": "Test imports non-existent modules: src.config, src.config, src.config",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\platform\\test_macos_edge_cases.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_cleanup_orchestrator.py",
+      "description": "Test imports non-existent modules: src.plugins.cleanup_plugin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_cleanup_orchestrator.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_cleanup_plugin.py",
+      "description": "Test imports non-existent modules: src.plugins.cleanup_plugin, src.plugins.base_plugin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_cleanup_plugin.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_code_review_plugin.py",
+      "description": "Test imports non-existent modules: src.plugins.code_review_plugin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_code_review_plugin.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_configuration_wizard_plugin.py",
+      "description": "Test imports non-existent modules: src.plugins.configuration_wizard_plugin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_configuration_wizard_plugin.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_doc_refresh_file_rules.py",
+      "description": "Test imports non-existent modules: src.plugins.doc_refresh_plugin",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_doc_refresh_file_rules.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_doc_refresh_plugin.py",
+      "description": "Test imports non-existent modules: src.plugins.doc_refresh_plugin, src.plugins.hooks",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_doc_refresh_plugin.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_extension_scaffold_plugin.py",
+      "description": "Test imports non-existent modules: src.plugins.extension_scaffold_plugin, src.plugins.hooks",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_extension_scaffold_plugin.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_integration.py",
+      "description": "Test imports non-existent modules: src.response_templates, src.entry_point.response_formatter, src.cortex_agents.base_agent, src.response_templates.template_loader",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\response_templates\\test_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_template_renderer.py",
+      "description": "Test imports non-existent modules: src.response_templates.template_loader, src.response_templates.template_renderer",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\response_templates\\test_template_renderer.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_fifo_enforcement.py",
+      "description": "Test imports non-existent modules: src.session_manager, src.config",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_fifo_enforcement.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_git_isolation.py",
+      "description": "Test imports non-existent modules: src.tier0.git_isolation",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_git_isolation.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_governance.py",
+      "description": "Test imports non-existent modules: src.tier0.governance_engine",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_governance.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_skull_006_headers_in_response.py",
+      "description": "Test imports non-existent modules: src.operations.base_operation_module, src.operations.response_formatter, src.operations.header_utils",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_006_headers_in_response.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_skull_comprehensive.py",
+      "description": "Test imports non-existent modules: src.tier0.skull_protector",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_comprehensive.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_skull_protector.py",
+      "description": "Test imports non-existent modules: src.tier0.skull_protector",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_protector.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_conversation_manager.py",
+      "description": "Test imports non-existent modules: src.tier1.conversation_manager",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_conversation_manager.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_ml_context_optimizer.py",
+      "description": "Test imports non-existent modules: src.tier1.ml_context_optimizer",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_ml_context_optimizer.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_session_token.py",
+      "description": "Test imports non-existent modules: src.tier1.session_token",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_session_token.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_token_metrics.py",
+      "description": "Test imports non-existent modules: src.tier1.token_metrics",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_token_metrics.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_vision_api.py",
+      "description": "Test imports non-existent modules: src.tier1.vision_api",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_vision_api.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_vision_api_auto_engagement.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.screenshot_analyzer, src.tier1.vision_api",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_vision_api_auto_engagement.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_working_memory.py",
+      "description": "Test imports non-existent modules: src.tier1.working_memory",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_working_memory.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_working_memory_optimization.py",
+      "description": "Test imports non-existent modules: src.tier1.working_memory",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_working_memory_optimization.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_work_state_manager.py",
+      "description": "Test imports non-existent modules: src.tier1.work_state_manager",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_work_state_manager.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_amnesia.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph, src.tier2.amnesia",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_amnesia.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_knowledge_graph.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_knowledge_graph.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_namespace_boundaries.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_namespace_boundaries.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_namespace_search.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_namespace_search.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_plan_schemas.py",
+      "description": "Test imports non-existent modules: src.tier2.plan_models",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_plan_schemas.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_context_intelligence.py",
+      "description": "Test imports non-existent modules: src.tier3.context_intelligence",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\test_context_intelligence.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_context_intelligence_integration.py",
+      "description": "Test imports non-existent modules: src.tier3.context_intelligence, src.tier3.metrics.git_metrics, src.tier3.metrics.file_metrics",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\test_context_intelligence_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_llm_orchestrator.py",
+      "description": "Test imports non-existent modules: src.llm.orchestrator, src.llm.types",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\unit\\test_llm_orchestrator.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_router.py",
+      "description": "Test imports non-existent modules: src.router",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\unit\\test_router.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_checkpoint.py",
+      "description": "Test imports non-existent modules: src.workflows.checkpoint, src.workflows.workflow_engine",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_checkpoint.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_workflow_engine.py",
+      "description": "Test imports non-existent modules: src.workflows.workflow_engine",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_workflow_engine.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_workflow_integration.py",
+      "description": "Test imports non-existent modules: src.workflows.workflow_engine, src.workflows.checkpoint, src.workflows.stages.dod_dor_clarifier, src.workflows.stages.code_cleanup, src.workflows.stages.doc_generator",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_workflow_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_insight_generator.py",
+      "description": "Test imports non-existent modules: src.tier3.analysis.insight_generator, src.tier3.analysis.velocity_analyzer, src.tier3.metrics.file_metrics, src.tier3.storage.context_store, src.tier3.metrics.git_metrics",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\analysis\\test_insight_generator.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_velocity_analyzer.py",
+      "description": "Test imports non-existent modules: src.tier3.analysis.velocity_analyzer, src.tier3.storage.context_store, src.tier3.metrics.git_metrics",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\analysis\\test_velocity_analyzer.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_file_metrics.py",
+      "description": "Test imports non-existent modules: src.tier3.metrics.file_metrics, src.tier3.storage.context_store",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\metrics\\test_file_metrics.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_git_metrics.py",
+      "description": "Test imports non-existent modules: src.tier3.metrics.git_metrics, src.tier3.storage.context_store",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\metrics\\test_git_metrics.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_context_store.py",
+      "description": "Test imports non-existent modules: src.tier3.storage.context_store",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\storage\\test_context_store.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_database.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph.database",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\knowledge_graph\\test_database.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_pattern_store.py",
+      "description": "Test imports non-existent modules: src.tier2.knowledge_graph.database, src.tier2.knowledge_graph.patterns.pattern_store, src.tier2.knowledge_graph.database.connection, src.tier2.knowledge_graph.database.schema, src.tier2.knowledge_graph.patterns.pattern_store",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\knowledge_graph\\test_pattern_store.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_conversation_manager.py",
+      "description": "Test imports non-existent modules: src.tier1.working_memory",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\conversations\\test_conversation_manager.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_conversation_search.py",
+      "description": "Test imports non-existent modules: src.tier1.conversations",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\conversations\\test_conversation_search.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_entity_extractor.py",
+      "description": "Test imports non-existent modules: src.tier1.entities",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\entities\\test_entity_extractor.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_queue_manager.py",
+      "description": "Test imports non-existent modules: src.tier1.fifo, src.tier1.conversations",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\fifo\\test_queue_manager.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_message_store.py",
+      "description": "Test imports non-existent modules: src.tier1.messages",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\messages\\test_message_store.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_backup.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.code_executor.backup",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_backup.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_integration.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.code_executor, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_operations.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.code_executor.operations, src.cortex_agents.code_executor.validators, src.cortex_agents.code_executor.backup",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_operations.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_validators.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.code_executor.validators",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_validators.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_integration.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.error_corrector, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_parsers.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.error_corrector.parsers",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_parsers.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_strategies.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.error_corrector.strategies",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_strategies.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_validators.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.error_corrector.validators",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_validators.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_integration.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.health_validator, src.cortex_agents.base_agent",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_integration.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_reporting.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.health_validator.reporting",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_reporting.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "medium",
+      "category": "test",
+      "title": "Obsolete test file: test_validators.py",
+      "description": "Test imports non-existent modules: src.cortex_agents.health_validator.validators",
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_validators.py",
+      "line_number": null,
+      "recommendation": "Delete this test file as it tests non-existent code",
+      "auto_fixable": true
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Missing brain database",
+      "description": "Brain database file not found",
+      "file_path": null,
+      "line_number": null,
+      "recommendation": "Initialize brain database",
+      "auto_fixable": false
+    }
+  ],
+  "obsolete_tests": [
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\test_cortex_help.py",
+      "reason": "Imports non-existent modules: src.cortex_help, src.plugins.command_registry",
+      "missing_imports": [
+        "src.cortex_help",
+        "src.plugins.command_registry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\test_risk_mitigation.py",
+      "reason": "Imports non-existent modules: src.tier0.brain_protector, src.workflows.workflow_pipeline, src.tier1.tier1_api, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.workflows.stages.threat_modeler, src.workflows.workflow_pipeline, src.context_injector",
+      "missing_imports": [
+        "src.tier0.brain_protector",
+        "src.workflows.workflow_pipeline",
+        "src.tier1.tier1_api",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.workflows.stages.threat_modeler",
+        "src.workflows.workflow_pipeline",
+        "src.workflows.stages.threat_modeler",
+        "src.workflows.workflow_pipeline",
+        "src.workflows.stages.threat_modeler",
+        "src.workflows.workflow_pipeline",
+        "src.context_injector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_agent_framework.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.base_agent, src.cortex_agents.agent_types, src.cortex_agents.exceptions",
+      "missing_imports": [
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types",
+        "src.cortex_agents.exceptions"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_change_governor.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.change_governor, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.cortex_agents.change_governor",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_commit_handler.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.commit_handler, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.cortex_agents.commit_handler",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_intent_router.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_learning_capture_agent.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.learning_capture_agent",
+      "missing_imports": [
+        "src.cortex_agents.learning_capture_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_screenshot_analyzer.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.screenshot_analyzer, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.cortex_agents.screenshot_analyzer",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\test_session_resumer.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.session_resumer, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.cortex_agents.session_resumer",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_input_validation.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_intent_routing.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_multi_agent_coordination_edge.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_session_lifecycle.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\edge_cases\\test_tier_failures.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_cortex_entry.py",
+      "reason": "Imports non-existent modules: src.entry_point, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.entry_point",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_request_parser.py",
+      "reason": "Imports non-existent modules: src.entry_point.request_parser, src.cortex_agents.base_agent, src.cortex_agents.agent_types",
+      "missing_imports": [
+        "src.entry_point.request_parser",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.agent_types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\entry_point\\test_response_formatter.py",
+      "reason": "Imports non-existent modules: src.entry_point.response_formatter, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.entry_point.response_formatter",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_agent_coordination.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.architect, src.cortex_agents.work_planner, src.cortex_agents.executor, src.cortex_agents.learner, src.cortex_agents.pattern_matcher",
+      "missing_imports": [
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.architect",
+        "src.cortex_agents.work_planner",
+        "src.cortex_agents.executor",
+        "src.cortex_agents.learner",
+        "src.cortex_agents.pattern_matcher"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_complex_intent_routing.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_cross_tier_workflows.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier2.knowledge_graph_legacy, src.tier3.context_intelligence, src.tier0.brain_protector, src.cortex_agents.base_agent, src.tier3.context_intelligence",
+      "missing_imports": [
+        "src.entry_point.cortex_entry",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph_legacy",
+        "src.tier3.context_intelligence",
+        "src.tier0.brain_protector",
+        "src.cortex_agents.base_agent",
+        "src.tier3.context_intelligence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_end_to_end_workflows.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_error_recovery.py",
+      "reason": "Imports non-existent modules: src.tier0.brain_protector, src.operations",
+      "missing_imports": [
+        "src.tier0.brain_protector",
+        "src.operations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_multi_agent_coordination.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_phase_5_1_high_priority.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.entry_point.cortex_entry",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_phase_5_1_medium_priority.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.entry_point.cortex_entry",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\integration\\test_session_boundaries.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_documentation_workflow.py",
+      "reason": "Imports non-existent modules: src.operations.modules.scan_docstrings_module, src.operations.modules.build_documentation_module, src.operations.modules.publish_documentation_module, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.scan_docstrings_module",
+        "src.operations.modules.build_documentation_module",
+        "src.operations.modules.publish_documentation_module",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_enhanced_headers.py",
+      "reason": "Imports non-existent modules: src.operations.header_utils",
+      "missing_imports": [
+        "src.operations.header_utils"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_execution_mode.py",
+      "reason": "Imports non-existent modules: src.operations.base_operation_module, src.operations.execution_mode_parser, src.operations.dry_run_mixin",
+      "missing_imports": [
+        "src.operations.base_operation_module",
+        "src.operations.execution_mode_parser",
+        "src.operations.dry_run_mixin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_help_command.py",
+      "reason": "Imports non-existent modules: src.operations, src.operations.help_command",
+      "missing_imports": [
+        "src.operations",
+        "src.operations.help_command"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_optimize_cortex_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.optimization, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.optimization",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_story_refresh_integration.py",
+      "reason": "Imports non-existent modules: src.operations, src.config",
+      "missing_imports": [
+        "src.operations",
+        "src.config"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\operations\\test_workspace_cleanup.py",
+      "reason": "Imports non-existent modules: src.operations",
+      "missing_imports": [
+        "src.operations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\performance\\test_performance_regression.py",
+      "reason": "Imports non-existent modules: src.tier1.conversation_manager, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.operations, src.operations",
+      "missing_imports": [
+        "src.tier1.conversation_manager",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.operations",
+        "src.operations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\platform\\test_macos_edge_cases.py",
+      "reason": "Imports non-existent modules: src.config, src.config, src.config",
+      "missing_imports": [
+        "src.config",
+        "src.config",
+        "src.config"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_cleanup_orchestrator.py",
+      "reason": "Imports non-existent modules: src.plugins.cleanup_plugin",
+      "missing_imports": [
+        "src.plugins.cleanup_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_cleanup_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.cleanup_plugin, src.plugins.base_plugin",
+      "missing_imports": [
+        "src.plugins.cleanup_plugin",
+        "src.plugins.base_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_code_review_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.code_review_plugin",
+      "missing_imports": [
+        "src.plugins.code_review_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_configuration_wizard_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.configuration_wizard_plugin",
+      "missing_imports": [
+        "src.plugins.configuration_wizard_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_doc_refresh_file_rules.py",
+      "reason": "Imports non-existent modules: src.plugins.doc_refresh_plugin",
+      "missing_imports": [
+        "src.plugins.doc_refresh_plugin"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_doc_refresh_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.doc_refresh_plugin, src.plugins.hooks",
+      "missing_imports": [
+        "src.plugins.doc_refresh_plugin",
+        "src.plugins.hooks"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\plugins\\test_extension_scaffold_plugin.py",
+      "reason": "Imports non-existent modules: src.plugins.extension_scaffold_plugin, src.plugins.hooks",
+      "missing_imports": [
+        "src.plugins.extension_scaffold_plugin",
+        "src.plugins.hooks"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\response_templates\\test_integration.py",
+      "reason": "Imports non-existent modules: src.response_templates, src.entry_point.response_formatter, src.cortex_agents.base_agent, src.response_templates.template_loader",
+      "missing_imports": [
+        "src.response_templates",
+        "src.entry_point.response_formatter",
+        "src.cortex_agents.base_agent",
+        "src.response_templates.template_loader"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\response_templates\\test_template_renderer.py",
+      "reason": "Imports non-existent modules: src.response_templates.template_loader, src.response_templates.template_renderer",
+      "missing_imports": [
+        "src.response_templates.template_loader",
+        "src.response_templates.template_renderer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_fifo_enforcement.py",
+      "reason": "Imports non-existent modules: src.session_manager, src.config",
+      "missing_imports": [
+        "src.session_manager",
+        "src.config"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_git_isolation.py",
+      "reason": "Imports non-existent modules: src.tier0.git_isolation",
+      "missing_imports": [
+        "src.tier0.git_isolation"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_governance.py",
+      "reason": "Imports non-existent modules: src.tier0.governance_engine",
+      "missing_imports": [
+        "src.tier0.governance_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_006_headers_in_response.py",
+      "reason": "Imports non-existent modules: src.operations.base_operation_module, src.operations.response_formatter, src.operations.header_utils",
+      "missing_imports": [
+        "src.operations.base_operation_module",
+        "src.operations.response_formatter",
+        "src.operations.header_utils"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_comprehensive.py",
+      "reason": "Imports non-existent modules: src.tier0.skull_protector",
+      "missing_imports": [
+        "src.tier0.skull_protector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier0\\test_skull_protector.py",
+      "reason": "Imports non-existent modules: src.tier0.skull_protector",
+      "missing_imports": [
+        "src.tier0.skull_protector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_conversation_manager.py",
+      "reason": "Imports non-existent modules: src.tier1.conversation_manager",
+      "missing_imports": [
+        "src.tier1.conversation_manager"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_ml_context_optimizer.py",
+      "reason": "Imports non-existent modules: src.tier1.ml_context_optimizer",
+      "missing_imports": [
+        "src.tier1.ml_context_optimizer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_session_token.py",
+      "reason": "Imports non-existent modules: src.tier1.session_token",
+      "missing_imports": [
+        "src.tier1.session_token"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_token_metrics.py",
+      "reason": "Imports non-existent modules: src.tier1.token_metrics",
+      "missing_imports": [
+        "src.tier1.token_metrics"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_vision_api.py",
+      "reason": "Imports non-existent modules: src.tier1.vision_api",
+      "missing_imports": [
+        "src.tier1.vision_api"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_vision_api_auto_engagement.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.screenshot_analyzer, src.tier1.vision_api",
+      "missing_imports": [
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.screenshot_analyzer",
+        "src.tier1.vision_api"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_working_memory.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory",
+      "missing_imports": [
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_working_memory_optimization.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory",
+      "missing_imports": [
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\test_work_state_manager.py",
+      "reason": "Imports non-existent modules: src.tier1.work_state_manager",
+      "missing_imports": [
+        "src.tier1.work_state_manager"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_amnesia.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph, src.tier2.amnesia",
+      "missing_imports": [
+        "src.tier2.knowledge_graph",
+        "src.tier2.amnesia"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_knowledge_graph.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph",
+      "missing_imports": [
+        "src.tier2.knowledge_graph"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_namespace_boundaries.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph",
+      "missing_imports": [
+        "src.tier2.knowledge_graph"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_namespace_search.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph",
+      "missing_imports": [
+        "src.tier2.knowledge_graph"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\test_plan_schemas.py",
+      "reason": "Imports non-existent modules: src.tier2.plan_models",
+      "missing_imports": [
+        "src.tier2.plan_models"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\test_context_intelligence.py",
+      "reason": "Imports non-existent modules: src.tier3.context_intelligence",
+      "missing_imports": [
+        "src.tier3.context_intelligence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\test_context_intelligence_integration.py",
+      "reason": "Imports non-existent modules: src.tier3.context_intelligence, src.tier3.metrics.git_metrics, src.tier3.metrics.file_metrics",
+      "missing_imports": [
+        "src.tier3.context_intelligence",
+        "src.tier3.metrics.git_metrics",
+        "src.tier3.metrics.file_metrics"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\unit\\test_llm_orchestrator.py",
+      "reason": "Imports non-existent modules: src.llm.orchestrator, src.llm.types",
+      "missing_imports": [
+        "src.llm.orchestrator",
+        "src.llm.types"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\unit\\test_router.py",
+      "reason": "Imports non-existent modules: src.router",
+      "missing_imports": [
+        "src.router"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_checkpoint.py",
+      "reason": "Imports non-existent modules: src.workflows.checkpoint, src.workflows.workflow_engine",
+      "missing_imports": [
+        "src.workflows.checkpoint",
+        "src.workflows.workflow_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_workflow_engine.py",
+      "reason": "Imports non-existent modules: src.workflows.workflow_engine",
+      "missing_imports": [
+        "src.workflows.workflow_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\workflows\\test_workflow_integration.py",
+      "reason": "Imports non-existent modules: src.workflows.workflow_engine, src.workflows.checkpoint, src.workflows.stages.dod_dor_clarifier, src.workflows.stages.code_cleanup, src.workflows.stages.doc_generator",
+      "missing_imports": [
+        "src.workflows.workflow_engine",
+        "src.workflows.checkpoint",
+        "src.workflows.stages.dod_dor_clarifier",
+        "src.workflows.stages.code_cleanup",
+        "src.workflows.stages.doc_generator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\analysis\\test_insight_generator.py",
+      "reason": "Imports non-existent modules: src.tier3.analysis.insight_generator, src.tier3.analysis.velocity_analyzer, src.tier3.metrics.file_metrics, src.tier3.storage.context_store, src.tier3.metrics.git_metrics",
+      "missing_imports": [
+        "src.tier3.analysis.insight_generator",
+        "src.tier3.analysis.velocity_analyzer",
+        "src.tier3.metrics.file_metrics",
+        "src.tier3.storage.context_store",
+        "src.tier3.metrics.git_metrics"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\analysis\\test_velocity_analyzer.py",
+      "reason": "Imports non-existent modules: src.tier3.analysis.velocity_analyzer, src.tier3.storage.context_store, src.tier3.metrics.git_metrics",
+      "missing_imports": [
+        "src.tier3.analysis.velocity_analyzer",
+        "src.tier3.storage.context_store",
+        "src.tier3.metrics.git_metrics"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\metrics\\test_file_metrics.py",
+      "reason": "Imports non-existent modules: src.tier3.metrics.file_metrics, src.tier3.storage.context_store",
+      "missing_imports": [
+        "src.tier3.metrics.file_metrics",
+        "src.tier3.storage.context_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\metrics\\test_git_metrics.py",
+      "reason": "Imports non-existent modules: src.tier3.metrics.git_metrics, src.tier3.storage.context_store",
+      "missing_imports": [
+        "src.tier3.metrics.git_metrics",
+        "src.tier3.storage.context_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier3\\storage\\test_context_store.py",
+      "reason": "Imports non-existent modules: src.tier3.storage.context_store",
+      "missing_imports": [
+        "src.tier3.storage.context_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\knowledge_graph\\test_database.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.database",
+      "missing_imports": [
+        "src.tier2.knowledge_graph.database"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier2\\knowledge_graph\\test_pattern_store.py",
+      "reason": "Imports non-existent modules: src.tier2.knowledge_graph.database, src.tier2.knowledge_graph.patterns.pattern_store, src.tier2.knowledge_graph.database.connection, src.tier2.knowledge_graph.database.schema, src.tier2.knowledge_graph.patterns.pattern_store",
+      "missing_imports": [
+        "src.tier2.knowledge_graph.database",
+        "src.tier2.knowledge_graph.patterns.pattern_store",
+        "src.tier2.knowledge_graph.database.connection",
+        "src.tier2.knowledge_graph.database.schema",
+        "src.tier2.knowledge_graph.patterns.pattern_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\conversations\\test_conversation_manager.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory",
+      "missing_imports": [
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\conversations\\test_conversation_search.py",
+      "reason": "Imports non-existent modules: src.tier1.conversations",
+      "missing_imports": [
+        "src.tier1.conversations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\entities\\test_entity_extractor.py",
+      "reason": "Imports non-existent modules: src.tier1.entities",
+      "missing_imports": [
+        "src.tier1.entities"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\fifo\\test_queue_manager.py",
+      "reason": "Imports non-existent modules: src.tier1.fifo, src.tier1.conversations",
+      "missing_imports": [
+        "src.tier1.fifo",
+        "src.tier1.conversations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\messages\\test_message_store.py",
+      "reason": "Imports non-existent modules: src.tier1.messages",
+      "missing_imports": [
+        "src.tier1.messages"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_backup.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.code_executor.backup",
+      "missing_imports": [
+        "src.cortex_agents.code_executor.backup"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.code_executor, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.code_executor",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_operations.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.code_executor.operations, src.cortex_agents.code_executor.validators, src.cortex_agents.code_executor.backup",
+      "missing_imports": [
+        "src.cortex_agents.code_executor.operations",
+        "src.cortex_agents.code_executor.validators",
+        "src.cortex_agents.code_executor.backup"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\code_executor\\test_validators.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.code_executor.validators",
+      "missing_imports": [
+        "src.cortex_agents.code_executor.validators"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.error_corrector, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.error_corrector",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_parsers.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.error_corrector.parsers",
+      "missing_imports": [
+        "src.cortex_agents.error_corrector.parsers"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_strategies.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.error_corrector.strategies",
+      "missing_imports": [
+        "src.cortex_agents.error_corrector.strategies"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\error_corrector\\test_validators.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.error_corrector.validators",
+      "missing_imports": [
+        "src.cortex_agents.error_corrector.validators"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.health_validator, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.health_validator",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_reporting.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.health_validator.reporting",
+      "missing_imports": [
+        "src.cortex_agents.health_validator.reporting"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\tests\\agents\\health_validator\\test_validators.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.health_validator.validators",
+      "missing_imports": [
+        "src.cortex_agents.health_validator.validators"
+      ],
+      "confidence": 0.9
+    }
+  ],
+  "statistics": {
+    "obsolete_tests_found": 94
+  },
+  "recommendations": [
+    "Run 'cleanup workspace' to remove 94 obsolete test files",
+    "Increase code coverage from 0.0% to at least 80%"
+  ]
+}

@@ -1,0 +1,428 @@
+{
+  "paths": {
+    "security-focused": {
+      "id": "security",
+      "name": "Security Enhancement Journey",
+      "description": "For teams prioritizing security and compliance",
+      "estimatedDuration": "6-8 weeks",
+      "tabs": [
+        {
+          "tab": 6,
+          "title": "Security & Compliance",
+          "duration": "15 minutes",
+          "description": "Start here to understand current security posture",
+          "tasks": [
+            "Review OWASP Top 10 status",
+            "Identify critical vulnerabilities",
+            "Check compliance gaps"
+          ],
+          "discoveries": [
+            "You'll see which security issues are most urgent",
+            "Compliance readiness for SOC 2, PCI-DSS, GDPR",
+            "Estimated remediation timeline"
+          ]
+        },
+        {
+          "tab": 2,
+          "title": "Architecture Impact",
+          "duration": "10 minutes",
+          "description": "See how security changes affect architecture",
+          "tasks": [
+            "Identify components with security issues",
+            "Review authentication component health",
+            "Check for god classes handling security"
+          ],
+          "discoveries": [
+            "Which components need security refactoring",
+            "Dependencies that create security risks",
+            "Architecture changes needed for security"
+          ]
+        },
+        {
+          "tab": 3,
+          "title": "Code Quality Review",
+          "duration": "12 minutes",
+          "description": "Find security-related code smells",
+          "tasks": [
+            "Look for hardcoded secrets",
+            "Check for SQL injection risks",
+            "Review input validation gaps"
+          ],
+          "discoveries": [
+            "Exact locations of security code smells",
+            "Automated fix suggestions",
+            "Priority order for remediation"
+          ]
+        },
+        {
+          "tab": 4,
+          "title": "Security Roadmap",
+          "duration": "8 minutes",
+          "description": "Plan security enhancements in phases",
+          "tasks": [
+            "Prioritize security tasks",
+            "Estimate implementation timeline",
+            "Assign team resources"
+          ],
+          "discoveries": [
+            "Phased approach: Quick wins → Foundation → Hardening",
+            "ROI analysis for security investments",
+            "Dependencies between security tasks"
+          ]
+        }
+      ],
+      "expectedOutcome": "Clear security roadmap with prioritized tasks, estimated timelines, and ROI justification for stakeholders",
+      "nextActions": [
+        "Export security roadmap as PDF",
+        "Schedule team security review",
+        "Get penetration test quote",
+        "Start Phase 1: Critical vulnerabilities"
+      ]
+    },
+    "performance-focused": {
+      "id": "performance",
+      "name": "Performance Optimization Journey",
+      "description": "For teams fighting latency and scalability issues",
+      "estimatedDuration": "4-6 weeks",
+      "tabs": [
+        {
+          "tab": 1,
+          "title": "Executive Summary",
+          "duration": "5 minutes",
+          "description": "Get high-level performance overview",
+          "tasks": [
+            "Check overall performance score",
+            "Review priority performance issues",
+            "See industry benchmarks"
+          ],
+          "discoveries": [
+            "How you compare to industry standards",
+            "Which performance issues impact users most",
+            "Quick ROI estimate for optimizations"
+          ]
+        },
+        {
+          "tab": 3,
+          "title": "Performance Analysis",
+          "duration": "15 minutes",
+          "description": "Deep dive into bottlenecks",
+          "tasks": [
+            "Analyze flamegraph for hot paths",
+            "Review endpoint latencies",
+            "Identify N+1 query problems"
+          ],
+          "discoveries": [
+            "Exact methods causing slowness",
+            "Database queries needing optimization",
+            "API endpoints to prioritize"
+          ]
+        },
+        {
+          "tab": 2,
+          "title": "Architecture Review",
+          "duration": "10 minutes",
+          "description": "Find architectural performance issues",
+          "tasks": [
+            "Check for synchronous blocking",
+            "Review caching opportunities",
+            "Identify tightly coupled components"
+          ],
+          "discoveries": [
+            "Where to add caching layers",
+            "Opportunities for async processing",
+            "Microservices candidates"
+          ]
+        },
+        {
+          "tab": 4,
+          "title": "Optimization Roadmap",
+          "duration": "8 minutes",
+          "description": "Plan performance improvements",
+          "tasks": [
+            "Prioritize optimizations by impact",
+            "Estimate implementation effort",
+            "Calculate performance gains"
+          ],
+          "discoveries": [
+            "Quick wins (1-2 days, big impact)",
+            "Foundation work (1-2 weeks)",
+            "Long-term optimizations (1-2 months)"
+          ]
+        }
+      ],
+      "expectedOutcome": "Performance optimization plan with estimated latency reductions, cost savings, and scalability improvements",
+      "nextActions": [
+        "Implement caching (highest ROI)",
+        "Add database indexes",
+        "Set up performance monitoring",
+        "Benchmark improvements"
+      ]
+    },
+    "quality-focused": {
+      "id": "quality",
+      "name": "Code Quality Improvement Journey",
+      "description": "For teams tackling technical debt",
+      "estimatedDuration": "3-5 weeks",
+      "tabs": [
+        {
+          "tab": 3,
+          "title": "Code Quality Deep Dive",
+          "duration": "20 minutes",
+          "description": "Comprehensive code smell analysis",
+          "tasks": [
+            "Review all code smell types",
+            "Check technical debt estimate",
+            "Prioritize refactoring tasks"
+          ],
+          "discoveries": [
+            "Which smells are most prevalent",
+            "Files with highest smell density",
+            "Estimated time to clean up"
+          ]
+        },
+        {
+          "tab": 2,
+          "title": "Architecture Health",
+          "duration": "12 minutes",
+          "description": "High-level design issues",
+          "tasks": [
+            "Identify god classes",
+            "Check component complexity",
+            "Review dependency coupling"
+          ],
+          "discoveries": [
+            "Components needing decomposition",
+            "Tight coupling to break",
+            "Architecture violations"
+          ]
+        },
+        {
+          "tab": 1,
+          "title": "Executive Summary",
+          "duration": "5 minutes",
+          "description": "Business case for refactoring",
+          "tasks": [
+            "Review maintainability score",
+            "Check technical debt cost",
+            "See refactoring ROI"
+          ],
+          "discoveries": [
+            "Total technical debt in dollars",
+            "Development velocity impact",
+            "ROI of cleanup investment"
+          ]
+        },
+        {
+          "tab": 4,
+          "title": "Refactoring Roadmap",
+          "duration": "10 minutes",
+          "description": "Systematic cleanup plan",
+          "tasks": [
+            "Prioritize refactorings",
+            "Estimate cleanup timeline",
+            "Plan TDD adoption"
+          ],
+          "discoveries": [
+            "Refactoring order (dependencies)",
+            "Safe vs risky refactorings",
+            "Testing strategy needed"
+          ]
+        }
+      ],
+      "expectedOutcome": "Refactoring roadmap with prioritized tasks, risk assessment, and test coverage plan",
+      "nextActions": [
+        "Adopt TDD for new code",
+        "Refactor highest-impact smells",
+        "Set up automated code analysis",
+        "Schedule refactoring sprints"
+      ]
+    },
+    "executive-summary": {
+      "id": "executive",
+      "name": "Executive Decision Journey",
+      "description": "For stakeholders evaluating investment",
+      "estimatedDuration": "30 minutes",
+      "tabs": [
+        {
+          "tab": 1,
+          "title": "Executive Summary",
+          "duration": "10 minutes",
+          "description": "High-level overview and ROI",
+          "tasks": [
+            "Review overall quality score",
+            "Check priority issues",
+            "See ROI projections"
+          ],
+          "discoveries": [
+            "Current health vs industry benchmarks",
+            "Risk areas needing investment",
+            "Expected ROI for enhancements"
+          ]
+        },
+        {
+          "tab": 6,
+          "title": "Risk Assessment",
+          "duration": "8 minutes",
+          "description": "Security and compliance risks",
+          "tasks": [
+            "Review critical vulnerabilities",
+            "Check compliance gaps",
+            "Assess breach probability"
+          ],
+          "discoveries": [
+            "Security risks and potential costs",
+            "Compliance requirements for growth",
+            "Risk mitigation priorities"
+          ]
+        },
+        {
+          "tab": 4,
+          "title": "Enhancement Roadmap",
+          "duration": "7 minutes",
+          "description": "Phased investment plan",
+          "tasks": [
+            "Review phased approach",
+            "Check timeline estimates",
+            "See resource requirements"
+          ],
+          "discoveries": [
+            "Phase 1: Quick wins (1-2 months)",
+            "Phase 2: Foundation (3-4 months)",
+            "Phase 3: Transformation (6-12 months)"
+          ]
+        },
+        {
+          "tab": 2,
+          "title": "Architecture Vision",
+          "duration": "5 minutes",
+          "description": "Future state architecture",
+          "tasks": [
+            "Compare current vs proposed",
+            "Review enhancement impact",
+            "Check scalability improvements"
+          ],
+          "discoveries": [
+            "How architecture will improve",
+            "Scalability for future growth",
+            "Technical debt reduction"
+          ]
+        }
+      ],
+      "expectedOutcome": "Business case with cost-benefit analysis, risk assessment, and phased investment plan ready for board presentation",
+      "nextActions": [
+        "Export executive summary (PDF)",
+        "Schedule stakeholder presentation",
+        "Get team capacity assessment",
+        "Approve Phase 1 budget"
+      ]
+    },
+    "developer-path": {
+      "id": "developer",
+      "name": "Developer Implementation Journey",
+      "description": "For developers who will do the work",
+      "estimatedDuration": "2-4 weeks (per phase)",
+      "tabs": [
+        {
+          "tab": 3,
+          "title": "Code Quality & Refactoring",
+          "duration": "25 minutes",
+          "description": "Hands-on refactoring guidance",
+          "tasks": [
+            "Review code smells in your area",
+            "Get refactoring suggestions",
+            "Copy fix templates"
+          ],
+          "discoveries": [
+            "Exact files and line numbers to fix",
+            "Before/after code examples",
+            "Automated refactoring scripts"
+          ]
+        },
+        {
+          "tab": 2,
+          "title": "Architecture & Design",
+          "duration": "15 minutes",
+          "description": "Design patterns to apply",
+          "tasks": [
+            "Review component dependencies",
+            "Check design pattern suggestions",
+            "Plan component refactoring"
+          ],
+          "discoveries": [
+            "Which patterns fit your code",
+            "Dependency injection opportunities",
+            "Testability improvements"
+          ]
+        },
+        {
+          "tab": 4,
+          "title": "Implementation Tasks",
+          "duration": "10 minutes",
+          "description": "Your personal task list",
+          "tasks": [
+            "See assigned refactorings",
+            "Check estimated effort",
+            "Review acceptance criteria"
+          ],
+          "discoveries": [
+            "Step-by-step implementation guides",
+            "Test cases to write",
+            "Definition of Done"
+          ]
+        },
+        {
+          "tab": 1,
+          "title": "Progress Tracking",
+          "duration": "5 minutes",
+          "description": "See impact of your work",
+          "tasks": [
+            "Check before/after metrics",
+            "Review improvement trends",
+            "Celebrate wins"
+          ],
+          "discoveries": [
+            "How your work improves quality score",
+            "Technical debt reduction",
+            "Team velocity improvements"
+          ]
+        }
+      ],
+      "expectedOutcome": "Clear implementation tasks with code examples, tests to write, and Definition of Done for each refactoring",
+      "nextActions": [
+        "Start TDD cycle (RED → GREEN → REFACTOR)",
+        "Clone task branch",
+        "Write failing tests",
+        "Implement refactoring"
+      ]
+    }
+  },
+  "pathRecommendations": {
+    "rules": [
+      {
+        "condition": "userSpentTime > 10 minutes on Security tab",
+        "recommend": "security-focused",
+        "confidence": 0.85
+      },
+      {
+        "condition": "userClickedMultiple performance metrics",
+        "recommend": "performance-focused",
+        "confidence": 0.8
+      },
+      {
+        "condition": "userViewedExecutiveSummary AND not clicked details",
+        "recommend": "executive-summary",
+        "confidence": 0.9
+      },
+      {
+        "condition": "userClickedCodeSmellDetails multiple times",
+        "recommend": "developer-path",
+        "confidence": 0.95
+      },
+      {
+        "condition": "userCycledThroughAllTabs quickly",
+        "recommend": "executive-summary",
+        "confidence": 0.7
+      }
+    ]
+  }
+}

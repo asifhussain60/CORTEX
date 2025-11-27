@@ -1,0 +1,75 @@
+{
+  "timestamp": "2025-11-16T07:41:27.274104",
+  "overall_health": "fair",
+  "health_score": 55.0,
+  "issues": [
+    {
+      "severity": "medium",
+      "category": "brain",
+      "title": "Missing TIER3 database",
+      "description": "Database file not found: tier3-development-context.db",
+      "file_path": "/Users/asifhussain/PROJECTS/cortex-brain/tier3-development-context.db",
+      "line_number": null,
+      "recommendation": "Initialize TIER3 database",
+      "auto_fixable": true
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Monolithic database reference in code (SKULL-011)",
+      "description": "Line 445: legacy_patterns = ['cortex-brain.db', 'cortex-brain/cortex-brain.db', 'monolithi",
+      "file_path": "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/optimize/optimize_cortex_orchestrator.py",
+      "line_number": 445,
+      "recommendation": "Use ConfigManager.get_tier1_conversations_path() or tier-specific paths",
+      "auto_fixable": true
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Monolithic database reference in code (SKULL-011)",
+      "description": "Line 445: legacy_patterns = ['cortex-brain.db', 'cortex-brain/cortex-brain.db', 'monolithi",
+      "file_path": "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/optimize/optimize_cortex_orchestrator.py",
+      "line_number": 445,
+      "recommendation": "Use ConfigManager.get_tier1_conversations_path() or tier-specific paths",
+      "auto_fixable": true
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Monolithic database reference in code (SKULL-011)",
+      "description": "Line 445: legacy_patterns = ['cortex-brain.db', 'cortex-brain/cortex-brain.db', 'monolithi",
+      "file_path": "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/optimize/optimize_cortex_orchestrator.py",
+      "line_number": 445,
+      "recommendation": "Use ConfigManager.get_tier1_conversations_path() or tier-specific paths",
+      "auto_fixable": true
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Monolithic database reference in code (SKULL-011)",
+      "description": "Line 469: self.report.statistics['monolithic_db_refs'] = len(monolithic_refs)",
+      "file_path": "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/optimize/optimize_cortex_orchestrator.py",
+      "line_number": 469,
+      "recommendation": "Use ConfigManager.get_tier1_conversations_path() or tier-specific paths",
+      "auto_fixable": true
+    }
+  ],
+  "obsolete_tests": [],
+  "statistics": {
+    "obsolete_tests_found": 0,
+    "monolithic_db_refs": 4,
+    "brain_db_size_mb": 2.87109375,
+    "tier0_protection_layers": 10,
+    "tier0_skull_rules": 7,
+    "tier1_conversations": 255,
+    "tier1_messages": 876,
+    "tier2_patterns": 0,
+    "tier2_lessons": 0,
+    "tier3_active": true,
+    "agent_coordination": true,
+    "brain_health_percentage": 100.0
+  },
+  "recommendations": [
+    "Increase code coverage from 0.0% to at least 80%"
+  ]
+}

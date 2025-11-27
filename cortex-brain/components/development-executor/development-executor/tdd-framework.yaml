@@ -1,0 +1,520 @@
+# CORTEX Development Executor - TDD Framework
+# Test-Driven Development workflow with quality tier system
+# Author: Asif Hussain | © 2024-2025
+
+version: "1.0.0"
+component: "development-executor"
+framework_type: "tdd"
+enforcement_level: "strict"  # TDD is mandatory, not optional
+
+# Quality Tier System
+quality_tiers:
+  simple:
+    description: "Simple features with linear flow (CRUD operations, simple utilities)"
+    
+    thresholds:
+      test_coverage: 80  # percent
+      cyclomatic_complexity: 5  # max complexity per function
+      refactor_cycles: 1  # Red-Green-Refactor iterations allowed
+      max_lines_per_function: 30
+      max_functions_per_class: 10
+    
+    detection_criteria:
+      - "Single responsibility (one clear purpose)"
+      - "No external API calls"
+      - "No complex business logic"
+      - "No multi-step workflows"
+    
+    examples:
+      - "CRUD operation for single entity"
+      - "Data validation function"
+      - "Simple formatting utility"
+      - "File read/write wrapper"
+    
+    test_requirements:
+      - "Happy path test"
+      - "Invalid input test"
+      - "Boundary condition test"
+    
+    tdd_workflow:
+      red: "Write 1-2 failing tests covering main functionality"
+      green: "Implement minimal code to pass tests"
+      refactor: "Extract any duplicate code, improve naming (1 cycle max)"
+  
+  medium:
+    description: "Moderate complexity with conditional logic and error handling"
+    
+    thresholds:
+      test_coverage: 85  # percent
+      cyclomatic_complexity: 8  # max complexity per function
+      refactor_cycles: 2  # Red-Green-Refactor iterations allowed
+      max_lines_per_function: 50
+      max_functions_per_class: 15
+    
+    detection_criteria:
+      - "Multiple conditional branches"
+      - "External API integration (single service)"
+      - "Error handling required"
+      - "2-3 step workflow"
+    
+    examples:
+      - "API client with error handling"
+      - "Multi-step validation logic"
+      - "Service with database + cache interaction"
+      - "Authentication flow"
+    
+    test_requirements:
+      - "Happy path test"
+      - "Multiple error scenarios (4-6 tests)"
+      - "Edge cases (empty input, max limits)"
+      - "Integration test (if external dependencies)"
+    
+    tdd_workflow:
+      red: "Write 4-6 failing tests covering main paths + error cases"
+      green: "Implement code to pass all tests"
+      refactor: "Extract helper methods, improve error handling (2 cycles max)"
+  
+  complex:
+    description: "Complex features requiring careful orchestration and comprehensive testing"
+    
+    thresholds:
+      test_coverage: 90  # percent
+      cyclomatic_complexity: 10  # max complexity per function (hard limit)
+      refactor_cycles: 3  # Red-Green-Refactor iterations allowed
+      max_lines_per_function: 75
+      max_functions_per_class: 20
+    
+    detection_criteria:
+      - "Multi-service orchestration"
+      - "Complex state management"
+      - "Transaction handling"
+      - "4+ step workflow"
+    
+    examples:
+      - "Multi-service payment processing"
+      - "Complex workflow orchestration"
+      - "Event-driven state machine"
+      - "Distributed transaction coordinator"
+    
+    test_requirements:
+      - "Happy path test"
+      - "Comprehensive error scenarios (8-12 tests)"
+      - "Edge cases and race conditions"
+      - "Integration tests for all service interactions"
+      - "Load/stress test for performance validation"
+    
+    tdd_workflow:
+      red: "Write 8-12 failing tests covering all paths, errors, and edge cases"
+      green: "Implement code iteratively, passing tests in groups"
+      refactor: "Extract services, improve architecture (3 cycles max, then ship)"
+    
+    warning: |
+      Complex features require extra scrutiny. Consider breaking into 
+      smaller features if possible. If complexity is inherent, document 
+      architectural decisions and add comprehensive monitoring.
+
+# Feature Complexity Auto-Detection
+complexity_detection:
+  enabled: true
+  
+  analysis_inputs:
+    - "Acceptance criteria structure (GIVEN-WHEN-THEN count)"
+    - "Number of external dependencies mentioned"
+    - "Workflow step count"
+    - "Error scenario count"
+    - "Data transformation complexity"
+  
+  detection_algorithm: |
+    function detect_complexity(acceptance_criteria):
+      score = 0
+      
+      # Count GIVEN-WHEN-THEN scenarios
+      scenarios = count_scenarios(acceptance_criteria)
+      score += scenarios * 2
+      
+      # Count external dependencies
+      dependencies = extract_dependencies(acceptance_criteria)
+      score += len(dependencies) * 3
+      
+      # Count workflow steps
+      steps = extract_workflow_steps(acceptance_criteria)
+      score += len(steps) * 1.5
+      
+      # Count error scenarios
+      error_scenarios = extract_error_scenarios(acceptance_criteria)
+      score += len(error_scenarios) * 2
+      
+      # Classify by score
+      if score <= 10:
+        return "simple"
+      elif score <= 25:
+        return "medium"
+      else:
+        return "complex"
+  
+  examples:
+    simple_feature:
+      input: |
+        GIVEN a user profile exists
+        WHEN user requests profile
+        THEN return profile data
+      
+      analysis:
+        scenarios: 1
+        dependencies: 0
+        steps: 1
+        errors: 0
+        score: 3.5
+        tier: "simple"
+    
+    medium_feature:
+      input: |
+        GIVEN user is authenticated
+        WHEN user submits payment
+        THEN charge payment gateway
+        AND create transaction record
+        AND send confirmation email
+        
+        Error scenarios:
+        - Payment gateway timeout
+        - Invalid payment method
+        - Insufficient funds
+        - Email service unavailable
+      
+      analysis:
+        scenarios: 1
+        dependencies: 3  # payment gateway, database, email service
+        steps: 3
+        errors: 4
+        score: 23
+        tier: "medium"
+    
+    complex_feature:
+      input: |
+        GIVEN user initiates checkout
+        WHEN processing multi-item order
+        THEN validate inventory across warehouses
+        AND reserve items with distributed lock
+        AND calculate shipping from multiple carriers
+        AND process payment with retry logic
+        AND coordinate order fulfillment
+        AND send notifications via multiple channels
+        
+        Error scenarios:
+        - Out of stock in all warehouses
+        - Payment gateway failures (5 types)
+        - Shipping calculation errors
+        - Lock acquisition timeout
+        - Partial fulfillment scenarios
+        - Notification delivery failures
+      
+      analysis:
+        scenarios: 1
+        dependencies: 6  # inventory, locks, carriers, payment, fulfillment, notifications
+        steps: 6
+        errors: 11
+        score: 43
+        tier: "complex"
+
+# Red-Green-Refactor Workflow
+tdd_cycle:
+  red:
+    description: "Write failing test(s) first"
+    
+    steps:
+      - name: "Write test"
+        action: "Create test file (test_*.py) with descriptive test name"
+        example: "test_user_login_with_valid_credentials_returns_success()"
+        
+      - name: "Assert expected behavior"
+        action: "Write assertions for expected outcome"
+        example: "assert result.success == True"
+        
+      - name: "Run test"
+        action: "Execute test suite"
+        command: "pytest tests/test_feature.py -v"
+        
+      - name: "Verify failure"
+        action: "Confirm test fails for expected reason"
+        expected_output: "FAILED (test not implemented)"
+    
+    quality_checks:
+      - "Test name describes behavior, not implementation"
+      - "Test is atomic (tests one thing)"
+      - "Test has clear arrange-act-assert structure"
+      - "Failure message is descriptive"
+    
+    anti_patterns:
+      - "Writing implementation before test"
+      - "Test that passes without implementation (false positive)"
+      - "Test with multiple assertions testing different behaviors"
+  
+  green:
+    description: "Write minimal code to pass test(s)"
+    
+    steps:
+      - name: "Implement feature"
+        action: "Write code to satisfy test requirements"
+        principle: "Simplest implementation that passes"
+        
+      - name: "Run tests"
+        action: "Execute test suite"
+        command: "pytest tests/test_feature.py -v"
+        
+      - name: "Verify pass"
+        action: "Confirm all tests pass"
+        expected_output: "PASSED (all tests green)"
+    
+    quality_checks:
+      - "All tests pass"
+      - "No commented-out code"
+      - "No obvious duplication (will be refactored in next phase)"
+    
+    anti_patterns:
+      - "Over-engineering solution (YAGNI violation)"
+      - "Adding functionality not required by tests"
+      - "Skipping tests or marking them as xfail"
+  
+  refactor:
+    description: "Improve code quality while keeping tests green"
+    
+    steps:
+      - name: "Identify improvements"
+        action: "Look for duplication, unclear naming, complexity"
+        tools:
+          - "PyLint (unused code)"
+          - "Radon (complexity)"
+          - "Manual code review"
+        
+      - name: "Make incremental changes"
+        action: "Refactor one thing at a time"
+        principle: "Keep tests passing after each change"
+        
+      - name: "Run tests after each change"
+        action: "Verify refactoring didn't break functionality"
+        command: "pytest tests/test_feature.py -v"
+        
+      - name: "Check quality metrics"
+        action: "Verify complexity and coverage targets met"
+        commands:
+          - "radon cc src/feature.py"
+          - "pytest --cov=src/feature tests/"
+    
+    refactoring_targets:
+      - "Extract duplicate code into functions"
+      - "Rename variables/functions for clarity"
+      - "Simplify complex conditionals"
+      - "Extract magic numbers to named constants"
+      - "Improve error messages"
+    
+    iteration_limits:
+      simple: 1  # One refactor pass, then ship
+      medium: 2  # Two refactor passes, then ship
+      complex: 3  # Three refactor passes, then ship (hard limit)
+    
+    anti_patterns:
+      - "Refactoring without running tests"
+      - "Making multiple changes before testing"
+      - "Endless refactoring (analysis paralysis)"
+      - "Changing behavior during refactoring"
+
+# Test Coverage Requirements
+test_coverage:
+  measurement_tool: "pytest-cov"
+  
+  coverage_types:
+    line_coverage:
+      description: "Percentage of code lines executed by tests"
+      targets:
+        simple: 80
+        medium: 85
+        complex: 90
+      
+    branch_coverage:
+      description: "Percentage of conditional branches tested"
+      targets:
+        simple: 70
+        medium: 80
+        complex: 85
+      
+    function_coverage:
+      description: "Percentage of functions with at least one test"
+      targets:
+        simple: 100
+        medium: 100
+        complex: 100
+  
+  exclusions:
+    - "__init__.py"
+    - "*/tests/*"
+    - "*/migrations/*"
+    - "*/settings.py"
+  
+  reporting:
+    format: ["terminal", "html", "json"]
+    html_output: "reports/coverage/index.html"
+    json_output: "reports/coverage/coverage.json"
+    
+  commands:
+    run_with_coverage: "pytest --cov=src --cov-report=html --cov-report=term-missing tests/"
+    check_threshold: "pytest --cov=src --cov-fail-under=80 tests/"
+
+# Test Quality Standards
+test_quality:
+  naming_conventions:
+    pattern: "test_<function>_<scenario>_<expected_outcome>"
+    examples:
+      - "test_login_with_valid_credentials_returns_success"
+      - "test_login_with_invalid_password_returns_error"
+      - "test_login_with_empty_username_raises_validation_error"
+  
+  structure:
+    pattern: "Arrange-Act-Assert"
+    example: |
+      def test_user_creation():
+          # Arrange
+          user_data = {"username": "testuser", "email": "test@example.com"}
+          
+          # Act
+          user = create_user(user_data)
+          
+          # Assert
+          assert user.username == "testuser"
+          assert user.email == "test@example.com"
+  
+  best_practices:
+    - "One assertion per test (or closely related assertions)"
+    - "Tests should be independent (no shared state)"
+    - "Use fixtures for setup/teardown"
+    - "Mock external dependencies"
+    - "Test behavior, not implementation"
+    - "Fast tests (< 100ms per test)"
+
+# TDD Enforcement
+enforcement:
+  pre_commit_hook:
+    enabled: true
+    checks:
+      - name: "Test exists for new code"
+        description: "Verify test file created/modified with source code"
+        blocking: true
+        
+      - name: "Tests pass"
+        description: "All tests must pass before commit"
+        command: "pytest tests/"
+        blocking: true
+        
+      - name: "Coverage threshold met"
+        description: "Coverage meets tier threshold"
+        command: "pytest --cov=src --cov-fail-under=<tier_threshold> tests/"
+        blocking: true
+  
+  pre_merge_gate:
+    enabled: true
+    checks:
+      - name: "Full test suite passes"
+        command: "pytest tests/ -v"
+        timeout: 300  # 5 minutes
+        blocking: true
+        
+      - name: "Coverage report generated"
+        command: "pytest --cov=src --cov-report=json tests/"
+        blocking: false
+        
+      - name: "No skipped tests"
+        command: "pytest tests/ -v | grep -v 'SKIPPED'"
+        blocking: true
+  
+  violations:
+    test_after_code:
+      severity: "error"
+      message: |
+        TDD violation detected: Source code modified without corresponding test changes.
+        
+        Modified files:
+        {modified_source_files}
+        
+        Expected test files:
+        {expected_test_files}
+        
+        TDD requires writing tests BEFORE implementation.
+        Please add/update tests before committing.
+      
+      detection: "Git diff analysis comparing source vs test file timestamps"
+    
+    low_coverage:
+      severity: "error"
+      message: |
+        Coverage threshold not met: {actual_coverage}% < {required_coverage}%
+        
+        Feature tier: {tier}
+        Required coverage: {required_coverage}%
+        Current coverage: {actual_coverage}%
+        Uncovered lines: {uncovered_lines}
+        
+        Add tests to cover missing lines before merging.
+      
+      reporting_command: "pytest --cov=src --cov-report=term-missing tests/"
+
+# Integration with Development Workflow
+workflow_integration:
+  ide_plugins:
+    vscode:
+      - "Python Test Explorer"
+      - "Coverage Gutters"
+    
+    pycharm:
+      - "Run tests with coverage"
+      - "Show coverage in editor gutter"
+  
+  cli_commands:
+    run_tests: "pytest tests/ -v"
+    run_single_test: "pytest tests/test_feature.py::test_specific_test -v"
+    watch_mode: "ptw -- tests/"  # pytest-watch for continuous testing
+    coverage_report: "pytest --cov=src --cov-report=html tests/ && open htmlcov/index.html"
+  
+  cicd_integration:
+    github_actions:
+      - name: "Run Tests"
+        command: "pytest tests/ -v --cov=src --cov-report=xml"
+        
+      - name: "Upload Coverage"
+        uses: "codecov/codecov-action@v3"
+        with:
+          files: "./coverage.xml"
+
+# Developer Guidance
+developer_guidance:
+  getting_started: |
+    TDD Workflow:
+    1. Write a failing test (RED)
+    2. Write minimal code to pass (GREEN)
+    3. Refactor for quality (REFACTOR)
+    4. Repeat for next requirement
+  
+  test_first_benefits:
+    - "Clarifies requirements before coding"
+    - "Ensures testable design"
+    - "Provides regression safety net"
+    - "Documents behavior through examples"
+    - "Reduces debugging time"
+  
+  common_mistakes:
+    - mistake: "Writing all tests upfront"
+      solution: "Write tests incrementally, one at a time"
+      
+    - mistake: "Testing implementation details"
+      solution: "Test behavior and outcomes, not internal structure"
+      
+    - mistake: "Skipping refactor phase"
+      solution: "Always refactor, but within iteration limits"
+      
+    - mistake: "Over-mocking"
+      solution: "Mock external dependencies, use real objects internally"
+
+# References
+references:
+  tdd_book: "Test Driven Development: By Example (Kent Beck)"
+  pytest_docs: "https://docs.pytest.org/"
+  coverage_docs: "https://coverage.readthedocs.io/"
+  clean_code_tdd: "Clean Code - Chapter 9: Unit Tests"

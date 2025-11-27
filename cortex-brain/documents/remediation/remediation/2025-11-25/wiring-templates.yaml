@@ -1,0 +1,339 @@
+# Auto-Generated Wiring Templates
+# Add these to cortex-brain/response-templates.yaml
+
+
+# === HandsOnTutorialOrchestrator ===
+# Suggested wiring for HandsOnTutorialOrchestrator
+# Add to cortex-brain/response-templates.yaml
+
+hands_on_tutorial:
+  name: "HandsOnTutorialOrchestrator"
+  triggers:
+    - "hands on tutorial"
+    - "start hands on tutorial"
+    - "run on tutorial"
+  response_type: "detailed"
+  orchestrator: "HandsOnTutorialOrchestrator"
+  content: |
+    🧠 **CORTEX HandsOnTutorialOrchestrator**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Orchestrates interactive hands-on tutorial for CORTEX.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for HandsOnTutorialOrchestrator
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 HandsOnTutorial
+
+**Purpose:** Orchestrates interactive hands-on tutorial for CORTEX.
+
+**Commands:**
+- `hands on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+- `start hands on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+- `run on tutorial` - Orchestrates interactive hands-on tutorial for CORTEX.
+
+**Natural Language Examples:**
+- "hands on tutorial"
+- "start hands on tutorial"
+- "run on tutorial"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
+# === PublishBranchOrchestrator ===
+# Suggested wiring for PublishBranchOrchestrator
+# Add to cortex-brain/response-templates.yaml
+
+publish_branch:
+  name: "PublishBranchOrchestrator"
+  triggers:
+    - "publish branch"
+    - "start publish branch"
+    - "run branch"
+  response_type: "detailed"
+  orchestrator: "PublishBranchOrchestrator"
+  content: |
+    🧠 **CORTEX PublishBranchOrchestrator**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Orchestrates CORTEX deployment to remote main branch.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for PublishBranchOrchestrator
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 PublishBranch
+
+**Purpose:** Orchestrates CORTEX deployment to remote main branch.
+
+**Commands:**
+- `publish branch` - Orchestrates CORTEX deployment to remote main branch.
+- `start publish branch` - Orchestrates CORTEX deployment to remote main branch.
+- `run branch` - Orchestrates CORTEX deployment to remote main branch.
+
+**Natural Language Examples:**
+- "publish branch"
+- "start publish branch"
+- "run branch"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
+# === OptimizeSystemOrchestrator ===
+# Suggested wiring for OptimizeSystemOrchestrator
+# Add to cortex-brain/response-templates.yaml
+
+optimize_system:
+  name: "OptimizeSystemOrchestrator"
+  triggers:
+    - "optimize system"
+    - "start optimize system"
+    - "run system"
+  response_type: "detailed"
+  orchestrator: "OptimizeSystemOrchestrator"
+  content: |
+    🧠 **CORTEX OptimizeSystemOrchestrator**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Meta-level orchestrator for comprehensive CORTEX system optimization.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for OptimizeSystemOrchestrator
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 OptimizeSystem
+
+**Purpose:** Meta-level orchestrator for comprehensive CORTEX system optimization.
+
+**Commands:**
+- `optimize system` - Meta-level orchestrator for comprehensive CORTEX system optimization.
+- `start optimize system` - Meta-level orchestrator for comprehensive CORTEX system optimization.
+- `run system` - Meta-level orchestrator for comprehensive CORTEX system optimization.
+
+**Natural Language Examples:**
+- "optimize system"
+- "start optimize system"
+- "run system"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
+# === PlanningOrchestrator ===
+# Suggested wiring for PlanningOrchestrator
+# Add to cortex-brain/response-templates.yaml
+
+planning:
+  name: "PlanningOrchestrator"
+  triggers:
+    - "planning"
+  response_type: "detailed"
+  orchestrator: "PlanningOrchestrator"
+  content: |
+    🧠 **CORTEX PlanningOrchestrator**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Orchestrates YAML-based feature planning with validation and Markdown generation.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for PlanningOrchestrator
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 Planning
+
+**Purpose:** Orchestrates YAML-based feature planning with validation and Markdown generation.
+
+**Commands:**
+- `planning` - Orchestrates YAML-based feature planning with validation and Markdown generation.
+
+**Natural Language Examples:**
+- "planning"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
+# === ViewDiscoveryAgent ===
+# Suggested wiring for ViewDiscoveryAgent
+# Add to cortex-brain/response-templates.yaml
+
+view_discovery:
+  name: "ViewDiscoveryAgent"
+  triggers:
+    - "view discovery"
+    - "start view discovery"
+    - "run discovery"
+  response_type: "detailed"
+  orchestrator: "ViewDiscoveryAgent"
+  content: |
+    🧠 **CORTEX ViewDiscoveryAgent**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Discovers element IDs and structure from Razor/Blazor views.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for ViewDiscoveryAgent
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 ViewDiscovery
+
+**Purpose:** Discovers element IDs and structure from Razor/Blazor views.
+
+**Commands:**
+- `view discovery` - Discovers element IDs and structure from Razor/Blazor views.
+- `start view discovery` - Discovers element IDs and structure from Razor/Blazor views.
+- `run discovery` - Discovers element IDs and structure from Razor/Blazor views.
+
+**Natural Language Examples:**
+- "view discovery"
+- "start view discovery"
+- "run discovery"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+
+
+# === LearningCaptureAgent ===
+# Suggested wiring for LearningCaptureAgent
+# Add to cortex-brain/response-templates.yaml
+
+learning_capture:
+  name: "LearningCaptureAgent"
+  triggers:
+    - "learning capture"
+    - "start learning capture"
+    - "run capture"
+  response_type: "detailed"
+  orchestrator: "LearningCaptureAgent"
+  content: |
+    🧠 **CORTEX LearningCaptureAgent**
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    🎯 **My Understanding Of Your Request:** {{understanding}}
+    
+    ⚠️ **Challenge:** {{challenge}}
+    
+    💬 **Response:** Agent that automatically captures lessons learned from various sources.
+    
+    📝 **Your Request:** {{user_request}}
+    
+    🔍 **Next Steps:**
+    {{next_steps}}
+
+
+# Suggested documentation for LearningCaptureAgent
+# Add to .github/prompts/CORTEX.prompt.md
+
+## 🔧 LearningCapture
+
+**Purpose:** Agent that automatically captures lessons learned from various sources.
+
+**Commands:**
+- `learning capture` - Agent that automatically captures lessons learned from various sources.
+- `start learning capture` - Agent that automatically captures lessons learned from various sources.
+- `run capture` - Agent that automatically captures lessons learned from various sources.
+
+**Natural Language Examples:**
+- "learning capture"
+- "start learning capture"
+- "run capture"
+
+**How It Works:**
+1. [Step 1 description]
+2. [Step 2 description]
+3. [Step 3 description]
+
+**Output:**
+- [Output description]
+
+**See Also:** [Related documentation]
+
+

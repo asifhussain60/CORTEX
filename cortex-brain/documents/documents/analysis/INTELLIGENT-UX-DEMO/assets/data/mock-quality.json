@@ -1,0 +1,126 @@
+{
+  "scenarios": {
+    "problem": {
+      "overallScore": 42,
+      "metrics": {
+        "maintainability": 38,
+        "reliability": 45,
+        "security": 41,
+        "performance": 47,
+        "testCoverage": 34
+      },
+      "codeSmells": {
+        "total": 287,
+        "critical": 42,
+        "high": 89,
+        "medium": 126,
+        "low": 30,
+        "breakdown": {
+          "longMethod": 67,
+          "largeClass": 34,
+          "complexMethod": 52,
+          "duplicateCode": 45,
+          "godClass": 12,
+          "featureEnvy": 28,
+          "dataClumps": 19,
+          "primitiveObsession": 15,
+          "switchStatements": 8,
+          "speculativeGenerality": 4,
+          "temporaryField": 3
+        }
+      },
+      "technicalDebt": {
+        "totalMinutes": 14523,
+        "estimatedCost": "$72,615",
+        "remediationTime": "7.8 weeks"
+      }
+    },
+    "average": {
+      "overallScore": 73,
+      "metrics": {
+        "maintainability": 71,
+        "reliability": 76,
+        "security": 69,
+        "performance": 75,
+        "testCoverage": 74
+      },
+      "codeSmells": {
+        "total": 89,
+        "critical": 3,
+        "high": 18,
+        "medium": 48,
+        "low": 20,
+        "breakdown": {
+          "longMethod": 22,
+          "largeClass": 11,
+          "complexMethod": 15,
+          "duplicateCode": 18,
+          "godClass": 2,
+          "featureEnvy": 9,
+          "dataClumps": 6,
+          "primitiveObsession": 4,
+          "switchStatements": 1,
+          "speculativeGenerality": 1,
+          "temporaryField": 0
+        }
+      },
+      "technicalDebt": {
+        "totalMinutes": 3847,
+        "estimatedCost": "$19,235",
+        "remediationTime": "2.1 weeks"
+      }
+    },
+    "excellent": {
+      "overallScore": 92,
+      "metrics": {
+        "maintainability": 94,
+        "reliability": 91,
+        "security": 89,
+        "performance": 93,
+        "testCoverage": 93
+      },
+      "codeSmells": {
+        "total": 12,
+        "critical": 0,
+        "high": 1,
+        "medium": 6,
+        "low": 5,
+        "breakdown": {
+          "longMethod": 3,
+          "largeClass": 2,
+          "complexMethod": 2,
+          "duplicateCode": 3,
+          "godClass": 0,
+          "featureEnvy": 1,
+          "dataClumps": 1,
+          "primitiveObsession": 0,
+          "switchStatements": 0,
+          "speculativeGenerality": 0,
+          "temporaryField": 0
+        }
+      },
+      "technicalDebt": {
+        "totalMinutes": 427,
+        "estimatedCost": "$2,135",
+        "remediationTime": "0.2 weeks"
+      }
+    }
+  },
+  "industryBenchmarks": {
+    "maintainability": { "poor": 40, "average": 70, "good": 85, "excellent": 95 },
+    "reliability": { "poor": 45, "average": 72, "good": 88, "excellent": 96 },
+    "security": { "poor": 35, "average": 65, "good": 82, "excellent": 94 },
+    "performance": { "poor": 50, "average": 75, "good": 90, "excellent": 97 },
+    "testCoverage": { "poor": 30, "average": 70, "good": 85, "excellent": 95 }
+  },
+  "trendData": {
+    "lastSixMonths": [
+      { "month": "Jun", "score": 38 },
+      { "month": "Jul", "score": 41 },
+      { "month": "Aug", "score": 44 },
+      { "month": "Sep", "score": 48 },
+      { "month": "Oct", "score": 52 },
+      { "month": "Nov", "score": 56 }
+    ]
+  }
+}

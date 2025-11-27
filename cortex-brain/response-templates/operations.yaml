@@ -1,0 +1,428 @@
+# CORTEX Response Templates - OPERATIONS Category
+# Auto-generated from response-templates.yaml
+# Template count: 20
+
+category: operations
+last_updated: '2025-11-13'
+schema_version: 2.1.0
+templates:
+  brain_check_complete:
+    content: '✅ **Brain Protection Validated**
+
+
+      Tier 0: {{tier0_status}}
+
+      Tier 1: {{tier1_status}}
+
+      Tier 2: {{tier2_status}}
+
+      Tier 3: {{tier3_status}}
+
+
+      All systems protected.
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: brain_check
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  brain_check_started:
+    content: '🛡️ **Brain Protection Check** - Starting
+
+
+      Validating CORTEX brain integrity...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: brain_check
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  cleanup_complete:
+    content: '✅ **Cleanup Complete**
+
+
+      Files Removed: {{files_count}} ({{size_mb}}MB)
+
+      Logs Rotated: {{logs_count}}
+
+      DB Optimized: {{db_savings_mb}}MB
+
+
+      Total Space Freed: {{total_mb}}MB
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: cleanup
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  cleanup_started:
+    content: '🧹 **Workspace Cleanup** - Starting
+
+
+      Profile: {{profile}}
+
+      Scanning...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: cleanup
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  design_sync_complete:
+    content: '✅ **Design Synchronization Complete**
+
+
+      Profile: {{profile}}
+
+      Duration: {{duration_seconds}}s
+
+
+      Changes Applied:
+
+      • Status files consolidated: {{status_consolidated}}
+
+      • MD to YAML converted: {{md_converted}}
+
+      • Optimizations integrated: {{optimizations}}
+
+      • Gaps resolved: {{gaps_resolved}}
+
+
+      Git: {{git_commits}} commit(s)
+
+
+      {{#next_actions}}
+
+      Next: {{text}}
+
+      {{/next_actions}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: design_sync
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  design_sync_discovery:
+    content: '🔍 **Discovery Complete**
+
+
+      Implementation:
+
+      • Modules: {{total_modules}} ({{implemented_modules}} implemented)
+
+      • Tests: {{total_tests}} tests
+
+      • Plugins: {{plugins_count}} operational
+
+      • Operations: {{operations_count}} defined
+
+
+      Design:
+
+      • Version: CORTEX {{design_version}}
+
+      • Design files: {{design_files_count}}
+
+      • Status files: {{status_files_count}}
+
+      • YAML schemas: {{yaml_count}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: design_sync
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  design_sync_gaps:
+    content: '⚠️ **Gaps Identified**
+
+
+      {{gaps_count}} issues found:
+
+
+      {{#inconsistent_counts}}
+
+      • {{operation}}: Claimed {{claimed}} modules, actually {{actual}}
+
+      {{/inconsistent_counts}}
+
+
+      {{#if redundant_status}}
+
+      • {{redundant_status}} redundant status files
+
+      {{/if}}
+
+
+      {{#if verbose_md}}
+
+      • {{verbose_md}} verbose MD documents (YAML candidates)
+
+      {{/if}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: design_sync
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  design_sync_started:
+    content: '🔄 **Design Synchronization** - Starting
+
+
+      Profile: {{profile}}
+
+      Version: CORTEX {{version}}
+
+      Scanning implementation...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: design_sync
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  docs_build_complete:
+    content: '✅ **Documentation Built**
+
+
+      Pages Generated: {{pages_count}}
+
+      Output: {{output_dir}}
+
+
+      View: {{url}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: docs_build
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  docs_build_started:
+    content: '📖 **Documentation Build** - Starting
+
+
+      Building documentation site...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: docs_build
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  operation_complete:
+    content: '✅ **{{operation_name}}** - Complete
+
+
+      Duration: {{duration_seconds}}s
+
+      Modules: {{succeeded}}/{{total}} succeeded
+
+
+      {{#failures}}
+
+      ❌ {{module_name}}: {{error}}
+
+      {{/failures}}
+
+
+      Next: {{recommendation}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  operation_failed:
+    content: '❌ **{{operation_name}}** - Failed
+
+
+      Error: {{error_message}}
+
+      Module: {{failed_module}}
+
+
+      Troubleshooting:
+
+      {{#suggestions}}
+
+      • {{text}}
+
+      {{/suggestions}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  operation_progress:
+    content: '⏳ **{{operation_name}}** - {{percent}}%
+
+
+      ✅ Completed: {{completed_modules}}
+
+      🔄 Running: {{current_module}}
+
+      ⏸️ Pending: {{pending_modules}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  operation_started:
+    content: '🚀 **{{operation_name}}** - Started
+
+
+      Profile: {{profile}}
+
+      Modules: {{modules_count}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  setup_complete:
+    content: '✅ **Environment Setup Complete**
+
+
+      Platform: {{platform}}
+
+      Python: {{python_version}}
+
+      Dependencies: {{dependencies_installed}}
+
+
+      You''re ready to go!
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: setup
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  setup_started:
+    content: '🔧 **Environment Setup** - Starting
+
+
+      Platform: {{platform}}
+
+      Profile: {{profile}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: setup
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  story_refresh_complete:
+    content: '✅ **Story Refresh Complete**
+
+
+      Files Updated: {{files_count}}
+
+      Transformations: {{transformations_count}}
+
+
+      Preview: {{preview_path}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: story_refresh
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  story_refresh_started:
+    content: '📚 **Story Refresh** - Starting
+
+
+      Loading story template...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: story_refresh
+    response_type: narrative
+    triggers: []
+    verbosity: concise
+  tests_complete:
+    content: '✅ **Tests Passed**
+
+
+      Passed: {{passed}}/{{total}}
+
+      Coverage: {{coverage}}%
+
+      Duration: {{duration}}s
+
+
+      {{#failures}}
+
+      ❌ {{test_name}}: {{error}}
+
+      {{/failures}}
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: tests
+    response_type: detailed
+    triggers: []
+    verbosity: concise
+  tests_started:
+    content: '🧪 **Test Suite** - Starting
+
+
+      Running {{tests_count}} tests...
+
+      '
+    context_needed: true
+    metadata:
+      category: operation
+      operation: tests
+    response_type: narrative
+    triggers: []
+    verbosity: concise

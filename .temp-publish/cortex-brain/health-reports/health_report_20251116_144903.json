@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-11-16T14:49:03.304071",
+  "epmo_path": "src/epmo/health",
+  "health_report": {
+    "epmo_name": "health",
+    "epmo_path": "src/epmo/health",
+    "overall_score": 83.39562140645732,
+    "overall_grade": "B",
+    "dimension_scores": {
+      "code_quality": {
+        "score": 100.0,
+        "weight": 0.25,
+        "weighted_score": 25.0,
+        "results": [
+          {
+            "dimension": "code_quality",
+            "check_name": "cyclomatic_complexity",
+            "severity": "info",
+            "score": 1.0,
+            "max_score": 1.0,
+            "message": "Excellent complexity: 3.6 avg (\u22645 target)",
+            "details": {
+              "average_complexity": 3.557894736842105,
+              "total_complexity": 338,
+              "total_functions": 95,
+              "threshold": 10
+            },
+            "metadata": {
+              "dimension": 

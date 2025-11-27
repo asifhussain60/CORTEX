@@ -1,0 +1,222 @@
+# EPM Orchestrator Enhancement Plan - Phase 1: Analysis & Design
+# Version: 1.0.0
+# Created: 2025-11-26
+# Author: Asif Hussain
+# Status: ACTIVE
+
+metadata:
+  title: "EPM Orchestrator Enhancement Plan"
+  version: "1.0.0"
+  created: "2025-11-26"
+  status: "active"
+  total_phases: 4
+  current_phase: 1
+  estimated_duration: "8-12 hours"
+
+overview:
+  problem_statement: |
+    Three critical issues identified in Entry Point Module (EPM) Orchestrators:
+    
+    1. CODE QUALITY ENFORCEMENT MISSING
+       - Debug logging statements left in code
+       - No final code smell detection
+       - No lint validation before completion
+       - Code not left in production-ready state
+    
+    2. BRAIN DOCUMENTATION DISORGANIZED
+       - Planning docs scattered
+       - ADO work items not consistently tracked
+       - Code reviews not documented
+       - TDD session artifacts hard to reference
+    
+    3. INCREMENTAL PLANNING NOT ENFORCED
+       - CORTEX ignores small-increment rule
+       - Generates large YAML/MD plans causing excessive data errors
+       - No token budget enforcement during plan generation
+    
+  affected_orchestrators:
+    - "session_completion_orchestrator.py"
+    - "tdd_workflow_orchestrator.py"
+    - "planning_orchestrator.py"
+    - "setup_epm_orchestrator.py"
+    - "git_checkpoint_orchestrator.py"
+    - "lint_validation_orchestrator.py"
+    - "upgrade_orchestrator.py"
+  
+  success_criteria:
+    - "100% of EPM orchestrators enforce final code quality review"
+    - "Brain documentation organized in 7-category structure"
+    - "YAML/MD plans generated in <2KB increments (max 500 tokens)"
+    - "Zero excessive data errors during plan generation"
+    - "All TDD sessions complete with production-ready code"
+
+phase_1_analysis:
+  current_state_assessment:
+    session_completion_orchestrator:
+      status: "partial_implementation"
+      has_test_validation: true
+      has_metrics_comparison: true
+      has_skull_validation: true
+      missing:
+        - "Final code smell detection"
+        - "Debug logging removal validation"
+        - "Lint execution before report"
+        - "Production readiness checklist"
+    
+    tdd_workflow_orchestrator:
+      status: "partial_implementation"
+      has_refactoring_suggestions: true
+      has_code_smell_detection: true
+      missing:
+        - "Final cleanup phase"
+        - "Debug statement scanner"
+        - "Lint integration at completion"
+        - "Production readiness gate"
+    
+    planning_orchestrator:
+      status: "needs_major_enhancement"
+      current_behavior: "Generates full plans in single operation"
+      missing:
+        - "Incremental generation with token tracking"
+        - "YAML chunking for CORTEX consumption"
+        - "MD sectioning for user readability"
+        - "Token budget enforcement (500 token max per chunk)"
+    
+    brain_documentation_structure:
+      current_folders:
+        - "analysis/"
+        - "reports/"
+        - "planning/"
+        - "conversation-captures/"
+        - "implementation-guides/"
+      missing_folders:
+        - "tdd-sessions/"
+        - "code-reviews/"
+        - "ado-work-items/"
+      needs_organization:
+        - "planning/ subfolder structure"
+        - "reports/ categorization"
+
+  gap_analysis:
+    code_quality_gaps:
+      severity: "HIGH"
+      impact: "Production code contains debug artifacts, poor maintainability"
+      affected_operations:
+        - "TDD session completion"
+        - "Git checkpoint creation"
+        - "Session report generation"
+      required_additions:
+        - "CodeCleanupValidator class"
+        - "DebugStatementScanner"
+        - "LintIntegration wrapper"
+        - "ProductionReadinessChecklist"
+    
+    documentation_gaps:
+      severity: "MEDIUM"
+      impact: "Hard to find session artifacts, poor knowledge organization"
+      affected_operations:
+        - "All planning operations"
+        - "TDD session tracking"
+        - "Code review storage"
+      required_additions:
+        - "DocumentOrganizer utility"
+        - "Standardized folder structure"
+        - "Auto-filing logic"
+        - "Cross-reference system"
+    
+    incremental_planning_gaps:
+      severity: "HIGH"
+      impact: "Excessive data errors block planning operations"
+      affected_operations:
+        - "Feature planning"
+        - "ADO work item planning"
+        - "Implementation plan generation"
+      required_additions:
+        - "IncrementalPlanGenerator"
+        - "TokenBudgetEnforcer"
+        - "ChunkingStrategy"
+        - "StreamingPlanWriter"
+
+  design_decisions:
+    code_quality_enforcement:
+      approach: "Multi-stage validation pipeline"
+      stages:
+        1: "Refactoring suggestions (existing)"
+        2: "Code smell detection (existing)"
+        3: "Debug statement scan (NEW)"
+        4: "Lint validation (NEW)"
+        5: "Production readiness checklist (NEW)"
+      integration_point: "session_completion_orchestrator.complete_session()"
+      rollback_strategy: "If validation fails, block completion and report issues"
+    
+    brain_documentation_structure:
+      approach: "7-category organized hierarchy"
+      categories:
+        tdd_sessions:
+          path: "cortex-brain/documents/tdd-sessions/YYYY-MM-DD/"
+          content: "Session reports, test results, refactoring logs"
+        code_reviews:
+          path: "cortex-brain/documents/code-reviews/YYYY-MM-DD/"
+          content: "Code smell reports, lint results, quality metrics"
+        ado_work_items:
+          path: "cortex-brain/documents/ado-work-items/ADO-{id}/"
+          content: "Work item plans, status updates, completion reports"
+        planning:
+          path: "cortex-brain/documents/planning/{type}/"
+          content: "Feature plans, architecture designs, roadmaps"
+        implementation_guides:
+          path: "cortex-brain/documents/implementation-guides/"
+          content: "Step-by-step implementation docs"
+        reports:
+          path: "cortex-brain/documents/reports/{category}/"
+          content: "System reports, metrics, health checks"
+        conversation_captures:
+          path: "cortex-brain/documents/conversation-captures/"
+          content: "Imported conversations, learning material"
+      auto_filing: "DocumentOrganizer determines category from context"
+    
+    incremental_planning:
+      approach: "Chunked generation with streaming output"
+      strategy:
+        token_budget: 500  # Max tokens per chunk
+        chunk_size: 2048   # Max bytes per chunk
+        formats:
+          yaml: "For CORTEX brain consumption"
+          markdown: "For user review and editing"
+      workflow:
+        1: "Plan skeleton generation (structure only, <200 tokens)"
+        2: "Section-by-section filling (one section per API call)"
+        3: "User review checkpoint after each major section"
+        4: "Streaming write to files (prevents memory buildup)"
+        5: "Token budget validation before each write"
+      error_handling: "If budget exceeded, pause and prompt user to continue"
+
+next_steps:
+  immediate_actions:
+    - "Create Phase 2 plan file with detailed implementation specs"
+    - "Design CodeCleanupValidator class interface"
+    - "Design IncrementalPlanGenerator class interface"
+    - "Design DocumentOrganizer utility interface"
+  
+  validation_criteria:
+    - "All interfaces documented with type signatures"
+    - "Integration points identified"
+    - "Test strategy defined"
+    - "Rollout plan created"
+
+estimated_impact:
+  code_quality:
+    before: "30% of sessions leave debug statements"
+    after: "0% - automatic validation blocks completion"
+  
+  documentation_findability:
+    before: "5+ minute search for session artifacts"
+    after: "<30 second access via organized structure"
+  
+  planning_reliability:
+    before: "40% of plans fail with excessive data error"
+    after: "0% - chunking prevents token overflow"
+  
+  developer_experience:
+    before: "Manual cleanup required after every session"
+    after: "Production-ready code automatically validated"

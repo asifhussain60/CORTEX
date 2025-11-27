@@ -1,0 +1,119 @@
+{
+  "scenarios": {
+    "problem": {
+      "overallScore": 41,
+      "owaspTop10": [
+        { "id": "A01", "name": "Broken Access Control", "status": "vulnerable", "severity": "critical", "instances": 12 },
+        { "id": "A02", "name": "Cryptographic Failures", "status": "vulnerable", "severity": "high", "instances": 8 },
+        { "id": "A03", "name": "Injection", "status": "vulnerable", "severity": "critical", "instances": 15 },
+        { "id": "A04", "name": "Insecure Design", "status": "vulnerable", "severity": "high", "instances": 6 },
+        { "id": "A05", "name": "Security Misconfiguration", "status": "vulnerable", "severity": "medium", "instances": 9 },
+        { "id": "A06", "name": "Vulnerable Components", "status": "vulnerable", "severity": "high", "instances": 22 },
+        { "id": "A07", "name": "Auth and Session Failures", "status": "vulnerable", "severity": "critical", "instances": 11 },
+        { "id": "A08", "name": "Software/Data Integrity", "status": "at-risk", "severity": "medium", "instances": 4 },
+        { "id": "A09", "name": "Security Logging Failures", "status": "vulnerable", "severity": "medium", "instances": 7 },
+        { "id": "A10", "name": "Server-Side Request Forgery", "status": "at-risk", "severity": "low", "instances": 2 }
+      ],
+      "vulnerabilities": {
+        "critical": 38,
+        "high": 45,
+        "medium": 67,
+        "low": 23,
+        "total": 173
+      },
+      "compliance": {
+        "SOC2": { "status": "non-compliant", "coverage": 42 },
+        "GDPR": { "status": "non-compliant", "coverage": 38 },
+        "PCI-DSS": { "status": "non-compliant", "coverage": 35 },
+        "HIPAA": { "status": "non-compliant", "coverage": 28 }
+      },
+      "criticalIssues": [
+        { "type": "SQL Injection", "location": "PaymentService.GetTransactions()", "severity": "critical", "description": "Unsanitized user input in SQL query" },
+        { "type": "Hardcoded Secrets", "location": "appsettings.json", "severity": "critical", "description": "API keys stored in plain text" },
+        { "type": "Missing Authentication", "location": "/api/admin/*", "severity": "critical", "description": "Admin endpoints accessible without auth" },
+        { "type": "Weak Password Policy", "location": "AuthService", "severity": "high", "description": "No minimum password requirements" },
+        { "type": "XSS Vulnerability", "location": "UserProfile.cshtml", "severity": "high", "description": "Unescaped user input displayed" }
+      ]
+    },
+    "average": {
+      "overallScore": 69,
+      "owaspTop10": [
+        { "id": "A01", "name": "Broken Access Control", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A02", "name": "Cryptographic Failures", "status": "at-risk", "severity": "low", "instances": 2 },
+        { "id": "A03", "name": "Injection", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A04", "name": "Insecure Design", "status": "at-risk", "severity": "medium", "instances": 3 },
+        { "id": "A05", "name": "Security Misconfiguration", "status": "at-risk", "severity": "low", "instances": 4 },
+        { "id": "A06", "name": "Vulnerable Components", "status": "at-risk", "severity": "medium", "instances": 8 },
+        { "id": "A07", "name": "Auth and Session Failures", "status": "at-risk", "severity": "medium", "instances": 3 },
+        { "id": "A08", "name": "Software/Data Integrity", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A09", "name": "Security Logging Failures", "status": "at-risk", "severity": "low", "instances": 2 },
+        { "id": "A10", "name": "Server-Side Request Forgery", "status": "protected", "severity": "none", "instances": 0 }
+      ],
+      "vulnerabilities": {
+        "critical": 0,
+        "high": 3,
+        "medium": 12,
+        "low": 7,
+        "total": 22
+      },
+      "compliance": {
+        "SOC2": { "status": "partially-compliant", "coverage": 73 },
+        "GDPR": { "status": "partially-compliant", "coverage": 68 },
+        "PCI-DSS": { "status": "partially-compliant", "coverage": 71 },
+        "HIPAA": { "status": "non-compliant", "coverage": 55 }
+      },
+      "criticalIssues": [
+        { "type": "Weak Encryption", "location": "PasswordHasher", "severity": "medium", "description": "Using MD5 instead of bcrypt/Argon2" },
+        { "type": "Outdated Dependencies", "location": "package.json", "severity": "medium", "description": "8 packages with known vulnerabilities" },
+        { "type": "Missing Rate Limiting", "location": "/api/auth/login", "severity": "medium", "description": "Brute force attack possible" }
+      ]
+    },
+    "excellent": {
+      "overallScore": 89,
+      "owaspTop10": [
+        { "id": "A01", "name": "Broken Access Control", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A02", "name": "Cryptographic Failures", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A03", "name": "Injection", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A04", "name": "Insecure Design", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A05", "name": "Security Misconfiguration", "status": "at-risk", "severity": "low", "instances": 1 },
+        { "id": "A06", "name": "Vulnerable Components", "status": "at-risk", "severity": "low", "instances": 2 },
+        { "id": "A07", "name": "Auth and Session Failures", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A08", "name": "Software/Data Integrity", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A09", "name": "Security Logging Failures", "status": "protected", "severity": "none", "instances": 0 },
+        { "id": "A10", "name": "Server-Side Request Forgery", "status": "protected", "severity": "none", "instances": 0 }
+      ],
+      "vulnerabilities": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 3,
+        "total": 3
+      },
+      "compliance": {
+        "SOC2": { "status": "compliant", "coverage": 92 },
+        "GDPR": { "status": "compliant", "coverage": 89 },
+        "PCI-DSS": { "status": "compliant", "coverage": 94 },
+        "HIPAA": { "status": "partially-compliant", "coverage": 78 }
+      },
+      "criticalIssues": [
+        { "type": "Minor Configuration", "location": "CORS settings", "severity": "low", "description": "Overly permissive CORS policy" }
+      ]
+    }
+  },
+  "securityRoadmap": {
+    "problem": [
+      { "phase": 1, "title": "Fix Critical Vulnerabilities", "duration": "1-2 weeks", "tasks": ["Patch SQL injection", "Remove hardcoded secrets", "Add admin auth"] },
+      { "phase": 2, "title": "Implement MFA", "duration": "2-3 weeks", "tasks": ["TOTP support", "Backup codes", "Recovery process"] },
+      { "phase": 3, "title": "Security Hardening", "duration": "3-4 weeks", "tasks": ["Update dependencies", "Add rate limiting", "Implement CSP"] },
+      { "phase": 4, "title": "Compliance Certification", "duration": "4-6 weeks", "tasks": ["SOC 2 audit prep", "GDPR compliance", "PCI-DSS certification"] }
+    ],
+    "average": [
+      { "phase": 1, "title": "Upgrade Encryption", "duration": "1 week", "tasks": ["Migrate to bcrypt", "Rotate secrets", "Update SSL/TLS"] },
+      { "phase": 2, "title": "Dependency Management", "duration": "1 week", "tasks": ["Update vulnerable packages", "Automated scanning", "Dependency pinning"] },
+      { "phase": 3, "title": "Enhanced Logging", "duration": "1-2 weeks", "tasks": ["Security event logging", "Audit trail", "SIEM integration"] }
+    ],
+    "excellent": [
+      { "phase": 1, "title": "Fine-tune Security", "duration": "3-5 days", "tasks": ["Tighten CORS policy", "Review permissions", "Security scan"] }
+    ]
+  }
+}

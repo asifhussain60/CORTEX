@@ -1,0 +1,426 @@
+schema_version: '1.0'
+meta_type: template_documentation
+last_updated: '2025-11-19'
+description: 'Meta-template defining structure and validation rules for all CORTEX response templates'
+
+# ============================================================================
+# Meta-Template Definition (Template About Templates)
+# ============================================================================
+# This file defines how to create well-formed response templates in CORTEX.
+# All templates in response-templates.yaml MUST conform to this structure.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# ============================================================================
+
+template_structure:
+  required_fields:
+    - name: template_name
+      type: string
+      description: Unique identifier for the template
+      format: snake_case
+      examples:
+        - work_planner_success
+        - planning_dor_complete
+        - brain_export_guide
+      validation:
+        - Must be unique across all templates
+        - Must match filename pattern if stored separately
+        - Must use snake_case convention
+    
+    - name: name
+      type: string
+      description: Human-readable display name
+      format: Title Case
+      examples:
+        - "Work Planner Success"
+        - "Planning DoR Complete"
+        - "Brain Export Guide"
+    
+    - name: trigger
+      type: array<string>
+      description: Natural language keywords that activate this template
+      min_items: 1
+      examples:
+        - ["work_planner_success"]
+        - ["export brain", "brain export", "share brain"]
+        - ["help", "help detailed", "what can cortex do"]
+      validation:
+        - At least one trigger required
+        - Triggers should be user-friendly phrases
+        - Avoid overly technical jargon
+        - Test for ambiguity with other template triggers
+    
+    - name: response_type
+      type: enum
+      description: Output format/style for response
+      allowed_values:
+        - narrative: "Conversational explanation with examples"
+        - table: "Structured data in table format"
+        - detailed: "Comprehensive step-by-step guide"
+        - structured: "Hierarchical sections with clear organization"
+      default: narrative
+    
+    - name: content
+      type: string
+      description: Template body with 5-part mandatory structure
+      format: multiline_string
+      required_sections:
+        - header: "🧠 **CORTEX [Operation Type]**"
+        - author: "Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
+        - understanding: "🎯 **My Understanding Of Your Request:**"
+        - challenge: "⚠️ **Challenge:**"
+        - response: "💬 **Response:**"
+        - request_echo: "📝 **Your Request:**"
+        - next_steps: "🔍 **Next Steps:**"
+      
+      placeholder_syntax:
+        pattern: "{{variable_name}}"
+        examples:
+          - "{{conversation_count}}"
+          - "{{quality_score}}"
+          - "{{feature_name}}"
+      
+      validation:
+        - All 7 sections must be present
+        - Section order must be preserved
+        - Placeholders must be declared in context_summary_template (if used)
+        - No hardcoded counts (use placeholders or qualitative descriptions)
+        - Decorative separators NOT allowed (breaks GitHub Copilot Chat rendering)
+
+  optional_fields:
+    - name: context_summary_template
+      type: string
+      description: Collapsible context summary with quality metrics
+      when_to_use: "When template displays conversation memory or loaded context"
+      required_placeholders:
+        - "{conversation_count}"
+        - "{quality_score}"
+        - "{quality_emoji}"
+        - "{freshness_label}"
+        - "{hours_since_last}"
+        - "{entity_coverage}"
+        - "{avg_relevance_score}"
+        - "{relevance_label}"
+        - "{memory_health}"
+        - "{avg_query_time}"
+        - "{token_usage}"
+        - "{token_budget}"
+        - "{token_percentage}"
+        - "{storage_health}"
+      example: |
+        <details>
+        <summary>🧠 <b>Context Memory ({conversation_count} conversations, Quality: {quality_score}/10)</b></summary>
+        **Freshness:** {freshness_label}
+        **Relevance Score:** {avg_relevance_score}/1.0
+        </details>
+    
+    - name: metadata
+      type: object
+      description: Additional template metadata for categorization and tracking
+      optional_fields:
+        - category: "planning|execution|validation|help|admin"
+        - tags: "array<string> - keywords for search/discovery"
+        - version: "string - semantic version (e.g., '1.0.0')"
+        - author: "string - template creator"
+        - deprecated: "boolean - if true, show deprecation warning"
+        - replacement: "string - if deprecated, suggest alternative template"
+
+validation_rules:
+  structural:
+    - name: "Mandatory 5-part format"
+      rule: "All templates MUST include: Header, Understanding, Challenge, Response, Request Echo, Next Steps"
+      severity: ERROR
+      auto_fix: false
+    
+    - name: "No separator lines"
+      rule: "No horizontal separator lines (━, ═, ─, _, -) allowed"
+      reason: "Breaks rendering in GitHub Copilot Chat"
+      severity: ERROR
+      auto_fix: true
+      fix_action: "Remove all separator line characters"
+    
+    - name: "Placeholder consistency"
+      rule: "All placeholders in content must be declared in required_placeholders or context_summary_template"
+      severity: WARNING
+      auto_fix: false
+    
+    - name: "Trigger uniqueness"
+      rule: "No two templates should share identical trigger phrases"
+      severity: WARNING
+      auto_fix: false
+      check_method: "Cross-reference all trigger arrays across templates"
+  
+  content:
+    - name: "No hardcoded counts"
+      rule: "Use placeholders ({count}) or qualitative descriptions instead of hardcoded numbers"
+      examples:
+        bad: "Found 15 issues in the codebase"
+        good: "Found {issue_count} issues in the codebase"
+        also_good: "Found several issues in the codebase"
+      severity: WARNING
+      auto_fix: false
+    
+    - name: "Consistent emoji usage"
+      rule: "Use standard emoji set for section headers"
+      standard_emojis:
+        header: "🧠"
+        understanding: "🎯"
+        challenge_accept: "✓"
+        challenge_reject: "⚡"
+        response: "💬"
+        request_echo: "📝"
+        next_steps: "🔍"
+        warning: "⚠️"
+        success: "✅"
+        error: "❌"
+        info: "ℹ️"
+      severity: INFO
+    
+    - name: "Request echo placement"
+      rule: "Request echo MUST appear between Response and Next Steps"
+      severity: ERROR
+      auto_fix: false
+      reason: "Most common quality violation - bridges response to actionable steps"
+
+  formatting:
+    - name: "YAML string escaping"
+      rule: "Multiline strings use '|' or proper quote escaping"
+      severity: ERROR
+      auto_fix: false
+    
+    - name: "Unicode consistency"
+      rule: "Emojis stored as Unicode escapes in YAML (\\U0001F9E0 for 🧠)"
+      severity: INFO
+      auto_fix: true
+      reason: "Ensures cross-platform compatibility"
+
+automation:
+  validation_script: "src/validators/template_validator.py"
+  validation_command: "python src/validators/template_validator.py --file=cortex-brain/response-templates.yaml"
+  
+  auto_fix_script: "src/validators/template_auto_fixer.py"
+  auto_fix_command: "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates.yaml --fix"
+  
+  validation_triggers:
+    - "On commit (pre-commit hook)"
+    - "On pull request (CI/CD)"
+    - "On template creation (editor integration)"
+    - "During optimize_cortex execution"
+  
+  quality_gates:
+    - name: "All templates pass validation"
+      threshold: "100%"
+      block_commit: true
+    
+    - name: "No ERROR-level violations"
+      threshold: "0 errors"
+      block_commit: true
+    
+    - name: "WARNING-level violations acceptable"
+      threshold: "< 5 warnings per template"
+      block_commit: false
+
+template_creation_workflow:
+  step_1_define_purpose:
+    description: "Identify what user request this template addresses"
+    questions:
+      - "What user intent triggers this template?"
+      - "What problem does this solve?"
+      - "Is there an existing template that covers this?"
+    output: "Purpose statement and trigger keywords"
+  
+  step_2_choose_response_type:
+    description: "Select appropriate response format"
+    decision_tree:
+      - condition: "User needs quick reference"
+        type: "table"
+      - condition: "User needs step-by-step guide"
+        type: "detailed"
+      - condition: "User needs conceptual explanation"
+        type: "narrative"
+      - condition: "User needs hierarchical breakdown"
+        type: "structured"
+    output: "response_type field value"
+  
+  step_3_draft_content:
+    description: "Write template body following 5-part structure"
+    substeps:
+      - "Write Understanding section (interpret user intent)"
+      - "Write Challenge section (validate assumptions or offer alternatives)"
+      - "Write Response section (explain solution in natural language)"
+      - "Write Request Echo section (refined summary of user's request)"
+      - "Write Next Steps section (context-appropriate format)"
+    placeholders:
+      - "Identify dynamic values that change per request"
+      - "Use {{placeholder}} syntax for variables"
+      - "Document required placeholders"
+    output: "Complete content field with all sections"
+  
+  step_4_define_triggers:
+    description: "List natural language phrases that activate template"
+    guidelines:
+      - "Use user-friendly language (not technical jargon)"
+      - "Include variations (e.g., 'help', 'help me', 'what can cortex do')"
+      - "Test for ambiguity with existing triggers"
+      - "Minimum 1 trigger, recommended 3-5 for discoverability"
+    output: "trigger array"
+  
+  step_5_validate:
+    description: "Run automated validation and fix errors"
+    commands:
+      - "python src/validators/template_validator.py --file=cortex-brain/response-templates.yaml --template=new_template_name"
+      - "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates.yaml --fix --template=new_template_name"
+    success_criteria:
+      - "0 ERROR-level violations"
+      - "< 5 WARNING-level violations"
+      - "All required sections present"
+      - "All placeholders declared"
+    output: "Validated template ready for production"
+  
+  step_6_test:
+    description: "Test template in live environment"
+    test_cases:
+      - "Trigger template with expected keywords"
+      - "Verify all placeholders populate correctly"
+      - "Check rendering in GitHub Copilot Chat"
+      - "Validate Next Steps format matches work type"
+    output: "Tested template with no rendering issues"
+
+examples:
+  simple_template:
+    description: "Minimal template with required fields only"
+    yaml: |
+      status_check:
+        name: Status Check
+        trigger:
+          - status_check
+          - show status
+          - implementation status
+        response_type: table
+        content: |
+          🧠 **CORTEX Implementation Status**
+          Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+          
+          🎯 **My Understanding Of Your Request:**
+             You want to see the current implementation status of CORTEX features.
+          
+          ⚠️ **Challenge:** ✓ **Accept**
+             Status information is readily available from the feature tracker.
+          
+          💬 **Response:**
+             [Status table with feature completion percentages]
+          
+          📝 **Your Request:** Show CORTEX implementation status
+          
+          🔍 **Next Steps:**
+             1. Review feature completion status
+             2. Identify blockers or in-progress items
+             3. Ask about specific feature details if needed
+  
+  complex_template:
+    description: "Advanced template with context summary and metadata"
+    yaml: |
+      work_planner_success:
+        name: Work Planner Success
+        trigger:
+          - work_planner_success
+          - plan feature
+          - interactive planning
+        response_type: detailed
+        metadata:
+          category: planning
+          tags: ["feature planning", "interactive", "DoR validation"]
+          version: "2.1.0"
+          author: "Asif Hussain"
+        content: |
+          🧠 **CORTEX Feature Planning**
+          Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+          
+          🎯 **My Understanding Of Your Request:**
+             You want to plan {{feature_name}} with structured approach and zero ambiguity.
+          
+          ⚠️ **Challenge:** ⚡ **DoR Validation Required**
+             I need to ensure Definition of Ready (DoR) is met before proceeding.
+          
+          💬 **Response:**
+             Created planning file: `{{planning_file_path}}`
+             Starting interactive planning session with DoR enforcement...
+          
+          📝 **Your Request:** Plan {{feature_name}} with zero ambiguity
+          
+          🔍 **Next Steps - DoR Validation:**
+             ☐ Requirements documented (zero ambiguity)
+             ☐ Dependencies identified & validated
+             ☐ Technical design approach agreed
+             ☐ Test strategy defined
+             ☐ Acceptance criteria measurable
+             
+             Please answer clarifying questions to complete DoR.
+
+best_practices:
+  - name: "Keep templates concise"
+    description: "Templates should guide, not overwhelm. Target 30-100 lines."
+  
+  - name: "Use intelligent verbosity"
+    description: "Simple tasks = concise. Complex projects = detailed with phases."
+  
+  - name: "Test with real users"
+    description: "User-test templates before production to catch ambiguity."
+  
+  - name: "Version control templates"
+    description: "Track changes to templates for rollback and A/B testing."
+  
+  - name: "Avoid over-engineering"
+    description: "Don't create a template for every edge case. Use fallback patterns."
+  
+  - name: "Document intent"
+    description: "Add inline comments explaining WHY sections exist (for maintainers)."
+
+common_mistakes:
+  - mistake: "Missing Request Echo section"
+    severity: ERROR
+    fix: "Add '📝 **Your Request:**' between Response and Next Steps"
+    frequency: "Most common violation in quality reviews"
+  
+  - mistake: "Using separator lines"
+    severity: ERROR
+    fix: "Remove all ━ ═ ─ _ - horizontal lines"
+    reason: "Breaks rendering in GitHub Copilot Chat"
+  
+  - mistake: "Hardcoded counts"
+    severity: WARNING
+    fix: "Use placeholders: {{count}} or qualitative descriptions"
+    example: "Bad: 'Found 15 issues' → Good: 'Found {{issue_count}} issues'"
+  
+  - mistake: "Verbose tool narration"
+    severity: WARNING
+    fix: "Explain WHAT was done, not HOW tools were used"
+    example: "Bad: 'Read file... Searched text...' → Good: 'I analyzed the solution structure'"
+  
+  - mistake: "Wrong Smart Hint placement"
+    severity: WARNING
+    fix: "Smart Hint comes AFTER Next Steps (optional enhancement)"
+  
+  - mistake: "Duplicate headers"
+    severity: ERROR
+    fix: "Header should appear once at start only"
+
+related_meta_documents:
+  - path: "cortex-brain/templates/meta-rules.yaml"
+    description: "Meta-rules defining how to create governance rules"
+  
+  - path: "cortex-brain/templates/meta-agent.yaml"
+    description: "Meta-agent defining how to create agent configurations"
+  
+  - path: "src/validators/template_validator.py"
+    description: "Automated validator implementing these rules"
+
+version_history:
+  - version: "1.0.0"
+    date: "2025-11-19"
+    changes:
+      - "Initial meta-template definition"
+      - "5-part mandatory format established"
+      - "Validation rules codified"
+      - "Template creation workflow documented"

@@ -1,0 +1,1 @@
+D:\PROJECTS\CORTEX\.venv\Scripts\python.exe: can't open file 'D:\\PROJECTS\\CORTEX\\validate_issue3_phase4.py': [Errno 2] No such file or directory

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-11-25T15:19:40.107367",
+  "statistics": {
+    "files_processed": 0,
+    "empty_sections_filled": 0,
+    "stub_markers_removed": 0,
+    "false_positives_skipped": 0,
+    "errors": []
+  },
+  "quality_metrics": {
+    "files_processed": 0,
+    "empty_sections_filled": 0,
+    "stub_markers_removed": 0,
+    "errors": 0
+  }
+}

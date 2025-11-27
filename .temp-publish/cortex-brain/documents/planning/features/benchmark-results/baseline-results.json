@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-11-21 10:58:00",
+  "scenarios": [
+    {
+      "scenario_name": "Password Reset",
+      "duration_seconds": 960,
+      "test_count": 2,
+      "assertion_strength": 0.6,
+      "edge_case_coverage": 0.33,
+      "mutation_score": 0.72,
+      "tier0_time_ms": 0.0,
+      "tier1_time_ms": 0.0,
+      "tier2_time_ms": 0.0,
+      "tier3_time_ms": 0.0
+    },
+    {
+      "scenario_name": "Authentication",
+      "duration_seconds": 1800,
+      "test_count": 3,
+      "assertion_strength": 0.65,
+      "edge_case_coverage": 0.33,
+      "mutation_score": 0.65,
+      "tier0_time_ms": 0.0,
+      "tier1_time_ms": 0.0,
+      "tier2_time_ms": 0.0,
+      "tier3_time_ms": 0.0
+    },
+    {
+      "scenario_name": "Email Validation",
+      "duration_seconds": 360,
+      "test_count": 1,
+      "assertion_strength": 0.55,
+      "edge_case_coverage": 0.0,
+      "mutation_score": 0.73,
+      "tier0_time_ms": 0.0,
+      "tier1_time_ms": 0.0,
+      "tier2_time_ms": 0.0,
+      "tier3_time_ms": 0.0
+    }
+  ],
+  "summary": {
+    "total_scenarios": 3,
+    "total_duration_seconds": 3120,
+    "total_duration_minutes": 52.0,
+    "average_assertion_strength": 0.6,
+    "average_edge_case_coverage": 0.22,
+    "average_mutation_score": 0.7000000000000001,
+    "total_test_count": 6
+  }
+}

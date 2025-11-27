@@ -1,0 +1,128 @@
+{
+  "scenarios": {
+    "problem": {
+      "components": [
+        { "id": "auth", "name": "Authentication", "health": 35, "complexity": 82, "dependencies": 8, "type": "security" },
+        { "id": "payment", "name": "Payment Gateway", "health": 28, "complexity": 91, "dependencies": 12, "type": "business" },
+        { "id": "database", "name": "Database Layer", "health": 45, "complexity": 67, "dependencies": 15, "type": "infrastructure" },
+        { "id": "api", "name": "REST API", "health": 52, "complexity": 73, "dependencies": 9, "type": "interface" },
+        { "id": "ui", "name": "User Interface", "health": 61, "complexity": 58, "dependencies": 6, "type": "presentation" },
+        { "id": "logging", "name": "Logging Service", "health": 48, "complexity": 42, "dependencies": 11, "type": "infrastructure" },
+        { "id": "notification", "name": "Notification System", "health": 39, "complexity": 55, "dependencies": 7, "type": "business" },
+        { "id": "reporting", "name": "Reporting Engine", "health": 33, "complexity": 78, "dependencies": 10, "type": "business" }
+      ],
+      "relationships": [
+        { "source": "ui", "target": "api", "type": "calls", "strength": 0.9 },
+        { "source": "api", "target": "auth", "type": "depends", "strength": 0.85 },
+        { "source": "api", "target": "payment", "type": "calls", "strength": 0.95 },
+        { "source": "payment", "target": "database", "type": "persists", "strength": 0.8 },
+        { "source": "auth", "target": "database", "type": "persists", "strength": 0.75 },
+        { "source": "api", "target": "logging", "type": "logs", "strength": 0.6 },
+        { "source": "notification", "target": "api", "type": "subscribes", "strength": 0.7 },
+        { "source": "reporting", "target": "database", "type": "queries", "strength": 0.85 }
+      ],
+      "issues": [
+        { "component": "payment", "type": "god-class", "severity": "critical", "description": "PaymentProcessor handles too many responsibilities" },
+        { "component": "auth", "type": "security", "severity": "high", "description": "Basic authentication without MFA" },
+        { "component": "database", "type": "coupling", "severity": "high", "description": "15 direct dependencies create tight coupling" },
+        { "component": "api", "type": "monolith", "severity": "medium", "description": "Single API endpoint for all operations" }
+      ]
+    },
+    "average": {
+      "components": [
+        { "id": "auth", "name": "Authentication", "health": 72, "complexity": 45, "dependencies": 4, "type": "security" },
+        { "id": "payment", "name": "Payment Gateway", "health": 68, "complexity": 58, "dependencies": 6, "type": "business" },
+        { "id": "database", "name": "Database Layer", "health": 75, "complexity": 42, "dependencies": 8, "type": "infrastructure" },
+        { "id": "api", "name": "REST API", "health": 79, "complexity": 48, "dependencies": 5, "type": "interface" },
+        { "id": "ui", "name": "User Interface", "health": 81, "complexity": 38, "dependencies": 3, "type": "presentation" },
+        { "id": "logging", "name": "Logging Service", "health": 73, "complexity": 28, "dependencies": 6, "type": "infrastructure" },
+        { "id": "notification", "name": "Notification System", "health": 70, "complexity": 35, "dependencies": 4, "type": "business" },
+        { "id": "reporting", "name": "Reporting Engine", "health": 67, "complexity": 52, "dependencies": 5, "type": "business" }
+      ],
+      "relationships": [
+        { "source": "ui", "target": "api", "type": "calls", "strength": 0.8 },
+        { "source": "api", "target": "auth", "type": "depends", "strength": 0.7 },
+        { "source": "api", "target": "payment", "type": "calls", "strength": 0.85 },
+        { "source": "payment", "target": "database", "type": "persists", "strength": 0.6 },
+        { "source": "auth", "target": "database", "type": "persists", "strength": 0.5 },
+        { "source": "api", "target": "logging", "type": "logs", "strength": 0.4 },
+        { "source": "notification", "target": "api", "type": "subscribes", "strength": 0.5 },
+        { "source": "reporting", "target": "database", "type": "queries", "strength": 0.7 }
+      ],
+      "issues": [
+        { "component": "payment", "type": "complexity", "severity": "medium", "description": "Payment logic could be simplified" },
+        { "component": "auth", "type": "enhancement", "severity": "low", "description": "Consider adding OAuth support" },
+        { "component": "reporting", "type": "performance", "severity": "medium", "description": "Query optimization needed" }
+      ]
+    },
+    "excellent": {
+      "components": [
+        { "id": "auth", "name": "Authentication", "health": 94, "complexity": 28, "dependencies": 2, "type": "security" },
+        { "id": "payment", "name": "Payment Gateway", "health": 91, "complexity": 32, "dependencies": 3, "type": "business" },
+        { "id": "database", "name": "Database Layer", "health": 93, "complexity": 25, "dependencies": 4, "type": "infrastructure" },
+        { "id": "api", "name": "REST API", "health": 95, "complexity": 30, "dependencies": 3, "type": "interface" },
+        { "id": "ui", "name": "User Interface", "health": 96, "complexity": 22, "dependencies": 2, "type": "presentation" },
+        { "id": "logging", "name": "Logging Service", "health": 92, "complexity": 18, "dependencies": 3, "type": "infrastructure" },
+        { "id": "notification", "name": "Notification System", "health": 90, "complexity": 24, "dependencies": 2, "type": "business" },
+        { "id": "reporting", "name": "Reporting Engine", "health": 89, "complexity": 35, "dependencies": 3, "type": "business" }
+      ],
+      "relationships": [
+        { "source": "ui", "target": "api", "type": "calls", "strength": 0.5 },
+        { "source": "api", "target": "auth", "type": "depends", "strength": 0.4 },
+        { "source": "api", "target": "payment", "type": "calls", "strength": 0.5 },
+        { "source": "payment", "target": "database", "type": "persists", "strength": 0.3 },
+        { "source": "auth", "target": "database", "type": "persists", "strength": 0.2 },
+        { "source": "api", "target": "logging", "type": "logs", "strength": 0.2 },
+        { "source": "notification", "target": "api", "type": "subscribes", "strength": 0.3 },
+        { "source": "reporting", "target": "database", "type": "queries", "strength": 0.4 }
+      ],
+      "issues": [
+        { "component": "reporting", "type": "optimization", "severity": "low", "description": "Minor query optimization opportunity" }
+      ]
+    }
+  },
+  "proposedEnhancements": {
+    "problem": [
+      {
+        "title": "Decompose Payment Gateway",
+        "impact": { "health": "+28%", "complexity": "-35%" },
+        "effort": "5-7 weeks",
+        "priority": "critical"
+      },
+      {
+        "title": "Implement MFA",
+        "impact": { "security": "+45%", "health": "+15%" },
+        "effort": "2-3 weeks",
+        "priority": "high"
+      },
+      {
+        "title": "Reduce Database Coupling",
+        "impact": { "dependencies": "-40%", "maintainability": "+20%" },
+        "effort": "3-4 weeks",
+        "priority": "high"
+      }
+    ],
+    "average": [
+      {
+        "title": "Add OAuth Integration",
+        "impact": { "security": "+12%", "ux": "+8%" },
+        "effort": "1-2 weeks",
+        "priority": "medium"
+      },
+      {
+        "title": "Optimize Reporting Queries",
+        "impact": { "performance": "+25%", "cost": "-15%" },
+        "effort": "1 week",
+        "priority": "medium"
+      }
+    ],
+    "excellent": [
+      {
+        "title": "Implement Query Caching",
+        "impact": { "performance": "+8%", "cost": "-5%" },
+        "effort": "3-5 days",
+        "priority": "low"
+      }
+    ]
+  }
+}

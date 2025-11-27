@@ -1,0 +1,961 @@
+# CORTEX Response Template Mixins v2.0
+# Markdown-Optimized Reusable Components
+# 
+# Mixins are composable units that add specialized functionality to templates.
+# Each mixin follows markdown-first design principles.
+#
+# Author: Asif Hussain | © 2024-2025
+# Created: 2025-11-20
+# Version: 2.0.0
+
+schema_version: "2.0.0"
+created: "2025-11-20"
+last_updated: "2025-11-20"
+
+# ============================================================================
+# MIXIN ARCHITECTURE
+# ============================================================================
+
+architecture:
+  composition_model: "Multiple inheritance - templates can use 0-4 mixins"
+  merge_strategy: "base_template > mixins > unique_content"
+  conflict_resolution: "unique_content wins over mixin defaults"
+  
+  usage_pattern:
+    - "Define mixin components with placeholders"
+    - "Template specifies which mixins to use"
+    - "Renderer merges base + mixins + unique content"
+    - "Output is markdown-formatted response"
+  
+  design_principles:
+    - "Each mixin is independent and self-contained"
+    - "Mixins don't depend on other mixins"
+    - "Components have clear visual hierarchy"
+    - "All output is markdown-optimized"
+
+# ============================================================================
+# MIXIN 1: PROGRESS MIXIN
+# ============================================================================
+# Used by: Entry points, progress updates, completion templates (~60% usage)
+# Purpose: Track and display progress through multi-step operations
+
+progress_mixin:
+  name: "Progress Tracking Mixin"
+  version: "2.0.0"
+  description: "Adds progress indicators, phase tracking, and time estimates"
+  usage_percentage: 60
+  
+  components:
+    
+    phase_indicator:
+      name: "Phase Status Indicator"
+      description: "Show phase status with collapsible details"
+      
+      format: |
+        <details>
+        <summary><strong>{checkbox} Phase {number}: {name}</strong> ({duration})</summary>
+        
+        {tasks}
+        
+        {progress_bar}
+        </details>
+      
+      placeholders:
+        checkbox: "☐ (not started) | ⏳ (in progress) | ✅ (complete) | 🚫 (blocked)"
+        number: "Phase number (1, 2, 3...)"
+        name: "Phase name"
+        duration: "Estimated duration"
+        tasks: "Bulleted list of tasks"
+        progress_bar: "Optional progress bar"
+      
+      example: |
+        <details>
+        <summary><strong>⏳ Phase 2: Core Implementation</strong> (4 hours)</summary>
+        
+        - Write failing tests (RED) ✅
+        - Implement functionality (GREEN) ⏳
+        - Refactor for quality (REFACTOR) ☐
+        
+        **Progress:** ▓▓▓▓▓▓░░░░ 60%
+        </details>
+    
+    progress_bar:
+      name: "Visual Progress Bar"
+      description: "ASCII progress bar with percentage"
+      
+      format: "**Progress:** {bar} {percentage}%"
+      
+      characters:
+        filled: "▓"
+        empty: "░"
+        length: 10
+      
+      examples:
+        0: "**Progress:** ░░░░░░░░░░ 0%"
+        25: "**Progress:** ▓▓░░░░░░░░ 25%"
+        50: "**Progress:** ▓▓▓▓▓░░░░░ 50%"
+        75: "**Progress:** ▓▓▓▓▓▓▓░░░ 75%"
+        100: "**Progress:** ▓▓▓▓▓▓▓▓▓▓ 100%"
+    
+    time_estimate:
+      name: "Time Tracking"
+      description: "Show estimated vs elapsed time"
+      
+      format: "⏱️ **Time:** Estimated {estimate} | Elapsed {elapsed} | Remaining {remaining}"
+      
+      placeholders:
+        estimate: "Total estimated time"
+        elapsed: "Time spent so far"
+        remaining: "Calculated remaining time"
+      
+      example: "⏱️ **Time:** Estimated 6 hours | Elapsed 3.5 hours | Remaining 2.5 hours"
+    
+    milestone_status:
+      name: "Milestone Tracker"
+      description: "Track major milestones"
+      
+      format: |
+        ### 🎯 Milestones
+        
+        | Milestone | Status | Completion | Notes |
+        |-----------|--------|------------|-------|
+        {milestone_rows}
+      
+      row_format: "| {name} | {status_emoji} {status} | {percentage}% | {notes} |"
+      
+      status_options:
+        not_started: "☐ Not Started"
+        in_progress: "⏳ In Progress"
+        complete: "✅ Complete"
+        blocked: "🚫 Blocked"
+      
+      example: |
+        ### 🎯 Milestones
+        
+        | Milestone | Status | Completion | Notes |
+        |-----------|--------|------------|-------|
+        | Foundation | ✅ Complete | 100% | All tests passing |
+        | Core Logic | ⏳ In Progress | 60% | Implementing validation |
+        | Integration | ☐ Not Started | 0% | Waiting on Foundation |
+    
+    phase_summary:
+      name: "Phase Completion Summary"
+      description: "Summary table of all phases"
+      
+      format: |
+        ### 📊 Phase Summary
+        
+        | Phase | Status | Duration | Tasks | Progress |
+        |-------|--------|----------|-------|----------|
+        {phase_rows}
+        
+        **Overall Progress:** {overall_percentage}% ({completed_phases}/{total_phases} phases)
+      
+      row_format: "| Phase {number}: {name} | {status_emoji} | {duration} | {tasks_complete}/{tasks_total} | ▓{filled}░{empty} {percentage}% |"
+      
+      example: |
+        ### 📊 Phase Summary
+        
+        | Phase | Status | Duration | Tasks | Progress |
+        |-------|--------|----------|-------|----------|
+        | Phase 1: Foundation | ✅ | 2h 15m | 5/5 | ▓▓▓▓▓▓▓▓▓▓ 100% |
+        | Phase 2: Core Logic | ⏳ | 3h 45m | 8/12 | ▓▓▓▓▓▓░░░░ 66% |
+        | Phase 3: Integration | ☐ | 2h 00m | 0/6 | ░░░░░░░░░░ 0% |
+        
+        **Overall Progress:** 55% (1/3 phases complete)
+    
+    task_checklist:
+      name: "Task Completion Checklist"
+      description: "Interactive checklist for tasks"
+      
+      format: |
+        - [{checkbox}] {task} {status_indicator}
+      
+      checkbox_states:
+        incomplete: " "
+        complete: "x"
+        in_progress: "~"
+      
+      status_indicators:
+        complete: "✅"
+        in_progress: "⏳"
+        blocked: "🚫"
+        pending: ""
+      
+      example: |
+        - [x] Create module structure ✅
+        - [~] Write unit tests ⏳
+        - [ ] Implement core logic
+        - [ ] Integration testing
+  
+  full_example: |
+    ### 🔄 Implementation Progress
+    
+    <details>
+    <summary><strong>✅ Phase 1: Foundation & Setup</strong> (2h 15m - Complete)</summary>
+    
+    - [x] Create module structure in `src/auth/` ✅
+    - [x] Initialize test suite (`tests/test_auth.py`) ✅
+    - [x] Set up fixtures and mocks ✅
+    - [x] Configure CI/CD pipeline ✅
+    - [x] Create database migrations ✅
+    
+    **Progress:** ▓▓▓▓▓▓▓▓▓▓ 100%
+    </details>
+    
+    <details>
+    <summary><strong>⏳ Phase 2: Core Implementation</strong> (4 hours - In Progress)</summary>
+    
+    - [x] Write failing tests (RED) ✅
+    - [~] Implement JWT token generation ⏳
+    - [ ] Add password hashing (bcrypt)
+    - [ ] Create session management
+    - [ ] Implement refresh token logic
+    - [ ] Add rate limiting
+    
+    **Progress:** ▓▓▓░░░░░░░ 33%
+    </details>
+    
+    <details>
+    <summary><strong>☐ Phase 3: Integration & Testing</strong> (2 hours - Pending)</summary>
+    
+    - [ ] Integration tests with user database
+    - [ ] Add middleware for route protection
+    - [ ] End-to-end testing with Postman
+    - [ ] Performance testing
+    - [ ] Security audit
+    
+    **Progress:** ░░░░░░░░░░ 0%
+    </details>
+    
+    ---
+    
+    ### 📊 Overall Status
+    
+    ⏱️ **Time:** Estimated 8h 15m | Elapsed 4h 30m | Remaining 3h 45m
+    
+    **Overall Progress:** ▓▓▓▓▓░░░░░ 55% (1/3 phases complete)
+
+# ============================================================================
+# MIXIN 2: VALIDATION MIXIN
+# ============================================================================
+# Used by: Planning, quality gates, DoR/DoD checks (~40% usage)
+# Purpose: Display validation results, checklists, and remediation steps
+
+validation_mixin:
+  name: "Validation & Quality Gate Mixin"
+  version: "2.0.0"
+  description: "Adds validation checklists, quality gates, and remediation guidance"
+  usage_percentage: 40
+  
+  components:
+    
+    checklist_table:
+      name: "Validation Checklist Table"
+      description: "Status table for validation items"
+      
+      format: |
+        ### {title}
+        
+        | # | Item | Status | Notes |
+        |---|------|--------|-------|
+        {checklist_rows}
+        
+        **Overall Status:** {status_emoji} **{status_text}** ({complete_count}/{total_count} complete, {blocker_count} blockers)
+      
+      row_format: "| {number} | {item} | {status_emoji} {status} | {notes} |"
+      
+      status_options:
+        pass: "✅ Pass"
+        warning: "⚠️ Warning"
+        fail: "❌ Fail"
+        blocked: "🚫 Blocked"
+        skipped: "⏭️ Skipped"
+      
+      example: |
+        ### 📋 Definition of Ready Checklist
+        
+        | # | Item | Status | Notes |
+        |---|------|--------|-------|
+        | 1 | Requirements | ✅ Pass | Documented with zero ambiguity |
+        | 2 | Technical Design | ✅ Pass | Architecture approved |
+        | 3 | Dependencies | ⚠️ Warning | 2 external services need validation |
+        | 4 | Security Review | ❌ Fail | OWASP checklist incomplete (3/10) |
+        | 5 | Acceptance Criteria | ✅ Pass | Measurable and testable |
+        
+        **Overall Status:** ❌ **NOT READY** (3/5 complete, 1 blocker)
+    
+    validation_result:
+      name: "Single Validation Result"
+      description: "Display result of a single validation check"
+      
+      format: "{status_emoji} **{category}:** {message}"
+      
+      status_emojis:
+        success: "✅"
+        warning: "⚠️"
+        error: "❌"
+        info: "ℹ️"
+        blocked: "🚫"
+      
+      examples:
+        success: "✅ **Requirements:** Documented with zero ambiguity"
+        warning: "⚠️ **Dependencies:** 2 external services need validation"
+        error: "❌ **Security:** OWASP checklist incomplete (3/10 items)"
+        info: "ℹ️ **Documentation:** Templates prepared and ready"
+    
+    remediation_steps:
+      name: "Remediation Guidance"
+      description: "Collapsible fix instructions with impact analysis"
+      
+      format: |
+        <details>
+        <summary><strong>{severity_emoji} {title}</strong></summary>
+        
+        **Issue:** {issue_description}
+        
+        **Challenge:** {challenge_question}
+        
+        **Fix:**
+        ```{code_language}
+        {before_code}
+        ```
+        ↓
+        ```{code_language}
+        {after_code}
+        ```
+        
+        **Impact:** {impact_description}
+        
+        **Time to Fix:** {fix_duration}
+        </details>
+      
+      severity_levels:
+        critical: "🔴"
+        high: "🟠"
+        medium: "🟡"
+        low: "🟢"
+      
+      example: |
+        <details>
+        <summary><strong>🔴 Line 15: "improve performance"</strong></summary>
+        
+        **Issue:** VAGUE TERM - "improve"
+        
+        **Challenge:** Improve by how much? What specific metric?
+        
+        **Fix:**
+        ```markdown
+        ❌ Before: "improve performance"
+        ```
+        ↓
+        ```markdown
+        ✅ After: "Reduce API response time from 500ms to <100ms"
+        ```
+        
+        **Impact:** Cannot write measurable acceptance criteria without specific target
+        
+        **Time to Fix:** 5 minutes
+        </details>
+    
+    quality_gate:
+      name: "Quality Gate Status"
+      description: "Pass/fail status with threshold comparison"
+      
+      format: |
+        <details>
+        <summary><strong>{status_emoji} Quality Gate: {status_text}</strong></summary>
+        
+        - **Threshold:** {threshold}%
+        - **Actual:** {actual}%
+        - **Status:** {status_text} ({difference})
+        - **Gate:** {gate_name}
+        </details>
+      
+      status_calculation:
+        pass: "actual >= threshold"
+        fail: "actual < threshold"
+      
+      example_pass: |
+        <details>
+        <summary><strong>✅ Quality Gate: PASSED</strong></summary>
+        
+        - **Threshold:** 80%
+        - **Actual:** 88.2%
+        - **Status:** PASSED (+8.2% above threshold)
+        - **Gate:** Code Coverage
+        </details>
+      
+      example_fail: |
+        <details>
+        <summary><strong>❌ Quality Gate: FAILED</strong></summary>
+        
+        - **Threshold:** 80%
+        - **Actual:** 72.5%
+        - **Status:** FAILED (-7.5% below threshold)
+        - **Gate:** Code Coverage
+        </details>
+    
+    ambiguity_report:
+      name: "Ambiguity Detection Report"
+      description: "Line-level feedback on vague terms"
+      
+      format: |
+        ### 🚫 Ambiguities Detected
+        
+        {ambiguity_items}
+      
+      item_format: |
+        <details>
+        <summary><strong>❌ Line {line_number}: "{quote}"</strong></summary>
+        
+        **Issue:** {issue_type} - "{problematic_term}"
+        
+        **Challenge:** {challenge_question}
+        
+        **Fix:** {fix_description}
+        ```
+        ❌ Before: {before}
+        ✅ After: {after}
+        ```
+        
+        **Impact:** {impact}
+        </details>
+      
+      issue_types:
+        - "VAGUE TERM"
+        - "UNDEFINED REFERENCE"
+        - "AMBIGUOUS SCOPE"
+        - "MISSING METRIC"
+        - "CIRCULAR DEFINITION"
+      
+      example: |
+        ### 🚫 Ambiguities Detected
+        
+        <details>
+        <summary><strong>❌ Line 15: "improve performance"</strong></summary>
+        
+        **Issue:** VAGUE TERM - "improve"
+        
+        **Challenge:** Improve by how much? What specific metric?
+        
+        **Fix:** Define target metric
+        ```
+        ❌ Before: "improve performance"
+        ✅ After: "Reduce API response time from 500ms to <100ms"
+        ```
+        
+        **Impact:** Cannot write measurable acceptance criteria without specific target
+        </details>
+  
+  full_example: |
+    ### 📋 Definition of Ready Validation
+    
+    | # | Item | Status | Notes |
+    |---|------|--------|-------|
+    | 1 | Requirements | ✅ Pass | Documented with zero ambiguity |
+    | 2 | Technical Design | ✅ Pass | Architecture approved |
+    | 3 | Test Strategy | ✅ Pass | Coverage targets defined |
+    | 4 | Dependencies | ⚠️ Warning | 2 external services need validation |
+    | 5 | Security Review | ❌ Fail | OWASP checklist incomplete (3/10) |
+    | 6 | Acceptance Criteria | ✅ Pass | Measurable and testable |
+    | 7 | Ambiguity Check | ❌ Fail | 3 vague terms detected |
+    
+    **Overall Status:** ❌ **NOT READY** (4/7 complete, 2 blockers)
+    
+    ---
+    
+    ### 🚫 Ambiguities Detected
+    
+    <details>
+    <summary><strong>❌ Line 15: "improve performance"</strong></summary>
+    
+    **Issue:** VAGUE TERM - "improve"
+    
+    **Challenge:** Improve by how much? What specific metric?
+    
+    **Fix:** Define target metric
+    ```
+    ❌ Before: "improve performance"
+    ✅ After: "Reduce API response time from 500ms to <100ms"
+    ```
+    
+    **Impact:** Cannot write measurable acceptance criteria
+    </details>
+    
+    ---
+    
+    <details>
+    <summary><strong>✅ Quality Gate: PASSED</strong></summary>
+    
+    - **Threshold:** 80%
+    - **Actual:** 88.2%
+    - **Status:** PASSED (+8.2% above threshold)
+    - **Gate:** Requirements Completeness
+    </details>
+
+# ============================================================================
+# MIXIN 3: DATA DISPLAY MIXIN
+# ============================================================================
+# Used by: Results, reports, status displays (~30% usage)
+# Purpose: Present structured data in tables, summaries, and lists
+
+data_display_mixin:
+  name: "Data Display & Reporting Mixin"
+  version: "2.0.0"
+  description: "Adds tables, summaries, file lists, and structured data displays"
+  usage_percentage: 30
+  
+  components:
+    
+    summary_table:
+      name: "Summary Statistics Table"
+      description: "Key metrics in table format"
+      
+      format: |
+        ### {title}
+        
+        | Metric | Value |
+        |--------|-------|
+        {metric_rows}
+      
+      row_format: "| **{metric_name}** | {value} {indicator} |"
+      
+      example: |
+        ### 📊 Test Summary
+        
+        | Metric | Value |
+        |--------|-------|
+        | **Total Tests** | 897 |
+        | **Passed** | 834 (93.0%) ✅ |
+        | **Failed** | 0 ✅ |
+        | **Skipped** | 63 |
+        | **Pass Rate** | 100% ✅ |
+        | **Coverage** | 88.2% |
+        | **Execution Time** | 31.89s |
+    
+    comparison_table:
+      name: "Multi-Column Comparison Table"
+      description: "Compare multiple items across dimensions"
+      
+      format: |
+        ### {title}
+        
+        | {column_headers} |
+        |{separator_row}|
+        {data_rows}
+      
+      alignment_options:
+        left: ":---"
+        center: ":---:"
+        right: "---:"
+      
+      example: |
+        ### 📈 Coverage Breakdown
+        
+        | Test Type | Coverage | Tests Passed | Tests Total | Status |
+        |-----------|:--------:|-------------:|------------:|:------:|
+        | Unit Tests | 92% | 682 | 741 | 🟢 |
+        | Integration Tests | 85% | 134 | 158 | 🟡 |
+        | E2E Tests | 78% | 18 | 23 | 🟡 |
+        | **Total** | **88.2%** | **834** | **897** | **✅** |
+    
+    file_list:
+      name: "File List with Metadata"
+      description: "Display files with context"
+      
+      format: |
+        ### {title}
+        
+        {file_items}
+      
+      item_format: "- `{file_path}` - {description} ({size})"
+      
+      example: |
+        ### 📁 Generated Files
+        
+        - `docs/api/authentication.md` - API reference (12.5 KB)
+        - `docs/architecture/system-design.md` - Architecture diagrams (8.3 KB)
+        - `docs/guides/quickstart.md` - Getting started guide (5.7 KB)
+        - `docs/index.md` - Documentation homepage (3.2 KB)
+    
+    category_breakdown:
+      name: "Categorical Data Breakdown"
+      description: "Group items by category"
+      
+      format: |
+        ### {title}
+        
+        <details>
+        <summary><strong>{category_name}</strong> ({item_count} items)</summary>
+        
+        {items}
+        </details>
+      
+      example: |
+        ### 📦 Test Categories
+        
+        <details>
+        <summary><strong>Unit Tests</strong> (741 tests)</summary>
+        
+        - Authentication: 45 tests ✅
+        - Authorization: 38 tests ✅
+        - User Management: 52 tests ✅
+        - Session Handling: 31 tests ✅
+        - Password Reset: 28 tests ✅
+        </details>
+        
+        <details>
+        <summary><strong>Integration Tests</strong> (158 tests)</summary>
+        
+        - API Endpoints: 67 tests ✅
+        - Database Operations: 45 tests ✅
+        - External Services: 32 tests ✅
+        - Middleware: 14 tests ✅
+        </details>
+    
+    summary_card:
+      name: "Summary Information Card"
+      description: "Boxed summary with key points"
+      
+      format: |
+        > ### {emoji} {title}
+        > 
+        > {summary_points}
+        > 
+        > **{footer_label}:** {footer_value}
+      
+      example: |
+        > ### ✅ Deployment Summary
+        > 
+        > - Environment: Production
+        > - Version: v2.1.0
+        > - Deployed: 2025-11-20 14:30 UTC
+        > - Status: Healthy
+        > - Uptime: 100%
+        > 
+        > **Deployment Time:** 3 minutes 45 seconds
+    
+    key_value_list:
+      name: "Key-Value Information List"
+      description: "Simple key: value pairs"
+      
+      format: |
+        - **{key}:** {value}
+      
+      example: |
+        ### 📋 Configuration
+        
+        - **Environment:** Production
+        - **Region:** us-east-1
+        - **Instance Type:** t3.medium
+        - **Database:** PostgreSQL 14.2
+        - **Cache:** Redis 7.0
+        - **CDN:** CloudFront
+  
+  full_example: |
+    ### 📊 Test Execution Results
+    
+    | Metric | Value |
+    |--------|-------|
+    | **Total Tests** | 897 |
+    | **Passed** | 834 (93.0%) ✅ |
+    | **Failed** | 0 ✅ |
+    | **Skipped** | 63 |
+    | **Pass Rate** | 100% ✅ |
+    | **Coverage** | 88.2% |
+    | **Execution Time** | 31.89s |
+    
+    ---
+    
+    ### 📈 Coverage Breakdown
+    
+    | Test Type | Coverage | Tests Passed | Tests Total | Status |
+    |-----------|:--------:|-------------:|------------:|:------:|
+    | Unit Tests | 92% | 682 | 741 | 🟢 |
+    | Integration Tests | 85% | 134 | 158 | 🟡 |
+    | E2E Tests | 78% | 18 | 23 | 🟡 |
+    | **Total** | **88.2%** | **834** | **897** | **✅** |
+    
+    ---
+    
+    ### 📁 Generated Reports
+    
+    - `coverage/index.html` - HTML coverage report (245 KB)
+    - `coverage/coverage.xml` - XML coverage data (87 KB)
+    - `test-results.json` - JSON test results (23 KB)
+    - `junit-report.xml` - JUnit format results (45 KB)
+
+# ============================================================================
+# MIXIN 4: TEST METRICS MIXIN
+# ============================================================================
+# Used by: Testing, quality, coverage reports (~25% usage)
+# Purpose: Display test execution results and metrics
+
+test_metrics_mixin:
+  name: "Test Metrics & Coverage Mixin"
+  version: "2.0.0"
+  description: "Adds test results, coverage metrics, and quality dashboards"
+  usage_percentage: 25
+  
+  components:
+    
+    test_summary_inline:
+      name: "Inline Test Summary"
+      description: "Compact one-line test summary"
+      
+      format: "**Tests:** {passed}/{total} ({pass_rate}%) | **Coverage:** {coverage}% | **Time:** {duration}s"
+      
+      example: "**Tests:** 834/897 (93.0%) | **Coverage:** 88.2% | **Time:** 31.89s"
+    
+    test_results_table:
+      name: "Detailed Test Results Table"
+      description: "Comprehensive test execution table"
+      
+      format: |
+        ### {title}
+        
+        | Category | Total | Passed | Failed | Skipped | Pass Rate | Time |
+        |----------|------:|-------:|-------:|--------:|----------:|-----:|
+        {result_rows}
+      
+      row_format: "| {category} | {total} | {passed} | {failed} | {skipped} | {pass_rate}% {indicator} | {time}s |"
+      
+      example: |
+        ### 🧪 Test Results
+        
+        | Category | Total | Passed | Failed | Skipped | Pass Rate | Time |
+        |----------|------:|-------:|-------:|--------:|----------:|-----:|
+        | Unit | 741 | 682 | 0 | 59 | 100% ✅ | 18.23s |
+        | Integration | 158 | 134 | 0 | 24 | 100% ✅ | 11.45s |
+        | E2E | 23 | 18 | 0 | 5 | 100% ✅ | 2.21s |
+        | **Total** | **897** | **834** | **0** | **63** | **100%** ✅ | **31.89s** |
+    
+    coverage_breakdown:
+      name: "Coverage Analysis by Type"
+      description: "Coverage metrics with visual indicators"
+      
+      format: |
+        ### {title}
+        
+        | Component | Coverage | Files | Lines Covered | Lines Total | Status |
+        |-----------|:--------:|------:|--------------:|------------:|:------:|
+        {coverage_rows}
+      
+      status_thresholds:
+        excellent: ">= 90% 🟢"
+        good: ">= 80% 🟡"
+        fair: ">= 70% 🟠"
+        poor: "< 70% 🔴"
+      
+      example: |
+        ### 📊 Coverage Analysis
+        
+        | Component | Coverage | Files | Lines Covered | Lines Total | Status |
+        |-----------|:--------:|------:|--------------:|------------:|:------:|
+        | src/auth/ | 92% | 12 | 1,458 | 1,585 | 🟢 |
+        | src/api/ | 88% | 8 | 2,234 | 2,539 | 🟡 |
+        | src/database/ | 85% | 6 | 987 | 1,161 | 🟡 |
+        | src/utils/ | 78% | 15 | 1,823 | 2,337 | 🟡 |
+        | **Total** | **88.2%** | **41** | **6,502** | **7,622** | **🟡** |
+    
+    quality_gate_dashboard:
+      name: "Quality Gate Status Dashboard"
+      description: "Multi-gate quality assessment"
+      
+      format: |
+        ### {title}
+        
+        | Quality Gate | Threshold | Actual | Status | Delta |
+        |--------------|----------:|-------:|:------:|------:|
+        {gate_rows}
+        
+        **Overall Quality Status:** {overall_status_emoji} **{overall_status}**
+      
+      row_format: "| {gate_name} | {threshold}% | {actual}% | {status_emoji} | {delta} |"
+      
+      example: |
+        ### 🎯 Quality Gates
+        
+        | Quality Gate | Threshold | Actual | Status | Delta |
+        |--------------|----------:|-------:|:------:|------:|
+        | Code Coverage | 80% | 88.2% | ✅ | +8.2% |
+        | Test Pass Rate | 90% | 100% | ✅ | +10.0% |
+        | Code Complexity | < 15 | 12.3 | ✅ | -2.7 |
+        | Technical Debt | < 5% | 3.2% | ✅ | -1.8% |
+        | Security Issues | 0 | 0 | ✅ | 0 |
+        
+        **Overall Quality Status:** ✅ **ALL GATES PASSED**
+    
+    failure_details:
+      name: "Test Failure Details"
+      description: "Collapsible failure information"
+      
+      format: |
+        <details>
+        <summary><strong>❌ Failed Test: {test_name}</strong></summary>
+        
+        **Location:** `{file_path}::{test_name}`
+        
+        **Error:**
+        ```
+        {error_message}
+        ```
+        
+        **Stack Trace:**
+        ```
+        {stack_trace}
+        ```
+        
+        **Time:** {execution_time}s
+        </details>
+      
+      example: |
+        <details>
+        <summary><strong>❌ Failed Test: test_authentication_with_invalid_token</strong></summary>
+        
+        **Location:** `tests/test_auth.py::test_authentication_with_invalid_token`
+        
+        **Error:**
+        ```
+        AssertionError: Expected 401 Unauthorized, got 200 OK
+        ```
+        
+        **Stack Trace:**
+        ```
+        tests/test_auth.py:145: in test_authentication_with_invalid_token
+            assert response.status_code == 401
+        E   assert 200 == 401
+        ```
+        
+        **Time:** 0.023s
+        </details>
+    
+    performance_metrics:
+      name: "Test Performance Metrics"
+      description: "Execution time analysis"
+      
+      format: |
+        ### {title}
+        
+        - **Total Time:** {total_time}s
+        - **Average per Test:** {avg_time}s
+        - **Fastest Test:** {fastest_test} ({fastest_time}s)
+        - **Slowest Test:** {slowest_test} ({slowest_time}s)
+        - **Tests per Second:** {tests_per_second}
+      
+      example: |
+        ### ⚡ Performance Metrics
+        
+        - **Total Time:** 31.89s
+        - **Average per Test:** 0.038s
+        - **Fastest Test:** test_user_model_creation (0.002s)
+        - **Slowest Test:** test_end_to_end_auth_flow (2.145s)
+        - **Tests per Second:** 28.1
+  
+  full_example: |
+    ### 🧪 Test Execution Results
+    
+    **Tests:** 834/897 (93.0%) | **Coverage:** 88.2% | **Time:** 31.89s
+    
+    ---
+    
+    | Category | Total | Passed | Failed | Skipped | Pass Rate | Time |
+    |----------|------:|-------:|-------:|--------:|----------:|-----:|
+    | Unit | 741 | 682 | 0 | 59 | 100% ✅ | 18.23s |
+    | Integration | 158 | 134 | 0 | 24 | 100% ✅ | 11.45s |
+    | E2E | 23 | 18 | 0 | 5 | 100% ✅ | 2.21s |
+    | **Total** | **897** | **834** | **0** | **63** | **100%** ✅ | **31.89s** |
+    
+    ---
+    
+    ### 📊 Coverage Analysis
+    
+    | Component | Coverage | Files | Lines Covered | Lines Total | Status |
+    |-----------|:--------:|------:|--------------:|------------:|:------:|
+    | src/auth/ | 92% | 12 | 1,458 | 1,585 | 🟢 |
+    | src/api/ | 88% | 8 | 2,234 | 2,539 | 🟡 |
+    | src/database/ | 85% | 6 | 987 | 1,161 | 🟡 |
+    | src/utils/ | 78% | 15 | 1,823 | 2,337 | 🟡 |
+    | **Total** | **88.2%** | **41** | **6,502** | **7,622** | **🟡** |
+    
+    ---
+    
+    ### 🎯 Quality Gates
+    
+    | Quality Gate | Threshold | Actual | Status | Delta |
+    |--------------|----------:|-------:|:------:|------:|
+    | Code Coverage | 80% | 88.2% | ✅ | +8.2% |
+    | Test Pass Rate | 90% | 100% | ✅ | +10.0% |
+    | Code Complexity | < 15 | 12.3 | ✅ | -2.7 |
+    | Technical Debt | < 5% | 3.2% | ✅ | -1.8% |
+    
+    **Overall Quality Status:** ✅ **ALL GATES PASSED**
+
+# ============================================================================
+# MIXIN USAGE PATTERNS
+# ============================================================================
+
+usage_patterns:
+  
+  single_mixin:
+    description: "Template uses one mixin for focused functionality"
+    example: "help_table uses data_display_mixin only"
+    composition: "base_template + single_mixin + unique_content"
+    token_cost: ~550
+  
+  dual_mixin:
+    description: "Template combines two complementary mixins"
+    example: "test_execution uses test_metrics_mixin + data_display_mixin"
+    composition: "base_template + mixin1 + mixin2 + unique_content"
+    token_cost: ~700
+  
+  triple_mixin:
+    description: "Template uses three mixins for comprehensive response"
+    example: "planning_dor_validation uses validation + progress + data_display"
+    composition: "base_template + mixin1 + mixin2 + mixin3 + unique_content"
+    token_cost: ~850
+  
+  no_mixin:
+    description: "Simple template with no mixins"
+    example: "quick_response for simple questions"
+    composition: "base_template + unique_content"
+    token_cost: ~400
+
+# ============================================================================
+# TOKEN METRICS
+# ============================================================================
+
+token_metrics:
+  per_mixin:
+    progress_mixin: 150
+    validation_mixin: 180
+    data_display_mixin: 120
+    test_metrics_mixin: 140
+  
+  cache_strategy:
+    description: "Mixin components cached after first use"
+    cache_ttl: 3600
+    expected_hit_rate: ">90%"
+  
+  optimization:
+    description: "Only load mixin components actually used in template"
+    lazy_loading: true
+    component_caching: true
+
+# ============================================================================
+# VERSION HISTORY
+# ============================================================================
+
+version_history:
+  "2.0.0":
+    date: "2025-11-20"
+    changes:
+      - "Complete redesign for markdown-first approach"
+      - "All components use proper heading hierarchy"
+      - "Extensive use of collapsible sections"
+      - "Enhanced visual indicators and tables"
+      - "Performance-optimized structure"
+    mixins_created: 4
+    components_per_mixin: 5-6
+    total_components: 22
