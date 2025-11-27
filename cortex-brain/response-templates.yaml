@@ -1354,6 +1354,25 @@ templates:
     response_type: detailed
     handler: src.orchestrators.git_checkpoint_orchestrator.GitCheckpointOrchestrator
 
+  commit_operation:
+    <<: *standard_5_part_base
+    name: Commit and Sync
+    triggers:
+    - commit
+    - commit and push
+    - sync with origin
+    - commit sync
+    - push changes
+    - sync repository
+    - commit and sync
+    response_type: detailed
+    handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
+    understanding_content: "You want to synchronize your local repository with origin by pulling, merging, and pushing changes while ensuring no untracked files remain."
+    challenge_content: "No Challenge - Commit workflow will handle pre-flight validation, untracked files, merge conflicts, and create safety checkpoints automatically."
+    response_content: "**Commit Workflow Steps:**\n   \n   1. **Pre-flight Check** - Validate current repository state\n   2. **Handle Untracked Files** - Prompt to add or ignore untracked files\n   3. **Commit Local Changes** - Create commit with auto-generated or custom message\n   4. **Create Checkpoint** - Safety checkpoint for rollback capability\n   5. **Pull from Origin** - Fetch and merge/rebase with remote changes\n   6. **Push to Origin** - Upload merged changes to remote repository\n   \n   **Safety Features:**\n   • Git checkpoint before pull (rollback if needed)\n   • Merge conflict detection with clear guidance\n   • Untracked file validation (zero untracked files guarantee)\n   • Progress reporting for each step"
+    request_echo_content: "Sync repository with origin (pull, merge, push)"
+    next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
+
   lint_validation:
     <<: *standard_5_part_base
     name: Lint Validation
@@ -1685,6 +1704,16 @@ routing:
   - suggest improvements
   - refactor architecture
   - optimize codebase
+  commit_operation_triggers:
+  - commit
+  - commit and push
+  - sync with origin
+  - commit sync
+  - push changes
+  - sync repository
+  - commit and sync
+  - pull and push
+  - sync repo
 formatting:
   mandatory_sections:
   - understanding

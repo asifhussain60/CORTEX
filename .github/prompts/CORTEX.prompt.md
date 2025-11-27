@@ -664,7 +664,44 @@ cortex-brain/documents/planning/ado/
 
 ---
 
-## 🐛 Debug System
+## � Commit & Sync Workflow
+
+**Quick Commands:**
+- `commit` - Complete sync workflow (pull, merge, push)
+- `commit and push` - Alternative trigger
+- `sync with origin` - Alternative trigger
+
+**What It Does:**
+1. **Pre-flight Validation** - Checks current branch, untracked files, uncommitted changes
+2. **Untracked Files Handling** - Prompts to add or ignore (or auto-add with `--auto-add`)
+3. **Local Commit** - Commits changes with auto-generated or custom message
+4. **Safety Checkpoint** - Creates rollback point before pull
+5. **Pull from Origin** - Merges remote changes (rebase with `--rebase`)
+6. **Push to Origin** - Uploads merged result
+
+**Execution Options:**
+- `commit` - Standard workflow with prompts
+- `commit --auto-add` - Automatically stage all untracked files
+- `commit --rebase` - Use rebase instead of merge
+- `commit --message "custom"` - Custom commit message
+
+**Safety Features:**
+- ✅ Zero untracked files guarantee (enforced validation)
+- ✅ Git checkpoint before pull (rollback capability)
+- ✅ Merge conflict detection with clear guidance
+- ✅ Progress reporting for all 6 steps
+- ✅ Intelligent merge strategy (preserves local work)
+
+**Rollback:** If issues occur, say `rollback to checkpoint` to restore pre-sync state
+
+**Use Cases:**
+- End-of-day sync: Commit your work and sync with team changes
+- Before feature work: Pull latest changes and push current progress
+- Continuous sync: Keep local and remote in sync throughout the day
+
+---
+
+## �🐛 Debug System
 
 **Commands:**
 - `debug [target]` - Runtime instrumentation without source modification
