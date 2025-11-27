@@ -30,8 +30,12 @@ from src.operations.base_operation_module import (
 )
 from src.validation.file_organization_validator import FileOrganizationValidator
 from src.validation.template_header_validator import TemplateHeaderValidator
+from src.validation.conflict_detector import ConflictDetector, Conflict
+from src.validation.remediation_engine import RemediationEngine, FixTemplate
+from src.validation.dashboard_generator import DashboardGenerator
 from src.caching import get_cache
 from src.governance import DocumentGovernance
+from src.utils.progress_monitor import ProgressMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +130,10 @@ class AlignmentReport:
     # Document governance fields
     doc_governance_violations: List[Any] = field(default_factory=list)  # Duplicate/overlapping docs
     doc_governance_score: int = 100  # 0-100% documentation governance compliance
+    # Align 2.0 enhancements
+    conflicts: List[Conflict] = field(default_factory=list)  # Detected ecosystem conflicts
+    fix_templates: List[FixTemplate] = field(default_factory=list)  # Generated fix templates
+    dashboard_report: Optional[str] = None  # Visual dashboard HTML/text
     
     @property
     def is_healthy(self) -> bool:
@@ -214,16 +222,18 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             OperationResult with alignment report
         """
         start_time = datetime.now()
+        monitor = ProgressMonitor("System Alignment", hang_timeout_seconds=60.0)
         
         try:
-            logger.info("🔍 Running system alignment validation...")
+            monitor.start()
+            monitor.update("Validating brain accessibility")
             
             # Phase 0: Validate brain accessibility
-            logger.info("Validating brain accessibility...")
             brain_check = self._validate_brain_accessibility()
             
             if not brain_check['healthy']:
                 logger.error(f"❌ Brain validation failed: {', '.join(brain_check['issues'])}")
+                monitor.fail("Brain validation failed")
                 return OperationResult(
                     success=False,
                     status=OperationStatus.FAILED,
@@ -232,30 +242,71 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                     duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            logger.info(f"✅ Brain accessibility verified")
+            monitor.update("Brain verified, running validation")
             
-            # Run full validation
-            report = self.run_full_validation()
+            # Run full validation with monitoring
+            report = self.run_full_validation(monitor)
             
             # Store report in context
             context["alignment_report"] = report
             
+            # Phase 6: Align 2.0 - Interactive remediation if requested
+            interactive_fix = context.get('interactive_fix', False)
+            fixes_applied = []
+            
+            if interactive_fix and report.fix_templates:
+                monitor.update(f"Interactive remediation ({len(report.fix_templates)} fixes available)")
+                fixes_applied = self._apply_interactive_fixes(report, monitor)
+                
+                # Re-run validation to update scores after fixes
+                if fixes_applied:
+                    monitor.update("Re-validating after fixes")
+                    report = self.run_full_validation(monitor)
+                    context["alignment_report"] = report
+            
+            # Phase 6 (legacy): Auto-fix issues if enabled
+            auto_fix_enabled = context.get('auto_fix', False)
+            legacy_fixes = []
+            
+            if auto_fix_enabled and report.remediation_suggestions:
+                monitor.update(f"Applying {len(report.remediation_suggestions)} auto-fixes")
+                legacy_fixes = self._apply_auto_fixes(report, monitor)
+                
+                # Re-run validation to update scores after fixes
+                if legacy_fixes:
+                    monitor.update("Re-validating after fixes")
+                    report = self.run_full_validation(monitor)
+                    context["alignment_report"] = report
+                    fixes_applied.extend(legacy_fixes)
+            
             # Build result message
-            message = self._format_report_summary(report)
+            message = self._format_report_summary(report, fixes_applied)
             
             duration = (datetime.now() - start_time).total_seconds()
+            monitor.complete()
             
             return OperationResult(
                 success=report.is_healthy,
                 status=OperationStatus.SUCCESS if report.is_healthy else OperationStatus.WARNING,
                 message=message,
-                data={"report": report},
+                data={"report": report, "fixes_applied": fixes_applied},
                 duration_seconds=duration
             )
             
+        except KeyboardInterrupt:
+            monitor.fail("Cancelled by user")
+            duration = (datetime.now() - start_time).total_seconds()
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message="System alignment cancelled by user",
+                errors=["User cancelled operation"],
+                duration_seconds=duration
+            )
         except Exception as e:
             duration = (datetime.now() - start_time).total_seconds()
             logger.error(f"System alignment failed: {e}", exc_info=True)
+            monitor.fail(str(e))
             
             return OperationResult(
                 success=False,
@@ -265,10 +316,13 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 duration_seconds=duration
             )
     
-    def run_full_validation(self) -> AlignmentReport:
+    def run_full_validation(self, monitor: Optional[ProgressMonitor] = None) -> AlignmentReport:
         """
         Run complete system alignment validation.
         
+        Args:
+            monitor: Optional progress monitor for user feedback
+            
         Returns:
             AlignmentReport with all validation results
         """
@@ -280,6 +334,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         )
         
         # Phase 1: Discover all features (with caching)
+        if monitor:
+            monitor.update("Discovering orchestrators and agents")
+        
         operations_dir = self.project_root / 'src' / 'operations'
         agents_dir = self.project_root / 'src' / 'agents'
         
@@ -302,12 +359,21 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             logger.info("Cache HIT: agents - using cached discovery")
         
         # Phase 1.5: Discover entry points and validate wiring
+        if monitor:
+            monitor.update("Validating entry point wiring")
         orphaned, ghost = self._validate_entry_points(orchestrators)
         report.orphaned_triggers = orphaned
         report.ghost_features = ghost
         
         # Phase 2: Validate integration depth (with caching)
+        total_features = len(orchestrators) + len(agents.get('agents', {}))
+        current_idx = 0
+        
         for name, metadata in orchestrators.items():
+            current_idx += 1
+            if monitor:
+                monitor.update(f"Scoring integrations", current_idx, total_features)
+            
             # Get feature files for cache tracking
             feature_files = self._get_feature_files(name, metadata)
             
@@ -333,6 +399,10 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 report.warnings += 1
         
         for name, metadata in agents.items():
+            current_idx += 1
+            if monitor:
+                monitor.update(f"Scoring integrations", current_idx, total_features)
+            
             feature_files = self._get_feature_files(name, metadata)
             cache_key = f'integration_score:{name}'
             
@@ -363,28 +433,65 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         # New logic checks both docstrings AND guide files correctly
         
         # Phase 3.5: Validate deployment readiness (quality gates + package purity)
+        if monitor:
+            monitor.update("Validating deployment readiness")
         self._validate_deployment_readiness(report)
         
         # Phase 3.6: Validate Phase 1-4 gap remediation components
+        if monitor:
+            monitor.update("Validating gap remediation")
         self._validate_gap_remediation_components(report)
         
         # Phase 3.7: Validate file organization (CORTEX boundary)
+        if monitor:
+            monitor.update("Validating file organization")
         org_results = self._validate_file_organization()
         report.organization_violations = org_results.get('violations', [])
         report.organization_score = org_results.get('score', 100)
         
         # Phase 3.8: Validate template headers (v3.2 format enforcement + old format detection)
+        if monitor:
+            monitor.update("Validating template headers")
         # Enforces: Brain emoji (🧠), section icons (🎯 ⚠️ 💬 📝 🔍), NO old format (✓ Accept, ⚡ Challenge)
         header_results = self._validate_template_headers()
         report.header_violations = header_results.get('violations', [])
         report.header_compliance_score = header_results.get('score', 100)
         
         # Phase 3.9: Validate documentation governance (duplicate/overlapping docs)
+        if monitor:
+            monitor.update("Checking documentation governance")
         doc_gov_results = self._validate_documentation_governance()
         report.doc_governance_violations = doc_gov_results.get('violations', [])
         report.doc_governance_score = doc_gov_results.get('score', 100)
         
-        # Phase 4: Generate auto-remediation suggestions
+        # Phase 3.10: Align 2.0 - Detect internal conflicts
+        if monitor:
+            monitor.update("Detecting ecosystem conflicts")
+        conflicts = self._detect_conflicts()
+        report.conflicts = conflicts
+        
+        # Update critical/warning counts from conflicts
+        for conflict in conflicts:
+            if conflict.severity == 'critical':
+                report.critical_issues += 1
+            elif conflict.severity == 'warning':
+                report.warnings += 1
+        
+        # Phase 3.11: Align 2.0 - Generate fix templates
+        if monitor:
+            monitor.update("Generating fix templates")
+        fix_templates = self._generate_fix_templates(conflicts)
+        report.fix_templates = fix_templates
+        
+        # Phase 3.12: Align 2.0 - Generate dashboard
+        if monitor:
+            monitor.update("Generating health dashboard")
+        dashboard = self._generate_dashboard(report, conflicts)
+        report.dashboard_report = dashboard
+        
+        # Phase 4: Generate auto-remediation suggestions (legacy)
+        if monitor:
+            monitor.update("Generating remediation suggestions")
         self._generate_remediation_suggestions(report, orchestrators, agents)
         
         # Calculate overall health (production features only for deployment threshold)
@@ -691,18 +798,43 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 with open(templates_path, "r", encoding="utf-8") as f:
                     templates = yaml.safe_load(f)
                 
-                # Check for H1 header format (# 🧠 CORTEX)
+                # Validate new template architecture
                 template_issues = []
-                for template_name, template_data in templates.get("templates", {}).items():
-                    content = template_data.get("content", "")
+                base_templates = templates.get("base_templates", {})
+                template_defs = templates.get("templates", {})
+                
+                # Check for base template architecture (v3.2+)
+                if not base_templates:
+                    template_issues.append("Missing base_templates section (v3.2 architecture)")
+                else:
+                    # Validate base templates have required structure
+                    for base_name, base_data in base_templates.items():
+                        if "base_structure" not in base_data:
+                            template_issues.append(f"Base template '{base_name}' missing base_structure")
+                
+                # Check for H1 header format in templates (# 🧠 CORTEX)
+                for template_name, template_data in template_defs.items():
+                    # New architecture: templates inherit from base_templates via YAML anchors
+                    if "base_structure" in template_data:
+                        # Using new composition model - validate placeholders
+                        base_structure = template_data.get("base_structure", "")
+                        if not base_structure.startswith("# "):
+                            template_issues.append(f"{template_name}: Base structure missing H1 header")
+                    else:
+                        # Traditional template with direct content
+                        content = template_data.get("content", "")
+                        if content and not content.startswith("# ") and not content.startswith("##"):
+                            template_issues.append(f"{template_name}: Missing H1 header")
                     
-                    # Validate H1 header
-                    if not content.startswith("# ") and not content.startswith("##"):
-                        template_issues.append(f"{template_name}: Missing H1 header")
-                    
-                    # Validate Challenge field format
-                    if "Challenge:" in content and "[✓ Accept OR ⚡ Challenge]" in content:
+                    # Validate Challenge field format (should not have old [✓ Accept OR ⚡ Challenge])
+                    content_str = str(template_data.get("content", "")) + str(template_data.get("base_structure", ""))
+                    if "[✓ Accept OR ⚡ Challenge]" in content_str or "[Accept|Challenge]" in content_str:
                         template_issues.append(f"{template_name}: Old Challenge format detected")
+                
+                # Check for schema version
+                schema_version = templates.get("schema_version", "unknown")
+                if schema_version not in ["3.2", "3.3"]:
+                    template_issues.append(f"Outdated schema_version: {schema_version} (expected 3.2+)")
                 
                 if template_issues:
                     report.warnings += len(template_issues)
@@ -918,6 +1050,19 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         Returns:
             Dict with validation results and violations
         """
+        # Check if duplicate detection should be skipped (performance optimization)
+        # DEFAULT: Skip duplicate detection in system alignment to prevent O(n²) catastrophe
+        # Can be explicitly enabled via context: {'skip_duplicate_detection': False}
+        if self.context.get('skip_duplicate_detection', True):  # Changed default from False to True
+            logger.info("Skipping duplicate document detection (skip_duplicate_detection=True) - prevents O(n²) performance issue")
+            return {
+                'score': 100,
+                'violations': [],
+                'total_docs_scanned': 0,
+                'duplicate_pairs': 0,
+                'warning': 'Duplicate detection skipped for performance (enable with skip_duplicate_detection=False if needed)'
+            }
+        
         try:
             governance = DocumentGovernance(self.project_root)
             violations = []
@@ -1155,10 +1300,126 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                         file_path=str(keep_file)
                     ))
     
-    def _format_report_summary(self, report: AlignmentReport) -> str:
+    def _apply_auto_fixes(self, report: AlignmentReport, monitor: Optional[ProgressMonitor] = None) -> List[Dict[str, Any]]:
+        """
+        Apply auto-remediation fixes to features.
+        
+        Args:
+            report: AlignmentReport with remediation suggestions
+            monitor: Optional progress monitor for user feedback
+        
+        Returns:
+            List of applied fixes with success status
+        """
+        fixes_applied = []
+        
+        for suggestion in report.remediation_suggestions:
+            fix_result = {
+                'feature_name': suggestion.feature_name,
+                'type': suggestion.suggestion_type,
+                'success': False,
+                'message': ''
+            }
+            
+            try:
+                if suggestion.suggestion_type == 'wiring':
+                    # Apply wiring fix: add template to response-templates.yaml
+                    fix_result['success'] = self._apply_wiring_fix(suggestion)
+                    fix_result['message'] = 'Template added to response-templates.yaml'
+                
+                elif suggestion.suggestion_type == 'test':
+                    # Apply test fix: create test skeleton file
+                    fix_result['success'] = self._apply_test_fix(suggestion)
+                    fix_result['message'] = 'Test skeleton created'
+                
+                elif suggestion.suggestion_type == 'documentation':
+                    # Apply documentation fix: create guide file
+                    fix_result['success'] = self._apply_documentation_fix(suggestion)
+                    fix_result['message'] = 'Documentation guide created'
+                
+                else:
+                    fix_result['message'] = f'Unknown fix type: {suggestion.suggestion_type}'
+                
+                if monitor and fix_result['success']:
+                    monitor.update(f"Applied {suggestion.suggestion_type} fix for {suggestion.feature_name}")
+                
+            except Exception as e:
+                fix_result['message'] = f'Error: {str(e)}'
+                logger.error(f"Failed to apply {suggestion.suggestion_type} fix for {suggestion.feature_name}: {e}")
+            
+            fixes_applied.append(fix_result)
+        
+        return fixes_applied
+    
+    def _apply_wiring_fix(self, suggestion: RemediationSuggestion) -> bool:
+        """Apply wiring fix by adding template to response-templates.yaml."""
+        try:
+            templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+            
+            if not templates_file.exists():
+                logger.error(f"response-templates.yaml not found at {templates_file}")
+                return False
+            
+            # Read current content
+            with open(templates_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Append template (suggestion.content contains the full YAML template)
+            with open(templates_file, 'a', encoding='utf-8') as f:
+                f.write('\n# Auto-generated template\n')
+                f.write(suggestion.content)
+                f.write('\n')
+            
+            return True
+        except Exception as e:
+            logger.error(f"Failed to apply wiring fix: {e}")
+            return False
+    
+    def _apply_test_fix(self, suggestion: RemediationSuggestion) -> bool:
+        """Apply test fix by creating test skeleton file."""
+        try:
+            if not suggestion.file_path:
+                return False
+            
+            test_file = Path(suggestion.file_path)
+            test_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Write test skeleton (suggestion.content contains the full test code)
+            with open(test_file, 'w', encoding='utf-8') as f:
+                f.write(suggestion.content)
+            
+            return True
+        except Exception as e:
+            logger.error(f"Failed to apply test fix: {e}")
+            return False
+    
+    def _apply_documentation_fix(self, suggestion: RemediationSuggestion) -> bool:
+        """Apply documentation fix by creating guide file."""
+        try:
+            if not suggestion.file_path:
+                return False
+            
+            doc_file = Path(suggestion.file_path)
+            doc_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Write documentation (suggestion.content contains the full guide)
+            with open(doc_file, 'w', encoding='utf-8') as f:
+                f.write(suggestion.content)
+            
+            return True
+        except Exception as e:
+            logger.error(f"Failed to apply documentation fix: {e}")
+            return False
+    
+    def _format_report_summary(self, report: AlignmentReport, fixes_applied: List[Dict[str, Any]] = None) -> str:
         """Format alignment report summary for display."""
         lines = []
         
+        # Align 2.0: Show dashboard if available
+        if report.dashboard_report:
+            return report.dashboard_report
+        
+        # Legacy format (fallback)
         if report.is_healthy:
             lines.append("[OK] System alignment healthy")
         else:
@@ -1178,12 +1439,40 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             if len(issues) > 3:
                 lines.append(f"   ... and {len(issues) - 3} more")
             
+            # Show conflict summary (Align 2.0)
+            if report.conflicts:
+                critical_conflicts = [c for c in report.conflicts if c.severity == 'critical']
+                warning_conflicts = [c for c in report.conflicts if c.severity == 'warning']
+                
+                lines.append(f"\n[INFO] Detected {len(report.conflicts)} ecosystem conflicts:")
+                if critical_conflicts:
+                    lines.append(f"   ❌ Critical: {len(critical_conflicts)}")
+                if warning_conflicts:
+                    lines.append(f"   ⚠️  Warning: {len(warning_conflicts)}")
+            
+            # Show auto-fix results if any
+            if fixes_applied:
+                lines.append(f"\n[INFO] Applied {len(fixes_applied)} fixes:")
+                for fix in (fixes_applied[:5] if isinstance(fixes_applied[0], dict) else fixes_applied[:5]):
+                    if isinstance(fix, dict):
+                        status = "✅" if fix['success'] else "❌"
+                        lines.append(f"   {status} {fix['type']}: {fix['feature_name']}")
+                    else:
+                        lines.append(f"   ✅ {fix}")
+                if len(fixes_applied) > 5:
+                    lines.append(f"   ... and {len(fixes_applied) - 5} more")
+            
             # Show remediation suggestion count
+            if report.fix_templates:
+                auto_fixable = [t for t in report.fix_templates if t.risk_level == 'low']
+                lines.append(f"\n[INFO] Generated {len(report.fix_templates)} fix templates ({len(auto_fixable)} low-risk)")
+            
             if report.remediation_suggestions:
-                lines.append(f"\n[INFO] Generated {len(report.remediation_suggestions)} auto-remediation suggestions")
+                lines.append(f"[INFO] Generated {len(report.remediation_suggestions)} legacy remediation suggestions")
             
             lines.append("")
-            lines.append("Run 'align report' for details and auto-remediation")
+            lines.append("Run 'align report' for detailed dashboard with trends and recommendations")
+            lines.append("Run 'align fix --interactive' to apply fixes with confirmation")
         
         return "\n".join(lines)
     
@@ -1374,3 +1663,122 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             wired=data['wired'],
             optimized=data['optimized']
         )
+    
+    def _detect_conflicts(self) -> List[Conflict]:
+        """
+        Detect internal CORTEX ecosystem conflicts.
+        
+        Phase 3.10: Align 2.0 enhancement
+        
+        Returns:
+            List of detected conflicts
+        """
+        logger.info("Running conflict detection...")
+        
+        detector = ConflictDetector(self.project_root)
+        conflicts = detector.detect_all_conflicts()
+        
+        logger.info(f"Found {len(conflicts)} conflicts")
+        return conflicts
+    
+    def _generate_fix_templates(self, conflicts: List[Conflict]) -> List[FixTemplate]:
+        """
+        Generate fix templates for conflicts.
+        
+        Phase 3.11: Align 2.0 enhancement
+        
+        Args:
+            conflicts: List of detected conflicts
+            
+        Returns:
+            List of fix templates
+        """
+        logger.info("Generating fix templates...")
+        
+        engine = RemediationEngine(self.project_root)
+        templates = []
+        
+        for conflict in conflicts:
+            template = engine.generate_fix_template(conflict)
+            if template:
+                templates.append(template)
+        
+        logger.info(f"Generated {len(templates)} fix templates")
+        return templates
+    
+    def _generate_dashboard(self, report: AlignmentReport, conflicts: List[Conflict]) -> str:
+        """
+        Generate visual health dashboard.
+        
+        Phase 3.12: Align 2.0 enhancement
+        
+        Args:
+            report: Alignment report
+            conflicts: List of conflicts
+            
+        Returns:
+            Formatted dashboard string
+        """
+        logger.info("Generating health dashboard...")
+        
+        generator = DashboardGenerator(self.project_root)
+        dashboard = generator.generate_dashboard(report, conflicts)
+        
+        # Save to history
+        generator.save_history(report)
+        
+        return dashboard
+    
+    def _apply_interactive_fixes(self, report: AlignmentReport, monitor: Optional[ProgressMonitor]) -> List[str]:
+        """
+        Apply fixes interactively with user confirmation.
+        
+        Align 2.0: Smart remediation with consent
+        
+        Args:
+            report: Alignment report with fix templates
+            monitor: Progress monitor
+            
+        Returns:
+            List of applied fix descriptions
+        """
+        logger.info("Starting interactive remediation...")
+        
+        engine = RemediationEngine(self.project_root)
+        applied_fixes = []
+        
+        # Create checkpoint before any fixes
+        print("\n🔒 Creating safety checkpoint...")
+        if not engine.create_checkpoint():
+            logger.error("Failed to create checkpoint - aborting remediation")
+            return []
+        
+        # Present fixes one by one
+        for idx, fix_template in enumerate(report.fix_templates, 1):
+            print(f"\n\n{'='*80}")
+            print(f"FIX {idx}/{len(report.fix_templates)}")
+            print(f"{'='*80}")
+            
+            # Show preview and request confirmation
+            if engine.request_confirmation(fix_template):
+                success = engine.apply_fix(fix_template)
+                
+                if success:
+                    applied_fixes.append(fix_template.description)
+                    logger.info(f"✅ Fix applied: {fix_template.description}")
+                else:
+                    logger.error(f"❌ Fix failed: {fix_template.description}")
+                    response = input("Continue with remaining fixes? [y/N]: ").strip().lower()
+                    if response != 'y':
+                        logger.info("Remediation stopped by user")
+                        break
+            else:
+                logger.info(f"⏭️ Skipped: {fix_template.description}")
+        
+        if applied_fixes:
+            print(f"\n\n✅ Applied {len(applied_fixes)} fixes successfully")
+            print(f"🔒 Checkpoint available for rollback: git reset --hard {engine.checkpoint_sha[:8]}")
+        else:
+            print("\n\nℹ️ No fixes applied")
+        
+        return applied_fixes

@@ -14,6 +14,7 @@ from .brain_initialization_module import BrainInitializationModule
 from .python_dependencies_module import PythonDependenciesModule
 from .refactoring_tools_module import RefactoringToolsModule
 from .smart_refactoring_recommender import SmartRefactoringRecommender
+from .gitignore_setup_module import GitIgnoreSetupModule
 
 __all__ = [
     'PlatformDetectionModule',
@@ -22,4 +23,5 @@ __all__ = [
     'PythonDependenciesModule',
     'RefactoringToolsModule',
     'SmartRefactoringRecommender',
+    'GitIgnoreSetupModule',
 ]

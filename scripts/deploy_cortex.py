@@ -103,7 +103,14 @@ EXCLUDED_DIRS = {
     '.git',
     'dist',
     'publish',          # Don't include existing publish folder
-    '.backup-archive'
+    '.backup-archive',
+    # Admin-only directories (SECURITY: Users must not modify CORTEX)
+    'cortex-brain/admin',
+    'src/operations/modules/admin',
+    'scripts/admin',
+    'tests/admin',
+    'tests/operations/admin',
+    'tests/operations/modules/admin'
 }
 
 # File patterns to exclude
@@ -118,6 +125,15 @@ EXCLUDED_PATTERNS = {
     '*.db-journal',
     '.coverage',
     'htmlcov',
+}
+
+# Admin-only files to EXCLUDE (SECURITY: Users must not modify CORTEX)
+EXCLUDED_ADMIN_FILES = {
+    'scripts/deploy_cortex.py',
+    'scripts/deploy_cortex_OLD.py',
+    'scripts/deploy_cortex_simple.py',
+    'scripts/validate_deployment.py',
+    'scripts/publish_to_branch.py',
 }
 
 
@@ -230,8 +246,13 @@ def run_git_command(cmd: List[str], cwd: Path, check: bool = True) -> subprocess
     
     if check and result.returncode != 0:
         logger.error(f"Git command failed: {' '.join(cmd)}")
+        logger.error(f"Exit code: {result.returncode}")
         logger.error(f"Error: {result.stderr}")
-        raise RuntimeError(f"Git command failed: {result.stderr}")
+        raise RuntimeError(f"Git command failed with exit code {result.returncode}: {result.stderr}")
+    
+    # Git hooks may write to stderr even on success - only fail on non-zero exit code
+    if result.stderr and result.returncode == 0:
+        logger.debug(f"Git hook output (non-fatal): {result.stderr[:200]}")
     
     return result
 
@@ -240,6 +261,77 @@ def get_current_branch(project_root: Path) -> str:
     """Get current git branch name."""
     result = run_git_command(['git', 'branch', '--show-current'], project_root)
     return result.stdout.strip()
+
+
+def filter_admin_operations(temp_dir: Path):
+    """
+    Remove admin-only operations from cortex-operations.yaml.
+    
+    SECURITY: Users must not have access to commands that modify CORTEX source code.
+    This includes deployment, validation, system alignment, and optimization scripts.
+    """
+    operations_file = temp_dir / "cortex-operations.yaml"
+    
+    if not operations_file.exists():
+        logger.warning("⚠️  cortex-operations.yaml not found - skipping admin filter")
+        return
+    
+    try:
+        with open(operations_file, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+        
+        if 'operations' not in config:
+            logger.warning("⚠️  cortex-operations.yaml has no 'operations' section")
+            return
+        
+        # Admin operation patterns to exclude
+        admin_patterns = [
+            'deploy',
+            'publish',
+            'validate_deployment',
+            'alignment',
+            'admin',
+            'optimize_cortex',
+            'system_alignment'
+        ]
+        
+        original_count = len(config['operations'])
+        filtered_operations = {}
+        removed_operations = []
+        
+        for op_name, op_config in config['operations'].items():
+            # Check if operation is marked as admin-only
+            is_admin = False
+            
+            if isinstance(op_config, dict) and op_config.get('admin_only', False):
+                is_admin = True
+            
+            # Check operation name against admin patterns
+            if not is_admin:
+                for pattern in admin_patterns:
+                    if pattern in op_name.lower():
+                        is_admin = True
+                        break
+            
+            if is_admin:
+                removed_operations.append(op_name)
+            else:
+                filtered_operations[op_name] = op_config
+        
+        # Update config with filtered operations
+        config['operations'] = filtered_operations
+        
+        # Write back to file
+        with open(operations_file, 'w', encoding='utf-8') as f:
+            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+        
+        logger.info(f"✓ Filtered admin operations: {original_count} → {len(filtered_operations)} operations")
+        if removed_operations:
+            logger.info(f"  Removed: {', '.join(removed_operations)}")
+        
+    except Exception as e:
+        logger.error(f"Failed to filter admin operations: {e}")
+        raise
 
 
 def branch_exists(branch_name: str, project_root: Path) -> bool:
@@ -263,15 +355,30 @@ def should_include_path(path: Path, project_root: Path) -> bool:
     if path_str in CORE_FILES:
         return True
     
+    # Exclude admin files (deployment, validation scripts)
+    if path_str in EXCLUDED_ADMIN_FILES:
+        return False
+    
     # Exclude patterns
     for pattern in EXCLUDED_PATTERNS:
         if path.match(pattern):
             return False
     
-    # Check excluded directories
+    # Check excluded directories (including admin subdirectories)
     first_dir = rel_path.parts[0] if len(rel_path.parts) > 0 else None
     if first_dir in EXCLUDED_DIRS:
         return False
+    
+    # Check for admin subdirectories within included directories
+    for part in rel_path.parts:
+        # Exclude any path containing /admin/ subdirectory
+        if part == 'admin':
+            return False
+    
+    # Also check the full path string for admin subdirectories
+    for excluded_admin_dir in ['cortex-brain/admin', 'src/operations/modules/admin', 'scripts/admin']:
+        if path_str.startswith(excluded_admin_dir):
+            return False
     
     # Check if under core directories
     for core_dir in CORE_DIRS:
@@ -339,6 +446,9 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
         )
     else:
         logger.warning("⚠️  CORTEX copilot-instructions.md not found - skipping merge")
+    
+    # Filter admin operations from cortex-operations.yaml
+    filter_admin_operations(temp_dir)
     
     # Create SETUP-CORTEX.md guide
     create_setup_guide(temp_dir)
@@ -816,7 +926,8 @@ def publish_to_branch(
     project_root: Path,
     branch_name: str = PUBLISH_BRANCH,
     dry_run: bool = False,
-    resume: bool = False
+    resume: bool = False,
+    skip_validation: bool = False
 ) -> bool:
     """Publish CORTEX to dedicated branch with fault tolerance.
     
@@ -825,6 +936,7 @@ def publish_to_branch(
         branch_name: Name of publish branch
         dry_run: Preview mode (no git changes)
         resume: Resume from last checkpoint
+        skip_validation: Skip pre-deployment validation (use with caution)
         
     Returns:
         True if successful, False otherwise
@@ -837,10 +949,11 @@ def publish_to_branch(
     logger.info(f"Project root: {project_root}")
     logger.info(f"Dry run: {dry_run}")
     logger.info(f"Resume mode: {resume}")
+    logger.info(f"Skip validation: {skip_validation}")
     logger.info("")
     
-    # Run validation gate first (unless resuming or dry-run)
-    if not resume and not dry_run:
+    # Run validation gate first (unless resuming, dry-run, or skipped)
+    if not resume and not dry_run and not skip_validation:
         logger.info("" + "=" * 80)
         logger.info("STAGE 0: Pre-Deployment Validation Gate")
         logger.info("" + "=" * 80)
@@ -1264,6 +1377,11 @@ Fault Tolerance:
         action='store_true',
         help='Resume from last checkpoint (if publish was interrupted)'
     )
+    parser.add_argument(
+        '--skip-validation',
+        action='store_true',
+        help='Skip pre-deployment validation gate (use with caution - for documented known issues only)'
+    )
     
     args = parser.parse_args()
     
@@ -1272,7 +1390,8 @@ Fault Tolerance:
             project_root=args.project_root,
             branch_name=args.branch,
             dry_run=args.dry_run,
-            resume=args.resume
+            resume=args.resume,
+            skip_validation=args.skip_validation
         )
         return 0 if success else 1
     except KeyboardInterrupt:

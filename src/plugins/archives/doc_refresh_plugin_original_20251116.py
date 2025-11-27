@@ -1,4 +1,11 @@
 """
+ARCHIVED FILE - DO NOT USE
+
+This file contains outdated imports and is preserved for historical reference only.
+Use src/operations/modules/admin/* for current functionality.
+
+---
+
 Documentation Refresh Plugin
 
 Automatically refreshes the 6 synchronized documentation files based on CORTEX 2.0 design:

@@ -3,6 +3,28 @@ Base Agent Class and Core Data Structures
 
 Provides abstract base class for all CORTEX specialist agents
 and standard request/response formats.
+
+PROGRESS MONITORING:
+All agents can report progress during long-running operations using the
+report_progress() method. Progress monitoring automatically activates if
+the operation takes >5 seconds.
+
+Example with Progress Monitoring:
+    from src.utils.progress_decorator import with_progress
+    
+    class MyAgent(BaseAgent):
+        def can_handle(self, request: AgentRequest) -> bool:
+            return request.intent == "process_files"
+        
+        @with_progress(operation_name="File Processing")
+        def execute(self, request: AgentRequest) -> AgentResponse:
+            files = request.context.get('files', [])
+            
+            for i, file in enumerate(files, 1):
+                self.report_progress(i, len(files), f"Processing {file}")
+                result = self._process_file(file)
+            
+            return AgentResponse(success=True, result={"processed": len(files)})
 """
 
 from abc import ABC, abstractmethod
@@ -11,6 +33,9 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 import logging
 import sys
+
+# Import progress monitoring
+from src.utils.progress_decorator import with_progress, yield_progress
 
 
 @dataclass
@@ -251,6 +276,32 @@ class BaseAgent(ABC):
         result = func(*args, **kwargs)
         duration_ms = (datetime.now() - start).total_seconds() * 1000
         return result, duration_ms
+    
+    def report_progress(self, current: int, total: int, step: str):
+        """
+        Report progress from within agent execution.
+        
+        Use this method to provide progress updates during long-running operations.
+        Progress monitoring will automatically activate if operation takes >5 seconds.
+        
+        Args:
+            current: Current item index (1-based)
+            total: Total items to process
+            step: Description of current step
+        
+        Example:
+            def execute(self, request: AgentRequest) -> AgentResponse:
+                items = self._get_items(request)
+                for i, item in enumerate(items, 1):
+                    self.report_progress(i, len(items), f"Processing {item.name}")
+                    self._process_item(item)
+                return AgentResponse(success=True, result={})
+        
+        Note:
+            Only works when agent's execute() method is decorated with @with_progress.
+            If not decorated, this method safely does nothing.
+        """
+        yield_progress(current, total, step)
     
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(name='{self.name}')>"

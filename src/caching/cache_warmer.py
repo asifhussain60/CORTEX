@@ -142,7 +142,7 @@ class CacheWarmer:
         Returns:
             Result dictionary with success status and items cached
         """
-        from src.operations.align import AlignSystemOrchestrator
+        from src.operations.modules.admin.system_alignment_orchestrator import SystemAlignmentOrchestrator
         
         logger.info("Warming align cache (orchestrator + agent discovery)...")
         
@@ -174,13 +174,23 @@ class CacheWarmer:
         
         Returns:
             Result dictionary with success status and items cached
+        
+        Note: DeployOrchestrator deprecated - deploy now handled by scripts/deploy_cortex.py
         """
-        from src.deployment.deploy_orchestrator import DeployOrchestrator
+        # from src.deployment.deploy_orchestrator import DeployOrchestrator
         
-        logger.info("Warming deploy cache (integration scoring)...")
+        logger.info("Skipping deploy cache warming (orchestrator deprecated)...")
         
-        try:
-            orchestrator = DeployOrchestrator(self.project_root)
+        return {
+            'success': True,
+            'items_cached': 0,
+            'operation': 'deploy',
+            'note': 'Deploy orchestrator deprecated - using scripts instead'
+        }
+        
+        # Legacy code commented out:
+        # try:
+        #     orchestrator = DeployOrchestrator(self.project_root)
             
             # Run scoring (will cache results automatically)
             orchestrator._calculate_integration_scores()
