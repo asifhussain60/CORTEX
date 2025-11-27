@@ -1,0 +1,84 @@
+# Code Review Question Schema
+# Interactive Q&A flow for pull request code review
+
+name: code-review
+version: 1.0.0
+metadata:
+  description: Interactive question flow for code review analysis
+  author: Asif Hussain
+  last_updated: 2025-11-27
+
+questions:
+  # PR Source
+  - id: pr_source
+    type: choice
+    prompt: How would you like to provide the PR?
+    required: true
+    options:
+      - ADO Link
+      - Work Item ID
+      - Paste Diff
+    default: ADO Link
+    help_text: Choose how to provide PR information
+
+  # ADO Link (conditional)
+  - id: ado_link
+    type: text
+    prompt: ADO Pull Request Link
+    required: true
+    placeholder: "https://dev.azure.com/org/project/_git/repo/pullrequest/12345"
+    skip_if: "pr_source != ADO Link"
+    help_text: Full URL to ADO pull request
+
+  # Work Item ID (conditional)
+  - id: work_item_id
+    type: text
+    prompt: Work Item ID
+    required: true
+    placeholder: "12345"
+    skip_if: "pr_source != Work Item ID"
+    help_text: ADO work item number
+
+  # Paste Diff (conditional)
+  - id: diff_content
+    type: multiline
+    prompt: Paste the diff content
+    required: true
+    placeholder: "diff --git a/src/file.js b/src/file.js\n..."
+    skip_if: "pr_source != Paste Diff"
+    help_text: Paste git diff output
+
+  # Review Depth
+  - id: review_depth
+    type: choice
+    prompt: Review Depth
+    required: true
+    options:
+      - Quick
+      - Standard
+      - Deep
+    default: Standard
+    help_text: "Quick (30s, critical only) | Standard (2min, + best practices) | Deep (5min, + security/TDD)"
+
+  # Focus Areas
+  - id: focus_areas
+    type: multi_choice
+    prompt: Focus Areas (select one or more)
+    required: true
+    options:
+      - Security
+      - Performance
+      - Maintainability
+      - Tests
+      - Architecture
+      - All
+    default: All
+    help_text: Areas to focus the review on
+
+  # Context (optional)
+  - id: additional_context
+    type: multiline
+    prompt: Additional Context (optional)
+    required: false
+    placeholder: "This PR implements user authentication. Pay special attention to password hashing."
+    help_text: Any additional context or specific concerns
