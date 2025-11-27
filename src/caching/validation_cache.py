@@ -29,6 +29,30 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+def _serialize_for_json(obj: Any) -> Any:
+    """
+    Convert objects to JSON-serializable format.
+    
+    Handles:
+    - Path objects → strings
+    - Nested dicts/lists with Path objects
+    
+    Args:
+        obj: Object to serialize
+    
+    Returns:
+        JSON-serializable version
+    """
+    if isinstance(obj, Path):
+        return str(obj)
+    elif isinstance(obj, dict):
+        return {k: _serialize_for_json(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [_serialize_for_json(item) for item in obj]
+    else:
+        return obj
+
 # Default cache database location
 DEFAULT_CACHE_DB = Path(__file__).parent.parent.parent / "cortex-brain" / "cache" / "validation_cache.db"
 
@@ -243,7 +267,7 @@ class ValidationCache:
             ''', (
                 operation,
                 key,
-                json.dumps(result),
+                json.dumps(_serialize_for_json(result)),
                 json.dumps(file_hashes),
                 datetime.now().isoformat(),
                 ttl_seconds

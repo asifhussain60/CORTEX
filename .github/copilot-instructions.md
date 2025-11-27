@@ -5,7 +5,7 @@
 ## 🚀 Key Features & Workflows
 
 ### Planning System 2.0
-**Guide:** `.github/prompts/modules/planning-system-guide.md`
+**Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
 
 - **Vision API:** Auto-extract requirements from screenshots (UI mockups, errors, ADO items)
 - **File-Based:** Planning outputs to persistent `.md` files (git-trackable, resumable)

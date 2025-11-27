@@ -170,8 +170,16 @@ class EntryPointScanner:
         
         # Check trigger keywords
         trigger_lower = trigger.lower()
+        template_lower = template_name.lower()
+        
+        # First pass: exact matches (prioritize)
         for keyword, orchestrator in mappings.items():
-            if keyword in trigger_lower or keyword in template_name.lower():
+            if keyword == trigger_lower or keyword == template_lower:
+                return orchestrator
+        
+        # Second pass: substring matches
+        for keyword, orchestrator in mappings.items():
+            if keyword in trigger_lower or keyword in template_lower:
                 return orchestrator
         
         return None

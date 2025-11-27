@@ -423,7 +423,7 @@ Recommendations: Cache is performing well
 
 # ⭐ Planning System 2.0
 
-**Complete Guide:** #file:modules/planning-system-guide.md
+**Complete Guide:** #file:modules/planning-orchestrator-guide.md
 
 **Key Features:**
 - **Vision API:** Auto-extract requirements from UI mockups, error screenshots, ADO items
@@ -446,7 +446,7 @@ Recommendations: Cache is performing well
 - ✅ Memory efficient (streams to disk, never holds full plan in memory)
 - ✅ Auto-organized to `cortex-brain/documents/planning/features/`
 
-**See planning-system-guide.md for scenarios, file structure, incremental planning workflow, and DoR/DoD checklists.**
+**See planning-orchestrator-guide.md for scenarios, file structure, incremental planning workflow, and DoR/DoD checklists.**
 
 ---
 
