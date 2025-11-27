@@ -246,8 +246,13 @@ def run_git_command(cmd: List[str], cwd: Path, check: bool = True) -> subprocess
     
     if check and result.returncode != 0:
         logger.error(f"Git command failed: {' '.join(cmd)}")
+        logger.error(f"Exit code: {result.returncode}")
         logger.error(f"Error: {result.stderr}")
-        raise RuntimeError(f"Git command failed: {result.stderr}")
+        raise RuntimeError(f"Git command failed with exit code {result.returncode}: {result.stderr}")
+    
+    # Git hooks may write to stderr even on success - only fail on non-zero exit code
+    if result.stderr and result.returncode == 0:
+        logger.debug(f"Git hook output (non-fatal): {result.stderr[:200]}")
     
     return result
 
