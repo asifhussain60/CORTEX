@@ -95,6 +95,18 @@ class CortexSetup:
             crawler_result = self._run_crawlers(env_info)
             self.setup_results["phases"]["crawler"] = crawler_result
             
+            # Phase 4.5: Validate Setup
+            self._log_phase("Phase 4.5: Validating Setup")
+            validation_passed = self._validate_setup()
+            self.setup_results["phases"]["validation"] = {
+                "passed": validation_passed,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            if not validation_passed:
+                self._log_warning("⚠ Setup validation failed - CORTEX may not initialize properly")
+                self.setup_results["warnings"].append("Setup validation failed")
+            
             # Phase 5: Welcome User
             self._log_phase("Phase 5: Welcome to CORTEX!")
             self._show_welcome()
@@ -445,6 +457,27 @@ Brain initialized: {timestamp}
             self.setup_results["warnings"].append(f"Crawler: {e}")
         
         return results
+    
+    def _validate_setup(self) -> bool:
+        """
+        Validate setup was successful by attempting to initialize CortexEntry.
+        
+        Returns:
+            True if setup successful and CORTEX can initialize
+        """
+        try:
+            from src.entry_point.cortex_entry import CortexEntry
+            # Use skip_setup_check to prevent recursive setup prompt
+            entry = CortexEntry(
+                brain_path=str(self.brain_path),
+                enable_logging=False,
+                skip_setup_check=True
+            )
+            self._log_success("✓ Setup validation passed")
+            return True
+        except Exception as e:
+            self._log_warning(f"⚠ Setup validation failed: {e}")
+            return False
     
     def _show_welcome(self):
         """Display welcome message with links to documentation."""

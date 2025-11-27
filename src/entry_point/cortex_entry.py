@@ -66,7 +66,8 @@ class CortexEntry:
     def __init__(
         self,
         brain_path: Optional[str] = None,
-        enable_logging: bool = True
+        enable_logging: bool = True,
+        skip_setup_check: bool = False
     ):
         """
         Initialize CORTEX entry point.
@@ -75,17 +76,22 @@ class CortexEntry:
             brain_path: Path to CORTEX brain directory
                        (default: auto-detected from config)
             enable_logging: Whether to enable detailed logging
+            skip_setup_check: Skip first-time setup check (for setup command itself)
         """
         # Set brain path (use config if not provided)
         if brain_path is None:
             brain_path = config.brain_path
         self.brain_path = Path(brain_path)
         
-        # Ensure brain directory structure exists
-        config.ensure_paths_exist()
-        
         # Setup logging
         self.logger = self._setup_logging(enable_logging)
+        
+        # Check for first-time setup (unless skipped)
+        if not skip_setup_check:
+            self._check_first_time_setup()
+        
+        # Ensure brain directory structure exists
+        config.ensure_paths_exist()
         
         # Initialize tier APIs
         self.tier1 = Tier1API(
@@ -582,6 +588,64 @@ class CortexEntry:
                 "\n  🔄 Update phase progress bars" +
                 "\n\nThis keeps the implementation tracking accurate!" +
                 "\n" + "="*60
+            )
+    
+    def _check_first_time_setup(self) -> None:
+        """
+        Check if CORTEX needs first-time setup.
+        
+        Validates brain structure exists and prompts user if missing.
+        This provides automatic guidance for first-time users.
+        """
+        # Check for essential brain components
+        required_paths = [
+            self.brain_path / "tier1",
+            self.brain_path / "tier2",
+            self.brain_path / "tier3",
+            self.brain_path / "tier1" / "working_memory.db",
+            self.brain_path / "tier2" / "knowledge_graph.db",
+            self.brain_path / "tier3" / "development_context.db"
+        ]
+        
+        missing_components = [p for p in required_paths if not p.exists()]
+        
+        if missing_components:
+            # First-time user detected
+            setup_message = f"""
+╔══════════════════════════════════════════════════════════════╗
+║          Welcome to CORTEX - First Time Setup Needed        ║
+╚══════════════════════════════════════════════════════════════╝
+
+CORTEX brain structure not found at: {self.brain_path}
+
+To get started, run the setup command:
+
+  📋 Command Line:
+     python -m src.main --setup
+
+  💬 GitHub Copilot Chat:
+     "setup cortex"
+
+The setup process will:
+  ✓ Analyze your repository structure
+  ✓ Install required tooling (Python, Node.js, MkDocs)
+  ✓ Initialize CORTEX brain (4-tier architecture)
+  ✓ Run crawlers to learn your codebase
+  ✓ Provide quick start guide and documentation
+
+⏱️  Estimated time: 5-10 minutes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+            print(setup_message)
+            
+            # Log for debugging
+            self.logger.info("First-time setup required - brain components missing")
+            self.logger.debug(f"Missing: {[str(p) for p in missing_components]}")
+            
+            # Raise exception to prevent incomplete initialization
+            raise RuntimeError(
+                "CORTEX setup required. Run: python -m src.main --setup"
             )
     
     def setup(

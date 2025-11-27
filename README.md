@@ -95,10 +95,47 @@ See **[Upgrade Guide](cortex-brain/documents/implementation-guides/UPGRADE-GUIDE
 
 ### First Time Setup
 
+**Option 1: Automatic Detection (Recommended)**
+
+Just try to use CORTEX - it will automatically detect if setup is needed:
+
+```bash
+# In GitHub Copilot Chat
+help
+
+# Or from terminal
+python -m src.main "help"
+```
+
+If setup is needed, you'll see a friendly prompt with instructions.
+
+**Option 2: Manual Setup**
+
+Run the setup command explicitly:
+
+```bash
+# From terminal
+python -m src.main --setup
+
+# Or in GitHub Copilot Chat
+setup cortex
+```
+
+**What Setup Does:**
+1. ✅ Analyzes your repository structure (languages, frameworks, file count)
+2. ✅ Installs required tooling (Python deps, Node.js deps, MkDocs)
+3. ✅ Initializes CORTEX brain (4-tier architecture with databases)
+4. ✅ Runs crawlers to learn your codebase
+5. ✅ Validates setup and provides quick start guide
+
+**Time:** 5-10 minutes | **Automatic:** Safe to re-run anytime
+
+### Using CORTEX
+
 In GitHub Copilot Chat, use the simple entry point:
 
 ```
-/CORTEX
+help
 ```
 
 [Your request - CORTEX will handle everything]
@@ -106,14 +143,14 @@ In GitHub Copilot Chat, use the simple entry point:
 
 **From Terminal:**
 ```bash
-# Open CORTEX entry point in VS Code
-cortex
+# Interactive mode
+python -m src.main
 
-# Or use the launcher script
-./scripts/launchers/run-cortex.sh
+# Single command
+python -m src.main "create tests for auth.py"
 
-# Navigate to CORTEX directory
-cdcortex
+# With verbose logging
+python -m src.main "implement feature" --verbose
 ```
 
 ### What Can You Ask CORTEX?
