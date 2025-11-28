@@ -451,7 +451,7 @@ pytest tests/orchestrators/test_rollback*.py --cov=src/orchestrators --cov-repor
 - ✅ Invalid checkpoint error
 - ✅ Command parser integration
 
-**Total: 29/29 tests passing (100%), 0.83s runtime**
+**Total: 29/29 tests passing (100%), 0.48s runtime**
 
 ---
 
@@ -501,7 +501,7 @@ pytest tests/orchestrators/test_rollback*.py --cov=src/orchestrators --cov-repor
 | Git status check | 50-100ms | Git subprocess call |
 | Diff generation | 100-200ms | Git subprocess call |
 | Git reset | 200-500ms | Git subprocess call |
-| **Total workflow** | **~400-800ms** | With confirmation prompt |
+- **Total workflow** | **~300-500ms** | With confirmation prompt |
 
 ### Resource Usage
 
