@@ -90,6 +90,9 @@ class IntentType(Enum):
     FEEDBACK = "feedback"
     REPORT_ISSUE = "report_issue"
     
+    # User profile management (NEW - User Profile System 3.2.1)
+    UPDATE_PROFILE = "update_profile"
+    
     # ADO (Azure DevOps) operations (NEW - ADO Integration)
     ADO_WORKITEM = "ado_workitem"
     ADO_STORY = "ado_story"

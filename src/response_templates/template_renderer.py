@@ -19,6 +19,34 @@ class TemplateRenderer:
         self.placeholder_pattern = re.compile(r'\{\{([^}]+)\}\}')
         self.conditional_pattern = re.compile(r'\{\{#if\s+(\w+)\}\}(.*?)\{\{/if\}\}', re.DOTALL)
         self.loop_pattern = re.compile(r'\{\{#(\w+)\}\}(.*?)\{\{/\1\}\}', re.DOTALL)
+        
+        # Tech stack to deployment platform mappings
+        self.tech_stack_mappings = {
+            'azure': {
+                'cloud_deployment': 'Azure App Service / AKS',
+                'container_orchestration': 'Azure Kubernetes Service (AKS)',
+                'cicd_pipeline': 'Azure DevOps Pipelines',
+                'iac_tool': 'Azure Resource Manager (ARM) or Terraform',
+                'monitoring': 'Azure Monitor / Application Insights',
+                'storage': 'Azure Blob Storage / Cosmos DB'
+            },
+            'aws': {
+                'cloud_deployment': 'AWS Elastic Beanstalk / ECS / EKS',
+                'container_orchestration': 'Amazon ECS or EKS',
+                'cicd_pipeline': 'AWS CodePipeline / GitHub Actions',
+                'iac_tool': 'AWS CloudFormation or Terraform',
+                'monitoring': 'AWS CloudWatch / X-Ray',
+                'storage': 'Amazon S3 / DynamoDB'
+            },
+            'gcp': {
+                'cloud_deployment': 'Google App Engine / GKE',
+                'container_orchestration': 'Google Kubernetes Engine (GKE)',
+                'cicd_pipeline': 'Cloud Build / GitHub Actions',
+                'iac_tool': 'Terraform',
+                'monitoring': 'Google Cloud Monitoring',
+                'storage': 'Google Cloud Storage / Firestore'
+            }
+        }
     
     def render(
         self, 
@@ -39,6 +67,9 @@ class TemplateRenderer:
         context = context or {}
         verbosity = verbosity or template.verbosity
         
+        # Enrich context with tech stack deployment options if user profile available
+        context = self._enrich_tech_stack_context(context)
+        
         content = template.content
         
         # Apply verbosity filtering first
@@ -54,6 +85,49 @@ class TemplateRenderer:
         content = self._substitute_placeholders(content, context)
         
         return content.strip()
+    
+    def _enrich_tech_stack_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Enrich context with tech stack deployment options from user profile.
+        
+        Adds tech-specific placeholders like {cloud_deployment}, {container_orchestration}
+        based on user's tech_stack_preference profile field.
+        
+        Args:
+            context: Original context dictionary
+            
+        Returns:
+            Enriched context with tech stack placeholders
+        """
+        # Check if user_profile exists in context
+        user_profile = context.get('user_profile', {})
+        if not user_profile:
+            return context
+        
+        # Extract tech_stack_preference
+        tech_stack = user_profile.get('tech_stack_preference', {})
+        if not tech_stack or not isinstance(tech_stack, dict):
+            return context
+        
+        # Get cloud provider from tech stack
+        cloud_provider = tech_stack.get('cloud_provider', '').lower()
+        
+        # Map to deployment options
+        if cloud_provider in self.tech_stack_mappings:
+            mappings = self.tech_stack_mappings[cloud_provider]
+            
+            # Add deployment-specific placeholders to context
+            context['cloud_deployment'] = mappings.get('cloud_deployment', 'Cloud Platform')
+            context['container_orchestration'] = mappings.get('container_orchestration', 'Kubernetes')
+            context['cicd_pipeline'] = mappings.get('cicd_pipeline', 'CI/CD Platform')
+            context['iac_tool'] = mappings.get('iac_tool', 'Infrastructure as Code')
+            context['monitoring_platform'] = mappings.get('monitoring', 'Monitoring Platform')
+            context['storage_service'] = mappings.get('storage', 'Cloud Storage')
+            
+            # Add flag to indicate tech stack is available
+            context['has_tech_stack'] = True
+            context['cloud_provider_name'] = cloud_provider.upper()
+        
+        return context
     
     def render_with_placeholders(self, template: Template, **kwargs) -> str:
         """Render template with keyword arguments as placeholders.

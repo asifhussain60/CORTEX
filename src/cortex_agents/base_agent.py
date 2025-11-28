@@ -50,12 +50,14 @@ class AgentRequest:
         conversation_id: Optional ID linking to Tier 1 conversation
         priority: Request priority level (default: NORMAL)
         metadata: Additional metadata for the request
+        user_profile: User interaction preferences (CORTEX 3.2.1+)
     
     Example:
         request = AgentRequest(
             intent="plan",
             context={"feature": "authentication"},
-            user_message="Add user authentication"
+            user_message="Add user authentication",
+            user_profile={"interaction_mode": "guided", "experience_level": "senior"}
         )
     """
     intent: str
@@ -65,6 +67,7 @@ class AgentRequest:
     priority: int = 3  # NORMAL priority
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
+    user_profile: Optional[Dict[str, Any]] = None  # CORTEX 3.2.1: User Profile System
 
 
 @dataclass

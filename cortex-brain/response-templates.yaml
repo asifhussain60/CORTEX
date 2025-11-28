@@ -37,6 +37,42 @@ base_templates:
       ### 🔍 Next Steps
       {next_steps_content}
   
+  tech_aware_response: &tech_aware_base
+    base_structure: |
+      ## 🧠 CORTEX {operation}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 My Understanding Of Your Request
+      {understanding_content}
+      
+      ### ⚠️ Challenge
+      {challenge_content}
+      
+      ### 💬 Response
+      
+      **🏆 Recommended Solution:**
+      {recommended_solution}
+      
+      {{#if has_tech_stack}}
+      **🔧 {cloud_provider_name}-Aligned Implementation:**
+      {company_aligned_implementation}
+      
+      *Deployment Options:*
+      - **Cloud Platform:** {cloud_deployment}
+      - **Container Orchestration:** {container_orchestration}
+      - **CI/CD:** {cicd_pipeline}
+      - **Infrastructure as Code:** {iac_tool}
+      - **Monitoring:** {monitoring_platform}
+      {{/if}}
+      
+      ### 📝 Your Request
+      {request_echo_content}
+      
+      ### 🔍 Next Steps
+      {next_steps_content}
+  
   compact_format: &compact_format_base
     base_structure: |
       ## 🧠 CORTEX {operation}
@@ -53,6 +89,133 @@ base_templates:
       
       🔍 Next Steps: {next_steps_content}
 templates:
+  onboarding:
+    <<: *standard_5_part_base
+    name: User Onboarding
+    triggers:
+    - onboard
+    - onboarding
+    - setup profile
+    - first time
+    - new user
+    response_type: interactive
+    operation_name: Onboarding
+    understanding_content: "You're starting the onboarding process to personalize CORTEX for your experience level, interaction preferences, and tech stack."
+    challenge_content: "No Challenge - This quick 3-question setup helps CORTEX adapt to your needs."
+    response_content: |
+      Welcome! Let's personalize CORTEX in ~30 seconds.
+      
+      **What we'll capture:**
+      1. Your experience level (affects explanation depth)
+      2. Your interaction preference (autonomous/guided/educational/pair)
+      3. Your tech stack context (optional - for deployment recommendations)
+      
+      **Important:** Tech stack is context for deployment, NOT a constraint.  
+      CORTEX will always recommend the best solution first.
+      
+      {onboarding_question}
+    request_echo_content: "Set up CORTEX profile"
+    next_steps_content: |
+      Answer the current question to proceed.
+      You can update your profile anytime with `update profile`.
+  
+  tech_implementation_example:
+    <<: *tech_aware_base
+    name: Tech-Aware Implementation (Example)
+    triggers:
+    - implement caching
+    - add caching
+    - cache layer
+    response_type: tech_aware
+    operation_name: Caching Implementation
+    understanding_content: "You want to implement a caching layer to improve application performance."
+    challenge_content: "No Challenge - Caching is a proven performance optimization pattern."
+    recommended_solution: |
+      **Best Practice: Redis**
+      Redis is the industry-standard for application caching with:
+      - Sub-millisecond response times
+      - Rich data structures (strings, hashes, sets, sorted sets)
+      - Built-in persistence options
+      - Pub/sub messaging capabilities
+      - Cluster support for horizontal scaling
+      
+      ```python
+      # Example: Redis caching implementation
+      import redis
+      from functools import wraps
+      
+      redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+      
+      def cache_result(ttl=300):
+          def decorator(func):
+              @wraps(func)
+              def wrapper(*args, **kwargs):
+                  cache_key = f"{func.__name__}:{args}:{kwargs}"
+                  cached = redis_client.get(cache_key)
+                  if cached:
+                      return cached
+                  result = func(*args, **kwargs)
+                  redis_client.setex(cache_key, ttl, result)
+                  return result
+              return wrapper
+          return decorator
+      ```
+    company_aligned_implementation: |
+      **Azure Cache for Redis**
+      Deploy Redis on Azure for seamless integration with your stack:
+      - Fully managed Redis service (no server maintenance)
+      - Enterprise-grade SLA (99.9% uptime)
+      - Built-in security (VNet integration, private endpoints)
+      - Automatic backups and geo-replication
+      - Integration with Azure Monitor for observability
+      
+      **Deployment via {iac_tool}:**
+      ```hcl
+      # Terraform example for Azure Cache for Redis
+      resource "azurerm_redis_cache" "main" {
+        name                = "myapp-cache"
+        location            = azurerm_resource_group.main.location
+        resource_group_name = azurerm_resource_group.main.name
+        capacity            = 1
+        family              = "C"
+        sku_name            = "Standard"
+        enable_non_ssl_port = false
+        minimum_tls_version = "1.2"
+      }
+      ```
+      
+      **Connection String (stored in Azure Key Vault):**
+      ```python
+      # Same Redis client code - just different connection string
+      redis_client = redis.Redis(
+          host=os.environ['AZURE_REDIS_HOST'],
+          port=6380,
+          password=os.environ['AZURE_REDIS_KEY'],
+          ssl=True
+      )
+      ```
+      
+      **Monitoring via {monitoring_platform}:**
+      - Cache hit/miss rates
+      - Memory usage and eviction metrics
+      - Connection counts and latency
+    request_echo_content: "Implement caching layer with Redis"
+    next_steps_content: |
+      1. **Choose deployment approach:**
+         - ✅ **Redis on {cloud_deployment}** (managed service, recommended)
+         - Local Redis for development (docker-compose)
+      
+      2. **Install dependencies:**
+         ```bash
+         pip install redis
+         ```
+      
+      3. **Add caching decorator to expensive operations**
+      
+      4. **Configure monitoring in {monitoring_platform}**
+      
+      5. **Load test to measure performance improvement**
+  
   help_table:
     <<: *standard_5_part_base
     name: Help Table
