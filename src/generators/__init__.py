@@ -9,9 +9,11 @@ from .dashboard_template_generator import (
     DashboardLayer,
     VisualizationConfig
 )
+from .epm_dashboard_adapter import EPMDashboardAdapter
 
 __all__ = [
     'DashboardTemplateGenerator',
     'DashboardLayer',
-    'VisualizationConfig'
+    'VisualizationConfig',
+    'EPMDashboardAdapter'
 ]

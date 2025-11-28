@@ -1901,26 +1901,81 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
     
     def _generate_dashboard(self, report: AlignmentReport, conflicts: List[Conflict]) -> str:
         """
-        Generate visual health dashboard.
+        Generate visual health dashboards (text + interactive HTML).
         
         Phase 3.12: Align 2.0 enhancement
+        Phase 4: Documentation Format Enforcement - Interactive HTML dashboards
+        
+        Generates two outputs:
+        1. Text dashboard - Console output (backward compatible)
+        2. HTML dashboard - Interactive D3.js visualizations (new)
         
         Args:
             report: Alignment report
             conflicts: List of conflicts
             
         Returns:
-            Formatted dashboard string
+            Formatted text dashboard string (HTML saved to file)
         """
-        logger.info("Generating health dashboard...")
+        logger.info("Generating health dashboards...")
         
-        generator = DashboardGenerator(self.project_root)
-        dashboard = generator.generate_dashboard(report, conflicts)
+        # Generate text dashboard (existing functionality)
+        text_generator = DashboardGenerator(self.project_root)
+        text_dashboard = text_generator.generate_dashboard(report, conflicts)
         
         # Save to history
-        generator.save_history(report)
+        text_generator.save_history(report)
         
-        return dashboard
+        # Generate interactive HTML dashboard (new functionality)
+        try:
+            from src.generators import EPMDashboardAdapter, DashboardTemplateGenerator
+            
+            logger.info("Generating interactive HTML dashboard...")
+            
+            # Transform report data to dashboard layers
+            adapter = EPMDashboardAdapter()
+            layers = adapter.transform_alignment_report(report, conflicts)
+            
+            # Determine status
+            if report.is_healthy:
+                status = "healthy"
+            elif report.has_warnings:
+                status = "warning"
+            else:
+                status = "critical"
+            
+            # Generate HTML
+            html_generator = DashboardTemplateGenerator()
+            html_content = html_generator.generate_dashboard(
+                operation="system-alignment",
+                title="CORTEX System Alignment Report",
+                data={'overall_health': report.overall_health, 'timestamp': report.timestamp.isoformat()},
+                layers=layers,
+                metadata={
+                    'author': 'CORTEX System Alignment',
+                    'status': status,
+                    'generated_at': report.timestamp.isoformat()
+                }
+            )
+            
+            # Save HTML dashboard
+            reports_dir = self.cortex_brain / "documents" / "reports"
+            reports_dir.mkdir(parents=True, exist_ok=True)
+            
+            timestamp_str = report.timestamp.strftime("%Y%m%d_%H%M%S")
+            html_file = reports_dir / f"SYSTEM_ALIGNMENT_DASHBOARD_{timestamp_str}.html"
+            
+            with open(html_file, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            
+            logger.info(f"✅ Interactive dashboard saved: {html_file}")
+            logger.info(f"   Open in browser for D3.js visualizations")
+            
+        except Exception as e:
+            logger.warning(f"Failed to generate HTML dashboard: {e}")
+            logger.info("Continuing with text dashboard only...")
+        
+        return text_dashboard
     
     def _apply_interactive_fixes(self, report: AlignmentReport, monitor: Optional[ProgressMonitor]) -> List[str]:
         """
