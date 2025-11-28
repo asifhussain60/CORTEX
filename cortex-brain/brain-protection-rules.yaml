@@ -73,6 +73,7 @@ tier0_instincts:
   - "CORTEX_PROMPT_FILE_PROTECTION"  # CRITICAL: CORTEX.prompt.md NEVER renamed, safe update procedure enforced
   - "GIT_CHECKPOINT_ENFORCEMENT"  # CRITICAL: Create git checkpoint before starting development work
   - "PREVENT_DIRTY_STATE_WORK"  # CRITICAL: Never work on dirty branches without user consent
+  - "GIT_COMMIT_PRIVACY_VALIDATION"  # CRITICAL: NEVER commit files with absolute paths (C:\, /home/, machine names)
   - "SECURITY_INJECTION"  # NEW: Prevent SQL injection, XSS, command injection
   - "SECURITY_AUTHENTICATION"  # NEW: Enforce authentication/authorization best practices
   - "BRAIN_ARCHITECTURE_INTEGRITY"  # NEW: Protect 4-tier brain architecture from degradation
@@ -2746,6 +2747,87 @@ protection_layers:
           - Create test_publish_privacy.py that scans for leaks
           - Add pre-publish hook that runs privacy scan
           - Use cortex.config.template.json instead of cortex.config.json
+      
+      - rule_id: "GIT_COMMIT_PRIVACY_VALIDATION"
+        name: "Git Commit Privacy Validation (Tier 0 Instinct)"
+        severity: "blocked"
+        description: "Git commits MUST NOT contain files with absolute paths or machine-specific data"
+        
+        detection:
+          patterns:
+            - "C:\\\\"
+            - "D:\\\\"
+            - "/home/[a-z]+"
+            - "/Users/[a-z]+"
+            - "AHHOME"
+            - "HOSTNAME"
+            - "[A-Z]+-PC"  # Machine names like DESKTOP-PC, LAPTOP-PC
+          scope: ["staged_files", "git_diff"]
+        
+        verification_required:
+          - type: "pre_commit_privacy_scan"
+            description: "Scan all staged files for absolute paths before commit"
+            requirement: "Zero files with absolute paths (C:\\, D:\\, /home/, /Users/, machine names)"
+          
+          - type: "git_diff_validation"
+            description: "Validate git diff contains only relative paths"
+            requirement: "All file references MUST use relative paths from repo root"
+          
+          - type: "merge_content_validation"
+            description: "Validate merged content does not introduce privacy leaks"
+            requirement: "Git merge operations MUST scan resulting files before accepting"
+        
+        alternatives:
+          - "Use relative paths: src/, cortex-brain/, tests/"
+          - "Use Path() objects with relative references"
+          - "Use environment variables: os.getenv('CORTEX_ROOT')"
+          - "Use config templates with placeholders: {{CORTEX_ROOT}}"
+        
+        evidence_template: "Staged file '{file_path}' line {line_num} contains absolute path: '{privacy_leak}'"
+        
+        rationale: |
+          Git Commit Privacy Validation (Tier 0 Instinct)
+          
+          Issue identified (2025-11-28):
+          - Git merge operations could include files with machine-specific paths
+          - No validation of staged files before commit
+          - SKULL-006 enforced privacy for publish, but not for git commits
+          - Privacy leaks in git history when files pushed to remote
+          
+          Examples of violations:
+          ❌ C:\PROJECTS\CORTEX\src\module.py (Windows absolute path)
+          ❌ D:\Work\data.json (alternate drive)
+          ❌ /home/asif/code/file.py (Unix home directory)
+          ❌ /Users/asif/Desktop/temp.log (macOS user directory)
+          ❌ AHHOME environment variable references
+          
+          Impact:
+          - Privacy violation (exposes usernames, machine names, file structure)
+          - Git history contamination (absolute paths persist in history)
+          - Merge conflicts when paths differ across machines
+          - Unprofessional git log (machine-specific references)
+          
+          This Tier 0 instinct prevents privacy leaks by:
+          1. Scanning staged files before EVERY commit
+          2. Blocking commits with absolute path violations
+          3. Validating merge results before accepting
+          4. Integration with PhaseCheckpointManager for automatic enforcement
+          5. Providing actionable error messages with file + line numbers
+          
+          Implementation (git-enhancements-feature-plan.md):
+          - PhaseCheckpointManager.validate_staged_files_privacy()
+          - Pre-commit hook: git diff --cached | scan for patterns
+          - Error message shows file, line number, and violation
+          - Suggests remediation: relative paths, env vars, config templates
+          - Checkpoint creation blocked until violations resolved
+          
+          Test coverage:
+          - test_validate_staged_files_blocks_absolute_paths()
+          - test_validate_staged_files_blocks_unix_home_paths()
+          - test_validate_staged_files_blocks_machine_names()
+          - test_checkpoint_creation_fails_on_privacy_violation()
+          
+          This extends SKULL-006 from publish-time to commit-time enforcement.
       
       - rule_id: "SKULL_HEADER_FOOTER_IN_RESPONSE"
         name: "Faculty Integrity Check (SKULL-007)"
