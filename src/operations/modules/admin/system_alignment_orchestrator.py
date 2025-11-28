@@ -47,6 +47,9 @@ from src.utils.progress_monitor import ProgressMonitor
 from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
 from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 
+# Import centralized config for cross-platform path resolution
+from src.config import config
+
 logger = logging.getLogger(__name__)
 
 
@@ -197,8 +200,10 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         """Initialize system alignment orchestrator."""
         super().__init__()
         self.context = context or {}
-        self.project_root = Path(self.context.get("project_root", Path.cwd()))
-        self.cortex_brain = self.project_root / "cortex-brain"
+        
+        # Use centralized config for cross-platform path resolution
+        self.project_root = config.root_path
+        self.cortex_brain = config.brain_path
         
         # Load configuration
         self.config = self._load_config()
