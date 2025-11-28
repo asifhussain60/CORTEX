@@ -383,6 +383,39 @@ templates:
     response_content: "[Natural language explanation]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
+  rulebook_welcome_banner:
+    name: Rulebook Welcome Banner
+    triggers:
+    - rulebook_welcome_banner
+    - welcome_banner
+    - governance_banner
+    response_type: banner
+    content: |
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║                  🧠 CORTEX GOVERNANCE RULES ACTIVE                       ║
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      
+      CORTEX operates under strict governance rules to ensure quality and safety.
+      
+      📋 KEY RULES:
+      - All feature work requires Definition of Ready (DoR) before starting
+      - All completions require Definition of Done (DoD) validation
+      - Git checkpoint required before high-risk operations
+      - Test coverage ≥80% for all production code
+      - Architecture review for structural changes
+      
+      📖 QUICK ACCESS:
+      - Say "show rules" or "rulebook" to see full governance document
+      - Say "help" to see available commands (includes governance section)
+      - Say "compliance" to check your current compliance status
+      
+      ✨ DISMISSAL:
+      - This banner appears once per session
+      - Say "got it" or continue with your request to proceed
+      
+      Full Rulebook: cortex-brain/brain-protection-rules.yaml
+      ╚══════════════════════════════════════════════════════════════════════════╝
+  
   introduction_discovery:
     name: CORTEX Discovery & Introduction
     triggers:
