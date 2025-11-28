@@ -2116,6 +2116,71 @@ templates:
     response_type: detailed
     handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
 
+  diagram_regeneration:
+    <<: *standard_5_part_base
+    name: Diagram Regeneration
+    triggers:
+    - regenerate diagrams
+    - refresh diagrams
+    - update diagrams
+    - rebuild diagrams
+    - diagram regeneration
+    response_type: detailed
+    handler: src.orchestrators.diagram_regeneration_orchestrator.DiagramRegenerationOrchestrator
+
+  commit_orchestrator:
+    <<: *standard_5_part_base
+    name: Commit and Sync
+    triggers:
+    - commit
+    - commit and push
+    - sync with origin
+    - commit sync
+    - push changes
+    - sync repository
+    - commit and sync
+    response_type: detailed
+    handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
+
+  rollback_orchestrator:
+    <<: *standard_5_part_base
+    name: Rollback to Checkpoint
+    triggers:
+    - rollback
+    - rollback to checkpoint
+    - undo changes
+    - restore checkpoint
+    - git rollback
+    - revert changes
+    response_type: detailed
+    handler: src.orchestrators.rollback_orchestrator.RollbackOrchestrator
+
+  ux_enhancement:
+    <<: *standard_5_part_base
+    name: UX Enhancement
+    triggers:
+    - enhance ux
+    - improve user experience
+    - ux enhancement
+    - improve interface
+    - enhance ui
+    - user experience improvement
+    response_type: detailed
+    handler: src.orchestrators.ux_enhancement_orchestrator.UXEnhancementOrchestrator
+
+  onboarding_orchestrator:
+    <<: *standard_5_part_base
+    name: User Onboarding
+    triggers:
+    - start onboarding
+    - begin onboarding
+    - onboard user
+    - setup user
+    - user setup
+    - initialize user
+    response_type: interactive
+    handler: src.orchestrators.onboarding_orchestrator.OnboardingOrchestrator
+
 routing:
   default: fallback
   greeting_triggers:
