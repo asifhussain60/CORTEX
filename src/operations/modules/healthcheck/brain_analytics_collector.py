@@ -206,7 +206,7 @@ class BrainAnalyticsCollector:
             # Retention rate (conversations accessed in last 30 days)
             thirty_days_ago = (datetime.now() - timedelta(days=30)).timestamp()
             cursor.execute(
-                "SELECT COUNT(*) FROM conversations WHERE last_accessed > ?",
+                "SELECT COUNT(*) FROM conversations WHERE last_activity > ?",
                 (thirty_days_ago,)
             )
             recent_access = cursor.fetchone()[0]
@@ -275,7 +275,7 @@ class BrainAnalyticsCollector:
             # Recent entities (last 7 days)
             seven_days_ago = (datetime.now() - timedelta(days=7)).timestamp()
             cursor.execute(
-                "SELECT COUNT(*) FROM entities WHERE created_at > ?",
+                "SELECT COUNT(*) FROM entities WHERE first_seen > ?",
                 (seven_days_ago,)
             )
             recent_entities = cursor.fetchone()[0]

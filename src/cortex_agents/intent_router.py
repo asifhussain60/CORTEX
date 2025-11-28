@@ -143,6 +143,15 @@ class IntentRouter(BaseAgent):
                 "code review", "review code", "pr review", "review pr", "pull request review",
                 "review pull request"
             ],
+            # Profile management (NEW - User Profile System 3.2.1)
+            IntentType.UPDATE_PROFILE: [
+                "update profile", "change profile", "modify profile", "edit profile",
+                "update preferences", "change preferences", "modify preferences",
+                "update my profile", "change my profile", "update settings",
+                "change settings", "profile settings", "update tech stack",
+                "change tech stack", "update experience", "change experience",
+                "update mode", "change mode", "update interaction", "change interaction"
+            ],
         }
         
         # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
@@ -267,6 +276,12 @@ class IntentRouter(BaseAgent):
                 'rules_to_consider': ['CODE_QUALITY', 'SECURITY', 'DEFINITION_OF_DONE'],
                 'skip_summary_generation': False,  # Reviews need detailed reports
                 'requires_documentation': True
+            },
+            # User profile management (NEW - User Profile System 3.2.1)
+            IntentType.UPDATE_PROFILE: {
+                'rules_to_consider': [],  # No governance rules - user preference only
+                'skip_summary_generation': True,  # Interactive flow, no summary needed
+                'requires_documentation': False
             }
         }
 
@@ -319,6 +334,24 @@ class IntentRouter(BaseAgent):
         start_time = self.logger.info("Starting intent routing")
         
         try:
+            # Step -1: Load user profile and inject into request (CORTEX 3.2.1)
+            if self.tier1 and not request.user_profile:
+                try:
+                    profile = self.tier1.get_profile()
+                    if profile:
+                        request.user_profile = profile
+                        self.logger.info(f"Loaded user profile: {profile['interaction_mode']}/{profile['experience_level']}")
+                    else:
+                        # No profile exists - trigger onboarding
+                        self.logger.info("No user profile found - onboarding required")
+                        return self._trigger_onboarding(request)
+                except Exception as e:
+                    self.logger.warning(f"Failed to load user profile: {e}")
+            
+            # Step -0.5: Check for profile update request (CORTEX 3.2.1)
+            if self._is_profile_update_request(request.user_message):
+                return self._handle_profile_update(request)
+            
             # Step 0: Check for images and analyze automatically (PRIORITY)
             if self.vision_orchestrator:
                 vision_result = self._process_images(request)
@@ -985,3 +1018,67 @@ class IntentRouter(BaseAgent):
         except Exception as e:
             self.logger.warning(f"Pattern suggestion failed: {e}")
             return []
+    
+    def _trigger_onboarding(self, request: AgentRequest) -> AgentResponse:
+        """
+        Trigger onboarding flow for first-time users (CORTEX 3.2.1).
+        
+        Args:
+            request: The agent request
+        
+        Returns:
+            AgentResponse indicating onboarding is required
+        """
+        return AgentResponse(
+            success=True,
+            result={"action": "onboarding_required"},
+            message="User profile not found. Onboarding orchestrator will be triggered.",
+            agent_name=self.name,
+            metadata={
+                "requires_onboarding": True,
+                "original_message": request.user_message
+            }
+        )
+    
+    def _is_profile_update_request(self, message: str) -> bool:
+        """
+        Check if message is a profile update request (CORTEX 3.2.1).
+        
+        Args:
+            message: User message
+        
+        Returns:
+            True if message contains profile update keywords
+        """
+        message_lower = message.lower()
+        
+        # Check for explicit profile update keywords
+        update_keywords = self.INTENT_KEYWORDS.get(IntentType.UPDATE_PROFILE, [])
+        return any(keyword in message_lower for keyword in update_keywords)
+    
+    def _handle_profile_update(self, request: AgentRequest) -> AgentResponse:
+        """
+        Handle profile update request by routing to onboarding orchestrator (CORTEX 3.2.1).
+        
+        Args:
+            request: The agent request
+        
+        Returns:
+            AgentResponse indicating profile update is being handled
+        """
+        return AgentResponse(
+            success=True,
+            result={"action": "profile_update", "intent": IntentType.UPDATE_PROFILE.value},
+            message="Profile update requested. Onboarding orchestrator will handle the update flow.",
+            agent_name=self.name,
+            metadata={
+                "requires_profile_update": True,
+                "current_profile": request.user_profile,
+                "original_message": request.user_message
+            },
+            next_actions=[
+                "Show profile update options",
+                "Allow user to select what to update (experience/mode/tech_stack)",
+                "Process updates and confirm"
+            ]
+        )

@@ -102,6 +102,8 @@ nav:
   - Telemetry Guide: telemetry/PERFORMANCE-TELEMETRY-GUIDE.md
 - Case Studies:
   - Overview: case-studies/index.md
+  - CORTEX Optimization:
+    - Token Optimization: case-studies/cortex-optimization/index.md
   - NOOR CANVAS:
     - Overview: case-studies/noor-canvas/index.md
     - SignalR Refactoring:

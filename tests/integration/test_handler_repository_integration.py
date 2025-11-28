@@ -181,7 +181,7 @@ async def test_update_pattern_confidence_modifies_existing_pattern(unit_of_work)
         pattern_name="Confidence Test",
         pattern_type="test",
         pattern_content="content",
-        source_conversation_id="conv-001"
+        source_conversation_id="conv-001",
         confidence_score=0.75,
         learned_at=datetime.now()
     )
@@ -258,7 +258,7 @@ async def test_delete_conversation_cascades_patterns(unit_of_work):
         pattern_name="Cascade Pattern",
         pattern_type="test",
         pattern_content="content",
-        source_conversation_id="test-conv-cascade"
+        source_conversation_id="test-conv-cascade",
         confidence_score=0.85,
         learned_at=datetime.now()
     )
@@ -324,7 +324,7 @@ async def test_get_pattern_by_id_retrieves_from_database(unit_of_work):
         pattern_name="Retrieve Pattern",
         pattern_type="test",
         pattern_content="def test(): return True",
-        source_conversation_id="conv-001"
+        source_conversation_id="conv-001",
         confidence_score=0.90,
         learned_at=datetime.now()
     )
@@ -394,7 +394,7 @@ async def test_get_recent_conversations_returns_sorted_list(unit_of_work):
             title=f"Conversation {i}",
             content="User: Test\nAssistant: Response\nUser: More\nAssistant: More response",
             file_path=f"/test/recent-{i}.json",
-            quality_score=0.85
+            quality_score=0.85,
             captured_at=datetime(2024, 1, i+1, 12, 0, 0)  # Different dates
         )
         await capture_handler.handle(command)

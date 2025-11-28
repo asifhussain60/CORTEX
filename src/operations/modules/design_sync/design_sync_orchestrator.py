@@ -1,13 +1,8 @@
 """
 CORTEX Design Synchronization Orchestrator
 
-Resolves the critical problem of design-implementation drift by:
-1. Discovering actual implementation state (modules, operations, tests, plugins)
-2. Analyzing gaps between design documents and reality
-3. Integrating optimization recommendations from optimize_cortex
-4. Converting verbose MD documents to structured YAML schemas
-5. Consolidating multiple status files into ONE coherent status document
-6. Applying all changes with git tracking for audit trail
+Resolves design-implementation drift by discovering state, analyzing gaps,
+integrating optimizations, consolidating status files, and tracking changes with git.
 
 Always works on LATEST design version (auto-detects, currently CORTEX 2.0).
 
@@ -19,7 +14,6 @@ Version: 1.0
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Set
-from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import subprocess
 import json
@@ -38,6 +32,20 @@ from src.operations.base_operation_module import (
 )
 from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
 from src.operations.operation_header_formatter import OperationHeaderFormatter
+from src.operations.modules.design_sync.design_sync_models import (
+    ImplementationState,
+    DesignState,
+    GapAnalysis,
+    SyncMetrics
+)
+from src.operations.modules.design_sync.status_file_consolidator import StatusFileConsolidator
+from src.operations.modules.design_sync.design_sync_helpers import RecentUpdatesGenerator, CommitReporter
+from src.operations.modules.design_sync.implementation_discovery import ImplementationDiscovery
+from src.operations.modules.design_sync.progress_helpers import (
+    PhaseProgressCalculator,
+    ProgressBarGenerator,
+    SyncContextGenerator
+)
 from .track_config import (
     MultiTrackConfig,
     MachineTrack,
@@ -47,56 +55,6 @@ from .track_config import (
 from .track_templates import TrackDocumentTemplates
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class ImplementationState:
-    """Current implementation reality."""
-    operations: Dict[str, Dict] = field(default_factory=dict)
-    modules: Dict[str, Path] = field(default_factory=dict)
-    tests: Dict[str, int] = field(default_factory=dict)
-    plugins: List[str] = field(default_factory=list)
-    agents: List[str] = field(default_factory=list)
-    total_modules: int = 0
-    implemented_modules: int = 0
-    completion_percentage: float = 0.0
-
-
-@dataclass
-class DesignState:
-    """Design document state."""
-    version: str = "2.0"
-    design_files: List[Path] = field(default_factory=list)
-    status_files: List[Path] = field(default_factory=list)
-    md_documents: List[Path] = field(default_factory=list)
-    yaml_documents: List[Path] = field(default_factory=list)
-
-
-@dataclass
-class GapAnalysis:
-    """Gaps between design and implementation."""
-    overclaimed_completions: List[str] = field(default_factory=list)
-    underclaimed_completions: List[str] = field(default_factory=list)
-    missing_documentation: List[str] = field(default_factory=list)
-    inconsistent_counts: List[Dict[str, Any]] = field(default_factory=list)
-    redundant_status_files: List[Path] = field(default_factory=list)
-    verbose_md_candidates: List[Path] = field(default_factory=list)
-
-
-@dataclass
-class SyncMetrics:
-    """Metrics collected during sync."""
-    sync_id: str
-    timestamp: datetime
-    implementation_discovered: bool = False
-    gaps_analyzed: int = 0
-    optimizations_integrated: int = 0
-    md_to_yaml_converted: int = 0
-    status_files_consolidated: int = 0
-    git_commits: List[str] = field(default_factory=list)
-    duration_seconds: float = 0.0
-    errors: List[str] = field(default_factory=list)
-    improvements: Dict[str, Any] = field(default_factory=dict)
 
 
 class DesignSyncOrchestrator(BaseOperationModule):
@@ -640,65 +598,9 @@ class DesignSyncOrchestrator(BaseOperationModule):
         project_root: Path,
         metrics: SyncMetrics
     ) -> ImplementationState:
-        """
-        Discover actual implementation state by scanning the codebase.
-        
-        Returns:
-            ImplementationState with accurate counts
-        """
-        state = ImplementationState()
-        
-        # Discover operations from YAML
-        operations_yaml = project_root / 'cortex-operations.yaml'
-        if operations_yaml.exists():
-            with open(operations_yaml, encoding='utf-8') as f:
-                ops_data = yaml.safe_load(f)
-                if 'operations' in ops_data:
-                    state.operations = ops_data['operations']
-        
-        # Discover modules by scanning filesystem
-        modules_dir = project_root / 'src' / 'operations' / 'modules'
-        if modules_dir.exists():
-            for py_file in modules_dir.rglob('*.py'):
-                if py_file.name != '__init__.py' and py_file.name != '__pycache__':
-                    module_name = py_file.stem
-                    state.modules[module_name] = py_file
-        
-        state.total_modules = len(state.modules)
-        state.implemented_modules = len(state.modules)
-        state.completion_percentage = (
-            100.0 if state.total_modules > 0 
-            else 0.0
-        )
-        
-        # Discover tests
-        tests_dir = project_root / 'tests'
-        if tests_dir.exists():
-            for test_file in tests_dir.rglob('test_*.py'):
-                # Count test functions in file
-                test_count = 0
-                try:
-                    with open(test_file, encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                        test_count = len(re.findall(r'^\s*def test_', content, re.MULTILINE))
-                    state.tests[str(test_file.relative_to(project_root))] = test_count
-                except Exception as e:
-                    logger.warning(f"Could not read test file {test_file}: {e}")
-        
-        # Discover plugins
-        plugins_dir = project_root / 'src' / 'plugins'
-        if plugins_dir.exists():
-            for plugin_file in plugins_dir.glob('*_plugin.py'):
-                state.plugins.append(plugin_file.stem)
-        
-        # Discover agents
-        agents_dir = project_root / 'src' / 'cortex_agents'
-        if agents_dir.exists():
-            for agent_file in agents_dir.glob('*_agent.py'):
-                state.agents.append(agent_file.stem)
-        
-        metrics.implementation_discovered = True
-        return state
+        """Discover implementation state (delegated to ImplementationDiscovery)."""
+        discovery = ImplementationDiscovery()
+        return discovery.discover(project_root, metrics)
     
     def _discover_design_documents(
         self,
@@ -888,148 +790,23 @@ class DesignSyncOrchestrator(BaseOperationModule):
         return transformations
     
     def _calculate_phase_progress(self, content: str) -> tuple[Dict[str, int], List[str]]:
-        """
-        Calculate phase completion percentages AND execution order by parsing Current Focus.
-        
-        Returns:
-            Tuple of (phase_progress_dict, execution_order_list)
-            - phase_progress_dict: Maps phase names to completion percentages (0-100)
-            - execution_order_list: List of phase names in user-specified execution order
-        """
-        # Default percentages (fallback if parsing fails)
-        phase_progress = {
-            'Phase 0 - Quick Wins': 100,
-            'Phase 1 - Core Modularization': 100,
-            'Phase 2 - Ambient + Workflow': 100,
-            'Phase 3 - Modular Entry Validation': 100,
-            'Phase 4 - Advanced CLI & Integration': 100,
-            'Phase 5 - Risk Mitigation & Testing': 85,
-            'Phase 6 - Performance Optimization': 100,
-            'Phase 7 - Documentation & Polish': 70,
-            'Phase 8 - Migration & Deployment': 25,
-            'Phase 9 - Advanced Capabilities': 0,
-            'Phase 10 - Production Hardening': 0,
-            'Phase 11 - Context Helper Plugin': 0,
-        }
-        
-        # Track execution order (phases mentioned in Current Focus)
-        execution_order = []
-        
-        # Try to extract percentages AND order from Current Focus section
-        focus_match = re.search(r'## 🎯 Current Focus(.*?)(?=##|$)', content, re.DOTALL)
-        if focus_match:
-            focus_section = focus_match.group(1)
-            
-            # Look for "\*\*Phase X (YY% complete" patterns (must start a line with **)
-            # This prevents matching "Phase 2 Reality Check:" style headers
-            for match in re.finditer(r'\*\*Phase (\d+) \((\d+)%\s+complete', focus_section):
-                phase_num = int(match.group(1))
-                percentage = int(match.group(2))
-                
-                # Map phase number to full phase name
-                for phase_name in phase_progress.keys():
-                    if phase_name.startswith(f'Phase {phase_num} -'):
-                        phase_progress[phase_name] = percentage
-                        # Only add if not already in execution order (prevent duplicates)
-                        if phase_name not in execution_order:
-                            execution_order.append(phase_name)
-                        break
-        
-        # If no execution order found, fall back to numerical order
-        if not execution_order:
-            execution_order = list(phase_progress.keys())
-        else:
-            # Add remaining phases (not in Current Focus) at the end in numerical order
-            for phase_name in phase_progress.keys():
-                if phase_name not in execution_order:
-                    execution_order.append(phase_name)
-        
-        return phase_progress, execution_order
+        """Calculate phase progress (delegated to PhaseProgressCalculator)."""
+        calculator = PhaseProgressCalculator()
+        return calculator.calculate(content)
     
     def _generate_progress_bar(self, percentage: int, width: int = 32) -> str:
-        """
-        Generate visual progress bar with █ (complete) and ░ (remaining).
-        
-        Args:
-            percentage: Completion percentage (0-100)
-            width: Total width of progress bar in characters
-            
-        Returns:
-            Progress bar string like "[████████████████████░░░░░░░░]"
-        """
-        filled = int(width * percentage / 100)
-        remaining = width - filled
-        return f"[{'█' * filled}{'░' * remaining}]"
+        """Generate progress bar (delegated to ProgressBarGenerator)."""
+        generator = ProgressBarGenerator()
+        return generator.generate(percentage, width)
     
     def _generate_recent_updates(
         self,
         project_root: Path,
         lookback_days: int = 1
     ) -> List[str]:
-        """
-        Generate recent updates list from git commit history.
-        
-        Parses git log for the last N days and extracts meaningful updates
-        to auto-generate the "Recent Updates" section in status documents.
-        
-        Args:
-            project_root: Project root directory
-            lookback_days: Number of days to look back in git history
-            
-        Returns:
-            List of update strings with emoji prefixes
-            
-        Example output:
-            [
-                "✅ Build script updated with critical files manifest",
-                "✅ Verification script created (350 lines)",
-                "✅ LICENSE file added (proprietary)"
-            ]
-        """
-        updates = []
-        
-        try:
-            # Get commits from last N days
-            since_date = (datetime.now() - timedelta(days=lookback_days)).strftime('%Y-%m-%d')
-            
-            result = subprocess.run(
-                ['git', 'log', f'--since={since_date}', '--oneline', '--no-merges'],
-                cwd=project_root,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            
-            # Parse commit messages
-            for line in result.stdout.strip().split('\n'):
-                if not line:
-                    continue
-                
-                # Extract commit message (after hash)
-                parts = line.split(' ', 1)
-                if len(parts) < 2:
-                    continue
-                
-                commit_msg = parts[1].strip()
-                
-                # Skip internal/noise commits
-                if any(skip in commit_msg.lower() for skip in ['wip', 'temp', 'fixup', 'test commit']):
-                    continue
-                
-                # Categorize and format update
-                update = self._format_commit_as_update(commit_msg, project_root)
-                if update and update not in updates:  # Deduplicate
-                    updates.append(update)
-            
-            # Limit to most recent 10 updates
-            return updates[:10]
-        
-        except subprocess.CalledProcessError as e:
-            logger.warning(f"Could not parse git history: {e}")
-            return []
-        except Exception as e:
-            logger.warning(f"Error generating recent updates: {e}")
-            return []
+        """Generate recent updates (delegated to RecentUpdatesGenerator)."""
+        generator = RecentUpdatesGenerator(self._format_commit_as_update)
+        return generator.generate(project_root, lookback_days)
     
     def _format_commit_as_update(self, commit_msg: str, project_root: Path) -> Optional[str]:
         """
@@ -1074,52 +851,9 @@ class DesignSyncOrchestrator(BaseOperationModule):
         impl_state: ImplementationState,
         transformations: Dict[str, Any]
     ) -> str:
-        """
-        Add contextual suffix to sync timestamp based on what changed.
-        
-        Analyzes the updates and transformations to generate a meaningful
-        description like "(design_sync + deployment updates)" instead of
-        just generic "(design_sync)".
-        
-        Args:
-            updates: Recent updates list
-            impl_state: Implementation state
-            transformations: Transformations applied
-            
-        Returns:
-            Contextual suffix string
-        """
-        context_keywords = []
-        
-        # Analyze recent updates for themes
-        update_text = ' '.join(updates).lower()
-        
-        if 'deploy' in update_text or 'package' in update_text:
-            context_keywords.append('deployment updates')
-        
-        if 'build' in update_text or 'script' in update_text:
-            context_keywords.append('build automation')
-        
-        if 'test' in update_text and 'fix' in update_text:
-            context_keywords.append('test fixes')
-        
-        if 'doc' in update_text or 'documentation' in update_text:
-            context_keywords.append('documentation')
-        
-        # Check transformations
-        if transformations.get('md_to_yaml_converted', 0) > 0:
-            context_keywords.append('YAML conversion')
-        
-        if transformations.get('status_files_consolidated', 0) > 1:
-            context_keywords.append('status consolidation')
-        
-        # Build context string
-        if context_keywords:
-            # Use first 2 most relevant keywords
-            context = ' + '.join(context_keywords[:2])
-            return f"(design_sync + {context})"
-        else:
-            return "(design_sync)"
+        """Add sync context (delegated to SyncContextGenerator)."""
+        generator = SyncContextGenerator()
+        return generator.generate(updates, impl_state, transformations)
     
     def _consolidate_status_files(
         self,
@@ -1130,163 +864,21 @@ class DesignSyncOrchestrator(BaseOperationModule):
         project_root: Path,
         metrics: SyncMetrics
     ) -> Optional[Path]:
-        """
-        Consolidate multiple status files into ONE authoritative document.
-        
-        Returns:
-            Path to consolidated status file
-        """
-        # Use CORTEX2-STATUS.MD as primary (it has the visual bars)
-        primary = None
-        for status_file in status_files:
-            if 'CORTEX2-STATUS' in status_file.name:
-                primary = status_file
-                break
-        
-        if not primary and status_files:
-            primary = status_files[0]
-        
-        if not primary:
-            return None
-        
-        # Read current content with proper encoding
-        try:
-            content = primary.read_text(encoding='utf-8', errors='ignore')
-        except Exception as e:
-            logger.error(f"Failed to read {primary.name}: {e}")
-            return None
-        
-        # Update with accurate counts
-        updates = []
-        
-        # Update total modules
-        content = re.sub(
-            r'Total Modules:\*\* \d+',
-            f'Total Modules:** {impl_state.total_modules}',
-            content
+        """Consolidate multiple status files (delegated to StatusFileConsolidator)."""
+        consolidator = StatusFileConsolidator(
+            self._generate_recent_updates,
+            self._calculate_phase_progress,
+            self._generate_progress_bar,
+            self._add_sync_context
         )
-        updates.append(f"Updated total modules: {impl_state.total_modules}")
-        
-        # Update implemented modules
-        content = re.sub(
-            r'Implemented:\*\* \d+ modules',
-            f'Implemented:** {impl_state.implemented_modules} modules',
-            content
+        return consolidator.consolidate(
+            status_files,
+            impl_state,
+            design_state,
+            gaps,
+            project_root,
+            metrics
         )
-        updates.append(f"Updated implemented modules: {impl_state.implemented_modules}")
-        
-        # Update test count
-        total_tests = sum(impl_state.tests.values())
-        content = re.sub(
-            r'Tests:\*\* \d+ tests',
-            f'Tests:** {total_tests} tests',
-            content
-        )
-        updates.append(f"Updated test count: {total_tests}")
-        
-        # Update plugins count
-        content = re.sub(
-            r'Plugins:\*\* \d+ operational',
-            f'Plugins:** {len(impl_state.plugins)} operational',
-            content
-        )
-        updates.append(f"Updated plugins: {len(impl_state.plugins)}")
-        
-        # Generate recent updates from git history
-        recent_updates = self._generate_recent_updates(project_root, lookback_days=1)
-        
-        # Insert "Recent Updates" section if not present
-        if recent_updates and '**Recent Updates' not in content:
-            # Find where to insert (after first header section)
-            insert_pattern = r'(\*\*Last Synchronized:.*?\*\n)'
-            recent_section = f"\n**Recent Updates ({datetime.now().strftime('%Y-%m-%d %H:%M')}):**\n"
-            for update in recent_updates[:10]:  # Limit to 10 most recent
-                recent_section += f"- {update}\n"
-            recent_section += "\n"
-            
-            content = re.sub(
-                insert_pattern,
-                r'\1' + recent_section,
-                content,
-                count=1
-            )
-            updates.append(f"Added recent updates section ({len(recent_updates)} updates)")
-        elif recent_updates and '**Recent Updates' in content:
-            # Update existing Recent Updates section
-            recent_section = f"**Recent Updates ({datetime.now().strftime('%Y-%m-%d %H:%M')}):**\n"
-            for update in recent_updates[:10]:
-                recent_section += f"- {update}\n"
-            
-            # Replace entire Recent Updates block
-            pattern = r'\*\*Recent Updates.*?\n(?:- .*?\n)*'
-            content = re.sub(
-                pattern,
-                recent_section,
-                content,
-                count=1
-            )
-            updates.append(f"Updated recent updates section ({len(recent_updates)} updates)")
-        
-        # Update visual progress bars (with user-specified execution order)
-        phase_progress, execution_order = self._calculate_phase_progress(content)
-        progress_section_lines = []
-        progress_section_lines.append("```")
-        
-        # Display phases in execution order (not numerical order)
-        for phase_name in execution_order:
-            percentage = phase_progress[phase_name]
-            bar = self._generate_progress_bar(percentage)
-            # Pad phase name to align bars
-            padded_name = phase_name.ljust(40)
-            progress_section_lines.append(f"{padded_name}{bar} {percentage:3d}%")
-        progress_section_lines.append("```")
-        
-        new_progress_section = "\n".join(progress_section_lines)
-        
-        # Replace the entire progress bars code block
-        # Match from opening ``` to closing ``` after the last phase line
-        progress_pattern = r'```\nPhase 0.*?```'
-        if re.search(progress_pattern, content, re.DOTALL):
-            content = re.sub(
-                progress_pattern,
-                new_progress_section,
-                content,
-                flags=re.DOTALL,
-                count=1
-            )
-            updates.append(f"Updated visual progress bars for {len(phase_progress)} phases")
-        
-        # Add sync timestamp with contextual suffix
-        transformations_context = {
-            'md_to_yaml_converted': metrics.md_to_yaml_converted,
-            'status_files_consolidated': metrics.status_files_consolidated
-        }
-        context_suffix = self._add_sync_context(recent_updates, impl_state, transformations_context)
-        sync_note = f"*Last Synchronized: {datetime.now().strftime('%Y-%m-%d %H:%M')} {context_suffix}*\n"
-        
-        if '*Last Synchronized:' not in content:
-            content += f"\n\n{sync_note}"
-        else:
-            # ✅ FIXED: Only match timestamp line, not surrounding content
-            # Bug was: r'\*Last Synchronized:.*?\*' matched too much (greedy through next asterisk)
-            # Fix: Only match to newline, use count=1 to avoid multiple replacements
-            content = re.sub(
-                r'\*Last Synchronized:.*?\n',
-                sync_note,
-                content,
-                count=1
-            )
-        updates.append(f"Added sync timestamp with context: {context_suffix}")
-        
-        # Write back with proper encoding
-        try:
-            primary.write_text(content, encoding='utf-8')
-        except Exception as e:
-            logger.error(f"Failed to write {primary.name}: {e}")
-            return None
-        
-        metrics.improvements['status_consolidation'] = updates
-        return primary
     
     def _convert_md_to_yaml(
         self,
@@ -1350,102 +942,18 @@ class DesignSyncOrchestrator(BaseOperationModule):
         metrics: SyncMetrics,
         profile: str
     ) -> Dict[str, Any]:
-        """
-        Commit changes and generate comprehensive report.
-        
-        Returns:
-            Dict with final report data
-        """
-        report = {
-            'sync_id': metrics.sync_id,
-            'timestamp': metrics.timestamp.isoformat(),
-            'profile': profile,
-            'implementation_state': {
-                'total_modules': impl_state.total_modules,
-                'implemented_modules': impl_state.implemented_modules,
-                'completion_percentage': impl_state.completion_percentage,
-                'total_tests': sum(impl_state.tests.values()),
-                'plugins': len(impl_state.plugins),
-                'agents': len(impl_state.agents)
-            },
-            'design_state': {
-                'version': design_state.version,
-                'design_files': len(design_state.design_files),
-                'status_files': len(design_state.status_files),
-                'yaml_documents': len(design_state.yaml_documents)
-            },
-            'gaps_analyzed': metrics.gaps_analyzed,
-            'optimizations_integrated': metrics.optimizations_integrated,
-            'transformations': {
-                'status_files_consolidated': metrics.status_files_consolidated,
-                'md_to_yaml_converted': metrics.md_to_yaml_converted
-            },
-            'git_commits': metrics.git_commits,
-            'duration_seconds': metrics.duration_seconds,
-            'next_actions': []
-        }
-        
-        # Git commit if changes made
-        if profile != 'quick':
-            try:
-                # Add changed files
-                subprocess.run(
-                    ['git', 'add', 'cortex-brain/'],
-                    cwd=project_root,
-                    check=True,
-                    capture_output=True
-                )
-                
-                # Commit
-                commit_msg = (
-                    f"design: synchronize CORTEX {design_state.version} design with implementation\n\n"
-                    f"Profile: {profile}\n"
-                    f"Gaps analyzed: {metrics.gaps_analyzed}\n"
-                    f"Status files consolidated: {metrics.status_files_consolidated}\n"
-                    f"MD to YAML converted: {metrics.md_to_yaml_converted}\n"
-                    f"Optimizations integrated: {metrics.optimizations_integrated}\n\n"
-                    f"[design_sync {metrics.sync_id}]"
-                )
-                
-                result = subprocess.run(
-                    ['git', 'commit', '-m', commit_msg],
-                    cwd=project_root,
-                    check=False,
-                    capture_output=True,
-                    text=True
-                )
-                
-                if result.returncode == 0:
-                    # Get commit hash
-                    hash_result = subprocess.run(
-                        ['git', 'rev-parse', 'HEAD'],
-                        cwd=project_root,
-                        check=True,
-                        capture_output=True,
-                        text=True
-                    )
-                    commit_hash = hash_result.stdout.strip()[:8]
-                    metrics.git_commits.append(commit_hash)
-                    logger.info(f"  ✅ Git commit: {commit_hash}")
-                else:
-                    logger.info("  ℹ️  No changes to commit")
-            
-            except subprocess.CalledProcessError as e:
-                logger.warning(f"Git commit failed: {e}")
-        
-        # Generate next actions
-        if gaps.inconsistent_counts:
-            report['next_actions'].append("Review inconsistent module counts in operations")
-        
-        if gaps.verbose_md_candidates and profile != 'comprehensive':
-            report['next_actions'].append(
-                f"Run comprehensive profile to convert {len(gaps.verbose_md_candidates)} verbose MD to YAML"
-            )
-        
-        if metrics.optimizations_integrated > 0:
-            report['next_actions'].append("Review and implement integrated optimizations")
-        
-        return report
+        """Commit changes and report (delegated to CommitReporter)."""
+        reporter = CommitReporter()
+        return reporter.commit_and_report(
+            impl_state,
+            design_state,
+            gaps,
+            optimizations,
+            transformations,
+            project_root,
+            metrics,
+            profile
+        )
     
     def _create_analysis_report(
         self,

@@ -176,6 +176,24 @@ class WorkingMemory:
             )
         """)
         
+        # Create user_profile table (CORTEX 3.2.1: User Profile System)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS user_profile (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                interaction_mode TEXT NOT NULL CHECK(interaction_mode IN ('autonomous', 'guided', 'educational', 'pair')) DEFAULT 'guided',
+                experience_level TEXT NOT NULL CHECK(experience_level IN ('junior', 'mid', 'senior', 'expert')) DEFAULT 'mid',
+                tech_stack_preference TEXT DEFAULT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                persistent_flag BOOLEAN NOT NULL DEFAULT 1
+            )
+        """)
+        
+        # Ensure only one profile exists
+        cursor.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_single_profile ON user_profile(id)
+        """)
+        
         # Migrate existing databases to add missing columns
         # Check if columns exist and add them if they don't
         cursor.execute("PRAGMA table_info(conversations)")
@@ -191,6 +209,15 @@ class WorkingMemory:
         for column_name, alter_sql in migrations:
             if column_name not in existing_columns:
                 cursor.execute(alter_sql)
+        
+        # Migrate user_profile table to add tech_stack_preference if missing
+        cursor.execute("PRAGMA table_info(user_profile)")
+        profile_columns = {row[1] for row in cursor.fetchall()}
+        
+        if "tech_stack_preference" not in profile_columns:
+            cursor.execute("""
+                ALTER TABLE user_profile ADD COLUMN tech_stack_preference TEXT DEFAULT NULL
+            """)
         
         # Create eviction log table
         cursor.execute("""
@@ -1309,3 +1336,256 @@ class WorkingMemory:
         """Close any open connections (for cleanup in tests)."""
         # SQLite connections are per-operation, so nothing to close
         pass
+    
+    # ========== User Profile Operations (CORTEX 3.2.1) ==========
+    
+    def create_profile(
+        self,
+        interaction_mode: str = "guided",
+        experience_level: str = "mid",
+        tech_stack_preference: Optional[Dict[str, str]] = None
+    ) -> bool:
+        """
+        Create user profile with interaction preferences.
+        
+        Args:
+            interaction_mode: How user prefers to interact (autonomous/guided/educational/pair)
+            experience_level: User's development experience (junior/mid/senior/expert)
+            tech_stack_preference: Optional company tech stack context (not constraint)
+                {
+                    "cloud_provider": "azure|aws|gcp|none",
+                    "container_platform": "kubernetes|docker|none",
+                    "architecture": "microservices|monolithic|hybrid",
+                    "ci_cd": "azure_devops|github_actions|jenkins|none",
+                    "iac": "terraform|arm|cloudformation|none"
+                }
+            
+        Returns:
+            True if profile created successfully, False otherwise
+        """
+        # Validate inputs
+        valid_modes = ["autonomous", "guided", "educational", "pair"]
+        valid_levels = ["junior", "mid", "senior", "expert"]
+        
+        if interaction_mode not in valid_modes:
+            raise ValueError(f"Invalid interaction_mode '{interaction_mode}'. Must be one of: {', '.join(valid_modes)}")
+        
+        if experience_level not in valid_levels:
+            raise ValueError(f"Invalid experience_level '{experience_level}'. Must be one of: {', '.join(valid_levels)}")
+        
+        # Validate tech_stack_preference if provided
+        if tech_stack_preference:
+            valid_cloud = ["azure", "aws", "gcp", "none"]
+            valid_container = ["kubernetes", "docker", "none"]
+            valid_arch = ["microservices", "monolithic", "hybrid"]
+            valid_cicd = ["azure_devops", "github_actions", "jenkins", "none"]
+            valid_iac = ["terraform", "arm", "cloudformation", "none"]
+            
+            if "cloud_provider" in tech_stack_preference and tech_stack_preference["cloud_provider"] not in valid_cloud:
+                raise ValueError(f"Invalid cloud_provider. Must be one of: {', '.join(valid_cloud)}")
+            
+            if "container_platform" in tech_stack_preference and tech_stack_preference["container_platform"] not in valid_container:
+                raise ValueError(f"Invalid container_platform. Must be one of: {', '.join(valid_container)}")
+            
+            if "architecture" in tech_stack_preference and tech_stack_preference["architecture"] not in valid_arch:
+                raise ValueError(f"Invalid architecture. Must be one of: {', '.join(valid_arch)}")
+            
+            if "ci_cd" in tech_stack_preference and tech_stack_preference["ci_cd"] not in valid_cicd:
+                raise ValueError(f"Invalid ci_cd. Must be one of: {', '.join(valid_cicd)}")
+            
+            if "iac" in tech_stack_preference and tech_stack_preference["iac"] not in valid_iac:
+                raise ValueError(f"Invalid iac. Must be one of: {', '.join(valid_iac)}")
+        
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Serialize tech_stack_preference to JSON
+            tech_stack_json = json.dumps(tech_stack_preference) if tech_stack_preference else None
+            
+            # Use REPLACE to handle both insert and update
+            cursor.execute("""
+                INSERT OR REPLACE INTO user_profile (id, interaction_mode, experience_level, tech_stack_preference, last_updated)
+                VALUES (1, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (interaction_mode, experience_level, tech_stack_json))
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to create user profile: {e}")
+            return False
+    
+    def get_profile(self) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve current user profile.
+        
+        Returns:
+            Profile dict with interaction_mode, experience_level, tech_stack_preference, created_at, last_updated
+            None if no profile exists
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT interaction_mode, experience_level, tech_stack_preference, created_at, last_updated
+                FROM user_profile
+                WHERE id = 1
+            """)
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            if result:
+                # Deserialize tech_stack_preference from JSON
+                tech_stack = json.loads(result[2]) if result[2] else None
+                
+                return {
+                    "interaction_mode": result[0],
+                    "experience_level": result[1],
+                    "tech_stack_preference": tech_stack,
+                    "created_at": result[3],
+                    "last_updated": result[4]
+                }
+            
+            return None
+            
+        except Exception as e:
+            print(f"Failed to retrieve user profile: {e}")
+            return None
+    
+    def update_profile(
+        self,
+        interaction_mode: Optional[str] = None,
+        experience_level: Optional[str] = None,
+        tech_stack_preference: Optional[Dict[str, str]] = ...  # ... is sentinel for "not provided"
+    ) -> bool:
+        """
+        Update user profile (individual fields or multiple).
+        
+        Args:
+            interaction_mode: New interaction mode (optional)
+            experience_level: New experience level (optional)
+            tech_stack_preference: New tech stack preference, None to clear, omit to keep current
+            
+        Returns:
+            True if update successful, False otherwise
+        """
+        # Check if anything to update (use sentinel check for tech_stack)
+        if interaction_mode is None and experience_level is None and tech_stack_preference is ...:
+            return False  # Nothing to update
+        
+        # Validate inputs
+        valid_modes = ["autonomous", "guided", "educational", "pair"]
+        valid_levels = ["junior", "mid", "senior", "expert"]
+        
+        if interaction_mode and interaction_mode not in valid_modes:
+            raise ValueError(f"Invalid interaction_mode '{interaction_mode}'. Must be one of: {', '.join(valid_modes)}")
+        
+        if experience_level and experience_level not in valid_levels:
+            raise ValueError(f"Invalid experience_level '{experience_level}'. Must be one of: {', '.join(valid_levels)}")
+        
+        # Validate tech_stack_preference if provided (skip if sentinel or None)
+        if tech_stack_preference is not ... and tech_stack_preference is not None:
+            valid_cloud = ["azure", "aws", "gcp", "none"]
+            valid_container = ["kubernetes", "docker", "none"]
+            valid_arch = ["microservices", "monolithic", "hybrid"]
+            valid_cicd = ["azure_devops", "github_actions", "jenkins", "none"]
+            valid_iac = ["terraform", "arm", "cloudformation", "none"]
+            
+            if "cloud_provider" in tech_stack_preference and tech_stack_preference["cloud_provider"] not in valid_cloud:
+                raise ValueError(f"Invalid cloud_provider. Must be one of: {', '.join(valid_cloud)}")
+            
+            if "container_platform" in tech_stack_preference and tech_stack_preference["container_platform"] not in valid_container:
+                raise ValueError(f"Invalid container_platform. Must be one of: {', '.join(valid_container)}")
+            
+            if "architecture" in tech_stack_preference and tech_stack_preference["architecture"] not in valid_arch:
+                raise ValueError(f"Invalid architecture. Must be one of: {', '.join(valid_arch)}")
+            
+            if "ci_cd" in tech_stack_preference and tech_stack_preference["ci_cd"] not in valid_cicd:
+                raise ValueError(f"Invalid ci_cd. Must be one of: {', '.join(valid_cicd)}")
+            
+            if "iac" in tech_stack_preference and tech_stack_preference["iac"] not in valid_iac:
+                raise ValueError(f"Invalid iac. Must be one of: {', '.join(valid_iac)}")
+        
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Build dynamic UPDATE query
+            updates = []
+            params = []
+            
+            if interaction_mode:
+                updates.append("interaction_mode = ?")
+                params.append(interaction_mode)
+            
+            if experience_level:
+                updates.append("experience_level = ?")
+                params.append(experience_level)
+            
+            if tech_stack_preference is not ...:  # ... is sentinel for "not provided"
+                updates.append("tech_stack_preference = ?")
+                params.append(json.dumps(tech_stack_preference) if tech_stack_preference else None)
+            
+            # Always update timestamp
+            updates.append("last_updated = CURRENT_TIMESTAMP")
+            
+            query = f"UPDATE user_profile SET {', '.join(updates)} WHERE id = 1"
+            cursor.execute(query, params)
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to update user profile: {e}")
+            return False
+    
+    def profile_exists(self) -> bool:
+        """
+        Check if user profile exists.
+        
+        Returns:
+            True if profile exists, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
+            count = cursor.fetchone()[0]
+            
+            conn.close()
+            
+            return count > 0
+            
+        except Exception as e:
+            print(f"Failed to check profile existence: {e}")
+            return False
+    
+    def delete_profile(self) -> bool:
+        """
+        Delete user profile (clear all preferences).
+        
+        Returns:
+            True if deletion successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("DELETE FROM user_profile WHERE id = 1")
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to delete user profile: {e}")
+            return False
