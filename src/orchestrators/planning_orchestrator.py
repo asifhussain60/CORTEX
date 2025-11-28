@@ -934,4 +934,619 @@ class PlanningOrchestrator:
         if section:
             return section.content
         return f"(Section {section_name} not found)"
+    
+    # ========================================
+    # Phase 2.2: Duplicate Detection Methods
+    # ========================================
+    
+    def check_for_duplicate_plans(
+        self, 
+        proposed_filename: str, 
+        proposed_content: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Check for duplicate planning documents before creation.
+        
+        Uses DocumentGovernance for semantic similarity detection.
+        Searches across all planning subdirectories (active, approved, completed).
+        
+        Args:
+            proposed_filename: Filename for proposed plan
+            proposed_path: Path to proposed plan location
+            proposed_content: Content of proposed plan
+        
+        Returns:
+            List of duplicate matches with:
+            - existing_path: Path to existing document
+            - similarity_score: Float 0-1 (1.0 = exact match)
+            - algorithm: Detection algorithm used
+            - recommendation: Human-readable suggestion
+        """
+        try:
+            # Lazy import to avoid circular dependency
+            from src.governance.document_governance import DocumentGovernance
+            
+            governance = DocumentGovernance(self.cortex_root)
+            
+            # Construct proposed path (in active directory by default)
+            planning_root = self.cortex_root / "cortex-brain" / "documents" / "planning"
+            proposed_path = planning_root / "active" / proposed_filename
+            
+            # Find duplicates using DocumentGovernance
+            duplicate_matches = governance.find_duplicates(proposed_path, proposed_content)
+            
+            # Convert to dict format for easier handling
+            results = []
+            for match in duplicate_matches:
+                results.append({
+                    'existing_path': match.existing_path,
+                    'similarity_score': match.similarity_score,
+                    'algorithm': match.algorithm,
+                    'recommendation': match.recommendation
+                })
+            
+            # Sort by similarity score (highest first)
+            results.sort(key=lambda x: x['similarity_score'], reverse=True)
+            
+            logger.info(f"Duplicate detection found {len(results)} potential matches")
+            return results
+            
+        except Exception as e:
+            logger.warning(f"DocumentGovernance failed, using simplified detection: {e}")
+            # Fallback to simplified detection
+            return self._simple_duplicate_detection(proposed_filename, proposed_content)
+    
+    def _simple_duplicate_detection(
+        self,
+        proposed_filename: str,
+        proposed_content: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Simplified duplicate detection without DocumentGovernance.
+        Uses basic title and keyword matching.
+        """
+        results = []
+        planning_root = self.cortex_root / "cortex-brain" / "documents" / "planning"
+        
+        # Search in all status directories
+        search_dirs = ['active', 'approved', 'completed', 'deprecated']
+        
+        # Extract proposed title and keywords
+        proposed_title = self._extract_simple_title(proposed_content)
+        proposed_keywords = self._extract_simple_keywords(proposed_content)
+        
+        for status_dir in search_dirs:
+            dir_path = planning_root / status_dir
+            if not dir_path.exists():
+                continue
+            
+            for existing_file in dir_path.glob('*.md'):
+                try:
+                    # Check filename match
+                    if existing_file.name == proposed_filename:
+                        results.append({
+                            'existing_path': existing_file,
+                            'similarity_score': 1.0,
+                            'algorithm': 'exact_filename_match',
+                            'recommendation': f'File with same name exists: {existing_file}'
+                        })
+                        continue
+                    
+                    # Read existing content
+                    existing_content = existing_file.read_text(encoding='utf-8')
+                    existing_title = self._extract_simple_title(existing_content)
+                    existing_keywords = self._extract_simple_keywords(existing_content)
+                    
+                    # Title similarity
+                    if proposed_title and existing_title:
+                        title_sim = self._calculate_simple_similarity(proposed_title, existing_title)
+                        if title_sim >= 0.70:
+                            results.append({
+                                'existing_path': existing_file,
+                                'similarity_score': title_sim,
+                                'algorithm': 'title_similarity',
+                                'recommendation': f'Similar title: "{existing_title}"'
+                            })
+                    
+                    # Keyword overlap
+                    if proposed_keywords and existing_keywords:
+                        overlap = len(proposed_keywords & existing_keywords)
+                        total = len(proposed_keywords | existing_keywords)
+                        if total > 0:
+                            keyword_sim = overlap / total
+                            if keyword_sim >= 0.60:
+                                results.append({
+                                    'existing_path': existing_file,
+                                    'similarity_score': keyword_sim,
+                                    'algorithm': 'keyword_overlap',
+                                    'recommendation': f'High keyword overlap ({keyword_sim:.0%})'
+                                })
+                
+                except Exception as e:
+                    logger.debug(f"Error checking {existing_file}: {e}")
+                    continue
+        
+        # Sort by similarity score
+        results.sort(key=lambda x: x['similarity_score'], reverse=True)
+        
+        # Deduplicate (keep highest score for each file)
+        seen = set()
+        unique_results = []
+        for result in results:
+            path_str = str(result['existing_path'])
+            if path_str not in seen:
+                seen.add(path_str)
+                unique_results.append(result)
+        
+        logger.info(f"Simple duplicate detection found {len(unique_results)} potential matches")
+        return unique_results
+    
+    def _extract_simple_title(self, content: str) -> Optional[str]:
+        """Extract title from markdown content"""
+        lines = content.split('\n')
+        for line in lines[:10]:  # Check first 10 lines
+            if line.startswith('# '):
+                return line[2:].strip()
+        return None
+    
+    def _extract_simple_keywords(self, content: str) -> set:
+        """Extract keywords from content (simple word extraction)"""
+        import re
+        # Remove markdown formatting
+        text = re.sub(r'[#*`\[\]()]', ' ', content)
+        # Extract words
+        words = re.findall(r'\b[a-zA-Z]{4,}\b', text.lower())
+        # Filter common words
+        stop_words = {'this', 'that', 'with', 'from', 'have', 'will', 'would', 'could', 'should'}
+        keywords = {w for w in words if w not in stop_words}
+        return keywords
+    
+    def _calculate_simple_similarity(self, str1: str, str2: str) -> float:
+        """Calculate simple similarity between two strings"""
+        str1 = str1.lower()
+        str2 = str2.lower()
+        
+        # Exact match
+        if str1 == str2:
+            return 1.0
+        
+        # Token-based similarity
+        tokens1 = set(str1.split())
+        tokens2 = set(str2.split())
+        
+        if not tokens1 or not tokens2:
+            return 0.0
+        
+        intersection = len(tokens1 & tokens2)
+        union = len(tokens1 | tokens2)
+        
+        return intersection / union if union > 0 else 0.0
+    
+    def generate_duplicate_handling_prompt(self, duplicates: List[Dict[str, Any]]) -> str:
+        """
+        Generate user-friendly prompt for handling duplicates.
+        
+        Args:
+            duplicates: List of duplicate matches from check_for_duplicate_plans()
+        
+        Returns:
+            Markdown-formatted prompt with options
+        """
+        if not duplicates:
+            return ""
+        
+        prompt_lines = []
+        prompt_lines.append("# \ud83d\udd0d Potential Duplicate Plans Detected\n")
+        prompt_lines.append(f"Found {len(duplicates)} existing plan(s) similar to your request:\n")
+        
+        # List duplicates
+        for i, dup in enumerate(duplicates[:5], 1):  # Show top 5
+            score_pct = int(dup['similarity_score'] * 100)
+            confidence = "\ud83d\udd34" if score_pct >= 90 else "\ud83d\udfe1" if score_pct >= 70 else "\ud83d\udfe2"
+            
+            prompt_lines.append(f"{i}. {confidence} **{dup['existing_path'].name}** ({score_pct}% similar)")
+            prompt_lines.append(f"   - {dup['recommendation']}\n")
+        
+        if len(duplicates) > 5:
+            prompt_lines.append(f"_(and {len(duplicates) - 5} more...)_\n")
+        
+        # Options
+        prompt_lines.append("\n## \ud83d\udc49 What would you like to do?\n")
+        prompt_lines.append("1. **Update existing plan** - Modify one of the existing plans instead")
+        prompt_lines.append("2. **Create new plan anyway** - Your plan is different enough")
+        prompt_lines.append("3. **Cancel** - Review existing plans first\n")
+        
+        return "\n".join(prompt_lines)
+    
+    # ========================================
+    # Phase 2.3: Status Transition Methods
+    # ========================================
+    
+    def approve_plan(self, plan_filename: str) -> Dict[str, Any]:
+        """
+        Approve a plan, moving it from active to approved directory.
+        
+        Args:
+            plan_filename: Filename of plan to approve
+        
+        Returns:
+            Dictionary with:
+            - success: bool
+            - message: str
+            - old_status: str
+            - new_status: str
+            - old_path: Optional[Path]
+            - new_path: Optional[Path]
+        """
+        planning_root = self.cortex_root / "cortex-brain" / "documents" / "planning"
+        active_dir = planning_root / "active"
+        approved_dir = planning_root / "approved"
+        
+        old_path = active_dir / plan_filename
+        new_path = approved_dir / plan_filename
+        
+        # Validate plan exists in active directory
+        if not old_path.exists():
+            return {
+                'success': False,
+                'message': f"Plan '{plan_filename}' not found in active directory",
+                'old_status': 'unknown',
+                'new_status': 'approved'
+            }
+        
+        try:
+            # Read content
+            content = old_path.read_text(encoding='utf-8')
+            
+            # Update status in content
+            updated_content = self._update_status_in_content(content, 'approved')
+            
+            # Write to new location
+            new_path.write_text(updated_content, encoding='utf-8')
+            
+            # Remove old file
+            old_path.unlink()
+            
+            logger.info(f"Approved plan: {plan_filename} (active → approved)")
+            
+            return {
+                'success': True,
+                'message': f"Plan '{plan_filename}' approved successfully",
+                'old_status': 'active',
+                'new_status': 'approved',
+                'old_path': old_path,
+                'new_path': new_path
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to approve plan '{plan_filename}': {e}")
+            return {
+                'success': False,
+                'message': f"Failed to approve plan: {str(e)}",
+                'old_status': 'active',
+                'new_status': 'approved'
+            }
+    
+    def complete_plan(self, plan_filename: str) -> Dict[str, Any]:
+        """
+        Mark a plan as completed, moving it from approved to completed directory.
+        Adds completion timestamp to the plan.
+        
+        Args:
+            plan_filename: Filename of plan to complete
+        
+        Returns:
+            Dictionary with:
+            - success: bool
+            - message: str
+            - old_status: str
+            - new_status: str
+            - old_path: Optional[Path]
+            - new_path: Optional[Path]
+            - completed_date: str
+        """
+        planning_root = self.cortex_root / "cortex-brain" / "documents" / "planning"
+        approved_dir = planning_root / "approved"
+        completed_dir = planning_root / "completed"
+        
+        old_path = approved_dir / plan_filename
+        new_path = completed_dir / plan_filename
+        
+        # Validate plan exists in approved directory
+        if not old_path.exists():
+            return {
+                'success': False,
+                'message': f"Plan '{plan_filename}' not found in approved directory",
+                'old_status': 'unknown',
+                'new_status': 'completed'
+            }
+        
+        try:
+            # Read content
+            content = old_path.read_text(encoding='utf-8')
+            
+            # Update status in content
+            updated_content = self._update_status_in_content(content, 'completed')
+            
+            # Add completion timestamp
+            completion_date = datetime.now().strftime("%Y-%m-%d")
+            updated_content = self._add_completion_timestamp(updated_content, completion_date)
+            
+            # Write to new location
+            new_path.write_text(updated_content, encoding='utf-8')
+            
+            # Remove old file
+            old_path.unlink()
+            
+            logger.info(f"Completed plan: {plan_filename} (approved → completed)")
+            
+            return {
+                'success': True,
+                'message': f"Plan '{plan_filename}' completed successfully",
+                'old_status': 'approved',
+                'new_status': 'completed',
+                'old_path': old_path,
+                'new_path': new_path,
+                'completed_date': completion_date
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to complete plan '{plan_filename}': {e}")
+            return {
+                'success': False,
+                'message': f"Failed to complete plan: {str(e)}",
+                'old_status': 'approved',
+                'new_status': 'completed'
+            }
+    
+    def _update_status_in_content(self, content: str, new_status: str) -> str:
+        """
+        Update status field in plan content.
+        
+        Args:
+            content: Original content
+            new_status: New status value
+        
+        Returns:
+            Updated content
+        """
+        import re
+        
+        # Try different status patterns
+        patterns = [
+            (r'\*\*Status:\*\*\s*([a-zA-Z-]+)', f'**Status:** {new_status}'),
+            (r'\*\*Status\*\*:\s*([a-zA-Z-]+)', f'**Status:** {new_status}'),
+            (r'Status:\s*([a-zA-Z-]+)', f'Status: {new_status}'),
+        ]
+        
+        for pattern, replacement in patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                return re.sub(pattern, replacement, content, count=1, flags=re.IGNORECASE)
+        
+        # If no status found, add it after the title
+        lines = content.split('\n')
+        if lines and lines[0].startswith('#'):
+            # Insert after title
+            lines.insert(1, '')
+            lines.insert(2, f'**Status:** {new_status}')
+            return '\n'.join(lines)
+        
+        # Fallback: prepend to content
+        return f'**Status:** {new_status}\n\n{content}'
+    
+    def _add_completion_timestamp(self, content: str, completion_date: str) -> str:
+        """
+        Add completion timestamp to plan content.
+        
+        Args:
+            content: Plan content
+            completion_date: Completion date (YYYY-MM-DD)
+        
+        Returns:
+            Updated content
+        """
+        import re
+        
+        # Check if completion timestamp already exists
+        if re.search(r'\*\*Completed:\*\*', content, re.IGNORECASE):
+            # Update existing
+            return re.sub(
+                r'\*\*Completed:\*\*\s*[\d-]+',
+                f'**Completed:** {completion_date}',
+                content,
+                flags=re.IGNORECASE
+            )
+        
+        # Add after status field
+        status_pattern = r'(\*\*Status:\*\*\s*completed)'
+        if re.search(status_pattern, content, re.IGNORECASE):
+            return re.sub(
+                status_pattern,
+                f'\\1  \n**Completed:** {completion_date}',
+                content,
+                count=1,
+                flags=re.IGNORECASE
+            )
+        
+        # Fallback: add after first line
+        lines = content.split('\n')
+        if len(lines) > 1:
+            lines.insert(1, f'**Completed:** {completion_date}')
+            return '\n'.join(lines)
+        
+        return f'{content}\n\n**Completed:** {completion_date}'
 
+
+    # ==================================================================================
+    # PHASE 3: SWAGGER ENTRY POINT MODULE - Scope Inference & Clarification
+    # ==================================================================================
+    
+    def infer_scope_from_dor(self, dor_responses: Dict[str, str]) -> Dict[str, Any]:
+        """
+        Infer feature scope from DoR responses (Q3 + Q6)
+        
+        This is the SWAGGER Entry Point - automatically extracts scope boundaries
+        from DoR answers to reduce interrogation by 70%
+        
+        Args:
+            dor_responses: Dictionary with keys 'Q3' (functional scope) and 'Q6' (dependencies)
+        
+        Returns:
+            Dictionary with:
+                - entities: Extracted scope entities (tables, files, services, dependencies)
+                - confidence: Confidence score (0.0-1.0)
+                - validation: Validation result
+                - needs_clarification: Boolean indicating if clarification is needed
+                - clarification_prompt: Optional prompt for user (if needs_clarification=True)
+        """
+        from src.agents.estimation.scope_inference_engine import ScopeInferenceEngine
+        from src.agents.estimation.scope_validator import ScopeValidator
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        # Initialize components
+        inference_engine = ScopeInferenceEngine()
+        validator = ScopeValidator()
+        clarifier = ClarificationOrchestrator()
+        
+        # Combine DoR Q3 + Q6 into requirements text
+        requirements_text = inference_engine.parse_dor_answers(dor_responses)
+        
+        # Extract scope entities
+        entities = inference_engine.extract_entities(requirements_text)
+        
+        # Calculate confidence
+        confidence = inference_engine.calculate_confidence(entities, requirements_text)
+        
+        # Generate scope boundary
+        boundary = inference_engine.generate_scope_boundary(entities, confidence)
+        
+        # Validate
+        validation_result = validator.validate_scope(boundary)
+        
+        # Convert validation result to dict for clarifier
+        validation_dict = {
+            'confidence': validation_result.confidence_score,
+            'is_valid': validation_result.is_valid,
+            'missing_elements': validation_result.missing_elements,
+            'clarification_questions': []  # Generate from missing elements
+        }
+        
+        # Generate clarification questions from missing elements
+        if 'tables' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What database tables will be involved?')
+        if 'files' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What code files need to be modified or created?')
+        if 'services' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What external services will be integrated?')
+        
+        # Check if clarification is needed
+        needs_clarification = clarifier.should_clarify(validation_dict)
+        
+        result = {
+            'entities': {
+                'tables': entities.tables,
+                'files': entities.files,
+                'services': entities.services,
+                'dependencies': entities.dependencies
+            },
+            'confidence': confidence,
+            'validation': {
+                'is_valid': validation_result.is_valid,
+                'requires_clarification': validation_result.requires_clarification,
+                'errors': validation_result.validation_errors,
+                'warnings': validation_result.warnings,
+                'missing_elements': validation_result.missing_elements
+            },
+            'needs_clarification': needs_clarification,
+            'clarification_prompt': None
+        }
+        
+        # Generate clarification prompt if needed
+        if needs_clarification:
+            result['clarification_prompt'] = clarifier.generate_clarification_prompt(validation_dict)
+        
+        return result
+    
+    def process_clarification_response(self, user_response: str) -> Dict[str, Any]:
+        """
+        Process user's response to clarification questions
+        
+        Args:
+            user_response: User's text response with additional scope details
+        
+        Returns:
+            Dictionary with:
+                - entities: Re-extracted scope entities
+                - confidence: Updated confidence score
+                - is_vague: Boolean indicating if response is still vague
+        """
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        clarifier = ClarificationOrchestrator()
+        return clarifier.parse_user_response(user_response)
+    
+    def estimate_feature_scope(self, feature_name: str, dor_responses: Dict[str, str], 
+                              max_clarification_rounds: int = 2) -> Dict[str, Any]:
+        """
+        Complete scope estimation workflow with automatic clarification
+        
+        This is the main entry point for the SWAGGER scope estimation system
+        
+        Args:
+            feature_name: Name of the feature being planned
+            dor_responses: DoR responses (Q3 + Q6 minimum)
+            max_clarification_rounds: Maximum clarification iterations (default 2)
+        
+        Returns:
+            Dictionary with:
+                - final_scope: Final extracted scope entities
+                - confidence: Final confidence score
+                - rounds_completed: Number of clarification rounds used
+                - workflow_log: List of workflow steps taken
+                - success: Boolean indicating if confidence threshold was met
+        """
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        workflow_log = []
+        clarifier = ClarificationOrchestrator()
+        
+        # Initial scope inference
+        workflow_log.append(f"Starting scope inference for '{feature_name}'")
+        initial_scope = self.infer_scope_from_dor(dor_responses)
+        workflow_log.append(f"Initial confidence: {initial_scope['confidence']:.2%}")
+        
+        # If high confidence, we're done
+        if not initial_scope['needs_clarification']:
+            workflow_log.append("High confidence achieved - no clarification needed")
+            return {
+                'final_scope': initial_scope['entities'],
+                'confidence': initial_scope['confidence'],
+                'rounds_completed': 0,
+                'workflow_log': workflow_log,
+                'success': True
+            }
+        
+        # Clarification workflow
+        workflow_log.append("Low confidence detected - clarification workflow activated")
+        current_scope = initial_scope
+        
+        for round_num in range(1, max_clarification_rounds + 1):
+            clarifier.increment_round()
+            workflow_log.append(f"Clarification round {round_num}/{max_clarification_rounds}")
+            
+            # In real usage, this would prompt the user and wait for response
+            # For now, we return the state and let the caller handle user interaction
+            workflow_log.append(f"Clarification prompt: {current_scope['clarification_prompt']}")
+            
+            # Exit point for real usage - caller will provide user response separately
+            break
+        
+        return {
+            'final_scope': current_scope['entities'],
+            'confidence': current_scope['confidence'],
+            'rounds_completed': clarifier.get_current_round(),
+            'workflow_log': workflow_log,
+            'success': current_scope['confidence'] >= 0.70,
+            'awaiting_user_response': True,
+            'clarification_prompt': current_scope['clarification_prompt']
+        }

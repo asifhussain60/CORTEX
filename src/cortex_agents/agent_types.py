@@ -24,6 +24,7 @@ class AgentType(Enum):
     ANALYZER = auto()        # ScreenshotAnalyzer
     COMMITTER = auto()       # CommitHandler
     FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
+    PROFILE = auto()         # ProfileAgent (NEW - User Profile System)
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
 
 
@@ -183,6 +184,8 @@ INTENT_AGENT_MAP = {
     
     IntentType.FEEDBACK: AgentType.FEEDBACK,
     IntentType.REPORT_ISSUE: AgentType.FEEDBACK,
+    
+    IntentType.UPDATE_PROFILE: AgentType.PROFILE,
     
     # ADO operations mapping (NEW - ADO Integration)
     IntentType.ADO_WORKITEM: AgentType.ADO_ORCHESTRATOR,

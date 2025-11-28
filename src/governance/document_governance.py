@@ -88,7 +88,18 @@ class DocumentGovernance:
         governance_file = self.brain_path / "documents" / "governance" / "documentation-governance.yaml"
         
         if not governance_file.exists():
-            raise FileNotFoundError(f"Governance rules not found: {governance_file}")
+            # Return minimal defaults if file doesn't exist
+            return {
+                'governance_rules': {
+                    'search_before_create': {
+                        'enabled': True,
+                        'similarity_threshold': 0.70
+                    }
+                },
+                'documentation_structure': {
+                    'fixed_categories': {}
+                }
+            }
         
         with open(governance_file, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)

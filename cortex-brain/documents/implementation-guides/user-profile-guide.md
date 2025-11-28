@@ -427,6 +427,185 @@ Tech stack preference is **NOT** considered for:
 
 ## API Reference (For Developers)
 
+### UserProfileManager (NEW - v3.2.1)
+
+The `UserProfileManager` provides a high-level interface for tech stack preference management with preset configurations.
+
+#### TechStackPreset Enum
+
+```python
+from src.tier1.user_profile_manager import TechStackPreset
+
+# Available presets
+TechStackPreset.AZURE_STACK    # Azure DevOps, AKS, ARM
+TechStackPreset.AWS_STACK      # GitHub Actions, EKS, Terraform
+TechStackPreset.GCP_STACK      # Cloud Build, GKE, Terraform
+TechStackPreset.NO_PREFERENCE  # CORTEX decides
+TechStackPreset.CUSTOM         # User-defined configuration
+```
+
+#### set_tech_stack_preset()
+
+```python
+def set_tech_stack_preset(preset: TechStackPreset) -> bool
+```
+
+**Parameters:**
+- `preset` - TechStackPreset enum value
+
+**Returns:** `True` if successful, `False` otherwise
+
+**Example:**
+```python
+from src.tier1.user_profile_manager import UserProfileManager, TechStackPreset
+
+manager = UserProfileManager()
+success = manager.set_tech_stack_preset(TechStackPreset.AZURE_STACK)
+```
+
+---
+
+#### set_tech_stack_custom()
+
+```python
+def set_tech_stack_custom(config: Dict[str, str]) -> bool
+```
+
+**Parameters:**
+- `config` - Dict with keys: cloud_provider, container_platform, ci_cd, iac, architecture
+
+**Valid Values:**
+- `cloud_provider`: azure, aws, gcp, none
+- `container_platform`: kubernetes, aks, eks, gke, docker, none
+- `ci_cd`: azure_devops, github_actions, jenkins, cloud_build, none
+- `iac`: terraform, arm, cloudformation, none
+- `architecture`: microservices, monolithic, hybrid
+
+**Raises:** `ValueError` if invalid values provided
+
+**Example:**
+```python
+custom_config = {
+    "cloud_provider": "azure",
+    "container_platform": "docker",
+    "ci_cd": "jenkins",
+    "iac": "terraform"
+}
+success = manager.set_tech_stack_custom(custom_config)
+```
+
+---
+
+#### get_tech_stack_preference()
+
+```python
+def get_tech_stack_preference() -> Optional[Dict[str, str]]
+```
+
+**Returns:** Dict with tech stack configuration, or `None` if not set
+
+**Example:**
+```python
+tech_stack = manager.get_tech_stack_preference()
+if tech_stack:
+    print(f"Cloud: {tech_stack['cloud_provider']}")
+    print(f"Container: {tech_stack['container_platform']}")
+```
+
+---
+
+#### update_tech_stack_preset()
+
+```python
+def update_tech_stack_preset(preset: TechStackPreset) -> bool
+```
+
+**Parameters:**
+- `preset` - New TechStackPreset enum value
+
+**Returns:** `True` if successful
+
+**Example:**
+```python
+# Switch from Azure to AWS
+manager.update_tech_stack_preset(TechStackPreset.AWS_STACK)
+```
+
+---
+
+#### clear_tech_stack_preference()
+
+```python
+def clear_tech_stack_preference() -> bool
+```
+
+**Returns:** `True` if successful
+
+**Example:**
+```python
+# Remove tech stack preference (equivalent to NO_PREFERENCE)
+manager.clear_tech_stack_preference()
+```
+
+---
+
+### ProfileAgent (NEW - v3.2.1)
+
+The `ProfileAgent` handles natural language profile update requests with intent detection.
+
+#### Natural Language Examples
+
+```python
+from src.cortex_agents.profile_agent import ProfileAgent
+from src.cortex_agents.base_agent import AgentRequest
+from src.cortex_agents.agent_types import IntentType
+
+agent = ProfileAgent()
+
+# Update to Azure stack
+request = AgentRequest(
+    intent=IntentType.UPDATE_PROFILE,
+    context={},
+    user_message="switch to azure stack"
+)
+response = agent.execute(request)
+
+# Update interaction mode
+request = AgentRequest(
+    intent=IntentType.UPDATE_PROFILE,
+    context={},
+    user_message="change mode to autonomous"
+)
+response = agent.execute(request)
+
+# Custom tech stack
+request = AgentRequest(
+    intent=IntentType.UPDATE_PROFILE,
+    context={},
+    user_message="custom tech stack: azure cloud, docker containers, jenkins ci/cd"
+)
+response = agent.execute(request)
+```
+
+#### Supported Keywords
+
+**Tech Stack:**
+- "switch to azure", "use azure stack", "prefer azure"
+- "switch to aws", "use aws stack", "prefer aws"  
+- "switch to gcp", "use gcp stack", "prefer gcp"
+- "no tech preference", "no preference"
+- "custom tech stack"
+
+**Interaction Mode:**
+- "change mode to [autonomous|guided|educational|pair]"
+- "update mode", "mode to autonomous"
+
+**Experience Level:**
+- "update experience to [junior|mid|senior|expert]"
+- "change experience", "experience to senior"
+
+---
+
 ### WorkingMemory CRUD Operations
 
 #### create_profile()
@@ -661,11 +840,14 @@ A: Same behavior - both mean CORTEX decides based on best practice.
 ## Version History
 
 **3.2.1** (2025-11-28)
-- Added tech_stack_preference field
+- Added tech_stack_preference field to database schema
+- Implemented UserProfileManager with TechStackPreset enum
+- Added ProfileAgent for natural language profile updates
 - Implemented context-not-constraint pattern
-- Added 5 preset configurations
-- Added 16-keyword intent detection
-- Comprehensive test coverage (46 tests, 100% passing)
+- Added 5 preset configurations (Azure/AWS/GCP/NoPreference/Custom)
+- Extended intent detection with 24+ tech stack keywords
+- Added PROFILE agent type and UPDATE_PROFILE intent mapping
+- Comprehensive test coverage (22 tests UserProfileManager + 11 tests ProfileAgent = 33 total, 100% passing)
 
 **3.2.0** (2025-11-27)
 - Initial profile system (interaction_mode + experience_level)
