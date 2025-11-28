@@ -49,6 +49,9 @@ cortex-optimization.log
 logs/cleanup/
 scripts/temp/cortex-optimization.log
 
+# Phase checkpoint metadata
+.cortex/
+
 # Pytest cache (state files)
 .pytest_cache/v/cache/lastfailed
 

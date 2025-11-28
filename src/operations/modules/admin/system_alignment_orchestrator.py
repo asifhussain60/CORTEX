@@ -149,6 +149,10 @@ class AlignmentReport:
     dashboard_report: Optional[str] = None  # Visual dashboard HTML/text
     # Enhancement Catalog integration (NEW)
     catalog_features_total: int = 0  # Total features in catalog
+    catalog_features_new: int = 0  # New features since last review
+    catalog_days_since_review: Optional[int] = None  # Days since last alignment
+    catalog_new_features: List[Dict[str, Any]] = field(default_factory=list)  # Details of new features
+    catalog_features_total: int = 0  # Total features in catalog
     catalog_features_new: int = 0  # New features since last alignment
     catalog_days_since_review: Optional[int] = None  # Days since last catalog review
     catalog_new_features: List[Dict[str, Any]] = field(default_factory=list)  # New feature details

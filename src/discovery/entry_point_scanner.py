@@ -198,7 +198,13 @@ class EntryPointScanner:
             "run discovery": "ViewDiscoveryAgent",
             "learning capture": "LearningCaptureAgent",
             "start learning capture": "LearningCaptureAgent",
-            "run capture": "LearningCaptureAgent"
+            "run capture": "LearningCaptureAgent",
+            "code review": "CodeReviewOrchestrator",
+            "review pr": "CodeReviewOrchestrator",
+            "pr review": "CodeReviewOrchestrator",
+            "review pull request": "CodeReviewOrchestrator",
+            "pull request review": "CodeReviewOrchestrator",
+            "ado pr review": "CodeReviewOrchestrator"
         }
         
         # Check trigger keywords
