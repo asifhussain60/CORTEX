@@ -37,17 +37,56 @@ metadata:
     days_since_review: 0
     
     strategy_a_progress:
-      phase: "Phase 0 - Documentation Layer Complete"
-      completion: "40%"
-      guide_files_created: 5
-      orchestrators_documented:
-        - "DiagramRegenerationOrchestrator"
-        - "CommitOrchestrator"
-        - "RollbackOrchestrator"
-        - "UXEnhancementOrchestrator"
-        - "OnboardingOrchestrator"
-      expected_health_improvement: "60% → 70% per orchestrator"
-      next_phase: "Wiring to entry point routing"
+      total_completion: "80%"
+      status: "COMPLETE"
+      
+      phase_1_documentation:
+        status: "COMPLETE"
+        completion: "40%"
+        guide_files_created: 5
+        orchestrators_documented:
+          - "DiagramRegenerationOrchestrator"
+          - "CommitOrchestrator"
+          - "RollbackOrchestrator"
+          - "UXEnhancementOrchestrator"
+          - "OnboardingOrchestrator"
+        implementation:
+          location: ".github/prompts/modules/"
+          files:
+            - "diagram-regeneration-orchestrator-guide.md (6405 chars)"
+            - "commit-orchestrator-guide.md (4939 chars)"
+            - "rollback-orchestrator-guide.md (5737 chars)"
+            - "ux-enhancement-orchestrator-guide.md (6316 chars)"
+            - "onboarding-orchestrator-guide.md (7748 chars)"
+          commit: "bfc473b7"
+          expected_improvement: "60% → 70% per orchestrator (Layer 4: documented)"
+      
+      phase_2_wiring:
+        status: "COMPLETE"
+        completion: "40%"
+        template_definitions_added: 5
+        orchestrators_wired:
+          - "DiagramRegenerationOrchestrator"
+          - "CommitOrchestrator"
+          - "RollbackOrchestrator"
+          - "UXEnhancementOrchestrator"
+          - "OnboardingOrchestrator"
+        implementation:
+          location: "cortex-brain/response-templates.yaml"
+          template_definitions: "lines 2115-2177"
+          routing_triggers: "lines 2566-2593"
+          natural_language_activation:
+            - "regenerate/refresh/update diagrams, diagram status, show dashboard"
+            - "commit/commit changes/git commit/save changes"
+            - "rollback/undo/restore/revert changes"
+            - "enhance ux/improve experience/optimize interface/ux review"
+            - "onboard/onboarding/setup profile/start onboarding"
+          commit: "7ba2d255"
+          expected_improvement: "70% → 80% per orchestrator (Layer 6: wired)"
+      
+      total_expected_improvement: "60% → 80% per orchestrator (+20 pts)"
+      health_target: "72% → 78% overall system health (+6%)"
+      validation_status: "pending_clean_run"
     
     component_status:
       - name: "HandsOnTutorialOrchestrator"
