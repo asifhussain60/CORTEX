@@ -105,6 +105,24 @@ templates:
     response_content: |
       Welcome! Let's personalize CORTEX in ~30 seconds.
       
+      **📖 Before We Begin:**
+      CORTEX operates under transparent engineering standards documented in [THE RULEBOOK](../docs/governance/THE-RULEBOOK.md).
+      
+      **Key Governance Principles:**
+      - ✅ TDD enforcement (test-first development)
+      - ✅ Brain protection (prevents degradation)
+      - ✅ SOLID compliance (architecture standards)
+      - ✅ Security standards (OWASP integration)
+      
+      **Quick Commands:**
+      - `show rules` - View all 27 governance rules
+      - `show compliance` - Real-time compliance dashboard
+      - `explain rule [name]` - Detailed rule explanation
+      
+      **Acknowledgment:** By proceeding with onboarding, you acknowledge awareness of CORTEX governance standards.
+      
+      ---
+      
       **What we'll capture:**
       1. Your experience level (affects explanation depth)
       2. Your interaction preference (autonomous/guided/educational/pair)
@@ -268,7 +286,11 @@ templates:
     operation_name: Help
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
-    response_content: "[Natural language explanation]\n\n[CONTEXT_SUMMARY]"
+    response_content: "[Natural language explanation]\n\n**📖 Governance & Brain Protection:**\n\
+      CORTEX operates under transparent engineering standards:\n- **The Rulebook:** [View all 27 governance rules](../docs/governance/THE-RULEBOOK.md)\n\
+      - **Quick Commands:** `show rules` | `explain rule [name]` | `my compliance` | `rulebook`\n\
+      - **Protection Layers:** TDD enforcement, SOLID compliance, brain integrity, security standards\n\
+      - **Learn More:** Say 'show compliance' for real-time dashboard\n\n[CONTEXT_SUMMARY]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
     context_summary_template: "\n<details>\n<summary>\U0001F9E0 <b>Context Memory\
@@ -2156,6 +2178,99 @@ routing:
   - open dashboard
   - brain compliance
   - governance dashboard
+  organize_brain_triggers:
+  - organize brain
+  - organize documents
+  - organize cortex brain
+  - brain organization
+  organize_brain_dryrun_triggers:
+  - organize brain dry-run
+  - organize brain preview
+  - brain organization preview
+  - dry-run organization
+  forecast_technical_debt_triggers:
+  - forecast technical debt
+  - forecast debt
+  - technical debt forecast
+  - debt projection
+  - predict technical debt
+  deploy_cortex_triggers:
+  - deploy cortex
+  - build cortex
+  - build production package
+  - cortex deployment
+  - package cortex
+  cortex_refresh_instructions_triggers:
+  - cortex refresh instructions
+  - refresh instructions
+  - update copilot instructions
+  - regenerate instructions
+  show_context_triggers:
+  - show context
+  - view context
+  - what do you remember
+  - cortex memory
+  - show memory
+  clear_all_context_triggers:
+  - clear all context
+  - forget everything
+  - reset context
+  - clear memory
+  - fresh start
+  stop_debug_triggers:
+  - stop debug
+  - end debug
+  - debug off
+  - stop debugging
+  cortex_backup_now_triggers:
+  - cortex backup now
+  - backup now
+  - manual backup
+  - backup cortex
+  - create backup
+  cortexfeatures_triggers:
+  - cortex features
+  - show features
+  - list features
+  - feature catalog
+  cortexreviewlog_triggers:
+  - cortex review log
+  - review log
+  - show reviews
+  - review history
+  diagram_regeneration_triggers:
+  - regenerate diagrams
+  - refresh diagrams
+  - diagram status
+  - show diagram dashboard
+  - regenerate design assets
+  - update diagrams
+  commit_triggers:
+  - commit
+  - commit changes
+  - git commit
+  - save changes
+  - commit to git
+  rollback_triggers:
+  - rollback
+  - undo changes
+  - restore checkpoint
+  - git rollback
+  - revert changes
+  - undo
+  ux_enhancement_triggers:
+  - enhance ux
+  - improve experience
+  - optimize interface
+  - ux review
+  - improve usability
+  onboarding_triggers:
+  - onboard
+  - onboarding
+  - setup profile
+  - start onboarding
+  - first time setup
+  - reset profile
 formatting:
   mandatory_sections:
   - understanding
