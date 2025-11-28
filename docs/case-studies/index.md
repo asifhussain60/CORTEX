@@ -6,7 +6,21 @@
 
 ## 📊 Featured Case Studies
 
-Case study information about 📊 featured case studies. See related sections for complete context.
+### [CORTEX Token Optimization](cortex-optimization/index.md)
+
+**CORTEX Internal | 8 Days | Performance Optimization**
+
+Achieved 97.2% input token reduction through modular architecture, template consolidation, and YAML caching. Reduced costs from $0.77 to $0.05 per request with $8,636 annual savings.
+
+**Key Achievements:**
+- ✅ 97.2% input token reduction (74,047 → 2,078 tokens)
+- ✅ 93.4% cost reduction ($0.77 → $0.05 per request)
+- ✅ 99.9% YAML load improvement (147ms → 0.11ms)
+- ✅ $8,636 annual savings at 1,000 requests/month
+
+[View Full Case Study →](cortex-optimization/index.md)
+
+---
 
 ### [Noor Canvas - SignalR Refactoring](noor-canvas/signalr-refactoring/index.md)
 
@@ -26,11 +40,11 @@ Transformed inline SignalR handlers into service-oriented architecture with comp
 
 ## 🎯 Case Studies by Type
 
-Case study information about 🎯 case studies by type. See related sections for complete context.
+### Performance Optimization
+- [CORTEX Token Optimization](cortex-optimization/index.md) - CORTEX Internal, 8 days
 
 ### Refactoring
 - [Noor Canvas - SignalR Architecture](noor-canvas/signalr-refactoring/index.md) - Blazor Server, 3.5 days
-
 
 - Performance Optimization
 - Bug Fixes
@@ -45,10 +59,12 @@ Across all case studies:
 
 | Metric | Total | Average |
 |--------|-------|---------|
-| **Projects** | 1 | - |
-| **Duration** | 3.5 days | 3.5 days |
-| **Code Reduced** | 1,520 lines | 1,520 lines |
-| **Tests Created** | 33 | 33 |
+| **Projects** | 2 | - |
+| **Duration** | 11.5 days | 5.75 days |
+| **Code Reduced** | 1,520 lines | 760 lines |
+| **Token Reduction** | 97.2% | - |
+| **Cost Savings** | $8,636/year | - |
+| **Tests Created** | 33 | 16.5 |
 | **Test Coverage Improvement** | 0% → 100% | 100% |
 
 ---
@@ -72,6 +88,6 @@ Want to document your own CORTEX success story? Use our [case study template](te
 
 ---
 
-**Last Updated:** 2025-11-24  
-**Total Case Studies:** 1  
-**Featured:** Noor Canvas SignalR Refactoring
+**Last Updated:** 2025-11-28  
+**Total Case Studies:** 2  
+**Featured:** CORTEX Token Optimization, Noor Canvas SignalR Refactoring
