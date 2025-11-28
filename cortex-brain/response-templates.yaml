@@ -287,10 +287,23 @@ templates:
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
     response_content: "[Natural language explanation]\n\n**📖 Governance & Brain Protection:**\n\
-      CORTEX operates under transparent engineering standards:\n- **The Rulebook:** [View all 27 governance rules](../docs/governance/THE-RULEBOOK.md)\n\
-      - **Quick Commands:** `show rules` | `explain rule [name]` | `my compliance` | `rulebook`\n\
-      - **Protection Layers:** TDD enforcement, SOLID compliance, brain integrity, security standards\n\
-      - **Learn More:** Say 'show compliance' for real-time dashboard\n\n[CONTEXT_SUMMARY]"
+      CORTEX operates under transparent engineering standards:\n\n\
+      **Quick Governance Commands:**\n\
+      | Command | Description | Example |\n\
+      |---------|-------------|----------|\n\
+      | `show rules` | Display full CORTEX governance rulebook | Say: \"show rules\" |\n\
+      | `rulebook` | Quick access to brain protection rules | Say: \"rulebook\" |\n\
+      | `compliance` | Check your current compliance status | Say: \"compliance\" |\n\
+      | `dor` | View Definition of Ready checklist | Say: \"dor\" or \"show dor\" |\n\
+      | `dod` | View Definition of Done checklist | Say: \"dod\" or \"show dod\" |\n\n\
+      **Compliance At-A-Glance:** {compliance_summary}\n\n\
+      **Core Protection Layers:**\n\
+      - ✅ TDD enforcement (RED→GREEN→REFACTOR cycle)\n\
+      - ✅ SOLID compliance checks\n\
+      - ✅ Brain integrity validation\n\
+      - ✅ Security standards (OWASP)\n\
+      - ✅ Git checkpoint system for safe rollbacks\n\n\
+      **Learn More:** Say 'show compliance' for real-time dashboard | Full rulebook: cortex-brain/brain-protection-rules.yaml\n\n[CONTEXT_SUMMARY]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
     context_summary_template: "\n<details>\n<summary>\U0001F9E0 <b>Context Memory\
