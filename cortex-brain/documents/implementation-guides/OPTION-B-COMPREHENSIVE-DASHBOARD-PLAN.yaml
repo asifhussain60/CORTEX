@@ -1,0 +1,906 @@
+# ============================================================================
+# OPTION B: COMPREHENSIVE DASHBOARD IMPLEMENTATION PLAN
+# ============================================================================
+# Tag: the promise
+# Purpose: Make CORTEX Rulebook impossible to miss with comprehensive visibility
+# Timeline: 4 weeks (1 month)
+# Status: APPROVED - Ready for Implementation
+# Author: Asif Hussain
+# Created: November 28, 2025
+# Version: 1.0
+# ============================================================================
+
+metadata:
+  plan_id: "option-b-comprehensive-dashboard"
+  tag: "the promise"
+  cross_machine_accessible: true
+  version: "1.0"
+  status: "approved"
+  timeline: "4 weeks"
+  created: "2025-11-28"
+  author: "Asif Hussain"
+  cortex_version: "3.2.1"
+  target_version: "3.3.0"
+  priority: "HIGH"
+  scope: "comprehensive_visibility"
+
+vision:
+  statement: "CORTEX vision is to provide transparent, proactive governance where rules guide development rather than block it."
+  clarification: "This is our internal engineering standard, not a customer promise. It represents how we build CORTEX to serve users effectively."
+  
+  core_principles:
+    - "Rules are visible before they're violated"
+    - "Enforcement is educational, not punitive"
+    - "Users understand why rules exist"
+    - "Compliance is measurable and trackable"
+    - "Governance adapts to user experience level"
+
+strategic_goals:
+  primary:
+    - "Zero surprise violations - users see rules before breaking them"
+    - "100% rulebook acknowledgment during onboarding"
+    - "Real-time compliance visibility via dashboard"
+    - "Educational enforcement - users learn from protection events"
+    - "Cross-machine accessibility - plan tracked in git"
+  
+  secondary:
+    - "Integration with User Profile System for adaptive guidance"
+    - "Foundation for CORTEX 4.0 Right Brain strategic features"
+    - "Measurable improvement in user satisfaction (NPS tracking)"
+    - "Reduced friction between users and Brain Protector"
+
+architecture:
+  current_state:
+    enforcement: "Strong - 27 rules, 10 layers, BrainProtector agent"
+    visibility: "Weak - Rulebook hidden in docs/governance/"
+    user_experience: "Reactive - Users discover rules when violated"
+    documentation: "Comprehensive but not surfaced proactively"
+    
+  target_state:
+    enforcement: "Enhanced - Same strong foundation + user education"
+    visibility: "Proactive - Multi-touchpoint display (greeting, help, pre-flight)"
+    user_experience: "Guided - Rules presented before work begins"
+    documentation: "Dynamic - Dashboard shows real-time compliance"
+    integration: "Seamless - Rulebook wired into all entry points"
+
+  enhancement_layers:
+    layer_1_proactive_visibility:
+      description: "Display rules at every entry point"
+      components:
+        - "Welcome banner with rulebook link"
+        - "Help command rulebook section"
+        - "Pre-flight acknowledgment flow"
+    
+    layer_2_active_monitoring:
+      description: "Real-time compliance tracking"
+      components:
+        - "Compliance dashboard (HTML + SQLite)"
+        - "Protection event notifications"
+        - "Rule violation analytics"
+    
+    layer_3_interactive_discovery:
+      description: "Conversational rule exploration"
+      components:
+        - "Natural language rule search"
+        - "Rule explanation on demand"
+        - "Context-sensitive rule display"
+    
+    layer_4_adaptive_guidance:
+      description: "Personalized rule emphasis"
+      components:
+        - "User profile integration"
+        - "Experience-based guidance"
+        - "Tech stack context awareness"
+    
+    layer_5_strategic_insights:
+      description: "Long-term governance intelligence (CORTEX 4.0)"
+      components:
+        - "Right Brain rule prioritization"
+        - "Project-specific rule weighting"
+        - "Predictive violation prevention"
+
+# ============================================================================
+# SPRINT STRUCTURE (4 Weeks, 1 Week Per Sprint)
+# ============================================================================
+
+sprint_1:
+  name: "Immediate Visibility Enhancement"
+  duration: "1 week"
+  goal: "Make rulebook impossible to miss at every CORTEX entry point"
+  status: "not_started"
+  start_date: "TBD"
+  end_date: "TBD"
+  
+  deliverables:
+    welcome_banner:
+      description: "Add rulebook link to CORTEX activation greeting"
+      file: "cortex-brain/response-templates.yaml"
+      acceptance_criteria:
+        - "All activation responses include rulebook link"
+        - "Link is prominent and action-oriented"
+        - "Text uses 'CORTEX vision is...' framing (not promises)"
+      implementation_details:
+        template_key: "cortex_activation"
+        new_section: |
+          📖 **CORTEX Governance:** This assistant operates under transparent engineering standards documented in [THE RULEBOOK](../docs/governance/THE-RULEBOOK.md). These are our internal principles - TDD enforcement, brain protection, SOLID compliance, etc.
+        location: "After capabilities summary, before operations list"
+    
+    help_command_enhancement:
+      description: "Add dedicated rulebook section to help responses"
+      file: "cortex-brain/response-templates.yaml"
+      acceptance_criteria:
+        - "Help command shows governance section"
+        - "Quick links to key rule categories"
+        - "Explanation of enforcement mechanisms"
+      implementation_details:
+        template_key: "help_response"
+        new_section: |
+          
+          ## 🛡️ Governance & Rules
+          
+          **THE RULEBOOK:** [View Complete Governance](../docs/governance/THE-RULEBOOK.md)
+          
+          **Key Rule Categories:**
+          - 🔒 Tier 0 Instincts (19 immutable rules)
+          - 🧪 TDD Enforcement (RED→GREEN→REFACTOR)
+          - 🧠 Brain Protection (SKULL rules)
+          - 📐 SOLID Principles (architecture standards)
+          
+          **CORTEX vision is to guide development with transparent standards rather than block progress with hidden rules.**
+          
+          Type `rulebook` or `show rules` to explore governance interactively.
+    
+    pre_flight_acknowledgment:
+      description: "First-use flow requiring rulebook acknowledgment"
+      file: "src/tier1/user_profile_manager.py"
+      acceptance_criteria:
+        - "New users see rulebook summary before first operation"
+        - "Acknowledgment timestamp stored in Tier 3 user profile"
+        - "Can be re-triggered with `review rules` command"
+        - "Does not block experienced users (one-time only)"
+      implementation_details:
+        trigger: "First operation after profile creation"
+        storage: "tier3-user-profile.db - new column 'rulebook_acknowledged_at'"
+        bypass_logic: "If acknowledged_at exists, skip flow"
+        content: |
+          🎯 **Welcome to CORTEX!**
+          
+          Before we begin, let's review the core principles that guide CORTEX development:
+          
+          **CORTEX Vision:**
+          - TDD Enforcement (tests before code)
+          - Brain Protection (27 automated rules)
+          - SOLID Principles (clean architecture)
+          - Incremental Planning (YAML-driven)
+          
+          These are our internal engineering standards documented in [THE RULEBOOK](../docs/governance/THE-RULEBOOK.md).
+          
+          **Type 'acknowledge' to confirm you've reviewed these principles, or 'read more' for detailed governance.**
+  
+  testing_requirements:
+    unit_tests:
+      - "test_welcome_banner_includes_rulebook_link()"
+      - "test_help_command_shows_governance_section()"
+      - "test_first_use_triggers_acknowledgment_flow()"
+      - "test_acknowledgment_timestamp_persisted()"
+      - "test_experienced_users_skip_acknowledgment()"
+    
+    integration_tests:
+      - "test_end_to_end_onboarding_with_rulebook_acknowledgment()"
+      - "test_rulebook_link_navigation_from_all_entry_points()"
+    
+    manual_validation:
+      - "Fresh user activation shows acknowledgment flow"
+      - "Links navigate to correct rulebook section"
+      - "Language uses 'vision' framing, not 'promise' framing"
+
+sprint_2:
+  name: "Active Compliance Dashboard"
+  duration: "1 week"
+  goal: "Real-time visibility into governance compliance and protection events"
+  status: "not_started"
+  start_date: "TBD"
+  end_date: "TBD"
+  dependencies:
+    - "Sprint 1 complete (acknowledgment flow in place)"
+  
+  deliverables:
+    compliance_dashboard_backend:
+      description: "SQLite database for compliance tracking"
+      file: "cortex-brain/cortex-compliance.db"
+      schema: |
+        CREATE TABLE compliance_status (
+          rule_id TEXT PRIMARY KEY,
+          rule_name TEXT NOT NULL,
+          category TEXT NOT NULL,
+          severity TEXT NOT NULL,
+          total_checks INTEGER DEFAULT 0,
+          violations INTEGER DEFAULT 0,
+          last_checked_at TEXT,
+          last_violation_at TEXT
+        );
+        
+        CREATE TABLE protection_events (
+          event_id TEXT PRIMARY KEY,
+          rule_id TEXT NOT NULL,
+          severity TEXT NOT NULL,
+          file_path TEXT,
+          description TEXT,
+          resolution TEXT,
+          created_at TEXT NOT NULL,
+          resolved_at TEXT,
+          FOREIGN KEY (rule_id) REFERENCES compliance_status(rule_id)
+        );
+        
+        CREATE TABLE user_compliance_history (
+          user_id TEXT NOT NULL,
+          rule_id TEXT NOT NULL,
+          acknowledged_at TEXT,
+          violations_count INTEGER DEFAULT 0,
+          last_violation_at TEXT,
+          PRIMARY KEY (user_id, rule_id)
+        );
+      
+      acceptance_criteria:
+        - "Database created during CORTEX initialization"
+        - "Brain Protector logs events to compliance DB"
+        - "Historical tracking of violations per user"
+        - "Performance: queries < 50ms for dashboard rendering"
+    
+    compliance_dashboard_frontend:
+      description: "HTML dashboard showing compliance status"
+      file: "src/tier1/compliance_dashboard_generator.py"
+      output: "cortex-brain/dashboards/compliance-dashboard.html"
+      acceptance_criteria:
+        - "Dashboard shows all 27 rules with status (compliant/violated)"
+        - "Visual indicators (🟢 compliant, 🟡 warning, 🔴 violation)"
+        - "Recent protection events list (last 10)"
+        - "Compliance score percentage (compliant rules / total rules)"
+        - "Responsive design (works in VS Code Simple Browser)"
+        - "Auto-refresh every 30 seconds (JavaScript polling)"
+      
+      implementation_details:
+        command_trigger: "`show compliance` or `dashboard`"
+        data_source: "cortex-brain/cortex-compliance.db"
+        template_file: "cortex-brain/templates/compliance-dashboard.html.j2"
+        css_framework: "Minimal custom CSS (no external dependencies)"
+        javascript: "Vanilla JS for auto-refresh (no jQuery)"
+    
+    protection_event_notifications:
+      description: "User-facing notifications when rules are violated"
+      file: "src/tier0/brain_protector.py"
+      acceptance_criteria:
+        - "When rule violated, show notification in Copilot Chat"
+        - "Notification includes: rule name, severity, explanation, suggested fix"
+        - "Link to dashboard for detailed view"
+        - "Educational tone (not punitive)"
+      
+      implementation_details:
+        notification_format: |
+          🛡️ **Brain Protection Alert**
+          
+          **Rule Violated:** {rule_name}
+          **Severity:** {severity}
+          
+          **What Happened:**
+          {violation_description}
+          
+          **Why This Matters:**
+          {rule_rationale}
+          
+          **Suggested Fix:**
+          {remediation_guidance}
+          
+          **Learn More:** [View Rule Details](rulebook#{rule_anchor}) | [Compliance Dashboard](dashboard)
+        
+        severity_emoji_mapping:
+          blocked: "🚫"
+          warning: "⚠️"
+          info: "ℹ️"
+  
+  testing_requirements:
+    unit_tests:
+      - "test_compliance_db_schema_creation()"
+      - "test_brain_protector_logs_events_to_compliance_db()"
+      - "test_dashboard_generator_renders_html()"
+      - "test_compliance_score_calculation()"
+      - "test_protection_event_notification_format()"
+    
+    integration_tests:
+      - "test_end_to_end_violation_to_dashboard_display()"
+      - "test_dashboard_auto_refresh_polling()"
+    
+    performance_tests:
+      - "test_dashboard_query_performance_under_50ms()"
+      - "test_compliance_db_handles_1000_events()"
+    
+    manual_validation:
+      - "Dashboard displays correctly in VS Code Simple Browser"
+      - "Auto-refresh updates without full page reload"
+      - "Notifications appear in Copilot Chat during violations"
+
+sprint_3:
+  name: "Interactive Rule Explorer"
+  duration: "1 week"
+  goal: "Conversational interface for exploring and learning about rules"
+  status: "not_started"
+  start_date: "TBD"
+  end_date: "TBD"
+  dependencies:
+    - "Sprint 2 complete (dashboard operational)"
+  
+  deliverables:
+    natural_language_rule_search:
+      description: "Search rules by keyword, category, or question"
+      file: "src/operations/modules/admin/rulebook_explorer.py"
+      acceptance_criteria:
+        - "User can type 'explain TDD rule' and get detailed explanation"
+        - "Supports fuzzy matching (e.g., 'test' matches 'TDD_ENFORCEMENT')"
+        - "Returns rule details: name, severity, rationale, examples"
+        - "Integrated into response-templates.yaml for conversational flow"
+      
+      implementation_details:
+        search_index: "Load brain-protection-rules.yaml into in-memory index"
+        fuzzy_matching: "Use difflib.SequenceMatcher for similarity scoring"
+        result_format: |
+          🔍 **Rule Found: {rule_name}**
+          
+          **Category:** {category}
+          **Severity:** {severity_icon} {severity}
+          
+          **What It Does:**
+          {description}
+          
+          **Why It Exists:**
+          {rationale}
+          
+          **Examples:**
+          ✅ **Good:** {good_example}
+          ❌ **Bad:** {bad_example}
+          
+          **Related Rules:** {related_rules_list}
+    
+    rule_explanation_on_demand:
+      description: "Click/command to get detailed rule explanation"
+      integration: "Copilot Chat inline commands"
+      acceptance_criteria:
+        - "User can type '@cortex explain rule INCREMENTAL_PLAN_GENERATION'"
+        - "Dashboard links to detailed explanations"
+        - "Explanation includes real CORTEX examples from codebase"
+        - "Shows historical violation patterns (if any)"
+      
+      implementation_details:
+        trigger_patterns:
+          - "explain rule {rule_name}"
+          - "why does {rule_name} exist"
+          - "show me examples of {rule_name}"
+          - "what is {rule_name}"
+        
+        content_sources:
+          - "brain-protection-rules.yaml (rule definition)"
+          - "THE-RULEBOOK.md (detailed documentation)"
+          - "cortex-compliance.db (historical violations)"
+          - "Codebase grep for real examples"
+    
+    context_sensitive_rule_display:
+      description: "Show relevant rules based on current work context"
+      file: "src/tier1/context_aware_rule_suggester.py"
+      acceptance_criteria:
+        - "When editing Tier 0 files, show Tier 0 protection rules"
+        - "When starting feature work, show TDD enforcement rules"
+        - "When modifying git history, show git isolation rules"
+        - "Non-intrusive (info notifications, not blocking)"
+      
+      implementation_details:
+        context_detection:
+          - "File path analysis (tier0/, tier1/, etc.)"
+          - "Git status analysis (staged changes)"
+          - "Operation type detection (from user command)"
+        
+        rule_mapping:
+          tier0_edits: ["TIER0_APPLICATION_DATA", "INSTINCT_IMMUTABILITY"]
+          feature_work: ["TDD_ENFORCEMENT", "DEFINITION_OF_READY", "DEFINITION_OF_DONE"]
+          git_operations: ["GIT_ISOLATION_ENFORCEMENT", "BRAIN_STATE_GITIGNORE"]
+          architecture_changes: ["SOLID_PRINCIPLES", "SINGLE_RESPONSIBILITY"]
+  
+  testing_requirements:
+    unit_tests:
+      - "test_rule_search_by_keyword()"
+      - "test_fuzzy_matching_returns_closest_rule()"
+      - "test_rule_explanation_includes_all_sections()"
+      - "test_context_detection_from_file_path()"
+      - "test_relevant_rules_suggested_for_context()"
+    
+    integration_tests:
+      - "test_end_to_end_rule_search_and_display()"
+      - "test_dashboard_links_to_detailed_explanations()"
+    
+    user_testing:
+      - "10 beta users test conversational rule exploration"
+      - "Collect feedback on search accuracy"
+      - "Measure time to find rule explanation (target < 30 seconds)"
+
+sprint_4:
+  name: "Refinement & User Profile Integration"
+  duration: "1 week"
+  goal: "Polish UX, integrate with User Profile System, prepare for production"
+  status: "not_started"
+  start_date: "TBD"
+  end_date: "TBD"
+  dependencies:
+    - "Sprint 3 complete (interactive explorer operational)"
+  
+  deliverables:
+    user_profile_integration:
+      description: "Adapt rule visibility based on user experience level"
+      file: "src/tier1/user_profile_manager.py"
+      acceptance_criteria:
+        - "Junior users: More detailed rule explanations, examples"
+        - "Senior users: Concise rule summaries, assume knowledge"
+        - "Expert users: Rule references only, minimal explanation"
+        - "Profile preferences persist across sessions"
+      
+      implementation_details:
+        experience_adaptations:
+          junior:
+            explanation_depth: "detailed"
+            examples_count: 3
+            related_concepts: true
+            learning_resources: true
+          
+          mid:
+            explanation_depth: "standard"
+            examples_count: 2
+            related_concepts: true
+            learning_resources: false
+          
+          senior:
+            explanation_depth: "concise"
+            examples_count: 1
+            related_concepts: false
+            learning_resources: false
+          
+          expert:
+            explanation_depth: "reference_only"
+            examples_count: 0
+            related_concepts: false
+            learning_resources: false
+    
+    rule_customization_preferences:
+      description: "Allow users to customize rule display preferences"
+      file: "src/tier3/user_preferences.db"
+      acceptance_criteria:
+        - "User can disable specific rule notifications (warnings only)"
+        - "Cannot disable BLOCKED severity rules (Tier 0 instincts)"
+        - "Dashboard reflects customization preferences"
+        - "Preferences sync via git (stored in cortex-brain/config/)"
+      
+      implementation_details:
+        command: "`customize rules`"
+        ui: "Interactive prompt with rule list"
+        storage: "tier3-user-preferences.db + YAML export for git sync"
+        restrictions: "BLOCKED rules always shown (cannot be disabled)"
+    
+    analytics_and_metrics:
+      description: "Track governance effectiveness metrics"
+      file: "cortex-brain/cortex-compliance.db"
+      acceptance_criteria:
+        - "Track rulebook acknowledgment rate (target: 100%)"
+        - "Track average time to acknowledge (target: < 5 minutes)"
+        - "Track violation reduction over time"
+        - "Track user satisfaction (NPS survey prompt after 30 days)"
+        - "Dashboard shows trends (violations over time graph)"
+      
+      implementation_details:
+        metrics_tracked:
+          - "acknowledgment_rate"
+          - "average_acknowledgment_time"
+          - "violations_per_day"
+          - "compliance_score_trend"
+          - "user_nps_score"
+        
+        visualization: "Chart.js for trend graphs in dashboard"
+    
+    documentation_and_training:
+      description: "Complete implementation guides and user training materials"
+      files:
+        - "docs/guides/GOVERNANCE-VISIBILITY-GUIDE.md"
+        - "docs/guides/COMPLIANCE-DASHBOARD-GUIDE.md"
+        - "cortex-brain/documents/implementation-guides/option-b-retrospective.yaml"
+      
+      acceptance_criteria:
+        - "User guide explains all visibility features"
+        - "Developer guide documents dashboard architecture"
+        - "Retrospective captures lessons learned"
+        - "Training video (optional) for new contributors"
+    
+    production_readiness:
+      description: "Final validation and deployment preparation"
+      checklist:
+        - "All 900+ tests pass (100% pass rate)"
+        - "Performance benchmarks met (dashboard < 50ms)"
+        - "Security audit complete (no sensitive data exposed)"
+        - "Backward compatibility verified (CORTEX 3.2.1 users unaffected)"
+        - "Rollback plan documented"
+        - "Release notes prepared"
+        - "Version bump to 3.3.0"
+  
+  testing_requirements:
+    comprehensive_testing:
+      - "Full regression test suite (900+ tests)"
+      - "User acceptance testing (100 beta users)"
+      - "Performance testing (dashboard under load)"
+      - "Security testing (penetration test for dashboard)"
+      - "Cross-platform testing (macOS, Windows, Linux)"
+    
+    user_acceptance_criteria:
+      - "NPS score > 50 (promoter majority)"
+      - "90% of users find rulebook easily"
+      - "80% of users understand rule violations"
+      - "Zero critical bugs reported"
+      - "Dashboard loads < 2 seconds on average machine"
+
+# ============================================================================
+# IMPLEMENTATION ROADMAP
+# ============================================================================
+
+implementation_roadmap:
+  week_1:
+    sprint: "Sprint 1 - Immediate Visibility"
+    focus: "Entry point enhancements"
+    deliverables:
+      - "Welcome banner with rulebook link"
+      - "Help command governance section"
+      - "Pre-flight acknowledgment flow"
+    team_allocation:
+      backend: "2 days (user profile acknowledgment)"
+      frontend: "1 day (template updates)"
+      testing: "2 days (unit + integration)"
+    
+    daily_breakdown:
+      day_1: "Backend - Add acknowledgment flow to user_profile_manager.py"
+      day_2: "Backend - Store acknowledgment timestamp in Tier 3 DB"
+      day_3: "Frontend - Update response-templates.yaml with rulebook sections"
+      day_4: "Testing - Write and run unit tests (target: 100% coverage)"
+      day_5: "Testing - Integration tests + manual validation"
+  
+  week_2:
+    sprint: "Sprint 2 - Active Compliance Dashboard"
+    focus: "Real-time monitoring"
+    deliverables:
+      - "Compliance SQLite database"
+      - "HTML dashboard with auto-refresh"
+      - "Protection event notifications"
+    team_allocation:
+      backend: "3 days (database + dashboard generator)"
+      frontend: "1 day (HTML/CSS/JS)"
+      integration: "1 day (Brain Protector logging)"
+    
+    daily_breakdown:
+      day_1: "Backend - Create compliance DB schema + initialization"
+      day_2: "Backend - Implement dashboard generator (Python + Jinja2)"
+      day_3: "Backend - Integrate Brain Protector with compliance DB"
+      day_4: "Frontend - Build HTML dashboard with auto-refresh"
+      day_5: "Testing - End-to-end validation + performance testing"
+  
+  week_3:
+    sprint: "Sprint 3 - Interactive Rule Explorer"
+    focus: "Conversational interface"
+    deliverables:
+      - "Natural language rule search"
+      - "Rule explanation on demand"
+      - "Context-sensitive rule suggestions"
+    team_allocation:
+      backend: "3 days (search index + context detection)"
+      integration: "1 day (Copilot Chat commands)"
+      testing: "1 day (user testing with 10 beta users)"
+    
+    daily_breakdown:
+      day_1: "Backend - Build rule search index with fuzzy matching"
+      day_2: "Backend - Implement context-aware rule suggester"
+      day_3: "Integration - Wire up Copilot Chat commands"
+      day_4: "Testing - Unit tests + integration tests"
+      day_5: "User Testing - 10 beta users provide feedback"
+  
+  week_4:
+    sprint: "Sprint 4 - Refinement & Launch"
+    focus: "Polish and production readiness"
+    deliverables:
+      - "User profile integration"
+      - "Analytics and metrics"
+      - "Documentation and training"
+      - "Production deployment"
+    team_allocation:
+      polish: "2 days (UX refinement + user profile integration)"
+      documentation: "1 day (guides + retrospective)"
+      testing: "2 days (comprehensive validation + 100 beta users)"
+    
+    daily_breakdown:
+      day_1: "Polish - User profile integration (experience-based adaptations)"
+      day_2: "Polish - Rule customization preferences + analytics setup"
+      day_3: "Documentation - Complete guides + training materials"
+      day_4: "Testing - Full regression suite + security audit"
+      day_5: "Launch - Deploy to production + monitor initial rollout"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    acknowledgment_rate:
+      target: "100%"
+      measurement: "Percentage of users who acknowledge rulebook on first use"
+      baseline: "0% (no acknowledgment flow exists)"
+    
+    visibility_improvement:
+      target: "90%"
+      measurement: "Percentage of users who report finding rulebook easily (survey)"
+      baseline: "Unknown (no current survey data)"
+    
+    violation_reduction:
+      target: "30%"
+      measurement: "Reduction in rule violations after 30 days"
+      baseline: "Current violation rate from cortex-compliance.db"
+    
+    dashboard_adoption:
+      target: "70%"
+      measurement: "Percentage of users who access dashboard at least once per week"
+      baseline: "0% (dashboard doesn't exist)"
+    
+    performance:
+      dashboard_load_time:
+        target: "< 2 seconds"
+        measurement: "Average time to render dashboard (95th percentile)"
+      
+      query_performance:
+        target: "< 50ms"
+        measurement: "Average database query time for compliance data"
+  
+  qualitative:
+    user_satisfaction:
+      target: "NPS > 50"
+      measurement: "Net Promoter Score survey after 30 days"
+      baseline: "Unknown (no current NPS data)"
+    
+    rule_comprehension:
+      target: "80%"
+      measurement: "Users report understanding why rules were violated (survey)"
+      baseline: "Unknown (no current survey data)"
+    
+    friction_reduction:
+      target: "Improved"
+      measurement: "User feedback: 'Rules guide rather than block' (qualitative)"
+      baseline: "Current perception: Rules feel restrictive"
+
+# ============================================================================
+# RISK MANAGEMENT
+# ============================================================================
+
+risks:
+  technical:
+    risk_1:
+      description: "Dashboard performance degrades with large violation history"
+      likelihood: "medium"
+      impact: "medium"
+      mitigation:
+        - "Implement pagination (show last 100 events)"
+        - "Archive old events to separate table"
+        - "Add database indexes on frequently queried columns"
+    
+    risk_2:
+      description: "Acknowledgment flow feels intrusive to experienced users"
+      likelihood: "high"
+      impact: "low"
+      mitigation:
+        - "One-time only flow (bypass on subsequent uses)"
+        - "Quick acknowledgment (single button click)"
+        - "Skip option for experts (but log the skip)"
+    
+    risk_3:
+      description: "Browser compatibility issues in VS Code Simple Browser"
+      likelihood: "low"
+      impact: "high"
+      mitigation:
+        - "Use vanilla JavaScript (no modern ES6+ features)"
+        - "Test in VS Code Simple Browser during Sprint 2"
+        - "Fallback to text-based dashboard if rendering fails"
+  
+  organizational:
+    risk_1:
+      description: "Timeline slips due to scope creep"
+      likelihood: "medium"
+      impact: "medium"
+      mitigation:
+        - "Strict sprint boundaries (1 week each)"
+        - "MVP features only (defer customization to Sprint 4)"
+        - "Daily standup to track progress"
+    
+    risk_2:
+      description: "User resistance to new acknowledgment flow"
+      likelihood: "low"
+      impact: "low"
+      mitigation:
+        - "Educational messaging (explain why it helps)"
+        - "Quick skip option for emergencies"
+        - "Collect feedback and iterate in Sprint 4"
+
+# ============================================================================
+# FOUNDATION FOR CORTEX 4.0
+# ============================================================================
+
+cortex_4_0_preparation:
+  right_brain_integration:
+    description: "Option B creates foundation for strategic rule guidance"
+    components:
+      - "Compliance DB provides historical data for Right Brain analysis"
+      - "Context-aware rule suggester is primitive strategic guidance system"
+      - "User profile integration enables adaptive rule emphasis"
+    
+    cortex_4_0_enhancements:
+      - "Right Brain analyzes project patterns to prioritize relevant rules"
+      - "Predictive violation prevention (warn before user attempts violation)"
+      - "Adaptive rule weighting based on project complexity"
+      - "Conversational rule negotiation (explain why rule applies in this context)"
+  
+  adaptive_rule_emphasis:
+    description: "Rules change priority based on project context"
+    examples:
+      greenfield_project:
+        high_priority: ["TDD_ENFORCEMENT", "SOLID_PRINCIPLES"]
+        low_priority: ["BACKWARD_COMPATIBILITY"]
+      
+      legacy_migration:
+        high_priority: ["BACKWARD_COMPATIBILITY", "INCREMENTAL_PLAN_GENERATION"]
+        low_priority: ["SKULL_VISUAL_REGRESSION"]
+      
+      bug_fix:
+        high_priority: ["SKULL_TEST_BEFORE_CLAIM", "SKULL_INTEGRATION_VERIFICATION"]
+        low_priority: ["DEFINITION_OF_READY"]
+  
+  learning_paths:
+    description: "Interactive governance tutorials"
+    implementation_timeline: "CORTEX 4.0 (Q2 2026)"
+    features:
+      - "Rule-specific tutorials with real CORTEX examples"
+      - "Gamification (badges for rule compliance)"
+      - "Mentor mode (experienced users guide juniors)"
+
+# ============================================================================
+# DEPENDENCIES & PREREQUISITES
+# ============================================================================
+
+dependencies:
+  existing_systems:
+    - name: "User Profile System"
+      status: "production"
+      version: "3.2.1"
+      integration_points:
+        - "Acknowledgment timestamp storage"
+        - "Experience level for adaptive guidance"
+    
+    - name: "Brain Protector"
+      status: "production"
+      version: "2.2"
+      integration_points:
+        - "Event logging to compliance DB"
+        - "Protection event notifications"
+    
+    - name: "Response Templates"
+      status: "production"
+      version: "3.2"
+      integration_points:
+        - "Welcome banner template updates"
+        - "Help command template updates"
+    
+    - name: "Enterprise Documentation Orchestrator"
+      status: "production"
+      version: "3.2.1"
+      integration_points:
+        - "Rulebook regeneration"
+        - "Dashboard generation"
+  
+  new_components:
+    - name: "Compliance Database"
+      type: "SQLite"
+      location: "cortex-brain/cortex-compliance.db"
+      schema_version: "1.0"
+    
+    - name: "Compliance Dashboard Generator"
+      type: "Python module"
+      location: "src/tier1/compliance_dashboard_generator.py"
+      dependencies: ["Jinja2", "SQLite3"]
+    
+    - name: "Rulebook Explorer"
+      type: "Python module"
+      location: "src/operations/modules/admin/rulebook_explorer.py"
+      dependencies: ["difflib", "PyYAML"]
+
+# ============================================================================
+# ACCEPTANCE CRITERIA
+# ============================================================================
+
+overall_acceptance_criteria:
+  sprint_1:
+    - "✅ All activation responses include rulebook link"
+    - "✅ Help command shows governance section"
+    - "✅ First-use acknowledgment flow functional"
+    - "✅ Acknowledgment timestamp persisted in Tier 3"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_2:
+    - "✅ Compliance database operational"
+    - "✅ Dashboard renders in VS Code Simple Browser"
+    - "✅ Auto-refresh works without full page reload"
+    - "✅ Protection event notifications appear in Copilot Chat"
+    - "✅ Dashboard load time < 2 seconds"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_3:
+    - "✅ Natural language rule search works"
+    - "✅ Rule explanations include all required sections"
+    - "✅ Context-sensitive suggestions appear during relevant work"
+    - "✅ 10 beta users provide positive feedback"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_4:
+    - "✅ User profile integration adapts rule visibility"
+    - "✅ Rule customization preferences work"
+    - "✅ Analytics dashboard shows trends"
+    - "✅ Documentation complete"
+    - "✅ 100 beta users test without critical bugs"
+    - "✅ NPS score > 50"
+    - "✅ All 900+ tests pass (100% pass rate)"
+    - "✅ Production deployment successful"
+
+# ============================================================================
+# POST-IMPLEMENTATION REVIEW
+# ============================================================================
+
+retrospective_plan:
+  timing: "1 week after Sprint 4 completion"
+  participants:
+    - "Implementation team"
+    - "10 beta users (representative sample)"
+    - "Stakeholders (project owner)"
+  
+  agenda:
+    - "Review success metrics (quantitative)"
+    - "Discuss user feedback (qualitative)"
+    - "Identify lessons learned"
+    - "Document technical debt"
+    - "Plan CORTEX 4.0 enhancements"
+  
+  deliverable: "cortex-brain/documents/implementation-guides/option-b-retrospective.yaml"
+
+# ============================================================================
+# CONCLUSION
+# ============================================================================
+
+conclusion:
+  summary: |
+    Option B (Comprehensive Dashboard - 1 month) provides the optimal balance between
+    immediate impact and strategic foundation for CORTEX 4.0. By implementing proactive
+    visibility, active monitoring, and interactive exploration, we make the CORTEX
+    rulebook impossible to miss while maintaining a positive user experience.
+    
+    This plan transforms governance from a reactive enforcement mechanism into a
+    proactive guidance system that helps users succeed rather than blocking progress.
+  
+  next_steps:
+    - "Get plan approved by stakeholders"
+    - "Allocate team resources (1 developer, 1 week per sprint)"
+    - "Set sprint start dates"
+    - "Kick off Sprint 1 (Immediate Visibility Enhancement)"
+  
+  vision_statement: |
+    CORTEX vision is to build AI assistance that operates transparently under
+    well-defined engineering standards. These rules are not promises to customers -
+    they are our internal commitment to code quality, architectural integrity, and
+    sustainable development practices. By making these standards visible and
+    educational, we empower users to work with CORTEX effectively rather than
+    against its design principles.
+
+# ============================================================================
+# END OF PLAN
+# ============================================================================

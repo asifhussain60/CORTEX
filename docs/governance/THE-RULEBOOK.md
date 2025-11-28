@@ -27,6 +27,8 @@
 
 This is **THE** authoritative source of truth for all CORTEX governance, rules, standards, and principles. Every rule, constraint, and best practice is derived from live brain sources - all content is real and verified.
 
+**CORTEX vision is to provide transparent, proactive governance where rules guide development rather than block it.** This document represents our internal engineering standards - not customer promises, but our commitment to code quality, architectural integrity, and sustainable development practices.
+
 **Brain Sources (Live Data):**
 
 - `cortex-brain/brain-protection-rules.yaml` - 27 protection rules across 10 layers
@@ -599,6 +601,8 @@ To update the rulebook:
 ## VIII. Conclusion
 
 This rulebook represents the accumulated wisdom of CORTEX development. Every rule, principle, and pattern has been validated through real implementation experience.
+
+**CORTEX vision is to build AI assistance that operates transparently under well-defined engineering standards.** These rules are not promises to customers - they are our internal commitment to code quality, architectural integrity, and sustainable development practices.
 
 **100% Real Content. 100% Verified Data. 100% Live Brain Sources.**
 
