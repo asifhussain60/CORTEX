@@ -359,6 +359,15 @@ class RollbackOrchestrator:
                 'message': ROLLBACK_MSG_FORCED.format(checkpoint_id=checkpoint_id)
             }
         
+        # Validate checkpoint exists before proceeding
+        if not self.validate_checkpoint(checkpoint_id):
+            return {
+                'executed': False,
+                'forced': False,
+                'preview': None,
+                'message': f'Invalid checkpoint: {checkpoint_id} not found'
+            }
+        
         # Normal mode: perform safety checks and get confirmation
         safety = self.check_rollback_safety(checkpoint_id)
         if not safety['safe']:
@@ -384,6 +393,45 @@ class RollbackOrchestrator:
             'forced': False,
             'preview': None,
             'message': ROLLBACK_MSG_SUCCESS.format(checkpoint_id=checkpoint_id)
+        }
+    
+    def parse_rollback_command(self, command: str) -> Dict[str, Any]:
+        """Parse natural language rollback command.
+        
+        Supports formats:
+        - 'rollback to <checkpoint-id>'
+        - 'rollback <checkpoint-id>'
+        
+        Args:
+            command: Natural language command string
+            
+        Returns:
+            Dict with keys:
+            - checkpoint_id: Extracted checkpoint ID (str or None)
+            - dry_run: Dry-run flag (bool, default False)
+            - force: Force flag (bool, default False)
+        
+        Example:
+            >>> orchestrator.parse_rollback_command('rollback to pre-work-20251128-100000')
+            {'checkpoint_id': 'pre-work-20251128-100000', 'dry_run': False, 'force': False}
+        """
+        import re
+        
+        # Extract checkpoint ID from command (matches alphanumeric and hyphens)
+        match = re.search(r'rollback\s+(?:to\s+)?([a-zA-Z0-9-]+)', command.lower())
+        
+        if match:
+            return {
+                'checkpoint_id': match.group(1),
+                'dry_run': False,
+                'force': False
+            }
+        
+        # No match found
+        return {
+            'checkpoint_id': None,
+            'dry_run': False,
+            'force': False
         }
     
     def _execute_git_reset(self, checkpoint_id: str) -> Dict[str, Any]:
