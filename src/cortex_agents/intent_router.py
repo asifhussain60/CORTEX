@@ -150,7 +150,11 @@ class IntentRouter(BaseAgent):
                 "update my profile", "change my profile", "update settings",
                 "change settings", "profile settings", "update tech stack",
                 "change tech stack", "update experience", "change experience",
-                "update mode", "change mode", "update interaction", "change interaction"
+                "update mode", "change mode", "update interaction", "change interaction",
+                # Tech stack specific keywords (Phase 1: User Profile System)
+                "switch to azure", "switch to aws", "switch to gcp", "use azure stack",
+                "use aws stack", "use gcp stack", "prefer azure", "prefer aws", "prefer gcp",
+                "no tech preference", "custom tech stack", "configure stack", "set stack"
             ],
         }
         
