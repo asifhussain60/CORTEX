@@ -25,6 +25,12 @@ from .base_operation_module import (
 )
 from .modules.healthcheck.brain_analytics_collector import BrainAnalyticsCollector
 
+# Enhancement Catalog imports
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.enhancement_catalog import EnhancementCatalog
+from discovery.enhancement_discovery import EnhancementDiscoveryEngine
+
 
 logger = logging.getLogger(__name__)
 
@@ -148,6 +154,17 @@ class HealthCheckOperation(BaseOperationModule):
                 if brain_analytics.get('health_score', 100) < 70:
                     health_report['warnings'].append(
                         f"Brain health score below threshold: {brain_analytics.get('health_score')}%"
+            
+            # Enhancement Catalog health check
+            if component in ['catalog', 'all']:
+                catalog_check = self._check_catalog_health()
+                health_report['checks']['catalog'] = catalog_check
+                if catalog_check['status'] == 'warning':
+                    health_report['warnings'].extend(catalog_check['issues'])
+                elif catalog_check['status'] == 'critical':
+                    health_report['errors'].extend(catalog_check['issues'])
+                    if health_report['overall_status'] == 'healthy':
+                        health_report['overall_status'] = 'warning'
                     )
                 
                 # Add brain recommendations
@@ -404,6 +421,67 @@ class HealthCheckOperation(BaseOperationModule):
                 'status': 'error',
                 'error': str(e),
                 'health_score': 0
+            }
+    
+    def _check_catalog_health(self) -> Dict[str, Any]:
+        """
+        Check Enhancement Catalog health and freshness.
+        
+        Returns:
+            Dict with catalog health metrics
+        """
+        issues = []
+        status = 'healthy'
+        
+        try:
+            catalog = EnhancementCatalog()
+            
+            # Get catalog statistics
+            stats = catalog.get_catalog_stats()
+            
+            # Check for staleness (> 7 days since any review)
+            last_reviews = {}
+            for review_type in ['documentation', 'epm_setup', 'alignment', 'upgrade', 'admin_help', 'healthcheck']:
+                last_review = catalog.get_last_review_timestamp(review_type)
+                if last_review:
+                    days_since = (datetime.now() - last_review).days
+                    last_reviews[review_type] = days_since
+                    
+                    if days_since > 7:
+                        issues.append(f"{review_type} catalog review stale (>{days_since} days old)")
+                        if status == 'healthy':
+                            status = 'warning'
+            
+            # Check for catalog integrity
+            if stats['total_features'] == 0:
+                issues.append("Enhancement catalog is empty - run discovery")
+                status = 'warning'
+            
+            # Check for discovery engine availability
+            try:
+                engine = EnhancementDiscoveryEngine()
+                engine_status = 'available'
+            except Exception as e:
+                engine_status = f'unavailable: {e}'
+                issues.append(f"Discovery engine not available: {e}")
+                status = 'warning'
+            
+            return {
+                'status': status,
+                'total_features': stats['total_features'],
+                'by_type': stats['by_type'],
+                'by_status': stats['by_status'],
+                'last_reviews': last_reviews,
+                'discovery_engine': engine_status,
+                'issues': issues,
+            }
+        
+        except Exception as e:
+            logger.error(f"Catalog health check failed: {e}")
+            return {
+                'status': 'critical',
+                'error': str(e),
+                'issues': [f"Catalog health check failed: {e}"],
             }
     
     def rollback(self) -> OperationResult:

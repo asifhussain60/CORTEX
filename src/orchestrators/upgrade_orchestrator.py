@@ -8,9 +8,12 @@ Purpose:
 - Pulls from origin/main
 - Runs post-upgrade migrations
 - Provides rollback on failure
+- Shows 'What's New' with features added since user's version
 
+Version: 1.1 (Added Enhancement Catalog integration)
 Author: GitHub Copilot
 Created: 2024-11-25
+Updated: 2024-11-28 (Enhancement Catalog integration)
 """
 
 import os
@@ -22,6 +25,12 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple, List
 import logging
 import json
+
+# Enhancement Catalog imports
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.enhancement_catalog import EnhancementCatalog, FeatureType
+from discovery.enhancement_discovery import EnhancementDiscoveryEngine
 
 logger = logging.getLogger(__name__)
 
@@ -155,9 +164,18 @@ class UpgradeOrchestrator:
             # Verify upgrade
             new_version = self._get_current_version()
             if new_version == latest_version:
+                # Generate "What's New" report
+                whats_new = self._generate_whats_new(current_version, new_version)
+                
                 message = f"✅ Upgraded successfully: {current_version} → {new_version}"
                 if backup_id:
                     message += f"\n📦 Backup created: {backup_id}"
+                if whats_new:
+                    message += f"\n\n{whats_new}"
+                
+                # Log upgrade review in catalog
+                self._log_upgrade_review(new_version)
+                
                 return (True, message)
             else:
                 logger.warning(f"Version mismatch after upgrade: expected {latest_version}, got {new_version}")
@@ -456,6 +474,109 @@ class UpgradeOrchestrator:
                     pass
         
         return sorted(backups, key=lambda x: x.get('timestamp', ''), reverse=True)
+    
+    def _generate_whats_new(self, from_version: str, to_version: str) -> str:
+        """
+        Generate 'What's New' report showing features added since from_version.
+        
+        Args:
+            from_version: Starting version (user's old version)
+            to_version: Target version (new version)
+        
+        Returns:
+            Formatted markdown string with new features grouped by category
+        """
+        try:
+            catalog = EnhancementCatalog()
+            
+            # Get last upgrade review timestamp
+            last_review = catalog.get_last_review_timestamp('upgrade')
+            
+            # Discover new features since last review
+            engine = EnhancementDiscoveryEngine(self.cortex_root)
+            discovered = engine.discover_since(last_review) if last_review else engine.discover_all()
+            
+            if not discovered:
+                return ""
+            
+            # Update catalog
+            for feature in discovered:
+                catalog.add_feature(
+                    name=feature.name,
+                    feature_type=self._map_feature_type(feature.type),
+                    description=feature.description or "",
+                    source=feature.source
+                )
+            
+            # Group by type
+            by_type: Dict[str, List] = {}
+            for feature in discovered:
+                ftype = feature.type
+                if ftype not in by_type:
+                    by_type[ftype] = []
+                by_type[ftype].append(feature)
+            
+            # Build report
+            lines = [""]
+            lines.append("📢 **What's New in this Version:**")
+            lines.append("")
+            lines.append(f"🎯 **{len(discovered)} new feature(s)** added since version {from_version}")
+            lines.append("")
+            
+            # Sort by type (operations first, then agents, etc.)
+            type_order = ['operation', 'agent', 'orchestrator', 'workflow', 'template', 'documentation', 'integration', 'utility']
+            sorted_types = sorted(by_type.keys(), key=lambda t: type_order.index(t) if t in type_order else 999)
+            
+            for ftype in sorted_types:
+                features = by_type[ftype]
+                lines.append(f"**{ftype.capitalize()}s ({len(features)}):**")
+                for feature in sorted(features, key=lambda f: f.name):
+                    lines.append(f"  • {feature.name} - {feature.description or 'No description'}")
+                lines.append("")
+            
+            lines.append("💡 **Tip:** Say 'help' to explore new capabilities")
+            
+            return "\n".join(lines)
+        
+        except Exception as e:
+            logger.error(f"Failed to generate What's New report: {e}")
+            return ""
+    
+    def _map_feature_type(self, discovery_type: str) -> FeatureType:
+        """
+        Map discovery type string to FeatureType enum.
+        
+        Args:
+            discovery_type: Discovery type string
+        
+        Returns:
+            FeatureType enum value
+        """
+        mapping = {
+            'operation': FeatureType.OPERATION,
+            'agent': FeatureType.AGENT,
+            'orchestrator': FeatureType.ORCHESTRATOR,
+            'workflow': FeatureType.WORKFLOW,
+            'template': FeatureType.TEMPLATE,
+            'documentation': FeatureType.DOCUMENTATION,
+            'integration': FeatureType.INTEGRATION,
+            'utility': FeatureType.UTILITY,
+        }
+        return mapping.get(discovery_type.lower(), FeatureType.UTILITY)
+    
+    def _log_upgrade_review(self, version: str) -> None:
+        """
+        Log upgrade review event in catalog.
+        
+        Args:
+            version: Version upgraded to
+        """
+        try:
+            catalog = EnhancementCatalog()
+            catalog.log_review('upgrade', metadata={'version': version})
+            logger.info(f"Logged upgrade review for version {version}")
+        except Exception as e:
+            logger.error(f"Failed to log upgrade review: {e}")
 
 
 def main():

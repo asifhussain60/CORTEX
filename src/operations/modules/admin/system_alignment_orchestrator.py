@@ -10,9 +10,14 @@ Design Philosophy:
     - Self-healing architecture
     - Admin-only execution
 
+Enhancement Catalog Integration:
+    - Tracks features discovered since last alignment
+    - Reports new features with temporal awareness
+    - Updates catalog with acceptance status
+
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-Version: 1.0
+Version: 1.1
 Status: IMPLEMENTATION
 """
 
@@ -37,6 +42,10 @@ from src.validation.dashboard_generator import DashboardGenerator
 from src.caching import get_cache
 from src.governance import DocumentGovernance
 from src.utils.progress_monitor import ProgressMonitor
+
+# Import enhancement catalog for temporal feature tracking
+from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
+from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 
 logger = logging.getLogger(__name__)
 
@@ -135,6 +144,11 @@ class AlignmentReport:
     conflicts: List[Conflict] = field(default_factory=list)  # Detected ecosystem conflicts
     fix_templates: List[FixTemplate] = field(default_factory=list)  # Generated fix templates
     dashboard_report: Optional[str] = None  # Visual dashboard HTML/text
+    # Enhancement Catalog integration (NEW)
+    catalog_features_total: int = 0  # Total features in catalog
+    catalog_features_new: int = 0  # New features since last alignment
+    catalog_days_since_review: Optional[int] = None  # Days since last catalog review
+    catalog_new_features: List[Dict[str, Any]] = field(default_factory=list)  # New feature details
     
     @property
     def is_healthy(self) -> bool:
@@ -351,6 +365,19 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             timestamp=datetime.now(),
             overall_health=0
         )
+        
+        # Phase 0.5: Enhancement Catalog Review (NEW)
+        if monitor:
+            monitor.update("Reviewing CORTEX enhancement catalog")
+        
+        catalog_info = self._review_enhancement_catalog()
+        report.catalog_features_total = catalog_info['total_count']
+        report.catalog_features_new = catalog_info['new_count']
+        report.catalog_days_since_review = catalog_info.get('days_since_review')
+        report.catalog_new_features = catalog_info.get('new_features', [])
+        
+        if catalog_info['new_count'] > 0:
+            logger.info(f"📊 Enhancement Catalog: {catalog_info['new_count']} new features since last alignment")
         
         # Phase 1: Discover all features (with caching)
         if monitor:
@@ -1440,6 +1467,122 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             logger.error(f"Failed to apply documentation fix: {e}")
             return False
     
+    def _review_enhancement_catalog(self) -> Dict[str, Any]:
+        """
+        Review Enhancement Catalog for new features since last alignment.
+        
+        Phase 0.5 integration - temporal feature tracking.
+        
+        Returns:
+            Dict with catalog statistics and new features
+        """
+        try:
+            # Initialize catalog and discovery
+            catalog = EnhancementCatalog()
+            discovery = EnhancementDiscoveryEngine(self.project_root)
+            
+            # Get last alignment review timestamp
+            last_review = catalog.get_last_review_timestamp(review_type='alignment')
+            
+            # Discover features since last review
+            if last_review:
+                days_since = (datetime.now() - last_review).days
+                logger.info(f"Last alignment review: {days_since} days ago, scanning for new features...")
+                discovered = discovery.discover_since(since_date=last_review)
+            else:
+                logger.info("First alignment review, performing quick discovery...")
+                discovered = discovery.discover_since(days=7)  # Quick scan for first run
+            
+            # Add/update features in catalog
+            new_features_count = 0
+            new_features_list = []
+            
+            for feature in discovered:
+                # Map feature type
+                feature_type = self._map_feature_type_for_catalog(feature.feature_type)
+                
+                # Determine acceptance status from integration score
+                acceptance = AcceptanceStatus.DISCOVERED
+                if hasattr(self, '_integration_scores') and feature.name in self._integration_scores:
+                    score = self._integration_scores[feature.name]
+                    if score >= 90:
+                        acceptance = AcceptanceStatus.ACCEPTED
+                
+                is_new = catalog.add_feature(
+                    name=feature.name,
+                    feature_type=feature_type,
+                    description=feature.description,
+                    source=feature.source,
+                    metadata=feature.metadata,
+                    commit_hash=feature.commit_hash,
+                    file_path=feature.file_path,
+                    acceptance_status=acceptance
+                )
+                
+                if is_new:
+                    new_features_count += 1
+                    new_features_list.append({
+                        'name': feature.name,
+                        'type': feature.feature_type,
+                        'description': feature.description,
+                        'source': feature.source,
+                        'discovered_at': feature.discovered_at.isoformat() if feature.discovered_at else None
+                    })
+            
+            # Log this alignment review
+            catalog.log_review(
+                review_type='alignment',
+                features_reviewed=len(discovered),
+                new_features_found=new_features_count,
+                notes=f"System alignment validation"
+            )
+            
+            # Get catalog stats
+            stats = catalog.get_catalog_stats()
+            
+            return {
+                'total_count': stats['total_features'],
+                'new_count': new_features_count,
+                'days_since_review': (datetime.now() - last_review).days if last_review else None,
+                'new_features': new_features_list,
+                'last_review': last_review.isoformat() if last_review else None
+            }
+            
+        except Exception as e:
+            logger.error(f"Error reviewing enhancement catalog: {e}")
+            return {
+                'total_count': 0,
+                'new_count': 0,
+                'days_since_review': None,
+                'new_features': [],
+                'error': str(e)
+            }
+    
+    def _map_feature_type_for_catalog(self, discovery_type: str) -> FeatureType:
+        """
+        Map discovery feature type to catalog feature type.
+        
+        Args:
+            discovery_type: Type from EnhancementDiscoveryEngine
+            
+        Returns:
+            Mapped FeatureType for catalog
+        """
+        mapping = {
+            'operation': FeatureType.OPERATION,
+            'agent': FeatureType.AGENT,
+            'orchestrator': FeatureType.ORCHESTRATOR,
+            'workflow': FeatureType.WORKFLOW,
+            'template': FeatureType.TEMPLATE,
+            'documentation': FeatureType.DOCUMENTATION,
+            'capability': FeatureType.INTEGRATION,
+            'admin_script': FeatureType.UTILITY,
+            'guide': FeatureType.DOCUMENTATION,
+            'prompt_module': FeatureType.DOCUMENTATION
+        }
+        
+        return mapping.get(discovery_type, FeatureType.UTILITY)
+    
     def _format_report_summary(self, report: AlignmentReport, fixes_applied: List[Dict[str, Any]] = None) -> str:
         """Format alignment report summary for display."""
         lines = []
@@ -1448,11 +1591,27 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         if report.dashboard_report:
             return report.dashboard_report
         
+        # Enhancement Catalog Summary (NEW)
+        if report.catalog_features_new > 0:
+            lines.append(f"\n📊 Enhancement Catalog:")
+            lines.append(f"   Total Features: {report.catalog_features_total}")
+            lines.append(f"   New Since Last Alignment: {report.catalog_features_new}")
+            if report.catalog_days_since_review:
+                lines.append(f"   Days Since Review: {report.catalog_days_since_review}")
+            
+            # Show top 5 new features
+            if report.catalog_new_features:
+                lines.append(f"\n   New Features:")
+                for feature in report.catalog_new_features[:5]:
+                    lines.append(f"      • {feature['name']} ({feature['type']})")
+                if len(report.catalog_new_features) > 5:
+                    lines.append(f"      ... and {len(report.catalog_new_features) - 5} more")
+        
         # Legacy format (fallback)
         if report.is_healthy:
-            lines.append("[OK] System alignment healthy")
+            lines.append("\n[OK] System alignment healthy")
         else:
-            lines.append(f"[WARN] {report.issues_found} alignment issues detected:")
+            lines.append(f"\n[WARN] {report.issues_found} alignment issues detected:")
             
             # Show top 3 issues
             issues = [
