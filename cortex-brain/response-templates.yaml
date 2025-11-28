@@ -429,6 +429,219 @@ templates:
       Full Rulebook: cortex-brain/brain-protection-rules.yaml
       ╚══════════════════════════════════════════════════════════════════════════╝
   
+  governance_onboarding_step1:
+    name: Governance Onboarding - Step 1 (Welcome)
+    triggers:
+    - governance_onboarding_step1
+    - start governance onboarding
+    - first time setup
+    response_type: narrative
+    content: |
+      # 🧠 Welcome to CORTEX Enhancement System
+      
+      ## Your AI Coding Assistant with Governance
+      
+      CORTEX is not just another AI assistant - it's a **governed, quality-enforced** development enhancement system.
+      
+      ### What Makes CORTEX Different?
+      
+      ✅ **Transparent Governance:** All operations follow documented rules
+      ✅ **Quality Enforcement:** TDD, SOLID, security standards built-in
+      ✅ **Brain Protection:** Your project knowledge is protected and validated
+      ✅ **Rollback Safety:** Git checkpoints before risky operations
+      ✅ **Compliance Tracking:** Real-time dashboard of rule adherence
+      
+      ### Why Governance Matters
+      
+      Without governance:
+      - ❌ AI can make breaking changes without safety nets
+      - ❌ Code quality degrades over time
+      - ❌ Technical debt accumulates invisibly
+      - ❌ No audit trail or rollback mechanism
+      
+      With CORTEX governance:
+      - ✅ Every change follows Definition of Ready/Done
+      - ✅ Automated testing and validation
+      - ✅ Safe experimentation with rollback points
+      - ✅ Clear compliance visibility
+      
+      ### What Happens Next?
+      
+      You'll go through a quick 3-step onboarding:
+      1. **Welcome** (you are here) [1/3]
+      2. **Rulebook Overview** - Key rules explained
+      3. **Acknowledgment** - Confirm understanding
+      
+      **This takes 2-3 minutes and happens only once.**
+      
+      ---
+      
+      **Ready to continue?** Say "next" or "continue" to see the rulebook.
+  
+  governance_onboarding_step2:
+    name: Governance Onboarding - Step 2 (Rulebook)
+    triggers:
+    - governance_onboarding_step2
+    - show rulebook onboarding
+    response_type: narrative
+    content: |
+      # 📖 CORTEX Governance Rulebook (Overview)
+      
+      **Progress: [2/3]**
+      
+      ## The 7 Core Protection Layers
+      
+      ### 1. Definition of Ready (DoR)
+      **Before starting any feature:**
+      - ✅ Requirements are clear and documented
+      - ✅ Acceptance criteria defined
+      - ✅ Technical approach validated
+      - ✅ No blockers present
+      
+      ### 2. Definition of Done (DoD)
+      **Before marking work complete:**
+      - ✅ Code complete and reviewed
+      - ✅ Unit tests written (≥80% coverage)
+      - ✅ Integration tests passing
+      - ✅ Documentation updated
+      - ✅ No regressions introduced
+      
+      ### 3. TDD Enforcement
+      **Test-Driven Development cycle:**
+      - 🔴 **RED:** Write failing test first
+      - 🟢 **GREEN:** Write minimal code to pass
+      - 🔵 **REFACTOR:** Improve design without breaking tests
+      
+      ### 4. Git Checkpoint System
+      **Before risky operations:**
+      - ✅ Automatic git checkpoint created
+      - ✅ Easy rollback if something breaks
+      - ✅ Safe experimentation encouraged
+      
+      ### 5. SOLID Principles
+      **Code design standards:**
+      - **S**ingle Responsibility
+      - **O**pen/Closed
+      - **L**iskov Substitution
+      - **I**nterface Segregation
+      - **D**ependency Inversion
+      
+      ### 6. Security Standards (OWASP)
+      **Security by design:**
+      - ✅ Input validation
+      - ✅ Authentication/Authorization
+      - ✅ Sensitive data protection
+      - ✅ Security scanning
+      
+      ### 7. Brain Integrity
+      **Your project knowledge:**
+      - ✅ Context validated before use
+      - ✅ Lessons learned captured
+      - ✅ Technical debt tracked
+      - ✅ Architecture decisions documented
+      
+      ## Quick Commands
+      
+      | Command | Purpose |
+      |---------|---------|
+      | `show rules` | Display full rulebook |
+      | `compliance` | Check your compliance status |
+      | `dor` | View Definition of Ready checklist |
+      | `dod` | View Definition of Done checklist |
+      | `help` | See all available commands |
+      
+      ## What This Means for You
+      
+      ✅ **You can trust CORTEX** - Every operation is governed
+      ✅ **You stay in control** - Rollback any time
+      ✅ **Quality is built-in** - Not an afterthought
+      ✅ **Compliance is visible** - Real-time dashboard
+      
+      ---
+      
+      **Full Rulebook:** `cortex-brain/brain-protection-rules.yaml`
+      
+      **Ready to acknowledge?** Say "acknowledge" or "I understand" to complete onboarding.
+  
+  governance_onboarding_step3:
+    name: Governance Onboarding - Step 3 (Acknowledgment)
+    triggers:
+    - governance_onboarding_step3
+    - acknowledge governance
+    response_type: narrative
+    content: |
+      # ✅ Acknowledgment & Completion
+      
+      **Progress: [3/3]**
+      
+      ## Confirm Your Understanding
+      
+      By acknowledging, you confirm that you:
+      
+      1. ✅ Understand CORTEX operates under governance rules
+      2. ✅ Agree to follow Definition of Ready/Done workflows
+      3. ✅ Will use compliance dashboard for status tracking
+      4. ✅ Know how to access rulebook and help commands
+      
+      ## Your Rights
+      
+      You always have the right to:
+      - 📖 Review rules any time: `show rules`
+      - 📊 Check compliance: `compliance`
+      - ❓ Ask questions: `help`
+      - 🔄 Request rollback: Git checkpoints are automatic
+      
+      ## Complete Onboarding
+      
+      **To acknowledge and complete setup, say:**
+      - "I acknowledge"
+      - "I understand and agree"
+      - "acknowledged"
+      - "confirm"
+      
+      ---
+      
+      **Need to review?**
+      - Say "back" to see rulebook again
+      - Say "show rules" for full documentation
+      
+      **Once you acknowledge, you won't see this onboarding again.**  
+      (But you can always access the rulebook with `show rules`)
+  
+  governance_onboarding_complete:
+    name: Governance Onboarding - Complete
+    triggers:
+    - governance_onboarding_complete
+    response_type: success
+    content: |
+      # 🎉 Onboarding Complete!
+      
+      ✅ **Governance acknowledgment recorded**
+      ✅ **CORTEX is ready to assist you**
+      
+      ## What Happens Now?
+      
+      - You won't see this onboarding again
+      - Welcome banner will appear once per session
+      - All governance rules are active
+      - Compliance dashboard is available
+      
+      ## Quick Start Commands
+      
+      Try these commands to get started:
+      - `help` - See all available commands
+      - `compliance` - Check your current status
+      - `show rules` - Review governance rules
+      - `plan [feature]` - Start feature planning
+      
+      ## Need Help?
+      
+      - Say `help` any time for command list
+      - Say `show rules` to review governance
+      - Say `compliance` to check rule adherence
+      
+      **Welcome to governed AI development with CORTEX!** 🚀
+  
   introduction_discovery:
     name: CORTEX Discovery & Introduction
     triggers:
