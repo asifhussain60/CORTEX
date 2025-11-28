@@ -1014,6 +1014,18 @@ templates:
       system alignment
 
 
+      **📖 Governance & Rules:**
+
+      Before starting, please review the CORTEX Rulebook:
+      #file:cortex-brain/governance/CORTEX-RULEBOOK.md
+
+      **Governance Commands:**
+      - `show rules` - View all governance rules
+      - `explain rule [name]` - Get detailed rule explanation
+      - `my compliance` - Check your compliance status
+      - `rulebook` - Open full rulebook documentation
+
+
       **I''m operating with:**
 
       - ✅ 4-tier brain architecture (Tier 0-3 databases)
@@ -1650,6 +1662,135 @@ templates:
       
       Say "cache status" to begin analysis.
 
+  compliance_dashboard:
+    <<: *standard_5_part_base
+    name: Compliance Dashboard
+    triggers:
+    - show compliance
+    - compliance dashboard
+    - dashboard
+    - compliance status
+    - show dashboard
+    - open dashboard
+    - brain compliance
+    - governance dashboard
+    response_type: admin
+    handler: src.tier1.compliance_dashboard_generator
+    understanding_content: "You want to view the active compliance dashboard showing real-time governance and brain protection status."
+    challenge_content: "No Challenge - Compliance dashboard provides visibility into all 27 brain protection rules with visual indicators."
+    response_content: |
+      The Compliance Dashboard tracks real-time governance rule compliance:
+      
+      **Dashboard Features:**
+      • Overall compliance score (0-100%)
+      • Rule status by category (🟢 compliant, 🟡 warning, 🔴 violated)
+      • Recent protection events timeline
+      • Auto-refresh every 30 seconds
+      • Visual indicators for quick assessment
+      
+      **Compliance Scoring:**
+      • 🟢 90-100%: Healthy (all rules followed)
+      • 🟡 70-89%: Warning (some violations detected)
+      • 🔴 <70%: Critical (immediate attention needed)
+      
+      **Rule Categories Tracked:**
+      • SKULL Rules (architectural integrity)
+      • Brain Protection (data safety)
+      • Tier Enforcement (separation of concerns)
+      • Entry Point Validation (command routing)
+      • Template Compliance (response format)
+      • And 22 more categories...
+      
+      Dashboard opens in VS Code Simple Browser with real-time updates.
+    request_echo_content: "Display active compliance dashboard"
+    next_steps_content: |
+      **Dashboard Actions:**
+      
+      1. View dashboard → Opens in VS Code Simple Browser
+      2. Auto-refresh active → Updates every 30 seconds
+      3. Press R → Manual refresh anytime
+      
+      **Understanding Dashboard:**
+      • 🟢 = Rule followed correctly (0 violations)
+      • 🟡 = Some violations (<10% rate)
+      • 🔴 = Frequent violations (≥10% rate)
+      
+      **If violations detected:**
+      • Click rule to see details
+      • View recent events for context
+      • Check suggested fixes
+      
+      Say "show compliance" to open dashboard now.
+
+  protection_event_notification:
+    name: Protection Event Notification
+    description: "User-facing notification when governance rules are violated. Shows in Copilot Chat responses with educational context."
+    severity_emoji:
+      blocked: "🔴"
+      warning: "🟡"
+      safe: "🟢"
+    format: |
+      ---
+      
+      ## {emoji} Governance {severity}
+      
+      {severity_message}
+      
+      ### Rules Violated:
+      
+      {violations_list}
+      
+      {alternatives_section}
+      
+      ### 📊 Full Compliance Report:
+      
+      View the full compliance dashboard for detailed rule status and history:
+      ```
+      show compliance
+      ```
+      
+      {override_section}
+      
+      ---
+    sections:
+      severity_message_blocked: "**This operation violates CORTEX governance rules and cannot proceed.**"
+      severity_message_warning: "**This operation triggers governance warnings. Please review before proceeding.**"
+      violation_item_format: |
+        **{number}. {rule_name}**
+           - **Layer:** {layer_name}
+           - **Issue:** {description}
+           - **Why This Matters:** {rationale}
+           - **Evidence:** {evidence}
+           - **Suggested Fix:** {remedy}
+      alternatives_section: |
+        ### Recommended Alternatives:
+        
+        {alternatives_list}
+      override_section: |
+        ### ⚠️ Override Required:
+        
+        This operation requires explicit override. If you believe this is necessary:
+        1. Document your justification in the commit message
+        2. Tag the commit with `[OVERRIDE]`
+        3. Ensure architectural review before merge
+    usage: "Automatically displayed when Brain Protector detects violations. Call protector.format_user_notification(result) to generate."
+    integration_example: |
+      ```python
+      from src.tier0.brain_protector import BrainProtector, ModificationRequest
+      
+      protector = BrainProtector()
+      request = ModificationRequest(
+          intent="disable TDD",
+          description="Skip test-first development",
+          files=["src/tdd_workflow.py"]
+      )
+      result = protector.validate(request)
+      
+      if result.severity != Severity.SAFE:
+          notification = protector.format_user_notification(result)
+          print(notification)  # Display in Copilot Chat response
+      ```
+
   lint_validation:
     <<: *standard_5_part_base
     name: Lint Validation
@@ -2006,6 +2147,15 @@ routing:
   - reset cache
   - flush cache
   - clear validation cache
+  compliance_dashboard_triggers:
+  - show compliance
+  - compliance dashboard
+  - dashboard
+  - compliance status
+  - show dashboard
+  - open dashboard
+  - brain compliance
+  - governance dashboard
 formatting:
   mandatory_sections:
   - understanding
