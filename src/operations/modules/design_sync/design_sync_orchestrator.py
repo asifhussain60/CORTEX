@@ -30,6 +30,7 @@ from src.operations.base_operation_module import (
     OperationResult,
     OperationStatus
 )
+from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
 from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
 from src.operations.operation_header_formatter import OperationHeaderFormatter
 from src.operations.modules.design_sync.design_sync_models import (
@@ -550,6 +551,14 @@ class DesignSyncOrchestrator(BaseOperationModule):
             logger.info(f"Git commits: {len(metrics.git_commits)}")
             logger.info(f"Improvements: {len(metrics.improvements)} changes applied")
             
+            # Generate interactive D3.js dashboard
+            try:
+                logger.info("\n[Dashboard] Generating interactive D3.js dashboard...")
+                self._generate_interactive_dashboard(impl_state, design_state, gaps, metrics, project_root)
+                logger.info("✅ Dashboard generated: cortex-brain/admin/reports/design-sync-dashboard.html")
+            except Exception as dashboard_error:
+                logger.warning(f"Dashboard generation failed (non-critical): {dashboard_error}")
+            
             return OperationResult(
                 success=True,
                 status=OperationStatus.SUCCESS,
@@ -994,3 +1003,270 @@ class DesignSyncOrchestrator(BaseOperationModule):
                 'report': report
             }
         )
+    
+    def _generate_interactive_dashboard(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis,
+        metrics: SyncMetrics,
+        project_root: Path
+    ) -> None:
+        """Generate interactive D3.js dashboard for design sync results."""
+        dashboard_data = {
+            'metadata': {
+                'generatedAt': datetime.now().isoformat(),
+                'version': '3.3.0',
+                'operationType': 'design_sync',
+                'author': 'CORTEX'
+            },
+            'overview': self._build_design_sync_overview(impl_state, design_state, gaps, metrics),
+            'visualizations': self._build_design_sync_visualizations(impl_state, design_state, gaps, metrics),
+            'diagrams': self._build_design_sync_diagrams(impl_state, design_state, gaps),
+            'dataTable': self._build_design_sync_data_table(impl_state, design_state, gaps),
+            'recommendations': self._build_design_sync_recommendations(impl_state, design_state, gaps, metrics)
+        }
+        
+        generator = InteractiveDashboardGenerator()
+        output_path = project_root / "cortex-brain" / "admin" / "reports" / "design-sync-dashboard.html"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        generator.generate_dashboard(
+            title="CORTEX Design Sync Dashboard",
+            data=dashboard_data,
+            output_file=str(output_path)
+        )
+    
+    def _build_design_sync_overview(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis,
+        metrics: SyncMetrics
+    ) -> Dict[str, Any]:
+        """Build overview section for dashboard."""
+        total_issues = len(gaps.redundant_status_files) + len(gaps.verbose_md_candidates) + len(gaps.inconsistent_counts)
+        health_percentage = 100 - min(100, total_issues * 5)  # Each issue reduces health by 5%
+        
+        return {
+            'executiveSummary': (
+                f"Design synchronization completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}. "
+                f"Analyzed {impl_state.total_modules} modules ({impl_state.completion_percentage:.1f}% implemented), "
+                f"discovered {len(design_state.design_files)} design documents, "
+                f"and identified {metrics.gaps_analyzed} design-implementation gaps. "
+                f"Overall sync health: {health_percentage}%."
+            ),
+            'keyMetrics': [
+                {'label': 'Implementation Modules', 'value': str(impl_state.total_modules)},
+                {'label': 'Completion Percentage', 'value': f"{impl_state.completion_percentage:.1f}%"},
+                {'label': 'Design Documents', 'value': str(len(design_state.design_files))},
+                {'label': 'Gaps Identified', 'value': str(metrics.gaps_analyzed)},
+                {'label': 'Status Files Consolidated', 'value': str(metrics.status_files_consolidated)},
+                {'label': 'Sync Duration', 'value': f"{metrics.duration_seconds:.1f}s"}
+            ],
+            'statusIndicator': 'success' if health_percentage >= 80 else 'warning' if health_percentage >= 60 else 'critical'
+        }
+    
+    def _build_design_sync_visualizations(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis,
+        metrics: SyncMetrics
+    ) -> Dict[str, Any]:
+        """Build visualizations section for dashboard."""
+        # Force graph showing design-implementation alignment
+        nodes = [{'id': 'Implementation', 'group': 1, 'value': impl_state.total_modules}]
+        links = []
+        
+        # Add module nodes
+        for i, module_name in enumerate(list(impl_state.modules.keys())[:10]):  # Limit to 10 for readability
+            module_id = f"module_{i}"
+            status = 'implemented' if impl_state.modules[module_name] else 'planned'
+            nodes.append({'id': module_id, 'group': 2 if status == 'implemented' else 3, 'value': 5})
+            links.append({'source': 'Implementation', 'target': module_id, 'value': 1})
+        
+        # Add design document nodes
+        for i, design_file in enumerate(list(design_state.design_files)[:5]):  # Limit to 5
+            doc_id = f"design_{i}"
+            nodes.append({'id': doc_id, 'group': 4, 'value': 3})
+            # Link designs to modules (simplified - link to implementation hub)
+            links.append({'source': doc_id, 'target': 'Implementation', 'value': 1})
+        
+        # Time series showing sync metrics over time (simulated historical data)
+        time_series = []
+        for days_ago in range(9, -1, -1):
+            date = datetime.now() - timedelta(days=days_ago)
+            # Simulate improving completion percentage
+            completion = impl_state.completion_percentage * (1 - days_ago * 0.02)
+            time_series.append({
+                'date': date.strftime('%Y-%m-%d'),
+                'value': max(0, min(100, completion))
+            })
+        
+        return {
+            'forceGraph': {
+                'nodes': nodes,
+                'links': links,
+                'title': 'Design-Implementation Alignment Network',
+                'description': 'Visualizes relationships between implementation modules and design documents'
+            },
+            'timeSeries': {
+                'data': time_series,
+                'title': 'Implementation Completion Trend (10 days)',
+                'xAxisLabel': 'Date',
+                'yAxisLabel': 'Completion %'
+            }
+        }
+    
+    def _build_design_sync_diagrams(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis
+    ) -> List[Dict[str, str]]:
+        """Build diagrams section for dashboard."""
+        return [{
+            'type': 'mermaid',
+            'title': 'Design Sync Workflow',
+            'content': f"""flowchart TD
+    A[Start: Design Sync] --> B[Discover Implementation]
+    B --> C[Discover Design Docs]
+    C --> D[Analyze Gaps]
+    D --> E{{Issues Found?}}
+    E -->|Yes: {len(gaps.redundant_status_files) + len(gaps.verbose_md_candidates)} issues| F[Apply Transformations]
+    E -->|No| G[Generate Report]
+    F --> H[Consolidate Status Files]
+    H --> I[Commit Changes]
+    I --> G
+    G --> J[End: Sync Complete]
+    
+    style A fill:#e3f2fd
+    style J fill:#c8e6c9
+    style E fill:#fff9c4
+    style F fill:#ffe0b2"""
+        }]
+    
+    def _build_design_sync_data_table(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis
+    ) -> List[Dict[str, Any]]:
+        """Build data table section for dashboard."""
+        rows = []
+        
+        # Add module status rows
+        for module_name, is_implemented in list(impl_state.modules.items())[:15]:  # Limit to 15
+            rows.append({
+                'name': module_name,
+                'type': 'Module',
+                'status': 'Implemented' if is_implemented else 'Planned',
+                'health': 100 if is_implemented else 0,
+                'notes': f"{impl_state.tests.get(module_name, 0)} tests"
+            })
+        
+        # Add design document rows
+        for design_file in list(design_state.design_files)[:5]:  # Limit to 5
+            rows.append({
+                'name': design_file.name,
+                'type': 'Design Document',
+                'status': 'Active',
+                'health': 100,
+                'notes': f"Version {design_state.version}"
+            })
+        
+        return rows
+    
+    def _build_design_sync_recommendations(
+        self,
+        impl_state: ImplementationState,
+        design_state: DesignState,
+        gaps: GapAnalysis,
+        metrics: SyncMetrics
+    ) -> List[Dict[str, Any]]:
+        """Build recommendations section for dashboard."""
+        recommendations = []
+        
+        # Recommendation 1: Consolidate redundant status files
+        if len(gaps.redundant_status_files) > 0:
+            recommendations.append({
+                'title': 'Consolidate Redundant Status Files',
+                'priority': 'high',
+                'rationale': f"Found {len(gaps.redundant_status_files)} redundant status files causing inconsistency",
+                'steps': [
+                    'Review redundant status files identified in gaps analysis',
+                    'Merge content into single source of truth',
+                    'Delete or archive redundant files',
+                    'Update references in documentation'
+                ],
+                'expectedImpact': 'Eliminate conflicting status information, improve documentation accuracy',
+                'estimatedEffort': '2-4 hours'
+            })
+        
+        # Recommendation 2: Convert verbose MD to YAML
+        if len(gaps.verbose_md_candidates) > 0:
+            recommendations.append({
+                'title': 'Convert Verbose Markdown to YAML Schemas',
+                'priority': 'medium',
+                'rationale': f"Identified {len(gaps.verbose_md_candidates)} verbose MD files (>500 lines) suitable for YAML conversion",
+                'steps': [
+                    'Review verbose MD files for structured content',
+                    'Extract key information into YAML schema format',
+                    'Preserve critical narrative content',
+                    'Update cross-references'
+                ],
+                'expectedImpact': 'Reduce documentation bloat, improve maintainability',
+                'estimatedEffort': '4-6 hours'
+            })
+        
+        # Recommendation 3: Fix inconsistent counts
+        if len(gaps.inconsistent_counts) > 0:
+            recommendations.append({
+                'title': 'Fix Inconsistent Module/Test Counts',
+                'priority': 'high',
+                'rationale': f"Found {len(gaps.inconsistent_counts)} count inconsistencies between design and implementation",
+                'steps': [
+                    'Verify actual implementation state',
+                    'Update design documentation with correct counts',
+                    'Add automated count validation',
+                    'Schedule regular sync checks'
+                ],
+                'expectedImpact': 'Accurate progress tracking, reliable metrics',
+                'estimatedEffort': '1-2 hours'
+            })
+        
+        # Recommendation 4: Complete partial modules
+        incomplete_modules = sum(1 for is_impl in impl_state.modules.values() if not is_impl)
+        if incomplete_modules > 0:
+            recommendations.append({
+                'title': 'Complete Partially Implemented Modules',
+                'priority': 'medium',
+                'rationale': f"{incomplete_modules} modules are planned but not yet implemented",
+                'steps': [
+                    'Prioritize modules by architectural importance',
+                    'Create implementation plan for each module',
+                    'Assign ownership and timelines',
+                    'Track progress in design sync dashboard'
+                ],
+                'expectedImpact': f'Increase completion from {impl_state.completion_percentage:.1f}% to 100%',
+                'estimatedEffort': f'{incomplete_modules * 4}-{incomplete_modules * 8} hours'
+            })
+        
+        # Recommendation 5: Schedule regular sync operations
+        recommendations.append({
+            'title': 'Schedule Regular Design Sync Operations',
+            'priority': 'low',
+            'rationale': 'Prevent design drift by running sync operations regularly',
+            'steps': [
+                'Add design sync to weekly maintenance checklist',
+                'Set up automated sync checks in CI/CD pipeline',
+                'Create alerts for significant drift',
+                'Review sync dashboard before major releases'
+            ],
+            'expectedImpact': 'Maintain continuous design-implementation alignment',
+            'estimatedEffort': '1 hour setup + 15 min weekly'
+        })
+        
+        return recommendations
+

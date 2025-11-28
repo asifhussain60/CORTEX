@@ -250,5 +250,88 @@ class TestAgent:
         assert agents["TestAgent"]["has_process_method"] is True
 
 
+class TestSystemAlignmentDashboard:
+    """Test D3.js dashboard generation for system alignment."""
+    
+    def test_dashboard_generation(self, tmp_path, monkeypatch):
+        """Test dashboard generation with alignment report."""
+        # Create mock brain path
+        brain_path = tmp_path / "cortex-brain"
+        brain_path.mkdir()
+        
+        # Create mock admin directory
+        admin_path = brain_path / "admin"
+        admin_path.mkdir()
+        
+        # Set up orchestrator
+        orchestrator = SystemAlignmentOrchestrator()
+        monkeypatch.setattr(orchestrator, 'cortex_brain', brain_path)
+        
+        # Create test alignment report
+        report = AlignmentReport(
+            timestamp=datetime.now(),
+            overall_health=85,
+            critical_issues=1,
+            warnings=2,
+            catalog_features_total=10,
+            catalog_features_new=2,
+            catalog_days_since_review=7
+        )
+        
+        # Add some feature scores
+        report.feature_scores = {
+            "FeatureA": IntegrationScore("FeatureA", "orchestrator", True, True, True, True, True, True, True),
+            "FeatureB": IntegrationScore("FeatureB", "agent", True, True, True, False, False, True, False),
+            "FeatureC": IntegrationScore("FeatureC", "orchestrator", True, True, False, False, False, False, False)
+        }
+        
+        # Generate dashboard
+        orchestrator._generate_interactive_dashboard(report)
+        
+        # Verify dashboard file was created
+        dashboard_path = brain_path / "admin" / "reports" / "system-alignment-dashboard.html"
+        assert dashboard_path.exists()
+        
+        # Verify dashboard content
+        content = dashboard_path.read_text(encoding='utf-8')
+        assert "System Alignment Dashboard" in content
+        assert "Overall Health" in content
+        assert "Feature Integration Health Network" in content
+        assert "d3.forceSimulation" in content
+    
+    def test_dashboard_visualizations_structure(self, tmp_path, monkeypatch):
+        """Test dashboard visualization data structure."""
+        orchestrator = SystemAlignmentOrchestrator()
+        
+        report = AlignmentReport(
+            timestamp=datetime.now(),
+            overall_health=75,
+            critical_issues=2,
+            warnings=3
+        )
+        
+        # Add feature scores
+        report.feature_scores = {
+            "HighScore": IntegrationScore("HighScore", "orchestrator", True, True, True, True, True, True, True),
+            "MedScore": IntegrationScore("MedScore", "agent", True, True, True, True, False, True, False),
+            "LowScore": IntegrationScore("LowScore", "orchestrator", True, True, False, False, False, False, False)
+        }
+        
+        # Build visualizations
+        viz = orchestrator._build_alignment_visualizations(report)
+        
+        # Verify force graph structure
+        assert "forceGraph" in viz
+        assert "nodes" in viz["forceGraph"]
+        assert "links" in viz["forceGraph"]
+        assert len(viz["forceGraph"]["nodes"]) == 4  # health + 3 features
+        assert len(viz["forceGraph"]["links"]) == 3  # 3 feature links
+        
+        # Verify time series structure
+        assert "timeSeries" in viz
+        assert "data" in viz["timeSeries"]
+        assert len(viz["timeSeries"]["data"]) == 10  # 10 historical points
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

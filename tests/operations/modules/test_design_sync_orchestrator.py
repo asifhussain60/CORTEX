@@ -55,8 +55,7 @@ class TestOrchestrator:
 @pytest.fixture
 def orchestrator(project_root):
     """Create DesignSyncOrchestrator instance."""
-    context = {"project_root": str(project_root)}
-    return DesignSyncOrchestrator(context)
+    return DesignSyncOrchestrator()
 
 
 @pytest.fixture
@@ -245,4 +244,106 @@ class TestDesignSyncIntegration:
         # Should handle missing docs directory gracefully
         result = orchestrator.execute(context)
         
+        
         assert result.status in [OperationStatus.SUCCESS, OperationStatus.WARNING, OperationStatus.FAILED]
+
+
+class TestDesignSyncDashboard:
+    """Test Design Sync dashboard generation."""
+    
+    def test_dashboard_generation(self, orchestrator, project_root):
+        """Test dashboard generation creates HTML file."""
+        from src.operations.modules.design_sync.design_sync_models import (
+            ImplementationState, DesignState, GapAnalysis, SyncMetrics
+        )
+        from datetime import datetime
+        
+        # Create test data
+        impl_state = ImplementationState(
+            total_modules=10,
+            implemented_modules=8,
+            completion_percentage=80.0,
+            modules={'mod1': True, 'mod2': False},
+            tests={'mod1': 5},
+            plugins=[]
+        )
+        
+        design_state = DesignState(
+            version='3.3.0',
+            design_files=[project_root / 'design1.md'],
+            status_files=[project_root / 'STATUS.md']
+        )
+        
+        gaps = GapAnalysis(
+            redundant_status_files=[],
+            verbose_md_candidates=[],
+            inconsistent_counts={}
+        )
+        
+        metrics = SyncMetrics(
+            sync_id='test_sync',
+            timestamp=datetime.now(),
+            duration_seconds=10.0
+        )
+        
+        # Generate dashboard
+        orchestrator._generate_interactive_dashboard(
+            impl_state, design_state, gaps, metrics, project_root
+        )
+        
+        # Verify file created
+        dashboard_path = project_root / "cortex-brain" / "admin" / "reports" / "design-sync-dashboard.html"
+        assert dashboard_path.exists()
+        
+        # Verify file has content
+        content = dashboard_path.read_text(encoding='utf-8')
+        assert len(content) > 1000
+        assert 'Design Sync Dashboard' in content
+        assert 'D3' in content or 'd3' in content
+    
+    def test_dashboard_visualization_structure(self, orchestrator, project_root):
+        """Test dashboard visualizations have correct structure."""
+        from src.operations.modules.design_sync.design_sync_models import (
+            ImplementationState, DesignState, GapAnalysis, SyncMetrics
+        )
+        from datetime import datetime
+        
+        impl_state = ImplementationState(
+            total_modules=5,
+            implemented_modules=3,
+            completion_percentage=60.0,
+            modules={'mod1': True, 'mod2': False, 'mod3': True},
+            tests={},
+            plugins=[]
+        )
+        
+        design_state = DesignState(
+            version='3.3.0',
+            design_files=[],
+            status_files=[]
+        )
+        
+        gaps = GapAnalysis(
+            redundant_status_files=['extra1.md', 'extra2.md'],
+            verbose_md_candidates=[],
+            inconsistent_counts={}
+        )
+        
+        metrics = SyncMetrics(
+            sync_id='test',
+            timestamp=datetime.now()
+        )
+        
+        # Test visualization builder
+        viz_data = orchestrator._build_design_sync_visualizations(
+            impl_state, design_state, gaps, metrics
+        )
+        
+        # Verify structure
+        assert 'forceGraph' in viz_data
+        assert 'timeSeries' in viz_data
+        assert 'nodes' in viz_data['forceGraph']
+        assert 'links' in viz_data['forceGraph']
+        assert 'data' in viz_data['timeSeries']
+        assert len(viz_data['timeSeries']['data']) == 10  # 10-day trend
+
