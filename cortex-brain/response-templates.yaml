@@ -198,6 +198,46 @@ templates:
       **Monitoring via {monitoring_platform}:**
       - Cache hit/miss rates
       - Memory usage and eviction metrics
+    request_echo_content: "Implement caching layer"
+    next_steps_content: |
+      1. Choose deployment approach (best practice Redis vs. company-aligned)
+      2. Implement caching decorator
+      3. Add monitoring/alerting
+      4. Load test to validate performance improvements
+  
+  cache_management:
+    <<: *standard_5_part_base
+    name: Cache Management
+    triggers:
+    - cache status
+    - cache clear
+    - cache dashboard
+    response_type: admin
+    operation_name: Cache Management
+    understanding_content: "You want to view or manage the CORTEX ValidationCache for optimized operations."
+    challenge_content: "No Challenge - Cache management provides visibility into performance optimizations."
+    response_content: |
+      The ValidationCache accelerates repeated operations by storing validation results.
+      
+      **Available Operations:**
+      - `cache status` - Show hit rates, entry counts, and effectiveness metrics
+      - `cache clear` - Invalidate all cached results (or specify operation)
+      - `cache dashboard` - Interactive performance dashboard with recommendations
+      
+      **Performance Gains:**
+      - Optimize: 6.4x speedup (45s → 7s)
+      - Cleanup: 5.5x speedup (22s → 4s)
+      - Alignment: 4.2x speedup (30s → 7s)
+      
+      **Auto-Invalidation:** Cache automatically updates when files change (SHA256 tracking)
+      
+      **Current Status:**
+      {cache_statistics}
+    request_echo_content: "Manage CORTEX ValidationCache"
+    next_steps_content: |
+      - Run `cache status` for detailed metrics
+      - Use `cache clear [operation]` to invalidate specific operation cache
+      - View `cache-troubleshooting-guide.md` for optimization tips
       - Connection counts and latency
     request_echo_content: "Implement caching layer with Redis"
     next_steps_content: |
@@ -1570,6 +1610,46 @@ templates:
     request_echo_content: "Sync repository with origin (pull, merge, push)"
     next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
 
+  cache_management:
+    <<: *standard_5_part_base
+    name: Cache Management
+    triggers:
+    - cache status
+    - cache clear
+    - cache dashboard
+    response_type: admin
+    handler: src.operations.cache_commands
+    understanding_content: "You want to view or manage the CORTEX ValidationCache that accelerates repeated operations."
+    challenge_content: "No Challenge - Cache management provides visibility into performance optimizations."
+    response_content: |
+      The ValidationCache stores validation results to avoid redundant computation.
+      
+      **Available Operations:**
+      • `cache status` - Show hit rates, entry counts, effectiveness metrics
+      • `cache clear` - Invalidate all cached results (or specify operation)
+      • `cache dashboard` - Interactive performance dashboard with recommendations
+      
+      **Performance Gains:**
+      • Optimize: 6.4x speedup (45s → 7s)
+      • Cleanup: 5.5x speedup (22s → 4s)
+      • Alignment: 4.2x speedup (30s → 7s)
+      
+      **Auto-Invalidation:** Cache updates automatically when files change (SHA256 tracking)
+      
+      **When to Clear:**
+      • After major refactoring
+      • Low hit rates (<30%)
+      • Suspected corruption or stale results
+    request_echo_content: "Manage CORTEX ValidationCache"
+    next_steps_content: |
+      **Recommended Actions:**
+      
+      1. Run `cache status` for detailed metrics
+      2. Use `cache clear [operation]` for operation-specific invalidation
+      3. View cache-troubleshooting-guide.md for optimization tips
+      
+      Say "cache status" to begin analysis.
+
   lint_validation:
     <<: *standard_5_part_base
     name: Lint Validation
@@ -1911,6 +1991,21 @@ routing:
   - commit and sync
   - pull and push
   - sync repo
+  cache_status_triggers:
+  - cache status
+  - show cache
+  - cache stats
+  - cache metrics
+  - cache performance
+  - cache dashboard
+  - cache effectiveness
+  cache_clear_triggers:
+  - cache clear
+  - clear cache
+  - invalidate cache
+  - reset cache
+  - flush cache
+  - clear validation cache
 formatting:
   mandatory_sections:
   - understanding

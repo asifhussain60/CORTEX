@@ -271,6 +271,90 @@ class TestEnterpriseDocumentationOrchestrator:
             # All files created successfully
             assert result["count"] == result["expected_count"], \
                 "Count should match expected when all files succeed"
+    
+    def test_dashboard_generation(self, temp_workspace):
+        """Test that D3.js dashboard generation creates HTML file with correct structure."""
+        orchestrator = EnterpriseDocumentationOrchestrator(temp_workspace)
+        
+        # Mock discovered features and generation results
+        discovered_features = {
+            "features": [
+                {"name": "TDD Enforcement", "type": "governance", "source": "catalog"},
+                {"name": "Brain Protection", "type": "protection", "source": "catalog"},
+                {"name": "Planning System", "type": "orchestrator", "source": "catalog"}
+            ]
+        }
+        
+        generation_results = {
+            "diagrams_generated": 10,
+            "prompts_generated": 8,
+            "narratives_generated": 12
+        }
+        
+        # Generate dashboard
+        dashboard_path = orchestrator._generate_interactive_dashboard(
+            discovered_features,
+            generation_results,
+            duration=5.23,
+            dry_run=False
+        )
+        
+        # Verify dashboard file was created
+        assert dashboard_path.exists(), "Dashboard file not created"
+        assert dashboard_path.suffix == ".html", "Dashboard should be HTML file"
+        
+        # Read and validate dashboard content
+        dashboard_content = dashboard_path.read_text(encoding='utf-8')
+        
+        # Validate HTML structure
+        assert "<html" in dashboard_content.lower(), "Missing HTML tag"
+        assert "<!DOCTYPE" in dashboard_content or "<html" in dashboard_content, "Missing DOCTYPE or HTML tag"
+        
+        # Validate D3.js inclusion
+        assert "d3" in dashboard_content.lower() or "chart" in dashboard_content.lower(), \
+            "Dashboard should include D3.js or Chart.js references"
+        
+        # Validate data presence
+        assert "Enterprise Documentation Generation Report" in dashboard_content, \
+            "Missing dashboard title"
+        assert "10" in dashboard_content, "Missing diagram count"
+        assert "8" in dashboard_content, "Missing prompt count"
+        assert "12" in dashboard_content, "Missing narrative count"
+        
+        # Validate dashboard sections
+        assert "documentation_architecture" in dashboard_content or "force" in dashboard_content.lower(), \
+            "Missing architecture visualization"
+        
+        # Verify file size (should be non-trivial)
+        assert dashboard_path.stat().st_size > 5000, \
+            "Dashboard file seems too small (< 5KB)"
+    
+    def test_dashboard_generation_dry_run(self, temp_workspace):
+        """Test that dashboard generation works in dry-run mode."""
+        orchestrator = EnterpriseDocumentationOrchestrator(temp_workspace)
+        
+        discovered_features = {"features": []}
+        generation_results = {
+            "diagrams_generated": 0,
+            "prompts_generated": 0,
+            "narratives_generated": 0
+        }
+        
+        # Generate dashboard in dry-run mode
+        dashboard_path = orchestrator._generate_interactive_dashboard(
+            discovered_features,
+            generation_results,
+            duration=1.5,
+            dry_run=True
+        )
+        
+        # Verify dashboard created even in dry-run
+        assert dashboard_path.exists(), "Dashboard should be created even in dry-run mode"
+        
+        # Verify dry-run is indicated
+        dashboard_content = dashboard_path.read_text(encoding='utf-8')
+        assert "Dry Run" in dashboard_content or "dry" in dashboard_content.lower(), \
+            "Dashboard should indicate dry-run mode"
 
 
 class TestDocumentationStructureValidation:
