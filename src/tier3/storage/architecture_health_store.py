@@ -14,6 +14,9 @@ from pathlib import Path
 from typing import Optional, Dict, List, Any
 from dataclasses import dataclass, asdict
 
+# Import centralized config for cross-platform path resolution
+from src.config import config
+
 
 @dataclass
 class ArchitectureHealthSnapshot:
@@ -50,9 +53,10 @@ class ArchitectureHealthStore:
             db_path: Path to SQLite database (default: cortex-brain/tier3/context.db)
         """
         if db_path is None:
-            brain_dir = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier3"
-            brain_dir.mkdir(parents=True, exist_ok=True)
-            db_path = brain_dir / "context.db"
+            # Use centralized config for cross-platform path resolution
+            tier3_dir = config.brain_path / "tier3"
+            tier3_dir.mkdir(parents=True, exist_ok=True)
+            db_path = tier3_dir / "context.db"
         
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)

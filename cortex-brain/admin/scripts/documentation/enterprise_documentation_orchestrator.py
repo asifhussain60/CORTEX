@@ -43,6 +43,13 @@ import subprocess
 cortex_root = Path(__file__).parent.parent.parent.parent.parent
 sys.path.insert(0, str(cortex_root))
 
+# Import CORTEX enhancement catalog and discovery
+from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
+from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
+
+# Import centralized config for cross-platform path resolution
+from src.config import config
+
 # Import base operation result structures
 try:
     from src.operations.base_operation_module import OperationResult, OperationStatus
@@ -90,8 +97,9 @@ class EnterpriseDocumentationOrchestrator:
     
     def __init__(self, workspace_root: Optional[Path] = None):
         """Initialize the orchestrator"""
-        self.workspace_root = workspace_root or cortex_root
-        self.brain_path = self.workspace_root / "cortex-brain"
+        # Use centralized config for cross-platform path resolution
+        self.workspace_root = workspace_root or config.root_path
+        self.brain_path = config.brain_path
         self.docs_path = self.workspace_root / "docs"
         self.diagrams_path = self.docs_path / "diagrams"
         self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -140,10 +148,18 @@ class EnterpriseDocumentationOrchestrator:
                 logger.info(f"Stage: {stage}")
             logger.info("")
             
-            # Phase 1: Discovery Engine - Scan Git + YAML for features
-            logger.info("📡 Phase 1: Discovery Engine (Git + YAML scanning)")
-            discovered_features = self._run_discovery_engine()
+            # Phase 1: Enhancement Catalog Discovery - Centralized feature tracking
+            logger.info("📡 Phase 1: Enhancement Catalog Discovery")
+            discovered_features = self._discover_features_from_catalog()
             logger.info(f"   ✅ Discovered {len(discovered_features.get('features', []))} features")
+            
+            # Log review statistics
+            if discovered_features.get('last_review'):
+                days_since = discovered_features['last_review']['days_since']
+                new_count = discovered_features['last_review']['new_features_found']
+                logger.info(f"   📊 Last review: {days_since} days ago ({new_count} new features found)")
+            else:
+                logger.info(f"   📊 First review - cataloging all features")
             logger.info("")
             
             # Phase 2: Generate documentation components
@@ -278,15 +294,141 @@ class EnterpriseDocumentationOrchestrator:
     
     
     # =========================================================================
-    # PHASE 1: DISCOVERY ENGINE
+    # PHASE 1: CENTRALIZED ENHANCEMENT CATALOG DISCOVERY
+    # =========================================================================
+    
+    def _discover_features_from_catalog(self) -> Dict[str, Any]:
+        """
+        Centralized Enhancement Catalog Discovery
+        
+        Uses EnhancementCatalog + EnhancementDiscoveryEngine for unified feature tracking.
+        Replaces old _run_discovery_engine() with centralized approach.
+        
+        Returns comprehensive feature inventory for documentation generation.
+        """
+        try:
+            # Initialize catalog and discovery engine
+            catalog = EnhancementCatalog()
+            discovery = EnhancementDiscoveryEngine(self.workspace_root)
+            
+            # Get last review timestamp
+            last_review = catalog.get_last_review_timestamp(review_type='documentation')
+            
+            # Discover features since last review (or all if first run)
+            if last_review:
+                days_since = (datetime.now() - last_review).days
+                logger.info(f"   Last review: {days_since} days ago, scanning for new features...")
+                discovered = discovery.discover_since(since_date=last_review)
+            else:
+                logger.info(f"   First review, performing full discovery...")
+                discovered = discovery.discover_all()
+            
+            # Add discovered features to catalog
+            new_features_count = 0
+            for feature in discovered:
+                # Map discovery feature type to catalog feature type
+                feature_type = self._map_feature_type(feature.feature_type)
+                
+                is_new = catalog.add_feature(
+                    name=feature.name,
+                    feature_type=feature_type,
+                    description=feature.description,
+                    source=feature.source,
+                    metadata=feature.metadata,
+                    commit_hash=feature.commit_hash,
+                    file_path=feature.file_path
+                )
+                
+                if is_new:
+                    new_features_count += 1
+            
+            # Log this review
+            catalog.log_review(
+                review_type='documentation',
+                features_reviewed=len(discovered),
+                new_features_found=new_features_count,
+                notes=f"Enterprise documentation generation (automated)"
+            )
+            
+            # Get all features for documentation generation
+            all_features = catalog.get_all_features(status=AcceptanceStatus.DISCOVERED)
+            all_features.extend(catalog.get_all_features(status=AcceptanceStatus.ACCEPTED))
+            
+            # Convert to old format for compatibility with existing code
+            features_list = [
+                {
+                    'name': f.name,
+                    'type': f.feature_type.value,
+                    'description': f.description,
+                    'source': f.source,
+                    'file': f.file_path,
+                    'commit_hash': f.commit_hash
+                }
+                for f in all_features
+            ]
+            
+            return {
+                "features": features_list,
+                "total_count": len(all_features),
+                "new_count": new_features_count,
+                "source": "centralized_enhancement_catalog",
+                "last_review": {
+                    "timestamp": last_review.isoformat() if last_review else None,
+                    "days_since": (datetime.now() - last_review).days if last_review else None,
+                    "new_features_found": new_features_count
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error in centralized discovery: {e}")
+            # Fallback to empty results
+            return {
+                "features": [],
+                "total_count": 0,
+                "new_count": 0,
+                "source": "error",
+                "error": str(e)
+            }
+    
+    def _map_feature_type(self, discovery_type: str) -> FeatureType:
+        """
+        Map discovery feature type to catalog feature type.
+        
+        Args:
+            discovery_type: Type from EnhancementDiscoveryEngine
+            
+        Returns:
+            Mapped FeatureType for catalog
+        """
+        mapping = {
+            'operation': FeatureType.OPERATION,
+            'agent': FeatureType.AGENT,
+            'orchestrator': FeatureType.ORCHESTRATOR,
+            'workflow': FeatureType.WORKFLOW,
+            'template': FeatureType.TEMPLATE,
+            'documentation': FeatureType.DOCUMENTATION,
+            'capability': FeatureType.INTEGRATION,
+            'admin_script': FeatureType.UTILITY,
+            'guide': FeatureType.DOCUMENTATION,
+            'prompt_module': FeatureType.DOCUMENTATION
+        }
+        
+        return mapping.get(discovery_type, FeatureType.UTILITY)
+    
+    # =========================================================================
+    # LEGACY DISCOVERY ENGINE (DEPRECATED - Kept for reference)
     # =========================================================================
     
     def _run_discovery_engine(self) -> Dict[str, Any]:
         """
-        Discovery Engine - Scan Git history + YAML configs for features
+        DEPRECATED: Old Discovery Engine
         
-        Returns comprehensive feature inventory for documentation generation.
+        Use _discover_features_from_catalog() instead.
+        Kept for backward compatibility only.
         """
+        logger.warning("   ⚠️ Using deprecated _run_discovery_engine()")
+        logger.warning("   ⚠️ Switch to _discover_features_from_catalog() for centralized tracking")
+        
         logger.info("   Scanning Git history (last 2 days)...")
         git_features = self._scan_git_history(days=2)
         

@@ -1277,6 +1277,24 @@ templates:
     - admin docs
     - docs admin
     response_type: detailed
+    understanding_content: "You want administrative-level help for CORTEX development and deployment operations."
+    challenge_content: "No Challenge - Admin operations manage CORTEX itself - deployment, documentation, and internal tools. These are only available in CORTEX development repository."
+    response_content: |
+      **CORTEX Admin Operations** (Development Repository Only)
+      
+      {catalog_features}
+      
+      **Access Control:** Admin operations only route in CORTEX development repository (detects cortex-brain/admin/). User operations work in all repositories.
+    request_echo_content: "Show all admin operations for CORTEX development"
+    next_steps_content: |
+      1. Use deployment operations to create production releases
+      2. Use documentation operations to rebuild docs/diagrams
+      3. Run validation tests after major changes
+      4. Check SKULL tests pass before deployment
+    
+    # NOTE: {catalog_features} is populated dynamically from Enhancement Catalog
+    # Shows features grouped by type with age/status indicators
+    # Format: Type (count) → Feature list with "NEW" badges for recent additions
 
   generate_documentation_completion:
     <<: *standard_5_part_base
