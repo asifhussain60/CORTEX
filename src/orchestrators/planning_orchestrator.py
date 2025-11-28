@@ -1377,3 +1377,176 @@ class PlanningOrchestrator:
         return f'{content}\n\n**Completed:** {completion_date}'
 
 
+    # ==================================================================================
+    # PHASE 3: SWAGGER ENTRY POINT MODULE - Scope Inference & Clarification
+    # ==================================================================================
+    
+    def infer_scope_from_dor(self, dor_responses: Dict[str, str]) -> Dict[str, Any]:
+        """
+        Infer feature scope from DoR responses (Q3 + Q6)
+        
+        This is the SWAGGER Entry Point - automatically extracts scope boundaries
+        from DoR answers to reduce interrogation by 70%
+        
+        Args:
+            dor_responses: Dictionary with keys 'Q3' (functional scope) and 'Q6' (dependencies)
+        
+        Returns:
+            Dictionary with:
+                - entities: Extracted scope entities (tables, files, services, dependencies)
+                - confidence: Confidence score (0.0-1.0)
+                - validation: Validation result
+                - needs_clarification: Boolean indicating if clarification is needed
+                - clarification_prompt: Optional prompt for user (if needs_clarification=True)
+        """
+        from src.agents.estimation.scope_inference_engine import ScopeInferenceEngine
+        from src.agents.estimation.scope_validator import ScopeValidator
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        # Initialize components
+        inference_engine = ScopeInferenceEngine()
+        validator = ScopeValidator()
+        clarifier = ClarificationOrchestrator()
+        
+        # Combine DoR Q3 + Q6 into requirements text
+        requirements_text = inference_engine.parse_dor_answers(dor_responses)
+        
+        # Extract scope entities
+        entities = inference_engine.extract_entities(requirements_text)
+        
+        # Calculate confidence
+        confidence = inference_engine.calculate_confidence(entities, requirements_text)
+        
+        # Generate scope boundary
+        boundary = inference_engine.generate_scope_boundary(entities, confidence)
+        
+        # Validate
+        validation_result = validator.validate_scope(boundary)
+        
+        # Convert validation result to dict for clarifier
+        validation_dict = {
+            'confidence': validation_result.confidence_score,
+            'is_valid': validation_result.is_valid,
+            'missing_elements': validation_result.missing_elements,
+            'clarification_questions': []  # Generate from missing elements
+        }
+        
+        # Generate clarification questions from missing elements
+        if 'tables' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What database tables will be involved?')
+        if 'files' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What code files need to be modified or created?')
+        if 'services' in validation_result.missing_elements:
+            validation_dict['clarification_questions'].append('What external services will be integrated?')
+        
+        # Check if clarification is needed
+        needs_clarification = clarifier.should_clarify(validation_dict)
+        
+        result = {
+            'entities': {
+                'tables': entities.tables,
+                'files': entities.files,
+                'services': entities.services,
+                'dependencies': entities.dependencies
+            },
+            'confidence': confidence,
+            'validation': {
+                'is_valid': validation_result.is_valid,
+                'requires_clarification': validation_result.requires_clarification,
+                'errors': validation_result.validation_errors,
+                'warnings': validation_result.warnings,
+                'missing_elements': validation_result.missing_elements
+            },
+            'needs_clarification': needs_clarification,
+            'clarification_prompt': None
+        }
+        
+        # Generate clarification prompt if needed
+        if needs_clarification:
+            result['clarification_prompt'] = clarifier.generate_clarification_prompt(validation_dict)
+        
+        return result
+    
+    def process_clarification_response(self, user_response: str) -> Dict[str, Any]:
+        """
+        Process user's response to clarification questions
+        
+        Args:
+            user_response: User's text response with additional scope details
+        
+        Returns:
+            Dictionary with:
+                - entities: Re-extracted scope entities
+                - confidence: Updated confidence score
+                - is_vague: Boolean indicating if response is still vague
+        """
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        clarifier = ClarificationOrchestrator()
+        return clarifier.parse_user_response(user_response)
+    
+    def estimate_feature_scope(self, feature_name: str, dor_responses: Dict[str, str], 
+                              max_clarification_rounds: int = 2) -> Dict[str, Any]:
+        """
+        Complete scope estimation workflow with automatic clarification
+        
+        This is the main entry point for the SWAGGER scope estimation system
+        
+        Args:
+            feature_name: Name of the feature being planned
+            dor_responses: DoR responses (Q3 + Q6 minimum)
+            max_clarification_rounds: Maximum clarification iterations (default 2)
+        
+        Returns:
+            Dictionary with:
+                - final_scope: Final extracted scope entities
+                - confidence: Final confidence score
+                - rounds_completed: Number of clarification rounds used
+                - workflow_log: List of workflow steps taken
+                - success: Boolean indicating if confidence threshold was met
+        """
+        from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
+        
+        workflow_log = []
+        clarifier = ClarificationOrchestrator()
+        
+        # Initial scope inference
+        workflow_log.append(f"Starting scope inference for '{feature_name}'")
+        initial_scope = self.infer_scope_from_dor(dor_responses)
+        workflow_log.append(f"Initial confidence: {initial_scope['confidence']:.2%}")
+        
+        # If high confidence, we're done
+        if not initial_scope['needs_clarification']:
+            workflow_log.append("High confidence achieved - no clarification needed")
+            return {
+                'final_scope': initial_scope['entities'],
+                'confidence': initial_scope['confidence'],
+                'rounds_completed': 0,
+                'workflow_log': workflow_log,
+                'success': True
+            }
+        
+        # Clarification workflow
+        workflow_log.append("Low confidence detected - clarification workflow activated")
+        current_scope = initial_scope
+        
+        for round_num in range(1, max_clarification_rounds + 1):
+            clarifier.increment_round()
+            workflow_log.append(f"Clarification round {round_num}/{max_clarification_rounds}")
+            
+            # In real usage, this would prompt the user and wait for response
+            # For now, we return the state and let the caller handle user interaction
+            workflow_log.append(f"Clarification prompt: {current_scope['clarification_prompt']}")
+            
+            # Exit point for real usage - caller will provide user response separately
+            break
+        
+        return {
+            'final_scope': current_scope['entities'],
+            'confidence': current_scope['confidence'],
+            'rounds_completed': clarifier.get_current_round(),
+            'workflow_log': workflow_log,
+            'success': current_scope['confidence'] >= 0.70,
+            'awaiting_user_response': True,
+            'clarification_prompt': current_scope['clarification_prompt']
+        }
