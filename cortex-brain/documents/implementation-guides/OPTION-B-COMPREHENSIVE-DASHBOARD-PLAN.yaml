@@ -3,26 +3,45 @@
 # ============================================================================
 # Tag: the promise
 # Purpose: Make CORTEX Rulebook impossible to miss with comprehensive visibility
-# Timeline: 4 weeks (1 month)
+# Timeline: 8 weeks (2 months) - EXPANDED to include D3.js Admin Dashboards
 # Status: APPROVED - Ready for Implementation
 # Author: Asif Hussain
 # Created: November 28, 2025
-# Version: 1.0
+# Updated: November 28, 2025 - Integrated D3.js Dashboard Plan
+# Version: 2.0
 # ============================================================================
 
 metadata:
   plan_id: "option-b-comprehensive-dashboard"
   tag: "the promise"
   cross_machine_accessible: true
-  version: "1.0"
+  version: "2.0"
   status: "approved"
-  timeline: "4 weeks"
+  timeline: "8 weeks"
   created: "2025-11-28"
+  updated: "2025-11-28"
   author: "Asif Hussain"
   cortex_version: "3.2.1"
-  target_version: "3.3.0"
+  target_version: "3.4.0"
   priority: "HIGH"
-  scope: "comprehensive_visibility"
+  scope: "comprehensive_visibility_plus_admin_dashboards"
+  
+  integration_note: |
+    This plan integrates TWO complementary dashboard systems:
+    
+    **Sprints 1-4 (Weeks 1-4): Governance & Rulebook Visibility**
+    - User-facing compliance dashboard
+    - Rulebook acknowledgment flow
+    - Interactive rule explorer
+    - User profile integration
+    
+    **Sprints 5-8 (Weeks 5-8): D3.js Admin Dashboards**
+    - Interactive admin operation dashboards
+    - Real-time WebSocket monitoring
+    - Visual feedback for sync/optimize/deploy
+    - Format validation & deployment gates
+    
+    Both systems share the WebSocket server infrastructure built in Sprint 2.
 
 vision:
   statement: "CORTEX vision is to provide transparent, proactive governance where rules guide development rather than block it."
@@ -852,6 +871,473 @@ overall_acceptance_criteria:
     - "✅ NPS score > 50"
     - "✅ All 900+ tests pass (100% pass rate)"
     - "✅ Production deployment successful"
+  
+  sprint_5:
+    - "✅ D3.js format specification complete with validation schema"
+    - "✅ Reference dashboard implementation passes all tests"
+    - "✅ WebSocket server handles 50+ concurrent connections"
+    - "✅ Real-time metrics publishing operational"
+    - "✅ Authentication system blocks unauthorized access"
+    - "✅ All foundation tests pass (100% pass rate)"
+  
+  sprint_6:
+    - "✅ All 6 admin EPMs migrated to D3.js dashboard format"
+    - "✅ Multi-layer tabs functional (Overview, Visualizations, Diagrams, Data, Recommendations)"
+    - "✅ Narrative intelligence integrated in all dashboards"
+    - "✅ Export functionality works (PDF/PNG/PPTX)"
+    - "✅ Dashboard generation <5 seconds"
+    - "✅ All EPM migration tests pass (100% pass rate)"
+  
+  sprint_7:
+    - "✅ Visual feedback for sync operations (force-directed graphs)"
+    - "✅ Visual feedback for optimize operations (Sankey diagrams)"
+    - "✅ Visual feedback for deploy operations (flow diagrams)"
+    - "✅ WebSocket real-time updates <100ms latency"
+    - "✅ Interactive controls functional (pause/resume)"
+    - "✅ All visual feedback tests pass (100% pass rate)"
+  
+  sprint_8:
+    - "✅ Format validator operational with deployment gate"
+    - "✅ System Alignment 8th layer added (format compliance)"
+    - "✅ Compliance dashboard tracks format adherence"
+    - "✅ Deployment pipeline blocks non-compliant outputs"
+    - "✅ Full regression testing complete (100% pass rate)"
+    - "✅ Production deployment to v3.4.0 successful"
+
+# ============================================================================
+# D3.JS ADMIN DASHBOARD SPRINTS (Weeks 5-8)
+# ============================================================================
+
+sprint_5:
+  name: "D3.js Foundation & WebSocket Infrastructure"
+  duration: "1 week"
+  goal: "Build foundation for interactive admin dashboards with WebSocket server"
+  status: "not_started"
+  start_date: "TBD (after Sprint 4)"
+  end_date: "TBD"
+  dependencies:
+    - "Sprint 2 complete (compliance dashboard and WebSocket basics)"
+  
+  deliverables:
+    format_specification:
+      description: "D3.js dashboard format standard with validation schema"
+      files:
+        - "cortex-brain/documents/standards/DOCUMENTATION-FORMAT-SPEC-v1.0.md"
+        - "cortex-brain/documents/standards/format-validation-schema.json"
+        - "cortex-brain/documents/guides/EPM-MIGRATION-GUIDE.md"
+      acceptance_criteria:
+        - "5-tab structure defined (Overview, Visualizations, Diagrams, Data, Recommendations)"
+        - "D3.js v7+ API requirements documented"
+        - "Narrative intelligence format specified"
+        - "Export functionality requirements (PDF/PNG/PPTX)"
+        - "Performance criteria (<5s generation, <500MB memory)"
+    
+    reference_implementation:
+      description: "Complete reference dashboard generator with all features"
+      files:
+        - "src/utils/interactive_dashboard_generator.py" (500 lines)
+        - "templates/interactive-dashboard-template.html" (800 lines)
+        - "tests/utils/test_interactive_dashboard_generator.py" (400 lines)
+      acceptance_criteria:
+        - "Generates valid D3.js dashboards with 5 tabs"
+        - "Includes force-directed graph template"
+        - "Mermaid diagram embedding works"
+        - "Export to PDF/PNG/PPTX functional"
+        - "Dashboard generation <5 seconds"
+        - "15 tests pass (100% pass rate)"
+    
+    websocket_server_enhancement:
+      description: "Extend existing WebSocket server for admin operations"
+      files:
+        - "src/operations/realtime_dashboard_server.py" (600 lines)
+        - "src/operations/realtime_metrics_publisher.py" (400 lines)
+        - "templates/websocket-client.js" (350 lines)
+        - "src/operations/realtime_dashboard_auth.py" (300 lines)
+      acceptance_criteria:
+        - "Handles 50+ concurrent connections"
+        - "Authentication blocks unauthorized users"
+        - "Message routing supports admin operations"
+        - "Auto-reconnect with exponential backoff"
+        - "SSL/TLS support (wss://)"
+        - "Rate limiting (100 msg/sec per client)"
+  
+  testing_requirements:
+    unit_tests: 40
+    integration_tests: 15
+    performance_tests: 5
+    manual_validation:
+      - "Dashboard renders in Chrome/Firefox/Safari/Edge"
+      - "WebSocket connection survives network interruption"
+      - "Export generates valid PDF/PNG/PPTX files"
+
+sprint_6:
+  name: "Admin EPM Migration to D3.js Format"
+  duration: "1 week"
+  goal: "Migrate all 6 admin EPMs to interactive D3.js dashboard format"
+  status: "not_started"
+  dependencies:
+    - "Sprint 5 complete (reference implementation ready)"
+  
+  deliverables:
+    enterprise_documentation_orchestrator:
+      description: "Migrate to D3.js interactive dashboard with narrative intelligence"
+      file: "cortex-brain/admin/scripts/documentation/enterprise_documentation_orchestrator.py"
+      changes: "+300 lines for dashboard generation"
+      features:
+        - "Overview tab with document statistics and AI narrative"
+        - "Visualizations tab with D3.js force-directed doc graph"
+        - "Diagrams tab with embedded Mermaid architecture diagrams"
+        - "Data tab with sortable documentation inventory"
+        - "Recommendations tab with actionable improvements"
+    
+    system_alignment_orchestrator:
+      description: "Interactive alignment dashboard with feature dependency graphs"
+      file: "src/operations/modules/admin/system_alignment_orchestrator.py"
+      changes: "+350 lines for dashboard generation"
+      features:
+        - "7-layer integration scoring visualization"
+        - "Feature status breakdown with drill-down"
+        - "Dependency graph (D3.js force-directed)"
+        - "Remediation templates preview"
+    
+    diagram_regeneration:
+      description: "Visual diagram regeneration dashboard"
+      file: "src/operations/modules/diagrams/diagram_regeneration_orchestrator.py"
+      changes: "New file, 400 lines"
+      features:
+        - "Before/after diagram comparison"
+        - "Mermaid source code viewer with syntax highlighting"
+        - "Regeneration progress visualization"
+    
+    design_sync:
+      description: "Design sync dashboard with change tracking"
+      file: "src/operations/modules/design_sync/design_sync_orchestrator.py"
+      changes: "+250 lines for dashboard"
+      features:
+        - "Design document diff visualization"
+        - "Sync operation timeline"
+        - "Conflict resolution recommendations"
+    
+    analytics_dashboard:
+      description: "System analytics with Chart.js integration"
+      file: "src/operations/modules/data_integration/analytics_dashboard.py"
+      changes: "+200 lines for D3.js elements"
+      features:
+        - "Performance metrics over time (Chart.js line graphs)"
+        - "Token usage breakdown (D3.js pie chart)"
+        - "Operation frequency heatmap"
+    
+    response_templates:
+      description: "Template usage analytics dashboard"
+      file: "src/operations/modules/response_template_dashboard.py"
+      changes: "New file, 300 lines"
+      features:
+        - "Template usage frequency"
+        - "Response type distribution"
+        - "Template effectiveness metrics"
+  
+  testing_requirements:
+    unit_tests: 60
+    integration_tests: 24
+    manual_validation:
+      - "All 6 EPMs generate valid D3.js dashboards"
+      - "Navigation between tabs smooth (<100ms)"
+      - "Export functionality works for all dashboards"
+
+sprint_7:
+  name: "Visual Feedback for Operations"
+  duration: "1 week"
+  goal: "Real-time visual feedback for sync, optimize, and deploy operations"
+  status: "not_started"
+  dependencies:
+    - "Sprint 6 complete (admin dashboards operational)"
+  
+  deliverables:
+    sync_operation_visualizer:
+      description: "Force-directed graph showing sync dependencies"
+      files:
+        - "src/operations/visual_feedback/sync_visualizer.py" (350 lines)
+        - "templates/static/js/sync-dashboard.js" (400 lines)
+      features:
+        - "Real-time node updates (files being synced)"
+        - "Dependency edge highlighting"
+        - "Progress indicators per file"
+        - "Conflict detection visualization"
+    
+    optimize_operation_visualizer:
+      description: "Sankey diagram showing optimization flow"
+      files:
+        - "src/operations/visual_feedback/optimize_visualizer.py" (400 lines)
+        - "templates/static/js/optimize-dashboard.js" (380 lines)
+      features:
+        - "Optimization stage flow (scan → analyze → optimize → validate)"
+        - "Resource savings visualization (before/after comparison)"
+        - "Performance improvement metrics"
+        - "Rollback preview"
+    
+    deploy_operation_visualizer:
+      description: "Deployment flow with validation gates"
+      files:
+        - "src/operations/visual_feedback/deploy_visualizer.py" (380 lines)
+        - "templates/static/js/deploy-dashboard.js" (360 lines)
+      features:
+        - "Deployment stage Sankey diagram"
+        - "Validation gate status (pass/fail with details)"
+        - "Module deployment progress"
+        - "Rollback preview and recommendations"
+    
+    operation_integration:
+      description: "Hook visual feedback into existing operations"
+      files:
+        - "src/operations/cache_dashboard.py (+200 lines)"
+        - "src/utils/progress_decorator.py (+150 lines)"
+      features:
+        - "WebSocket broadcasting integration"
+        - "Toggle visual feedback on/off"
+        - "Fallback to CLI progress bars"
+  
+  testing_requirements:
+    unit_tests: 51
+    integration_tests: 18
+    performance_tests: 8
+    manual_validation:
+      - "Visual feedback updates in real-time (<100ms latency)"
+      - "Interactive controls work (pause/resume operations)"
+      - "Fallback to CLI when WebSocket unavailable"
+
+sprint_8:
+  name: "Validation, Deployment & Production Release"
+  duration: "1 week"
+  goal: "Format validation, deployment gates, and production release to v3.4.0"
+  status: "not_started"
+  dependencies:
+    - "Sprint 7 complete (visual feedback operational)"
+  
+  deliverables:
+    format_validator:
+      description: "Validate dashboard format against schema"
+      files:
+        - "src/validation/documentation_format_validator.py" (500 lines)
+        - "tests/validation/test_documentation_format_validator.py" (350 lines)"
+      features:
+        - "HTML structure validation"
+        - "D3.js element presence checks"
+        - "5-tab verification"
+        - "Mermaid diagram validation"
+        - "Export functionality checks"
+        - "Performance validation (<5s generation)"
+        - "Browser compatibility checks"
+    
+    deployment_pipeline_integration:
+      description: "Add format validation to deployment gate"
+      file: "scripts/deploy_cortex.py"
+      changes: "+250 lines for validation step"
+      features:
+        - "Run validator on all generated documentation"
+        - "Block deployment if validation fails"
+        - "Generate validation report"
+        - "Override flag for emergency deployments (audited)"
+        - "Rollback on validation failure"
+    
+    system_alignment_8th_layer:
+      description: "Add Documentation Format Compliance layer"
+      file: "src/operations/modules/admin/system_alignment_orchestrator.py"
+      changes: "+200 lines for 8th layer"
+      features:
+        - "Score EPMs on format adherence (0-100)"
+        - "Flag non-compliant EPMs in alignment report"
+        - "Generate compliance recommendations"
+        - "Track compliance trends over time"
+    
+    compliance_dashboard:
+      description: "Dashboard showing EPM format compliance"
+      file: "scripts/check_documentation_compliance.py"
+      changes: "New file, 350 lines"
+      features:
+        - "Scan all admin EPMs for compliance"
+        - "Generate compliance report (pass/fail)"
+        - "Show compliance trends"
+        - "Recommendations for non-compliant EPMs"
+    
+    production_readiness:
+      description: "Final validation and v3.4.0 release"
+      tasks:
+        - "Full regression testing (all 900+ tests)"
+        - "Performance benchmarking"
+        - "Security audit"
+        - "Documentation review"
+        - "Version bump to 3.4.0"
+        - "Production deployment"
+  
+  testing_requirements:
+    comprehensive_testing:
+      - "Full regression (900+ tests, 100% pass rate)"
+      - "Format validation (20 tests)"
+      - "Deployment pipeline (12 tests)"
+      - "System alignment 8th layer (10 tests)"
+      - "Performance testing (all dashboards <5s)"
+      - "Browser compatibility (4 browsers)"
+      - "Security testing (penetration test)"
+    
+    user_acceptance:
+      - "100 beta users test admin dashboards"
+      - "NPS score > 50"
+      - "Zero critical bugs"
+      - "Dashboard usability rating > 4.5/5"
+
+# ============================================================================
+# UPDATED IMPLEMENTATION ROADMAP (8 Weeks)
+# ============================================================================
+
+implementation_roadmap:
+  week_1_to_4:
+    note: "Original Option B plan (Governance & Rulebook Visibility)"
+    reference: "See sprint_1 through sprint_4 above for details"
+  
+  week_5:
+    sprint: "Sprint 5 - D3.js Foundation"
+    focus: "Interactive dashboard infrastructure"
+    deliverables:
+      - "D3.js format specification + validation schema"
+      - "Reference dashboard implementation"
+      - "Enhanced WebSocket server for admin operations"
+    team_allocation:
+      backend: "3 days (dashboard generator + WebSocket enhancement)"
+      frontend: "1 day (template + WebSocket client)"
+      testing: "1 day (40 tests)"
+  
+  week_6:
+    sprint: "Sprint 6 - Admin EPM Migration"
+    focus: "Convert 6 admin EPMs to D3.js format"
+    deliverables:
+      - "Enterprise Documentation Orchestrator (D3.js)"
+      - "System Alignment Orchestrator (D3.js)"
+      - "Diagram Regeneration Module (D3.js)"
+      - "Design Sync Orchestrator (D3.js)"
+      - "Analytics Dashboard (D3.js)"
+      - "Response Template Dashboard (D3.js)"
+    team_allocation:
+      migration: "4 days (6 EPMs × ~350 lines each)"
+      testing: "1 day (84 tests)"
+  
+  week_7:
+    sprint: "Sprint 7 - Visual Feedback"
+    focus: "Real-time operation visualization"
+    deliverables:
+      - "Sync operation visualizer (force-directed graph)"
+      - "Optimize operation visualizer (Sankey diagram)"
+      - "Deploy operation visualizer (flow diagram)"
+      - "Operation integration (WebSocket broadcasting)"
+    team_allocation:
+      visualizers: "3 days (3 visualizers × 350 lines each)"
+      integration: "1 day (operation hooks)"
+      testing: "1 day (77 tests)"
+  
+  week_8:
+    sprint: "Sprint 8 - Validation & Production"
+    focus: "Format validation and v3.4.0 release"
+    deliverables:
+      - "Format validator tool"
+      - "Deployment pipeline integration"
+      - "System Alignment 8th layer"
+      - "Compliance dashboard"
+      - "Production release v3.4.0"
+    team_allocation:
+      validation: "2 days (validator + deployment gate)"
+      alignment: "1 day (8th layer)"
+      testing: "2 days (comprehensive regression + user acceptance)"
+
+# ============================================================================
+# UPDATED SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    governance_visibility:
+      acknowledgment_rate:
+        target: "100%"
+        measurement: "New users who acknowledge rulebook before first operation"
+        baseline: "0% (no acknowledgment flow exists)"
+      
+      dashboard_adoption:
+        target: "70%"
+        measurement: "Users who access compliance dashboard weekly"
+        baseline: "0% (dashboard doesn't exist)"
+    
+    admin_dashboard_adoption:
+      epm_migration_rate:
+        target: "100%"
+        measurement: "Admin EPMs outputting D3.js dashboards"
+        baseline: "1 EPM (Cache Dashboard only)"
+      
+      dashboard_generation_performance:
+        target: "<5 seconds"
+        measurement: "Average dashboard generation time"
+        baseline: "N/A (no D3.js dashboards)"
+      
+      websocket_performance:
+        target: "<100ms latency"
+        measurement: "Real-time update delay"
+        baseline: "N/A (no WebSocket system)"
+      
+      format_compliance_rate:
+        target: "100%"
+        measurement: "EPMs passing format validation"
+        baseline: "N/A (no validation)"
+  
+  qualitative:
+    user_satisfaction:
+      governance_nps:
+        target: "NPS > 50"
+        measurement: "Net Promoter Score for governance experience"
+        baseline: "Unknown"
+      
+      admin_dashboard_nps:
+        target: "NPS > 60"
+        measurement: "Net Promoter Score for admin dashboards"
+        baseline: "Unknown"
+      
+      wow_factor:
+        target: "Achieved"
+        measurement: "Admin dashboards significantly differentiate CORTEX from GitHub Copilot"
+        baseline: "Parity with GitHub Copilot"
+
+# ============================================================================
+# UPDATED ACCEPTANCE CRITERIA (Sprints 1-8)
+# ============================================================================
+
+overall_acceptance_criteria:
+  sprint_1:
+    - "✅ All activation responses include rulebook link"
+    - "✅ Help command shows governance section"
+    - "✅ First-use acknowledgment flow functional"
+    - "✅ Acknowledgment timestamp persisted in Tier 3"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_2:
+    - "✅ Compliance database operational"
+    - "✅ Dashboard renders in VS Code Simple Browser"
+    - "✅ Auto-refresh works without full page reload"
+    - "✅ Protection event notifications appear in Copilot Chat"
+    - "✅ Dashboard load time < 2 seconds"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_3:
+    - "✅ Natural language rule search works"
+    - "✅ Rule explanations include all required sections"
+    - "✅ Context-sensitive suggestions appear during relevant work"
+    - "✅ 10 beta users provide positive feedback"
+    - "✅ All tests pass (100% pass rate)"
+  
+  sprint_4:
+    - "✅ User profile integration adapts rule visibility"
+    - "✅ Rule customization preferences work"
+    - "✅ Analytics dashboard shows trends"
+    - "✅ Documentation complete"
+    - "✅ 100 beta users test without critical bugs"
+    - "✅ NPS score > 50"
+    - "✅ All 900+ tests pass (100% pass rate)"
+    - "✅ Production deployment successful"
 
 # ============================================================================
 # POST-IMPLEMENTATION REVIEW
@@ -879,27 +1365,42 @@ retrospective_plan:
 
 conclusion:
   summary: |
-    Option B (Comprehensive Dashboard - 1 month) provides the optimal balance between
-    immediate impact and strategic foundation for CORTEX 4.0. By implementing proactive
-    visibility, active monitoring, and interactive exploration, we make the CORTEX
-    rulebook impossible to miss while maintaining a positive user experience.
+    Option B (Comprehensive Dashboard - 8 weeks) delivers both user-facing governance
+    visibility (Weeks 1-4) and professional admin-facing D3.js interactive dashboards
+    (Weeks 5-8). This integrated approach provides optimal balance between:
     
-    This plan transforms governance from a reactive enforcement mechanism into a
-    proactive guidance system that helps users succeed rather than blocking progress.
+    • Immediate impact through proactive governance visibility (Sprints 1-4)
+    • Strategic foundation with admin operational intelligence (Sprints 5-8)
+    
+    By implementing compliance monitoring, interactive rule exploration, AND real-time
+    WebSocket dashboards with visual operation feedback, CORTEX significantly
+    differentiates from GitHub Copilot with the "wow factor" of professional
+    interactive dashboards.
+    
+    This plan transforms governance from reactive enforcement into proactive guidance,
+    while giving admins unprecedented visibility into CORTEX operations through
+    stunning D3.js visualizations.
   
   next_steps:
-    - "Get plan approved by stakeholders"
+    - "Get integrated 8-week plan approved by stakeholders"
     - "Allocate team resources (1 developer, 1 week per sprint)"
     - "Set sprint start dates"
     - "Kick off Sprint 1 (Immediate Visibility Enhancement)"
+    - "Consider phased rollout: Complete Sprints 1-4 first, evaluate, then Sprints 5-8"
   
   vision_statement: |
     CORTEX vision is to build AI assistance that operates transparently under
     well-defined engineering standards. These rules are not promises to customers -
     they are our internal commitment to code quality, architectural integrity, and
-    sustainable development practices. By making these standards visible and
-    educational, we empower users to work with CORTEX effectively rather than
-    against its design principles.
+    sustainable development practices.
+    
+    By making these standards visible and educational (Sprints 1-4), we empower
+    users to work with CORTEX effectively. By providing interactive admin dashboards
+    with real-time operational intelligence (Sprints 5-8), we give administrators
+    unprecedented insight into system health, performance, and compliance.
+    
+    Together, these capabilities position CORTEX as a best-in-class AI development
+    assistant with enterprise-grade governance visibility and operational excellence.
 
 # ============================================================================
 # END OF PLAN
