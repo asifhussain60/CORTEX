@@ -133,6 +133,7 @@ class AlignmentReport:
     remediation_suggestions: List[RemediationSuggestion] = field(default_factory=list)
     orphaned_triggers: List[str] = field(default_factory=list)  # Triggers without features
     ghost_features: List[str] = field(default_factory=list)  # Features without triggers
+    documented_but_not_routed: List[Dict[str, str]] = field(default_factory=list)  # Commands documented but no routing
     deployment_gate_results: Optional[Dict[str, Any]] = None  # Deployment quality gates
     package_purity_results: Optional[Dict[str, Any]] = None  # Admin leak detection
     suggestions: List[Dict[str, str]] = field(default_factory=list)
@@ -428,6 +429,20 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         report.orphaned_triggers = orphaned
         report.ghost_features = ghost
         
+        # Phase 1.6: Validate command documentation routing (NEW - detects "documented but not routed")
+        if monitor:
+            monitor.update("Validating command documentation routing")
+        cmd_doc_results = self._validate_command_documentation_routing()
+        if cmd_doc_results:
+            report.documented_but_not_routed = cmd_doc_results.get('documented_but_not_routed', [])
+            
+            # Add to critical issues if commands are documented but unreachable
+            if report.documented_but_not_routed:
+                report.critical_issues += len(report.documented_but_not_routed)
+                logger.warning(
+                    f"⚠️ Found {len(report.documented_but_not_routed)} documented commands without routing triggers"
+                )
+        
         # Phase 2: Validate integration depth (with caching)
         total_features = len(orchestrators) + len(agents.get('agents', {}))
         current_idx = 0
@@ -623,6 +638,40 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             self._entry_point_scanner = EntryPointScanner(self.project_root)
         
         return self._entry_point_scanner.validate_wiring(orchestrators)
+    
+    def _validate_command_documentation_routing(self) -> Dict[str, Any]:
+        """
+        Validate that documented commands have routing triggers.
+        
+        Uses WiringValidator to cross-reference CORTEX.prompt.md documented
+        commands against response-templates.yaml routing triggers.
+        
+        Returns:
+            Validation results with documented_but_not_routed list
+        """
+        try:
+            from src.validation.wiring_validator import WiringValidator
+            
+            validator = WiringValidator(self.project_root)
+            results = validator.validate_command_documentation()
+            
+            if not results.get('validation_passed', True):
+                logger.warning(
+                    f"Command documentation validation failed: "
+                    f"{len(results.get('documented_but_not_routed', []))} commands lack routing"
+                )
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"Command documentation validation error: {e}")
+            return {
+                "total_documented_commands": 0,
+                "commands_with_routing": 0,
+                "documented_but_not_routed": [],
+                "validation_passed": False,
+                "error": str(e)
+            }
     
     def _validate_documentation(
         self,
@@ -1869,6 +1918,15 @@ graph TD
             lines.append("\n[OK] System alignment healthy")
         else:
             lines.append(f"\n[WARN] {report.issues_found} alignment issues detected:")
+            
+            # Show documented but not routed commands (NEW - critical finding)
+            if report.documented_but_not_routed:
+                lines.append(f"\n❌ CRITICAL: {len(report.documented_but_not_routed)} documented commands lack routing:")
+                for cmd_info in report.documented_but_not_routed[:5]:
+                    lines.append(f"   • `{cmd_info['command']}` (needs {cmd_info['suggested_trigger_group']})")
+                if len(report.documented_but_not_routed) > 5:
+                    lines.append(f"   ... and {len(report.documented_but_not_routed) - 5} more")
+                lines.append("   Impact: Users cannot access these documented features")
             
             # Show top 3 issues
             issues = [

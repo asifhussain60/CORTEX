@@ -6,14 +6,17 @@ Validates that orchestrators are properly wired to entry points:
 - Detects orphaned triggers (no orchestrator)
 - Detects ghost features (orchestrator but no trigger)
 - Validates naming conventions
+- Validates documented commands have routing triggers
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import logging
+import re
+import yaml
 from pathlib import Path
-from typing import Dict, Any, List, Set
+from typing import Dict, Any, List, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +37,8 @@ class WiringValidator:
             project_root: Root directory of CORTEX project
         """
         self.project_root = Path(project_root)
+        self._documented_commands_cache = None
+        self._routing_triggers_cache = None
     
     def validate_wiring(
         self,
@@ -194,3 +199,166 @@ class {orchestrator_name}(BaseOperationModule):
             return "wired"
         
         return "unwired"
+    
+    def validate_command_documentation(self) -> Dict[str, Any]:
+        """
+        Validate that all documented commands have routing triggers.
+        
+        Scans CORTEX.prompt.md for documented commands (- `command` - description)
+        and verifies each has corresponding routing triggers in response-templates.yaml.
+        
+        Returns:
+            Validation results with documented_but_not_routed commands
+        """
+        results = {
+            "total_documented_commands": 0,
+            "commands_with_routing": 0,
+            "documented_but_not_routed": [],
+            "validation_passed": True
+        }
+        
+        try:
+            # Extract documented commands from CORTEX.prompt.md
+            documented_commands = self._extract_documented_commands()
+            results["total_documented_commands"] = len(documented_commands)
+            
+            # Get routing triggers from response-templates.yaml
+            routing_triggers = self._extract_routing_triggers()
+            
+            # Cross-reference
+            for cmd_info in documented_commands:
+                command = cmd_info["command"]
+                description = cmd_info["description"]
+                source_file = cmd_info["source_file"]
+                
+                # Check if command appears in any routing trigger
+                found_in_routing = False
+                for trigger_group, triggers in routing_triggers.items():
+                    for trigger in triggers:
+                        if command.lower() in trigger.lower() or trigger.lower() in command.lower():
+                            found_in_routing = True
+                            break
+                    if found_in_routing:
+                        break
+                
+                if found_in_routing:
+                    results["commands_with_routing"] += 1
+                else:
+                    results["documented_but_not_routed"].append({
+                        "command": command,
+                        "description": description,
+                        "source_file": source_file,
+                        "suggested_trigger_group": self._suggest_trigger_group_name(command)
+                    })
+                    results["validation_passed"] = False
+            
+        except Exception as e:
+            logger.error(f"Command documentation validation failed: {e}")
+            results["error"] = str(e)
+            results["validation_passed"] = False
+        
+        return results
+    
+    def _extract_documented_commands(self) -> List[Dict[str, str]]:
+        """
+        Extract documented commands from CORTEX.prompt.md.
+        
+        Looks for patterns like:
+        - `command name` - Description
+        
+        Returns:
+            List of command dictionaries with command, description, source_file
+        """
+        if self._documented_commands_cache is not None:
+            return self._documented_commands_cache
+        
+        commands = []
+        prompt_file = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+        
+        if not prompt_file.exists():
+            logger.warning(f"CORTEX.prompt.md not found at {prompt_file}")
+            self._documented_commands_cache = commands
+            return commands
+        
+        try:
+            content = prompt_file.read_text(encoding='utf-8')
+            # Pattern: - `command` - description
+            pattern = r'^\s*-\s*`([^`]+)`\s*-\s*(.+)$'
+            
+            for line in content.split('\n'):
+                match = re.match(pattern, line)
+                if match:
+                    command = match.group(1).strip()
+                    description = match.group(2).strip()
+                    
+                    # Skip non-command entries (examples, placeholders)
+                    if any(skip in command.lower() for skip in ['[', 'example', 'todo', 'tbd']):
+                        continue
+                    
+                    commands.append({
+                        "command": command,
+                        "description": description,
+                        "source_file": "CORTEX.prompt.md"
+                    })
+            
+            self._documented_commands_cache = commands
+            logger.info(f"Extracted {len(commands)} documented commands from CORTEX.prompt.md")
+            
+        except Exception as e:
+            logger.error(f"Failed to extract documented commands: {e}")
+        
+        return commands
+    
+    def _extract_routing_triggers(self) -> Dict[str, List[str]]:
+        """
+        Extract routing triggers from response-templates.yaml.
+        
+        Returns:
+            Dict mapping trigger group names to lists of trigger phrases
+        """
+        if self._routing_triggers_cache is not None:
+            return self._routing_triggers_cache
+        
+        routing_triggers = {}
+        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        
+        if not templates_file.exists():
+            logger.warning(f"response-templates.yaml not found at {templates_file}")
+            self._routing_triggers_cache = routing_triggers
+            return routing_triggers
+        
+        try:
+            with open(templates_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+            
+            # Extract routing section
+            routing = data.get('routing', {})
+            
+            for key, value in routing.items():
+                if key.endswith('_triggers') and isinstance(value, list):
+                    routing_triggers[key] = value
+            
+            self._routing_triggers_cache = routing_triggers
+            logger.info(f"Extracted {len(routing_triggers)} trigger groups from response-templates.yaml")
+            
+        except Exception as e:
+            logger.error(f"Failed to extract routing triggers: {e}")
+        
+        return routing_triggers
+    
+    def _suggest_trigger_group_name(self, command: str) -> str:
+        """
+        Suggest routing trigger group name for a command.
+        
+        Args:
+            command: Command string (e.g., 'cache status')
+        
+        Returns:
+            Suggested trigger group name (e.g., 'cache_status_triggers')
+        """
+        # Clean command and convert to snake_case
+        clean_cmd = command.lower()
+        clean_cmd = re.sub(r'[^a-z0-9\s]', '', clean_cmd)
+        clean_cmd = clean_cmd.strip().replace(' ', '_')
+        
+        return f"{clean_cmd}_triggers"
