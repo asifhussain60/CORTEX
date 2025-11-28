@@ -125,6 +125,16 @@
     "enforce_validation": true,
     "fail_on_critical_length": false
   },
+  "adaptive_templates": {
+    "enabled": true,
+    "enable_brain_learning": true,
+    "enable_optimization": true,
+    "use_pattern_learning": true,
+    "confidence_threshold": 0.7,
+    "quality_feedback_loop": true,
+    "context_aware_selection": true,
+    "learning_weight": 0.3
+  },
   "github": {
     "comment": "GitHub Personal Access Token for automatic Gist upload",
     "token": "",

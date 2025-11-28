@@ -47,6 +47,9 @@ sys.path.insert(0, str(cortex_root))
 from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
 from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 
+# Import centralized config for cross-platform path resolution
+from src.config import config
+
 # Import base operation result structures
 try:
     from src.operations.base_operation_module import OperationResult, OperationStatus
@@ -94,8 +97,9 @@ class EnterpriseDocumentationOrchestrator:
     
     def __init__(self, workspace_root: Optional[Path] = None):
         """Initialize the orchestrator"""
-        self.workspace_root = workspace_root or cortex_root
-        self.brain_path = self.workspace_root / "cortex-brain"
+        # Use centralized config for cross-platform path resolution
+        self.workspace_root = workspace_root or config.root_path
+        self.brain_path = config.brain_path
         self.docs_path = self.workspace_root / "docs"
         self.diagrams_path = self.docs_path / "diagrams"
         self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
