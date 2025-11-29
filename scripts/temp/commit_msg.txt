@@ -1,0 +1,37 @@
+feat: Voice Transformation for Story Narrative
+
+Enhanced Doc Refresh Plugin v2.1 with narrative voice transformation:
+
+Plugin Enhancements:
+- Added transform_narrative_voice config option
+- Added voice_transformation_mode (dialogue_heavy, internal_monologue, mixed)
+- Implemented _transform_narrative_voice() method with 9 transformation patterns
+- Independent of story recap generation (can be used separately)
+
+Transformation Patterns:
+1. action_to_dialogue: Narrator actions to character speech
+2. emotion_to_internal_monologue: Descriptions to internal thoughts
+3. action_to_dialogue_with_context: Actions to dialogue with context
+4. action_to_announcement: Simple actions to character announcements
+5. decision_to_dialogue: Decisions to spoken/thought dialogue
+6. panic_dialogue: Enhanced panic moments
+7. action_to_reaction: Actions to character reactions
+8. explanation_to_self_talk: Narrator explanations to self-talk
+9. action_sequence_to_staccato: Action lists to staccato dialogue
+
+Story Changes Applied (Awakening Of CORTEX.md):
+- Transformed 5 key narrative moments
+- Changed narrator descriptions to character dialogue
+- Enhanced internal monologue moments
+- Improved comedic delivery through voice
+
+Testing:
+- Created test_voice_transformation.py for analysis
+- Detected 5 patterns successfully
+- Applied transformations maintaining comedy tone
+
+Impact:
+- More immersive narrative voice
+- Character-driven storytelling
+- Enhanced comedic delivery
+- Technical accuracy preserved

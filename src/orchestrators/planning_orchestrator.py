@@ -1550,3 +1550,101 @@ class PlanningOrchestrator:
             'awaiting_user_response': True,
             'clarification_prompt': current_scope['clarification_prompt']
         }
+    
+    def estimate_timeframe(self, complexity: float, scope: Optional[Dict] = None,
+                          team_size: int = 1, velocity: Optional[float] = None,
+                          include_three_point: bool = False) -> Dict[str, Any]:
+        """
+        Generate time estimates from SWAGGER complexity score
+        
+        Natural language triggers:
+        - "timeframe", "estimate", "time estimate", "how long", "duration"
+        - "story points", "sprint estimate", "team size", "velocity"
+        
+        This method integrates TIMEFRAME Entry Point Module with SWAGGER.
+        Call this after scope inference when user asks about time estimates.
+        
+        Args:
+            complexity: SWAGGER complexity score (0-100)
+            scope: Optional SWAGGER scope dict (for detailed breakdown)
+            team_size: Number of developers on team (default: 1)
+            velocity: Optional team velocity (story points per sprint)
+            include_three_point: Generate PERT three-point estimate
+        
+        Returns:
+            Dictionary with:
+                - story_points: Fibonacci story points
+                - hours_single: Single developer hours
+                - hours_team: Team hours (with communication overhead)
+                - days_single: Single developer days
+                - days_team: Team calendar days
+                - sprints: Sprint allocation
+                - confidence: Estimate confidence (HIGH/MEDIUM/LOW)
+                - breakdown: Effort breakdown by entity type
+                - assumptions: List of estimation assumptions
+                - report: Formatted markdown report
+                - three_point: Optional PERT estimates (best/likely/worst)
+        
+        Example:
+            >>> # After SWAGGER scope inference
+            >>> scope_result = orchestrator.infer_scope_from_dor(dor_responses)
+            >>> complexity = scope_result['validation']['complexity']
+            >>> 
+            >>> # User asks: "what's the timeframe for this?"
+            >>> timeframe = orchestrator.estimate_timeframe(
+            ...     complexity=complexity,
+            ...     scope=scope_result['entities'],
+            ...     team_size=2
+            ... )
+            >>> print(timeframe['report'])
+        """
+        from src.agents.estimation.timeframe_estimator import TimeframeEstimator
+        
+        # Initialize TIMEFRAME estimator
+        estimator = TimeframeEstimator()
+        
+        # Generate estimate
+        estimate = estimator.estimate_timeframe(
+            complexity=complexity,
+            scope=scope,
+            team_size=team_size,
+            velocity=velocity
+        )
+        
+        # Convert dataclass to dict for JSON serialization
+        result = {
+            'story_points': estimate.story_points,
+            'hours_single': estimate.hours_single,
+            'hours_team': estimate.hours_team,
+            'days_single': estimate.days_single,
+            'days_team': estimate.days_team,
+            'sprints': estimate.sprints,
+            'team_size': estimate.team_size,
+            'confidence': estimate.confidence,
+            'breakdown': estimate.breakdown,
+            'assumptions': estimate.assumptions,
+            'report': estimator.format_estimate_report(estimate, include_breakdown=True)
+        }
+        
+        # Add three-point estimate if requested
+        if include_three_point:
+            three_point = estimator.estimate_three_point(complexity, scope, team_size)
+            result['three_point'] = {
+                'best': {
+                    'story_points': three_point['best'].story_points,
+                    'hours': three_point['best'].hours_single,
+                    'days': three_point['best'].days_single
+                },
+                'likely': {
+                    'story_points': three_point['likely'].story_points,
+                    'hours': three_point['likely'].hours_single,
+                    'days': three_point['likely'].days_single
+                },
+                'worst': {
+                    'story_points': three_point['worst'].story_points,
+                    'hours': three_point['worst'].hours_single,
+                    'days': three_point['worst'].days_single
+                }
+            }
+        
+        return result

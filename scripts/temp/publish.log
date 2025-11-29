@@ -1,0 +1,19 @@
+INFO: ================================================================================
+INFO: CORTEX Branch Publisher - Fault Tolerant Edition
+INFO: ================================================================================
+INFO: Version: 5.2.0
+INFO: Target branch: cortex-publish
+INFO: Project root: /Users/asifhussain/PROJECTS/CORTEX
+INFO: Dry run: False
+INFO: Resume mode: False
+INFO: 
+INFO: ================================================================================
+INFO: STAGE 0: Pre-Deployment Validation Gate
+INFO: ================================================================================
+INFO: 
+ERROR: 
+ERROR: ❌ VALIDATION FAILED - BRANCH PUBLISH BLOCKED
+ERROR: 
+ERROR: Fix all CRITICAL and HIGH issues before publishing.
+ERROR: Run: python scripts/validate_deployment.py
+ERROR: 
