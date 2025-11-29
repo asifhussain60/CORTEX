@@ -559,32 +559,32 @@
     <script>
         const dashboardData = {
   "metadata": {
-    "generatedAt": "2025-11-29T05:28:06.202313",
+    "generatedAt": "2025-11-29T15:39:24.323502",
     "version": "3.3.0",
     "operationType": "system_alignment",
     "author": "CORTEX"
   },
   "overview": {
-    "executiveSummary": "System alignment validation completed at 2025-11-29 05:28:06. Overall health is 76%, indicating a warning system state. Found 21 critical issues and 86 warnings across 37 registered features. 0 new features have been added since the last alignment review.",
+    "executiveSummary": "System alignment validation completed at 2025-11-29 15:39:24. Overall health is 77%, indicating a warning system state. Found 22 critical issues and 85 warnings across 38 registered features. 0 new features have been added since the last alignment review.",
     "keyMetrics": [
       {
         "label": "Overall Health",
-        "value": "76%",
+        "value": "77%",
         "status": "warning"
       },
       {
         "label": "Total Features",
-        "value": 37,
+        "value": 38,
         "status": "info"
       },
       {
         "label": "Critical Issues",
-        "value": 21,
+        "value": 22,
         "status": "critical"
       },
       {
         "label": "Warnings",
-        "value": 86,
+        "value": 85,
         "status": "warning"
       },
       {
@@ -610,7 +610,7 @@
         {
           "id": "health",
           "group": "health",
-          "label": "76% Health"
+          "label": "77% Health"
         },
         {
           "id": "HandsOnTutorialOrchestrator",
@@ -679,8 +679,8 @@
         },
         {
           "id": "CodeReviewOrchestrator",
-          "group": "critical",
-          "label": "CodeReviewOrchestrator (60%)"
+          "group": "healthy",
+          "label": "CodeReviewOrchestrator (90%)"
         },
         {
           "id": "CommitOrchestrator",
@@ -733,6 +733,11 @@
           "label": "SetupEPMOrchestrator (90%)"
         },
         {
+          "id": "SWAGGEREntryPointOrchestrator",
+          "group": "critical",
+          "label": "SWAGGEREntryPointOrchestrator (60%)"
+        },
+        {
           "id": "UnifiedEntryPointOrchestrator",
           "group": "warning",
           "label": "UnifiedEntryPointOrchestrator (80%)"
@@ -754,18 +759,18 @@
         },
         {
           "id": "BrainIngestionAgent",
-          "group": "warning",
-          "label": "BrainIngestionAgent (80%)"
+          "group": "healthy",
+          "label": "BrainIngestionAgent (90%)"
         },
         {
           "id": "FeedbackAgent",
           "group": "healthy",
-          "label": "FeedbackAgent (90%)"
+          "label": "FeedbackAgent (100%)"
         },
         {
           "id": "ViewDiscoveryAgent",
           "group": "healthy",
-          "label": "ViewDiscoveryAgent (90%)"
+          "label": "ViewDiscoveryAgent (100%)"
         },
         {
           "id": "ADOAgent",
@@ -867,7 +872,7 @@
         {
           "source": "health",
           "target": "CodeReviewOrchestrator",
-          "value": 6.0
+          "value": 9.0
         },
         {
           "source": "health",
@@ -921,6 +926,11 @@
         },
         {
           "source": "health",
+          "target": "SWAGGEREntryPointOrchestrator",
+          "value": 6.0
+        },
+        {
+          "source": "health",
           "target": "UnifiedEntryPointOrchestrator",
           "value": 8.0
         },
@@ -942,17 +952,17 @@
         {
           "source": "health",
           "target": "BrainIngestionAgent",
-          "value": 8.0
+          "value": 9.0
         },
         {
           "source": "health",
           "target": "FeedbackAgent",
-          "value": 9.0
+          "value": 10.0
         },
         {
           "source": "health",
           "target": "ViewDiscoveryAgent",
-          "value": 9.0
+          "value": 10.0
         },
         {
           "source": "health",
@@ -1001,42 +1011,42 @@
         },
         {
           "date": "2025-11-21",
-          "value": 60,
+          "value": 61,
           "label": "Day 3"
         },
         {
           "date": "2025-11-22",
-          "value": 62,
+          "value": 63,
           "label": "Day 4"
         },
         {
           "date": "2025-11-23",
-          "value": 64,
+          "value": 65,
           "label": "Day 5"
         },
         {
           "date": "2025-11-24",
-          "value": 66,
+          "value": 67,
           "label": "Day 6"
         },
         {
           "date": "2025-11-25",
-          "value": 68,
+          "value": 69,
           "label": "Day 7"
         },
         {
           "date": "2025-11-26",
-          "value": 70,
+          "value": 71,
           "label": "Day 8"
         },
         {
           "date": "2025-11-27",
-          "value": 72,
+          "value": 73,
           "label": "Day 9"
         },
         {
           "date": "2025-11-28",
-          "value": 74,
+          "value": 75,
           "label": "Day 10"
         }
       ],
@@ -1048,19 +1058,12 @@
     {
       "title": "Alignment Validation Workflow",
       "type": "mermaid",
-      "content": "```mermaid\ngraph TD\n    A[Start Alignment] --> B[Discover Features]\n    B --> C[Score Integration]\n    C --> D[Validate Wiring]\n    D --> E[Check Deployment]\n    E --> F[Generate Report]\n    F --> G{Overall Health: 76%}\n    G -->|>= 80%| H[\u2705 Healthy]\n    G -->|< 80%| I[\u26a0\ufe0f Needs Attention]\n    I --> J[Apply Fixes]\n    J --> C\n```"
+      "content": "```mermaid\ngraph TD\n    A[Start Alignment] --> B[Discover Features]\n    B --> C[Score Integration]\n    C --> D[Validate Wiring]\n    D --> E[Check Deployment]\n    E --> F[Generate Report]\n    F --> G{Overall Health: 77%}\n    G -->|>= 80%| H[\u2705 Healthy]\n    G -->|< 80%| I[\u26a0\ufe0f Needs Attention]\n    I --> J[Apply Fixes]\n    J --> C\n```"
     }
   ],
   "dataTable": [
     {
       "name": "DiagramRegenerationOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "CodeReviewOrchestrator",
       "type": "orchestrator",
       "status": "critical",
       "health": 60,
@@ -1082,6 +1085,13 @@
     },
     {
       "name": "RollbackOrchestrator",
+      "type": "orchestrator",
+      "status": "critical",
+      "health": 60,
+      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "SWAGGEREntryPointOrchestrator",
       "type": "orchestrator",
       "status": "critical",
       "health": 60,
@@ -1221,13 +1231,6 @@
       "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
-      "name": "BrainIngestionAgent",
-      "type": "agent",
-      "status": "warning",
-      "health": 80,
-      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
       "name": "ArchitectAgent",
       "type": "agent",
       "status": "warning",
@@ -1254,6 +1257,13 @@
       "status": "healthy",
       "health": 90,
       "issues": "No test coverage, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "CodeReviewOrchestrator",
+      "type": "orchestrator",
+      "status": "healthy",
+      "health": 90,
+      "issues": "Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
       "name": "GitCheckpointOrchestrator",
@@ -1298,51 +1308,58 @@
       "issues": "No test coverage, No Swagger/OpenAPI documentation"
     },
     {
-      "name": "FeedbackAgent",
+      "name": "BrainIngestionAgent",
       "type": "agent",
       "status": "healthy",
       "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
+      "issues": "Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "FeedbackAgent",
+      "type": "agent",
+      "status": "healthy",
+      "health": 100,
+      "issues": "No Swagger/OpenAPI documentation"
     },
     {
       "name": "ViewDiscoveryAgent",
       "type": "agent",
       "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
+      "health": 100,
+      "issues": "No Swagger/OpenAPI documentation"
     }
   ],
   "recommendations": [
     {
       "priority": "high",
-      "title": "Fix 21 critical integration issues immediately",
-      "rationale": "Features with <70% integration pose deployment risks and may cause system instability. 21 features currently below threshold.",
+      "title": "Fix 22 critical integration issues immediately",
+      "rationale": "Features with <70% integration pose deployment risks and may cause system instability. 22 features currently below threshold.",
       "steps": [
         "Run 'cortex align --interactive' to see detailed integration gaps",
         "Review missing documentation and test coverage",
         "Apply auto-generated fixes with '--auto-fix' flag",
         "Re-run alignment to verify improvements"
       ],
-      "expectedImpact": "Improve system health from 76% to 85%+ by addressing critical gaps",
-      "estimatedEffort": "42-84 hours"
+      "expectedImpact": "Improve system health from 77% to 85%+ by addressing critical gaps",
+      "estimatedEffort": "44-88 hours"
     },
     {
       "priority": "medium",
-      "title": "Address 86 integration warnings for production readiness",
-      "rationale": "Features with 70-90% integration are functional but lack production-grade quality assurance. 86 features need improvement.",
+      "title": "Address 85 integration warnings for production readiness",
+      "rationale": "Features with 70-90% integration are functional but lack production-grade quality assurance. 85 features need improvement.",
       "steps": [
         "Review documentation completeness for warning-level features",
         "Add missing test coverage (target: 80%+)",
         "Verify entry point wiring in response-templates.yaml",
         "Run performance benchmarks to validate optimization"
       ],
-      "expectedImpact": "Achieve 90% system health by elevating 86 features to healthy status",
-      "estimatedEffort": "86-172 hours"
+      "expectedImpact": "Achieve 90% system health by elevating 85 features to healthy status",
+      "estimatedEffort": "85-170 hours"
     },
     {
       "priority": "medium",
-      "title": "Clean up 50 orphaned entry point triggers",
-      "rationale": "Response templates reference 50 triggers without corresponding features. Causes user confusion.",
+      "title": "Clean up 53 orphaned entry point triggers",
+      "rationale": "Response templates reference 53 triggers without corresponding features. Causes user confusion.",
       "steps": [
         "Review orphaned triggers: setup profile, plan, let's plan",
         "Remove invalid triggers from response-templates.yaml",
@@ -1354,16 +1371,16 @@
     },
     {
       "priority": "low",
-      "title": "Wire 5 ghost features to entry points",
-      "rationale": "Discovered 5 features without entry point triggers. Users cannot access these features.",
+      "title": "Wire 6 ghost features to entry points",
+      "rationale": "Discovered 6 features without entry point triggers. Users cannot access these features.",
       "steps": [
         "Identify ghost features: DiagramRegenerationOrchestrator, CommitOrchestrator, OnboardingOrchestrator",
         "Add entry point triggers to response-templates.yaml",
         "Test trigger-to-feature routing",
         "Update user documentation with new entry points"
       ],
-      "expectedImpact": "Expose 5 hidden features to users, increasing system utility",
-      "estimatedEffort": "50-100 mins"
+      "expectedImpact": "Expose 6 hidden features to users, increasing system utility",
+      "estimatedEffort": "60-120 mins"
     }
   ]
 };

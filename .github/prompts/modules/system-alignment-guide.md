@@ -127,14 +127,14 @@ validate alignment
 ### Align 2.0 Commands (NEW)
 
 ```bash
-# Run alignment with visual dashboard and conflict detection
+# Run alignment with visual dashboard and automatic fix prompt
 align
+
+# Apply fixes interactively with confirmation (direct access)
+align fix
 
 # View full dashboard in terminal
 align report
-
-# Apply fixes interactively with confirmation
-align fix --interactive
 
 # Show detected conflicts only
 align conflicts
@@ -142,6 +142,17 @@ align conflicts
 # Generate fix templates without applying
 align fix --preview
 ```
+
+**Unified Workflow (NEW in v2.0):**
+When you run `align`, it automatically:
+1. Validates system integration depth
+2. Detects conflicts and generates fix templates
+3. **Prompts you** if fixes are available:
+   - Option 1: Apply fixes interactively (recommended)
+   - Option 2: View report only
+   - Option 3: Exit
+
+This eliminates the need to run `align` then `align fix` separately.
 
 ### Integration with Optimize
 
