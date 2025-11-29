@@ -1272,6 +1272,16 @@ def publish_to_branch(
         if not checkpoint.should_skip_stage(PublishStage.BRANCH_SETUP):
             logger.info("\n🌿 STAGE 3: Setting Up Publish Branch")
             
+            # Remove checkpoint file before branch switch to avoid conflicts
+            # (it gets recreated during build and may differ between branches)
+            checkpoint_path = project_root / CHECKPOINT_FILE
+            if checkpoint_path.exists():
+                try:
+                    checkpoint_path.unlink()
+                    logger.debug("Removed checkpoint file before branch switch")
+                except Exception as e:
+                    logger.warning(f"Could not remove checkpoint file: {e}")
+            
             # Check if branch exists
             if branch_exists(branch_name, project_root):
                 logger.info(f"Branch '{branch_name}' exists - switching to it")
