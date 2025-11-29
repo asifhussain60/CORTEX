@@ -1,0 +1,391 @@
+# CORTEX REST API Specification (OpenAPI 3.0)
+# Auto-generated API documentation for CORTEX external interfaces
+
+openapi: "3.0.0"
+
+info:
+  title: "CORTEX REST API"
+  version: "3.2.0"
+  description: |
+    CORTEX AI Assistant Enhancement System - External REST API
+    
+    Provides programmatic access to CORTEX capabilities including:
+    - Feature planning with DoR/DoD enforcement
+    - TDD workflow orchestration
+    - System alignment validation
+    - Architecture intelligence analytics
+  contact:
+    name: "Asif Hussain"
+    url: "https://github.com/asifhussain60/CORTEX"
+  license:
+    name: "Source-Available (Use Allowed, No Contributions)"
+    url: "https://github.com/asifhussain60/CORTEX/blob/main/LICENSE"
+
+servers:
+  - url: "http://localhost:5000/api/v1"
+    description: "Local development server"
+  - url: "https://cortex-api.example.com/api/v1"
+    description: "Production API server (placeholder)"
+
+paths:
+  /health:
+    get:
+      summary: "Health check endpoint"
+      description: "Returns CORTEX system health status including database integrity, feature availability, and brain health"
+      operationId: "getHealth"
+      tags:
+        - "System"
+      responses:
+        '200':
+          description: "System healthy"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
+        '500':
+          description: "System unhealthy"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /planning/feature:
+    post:
+      summary: "Create feature plan"
+      description: "Initiate interactive feature planning with DoR/DoD validation and security review"
+      operationId: "createFeaturePlan"
+      tags:
+        - "Planning"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeaturePlanRequest'
+      responses:
+        '201':
+          description: "Planning session created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanningSessionResponse'
+        '400':
+          description: "Invalid request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /alignment/validate:
+    post:
+      summary: "Run system alignment validation"
+      description: "Execute 8-layer integration scoring across all CORTEX features with remediation suggestions"
+      operationId: "validateAlignment"
+      tags:
+        - "Validation"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlignmentRequest'
+      responses:
+        '200':
+          description: "Alignment validation complete"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlignmentReport'
+
+  /tdd/session:
+    post:
+      summary: "Start TDD workflow session"
+      description: "Initialize RED→GREEN→REFACTOR cycle with auto-debug and performance-based refactoring"
+      operationId: "startTDDSession"
+      tags:
+        - "TDD"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TDDSessionRequest'
+      responses:
+        '201':
+          description: "TDD session started"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TDDSessionResponse'
+
+  /architecture/review:
+    get:
+      summary: "Get architecture health review"
+      description: "Retrieve architecture intelligence report with trend analysis and debt forecasting"
+      operationId: "getArchitectureReview"
+      tags:
+        - "Architecture"
+      parameters:
+        - name: since
+          in: query
+          description: "ISO 8601 timestamp for historical comparison"
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: "Architecture review complete"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchitectureReviewResponse'
+
+components:
+  schemas:
+    HealthCheckResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - checks
+      properties:
+        status:
+          type: string
+          enum: ["healthy", "warning", "unhealthy"]
+          description: "Overall system health"
+        timestamp:
+          type: string
+          format: date-time
+          description: "Check execution timestamp"
+        checks:
+          type: object
+          properties:
+            database_integrity:
+              type: boolean
+            feature_availability:
+              type: boolean
+            brain_health:
+              type: boolean
+
+    FeaturePlanRequest:
+      type: object
+      required:
+        - feature_name
+        - feature_type
+      properties:
+        feature_name:
+          type: string
+          example: "user-authentication"
+        feature_type:
+          type: string
+          enum: ["feature", "bug", "enhancement"]
+        requirements:
+          type: string
+          description: "Detailed feature requirements"
+        vision_api_screenshot:
+          type: string
+          format: byte
+          description: "Base64-encoded screenshot for Vision API extraction"
+
+    PlanningSessionResponse:
+      type: object
+      required:
+        - session_id
+        - status
+        - planning_file
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: ["active", "dor_incomplete", "dor_complete", "approved"]
+        planning_file:
+          type: string
+          description: "Path to generated planning document"
+        dor_questions:
+          type: array
+          items:
+            type: string
+          description: "Clarifying questions for DoR completion"
+
+    AlignmentRequest:
+      type: object
+      properties:
+        full_discovery:
+          type: boolean
+          default: true
+          description: "Run full feature discovery vs cached results"
+        focus_areas:
+          type: array
+          items:
+            type: string
+            enum: ["documentation", "testing", "wiring", "optimization", "api_documentation"]
+
+    AlignmentReport:
+      type: object
+      required:
+        - overall_health
+        - features
+      properties:
+        overall_health:
+          type: integer
+          minimum: 0
+          maximum: 110
+          description: "0-110 health score (110 = perfect integration)"
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureScore'
+        critical_issues:
+          type: integer
+        warnings:
+          type: integer
+        remediation_suggestions:
+          type: array
+          items:
+            type: string
+
+    FeatureScore:
+      type: object
+      required:
+        - name
+        - score
+        - status
+      properties:
+        name:
+          type: string
+        score:
+          type: integer
+          minimum: 0
+          maximum: 110
+        status:
+          type: string
+          enum: ["healthy", "warning", "critical"]
+        issues:
+          type: array
+          items:
+            type: string
+        dimensions:
+          type: object
+          properties:
+            discovered:
+              type: boolean
+            imported:
+              type: boolean
+            instantiated:
+              type: boolean
+            documented:
+              type: boolean
+            tested:
+              type: boolean
+            wired:
+              type: boolean
+            optimized:
+              type: boolean
+            api_documented:
+              type: boolean
+
+    TDDSessionRequest:
+      type: object
+      required:
+        - feature_name
+      properties:
+        feature_name:
+          type: string
+        discover_views:
+          type: boolean
+          default: true
+          description: "Auto-discover UI element IDs before test generation"
+
+    TDDSessionResponse:
+      type: object
+      required:
+        - session_id
+        - phase
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        phase:
+          type: string
+          enum: ["RED", "GREEN", "REFACTOR"]
+        test_file:
+          type: string
+        discovered_elements:
+          type: array
+          items:
+            type: object
+            properties:
+              element_id:
+                type: string
+              element_type:
+                type: string
+              selector_strategies:
+                type: array
+                items:
+                  type: string
+
+    ArchitectureReviewResponse:
+      type: object
+      required:
+        - overall_score
+        - layer_scores
+      properties:
+        overall_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        layer_scores:
+          type: object
+          additionalProperties:
+            type: integer
+        trend_analysis:
+          type: object
+          properties:
+            velocity:
+              type: number
+              description: "Health change rate (%/day)"
+            direction:
+              type: string
+              enum: ["improving", "degrading", "stable"]
+            volatility:
+              type: number
+        debt_forecast:
+          type: object
+          properties:
+            three_month_projection:
+              type: integer
+            six_month_projection:
+              type: integer
+            current_debt_hours:
+              type: number
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: "Error code"
+        message:
+          type: string
+          description: "Human-readable error message"
+        details:
+          type: object
+          additionalProperties: true
+
+tags:
+  - name: "System"
+    description: "System health and status endpoints"
+  - name: "Planning"
+    description: "Feature planning with DoR/DoD enforcement"
+  - name: "Validation"
+    description: "System alignment and quality validation"
+  - name: "TDD"
+    description: "Test-Driven Development workflow orchestration"
+  - name: "Architecture"
+    description: "Architecture intelligence and health analytics"
