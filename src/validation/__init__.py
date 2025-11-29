@@ -12,9 +12,9 @@ Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 """
 
-from src.validation.integration_scorer import IntegrationScorer
-from src.validation.wiring_validator import WiringValidator
-from src.validation.test_coverage_validator import TestCoverageValidator
+from validation.integration_scorer import IntegrationScorer
+from validation.wiring_validator import WiringValidator
+from validation.test_coverage_validator import TestCoverageValidator
 
 __all__ = [
     "IntegrationScorer",

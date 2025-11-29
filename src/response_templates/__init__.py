@@ -11,10 +11,10 @@ Author: Asif Hussain
 Version: 1.1
 """
 
-from .template_loader import TemplateLoader, Template
-from .template_renderer import TemplateRenderer
-from .template_registry import TemplateRegistry
-from .confidence_response_generator import ConfidenceResponseGenerator
+from response_templates.template_loader import TemplateLoader, Template
+from response_templates.template_renderer import TemplateRenderer
+from response_templates.template_registry import TemplateRegistry
+from response_templates.confidence_response_generator import ConfidenceResponseGenerator
 
 __all__ = [
     "TemplateLoader",

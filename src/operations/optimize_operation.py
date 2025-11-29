@@ -75,25 +75,25 @@ class OptimizeOperation(BaseOperationModule):
         
         # Check databases exist
         tier1_db = brain_path / "tier1" / "working_memory.db"
-        tier2_db = brain_path / "tier2" / "knowledge-graph.db"
+        tier2_db = brain_path / "tier2" / "knowledge_graph.db"
         
         if not tier1_db.exists():
             issues.append("Tier 1 database not found (working_memory.db)")
         
         if not tier2_db.exists():
-            issues.append("Tier 2 database not found (knowledge-graph.db)")
+            issues.append("Tier 2 database not found (knowledge_graph.db)")
         
         if issues:
             return OperationResult(
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Validation failed: {', '.join(issues)}",
-                phase=OperationPhase.VALIDATION,
             )
         
         return OperationResult(
+            success=True,
             status=OperationStatus.SUCCESS,
             message="✓ Optimization prerequisites validated",
-            phase=OperationPhase.VALIDATION,
         )
     
     def execute(self, **kwargs) -> OperationResult:
@@ -143,19 +143,19 @@ class OptimizeOperation(BaseOperationModule):
                 results['optimizations_applied'].extend(code_result['suggestions'])
             
             return OperationResult(
+                success=True,
                 status=OperationStatus.SUCCESS,
                 message=f"✓ Optimization complete ({len(results['optimizations_applied'])} actions)",
-                phase=OperationPhase.COMPLETE,
                 data=results,
             )
             
         except Exception as e:
             logger.error(f"Optimization failed: {e}", exc_info=True)
             return OperationResult(
+                success=False,
                 status=OperationStatus.FAILED,
                 message=f"Optimization failed: {str(e)}",
-                phase=OperationPhase.EXECUTION,
-                error=e,
+                errors=[str(e)],
             )
     
     def _optimize_brain(self) -> Dict[str, Any]:
@@ -254,7 +254,7 @@ class OptimizeOperation(BaseOperationModule):
         
         databases = [
             brain_path / "tier1" / "working_memory.db",
-            brain_path / "tier2" / "knowledge-graph.db",
+            brain_path / "tier2" / "knowledge_graph.db",
         ]
         
         for db_path in databases:
@@ -306,7 +306,7 @@ class OptimizeOperation(BaseOperationModule):
             OperationResult indicating rollback not supported
         """
         return OperationResult(
+            success=True,
             status=OperationStatus.SUCCESS,
             message="Optimization rollback not applicable (changes are safe)",
-            phase=OperationPhase.ROLLBACK,
         )
