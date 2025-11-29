@@ -660,4 +660,292 @@ class BrainAnalyticsCollector:
                     f"High number of code hotspots ({hotspots}) - these files change frequently and may need refactoring"
                 )
         
+        
         return recommendations
+
+    def record_strategic_health(
+        self,
+        architecture_intelligence: Dict[str, Any],
+        rollback_system: Dict[str, Any],
+        swagger_dor: Dict[str, Any],
+        ux_enhancement: Dict[str, Any],
+        ado_agent: Dict[str, Any],
+        conversation_id: Optional[str] = None
+    ) -> str:
+        """
+        Record strategic feature health snapshot to Tier 3 database.
+        
+        Args:
+            architecture_intelligence: Validation result for Architecture Intelligence
+            rollback_system: Validation result for Rollback System
+            swagger_dor: Validation result for SWAGGER DoR
+            ux_enhancement: Validation result for UX Enhancement
+            ado_agent: Validation result for ADO Agent
+            conversation_id: Optional conversation ID that triggered check
+        
+        Returns:
+            check_id: UUID of the recorded health check
+        """
+        import uuid
+        import json
+        
+        check_id = str(uuid.uuid4())
+        
+        # Extract statuses
+        statuses = {
+            'architecture_intelligence': architecture_intelligence.get('status', 'error'),
+            'rollback_system': rollback_system.get('status', 'error'),
+            'swagger_dor': swagger_dor.get('status', 'error'),
+            'ux_enhancement': ux_enhancement.get('status', 'error'),
+            'ado_agent': ado_agent.get('status', 'error')
+        }
+        
+        # Calculate aggregate metrics
+        features_healthy = sum(1 for s in statuses.values() if s == 'healthy')
+        features_warning = sum(1 for s in statuses.values() if s == 'warning')
+        features_critical = sum(1 for s in statuses.values() if s == 'critical')
+        
+        # Determine overall status
+        if features_critical > 0:
+            overall_status = 'critical'
+        elif features_warning > 0:
+            overall_status = 'warning'
+        elif features_healthy == 5:
+            overall_status = 'healthy'
+        else:
+            overall_status = 'error'
+        
+        # Collect all issues
+        all_issues = []
+        for feature_name, result in [
+            ('Architecture Intelligence', architecture_intelligence),
+            ('Rollback System', rollback_system),
+            ('SWAGGER DoR', swagger_dor),
+            ('UX Enhancement', ux_enhancement),
+            ('ADO Agent', ado_agent)
+        ]:
+            issues = result.get('issues', [])
+            if issues:
+                all_issues.extend([f"{feature_name}: {issue}" for issue in issues])
+        
+        issue_summary = json.dumps(all_issues) if all_issues else None
+        total_issues = len(all_issues)
+        
+        # Calculate improvement since last check
+        improvement_since_last, days_since_last = self._calculate_health_trends(statuses)
+        
+        # Store in Tier 3 database
+        try:
+            conn = sqlite3.connect(self.tier3_db)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT INTO tier3_strategic_health (
+                    check_id, conversation_id, overall_status,
+                    features_healthy, features_warning, features_critical,
+                    architecture_intelligence, rollback_system, swagger_dor,
+                    ux_enhancement, ado_agent,
+                    total_issues, issue_summary,
+                    improvement_since_last, days_since_last_check
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                check_id, conversation_id, overall_status,
+                features_healthy, features_warning, features_critical,
+                statuses['architecture_intelligence'],
+                statuses['rollback_system'],
+                statuses['swagger_dor'],
+                statuses['ux_enhancement'],
+                statuses['ado_agent'],
+                total_issues, issue_summary,
+                improvement_since_last, days_since_last
+            ))
+            
+            conn.commit()
+            conn.close()
+            
+            logger.info(f"Recorded strategic health check {check_id}: {overall_status}")
+            return check_id
+            
+        except sqlite3.Error as e:
+            logger.error(f"Failed to record strategic health: {e}")
+            return check_id
+    
+    def get_strategic_health_history(
+        self,
+        days: int = 30,
+        limit: Optional[int] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Get strategic health history for trend analysis.
+        
+        Args:
+            days: Number of days to look back (default 30)
+            limit: Maximum number of records to return
+        
+        Returns:
+            List of health check records with all fields
+        """
+        try:
+            conn = sqlite3.connect(self.tier3_db)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            cutoff_date = (datetime.now() - timedelta(days=days)).isoformat()
+            
+            query = '''
+                SELECT * FROM tier3_strategic_health
+                WHERE timestamp >= ?
+                ORDER BY timestamp DESC
+            '''
+            
+            if limit:
+                query += f' LIMIT {limit}'
+            
+            cursor.execute(query, (cutoff_date,))
+            rows = cursor.fetchall()
+            conn.close()
+            
+            return [dict(row) for row in rows]
+            
+        except sqlite3.Error as e:
+            logger.error(f"Failed to get strategic health history: {e}")
+            return []
+    
+    def get_strategic_health_trends(self, days: int = 30) -> Dict[str, Any]:
+        """
+        Calculate strategic health trends over time.
+        
+        Args:
+            days: Number of days to analyze (default 30)
+        
+        Returns:
+            Dict with trend metrics:
+            - current_status: Latest overall status
+            - improvement_rate: % of features that improved
+            - degradation_rate: % of features that degraded
+            - most_stable_feature: Feature with least changes
+            - most_volatile_feature: Feature with most changes
+            - check_frequency: Avg days between checks
+        """
+        history = self.get_strategic_health_history(days=days)
+        
+        if not history:
+            return {
+                'status': 'no_data',
+                'message': 'No strategic health data available'
+            }
+        
+        # Calculate metrics
+        current_status = history[0]['overall_status']
+        total_checks = len(history)
+        
+        # Feature stability analysis
+        feature_changes = {
+            'architecture_intelligence': 0,
+            'rollback_system': 0,
+            'swagger_dor': 0,
+            'ux_enhancement': 0,
+            'ado_agent': 0
+        }
+        
+        for i in range(1, len(history)):
+            for feature in feature_changes.keys():
+                if history[i-1][feature] != history[i][feature]:
+                    feature_changes[feature] += 1
+        
+        most_stable = min(feature_changes, key=feature_changes.get)
+        most_volatile = max(feature_changes, key=feature_changes.get)
+        
+        # Calculate improvement/degradation rates
+        improvements = sum(h.get('improvement_since_last', 0) or 0 for h in history if h.get('improvement_since_last', 0) and h['improvement_since_last'] > 0)
+        degradations = sum(abs(h.get('improvement_since_last', 0) or 0) for h in history if h.get('improvement_since_last', 0) and h['improvement_since_last'] < 0)
+        
+        total_changes = improvements + degradations
+        improvement_rate = (improvements / total_changes * 100) if total_changes > 0 else 0
+        degradation_rate = (degradations / total_changes * 100) if total_changes > 0 else 0
+        
+        # Calculate check frequency
+        if len(history) > 1:
+            first_check = datetime.fromisoformat(history[-1]['timestamp'])
+            last_check = datetime.fromisoformat(history[0]['timestamp'])
+            total_days = (last_check - first_check).days
+            check_frequency = total_days / (total_checks - 1) if total_checks > 1 else 0
+        else:
+            check_frequency = 0
+        
+        return {
+            'status': 'success',
+            'current_status': current_status,
+            'total_checks': total_checks,
+            'days_analyzed': days,
+            'improvement_rate': round(improvement_rate, 1),
+            'degradation_rate': round(degradation_rate, 1),
+            'most_stable_feature': most_stable.replace('_', ' ').title(),
+            'most_volatile_feature': most_volatile.replace('_', ' ').title(),
+            'feature_change_counts': feature_changes,
+            'avg_days_between_checks': round(check_frequency, 1)
+        }
+    
+    def _calculate_health_trends(self, current_statuses: Dict[str, str]) -> tuple:
+        """
+        Calculate improvement since last check and days since last check.
+        
+        Args:
+            current_statuses: Dict of feature_name -> status
+        
+        Returns:
+            Tuple of (improvement_since_last, days_since_last_check)
+        """
+        try:
+            conn = sqlite3.connect(self.tier3_db)
+            cursor = conn.cursor()
+            
+            # Get last check
+            cursor.execute('''
+                SELECT timestamp, architecture_intelligence, rollback_system,
+                       swagger_dor, ux_enhancement, ado_agent
+                FROM tier3_strategic_health
+                ORDER BY timestamp DESC
+                LIMIT 1
+            ''')
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if not row:
+                return (None, None)
+            
+            last_timestamp, last_arch, last_rollback, last_dor, last_ux, last_ado = row
+            
+            # Calculate days since last check
+            last_check_time = datetime.fromisoformat(last_timestamp)
+            days_since = (datetime.now() - last_check_time).total_seconds() / 86400
+            
+            # Calculate improvement (compare status rankings)
+            status_rank = {'critical': 0, 'error': 0, 'warning': 1, 'healthy': 2}
+            
+            last_statuses = {
+                'architecture_intelligence': last_arch,
+                'rollback_system': last_rollback,
+                'swagger_dor': last_dor,
+                'ux_enhancement': last_ux,
+                'ado_agent': last_ado
+            }
+            
+            improvement = 0
+            for feature, current_status in current_statuses.items():
+                last_status = last_statuses.get(feature, 'error')
+                current_rank = status_rank.get(current_status, 0)
+                last_rank = status_rank.get(last_status, 0)
+                
+                if current_rank > last_rank:
+                    improvement += 1
+                elif current_rank < last_rank:
+                    improvement -= 1
+            
+            return (improvement, round(days_since, 2))
+            
+        except sqlite3.Error as e:
+            logger.error(f"Failed to calculate health trends: {e}")
+            return (None, None)
+

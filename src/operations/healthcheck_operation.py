@@ -158,6 +158,10 @@ class HealthCheckOperation(BaseOperationModule):
             if component in ['strategic', 'all']:
                 strategic = self._check_strategic_features()
                 health_report['checks']['strategic_features'] = strategic
+                
+                # Record strategic health to Tier 3 analytics
+                self._record_strategic_health_analytics(strategic)
+                
                 # Aggregate issues
                 for k, v in strategic.items():
                     status = v.get('status')
@@ -227,6 +231,38 @@ class HealthCheckOperation(BaseOperationModule):
             return {
                 'error': str(e)
             }
+    
+    def _record_strategic_health_analytics(self, strategic_results: Dict[str, Any]) -> None:
+        """
+        Record strategic health check results to Tier 3 analytics database.
+        
+        Args:
+            strategic_results: Dict with results from all strategic validators
+        """
+        try:
+            # Skip if there was an error in validation
+            if 'error' in strategic_results:
+                logger.warning("Skipping analytics recording due to validation error")
+                return
+            
+            # Initialize analytics collector
+            analytics = BrainAnalyticsCollector(brain_path=self.brain_path)
+            
+            # Record strategic health snapshot
+            check_id = analytics.record_strategic_health(
+                architecture_intelligence=strategic_results.get('architecture_intelligence', {}),
+                rollback_system=strategic_results.get('rollback_system', {}),
+                swagger_dor=strategic_results.get('swagger_dor', {}),
+                ux_enhancement=strategic_results.get('ux_enhancement', {}),
+                ado_agent=strategic_results.get('ado_agent', {}),
+                conversation_id=None  # Could be passed from context if available
+            )
+            
+            logger.info(f"Recorded strategic health analytics: {check_id}")
+            
+        except Exception as e:
+            # Don't fail healthcheck if analytics recording fails
+            logger.warning(f"Failed to record strategic health analytics: {e}")
     
     def _check_system_resources(self) -> Dict[str, Any]:
         """Check system resource usage."""
