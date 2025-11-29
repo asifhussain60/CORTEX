@@ -1,0 +1,2089 @@
+schema_version: '3.2'
+last_updated: '2025-11-26'
+optimization:
+  type: aggressive_minimal
+  original_templates: 107
+  minimal_templates: 18
+  reduction_strategy: Core essentials only + fallback pattern
+shared:
+  standard_header: '## 🧠 CORTEX {title}
+
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+    ---
+
+    '
+base_templates:
+  standard_5_part: &standard_5_part_base
+    base_structure: |
+      ## 🧠 CORTEX {operation}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 My Understanding Of Your Request
+      {understanding_content}
+      
+      ### ⚠️ Challenge
+      {challenge_content}
+      
+      ### 💬 Response
+      {response_content}
+      
+      ### 📝 Your Request
+      {request_echo_content}
+      
+      ### 🔍 Next Steps
+      {next_steps_content}
+  
+  tech_aware_response: &tech_aware_base
+    base_structure: |
+      ## 🧠 CORTEX {operation}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 My Understanding Of Your Request
+      {understanding_content}
+      
+      ### ⚠️ Challenge
+      {challenge_content}
+      
+      ### 💬 Response
+      
+      **🏆 Recommended Solution:**
+      {recommended_solution}
+      
+      {{#if has_tech_stack}}
+      **🔧 {cloud_provider_name}-Aligned Implementation:**
+      {company_aligned_implementation}
+      
+      *Deployment Options:*
+      - **Cloud Platform:** {cloud_deployment}
+      - **Container Orchestration:** {container_orchestration}
+      - **CI/CD:** {cicd_pipeline}
+      - **Infrastructure as Code:** {iac_tool}
+      - **Monitoring:** {monitoring_platform}
+      {{/if}}
+      
+      ### 📝 Your Request
+      {request_echo_content}
+      
+      ### 🔍 Next Steps
+      {next_steps_content}
+  
+  compact_format: &compact_format_base
+    base_structure: |
+      ## 🧠 CORTEX {operation}
+      **{understanding_brief}** | *No Challenge*
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      💬 **Response:**
+      {response_content}
+      
+      📝 **Your Request:** {request_echo_content}
+      
+      🔍 Next Steps: {next_steps_content}
+templates:
+  onboarding:
+    <<: *standard_5_part_base
+    name: User Onboarding
+    triggers:
+    - onboard
+    - onboarding
+    - setup profile
+    - first time
+    - new user
+    response_type: interactive
+    operation_name: Onboarding
+    understanding_content: "You're starting the onboarding process to personalize CORTEX for your experience level, interaction preferences, and tech stack."
+    challenge_content: "No Challenge - This quick 3-question setup helps CORTEX adapt to your needs."
+    response_content: |
+      Welcome! Let's personalize CORTEX in ~30 seconds.
+      
+      **What we'll capture:**
+      1. Your experience level (affects explanation depth)
+      2. Your interaction preference (autonomous/guided/educational/pair)
+      3. Your tech stack context (optional - for deployment recommendations)
+      
+      **Important:** Tech stack is context for deployment, NOT a constraint.  
+      CORTEX will always recommend the best solution first.
+      
+      {onboarding_question}
+    request_echo_content: "Set up CORTEX profile"
+    next_steps_content: |
+      Answer the current question to proceed.
+      You can update your profile anytime with `update profile`.
+  
+  tech_implementation_example:
+    <<: *tech_aware_base
+    name: Tech-Aware Implementation (Example)
+    triggers:
+    - implement caching
+    - add caching
+    - cache layer
+    response_type: tech_aware
+    operation_name: Caching Implementation
+    understanding_content: "You want to implement a caching layer to improve application performance."
+    challenge_content: "No Challenge - Caching is a proven performance optimization pattern."
+    recommended_solution: |
+      **Best Practice: Redis**
+      Redis is the industry-standard for application caching with:
+      - Sub-millisecond response times
+      - Rich data structures (strings, hashes, sets, sorted sets)
+      - Built-in persistence options
+      - Pub/sub messaging capabilities
+      - Cluster support for horizontal scaling
+      
+      ```python
+      # Example: Redis caching implementation
+      import redis
+      from functools import wraps
+      
+      redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+      
+      def cache_result(ttl=300):
+          def decorator(func):
+              @wraps(func)
+              def wrapper(*args, **kwargs):
+                  cache_key = f"{func.__name__}:{args}:{kwargs}"
+                  cached = redis_client.get(cache_key)
+                  if cached:
+                      return cached
+                  result = func(*args, **kwargs)
+                  redis_client.setex(cache_key, ttl, result)
+                  return result
+              return wrapper
+          return decorator
+      ```
+    company_aligned_implementation: |
+      **Azure Cache for Redis**
+      Deploy Redis on Azure for seamless integration with your stack:
+      - Fully managed Redis service (no server maintenance)
+      - Enterprise-grade SLA (99.9% uptime)
+      - Built-in security (VNet integration, private endpoints)
+      - Automatic backups and geo-replication
+      - Integration with Azure Monitor for observability
+      
+      **Deployment via {iac_tool}:**
+      ```hcl
+      # Terraform example for Azure Cache for Redis
+      resource "azurerm_redis_cache" "main" {
+        name                = "myapp-cache"
+        location            = azurerm_resource_group.main.location
+        resource_group_name = azurerm_resource_group.main.name
+        capacity            = 1
+        family              = "C"
+        sku_name            = "Standard"
+        enable_non_ssl_port = false
+        minimum_tls_version = "1.2"
+      }
+      ```
+      
+      **Connection String (stored in Azure Key Vault):**
+      ```python
+      # Same Redis client code - just different connection string
+      redis_client = redis.Redis(
+          host=os.environ['AZURE_REDIS_HOST'],
+          port=6380,
+          password=os.environ['AZURE_REDIS_KEY'],
+          ssl=True
+      )
+      ```
+      
+      **Monitoring via {monitoring_platform}:**
+      - Cache hit/miss rates
+      - Memory usage and eviction metrics
+    request_echo_content: "Implement caching layer"
+    next_steps_content: |
+      1. Choose deployment approach (best practice Redis vs. company-aligned)
+      2. Implement caching decorator
+      3. Add monitoring/alerting
+      4. Load test to validate performance improvements
+  
+  cache_management:
+    <<: *standard_5_part_base
+    name: Cache Management
+    triggers:
+    - cache status
+    - cache clear
+    - cache dashboard
+    response_type: admin
+    operation_name: Cache Management
+    understanding_content: "You want to view or manage the CORTEX ValidationCache for optimized operations."
+    challenge_content: "No Challenge - Cache management provides visibility into performance optimizations."
+    response_content: |
+      The ValidationCache accelerates repeated operations by storing validation results.
+      
+      **Available Operations:**
+      - `cache status` - Show hit rates, entry counts, and effectiveness metrics
+      - `cache clear` - Invalidate all cached results (or specify operation)
+      - `cache dashboard` - Interactive performance dashboard with recommendations
+      
+      **Performance Gains:**
+      - Optimize: 6.4x speedup (45s → 7s)
+      - Cleanup: 5.5x speedup (22s → 4s)
+      - Alignment: 4.2x speedup (30s → 7s)
+      
+      **Auto-Invalidation:** Cache automatically updates when files change (SHA256 tracking)
+      
+      **Current Status:**
+      {cache_statistics}
+    request_echo_content: "Manage CORTEX ValidationCache"
+    next_steps_content: |
+      - Run `cache status` for detailed metrics
+      - Use `cache clear [operation]` to invalidate specific operation cache
+      - View `cache-troubleshooting-guide.md` for optimization tips
+      - Connection counts and latency
+    request_echo_content: "Implement caching layer with Redis"
+    next_steps_content: |
+      1. **Choose deployment approach:**
+         - ✅ **Redis on {cloud_deployment}** (managed service, recommended)
+         - Local Redis for development (docker-compose)
+      
+      2. **Install dependencies:**
+         ```bash
+         pip install redis
+         ```
+      
+      3. **Add caching decorator to expensive operations**
+      
+      4. **Configure monitoring in {monitoring_platform}**
+      
+      5. **Load test to measure performance improvement**
+  
+  help_table:
+    <<: *standard_5_part_base
+    name: Help Table
+    triggers:
+    - help
+    - /help
+    - what can cortex do
+    - help_table
+    response_type: table
+    operation_name: Help
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n\n[CONTEXT_SUMMARY]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+    context_summary_template: "\n<details>\n<summary>\U0001F9E0 <b>Context Memory\
+      \ ({conversation_count} conversations loaded, Quality: {quality_score}/10 {quality_emoji})</b></summary>\n\
+      \n**Freshness:** {freshness_label} ({hours_since_last}h ago)  \n**Entity Coverage:**\
+      \ {entity_coverage}%  \n**Relevance Score:** {avg_relevance_score}/1.0 ({relevance_label})\
+      \  \n**Memory Health:** {memory_health}\n\n**Performance Metrics:**\n- Average\
+      \ query time: {avg_query_time}ms\n- Token usage: {token_usage}/{token_budget}\
+      \ ({token_percentage}%)\n- Storage health: {storage_health}\n\n*Use `show context`\
+      \ for detailed view*\n</details>\n"
+  help_detailed:
+    <<: *standard_5_part_base
+    name: Help Detailed
+    triggers:
+    - help_detailed
+    response_type: detailed
+    operation_name: Help (Detailed)
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  quick_start:
+    <<: *standard_5_part_base
+    name: Quick Start
+    triggers:
+    - quick start
+    - get started
+    - quick_start
+    response_type: narrative
+    operation_name: Quick Start
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  hands_on_tutorial:
+    <<: *standard_5_part_base
+    name: Hands-On Tutorial
+    triggers:
+    - tutorial
+    - start tutorial
+    - hands on tutorial
+    - interactive tutorial
+    - learn cortex
+    - teach me cortex
+    - cortex tutorial
+    response_type: interactive
+    operation_name: Hands On Tutorial
+    understanding_content: "You want an interactive hands-on tutorial that teaches CORTEX through practical exercises."
+    challenge_content: "No Challenge - Tutorial program guides you through planning, development, and testing with real exercises."
+    response_content: "**Tutorial Profiles Available:**\n   \n   1. **Quick (15 min)** - Essential commands only\n      • CORTEX basics (help, context, healthcheck)\n      • Simple planning workflow\n      • Basic TDD cycle\n   \n   2. **Standard (25 min)** - Recommended for most users\n      • CORTEX core capabilities\n      • Complete planning workflow (DoR/DoD)\n      • Full TDD cycle (RED→GREEN→REFACTOR)\n      • Testing & validation\n   \n   3. **Comprehensive (30 min)** - Deep dive\n      • Advanced planning with security review\n      • TDD with performance optimization\n      • Production-ready testing\n   \n   **What You'll Build:**\n   🔐 User authentication feature with:\n   • Login form with validation\n   • Real tests using discovered element IDs\n   • Performance-optimized code\n   • Complete session report"
+    request_echo_content: "Start interactive hands-on tutorial"
+    next_steps_content: "Choose a tutorial profile:\n   1. Say \"tutorial quick\" for 15-minute essentials\n   2. Say \"tutorial standard\" for 25-minute walkthrough (recommended)\n   3. Say \"tutorial comprehensive\" for 30-minute deep dive\n   \n   Or say \"tutorial [profile] now\" to start immediately.\n   \n   **First Module:** CORTEX Basics\n   - Exercise 1.1: Explore capabilities (type 'help')\n   - Exercise 1.2: Check brain memory (type 'show context')\n   - Exercise 1.3: System health (type 'healthcheck')"
+  status_check:
+    <<: *standard_5_part_base
+    name: Status Check
+    triggers:
+    - status
+    - where are we
+    - status_check
+    response_type: table
+    operation_name: Status Check
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Progress Overview:**\n   ```\n   Overall Status: [████████░░] 85%\n   ✅ Completed: [██████████] 100%\n   ⏳ In Progress: [██████░░░░] 60%\n   ⏸️  Not Started: [░░░░░░░░░░] 0%\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  success_general:
+    <<: *standard_5_part_base
+    name: Success General
+    triggers:
+    - success_general
+    response_type: narrative
+    operation_name: Success General
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  error_general:
+    <<: *standard_5_part_base
+    name: Error General
+    triggers:
+    - error_general
+    response_type: narrative
+    operation_name: Error General
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  introduction_discovery:
+    name: CORTEX Discovery & Introduction
+    triggers:
+    - discover cortex
+    - explore cortex
+    - cortex demo
+    - show me what cortex can do
+    - cortex tour
+    - guided tour
+    - what can you do
+    - cortex capabilities
+    - cortex features
+    - show capabilities
+    response_type: interactive
+    content: '# 🧠 CORTEX Discovery & Introduction
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to explore CORTEX capabilities and discover what it can do for your
+      development workflow.
+
+
+      ## ⚠️ Challenge
+
+
+      No Challenge - Discovery mode helps you understand CORTEX''s full potential
+      and find the features that best match your needs.
+
+
+      ## 💬 Response
+
+
+      CORTEX is an AI-enhanced development assistant with **long-term memory**, **strategic
+      planning**, and **automated workflows**.
+
+
+      **Core Philosophy:**
+
+      - 🧠 **Brain Architecture** - 4-tier memory system (Tier 0: Governance, Tier
+      1: Working Memory, Tier 2: Knowledge Graph, Tier 3: Dev Context)
+
+      - 🎯 **Zero Ambiguity** - Planning with Definition of Ready (DoR) and Definition
+      of Done (DoD) enforcement
+
+      - 🔴🟢🔵 **TDD Mastery** - RED→GREEN→REFACTOR automation with performance-based
+      refactoring
+
+      - 📊 **Pattern Learning** - Learns from your coding patterns and improves accuracy
+      over time
+
+      - 🛡️ **Brain Protection** - SKULL rules prevent degradation and enforce best
+      practices
+
+
+      **Key Differentiators:**
+
+      - **97.2% token reduction** (74,047 → 2,078 avg) through intelligent memory
+      management
+
+      - **Universal upgrade system** works across all installation types with zero
+      data loss
+
+      - **Vision API integration** extracts requirements from screenshots (UI mockups,
+      errors, ADO items)
+
+      - **Convention-based feature validation** ensures complete integration (7-layer
+      scoring)
+
+
+      ## 📝 Your Request
+
+
+      Discover CORTEX capabilities and learn how to use them effectively
+
+
+      ## 🔍 Next Steps - Interactive Discovery
+
+
+      **Choose your exploration path:**
+
+
+      ### 🚀 Quick Demos (5-10 min each)
+
+      1. **`demo planning`** - See Planning System 2.0 with DoR/DoD enforcement and
+      Vision API
+
+      2. **`demo tdd`** - Watch RED→GREEN→REFACTOR cycle with auto-debug and performance
+      refactoring
+
+      3. **`demo view discovery`** - Auto-extract UI elements for testing (60+ min
+      → <5 min, 92% time savings)
+
+      4. **`demo feedback`** - Structured issue reporting with privacy protection
+      and GitHub Gist upload
+
+      5. **`demo upgrade`** - Universal upgrade system with brain preservation and
+      auto-detection
+
+
+      ### 🎓 Deep Dives (15-30 min each)
+
+      6. **`tutorial`** - Hands-on interactive tutorial (build real authentication
+      feature with tests)
+
+      7. **`show brain architecture`** - Understand 4-tier memory system and SKULL
+      protection rules
+
+      8. **`explain upgrade system`** - Universal upgrade with brain preservation
+      and path validation
+
+      9. **`system alignment demo`** - Convention-based feature validation (admin
+      only - CORTEX repo)
+
+      10. **`show context`** - See what CORTEX remembers about your project and conversations
+
+
+      ### 📖 Documentation (Read at your pace)
+
+      11. **Planning Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
+      (Coming Soon)
+
+      12. **TDD Mastery** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/tdd/)
+      (Coming Soon)
+
+      13. **Response Format** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/format/)
+      (Coming Soon)
+
+      14. **Brain Architecture** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/architecture/)
+      (Coming Soon)
+
+      15. **Full Documentation** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/)
+      (Coming Soon)
+
+
+      ### 🎓 Learning Paths
+
+      16. **`beginner path`** - New to CORTEX? → Start here: `help` → `tutorial` →
+      `demo planning`
+
+      17. **`advanced path`** - Experienced user? → Explore: `system alignment` →
+      `show context` → `admin help` (CORTEX repo only)
+
+      18. **`developer path`** - Building features? → Learn: `demo tdd` → `demo view
+      discovery` → `git checkpoint`
+
+
+      ---
+
+
+      **Pro Tips:**
+
+      - Say **`help`** anytime to see all available commands
+
+      - Use **`show context`** to see what CORTEX remembers about your project
+
+      - Try **`healthcheck`** to validate your CORTEX installation
+
+      - Use **`feedback`** to report issues or suggest improvements
+
+
+      **Quick Start Recommendations:**
+
+      - 🆕 **First time?** → Try `tutorial` for hands-on learning
+
+      - 📋 **Need to plan?** → Use `demo planning` to see planning in action
+
+      - 🧪 **Writing tests?** → Start with `demo tdd` for TDD workflow
+
+      - 🔍 **Need help?** → Say `help` for command reference'
+  not_implemented:
+    <<: *standard_5_part_base
+    name: Not Implemented
+    triggers:
+    - not_implemented
+    response_type: narrative
+    operation_name: Not Implemented
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  executor_success:
+    <<: *standard_5_part_base
+    name: Executor Success
+    triggers:
+    - executor_success
+    response_type: detailed
+    operation_name: Executor Success
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  executor_error:
+    <<: *standard_5_part_base
+    name: Executor Error
+    triggers:
+    - executor_error
+    response_type: detailed
+    operation_name: Executor Error
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  tester_success:
+    <<: *standard_5_part_base
+    name: Tester Success
+    triggers:
+    - tester_success
+    response_type: detailed
+    operation_name: Tester Success
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  operation_started:
+    <<: *standard_5_part_base
+    name: Operation Started
+    triggers:
+    - operation_started
+    response_type: narrative
+    operation_name: Operation Started
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  operation_progress:
+    <<: *standard_5_part_base
+    name: Operation Progress
+    triggers:
+    - operation_progress
+    response_type: narrative
+    operation_name: Operation Progress
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Operation Progress:**\n   ```\n   Phase 1: [██████████] 100% ✅ Complete\n   Phase 2: [████████░░] 75% ⏳ In Progress\n   Phase 3: [░░░░░░░░░░] 0% ⏸️  Not Started\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  operation_complete:
+    <<: *standard_5_part_base
+    name: Operation Complete
+    triggers:
+    - operation_complete
+    response_type: detailed
+    operation_name: Operation Complete
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]\n   \n   **Completion Metrics:**\n   ```\n   Overall: [██████████] 100% ✅\n   Quality: [█████████░] 95%\n   Coverage: [████████░░] 85%\n   Performance: [█████████░] 90%\n   ```"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  question_documentation_issues:
+    <<: *standard_5_part_base
+    name: Question Documentation Issues
+    triggers:
+    - question_documentation_issues
+    response_type: detailed
+    operation_name: Question Documentation Issues
+    understanding_content: "[State understanding]"
+    challenge_content: "[State specific challenge or \"No Challenge\"]"
+    response_content: "[Natural language explanation]"
+    request_echo_content: "[Echo refined request]"
+    next_steps_content: "[Context-appropriate format]"
+  work_planner_success:
+    <<: *standard_5_part_base
+    name: Work Planner Success
+    triggers:
+    - plan
+    - let's plan
+    - plan a feature
+    - plan this
+    - help me plan
+    - planning
+    - feature planning
+    - i want to plan
+    - work_planner_success
+    response_type: detailed
+
+  planning_dor_incomplete:
+    <<: *standard_5_part_base
+    name: Planning DoR Incomplete
+    triggers:
+    - planning_dor_incomplete
+    response_type: detailed
+
+  planning_dor_complete:
+    <<: *standard_5_part_base
+    name: Planning DoR Complete
+    triggers:
+    - planning_dor_complete
+    response_type: detailed
+  planning_security_review:
+    <<: *standard_5_part_base
+    name: Planning Security Review
+    triggers:
+    - planning_security_review
+    - security review
+    - owasp review
+    response_type: detailed
+
+  ado_created:
+    <<: *standard_5_part_base
+    name: ADO Created
+    triggers:
+    - ado_created
+    response_type: detailed
+  ado_resumed:
+    <<: *standard_5_part_base
+    name: ADO Resumed
+    triggers:
+    - ado_resumed
+    response_type: detailed
+  ado_search_results:
+    <<: *standard_5_part_base
+    name: ADO Search Results
+    triggers:
+    - ado_search_results
+    response_type: table
+  ado_story_planning:
+    <<: *standard_5_part_base
+    name: ADO User Story Planning
+    triggers:
+    - plan ado story
+    - create ado story
+    - new ado story
+    - plan user story
+    response_type: detailed
+  ado_feature_planning:
+    <<: *standard_5_part_base
+    name: ADO Feature Planning
+    triggers:
+    - plan ado feature
+    - create ado feature
+    - new ado feature
+    - plan feature
+    response_type: detailed
+  ado_summary_generation:
+    <<: *standard_5_part_base
+    name: ADO Work Summary Generation
+    triggers:
+    - generate ado summary
+    - create work summary
+    - ado work summary
+    - complete ado work
+    response_type: detailed
+  onboarding_introduction:
+    name: CORTEX Onboarding Introduction
+    triggers:
+    - setup cortex
+    - onboard application
+    - cortex setup
+    - start onboarding
+    - begin setup
+    - initialize cortex
+    - show health dashboard
+    - health dashboard
+    - application health
+    - app health
+    - show app health
+    - dashboard
+    response_type: interactive
+    content: '# 🧠 CORTEX Setup & Onboarding
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to set up CORTEX for your project with full onboarding workflow including dependency installation, application analysis, and dashboard generation.
+
+
+      ## ⚠️ Challenge
+
+
+      No Challenge - This is your first time running CORTEX setup. Let me walk you through what will happen.
+
+
+      ## 💬 Response
+
+
+      Welcome to **CORTEX** - Your AI assistant enhancement system with long-term memory, strategic planning, and automated workflows!
+
+
+      **🚀 What This Setup Will Do:**
+
+
+      **Phase 1: Environment Setup (2-3 minutes)**
+
+      - ✅ Validate Python version (3.8+ required)
+
+      - ✅ Create/detect virtual environment
+
+      - ✅ Install dependencies from requirements.txt
+
+      - ✅ Verify critical packages (pytest, pyyaml, requests)
+
+
+      **Phase 2: Application Analysis (3-5 minutes)**
+
+      - 🔍 Detect project structure (language, framework, build system)
+
+      - 📊 Run code quality analysis (issues, metrics, score)
+
+      - 🔒 Perform security scan (vulnerabilities, OWASP checks)
+
+      - ⚡ Collect performance metrics (file sizes, complexity)
+
+
+      **Phase 3: Dashboard & Documentation (1-2 minutes)**
+
+      - 📈 Generate D3.js interactive dashboard (quality/security/performance)
+
+      - 📝 Create .github/copilot-instructions.md (auto-context for AI)
+
+      - 🛡️ Setup .gitignore (exclude CORTEX/ from git)
+
+      - 💾 Save completion report
+
+
+      **Phase 4: Brain Learning (Background)**
+
+      - 🧠 Initialize Tier 3 namespace for your project
+
+      - 📚 Setup pattern learning (improves over time)
+
+      - 🔗 Enable context injection for future sessions
+
+
+      **📋 Setup Checklist:**
+
+      - [ ] Dependencies installed
+
+      - [ ] Application analyzed
+
+      - [ ] Dashboard generated
+
+      - [ ] Documentation created
+
+      - [ ] GitIgnore configured
+
+      - [ ] Brain learning enabled
+
+
+      **⏱️ Estimated Total Time:** 6-10 minutes
+
+
+      **🔒 Privacy & Safety:**
+
+      - All data stored locally in `cortex-brain/` folder
+
+      - No cloud uploads or external API calls
+
+      - CORTEX/ folder automatically excluded from git
+
+      - Can pause/resume setup anytime
+
+
+      ## 📝 Your Request
+
+
+      Initialize CORTEX for my project with full setup and onboarding
+
+
+      ## 🔍 Next Steps
+
+
+      **Ready to begin? Choose an option:**
+
+
+      1. **Full Setup** (recommended) - All phases, ~10 minutes
+
+         - Say: `yes` or `full setup`
+
+
+      2. **Quick Setup** - Skip optional steps, ~5 minutes
+
+         - Say: `quick setup`
+
+
+      3. **Custom Setup** - Choose which phases to run
+
+         - Say: `customize` or `custom setup`
+
+
+      4. **Learn More** - Read detailed documentation
+
+         - Say: `setup guide` or `help setup`
+
+
+      5. **Cancel** - Exit setup (can restart anytime)
+
+         - Say: `cancel` or `exit`
+
+
+      **Most users choose:** Option 1 (Full Setup)
+
+
+      '
+  policy_validation:
+    <<: *standard_5_part_base
+    name: Policy Validation
+    triggers:
+    - validate policies
+    - check compliance
+    - policy validation
+    - policy check
+    - compliance check
+    - validate against policies
+    response_type: detailed
+    operation_name: Policy Validation
+    understanding_content: "You want CORTEX to validate itself against your organization's policies and coding standards."
+    challenge_content: "No Challenge - Policy validation ensures CORTEX aligns with your team's requirements and best practices."
+    response_content: |
+      **Policy Validation System**
+      
+      CORTEX will scan for policy documents in your repository and validate its configuration and implementation against your standards.
+      
+      **What Gets Validated:**
+      
+      ✅ **Naming Conventions** (25% weight)
+         • PascalCase for classes
+         • snake_case for functions/variables
+         • UPPER_CASE for constants
+         • Descriptive names (min 3 chars)
+      
+      ✅ **Security Practices** (35% weight)
+         • No hardcoded credentials
+         • Environment variables for secrets
+         • Input validation present
+         • Encryption at rest/transit
+      
+      ✅ **Code Standards** (25% weight)
+         • Docstrings for public functions
+         • Test coverage ≥70%
+         • Linter compliance
+         • Cyclomatic complexity <10
+      
+      ✅ **Architecture Patterns** (15% weight)
+         • SOLID principles
+         • Separation of concerns
+         • Error handling
+         • Max 50 lines per function
+      
+      **Policy Search Locations:**
+      • `.github/policies/` (recommended)
+      • `docs/policies/`
+      • `policies/`
+      • `POLICIES.yaml`, `POLICIES.json`, `POLICIES.md`
+      
+      **If No Policies Found:**
+      CORTEX can create a starter policy template with sensible defaults covering all 4 validation categories.
+      
+      **Compliance Reporting:**
+      • Overall compliance percentage (0-100%)
+      • Violations categorized by severity (Critical/Warning/Info)
+      • Specific recommendations for each violation
+      • Report saved to `cortex-brain/documents/reports/policy-compliance.md`
+      
+      **Critical Violations:**
+      Setup will pause if critical violations detected (e.g., hardcoded secrets, missing security practices). You can choose to:
+      • Fix violations and retry
+      • Continue anyway (not recommended)
+      • Skip policy validation
+    request_echo_content: "Validate CORTEX configuration against organizational policies"
+    next_steps_content: |
+      1. CORTEX will scan for policy documents (7 locations)
+      2. If policies found → Run validation across 4 categories
+      3. If no policies → Offer to create starter template
+      4. Generate compliance report with recommendations
+      5. Pause for critical violations (requires confirmation)
+      
+      **To start validation:**
+      • Say "validate policies" or "check compliance"
+      • During setup: Policy validation runs automatically in Phase 3.5
+      
+      **Expected output:**
+      • Compliance percentage (e.g., 87.5%)
+      • Violation count by severity
+      • Detailed report path
+      • Next steps for remediation
+  greeting:
+    name: Greeting Response
+    triggers:
+    - hello
+    - hi
+    - hey
+    - greetings
+    - good morning
+    - good afternoon
+    - good evening
+    - hello cortex
+    - hi cortex
+    - hey cortex
+    response_type: interactive
+    content: '# 🧠 CORTEX Initialization
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to start working with CORTEX.
+
+
+      ## 💬 Response
+
+
+      Hello! I''m CORTEX, your AI assistant enhancement system with long-term memory,
+      context awareness, and strategic planning capabilities.
+
+
+      **Available Operations (choose by letter or describe what you need):**
+
+
+      A. **Planning System 2.0** - Vision API, DoR/DoD validation, file-based plans
+
+
+      B. **TDD Mastery** - RED→GREEN→REFACTOR workflow with auto-debug
+
+
+      C. **Hands-On Tutorial** - Interactive 15-30 min learning program
+
+
+      D. **View Discovery** - Auto-extract element IDs from UI files
+
+
+      E. **Feedback System** - Structured bug/feature reporting
+
+
+      F. **Upgrade System** - Safe CORTEX upgrades with brain preservation
+
+
+      G. **Admin Operations** (detected: CORTEX dev repo) - Deploy, generate docs,
+      system alignment
+
+
+      **I''m operating with:**
+
+      - ✅ 4-tier brain architecture (Tier 0-3 databases)
+
+      - ✅ 10 specialist agents (tactical + strategic)
+
+      - ✅ Dual-hemisphere processing
+
+      - ✅ Brain protection (SKULL rules)
+
+      - ✅ Response template system
+
+
+      ## 📝 Your Request
+
+
+      Initial greeting
+
+
+      ## 🔍 Next Steps
+
+
+      **Quick Selection:**
+
+      - Say the **letter** (e.g., "C" for tutorial, "B" for TDD)
+
+      - Say the **name** (e.g., "start tutorial", "plan feature")
+
+      - **Ask anything** - "How do I...?", "Show me...", "Help with..."
+
+
+      **Popular Choices:**
+
+      - 🆕 **First time?** → Try **C** (tutorial) for hands-on learning
+
+      - 📋 **Need to plan?** → Try **A** (planning) for feature planning
+
+      - 🧪 **Writing tests?** → Try **B** (TDD) for test-driven development
+
+      - ❓ **Not sure?** → Say **"help"** for full command reference
+
+
+      What would you like to accomplish today?'
+  code_review_planning:
+    <<: *standard_5_part_base
+    name: Code Review Planning
+    triggers:
+    - code review
+    - review pr
+    - pr review
+    - review pull request
+    - pull request review
+    - ado pr review
+    - review code
+    response_type: detailed
+
+  ux_enhancement_explanation:
+    <<: *standard_5_part_base
+    name: UX Enhancement Workflow Explanation
+    triggers:
+    - enhance
+    - reimagine
+    - redesign
+    - improve ux
+    - modernize
+    - suggest improvements
+    - refactor architecture
+    - optimize codebase
+    response_type: guided
+
+  cleanup_orchestrator:
+    <<: *standard_5_part_base
+    name: Cleanup Orchestrator
+    expected_orchestrator: CleanupOrchestrator
+    triggers:
+    - legacy cleanup
+    - old cleanup
+    - basic cleanup
+    response_type: detailed
+
+  publish_branch:
+    <<: *standard_5_part_base
+    name: Publish Branch
+    expected_orchestrator: PublishBranchOrchestrator
+    triggers:
+    - publish branch
+    - publish to branch
+    - create publish branch
+    - deploy branch
+    response_type: detailed
+
+  master_setup:
+    <<: *standard_5_part_base
+    name: Master Setup
+    expected_orchestrator: MasterSetupOrchestrator
+    triggers:
+    - master setup
+    - setup master
+    - initialize master
+    - full setup
+    response_type: detailed
+
+  realignment:
+    <<: *standard_5_part_base
+    name: Realignment
+    expected_orchestrator: RealignmentOrchestrator
+    triggers:
+    - realign
+    - realignment
+    - re-align system
+    - system realignment
+    response_type: detailed
+
+  fallback:
+    <<: *standard_5_part_base
+    name: Fallback Response
+    triggers:
+    - '*'
+    response_type: structured
+
+  enhance_existing:
+    <<: *standard_5_part_base
+    name: Enhancement Workflow
+    triggers:
+    - enhance
+    - improve
+    - extend
+    - enhance existing
+    - improve existing
+    - extend existing
+    - modify existing
+    - update existing
+    - optimize
+    - refactor
+    - upgrade
+    - enhance the
+    - improve the
+    - extend the
+    - enhance_existing
+    response_type: detailed
+
+  brain_export_guide:
+    <<: *standard_5_part_base
+    name: Brain Implants - Export Guide
+    triggers:
+    - export brain
+    - brain export
+    - share brain
+    - export knowledge
+    - export patterns
+    response_type: detailed
+
+  brain_import_guide:
+    <<: *standard_5_part_base
+    name: Brain Implants - Import Guide
+    triggers:
+    - import brain
+    - brain import
+    - load brain
+    - import knowledge
+    - import patterns
+    response_type: detailed
+
+  generate_documentation_intro:
+    <<: *standard_5_part_base
+    name: Generate Documentation - Introduction
+    triggers:
+    - generate_documentation_intro
+    - doc_generation_intro
+    response_type: detailed
+
+  feedback_received:
+    <<: *standard_5_part_base
+    name: Feedback Received
+    triggers:
+    - feedback
+    - report issue
+    - report bug
+    - report problem
+    - suggest improvement
+    - cortex feedback
+    response_type: detailed
+
+  architect_analysis:
+    <<: *standard_5_part_base
+    name: Architect Analysis
+    triggers:
+    - analyze architecture
+    - architecture analysis
+    - understand architecture
+    - analyze shell
+    - analyze routing
+    - architect
+    - crawl shell
+    response_type: detailed
+
+  brain_ingestion:
+    <<: *standard_5_part_base
+    name: Brain Ingestion
+    triggers:
+    - ingest to brain
+    - save to brain
+    - brain ingest
+    - add to knowledge graph
+    - learn this
+    - remember this
+    response_type: detailed
+
+  brain_ingestion_adapter:
+    <<: *standard_5_part_base
+    name: Brain Ingestion Adapter
+    triggers:
+    - brain ingestion adapter
+    - start brain ingestion adapter
+    - run ingestion adapter
+    - adapter brain ingestion
+    response_type: detailed
+
+  cleanup_validation_failed:
+    <<: *standard_5_part_base
+    name: Cleanup Validation Failed
+    triggers:
+    - cleanup_validation_failed
+    - validation_failed
+    - cleanup_blocked
+    response_type: detailed
+
+  holistic_cleanup:
+    <<: *standard_5_part_base
+    name: Holistic Cleanup
+    expected_orchestrator: HolisticCleanupOrchestrator
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    - holistic cleanup
+    response_type: detailed
+
+  setup_epm:
+    <<: *standard_5_part_base
+    name: Setup Entry Point Module
+    expected_orchestrator: SetupEPMOrchestrator
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+
+  ado_work_item:
+    name: ADO Work Item Planning
+    expected_orchestrator: ADOWorkItemOrchestrator
+    triggers:
+    - plan ado
+    - create work item
+    - ado work item
+    - create story
+    - create feature
+    - create bug
+    - ado planning
+    response_type: detailed
+    <<: *standard_5_part_base
+  demo_system:
+    <<: *standard_5_part_base
+    name: Demo System
+    expected_orchestrator: DemoOrchestrator
+    triggers:
+    - demo
+    - cortex demo
+    - show demo
+    - run demo
+    - demo cortex
+    - live demo
+    response_type: detailed
+
+  unified_entry_point:
+    <<: *standard_5_part_base
+    name: Unified Entry Point
+    expected_orchestrator: UnifiedEntryPointOrchestrator
+    triggers:
+    - unified entry
+    - entry point
+    - cortex entry
+    - unified interface
+    response_type: detailed
+
+  brain_export:
+      \   - **Test files**: Keep test files or update test discovery configuration\n\
+      \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
+  admin_help:
+    <<: *standard_5_part_base
+    name: Admin Help
+    triggers:
+    - admin help
+    - help admin
+    - /admin help
+    - cortex admin help
+    - admin docs
+    - docs admin
+    response_type: detailed
+    understanding_content: "You want administrative-level help for CORTEX development and deployment operations."
+    challenge_content: "No Challenge - Admin operations manage CORTEX itself - deployment, documentation, and internal tools. These are only available in CORTEX development repository."
+    response_content: |
+      **CORTEX Admin Operations** (Development Repository Only)
+      
+      {catalog_features}
+      
+      **Access Control:** Admin operations only route in CORTEX development repository (detects cortex-brain/admin/). User operations work in all repositories.
+    request_echo_content: "Show all admin operations for CORTEX development"
+    next_steps_content: |
+      1. Use deployment operations to create production releases
+      2. Use documentation operations to rebuild docs/diagrams
+      3. Run validation tests after major changes
+      4. Check SKULL tests pass before deployment
+    
+    # NOTE: {catalog_features} is populated dynamically from Enhancement Catalog
+    # Shows features grouped by type with age/status indicators
+    # Format: Type (count) → Feature list with "NEW" badges for recent additions
+
+  generate_documentation_completion:
+    <<: *standard_5_part_base
+    name: Generate Documentation - Completion
+    triggers:
+    - generate_documentation_completion
+    - doc_generation_completion
+    response_type: detailed
+
+  confidence_high:
+    name: Confidence Display - High
+    trigger:
+    - confidence_high
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence High
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - High confidence pattern match from {pattern_count} similar conversations.
+
+
+      ## 💬 Response
+
+      {confidence_display}
+
+
+      I''m applying learned patterns from {pattern_count} similar conversations.
+
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
+  confidence_medium:
+    name: Confidence Display - Medium
+    trigger:
+    - confidence_medium
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence Medium
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - Moderate confidence pattern match from {pattern_count} related conversations.
+
+
+      ## 💬 Response
+
+      🟡 **Pattern Match Confidence:** {confidence_display}
+
+
+      I found {pattern_count} related patterns, applying with moderate confidence.
+
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
+  confidence_low:
+    name: Confidence Display - Low
+    trigger:
+    - confidence_low
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence Low
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - Limited pattern history, proceeding with available {pattern_count} patterns.
+
+
+      ## 💬 Response
+
+      🟠 **Pattern Match Confidence:** {confidence_display}
+
+
+      Limited pattern history available. Response based on {pattern_count} patterns.
+
+      {detailed_explanation}
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+    - understanding_content
+    - request_echo
+    - next_steps
+  confidence_none:
+    name: Confidence Display - None
+    trigger:
+    - confidence_none
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence None
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ℹ️ **New Territory:** No learned patterns available for this request.
+
+
+      Generating fresh response using CORTEX capabilities.'
+    placeholders: []
+  system_alignment_report:
+    <<: *standard_5_part_base
+    name: System Alignment Report
+    triggers:
+    - align
+    - align report
+    - system alignment
+    - validate alignment
+    - run system alignment
+    response_type: detailed
+
+  cleanup_operation:
+    <<: *standard_5_part_base
+    name: Holistic Cleanup Operation
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    - holistic cleanup
+    - repository cleanup
+    response_type: detailed
+
+  design_sync_operation:
+    <<: *standard_5_part_base
+    name: Design Sync Operation
+    triggers:
+    - design sync
+    - sync design
+    - synchronize design
+    - align design
+    response_type: detailed
+
+  setup_epm:
+    <<: *standard_5_part_base
+    name: Setup Entry Point Module
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+
+  tdd_workflow_start:
+    <<: *standard_5_part_base
+    name: TDD Workflow Start
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - start tdd workflow
+    response_type: detailed
+
+  optimize_system:
+    <<: *standard_5_part_base
+    name: Optimize System
+    triggers:
+    - optimize
+    - optimize cortex
+    - optimize system
+    - clean and optimize
+    response_type: detailed
+
+  workflow_execution:
+    <<: *standard_5_part_base
+    name: Workflow Execution
+    triggers:
+    - workflow
+    - execute workflow
+    - run workflow
+    - start workflow
+    response_type: detailed
+
+  git_checkpoint:
+    <<: *standard_5_part_base
+    name: Git Checkpoint
+    triggers:
+    - git checkpoint
+    - create checkpoint
+    - save checkpoint
+    response_type: detailed
+    handler: src.orchestrators.git_checkpoint_orchestrator.GitCheckpointOrchestrator
+
+  commit_operation:
+    <<: *standard_5_part_base
+    name: Commit and Sync
+    triggers:
+    - commit
+    - commit and push
+    - sync with origin
+    - commit sync
+    - push changes
+    - sync repository
+    - commit and sync
+    response_type: detailed
+    handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
+    understanding_content: "You want to synchronize your local repository with origin by pulling, merging, and pushing changes while ensuring no untracked files remain."
+    challenge_content: "No Challenge - Commit workflow will handle pre-flight validation, untracked files, merge conflicts, and create safety checkpoints automatically."
+    response_content: "**Commit Workflow Steps:**\n   \n   1. **Pre-flight Check** - Validate current repository state\n   2. **Handle Untracked Files** - Prompt to add or ignore untracked files\n   3. **Commit Local Changes** - Create commit with auto-generated or custom message\n   4. **Create Checkpoint** - Safety checkpoint for rollback capability\n   5. **Pull from Origin** - Fetch and merge/rebase with remote changes\n   6. **Push to Origin** - Upload merged changes to remote repository\n   \n   **Safety Features:**\n   • Git checkpoint before pull (rollback if needed)\n   • Merge conflict detection with clear guidance\n   • Untracked file validation (zero untracked files guarantee)\n   • Progress reporting for each step"
+    request_echo_content: "Sync repository with origin (pull, merge, push)"
+    next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
+
+  cache_management:
+    <<: *standard_5_part_base
+    name: Cache Management
+    triggers:
+    - cache status
+    - cache clear
+    - cache dashboard
+    response_type: admin
+    handler: src.operations.cache_commands
+    understanding_content: "You want to view or manage the CORTEX ValidationCache that accelerates repeated operations."
+    challenge_content: "No Challenge - Cache management provides visibility into performance optimizations."
+    response_content: |
+      The ValidationCache stores validation results to avoid redundant computation.
+      
+      **Available Operations:**
+      • `cache status` - Show hit rates, entry counts, effectiveness metrics
+      • `cache clear` - Invalidate all cached results (or specify operation)
+      • `cache dashboard` - Interactive performance dashboard with recommendations
+      
+      **Performance Gains:**
+      • Optimize: 6.4x speedup (45s → 7s)
+      • Cleanup: 5.5x speedup (22s → 4s)
+      • Alignment: 4.2x speedup (30s → 7s)
+      
+      **Auto-Invalidation:** Cache updates automatically when files change (SHA256 tracking)
+      
+      **When to Clear:**
+      • After major refactoring
+      • Low hit rates (<30%)
+      • Suspected corruption or stale results
+    request_echo_content: "Manage CORTEX ValidationCache"
+    next_steps_content: |
+      **Recommended Actions:**
+      
+      1. Run `cache status` for detailed metrics
+      2. Use `cache clear [operation]` for operation-specific invalidation
+      3. View cache-troubleshooting-guide.md for optimization tips
+      
+      Say "cache status" to begin analysis.
+
+  lint_validation:
+    <<: *standard_5_part_base
+    name: Lint Validation
+    triggers:
+    - validate lint
+    - check code quality
+    - run linter
+    - lint validation
+    response_type: detailed
+    handler: src.orchestrators.lint_validation_orchestrator.LintValidationOrchestrator
+
+  session_completion:
+    <<: *standard_5_part_base
+    name: Session Completion
+    triggers:
+    - complete session
+    - finish session
+    - session report
+    - end session
+    response_type: detailed
+    handler: src.orchestrators.session_completion_orchestrator.SessionCompletionOrchestrator
+
+  upgrade_cortex:
+    <<: *standard_5_part_base
+    name: Upgrade CORTEX
+    triggers:
+    - upgrade
+    - upgrade cortex
+    - cortex version
+    - check version
+    response_type: detailed
+    handler: src.orchestrators.upgrade_orchestrator.UpgradeOrchestrator
+
+  tdd_workflow:
+    <<: *standard_5_part_base
+    name: TDD Workflow
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - tdd session
+    response_type: detailed
+    handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
+
+  timeframe_estimate:
+    <<: *standard_5_part_base
+    name: Timeframe Estimation
+    triggers:
+    - estimate timeframe
+    - time estimate
+    - how long will this take
+    - timeframe
+    - story points
+    - sprint estimate
+    - parallel tracks
+    - timeline comparison
+    - delivery timeline
+    - effort estimate
+    - estimate effort
+    - project timeline
+    response_type: detailed
+    handler: src.agents.estimation.timeframe_estimator.TimeframeEstimator
+    understanding_content: "You want to estimate the development timeframe for a feature or project, including parallel track analysis and team sizing."
+    challenge_content: "No Challenge - Timeframe estimation uses SWAGGER complexity analysis with parallel track decomposition, risk buffers, and cost projections."
+    response_content: |
+      **Timeframe Estimation Capabilities:**
+      
+      **Core Analysis:**
+      - Convert complexity scores to sprint estimates
+      - Identify parallel development tracks
+      - Calculate critical path duration
+      - Generate effort explanations with complexity factors
+      
+      **Visual Timelines:**
+      - Single developer vs max team comparison
+      - ASCII Gantt charts for terminal display
+      - Interactive HTML timelines (D3.js)
+      - Resource utilization histograms
+      
+      **Cost & Risk Analysis:**
+      - Cost projections for different team sizes
+      - Risk buffers (Conway's Law, integration overhead)
+      - Break-even analysis for team scaling
+      - Optimal team size recommendation
+      
+      **What-If Scenarios:**
+      - Compare 1, 2, 3, 5+ developer configurations
+      - Speedup factors and efficiency metrics
+      - Professional markdown reports
+    request_echo_content: "Generate timeframe estimate with parallel track analysis"
+    next_steps_content: |
+      **Available Commands:**
+      
+      1. **Basic Estimate** - "estimate timeframe for [feature]"
+      2. **With Timeline** - "generate timeline comparison for [feature]"
+      3. **Cost Analysis** - "estimate effort with cost projection at $[rate]/hour"
+      4. **What-If Scenarios** - "compare team sizes for [feature]"
+      
+      **Required Input:**
+      - Feature description or SWAGGER complexity score
+      - Optional: hourly rate for cost projections (default: $75/hr)
+      - Optional: team size constraints
+      
+      Say "estimate timeframe" with your feature description to begin.
+
+routing:
+  default: fallback
+  greeting_triggers:
+  - hello
+  - hi
+  - hey
+  - greetings
+  - good morning
+  - good afternoon
+  - good evening
+  - hello cortex
+  - hi cortex
+  - hey cortex
+  help_triggers:
+  - help
+  - /help
+  - what can cortex do
+  status_triggers:
+  - status
+  - where are we
+  quick_start_triggers:
+  - quick start
+  - get started
+  hands_on_tutorial_triggers:
+  - tutorial
+  - start tutorial
+  - hands on tutorial
+  - interactive tutorial
+  - learn cortex
+  - teach me cortex
+  - cortex tutorial
+  git_checkpoint_triggers:
+  - git checkpoint
+  - create checkpoint
+  - save checkpoint
+  lint_validation_triggers:
+  - validate lint
+  - check code quality
+  - run linter
+  - lint validation
+  session_completion_triggers:
+  - complete session
+  - finish session
+  - session report
+  - end session
+  upgrade_cortex_triggers:
+  - upgrade
+  - upgrade cortex
+  - cortex version
+  - check version
+  tdd_workflow_start_triggers:
+  - start tdd
+  - tdd workflow
+  - begin tdd
+  - tdd session
+  tdd_workflow_triggers:
+  - implement
+  - add
+  - create
+  - build
+  - develop
+  - write
+  - implement feature
+  - add feature
+  - create feature
+  test_generation_triggers:
+  - test
+  - write tests
+  - generate tests
+  - add tests
+  - create tests
+  refactor_triggers:
+  - refactor
+  - improve code
+  - clean up
+  - restructure
+  - optimize code
+  planning_triggers:
+  - plan
+  - let's plan
+  - plan a feature
+  - plan this
+  - help me plan
+  - planning
+  - feature planning
+  - i want to plan
+  enhancement_triggers:
+  - enhance
+  - improve
+  - extend
+  - enhance existing
+  - improve existing
+  - extend existing
+  - modify existing
+  - update existing
+  - optimize
+  - refactor
+  - upgrade
+  - enhance the
+  - improve the
+  - extend the
+  ado_planning_triggers:
+  - plan ado
+  - create ado
+  - new ado
+  - ado planning
+  - plan work item
+  ado_story_triggers:
+  - plan ado story
+  - create ado story
+  - new ado story
+  - plan user story
+  ado_feature_triggers:
+  - plan ado feature
+  - create ado feature
+  - new ado feature
+  ado_summary_triggers:
+  - generate ado summary
+  - create work summary
+  - ado work summary
+  - complete ado work
+  ado_resume_triggers:
+  - resume ado
+  - continue ado
+  - open ado
+  - show ado
+  ado_search_triggers:
+  - find ado
+  - search ado
+  - list ado
+  - show ados
+  ado_status_triggers:
+  - ado status
+  - planning status
+  - show plans
+  - active ados
+  brain_export_triggers:
+  - export brain
+  - brain export
+  - share brain
+  - export knowledge
+  - export patterns
+  brain_import_triggers:
+  - import brain
+  - brain import
+  - load brain
+  - import knowledge
+  - import patterns
+  generate_documentation_triggers:
+  - generate documentation
+  - generate docs
+  - create documentation
+  - doc generation
+  - generate cortex docs
+  feedback_triggers:
+  - feedback
+  - report issue
+  - report bug
+  - cortex issue
+  - cortex bug
+  - cortex improvement
+  - report problem
+  - generate feedback report
+  - share performance metrics
+  - cortex feedback
+  admin_feedback_review_triggers:
+  - review feedback
+  - feedback review
+  - analyze feedback
+  - process feedback
+  - sync feedback
+  - import feedback
+  - review user feedback
+  - process user reports
+  view_discovery_triggers:
+  - discover views
+  - crawl views
+  - find element ids
+  - map elements
+  - scan razor files
+  system_alignment_triggers:
+  - align
+  - align report
+  - system alignment
+  - validate alignment
+  - run system alignment
+  cleanup_triggers:
+  - cleanup
+  - clean up
+  - cleanup cortex
+  - clean cortex
+  - holistic cleanup
+  cleanup_validation_failed_triggers:
+  - cleanup_validation_failed
+  - validation_failed
+  - cleanup_blocked
+  design_sync_triggers:
+  - design sync
+  - sync design
+  - synchronize design
+  - align design
+  setup_epm_triggers:
+  - setup copilot instructions
+  - setup instructions
+  - generate copilot instructions
+  - create copilot instructions
+  - setup epm
+  - copilot instructions
+  onboarding_introduction_triggers:
+  - setup cortex
+  - onboard application
+  - cortex setup
+  - start onboarding
+  - begin setup
+  - initialize cortex
+  - show health dashboard
+  - health dashboard
+  - application health
+  - app health
+  - show app health
+  - dashboard
+  ado_work_item_triggers:
+  - plan ado
+  - create work item
+  - ado work item
+  - create story
+  - create feature
+  - create bug
+  - ado planning
+  demo_triggers:
+  - demo
+  - cortex demo
+  - show demo
+  - run demo
+  - demo cortex
+  - live demo
+  unified_entry_point_triggers:
+  - unified entry
+  - entry point
+  - cortex entry
+  - unified interface
+  discovery_triggers:
+  - discover cortex
+  - explore cortex
+  - cortex demo
+  - show me what cortex can do
+  - cortex tour
+  - guided tour
+  - what can you do
+  - cortex capabilities
+  - cortex features
+  - show capabilities
+  capture_conversation_triggers:
+  - capture conversation
+  - capture chat
+  - save conversation
+  - capture this conversation
+  - save this chat
+  - capture copilot chat
+  import_conversation_triggers:
+  - import conversation
+  - import capture
+  - process capture
+  - load conversation
+  - proceed
+  list_captures_triggers:
+  - list captures
+  - show captures
+  - active captures
+  - capture files
+  code_review_triggers:
+  - code review
+  - review pr
+  - pr review
+  - review pull request
+  - pull request review
+  - ado pr review
+  - review code
+  ux_enhancement_triggers:
+  - enhance
+  - reimagine
+  - redesign
+  - improve ux
+  - modernize
+  - suggest improvements
+  - refactor architecture
+  - optimize codebase
+  commit_operation_triggers:
+  - commit
+  - commit and push
+  - sync with origin
+  - commit sync
+  - push changes
+  - sync repository
+  - commit and sync
+  - pull and push
+  - sync repo
+  cache_status_triggers:
+  - cache status
+  - show cache
+  - cache stats
+  - cache metrics
+  - cache performance
+  - cache dashboard
+  - cache effectiveness
+  cache_clear_triggers:
+  - cache clear
+  - clear cache
+  - invalidate cache
+  - reset cache
+  - flush cache
+  - clear validation cache
+  timeframe_estimate_triggers:
+  - estimate timeframe
+  - time estimate
+  - how long will this take
+  - timeframe
+  - story points
+  - sprint estimate
+  - parallel tracks
+  - timeline comparison
+  - delivery timeline
+  - effort estimate
+  - estimate effort
+  - project timeline
+formatting:
+  mandatory_sections:
+  - understanding
+  - challenge
+  - response
+  - request_echo
+  - next_steps

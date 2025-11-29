@@ -1,0 +1,84 @@
+{"name": "database_size_tier1", "value": 122880, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 1.1869999999999998, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 110592, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 0.195, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1630208, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.13699999999999998, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.207, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21380800, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 24707072, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420509614080, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 62.9, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T17:22:24.148370+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (23.6MB)", "performance: 25.0/25 (0.4ms)"], "max_score": 100.0}}
+{"name": "database_size_tier1", "value": 126976, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 1.2349999999999999, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 114688, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 0.19799999999999998, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1630208, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.27099999999999996, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.11699999999999999, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21392915, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 23756800, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420516954112, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 62.8, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T17:22:38.925888+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (22.7MB)", "performance: 25.0/25 (0.5ms)"], "max_score": 100.0}}
+{"name": "database_size_tier1", "value": 126976, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 1.1540000000000001, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 114688, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 0.19699999999999998, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1630208, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.309, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.189, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21434267, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 23953408, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420526440448, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 62.9, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T17:23:06.115823+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (22.8MB)", "performance: 25.0/25 (0.5ms)"], "max_score": 100.0}}
+{"name": "database_size_tier1", "value": 126976, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 1.3290000000000002, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 114688, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 1.1019999999999999, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1630208, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.216, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.124, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21429463, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 23068672, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420594008064, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 62.9, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T17:23:16.485500+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (22.0MB)", "performance: 25.0/25 (0.7ms)"], "max_score": 100.0}}
+{"name": "database_size_tier1", "value": 135168, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 0.187, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 106496, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 0.5289999999999999, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1634304, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.6579999999999999, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.421, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21845936, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 27639808, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420464640000, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 63.3, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T22:33:26.757181+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (26.4MB)", "performance: 25.0/25 (0.4ms)"], "max_score": 100.0}}
+{"name": "database_size_tier1", "value": 135168, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "storage", "database": "tier1", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier1", "value": 0.398, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "performance", "database": "tier1", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier2", "value": 106496, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "storage", "database": "tier2", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier2", "value": 0.40700000000000003, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "performance", "database": "tier2", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_tier3", "value": 1634304, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "storage", "database": "tier3", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_tier3", "value": 0.335, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "performance", "database": "tier3", "unit": "ms"}, "metadata": {}}
+{"name": "database_size_conversation", "value": 32768, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "storage", "database": "conversation", "unit": "bytes"}, "metadata": {}}
+{"name": "database_query_time_conversation", "value": 0.491, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "performance", "database": "conversation", "unit": "ms"}, "metadata": {}}
+{"name": "brain_total_size", "value": 21849877, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "storage", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_important_files_count", "value": 4, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "inventory", "total_expected": 4}, "metadata": {}}
+{"name": "brain_process_memory_rss", "value": 29835264, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "brain_process_memory_vms", "value": 420466737152, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "memory", "unit": "bytes"}, "metadata": {}}
+{"name": "system_memory_usage_percent", "value": 62.8, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "memory", "unit": "percent"}, "metadata": {}}
+{"name": "brain_health_score", "value": 100.0, "timestamp": "2025-11-16T22:37:08.433303+00:00", "tags": {"type": "health", "unit": "score"}, "metadata": {"factors": ["databases: 3/3", "filesystem: 30.0/30", "memory: 25.0/25 (28.5MB)", "performance: 25.0/25 (0.4ms)"], "max_score": 100.0}}

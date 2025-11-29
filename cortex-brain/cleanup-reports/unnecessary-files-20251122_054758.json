@@ -1,0 +1,788 @@
+{
+  "timestamp": "2025-11-22T05:47:58.358782",
+  "total_files": 92,
+  "total_size_bytes": 1097075,
+  "total_size_mb": 1.05,
+  "categories": {
+    "summary": 13,
+    "report": 13,
+    "analysis": 2,
+    "review": 2,
+    "complete": 17,
+    "progress": 5,
+    "guide": 20,
+    "temp": 3,
+    "fix": 3,
+    "enhancement": 1,
+    "integration": 5,
+    "resolution": 1,
+    "quick": 3,
+    "session": 4
+  },
+  "files": {
+    "summary": [
+      {
+        "path": "docs\\EXECUTIVE-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\EXECUTIVE-SUMMARY.md",
+        "size": 1828,
+        "size_kb": 1.79,
+        "modified": "2025-11-21T08:51:59.317541",
+        "name": "EXECUTIVE-SUMMARY.md"
+      },
+      {
+        "path": "docs\\PHASE-4-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-SUMMARY.md",
+        "size": 10258,
+        "size_kb": 10.02,
+        "modified": "2025-11-21T12:19:49.620307",
+        "name": "PHASE-4-SUMMARY.md"
+      },
+      {
+        "path": "src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "size": 7510,
+        "size_kb": 7.33,
+        "modified": "2025-11-17T11:24:22.240814",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "size": 6370,
+        "size_kb": 6.22,
+        "modified": "2025-11-17T11:24:22.281237",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "publish\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "size": 7510,
+        "size_kb": 7.33,
+        "modified": "2025-11-17T11:24:22.240814",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "publish\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "size": 6370,
+        "size_kb": 6.22,
+        "modified": "2025-11-17T11:24:22.281237",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "docs\\EXECUTIVE-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\EXECUTIVE-SUMMARY.md",
+        "size": 1828,
+        "size_kb": 1.79,
+        "modified": "2025-11-21T08:51:59.317541",
+        "name": "EXECUTIVE-SUMMARY.md"
+      },
+      {
+        "path": "docs\\PHASE-4-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-SUMMARY.md",
+        "size": 10258,
+        "size_kb": 10.02,
+        "modified": "2025-11-21T12:19:49.620307",
+        "name": "PHASE-4-SUMMARY.md"
+      },
+      {
+        "path": "tests\\tier1\\TEST_CONVERSATION_MANAGER_SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\tests\\tier1\\TEST_CONVERSATION_MANAGER_SUMMARY.md",
+        "size": 10837,
+        "size_kb": 10.58,
+        "modified": "2025-11-17T11:24:22.526012",
+        "name": "TEST_CONVERSATION_MANAGER_SUMMARY.md"
+      },
+      {
+        "path": "src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "size": 7510,
+        "size_kb": 7.33,
+        "modified": "2025-11-17T11:24:22.240814",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "size": 6370,
+        "size_kb": 6.22,
+        "modified": "2025-11-17T11:24:22.281237",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "publish\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+        "size": 7510,
+        "size_kb": 7.33,
+        "modified": "2025-11-17T11:24:22.240814",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      },
+      {
+        "path": "publish\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+        "size": 6370,
+        "size_kb": 6.22,
+        "modified": "2025-11-17T11:24:22.281237",
+        "name": "IMPLEMENTATION-SUMMARY.md"
+      }
+    ],
+    "report": [
+      {
+        "path": "docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "size": 11168,
+        "size_kb": 10.91,
+        "modified": "2025-11-19T16:54:40.717041",
+        "name": "DOCUMENTATION-LINKS-FIXED-REPORT.md"
+      },
+      {
+        "path": "docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "size": 4208,
+        "size_kb": 4.11,
+        "modified": "2025-11-19T17:02:01.984279",
+        "name": "MKDOCS-ENCODING-FIX-REPORT.md"
+      },
+      {
+        "path": "docs\\PHASE-2-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-2-COMPLETION-REPORT.md",
+        "size": 24238,
+        "size_kb": 23.67,
+        "modified": "2025-11-21T12:03:25.956517",
+        "name": "PHASE-2-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "docs\\PHASE-4-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-COMPLETION-REPORT.md",
+        "size": 10908,
+        "size_kb": 10.65,
+        "modified": "2025-11-21T12:18:59.867354",
+        "name": "PHASE-4-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "size": 44641,
+        "size_kb": 43.59,
+        "modified": "2025-11-22T03:32:58.640294",
+        "name": "PHASE-3-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\cortex-3.0-design\\CORTEX-3.0-DISCOVERY-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cortex-3.0-design\\CORTEX-3.0-DISCOVERY-REPORT.md",
+        "size": 22758,
+        "size_kb": 22.22,
+        "modified": "2025-11-17T11:24:19.548927",
+        "name": "CORTEX-3.0-DISCOVERY-REPORT.md"
+      },
+      {
+        "path": "docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "size": 11168,
+        "size_kb": 10.91,
+        "modified": "2025-11-19T16:54:40.717041",
+        "name": "DOCUMENTATION-LINKS-FIXED-REPORT.md"
+      },
+      {
+        "path": "docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "size": 4208,
+        "size_kb": 4.11,
+        "modified": "2025-11-19T17:02:01.984279",
+        "name": "MKDOCS-ENCODING-FIX-REPORT.md"
+      },
+      {
+        "path": "docs\\PHASE-2-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-2-COMPLETION-REPORT.md",
+        "size": 24238,
+        "size_kb": 23.67,
+        "modified": "2025-11-21T12:03:25.956517",
+        "name": "PHASE-2-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "docs\\PHASE-4-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-COMPLETION-REPORT.md",
+        "size": 10908,
+        "size_kb": 10.65,
+        "modified": "2025-11-21T12:18:59.867354",
+        "name": "PHASE-4-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "size": 44641,
+        "size_kb": 43.59,
+        "modified": "2025-11-22T03:32:58.640294",
+        "name": "PHASE-3-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\cortex-3.0-design\\CORTEX-3.0-DISCOVERY-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cortex-3.0-design\\CORTEX-3.0-DISCOVERY-REPORT.md",
+        "size": 22758,
+        "size_kb": 22.22,
+        "modified": "2025-11-17T11:24:19.548927",
+        "name": "CORTEX-3.0-DISCOVERY-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b-completion-report-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b-completion-report-2025-11-16.md",
+        "size": 12521,
+        "size_kb": 12.23,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b-completion-report-2025-11-16.md"
+      }
+    ],
+    "analysis": [
+      {
+        "path": "cortex-brain\\response-templates\\template-migration-analysis.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\response-templates\\template-migration-analysis.md",
+        "size": 11787,
+        "size_kb": 11.51,
+        "modified": "2025-11-20T06:02:08.760185",
+        "name": "template-migration-analysis.md"
+      },
+      {
+        "path": "cortex-brain\\response-templates\\template-migration-analysis.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\response-templates\\template-migration-analysis.md",
+        "size": 11787,
+        "size_kb": 11.51,
+        "modified": "2025-11-20T06:02:08.760185",
+        "name": "template-migration-analysis.md"
+      }
+    ],
+    "review": [
+      {
+        "path": ".github\\CopilotChats\\cortex-review.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\.github\\CopilotChats\\cortex-review.md",
+        "size": 0,
+        "size_kb": 0.0,
+        "modified": "2025-11-21T10:00:46.738504",
+        "name": "cortex-review.md"
+      },
+      {
+        "path": ".github\\CopilotChats\\cortex-review.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\.github\\CopilotChats\\cortex-review.md",
+        "size": 0,
+        "size_kb": 0.0,
+        "modified": "2025-11-21T10:00:46.738504",
+        "name": "cortex-review.md"
+      }
+    ],
+    "complete": [
+      {
+        "path": "cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "size": 10771,
+        "size_kb": 10.52,
+        "modified": "2025-11-22T04:36:52.258940",
+        "name": "ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\PHASE-3-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\PHASE-3-COMPLETE.md",
+        "size": 12018,
+        "size_kb": 11.74,
+        "modified": "2025-11-22T03:32:58.639281",
+        "name": "PHASE-3-COMPLETE.md"
+      },
+      {
+        "path": "docs\\PHASE-4-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-COMPLETE.md",
+        "size": 12651,
+        "size_kb": 12.35,
+        "modified": "2025-11-22T05:35:13.357218",
+        "name": "PHASE-4-COMPLETE.md"
+      },
+      {
+        "path": "tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "size": 8283,
+        "size_kb": 8.09,
+        "modified": "2025-11-17T11:24:22.460734",
+        "name": "CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\cortex-3.0-design\\ROADMAP-CONSOLIDATION-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cortex-3.0-design\\ROADMAP-CONSOLIDATION-COMPLETE.md",
+        "size": 9425,
+        "size_kb": 9.2,
+        "modified": "2025-11-17T11:24:19.552922",
+        "name": "ROADMAP-CONSOLIDATION-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\operations\\monitoring-setup-complete.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\operations\\monitoring-setup-complete.md",
+        "size": 7729,
+        "size_kb": 7.55,
+        "modified": "2025-11-21T09:37:16.413950",
+        "name": "monitoring-setup-complete.md"
+      },
+      {
+        "path": "cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "size": 10771,
+        "size_kb": 10.52,
+        "modified": "2025-11-22T04:36:52.258940",
+        "name": "ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\PHASE-3-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\PHASE-3-COMPLETE.md",
+        "size": 12018,
+        "size_kb": 11.74,
+        "modified": "2025-11-22T03:32:58.639281",
+        "name": "PHASE-3-COMPLETE.md"
+      },
+      {
+        "path": "docs\\PHASE-4-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-COMPLETE.md",
+        "size": 12651,
+        "size_kb": 12.35,
+        "modified": "2025-11-22T05:35:13.357218",
+        "name": "PHASE-4-COMPLETE.md"
+      },
+      {
+        "path": "tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "size": 8283,
+        "size_kb": 8.09,
+        "modified": "2025-11-17T11:24:22.460734",
+        "name": "CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\cortex-3.0-design\\ROADMAP-CONSOLIDATION-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cortex-3.0-design\\ROADMAP-CONSOLIDATION-COMPLETE.md",
+        "size": 9425,
+        "size_kb": 9.2,
+        "modified": "2025-11-17T11:24:19.552922",
+        "name": "ROADMAP-CONSOLIDATION-COMPLETE.md"
+      },
+      {
+        "path": "cortex-brain\\operations\\monitoring-setup-complete.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\operations\\monitoring-setup-complete.md",
+        "size": 7729,
+        "size_kb": 7.55,
+        "modified": "2025-11-21T09:37:16.413950",
+        "name": "monitoring-setup-complete.md"
+      },
+      {
+        "path": "cortex-brain\\admin\\documentation\\CLEANUP-COMPLETE-20251119-111344.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\admin\\documentation\\CLEANUP-COMPLETE-20251119-111344.md",
+        "size": 1462,
+        "size_kb": 1.43,
+        "modified": "2025-11-19T11:13:44.489463",
+        "name": "CLEANUP-COMPLETE-20251119-111344.md"
+      },
+      {
+        "path": "docs\\PHASE-2-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-2-COMPLETION-REPORT.md",
+        "size": 24238,
+        "size_kb": 23.67,
+        "modified": "2025-11-21T12:03:25.956517",
+        "name": "PHASE-2-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "docs\\PHASE-4-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\PHASE-4-COMPLETION-REPORT.md",
+        "size": 10908,
+        "size_kb": 10.65,
+        "modified": "2025-11-21T12:18:59.867354",
+        "name": "PHASE-4-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\artifacts\\PHASE-3-COMPLETION-REPORT.md",
+        "size": 44641,
+        "size_kb": 43.59,
+        "modified": "2025-11-22T03:32:58.640294",
+        "name": "PHASE-3-COMPLETION-REPORT.md"
+      },
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b-completion-report-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b-completion-report-2025-11-16.md",
+        "size": 12521,
+        "size_kb": 12.23,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b-completion-report-2025-11-16.md"
+      }
+    ],
+    "progress": [
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b2-final-progress-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b2-final-progress-2025-11-16.md",
+        "size": 2478,
+        "size_kb": 2.42,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b2-final-progress-2025-11-16.md"
+      },
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b2-progress-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b2-progress-2025-11-16.md",
+        "size": 2231,
+        "size_kb": 2.18,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b2-progress-2025-11-16.md"
+      },
+      {
+        "path": "cortex-brain\\inventory-v1\\PROGRESS.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\inventory-v1\\PROGRESS.md",
+        "size": 8492,
+        "size_kb": 8.29,
+        "modified": "2025-11-17T11:24:19.733817",
+        "name": "PROGRESS.md"
+      },
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b2-final-progress-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b2-final-progress-2025-11-16.md",
+        "size": 2478,
+        "size_kb": 2.42,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b2-final-progress-2025-11-16.md"
+      },
+      {
+        "path": "cortex-brain\\metrics-history\\phase-b2-progress-2025-11-16.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\metrics-history\\phase-b2-progress-2025-11-16.md",
+        "size": 2231,
+        "size_kb": 2.18,
+        "modified": "2025-11-17T11:24:19.740813",
+        "name": "phase-b2-progress-2025-11-16.md"
+      }
+    ],
+    "guide": [
+      {
+        "path": "docs\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+        "size": 10172,
+        "size_kb": 9.93,
+        "modified": "2025-11-19T16:54:40.726033",
+        "name": "KNOWLEDGE-GRAPH-IMPORT-GUIDE.md"
+      },
+      {
+        "path": "docs\\NAVIGATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\NAVIGATION-GUIDE.md",
+        "size": 10171,
+        "size_kb": 9.93,
+        "modified": "2025-11-19T16:54:40.732030",
+        "name": "NAVIGATION-GUIDE.md"
+      },
+      {
+        "path": "docs\\response-template-user-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\response-template-user-guide.md",
+        "size": 13649,
+        "size_kb": 13.33,
+        "modified": "2025-11-19T16:54:40.734029",
+        "name": "response-template-user-guide.md"
+      },
+      {
+        "path": "docs\\specification-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\specification-guide.md",
+        "size": 22700,
+        "size_kb": 22.17,
+        "modified": "2025-11-22T05:35:13.359198",
+        "name": "specification-guide.md"
+      },
+      {
+        "path": "docs\\validation-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\validation-guide.md",
+        "size": 15946,
+        "size_kb": 15.57,
+        "modified": "2025-11-22T05:35:13.359198",
+        "name": "validation-guide.md"
+      },
+      {
+        "path": "docs\\guides\\admin-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\admin-guide.md",
+        "size": 315,
+        "size_kb": 0.31,
+        "modified": "2025-11-19T16:54:40.816287",
+        "name": "admin-guide.md"
+      },
+      {
+        "path": "docs\\guides\\developer-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\developer-guide.md",
+        "size": 331,
+        "size_kb": 0.32,
+        "modified": "2025-11-19T16:54:40.818286",
+        "name": "developer-guide.md"
+      },
+      {
+        "path": "docs\\guides\\mkdocs-encoding-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\mkdocs-encoding-guide.md",
+        "size": 4589,
+        "size_kb": 4.48,
+        "modified": "2025-11-19T16:56:04.417176",
+        "name": "mkdocs-encoding-guide.md"
+      },
+      {
+        "path": "docs\\telemetry\\PERFORMANCE-TELEMETRY-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\telemetry\\PERFORMANCE-TELEMETRY-GUIDE.md",
+        "size": 20712,
+        "size_kb": 20.23,
+        "modified": "2025-11-19T16:54:40.835276",
+        "name": "PERFORMANCE-TELEMETRY-GUIDE.md"
+      },
+      {
+        "path": "cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "size": 11484,
+        "size_kb": 11.21,
+        "modified": "2025-11-18T05:14:14.766171",
+        "name": "GIT-INTEGRATION-GUIDE.md"
+      },
+      {
+        "path": "docs\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\KNOWLEDGE-GRAPH-IMPORT-GUIDE.md",
+        "size": 10172,
+        "size_kb": 9.93,
+        "modified": "2025-11-19T16:54:40.726033",
+        "name": "KNOWLEDGE-GRAPH-IMPORT-GUIDE.md"
+      },
+      {
+        "path": "docs\\NAVIGATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\NAVIGATION-GUIDE.md",
+        "size": 10171,
+        "size_kb": 9.93,
+        "modified": "2025-11-19T16:54:40.732030",
+        "name": "NAVIGATION-GUIDE.md"
+      },
+      {
+        "path": "docs\\response-template-user-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\response-template-user-guide.md",
+        "size": 13649,
+        "size_kb": 13.33,
+        "modified": "2025-11-19T16:54:40.734029",
+        "name": "response-template-user-guide.md"
+      },
+      {
+        "path": "docs\\specification-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\specification-guide.md",
+        "size": 22700,
+        "size_kb": 22.17,
+        "modified": "2025-11-22T05:35:13.359198",
+        "name": "specification-guide.md"
+      },
+      {
+        "path": "docs\\validation-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\validation-guide.md",
+        "size": 15946,
+        "size_kb": 15.57,
+        "modified": "2025-11-22T05:35:13.359198",
+        "name": "validation-guide.md"
+      },
+      {
+        "path": "docs\\guides\\admin-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\admin-guide.md",
+        "size": 315,
+        "size_kb": 0.31,
+        "modified": "2025-11-19T16:54:40.816287",
+        "name": "admin-guide.md"
+      },
+      {
+        "path": "docs\\guides\\developer-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\developer-guide.md",
+        "size": 331,
+        "size_kb": 0.32,
+        "modified": "2025-11-19T16:54:40.818286",
+        "name": "developer-guide.md"
+      },
+      {
+        "path": "docs\\guides\\mkdocs-encoding-guide.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\guides\\mkdocs-encoding-guide.md",
+        "size": 4589,
+        "size_kb": 4.48,
+        "modified": "2025-11-19T16:56:04.417176",
+        "name": "mkdocs-encoding-guide.md"
+      },
+      {
+        "path": "docs\\telemetry\\PERFORMANCE-TELEMETRY-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\telemetry\\PERFORMANCE-TELEMETRY-GUIDE.md",
+        "size": 20712,
+        "size_kb": 20.23,
+        "modified": "2025-11-19T16:54:40.835276",
+        "name": "PERFORMANCE-TELEMETRY-GUIDE.md"
+      },
+      {
+        "path": "cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "size": 11484,
+        "size_kb": 11.21,
+        "modified": "2025-11-18T05:14:14.766171",
+        "name": "GIT-INTEGRATION-GUIDE.md"
+      }
+    ],
+    "temp": [
+      {
+        "path": "publish\\CORTEX\\.github\\prompts\\modules\\template-system.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\publish\\CORTEX\\.github\\prompts\\modules\\template-system.md",
+        "size": 4054,
+        "size_kb": 3.96,
+        "modified": "2025-11-17T11:24:19.111882",
+        "name": "template-system.md"
+      },
+      {
+        "path": "cortex-brain\\response-templates\\template-migration-analysis.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\response-templates\\template-migration-analysis.md",
+        "size": 11787,
+        "size_kb": 11.51,
+        "modified": "2025-11-20T06:02:08.760185",
+        "name": "template-migration-analysis.md"
+      },
+      {
+        "path": ".github\\prompts\\modules\\template-system.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\.github\\prompts\\modules\\template-system.md",
+        "size": 4054,
+        "size_kb": 3.96,
+        "modified": "2025-11-17T11:24:19.111882",
+        "name": "template-system.md"
+      }
+    ],
+    "fix": [
+      {
+        "path": "docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "size": 4208,
+        "size_kb": 4.11,
+        "modified": "2025-11-19T17:02:01.984279",
+        "name": "MKDOCS-ENCODING-FIX-REPORT.md"
+      },
+      {
+        "path": "docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\DOCUMENTATION-LINKS-FIXED-REPORT.md",
+        "size": 11168,
+        "size_kb": 10.91,
+        "modified": "2025-11-19T16:54:40.717041",
+        "name": "DOCUMENTATION-LINKS-FIXED-REPORT.md"
+      },
+      {
+        "path": "docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\MKDOCS-ENCODING-FIX-REPORT.md",
+        "size": 4208,
+        "size_kb": 4.11,
+        "modified": "2025-11-19T17:02:01.984279",
+        "name": "MKDOCS-ENCODING-FIX-REPORT.md"
+      }
+    ],
+    "enhancement": [
+      {
+        "path": "cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md",
+        "size": 10771,
+        "size_kb": 10.52,
+        "modified": "2025-11-22T04:36:52.258940",
+        "name": "ENTERPRISE-DOC-ENHANCEMENT-COMPLETE.md"
+      }
+    ],
+    "integration": [
+      {
+        "path": "cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "size": 11484,
+        "size_kb": 11.21,
+        "modified": "2025-11-18T05:14:14.766171",
+        "name": "GIT-INTEGRATION-GUIDE.md"
+      },
+      {
+        "path": "docs\\integration-diagrams.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\integration-diagrams.md",
+        "size": 4613,
+        "size_kb": 4.5,
+        "modified": "2025-11-21T06:31:47.567872",
+        "name": "integration-diagrams.md"
+      },
+      {
+        "path": "docs\\performance\\CI-CD-INTEGRATION.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\performance\\CI-CD-INTEGRATION.md",
+        "size": 8409,
+        "size_kb": 8.21,
+        "modified": "2025-11-19T16:54:40.828281",
+        "name": "CI-CD-INTEGRATION.md"
+      },
+      {
+        "path": "cortex-brain\\conversation-captures\\2025-11-19-planning-validation-integration.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\conversation-captures\\2025-11-19-planning-validation-integration.md",
+        "size": 24388,
+        "size_kb": 23.82,
+        "modified": "2025-11-19T09:20:26.714308",
+        "name": "2025-11-19-planning-validation-integration.md"
+      },
+      {
+        "path": "cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\exports\\GIT-INTEGRATION-GUIDE.md",
+        "size": 11484,
+        "size_kb": 11.21,
+        "modified": "2025-11-18T05:14:14.766171",
+        "name": "GIT-INTEGRATION-GUIDE.md"
+      }
+    ],
+    "resolution": [
+      {
+        "path": "tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\tests\\cortex_brain_001\\CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md",
+        "size": 8283,
+        "size_kb": 8.09,
+        "modified": "2025-11-17T11:24:22.460734",
+        "name": "CORTEX-BRAIN-001-RESOLUTION-COMPLETE.md"
+      }
+    ],
+    "quick": [
+      {
+        "path": "cortex-extension\\QUICK-START.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-extension\\QUICK-START.md",
+        "size": 2813,
+        "size_kb": 2.75,
+        "modified": "2025-11-17T11:24:19.794781",
+        "name": "QUICK-START.md"
+      },
+      {
+        "path": "docs\\QUICK-START.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\QUICK-START.md",
+        "size": 614,
+        "size_kb": 0.6,
+        "modified": "2025-11-21T08:51:59.319540",
+        "name": "QUICK-START.md"
+      },
+      {
+        "path": "docs\\getting-started\\quick-start.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\docs\\getting-started\\quick-start.md",
+        "size": 339,
+        "size_kb": 0.33,
+        "modified": "2025-11-19T16:54:40.814288",
+        "name": "quick-start.md"
+      }
+    ],
+    "session": [
+      {
+        "path": "cortex-brain\\conversation-vault\\2025-11-13-path-1-execution-session.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\conversation-vault\\2025-11-13-path-1-execution-session.md",
+        "size": 39927,
+        "size_kb": 38.99,
+        "modified": "2025-11-17T11:24:19.541928",
+        "name": "2025-11-13-path-1-execution-session.md"
+      },
+      {
+        "path": "cortex-brain\\conversation-captures\\imported\\2025-11-13-path-1-execution-session.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\conversation-captures\\imported\\2025-11-13-path-1-execution-session.md",
+        "size": 39253,
+        "size_kb": 38.33,
+        "modified": "2025-11-17T11:24:19.538930",
+        "name": "2025-11-13-path-1-execution-session.md"
+      },
+      {
+        "path": "cortex-brain\\conversation-vault\\2025-11-13-path-1-execution-session.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\conversation-vault\\2025-11-13-path-1-execution-session.md",
+        "size": 39927,
+        "size_kb": 38.99,
+        "modified": "2025-11-17T11:24:19.541928",
+        "name": "2025-11-13-path-1-execution-session.md"
+      },
+      {
+        "path": "cortex-brain\\conversation-captures\\imported\\2025-11-13-path-1-execution-session.md",
+        "full_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\conversation-captures\\imported\\2025-11-13-path-1-execution-session.md",
+        "size": 39253,
+        "size_kb": 38.33,
+        "modified": "2025-11-17T11:24:19.538930",
+        "name": "2025-11-13-path-1-execution-session.md"
+      }
+    ]
+  }
+}

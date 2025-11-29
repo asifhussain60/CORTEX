@@ -1,0 +1,1578 @@
+{
+  "timestamp": "2025-11-27T17:46:50.041691",
+  "marked_by": "optimize_cortex_orchestrator",
+  "tests": [
+    {
+      "file_path": "tests/test_tdd_mastery_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.edge_case_analyzer, src.cortex_agents.test_generator.domain_knowledge_integrator, src.cortex_agents.test_generator.tdd_intent_router",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.edge_case_analyzer",
+        "src.cortex_agents.test_generator.domain_knowledge_integrator",
+        "src.cortex_agents.test_generator.tdd_intent_router"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase1_phase2_fixes.py",
+      "reason": "Imports non-existent modules: src.agents.feedback_agent, src.entry_point.agent_executor, src.cortex_agents.agent_types, src.entry_point.request_parser, src.tier2.pattern_suggestion_engine, src.cortex_agents.intent_router, src.tier1.conversation_auto_capture, src.tier1.conversation_auto_capture, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.tier2.pattern_suggestion_engine, src.tier1.conversation_auto_capture, src.agents.feedback_agent",
+      "missing_imports": [
+        "src.agents.feedback_agent",
+        "src.entry_point.agent_executor",
+        "src.cortex_agents.agent_types",
+        "src.entry_point.request_parser",
+        "src.tier2.pattern_suggestion_engine",
+        "src.cortex_agents.intent_router",
+        "src.tier1.conversation_auto_capture",
+        "src.tier1.conversation_auto_capture",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.tier2.pattern_suggestion_engine",
+        "src.tier1.conversation_auto_capture",
+        "src.agents.feedback_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_automatic_image_detection.py",
+      "reason": "Imports non-existent modules: src.tier1.image_detector, src.tier1.vision_orchestrator, src.tier1.image_detector, src.tier1.image_detector, src.tier1.image_detector, src.tier1.image_detector, src.tier1.vision_orchestrator, src.tier1.vision_orchestrator, src.tier1.image_detector, src.tier1.image_detector, src.tier1.vision_orchestrator",
+      "missing_imports": [
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_vision_api_enforcement.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.tier1.vision_orchestrator, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.tier1.image_detector, src.tier1.image_detector, src.tier1.image_detector, src.tier1.vision_orchestrator, src.tier1.image_detector, src.tier1.image_detector, src.cortex_agents.intent_router, src.cortex_agents.base_agent, src.tier1.vision_orchestrator, src.tier1.vision_orchestrator, src.tier1.vision_orchestrator, src.tier1.image_detector, src.tier1.vision_orchestrator, src.tier1.vision_orchestrator, src.tier1.image_detector, src.tier1.vision_orchestrator, src.tier1.vision_api",
+      "missing_imports": [
+        "src.cortex_agents.intent_router",
+        "src.tier1.vision_orchestrator",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.image_detector",
+        "src.tier1.image_detector",
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.base_agent",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.image_detector",
+        "src.tier1.vision_orchestrator",
+        "src.tier1.vision_api"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_documentation_e2e.py",
+      "reason": "Imports non-existent modules: src.operations.documentation_component_registry",
+      "missing_imports": [
+        "src.operations.documentation_component_registry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_template_renderer.py",
+      "reason": "Imports non-existent modules: src.core.template_renderer",
+      "missing_imports": [
+        "src.core.template_renderer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase4_tdd_demo_integration.py",
+      "reason": "Imports non-existent modules: src.tdd, src.tdd.code_runner",
+      "missing_imports": [
+        "src.tdd",
+        "src.tdd.code_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase2_milestone_22.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.test_quality_scorer, src.cortex_agents.test_generator.pattern_refiner, src.cortex_agents.test_generator.tier2_pattern_store",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.test_quality_scorer",
+        "src.cortex_agents.test_generator.pattern_refiner",
+        "src.cortex_agents.test_generator.tier2_pattern_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase2_milestone_21_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.tier2_pattern_store, src.cortex_agents.test_generator.pattern_learner, src.cortex_agents.test_generator.domain_knowledge_integrator",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.tier2_pattern_store",
+        "src.cortex_agents.test_generator.pattern_learner",
+        "src.cortex_agents.test_generator.domain_knowledge_integrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase2_deployment.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ux_enhancement_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ux_enhancement_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_commit_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.commit_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.commit_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_nl_tdd_integration.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.nl_tdd_processor, src.cortex_agents.test_generator.tdd_intent_router",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.nl_tdd_processor",
+        "src.cortex_agents.test_generator.tdd_intent_router"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase3_integration.py",
+      "reason": "Imports non-existent modules: src.policy",
+      "missing_imports": [
+        "src.policy"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_phase4_tdd_mastery.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.coverage_analyzer, src.cortex_agents.test_generator.mutation_tester, src.cortex_agents.test_generator.integration_test_generator, src.cortex_agents.test_generator.test_antipattern_detector, src.cortex_agents.test_generator.coverage_analyzer, src.cortex_agents.test_generator.mutation_tester, src.cortex_agents.test_generator.mutation_tester, src.cortex_agents.test_generator.mutation_tester",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.coverage_analyzer",
+        "src.cortex_agents.test_generator.mutation_tester",
+        "src.cortex_agents.test_generator.integration_test_generator",
+        "src.cortex_agents.test_generator.test_antipattern_detector",
+        "src.cortex_agents.test_generator.coverage_analyzer",
+        "src.cortex_agents.test_generator.mutation_tester",
+        "src.cortex_agents.test_generator.mutation_tester",
+        "src.cortex_agents.test_generator.mutation_tester"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_documentation_registry.py",
+      "reason": "Imports non-existent modules: src.operations.documentation_component_registry",
+      "missing_imports": [
+        "src.operations.documentation_component_registry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_generator/test_parametrized_enhancements.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.parametrized_test_generator",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.parametrized_test_generator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_generator/test_edge_case_enhancements.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.edge_case_analyzer",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.edge_case_analyzer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/test_generator/test_error_condition_enhancements.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.error_condition_generator",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.error_condition_generator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/reporting/test_alignment_reporter.py",
+      "reason": "Imports non-existent modules: src.reporting.alignment_reporter",
+      "missing_imports": [
+        "src.reporting.alignment_reporter"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_result.py",
+      "reason": "Imports non-existent modules: src.application.common.result",
+      "missing_imports": [
+        "src.application.common.result"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_mediator.py",
+      "reason": "Imports non-existent modules: src.application.common.mediator, src.application.common.interfaces, src.application.common.result, src.application.common.mediator, src.application.common.mediator",
+      "missing_imports": [
+        "src.application.common.mediator",
+        "src.application.common.interfaces",
+        "src.application.common.result",
+        "src.application.common.mediator",
+        "src.application.common.mediator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_event_dispatcher.py",
+      "reason": "Imports non-existent modules: src.application.common.event_dispatcher, src.domain.common.base_entity, src.domain.events",
+      "missing_imports": [
+        "src.application.common.event_dispatcher",
+        "src.domain.common.base_entity",
+        "src.domain.events"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_queries.py",
+      "reason": "Imports non-existent modules: src.application.queries.conversation_queries, src.application.queries.conversation_handlers",
+      "missing_imports": [
+        "src.application.queries.conversation_queries",
+        "src.application.queries.conversation_handlers"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_commands.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.commands.conversation_handlers",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.commands.conversation_handlers"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/test_guards.py",
+      "reason": "Imports non-existent modules: src.application.common.guards",
+      "missing_imports": [
+        "src.application.common.guards"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/validation/test_common_validators.py",
+      "reason": "Imports non-existent modules: src.application.validation.common_validators",
+      "missing_imports": [
+        "src.application.validation.common_validators"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/validation/test_validation_result.py",
+      "reason": "Imports non-existent modules: src.application.validation.validation_result",
+      "missing_imports": [
+        "src.application.validation.validation_result"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/application/validation/test_validator.py",
+      "reason": "Imports non-existent modules: src.application.validation.validator",
+      "missing_imports": [
+        "src.application.validation.validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/infrastructure/test_context_repository.py",
+      "reason": "Imports non-existent modules: src.infrastructure.persistence.db_context, src.infrastructure.persistence.repositories.context_repository, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.repositories.context_repository",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/infrastructure/test_conversation_repository.py",
+      "reason": "Imports non-existent modules: src.infrastructure.persistence.db_context, src.infrastructure.persistence.repositories.conversation_repository, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.repositories.conversation_repository",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/infrastructure/test_db_context.py",
+      "reason": "Imports non-existent modules: src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work",
+      "missing_imports": [
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/infrastructure/test_pattern_repository.py",
+      "reason": "Imports non-existent modules: src.infrastructure.persistence.db_context, src.infrastructure.persistence.repositories.pattern_repository, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.repositories.pattern_repository",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_pattern_confidence.py",
+      "reason": "Imports non-existent modules: src.domain.value_objects",
+      "missing_imports": [
+        "src.domain.value_objects"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_conversation_quality.py",
+      "reason": "Imports non-existent modules: src.domain.value_objects",
+      "missing_imports": [
+        "src.domain.value_objects"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_namespace.py",
+      "reason": "Imports non-existent modules: src.domain.value_objects",
+      "missing_imports": [
+        "src.domain.value_objects"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_relevance_score.py",
+      "reason": "Imports non-existent modules: src.domain.value_objects",
+      "missing_imports": [
+        "src.domain.value_objects"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_value_object.py",
+      "reason": "Imports non-existent modules: src.domain.common.value_object",
+      "missing_imports": [
+        "src.domain.common.value_object"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/test_base_entity.py",
+      "reason": "Imports non-existent modules: src.domain.common.base_entity",
+      "missing_imports": [
+        "src.domain.common.base_entity"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/specifications/test_common_specifications.py",
+      "reason": "Imports non-existent modules: src.domain.specifications",
+      "missing_imports": [
+        "src.domain.specifications"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/specifications/test_specification.py",
+      "reason": "Imports non-existent modules: src.domain.specifications",
+      "missing_imports": [
+        "src.domain.specifications"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/unit/domain/specifications/test_expression_specification.py",
+      "reason": "Imports non-existent modules: src.domain.specifications",
+      "missing_imports": [
+        "src.domain.specifications"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cognitive/test_confidence_scorer.py",
+      "reason": "Imports non-existent modules: src.cognitive.confidence_scorer",
+      "missing_imports": [
+        "src.cognitive.confidence_scorer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/collectors/test_conversation_pipeline_integration.py",
+      "reason": "Imports non-existent modules: src.collectors.conversation_collector, src.collectors.manager",
+      "missing_imports": [
+        "src.collectors.conversation_collector",
+        "src.collectors.manager"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/core/test_document_organization.py",
+      "reason": "Imports non-existent modules: src.core.document_validator",
+      "missing_imports": [
+        "src.core.document_validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawlers/test_workspace_topology.py",
+      "reason": "Imports non-existent modules: src.crawlers.workspace_topology_crawler, src.crawlers.base_crawler",
+      "missing_imports": [
+        "src.crawlers.workspace_topology_crawler",
+        "src.crawlers.base_crawler"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawlers/test_persistent_cache.py",
+      "reason": "Imports non-existent modules: src.crawlers.persistent_cache",
+      "missing_imports": [
+        "src.crawlers.persistent_cache"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawlers/test_database_inference.py",
+      "reason": "Imports non-existent modules: src.crawlers.database_inference_engine",
+      "missing_imports": [
+        "src.crawlers.database_inference_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/intelligence/test_multi_language_refactoring.py",
+      "reason": "Imports non-existent modules: src.intelligence, src.intelligence.analyzers.base_analyzer",
+      "missing_imports": [
+        "src.intelligence",
+        "src.intelligence.analyzers.base_analyzer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_conversation_capture.py",
+      "reason": "Imports non-existent modules: src.conversation_capture",
+      "missing_imports": [
+        "src.conversation_capture"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_cache_integration.py",
+      "reason": "Imports non-existent modules: src.caching",
+      "missing_imports": [
+        "src.caching"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_transaction_scenarios.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.queries.conversation_queries, src.application.commands.conversation_handlers, src.application.queries.conversation_handlers, src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.queries.conversation_queries",
+        "src.application.commands.conversation_handlers",
+        "src.application.queries.conversation_handlers",
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_conversation_workflow.py",
+      "reason": "Imports non-existent modules: src.domain.value_objects.conversation_quality, src.application.commands.conversation_commands, src.application.queries.conversation_queries, src.application.commands.conversation_handlers, src.application.queries.conversation_handlers, src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.domain.value_objects.conversation_quality",
+        "src.application.commands.conversation_commands",
+        "src.application.queries.conversation_queries",
+        "src.application.commands.conversation_handlers",
+        "src.application.queries.conversation_handlers",
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_tier_contracts_fixed.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.working_memory, src.tier1.working_memory, src.tier1.conversations, src.tier1.working_memory, src.tier1.conversations, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier1.working_memory, src.tier2.knowledge_graph, src.core.context_management, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.tier1.working_memory, src.tier1.working_memory",
+      "missing_imports": [
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.tier1.conversations",
+        "src.tier1.working_memory",
+        "src.tier1.conversations",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.core.context_management",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.tier1.working_memory",
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_event_dispatching.py",
+      "reason": "Imports non-existent modules: src.domain.events.conversation_events, src.application.events.event_dispatcher",
+      "missing_imports": [
+        "src.domain.events.conversation_events",
+        "src.application.events.event_dispatcher"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_tdd_mastery_learning_loop.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.bug_driven_learner, src.cortex_agents.test_generator.pattern_recommender",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.bug_driven_learner",
+        "src.cortex_agents.test_generator.pattern_recommender"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_context_search.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.queries.conversation_queries, src.application.commands.conversation_handlers, src.application.queries.conversation_handlers, src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.queries.conversation_queries",
+        "src.application.commands.conversation_handlers",
+        "src.application.queries.conversation_handlers",
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_first_time_setup.py",
+      "reason": "Imports non-existent modules: src.entry_point.cortex_entry",
+      "missing_imports": [
+        "src.entry_point.cortex_entry"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_tier_contracts.py",
+      "reason": "Imports non-existent modules: src.tier1.working_memory, src.tier1.working_memory, src.tier1.working_memory, src.tier1.conversations, src.tier1.working_memory, src.tier1.conversations, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier3.context_intelligence, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier1.working_memory, src.tier2.knowledge_graph, src.tier3.context_intelligence, src.core.context_management, src.tier1.working_memory, src.tier1.working_memory, src.tier3.context_intelligence",
+      "missing_imports": [
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.tier1.conversations",
+        "src.tier1.working_memory",
+        "src.tier1.conversations",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier3.context_intelligence",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier1.working_memory",
+        "src.tier2.knowledge_graph",
+        "src.tier3.context_intelligence",
+        "src.core.context_management",
+        "src.tier1.working_memory",
+        "src.tier1.working_memory",
+        "src.tier3.context_intelligence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_pattern_learning.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.queries.conversation_queries, src.application.commands.conversation_handlers, src.application.queries.conversation_handlers, src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.queries.conversation_queries",
+        "src.application.commands.conversation_handlers",
+        "src.application.queries.conversation_handlers",
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_policy_workflow.py",
+      "reason": "Imports non-existent modules: src.orchestrators.master_setup_orchestrator, src.operations.user_consent_manager, src.operations.policy_scanner, src.validation.policy_validator, src.operations.policy_scanner",
+      "missing_imports": [
+        "src.orchestrators.master_setup_orchestrator",
+        "src.operations.user_consent_manager",
+        "src.operations.policy_scanner",
+        "src.validation.policy_validator",
+        "src.operations.policy_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_handlers_integration.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.commands.conversation_handlers, src.application.queries.conversation_queries, src.application.queries.conversation_handlers, src.infrastructure.persistence.db_context, src.infrastructure.persistence.unit_of_work, src.infrastructure.migrations.migration_runner",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.commands.conversation_handlers",
+        "src.application.queries.conversation_queries",
+        "src.application.queries.conversation_handlers",
+        "src.infrastructure.persistence.db_context",
+        "src.infrastructure.persistence.unit_of_work",
+        "src.infrastructure.migrations.migration_runner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_phase_2_integration.py",
+      "reason": "Imports non-existent modules: src.crawlers.multi_app_orchestrator, src.tier2.knowledge_graph, src.crawlers.base_crawler",
+      "missing_imports": [
+        "src.crawlers.multi_app_orchestrator",
+        "src.tier2.knowledge_graph",
+        "src.crawlers.base_crawler"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/test_confidence_response_generator.py",
+      "reason": "Imports non-existent modules: src.response_templates.confidence_response_generator, src.tier2.knowledge_graph, src.cognitive.confidence_scorer",
+      "missing_imports": [
+        "src.response_templates.confidence_response_generator",
+        "src.tier2.knowledge_graph",
+        "src.cognitive.confidence_scorer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/integration/application/test_validation_pipeline.py",
+      "reason": "Imports non-existent modules: src.application.commands.conversation_commands, src.application.queries.conversation_queries, src.application.validation, src.application.behaviors.validation_behavior, src.application.common.result, src.application.behaviors.validation_behavior, src.application.common.result, src.application.behaviors.validation_behavior, src.application.common.result, src.application.common.interfaces",
+      "missing_imports": [
+        "src.application.commands.conversation_commands",
+        "src.application.queries.conversation_queries",
+        "src.application.validation",
+        "src.application.behaviors.validation_behavior",
+        "src.application.common.result",
+        "src.application.behaviors.validation_behavior",
+        "src.application.common.result",
+        "src.application.behaviors.validation_behavior",
+        "src.application.common.result",
+        "src.application.common.interfaces"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawler/test_adaptive_strategies.py",
+      "reason": "Imports non-existent modules: src.crawler.adaptive_strategies, src.crawler.size_detector",
+      "missing_imports": [
+        "src.crawler.adaptive_strategies",
+        "src.crawler.size_detector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawler/test_size_detector.py",
+      "reason": "Imports non-existent modules: src.crawler.size_detector",
+      "missing_imports": [
+        "src.crawler.size_detector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/crawler/test_timeout_prevention.py",
+      "reason": "Imports non-existent modules: src.crawler.timeout_prevention",
+      "missing_imports": [
+        "src.crawler.timeout_prevention"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_3_0/test_feature_2_question_routing.py",
+      "reason": "Imports non-existent modules: src.agents.namespace_detector, src.operations.modules.questions.question_router",
+      "missing_imports": [
+        "src.agents.namespace_detector",
+        "src.operations.modules.questions.question_router"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_3_0/test_feature_5_3_smart_auto_detection.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversations.smart_auto_detection, src.tier1.conversation_quality",
+      "missing_imports": [
+        "src.operations.modules.conversations.smart_auto_detection",
+        "src.tier1.conversation_quality"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/discovery/test_scanners.py",
+      "reason": "Imports non-existent modules: src.discovery.orchestrator_scanner, src.discovery.agent_scanner, src.discovery.entry_point_scanner, src.discovery.documentation_scanner",
+      "missing_imports": [
+        "src.discovery.orchestrator_scanner",
+        "src.discovery.agent_scanner",
+        "src.discovery.entry_point_scanner",
+        "src.discovery.documentation_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/setup/test_onboarding_module.py",
+      "reason": "Imports non-existent modules: src.setup.modules.onboarding_module, src.setup.base_setup_module",
+      "missing_imports": [
+        "src.setup.modules.onboarding_module",
+        "src.setup.base_setup_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/setup/test_post_installation_handler.py",
+      "reason": "Imports non-existent modules: src.setup.post_installation_handler",
+      "missing_imports": [
+        "src.setup.post_installation_handler"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/setup/test_gitignore_setup_module.py",
+      "reason": "Imports non-existent modules: src.setup.modules.gitignore_setup_module, src.setup.base_setup_module",
+      "missing_imports": [
+        "src.setup.modules.gitignore_setup_module",
+        "src.setup.base_setup_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/admin/test_gap_remediation_validation.py",
+      "reason": "Imports non-existent modules: src.operations.modules.admin.system_alignment_orchestrator, src.discovery.orchestrator_scanner, src.discovery.orchestrator_scanner",
+      "missing_imports": [
+        "src.operations.modules.admin.system_alignment_orchestrator",
+        "src.discovery.orchestrator_scanner",
+        "src.discovery.orchestrator_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/planning/test_ado_parser.py",
+      "reason": "Imports non-existent modules: src.planning.ado_parser",
+      "missing_imports": [
+        "src.planning.ado_parser"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_document_organizer.py",
+      "reason": "Imports non-existent modules: src.workflows.document_organizer",
+      "missing_imports": [
+        "src.workflows.document_organizer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_incremental_plan_generator.py",
+      "reason": "Imports non-existent modules: src.workflows.incremental_plan_generator",
+      "missing_imports": [
+        "src.workflows.incremental_plan_generator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_refactoring_intelligence.py",
+      "reason": "Imports non-existent modules: src.workflows.refactoring_intelligence",
+      "missing_imports": [
+        "src.workflows.refactoring_intelligence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_page_tracking.py",
+      "reason": "Imports non-existent modules: src.workflows.page_tracking, src.workflows.tdd_state_machine",
+      "missing_imports": [
+        "src.workflows.page_tracking",
+        "src.workflows.tdd_state_machine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_code_cleanup_validator.py",
+      "reason": "Imports non-existent modules: src.workflows.code_cleanup_validator",
+      "missing_imports": [
+        "src.workflows.code_cleanup_validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_streaming_plan_writer.py",
+      "reason": "Imports non-existent modules: src.workflows.streaming_plan_writer",
+      "missing_imports": [
+        "src.workflows.streaming_plan_writer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_lint_integration.py",
+      "reason": "Imports non-existent modules: src.workflows.lint_integration",
+      "missing_imports": [
+        "src.workflows.lint_integration"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_tdd_state_machine.py",
+      "reason": "Imports non-existent modules: src.workflows.tdd_state_machine",
+      "missing_imports": [
+        "src.workflows.tdd_state_machine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/workflows/test_tdd_workflow_orchestrator.py",
+      "reason": "Imports non-existent modules: src.workflows.tdd_workflow_orchestrator, src.workflows.page_tracking",
+      "missing_imports": [
+        "src.workflows.tdd_workflow_orchestrator",
+        "src.workflows.page_tracking"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_summary_generation_phase3.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.agent, src.cortex_agents.error_corrector, src.cortex_agents.health_validator.agent, src.cortex_agents.commit_handler, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.agent",
+        "src.cortex_agents.error_corrector",
+        "src.cortex_agents.health_validator.agent",
+        "src.cortex_agents.commit_handler",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_intent_router_rule_context.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.intent_router, src.cortex_agents.agent_types, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.intent_router",
+        "src.cortex_agents.agent_types",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_code_executor_intelligent_tests.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.tactical.code_executor, src.cortex_agents.base_agent",
+      "missing_imports": [
+        "src.cortex_agents.tactical.code_executor",
+        "src.cortex_agents.base_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_view_discovery_agent.py",
+      "reason": "Imports non-existent modules: src.agents.view_discovery_agent",
+      "missing_imports": [
+        "src.agents.view_discovery_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_brain_ingestion_agent.py",
+      "reason": "Imports non-existent modules: src.agents.brain_ingestion_agent, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator, src.agents.feature_completion_orchestrator",
+      "missing_imports": [
+        "src.agents.brain_ingestion_agent",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator",
+        "src.agents.feature_completion_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/agents/test_feedback_agent.py",
+      "reason": "Imports non-existent modules: src.agents.feedback_agent",
+      "missing_imports": [
+        "src.agents.feedback_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier0/test_brain_protection_loader.py",
+      "reason": "Imports non-existent modules: src.tier0.brain_protection_loader, src.tier0.brain_protector, src.tier0.brain_protector",
+      "missing_imports": [
+        "src.tier0.brain_protection_loader",
+        "src.tier0.brain_protector",
+        "src.tier0.brain_protector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/utils/test_progress_decorator.py",
+      "reason": "Imports non-existent modules: src.utils.progress_decorator, src.utils.progress_monitor",
+      "missing_imports": [
+        "src.utils.progress_decorator",
+        "src.utils.progress_monitor"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/utils/test_yaml_cache.py",
+      "reason": "Imports non-existent modules: src.utils.yaml_cache",
+      "missing_imports": [
+        "src.utils.yaml_cache"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/vision/test_extraction_formatter.py",
+      "reason": "Imports non-existent modules: src.vision.extraction_formatter",
+      "missing_imports": [
+        "src.vision.extraction_formatter"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/vision/test_failure_handler.py",
+      "reason": "Imports non-existent modules: src.vision.failure_handler",
+      "missing_imports": [
+        "src.vision.failure_handler"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_ado_dor_dod_validation.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_git_checkpoint_module.py",
+      "reason": "Imports non-existent modules: src.operations.modules.git_checkpoint_module",
+      "missing_imports": [
+        "src.operations.modules.git_checkpoint_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_ado_yaml_tracking.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_documentation_file_creation.py",
+      "reason": "Imports non-existent modules: src.operations",
+      "missing_imports": [
+        "src.operations"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_conversation_capture_module.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversation_capture_module, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.conversation_capture_module",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_ado_clarification.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_policy_scanner.py",
+      "reason": "Imports non-existent modules: src.operations.policy_scanner",
+      "missing_imports": [
+        "src.operations.policy_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_setup_gitignore.py",
+      "reason": "Imports non-existent modules: src.operations.setup",
+      "missing_imports": [
+        "src.operations.setup"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/test_demo_tutorial_integration.py",
+      "reason": "Imports non-existent modules: src.operations.modules.demo.demo_orchestrator, src.operations.modules.demo.ado_planning_demo, src.operations.modules.hands_on_tutorial_orchestrator, src.operations.modules.tutorial_validator",
+      "missing_imports": [
+        "src.operations.modules.demo.demo_orchestrator",
+        "src.operations.modules.demo.ado_planning_demo",
+        "src.operations.modules.hands_on_tutorial_orchestrator",
+        "src.operations.modules.tutorial_validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/test_cleanup_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.cleanup.cleanup_orchestrator, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.cleanup.cleanup_orchestrator",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/test_demo_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.demo.demo_orchestrator",
+      "missing_imports": [
+        "src.operations.modules.demo.demo_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/test_design_sync_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.design_sync.design_sync_orchestrator, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.design_sync.design_sync_orchestrator",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/optimization/test_optimize_cortex_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.optimization.optimize_cortex_orchestrator, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.optimization.optimize_cortex_orchestrator",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/optimization/test_optimize_alignment_integration.py",
+      "reason": "Imports non-existent modules: src.operations.modules.optimization.optimize_cortex_orchestrator, src.operations.base_operation_module",
+      "missing_imports": [
+        "src.operations.modules.optimization.optimize_cortex_orchestrator",
+        "src.operations.base_operation_module"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/admin/test_system_alignment_orchestrator.py",
+      "reason": "Imports non-existent modules: src.operations.modules.admin.system_alignment_orchestrator, src.operations.base_operation_module, src.discovery.orchestrator_scanner, src.discovery.agent_scanner",
+      "missing_imports": [
+        "src.operations.modules.admin.system_alignment_orchestrator",
+        "src.operations.base_operation_module",
+        "src.discovery.orchestrator_scanner",
+        "src.discovery.agent_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/conversations/test_tier2_learning.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversations.tier2_learning",
+      "missing_imports": [
+        "src.operations.modules.conversations.tier2_learning"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/conversations/test_direct_import.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversations.direct_import",
+      "missing_imports": [
+        "src.operations.modules.conversations.direct_import"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/conversations/test_phase3_integration.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversations.quality_monitor, src.operations.modules.conversations.smart_hint_generator, src.operations.modules.conversations.tier2_learning",
+      "missing_imports": [
+        "src.operations.modules.conversations.quality_monitor",
+        "src.operations.modules.conversations.smart_hint_generator",
+        "src.operations.modules.conversations.tier2_learning"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/conversations/test_quality_monitor.py",
+      "reason": "Imports non-existent modules: src.operations.modules.conversations.quality_monitor",
+      "missing_imports": [
+        "src.operations.modules.conversations.quality_monitor"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/ideas/test_context_linker.py",
+      "reason": "Imports non-existent modules: src.operations.modules.ideas.context_linker, src.operations.modules.ideas.idea_queue",
+      "missing_imports": [
+        "src.operations.modules.ideas.context_linker",
+        "src.operations.modules.ideas.idea_queue"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/ideas/test_natural_language_interface.py",
+      "reason": "Imports non-existent modules: src.operations.modules.ideas",
+      "missing_imports": [
+        "src.operations.modules.ideas"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/ideas/test_idea_organizer.py",
+      "reason": "Imports non-existent modules: src.operations.modules.ideas, src.operations.modules.ideas",
+      "missing_imports": [
+        "src.operations.modules.ideas",
+        "src.operations.modules.ideas"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/ideas/test_idea_queue.py",
+      "reason": "Imports non-existent modules: src.operations.modules.ideas.idea_queue",
+      "missing_imports": [
+        "src.operations.modules.ideas.idea_queue"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/operations/modules/questions/test_question_router.py",
+      "reason": "Imports non-existent modules: src.agents.namespace_detector, src.agents.namespace_detector, src.agents.namespace_detector, src.agents.namespace_detector, src.agents.namespace_detector, src.agents.namespace_detector, src.agents.namespace_detector",
+      "missing_imports": [
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector",
+        "src.agents.namespace_detector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier1/test_context_injection_helper.py",
+      "reason": "Imports non-existent modules: src.tier1.context_injection_helper, src.tier1.context_injection_helper, src.tier1.context_injection_helper",
+      "missing_imports": [
+        "src.tier1.context_injection_helper",
+        "src.tier1.context_injection_helper",
+        "src.tier1.context_injection_helper"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier1/test_tier1_integration.py",
+      "reason": "Imports non-existent modules: src.tier1.context_formatter, src.context_injector, src.tier1.relevance_scorer, src.tier1.response_context_integration, src.operations.modules.conversation_capture_module, src.operations.modules.context_display_module, src.operations.modules.context_control_module, src.tier1.relevance_scorer, src.tier1.relevance_scorer",
+      "missing_imports": [
+        "src.tier1.context_formatter",
+        "src.context_injector",
+        "src.tier1.relevance_scorer",
+        "src.tier1.response_context_integration",
+        "src.operations.modules.conversation_capture_module",
+        "src.operations.modules.context_display_module",
+        "src.operations.modules.context_control_module",
+        "src.tier1.relevance_scorer",
+        "src.tier1.relevance_scorer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier1/test_adaptive_context_loading.py",
+      "reason": "Imports non-existent modules: src.context_injector",
+      "missing_imports": [
+        "src.context_injector"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier1/test_relevance_scorer.py",
+      "reason": "Imports non-existent modules: src.tier1.relevance_scorer",
+      "missing_imports": [
+        "src.tier1.relevance_scorer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier1/test_context_formatter.py",
+      "reason": "Imports non-existent modules: src.tier1.context_formatter",
+      "missing_imports": [
+        "src.tier1.context_formatter"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/response_templates/test_multi_template_orchestrator.py",
+      "reason": "Imports non-existent modules: src.response_templates.multi_template_orchestrator, src.response_templates.template_registry, src.response_templates.template_loader",
+      "missing_imports": [
+        "src.response_templates.multi_template_orchestrator",
+        "src.response_templates.template_registry",
+        "src.response_templates.template_loader"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/response_templates/test_base_template_composition.py",
+      "reason": "Imports non-existent modules: src.response_templates.template_loader",
+      "missing_imports": [
+        "src.response_templates.template_loader"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_upgrade_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.upgrade_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.upgrade_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_planning_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.planning_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.planning_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_session_completion_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.session_completion_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.session_completion_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_lint_validation_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.lint_validation_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.lint_validation_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_high_value_orchestrators.py",
+      "reason": "Imports non-existent modules: src.operations.modules.admin.system_alignment_orchestrator, src.operations.modules.hands_on_tutorial_orchestrator, src.operations.modules.cleanup.holistic_cleanup_orchestrator",
+      "missing_imports": [
+        "src.operations.modules.admin.system_alignment_orchestrator",
+        "src.operations.modules.hands_on_tutorial_orchestrator",
+        "src.operations.modules.cleanup.holistic_cleanup_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_pr_context_builder.py",
+      "reason": "Imports non-existent modules: src.orchestrators.pr_context_builder",
+      "missing_imports": [
+        "src.orchestrators.pr_context_builder"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_code_review_e2e.py",
+      "reason": "Imports non-existent modules: src.orchestrators.code_review_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.code_review_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_analysis_engine.py",
+      "reason": "Imports non-existent modules: src.orchestrators.analysis_engine",
+      "missing_imports": [
+        "src.orchestrators.analysis_engine"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_git_checkpoint_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.git_checkpoint_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.git_checkpoint_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_ado_work_item_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_setup_epm_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.setup_epm_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.setup_epm_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_ado_git_integration.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/orchestrators/test_code_review_orchestrator.py",
+      "reason": "Imports non-existent modules: src.orchestrators.code_review_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.code_review_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/components/test_intent_router.py",
+      "reason": "Imports non-existent modules: src.components.intent_router",
+      "missing_imports": [
+        "src.components.intent_router"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/conversation_capture/test_direct_import.py",
+      "reason": "Imports non-existent modules: src.conversation_capture.command_processor, src.conversation_capture.capture_manager, src.tier1.working_memory",
+      "missing_imports": [
+        "src.conversation_capture.command_processor",
+        "src.conversation_capture.capture_manager",
+        "src.tier1.working_memory"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/conversation_capture/test_file_parameter_syntax.py",
+      "reason": "Imports non-existent modules: src.conversation_capture.command_processor",
+      "missing_imports": [
+        "src.conversation_capture.command_processor"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_agents/test_base_agent_progress.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.base_agent, src.utils.progress_decorator",
+      "missing_imports": [
+        "src.cortex_agents.base_agent",
+        "src.utils.progress_decorator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_agents/test_generator/test_pattern_recommender.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.pattern_recommender",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.pattern_recommender"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_agents/test_generator/test_bug_driven_learner.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.bug_driven_learner",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.bug_driven_learner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_agents/test_generator/test_failure_analyzer.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.test_generator.failure_analyzer",
+      "missing_imports": [
+        "src.cortex_agents.test_generator.failure_analyzer"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/cortex_agents/strategic/test_architecture_intelligence_agent.py",
+      "reason": "Imports non-existent modules: src.cortex_agents.strategic.architecture_intelligence_agent, src.cortex_agents.base_agent, src.tier3.architecture_health_history, src.tier3.storage.architecture_health_store",
+      "missing_imports": [
+        "src.cortex_agents.strategic.architecture_intelligence_agent",
+        "src.cortex_agents.base_agent",
+        "src.tier3.architecture_health_history",
+        "src.tier3.storage.architecture_health_store"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_ado_work_item_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.orchestrators.ado_work_item_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.ado_work_item_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_session_completion_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_upgrade_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_feedback_agent_benchmarks.py",
+      "reason": "Imports non-existent modules: src.agents.feedback_agent",
+      "missing_imports": [
+        "src.agents.feedback_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_git_checkpoint_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_lint_validation_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_planning_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.orchestrators.planning_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.planning_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_tdd_workflow_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.validation.performance_benchmarker",
+      "missing_imports": [
+        "src.validation.performance_benchmarker"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_optimization.py",
+      "reason": "Imports non-existent modules: src.workflows.ast_cache, src.workflows.pattern_cache, src.workflows.smell_cache, src.workflows.batch_processor, src.workflows.batch_processor, src.workflows.batch_processor",
+      "missing_imports": [
+        "src.workflows.ast_cache",
+        "src.workflows.pattern_cache",
+        "src.workflows.smell_cache",
+        "src.workflows.batch_processor",
+        "src.workflows.batch_processor",
+        "src.workflows.batch_processor"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_setup_epm_orchestrator_benchmarks.py",
+      "reason": "Imports non-existent modules: src.orchestrators.setup_epm_orchestrator",
+      "missing_imports": [
+        "src.orchestrators.setup_epm_orchestrator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/performance/test_view_discovery_agent_benchmarks.py",
+      "reason": "Imports non-existent modules: src.agents.view_discovery_agent",
+      "missing_imports": [
+        "src.agents.view_discovery_agent"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/caching/test_validation_cache.py",
+      "reason": "Imports non-existent modules: src.caching.validation_cache",
+      "missing_imports": [
+        "src.caching.validation_cache"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/caching/test_cache_warming.py",
+      "reason": "Imports non-existent modules: src.caching.cache_warmer, src.caching",
+      "missing_imports": [
+        "src.caching.cache_warmer",
+        "src.caching"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/validation/test_template_header_validator.py",
+      "reason": "Imports non-existent modules: src.validation.template_header_validator",
+      "missing_imports": [
+        "src.validation.template_header_validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/validation/test_file_organization_validator.py",
+      "reason": "Imports non-existent modules: src.validation.file_organization_validator",
+      "missing_imports": [
+        "src.validation.file_organization_validator"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/validation/test_policy_validator.py",
+      "reason": "Imports non-existent modules: src.validation.policy_validator, src.operations.policy_scanner",
+      "missing_imports": [
+        "src.validation.policy_validator",
+        "src.operations.policy_scanner"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "file_path": "tests/tier2/test_plan_sync_manager.py",
+      "reason": "Imports non-existent modules: src.operations.modules.planning.plan_sync_manager",
+      "missing_imports": [
+        "src.operations.modules.planning.plan_sync_manager"
+      ],
+      "confidence": 0.9
+    }
+  ]
+}

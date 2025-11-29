@@ -1,0 +1,3 @@
+# DALL-E Prompt: Operation Pipeline
+
+Create a pipeline diagram showing operation stages...

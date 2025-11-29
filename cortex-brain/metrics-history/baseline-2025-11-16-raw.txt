@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\PROJECTS\CORTEX\scripts\admin\cortex_optimizer.py", line 485, in <module>
+    main()
+    ~~~~^^
+  File "D:\PROJECTS\CORTEX\scripts\admin\cortex_optimizer.py", line 467, in main
+    result = optimizer.analyze(report_format=args.report)
+  File "D:\PROJECTS\CORTEX\scripts\admin\cortex_optimizer.py", line 371, in analyze
+    print("\U0001f50d CORTEX Codebase Optimization Analysis")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50d' in position 0: character maps to <undefined>

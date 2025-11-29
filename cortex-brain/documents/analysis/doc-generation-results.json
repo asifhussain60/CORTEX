@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-11-19T14:59:20.804893",
+  "generated_files": [
+    "docs\\architecture\\epmo-documentation.md"
+  ],
+  "components": {
+    "epmo": {
+      "status": "success",
+      "markdown_content_lines": 5931,
+      "diagrams": 1,
+      "image_prompts": 3,
+      "visual_stats": {
+        "total_diagrams": 1,
+        "mermaid_diagrams": 1,
+        "image_prompts": 3,
+        "multi_modal_diagrams": 1
+      }
+    },
+    "diagrams": {
+      "status": "error",
+      "error": "EPMDocumentationModel.__init__() got an unexpected keyword argument 'module_name'"
+    },
+    "mkdocs": {
+      "status": "skipped",
+      "reason": "mkdocs.yml not found"
+    },
+    "api_docs": {
+      "status": "error",
+      "error": "No module named 'src.operations.update_documentation'"
+    }
+  },
+  "summary": {
+    "total_components": 4,
+    "successful": 1,
+    "failed": 3,
+    "files_generated": 1,
+    "completion_percentage": 25.0
+  }
+}

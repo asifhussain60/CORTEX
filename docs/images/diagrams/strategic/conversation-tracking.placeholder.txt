@@ -1,0 +1,2 @@
+Placeholder for strategic/conversation-tracking.png
+Generate using DALL-E prompt: docs/diagrams/prompts/04-conversation-tracking-prompt.md

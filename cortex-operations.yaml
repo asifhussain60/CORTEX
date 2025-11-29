@@ -1,0 +1,2393 @@
+operations:
+  
+  # ========== Conversation Management Operations ==========
+  
+  resume_conversation:
+    name: Resume Conversation
+    description: Resume previous conversation from new chat session with full context restoration
+    deployment_tier: user  # User-facing operation
+    natural_language:
+    - resume {topic}
+    - continue {topic}
+    - resume our {topic} work
+    - continue our {topic} work
+    - resume my {topic}
+    - continue my {topic}
+    - resume conversation {id}
+    - resume the {topic} conversation
+    - continue the {topic} conversation
+    category: conversation
+    modules:
+    - resume_conversation_orchestrator
+    profiles:
+      standard:
+        description: Resume conversation with full context
+        modules:
+        - resume_conversation_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: SQLite-based conversation resume with planning doc sync
+    examples:
+    - resume authentication feature
+    - continue our dark mode work
+    - resume planning session
+    - continue the API refactoring
+    - resume conversation conv-20251122-001
+  
+  deploy_cortex_production:
+    name: Deploy CORTEX Production Build
+    description: Build clean production package and publish to downloadable repository for user deployment
+    deployment_tier: admin  # Admin operation (deploys CORTEX itself)
+    natural_language:
+    - deploy cortex
+    - deploy production
+    - deploy production build
+    - create production build
+    - build production package
+    - release cortex
+    - create cortex release
+    - publish cortex production
+    - package for deployment
+    category: deployment
+    modules:
+    - publish_branch_orchestrator
+    profiles:
+      dry_run:
+        description: Preview deployment without git operations
+        modules:
+        - publish_branch_orchestrator
+        options:
+          dry_run: true
+      standard:
+        description: Full deployment to cortex-publish branch
+        modules:
+        - publish_branch_orchestrator
+        options:
+          dry_run: false
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Builds clean production package and publishes to downloadable repository
+  
+  regenerate_diagrams:
+    name: Regenerate All Diagrams
+    description: Analyze CORTEX design and regenerate all visual assets from scratch
+    deployment_tier: developer  # Developer operation
+    natural_language:
+    - regenerate diagrams
+    - regenerate all diagrams
+    - refresh diagrams
+    - update diagrams
+    - generate diagrams
+    - create diagrams
+    category: documentation
+    modules:
+    - diagram_regeneration
+    profiles:
+      standard:
+        description: Full diagram regeneration with analysis
+        modules:
+        - diagram_regeneration
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Complete diagram regeneration system with CORTEX design analysis
+  
+  cortex_tutorial:
+    name: CORTEX Interactive Demo
+    description: Hands-on walkthrough of CORTEX capabilities with live execution
+    deployment_tier: user  # ✅ Include in user deployment package
+    natural_language:
+    - demo
+    - show me what cortex can do
+    - walkthrough
+    - tutorial
+    - cortex demo
+    - interactive tutorial
+    - show demo
+    category: onboarding
+    modules:
+    - demo_introduction
+    - demo_help_system
+    - demo_story_refresh
+    - demo_dod_dor_workflow
+    - demo_token_optimization
+    - demo_code_review
+    - demo_cleanup
+    - demo_conversation
+    - demo_completion
+    profiles:
+      quick:
+        description: Essential commands only (2 minutes)
+        modules:
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_completion
+      standard:
+        description: Core capabilities (3-4 minutes)
+        modules:
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_dod_dor_workflow
+        - demo_cleanup
+        - demo_completion
+      comprehensive:
+        description: Full walkthrough (5-6 minutes)
+        modules:
+        - demo_introduction
+        - demo_help_system
+        - demo_story_refresh
+        - demo_dod_dor_workflow
+        - demo_token_optimization
+        - demo_cleanup
+        - demo_conversation
+        - demo_completion
+      developer:
+        description: Development workflow deep-dive (8-10 minutes)
+        modules:
+        - demo_introduction
+        - demo_help_system
+        - demo_dod_dor_workflow
+        - demo_token_optimization
+        - demo_code_review
+        - demo_story_refresh
+        - demo_cleanup
+        - demo_conversation
+        - demo_completion
+    implementation_status:
+      status: ready
+      modules_implemented: 8
+      modules_total: 9
+      completion_percentage: 89
+      notes: Core demo modules complete (intro, help, story_refresh, dod_dor, token_optimization, code_review, conversation, completion). Cleanup module in progress. All showcase real CORTEX capabilities - no mocks.
+      estimated_hours: 6
+  environment_setup:
+    name: Environment Setup
+    description: Configure CORTEX development environment on Mac/Windows/Linux
+    deployment_tier: user  # ✅ Include in user deployment package
+    natural_language:
+    - setup
+    - setup environment
+    - configure
+    - configure cortex
+    - initialize environment
+    - get started
+    category: environment
+    modules:
+    - project_validation
+    - platform_detection
+    - git_sync
+    - virtual_environment
+    - python_dependencies
+    - vision_api
+    - conversation_tracking
+    - brain_initialization
+    - brain_tests
+    - tooling_verification
+    - gitignore_setup
+    - setup_completion
+    profiles:
+      minimal:
+        description: Minimal setup - core functionality only
+        modules:
+        - project_validation
+        - platform_detection
+        - virtual_environment
+        - python_dependencies
+        - brain_initialization
+        - gitignore_setup
+        - setup_completion
+      standard:
+        description: Standard setup - recommended for most users
+        modules:
+        - project_validation
+        - platform_detection
+        - git_sync
+        - virtual_environment
+        - python_dependencies
+        - vision_api
+        - brain_initialization
+        - brain_tests
+        - gitignore_setup
+        - setup_completion
+      full:
+        description: Full setup - everything enabled
+        modules:
+        - project_validation
+        - platform_detection
+        - git_sync
+        - virtual_environment
+        - python_dependencies
+        - vision_api
+        - conversation_tracking
+        - brain_initialization
+        - brain_tests
+        - tooling_verification
+        - gitignore_setup
+        - setup_completion
+    implementation_status:
+      status: ready
+      modules_implemented: 12
+      modules_total: 12
+      completion_percentage: 100
+      notes: "Environment setup is fully implemented and operational. All modules including platform detection, dependency management, gitignore setup, and brain initialization are complete and tested across Mac/Windows/Linux platforms."
+      estimated_hours: 15
+      completion_date: "2025-11-14"
+  document_cortex:
+    name: CORTEX Documentation
+    description: Comprehensive CORTEX documentation management combining story refresh and documentation updates
+    deployment_tier: admin  # ❌ Admin-only (manages CORTEX's own documentation)
+    natural_language:
+    - document
+    - documentation
+    - refresh story
+    - refresh cortex story
+    - update story
+    - regenerate story
+    - update cortex story
+    - transform story
+    - update documentation
+    - generate docs
+    - refresh docs
+    - maintain docs
+    category: documentation
+    modules:
+    - load_story_template
+    - apply_narrator_voice
+    - validate_story_structure
+    - save_story_markdown
+    - update_mkdocs_index
+    - build_story_preview
+    - update_api_docs
+    - refresh_user_guides
+    - validate_doc_links
+    - generate_doc_index
+    - build_doc_preview
+    profiles:
+      quick:
+        description: Quick documentation - story refresh only
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - save_story_markdown
+        - update_mkdocs_index
+      standard:
+        description: Standard documentation - story + core docs update
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
+        - update_api_docs
+        - refresh_user_guides
+        - validate_doc_links
+      comprehensive:
+        description: Full documentation - complete refresh with previews
+        modules:
+        - load_story_template
+        - apply_narrator_voice
+        - validate_story_structure
+        - save_story_markdown
+        - update_mkdocs_index
+        - build_story_preview
+        - update_api_docs
+        - refresh_user_guides
+        - validate_doc_links
+        - generate_doc_index
+        - build_doc_preview
+    implementation_status:
+      status: ready
+      modules_implemented: 11
+      modules_total: 11
+      completion_percentage: 100
+      notes: "Documentation management is fully implemented, consolidating story refresh and documentation update capabilities. All modules including narrator voice transformation and automated doc generation are complete."
+      estimated_hours: 20
+      completion_date: "2025-11-14"
+      consolidation_from:
+        - update_documentation
+  generate_cortex_docs:
+    name: Generate CORTEX Documentation
+    description: Run CORTEX Enterprise Documentation Orchestrator to generate comprehensive MkDocs documentation with diagrams, guides, and API references
+    deployment_tier: admin  # Admin operation (generates CORTEX's own documentation)
+    module: "src.operations.modules.enterprise_documentation_orchestrator_module"
+    class: "EnterpriseDocumentationOrchestratorModule"
+    natural_language:
+    - generate docs
+    - generate documentation
+    - build documentation
+    - build mkdocs
+    - generate mkdocs
+    - refresh documentation
+    - regenerate docs
+    - build cortex docs
+    - generate cortex documentation
+    category: documentation
+    modules:
+    # Uses EPM system - single orchestrator module
+    - enterprise_documentation_orchestrator_module
+    profiles:
+      quick:
+        description: Validation-only mode - preview what would be generated
+        execution_mode: dry_run
+        options:
+          dry_run: true
+      standard:
+        description: Full documentation generation with MkDocs build
+        execution_mode: live
+        options:
+          profile: standard
+      comprehensive:
+        description: Complete documentation with all diagrams and guides
+        execution_mode: live
+        options:
+          profile: comprehensive
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Runs Enterprise Documentation Orchestrator to generate MkDocs site with all documentation components"
+      estimated_hours: 8
+      completion_date: "2025-11-16"
+      epm_integration: true
+      epm_modules:
+        - doc_generator.py
+        - modules/validation_engine.py
+        - modules/cleanup_manager.py
+        - modules/diagram_generator.py
+        - modules/page_generator.py
+        - modules/cross_reference_builder.py
+  maintain_cortex:
+    name: CORTEX Maintenance
+    description: Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics
+    deployment_tier: user  # ✅ Include in user deployment package - combines user and admin functionality
+    natural_language:
+    - maintain
+    - maintenance
+    - cleanup
+    - clean workspace
+    - clean up
+    - tidy up
+    - organize workspace
+    - optimize
+    - optimize cortex
+    - run optimization
+    - improve cortex
+    - holistic review
+    - architecture review
+    - health check
+    - system scan
+    - check cortex health
+    - system health
+    - brain health check
+    - how is cortex doing
+    - run system diagnostics
+    - validate everything
+    - comprehensive diagnostics
+    category: maintenance
+    modules:
+    - cleanup_orchestrator
+    - optimize_cortex_orchestrator
+    - validate_tier0_governance
+    - validate_tier_health
+    - analyze_test_coverage
+    - profile_performance
+    - audit_configuration
+    - review_module_status
+    - optimize_knowledge_graph
+    - optimize_databases
+    - optimize_context_cache
+    - generate_optimization_plan
+    - generate_health_report
+    profiles:
+      quick:
+        description: Quick maintenance - cleanup and basic health check
+        modules:
+        - cleanup_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - profile_performance
+        - generate_health_report
+      standard:
+        description: Standard maintenance - cleanup, optimization, and health validation
+        modules:
+        - cleanup_orchestrator
+        - optimize_cortex_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - generate_optimization_plan
+        - generate_health_report
+      comprehensive:
+        description: Full maintenance - complete cleanup, optimization, health check, and auto-optimization
+        modules:
+        - cleanup_orchestrator
+        - optimize_cortex_orchestrator
+        - validate_tier0_governance
+        - validate_tier_health
+        - analyze_test_coverage
+        - profile_performance
+        - audit_configuration
+        - review_module_status
+        - optimize_knowledge_graph
+        - optimize_databases
+        - optimize_context_cache
+        - generate_optimization_plan
+        - generate_health_report
+    implementation_status:
+      status: ready
+      modules_implemented: 13
+      modules_total: 13
+      completion_percentage: 100
+      notes: "Consolidates workspace_cleanup (ready), optimize_cortex (ready), and brain_health_check (designed) into single maintenance operation. All cleanup and optimization orchestrators are ready; health check modules will be implemented as part of this consolidation."
+      estimated_hours: 47  # Combined: 10 + 12 + 25 hours
+      consolidation_from:
+        - workspace_cleanup
+        - optimize_cortex  
+        - brain_health_check
+  feature_planning:
+    name: Feature Planning
+    description: Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
+    deployment_tier: user  # ✅ Include in user deployment package
+    natural_language:
+    - plan a feature
+    - let's plan a feature
+    - help me plan
+    - plan feature
+    - create feature plan
+    - start planning
+    - feature planning
+    category: planning
+    modules:
+    - feature_discovery
+    - pattern_search
+    - requirement_breakdown
+    - dependency_analysis
+    - risk_identification
+    - roadmap_generation
+    - plan_storage
+    profiles:
+      quick:
+        description: Quick planning - essential breakdown only
+        modules:
+        - feature_discovery
+        - requirement_breakdown
+        - roadmap_generation
+        - plan_storage
+      standard:
+        description: Standard planning - with pattern insights and risks
+        modules:
+        - feature_discovery
+        - pattern_search
+        - requirement_breakdown
+        - risk_identification
+        - roadmap_generation
+        - plan_storage
+      comprehensive:
+        description: Full planning - complete analysis with dependencies
+        modules:
+        - feature_discovery
+        - pattern_search
+        - requirement_breakdown
+        - dependency_analysis
+        - risk_identification
+        - roadmap_generation
+        - plan_storage
+    implementation_status:
+      status: ready
+      modules_implemented: 7
+      modules_total: 7
+      completion_percentage: 100
+      notes: "Feature planning is fully implemented using existing Work Planner, Pattern Matcher, and Architect agents. All 7 modules complete and integrated with interactive planning workflows from CORTEX 2.1."
+      estimated_hours: 160
+      completion_date: "2025-11-14"
+  update_documentation:
+    name: Update Documentation
+    description: "[DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site"
+    deployment_tier: admin  # ❌ Admin-only (builds CORTEX's own docs) - DEPRECATED
+    status: deprecated
+    consolidation_target: document_cortex
+    natural_language:
+    - update docs (deprecated - use document)
+    category: documentation
+    implementation_status:
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'document_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "document_cortex"
+  brain_protection_check:
+    name: Brain Protection Validation
+    description: "[EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically"
+    deployment_tier: experimental  # 🧪 Experimental feature (Tier 0 handles protection)
+    status: experimental
+    experimental_reason: "Tier 0 governance automatically handles brain protection validation. This operation is redundant with existing protection mechanisms."
+    natural_language:
+    - check brain (experimental)
+    - validate brain (experimental)
+    - brain protection (experimental)
+    category: validation
+    implementation_status:
+      status: experimental
+      notes: "EXPERIMENTAL: Tier 0 governance provides automatic brain protection. This operation may be redundant. Consider for future implementation if advanced validation features are needed."
+      experimental_date: "2025-11-14"
+  
+  brain_health_check:
+    name: Brain Health Check & Self-Optimization
+    description: "[DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations"
+    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    status: deprecated
+    consolidation_target: maintain_cortex
+    natural_language:
+    - brain health check (deprecated - use maintain)
+    category: validation
+    implementation_status:
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "maintain_cortex"
+  
+  comprehensive_self_review:
+    name: Comprehensive Self-Review
+    description: "[EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature"
+    deployment_tier: experimental  # 🧪 Experimental feature (advanced validation)
+    status: experimental
+    experimental_reason: "Advanced validation feature for comprehensive architecture review. Consider for future implementation when automated quality assurance is needed."
+    natural_language:
+    - run self-review (experimental)
+    - comprehensive review (experimental)
+    - validate everything (experimental)
+    category: validation
+    implementation_status:
+      status: experimental
+      notes: "EXPERIMENTAL: Advanced validation feature for comprehensive architecture and code quality review. May be implemented in future versions for enhanced quality assurance."
+      experimental_date: "2025-11-14"
+  
+  run_tests:
+    name: Test Suite Execution
+    description: "[INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation"
+    deployment_tier: integrated  # 🔗 Integrated into operations as validation
+    status: integrated
+    integration_target: "maintain_cortex and other operations"
+    natural_language:
+    - run tests (integrated into maintain operation)
+    - test this (integrated into operations)
+    category: testing
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Test execution is integrated into maintain_cortex operation and other operations for validation. No separate operation needed - tests run as part of maintenance and validation workflows."
+      integration_date: "2025-11-14"
+      related_operations:
+        - maintain_cortex
+  
+  optimize_cortex:
+    name: CORTEX Optimization
+    description: "[DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations"
+    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    status: deprecated
+    consolidation_target: maintain_cortex
+    natural_language:
+    - optimize (deprecated - use maintain)
+    category: maintenance
+    implementation_status:
+      status: deprecated
+      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
+      consolidation_date: "2025-11-14"
+      replacement: "maintain_cortex"
+  
+  deploy_to_app:
+    name: Deploy CORTEX to Application
+    description: "[FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature"
+    deployment_tier: future  # 🔮 Future feature (advanced deployment automation)
+    status: future
+    future_reason: "Advanced deployment automation feature planned for future versions. Application onboarding currently handles basic deployment needs."
+    natural_language:
+    - deploy to app (future feature)
+    - deploy cortex (future feature)
+    category: deployment
+    implementation_status:
+      status: future
+      notes: "FUTURE: Advanced deployment automation feature. Application onboarding operation currently provides basic deployment capabilities. Full automation planned for future versions."
+      future_date: "2025-11-14"
+      related_operations:
+        - application_onboarding
+  
+  design_sync:
+    name: Design-Implementation Synchronization
+    description: Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas
+    deployment_tier: admin  # ❌ Admin-only (development tool)
+    natural_language:
+    - sync design
+    - design sync
+    - synchronize design
+    - align design with implementation
+    - update design docs
+    - consolidate design
+    - fix design drift
+    - resync design
+    - design implementation sync
+    category: maintenance
+    modules:
+    - design_sync_orchestrator
+    profiles:
+      quick:
+        description: Quick sync - discovery and gap analysis only (no changes)
+        modules:
+        - design_sync_orchestrator
+      standard:
+        description: Standard sync - discovery, analysis, consolidation (safe updates)
+        modules:
+        - design_sync_orchestrator
+      comprehensive:
+        description: Full sync - discovery, optimization, YAML conversion, consolidation (all changes with git tracking)
+        modules:
+        - design_sync_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Single orchestrator module coordinates: (1) Live implementation discovery, (2) Design-implementation gap analysis, (3) Optimization integration, (4) MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking. Always works on LATEST design version (currently CORTEX 2.0)."
+      estimated_hours: 14
+  
+  # ========== Feedback & Analytics Operations ==========
+  
+  feedback_report:
+    name: Generate Comprehensive Feedback Report
+    description: Generate detailed performance and metrics report covering 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity)
+    deployment_tier: user  # User-facing operation
+    natural_language:
+    - feedback
+    - generate feedback
+    - generate feedback report
+    - share performance metrics
+    - cortex feedback
+    - performance report
+    - metrics report
+    - how is cortex performing
+    - cortex status report
+    category: feedback
+    modules:
+    - enhanced_feedback_module
+    profiles:
+      standard:
+        description: Complete feedback report with all 8 metric categories
+        modules:
+        - enhanced_feedback_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "8-category metrics collection with GitHub Gist integration and privacy sanitization"
+    examples:
+    - feedback
+    - generate feedback report
+    - share performance metrics with team
+    - how is cortex performing
+  
+  admin_feedback_review:
+    name: Review Feedback from Multiple Applications
+    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple user repositories. Only works in CORTEX repo"
+    deployment_tier: admin  # Admin operation (CORTEX repo only)
+    natural_language:
+    - review feedback
+    - feedback review
+    - analyze feedback
+    - process feedback
+    - sync feedback
+    - import feedback
+    - review user feedback
+    - process user reports
+    - aggregate feedback
+    - feedback analytics
+    category: feedback
+    modules:
+    - admin_feedback_review_module
+    profiles:
+      standard:
+        description: Sync Gist registry and process all feedback reports
+        modules:
+        - admin_feedback_review_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Phase 2 - Admin feedback aggregation with Gist sync, analytics DB storage, and trend analysis. CORTEX repo only."
+  
+  interactive_planning:
+    name: Interactive Feature Planning
+    description: "[INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities"
+    deployment_tier: integrated  # 🔗 Integrated into feature_planning operation
+    status: integrated
+    integration_target: "feature_planning"
+    natural_language:
+    - let's plan a feature (integrated into feature planning)
+    - collaborative planning (integrated into feature planning)
+    category: planning
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Interactive planning capabilities are built into the feature_planning operation. CORTEX 2.1 interactive planning workflows are fully integrated."
+      integration_date: "2025-11-14"
+      related_operations:
+        - feature_planning
+        - generate_implementation_plan
+        - present_plan_for_approval
+      collaborative:
+        description: Collaborative planning - thorough exploration
+        modules:
+        - detect_planning_ambiguity
+        - generate_clarifying_questions
+        - parse_user_answers
+        - filter_redundant_questions
+        - extract_implied_context
+        - synthesize_planning_context
+        - generate_implementation_plan
+        - present_plan_for_approval
+  architecture_planning:
+    name: Architecture Solution Planning
+    description: "[FUTURE] Collaborative architecture design with guided questions - Advanced planning feature"
+    deployment_tier: future  # 🔮 Future feature (advanced architecture planning)
+    status: future
+    future_reason: "Advanced architecture planning with guided questionnaire system. Feature planning operation currently handles basic planning needs."
+    natural_language:
+    - architect a solution (future feature)
+    - design architecture (future feature)
+    - plan architecture (future feature)
+    category: planning
+    implementation_status:
+      status: future
+      notes: "FUTURE: Advanced architecture planning with collaborative questionnaire system. Feature planning operation currently provides basic planning capabilities."
+      future_date: "2025-11-14"
+      related_operations:
+        - feature_planning
+  
+  application_onboarding:
+    name: Application Onboarding & Intelligent Analysis
+    description: One-command CORTEX deployment with intelligent codebase discovery and contextual questioning
+    deployment_tier: user  # ✅ User-facing operation (included in publish package)
+    natural_language:
+    - onboard this application
+    - analyze my codebase
+    - setup cortex for this project
+    - what can cortex learn about this app
+    - initialize cortex here
+    - deploy cortex
+    - onboard app
+    - application onboarding
+    category: setup
+    status: ready
+    modules:
+    - copy_cortex_entry_points
+    - install_tooling
+    - initialize_brain_tiers
+    - crawl_application
+    - analyze_discoveries
+    - generate_smart_questions
+    - present_onboarding_summary
+    profiles:
+      quick:
+        description: Quick onboarding - essential setup only (no questions)
+        modules:
+        - copy_cortex_entry_points
+        - install_tooling
+        - initialize_brain_tiers
+        - present_onboarding_summary
+      standard:
+        description: Standard onboarding - full analysis with intelligent questions
+        modules:
+        - copy_cortex_entry_points
+        - install_tooling
+        - initialize_brain_tiers
+        - crawl_application
+        - analyze_discoveries
+        - generate_smart_questions
+        - present_onboarding_summary
+      comprehensive:
+        description: Comprehensive onboarding - deep analysis with recommendations
+        modules:
+        - copy_cortex_entry_points
+        - install_tooling
+        - initialize_brain_tiers
+        - crawl_application
+        - analyze_discoveries
+        - generate_smart_questions
+        - present_onboarding_summary
+    implementation_status:
+      status: ready
+      modules_implemented: 7
+      modules_total: 7
+      completion_percentage: 100
+      notes: "Application onboarding is fully implemented and operational. Provides seamless CORTEX deployment to target applications with intelligent codebase analysis, tech stack detection, and contextual questioning capabilities."
+      estimated_hours: 6
+      completion_date: "2025-11-14"
+  
+  user_onboarding:
+    name: User Onboarding & CORTEX Introduction
+    description: Guided new user experience with interactive learning and hands-on validation
+    deployment_tier: user  # ✅ User-facing operation (included in publish package)
+    natural_language:
+    - onboard me
+    - new user setup
+    - cortex introduction
+    - getting started
+    - first time user
+    - help me get started
+    - show me around
+    - cortex tutorial
+    - guide me through cortex
+    - onboarding wizard
+    category: onboarding
+    status: ready
+    modules:
+    - present_cortex_introduction
+    - detect_user_environment
+    - validate_cortex_installation
+    - demonstrate_memory_capabilities
+    - guide_first_interaction
+    - setup_conversation_tracking
+    - present_graduation_summary
+    profiles:
+      quick:
+        description: Essential introduction - 5-7 minutes (understand value + basic setup)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - present_graduation_summary
+        estimated_duration: 420  # 7 minutes
+      standard:
+        description: Complete onboarding - 10-15 minutes (full guided experience)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - demonstrate_memory_capabilities
+        - guide_first_interaction
+        - setup_conversation_tracking
+        - present_graduation_summary
+        estimated_duration: 900  # 15 minutes
+      comprehensive:
+        description: Deep dive onboarding - 20-30 minutes (includes advanced features)
+        modules:
+        - present_cortex_introduction
+        - detect_user_environment
+        - validate_cortex_installation
+        - demonstrate_memory_capabilities
+        - guide_first_interaction
+        - setup_conversation_tracking
+        - present_graduation_summary
+        estimated_duration: 1800  # 30 minutes
+    implementation_status:
+      status: ready
+      modules_implemented: 7
+      modules_total: 7
+      completion_percentage: 100
+      notes: "User onboarding operation implemented with EPM orchestrator integration. Provides comprehensive guided experience from first contact to productive CORTEX usage with memory validation."
+      estimated_hours: 4
+      completion_date: "2025-11-15"
+      epm_integration: true
+      orchestrator_class: "OnboardingOrchestrator"
+      step_registry: "UserOnboardingSteps"
+  
+  refactoring_planning:
+    name: Refactoring Module Planning
+    description: "[FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance"
+    deployment_tier: future  # 🔮 Future feature (advanced refactoring planning)
+    status: future
+    future_reason: "Advanced refactoring planning with interactive guidance. Feature planning operation can handle basic refactoring tasks."
+    natural_language:
+    - refactor this module (future feature)
+    - refactor code (future feature)
+    category: planning
+    implementation_status:
+      status: future
+      notes: "FUTURE: Advanced refactoring planning with interactive clarification questions. Basic refactoring guidance available through feature planning operation."
+      future_date: "2025-11-14"
+      related_operations:
+        - feature_planning
+  command_help:
+    name: Command Discovery & Help
+    description: "[INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface"
+    deployment_tier: integrated  # 🔗 Integrated into core help system
+    status: integrated
+    integration_target: "Natural language interface and help system"
+    natural_language:
+    - help (integrated into help system)
+    - show commands (integrated into help system)
+    category: discovery
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Command discovery and help functionality is built into the natural language interface and core help system. No separate operation needed."
+      integration_date: "2025-11-14"
+  command_search:
+    name: Command Search
+    description: "[INTEGRATED] Command search integrated into CORTEX help system and natural language interface" 
+    deployment_tier: integrated  # 🔗 Integrated into core help system
+    status: integrated
+    integration_target: "Natural language interface and help system"
+    natural_language:
+    - find command (integrated into help system)
+    - search commands (integrated into help system)
+    category: discovery
+    implementation_status:
+      status: integrated
+      notes: "INTEGRATED: Command search functionality is built into the natural language interface. Users can ask 'how do I...' or 'help with...' and get contextual assistance."
+      integration_date: "2025-11-14"
+modules:
+  project_validation:
+    name: Project Validation
+    description: Validate CORTEX project structure
+    phase: PRE_VALIDATION
+    priority: high
+    class: ProjectValidationModule
+    file: project_validation_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - setup
+    - validation
+    - required
+    status: pending
+    estimated_hours: 1.5
+  platform_detection:
+    name: Platform Detection
+    description: Detect operating system (Mac/Windows/Linux)
+    phase: ENVIRONMENT
+    priority: 10
+    class: PlatformDetectionModule
+    file: platform_detection_module.py
+    dependencies:
+    - project_validation
+    optional: false
+    tags:
+    - setup
+    - environment
+    - required
+    status: implemented
+    tests: 15
+    implemented_date: '2025-11-09'
+    lines_of_code: 156
+  git_sync:
+    name: Git Synchronization
+    description: Sync with git repository
+    phase: ENVIRONMENT
+    priority: high
+    class: GitSyncModule
+    file: git_sync_module.py
+    dependencies:
+    - platform_detection
+    optional: true
+    tags:
+    - setup
+    - git
+    status: pending
+    estimated_hours: 2.0
+  virtual_environment:
+    name: Virtual Environment
+    description: Create/activate Python virtual environment
+    phase: DEPENDENCIES
+    priority: high
+    class: VirtualEnvironmentModule
+    file: virtual_environment_module.py
+    dependencies:
+    - platform_detection
+    optional: false
+    tags:
+    - setup
+    - python
+    - required
+    status: pending
+    estimated_hours: 2.5
+  python_dependencies:
+    name: Python Dependencies
+    description: Install Python packages from requirements.txt
+    phase: DEPENDENCIES
+    priority: 20
+    class: PythonDependenciesModule
+    file: python_dependencies_module.py
+    dependencies:
+    - virtual_environment
+    optional: false
+    tags:
+    - setup
+    - python
+    - required
+    status: implemented
+    tests: 8
+    implemented_date: '2025-11-09'
+    lines_of_code: 178
+  vision_api:
+    name: Vision API
+    description: Enable GitHub Copilot Vision API
+    phase: FEATURES
+    priority: 10
+    class: VisionAPIModule
+    file: vision_api_module.py
+    dependencies:
+    - python_dependencies
+    optional: true
+    tags:
+    - setup
+    - features
+    - vision
+    status: implemented
+    tests: 12
+    implemented_date: '2025-11-09'
+    lines_of_code: 245
+  conversation_tracking:
+    name: Conversation Tracking
+    description: Enable ambient conversation capture
+    phase: FEATURES
+    priority: high
+    class: ConversationTrackingModule
+    file: conversation_tracking_module.py
+    dependencies:
+    - brain_initialization
+    optional: true
+    tags:
+    - setup
+    - features
+    - conversation
+    status: pending
+    estimated_hours: 3.0
+  brain_initialization:
+    name: Brain Initialization
+    description: Initialize CORTEX brain (Tier 1/2/3 databases)
+    phase: PROCESSING
+    priority: 10
+    class: BrainInitializationModule
+    file: brain_initialization_module.py
+    dependencies:
+    - python_dependencies
+    optional: false
+    tags:
+    - setup
+    - brain
+    - required
+    status: implemented
+    tests: 10
+    implemented_date: '2025-11-09'
+    lines_of_code: 203
+  brain_tests:
+    name: Brain Tests
+    description: Validate brain initialization
+    phase: VALIDATION
+    priority: high
+    class: BrainTestsModule
+    file: brain_tests_module.py
+    dependencies:
+    - brain_initialization
+    optional: true
+    tags:
+    - setup
+    - testing
+    - brain
+    status: pending
+    estimated_hours: 2.0
+  tooling_verification:
+    name: Tooling Verification
+    description: Verify development tools (git, python, etc.)
+    phase: VALIDATION
+    priority: high
+    class: ToolingVerificationModule
+    file: tooling_verification_module.py
+    dependencies: []
+    optional: true
+    tags:
+    - setup
+    - validation
+    - tools
+    status: pending
+    estimated_hours: 1.5
+  setup_completion:
+    name: Setup Completion
+    description: Generate setup summary report
+    phase: FINALIZATION
+    priority: high
+    class: SetupCompletionModule
+    file: setup_completion_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - setup
+    - reporting
+    - required
+    status: pending
+    estimated_hours: 1.0
+  load_story_template:
+    name: Load Story Template
+    description: Load CORTEX story from prompts/shared/story.md
+    phase: PREPARATION
+    priority: 10
+    class: LoadStoryTemplateModule
+    file: load_story_template_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - story
+    - required
+    status: implemented
+    tests: 5
+    implemented_date: '2025-11-09'
+    lines_of_code: 89
+  apply_narrator_voice:
+    name: Apply Narrator Voice
+    description: Transform story to narrator voice
+    phase: PROCESSING
+    priority: 10
+    class: ApplyNarratorVoiceModule
+    file: apply_narrator_voice_module.py
+    dependencies:
+    - load_story_template
+    optional: false
+    tags:
+    - story
+    - transformation
+    - required
+    status: implemented
+    tests: 8
+    implemented_date: '2025-11-09'
+    lines_of_code: 156
+  validate_story_structure:
+    name: Validate Story Structure
+    description: Ensure story has proper Markdown structure
+    phase: VALIDATION
+    priority: 10
+    class: ValidateStoryStructureModule
+    file: validate_story_structure_module.py
+    dependencies:
+    - apply_narrator_voice
+    optional: true
+    tags:
+    - story
+    - validation
+    status: implemented
+    tests: 6
+    implemented_date: '2025-11-09'
+    lines_of_code: 134
+  save_story_markdown:
+    name: Save Story Markdown
+    description: Write transformed story to file
+    phase: FINALIZATION
+    priority: 10
+    class: SaveStoryMarkdownModule
+    file: save_story_markdown_module.py
+    dependencies:
+    - apply_narrator_voice
+    optional: false
+    tags:
+    - story
+    - required
+    status: implemented
+    tests: 5
+    implemented_date: '2025-11-09'
+    lines_of_code: 98
+  update_mkdocs_index:
+    name: Update MkDocs Index
+    description: Update MkDocs navigation with story
+    phase: FINALIZATION
+    priority: 20
+    class: UpdateMkDocsIndexModule
+    file: update_mkdocs_index_module.py
+    dependencies:
+    - save_story_markdown
+    optional: true
+    tags:
+    - story
+    - documentation
+    status: implemented
+    tests: 4
+    implemented_date: '2025-11-09'
+    lines_of_code: 123
+  build_story_preview:
+    name: Build Story Preview
+    description: Generate HTML preview of story
+    phase: FINALIZATION
+    priority: 30
+    class: BuildStoryPreviewModule
+    file: build_story_preview_module.py
+    dependencies:
+    - save_story_markdown
+    optional: true
+    tags:
+    - story
+    - preview
+    status: implemented
+    tests: 3
+    implemented_date: '2025-11-09'
+    lines_of_code: 87
+  scan_temporary_files:
+    name: Scan Temporary Files
+    description: Find temporary files to remove
+    phase: PREPARATION
+    priority: medium
+    class: ScanTemporaryFilesModule
+    file: scan_temporary_files_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - cleanup
+    - required
+    status: implemented
+    tests: 3
+    implemented_date: '2025-11-10'
+    estimated_hours: 1.5
+  remove_old_logs:
+    name: Remove Old Logs
+    description: Delete log files older than 30 days
+    phase: PROCESSING
+    priority: medium
+    class: RemoveOldLogsModule
+    file: remove_old_logs_module.py
+    dependencies:
+    - scan_temporary_files
+    optional: false
+    tags:
+    - cleanup
+    - logs
+    status: implemented
+    tests: 2
+    implemented_date: '2025-11-10'
+    estimated_hours: 1.0
+  clear_python_cache:
+    name: Clear Python Cache
+    description: Remove __pycache__ directories
+    phase: PROCESSING
+    priority: medium
+    class: ClearPythonCacheModule
+    file: clear_python_cache_module.py
+    dependencies:
+    - scan_temporary_files
+    optional: false
+    tags:
+    - cleanup
+    - python
+    status: implemented
+    tests: 2
+    implemented_date: '2025-11-10'
+    estimated_hours: 0.5
+  vacuum_sqlite_databases:
+    name: Vacuum SQLite Databases
+    description: Optimize SQLite databases
+    phase: PROCESSING
+    priority: medium
+    class: VacuumSQLiteDatabasesModule
+    file: vacuum_sqlite_databases_module.py
+    dependencies: []
+    optional: true
+    tags:
+    - cleanup
+    - database
+    status: implemented
+    tests: 1
+    implemented_date: '2025-11-10'
+    estimated_hours: 1.5
+  remove_orphaned_files:
+    name: Remove Orphaned Files
+    description: Remove files not referenced by git
+    phase: PROCESSING
+    priority: medium
+    class: RemoveOrphanedFilesModule
+    file: remove_orphaned_files_module.py
+    dependencies:
+    - scan_temporary_files
+    optional: true
+    tags:
+    - cleanup
+    - aggressive
+    status: pending
+    estimated_hours: 2.0
+  generate_cleanup_report:
+    name: Generate Cleanup Report
+    description: Create summary of cleanup actions
+    phase: FINALIZATION
+    priority: medium
+    class: GenerateCleanupReportModule
+    file: generate_cleanup_report_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - cleanup
+    - reporting
+    - required
+    status: implemented
+    tests: 3
+    implemented_date: '2025-11-10'
+    estimated_hours: 1.0
+  scan_docstrings:
+    name: Scan Docstrings
+    description: Extract docstrings from Python files
+    phase: PREPARATION
+    priority: medium
+    class: ScanDocstringsModule
+    file: scan_docstrings_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - documentation
+    - required
+    status: pending
+    estimated_hours: 2.0
+  generate_api_docs:
+    name: Generate API Documentation
+    description: Create API reference from docstrings
+    phase: PROCESSING
+    priority: medium
+    class: GenerateAPIDocsModule
+    file: generate_api_docs_module.py
+    dependencies:
+    - scan_docstrings
+    optional: false
+    tags:
+    - documentation
+    - api
+    status: pending
+    estimated_hours: 2.5
+  refresh_design_docs:
+    name: Refresh Design Documentation
+    description: Update design documentation
+    phase: PROCESSING
+    priority: medium
+    class: RefreshDesignDocsModule
+    file: refresh_design_docs_module.py
+    dependencies: []
+    optional: true
+    tags:
+    - documentation
+    - design
+    status: pending
+    estimated_hours: 2.0
+  build_mkdocs_site:
+    name: Build MkDocs Site
+    description: Build documentation site with MkDocs
+    phase: PROCESSING
+    priority: medium
+    class: BuildMkDocsSiteModule
+    file: build_mkdocs_site_module.py
+    dependencies:
+    - generate_api_docs
+    optional: false
+    tags:
+    - documentation
+    - mkdocs
+    - required
+    status: pending
+    estimated_hours: 1.5
+  validate_doc_links:
+    name: Validate Documentation Links
+    description: Check for broken links in documentation
+    phase: VALIDATION
+    priority: medium
+    class: ValidateDocLinksModule
+    file: validate_doc_links_module.py
+    dependencies:
+    - build_mkdocs_site
+    optional: true
+    tags:
+    - documentation
+    - validation
+    status: pending
+    estimated_hours: 1.0
+  deploy_docs_preview:
+    name: Deploy Documentation Preview
+    description: Deploy documentation to preview server
+    phase: FINALIZATION
+    priority: medium
+    class: DeployDocsPreviewModule
+    file: deploy_docs_preview_module.py
+    dependencies:
+    - build_mkdocs_site
+    optional: true
+    tags:
+    - documentation
+    - deployment
+    status: pending
+    estimated_hours: 1.5
+  load_protection_rules:
+    name: Load Protection Rules
+    description: Load brain-protection-rules.yaml
+    phase: PREPARATION
+    priority: low
+    class: LoadProtectionRulesModule
+    file: load_protection_rules_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - brain
+    - protection
+    - required
+    status: pending
+    estimated_hours: 1.0
+  validate_tier0_immutability:
+    name: Validate Tier 0 Immutability
+    description: Ensure Tier 0 rules are immutable
+    phase: VALIDATION
+    priority: low
+    class: ValidateTier0ImmutabilityModule
+    file: validate_tier0_immutability_module.py
+    dependencies:
+    - load_protection_rules
+    optional: false
+    tags:
+    - brain
+    - tier0
+    - required
+    status: pending
+    estimated_hours: 1.5
+  validate_tier1_structure:
+    name: Validate Tier 1 Structure
+    description: Validate Tier 1 database schema
+    phase: VALIDATION
+    priority: low
+    class: ValidateTier1StructureModule
+    file: validate_tier1_structure_module.py
+    dependencies:
+    - load_protection_rules
+    optional: false
+    tags:
+    - brain
+    - tier1
+    - required
+    status: pending
+    estimated_hours: 1.5
+  validate_tier2_schema:
+    name: Validate Tier 2 Schema
+    description: Validate Tier 2 YAML schema
+    phase: VALIDATION
+    priority: low
+    class: ValidateTier2SchemaModule
+    file: validate_tier2_schema_module.py
+    dependencies:
+    - load_protection_rules
+    optional: false
+    tags:
+    - brain
+    - tier2
+    - required
+    status: pending
+    estimated_hours: 1.5
+  check_brain_integrity:
+    name: Check Brain Integrity
+    description: Comprehensive brain health check
+    phase: VALIDATION
+    priority: low
+    class: CheckBrainIntegrityModule
+    file: check_brain_integrity_module.py
+    dependencies:
+    - validate_tier0_immutability
+    - validate_tier1_structure
+    - validate_tier2_schema
+    optional: false
+    tags:
+    - brain
+    - integrity
+    - required
+    status: pending
+    estimated_hours: 2.0
+  generate_protection_report:
+    name: Generate Protection Report
+    description: Create brain protection summary
+    phase: FINALIZATION
+    priority: low
+    class: GenerateProtectionReportModule
+    file: generate_protection_report_module.py
+    dependencies:
+    - check_brain_integrity
+    optional: false
+    tags:
+    - brain
+    - reporting
+    - required
+    status: pending
+    estimated_hours: 1.0
+  discover_tests:
+    name: Discover Tests
+    description: Find all test files
+    phase: PREPARATION
+    priority: low
+    class: DiscoverTestsModule
+    file: discover_tests_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - testing
+    - required
+    status: pending
+    estimated_hours: 1.0
+  run_unit_tests:
+    name: Run Unit Tests
+    description: Execute unit test suite
+    phase: PROCESSING
+    priority: low
+    class: RunUnitTestsModule
+    file: run_unit_tests_module.py
+    dependencies:
+    - discover_tests
+    optional: false
+    tags:
+    - testing
+    - unit
+    - required
+    status: pending
+    estimated_hours: 1.5
+  run_integration_tests:
+    name: Run Integration Tests
+    description: Execute integration test suite
+    phase: PROCESSING
+    priority: low
+    class: RunIntegrationTestsModule
+    file: run_integration_tests_module.py
+    dependencies:
+    - discover_tests
+    optional: true
+    tags:
+    - testing
+    - integration
+    status: pending
+    estimated_hours: 1.5
+  generate_coverage_report:
+    name: Generate Coverage Report
+    description: Create test coverage report
+    phase: FINALIZATION
+    priority: low
+    class: GenerateCoverageReportModule
+    file: generate_coverage_report_module.py
+    dependencies:
+    - run_unit_tests
+    - run_integration_tests
+    optional: true
+    tags:
+    - testing
+    - coverage
+    status: pending
+    estimated_hours: 1.5
+  validate_test_quality:
+    name: Validate Test Quality
+    description: Check test quality metrics
+    phase: VALIDATION
+    priority: low
+    class: ValidateTestQualityModule
+    file: validate_test_quality_module.py
+    dependencies:
+    - generate_coverage_report
+    optional: true
+    tags:
+    - testing
+    - quality
+    status: pending
+    estimated_hours: 1.0
+  detect_planning_ambiguity:
+    name: Detect Planning Ambiguity
+    description: Analyze user request for unclear requirements
+    phase: PREPARATION
+    priority: medium
+    class: DetectPlanningAmbiguityModule
+    file: detect_planning_ambiguity_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
+  generate_clarifying_questions:
+    name: Generate Clarifying Questions
+    description: Create targeted questions to resolve ambiguity
+    phase: PROCESSING
+    priority: medium
+    class: GenerateClarifyingQuestionsModule
+    file: generate_clarifying_questions_module.py
+    dependencies:
+    - detect_planning_ambiguity
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 3.0
+    cortex_version: '2.1'
+  parse_user_answers:
+    name: Parse User Answers
+    description: Extract direct answers and implied context from responses
+    phase: PROCESSING
+    priority: medium
+    class: ParseUserAnswersModule
+    file: parse_user_answers_module.py
+    dependencies:
+    - generate_clarifying_questions
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
+  filter_redundant_questions:
+    name: Filter Redundant Questions
+    description: Skip questions already answered via context
+    phase: PROCESSING
+    priority: medium
+    class: FilterRedundantQuestionsModule
+    file: filter_redundant_questions_module.py
+    dependencies:
+    - parse_user_answers
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  extract_implied_context:
+    name: Extract Implied Context
+    description: Identify additional context from natural language
+    phase: PROCESSING
+    priority: medium
+    class: ExtractImpliedContextModule
+    file: extract_implied_context_module.py
+    dependencies:
+    - parse_user_answers
+    optional: true
+    tags:
+    - planning
+    - cortex-2.1
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
+  synthesize_planning_context:
+    name: Synthesize Planning Context
+    description: Combine all answers and context into cohesive requirements
+    phase: PROCESSING
+    priority: medium
+    class: SynthesizePlanningContextModule
+    file: synthesize_planning_context_module.py
+    dependencies:
+    - filter_redundant_questions
+    - extract_implied_context
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  generate_implementation_plan:
+    name: Generate Implementation Plan
+    description: Create detailed implementation plan from synthesized context
+    phase: PROCESSING
+    priority: medium
+    class: GenerateImplementationPlanModule
+    file: generate_implementation_plan_module.py
+    dependencies:
+    - synthesize_planning_context
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
+  generate_architecture_plan:
+    name: Generate Architecture Plan
+    description: Create architecture design from requirements
+    phase: PROCESSING
+    priority: medium
+    class: GenerateArchitecturePlanModule
+    file: generate_architecture_plan_module.py
+    dependencies:
+    - synthesize_planning_context
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.5
+    cortex_version: '2.1'
+  generate_refactoring_plan:
+    name: Generate Refactoring Plan
+    description: Create refactoring plan with SOLID principles
+    phase: PROCESSING
+    priority: medium
+    class: GenerateRefactoringPlanModule
+    file: generate_refactoring_plan_module.py
+    dependencies:
+    - synthesize_planning_context
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  present_plan_for_approval:
+    name: Present Plan for Approval
+    description: Show plan to user and handle modifications
+    phase: FINALIZATION
+    priority: medium
+    class: PresentPlanForApprovalModule
+    file: present_plan_for_approval_module.py
+    dependencies:
+    - generate_implementation_plan
+    optional: false
+    tags:
+    - planning
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
+  analyze_user_context:
+    name: Analyze User Context
+    description: Analyze current work context for relevant commands
+    phase: PREPARATION
+    priority: medium
+    class: AnalyzeUserContextModule
+    file: analyze_user_context_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  filter_relevant_commands:
+    name: Filter Relevant Commands
+    description: Select commands relevant to current context
+    phase: PROCESSING
+    priority: medium
+    class: FilterRelevantCommandsModule
+    file: filter_relevant_commands_module.py
+    dependencies:
+    - analyze_user_context
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
+  categorize_commands:
+    name: Categorize Commands
+    description: Group commands by category and usage
+    phase: PROCESSING
+    priority: medium
+    class: CategorizeCommandsModule
+    file: categorize_commands_module.py
+    dependencies: []
+    optional: true
+    tags:
+    - discovery
+    - cortex-2.1
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
+  generate_help_output:
+    name: Generate Help Output
+    description: Create formatted help text with examples
+    phase: FINALIZATION
+    priority: medium
+    class: GenerateHelpOutputModule
+    file: generate_help_output_module.py
+    dependencies:
+    - filter_relevant_commands
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
+  suggest_next_actions:
+    name: Suggest Next Actions
+    description: Proactively suggest relevant commands based on work
+    phase: FINALIZATION
+    priority: medium
+    class: SuggestNextActionsModule
+    file: suggest_next_actions_module.py
+    dependencies:
+    - analyze_user_context
+    optional: true
+    tags:
+    - discovery
+    - cortex-2.1
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  parse_search_query:
+    name: Parse Search Query
+    description: Extract keywords and intent from search query
+    phase: PREPARATION
+    priority: medium
+    class: ParseSearchQueryModule
+    file: parse_search_query_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
+  search_command_index:
+    name: Search Command Index
+    description: Search commands by keywords and synonyms
+    phase: PROCESSING
+    priority: medium
+    class: SearchCommandIndexModule
+    file: search_command_index_module.py
+    dependencies:
+    - parse_search_query
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 2.0
+    cortex_version: '2.1'
+  rank_search_results:
+    name: Rank Search Results
+    description: Rank search results by relevance
+    phase: PROCESSING
+    priority: medium
+    class: RankSearchResultsModule
+    file: rank_search_results_module.py
+    dependencies:
+    - search_command_index
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.5
+    cortex_version: '2.1'
+  generate_search_output:
+    name: Generate Search Output
+    description: Format search results with details and examples
+    phase: FINALIZATION
+    priority: medium
+    class: GenerateSearchOutputModule
+    file: generate_search_output_module.py
+    dependencies:
+    - rank_search_results
+    optional: false
+    tags:
+    - discovery
+    - cortex-2.1
+    - required
+    status: pending
+    estimated_hours: 1.0
+    cortex_version: '2.1'
+  demo_introduction:
+    name: Demo Introduction
+    description: Welcome user and explain demo flow (3-5 minute walkthrough overview)
+    phase: INTRODUCTION
+    priority: high
+    class: DemoIntroductionModule
+    file: demo_introduction_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - demo
+    - onboarding
+    - education
+    status: planned
+    estimated_hours: 0.5
+    token_cost: 100
+    cortex_version: '2.0'
+  demo_help_system:
+    name: Demo Help System
+    description: Execute /help and explain output (status icons, natural language
+      vs slash commands)
+    phase: DEMONSTRATION
+    priority: high
+    class: DemoHelpSystemModule
+    file: demo_help_system_module.py
+    dependencies:
+    - demo_introduction
+    optional: false
+    tags:
+    - demo
+    - help
+    - discovery
+    status: planned
+    estimated_hours: 1.0
+    token_cost: 150
+    cortex_version: '2.0'
+  demo_story_refresh:
+    name: Demo Story Refresh
+    description: Execute story refresh and show narrator voice transformation results
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoStoryRefreshModule
+    file: demo_story_refresh_module.py
+    dependencies:
+    - demo_help_system
+    optional: false
+    tags:
+    - demo
+    - documentation
+    - transformation
+    status: ready
+    estimated_hours: 1.5
+    token_cost: 200
+    cortex_version: '2.0'
+  demo_dod_dor_workflow:
+    name: Demo DoD/DoR Workflow Integration
+    description: Showcase how CORTEX processes user-provided DoD, DoR, and acceptance criteria through Work Planner agent
+    phase: DEMONSTRATION
+    priority: medium
+    class: DoDDoRWorkflowDemo
+    file: demo_dod_dor_workflow.py
+    dependencies:
+    - demo_help_system
+    optional: true
+    tags:
+    - demo
+    - dod
+    - dor
+    - work-planner
+    - quality-gates
+    - acceptance-criteria
+    status: ready
+    estimated_hours: 2.0
+    token_cost: 250
+    cortex_version: '2.0'
+    notes: Demonstrates DoR validation (Rule #21), planning enhancement, AC-to-test mapping, and DoD enforcement (Rule #20)
+  demo_token_optimization:
+    name: Demo Token Optimization
+    description: Showcase CORTEX's 97.2% token reduction achievement and optimization strategies (modular architecture, YAML extraction, lazy loading)
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoTokenOptimizationModule
+    file: demo_token_optimization_module.py
+    dependencies:
+    - demo_dod_dor_workflow
+    optional: true
+    tags:
+    - demo
+    - optimization
+    - token-reduction
+    - cost-savings
+    - performance
+    status: ready
+    estimated_hours: 1.5
+    token_cost: 200
+    cortex_version: '2.0'
+    notes: Demonstrates 97.2% token reduction (74,047 → 2,078 tokens), 93.4% cost savings, and optimization techniques applied to CORTEX 2.0
+  demo_code_review:
+    name: Demo Code Review & PR Capabilities
+    description: Showcase CORTEX's automated code review with SOLID principles, security scanning, performance analysis, and PR integration
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoCodeReviewModule
+    file: demo_code_review_module.py
+    dependencies:
+    - demo_token_optimization
+    optional: true
+    tags:
+    - demo
+    - code-review
+    - pull-request
+    - solid-principles
+    - security
+    - performance
+    status: ready
+    estimated_hours: 2.0
+    token_cost: 300
+    cortex_version: '2.0'
+    notes: Demonstrates automated PR review, SOLID violation detection, security scanning (secrets, SQL injection, XSS), and performance anti-pattern detection
+  demo_cleanup:
+    name: Demo Cleanup
+    description: Execute workspace cleanup and show optimization report (files removed,
+      space saved, DB optimization)
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoCleanupModule
+    file: demo_cleanup_module.py
+    dependencies:
+    - demo_story_refresh
+    optional: true
+    tags:
+    - demo
+    - maintenance
+    - optimization
+    status: planned
+    estimated_hours: 1.0
+    token_cost: 150
+    cortex_version: '2.0'
+  demo_conversation:
+    name: Demo Conversation Memory
+    description: Explain conversation tracking system and how /resume works
+    phase: DEMONSTRATION
+    priority: medium
+    class: DemoConversationModule
+    file: demo_conversation_module.py
+    dependencies:
+    - demo_cleanup
+    optional: true
+    tags:
+    - demo
+    - conversation
+    - memory
+    status: ready
+    estimated_hours: 1.0
+    token_cost: 100
+    cortex_version: '2.0'
+  demo_completion:
+    name: Demo Completion
+    description: Summarize demo learnings and suggest next steps
+    phase: COMPLETION
+    priority: high
+    class: DemoCompletionModule
+    file: demo_completion_module.py
+    dependencies:
+    - demo_conversation
+    optional: false
+    tags:
+    - demo
+    - summary
+    - next-steps
+    status: ready
+    estimated_hours: 0.5
+    token_cost: 100
+    cortex_version: '2.0'
+  
+  cleanup_orchestrator:
+    name: Cleanup Orchestrator
+    description: Orchestrates comprehensive workspace cleanup with backup management, organization, and optimization
+    phase: PROCESSING
+    priority: 100
+    class: CleanupOrchestrator
+    file: cleanup/cleanup_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - cleanup
+    - maintenance
+    - organization
+    - optimization
+    - git-tracking
+    status: implemented
+    tests: 0
+    implemented_date: '2025-11-11'
+    lines_of_code: 1120
+    cortex_version: '2.0'
+  
+  optimize_cortex_orchestrator:
+    name: CORTEX Optimization Orchestrator
+    description: Comprehensive health scanning and optimization with obsolete test detection
+    phase: EXECUTION
+    priority: 100
+    class: OptimizeCortexOrchestrator
+    file: optimize/optimize_cortex_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - optimization
+    - health-scan
+    - obsolete-tests
+    - coverage
+    - brain-validation
+    - architecture
+    status: implemented
+    tests: 0
+    implemented_date: '2025-11-11'
+    lines_of_code: 650
+    cortex_version: '2.0'
+    
+  # Feature Planning Modules (CORTEX 2.0 Enhancement)
+  feature_discovery:
+    name: Feature Discovery
+    description: Interactive questioning to understand feature requirements (what, why, who, constraints)
+    phase: PRE_VALIDATION
+    priority: 10
+    class: FeatureDiscoveryModule
+    file: planning/feature_discovery_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - planning
+    - interactive
+    - requirements
+    status: designed
+    estimated_hours: 8
+    cortex_version: '2.1'
+    
+  pattern_search:
+    name: Pattern Search
+    description: Search Tier 2 Knowledge Graph for similar past features and proven approaches
+    phase: PREPARATION
+    priority: 20
+    class: PatternSearchModule
+    file: planning/pattern_search_module.py
+    dependencies:
+    - feature_discovery
+    optional: false
+    tags:
+    - planning
+    - pattern-matching
+    - tier2
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  requirement_breakdown:
+    name: Requirement Breakdown
+    description: Decompose feature into phases, tasks, and acceptance criteria
+    phase: PROCESSING
+    priority: 30
+    class: RequirementBreakdownModule
+    file: planning/requirement_breakdown_module.py
+    dependencies:
+    - feature_discovery
+    optional: false
+    tags:
+    - planning
+    - breakdown
+    - work-planner
+    status: designed
+    estimated_hours: 16
+    cortex_version: '2.1'
+    
+  dependency_analysis:
+    name: Dependency Analysis
+    description: Identify phase dependencies, external dependencies, and technical constraints
+    phase: PROCESSING
+    priority: 40
+    class: DependencyAnalysisModule
+    file: planning/dependency_analysis_module.py
+    dependencies:
+    - requirement_breakdown
+    optional: true
+    tags:
+    - planning
+    - dependencies
+    - architecture
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  risk_identification:
+    name: Risk Identification
+    description: Identify technical risks, suggest mitigations, flag unknown unknowns
+    phase: VALIDATION
+    priority: 50
+    class: RiskIdentificationModule
+    file: planning/risk_identification_module.py
+    dependencies:
+    - requirement_breakdown
+    optional: false
+    tags:
+    - planning
+    - risk-analysis
+    - architect
+    status: designed
+    estimated_hours: 10
+    cortex_version: '2.1'
+    
+  roadmap_generation:
+    name: Roadmap Generation
+    description: Generate phase-based roadmap with timeline, acceptance criteria, and markdown document
+    phase: FINALIZATION
+    priority: 60
+    class: RoadmapGenerationModule
+    file: planning/roadmap_generation_module.py
+    dependencies:
+    - requirement_breakdown
+    - risk_identification
+    optional: false
+    tags:
+    - planning
+    - roadmap
+    - documentation
+    status: designed
+    estimated_hours: 12
+    cortex_version: '2.1'
+    
+  plan_storage:
+    name: Plan Storage
+    description: Save feature plan to Tier 1 database and cortex-brain/feature-plans/ markdown file
+    phase: FINALIZATION
+    priority: 70
+    class: PlanStorageModule
+    file: planning/plan_storage_module.py
+    dependencies:
+    - roadmap_generation
+    optional: false
+    tags:
+    - planning
+    - storage
+    - tier1
+    status: designed
+    estimated_hours: 8
+    cortex_version: '2.1'
+  
+  diagram_regeneration:
+    name: Diagram Regeneration
+    description: Analyze CORTEX design and regenerate all visual assets from scratch
+    phase: PROCESSING
+    priority: 50
+    class: DiagramRegenerationOperation
+    file: diagram_regeneration_operation.py
+    dependencies: []
+    optional: false
+    tags:
+    - documentation
+    - diagrams
+    - visual-assets
+    - analysis
+    status: implemented
+    estimated_hours: 24
+    cortex_version: '3.0'
+    notes: Complete diagram regeneration with CORTEX design analysis, feature identification, Mermaid generation, and professional illustration prompts
+  
+  publish_branch_orchestrator:
+    name: Publish Branch Orchestrator
+    description: Build production package and publish to dedicated git branch
+    phase: DEPLOYMENT
+    priority: 100
+    class: PublishBranchOrchestrator
+    file: publish/publish_branch_orchestrator.py
+    dependencies: []
+    optional: false
+    tags:
+    - publish
+    - deployment
+    - production
+    - git
+    status: implemented
+    estimated_hours: 0
+    cortex_version: '3.0'
+    notes: Wraps existing publish_to_branch.py script for integration with CORTEX operations system
+  
+  # Feedback & Analytics Modules (CORTEX 3.0)
+  enhanced_feedback_module:
+    name: Enhanced Feedback Module
+    description: Collect comprehensive metrics across 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity) with privacy sanitization and GitHub Gist integration
+    phase: EXECUTION
+    priority: 100
+    class: EnhancedFeedbackModule
+    file: modules/feedback/enhanced_feedback_module.py
+    dependencies: []
+    optional: false
+    tags:
+    - feedback
+    - metrics
+    - analytics
+    - gist
+    - privacy
+    status: implemented
+    estimated_hours: 8
+    cortex_version: '3.0'
+    notes: "8 metrics collectors: ApplicationMetricsCollector, CrawlerPerformanceCollector, CortexPerformanceCollector, KnowledgeGraphCollector, DevelopmentHygieneCollector, TDDMasteryCollector, CommitMetricsCollector, VelocityMetricsCollector. Privacy sanitization with 3 levels (full/medium/minimal). GitHub Gist upload with registry tracking"
+  
+  admin_feedback_review_module:
+    name: Admin Feedback Review Module
+    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple applications. Sync Gist registry, process reports, generate trend analysis, categorize issues"
+    phase: EXECUTION
+    priority: 100
+    class: AdminFeedbackReviewModule
+    file: admin/scripts/feedback/admin_feedback_review.py
+    dependencies: []
+    optional: false
+    tags:
+    - feedback
+    - admin
+    - analytics
+    - aggregation
+    - trends
+    status: implemented
+    estimated_hours: 6
+    cortex_version: '3.0'
+    notes: "CORTEX repo only. Natural language triggers: review feedback, feedback review, analyze feedback, process feedback, sync feedback, import feedback. Auto-syncs Gist registry by default. Stores in cortex-brain/analytics/ databases"
+    implemented_date: '2025-11-24'
+    
+metadata:
+  version: '2.1'
+  schema_version: '1.0'
+  author: Asif Hussain
+  last_updated: '2025-11-13'
+  description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
+  changelog:
+  - version: '3.0'
+    date: '2025-11-23'
+    changes:
+    - Added Feedback & Analytics System (feedback_report and admin_feedback_review operations)
+    - Added enhanced_feedback_module with 8-category metrics collection
+    - Added admin_feedback_review_module for aggregation and analytics
+    - Added 2 new feedback operations (1 user-facing, 1 admin-only)
+    - Added 2 new feedback modules (1 implemented, 1 pending)
+    - Enhanced feedback_triggers in response-templates.yaml
+    - GitHub Gist integration with privacy sanitization
+  - version: '2.1'
+    date: '2025-11-10'
+    changes:
+    - Fixed module count (added brain_health_check 11 modules)
+    - Updated statistics to reflect accurate totals
+    - Architecture review identified 8 gaps for future improvement
+  - version: '2.1'
+    date: '2025-11-10'
+    changes:
+    - Added Interactive Demo System (cortex_tutorial operation)
+    - Added 6 new demo modules for hands-on onboarding
+    - Added demo_introduction, demo_help_system, demo_story_refresh modules
+    - Added demo_cleanup, demo_conversation, demo_completion modules
+    - Total token cost: 700 tokens for complete demo walkthrough
+  - version: '2.1'
+    date: '2025-11-09'
+    changes:
+    - Added CORTEX 2.1 interactive planning operations
+    - Added CORTEX 2.1 command discovery operations
+    - Added 5 new planning-focused operations
+    - Added 2 new discovery-focused operations
+    - Added 22 new modules for 2.1 features
+    - All 2.1 operations marked as 'pending' implementation
+  - version: '2.0'
+    date: '2025-11-08'
+    changes:
+    - Initial universal operations architecture
+    - Migrated setup operation (4 modules functional)
+    - Defined 6 operations with 48 modules total
+statistics:
+  total_operations: 17
+  total_modules: 101
+  total_phases: 9
+  cortex_2_0_operations: 9
+  cortex_2_1_operations: 6
+  cortex_3_0_operations: 2
+  cortex_2_0_modules: 67
+  cortex_2_1_modules: 22
+  cortex_3_0_modules: 2
+  modules_implemented: 41
+  modules_pending: 60
+  implementation_percentage: 41

@@ -1,0 +1,274 @@
+# {{ model.metadata.epmo_name }} Documentation
+
+{% if config.header_template %}
+{{ config.header_template }}
+{% endif %}
+
+| Property | Value |
+|----------|-------|
+| **Generated** | {{ model.metadata.generated_at }} |
+| **Version** | {{ model.metadata.version }} |
+| **Health Score** | {{ "%.1f"|format(model.health.overall_score) }}/100 {% if model.health %}{% endif %} |
+| **Components** | {{ summary_stats.total_files }} files, {{ summary_stats.total_classes }} classes, {{ summary_stats.total_functions }} functions |
+{% if has_visual_content %}
+| **Diagrams** | {{ visual_stats.total_diagrams }} ({{ visual_stats.mermaid_diagrams }} technical, {{ visual_stats.image_prompts }} visual) |
+{% endif %}
+
+{% if config.include_health_badges and quality_badges %}
+**Quality:** {% for badge in quality_badges %}![{{ badge }}](https://img.shields.io/badge/{{ badge|replace(' ', '%20') }}-success-green) {% endfor %}
+{% endif %}
+
+## Table of Contents
+
+- [Overview](#overview)
+{% if 'architecture' in include_sections %}
+- [Architecture](#architecture)
+{% if has_visual_content %}
+  - [Diagrams](#diagrams)
+{% endif %}
+{% endif %}
+{% if 'api' in include_sections %}
+- [API Reference](#api-reference)
+{% endif %}
+{% if 'health' in include_sections and model.health %}
+- [Health Analysis](#health-analysis)
+{% endif %}
+{% if 'remediation' in include_sections and remediation %}
+- [Remediation Guide](#remediation-guide)
+{% endif %}
+
+## Overview
+
+This Entry Point Module contains **{{ summary_stats.total_files }} files** with **{{ summary_stats.total_classes }} classes** and **{{ summary_stats.total_functions }} functions**, totaling **{{ "{:,}"|format(summary_stats.total_lines) }} lines of code**.
+
+{% if summary_stats.external_dependencies > 0 %}
+The module has **{{ summary_stats.external_dependencies }} external dependencies**.
+{% endif %}
+
+{% if model.health %}
+**Health Status:** {{ model.health.health_status|title }} (Score: {{ "%.1f"|format(model.health.overall_score) }}/100)
+
+{% if model.health.issues_found > 0 %}
+**Issues:** {{ model.health.issues_found }} total ({{ summary_stats.auto_fixable_items }} auto-fixable)
+{% endif %}
+{% endif %}
+
+{% if has_visual_content %}
+**Visual Documentation:** {{ visual_stats.total_diagrams }} diagrams ({{ visual_stats.mermaid_diagrams }} technical, {{ visual_stats.image_prompts }} presentation)
+{% endif %}
+
+{% if 'architecture' in include_sections %}
+## Architecture
+
+{% if model.architecture %}
+### Structure
+
+The architecture consists of {{ model.architecture.total_modules }} modules with {{ model.architecture.dependency_count }} dependencies.
+
+{% if model.architecture.coupling_score > 0 %}
+**Coupling Score:** {{ "%.2f"|format(model.architecture.coupling_score) }}  
+**Cohesion Score:** {{ "%.2f"|format(model.architecture.cohesion_score) }}
+{% endif %}
+
+{% if model.architecture.circular_dependencies > 0 %}
+⚠️ **Circular Dependencies:** {{ model.architecture.circular_dependencies }} detected
+{% endif %}
+
+### External Dependencies
+
+{% if model.architecture.external_dependencies %}
+{% for dep in model.architecture.external_dependencies[:10] %}
+- `{{ dep }}`
+{% endfor %}
+{% if model.architecture.external_dependencies|length > 10 %}
+- ... and {{ model.architecture.external_dependencies|length - 10 }} more
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% if has_visual_content and config.include_diagrams %}
+### Diagrams
+
+{% for diagram in all_diagrams %}
+{% if diagram.__class__.__name__ == 'MultiModalDiagram' %}
+#### {{ diagram.title }}
+
+{% if diagram.description %}
+{{ diagram.description }}
+{% endif %}
+
+{% if diagram.mermaid_diagram %}
+**Technical Diagram:**
+
+```mermaid
+{{ diagram.mermaid_diagram.mermaid_syntax }}
+```
+{% endif %}
+
+{% if diagram.image_prompt %}
+**Professional Visualization:**
+
+{% if diagram.image_prompt.generated_image_path %}
+![{{ diagram.title }}]({{ diagram.image_prompt.generated_image_path }})
+{% else %}
+*AI Generation Prompt:* [View Prompt]({{ diagram.image_prompt.prompt_file_path }})
+{% if diagram.image_prompt.narrative_description %}
+*Description:* {{ diagram.image_prompt.narrative_description }}
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% else %}
+#### {{ diagram.title }}
+
+{% if diagram.description %}
+{{ diagram.description }}
+{% endif %}
+
+```mermaid
+{{ diagram.mermaid_syntax }}
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if 'api' in include_sections %}
+## API Reference
+
+{% for file_analysis in model.files %}
+{% if file_analysis.classes or file_analysis.functions %}
+### {{ file_analysis.module_name }}
+
+*File: `{{ file_analysis.relative_path }}`*
+
+{% if file_analysis.docstring %}
+{{ file_analysis.docstring }}
+{% endif %}
+
+{% for class_model in file_analysis.classes %}
+#### `{{ class_model.name }}`
+
+{% if class_model.docstring %}
+{{ class_model.docstring }}
+{% endif %}
+
+{% if class_model.base_classes %}
+**Inherits:** {{ class_model.base_classes|join(', ') }}
+{% endif %}
+
+{% set public_methods = class_model.methods|selectattr("visibility", "equalto", "public")|list %}
+{% if public_methods %}
+**Methods:**
+{% for method in public_methods %}
+- `{{ method.name }}({{ method.parameters|join(', ') }})`{% if method.return_type %} → `{{ method.return_type }}`{% endif %}
+{% if method.docstring %}
+  {{ method.docstring }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+{% for function in file_analysis.functions %}
+{% if function.visibility == 'public' %}
+#### `{{ function.name }}({{ function.parameters|join(', ') }})`{% if function.return_type %} → `{{ function.return_type }}`{% endif %}
+
+{% if function.docstring %}
+{{ function.docstring }}
+{% endif %}
+
+{% if function.decorators %}
+**Decorators:** {{ function.decorators|join(', ') }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if 'health' in include_sections and model.health %}
+## Health Analysis
+
+**Overall Health Score:** {{ "%.1f"|format(model.health.overall_score) }}/100  
+**Status:** {{ model.health.health_status|title }}
+
+{% if model.health.dimension_scores %}
+### Dimension Scores
+
+{% for dimension, score in model.health.dimension_scores.items() %}
+- **{{ dimension|title }}:** {{ "%.1f"|format(score) }}/100 {% if score >= 80 %}✅{% elif score >= 60 %}⚠️{% else %}❌{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if model.health.issues_found > 0 %}
+### Issues Summary
+
+- **Total Issues:** {{ model.health.issues_found }}
+- **Auto-fixable:** {{ model.health.auto_fixable_issues }}
+- **High Priority:** {{ model.health.priority_issues }}
+{% if model.health.estimated_fix_time_minutes > 0 %}
+- **Estimated Fix Time:** {{ "%.1f"|format(model.health.estimated_fix_time_minutes / 60) }} hours
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% if 'remediation' in include_sections and remediation %}
+## Remediation Guide
+
+{% set high_priority = remediation|selectattr("priority", "equalto", "high")|list %}
+{% if high_priority %}
+### High Priority Items
+
+{% for item in high_priority %}
+#### 🔴 {{ item.description }}
+
+**Priority:** {{ item.priority|title }}  
+**Effort:** {{ item.estimated_effort_minutes }} minutes
+
+{% if item.auto_fixable %}
+**Auto-fixable:** ✅ Yes
+{% endif %}
+
+{% if item.affected_files %}
+**Affected Files:** {{ item.affected_files[:3]|join(', ') }}{% if item.affected_files|length > 3 %} and {{ item.affected_files|length - 3 }} more{% endif %}
+{% endif %}
+
+{% if item.detailed_guidance %}
+**Guidance:** {{ item.detailed_guidance }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% set auto_fixable = remediation|selectattr("auto_fixable", "equalto", true)|list %}
+{% if auto_fixable %}
+### Auto-fixable Items
+
+{% for item in auto_fixable %}
+#### ⚡ {{ item.description }}
+
+**Effort:** {{ item.estimated_effort_minutes }} minutes
+{% if item.affected_files %}
+**Affected Files:** {{ item.affected_files[:3]|join(', ') }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+---
+
+{% if config.footer_template %}
+{{ config.footer_template }}
+{% else %}
+*Generated by {{ model.metadata.generated_by }} on {{ model.metadata.generated_at }}*
+
+{% if model.metadata.generation_time_seconds > 0 %}
+*Generation time: {{ "%.2f"|format(model.metadata.generation_time_seconds) }} seconds*
+{% endif %}
+
+{% if warnings %}
+**Warnings:**
+{% for warning in warnings %}
+- {{ warning }}
+{% endfor %}
+{% endif %}
+{% endif %}
