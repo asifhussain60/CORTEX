@@ -16,7 +16,8 @@ This is the **production-ready CORTEX deployment package** - a clean, minimal in
 - ✅ GitHub Copilot integration (`.github/prompts/`)
 - ✅ Modular documentation (`prompts/`)
 - ✅ Automation scripts (`scripts/`)
-- ✅ All dependencies (`requirements.txt`)
+- ✅ Core dependencies (`requirements.txt` - 16 packages, ~123.5 MB)
+- ✅ Optional tools (`optional-requirements.txt` - 6 packages, ~26.5 MB, auto-installed when needed)
 
 **What's excluded:**
 - ❌ Development tools (tests, CI/CD, build scripts)
@@ -61,7 +62,7 @@ python --version
 git --version
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Install Core Dependencies
 
 ```bash
 # Create virtual environment (recommended)
@@ -73,9 +74,15 @@ python -m venv .venv
 # macOS/Linux:
 source .venv/bin/activate
 
-# Install CORTEX dependencies
+# Install CORTEX core dependencies (16 packages, ~123.5 MB)
 pip install -r requirements.txt
+
+# Optional: Install development tools (6 packages, ~26.5 MB)
+# These auto-install when first used, or install manually:
+pip install -r optional-requirements.txt
 ```
+
+**💡 Lazy Loading:** Development tools (black, flake8, mypy, radon, pylint, vulture) are automatically installed the first time you use commands like `validate lint`, `format code`, or `check types`. You'll see a one-time prompt to install them.
 
 ### 3️⃣ Configure CORTEX
 
@@ -278,4 +285,4 @@ git clone -b main --single-branch https://github.com/asifhussain60/CORTEX.git
 
 ---
 
-*Last Updated: 2025-11-29 09:44:41 | CORTEX 3.3.0*
+*Last Updated: 2025-11-29 10:24:45 | CORTEX 3.3.0*
