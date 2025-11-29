@@ -68,6 +68,7 @@ CORE_FILES = {
     'cortex.config.template.json',
     'cortex-operations.yaml',
     'requirements.txt',
+    'optional-requirements.txt',  # Development tools (lazy-loaded)
     'setup.py',
     'pytest.ini',
     
@@ -644,7 +645,8 @@ This is the **production-ready CORTEX deployment package** - a clean, minimal in
 - ✅ GitHub Copilot integration (`.github/prompts/`)
 - ✅ Modular documentation (`prompts/`)
 - ✅ Automation scripts (`scripts/`)
-- ✅ All dependencies (`requirements.txt`)
+- ✅ Core dependencies (`requirements.txt` - 16 packages, ~123.5 MB)
+- ✅ Optional tools (`optional-requirements.txt` - 6 packages, ~26.5 MB, auto-installed when needed)
 
 **What's excluded:**
 - ❌ Development tools (tests, CI/CD, build scripts)
@@ -689,7 +691,7 @@ python --version
 git --version
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Install Core Dependencies
 
 ```bash
 # Create virtual environment (recommended)
@@ -701,9 +703,15 @@ python -m venv .venv
 # macOS/Linux:
 source .venv/bin/activate
 
-# Install CORTEX dependencies
+# Install CORTEX core dependencies (16 packages, ~123.5 MB)
 pip install -r requirements.txt
+
+# Optional: Install development tools (6 packages, ~26.5 MB)
+# These auto-install when first used, or install manually:
+pip install -r optional-requirements.txt
 ```
+
+**💡 Lazy Loading:** Development tools (black, flake8, mypy, radon, pylint, vulture) are automatically installed the first time you use commands like `validate lint`, `format code`, or `check types`. You'll see a one-time prompt to install them.
 
 ### 3️⃣ Configure CORTEX
 
@@ -1233,11 +1241,21 @@ def publish_to_branch(
         if not checkpoint.should_skip_stage(PublishStage.VALIDATION):
             logger.info("\n📋 STAGE 1: Validation")
             
-            # Check for uncommitted changes
+            # Check for uncommitted changes and auto-commit
             result = run_git_command(['git', 'status', '--porcelain'], project_root)
             if result.stdout.strip():
-                logger.error("❌ You have uncommitted changes. Please commit or stash them first.")
-                return False
+                logger.info("📝 Uncommitted changes detected - auto-committing for deployment...")
+                
+                # Stage all changes
+                run_git_command(['git', 'add', '-A'], project_root)
+                
+                # Create commit with deployment marker
+                commit_msg = f"chore: pre-deployment commit - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                run_git_command(['git', 'commit', '-m', commit_msg], project_root)
+                
+                logger.info(f"✅ Changes committed: {commit_msg}")
+            else:
+                logger.info("✅ Working tree clean - no uncommitted changes")
             
             checkpoint.save(PublishStage.VALIDATION, {
                 'original_branch': original_branch,
