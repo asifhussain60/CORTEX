@@ -24,6 +24,7 @@ from .base_operation_module import (
     OperationModuleMetadata,
 )
 from .modules.healthcheck.brain_analytics_collector import BrainAnalyticsCollector
+from .modules.healthcheck.strategic_feature_validator import StrategicFeatureValidator
 
 # Enhancement Catalog imports
 import sys
@@ -108,6 +109,9 @@ class HealthCheckOperation(BaseOperationModule):
             'errors': [],
         }
         
+        # Safe default for downstream references
+        brain_analytics: Dict[str, Any] = {}
+
         try:
             # System resource check
             if component in ['system', 'all']:
@@ -149,12 +153,20 @@ class HealthCheckOperation(BaseOperationModule):
                 logger.info("Collecting brain analytics...")
                 brain_analytics = self._check_brain_analytics()
                 health_report['checks']['brain_analytics'] = brain_analytics
-                
-                # Add brain-specific warnings/errors
-                if brain_analytics.get('health_score', 100) < 70:
-                    health_report['warnings'].append(
-                        f"Brain health score below threshold: {brain_analytics.get('health_score')}%"
-                    )
+            
+            # Strategic feature health (Architecture/Rollback/Swagger/UX/ADO)
+            if component in ['strategic', 'all']:
+                strategic = self._check_strategic_features()
+                health_report['checks']['strategic_features'] = strategic
+                # Aggregate issues
+                for k, v in strategic.items():
+                    status = v.get('status')
+                    issues = v.get('issues', [])
+                    if status == 'warning':
+                        health_report['warnings'].extend(issues)
+                    elif status == 'critical':
+                        health_report['errors'].extend(issues)
+                        health_report['overall_status'] = 'unhealthy'
             
             # Enhancement Catalog health check
             if component in ['catalog', 'all']:
@@ -197,6 +209,24 @@ class HealthCheckOperation(BaseOperationModule):
                 message=f"Health check failed: {str(e)}",
                 errors=[str(e)],
             )
+
+    def _check_strategic_features(self) -> Dict[str, Any]:
+        """Run strategic feature validators and return a structured dict."""
+        try:
+            validator = StrategicFeatureValidator()
+            results = {
+                'architecture_intelligence': validator.validate_architecture_intelligence(),
+                'rollback_system': validator.validate_rollback_system(),
+                'swagger_dor': validator.validate_swagger_dor(),
+                'ux_enhancement': validator.validate_ux_enhancement(),
+                'ado_agent': validator.validate_ado_agent(),
+            }
+            return results
+        except Exception as e:
+            logger.warning(f"Strategic feature validation failed: {e}")
+            return {
+                'error': str(e)
+            }
     
     def _check_system_resources(self) -> Dict[str, Any]:
         """Check system resource usage."""
