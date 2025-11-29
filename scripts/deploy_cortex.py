@@ -118,6 +118,8 @@ EXCLUDED_DIRS = {
     '.backup-archive',
     '.deploy-staging',  # Deployment staging folder
     'CORTEX-cleanup',   # Cleanup artifacts
+    '.temp-publish',    # FIX: Temporary publish staging folder (non-production)
+    'test_merge',       # FIX: Test merge artifacts (non-production)
     
     # Cache and temporary directories
     '.cache',
@@ -506,6 +508,7 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
     staging_dir.mkdir(parents=True, exist_ok=True)
     
     # Copy project structure
+    manifest = []
     for item in project_root.rglob('*'):
         # Skip .git directory
         if '.git' in item.parts:
@@ -515,6 +518,7 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
             stats['files_excluded'] += 1
             continue
         
+        manifest.append(item)
         rel_path = item.relative_to(project_root)
         dest_path = staging_dir / rel_path
         
@@ -526,6 +530,37 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
             shutil.copy2(item, dest_path)
             stats['files_copied'] += 1
             stats['total_size'] += item.stat().st_size
+    
+    # Validate manifest before finalizing
+    logger.info("Validating publish manifest...")
+    try:
+        from scripts.validation.publish_manifest_validator import PublishManifestValidator
+        
+        validator = PublishManifestValidator(project_root, manifest)
+        validation_success, validation_report = validator.validate()
+        
+        if not validation_success:
+            logger.error("\n❌ MANIFEST VALIDATION FAILED")
+            logger.error("\nCritical violations found:")
+            for violation in validation_report.get('violations', []):
+                if violation['severity'] == 'critical':
+                    logger.error(f"  • {violation['path']}: {violation['reason']}")
+            
+            logger.error("\nDeploy blocked - non-production content detected in manifest")
+            logger.error("Run validator standalone for full report:")
+            logger.error("  python scripts/validation/publish_manifest_validator.py")
+            raise ValueError("Manifest validation failed - see errors above")
+        
+        if validation_report.get('warnings'):
+            logger.warning("\n⚠️  Manifest validation warnings:")
+            for violation in validation_report.get('violations', []):
+                if violation['severity'] == 'warning':
+                    logger.warning(f"  • {violation['path']}: {violation['reason']}")
+        
+        logger.info(f"✅ Manifest validation PASSED ({validation_report.get('files_checked', 0)} files checked)")
+        
+    except ImportError:
+        logger.warning("⚠️  Could not import manifest validator (optional)")
     
     # Handle copilot-instructions.md merge
     cortex_instructions_src = project_root / ".github" / "copilot-instructions.md"
