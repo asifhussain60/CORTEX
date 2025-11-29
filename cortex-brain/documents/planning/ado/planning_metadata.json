@@ -1,0 +1,11 @@
+{
+  "ADO-12345": {
+    "file_path": "cortex-brain\\documents\\planning\\ado\\completed\\ADO-12345-2025-11-17-Test-Feature-Implementation.md",
+    "status": "completed",
+    "created_at": "2025-11-17T07:01:55.112237",
+    "updated_at": "2025-11-17T07:01:55.115366",
+    "title": "Test Feature Implementation",
+    "approved_by": "asif.hussain",
+    "approved_at": "2025-11-17T07:01:55.113651"
+  }
+}

@@ -1,0 +1,52 @@
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#1e3a8a','secondaryColor':'#3b82f6','tertiaryColor':'#60a5fa'}}}%%
+
+flowchart TB
+    subgraph "Single Source of Truth"
+        YAML[📄 response-templates.yaml<br/>32 templates with triggers]
+    end
+    
+    subgraph "Automated Generation"
+        GEN[⚙️ generate_prompt_templates.py<br/>Converts YAML to AI-readable instructions]
+        HOOK[🪝 Git Hook<br/>Auto-runs on YAML changes]
+    end
+    
+    subgraph "GitHub Copilot Execution"
+        PROMPT[📋 CORTEX.prompt.md<br/>Template Trigger Mappings<br/>+902 lines of instructions]
+        COPILOT[🤖 GitHub Copilot<br/>Reads & applies templates]
+    end
+    
+    subgraph "Python Validation Layer"
+        LOADER[🔧 TemplateLoader<br/>Validation & testing]
+        RENDERER[🎨 TemplateRenderer<br/>Future VS Code extension]
+        REGISTRY[📚 TemplateRegistry<br/>Cataloging & search]
+    end
+    
+    subgraph "User Experience"
+        USER[👤 User Request<br/>"help" or "plan feature"]
+        RESPONSE[💬 Context-Appropriate Response<br/>Formatted via template]
+    end
+    
+    YAML -->|reads| GEN
+    YAML -.->|change detected| HOOK
+    HOOK -->|triggers| GEN
+    GEN -->|updates| PROMPT
+    PROMPT -->|context| COPILOT
+    USER -->|input| COPILOT
+    COPILOT -->|matches trigger| PROMPT
+    COPILOT -->|applies format| RESPONSE
+    
+    YAML -.->|validates| LOADER
+    LOADER -.->|future| RENDERER
+    RENDERER -.->|future| REGISTRY
+    
+    style YAML fill:#1e3a8a,stroke:#3b82f6,color:#fff
+    style PROMPT fill:#3b82f6,stroke:#60a5fa,color:#fff
+    style COPILOT fill:#60a5fa,stroke:#93c5fd,color:#000
+    style RESPONSE fill:#10b981,stroke:#34d399,color:#fff
+    style GEN fill:#8b5cf6,stroke:#a78bfa,color:#fff
+    style HOOK fill:#8b5cf6,stroke:#a78bfa,color:#fff
+    
+    classDef future fill:#6b7280,stroke:#9ca3af,stroke-dasharray: 5 5
+    class LOADER,RENDERER,REGISTRY future
+```

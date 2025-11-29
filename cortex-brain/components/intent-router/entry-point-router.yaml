@@ -1,0 +1,368 @@
+# CORTEX Entry Point Router
+# Purpose: Detect user intent and route to appropriate component
+# Version: 1.0
+# Last Updated: 2025-11-19
+
+# ============================================================================
+# INTENT DETECTION PATTERNS
+# ============================================================================
+
+planning_triggers:
+  description: "Indicates user wants to plan/design before implementation"
+  keywords:
+    - plan
+    - "let's plan"
+    - "lets plan"
+    - design
+    - architecture
+    - roadmap
+    - "how should i"
+    - "what approach"
+    - "help me plan"
+    - planning
+    - "feature planning"
+    - "i want to plan"
+    - "can we plan"
+    - blueprint
+    - strategy
+  
+  examples:
+    - "plan authentication system"
+    - "let's plan the user dashboard"
+    - "help me design the API"
+    - "what approach should I take for payment integration?"
+  
+  action: route_to_planning_orchestrator
+  confidence_threshold: 0.7
+
+development_triggers:
+  description: "Indicates user wants immediate implementation"
+  keywords:
+    - implement
+    - add
+    - create
+    - build
+    - fix
+    - update
+    - modify
+    - change
+    - refactor
+    - "write code"
+    - develop
+    - code
+    - make
+  
+  examples:
+    - "add a login button"
+    - "implement user authentication"
+    - "fix the broken link"
+    - "create a new API endpoint"
+  
+  action: route_to_development_executor
+  confidence_threshold: 0.7
+
+ambiguous_triggers:
+  description: "Keywords that could indicate either planning or development"
+  keywords:
+    - authentication
+    - dashboard
+    - api
+    - feature
+    - system
+    - module
+    - component
+  
+  examples:
+    - "authentication"  # Could be "plan auth" or "implement auth"
+    - "user dashboard"  # Could be "design dashboard" or "add dashboard"
+  
+  action: ask_clarification
+  clarification_prompt: |
+    I can help you with {feature}. Would you like to:
+    
+    1. **PLAN first** - Design the solution, gather requirements, identify risks
+    2. **IMPLEMENT directly** - Write code immediately (I'll auto-generate basic requirements)
+    
+    What would you prefer?
+
+# ============================================================================
+# CONTEXT DETECTION
+# ============================================================================
+
+context_signals:
+  # Signals that planning is needed
+  needs_planning:
+    - "not sure how to"
+    - "what's the best way"
+    - "should i use"
+    - "which approach"
+    - "need help deciding"
+    - "complex feature"
+    - "multiple components"
+    - "security concerns"
+    - "performance critical"
+  
+  # Signals that direct implementation is fine
+  ready_for_implementation:
+    - "simple task"
+    - "quick fix"
+    - "straightforward"
+    - "just add"
+    - "small change"
+    - "minor update"
+    - "already know how"
+
+# ============================================================================
+# ROUTING LOGIC
+# ============================================================================
+
+routing_rules:
+  rule_1_explicit_planning:
+    condition: "User message contains planning_triggers keywords"
+    action: route_to_planning_orchestrator
+    priority: 1  # Highest priority
+    rationale: "Explicit planning intent should always be respected"
+  
+  rule_2_explicit_development:
+    condition: "User message contains development_triggers keywords"
+    action: route_to_development_executor
+    priority: 2
+    rationale: "Explicit implementation intent should be respected"
+  
+  rule_3_ambiguous_with_context:
+    condition: "Ambiguous trigger + needs_planning context signals"
+    action: route_to_planning_orchestrator
+    priority: 3
+    rationale: "When unsure, planning is safer for complex/risky features"
+  
+  rule_4_ambiguous_simple:
+    condition: "Ambiguous trigger + ready_for_implementation signals"
+    action: route_to_development_executor
+    priority: 4
+    rationale: "Simple tasks don't need formal planning"
+  
+  rule_5_no_match:
+    condition: "No clear trigger match"
+    action: ask_clarification
+    priority: 5  # Lowest priority (fallback)
+    rationale: "Ask user to clarify intent rather than guessing"
+
+# ============================================================================
+# COMPONENT PIPELINE CONFIGURATIONS
+# ============================================================================
+
+pipelines:
+  sequential_planning_to_development:
+    description: "User plans first, then implements"
+    steps:
+      - step: 1
+        component: planning_orchestrator
+        output: planning_document
+        validation:
+          - dor_checklist_complete
+          - ambiguity_score_below_threshold
+          - security_review_passed
+      
+      - step: 2
+        component: user_approval
+        input: planning_document
+        action: present_plan_for_approval
+      
+      - step: 3
+        component: development_executor
+        input: approved_planning_document
+        trigger: user_says_proceed
+        validation:
+          - clean_code_gates_passed
+          - tdd_quality_tier_met
+          - security_gates_passed
+  
+  standalone_planning:
+    description: "User only wants to plan (no immediate implementation)"
+    steps:
+      - step: 1
+        component: planning_orchestrator
+        output: planning_document
+      
+      - step: 2
+        component: user_approval
+        input: planning_document
+        action: store_plan_for_future_use
+  
+  standalone_development:
+    description: "User implements directly without formal planning"
+    steps:
+      - step: 1
+        component: development_executor
+        input: user_request
+        auto_generate:
+          - basic_acceptance_criteria
+          - simple_security_checklist
+        validation:
+          - clean_code_gates_passed
+          - tdd_quality_tier_met
+          - security_gates_passed
+
+# ============================================================================
+# USER EXPERIENCE PATTERNS
+# ============================================================================
+
+ux_patterns:
+  pattern_1_planning_first:
+    user_says: "plan authentication"
+    router_action: route_to_planning_orchestrator
+    cortex_response: |
+      🧠 **CORTEX Planning Mode Activated**
+      
+      I'll help you plan the authentication system. Let me gather requirements and design the solution.
+      
+      [Loads help_plan_feature.md and DoR checklist]
+  
+  pattern_2_implement_directly:
+    user_says: "add login button"
+    router_action: route_to_development_executor
+    cortex_response: |
+      🧠 **CORTEX Development Mode Activated**
+      
+      I'll implement the login button directly. Auto-generating basic requirements...
+      
+      [Loads development executor with auto-generated simple AC]
+  
+  pattern_3_ambiguous_needs_clarification:
+    user_says: "authentication"
+    router_action: ask_clarification
+    cortex_response: |
+      🧠 **CORTEX Intent Detection**
+      
+      I can help you with authentication. Would you like to:
+      
+      1. **PLAN first** - Design the solution, gather requirements, identify risks
+      2. **IMPLEMENT directly** - Write code immediately (I'll auto-generate basic requirements)
+      
+      What would you prefer?
+  
+  pattern_4_complex_feature_auto_plan:
+    user_says: "add payment processing"
+    context_detected: ["security concerns", "complex feature"]
+    router_action: suggest_planning_first
+    cortex_response: |
+      🧠 **CORTEX Recommendation**
+      
+      Payment processing is a complex, security-critical feature. I recommend **planning first** to:
+      - Identify PCI-DSS compliance requirements
+      - Design secure payment flow
+      - Plan fraud detection strategy
+      
+      Would you like to proceed with planning? (or say "implement directly" to skip)
+
+# ============================================================================
+# INTEGRATION WITH EXISTING CORTEX COMPONENTS
+# ============================================================================
+
+component_integration:
+  tier1_working_memory:
+    description: "Auto-inject planning documents into Tier 1 context"
+    trigger: "User says 'resume plan [feature]' or 'implement planned feature'"
+    action: |
+      1. Search tier1/working_memory.db for related planning documents
+      2. Load approved planning document
+      3. Inject AC, risks, security requirements into context
+      4. Route to development_executor with enriched context
+  
+  tier2_knowledge_graph:
+    description: "Learn from planning → implementation patterns"
+    trigger: "Planning document approved + implementation completed"
+    action: |
+      1. Create knowledge graph node linking plan → implementation
+      2. Extract successful patterns (e.g., "feature X planning took Y hours, implementation Z hours")
+      3. Store for future similarity matching
+  
+  work_planner_agent:
+    description: "Delegate planning to Work Planner agent"
+    trigger: "Router detects planning intent"
+    action: |
+      1. Load #file:../../prompts/shared/help_plan_feature.md
+      2. Activate Work Planner agent persona
+      3. Use DoR checklist from cortex-brain/templates/planning/
+      4. Generate plan in cortex-brain/documents/planning/features/
+
+# ============================================================================
+# METRICS & MONITORING
+# ============================================================================
+
+routing_metrics:
+  track:
+    - routing_decision: "planning vs development vs clarification"
+    - confidence_score: "0.0 to 1.0"
+    - user_clarification_needed: "true/false"
+    - context_signals_detected: "list of signals"
+    - pipeline_chosen: "sequential/standalone_planning/standalone_development"
+  
+  storage: "cortex-brain/metrics/routing-decisions.jsonl"
+  
+  example_entry:
+    timestamp: "2025-11-19T10:30:00Z"
+    user_message: "plan authentication system"
+    routing_decision: "planning_orchestrator"
+    confidence_score: 0.95
+    keywords_matched: ["plan", "authentication", "system"]
+    context_signals: []
+    pipeline: "sequential_planning_to_development"
+    clarification_needed: false
+
+# ============================================================================
+# ERROR HANDLING
+# ============================================================================
+
+error_handling:
+  no_clear_intent:
+    condition: "Confidence score < 0.5 for all patterns"
+    action: ask_clarification
+    fallback_message: |
+      I'm not sure whether you want to:
+      - **Plan/design** a solution
+      - **Implement** code directly
+      
+      Could you clarify your intent?
+  
+  conflicting_signals:
+    condition: "Both planning and development triggers present"
+    example: "plan and implement authentication"
+    action: sequential_pipeline
+    response: |
+      I'll help you **plan first, then implement**. Let's start with planning.
+  
+  invalid_pipeline_state:
+    condition: "User tries to implement before plan approval"
+    action: block_and_redirect
+    response: |
+      ⚠️ **Planning Not Approved Yet**
+      
+      Please review and approve the planning document before proceeding to implementation.
+      
+      Say "approve plan" when ready.
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+config:
+  default_confidence_threshold: 0.7
+  auto_route_simple_tasks: true  # Skip clarification for obvious simple tasks
+  prefer_planning_for_complex: true  # Suggest planning for security/complex features
+  store_routing_decisions: true
+  learning_enabled: true  # Learn from user corrections
+
+# ============================================================================
+# VERSION HISTORY
+# ============================================================================
+
+version_history:
+  v1.0:
+    date: "2025-11-19"
+    changes:
+      - "Initial release"
+      - "Planning vs development trigger detection"
+      - "Three pipeline configurations (sequential, standalone planning, standalone development)"
+      - "Ambiguity clarification workflow"
+      - "Integration with Tier 1 working memory and Work Planner agent"

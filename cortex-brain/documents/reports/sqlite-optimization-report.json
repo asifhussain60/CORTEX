@@ -1,0 +1,215 @@
+{
+  "timestamp": "2025-11-17T16:14:44.716017",
+  "databases": {
+    "tier1": {
+      "tier": "tier1",
+      "path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\tier1\\conversations.db",
+      "success": true,
+      "timestamp": "2025-11-17T16:14:44.716173",
+      "initial_size_bytes": 233472,
+      "initial_size_mb": 0.22,
+      "integrity_check": {
+        "passed": true,
+        "details": [
+          "ok"
+        ]
+      },
+      "index_analysis": {
+        "index_count": 7,
+        "indexes": [
+          {
+            "name": "idx_conv_agent",
+            "table": "conversations",
+            "sql": "CREATE INDEX idx_conv_agent ON conversations(agent_id)"
+          },
+          {
+            "name": "idx_conv_status",
+            "table": "conversations",
+            "sql": "CREATE INDEX idx_conv_status ON conversations(status)"
+          },
+          {
+            "name": "idx_msg_conv",
+            "table": "messages",
+            "sql": "CREATE INDEX idx_msg_conv ON messages(conversation_id)"
+          },
+          {
+            "name": "idx_entity_conv",
+            "table": "entities",
+            "sql": "CREATE INDEX idx_entity_conv ON entities(conversation_id)"
+          },
+          {
+            "name": "idx_file_conv",
+            "table": "files_modified",
+            "sql": "CREATE INDEX idx_file_conv ON files_modified(conversation_id)"
+          },
+          {
+            "name": "idx_wm_conv_status",
+            "table": "working_memory_conversations",
+            "sql": "CREATE INDEX idx_wm_conv_status \n            ON working_memory_conversations(status, start_time)\n        "
+          },
+          {
+            "name": "idx_wm_msg_conv",
+            "table": "working_memory_messages",
+            "sql": "CREATE INDEX idx_wm_msg_conv \n            ON working_memory_messages(conversation_id, timestamp)\n        "
+          }
+        ]
+      },
+      "table_stats": [
+        {
+          "table": "conversations",
+          "rows": 3
+        },
+        {
+          "table": "messages",
+          "rows": 195
+        },
+        {
+          "table": "entities",
+          "rows": 509
+        },
+        {
+          "table": "files_modified",
+          "rows": 0
+        },
+        {
+          "table": "working_memory_conversations",
+          "rows": 50
+        },
+        {
+          "table": "working_memory_messages",
+          "rows": 0
+        },
+        {
+          "table": "conversation_entities",
+          "rows": 0
+        },
+        {
+          "table": "eviction_log",
+          "rows": 0
+        }
+      ],
+      "vacuum_completed": true,
+      "analyze_completed": true,
+      "final_size_bytes": 233472,
+      "final_size_mb": 0.22,
+      "space_reclaimed_bytes": 0,
+      "space_reclaimed_mb": 0.0,
+      "space_reclaimed_percent": 0.0
+    },
+    "tier2": {
+      "tier": "tier2",
+      "path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\tier2\\knowledge_graph.db",
+      "success": true,
+      "timestamp": "2025-11-17T16:14:44.892770",
+      "initial_size_bytes": 114688,
+      "initial_size_mb": 0.11,
+      "integrity_check": {
+        "passed": true,
+        "details": [
+          "ok"
+        ]
+      },
+      "index_analysis": {
+        "index_count": 8,
+        "indexes": [
+          {
+            "name": "idx_pattern_type",
+            "table": "patterns",
+            "sql": "CREATE INDEX idx_pattern_type ON patterns(pattern_type)"
+          },
+          {
+            "name": "idx_confidence",
+            "table": "patterns",
+            "sql": "CREATE INDEX idx_confidence ON patterns(confidence)"
+          },
+          {
+            "name": "idx_last_accessed",
+            "table": "patterns",
+            "sql": "CREATE INDEX idx_last_accessed ON patterns(last_accessed)"
+          },
+          {
+            "name": "idx_tag",
+            "table": "pattern_tags",
+            "sql": "CREATE INDEX idx_tag ON pattern_tags(tag)"
+          },
+          {
+            "name": "idx_relationship_from",
+            "table": "pattern_relationships",
+            "sql": "CREATE INDEX idx_relationship_from ON pattern_relationships(from_pattern)"
+          },
+          {
+            "name": "idx_relationship_to",
+            "table": "pattern_relationships",
+            "sql": "CREATE INDEX idx_relationship_to ON pattern_relationships(to_pattern)"
+          },
+          {
+            "name": "idx_scope",
+            "table": "patterns",
+            "sql": "CREATE INDEX idx_scope ON patterns(scope)"
+          },
+          {
+            "name": "idx_namespaces",
+            "table": "patterns",
+            "sql": "CREATE INDEX idx_namespaces ON patterns(namespaces)"
+          }
+        ]
+      },
+      "table_stats": [
+        {
+          "table": "patterns",
+          "rows": 7
+        },
+        {
+          "table": "pattern_relationships",
+          "rows": 0
+        },
+        {
+          "table": "pattern_tags",
+          "rows": 0
+        },
+        {
+          "table": "confidence_decay_log",
+          "rows": 0
+        },
+        {
+          "table": "pattern_fts_data",
+          "rows": 10
+        },
+        {
+          "table": "pattern_fts_idx",
+          "rows": 8
+        },
+        {
+          "table": "pattern_fts_docsize",
+          "rows": 8
+        },
+        {
+          "table": "pattern_fts_config",
+          "rows": 1
+        },
+        {
+          "table": "pattern_fts",
+          "rows": 7
+        }
+      ],
+      "vacuum_completed": true,
+      "analyze_completed": true,
+      "final_size_bytes": 114688,
+      "final_size_mb": 0.11,
+      "space_reclaimed_bytes": 0,
+      "space_reclaimed_mb": 0.0,
+      "space_reclaimed_percent": 0.0
+    },
+    "tier3": {
+      "success": false,
+      "error": "Database not found: D:\\PROJECTS\\CORTEX\\cortex-brain\\tier3\\context_intelligence.db",
+      "tier": "tier3"
+    }
+  },
+  "summary": {
+    "total_space_reclaimed": 0,
+    "total_databases": 3,
+    "successful": 2,
+    "failed": 1
+  }
+}

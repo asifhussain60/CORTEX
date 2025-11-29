@@ -1,0 +1,17 @@
+{
+  "label": "tdd_session_start",
+  "metrics": {
+    "response_time_ms": 0.004399917088449001,
+    "memory_peak_mb": 0.0012054443359375,
+    "memory_current_mb": 0.00086212158203125,
+    "cpu_percent": 0.0,
+    "timestamp": "2025-11-25T15:42:17.559678",
+    "passed": true,
+    "violations": []
+  },
+  "thresholds": {
+    "response_time_ms": 500.0,
+    "memory_mb": 100.0,
+    "cpu_percent": 50.0
+  }
+}
