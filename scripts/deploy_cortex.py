@@ -1103,7 +1103,8 @@ def publish_to_branch(
     original_branch = checkpoint.get_data('original_branch')
     if not original_branch:
         original_branch = get_current_branch(project_root)
-        checkpoint.save(PublishStage.VALIDATION, {'original_branch': original_branch})
+        # Don't save checkpoint here - just store the branch info
+        # The actual checkpoint.save will happen in STAGE 1
     
     logger.info(f"Current branch: {original_branch}")
     
