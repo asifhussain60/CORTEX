@@ -1755,6 +1755,65 @@ templates:
       
       Say "estimate timeframe" with your feature description to begin.
 
+  application_health:
+    <<: *standard_5_part_base
+    name: Application Health Dashboard
+    triggers:
+    - show health dashboard
+    - health dashboard
+    - application health
+    - app health
+    - show app health
+    - analyze application
+    - application analysis
+    - code health
+    - project health
+    - scan application
+    response_type: detailed
+    handler: src.orchestrators.application_health_orchestrator.ApplicationHealthOrchestrator
+    understanding_content: "You want to analyze your application's health with multi-language code analysis, quality metrics, and a comprehensive report."
+    challenge_content: "No Challenge - Application Health Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
+    response_content: |
+      **Application Health Dashboard Features:**
+      
+      **Progressive Crawling Strategy:**
+      - **Overview Scan** (30s): High-level file counts, language detection, basic structure
+      - **Standard Scan** (2-5 min): 20% sampling with quality metrics, complexity analysis
+      - **Deep Scan** (5-10 min): Full analysis with security patterns, dependency graphs
+      
+      **Multi-Language Support:**
+      - Python (AST-based analysis, function/class detection)
+      - C# (.NET patterns, LINQ detection)
+      - JavaScript/TypeScript (React/Angular/Vue patterns)
+      - ColdFusion (tag parsing, SQL injection detection)
+      - Generic fallback (LOC, SLOC, comments)
+      
+      **Performance Optimizations:**
+      - Multi-threaded file processing (up to 100 workers)
+      - Hash-based caching (90%+ cache hit rate on re-scans)
+      - Incremental updates (only changed files re-analyzed)
+      - Memory-efficient streaming (handles 50K+ files)
+      
+      **Report Outputs:**
+      - Text-based markdown reports (terminal-friendly)
+      - File counts and type breakdown
+      - Language-specific metrics (functions, classes, LOC)
+      - Quality scores and health indicators
+    request_echo_content: "Analyze application health with comprehensive metrics and report"
+    next_steps_content: |
+      **Quick Start:**
+      
+      1. Say "show health dashboard" (uses current directory)
+      2. Specify scan level: "analyze application with deep scan"
+      3. Choose directory: "scan application in C:\Projects\MyApp"
+      
+      **Scan Levels:**
+      - **overview** - Fast high-level scan (30 seconds)
+      - **standard** - Balanced analysis (2-5 minutes) [DEFAULT]
+      - **deep** - Comprehensive audit (5-10 minutes)
+      
+      Reports are saved to: `cortex-brain/documents/analysis/`
+
 routing:
   default: fallback
   greeting_triggers:
@@ -2080,6 +2139,17 @@ routing:
   - effort estimate
   - estimate effort
   - project timeline
+  application_health_triggers:
+  - show health dashboard
+  - health dashboard
+  - application health
+  - app health
+  - show app health
+  - analyze application
+  - application analysis
+  - code health
+  - project health
+  - scan application
 formatting:
   mandatory_sections:
   - understanding
