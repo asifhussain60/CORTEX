@@ -443,10 +443,18 @@ def should_include_path(path: Path, project_root: Path) -> bool:
     
     # Step 4: Check excluded directories (full path matching, not just first dir)
     # This catches nested excluded directories like cortex-brain/admin
+    # NOTE: Special handling for directories that should only be excluded at root level
+    ROOT_ONLY_EXCLUSIONS = {'templates'}  # templates/ excluded at root, but cortex-brain/templates/ is included
+    
     for excluded_dir in EXCLUDED_DIRS:
-        # Check if path starts with excluded directory
+        # Check if path starts with excluded directory (root-level match)
         if path_str.startswith(f"{excluded_dir}/") or path_str == excluded_dir:
             return False
+        
+        # For nested path matching, skip root-only exclusions
+        if excluded_dir in ROOT_ONLY_EXCLUSIONS:
+            continue
+            
         # Check if any part of path matches excluded directory name
         if excluded_dir in rel_path.parts:
             return False
