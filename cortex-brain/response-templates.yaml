@@ -99,6 +99,7 @@ templates:
     - first time
     - new user
     response_type: interactive
+    expected_orchestrator: OnboardingOrchestrator
     operation_name: Onboarding
     understanding_content: "You're starting the onboarding process to personalize CORTEX for your experience level, interaction preferences, and tech stack."
     challenge_content: "No Challenge - This quick 3-question setup helps CORTEX adapt to your needs."
@@ -118,6 +119,41 @@ templates:
     next_steps_content: |
       Answer the current question to proceed.
       You can update your profile anytime with `update profile`.
+  
+  diagram_regeneration:
+    <<: *standard_5_part_base
+    name: Diagram Regeneration
+    triggers:
+    - regenerate diagram
+    - refresh diagram
+    - update diagram
+    - diagram sync
+    - rebuild diagram
+    - diagram regeneration
+    response_type: detailed
+    expected_orchestrator: DiagramRegenerationOrchestrator
+    operation_name: Diagram Regeneration
+    understanding_content: "You want to regenerate architecture diagrams from source code to reflect the current system structure."
+    challenge_content: "No Challenge - Diagram regeneration automatically analyzes code structure and relationships to produce up-to-date visual documentation."
+    response_content: |
+      **Diagram Regeneration Process:**
+      
+      1. **Code Analysis** - Scan source files to extract components, relationships, dependencies
+      2. **Structure Detection** - Identify orchestrators, agents, modules, workflows
+      3. **Relationship Mapping** - Trace calls, imports, and data flows
+      4. **Diagram Generation** - Produce Mermaid diagrams (flowcharts, class diagrams, sequence diagrams)
+      5. **File Updates** - Save diagrams to documentation directory
+      
+      **Generated Diagrams:**
+      • System architecture overview
+      • Component relationships
+      • Data flow diagrams
+      • Module dependencies
+    request_echo_content: "Regenerate architecture diagrams from current source code"
+    next_steps_content: |
+      Say "regenerate diagram" to start the automated diagram generation process.
+      
+      Diagrams will be saved to `docs/architecture/` directory.
   
   tech_implementation_example:
     <<: *tech_aware_base
@@ -1517,6 +1553,17 @@ templates:
     - run system alignment
     response_type: detailed
 
+  system_alignment_fix:
+    <<: *standard_5_part_base
+    name: System Alignment Interactive Fix
+    triggers:
+    - align fix
+    - fix alignment
+    - apply fixes
+    - interactive fix
+    - remediate alignment
+    response_type: detailed
+
   cleanup_operation:
     <<: *standard_5_part_base
     name: Holistic Cleanup Operation
@@ -1603,6 +1650,7 @@ templates:
     - sync repository
     - commit and sync
     response_type: detailed
+    expected_orchestrator: CommitOrchestrator
     handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
     understanding_content: "You want to synchronize your local repository with origin by pulling, merging, and pushing changes while ensuring no untracked files remain."
     challenge_content: "No Challenge - Commit workflow will handle pre-flight validation, untracked files, merge conflicts, and create safety checkpoints automatically."
@@ -2000,6 +2048,12 @@ routing:
   - system alignment
   - validate alignment
   - run system alignment
+  system_alignment_fix_triggers:
+  - align fix
+  - fix alignment
+  - apply fixes
+  - interactive fix
+  - remediate alignment
   cleanup_triggers:
   - cleanup
   - clean up
@@ -2126,6 +2180,13 @@ routing:
   - reset cache
   - flush cache
   - clear validation cache
+  diagram_regeneration_triggers:
+  - regenerate diagrams
+  - generate diagrams
+  - rebuild diagrams
+  - refresh diagrams
+  - update diagrams
+  - create diagrams
   timeframe_estimate_triggers:
   - estimate timeframe
   - time estimate
