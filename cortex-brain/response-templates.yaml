@@ -1658,6 +1658,24 @@ templates:
     request_echo_content: "Sync repository with origin (pull, merge, push)"
     next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
 
+  rollback_operation:
+    <<: *standard_5_part_base
+    name: Rollback to Checkpoint
+    triggers:
+    - rollback
+    - rollback to
+    - restore to checkpoint
+    - undo to checkpoint
+    - revert to checkpoint
+    response_type: detailed
+    expected_orchestrator: RollbackOrchestrator
+    handler: src.orchestrators.rollback_orchestrator.RollbackOrchestrator
+    understanding_content: "You want to rollback your repository to a previous checkpoint created during TDD workflow (pre-work, tdd-red, tdd-green, refactoring, post-work)."
+    challenge_content: "No Challenge - Rollback will validate checkpoint exists, check for uncommitted changes, show diff preview, and require confirmation before executing."
+    response_content: "**Rollback Workflow Steps:**\n   \n   1. **Checkpoint Validation** - Verify checkpoint exists in PhaseCheckpointManager\n   2. **Safety Checks** - Detect uncommitted changes and merge conflicts\n   3. **Preview Changes** - Show git diff of changes to be discarded\n   4. **User Confirmation** - Require explicit 'yes' confirmation\n   5. **Execute Rollback** - Run git reset --hard to checkpoint\n   \n   **Safety Features:**\n   • Blocks rollback if uncommitted changes exist\n   • Blocks rollback if merge in progress\n   • Shows diff preview before confirmation\n   • Dry-run mode (--dry-run) for preview without execution\n   • Force mode (--force) to bypass safety checks (DANGER: loses changes)\n   \n   **Checkpoint Types:**\n   • pre-work - Before starting feature work\n   • tdd-red - After writing failing test\n   • tdd-green - After making test pass\n   • refactoring - After code cleanup\n   • post-work - After completing feature"
+    request_echo_content: "Rollback to previous checkpoint"
+    next_steps_content: "**Execution Options:**\n   \n   1. **Safe Rollback** - Say \"rollback to <checkpoint-id>\" for full safety workflow\n   2. **Preview Only** - Say \"rollback to <checkpoint-id> --dry-run\" to see diff without executing\n   3. **Force Rollback** - Say \"rollback to <checkpoint-id> --force\" to bypass safety (⚠️ loses uncommitted changes)\n   \n   **Finding Checkpoints:**\n   • Say \"list checkpoints\" to see available checkpoint IDs\n   • Checkpoint IDs follow format: phase-YYYYMMDD-HHMMSS (e.g., tdd-green-20251129-140000)\n   \n   **Resolution Tips:**\n   • If uncommitted changes block rollback: commit or stash first\n   • If merge in progress: complete merge or abort with \"git merge --abort\"\n   \n   Ready to rollback? Provide checkpoint ID or say \"list checkpoints\" to see options."
+
   cache_management:
     <<: *standard_5_part_base
     name: Cache Management
@@ -1697,6 +1715,58 @@ templates:
       3. View cache-troubleshooting-guide.md for optimization tips
       
       Say "cache status" to begin analysis.
+
+  ado_planning:
+    <<: *standard_5_part_base
+    name: ADO Work Item Planning
+    triggers:
+    - plan ado
+    - ado story
+    - ado feature
+    - create ado work item
+    - estimate work item
+    response_type: detailed
+    expected_orchestrator: SWAGGEREntryPointOrchestrator
+    handler: src.orchestrators.swagger_entry_point_orchestrator.SWAGGEREntryPointOrchestrator
+    understanding_content: "You want to create Azure DevOps work items (stories, features, tasks) with Definition of Ready validation and story point estimation."
+    challenge_content: "No Challenge - ADO planning enforces DoR (Definition of Ready) validation before providing estimates to ensure requirements are complete."
+    response_content: "**ADO Planning Workflow:**\n   \n   1. **DoR Validation** - Interactive questioning across 5 categories (requirements, dependencies, technical, security, testing)\n   2. **Work Item Decomposition** - Break down Epics → Features → Stories → Tasks\n   3. **Story Point Estimation** - Modified Fibonacci scale (1, 2, 3, 5, 8, 13)\n   4. **Timeframe Analysis** - Parallel track identification, team size scenarios, critical path\n   5. **ADO Output** - Copy-paste ready markdown with acceptance criteria"
+    request_echo_content: "Create ADO work items with DoR validation"
+    next_steps_content: "Ready to start? Provide feature name or say \"plan ado [feature name]\" to begin."
+
+  ux_enhancement:
+    <<: *standard_5_part_base
+    name: UX Enhancement Analysis
+    triggers:
+    - ux enhancement
+    - analyze ux
+    - ux dashboard
+    - enhance user experience
+    - ux analysis
+    response_type: detailed
+    expected_orchestrator: UXEnhancementOrchestrator
+    handler: src.orchestrators.ux_enhancement_orchestrator.UXEnhancementOrchestrator
+    understanding_content: "You want to analyze your codebase for UX improvement opportunities with an interactive dashboard showing performance, accessibility, and code quality metrics."
+    challenge_content: "No Challenge - UX analysis will scan codebase, measure performance, check accessibility, and generate interactive HTML dashboard."
+    response_content: "**UX Enhancement Workflow:**\n   \n   1. **Codebase Scanning** - Analyze file structure, languages, components (30-60s)\n   2. **Architecture Mapping** - Map dependencies, coupling, entry points (45-90s)\n   3. **Performance Measurement** - Bundle size, load times, optimization opportunities (30-60s)\n   4. **Security & Accessibility** - OWASP validation, WCAG compliance checking (45-90s)\n   5. **Discovery Intelligence** - Identify code duplication, unused code, enhancement patterns (30-45s)\n   6. **Dashboard Generation** - Interactive D3.js visualization with recommendations (15-30s)"
+    request_echo_content: "Analyze codebase for UX enhancements"
+    next_steps_content: "Ready to analyze? Say \"ux enhancement\" or \"analyze ux\" to begin."
+
+  ado_operations:
+    <<: *standard_5_part_base
+    name: ADO Operations
+    triggers:
+    - ado summary
+    - ado pr review
+    - review ado pr
+    response_type: detailed
+    expected_orchestrator: ADOAgent
+    handler: src.cortex_agents.ado_agent.ADOAgent
+    understanding_content: "You want to perform Azure DevOps operations such as work summaries, pull request reviews, or work item tracking."
+    challenge_content: "No Challenge - ADO operations provide unified access to ADO functionality with copy-paste ready output."
+    response_content: "**ADO Operations Available:**\n   \n   1. **Work Summary** - Generate sprint summary with completed stories, metrics, decisions\n   2. **PR Review** - Analyze pull request with code quality, security, test validation\n   3. **Story Creation** - Create user stories with ADO-formatted markdown\n   4. **Feature Planning** - Plan features with acceptance criteria and story points"
+    request_echo_content: "Perform ADO operations"
+    next_steps_content: "What would you like to do? Say \"ado summary\" for work tracking or \"ado pr review #123\" for pull request analysis."
 
   lint_validation:
     <<: *standard_5_part_base

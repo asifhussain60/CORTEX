@@ -449,6 +449,157 @@ class TestQuestionGeneration:
 class TestInvalidInputs:
     """Test handling of various invalid inputs"""
     
+    def test_update_profile_options_display(self):
+        """Test profile update options message display"""
+        orchestrator = OnboardingOrchestrator()
+        
+        message = orchestrator.show_update_options()
+        
+        assert isinstance(message, str)
+        assert 'profile' in message.lower()
+        assert len(message) > 0
+    
+    def test_update_interaction_mode_with_tier1_success(self):
+        """Test interaction mode update with successful Tier 1 storage"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_interaction_mode("2")
+        
+        assert result['status'] == 'success'
+        assert 'Guided' in result['message']
+    
+    def test_update_interaction_mode_with_tier1_failure(self):
+        """Test interaction mode update with failed Tier 1 storage"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=False)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_interaction_mode("2")
+        
+        assert result['status'] == 'error'
+        assert 'Failed' in result['message']
+    
+    def test_update_tech_stack_azure_preset(self):
+        """Test updating to Azure preset"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("1")  # Azure Stack
+        
+        assert result['status'] == 'success'
+        assert 'Azure' in result['message'] or 'stack' in result['message'].lower()
+        assert 'NOT a constraint' in result['message']
+    
+    def test_update_tech_stack_aws_preset(self):
+        """Test updating to AWS preset"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("2")  # AWS Stack
+        
+        assert result['status'] == 'success'
+        assert 'stack' in result['message'].lower()
+    
+    def test_update_tech_stack_gcp_preset(self):
+        """Test updating to GCP preset"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("3")  # GCP Stack
+        
+        assert result['status'] == 'success'
+        assert 'stack' in result['message'].lower()
+    
+    def test_update_tech_stack_no_preference(self):
+        """Test updating to no preference"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("4")  # No Preference
+        
+        assert result['status'] == 'success'
+        assert 'stack' in result['message'].lower() or 'updated' in result['message'].lower()
+    
+    def test_update_tech_stack_custom(self):
+        """Test updating to custom tech stack"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=True)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("5")  # Custom
+        
+        assert result['status'] == 'success'
+        assert 'Custom' in result['message']
+    
+    def test_tech_stack_processing_all_presets(self):
+        """Test processing all tech stack preset choices"""
+        orchestrator = OnboardingOrchestrator()
+        orchestrator.process_experience_choice("2")
+        orchestrator.process_mode_choice("1", "mid")
+        
+        for choice in ["1", "2", "3", "4", "5"]:
+            orch = OnboardingOrchestrator()
+            orch.process_experience_choice("2")
+            orch.process_mode_choice("1", "mid")
+            result = orch.process_tech_stack_choice(choice)
+            
+            assert result['status'] == 'completed'
+            assert 'profile' in result
+            assert 'experience_level' in result['profile']
+            assert 'interaction_mode' in result['profile']
+    
+    def test_update_tech_stack_with_tier1_failure(self):
+        """Test tech stack update with failed Tier 1 storage"""
+        mock_tier1 = Mock()
+        mock_tier1.update_profile = Mock(return_value=False)
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        result = orchestrator.update_tech_stack("1")
+        
+        assert result['status'] == 'error'
+        assert 'Failed' in result['message']
+    
+    def test_get_profile_summary_with_tier1(self):
+        """Test profile summary retrieval with Tier 1"""
+        mock_tier1 = Mock()
+        mock_tier1.get_profile = Mock(return_value={
+            'experience_level': 'senior',
+            'interaction_mode': 'educational',
+            'tech_stack_preference': 'aws',
+            'created_at': '2025-11-29T10:00:00',
+            'last_updated': '2025-11-29T10:30:00'
+        })
+        
+        orchestrator = OnboardingOrchestrator(tier1_api=mock_tier1)
+        
+        summary = orchestrator.get_profile_summary()
+        
+        assert isinstance(summary, str)
+        assert len(summary) > 0
+    
+    def test_get_profile_summary_without_tier1(self):
+        """Test profile summary when Tier 1 unavailable"""
+        orchestrator = OnboardingOrchestrator()
+        
+        summary = orchestrator.get_profile_summary()
+        
+        assert isinstance(summary, str)
+        assert 'tier 1' in summary.lower() or 'not available' in summary.lower()
+    
     def test_out_of_range_experience(self):
         """Test experience choice outside valid range"""
         orchestrator = OnboardingOrchestrator()
