@@ -156,6 +156,28 @@ class IntentRouter(BaseAgent):
                 "use aws stack", "use gcp stack", "prefer azure", "prefer aws", "prefer gcp",
                 "no tech preference", "custom tech stack", "configure stack", "set stack"
             ],
+            # Timeframe estimation (NEW - SWAGGER Integration + 3.2.1 Scope Approval Gate)
+            IntentType.ESTIMATE: [
+                "estimate timeframe", "time estimate", "how long will this take",
+                "timeframe", "story points", "sprint estimate", "parallel tracks",
+                "timeline comparison", "delivery timeline", "effort estimate",
+                "estimate effort", "project timeline", "estimate this", "estimate",
+                "how many sprints", "team size estimate", "cost projection",
+                "what-if scenarios", "estimate hours", "estimate days"
+            ],
+            IntentType.TIMEFRAME: [
+                "timeframe for", "timeframe estimate", "delivery timeframe",
+                "timeframe analysis", "track timeframe"
+            ],
+            IntentType.STORY_POINTS: [
+                "story points for", "calculate story points", "how many points",
+                "point estimate", "fibonacci points"
+            ],
+            IntentType.APPROVE_SCOPE: [
+                "approve scope", "confirm scope", "scope approved", "scope looks good",
+                "approve estimation scope", "scope is correct", "yes approve",
+                "accept scope", "scope confirmation", "validate scope"
+            ],
         }
         
         # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
@@ -286,6 +308,42 @@ class IntentRouter(BaseAgent):
                 'rules_to_consider': [],  # No governance rules - user preference only
                 'skip_summary_generation': True,  # Interactive flow, no summary needed
                 'requires_documentation': False
+            },
+            # Timeframe estimation (NEW - SWAGGER Integration + 3.2.1 Scope Approval Gate)
+            IntentType.ESTIMATE: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT', 'SCOPE_APPROVAL_REQUIRED'],
+                'requires_dor_validation': True,  # SWAGGER requires DoR before estimation
+                'requires_scope_approval': True,  # NEW 3.2.1: Block estimates without approved scope
+                'skip_summary_generation': False,  # Estimates need detailed reports
+                'requires_documentation': True,
+                'create_persistent_artifact': True,  # Save estimation reports
+                'enable_parallel_analysis': True,  # Enable parallel track analysis
+                'planner_handoff_on_low_confidence': True  # NEW 3.2.1: Auto-handoff to planner
+            },
+            IntentType.TIMEFRAME: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT', 'SCOPE_APPROVAL_REQUIRED'],
+                'requires_dor_validation': True,
+                'requires_scope_approval': True,  # NEW 3.2.1: Block estimates without approved scope
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'create_persistent_artifact': True,
+                'enable_parallel_analysis': True,
+                'planner_handoff_on_low_confidence': True  # NEW 3.2.1: Auto-handoff to planner
+            },
+            IntentType.STORY_POINTS: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT', 'SCOPE_APPROVAL_REQUIRED'],
+                'requires_dor_validation': True,
+                'requires_scope_approval': True,  # NEW 3.2.1: Block estimates without approved scope
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'create_persistent_artifact': True,
+                'planner_handoff_on_low_confidence': True  # NEW 3.2.1: Auto-handoff to planner
+            },
+            IntentType.APPROVE_SCOPE: {
+                'rules_to_consider': [],  # No governance rules - user approval action
+                'skip_summary_generation': True,  # Direct action, no summary needed
+                'requires_documentation': False,  # No documentation artifact needed
+                'approval_action': True  # Flag this as approval workflow
             }
         }
 

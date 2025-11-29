@@ -99,29 +99,12 @@ templates:
     - first time
     - new user
     response_type: interactive
+    expected_orchestrator: OnboardingOrchestrator
     operation_name: Onboarding
     understanding_content: "You're starting the onboarding process to personalize CORTEX for your experience level, interaction preferences, and tech stack."
     challenge_content: "No Challenge - This quick 3-question setup helps CORTEX adapt to your needs."
     response_content: |
       Welcome! Let's personalize CORTEX in ~30 seconds.
-      
-      **📖 Before We Begin:**
-      CORTEX operates under transparent engineering standards documented in [THE RULEBOOK](../docs/governance/THE-RULEBOOK.md).
-      
-      **Key Governance Principles:**
-      - ✅ TDD enforcement (test-first development)
-      - ✅ Brain protection (prevents degradation)
-      - ✅ SOLID compliance (architecture standards)
-      - ✅ Security standards (OWASP integration)
-      
-      **Quick Commands:**
-      - `show rules` - View all 27 governance rules
-      - `show compliance` - Real-time compliance dashboard
-      - `explain rule [name]` - Detailed rule explanation
-      
-      **Acknowledgment:** By proceeding with onboarding, you acknowledge awareness of CORTEX governance standards.
-      
-      ---
       
       **What we'll capture:**
       1. Your experience level (affects explanation depth)
@@ -136,6 +119,41 @@ templates:
     next_steps_content: |
       Answer the current question to proceed.
       You can update your profile anytime with `update profile`.
+  
+  diagram_regeneration:
+    <<: *standard_5_part_base
+    name: Diagram Regeneration
+    triggers:
+    - regenerate diagram
+    - refresh diagram
+    - update diagram
+    - diagram sync
+    - rebuild diagram
+    - diagram regeneration
+    response_type: detailed
+    expected_orchestrator: DiagramRegenerationOrchestrator
+    operation_name: Diagram Regeneration
+    understanding_content: "You want to regenerate architecture diagrams from source code to reflect the current system structure."
+    challenge_content: "No Challenge - Diagram regeneration automatically analyzes code structure and relationships to produce up-to-date visual documentation."
+    response_content: |
+      **Diagram Regeneration Process:**
+      
+      1. **Code Analysis** - Scan source files to extract components, relationships, dependencies
+      2. **Structure Detection** - Identify orchestrators, agents, modules, workflows
+      3. **Relationship Mapping** - Trace calls, imports, and data flows
+      4. **Diagram Generation** - Produce Mermaid diagrams (flowcharts, class diagrams, sequence diagrams)
+      5. **File Updates** - Save diagrams to documentation directory
+      
+      **Generated Diagrams:**
+      • System architecture overview
+      • Component relationships
+      • Data flow diagrams
+      • Module dependencies
+    request_echo_content: "Regenerate architecture diagrams from current source code"
+    next_steps_content: |
+      Say "regenerate diagram" to start the automated diagram generation process.
+      
+      Diagrams will be saved to `docs/architecture/` directory.
   
   tech_implementation_example:
     <<: *tech_aware_base
@@ -286,24 +304,7 @@ templates:
     operation_name: Help
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
-    response_content: "[Natural language explanation]\n\n**📖 Governance & Brain Protection:**\n\
-      CORTEX operates under transparent engineering standards:\n\n\
-      **Quick Governance Commands:**\n\
-      | Command | Description | Example |\n\
-      |---------|-------------|----------|\n\
-      | `show rules` | Display full CORTEX governance rulebook | Say: \"show rules\" |\n\
-      | `rulebook` | Quick access to brain protection rules | Say: \"rulebook\" |\n\
-      | `compliance` | Check your current compliance status | Say: \"compliance\" |\n\
-      | `dor` | View Definition of Ready checklist | Say: \"dor\" or \"show dor\" |\n\
-      | `dod` | View Definition of Done checklist | Say: \"dod\" or \"show dod\" |\n\n\
-      **Compliance At-A-Glance:** {compliance_summary}\n\n\
-      **Core Protection Layers:**\n\
-      - ✅ TDD enforcement (RED→GREEN→REFACTOR cycle)\n\
-      - ✅ SOLID compliance checks\n\
-      - ✅ Brain integrity validation\n\
-      - ✅ Security standards (OWASP)\n\
-      - ✅ Git checkpoint system for safe rollbacks\n\n\
-      **Learn More:** Say 'show compliance' for real-time dashboard | Full rulebook: cortex-brain/brain-protection-rules.yaml\n\n[CONTEXT_SUMMARY]"
+    response_content: "[Natural language explanation]\n\n[CONTEXT_SUMMARY]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
     context_summary_template: "\n<details>\n<summary>\U0001F9E0 <b>Context Memory\
@@ -396,252 +397,6 @@ templates:
     response_content: "[Natural language explanation]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
-  rulebook_welcome_banner:
-    name: Rulebook Welcome Banner
-    triggers:
-    - rulebook_welcome_banner
-    - welcome_banner
-    - governance_banner
-    response_type: banner
-    content: |
-      ╔══════════════════════════════════════════════════════════════════════════╗
-      ║                  🧠 CORTEX GOVERNANCE RULES ACTIVE                       ║
-      ╔══════════════════════════════════════════════════════════════════════════╗
-      
-      CORTEX operates under strict governance rules to ensure quality and safety.
-      
-      📋 KEY RULES:
-      - All feature work requires Definition of Ready (DoR) before starting
-      - All completions require Definition of Done (DoD) validation
-      - Git checkpoint required before high-risk operations
-      - Test coverage ≥80% for all production code
-      - Architecture review for structural changes
-      
-      📖 QUICK ACCESS:
-      - Say "show rules" or "rulebook" to see full governance document
-      - Say "help" to see available commands (includes governance section)
-      - Say "compliance" to check your current compliance status
-      
-      ✨ DISMISSAL:
-      - This banner appears once per session
-      - Say "got it" or continue with your request to proceed
-      
-      Full Rulebook: cortex-brain/brain-protection-rules.yaml
-      ╚══════════════════════════════════════════════════════════════════════════╝
-  
-  governance_onboarding_step1:
-    name: Governance Onboarding - Step 1 (Welcome)
-    triggers:
-    - governance_onboarding_step1
-    - start governance onboarding
-    - first time setup
-    response_type: narrative
-    content: |
-      # 🧠 Welcome to CORTEX Enhancement System
-      
-      ## Your AI Coding Assistant with Governance
-      
-      CORTEX is not just another AI assistant - it's a **governed, quality-enforced** development enhancement system.
-      
-      ### What Makes CORTEX Different?
-      
-      ✅ **Transparent Governance:** All operations follow documented rules
-      ✅ **Quality Enforcement:** TDD, SOLID, security standards built-in
-      ✅ **Brain Protection:** Your project knowledge is protected and validated
-      ✅ **Rollback Safety:** Git checkpoints before risky operations
-      ✅ **Compliance Tracking:** Real-time dashboard of rule adherence
-      
-      ### Why Governance Matters
-      
-      Without governance:
-      - ❌ AI can make breaking changes without safety nets
-      - ❌ Code quality degrades over time
-      - ❌ Technical debt accumulates invisibly
-      - ❌ No audit trail or rollback mechanism
-      
-      With CORTEX governance:
-      - ✅ Every change follows Definition of Ready/Done
-      - ✅ Automated testing and validation
-      - ✅ Safe experimentation with rollback points
-      - ✅ Clear compliance visibility
-      
-      ### What Happens Next?
-      
-      You'll go through a quick 3-step onboarding:
-      1. **Welcome** (you are here) [1/3]
-      2. **Rulebook Overview** - Key rules explained
-      3. **Acknowledgment** - Confirm understanding
-      
-      **This takes 2-3 minutes and happens only once.**
-      
-      ---
-      
-      **Ready to continue?** Say "next" or "continue" to see the rulebook.
-  
-  governance_onboarding_step2:
-    name: Governance Onboarding - Step 2 (Rulebook)
-    triggers:
-    - governance_onboarding_step2
-    - show rulebook onboarding
-    response_type: narrative
-    content: |
-      # 📖 CORTEX Governance Rulebook (Overview)
-      
-      **Progress: [2/3]**
-      
-      ## The 7 Core Protection Layers
-      
-      ### 1. Definition of Ready (DoR)
-      **Before starting any feature:**
-      - ✅ Requirements are clear and documented
-      - ✅ Acceptance criteria defined
-      - ✅ Technical approach validated
-      - ✅ No blockers present
-      
-      ### 2. Definition of Done (DoD)
-      **Before marking work complete:**
-      - ✅ Code complete and reviewed
-      - ✅ Unit tests written (≥80% coverage)
-      - ✅ Integration tests passing
-      - ✅ Documentation updated
-      - ✅ No regressions introduced
-      
-      ### 3. TDD Enforcement
-      **Test-Driven Development cycle:**
-      - 🔴 **RED:** Write failing test first
-      - 🟢 **GREEN:** Write minimal code to pass
-      - 🔵 **REFACTOR:** Improve design without breaking tests
-      
-      ### 4. Git Checkpoint System
-      **Before risky operations:**
-      - ✅ Automatic git checkpoint created
-      - ✅ Easy rollback if something breaks
-      - ✅ Safe experimentation encouraged
-      
-      ### 5. SOLID Principles
-      **Code design standards:**
-      - **S**ingle Responsibility
-      - **O**pen/Closed
-      - **L**iskov Substitution
-      - **I**nterface Segregation
-      - **D**ependency Inversion
-      
-      ### 6. Security Standards (OWASP)
-      **Security by design:**
-      - ✅ Input validation
-      - ✅ Authentication/Authorization
-      - ✅ Sensitive data protection
-      - ✅ Security scanning
-      
-      ### 7. Brain Integrity
-      **Your project knowledge:**
-      - ✅ Context validated before use
-      - ✅ Lessons learned captured
-      - ✅ Technical debt tracked
-      - ✅ Architecture decisions documented
-      
-      ## Quick Commands
-      
-      | Command | Purpose |
-      |---------|---------|
-      | `show rules` | Display full rulebook |
-      | `compliance` | Check your compliance status |
-      | `dor` | View Definition of Ready checklist |
-      | `dod` | View Definition of Done checklist |
-      | `help` | See all available commands |
-      
-      ## What This Means for You
-      
-      ✅ **You can trust CORTEX** - Every operation is governed
-      ✅ **You stay in control** - Rollback any time
-      ✅ **Quality is built-in** - Not an afterthought
-      ✅ **Compliance is visible** - Real-time dashboard
-      
-      ---
-      
-      **Full Rulebook:** `cortex-brain/brain-protection-rules.yaml`
-      
-      **Ready to acknowledge?** Say "acknowledge" or "I understand" to complete onboarding.
-  
-  governance_onboarding_step3:
-    name: Governance Onboarding - Step 3 (Acknowledgment)
-    triggers:
-    - governance_onboarding_step3
-    - acknowledge governance
-    response_type: narrative
-    content: |
-      # ✅ Acknowledgment & Completion
-      
-      **Progress: [3/3]**
-      
-      ## Confirm Your Understanding
-      
-      By acknowledging, you confirm that you:
-      
-      1. ✅ Understand CORTEX operates under governance rules
-      2. ✅ Agree to follow Definition of Ready/Done workflows
-      3. ✅ Will use compliance dashboard for status tracking
-      4. ✅ Know how to access rulebook and help commands
-      
-      ## Your Rights
-      
-      You always have the right to:
-      - 📖 Review rules any time: `show rules`
-      - 📊 Check compliance: `compliance`
-      - ❓ Ask questions: `help`
-      - 🔄 Request rollback: Git checkpoints are automatic
-      
-      ## Complete Onboarding
-      
-      **To acknowledge and complete setup, say:**
-      - "I acknowledge"
-      - "I understand and agree"
-      - "acknowledged"
-      - "confirm"
-      
-      ---
-      
-      **Need to review?**
-      - Say "back" to see rulebook again
-      - Say "show rules" for full documentation
-      
-      **Once you acknowledge, you won't see this onboarding again.**  
-      (But you can always access the rulebook with `show rules`)
-  
-  governance_onboarding_complete:
-    name: Governance Onboarding - Complete
-    triggers:
-    - governance_onboarding_complete
-    response_type: success
-    content: |
-      # 🎉 Onboarding Complete!
-      
-      ✅ **Governance acknowledgment recorded**
-      ✅ **CORTEX is ready to assist you**
-      
-      ## What Happens Now?
-      
-      - You won't see this onboarding again
-      - Welcome banner will appear once per session
-      - All governance rules are active
-      - Compliance dashboard is available
-      
-      ## Quick Start Commands
-      
-      Try these commands to get started:
-      - `help` - See all available commands
-      - `compliance` - Check your current status
-      - `show rules` - Review governance rules
-      - `plan [feature]` - Start feature planning
-      
-      ## Need Help?
-      
-      - Say `help` any time for command list
-      - Say `show rules` to review governance
-      - Say `compliance` to check rule adherence
-      
-      **Welcome to governed AI development with CORTEX!** 🚀
-  
   introduction_discovery:
     name: CORTEX Discovery & Introduction
     triggers:
@@ -1295,18 +1050,6 @@ templates:
       system alignment
 
 
-      **📖 Governance & Rules:**
-
-      Before starting, please review the CORTEX Rulebook:
-      #file:cortex-brain/governance/CORTEX-RULEBOOK.md
-
-      **Governance Commands:**
-      - `show rules` - View all governance rules
-      - `explain rule [name]` - Get detailed rule explanation
-      - `my compliance` - Check your compliance status
-      - `rulebook` - Open full rulebook documentation
-
-
       **I''m operating with:**
 
       - ✅ 4-tier brain architecture (Tier 0-3 databases)
@@ -1810,6 +1553,17 @@ templates:
     - run system alignment
     response_type: detailed
 
+  system_alignment_fix:
+    <<: *standard_5_part_base
+    name: System Alignment Interactive Fix
+    triggers:
+    - align fix
+    - fix alignment
+    - apply fixes
+    - interactive fix
+    - remediate alignment
+    response_type: detailed
+
   cleanup_operation:
     <<: *standard_5_part_base
     name: Holistic Cleanup Operation
@@ -1896,12 +1650,31 @@ templates:
     - sync repository
     - commit and sync
     response_type: detailed
+    expected_orchestrator: CommitOrchestrator
     handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
     understanding_content: "You want to synchronize your local repository with origin by pulling, merging, and pushing changes while ensuring no untracked files remain."
     challenge_content: "No Challenge - Commit workflow will handle pre-flight validation, untracked files, merge conflicts, and create safety checkpoints automatically."
     response_content: "**Commit Workflow Steps:**\n   \n   1. **Pre-flight Check** - Validate current repository state\n   2. **Handle Untracked Files** - Prompt to add or ignore untracked files\n   3. **Commit Local Changes** - Create commit with auto-generated or custom message\n   4. **Create Checkpoint** - Safety checkpoint for rollback capability\n   5. **Pull from Origin** - Fetch and merge/rebase with remote changes\n   6. **Push to Origin** - Upload merged changes to remote repository\n   \n   **Safety Features:**\n   • Git checkpoint before pull (rollback if needed)\n   • Merge conflict detection with clear guidance\n   • Untracked file validation (zero untracked files guarantee)\n   • Progress reporting for each step"
     request_echo_content: "Sync repository with origin (pull, merge, push)"
     next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
+
+  rollback_operation:
+    <<: *standard_5_part_base
+    name: Rollback to Checkpoint
+    triggers:
+    - rollback
+    - rollback to
+    - restore to checkpoint
+    - undo to checkpoint
+    - revert to checkpoint
+    response_type: detailed
+    expected_orchestrator: RollbackOrchestrator
+    handler: src.orchestrators.rollback_orchestrator.RollbackOrchestrator
+    understanding_content: "You want to rollback your repository to a previous checkpoint created during TDD workflow (pre-work, tdd-red, tdd-green, refactoring, post-work)."
+    challenge_content: "No Challenge - Rollback will validate checkpoint exists, check for uncommitted changes, show diff preview, and require confirmation before executing."
+    response_content: "**Rollback Workflow Steps:**\n   \n   1. **Checkpoint Validation** - Verify checkpoint exists in PhaseCheckpointManager\n   2. **Safety Checks** - Detect uncommitted changes and merge conflicts\n   3. **Preview Changes** - Show git diff of changes to be discarded\n   4. **User Confirmation** - Require explicit 'yes' confirmation\n   5. **Execute Rollback** - Run git reset --hard to checkpoint\n   \n   **Safety Features:**\n   • Blocks rollback if uncommitted changes exist\n   • Blocks rollback if merge in progress\n   • Shows diff preview before confirmation\n   • Dry-run mode (--dry-run) for preview without execution\n   • Force mode (--force) to bypass safety checks (DANGER: loses changes)\n   \n   **Checkpoint Types:**\n   • pre-work - Before starting feature work\n   • tdd-red - After writing failing test\n   • tdd-green - After making test pass\n   • refactoring - After code cleanup\n   • post-work - After completing feature"
+    request_echo_content: "Rollback to previous checkpoint"
+    next_steps_content: "**Execution Options:**\n   \n   1. **Safe Rollback** - Say \"rollback to <checkpoint-id>\" for full safety workflow\n   2. **Preview Only** - Say \"rollback to <checkpoint-id> --dry-run\" to see diff without executing\n   3. **Force Rollback** - Say \"rollback to <checkpoint-id> --force\" to bypass safety (⚠️ loses uncommitted changes)\n   \n   **Finding Checkpoints:**\n   • Say \"list checkpoints\" to see available checkpoint IDs\n   • Checkpoint IDs follow format: phase-YYYYMMDD-HHMMSS (e.g., tdd-green-20251129-140000)\n   \n   **Resolution Tips:**\n   • If uncommitted changes block rollback: commit or stash first\n   • If merge in progress: complete merge or abort with \"git merge --abort\"\n   \n   Ready to rollback? Provide checkpoint ID or say \"list checkpoints\" to see options."
 
   cache_management:
     <<: *standard_5_part_base
@@ -1943,134 +1716,75 @@ templates:
       
       Say "cache status" to begin analysis.
 
-  compliance_dashboard:
+  ado_planning:
     <<: *standard_5_part_base
-    name: Compliance Dashboard
+    name: ADO Work Item Planning
     triggers:
-    - show compliance
-    - compliance dashboard
-    - dashboard
-    - compliance status
-    - show dashboard
-    - open dashboard
-    - brain compliance
-    - governance dashboard
-    response_type: admin
-    handler: src.tier1.compliance_dashboard_generator
-    understanding_content: "You want to view the active compliance dashboard showing real-time governance and brain protection status."
-    challenge_content: "No Challenge - Compliance dashboard provides visibility into all 27 brain protection rules with visual indicators."
-    response_content: |
-      The Compliance Dashboard tracks real-time governance rule compliance:
-      
-      **Dashboard Features:**
-      • Overall compliance score (0-100%)
-      • Rule status by category (🟢 compliant, 🟡 warning, 🔴 violated)
-      • Recent protection events timeline
-      • Auto-refresh every 30 seconds
-      • Visual indicators for quick assessment
-      
-      **Compliance Scoring:**
-      • 🟢 90-100%: Healthy (all rules followed)
-      • 🟡 70-89%: Warning (some violations detected)
-      • 🔴 <70%: Critical (immediate attention needed)
-      
-      **Rule Categories Tracked:**
-      • SKULL Rules (architectural integrity)
-      • Brain Protection (data safety)
-      • Tier Enforcement (separation of concerns)
-      • Entry Point Validation (command routing)
-      • Template Compliance (response format)
-      • And 22 more categories...
-      
-      Dashboard opens in VS Code Simple Browser with real-time updates.
-    request_echo_content: "Display active compliance dashboard"
-    next_steps_content: |
-      **Dashboard Actions:**
-      
-      1. View dashboard → Opens in VS Code Simple Browser
-      2. Auto-refresh active → Updates every 30 seconds
-      3. Press R → Manual refresh anytime
-      
-      **Understanding Dashboard:**
-      • 🟢 = Rule followed correctly (0 violations)
-      • 🟡 = Some violations (<10% rate)
-      • 🔴 = Frequent violations (≥10% rate)
-      
-      **If violations detected:**
-      • Click rule to see details
-      • View recent events for context
-      • Check suggested fixes
-      
-      Say "show compliance" to open dashboard now.
+    - plan ado
+    - ado story
+    - ado feature
+    - create ado work item
+    - estimate work item
+    response_type: detailed
+    expected_orchestrator: SWAGGEREntryPointOrchestrator
+    handler: src.orchestrators.swagger_entry_point_orchestrator.SWAGGEREntryPointOrchestrator
+    understanding_content: "You want to create Azure DevOps work items (stories, features, tasks) with Definition of Ready validation and story point estimation."
+    challenge_content: "No Challenge - ADO planning enforces DoR (Definition of Ready) validation before providing estimates to ensure requirements are complete."
+    response_content: "**ADO Planning Workflow:**\n   \n   1. **DoR Validation** - Interactive questioning across 5 categories (requirements, dependencies, technical, security, testing)\n   2. **Work Item Decomposition** - Break down Epics → Features → Stories → Tasks\n   3. **Story Point Estimation** - Modified Fibonacci scale (1, 2, 3, 5, 8, 13)\n   4. **Timeframe Analysis** - Parallel track identification, team size scenarios, critical path\n   5. **ADO Output** - Copy-paste ready markdown with acceptance criteria"
+    request_echo_content: "Create ADO work items with DoR validation"
+    next_steps_content: "Ready to start? Provide feature name or say \"plan ado [feature name]\" to begin."
 
-  protection_event_notification:
-    name: Protection Event Notification
-    description: "User-facing notification when governance rules are violated. Shows in Copilot Chat responses with educational context."
-    severity_emoji:
-      blocked: "🔴"
-      warning: "🟡"
-      safe: "🟢"
-    format: |
-      ---
-      
-      ## {emoji} Governance {severity}
-      
-      {severity_message}
-      
-      ### Rules Violated:
-      
-      {violations_list}
-      
-      {alternatives_section}
-      
-      ### 📊 Full Compliance Report:
-      
-      View the full compliance dashboard for detailed rule status and history:
-      ```
-      show compliance
-      ```
-      
-      {override_section}
-      
-      ---
-    sections:
-      severity_message_blocked: "**This operation violates CORTEX governance rules and cannot proceed.**"
-      severity_message_warning: "**This operation triggers governance warnings. Please review before proceeding.**"
-      violation_item_format: |
-        **{number}. {rule_name}**
-           - **Layer:** {layer_name}
-           - **Issue:** {description}
-           - **Why This Matters:** {rationale}
-           - **Evidence:** {evidence}
-           - **Suggested Fix:** {remedy}
-      alternatives_section: |
-        ### Recommended Alternatives:
-        
-        {alternatives_list}
-      override_section: |
-        ### ⚠️ Override Required:
-        
-        This operation requires explicit override. If you believe this is necessary:
-        1. Document your justification in the commit message
-        2. Tag the commit with `[OVERRIDE]`
-        3. Ensure architectural review before merge
-    usage: "Automatically displayed when Brain Protector detects violations. Call protector.format_user_notification(result) to generate."
-    integration_example: |
-      ```python
-      from src.tier0.brain_protector import BrainProtector, ModificationRequest
-      
-      protector = BrainProtector()
-      request = ModificationRequest(
-          intent="disable TDD",
-          description="Skip test-first development",
-          files=["src/tdd_workflow.py"]
-      )
-      result = protector.validate(request)
-      
-      if result.severity != Severity.SAFE:
-          notification = protector.format_user_notification(result)
-          print(notification)  # Display in Copilot Chat response
-      ```
+  ux_enhancement:
+    <<: *standard_5_part_base
+    name: UX Enhancement Analysis
+    triggers:
+    - ux enhancement
+    - analyze ux
+    - ux dashboard
+    - enhance user experience
+    - ux analysis
+    response_type: detailed
+    expected_orchestrator: UXEnhancementOrchestrator
+    handler: src.orchestrators.ux_enhancement_orchestrator.UXEnhancementOrchestrator
+    understanding_content: "You want to analyze your codebase for UX improvement opportunities with an interactive dashboard showing performance, accessibility, and code quality metrics."
+    challenge_content: "No Challenge - UX analysis will scan codebase, measure performance, check accessibility, and generate interactive HTML dashboard."
+    response_content: "**UX Enhancement Workflow:**\n   \n   1. **Codebase Scanning** - Analyze file structure, languages, components (30-60s)\n   2. **Architecture Mapping** - Map dependencies, coupling, entry points (45-90s)\n   3. **Performance Measurement** - Bundle size, load times, optimization opportunities (30-60s)\n   4. **Security & Accessibility** - OWASP validation, WCAG compliance checking (45-90s)\n   5. **Discovery Intelligence** - Identify code duplication, unused code, enhancement patterns (30-45s)\n   6. **Dashboard Generation** - Interactive D3.js visualization with recommendations (15-30s)"
+    request_echo_content: "Analyze codebase for UX enhancements"
+    next_steps_content: "Ready to analyze? Say \"ux enhancement\" or \"analyze ux\" to begin."
+
+  ado_operations:
+    <<: *standard_5_part_base
+    name: ADO Operations
+    triggers:
+    - ado summary
+    - ado pr review
+    - review ado pr
+    response_type: detailed
+    expected_orchestrator: ADOAgent
+    handler: src.cortex_agents.ado_agent.ADOAgent
+    understanding_content: "You want to perform Azure DevOps operations such as work summaries, pull request reviews, or work item tracking."
+    challenge_content: "No Challenge - ADO operations provide unified access to ADO functionality with copy-paste ready output."
+    response_content: "**ADO Operations Available:**\n   \n   1. **Work Summary** - Generate sprint summary with completed stories, metrics, decisions\n   2. **PR Review** - Analyze pull request with code quality, security, test validation\n   3. **Story Creation** - Create user stories with ADO-formatted markdown\n   4. **Feature Planning** - Plan features with acceptance criteria and story points"
+    request_echo_content: "Perform ADO operations"
+    next_steps_content: "What would you like to do? Say \"ado summary\" for work tracking or \"ado pr review #123\" for pull request analysis."
+
+  architecture_intelligence:
+    <<: *standard_5_part_base
+    name: Architecture Intelligence
+    triggers:
+    - review architecture
+    - analyze architectural health
+    - forecast technical debt
+    - track architecture evolution
+    - architecture report
+    response_type: detailed
+    expected_orchestrator: ArchitectureIntelligenceAgent
+    handler: src.cortex_agents.strategic.architecture_intelligence_agent.ArchitectureIntelligenceAgent
+    understanding_content: "You want strategic analysis of CORTEX architecture health, including historical trends, technical debt forecasting, and CORTEX 4.0 recommendations."
+    challenge_content: "No Challenge - Architecture Intelligence provides read-only strategic analysis complementing System Alignment's tactical remediation."
+    response_content: "**Architecture Intelligence Capabilities:**\n   \n   1. **Current Health Analysis** - 7-layer integration scoring across all 39 features\n   2. **Trend Analysis** - Historical health evolution (30-day, 90-day trends)\n   3. **Debt Forecasting** - 3-month and 6-month projections with confidence scores\n   4. **ADR Generation** - CORTEX 4.0 prioritized recommendations\n   5. **Report Generation** - Comprehensive markdown reports in cortex-brain/documents/analysis/\n   \n   **Strategic vs Tactical:**\n   - Architecture Intelligence: Long-term trends, forecasting, ADRs (strategic)\n   - System Alignment: Current issues, remediation tasks (tactical)"
+    request_echo_content: "Analyze architecture health and trends"
+    next_steps_content: "Ready to review? Say \"review architecture\" for full analysis or \"forecast technical debt\" for 3/6-month projections."
 
   lint_validation:
     <<: *standard_5_part_base
@@ -2116,70 +1830,125 @@ templates:
     response_type: detailed
     handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
 
-  diagram_regeneration:
+  timeframe_estimate:
     <<: *standard_5_part_base
-    name: Diagram Regeneration
+    name: Timeframe Estimation
     triggers:
-    - regenerate diagrams
-    - refresh diagrams
-    - update diagrams
-    - rebuild diagrams
-    - diagram regeneration
+    - estimate timeframe
+    - time estimate
+    - how long will this take
+    - timeframe
+    - story points
+    - sprint estimate
+    - parallel tracks
+    - timeline comparison
+    - delivery timeline
+    - effort estimate
+    - estimate effort
+    - project timeline
     response_type: detailed
-    handler: src.orchestrators.diagram_regeneration_orchestrator.DiagramRegenerationOrchestrator
+    handler: src.agents.estimation.timeframe_estimator.TimeframeEstimator
+    understanding_content: "You want to estimate the development timeframe for a feature or project, including parallel track analysis and team sizing."
+    challenge_content: "No Challenge - Timeframe estimation uses SWAGGER complexity analysis with parallel track decomposition, risk buffers, and cost projections."
+    response_content: |
+      **Timeframe Estimation Capabilities:**
+      
+      **Core Analysis:**
+      - Convert complexity scores to sprint estimates
+      - Identify parallel development tracks
+      - Calculate critical path duration
+      - Generate effort explanations with complexity factors
+      
+      **Visual Timelines:**
+      - Single developer vs max team comparison
+      - ASCII Gantt charts for terminal display
+      - Interactive HTML timelines (D3.js)
+      - Resource utilization histograms
+      
+      **Cost & Risk Analysis:**
+      - Cost projections for different team sizes
+      - Risk buffers (Conway's Law, integration overhead)
+      - Break-even analysis for team scaling
+      - Optimal team size recommendation
+      
+      **What-If Scenarios:**
+      - Compare 1, 2, 3, 5+ developer configurations
+      - Speedup factors and efficiency metrics
+      - Professional markdown reports
+    request_echo_content: "Generate timeframe estimate with parallel track analysis"
+    next_steps_content: |
+      **Available Commands:**
+      
+      1. **Basic Estimate** - "estimate timeframe for [feature]"
+      2. **With Timeline** - "generate timeline comparison for [feature]"
+      3. **Cost Analysis** - "estimate effort with cost projection at $[rate]/hour"
+      4. **What-If Scenarios** - "compare team sizes for [feature]"
+      
+      **Required Input:**
+      - Feature description or SWAGGER complexity score
+      - Optional: hourly rate for cost projections (default: $75/hr)
+      - Optional: team size constraints
+      
+      Say "estimate timeframe" with your feature description to begin.
 
-  commit_orchestrator:
+  application_health:
     <<: *standard_5_part_base
-    name: Commit and Sync
+    name: Application Health Dashboard
     triggers:
-    - commit
-    - commit and push
-    - sync with origin
-    - commit sync
-    - push changes
-    - sync repository
-    - commit and sync
+    - show health dashboard
+    - health dashboard
+    - application health
+    - app health
+    - show app health
+    - analyze application
+    - application analysis
+    - code health
+    - project health
+    - scan application
     response_type: detailed
-    handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
-
-  rollback_orchestrator:
-    <<: *standard_5_part_base
-    name: Rollback to Checkpoint
-    triggers:
-    - rollback
-    - rollback to checkpoint
-    - undo changes
-    - restore checkpoint
-    - git rollback
-    - revert changes
-    response_type: detailed
-    handler: src.orchestrators.rollback_orchestrator.RollbackOrchestrator
-
-  ux_enhancement:
-    <<: *standard_5_part_base
-    name: UX Enhancement
-    triggers:
-    - enhance ux
-    - improve user experience
-    - ux enhancement
-    - improve interface
-    - enhance ui
-    - user experience improvement
-    response_type: detailed
-    handler: src.orchestrators.ux_enhancement_orchestrator.UXEnhancementOrchestrator
-
-  onboarding_orchestrator:
-    <<: *standard_5_part_base
-    name: User Onboarding
-    triggers:
-    - start onboarding
-    - begin onboarding
-    - onboard user
-    - setup user
-    - user setup
-    - initialize user
-    response_type: interactive
-    handler: src.orchestrators.onboarding_orchestrator.OnboardingOrchestrator
+    handler: src.orchestrators.application_health_orchestrator.ApplicationHealthOrchestrator
+    understanding_content: "You want to analyze your application's health with multi-language code analysis, quality metrics, and a comprehensive report."
+    challenge_content: "No Challenge - Application Health Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
+    response_content: |
+      **Application Health Dashboard Features:**
+      
+      **Progressive Crawling Strategy:**
+      - **Overview Scan** (30s): High-level file counts, language detection, basic structure
+      - **Standard Scan** (2-5 min): 20% sampling with quality metrics, complexity analysis
+      - **Deep Scan** (5-10 min): Full analysis with security patterns, dependency graphs
+      
+      **Multi-Language Support:**
+      - Python (AST-based analysis, function/class detection)
+      - C# (.NET patterns, LINQ detection)
+      - JavaScript/TypeScript (React/Angular/Vue patterns)
+      - ColdFusion (tag parsing, SQL injection detection)
+      - Generic fallback (LOC, SLOC, comments)
+      
+      **Performance Optimizations:**
+      - Multi-threaded file processing (up to 100 workers)
+      - Hash-based caching (90%+ cache hit rate on re-scans)
+      - Incremental updates (only changed files re-analyzed)
+      - Memory-efficient streaming (handles 50K+ files)
+      
+      **Report Outputs:**
+      - Text-based markdown reports (terminal-friendly)
+      - File counts and type breakdown
+      - Language-specific metrics (functions, classes, LOC)
+      - Quality scores and health indicators
+    request_echo_content: "Analyze application health with comprehensive metrics and report"
+    next_steps_content: |
+      **Quick Start:**
+      
+      1. Say "show health dashboard" (uses current directory)
+      2. Specify scan level: "analyze application with deep scan"
+      3. Choose directory: "scan application in C:\Projects\MyApp"
+      
+      **Scan Levels:**
+      - **overview** - Fast high-level scan (30 seconds)
+      - **standard** - Balanced analysis (2-5 minutes) [DEFAULT]
+      - **deep** - Comprehensive audit (5-10 minutes)
+      
+      Reports are saved to: `cortex-brain/documents/analysis/`
 
 routing:
   default: fallback
@@ -2367,6 +2136,12 @@ routing:
   - system alignment
   - validate alignment
   - run system alignment
+  system_alignment_fix_triggers:
+  - align fix
+  - fix alignment
+  - apply fixes
+  - interactive fix
+  - remediate alignment
   cleanup_triggers:
   - cleanup
   - clean up
@@ -2493,108 +2268,37 @@ routing:
   - reset cache
   - flush cache
   - clear validation cache
-  compliance_dashboard_triggers:
-  - show compliance
-  - compliance dashboard
-  - dashboard
-  - compliance status
-  - show dashboard
-  - open dashboard
-  - brain compliance
-  - governance dashboard
-  organize_brain_triggers:
-  - organize brain
-  - organize documents
-  - organize cortex brain
-  - brain organization
-  organize_brain_dryrun_triggers:
-  - organize brain dry-run
-  - organize brain preview
-  - brain organization preview
-  - dry-run organization
-  forecast_technical_debt_triggers:
-  - forecast technical debt
-  - forecast debt
-  - technical debt forecast
-  - debt projection
-  - predict technical debt
-  deploy_cortex_triggers:
-  - deploy cortex
-  - build cortex
-  - build production package
-  - cortex deployment
-  - package cortex
-  cortex_refresh_instructions_triggers:
-  - cortex refresh instructions
-  - refresh instructions
-  - update copilot instructions
-  - regenerate instructions
-  show_context_triggers:
-  - show context
-  - view context
-  - what do you remember
-  - cortex memory
-  - show memory
-  clear_all_context_triggers:
-  - clear all context
-  - forget everything
-  - reset context
-  - clear memory
-  - fresh start
-  stop_debug_triggers:
-  - stop debug
-  - end debug
-  - debug off
-  - stop debugging
-  cortex_backup_now_triggers:
-  - cortex backup now
-  - backup now
-  - manual backup
-  - backup cortex
-  - create backup
-  cortexfeatures_triggers:
-  - cortex features
-  - show features
-  - list features
-  - feature catalog
-  cortexreviewlog_triggers:
-  - cortex review log
-  - review log
-  - show reviews
-  - review history
   diagram_regeneration_triggers:
   - regenerate diagrams
+  - generate diagrams
+  - rebuild diagrams
   - refresh diagrams
-  - diagram status
-  - show diagram dashboard
-  - regenerate design assets
   - update diagrams
-  commit_triggers:
-  - commit
-  - commit changes
-  - git commit
-  - save changes
-  - commit to git
-  rollback_triggers:
-  - rollback
-  - undo changes
-  - restore checkpoint
-  - git rollback
-  - revert changes
-  - undo
-  ux_enhancement_triggers:
-  - enhance ux
-  - improve experience
-  - optimize interface
-  - ux review
-  - improve usability
-  onboarding_triggers:
-  - onboard
-  - onboarding
-  - setup profile
-  - start onboarding
-  - first time setup
-  - reset profile
+  - create diagrams
+  timeframe_estimate_triggers:
+  - estimate timeframe
+  - time estimate
+  - how long will this take
+  - timeframe
+  - story points
+  - sprint estimate
+  - parallel tracks
+  - timeline comparison
+  - delivery timeline
+  - effort estimate
+  - estimate effort
+  - project timeline
+  application_health_triggers:
+  - show health dashboard
+  - health dashboard
+  - application health
+  - app health
+  - show app health
+  - analyze application
+  - application analysis
+  - code health
+  - project health
+  - scan application
 formatting:
   mandatory_sections:
   - understanding

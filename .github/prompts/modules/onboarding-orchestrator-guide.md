@@ -1,323 +1,325 @@
 # Onboarding Orchestrator Guide
 
-**Module:** `OnboardingOrchestrator`  
-**Location:** `src/operations/modules/onboarding/onboarding_orchestrator.py`  
-**Purpose:** First-time user onboarding and profile setup  
-**Status:** ✅ Production  
-**Version:** 3.3.0
+**Purpose:** User onboarding with 3-question micro-survey for profile creation  
+**Version:** 3.2.1  
+**Status:** ✅ PRODUCTION
 
 ---
 
-## Overview
+## 🎯 Overview
 
-The Onboarding Orchestrator manages the first-time user experience for CORTEX, including user profile creation, initial setup, feature introduction, and learning path recommendations.
+The Onboarding Orchestrator handles first-time user setup through a quick 3-question survey to establish user preferences:
 
-**Key Capabilities:**
-- 3-question user profile setup
-- Interactive feature introduction
-- Guided learning path creation
-- Initial repository configuration
-- Welcome message customization
-- Skip/resume onboarding flow
+1. **Experience Level** - Junior, Mid, Senior, Expert
+2. **Interaction Mode** - Autonomous, Guided, Educational, Pair Programming
+3. **Tech Stack Preference** - Azure, AWS, GCP, Custom, or No Preference
+
+Profile is stored in Tier 1 with FIFO exemption for permanent retention.
 
 ---
 
-## Natural Language Triggers
+## 🚀 Commands
 
-**Automatic Activation:**
-- First-time CORTEX activation (no profile exists)
+**Natural Language Triggers:**
+
+- `onboard`
+- `onboarding`
 - `setup profile`
-- `onboard me`
+- `first time`
+- `new user`
 
-**Manual Triggers:**
-- `start onboarding`
-- `reset profile`
-- `onboarding tutorial`
-
-**Context Variations:**
-- "Set up my CORTEX profile"
-- "Start fresh with CORTEX"
-- "Show me how to use CORTEX"
+**When It Runs:**
+- Automatically on first CORTEX interaction (if no profile exists)
+- When user says "update profile" or "change profile"
 
 ---
 
-## Architecture & Integration
+## 📊 Onboarding Questions
 
-**Dependencies:**
-- User Profile System (Tier 3 database)
-- Response template system
-- Hands-on Tutorial Orchestrator
-- Setup EPM Orchestrator
+### Question 1: Experience Level
 
-**Integration Points:**
-- UnifiedEntryPointOrchestrator (first activation detection)
-- UserProfileManager (profile storage)
-- DemoOrchestrator (feature introduction)
+**Prompt:**
+```
+What's your development experience?
+
+1. Junior (0-2 years) - Learning the ropes, need guidance
+2. Mid (2-5 years) - Solid fundamentals, occasional help needed
+3. Senior (5-10 years) - Experienced, confident in most areas
+4. Expert (10+ years) - Deep expertise, minimal hand-holding
+
+Your choice (1-4):
+```
+
+**Impact:**
+- **Junior:** More detailed explanations, educational mode default
+- **Mid:** Balanced guidance and execution
+- **Senior:** Less verbose, assumes knowledge
+- **Expert:** Minimal explanation, results-focused
 
 ---
 
-## Onboarding Flow
+### Question 2: Interaction Mode
 
-**Step 1: Welcome & Introduction**
-- CORTEX overview
-- Key capabilities summary
-- Natural language interface explanation
-- Privacy and data storage info
+**Prompt:**
+```
+How do you prefer to work with CORTEX?
 
-**Step 2: User Profile Setup (3 Questions)**
+1. Autonomous - Just do it, show me results
+2. Guided - Explain what you're doing (recommended)
+3. Educational - Teach me why and show alternatives
+4. Pair Programming - Ask clarifying questions first
 
-**Question 1: Experience Level**
-- Junior (0-2 years)
-- Mid (2-5 years)
-- Senior (5-10 years)
-- Expert (10+ years)
+Your choice (1-4):
+```
 
-**Question 2: Interaction Mode**
-- Autonomous (quick results, minimal explanation)
-- Guided (standard, balanced approach) **[Default]**
-- Educational (teaching-focused, extended context)
-- Pair Programming (collaborative, seeks feedback)
+**Mode Behaviors:**
 
-**Question 3: Tech Stack Preference**
-- Azure Stack (Azure DevOps, AKS, ARM/Terraform)
-- AWS Stack (ECS/EKS, CodePipeline, CloudFormation)
-- GCP Stack (GKE, Cloud Build, Terraform)
-- No Preference (CORTEX decides - recommended) **[Default]**
-- Custom (mix and match)
+**Autonomous Mode:**
+- Executes immediately without explanation
+- Shows only results and next steps
+- Best for: Experienced users who know what they want
 
-**Step 3: Repository Setup**
-- Detect project type (language, framework)
-- Generate `.github/copilot-instructions.md`
-- Configure CORTEX/ directory structure
-- Add CORTEX/ to `.gitignore`
+**Guided Mode (Recommended):**
+- Explains actions before executing
+- Provides context for decisions
+- Best for: Most users, balanced approach
 
-**Step 4: Feature Introduction**
-- Planning System 2.0 demo
-- TDD Mastery overview
-- Brain system explanation
-- Quick command reference
+**Educational Mode:**
+- Teaches concepts as you work
+- Shows alternatives and trade-offs
+- Best for: Learning new technologies
 
-**Step 5: Learning Path Recommendation**
-- Beginner path: Tutorial → Planning → TDD
-- Intermediate path: TDD → Planning → Advanced features
-- Expert path: Architecture review → Optimization → Custom workflows
-
-**Step 6: Completion & Next Steps**
-- Profile confirmation
-- First operation suggestions
-- Help command reminder
-- Tutorial availability notice
+**Pair Programming Mode:**
+- Asks clarifying questions before proceeding
+- Collaborative decision-making
+- Best for: Complex problems requiring discussion
 
 ---
 
-## Usage Examples
+### Question 3: Tech Stack Preference
 
-### First-Time Activation
-
+**Prompt:**
 ```
-User: "/CORTEX"
-CORTEX: Detects no profile → Starts onboarding → 3 questions → Setup complete
-```
+What's your company/project tech stack?
 
-### Skip Onboarding
+1. No preference - CORTEX decides based on best practice
+2. Azure stack (Azure DevOps, AKS, ARM/Terraform)
+3. AWS stack (ECS/EKS, CodePipeline, CloudFormation/Terraform)
+4. GCP stack (GKE, Cloud Build, Terraform)
+5. Custom (I'll configure later with 'update profile')
 
-```
-User: "skip onboarding"
-CORTEX: Creates default profile → Proceeds to main interface
-```
-
-### Resume Onboarding
-
-```
-User: "continue onboarding"
-CORTEX: Resumes from last completed step
+Your choice (1-5):
 ```
 
-### Reset Profile
+**IMPORTANT:** Tech stack is context for deployment, NOT a constraint.
 
-```
-User: "reset profile"
-CORTEX: Confirms action → Deletes profile → Restarts onboarding
-```
+CORTEX will always recommend the best solution first, then show how to implement using your tech stack.
+
+**Preset Configurations:**
+
+- **Azure Stack:**
+  ```json
+  {
+    "cloud_provider": "azure",
+    "container_platform": "kubernetes",
+    "ci_cd": "azure_devops",
+    "iac": "terraform"
+  }
+  ```
+
+- **AWS Stack:**
+  ```json
+  {
+    "cloud_provider": "aws",
+    "container_platform": "kubernetes",
+    "ci_cd": "github_actions",
+    "iac": "terraform"
+  }
+  ```
+
+- **GCP Stack:**
+  ```json
+  {
+    "cloud_provider": "gcp",
+    "container_platform": "kubernetes",
+    "ci_cd": "github_actions",
+    "iac": "terraform"
+  }
+  ```
 
 ---
 
-## Configuration
+## ⚙️ Profile Storage
 
-**Onboarding Settings:**
-- Auto-start: Enabled (first activation)
-- Skippable: Yes
-- Resumable: Yes
-- Profile required: Yes
-- Tutorial auto-launch: Optional
+**Location:** Tier 1 SQLite database (`tier1-working-memory.db`)
 
-**Default Values:**
-- Experience: Mid
-- Interaction Mode: Guided
-- Tech Stack: No Preference
-
----
-
-## Profile Storage
-
-**Location:** `cortex-brain/tier3-development-context.db`
+**Table:** `user_profile`
 
 **Schema:**
 ```sql
-CREATE TABLE user_profiles (
-  profile_id TEXT PRIMARY KEY,
-  experience_level TEXT,
-  interaction_mode TEXT,
-  tech_stack_preference TEXT,
-  onboarding_completed BOOLEAN,
-  onboarding_step INTEGER,
-  created_at TEXT,
-  updated_at TEXT
+CREATE TABLE user_profile (
+    id INTEGER PRIMARY KEY,
+    experience_level TEXT NOT NULL,
+    interaction_mode TEXT NOT NULL,
+    tech_stack_preference TEXT,
+    created_at TEXT NOT NULL,
+    last_updated TEXT NOT NULL,
+    persistent_flag INTEGER DEFAULT 1
 );
+```
+
+**FIFO Exemption:** Profile is marked as persistent (never auto-deleted by 70-conversation FIFO cleanup).
+
+---
+
+## 🔧 Updating Profile
+
+**Commands:**
+- `update profile`
+- `change profile`
+- `modify profile`
+- `update my profile`
+
+**What Can Be Updated:**
+- Experience level
+- Interaction mode
+- Tech stack preference
+
+**Example:**
+```
+User: "update profile"
+
+CORTEX:
+  Current Profile:
+  • Experience: Senior
+  • Mode: Guided
+  • Tech Stack: Azure stack
+  
+  What would you like to update?
+  1. Experience level
+  2. Interaction mode
+  3. Tech stack preference
+  4. Cancel
+  
+  Your choice (1-4):
 ```
 
 ---
 
-## Implementation Details
+## 📈 Examples
 
-**Class:** `OnboardingOrchestrator`
+### Example 1: First-Time Onboarding
 
-**Key Methods:**
-- `execute(context)` - Main onboarding orchestration
-- `_check_profile_exists()` - Detect first-time user
-- `_show_welcome()` - Welcome message
-- `_collect_profile_data()` - 3-question survey
-- `_setup_repository()` - Initial configuration
-- `_introduce_features()` - Feature demos
-- `_recommend_learning_path()` - Personalized suggestions
-- `_complete_onboarding()` - Save profile and finish
+```
+User: [First interaction with CORTEX]
 
----
-
-## Onboarding Metrics
-
-**Tracked Metrics:**
-- Completion rate (target: >90%)
-- Time to complete (average: 3-5 minutes)
-- Skip rate (target: <10%)
-- Profile customization rate
-- Tutorial launch rate after onboarding
-
-**Analytics:**
-- Experience level distribution
-- Most common interaction mode
-- Tech stack preferences
-- Feature adoption after onboarding
-
----
-
-## Error Handling
-
-**Common Issues:**
-1. **Database write failure** → Falls back to in-memory profile
-2. **User interrupts onboarding** → Saves progress, allows resume
-3. **Invalid profile data** → Uses defaults, logs warning
-4. **Repository setup fails** → Continues with profile only, logs issue
-
----
-
-## Testing
-
-**Test Coverage:** 60% (needs improvement)
-
-**Test Files:**
-- `tests/operations/test_onboarding_orchestrator.py` (planned)
-
-**Manual Validation:**
-1. Delete existing profile
-2. Activate CORTEX
-3. Complete onboarding flow
-4. Verify profile saved correctly
-5. Check repository setup successful
-6. Validate welcome message appropriate
+CORTEX:
+  Welcome to CORTEX! Let's personalize your experience (~30 seconds).
+  
+  Question 1 of 3: What's your development experience?
+  
+  1. Junior (0-2 years)
+  2. Mid (2-5 years)
+  3. Senior (5-10 years)
+  4. Expert (10+ years)
+  
+  Your choice (1-4): 3
+  
+  ✅ Experience level set to: Senior
+  
+  Question 2 of 3: How do you prefer to work with CORTEX?
+  
+  1. Autonomous
+  2. Guided (recommended)
+  3. Educational
+  4. Pair Programming
+  
+  Your choice (1-4): 2
+  
+  ✅ Interaction mode set to: Guided
+  
+  Question 3 of 3: What's your tech stack?
+  
+  1. No preference
+  2. Azure stack
+  3. AWS stack
+  4. GCP stack
+  5. Custom
+  
+  Your choice (1-5): 2
+  
+  ✅ Tech stack preference set to: Azure stack
+  
+  🎉 Onboarding complete! CORTEX is now personalized for you.
+  
+  Try these commands:
+  • "help" - See all capabilities
+  • "plan [feature]" - Start feature planning
+  • "start tdd" - Begin test-driven development
+```
 
 ---
 
-## Related Modules
+### Example 2: Profile Update
 
-- **UserProfileManager** - Profile storage and retrieval
-- **SetupEPMOrchestrator** - Repository configuration
-- **HandsOnTutorialOrchestrator** - Interactive tutorial
-- **DemoOrchestrator** - Feature demonstrations
+```
+User: "change my interaction mode to autonomous"
 
----
-
-## Troubleshooting
-
-**Issue:** Onboarding starts every time  
-**Solution:** Check profile database exists and is readable
-
-**Issue:** Profile questions skipped  
-**Solution:** Verify interactive mode enabled, not in batch mode
-
-**Issue:** Repository setup fails  
-**Solution:** Check write permissions on project directory
+CORTEX:
+  Updating profile...
+  
+  ✅ Interaction mode changed: Guided → Autonomous
+  
+  From now on, CORTEX will execute immediately and show results without explanations.
+  
+  To revert: "update profile" and select Guided mode.
+```
 
 ---
 
-## Learning Paths
+## 🐛 Troubleshooting
 
-**Beginner Path (Junior/Mid):**
-1. Complete hands-on tutorial (30 min)
-2. Try planning a simple feature (15 min)
-3. Use TDD workflow for one test (20 min)
-4. Explore help commands (10 min)
+### Issue: "Profile not persisting"
 
-**Intermediate Path (Senior):**
-1. Review TDD Mastery guide (10 min)
-2. Plan complex feature with DoR/DoD (20 min)
-3. Use architecture review (15 min)
-4. Explore advanced commands (15 min)
+**Cause:** Profile not marked with persistent flag
 
-**Expert Path (Expert):**
-1. Architecture intelligence review (20 min)
-2. System optimization (15 min)
-3. Custom workflow creation (30 min)
-4. Contribute to CORTEX enhancements (optional)
+**Solution:**
+```sql
+-- Check persistent flag
+SELECT persistent_flag FROM user_profile WHERE id = 1;
+-- Should return 1
+
+-- If 0, update:
+UPDATE user_profile SET persistent_flag = 1 WHERE id = 1;
+```
 
 ---
 
-## Personalization Examples
+### Issue: "Onboarding loops (asks questions repeatedly)"
 
-**Junior Developer (Educational Mode):**
-- Detailed explanations for every action
-- Links to learning resources
-- Step-by-step guidance
-- Encouragement and positive reinforcement
+**Cause:** Profile creation failing silently
 
-**Expert Developer (Autonomous Mode):**
-- Minimal explanation
-- Direct execution
-- Advanced options presented upfront
-- Assumes deep knowledge
-
-**Azure Stack Preference:**
-- Examples use Azure DevOps, AKS
-- ARM templates in code samples
-- Azure-specific recommendations
-- Deployment examples target Azure
+**Solution:**
+```python
+# Check for errors
+from src.tier1.working_memory import WorkingMemory
+wm = WorkingMemory()
+try:
+    wm.create_profile("guided", "mid")
+except ValueError as e:
+    print(f"Validation error: {e}")
+```
 
 ---
 
-## Future Enhancements
+## 📚 Related Documentation
 
-**Planned (CORTEX 4.0):**
-- Interactive onboarding with real-time validation
-- Visual setup wizard with progress indicators
-- Team onboarding (shared profiles)
-- Custom onboarding flows per organization
-- Onboarding analytics dashboard
-- A/B testing for onboarding variations
+- **User Profile Guide:** `cortex-brain/documents/implementation-guides/user-profile-guide.md`
+- **Response Format:** `.github/prompts/modules/response-format.md`
+- **Template Guide:** `.github/prompts/modules/template-guide.md`
 
 ---
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Last Updated:** November 28, 2025  
-**Guide Version:** 1.0.0
+**License:** Source-Available (Use Allowed, No Contributions)

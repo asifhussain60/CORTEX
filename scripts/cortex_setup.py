@@ -258,6 +258,36 @@ Estimated Time: 5-10 minutes
             if results.get("warnings"):
                 print(f"\n⚠️  {len(results['warnings'])} warning(s) - see log for details")
             
+            # Run post-setup validation
+            print("\n🔍 Running post-setup validation...")
+            try:
+                from scripts.validation.post_setup_validator import PostSetupValidator
+                
+                validator = PostSetupValidator(repo_path)
+                validation_success, validation_report = validator.validate()
+                
+                if not validation_success:
+                    print("\n❌ POST-SETUP VALIDATION FAILED")
+                    print("\nCritical Issues Found:")
+                    for issue in validation_report.get('issues', []):
+                        print(f"  • {issue}")
+                    
+                    print("\nSetup completed but deployment may be incomplete.")
+                    print("Review issues above and run validation again:")
+                    print("  python scripts/validation/post_setup_validator.py")
+                    
+                    return 1
+                
+                if validation_report.get('warnings'):
+                    print("\n⚠️  Validation warnings:")
+                    for warning in validation_report['warnings']:
+                        print(f"  • {warning}")
+                
+                print("✅ Post-setup validation PASSED")
+                
+            except ImportError:
+                print("⚠️  Could not import post-setup validator (optional)")
+            
             return 0
         else:
             print("\n❌ CORTEX setup failed!")

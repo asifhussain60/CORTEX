@@ -1,233 +1,187 @@
 # Diagram Regeneration Orchestrator Guide
 
-**Module:** `DiagramRegenerationOrchestrator`  
-**Location:** `src/operations/modules/diagrams/diagram_regeneration_orchestrator.py`  
-**Purpose:** Comprehensive diagram regeneration with D3.js interactive dashboard generation  
-**Status:** ✅ Production  
-**Version:** 3.3.0
+**Purpose:** Automated regeneration of all CORTEX architecture diagrams with D3.js interactive dashboards  
+**Version:** 1.0  
+**Status:** ✅ PRODUCTION
 
 ---
 
-## Overview
+## 🎯 Overview
 
-The Diagram Regeneration Orchestrator analyzes CORTEX design documentation and regenerates visual assets (Mermaid diagrams, illustration prompts, narratives) with real-time status tracking via interactive D3.js dashboards.
-
-**Key Capabilities:**
-- Scans and analyzes 15+ diagram definitions
-- Regenerates Mermaid diagrams for architecture visualization
-- Generates illustration prompts for AI art generation
-- Creates narratives explaining each diagram
-- Produces interactive D3.js dashboard showing regeneration status
-- Tracks completion percentage per diagram (prompt, narrative, mermaid, image)
+The Diagram Regeneration Orchestrator manages the complete lifecycle of CORTEX system diagrams, including:
+- Architecture diagrams (system structure, component relationships)
+- Workflow visualizations (TDD, planning, upgrade flows)
+- Component relationship diagrams
+- System flow diagrams with D3.js interactivity
 
 ---
 
-## Natural Language Triggers
+## 🚀 Commands
 
-**Primary Commands:**
+**Natural Language Triggers:**
 - `regenerate diagrams`
+- `generate diagrams`
+- `rebuild diagrams`
 - `refresh diagrams`
-- `diagram status`
-- `show diagram dashboard`
+- `update diagrams`
+- `create diagrams`
 
-**Context Variations:**
-- "Regenerate all CORTEX diagrams"
-- "Refresh architecture diagrams"
-- "Show me diagram completion status"
-
----
-
-## Architecture & Integration
-
-**Dependencies:**
-- `InteractiveDashboardGenerator` - D3.js dashboard creation
-- `docs/diagrams/` - Diagram storage structure (prompts, narratives, mermaid, img)
-- `cortex-brain/diagram-definitions.yaml` - Diagram metadata
-
-**Output Locations:**
-- **Prompts:** `docs/diagrams/prompts/[diagram-name].md`
-- **Narratives:** `docs/diagrams/narratives/[diagram-name].md`
-- **Mermaid:** `docs/diagrams/mermaid/[diagram-name].mmd`
-- **Dashboard:** `docs/diagrams/dashboard.html`
-
-**Data Flow:**
-1. Scan diagram definitions (15+ diagrams)
-2. Check file existence (prompt, narrative, mermaid, image)
-3. Calculate completion percentage per diagram
-4. Generate regeneration report
-5. Build interactive D3.js dashboard
-6. Display status with visual indicators
+**Use Cases:**
+- After adding new orchestrators or agents
+- After architecture changes
+- Before documentation releases
+- When visual documentation is outdated
 
 ---
 
-## Usage Examples
+## 📊 What Gets Generated
 
-### Basic Regeneration
+### 1. Architecture Diagrams
+**Output Format:** Mermaid + PNG + D3.js interactive dashboard
 
-```
-User: "regenerate diagrams"
-CORTEX: Scans 15 diagrams → Generates dashboard → Shows completion status
-```
+**Diagrams Created:**
+- `docs/architecture/system-overview.png` - High-level CORTEX architecture
+- `docs/architecture/brain-tiers.png` - 4-tier brain architecture (Tier 0-3)
+- `docs/architecture/agent-ecosystem.png` - All agents and relationships
+- `docs/architecture/orchestrator-flow.png` - Orchestrator workflow patterns
 
-### Check Status
+### 2. Workflow Diagrams
+**Output Format:** Mermaid + PNG + D3.js
 
-```
-User: "show diagram status"
-CORTEX: Opens dashboard with completion percentages and missing files
-```
+**Workflows Visualized:**
+- `docs/workflows/tdd-cycle.png` - RED→GREEN→REFACTOR flow
+- `docs/workflows/planning-workflow.png` - Planning System 2.0 flow
+- `docs/workflows/upgrade-process.png` - Upgrade orchestrator steps
+- `docs/workflows/git-checkpoint.png` - Checkpoint creation and rollback
 
-### Targeted Regeneration
+### 3. Component Relationship Diagrams
+**Output Format:** D3.js force-directed graphs
 
-```
-User: "refresh architecture diagrams"
-CORTEX: Regenerates specific subset → Updates dashboard
-```
-
----
-
-## Dashboard Features
-
-**Interactive D3.js Visualization:**
-- **Overview Section:** Total diagrams, completion %, status distribution
-- **Progress Visualization:** Bar chart showing completion per diagram
-- **Diagram Table:** Detailed status (prompt, narrative, mermaid, image)
-- **Workflow Diagram:** Mermaid flowchart of regeneration process
-- **Recommendations:** Missing files and next actions
-
-**Status Indicators:**
-- ✅ **Complete** (100%) - All 4 components present
-- ⚠️ **Partial** (25-75%) - Some components missing
-- ❌ **Missing** (0%) - No components generated
+**Relationships Mapped:**
+- Orchestrators → Agents
+- Agents → Tier APIs
+- Operations → Templates
+- Workflows → Checkpoints
 
 ---
 
-## Configuration
+## ⚙️ How It Works
 
-**Diagram Definitions (cortex-brain/diagram-definitions.yaml):**
-
-```yaml
-diagrams:
-  - id: "01"
-    name: "tier-architecture"
-    title: "4-Tier Brain Architecture"
-    description: "Memory hierarchy visualization"
-  
-  - id: "02"
-    name: "agent-system"
-    title: "10 Specialized Agents"
-    description: "Agent roles and capabilities"
-  
-  # ... 13 more diagrams
+### Phase 1: Discovery (10s)
+```
+Scan repository structure:
+- .github/prompts/modules/*.md (documentation)
+- src/operations/modules/**/*.py (orchestrators)
+- src/cortex_agents/**/*.py (agents)
+- cortex-brain/response-templates.yaml (wiring)
 ```
 
-**File Structure:**
+### Phase 2: Status Analysis (5s)
 ```
-docs/diagrams/
-├── prompts/           # AI illustration prompts
-├── narratives/        # Explanatory text
-├── mermaid/          # Mermaid diagram code
-├── img/              # Generated images
-└── dashboard.html    # Interactive status dashboard
+For each diagram:
+- Check if prompt file exists (has_prompt)
+- Check if narrative description exists (has_narrative)
+- Check if mermaid source exists (has_mermaid)
+- Check if PNG render exists (has_image)
+- Calculate completion percentage (0-100%)
+```
+
+### Phase 3: Regeneration (30-60s)
+```
+For incomplete/outdated diagrams:
+1. Generate Mermaid source code
+2. Render to PNG using mermaid-cli
+3. Create D3.js interactive version
+4. Update documentation links
+```
+
+### Phase 4: Dashboard Generation (10s)
+```
+Create interactive dashboard:
+- Diagram status grid (complete/incomplete)
+- Staleness indicators (>7 days old)
+- Quick navigation links
+- Regeneration history
 ```
 
 ---
 
-## Implementation Details
+## 🔧 Configuration
 
-**Class:** `DiagramRegenerationOrchestrator`
+**Config File:** `cortex.config.json`
 
-**Key Methods:**
-- `execute(context)` - Main orchestration method
-- `_scan_diagrams()` - Analyze diagram completion
-- `_generate_dashboard(report)` - Build D3.js dashboard
-- `_build_overview_section(report)` - Dashboard overview
-- `_build_visualizations_section(report)` - Charts and graphs
-- `_build_diagrams_section(report)` - Diagram table
-- `_build_recommendations_section(report)` - Actionable suggestions
+```json
+{
+  "diagram_regeneration": {
+    "output_directory": "docs/architecture/",
+    "format": "png",
+    "interactive_dashboard": true,
+    "mermaid_theme": "default",
+    "max_age_days": 30,
+    "auto_regenerate": true
+  }
+}
+```
 
-**Data Classes:**
-- `DiagramStatus` - Individual diagram metadata
-- `DiagramRegenerationReport` - Aggregated report data
-
----
-
-## Performance Metrics
-
-**Execution Time:**
-- Scan phase: <1 second (15 diagrams)
-- Dashboard generation: <2 seconds
-- Total: <3 seconds end-to-end
-
-**Output Size:**
-- Dashboard HTML: ~50-80 KB
-- Includes D3.js visualizations inline
+**Options:**
+- `output_directory` - Where diagrams are saved (default: `docs/architecture/`)
+- `format` - Output format: `png`, `svg`, `pdf` (default: `png`)
+- `interactive_dashboard` - Enable D3.js dashboards (default: `true`)
+- `mermaid_theme` - Mermaid theme: `default`, `dark`, `forest` (default: `default`)
+- `max_age_days` - Diagram staleness threshold (default: 30)
+- `auto_regenerate` - Auto-regenerate on orchestrator changes (default: `true`)
 
 ---
 
-## Error Handling
+## 📈 Output Examples
 
-**Common Issues:**
-1. **Missing diagram definitions** → Logs warning, continues with available diagrams
-2. **File I/O errors** → Reports in dashboard recommendations
-3. **Dashboard generation failure** → Returns text-based report fallback
+### Diagram Status Report
+```
+✅ system-overview.png (100% complete)
+⚠️  brain-tiers.png (75% complete - missing interactive dashboard)
+❌ agent-ecosystem.png (25% complete - outdated, last modified 45 days ago)
+```
 
-**Validation:**
-- Checks `docs/diagrams/` directory existence
-- Validates diagram definition YAML format
-- Verifies file permissions before writing
-
----
-
-## Testing
-
-**Test Coverage:** 60% (needs improvement)
-
-**Test Files:**
-- `tests/operations/test_diagram_regeneration_orchestrator.py` (planned)
-
-**Manual Validation:**
-1. Run `regenerate diagrams`
-2. Verify dashboard opens in browser
-3. Check all 15 diagrams listed
-4. Validate completion percentages accurate
-5. Confirm missing files flagged correctly
+### Interactive Dashboard
+- **Location:** `cortex-brain/admin/reports/diagram-dashboard.html`
+- **Features:** Live diagram previews, status filters, regeneration history
+- **Access:** Open in browser after regeneration
 
 ---
 
-## Related Modules
+## 🐛 Troubleshooting
 
-- **DesignSyncOrchestrator** - Synchronizes design docs with implementation
-- **SystemAlignmentOrchestrator** - Uses diagram data for architecture validation
-- **InteractiveDashboardGenerator** - Shared D3.js dashboard infrastructure
+### Issue: "mermaid-cli not found"
+
+**Solution:**
+```pwsh
+npm install -g @mermaid-js/mermaid-cli
+```
+
+### Issue: "Diagram generation failed"
+
+**Check:**
+1. Mermaid syntax valid: `mmdc --help`
+2. Output directory writable: `Test-Path docs/architecture/`
+3. Dependency installed: `npm list -g @mermaid-js/mermaid-cli`
+
+### Issue: "Interactive dashboard not loading"
+
+**Check:**
+1. D3.js library included: `cortex-brain/admin/reports/diagram-dashboard.html` has D3.js CDN
+2. Browser supports ES6: Use modern browser (Chrome, Firefox, Edge)
+3. Dashboard file exists: `Test-Path cortex-brain/admin/reports/diagram-dashboard.html`
 
 ---
 
-## Troubleshooting
+## 📚 Related Documentation
 
-**Issue:** Dashboard not generated  
-**Solution:** Check `docs/diagrams/` permissions, verify write access
-
-**Issue:** Diagrams showing 0% completion  
-**Solution:** Run initial diagram generation, check file paths
-
-**Issue:** Dashboard blank/not loading  
-**Solution:** Check browser console, verify D3.js CDN accessible
-
----
-
-## Future Enhancements
-
-**Planned (CORTEX 4.0):**
-- Auto-regeneration on design doc changes
-- Diff view showing diagram evolution over time
-- Integration with Git history for diagram versioning
-- WebSocket live updates during regeneration
-- Export to PDF/PNG for offline viewing
+- **System Alignment Guide:** `.github/prompts/modules/system-alignment-guide.md`
+- **Enterprise Documentation:** `.github/prompts/modules/enterprise-documentation-guide.md`
+- **Design Sync:** `.github/prompts/modules/design-sync-orchestrator-guide.md`
 
 ---
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Last Updated:** November 28, 2025  
-**Guide Version:** 1.0.0
+**License:** Source-Available (Use Allowed, No Contributions)

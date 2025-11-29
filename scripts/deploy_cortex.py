@@ -68,6 +68,7 @@ CORE_FILES = {
     'cortex.config.template.json',
     'cortex-operations.yaml',
     'requirements.txt',
+    'optional-requirements.txt',  # Development tools (lazy-loaded)
     'setup.py',
     'pytest.ini',
     
@@ -85,15 +86,26 @@ CORE_DIRS = {
     'scripts',          # Automation tools
 }
 
-# Directories to EXCLUDE
+# Directories to EXCLUDE (COMPREHENSIVE - prevents non-production content in releases)
 EXCLUDED_DIRS = {
+    # Test directories
     'tests',
+    'test_merge',       # Temporary merge testing folder
+    
+    # Workflow and checkpoint directories
     'workflow_checkpoints',
+    '.publish-checkpoint.json',
+    
+    # GitHub internal (non-prompts)
     '.github/workflows',
     '.github/hooks',
-    'docs',             # MkDocs site (not needed for users)
+    
+    # MkDocs/Documentation build directories (ADMIN ONLY)
+    'docs',             # MkDocs source (admin feature, not for users)
+    'site',             # MkDocs build output
+    
+    # Development artifacts
     'examples',
-    'site',
     'logs',
     'cortex-extension',
     '__pycache__',
@@ -101,9 +113,23 @@ EXCLUDED_DIRS = {
     '.venv',
     'venv',
     '.git',
-    'dist',
+    'dist',             # Distribution builds
     'publish',          # Don't include existing publish folder
     '.backup-archive',
+    '.deploy-staging',  # Deployment staging folder
+    'CORTEX-cleanup',   # Cleanup artifacts
+    '.temp-publish',    # FIX: Temporary publish staging folder (non-production)
+    'test_merge',       # FIX: Test merge artifacts (non-production)
+    
+    # Cache and temporary directories
+    '.cache',
+    '.cortex',          # Local CORTEX state cache
+    '.upgrades',        # Upgrade artifacts
+    '.vscode',          # Editor config (user-specific)
+    
+    # Template/scaffold directories
+    'templates',        # Development templates
+    
     # Admin-only directories (SECURITY: Users must not modify CORTEX)
     'cortex-brain/admin',
     'src/operations/modules/admin',
@@ -111,22 +137,54 @@ EXCLUDED_DIRS = {
     'tests/admin',
     'tests/operations/admin',
     'tests/operations/modules/admin',
+    
     # Demo/Mock Data (PRODUCTION SAFETY: Real data generated at runtime)
-    'cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO',  # Mock data for Phase 1 demos only
+    'cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO',
 }
 
-# File patterns to exclude
+# File patterns to exclude (COMPREHENSIVE - production cleanliness)
 EXCLUDED_PATTERNS = {
+    # Python bytecode
     '*.pyc',
     '*.pyo',
     '*.pyd',
+    
+    # OS artifacts
     '.DS_Store',
     'Thumbs.db',
+    
+    # Log and database files (CRITICAL: User generates at runtime)
     '*.log',
     '*.db',             # Exclude populated brain databases
     '*.db-journal',
+    '*.db-shm',
+    '*.db-wal',
+    
+    # Coverage/test artifacts
     '.coverage',
     'htmlcov',
+    
+    # MkDocs (ADMIN ONLY - not for user distribution)
+    'mkdocs.yml',
+    'mkdocs-*.yaml',
+    
+    # Root-level test files (development only)
+    'test_*.py',
+    
+    # Build artifacts
+    '*.egg-info',
+    '*.egg',
+    '.eggs',
+    
+    # IDE/editor
+    '*.swp',
+    '*.swo',
+    '*~',
+    
+    # Temporary/checkpoint files
+    '.publish-checkpoint.json',
+    '*.bak',
+    '*.tmp',
 }
 
 # Admin-only files to EXCLUDE (SECURITY: Users must not modify CORTEX)
@@ -136,6 +194,8 @@ EXCLUDED_ADMIN_FILES = {
     'scripts/deploy_cortex_simple.py',
     'scripts/validate_deployment.py',
     'scripts/publish_to_branch.py',
+    # MkDocs admin documentation
+    'cortex-brain/mkdocs-refresh-config.yaml',
 }
 
 
@@ -265,14 +325,14 @@ def get_current_branch(project_root: Path) -> str:
     return result.stdout.strip()
 
 
-def filter_admin_operations(temp_dir: Path):
+def filter_admin_operations(staging_dir: Path):
     """
     Remove admin-only operations from cortex-operations.yaml.
     
     SECURITY: Users must not have access to commands that modify CORTEX source code.
     This includes deployment, validation, system alignment, and optimization scripts.
     """
-    operations_file = temp_dir / "cortex-operations.yaml"
+    operations_file = staging_dir / "cortex-operations.yaml"
     
     if not operations_file.exists():
         logger.warning("⚠️  cortex-operations.yaml not found - skipping admin filter")
@@ -349,45 +409,79 @@ def branch_exists(branch_name: str, project_root: Path) -> bool:
 
 
 def should_include_path(path: Path, project_root: Path) -> bool:
-    """Check if path should be included in publish branch."""
+    """
+    Check if path should be included in publish branch.
+    
+    Production Validation Logic:
+    1. Core files (whitelist) - always included
+    2. Excluded admin files - always excluded
+    3. Excluded patterns (*.pyc, *.db, mkdocs*, test_*) - always excluded
+    4. Excluded directories - always excluded (checks full path, not just first dir)
+    5. Admin subdirectories - always excluded
+    6. MkDocs-specific files - always excluded
+    7. Core directories (src, cortex-brain, prompts, scripts) - included
+    8. .github/prompts/ and copilot-instructions.md - included
+    9. Everything else - excluded (whitelist approach)
+    """
     rel_path = path.relative_to(project_root)
     path_str = str(rel_path).replace('\\', '/')
     
-    # Check if it's a core file
+    # Step 1: Check if it's a core file (whitelist)
     if path_str in CORE_FILES:
         return True
     
-    # Exclude admin files (deployment, validation scripts)
+    # Step 2: Exclude admin files (deployment, validation scripts)
     if path_str in EXCLUDED_ADMIN_FILES:
         return False
     
-    # Exclude patterns
+    # Step 3: Exclude patterns (*.pyc, *.db, mkdocs*, test_*.py, etc.)
     for pattern in EXCLUDED_PATTERNS:
         if path.match(pattern):
             return False
+        # Also check filename directly for patterns like 'mkdocs*'
+        if '*' in pattern:
+            import fnmatch
+            if fnmatch.fnmatch(path.name, pattern):
+                return False
     
-    # Check excluded directories (including admin subdirectories)
-    first_dir = rel_path.parts[0] if len(rel_path.parts) > 0 else None
-    if first_dir in EXCLUDED_DIRS:
-        return False
+    # Step 4: Check excluded directories (full path matching, not just first dir)
+    # This catches nested excluded directories like cortex-brain/admin
+    # NOTE: Special handling for directories that should only be excluded at root level
+    ROOT_ONLY_EXCLUSIONS = {'templates'}  # templates/ excluded at root, but cortex-brain/templates/ is included
     
-    # Check for admin subdirectories within included directories
+    for excluded_dir in EXCLUDED_DIRS:
+        # Check if path starts with excluded directory (root-level match)
+        if path_str.startswith(f"{excluded_dir}/") or path_str == excluded_dir:
+            return False
+        
+        # For nested path matching, skip root-only exclusions
+        if excluded_dir in ROOT_ONLY_EXCLUSIONS:
+            continue
+            
+        # Check if any part of path matches excluded directory name
+        if excluded_dir in rel_path.parts:
+            return False
+    
+    # Step 5: Check for admin subdirectories within included directories
     for part in rel_path.parts:
-        # Exclude any path containing /admin/ subdirectory
         if part == 'admin':
             return False
     
-    # Also check the full path string for admin subdirectories
-    for excluded_admin_dir in ['cortex-brain/admin', 'src/operations/modules/admin', 'scripts/admin']:
-        if path_str.startswith(excluded_admin_dir):
-            return False
+    # Step 6: Additional MkDocs-specific exclusions
+    mkdocs_patterns = [
+        'mkdocs.yml',
+        'mkdocs-refresh-config.yaml',
+        'mkdocs-orchestrator-guide.md',
+    ]
+    if path.name in mkdocs_patterns:
+        return False
     
-    # Check if under core directories
+    # Step 7: Check if under core directories (whitelist)
     for core_dir in CORE_DIRS:
         if path_str.startswith(f"{core_dir}/") or path_str == core_dir:
             return True
     
-    # .github/ - include prompts/ directory AND copilot-instructions.md (critical for auto-activation)
+    # Step 8: .github/ - include prompts/ directory AND copilot-instructions.md (critical for auto-activation)
     if '.github' in rel_path.parts:
         # Include the prompts/ subdirectory
         if 'prompts' in rel_path.parts:
@@ -401,8 +495,8 @@ def should_include_path(path: Path, project_root: Path) -> bool:
     return False
 
 
-def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
-    """Build content for publish branch in temporary directory."""
+def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, int]:
+    """Build content for publish branch in staging directory."""
     stats = {
         'files_copied': 0,
         'files_excluded': 0,
@@ -411,9 +505,10 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
     }
     
     logger.info("Building publish content...")
-    temp_dir.mkdir(parents=True, exist_ok=True)
+    staging_dir.mkdir(parents=True, exist_ok=True)
     
     # Copy project structure
+    manifest = []
     for item in project_root.rglob('*'):
         # Skip .git directory
         if '.git' in item.parts:
@@ -423,8 +518,9 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
             stats['files_excluded'] += 1
             continue
         
+        manifest.append(item)
         rel_path = item.relative_to(project_root)
-        dest_path = temp_dir / rel_path
+        dest_path = staging_dir / rel_path
         
         if item.is_dir():
             dest_path.mkdir(parents=True, exist_ok=True)
@@ -435,9 +531,40 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
             stats['files_copied'] += 1
             stats['total_size'] += item.stat().st_size
     
+    # Validate manifest before finalizing
+    logger.info("Validating publish manifest...")
+    try:
+        from scripts.validation.publish_manifest_validator import PublishManifestValidator
+        
+        validator = PublishManifestValidator(project_root, manifest)
+        validation_success, validation_report = validator.validate()
+        
+        if not validation_success:
+            logger.error("\n❌ MANIFEST VALIDATION FAILED")
+            logger.error("\nCritical violations found:")
+            for violation in validation_report.get('violations', []):
+                if violation['severity'] == 'critical':
+                    logger.error(f"  • {violation['path']}: {violation['reason']}")
+            
+            logger.error("\nDeploy blocked - non-production content detected in manifest")
+            logger.error("Run validator standalone for full report:")
+            logger.error("  python scripts/validation/publish_manifest_validator.py")
+            raise ValueError("Manifest validation failed - see errors above")
+        
+        if validation_report.get('warnings'):
+            logger.warning("\n⚠️  Manifest validation warnings:")
+            for violation in validation_report.get('violations', []):
+                if violation['severity'] == 'warning':
+                    logger.warning(f"  • {violation['path']}: {violation['reason']}")
+        
+        logger.info(f"✅ Manifest validation PASSED ({validation_report.get('files_checked', 0)} files checked)")
+        
+    except ImportError:
+        logger.warning("⚠️  Could not import manifest validator (optional)")
+    
     # Handle copilot-instructions.md merge
     cortex_instructions_src = project_root / ".github" / "copilot-instructions.md"
-    existing_instructions = temp_dir / ".github" / "copilot-instructions.md"
+    existing_instructions = staging_dir / ".github" / "copilot-instructions.md"
     
     if cortex_instructions_src.exists():
         logger.info("Merging copilot-instructions.md...")
@@ -450,13 +577,13 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
         logger.warning("⚠️  CORTEX copilot-instructions.md not found - skipping merge")
     
     # Filter admin operations from cortex-operations.yaml
-    filter_admin_operations(temp_dir)
+    filter_admin_operations(staging_dir)
     
     # Create SETUP-CORTEX.md guide
-    create_setup_guide(temp_dir)
+    create_setup_guide(staging_dir)
     
     # Create PACKAGE-INFO.md
-    create_package_info(temp_dir, stats)
+    create_package_info(staging_dir, stats)
     
     return stats
 
@@ -533,7 +660,7 @@ def merge_copilot_instructions(existing_file: Path, cortex_instructions_file: Pa
             f.write(merged_content)
 
 
-def create_setup_guide(temp_dir: Path):
+def create_setup_guide(staging_dir: Path):
     """Create comprehensive setup guide for end users."""
     setup_content = f"""# 🚀 CORTEX Setup Guide
 
@@ -553,7 +680,8 @@ This is the **production-ready CORTEX deployment package** - a clean, minimal in
 - ✅ GitHub Copilot integration (`.github/prompts/`)
 - ✅ Modular documentation (`prompts/`)
 - ✅ Automation scripts (`scripts/`)
-- ✅ All dependencies (`requirements.txt`)
+- ✅ Core dependencies (`requirements.txt` - 16 packages, ~123.5 MB)
+- ✅ Optional tools (`optional-requirements.txt` - 6 packages, ~26.5 MB, auto-installed when needed)
 
 **What's excluded:**
 - ❌ Development tools (tests, CI/CD, build scripts)
@@ -598,7 +726,7 @@ python --version
 git --version
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Install Core Dependencies
 
 ```bash
 # Create virtual environment (recommended)
@@ -610,9 +738,15 @@ python -m venv .venv
 # macOS/Linux:
 source .venv/bin/activate
 
-# Install CORTEX dependencies
+# Install CORTEX core dependencies (16 packages, ~123.5 MB)
 pip install -r requirements.txt
+
+# Optional: Install development tools (6 packages, ~26.5 MB)
+# These auto-install when first used, or install manually:
+pip install -r optional-requirements.txt
 ```
+
+**💡 Lazy Loading:** Development tools (black, flake8, mypy, radon, pylint, vulture) are automatically installed the first time you use commands like `validate lint`, `format code`, or `check types`. You'll see a one-time prompt to install them.
 
 ### 3️⃣ Configure CORTEX
 
@@ -818,14 +952,14 @@ git clone -b {PUBLISH_BRANCH} --single-branch https://github.com/asifhussain60/C
 *Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | CORTEX {PACKAGE_VERSION}*
 """
     
-    setup_file = temp_dir / 'SETUP-CORTEX.md'
+    setup_file = staging_dir / 'SETUP-CORTEX.md'
     with open(setup_file, 'w', encoding='utf-8') as f:
         f.write(setup_content)
     
     logger.info("Created SETUP-CORTEX.md")
 
 
-def create_package_info(temp_dir: Path, stats: Dict[str, int]):
+def create_package_info(staging_dir: Path, stats: Dict[str, int]):
     """Create package information file."""
     info_content = f"""# CORTEX Package Information
 
@@ -917,7 +1051,7 @@ cp cortex.config.template.json cortex.config.json
 **Copyright © 2024-2025 Asif Hussain. All rights reserved.**
 """
     
-    info_file = temp_dir / 'PACKAGE-INFO.md'
+    info_file = staging_dir / 'PACKAGE-INFO.md'
     with open(info_file, 'w', encoding='utf-8') as f:
         f.write(info_content)
     
@@ -1020,23 +1154,143 @@ def publish_to_branch(
     original_branch = checkpoint.get_data('original_branch')
     if not original_branch:
         original_branch = get_current_branch(project_root)
-        checkpoint.save(PublishStage.VALIDATION, {'original_branch': original_branch})
+        # Don't save checkpoint here - just store the branch info
+        # The actual checkpoint.save will happen in STAGE 1
     
     logger.info(f"Current branch: {original_branch}")
     
-    # Create temp directory for build
-    temp_dir = project_root / '.temp-publish'
+    # Create staging directory for build OUTSIDE the git repo to survive branch switches
+    import tempfile
+    staging_base = Path(tempfile.gettempdir()) / 'cortex-deploy-staging'
+    staging_dir = staging_base / 'package'
     
     try:
+        # STAGE 0: Feature Discovery (NEW - runs FIRST to ensure new functionality is cataloged)
+        if not checkpoint.should_skip_stage(PublishStage.VALIDATION):  # Run before validation
+            logger.info("\n🔍 STAGE 0: Feature Discovery & Wiring Validation")
+            
+            try:
+                # Import enhancement catalog and discovery engine
+                import sys
+                if str(project_root) not in sys.path:
+                    sys.path.insert(0, str(project_root))
+                
+                from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType
+                from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
+                
+                # Initialize catalog and discovery
+                catalog = EnhancementCatalog(brain_path=project_root / "cortex-brain")
+                engine = EnhancementDiscoveryEngine(repo_root=project_root)
+                
+                # Get last deployment review timestamp
+                last_review = catalog.get_last_review_timestamp('deployment')
+                
+                # Discover features (all if first time, or since last deployment)
+                logger.info("   Scanning for new features...")
+                if last_review:
+                    discovered = engine.discover_since(last_review)
+                    logger.info(f"   Discovered {len(discovered)} features since last deployment ({last_review.date()})")
+                else:
+                    discovered = engine.discover_all()
+                    logger.info(f"   Discovered {len(discovered)} features (first deployment scan)")
+                
+                # Add to catalog with deduplication
+                added_count = 0
+                for feature in discovered:
+                    # Map discovery type to FeatureType enum
+                    feature_type_map = {
+                        'operation': FeatureType.OPERATION,
+                        'agent': FeatureType.AGENT,
+                        'orchestrator': FeatureType.ORCHESTRATOR,
+                        'workflow': FeatureType.WORKFLOW,
+                        'template': FeatureType.TEMPLATE,
+                        'documentation': FeatureType.DOCUMENTATION,
+                        'integration': FeatureType.INTEGRATION,
+                        'utility': FeatureType.UTILITY,
+                    }
+                    ftype = feature_type_map.get(feature.type.lower(), FeatureType.UTILITY)
+                    
+                    if catalog.add_feature(
+                        name=feature.name,
+                        feature_type=ftype,
+                        description=feature.description or "",
+                        source=feature.source
+                    ):
+                        added_count += 1
+                
+                # Log deployment review
+                catalog.log_review('deployment', metadata={
+                    'features_discovered': len(discovered),
+                    'features_added': added_count,
+                    'version': VERSION
+                })
+                
+                # Get catalog stats
+                stats = catalog.get_catalog_stats()
+                logger.info(f"   ✅ Catalog updated: {stats['total_features']} total features")
+                logger.info(f"      - Operations: {stats['by_type'].get('operation', 0)}")
+                logger.info(f"      - Agents: {stats['by_type'].get('agent', 0)}")
+                logger.info(f"      - Orchestrators: {stats['by_type'].get('orchestrator', 0)}")
+                logger.info(f"      - Workflows: {stats['by_type'].get('workflow', 0)}")
+                
+                # Validate wiring - check critical features have entry points
+                logger.info("   Validating feature wiring...")
+                templates_path = project_root / "cortex-brain" / "response-templates.yaml"
+                if templates_path.exists():
+                    import yaml
+                    with open(templates_path, 'r', encoding='utf-8') as f:
+                        templates = yaml.safe_load(f)
+                    
+                    # Check for required triggers
+                    required_triggers = [
+                        ('swagger', 'Swagger/OpenAPI functionality'),
+                        ('timeframe', 'Timeframe estimation'),
+                        ('code review', 'Code review'),
+                        ('plan', 'Planning system'),
+                        ('tdd', 'TDD workflow'),
+                    ]
+                    
+                    all_triggers = str(templates.get('routing', {})).lower()
+                    template_content = str(templates.get('templates', {})).lower()
+                    combined_content = all_triggers + template_content
+                    
+                    missing_triggers = []
+                    for trigger, desc in required_triggers:
+                        if trigger not in combined_content:
+                            missing_triggers.append(f"{desc} ({trigger})")
+                    
+                    if missing_triggers:
+                        logger.warning(f"   ⚠️  Missing entry point triggers: {', '.join(missing_triggers)}")
+                    else:
+                        logger.info("   ✅ All critical features have entry point triggers")
+                
+                logger.info("✅ Feature discovery complete")
+                
+            except ImportError as e:
+                logger.warning(f"   ⚠️  Feature discovery skipped (import error): {e}")
+            except Exception as e:
+                logger.warning(f"   ⚠️  Feature discovery warning: {e}")
+                # Don't fail deployment on discovery errors - it's informational
+        
         # STAGE 1: Validation
         if not checkpoint.should_skip_stage(PublishStage.VALIDATION):
             logger.info("\n📋 STAGE 1: Validation")
             
-            # Check for uncommitted changes
+            # Check for uncommitted changes and auto-commit
             result = run_git_command(['git', 'status', '--porcelain'], project_root)
             if result.stdout.strip():
-                logger.error("❌ You have uncommitted changes. Please commit or stash them first.")
-                return False
+                logger.info("📝 Uncommitted changes detected - auto-committing for deployment...")
+                
+                # Stage all changes
+                run_git_command(['git', 'add', '-A'], project_root)
+                
+                # Create commit with deployment marker
+                commit_msg = f"chore: pre-deployment commit - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                run_git_command(['git', 'commit', '-m', commit_msg], project_root)
+                
+                logger.info(f"✅ Changes committed: {commit_msg}")
+            else:
+                logger.info("✅ Working tree clean - no uncommitted changes")
             
             checkpoint.save(PublishStage.VALIDATION, {
                 'original_branch': original_branch,
@@ -1048,17 +1302,17 @@ def publish_to_branch(
         
         # STAGE 2: Build Content
         stats = None
-        # Always rebuild if temp_dir missing (branch switch deleted it)
-        needs_rebuild = not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT) or not temp_dir.exists()
+        # Always rebuild if staging_dir missing (should not happen now with system temp)
+        needs_rebuild = not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT) or not staging_dir.exists()
         
         if needs_rebuild:
             if not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT):
                 logger.info("\n🔨 STAGE 2: Building Package Content")
             else:
-                logger.info("\n🔨 STAGE 2: Rebuilding Package Content (temp dir missing after branch switch)")
+                logger.info("\n🔨 STAGE 2: Rebuilding Package Content (staging dir missing)")
             
             # Build package content
-            stats = build_publish_content(project_root, temp_dir)
+            stats = build_publish_content(project_root, staging_dir)
             logger.info(f"✅ Build complete:")
             logger.info(f"   Files: {stats['files_copied']}")
             logger.info(f"   Size: {stats['total_size'] / 1024 / 1024:.2f} MB")
@@ -1074,13 +1328,23 @@ def publish_to_branch(
         
         if dry_run:
             logger.info("\n🔍 DRY RUN - No git operations performed")
-            logger.info(f"Preview content in: {temp_dir}")
+            logger.info(f"Preview content in: {staging_dir}")
             checkpoint.clear()
             return True
         
         # STAGE 3: Branch Setup
         if not checkpoint.should_skip_stage(PublishStage.BRANCH_SETUP):
             logger.info("\n🌿 STAGE 3: Setting Up Publish Branch")
+            
+            # Remove checkpoint file before branch switch to avoid conflicts
+            # (it gets recreated during build and may differ between branches)
+            checkpoint_path = project_root / CHECKPOINT_FILE
+            if checkpoint_path.exists():
+                try:
+                    checkpoint_path.unlink()
+                    logger.debug("Removed checkpoint file before branch switch")
+                except Exception as e:
+                    logger.warning(f"Could not remove checkpoint file: {e}")
             
             # Check if branch exists
             if branch_exists(branch_name, project_root):
@@ -1117,22 +1381,33 @@ def publish_to_branch(
         if not checkpoint.should_skip_stage(PublishStage.CONTENT_COPY):
             logger.info("\n📂 STAGE 4: Copying Content to Branch")
             
-            # Rebuild if temp_dir missing (branch switch deleted it)
-            if not temp_dir.exists():
-                logger.info("⚠️  Temp directory missing after branch switch - rebuilding...")
-                stats = build_publish_content(project_root, temp_dir)
-                logger.info(f"✅ Rebuild complete: {stats['files_copied']} files, {stats['total_size'] / 1024 / 1024:.2f} MB")
+            # Staging directory should exist in system temp (survives branch switch)
+            if not staging_dir.exists():
+                logger.error("❌ Staging directory missing - this should not happen!")
+                logger.error("   The staging directory is in system temp and should survive branch switch.")
+                logger.error(f"   Expected location: {staging_dir}")
+                raise RuntimeError("Staging directory missing after branch switch")
+            
+            # Verify staging_dir has content
+            staged_files = list(staging_dir.iterdir())
+            if not staged_files:
+                logger.error("❌ Staging directory is empty - build failed!")
+                raise RuntimeError("Staging directory is empty - no content to copy")
+            
+            logger.info(f"📦 Copying {len(staged_files)} items from staging to branch...")
             
             # Copy new content
-            for item in temp_dir.iterdir():
+            for item in staging_dir.iterdir():
                 dest = project_root / item.name
                 try:
                     if item.is_dir():
                         if dest.exists():
                             shutil.rmtree(dest)
                         shutil.copytree(item, dest)
+                        logger.debug(f"   Copied directory: {item.name}")
                     else:
                         shutil.copy2(item, dest)
+                        logger.debug(f"   Copied file: {item.name}")
                 except Exception as e:
                     logger.warning(f"Failed to copy {item.name}: {e}")
                     raise
@@ -1259,6 +1534,14 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
             logger.info(f"Returning to original branch: {original_branch}")
             run_git_command(['git', 'checkout', original_branch], project_root)
             
+            # Clean up staging directory (now in system temp)
+            if staging_base.exists():
+                try:
+                    shutil.rmtree(staging_base)
+                    logger.info("✅ Cleaned up staging directory")
+                except Exception as e:
+                    logger.warning(f"Could not clean staging directory: {e}")
+            
             checkpoint.save(PublishStage.CLEANUP, {
                 'original_branch': original_branch,
                 'branch_name': branch_name,
@@ -1308,27 +1591,37 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
         logger.info(f"      python scripts/publish_to_branch.py --resume")
         logger.info("   3. Or start fresh (will lose progress)")
         
-        # Try to return to original branch
-        if original_branch:
-            try:
-                current = get_current_branch(project_root)
-                if current != original_branch:
-                    logger.info(f"\n🔄 Attempting to return to {original_branch}...")
-                    run_git_command(['git', 'checkout', original_branch], project_root, check=False)
-                    logger.info("✅ Returned to original branch")
-            except Exception as branch_err:
-                logger.warning(f"⚠️  Could not return to original branch: {branch_err}")
+        # Note: Branch return is handled by finally block (guardrail)
         
         return False
         
     finally:
-        # Clean up temp directory only if publish completed
+        # GUARDRAIL: ALWAYS return to original branch (highest priority)
+        # This must happen regardless of success, failure, or interruption
+        try:
+            if original_branch:
+                current = get_current_branch(project_root)
+                if current != original_branch:
+                    logger.info(f"\n🔄 Returning to original branch: {original_branch}...")
+                    result = run_git_command(['git', 'checkout', original_branch], project_root, check=False)
+                    if result.returncode == 0:
+                        logger.info(f"✅ Safely returned to original branch: {original_branch}")
+                    else:
+                        logger.error(f"❌ Failed to return to original branch. You are on: {current}")
+                        logger.error(f"   Run manually: git checkout {original_branch}")
+                else:
+                    logger.debug(f"✅ Already on original branch: {original_branch}")
+        except Exception as branch_err:
+            logger.error(f"⚠️  CRITICAL: Could not return to original branch: {branch_err}")
+            logger.error(f"   Run manually: git checkout {original_branch}")
+        
+        # Clean up staging directory only if publish completed
         if checkpoint.get_last_stage() == PublishStage.COMPLETE:
-            if temp_dir.exists():
-                shutil.rmtree(temp_dir)
-                logger.debug(f"🗑️  Cleaned up temp directory: {temp_dir}")
-        elif temp_dir.exists():
-            logger.debug(f"💾 Keeping temp directory for resume: {temp_dir}")
+            if staging_dir.exists():
+                shutil.rmtree(staging_dir)
+                logger.debug(f"🗑️  Cleaned up staging directory: {staging_dir}")
+        elif staging_dir.exists():
+            logger.debug(f"💾 Keeping staging directory for resume: {staging_dir}")
 
 
 def main():

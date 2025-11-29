@@ -109,12 +109,17 @@ class SetupEPMOrchestrator:
             self._schedule_brain_learning(detected)
             logger.info(f"Phase 4: Scheduled brain learning")
         
+        # Phase 5: Bootstrap verification (NEW - ensures CORTEX is fully wired)
+        bootstrap_result = self._run_bootstrap_verification()
+        logger.info(f"Phase 5: Bootstrap verification - {bootstrap_result['status']}")
+        
         return {
             "success": True,
             "file_path": str(output_path),
             "detected": detected,
             "cortex_capabilities": cortex_capabilities,
             "learning_enabled": self.tier3_db_path is not None,
+            "bootstrap_verification": bootstrap_result,
             "next_update": "Run 'cortex refresh instructions' after working with CORTEX"
         }
     
@@ -443,6 +448,175 @@ start tdd              # Begin TDD workflow
             },
             "recommendation": "merge"
         }
+    
+    def _run_bootstrap_verification(self) -> Dict:
+        """
+        Phase 5: Bootstrap Verification
+        
+        Verifies that CORTEX is fully wired and operational after setup/upgrade.
+        This ensures the user has a working CORTEX installation with:
+        - Entry point (CORTEX.prompt.md) at correct location
+        - Brain structure intact (cortex-brain/)
+        - Response templates valid
+        - Key orchestrators wired
+        
+        Returns:
+            Dict with verification status and details
+        """
+        result = {
+            "status": "unknown",
+            "checks_passed": 0,
+            "checks_failed": 0,
+            "issues": [],
+            "checks": {}
+        }
+        
+        # Find CORTEX root (could be embedded or standalone)
+        cortex_root = self._find_cortex_root()
+        
+        if not cortex_root:
+            result["status"] = "error"
+            result["issues"].append("Could not locate CORTEX installation")
+            return result
+        
+        # Check 1: Entry point exists at .github/prompts/CORTEX.prompt.md
+        entry_point = cortex_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        if entry_point.exists():
+            result["checks"]["entry_point"] = True
+            result["checks_passed"] += 1
+            logger.info("  ✅ Entry point found at .github/prompts/CORTEX.prompt.md")
+        else:
+            result["checks"]["entry_point"] = False
+            result["checks_failed"] += 1
+            result["issues"].append("Entry point not found at .github/prompts/CORTEX.prompt.md")
+            logger.warning("  ❌ Entry point NOT found at expected location")
+        
+        # Check 2: cortex-brain/ structure exists
+        brain_path = cortex_root / 'cortex-brain'
+        required_dirs = ['tier1', 'tier3', 'documents', 'templates']
+        brain_ok = True
+        
+        if brain_path.exists():
+            for dir_name in required_dirs:
+                if not (brain_path / dir_name).exists():
+                    brain_ok = False
+                    result["issues"].append(f"Missing cortex-brain/{dir_name}/")
+        else:
+            brain_ok = False
+            result["issues"].append("cortex-brain/ directory not found")
+        
+        result["checks"]["brain_structure"] = brain_ok
+        if brain_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Brain structure verified")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Brain structure incomplete")
+        
+        # Check 3: response-templates.yaml exists and is valid
+        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        templates_ok = False
+        
+        if templates_file and templates_file.exists():
+            try:
+                import yaml
+                with open(templates_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                if 'templates' in data:
+                    critical_templates = ['help_table', 'fallback']
+                    missing = [t for t in critical_templates if t not in data['templates']]
+                    if not missing:
+                        templates_ok = True
+                    else:
+                        result["issues"].append(f"Missing templates: {missing}")
+            except Exception as e:
+                result["issues"].append(f"Invalid response-templates.yaml: {e}")
+        else:
+            result["issues"].append("response-templates.yaml not found")
+        
+        result["checks"]["response_templates"] = templates_ok
+        if templates_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Response templates verified")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Response templates invalid or missing")
+        
+        # Check 4: Key orchestrators exist
+        orchestrators_path = cortex_root / 'src' / 'orchestrators'
+        key_orchestrators = [
+            'planning_orchestrator.py',
+            'upgrade_orchestrator.py',
+            'git_checkpoint_orchestrator.py'
+        ]
+        orchestrators_ok = True
+        
+        if orchestrators_path.exists():
+            for orch in key_orchestrators:
+                if not (orchestrators_path / orch).exists():
+                    orchestrators_ok = False
+                    result["issues"].append(f"Missing orchestrator: {orch}")
+        else:
+            orchestrators_ok = False
+            result["issues"].append("src/orchestrators/ directory not found")
+        
+        result["checks"]["orchestrators"] = orchestrators_ok
+        if orchestrators_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Key orchestrators present")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Some orchestrators missing")
+        
+        # Calculate final status
+        total_checks = result["checks_passed"] + result["checks_failed"]
+        if result["checks_failed"] == 0:
+            result["status"] = "healthy"
+            logger.info(f"✅ Bootstrap verification PASSED: {result['checks_passed']}/{total_checks} checks")
+        elif result["checks_passed"] >= result["checks_failed"]:
+            result["status"] = "warning"
+            logger.warning(f"⚠️ Bootstrap verification WARNING: {result['checks_passed']}/{total_checks} checks passed")
+        else:
+            result["status"] = "error"
+            logger.error(f"❌ Bootstrap verification FAILED: {result['checks_passed']}/{total_checks} checks passed")
+        
+        return result
+    
+    def _find_cortex_root(self) -> Optional[Path]:
+        """
+        Find CORTEX installation root.
+        
+        Handles both embedded (CORTEX inside user repo) and standalone installations.
+        
+        Returns:
+            Path to CORTEX root or None if not found
+        """
+        # Priority 1: Check if current repo IS CORTEX
+        if (self.repo_path / 'cortex-brain').exists() and (self.repo_path / 'src' / 'orchestrators').exists():
+            return self.repo_path
+        
+        # Priority 2: Check for embedded CORTEX
+        embedded_path = self.repo_path / 'CORTEX'
+        if embedded_path.exists() and (embedded_path / 'cortex-brain').exists():
+            return embedded_path
+        
+        # Priority 3: Check parent directories (for when run from within CORTEX)
+        current = self.repo_path
+        for _ in range(3):  # Look up to 3 levels
+            if (current / 'cortex-brain').exists():
+                return current
+            current = current.parent
+        
+        # Priority 4: Use tier3_db_path to derive CORTEX root
+        if self.tier3_db_path:
+            tier3_path = Path(self.tier3_db_path).parent  # tier3/
+            brain_path = tier3_path.parent  # cortex-brain/
+            cortex_path = brain_path.parent  # CORTEX root
+            if cortex_path.exists() and (cortex_path / 'cortex-brain').exists():
+                return cortex_path
+        
+        return None
     
     def _review_cortex_enhancements(self) -> Dict:
         """

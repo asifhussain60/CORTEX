@@ -154,6 +154,7 @@ class HealthCheckOperation(BaseOperationModule):
                 if brain_analytics.get('health_score', 100) < 70:
                     health_report['warnings'].append(
                         f"Brain health score below threshold: {brain_analytics.get('health_score')}%"
+                    )
             
             # Enhancement Catalog health check
             if component in ['catalog', 'all']:
@@ -165,7 +166,6 @@ class HealthCheckOperation(BaseOperationModule):
                     health_report['errors'].extend(catalog_check['issues'])
                     if health_report['overall_status'] == 'healthy':
                         health_report['overall_status'] = 'warning'
-                    )
                 
                 # Add brain recommendations
                 if brain_analytics.get('recommendations'):

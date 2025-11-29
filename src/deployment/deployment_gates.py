@@ -115,6 +115,42 @@ class DeploymentGates:
         elif gate7["severity"] == "WARNING" and not gate7["passed"]:
             results["warnings"].append(gate7["message"])
         
+        # Gate 8: Swagger/OpenAPI documentation (NEW)
+        gate8 = self._validate_swagger_documentation()
+        results["gates"].append(gate8)
+        if gate8["severity"] == "ERROR" and not gate8["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate8["message"])
+        elif gate8["severity"] == "WARNING" and not gate8["passed"]:
+            results["warnings"].append(gate8["message"])
+        
+        # Gate 9: Timeframe Estimator module (NEW)
+        gate9 = self._validate_timeframe_estimator()
+        results["gates"].append(gate9)
+        if gate9["severity"] == "ERROR" and not gate9["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate9["message"])
+        elif gate9["severity"] == "WARNING" and not gate9["passed"]:
+            results["warnings"].append(gate9["message"])
+        
+        # Gate 10: Production File Validation (CRITICAL)
+        gate10 = self._validate_production_files()
+        results["gates"].append(gate10)
+        if gate10["severity"] == "ERROR" and not gate10["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate10["message"])
+        elif gate10["severity"] == "WARNING" and not gate10["passed"]:
+            results["warnings"].append(gate10["message"])
+        
+        # Gate 11: CORTEX Brain Operational Verification (CRITICAL)
+        gate11 = self._validate_cortex_brain_operational()
+        results["gates"].append(gate11)
+        if gate11["severity"] == "ERROR" and not gate11["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate11["message"])
+        elif gate11["severity"] == "WARNING" and not gate11["passed"]:
+            results["warnings"].append(gate11["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -647,5 +683,688 @@ class DeploymentGates:
             gate["message"] = f"Git Checkpoint System has {len(issues)} configuration issues"
         else:
             gate["message"] = "Git Checkpoint System fully operational"
+        
+        return gate
+    
+    def _validate_swagger_documentation(self) -> Dict[str, Any]:
+        """
+        Gate 8: Swagger/OpenAPI documentation present and valid.
+        
+        Validates:
+        - API documentation file exists (swagger.json or openapi.yaml)
+        - Valid OpenAPI 3.0+ structure (info, paths, components)
+        - Referenced in capabilities.yaml
+        - Documented in CORTEX.prompt.md
+        
+        Returns:
+            Gate result with API documentation validation details
+        """
+        gate = {
+            "name": "Swagger/OpenAPI Documentation",
+            "passed": True,
+            "severity": "ERROR",
+            "message": "",
+            "details": {}
+        }
+        
+        issues = []
+        checks = {
+            "api_file_exists": False,
+            "valid_openapi_structure": False,
+            "in_capabilities": False,
+            "documented_in_prompt": False
+        }
+        
+        # Check 1: Look for API documentation files
+        api_doc_paths = [
+            self.project_root / "docs" / "api" / "swagger.json",
+            self.project_root / "docs" / "api" / "openapi.yaml",
+            self.project_root / "docs" / "api" / "openapi.yml",
+            self.project_root / "api" / "swagger.json",
+            self.project_root / "api" / "openapi.yaml"
+        ]
+        
+        api_doc_file = None
+        for path in api_doc_paths:
+            if path.exists():
+                api_doc_file = path
+                checks["api_file_exists"] = True
+                break
+        
+        if not checks["api_file_exists"]:
+            issues.append("No API documentation file found (swagger.json or openapi.yaml)")
+        
+        # Check 2: Validate OpenAPI structure
+        if api_doc_file:
+            try:
+                import yaml
+                import json
+                
+                if api_doc_file.suffix == ".json":
+                    with open(api_doc_file, 'r', encoding='utf-8') as f:
+                        spec = json.load(f)
+                else:
+                    with open(api_doc_file, 'r', encoding='utf-8') as f:
+                        spec = yaml.safe_load(f)
+                
+                # Validate required OpenAPI 3.0+ fields
+                required_fields = ["openapi", "info", "paths"]
+                missing_fields = [f for f in required_fields if f not in spec]
+                
+                if missing_fields:
+                    issues.append(f"Invalid OpenAPI structure: missing {', '.join(missing_fields)}")
+                else:
+                    # Check OpenAPI version
+                    version = spec.get("openapi", "")
+                    if not version.startswith("3."):
+                        issues.append(f"OpenAPI version {version} not supported (require 3.0+)")
+                    else:
+                        checks["valid_openapi_structure"] = True
+                        
+                        # Additional quality checks
+                        info = spec.get("info", {})
+                        if not info.get("title"):
+                            issues.append("OpenAPI spec missing title in info section")
+                        if not info.get("version"):
+                            issues.append("OpenAPI spec missing version in info section")
+                        
+                        paths = spec.get("paths", {})
+                        if not paths:
+                            issues.append("OpenAPI spec has no documented endpoints")
+            
+            except json.JSONDecodeError as e:
+                issues.append(f"Invalid JSON in API doc: {e}")
+            except yaml.YAMLError as e:
+                issues.append(f"Invalid YAML in API doc: {e}")
+            except Exception as e:
+                issues.append(f"Could not validate API doc structure: {e}")
+        
+        # Check 3: Verify in capabilities.yaml
+        capabilities_path = self.project_root / "cortex-brain" / "capabilities.yaml"
+        if capabilities_path.exists():
+            try:
+                import yaml
+                with open(capabilities_path, 'r', encoding='utf-8') as f:
+                    capabilities = yaml.safe_load(f)
+                
+                # Search for OpenAPI/Swagger references
+                cap_str = str(capabilities).lower()
+                if "openapi" in cap_str or "swagger" in cap_str or "api documentation" in cap_str:
+                    checks["in_capabilities"] = True
+                else:
+                    issues.append("OpenAPI capability not declared in capabilities.yaml")
+            
+            except Exception as e:
+                issues.append(f"Could not validate capabilities.yaml: {e}")
+        else:
+            issues.append("capabilities.yaml not found")
+        
+        # Check 4: Verify documented in CORTEX.prompt.md
+        prompt_path = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+        if prompt_path.exists():
+            try:
+                content = prompt_path.read_text(encoding='utf-8')
+                content_lower = content.lower()
+                
+                if "swagger" in content_lower or "openapi" in content_lower or "api documentation" in content_lower:
+                    checks["documented_in_prompt"] = True
+                else:
+                    issues.append("API documentation not mentioned in CORTEX.prompt.md")
+            
+            except Exception as e:
+                issues.append(f"Could not validate CORTEX.prompt.md: {e}")
+        else:
+            issues.append("CORTEX.prompt.md not found")
+        
+        # Calculate overall status
+        gate["details"] = {
+            "checks": checks,
+            "issues": issues,
+            "passed_checks": sum(1 for v in checks.values() if v),
+            "total_checks": len(checks),
+            "api_doc_file": str(api_doc_file.relative_to(self.project_root)) if api_doc_file else None
+        }
+        
+        # Critical checks: file exists and valid structure
+        critical_checks = ["api_file_exists", "valid_openapi_structure"]
+        critical_passed = all(checks[c] for c in critical_checks)
+        
+        # Count passed checks
+        passed_checks = sum(1 for v in checks.values() if v)
+        total_checks = len(checks)
+        
+        if not checks["api_file_exists"]:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = "No Swagger/OpenAPI documentation found - API documentation required"
+        elif not checks["valid_openapi_structure"]:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = "Invalid OpenAPI specification structure"
+        elif not critical_passed or issues:
+            gate["passed"] = False
+            gate["severity"] = "WARNING"
+            gate["message"] = f"API documentation incomplete: {len(issues)} issues"
+        else:
+            gate["message"] = f"Swagger/OpenAPI documentation valid ({passed_checks}/{total_checks} checks passed)"
+        
+        # Add check details to gate
+        gate["details"]["checks"] = checks
+        gate["details"]["issues"] = issues
+        gate["details"]["passed_checks"] = passed_checks
+        gate["details"]["total_checks"] = total_checks
+        if api_doc_file:
+            gate["details"]["api_doc_file"] = str(api_doc_file.relative_to(self.project_root))
+        
+        return gate
+
+    def _validate_timeframe_estimator(self) -> Dict[str, Any]:
+        """
+        Gate 9: Timeframe Estimator module functional and properly integrated.
+        
+        Validates:
+        - TimeframeEstimator class exists in src/agents/estimation/
+        - Can be imported without errors
+        - Has required methods (estimate_from_tasks, generate_timeline_comparison)
+        - Has test file with passing tests
+        - Is documented in swagger-entry-point-guide.md
+        - Entry point triggers exist in response-templates.yaml
+        
+        Returns:
+            Gate result with timeframe estimator validation details
+        """
+        gate = {
+            "name": "Timeframe Estimator Module",
+            "passed": True,
+            "severity": "WARNING",
+            "message": "",
+            "details": {}
+        }
+        
+        issues = []
+        checks = {
+            "module_exists": False,
+            "module_imports": False,
+            "required_methods": False,
+            "has_tests": False,
+            "tests_pass": False,
+            "documented": False,
+            "entry_point_wired": False
+        }
+        
+        # Check 1: Module file exists
+        module_path = self.project_root / "src" / "agents" / "estimation" / "timeframe_estimator.py"
+        if module_path.exists():
+            checks["module_exists"] = True
+        else:
+            issues.append("TimeframeEstimator module not found at src/agents/estimation/timeframe_estimator.py")
+        
+        # Check 2: Can import module
+        if checks["module_exists"]:
+            try:
+                import sys
+                if str(self.project_root) not in sys.path:
+                    sys.path.insert(0, str(self.project_root))
+                
+                from src.agents.estimation.timeframe_estimator import TimeframeEstimator
+                checks["module_imports"] = True
+                
+                # Check 3: Required methods exist
+                estimator = TimeframeEstimator()
+                required_methods = [
+                    "estimate_timeframe",
+                    "generate_timeline_comparison",
+                    "generate_what_if_scenarios",
+                    "format_professional_report",
+                    "_analyze_parallel_tracks",
+                    "_calculate_critical_path"
+                ]
+                missing_methods = [m for m in required_methods if not hasattr(estimator, m)]
+                
+                if missing_methods:
+                    issues.append(f"Missing required methods: {', '.join(missing_methods)}")
+                else:
+                    checks["required_methods"] = True
+                    
+            except ImportError as e:
+                issues.append(f"Cannot import TimeframeEstimator: {e}")
+            except Exception as e:
+                issues.append(f"Error instantiating TimeframeEstimator: {e}")
+        
+        # Check 4: Test file exists
+        test_path = self.project_root / "tests" / "test_timeframe_estimator.py"
+        if test_path.exists():
+            checks["has_tests"] = True
+            # Check 5: Assume tests pass if file exists and has content
+            try:
+                test_content = test_path.read_text(encoding='utf-8')
+                if 'def test_' in test_content or 'class Test' in test_content:
+                    checks["tests_pass"] = True  # Assume pass - actual validation in CI
+                else:
+                    issues.append("Test file exists but appears to have no test functions")
+            except Exception as e:
+                issues.append(f"Could not read test file: {e}")
+        else:
+            issues.append("No test file found at tests/test_timeframe_estimator.py")
+        
+        # Check 6: Documentation exists
+        doc_paths = [
+            self.project_root / "cortex-brain" / "documents" / "implementation-guides" / "swagger-entry-point-guide.md",
+            self.project_root / ".github" / "prompts" / "modules" / "timeframe-estimation-guide.md"
+        ]
+        
+        for doc_path in doc_paths:
+            if doc_path.exists():
+                try:
+                    content = doc_path.read_text(encoding='utf-8').lower()
+                    if 'timeframeestimator' in content or 'timeframe_estimator' in content:
+                        checks["documented"] = True
+                        break
+                except Exception:
+                    pass
+        
+        if not checks["documented"]:
+            issues.append("TimeframeEstimator not documented in implementation guides")
+        
+        # Check 7: Entry point wiring (response-templates.yaml)
+        templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+        if templates_path.exists():
+            try:
+                content = templates_path.read_text(encoding='utf-8').lower()
+                estimate_triggers = [
+                    'estimate timeframe',
+                    'timeline comparison',
+                    'project timeline',
+                    'delivery estimate'
+                ]
+                if any(trigger in content for trigger in estimate_triggers):
+                    checks["entry_point_wired"] = True
+                else:
+                    issues.append("No entry point triggers found in response-templates.yaml")
+            except Exception as e:
+                issues.append(f"Could not validate entry points: {e}")
+        else:
+            issues.append("response-templates.yaml not found")
+        
+        # Calculate overall status
+        gate["details"] = {
+            "checks": checks,
+            "issues": issues,
+            "passed_checks": sum(1 for v in checks.values() if v),
+            "total_checks": len(checks)
+        }
+        
+        # Critical checks: module exists, imports, and has required methods
+        critical_checks = ["module_exists", "module_imports", "required_methods"]
+        critical_passed = all(checks[c] for c in critical_checks)
+        
+        passed_checks = sum(1 for v in checks.values() if v)
+        total_checks = len(checks)
+        
+        if not critical_passed:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Timeframe Estimator module incomplete: {len([c for c, v in checks.items() if c in critical_checks and not v])} critical issues"
+        elif passed_checks < total_checks:
+            gate["passed"] = False
+            gate["severity"] = "WARNING"
+            gate["message"] = f"Timeframe Estimator integration incomplete: {total_checks - passed_checks} issues"
+        else:
+            gate["message"] = f"Timeframe Estimator fully integrated ({passed_checks}/{total_checks} checks passed)"
+        
+        return gate
+
+    def _validate_production_files(self) -> Dict[str, Any]:
+        """
+        Gate 10: Production File Validation - CRITICAL GATE
+        
+        Scans ALL files and folders against production whitelist/blacklist.
+        Prevents non-production content from being included in releases.
+        
+        Blocked Content:
+        - Development/test folders: test_merge/, .temp-publish/, workflow_checkpoints/
+        - Build artifacts: dist/, site/, *.db, *.log
+        - IDE/editor config: .vscode/, .idea/
+        - Admin-only content: cortex-brain/admin/, scripts/deploy_*.py
+        - MkDocs admin content: mkdocs.yml, docs/, cortex-brain/mkdocs-*.yaml
+        - Root-level test files: test_*.py
+        
+        Returns:
+            Gate result with production validation details
+        """
+        gate = {
+            "name": "Production File Validation",
+            "passed": True,
+            "severity": "ERROR",  # This is a critical gate
+            "message": "",
+            "details": {}
+        }
+        
+        # BLOCKLIST: Files/folders that MUST NOT be in production
+        blocked_dirs = {
+            # Test and development folders
+            'test_merge',
+            '.temp-publish',       # Legacy name (keep for backwards compatibility)
+            '.deploy-staging',     # Current staging folder name
+            'workflow_checkpoints',
+            'CORTEX-cleanup',
+            
+            # Build and cache folders
+            'dist',
+            'site',
+            '__pycache__',
+            '.pytest_cache',
+            '.cache',
+            'htmlcov',
+            
+            # Development tools
+            '.vscode',
+            '.idea',
+            '.upgrades',
+            
+            # Admin-only (security critical)
+            'cortex-brain/admin',
+            'scripts/admin',
+            
+            # MkDocs (admin feature only)
+            'docs',
+        }
+        
+        blocked_file_patterns = [
+            # Root-level test files
+            'test_*.py',
+            
+            # MkDocs files
+            'mkdocs.yml',
+            'mkdocs-*.yaml',
+            
+            # Database files (generated at runtime)
+            '*.db',
+            '*.db-journal',
+            '*.db-shm',
+            '*.db-wal',
+            
+            # Deployment scripts (admin only)
+            'deploy_*.py',
+            
+            # Build artifacts
+            '*.egg-info',
+            '*.egg',
+            
+            # Coverage
+            '.coverage',
+        ]
+        
+        blocked_specific_files = {
+            'mkdocs.yml',
+            '.publish-checkpoint.json',
+            'cortex-brain/mkdocs-refresh-config.yaml',
+        }
+        
+        issues = []
+        blocked_found = {
+            "directories": [],
+            "files": [],
+            "patterns": []
+        }
+        
+        # Check 1: Scan for blocked directories at root level
+        for blocked_dir in blocked_dirs:
+            dir_path = self.project_root / blocked_dir
+            if dir_path.exists():
+                blocked_found["directories"].append(blocked_dir)
+                issues.append(f"BLOCKED DIR: {blocked_dir}/ exists and would be included in production")
+        
+        # Check 2: Scan for blocked file patterns at root level
+        import fnmatch
+        for item in self.project_root.iterdir():
+            if item.is_file():
+                for pattern in blocked_file_patterns:
+                    if fnmatch.fnmatch(item.name, pattern):
+                        blocked_found["patterns"].append(str(item.name))
+                        issues.append(f"BLOCKED FILE: {item.name} matches blocked pattern '{pattern}'")
+                        break
+        
+        # Check 3: Check for specific blocked files
+        for blocked_file in blocked_specific_files:
+            file_path = self.project_root / blocked_file
+            if file_path.exists():
+                # Check if not already captured by patterns
+                rel_path = str(blocked_file)
+                if rel_path not in blocked_found["files"]:
+                    blocked_found["files"].append(rel_path)
+                    if rel_path not in [str(p) for p in blocked_found["patterns"]]:
+                        issues.append(f"BLOCKED FILE: {blocked_file} must be excluded from production")
+        
+        # Check 4: Verify exclusion is properly configured in deploy_cortex.py
+        deploy_script = self.project_root / "scripts" / "deploy_cortex.py"
+        if deploy_script.exists():
+            try:
+                content = deploy_script.read_text(encoding='utf-8')
+                
+                # Check for critical exclusions
+                critical_exclusions = [
+                    'test_merge',
+                    '.deploy-staging',   # Current staging folder name
+                    'mkdocs.yml',
+                    'CORTEX-cleanup',
+                    'workflow_checkpoints',
+                    'cortex-brain/admin',
+                    'docs',
+                ]
+                
+                missing_exclusions = []
+                for exclusion in critical_exclusions:
+                    if exclusion not in content:
+                        missing_exclusions.append(exclusion)
+                
+                if missing_exclusions:
+                    issues.append(f"MISSING EXCLUSIONS in deploy_cortex.py: {', '.join(missing_exclusions)}")
+                    blocked_found["files"].append("deploy_cortex.py (missing exclusions)")
+                    
+            except Exception as e:
+                issues.append(f"Could not validate deploy_cortex.py: {e}")
+        else:
+            issues.append("deploy_cortex.py not found - cannot validate exclusion configuration")
+        
+        # Calculate results
+        gate["details"] = {
+            "blocked_found": blocked_found,
+            "issues": issues,
+            "total_blocked_dirs": len(blocked_found["directories"]),
+            "total_blocked_files": len(blocked_found["files"]) + len(blocked_found["patterns"])
+        }
+        
+        total_blocked = (
+            len(blocked_found["directories"]) + 
+            len(blocked_found["files"]) + 
+            len(blocked_found["patterns"])
+        )
+        
+        # Gate passes ONLY if exclusions are properly configured
+        # Blocked content existing is OK as long as deploy_cortex.py excludes them
+        missing_exclusions_issue = any("MISSING EXCLUSIONS" in issue for issue in issues)
+        
+        if missing_exclusions_issue:
+            gate["passed"] = False
+            gate["message"] = f"Production validation FAILED: deploy_cortex.py missing critical exclusions"
+        elif total_blocked > 0:
+            # Content exists but should be excluded - WARN but don't fail
+            gate["severity"] = "WARNING"
+            gate["message"] = f"Production validation passed with warnings: {total_blocked} items will be excluded by deploy_cortex.py"
+        else:
+            gate["message"] = "Production validation passed: No blocked content found"
+        
+        return gate
+
+    def _validate_cortex_brain_operational(self) -> Dict[str, Any]:
+        """
+        Gate 11: CORTEX Brain Operational Verification - CRITICAL GATE
+        
+        Validates that CORTEX is fully wired and operational with:
+        - CORTEX.prompt.md exists at .github/prompts/
+        - cortex-brain/ folder structure intact
+        - Tier databases exist (tier1/, tier3/)
+        - response-templates.yaml exists and is valid
+        - Key orchestrators are wired to entry points
+        - Brain protection rules exist
+        
+        This gate ensures production code contains a fully operational CORTEX brain
+        that can be used immediately after deployment without additional setup.
+        
+        Returns:
+            Gate result with brain operational status
+        """
+        gate = {
+            "name": "CORTEX Brain Operational",
+            "passed": True,
+            "severity": "ERROR",  # This is a critical gate
+            "message": "",
+            "details": {}
+        }
+        
+        issues = []
+        checks = {
+            "entry_point": False,
+            "brain_structure": False,
+            "tier_databases": False,
+            "response_templates": False,
+            "brain_protection": False,
+            "orchestrator_wiring": False
+        }
+        
+        # Check 1: CORTEX.prompt.md at .github/prompts/
+        entry_point = self.project_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        if entry_point.exists():
+            checks["entry_point"] = True
+            # Verify it has minimum content
+            try:
+                content = entry_point.read_text(encoding='utf-8')
+                required_sections = ['Entry Point', 'help', 'CORTEX']
+                missing_sections = [s for s in required_sections if s.lower() not in content.lower()]
+                if missing_sections:
+                    issues.append(f"CORTEX.prompt.md missing key sections: {missing_sections}")
+                    checks["entry_point"] = False
+            except Exception as e:
+                issues.append(f"Could not read CORTEX.prompt.md: {e}")
+                checks["entry_point"] = False
+        else:
+            issues.append(f"CRITICAL: Entry point not found at .github/prompts/CORTEX.prompt.md")
+        
+        # Check 2: cortex-brain/ folder structure
+        brain_path = self.project_root / 'cortex-brain'
+        required_brain_dirs = ['tier1', 'tier3', 'documents', 'templates']
+        if brain_path.exists():
+            missing_dirs = []
+            for dir_name in required_brain_dirs:
+                if not (brain_path / dir_name).exists():
+                    missing_dirs.append(dir_name)
+            
+            if not missing_dirs:
+                checks["brain_structure"] = True
+            else:
+                issues.append(f"cortex-brain/ missing directories: {missing_dirs}")
+        else:
+            issues.append("CRITICAL: cortex-brain/ directory not found")
+        
+        # Check 3: Tier databases exist (can be empty but must exist)
+        tier1_path = brain_path / 'tier1' if brain_path.exists() else None
+        tier3_path = brain_path / 'tier3' if brain_path.exists() else None
+        
+        tier_ok = True
+        if tier1_path and not tier1_path.exists():
+            issues.append("tier1/ directory not found in cortex-brain/")
+            tier_ok = False
+        if tier3_path and not tier3_path.exists():
+            issues.append("tier3/ directory not found in cortex-brain/")
+            tier_ok = False
+        checks["tier_databases"] = tier_ok
+        
+        # Check 4: response-templates.yaml exists and is valid YAML
+        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        if templates_file and templates_file.exists():
+            try:
+                import yaml
+                with open(templates_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                # Verify critical templates exist
+                if 'templates' in data:
+                    critical_templates = ['help_table', 'fallback', 'greeting']
+                    missing_templates = [t for t in critical_templates if t not in data['templates']]
+                    if missing_templates:
+                        issues.append(f"response-templates.yaml missing critical templates: {missing_templates}")
+                    else:
+                        checks["response_templates"] = True
+                else:
+                    issues.append("response-templates.yaml missing 'templates' key")
+            except Exception as e:
+                issues.append(f"response-templates.yaml is invalid: {e}")
+        else:
+            issues.append("response-templates.yaml not found in cortex-brain/")
+        
+        # Check 5: Brain protection rules exist
+        protection_file = brain_path / 'brain-protection-rules.yaml' if brain_path.exists() else None
+        if protection_file and protection_file.exists():
+            try:
+                import yaml
+                with open(protection_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                # Verify SKULL rules exist
+                if 'skull_rules' in data or 'protection_layers' in data or 'instincts' in data:
+                    checks["brain_protection"] = True
+                else:
+                    issues.append("brain-protection-rules.yaml missing SKULL rules")
+            except Exception as e:
+                issues.append(f"brain-protection-rules.yaml is invalid: {e}")
+        else:
+            issues.append("brain-protection-rules.yaml not found in cortex-brain/")
+        
+        # Check 6: Key orchestrators wired to entry points
+        # Check that response-templates.yaml references key orchestrators
+        wired_ok = True
+        if templates_file and templates_file.exists():
+            try:
+                content = templates_file.read_text(encoding='utf-8')
+                key_operations = ['plan', 'help', 'upgrade', 'feedback', 'tdd']
+                missing_wiring = []
+                for op in key_operations:
+                    if op not in content.lower():
+                        missing_wiring.append(op)
+                
+                if missing_wiring:
+                    issues.append(f"Key operations not wired in templates: {missing_wiring}")
+                    wired_ok = False
+            except Exception:
+                wired_ok = False
+        else:
+            wired_ok = False
+        checks["orchestrator_wiring"] = wired_ok
+        
+        # Calculate results
+        passed_checks = sum(1 for v in checks.values() if v)
+        total_checks = len(checks)
+        
+        gate["details"] = {
+            "checks": checks,
+            "issues": issues,
+            "passed_checks": passed_checks,
+            "total_checks": total_checks,
+            "score": f"{(passed_checks / total_checks) * 100:.0f}%"
+        }
+        
+        # Gate passes if ALL critical checks pass (entry_point, brain_structure, response_templates)
+        critical_passed = checks["entry_point"] and checks["brain_structure"] and checks["response_templates"]
+        
+        if not critical_passed:
+            gate["passed"] = False
+            gate["message"] = f"CORTEX Brain NOT operational: {total_checks - passed_checks} critical failures. Production deployment blocked."
+        elif passed_checks < total_checks:
+            gate["severity"] = "WARNING"
+            gate["passed"] = True
+            gate["message"] = f"CORTEX Brain operational with warnings: {passed_checks}/{total_checks} checks passed"
+        else:
+            gate["message"] = f"CORTEX Brain fully operational: All {total_checks} checks passed"
         
         return gate

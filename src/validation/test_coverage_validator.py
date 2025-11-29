@@ -63,6 +63,7 @@ class TestCoverageValidator:
         # Search in appropriate test directory
         if feature_type == "orchestrator":
             search_paths = [
+                self.tests_root,  # Search root first (convention: test_<feature>.py directly in tests/)
                 self.tests_root / "orchestrators",
                 self.tests_root / "operations" / "modules",
                 self.tests_root / "workflows",
@@ -70,6 +71,7 @@ class TestCoverageValidator:
             ]
         elif feature_type == "agent":
             search_paths = [
+                self.tests_root,  # Search root first
                 self.tests_root / "agents",
                 self.tests_root / "cortex_agents"
             ]

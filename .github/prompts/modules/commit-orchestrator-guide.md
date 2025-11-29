@@ -1,207 +1,289 @@
 # Commit Orchestrator Guide
 
-**Module:** `CommitOrchestrator`  
-**Location:** `src/operations/modules/git/commit_orchestrator.py`  
-**Purpose:** Intelligent Git commit operations with automatic staging and validation  
-**Status:** ✅ Production  
-**Version:** 3.3.0
+**Purpose:** Intelligent git commit and sync workflow with untracked file handling and merge conflict resolution  
+**Version:** 1.0.0  
+**Status:** ✅ PRODUCTION
 
 ---
 
-## Overview
+## 🎯 Overview
 
-The Commit Orchestrator provides intelligent Git commit operations with automatic file staging, commit message generation, and validation. It ensures clean commit history and proper Git workflow practices.
-
-**Key Capabilities:**
-- Automatic file staging based on context
-- Commit message generation following conventions
-- Pre-commit validation and checks
-- Integration with Brain Protector for compliance
-- Support for conventional commits format
-- Dry-run mode for safety
+The Commit Orchestrator provides a safe, intelligent workflow for syncing local repository changes with remote origin:
+- Pull from origin and merge (preserving local work)
+- Ensure zero untracked files (prompt user to add/ignore)
+- Push merged result to origin
+- Create git checkpoints for rollback safety
+- Handle merge conflicts with clear guidance
 
 ---
 
-## Natural Language Triggers
+## 🚀 Commands
 
-**Primary Commands:**
+**Natural Language Triggers:**
 - `commit`
-- `commit [message]`
-- `commit changes`
-- `git commit`
+- `commit and push`
+- `sync with origin`
+- `commit sync`
+- `push changes`
+- `sync repository`
+- `commit and sync`
+- `pull and push`
+- `sync repo`
 
-**Context Variations:**
-- "Commit my changes"
-- "Commit with message [text]"
-- "Save changes to Git"
-
----
-
-## Architecture & Integration
-
-**Dependencies:**
-- Git CLI (command-line interface)
-- `BrainProtector` - Validates commits don't violate rules
-- `GitCheckpointOrchestrator` - Creates rollback points
-- `.gitignore` - Respects exclusion rules
-
-**Integration Points:**
-- Unified Entry Point Orchestrator for command routing
-- Response template system for user feedback
-- Git checkpoint system for safety
+**Use Cases:**
+- Syncing local changes with team
+- Preparing for deployment
+- Collaborating on feature branches
+- Resolving merge conflicts safely
 
 ---
 
-## Usage Examples
+## 📊 Workflow Steps
 
-### Basic Commit
-
+### Phase 1: Pre-Flight Validation (5s)
 ```
-User: "commit"
-CORTEX: Stages all changes → Generates message → Creates commit
+Check current repository state:
+- Is working tree clean? (no uncommitted changes)
+- Are there untracked files? (prompt user to add/ignore)
+- Is branch up-to-date with remote?
+- Are there merge conflicts? (must resolve first)
 ```
 
-### Commit with Message
-
+### Phase 2: Untracked File Handling (10-30s)
 ```
-User: "commit Add user authentication feature"
-CORTEX: Stages changes → Uses provided message → Commits
-```
-
-### Dry Run
-
-```
-User: "commit --dry-run"
-CORTEX: Shows what would be committed without making actual commit
+If untracked files found:
+1. List all untracked files
+2. Prompt user: Add, Ignore, or Cancel
+3. If Add: Stage files with git add
+4. If Ignore: Add to .gitignore
+5. If Cancel: Abort sync operation
 ```
 
----
+### Phase 3: Commit Local Changes (5s)
+```
+If working tree dirty:
+1. Stage all changes (git add .)
+2. Create commit with auto-generated or custom message
+3. Verify commit success
+```
 
-## Commit Message Conventions
+### Phase 4: Create Safety Checkpoint (2s)
+```
+Create git checkpoint before pull:
+- Tag: pre-sync-YYYYMMDD-HHMMSS
+- Purpose: Rollback point if merge fails
+- Retention: 30 days
+```
 
-**Format:** `<type>: <description>`
+### Phase 5: Pull from Origin (10-30s)
+```
+Fetch and merge remote changes:
+1. git fetch origin
+2. git merge origin/<branch> --no-ff
+3. Detect merge conflicts (if any)
+4. If conflicts: Provide resolution guidance
+5. If success: Continue to push
+```
 
-**Types:**
-- `feat:` - New feature
-- `fix:` - Bug fix
-- `docs:` - Documentation changes
-- `refactor:` - Code refactoring
-- `test:` - Test additions/changes
-- `chore:` - Maintenance tasks
-- `perf:` - Performance improvements
-
-**Examples:**
-- `feat: Add user authentication system`
-- `fix: Resolve login validation bug`
-- `docs: Update API documentation`
-
----
-
-## Safety Features
-
-**Pre-Commit Checks:**
-1. ✅ No Brain Protector rule violations
-2. ✅ No staged files in `.gitignore`
-3. ✅ No merge conflicts present
-4. ✅ Valid commit message format
-5. ✅ No empty commits
-
-**Rollback Protection:**
-- Automatically creates Git checkpoint before commit
-- Allows easy rollback if issues discovered
-- Preserves uncommitted changes
-
----
-
-## Configuration
-
-**Git Configuration (Respects):**
-- `.gitignore` - File exclusion rules
-- `.git/config` - Repository settings
-- User name and email from Git config
-
-**CORTEX Settings:**
-- Auto-staging: Enabled by default
-- Commit message generation: Enabled
-- Pre-commit validation: Enabled
-- Checkpoint creation: Enabled
+### Phase 6: Push to Origin (10-30s)
+```
+Upload merged changes:
+1. git push origin <branch>
+2. Verify push success
+3. Create post-sync checkpoint
+4. Report sync status
+```
 
 ---
 
-## Implementation Details
+## 🔧 Configuration
 
-**Class:** `CommitOrchestrator`
+**Config File:** `cortex.config.json`
 
-**Key Methods:**
-- `execute(context)` - Main commit orchestration
-- `_stage_files(files)` - Stage specified files
-- `_generate_commit_message(changes)` - Auto-generate message
-- `_validate_commit()` - Pre-commit validation
-- `_create_checkpoint()` - Safety checkpoint
-- `_perform_commit(message)` - Execute Git commit
+```json
+{
+  "commit_orchestrator": {
+    "auto_stage_untracked": false,
+    "commit_message_template": "feat: {description}",
+    "merge_strategy": "merge",
+    "checkpoint_before_sync": true,
+    "verify_push": true,
+    "conflict_resolution_mode": "interactive"
+  }
+}
+```
 
----
-
-## Error Handling
-
-**Common Issues:**
-1. **No changes to commit** → Informs user, exits gracefully
-2. **Brain Protector violation** → Blocks commit, explains rule
-3. **Git not configured** → Guides user to configure name/email
-4. **Merge conflict** → Instructs resolution before commit
-
----
-
-## Testing
-
-**Test Coverage:** 60% (needs improvement)
-
-**Test Files:**
-- `tests/operations/test_commit_orchestrator.py` (planned)
-
-**Manual Validation:**
-1. Make file changes
-2. Run `commit`
-3. Verify files staged correctly
-4. Check commit message quality
-5. Validate checkpoint created
+**Options:**
+- `auto_stage_untracked` - Auto-add untracked files without prompting (default: `false`)
+- `commit_message_template` - Commit message format (default: `"feat: {description}"`)
+- `merge_strategy` - Merge method: `merge`, `rebase` (default: `merge`)
+- `checkpoint_before_sync` - Create safety checkpoint (default: `true`)
+- `verify_push` - Verify push completed (default: `true`)
+- `conflict_resolution_mode` - How to handle conflicts: `interactive`, `abort` (default: `interactive`)
 
 ---
 
-## Related Modules
+## 📈 Examples
 
-- **GitCheckpointOrchestrator** - Creates rollback points
-- **RollbackOrchestrator** - Undoes commits if needed
-- **BrainProtector** - Validates compliance before commit
+### Example 1: Clean Sync (No Conflicts)
+```
+User: "commit and push"
+
+CORTEX:
+  🔍 Checking repository state...
+  ✅ Working tree clean
+  ✅ No untracked files
+  
+  📸 Creating safety checkpoint: pre-sync-20251127-143000
+  
+  ⬇️  Pulling from origin/main...
+  ✅ Merged 3 commits (no conflicts)
+  
+  ⬆️  Pushing to origin/main...
+  ✅ Push successful
+  
+  📸 Creating post-sync checkpoint: post-sync-20251127-143045
+  
+  ✅ Sync complete!
+  
+  Summary:
+  • 3 commits pulled from origin
+  • 0 conflicts
+  • 0 untracked files
+  • 2 checkpoints created
+```
+
+### Example 2: Untracked Files Found
+```
+User: "sync repository"
+
+CORTEX:
+  🔍 Checking repository state...
+  ⚠️  UNTRACKED FILES DETECTED (3 files)
+  
+  Untracked files:
+  • src/new_feature.py
+  • tests/test_new_feature.py
+  • docs/new_feature_guide.md
+  
+  OPTIONS:
+    A) Add all to git (recommended)
+    I) Ignore in .gitignore
+    C) Cancel sync
+  
+  Your choice (A/I/C): A
+  
+  ✅ Staged 3 files
+  📝 Creating commit: "feat: Add new feature files"
+  
+  📸 Creating safety checkpoint: pre-sync-20251127-143500
+  
+  ⬇️  Pulling from origin/main...
+  ✅ Merged 2 commits (no conflicts)
+  
+  ⬆️  Pushing to origin/main...
+  ✅ Push successful (4 commits total)
+  
+  ✅ Sync complete with 3 new files added!
+```
+
+### Example 3: Merge Conflict Detected
+```
+User: "commit sync"
+
+CORTEX:
+  🔍 Checking repository state...
+  ✅ Working tree clean
+  
+  📸 Creating safety checkpoint: pre-sync-20251127-144000
+  
+  ⬇️  Pulling from origin/main...
+  ❌ MERGE CONFLICT DETECTED
+  
+  Conflicting files:
+  • src/auth.py (lines 45-60)
+  • config/settings.py (lines 12-18)
+  
+  CONFLICT RESOLUTION STEPS:
+  1. Open conflicting files
+  2. Resolve conflict markers (<<<<<<, ======, >>>>>>)
+  3. Stage resolved files: git add <file>
+  4. Complete merge: git commit
+  5. Re-run sync: "commit sync"
+  
+  ROLLBACK OPTION:
+  To undo sync attempt: "rollback to pre-sync-20251127-144000"
+  
+  Sync paused - resolve conflicts to continue.
+```
 
 ---
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
-**Issue:** Commit blocked by Brain Protector  
-**Solution:** Review violation message, fix issue, retry commit
+### Issue: "Push rejected - non-fast-forward"
 
-**Issue:** Wrong files staged  
-**Solution:** Use `git reset` to unstage, specify files explicitly
+**Cause:** Remote has commits not in local branch
 
-**Issue:** Commit message rejected  
-**Solution:** Follow conventional commits format, provide clear description
+**Solution:**
+```pwsh
+# Pull first, then try again
+git pull origin main
+# Re-run sync
+"commit sync"
+```
+
+### Issue: "Untracked files blocking sync"
+
+**Cause:** Untracked files present, user must decide to add or ignore
+
+**Solution:**
+- Choose option A (Add) to include files in commit
+- Choose option I (Ignore) to add to .gitignore
+- Choose option C (Cancel) to abort sync
+
+### Issue: "Merge conflict unresolved"
+
+**Cause:** Conflicting changes in same file lines
+
+**Solution:**
+1. Open conflicting files
+2. Search for conflict markers: `<<<<<<<`
+3. Resolve conflicts (keep yours, theirs, or merge both)
+4. Remove conflict markers
+5. Stage files: `git add <file>`
+6. Complete merge: `git commit`
+7. Re-run sync
 
 ---
 
-## Future Enhancements
+## 🔒 Safety Features
 
-**Planned (CORTEX 4.0):**
-- AI-powered commit message generation from diffs
-- Automatic issue linking (GitHub/ADO integration)
-- Co-author attribution for pair programming
-- Semantic versioning bump detection
-- Commit template customization
+### Git Checkpoint Integration
+- **Before sync:** Create `pre-sync-YYYYMMDD-HHMMSS` checkpoint
+- **After sync:** Create `post-sync-YYYYMMDD-HHMMSS` checkpoint
+- **Rollback:** Use `rollback to <checkpoint>` if sync causes issues
+
+### Untracked File Protection
+- Never auto-add without user consent
+- Clear options: Add, Ignore, Cancel
+- Zero surprise commits
+
+### Merge Conflict Guidance
+- Clear conflict markers shown
+- Step-by-step resolution steps
+- Rollback option always available
+
+---
+
+## 📚 Related Documentation
+
+- **Git Checkpoint Guide:** `.github/prompts/modules/git-checkpoint-orchestrator-guide.md`
+- **TDD Workflow:** `.github/prompts/modules/tdd-workflow-orchestrator-guide.md`
+- **System Alignment:** `.github/prompts/modules/system-alignment-guide.md`
 
 ---
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Last Updated:** November 28, 2025  
-**Guide Version:** 1.0.0
+**License:** Source-Available (Use Allowed, No Contributions)

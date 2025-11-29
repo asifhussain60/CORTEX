@@ -71,3 +71,4 @@ workspace/
 .temp-publish/
 publish/CORTEX-v*/
 .publish-checkpoint.json
+.publish-checkpoint.json

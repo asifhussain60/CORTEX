@@ -1550,3 +1550,415 @@ class PlanningOrchestrator:
             'awaiting_user_response': True,
             'clarification_prompt': current_scope['clarification_prompt']
         }
+    
+    def estimate_timeframe(self, complexity: float, scope: Optional[Dict] = None,
+                          team_size: int = 1, velocity: Optional[float] = None,
+                          include_three_point: bool = False, 
+                          scope_boundary: Optional['ScopeBoundary'] = None) -> Dict[str, Any]:
+        """
+        Generate time estimates from SWAGGER complexity score
+        
+        ⚠️ CRITICAL: Estimates BLOCKED unless scope is user-approved (CORTEX 3.2.1)
+        
+        Natural language triggers:
+        - "timeframe", "estimate", "time estimate", "how long", "duration"
+        - "story points", "sprint estimate", "team size", "velocity"
+        
+        This method integrates TIMEFRAME Entry Point Module with SWAGGER.
+        Call this after scope inference when user asks about time estimates.
+        
+        Args:
+            complexity: SWAGGER complexity score (0-100)
+            scope: Optional SWAGGER scope dict (for detailed breakdown)
+            team_size: Number of developers on team (default: 1)
+            velocity: Optional team velocity (story points per sprint)
+            include_three_point: Generate PERT three-point estimate
+            scope_boundary: Optional ScopeBoundary with approval tracking (NEW 3.2.1)
+        
+        Returns:
+            Dictionary with:
+                - story_points: Fibonacci story points
+                - hours_single: Single developer hours
+                - hours_team: Team hours (with communication overhead)
+                - days_single: Single developer days
+                - days_team: Team calendar days
+                - sprints: Sprint allocation
+                - confidence: Estimate confidence (HIGH/MEDIUM/LOW)
+                - breakdown: Effort breakdown by entity type
+                - assumptions: List of estimation assumptions
+                - report: Formatted markdown report
+                - three_point: Optional PERT estimates (best/likely/worst)
+            
+            OR (if scope approval required):
+                - status: 'scope_approval_required'
+                - swagger_context_id: Context ID for later retrieval
+                - confidence: Scope confidence score
+                - clarification_prompt: User-facing prompt
+                - next_action: 'plan'
+                - message: Detailed explanation for user
+        
+        Example:
+            >>> # After SWAGGER scope inference
+            >>> scope_result = orchestrator.infer_scope_from_dor(dor_responses)
+            >>> complexity = scope_result['validation']['complexity']
+            >>> 
+            >>> # User asks: "what's the timeframe for this?"
+            >>> timeframe = orchestrator.estimate_timeframe(
+            ...     complexity=complexity,
+            ...     scope=scope_result['entities'],
+            ...     team_size=2,
+            ...     scope_boundary=scope_result['scope_boundary']  # NEW
+            ... )
+            >>> 
+            >>> if timeframe.get('status') == 'scope_approval_required':
+            >>>     # User approval needed - hand off to planner
+            >>>     print(timeframe['message'])
+            >>> else:
+            >>>     # Approved - show estimate
+            >>>     print(timeframe['report'])
+        """
+        from src.agents.estimation.timeframe_estimator import TimeframeEstimator
+        from src.agents.estimation.scope_inference_engine import ScopeBoundary, ScopeEntities
+        
+        # STEP 1: Validate scope approval (NEW: Approval Gate)
+        if scope_boundary is None and scope is not None:
+            # Legacy call without ScopeBoundary - create one (treat as unapproved)
+            scope_boundary = ScopeBoundary(
+                table_count=len(scope.get('tables', [])),
+                file_count=len(scope.get('files', [])),
+                service_count=len(scope.get('services', [])),
+                dependency_depth=1,
+                estimated_complexity=complexity,
+                confidence=0.5,  # Unknown confidence - requires approval
+                gaps=[],
+                user_approved=False  # Default: not approved
+            )
+        
+        # STEP 2: Approval gate - check if user approval is required
+        if scope_boundary and scope_boundary.is_approval_required():
+            # Scope NOT approved - hand off to planner
+            return self._hand_off_to_planner_for_approval(
+                complexity=complexity,
+                scope_boundary=scope_boundary,
+                scope=scope,
+                team_size=team_size,
+                velocity=velocity
+            )
+        
+        # STEP 3: Scope approved - proceed with estimation
+        # Initialize TIMEFRAME estimator
+        estimator = TimeframeEstimator()
+        
+        # Generate estimate
+        estimate = estimator.estimate_timeframe(
+            complexity=complexity,
+            scope=scope,
+            team_size=team_size,
+            velocity=velocity
+        )
+        
+        # Convert dataclass to dict for JSON serialization
+        result = {
+            'story_points': estimate.story_points,
+            'hours_single': estimate.hours_single,
+            'hours_team': estimate.hours_team,
+            'days_single': estimate.days_single,
+            'days_team': estimate.days_team,
+            'sprints': estimate.sprints,
+            'team_size': estimate.team_size,
+            'confidence': estimate.confidence,
+            'breakdown': estimate.breakdown,
+            'assumptions': estimate.assumptions,
+            'report': estimator.format_estimate_report(estimate, include_breakdown=True)
+        }
+        
+        # Add three-point estimate if requested
+        if include_three_point:
+            three_point = estimator.estimate_three_point(complexity, scope, team_size)
+            result['three_point'] = {
+                'best': {
+                    'story_points': three_point['best'].story_points,
+                    'hours': three_point['best'].hours_single,
+                    'days': three_point['best'].days_single
+                },
+                'likely': {
+                    'story_points': three_point['likely'].story_points,
+                    'hours': three_point['likely'].hours_single,
+                    'days': three_point['likely'].days_single
+                },
+                'worst': {
+                    'story_points': three_point['worst'].story_points,
+                    'hours': three_point['worst'].hours_single,
+                    'days': three_point['worst'].days_single
+                }
+            }
+        
+        return result
+    
+    # ========== SWAGGER Scope Approval Gate (CORTEX 3.2.1) ==========
+    
+    def _hand_off_to_planner_for_approval(
+        self,
+        complexity: float,
+        scope_boundary: 'ScopeBoundary',
+        scope: Optional[Dict],
+        team_size: int,
+        velocity: Optional[float]
+    ) -> Dict[str, Any]:
+        """
+        Hand off to planner when scope requires user approval
+        
+        Preserves SWAGGER context for return path to estimator after user
+        reviews and approves scope boundaries.
+        
+        Args:
+            complexity: SWAGGER complexity score
+            scope_boundary: ScopeBoundary with approval status
+            scope: Optional scope dict
+            team_size: Team size for estimation
+            velocity: Optional velocity
+        
+        Returns:
+            Handoff response with clarification prompt and context ID
+        """
+        from datetime import datetime
+        from src.tier1.working_memory import WorkingMemory
+        
+        # Generate unique context ID
+        swagger_context_id = f"swagger-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        scope_boundary.swagger_context_id = swagger_context_id
+        
+        # Store SWAGGER context for later retrieval
+        self._store_swagger_context(
+            context_id=swagger_context_id,
+            complexity=complexity,
+            scope_boundary=scope_boundary,
+            scope=scope,
+            team_size=team_size,
+            velocity=velocity
+        )
+        
+        # Generate clarification prompt for user
+        clarification_msg = self._generate_scope_clarification_prompt(
+            scope_boundary=scope_boundary,
+            scope=scope,
+            confidence=scope_boundary.confidence
+        )
+        
+        # Return handoff response (not an estimate)
+        return {
+            'status': 'scope_approval_required',
+            'swagger_context_id': swagger_context_id,
+            'confidence': scope_boundary.confidence,
+            'clarification_prompt': clarification_msg,
+            'next_action': 'plan',  # Route to planning workflow
+            'message': (
+                f"⚠️ **Scope Approval Required**\n\n"
+                f"I've analyzed the scope with {scope_boundary.confidence:.0%} confidence, "
+                f"but need your confirmation before generating time estimates.\n\n"
+                f"{clarification_msg}\n\n"
+                f"**Options:**\n"
+                f"1. Review scope preview and approve: `approve scope {swagger_context_id}`\n"
+                f"2. Create detailed plan first: `plan [feature name]`\n"
+                f"3. Provide clarifications: Answer the questions above\n\n"
+                f"Once scope is approved, I'll return to timeframe estimation."
+            )
+        }
+    
+    def _store_swagger_context(
+        self,
+        context_id: str,
+        complexity: float,
+        scope_boundary: 'ScopeBoundary',
+        scope: Optional[Dict],
+        team_size: int,
+        velocity: Optional[float]
+    ) -> None:
+        """Store SWAGGER context in Tier 1 working memory"""
+        from src.tier1.working_memory import WorkingMemory
+        from datetime import datetime
+        
+        # Initialize working memory
+        tier1 = WorkingMemory()
+        
+        # Prepare scope_boundary for JSON serialization
+        scope_boundary_dict = {
+            'table_count': scope_boundary.table_count,
+            'file_count': scope_boundary.file_count,
+            'service_count': scope_boundary.service_count,
+            'dependency_depth': scope_boundary.dependency_depth,
+            'estimated_complexity': scope_boundary.estimated_complexity,
+            'confidence': scope_boundary.confidence,
+            'gaps': scope_boundary.gaps,
+            'user_approved': scope_boundary.user_approved,
+            'approval_timestamp': scope_boundary.approval_timestamp,
+            'approval_method': scope_boundary.approval_method,
+            'swagger_context_id': scope_boundary.swagger_context_id
+        }
+        
+        # Add entities if available
+        if scope_boundary.entities:
+            scope_boundary_dict['entities'] = {
+                'tables': scope_boundary.entities.tables,
+                'files': scope_boundary.entities.files,
+                'services': scope_boundary.entities.services,
+                'dependencies': scope_boundary.entities.dependencies
+            }
+        elif scope:
+            scope_boundary_dict['entities'] = scope
+        
+        context_data = {
+            'context_id': context_id,
+            'complexity': complexity,
+            'scope_boundary': scope_boundary_dict,
+            'team_size': team_size,
+            'velocity': velocity,
+            'created_at': datetime.now().isoformat(),
+            'status': 'awaiting_approval'
+        }
+        
+        # Store in Tier 1
+        tier1.store_swagger_context(context_id, context_data)
+    
+    def _generate_scope_clarification_prompt(
+        self,
+        scope_boundary: 'ScopeBoundary',
+        scope: Optional[Dict],
+        confidence: float
+    ) -> str:
+        """Generate user-facing clarification prompt"""
+        prompt_parts = [
+            f"**Inferred Scope (Confidence: {confidence:.0%}):**",
+            ""
+        ]
+        
+        # Extract entities from scope_boundary or scope dict
+        if scope_boundary.entities:
+            entities = scope_boundary.entities
+            tables = entities.tables
+            files = entities.files
+            services = entities.services
+            dependencies = entities.dependencies
+        elif scope:
+            tables = scope.get('tables', [])
+            files = scope.get('files', [])
+            services = scope.get('services', [])
+            dependencies = scope.get('dependencies', [])
+        else:
+            tables, files, services, dependencies = [], [], [], []
+        
+        if tables:
+            prompt_parts.append(f"📊 **Database Tables:** {', '.join(tables)}")
+        if files:
+            file_list = ', '.join(files[:5])
+            if len(files) > 5:
+                file_list += f"... (+{len(files)-5} more)"
+            prompt_parts.append(f"📁 **Files:** {file_list}")
+        if services:
+            prompt_parts.append(f"⚙️ **Services/APIs:** {', '.join(services)}")
+        if dependencies:
+            prompt_parts.append(f"🔗 **External Dependencies:** {', '.join(dependencies)}")
+        
+        # Add ambiguity warnings if present
+        if scope_boundary.gaps:
+            prompt_parts.extend([
+                "",
+                "⚠️ **Ambiguous References (Need Clarification):**"
+            ])
+            for gap in scope_boundary.gaps:
+                prompt_parts.append(f"  • {gap}")
+            prompt_parts.append("")
+            prompt_parts.append("**Questions:**")
+            prompt_parts.append("1. What exactly do these references mean in your application?")
+            prompt_parts.append("2. Are there additional components not listed above?")
+            prompt_parts.append("3. Should I analyze the codebase further for better scope accuracy?")
+        else:
+            prompt_parts.extend([
+                "",
+                "**Confirm:** Does this scope accurately represent your feature requirements?"
+            ])
+        
+        return "\n".join(prompt_parts)
+    
+    def resume_estimation_with_approved_scope(
+        self,
+        swagger_context_id: str,
+        approved_scope: Optional[Dict] = None
+    ) -> Dict[str, Any]:
+        """
+        Resume estimation after user approves scope via planning workflow
+        
+        Called when:
+        1. User completes planning workflow
+        2. User explicitly approves scope preview
+        3. Planner returns to estimator with validated scope
+        
+        Args:
+            swagger_context_id: Context ID from original handoff
+            approved_scope: Optional updated scope from planning workflow
+        
+        Returns:
+            Time estimate dictionary (same format as estimate_timeframe)
+        """
+        from src.tier1.working_memory import WorkingMemory
+        from src.agents.estimation.scope_inference_engine import ScopeBoundary
+        from datetime import datetime
+        
+        # Retrieve stored SWAGGER context
+        tier1 = WorkingMemory()
+        context = tier1.retrieve_swagger_context(swagger_context_id)
+        
+        if not context:
+            return {
+                'success': False,
+                'error': f"SWAGGER context not found: {swagger_context_id}",
+                'message': "Unable to resume estimation - context expired or not found."
+            }
+        
+        # Update scope if provided (from planning workflow)
+        if approved_scope:
+            context['scope_boundary']['entities'] = approved_scope
+        
+        # Mark scope as approved
+        context['scope_boundary']['user_approved'] = True
+        context['scope_boundary']['approval_method'] = 'plan' if approved_scope else 'explicit'
+        context['scope_boundary']['approval_timestamp'] = datetime.now().isoformat()
+        
+        # Boost confidence to 100% since user explicitly approved
+        # This ensures approval gate won't block again
+        context['scope_boundary']['confidence'] = 1.0
+        
+        # Clear gaps since user addressed them through approval
+        context['scope_boundary']['gaps'] = []
+        
+        # Update context status
+        tier1.update_swagger_context_status(swagger_context_id, 'approved')
+        
+        # Reconstruct ScopeBoundary
+        scope_boundary = ScopeBoundary(
+            table_count=context['scope_boundary']['table_count'],
+            file_count=context['scope_boundary']['file_count'],
+            service_count=context['scope_boundary']['service_count'],
+            dependency_depth=context['scope_boundary']['dependency_depth'],
+            estimated_complexity=context['scope_boundary']['estimated_complexity'],
+            confidence=context['scope_boundary']['confidence'],
+            gaps=context['scope_boundary']['gaps'],
+            user_approved=True,  # NOW APPROVED
+            approval_timestamp=context['scope_boundary']['approval_timestamp'],
+            approval_method=context['scope_boundary']['approval_method'],
+            swagger_context_id=swagger_context_id
+        )
+        
+        # Resume estimation with approved scope
+        result = self.estimate_timeframe(
+            complexity=context['complexity'],
+            scope=context['scope_boundary'].get('entities'),
+            team_size=context['team_size'],
+            velocity=context['velocity'],
+            scope_boundary=scope_boundary
+        )
+        
+        # Update context status to estimated
+        tier1.update_swagger_context_status(swagger_context_id, 'estimated')
+        
+        return result

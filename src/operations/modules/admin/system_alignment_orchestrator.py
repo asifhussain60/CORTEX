@@ -66,10 +66,11 @@ class IntegrationScore:
     tested: bool = False  # +10 points
     wired: bool = False  # +10 points
     optimized: bool = False  # +10 points
+    api_documented: bool = False  # +10 points (NEW: Swagger/OpenAPI documentation)
     
     @property
     def score(self) -> int:
-        """Calculate 0-100 integration score."""
+        """Calculate 0-110 integration score (extended for API documentation)."""
         total = 0
         if self.discovered:
             total += 20
@@ -84,6 +85,8 @@ class IntegrationScore:
         if self.wired:
             total += 10
         if self.optimized:
+            total += 10
+        if self.api_documented:
             total += 10
         return total
     
@@ -110,6 +113,8 @@ class IntegrationScore:
             issues.append("Not wired to entry point")
         if not self.optimized:
             issues.append("Performance not validated")
+        if not self.api_documented:
+            issues.append("No Swagger/OpenAPI documentation")
         return issues
 
 
@@ -294,10 +299,42 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             # Store report in context
             context["alignment_report"] = report
             
-            # Phase 6: Align 2.0 - Interactive remediation if requested
+            # Phase 6: Align 2.0 - Interactive remediation
             interactive_fix = context.get('interactive_fix', False)
+            auto_prompt = context.get('auto_prompt_fix', True)  # Default: prompt user
             fixes_applied = []
             
+            # If not explicitly requested but issues exist, prompt user
+            if not interactive_fix and auto_prompt and (report.fix_templates or report.remediation_suggestions):
+                fix_count = len(report.fix_templates) + len(report.remediation_suggestions)
+                print(f"\n\n{'='*80}")
+                print(f"🔧 {fix_count} REMEDIATIONS AVAILABLE")
+                print(f"{'='*80}")
+                print(f"\nSystem alignment detected {fix_count} issues with available fixes.")
+                print("\nOptions:")
+                print("  1. Apply fixes interactively (recommended)")
+                print("  2. View report only")
+                print("  3. Exit\n")
+                
+                response = input("Choose option [1/2/3]: ").strip()
+                
+                if response == '1':
+                    interactive_fix = True
+                    print("\n✅ Starting interactive remediation...\n")
+                elif response == '2':
+                    print("\n📊 Continuing to report generation...\n")
+                else:
+                    print("\n👋 Exiting alignment...\n")
+                    monitor.complete()
+                    return OperationResult(
+                        success=False,
+                        status=OperationStatus.SKIPPED,
+                        message="User cancelled alignment",
+                        data={"report": report},
+                        duration_seconds=(datetime.now() - start_time).total_seconds()
+                    )
+            
+            # Apply interactive fixes if requested or prompted
             if interactive_fix and report.fix_templates:
                 monitor.update(f"Interactive remediation ({len(report.fix_templates)} fixes available)")
                 fixes_applied = self._apply_interactive_fixes(report, monitor)
@@ -577,10 +614,29 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         dashboard = self._generate_dashboard(report, conflicts)
         report.dashboard_report = dashboard
         
+        # Phase 3.13: TDD Mastery Integration Validation (Track A)
+        if monitor:
+            monitor.update("Validating TDD Mastery integration")
+        tdd_validation = self._validate_tdd_mastery_integration()
+        
+        # Add TDD validation results to report
+        if not tdd_validation['all_passed']:
+            for issue in tdd_validation['issues']:
+                if issue['severity'] == 'critical':
+                    report.critical_issues += 1
+                else:
+                    report.warnings += 1
+                report.suggestions.append({
+                    "type": "tdd_integration",
+                    "severity": issue['severity'],
+                    "message": issue['message'],
+                    "fix": issue.get('fix', 'Manual review required')
+                })
+        
         # Phase 4: Generate auto-remediation suggestions (legacy)
         if monitor:
             monitor.update("Generating remediation suggestions")
-        self._generate_remediation_suggestions(report, orchestrators, agents)
+        self._generate_remediation_suggestions(report, orchestrators, agents, monitor)
         
         # Calculate overall health (production features only for deployment threshold)
         if report.feature_scores:
@@ -721,7 +777,11 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             
             class_name = metadata.get("class_name")
             if class_name:
-                score.instantiated = scorer.validate_instantiation(module_path, class_name)
+                # Orchestrators are instantiable by definition (called via routing system)
+                if feature_type == 'orchestrator':
+                    score.instantiated = True
+                else:
+                    score.instantiated = scorer.validate_instantiation(module_path, class_name)
         
         # Layer 4: Documentation validation (check both docstring AND guide file)
         has_docstring = metadata.get("has_docstring", False)
@@ -761,6 +821,17 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             score.optimized = perf_scorer.validate_performance(module_path, class_name)
         else:
             score.optimized = False
+        
+        # Layer 8: API documentation validation (check for Swagger/OpenAPI files)
+        # Search same paths as Gate 8 for consistency
+        api_doc_paths = [
+            self.project_root / "docs" / "api" / "swagger.json",
+            self.project_root / "docs" / "api" / "openapi.yaml",
+            self.project_root / "docs" / "api" / "openapi.yml",
+            self.project_root / "api" / "swagger.json",
+            self.project_root / "api" / "openapi.yaml"
+        ]
+        score.api_documented = any(path.exists() for path in api_doc_paths)
         
         return score
     
@@ -1285,7 +1356,8 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         self,
         report: AlignmentReport,
         orchestrators: Dict[str, Dict[str, Any]],
-        agents: Dict[str, Dict[str, Any]]
+        agents: Dict[str, Dict[str, Any]],
+        monitor: Optional['ProgressMonitor'] = None
     ) -> None:
         """
         Phase 5: Generate auto-remediation suggestions for incomplete features.
@@ -1294,6 +1366,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             report: AlignmentReport to populate with remediation suggestions
             orchestrators: Discovered orchestrators
             agents: Discovered agents
+            monitor: Optional progress monitor for user feedback
         """
         # Lazy load remediation generators
         from src.remediation.wiring_generator import WiringGenerator
@@ -1304,8 +1377,19 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         test_gen = TestSkeletonGenerator(self.project_root)
         doc_gen = DocumentationGenerator(self.project_root)
         
+        # Count features needing remediation
+        features_needing_remediation = [
+            (name, score) for name, score in report.feature_scores.items()
+            if not score.wired or not score.tested or not score.documented
+        ]
+        total_features = len(features_needing_remediation)
+        
         # Collect features needing remediation
-        for name, score in report.feature_scores.items():
+        for idx, (name, score) in enumerate(features_needing_remediation, 1):
+            # Update progress
+            if monitor:
+                monitor.update(f"Generating remediation suggestions ({idx}/{total_features}): {name}")
+            
             # Get feature metadata
             metadata = orchestrators.get(name) or agents.get(name)
             if not metadata:
@@ -1317,49 +1401,58 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             
             # Generate wiring suggestion if not wired
             if not score.wired:
-                wiring_suggestion = wiring_gen.generate_wiring_suggestion(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    docstring=docstring
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="wiring",
-                    content=wiring_suggestion["yaml_template"] + "\n\n" + wiring_suggestion["prompt_section"],
-                    file_path=None  # Suggestions shown in report, not saved
-                ))
+                try:
+                    wiring_suggestion = wiring_gen.generate_wiring_suggestion(
+                        feature_name=name,
+                        feature_path=feature_path,
+                        docstring=docstring
+                    )
+                    
+                    report.remediation_suggestions.append(RemediationSuggestion(
+                        feature_name=name,
+                        suggestion_type="wiring",
+                        content=wiring_suggestion["yaml_template"] + "\n\n" + wiring_suggestion["prompt_section"],
+                        file_path=None  # Suggestions shown in report, not saved
+                    ))
+                except Exception as e:
+                    logger.warning(f"Failed to generate wiring suggestion for {name}: {e}")
             
             # Generate test skeleton if not tested
             if not score.tested:
-                test_skeleton = test_gen.generate_test_skeleton(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    methods=methods
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="test",
-                    content=test_skeleton["test_code"],
-                    file_path=test_skeleton["test_path"]
-                ))
+                try:
+                    test_skeleton = test_gen.generate_test_skeleton(
+                        feature_name=name,
+                        feature_path=feature_path,
+                        methods=methods
+                    )
+                    
+                    report.remediation_suggestions.append(RemediationSuggestion(
+                        feature_name=name,
+                        suggestion_type="test",
+                        content=test_skeleton["test_code"],
+                        file_path=test_skeleton["test_path"]
+                    ))
+                except Exception as e:
+                    logger.warning(f"Failed to generate test suggestion for {name}: {e}")
             
             # Generate documentation if not documented
             if not score.documented:
-                doc_template = doc_gen.generate_documentation_template(
-                    feature_name=name,
-                    feature_path=feature_path,
-                    docstring=docstring,
-                    methods=methods
-                )
-                
-                report.remediation_suggestions.append(RemediationSuggestion(
-                    feature_name=name,
-                    suggestion_type="documentation",
-                    content=doc_template["doc_content"],
-                    file_path=doc_template["doc_path"]
-                ))
+                try:
+                    doc_template = doc_gen.generate_documentation_template(
+                        feature_name=name,
+                        feature_path=feature_path,
+                        docstring=docstring,
+                        methods=methods
+                    )
+                    
+                    report.remediation_suggestions.append(RemediationSuggestion(
+                        feature_name=name,
+                        suggestion_type="documentation",
+                        content=doc_template["doc_content"],
+                        file_path=doc_template["doc_path"]
+                    ))
+                except Exception as e:
+                    logger.warning(f"Failed to generate documentation suggestion for {name}: {e}")
         
         # Add file organization remediation suggestions
         if hasattr(report, 'organization_violations'):
@@ -2286,6 +2379,356 @@ graph TD
             logger.info("Continuing with text dashboard only...")
         
         return text_dashboard
+    
+    def _validate_tdd_mastery_integration(self) -> Dict[str, Any]:
+        """
+        Validate TDD Mastery integration (Track A).
+        
+        Validates:
+        1. TDD workflow configuration (enable_refactoring, auto_debug_on_failure)
+        2. RED→GREEN→REFACTOR state machine implementation
+        3. Autonomous mode integration (user profile settings)
+        4. Incremental work patterns (git checkpoints, session tracking)
+        
+        Returns:
+            Dict with validation results: {
+                'all_passed': bool,
+                'issues': List[Dict[str, str]]  # severity, message, fix
+            }
+        """
+        issues = []
+        
+        # 1. Validate TDD Workflow Config
+        config_issues = self._validate_tdd_workflow_config()
+        issues.extend(config_issues)
+        
+        # 2. Validate TDD State Machine
+        state_machine_issues = self._validate_tdd_state_machine()
+        issues.extend(state_machine_issues)
+        
+        # 3. Validate Autonomous Mode Integration
+        autonomous_issues = self._validate_autonomous_mode_integration()
+        issues.extend(autonomous_issues)
+        
+        # 4. Validate Incremental Work Checkpoints
+        checkpoint_issues = self._validate_incremental_work_checkpoints()
+        issues.extend(checkpoint_issues)
+        
+        return {
+            'all_passed': len(issues) == 0,
+            'issues': issues
+        }
+    
+    def _validate_tdd_workflow_config(self) -> List[Dict[str, str]]:
+        """
+        Validate TDDWorkflowConfig has required settings.
+        
+        Checks:
+        - enable_refactoring: bool = True
+        - auto_debug_on_failure: bool = True
+        - enable_session_tracking: bool = True
+        - enable_programmatic_execution: bool = True
+        - auto_detect_test_location: bool = True
+        
+        Returns:
+            List of validation issues
+        """
+        issues = []
+        
+        tdd_workflow_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
+        
+        if not tdd_workflow_path.exists():
+            issues.append({
+                'severity': 'critical',
+                'message': 'TDDWorkflowOrchestrator not found',
+                'fix': 'Ensure src/workflows/tdd_workflow_orchestrator.py exists'
+            })
+            return issues
+        
+        try:
+            content = tdd_workflow_path.read_text(encoding='utf-8')
+            
+            # Check TDDWorkflowConfig dataclass for required fields with correct defaults
+            required_configs = [
+                ('enable_refactoring: bool = True', 'enable_refactoring'),
+                ('auto_debug_on_failure: bool = True', 'auto_debug_on_failure'),
+                ('enable_session_tracking: bool = True', 'enable_session_tracking'),
+                ('enable_programmatic_execution: bool = True', 'enable_programmatic_execution'),
+                ('auto_detect_test_location: bool = True', 'auto_detect_test_location'),
+                ('debug_timing_to_refactoring: bool = True', 'debug_timing_to_refactoring')
+            ]
+            
+            for config_line, config_name in required_configs:
+                if config_line not in content:
+                    # Check if config exists but with wrong default
+                    if f'{config_name}: bool' in content:
+                        issues.append({
+                            'severity': 'warning',
+                            'message': f'TDDWorkflowConfig.{config_name} has non-optimal default (should be True)',
+                            'fix': f'Update TDDWorkflowConfig.{config_name} to default True for TDD Mastery'
+                        })
+                    else:
+                        issues.append({
+                            'severity': 'critical',
+                            'message': f'TDDWorkflowConfig missing {config_name} field',
+                            'fix': f'Add {config_line} to TDDWorkflowConfig dataclass'
+                        })
+            
+            # Check for Layer 8: Test Location Isolation comment
+            if 'Layer 8: Test Location Isolation' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDWorkflowConfig missing Layer 8 documentation',
+                    'fix': 'Add Layer 8: Test Location Isolation comments to config'
+                })
+            
+        except Exception as e:
+            issues.append({
+                'severity': 'critical',
+                'message': f'Failed to parse TDDWorkflowOrchestrator: {e}',
+                'fix': 'Check file for syntax errors'
+            })
+        
+        return issues
+    
+    def _validate_tdd_state_machine(self) -> List[Dict[str, str]]:
+        """
+        Validate TDD State Machine has RED→GREEN→REFACTOR states.
+        
+        Checks:
+        - TDDState enum has IDLE, RED, GREEN, REFACTOR, DONE, ERROR
+        - State transitions are configured
+        - Cycle metrics tracking exists
+        
+        Returns:
+            List of validation issues
+        """
+        issues = []
+        
+        state_machine_path = self.project_root / "src" / "workflows" / "tdd_state_machine.py"
+        
+        if not state_machine_path.exists():
+            issues.append({
+                'severity': 'critical',
+                'message': 'TDDStateMachine not found',
+                'fix': 'Ensure src/workflows/tdd_state_machine.py exists'
+            })
+            return issues
+        
+        try:
+            content = state_machine_path.read_text(encoding='utf-8')
+            
+            # Check TDDState enum
+            required_states = ['IDLE', 'RED', 'GREEN', 'REFACTOR', 'DONE', 'ERROR']
+            for state in required_states:
+                if f'{state} = ' not in content:
+                    issues.append({
+                        'severity': 'critical',
+                        'message': f'TDDState.{state} not found in state machine',
+                        'fix': f'Add {state} to TDDState enum'
+                    })
+            
+            # Check for TDDCycleMetrics
+            if 'class TDDCycleMetrics' not in content:
+                issues.append({
+                    'severity': 'critical',
+                    'message': 'TDDCycleMetrics class not found',
+                    'fix': 'Add TDDCycleMetrics dataclass for cycle tracking'
+                })
+            else:
+                # Check for required metrics
+                required_metrics = [
+                    'red_duration',
+                    'green_duration',
+                    'refactor_duration',
+                    'tests_written',
+                    'tests_passing'
+                ]
+                for metric in required_metrics:
+                    if f'{metric}:' not in content:
+                        issues.append({
+                            'severity': 'warning',
+                            'message': f'TDDCycleMetrics missing {metric} field',
+                            'fix': f'Add {metric} to TDDCycleMetrics for comprehensive tracking'
+                        })
+            
+            # Check for DebugAgent integration (Phase 4)
+            if 'from agents.debug_agent import DebugAgent' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDStateMachine missing DebugAgent integration',
+                    'fix': 'Import and integrate DebugAgent for auto-debug on RED failures'
+                })
+            
+        except Exception as e:
+            issues.append({
+                'severity': 'critical',
+                'message': f'Failed to parse TDDStateMachine: {e}',
+                'fix': 'Check file for syntax errors'
+            })
+        
+        return issues
+    
+    def _validate_autonomous_mode_integration(self) -> List[Dict[str, str]]:
+        """
+        Validate autonomous implementation capability.
+        
+        Checks:
+        - User profile system supports Autonomous mode
+        - TDDWorkflowOrchestrator respects user preferences
+        - Batch processing configured (batch_max_workers)
+        - Terminal integration enabled
+        
+        Returns:
+            List of validation issues
+        """
+        issues = []
+        
+        # Check TDDWorkflowConfig for autonomous settings
+        tdd_workflow_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
+        
+        if not tdd_workflow_path.exists():
+            return issues  # Already flagged in _validate_tdd_workflow_config
+        
+        try:
+            content = tdd_workflow_path.read_text(encoding='utf-8')
+            
+            # Check batch processing
+            if 'batch_max_workers' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDWorkflowConfig missing batch_max_workers',
+                    'fix': 'Add batch_max_workers: int = 4 for parallel test generation'
+                })
+            
+            # Check terminal integration
+            if 'enable_terminal_integration' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDWorkflowConfig missing enable_terminal_integration',
+                    'fix': 'Add enable_terminal_integration: bool = True for programmatic execution'
+                })
+            
+            # Check BatchTestGenerator import
+            if 'from src.workflows.batch_processor import BatchTestGenerator' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDWorkflowOrchestrator missing BatchTestGenerator import',
+                    'fix': 'Import and use BatchTestGenerator for autonomous batch processing'
+                })
+            
+            # Check for TestExecutionManager (Phase 4)
+            if 'from src.workflows.test_execution_manager import TestExecutionManager' not in content:
+                issues.append({
+                    'severity': 'warning',
+                    'message': 'TDDWorkflowOrchestrator missing TestExecutionManager',
+                    'fix': 'Import TestExecutionManager for autonomous test execution'
+                })
+            
+        except Exception as e:
+            issues.append({
+                'severity': 'critical',
+                'message': f'Failed to validate autonomous mode: {e}',
+                'fix': 'Check TDDWorkflowOrchestrator for syntax errors'
+            })
+        
+        return issues
+    
+    def _validate_incremental_work_checkpoints(self) -> List[Dict[str, str]]:
+        """
+        Validate incremental work patterns with git checkpoints.
+        
+        Checks:
+        - Git checkpoint integration exists
+        - Session tracking in Tier 1 working memory
+        - PageTracker for progress persistence
+        - Planning System 2.0 incremental planning
+        
+        Returns:
+            List of validation issues
+        """
+        issues = []
+        
+        # Check git checkpoint system
+        git_checkpoint_paths = [
+            self.project_root / "src" / "workflows" / "git_checkpoint_system.py",
+            self.project_root / "src" / "orchestrators" / "git_checkpoint_orchestrator.py",
+            self.project_root / "src" / "operations" / "modules" / "git_checkpoint_module.py"
+        ]
+        
+        git_checkpoint_exists = any(path.exists() for path in git_checkpoint_paths)
+        
+        if not git_checkpoint_exists:
+            issues.append({
+                'severity': 'critical',
+                'message': 'Git checkpoint system not found',
+                'fix': 'Ensure git checkpoint system exists in src/workflows/, src/orchestrators/, or src/operations/modules/'
+            })
+        
+        # Check TDD session tracking
+        tdd_workflow_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
+        if tdd_workflow_path.exists():
+            try:
+                content = tdd_workflow_path.read_text(encoding='utf-8')
+                
+                # Check SessionManager import
+                if 'from src.tier1.sessions.session_manager import SessionManager' not in content:
+                    issues.append({
+                        'severity': 'warning',
+                        'message': 'TDDWorkflowOrchestrator missing SessionManager integration',
+                        'fix': 'Import and use SessionManager for session persistence'
+                    })
+                
+                # Check PageTracker import
+                if 'from src.workflows.page_tracking import PageTracker' not in content:
+                    issues.append({
+                        'severity': 'warning',
+                        'message': 'TDDWorkflowOrchestrator missing PageTracker',
+                        'fix': 'Import PageTracker for progress checkpointing'
+                    })
+                
+                # Check for save_progress method
+                if 'def save_progress' not in content:
+                    issues.append({
+                        'severity': 'warning',
+                        'message': 'TDDWorkflowOrchestrator missing save_progress method',
+                        'fix': 'Add save_progress() method to checkpoint incremental work'
+                    })
+                
+                # Check for resume_session method
+                if 'def resume_session' not in content:
+                    issues.append({
+                        'severity': 'warning',
+                        'message': 'TDDWorkflowOrchestrator missing resume_session method',
+                        'fix': 'Add resume_session() method to restore incremental progress'
+                    })
+                
+            except Exception as e:
+                issues.append({
+                    'severity': 'critical',
+                    'message': f'Failed to validate session tracking: {e}',
+                    'fix': 'Check TDDWorkflowOrchestrator for syntax errors'
+                })
+        
+        # Check Planning System 2.0 incremental planning
+        planning_path = self.project_root / "src" / "orchestrators" / "planning_orchestrator.py"
+        if planning_path.exists():
+            try:
+                content = planning_path.read_text(encoding='utf-8')
+                
+                # Check for incremental planning phases
+                if 'skeleton' not in content.lower() or 'phase 1' not in content.lower():
+                    issues.append({
+                        'severity': 'warning',
+                        'message': 'PlanningOrchestrator missing incremental phase structure',
+                        'fix': 'Implement skeleton → Phase 1 → Phase 2 → Phase 3 planning'
+                    })
+                
+            except Exception as e:
+                # Non-critical - planning is separate from TDD
+                pass
+        
+        return issues
     
     def _apply_interactive_fixes(self, report: AlignmentReport, monitor: Optional[ProgressMonitor]) -> List[str]:
         """

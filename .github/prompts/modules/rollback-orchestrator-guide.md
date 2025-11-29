@@ -1,247 +1,324 @@
 # Rollback Orchestrator Guide
 
-**Module:** `RollbackOrchestrator`  
-**Location:** `src/operations/modules/git/rollback_orchestrator.py`  
-**Purpose:** Safe Git rollback operations with checkpoint restoration  
-**Status:** ✅ Production  
-**Version:** 3.3.0
+**Purpose:** Safe git rollback to previous checkpoints with validation and user confirmation  
+**Version:** 1.0.0  
+**Status:** ✅ PRODUCTION
 
 ---
 
-## Overview
+## 🎯 Overview
 
-The Rollback Orchestrator provides safe Git rollback capabilities using the Git Checkpoint system. It allows users to undo changes, restore previous states, and recover from mistakes without data loss.
+The Rollback Orchestrator provides a safe, intelligent workflow for rolling back repository changes to previous checkpoints:
+- List available checkpoints from TDD workflow phases
+- Validate checkpoint exists before rollback
+- Safety checks for uncommitted changes and merge conflicts
+- User confirmation with diff preview
+- Dry-run mode for preview without execution
+- Force mode to bypass safety checks (use with caution)
 
-**Key Capabilities:**
-- List available Git checkpoints
-- Rollback to specific checkpoint
-- Soft rollback (keep changes)
-- Hard rollback (discard changes)
-- Preview rollback impact
-- Safety confirmations
-
----
-
-## Natural Language Triggers
-
-**Primary Commands:**
-- `rollback`
-- `undo changes`
-- `restore checkpoint`
-- `git rollback`
-
-**Context Variations:**
-- "Roll back to last checkpoint"
-- "Undo my recent changes"
-- "Restore previous state"
+**Key Principle:** Checkpoints are safety points created during TDD workflows (pre-work, post-work, tdd-red, tdd-green, refactoring). Rollback lets you restore to these points if something goes wrong.
 
 ---
 
-## Architecture & Integration
+## 🚀 Commands
 
-**Dependencies:**
-- Git CLI (command-line interface)
-- `GitCheckpointOrchestrator` - Checkpoint management
-- `BrainProtector` - Validates rollback safety
-- Git checkpoint database
+**Natural Language Triggers:**
+- `rollback to <checkpoint-id>`
+- `rollback <checkpoint-id>`
+- `restore to checkpoint`
+- `undo to checkpoint`
+- `revert to checkpoint`
 
-**Integration Points:**
-- Unified Entry Point Orchestrator for command routing
-- Response template system for user feedback
-- Safety confirmation workflow
+**Use Cases:**
+- Rolling back after failed refactoring
+- Restoring to last GREEN phase in TDD
+- Recovering from accidental code deletion
+- Returning to known working state
+- Testing different implementation approaches
 
 ---
 
-## Usage Examples
+## 📊 Workflow Steps
 
-### List Checkpoints
-
+### Phase 1: Checkpoint Validation (2s)
 ```
-User: "rollback"
-CORTEX: Shows list of available checkpoints with timestamps and descriptions
+Verify checkpoint exists:
+- Check PhaseCheckpointManager for checkpoint_id
+- Verify checkpoint has valid metadata
+- Confirm git commit SHA exists
+- Return validation result
 ```
 
-### Rollback to Checkpoint
-
+### Phase 2: Safety Checks (5s)
 ```
-User: "rollback to [checkpoint-id]"
-CORTEX: Confirms action → Restores state → Reports result
-```
-
-### Soft Rollback (Keep Changes)
-
-```
-User: "rollback --soft"
-CORTEX: Resets Git history but preserves working directory changes
+Validate git repository state:
+1. Check for uncommitted changes
+   - If found: Warn user, require commit/stash first
+2. Check for merge in progress
+   - If found: Require merge completion or abort first
+3. Check working tree is clean
+   - If dirty: Cannot proceed
 ```
 
-### Hard Rollback (Discard Changes)
-
+### Phase 3: Preview Changes (10s)
 ```
-User: "rollback --hard"
-CORTEX: Warning → Confirmation → Discards all changes
+Generate diff between current state and checkpoint:
+1. Run git diff HEAD <checkpoint-id>
+2. Show first 1000 characters of diff
+3. Display file count and line changes
+4. Ask user: "Rollback to '<checkpoint-id>'? (yes/no)"
+```
+
+### Phase 4: User Confirmation (user-dependent)
+```
+Wait for user input:
+- "yes" → Proceed to execution
+- "no" → Cancel rollback, return success=false
+- Invalid → Prompt again
+```
+
+### Phase 5: Execute Rollback (5s)
+```
+Perform git reset:
+1. git reset --hard <checkpoint-id>
+2. Verify reset success
+3. Create post-rollback checkpoint (optional)
+4. Report rollback status
 ```
 
 ---
 
-## Safety Features
+## 🔧 Configuration
 
-**Pre-Rollback Checks:**
-1. ✅ Checkpoint exists and is valid
-2. ✅ No uncommitted critical changes
-3. ✅ No merge conflicts present
-4. ✅ User confirmation for destructive operations
-5. ✅ Automatic checkpoint before rollback
+**Config File:** `cortex.config.json`
 
-**Protection Mechanisms:**
-- **Double Confirmation:** Required for hard rollbacks
-- **Change Preview:** Shows what will be lost
-- **Backup Checkpoint:** Created before any rollback
-- **Staged Changes Warning:** Alerts if work in progress
+```json
+{
+  "rollback_orchestrator": {
+    "require_confirmation": true,
+    "show_diff_preview": true,
+    "create_post_rollback_checkpoint": true,
+    "max_checkpoints_displayed": 10,
+    "checkpoint_retention_days": 30
+  }
+}
+```
 
----
-
-## Rollback Modes
-
-**Soft Rollback:**
-- Moves HEAD to checkpoint
-- Keeps working directory changes
-- Preserves staged files
-- Safe for experimenting
-
-**Mixed Rollback (Default):**
-- Moves HEAD to checkpoint
-- Resets staging area
-- Keeps working directory changes
-- Balance of safety and cleanup
-
-**Hard Rollback:**
-- Moves HEAD to checkpoint
-- Resets staging area
-- **Discards working directory changes**
-- Requires confirmation
+**Options:**
+- `require_confirmation` - Require user confirmation before rollback (default: `true`)
+- `show_diff_preview` - Show diff preview before confirmation (default: `true`)
+- `create_post_rollback_checkpoint` - Create checkpoint after rollback (default: `true`)
+- `max_checkpoints_displayed` - Maximum checkpoints to list (default: `10`)
+- `checkpoint_retention_days` - Days to keep checkpoints (default: `30`)
 
 ---
 
-## Configuration
+## 📈 Examples
 
-**Checkpoint Settings:**
-- Checkpoint retention: 30 days
-- Maximum checkpoints: 50
-- Auto-checkpoint before rollback: Enabled
+### Example 1: Safe Rollback with Preview
+```
+User: "rollback to tdd-green-20251129-140000"
 
-**Safety Settings:**
-- Confirmation required: Enabled for hard rollbacks
-- Preview changes: Enabled
-- Create backup: Enabled
+CORTEX:
+  🔍 Validating checkpoint...
+  ✅ Checkpoint 'tdd-green-20251129-140000' found
+  
+  🔒 Running safety checks...
+  ✅ No uncommitted changes
+  ✅ No merge in progress
+  ✅ Working tree clean
+  
+  📊 Preview of changes to be discarded:
+  ============================================================
+  src/feature.py | 25 ++++++-------------------
+  tests/test_feature.py | 10 ----------
+  2 files changed, 7 insertions(+), 28 deletions(-)
+  ============================================================
+  
+  ❓ Rollback to 'tdd-green-20251129-140000'? (yes/no): yes
+  
+  ⏪ Rolling back...
+  ✅ Rollback successful!
+  
+  Summary:
+  • Restored to: tdd-green-20251129-140000
+  • Commit SHA: abc1234
+  • Phase: GREEN (all tests passing)
+  • Created: 2025-11-29 14:00:00
+```
+
+### Example 2: Rollback Blocked (Uncommitted Changes)
+```
+User: "rollback to pre-work-20251129-130000"
+
+CORTEX:
+  🔍 Validating checkpoint...
+  ✅ Checkpoint 'pre-work-20251129-130000' found
+  
+  🔒 Running safety checks...
+  ❌ Safety check failed: Uncommitted changes detected
+  
+  The following files have uncommitted changes:
+    - src/feature.py
+    - tests/test_feature.py
+  
+  🛠️ Resolution Options:
+  1. Commit changes: git add . && git commit -m "message"
+  2. Stash changes: git stash
+  3. Force rollback: rollback --force (DANGER: loses changes)
+  
+  ⚠️ Cannot proceed. Please commit or stash changes first.
+```
+
+### Example 3: Dry-Run Mode (Preview Only)
+```
+User: "rollback to refactoring-20251129-150000 --dry-run"
+
+CORTEX:
+  🔍 Validating checkpoint...
+  ✅ Checkpoint 'refactoring-20251129-150000' found
+  
+  📊 Dry-run preview (no changes will be made):
+  ============================================================
+  WOULD ROLLBACK TO: refactoring-20251129-150000
+  
+  Changes to be discarded:
+  src/utils.py | 50 ++++++++++++++++++++++++++++++++++++++++++++
+  tests/test_utils.py | 30 +++++++++++++++++++++++++
+  2 files changed, 80 insertions(+)
+  ============================================================
+  
+  ℹ️ This is a dry-run. No changes were made.
+  ℹ️ To execute rollback, run: rollback to refactoring-20251129-150000
+```
+
+### Example 4: Force Rollback (Bypass Safety)
+```
+User: "rollback to tdd-red-20251129-120000 --force"
+
+CORTEX:
+  🔍 Validating checkpoint...
+  ✅ Checkpoint 'tdd-red-20251129-120000' found
+  
+  ⚠️ FORCE MODE: Bypassing safety checks
+  ⚠️ WARNING: You have uncommitted changes that will be lost!
+  
+  ⏪ Executing forced rollback...
+  ✅ Forced rollback completed
+  
+  Summary:
+  • Restored to: tdd-red-20251129-120000
+  • Phase: RED (tests failing as expected)
+  • ⚠️ Uncommitted changes discarded (cannot be recovered)
+```
 
 ---
 
-## Implementation Details
+## 🎓 Key Concepts
 
-**Class:** `RollbackOrchestrator`
+### Checkpoints vs Commits
+**Checkpoints** are lightweight git tags created at TDD workflow phases:
+- `pre-work-YYYYMMDD-HHMMSS` - Before starting work
+- `tdd-red-YYYYMMDD-HHMMSS` - After writing failing test
+- `tdd-green-YYYYMMDD-HHMMSS` - After making test pass
+- `refactoring-YYYYMMDD-HHMMSS` - After refactoring
+- `post-work-YYYYMMDD-HHMMSS` - After completing work
 
-**Key Methods:**
-- `execute(context)` - Main rollback orchestration
-- `_list_checkpoints()` - Show available checkpoints
-- `_preview_rollback(checkpoint_id)` - Show impact
-- `_confirm_rollback()` - User confirmation
-- `_create_backup_checkpoint()` - Safety backup
-- `_perform_rollback(checkpoint_id, mode)` - Execute rollback
+**Commits** are permanent git history entries. Checkpoints reference commits but are temporary (30-day retention).
 
----
+### Safety Guarantees
+1. **Uncommitted Changes** - Rollback blocked if working tree dirty
+2. **Merge Conflicts** - Rollback blocked if merge in progress
+3. **User Confirmation** - Always requires "yes" confirmation (unless forced)
+4. **Diff Preview** - Shows exactly what will be lost
+5. **Dry-Run Mode** - Test rollback without executing
 
-## Error Handling
+### When to Use Rollback
+✅ **Good Use Cases:**
+- Failed refactoring (rollback to last GREEN)
+- Experimental implementation didn't work (rollback to pre-work)
+- Accidental code deletion (rollback to recent checkpoint)
+- Testing different approaches (rollback, try again)
 
-**Common Issues:**
-1. **Checkpoint not found** → Lists available checkpoints
-2. **Uncommitted changes** → Warns user, offers to stash
-3. **Merge conflict** → Requires resolution first
-4. **Invalid checkpoint ID** → Suggests correct format
-
----
-
-## Checkpoint Format
-
-**Checkpoint Naming:**
-- `checkpoint-[timestamp]-[description]`
-- Example: `checkpoint-20251128-153045-before-refactor`
-
-**Checkpoint Data:**
-- Git commit SHA
-- Timestamp
-- Description
-- File changes summary
-- Branch name
+❌ **Bad Use Cases:**
+- Reverting committed changes (use `git revert` instead)
+- Undoing pushed changes (creates divergent history)
+- Fixing bugs (write tests and fix properly)
+- Avoiding merge conflicts (resolve conflicts properly)
 
 ---
 
-## Testing
+## 🔍 Troubleshooting
 
-**Test Coverage:** 20% (needs significant improvement)
+### Issue: "Checkpoint not found"
+**Cause:** Checkpoint ID doesn't exist or was expired (>30 days)  
+**Solution:** Use `list checkpoints` to see available checkpoints
+
+### Issue: "Safety check failed: Uncommitted changes"
+**Cause:** Working tree has uncommitted files  
+**Solution:** Commit changes (`git add . && git commit`) or stash (`git stash`)
+
+### Issue: "Merge in progress - resolve conflicts first"
+**Cause:** Git merge operation incomplete  
+**Solution:** Complete merge (`git commit`) or abort (`git merge --abort`)
+
+### Issue: "Git reset failed"
+**Cause:** Git command error (corrupted repo, invalid commit SHA)  
+**Solution:** Check git status, verify repo integrity (`git fsck`)
+
+---
+
+## 🧪 Testing
 
 **Test Files:**
-- `tests/operations/test_rollback_orchestrator.py` (planned)
+- `tests/orchestrators/test_rollback_orchestrator_foundation.py` - Core functionality
+- `tests/orchestrators/test_rollback_orchestrator_extended.py` - Safety checks, confirmation
 
-**Manual Validation:**
-1. Create checkpoint via `git checkpoint`
-2. Make changes
-3. Run `rollback`
-4. Verify state restored correctly
-5. Check backup checkpoint created
+**Key Test Scenarios:**
+1. Checkpoint validation (exists/doesn't exist)
+2. Safety checks (uncommitted changes, merge in progress)
+3. User confirmation (yes/no/invalid input)
+4. Dry-run mode (preview without execution)
+5. Force mode (bypass safety checks)
+6. Git reset execution (success/failure)
 
----
-
-## Related Modules
-
-- **GitCheckpointOrchestrator** - Creates and manages checkpoints
-- **CommitOrchestrator** - Creates commits with checkpoints
-- **BrainProtector** - Validates rollback operations
-
----
-
-## Troubleshooting
-
-**Issue:** Rollback fails with merge conflict  
-**Solution:** Resolve conflicts manually, then retry rollback
-
-**Issue:** Changes lost after rollback  
-**Solution:** Check backup checkpoint, restore from there
-
-**Issue:** Checkpoint list empty  
-**Solution:** Create checkpoints using `git checkpoint` command
+**Run Tests:**
+```bash
+pytest tests/orchestrators/test_rollback_orchestrator*.py -v
+```
 
 ---
 
-## Best Practices
+## 🔗 Integration
 
-**When to Use Rollback:**
-- ✅ After failed experiments
-- ✅ When changes break tests
-- ✅ To recover from mistakes
-- ✅ Before starting risky operations
+**Dependencies:**
+- `PhaseCheckpointManager` - Manages checkpoint metadata and storage
+- `GitCheckpointSystem` - Creates/lists git tags for checkpoints
+- `CommitOrchestrator` - Works alongside (commit before rollback recommended)
 
-**When NOT to Use Rollback:**
-- ❌ On shared branches (use revert instead)
-- ❌ After pushing to remote (coordination required)
-- ❌ Without backup checkpoint
-- ❌ With uncommitted critical work
+**Called By:**
+- Interactive planner during TDD workflow
+- User natural language commands ("rollback to X")
+- Error recovery workflows (auto-suggest rollback on failures)
+
+**Calls:**
+- `PhaseCheckpointManager.list_checkpoints()` - Get available checkpoints
+- `git status --porcelain` - Check for uncommitted changes
+- `git diff HEAD <checkpoint>` - Generate diff preview
+- `git reset --hard <checkpoint>` - Execute rollback
 
 ---
 
-## Future Enhancements
+## 📚 Related Documentation
 
-**Planned (CORTEX 4.0):**
-- Selective file rollback (not entire checkpoint)
-- Rollback preview with diff visualization
-- Automatic conflict resolution for simple cases
-- Checkpoint branching (create branch from checkpoint)
-- Remote checkpoint sync for team collaboration
+- **Commit Orchestrator Guide** - Syncing with remote before rollback
+- **TDD Mastery Guide** - Understanding checkpoint creation during TDD
+- **Git Checkpoint System** - Low-level checkpoint mechanics
+- **Phase Checkpoint Manager** - Checkpoint metadata and storage
 
 ---
 
 **Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Last Updated:** November 28, 2025  
-**Guide Version:** 1.0.0
+**License:** Source-Available (Use Allowed, No Contributions) - See LICENSE  
+**Repository:** https://github.com/asifhussain60/CORTEX
