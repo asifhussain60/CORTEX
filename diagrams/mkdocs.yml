@@ -1,0 +1,57 @@
+site_name: CORTEX Documentation
+site_description: AI-powered development assistant with memory and context
+site_author: Asif Hussain
+repo_url: https://github.com/asifhussain60/CORTEX
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+
+plugins:
+  - search
+  - mermaid2
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+
+nav:
+  - Home: index.md
+  - CORTEX vs COPILOT: CORTEX-VS-COPILOT.md
+  - Getting Started: GETTING-STARTED.md
+  - Documentation:
+      - Architecture: ARCHITECTURE.md
+      - Technical Documentation: TECHNICAL-DOCUMENTATION.md
+      - Narrative Overview: narratives/01-tier-architecture-narrative.md
+      - Agent Coordination: narratives/02-agent-coordination-narrative.md
+  - Story:
+      - The Awakening: narratives/THE-AWAKENING-OF-CORTEX.md
+  - Diagrams:
+      - Mermaid Diagrams: diagrams/mermaid/
+      - DALL-E Prompts: diagrams/prompts/
