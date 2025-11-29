@@ -1035,7 +1035,8 @@ class DeploymentGates:
         blocked_dirs = {
             # Test and development folders
             'test_merge',
-            '.temp-publish',
+            '.temp-publish',       # Legacy name (keep for backwards compatibility)
+            '.deploy-staging',     # Current staging folder name
             'workflow_checkpoints',
             'CORTEX-cleanup',
             
@@ -1135,10 +1136,12 @@ class DeploymentGates:
                 # Check for critical exclusions
                 critical_exclusions = [
                     'test_merge',
-                    '.temp-publish',
+                    '.deploy-staging',   # Current staging folder name
                     'mkdocs.yml',
                     'CORTEX-cleanup',
                     'workflow_checkpoints',
+                    'cortex-brain/admin',
+                    'docs',
                 ]
                 
                 missing_exclusions = []

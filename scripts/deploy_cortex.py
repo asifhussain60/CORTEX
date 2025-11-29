@@ -115,7 +115,7 @@ EXCLUDED_DIRS = {
     'dist',             # Distribution builds
     'publish',          # Don't include existing publish folder
     '.backup-archive',
-    '.temp-publish',    # Temporary publishing folder
+    '.deploy-staging',  # Deployment staging folder
     'CORTEX-cleanup',   # Cleanup artifacts
     
     # Cache and temporary directories
@@ -322,14 +322,14 @@ def get_current_branch(project_root: Path) -> str:
     return result.stdout.strip()
 
 
-def filter_admin_operations(temp_dir: Path):
+def filter_admin_operations(staging_dir: Path):
     """
     Remove admin-only operations from cortex-operations.yaml.
     
     SECURITY: Users must not have access to commands that modify CORTEX source code.
     This includes deployment, validation, system alignment, and optimization scripts.
     """
-    operations_file = temp_dir / "cortex-operations.yaml"
+    operations_file = staging_dir / "cortex-operations.yaml"
     
     if not operations_file.exists():
         logger.warning("⚠️  cortex-operations.yaml not found - skipping admin filter")
@@ -484,8 +484,8 @@ def should_include_path(path: Path, project_root: Path) -> bool:
     return False
 
 
-def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
-    """Build content for publish branch in temporary directory."""
+def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, int]:
+    """Build content for publish branch in staging directory."""
     stats = {
         'files_copied': 0,
         'files_excluded': 0,
@@ -494,7 +494,7 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
     }
     
     logger.info("Building publish content...")
-    temp_dir.mkdir(parents=True, exist_ok=True)
+    staging_dir.mkdir(parents=True, exist_ok=True)
     
     # Copy project structure
     for item in project_root.rglob('*'):
@@ -507,7 +507,7 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
             continue
         
         rel_path = item.relative_to(project_root)
-        dest_path = temp_dir / rel_path
+        dest_path = staging_dir / rel_path
         
         if item.is_dir():
             dest_path.mkdir(parents=True, exist_ok=True)
@@ -520,7 +520,7 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
     
     # Handle copilot-instructions.md merge
     cortex_instructions_src = project_root / ".github" / "copilot-instructions.md"
-    existing_instructions = temp_dir / ".github" / "copilot-instructions.md"
+    existing_instructions = staging_dir / ".github" / "copilot-instructions.md"
     
     if cortex_instructions_src.exists():
         logger.info("Merging copilot-instructions.md...")
@@ -533,13 +533,13 @@ def build_publish_content(project_root: Path, temp_dir: Path) -> Dict[str, int]:
         logger.warning("⚠️  CORTEX copilot-instructions.md not found - skipping merge")
     
     # Filter admin operations from cortex-operations.yaml
-    filter_admin_operations(temp_dir)
+    filter_admin_operations(staging_dir)
     
     # Create SETUP-CORTEX.md guide
-    create_setup_guide(temp_dir)
+    create_setup_guide(staging_dir)
     
     # Create PACKAGE-INFO.md
-    create_package_info(temp_dir, stats)
+    create_package_info(staging_dir, stats)
     
     return stats
 
@@ -616,7 +616,7 @@ def merge_copilot_instructions(existing_file: Path, cortex_instructions_file: Pa
             f.write(merged_content)
 
 
-def create_setup_guide(temp_dir: Path):
+def create_setup_guide(staging_dir: Path):
     """Create comprehensive setup guide for end users."""
     setup_content = f"""# 🚀 CORTEX Setup Guide
 
@@ -901,14 +901,14 @@ git clone -b {PUBLISH_BRANCH} --single-branch https://github.com/asifhussain60/C
 *Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | CORTEX {PACKAGE_VERSION}*
 """
     
-    setup_file = temp_dir / 'SETUP-CORTEX.md'
+    setup_file = staging_dir / 'SETUP-CORTEX.md'
     with open(setup_file, 'w', encoding='utf-8') as f:
         f.write(setup_content)
     
     logger.info("Created SETUP-CORTEX.md")
 
 
-def create_package_info(temp_dir: Path, stats: Dict[str, int]):
+def create_package_info(staging_dir: Path, stats: Dict[str, int]):
     """Create package information file."""
     info_content = f"""# CORTEX Package Information
 
@@ -1000,7 +1000,7 @@ cp cortex.config.template.json cortex.config.json
 **Copyright © 2024-2025 Asif Hussain. All rights reserved.**
 """
     
-    info_file = temp_dir / 'PACKAGE-INFO.md'
+    info_file = staging_dir / 'PACKAGE-INFO.md'
     with open(info_file, 'w', encoding='utf-8') as f:
         f.write(info_content)
     
@@ -1107,8 +1107,10 @@ def publish_to_branch(
     
     logger.info(f"Current branch: {original_branch}")
     
-    # Create temp directory for build
-    temp_dir = project_root / '.temp-publish'
+    # Create staging directory for build OUTSIDE the git repo to survive branch switches
+    import tempfile
+    staging_base = Path(tempfile.gettempdir()) / 'cortex-deploy-staging'
+    staging_dir = staging_base / 'package'
     
     try:
         # STAGE 0: Feature Discovery (NEW - runs FIRST to ensure new functionality is cataloged)
@@ -1238,17 +1240,17 @@ def publish_to_branch(
         
         # STAGE 2: Build Content
         stats = None
-        # Always rebuild if temp_dir missing (branch switch deleted it)
-        needs_rebuild = not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT) or not temp_dir.exists()
+        # Always rebuild if staging_dir missing (should not happen now with system temp)
+        needs_rebuild = not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT) or not staging_dir.exists()
         
         if needs_rebuild:
             if not checkpoint.should_skip_stage(PublishStage.BUILD_CONTENT):
                 logger.info("\n🔨 STAGE 2: Building Package Content")
             else:
-                logger.info("\n🔨 STAGE 2: Rebuilding Package Content (temp dir missing after branch switch)")
+                logger.info("\n🔨 STAGE 2: Rebuilding Package Content (staging dir missing)")
             
             # Build package content
-            stats = build_publish_content(project_root, temp_dir)
+            stats = build_publish_content(project_root, staging_dir)
             logger.info(f"✅ Build complete:")
             logger.info(f"   Files: {stats['files_copied']}")
             logger.info(f"   Size: {stats['total_size'] / 1024 / 1024:.2f} MB")
@@ -1264,7 +1266,7 @@ def publish_to_branch(
         
         if dry_run:
             logger.info("\n🔍 DRY RUN - No git operations performed")
-            logger.info(f"Preview content in: {temp_dir}")
+            logger.info(f"Preview content in: {staging_dir}")
             checkpoint.clear()
             return True
         
@@ -1317,22 +1319,33 @@ def publish_to_branch(
         if not checkpoint.should_skip_stage(PublishStage.CONTENT_COPY):
             logger.info("\n📂 STAGE 4: Copying Content to Branch")
             
-            # Rebuild if temp_dir missing (branch switch deleted it)
-            if not temp_dir.exists():
-                logger.info("⚠️  Temp directory missing after branch switch - rebuilding...")
-                stats = build_publish_content(project_root, temp_dir)
-                logger.info(f"✅ Rebuild complete: {stats['files_copied']} files, {stats['total_size'] / 1024 / 1024:.2f} MB")
+            # Staging directory should exist in system temp (survives branch switch)
+            if not staging_dir.exists():
+                logger.error("❌ Staging directory missing - this should not happen!")
+                logger.error("   The staging directory is in system temp and should survive branch switch.")
+                logger.error(f"   Expected location: {staging_dir}")
+                raise RuntimeError("Staging directory missing after branch switch")
+            
+            # Verify staging_dir has content
+            staged_files = list(staging_dir.iterdir())
+            if not staged_files:
+                logger.error("❌ Staging directory is empty - build failed!")
+                raise RuntimeError("Staging directory is empty - no content to copy")
+            
+            logger.info(f"📦 Copying {len(staged_files)} items from staging to branch...")
             
             # Copy new content
-            for item in temp_dir.iterdir():
+            for item in staging_dir.iterdir():
                 dest = project_root / item.name
                 try:
                     if item.is_dir():
                         if dest.exists():
                             shutil.rmtree(dest)
                         shutil.copytree(item, dest)
+                        logger.debug(f"   Copied directory: {item.name}")
                     else:
                         shutil.copy2(item, dest)
+                        logger.debug(f"   Copied file: {item.name}")
                 except Exception as e:
                     logger.warning(f"Failed to copy {item.name}: {e}")
                     raise
@@ -1459,6 +1472,14 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
             logger.info(f"Returning to original branch: {original_branch}")
             run_git_command(['git', 'checkout', original_branch], project_root)
             
+            # Clean up staging directory (now in system temp)
+            if staging_base.exists():
+                try:
+                    shutil.rmtree(staging_base)
+                    logger.info("✅ Cleaned up staging directory")
+                except Exception as e:
+                    logger.warning(f"Could not clean staging directory: {e}")
+            
             checkpoint.save(PublishStage.CLEANUP, {
                 'original_branch': original_branch,
                 'branch_name': branch_name,
@@ -1522,13 +1543,13 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
         return False
         
     finally:
-        # Clean up temp directory only if publish completed
+        # Clean up staging directory only if publish completed
         if checkpoint.get_last_stage() == PublishStage.COMPLETE:
-            if temp_dir.exists():
-                shutil.rmtree(temp_dir)
-                logger.debug(f"🗑️  Cleaned up temp directory: {temp_dir}")
-        elif temp_dir.exists():
-            logger.debug(f"💾 Keeping temp directory for resume: {temp_dir}")
+            if staging_dir.exists():
+                shutil.rmtree(staging_dir)
+                logger.debug(f"🗑️  Cleaned up staging directory: {staging_dir}")
+        elif staging_dir.exists():
+            logger.debug(f"💾 Keeping staging directory for resume: {staging_dir}")
 
 
 def main():
