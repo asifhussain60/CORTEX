@@ -1530,20 +1530,30 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
         logger.info(f"      python scripts/publish_to_branch.py --resume")
         logger.info("   3. Or start fresh (will lose progress)")
         
-        # Try to return to original branch
-        if original_branch:
-            try:
-                current = get_current_branch(project_root)
-                if current != original_branch:
-                    logger.info(f"\n🔄 Attempting to return to {original_branch}...")
-                    run_git_command(['git', 'checkout', original_branch], project_root, check=False)
-                    logger.info("✅ Returned to original branch")
-            except Exception as branch_err:
-                logger.warning(f"⚠️  Could not return to original branch: {branch_err}")
+        # Note: Branch return is handled by finally block (guardrail)
         
         return False
         
     finally:
+        # GUARDRAIL: ALWAYS return to original branch (highest priority)
+        # This must happen regardless of success, failure, or interruption
+        try:
+            if original_branch:
+                current = get_current_branch(project_root)
+                if current != original_branch:
+                    logger.info(f"\n🔄 Returning to original branch: {original_branch}...")
+                    result = run_git_command(['git', 'checkout', original_branch], project_root, check=False)
+                    if result.returncode == 0:
+                        logger.info(f"✅ Safely returned to original branch: {original_branch}")
+                    else:
+                        logger.error(f"❌ Failed to return to original branch. You are on: {current}")
+                        logger.error(f"   Run manually: git checkout {original_branch}")
+                else:
+                    logger.debug(f"✅ Already on original branch: {original_branch}")
+        except Exception as branch_err:
+            logger.error(f"⚠️  CRITICAL: Could not return to original branch: {branch_err}")
+            logger.error(f"   Run manually: git checkout {original_branch}")
+        
         # Clean up staging directory only if publish completed
         if checkpoint.get_last_stage() == PublishStage.COMPLETE:
             if staging_dir.exists():

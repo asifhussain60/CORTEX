@@ -142,6 +142,15 @@ class DeploymentGates:
         elif gate10["severity"] == "WARNING" and not gate10["passed"]:
             results["warnings"].append(gate10["message"])
         
+        # Gate 11: CORTEX Brain Operational Verification (CRITICAL)
+        gate11 = self._validate_cortex_brain_operational()
+        results["gates"].append(gate11)
+        if gate11["severity"] == "ERROR" and not gate11["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate11["message"])
+        elif gate11["severity"] == "WARNING" and not gate11["passed"]:
+            results["warnings"].append(gate11["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -1185,5 +1194,177 @@ class DeploymentGates:
             gate["message"] = f"Production validation passed with warnings: {total_blocked} items will be excluded by deploy_cortex.py"
         else:
             gate["message"] = "Production validation passed: No blocked content found"
+        
+        return gate
+
+    def _validate_cortex_brain_operational(self) -> Dict[str, Any]:
+        """
+        Gate 11: CORTEX Brain Operational Verification - CRITICAL GATE
+        
+        Validates that CORTEX is fully wired and operational with:
+        - CORTEX.prompt.md exists at .github/prompts/
+        - cortex-brain/ folder structure intact
+        - Tier databases exist (tier1/, tier3/)
+        - response-templates.yaml exists and is valid
+        - Key orchestrators are wired to entry points
+        - Brain protection rules exist
+        
+        This gate ensures production code contains a fully operational CORTEX brain
+        that can be used immediately after deployment without additional setup.
+        
+        Returns:
+            Gate result with brain operational status
+        """
+        gate = {
+            "name": "CORTEX Brain Operational",
+            "passed": True,
+            "severity": "ERROR",  # This is a critical gate
+            "message": "",
+            "details": {}
+        }
+        
+        issues = []
+        checks = {
+            "entry_point": False,
+            "brain_structure": False,
+            "tier_databases": False,
+            "response_templates": False,
+            "brain_protection": False,
+            "orchestrator_wiring": False
+        }
+        
+        # Check 1: CORTEX.prompt.md at .github/prompts/
+        entry_point = self.project_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        if entry_point.exists():
+            checks["entry_point"] = True
+            # Verify it has minimum content
+            try:
+                content = entry_point.read_text(encoding='utf-8')
+                required_sections = ['Entry Point', 'help', 'CORTEX']
+                missing_sections = [s for s in required_sections if s.lower() not in content.lower()]
+                if missing_sections:
+                    issues.append(f"CORTEX.prompt.md missing key sections: {missing_sections}")
+                    checks["entry_point"] = False
+            except Exception as e:
+                issues.append(f"Could not read CORTEX.prompt.md: {e}")
+                checks["entry_point"] = False
+        else:
+            issues.append(f"CRITICAL: Entry point not found at .github/prompts/CORTEX.prompt.md")
+        
+        # Check 2: cortex-brain/ folder structure
+        brain_path = self.project_root / 'cortex-brain'
+        required_brain_dirs = ['tier1', 'tier3', 'documents', 'templates']
+        if brain_path.exists():
+            missing_dirs = []
+            for dir_name in required_brain_dirs:
+                if not (brain_path / dir_name).exists():
+                    missing_dirs.append(dir_name)
+            
+            if not missing_dirs:
+                checks["brain_structure"] = True
+            else:
+                issues.append(f"cortex-brain/ missing directories: {missing_dirs}")
+        else:
+            issues.append("CRITICAL: cortex-brain/ directory not found")
+        
+        # Check 3: Tier databases exist (can be empty but must exist)
+        tier1_path = brain_path / 'tier1' if brain_path.exists() else None
+        tier3_path = brain_path / 'tier3' if brain_path.exists() else None
+        
+        tier_ok = True
+        if tier1_path and not tier1_path.exists():
+            issues.append("tier1/ directory not found in cortex-brain/")
+            tier_ok = False
+        if tier3_path and not tier3_path.exists():
+            issues.append("tier3/ directory not found in cortex-brain/")
+            tier_ok = False
+        checks["tier_databases"] = tier_ok
+        
+        # Check 4: response-templates.yaml exists and is valid YAML
+        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        if templates_file and templates_file.exists():
+            try:
+                import yaml
+                with open(templates_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                # Verify critical templates exist
+                if 'templates' in data:
+                    critical_templates = ['help_table', 'fallback', 'greeting']
+                    missing_templates = [t for t in critical_templates if t not in data['templates']]
+                    if missing_templates:
+                        issues.append(f"response-templates.yaml missing critical templates: {missing_templates}")
+                    else:
+                        checks["response_templates"] = True
+                else:
+                    issues.append("response-templates.yaml missing 'templates' key")
+            except Exception as e:
+                issues.append(f"response-templates.yaml is invalid: {e}")
+        else:
+            issues.append("response-templates.yaml not found in cortex-brain/")
+        
+        # Check 5: Brain protection rules exist
+        protection_file = brain_path / 'brain-protection-rules.yaml' if brain_path.exists() else None
+        if protection_file and protection_file.exists():
+            try:
+                import yaml
+                with open(protection_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                # Verify SKULL rules exist
+                if 'skull_rules' in data or 'protection_layers' in data or 'instincts' in data:
+                    checks["brain_protection"] = True
+                else:
+                    issues.append("brain-protection-rules.yaml missing SKULL rules")
+            except Exception as e:
+                issues.append(f"brain-protection-rules.yaml is invalid: {e}")
+        else:
+            issues.append("brain-protection-rules.yaml not found in cortex-brain/")
+        
+        # Check 6: Key orchestrators wired to entry points
+        # Check that response-templates.yaml references key orchestrators
+        wired_ok = True
+        if templates_file and templates_file.exists():
+            try:
+                content = templates_file.read_text(encoding='utf-8')
+                key_operations = ['plan', 'help', 'upgrade', 'feedback', 'tdd']
+                missing_wiring = []
+                for op in key_operations:
+                    if op not in content.lower():
+                        missing_wiring.append(op)
+                
+                if missing_wiring:
+                    issues.append(f"Key operations not wired in templates: {missing_wiring}")
+                    wired_ok = False
+            except Exception:
+                wired_ok = False
+        else:
+            wired_ok = False
+        checks["orchestrator_wiring"] = wired_ok
+        
+        # Calculate results
+        passed_checks = sum(1 for v in checks.values() if v)
+        total_checks = len(checks)
+        
+        gate["details"] = {
+            "checks": checks,
+            "issues": issues,
+            "passed_checks": passed_checks,
+            "total_checks": total_checks,
+            "score": f"{(passed_checks / total_checks) * 100:.0f}%"
+        }
+        
+        # Gate passes if ALL critical checks pass (entry_point, brain_structure, response_templates)
+        critical_passed = checks["entry_point"] and checks["brain_structure"] and checks["response_templates"]
+        
+        if not critical_passed:
+            gate["passed"] = False
+            gate["message"] = f"CORTEX Brain NOT operational: {total_checks - passed_checks} critical failures. Production deployment blocked."
+        elif passed_checks < total_checks:
+            gate["severity"] = "WARNING"
+            gate["passed"] = True
+            gate["message"] = f"CORTEX Brain operational with warnings: {passed_checks}/{total_checks} checks passed"
+        else:
+            gate["message"] = f"CORTEX Brain fully operational: All {total_checks} checks passed"
         
         return gate
