@@ -1768,6 +1768,24 @@ templates:
     request_echo_content: "Perform ADO operations"
     next_steps_content: "What would you like to do? Say \"ado summary\" for work tracking or \"ado pr review #123\" for pull request analysis."
 
+  architecture_intelligence:
+    <<: *standard_5_part_base
+    name: Architecture Intelligence
+    triggers:
+    - review architecture
+    - analyze architectural health
+    - forecast technical debt
+    - track architecture evolution
+    - architecture report
+    response_type: detailed
+    expected_orchestrator: ArchitectureIntelligenceAgent
+    handler: src.cortex_agents.strategic.architecture_intelligence_agent.ArchitectureIntelligenceAgent
+    understanding_content: "You want strategic analysis of CORTEX architecture health, including historical trends, technical debt forecasting, and CORTEX 4.0 recommendations."
+    challenge_content: "No Challenge - Architecture Intelligence provides read-only strategic analysis complementing System Alignment's tactical remediation."
+    response_content: "**Architecture Intelligence Capabilities:**\n   \n   1. **Current Health Analysis** - 7-layer integration scoring across all 39 features\n   2. **Trend Analysis** - Historical health evolution (30-day, 90-day trends)\n   3. **Debt Forecasting** - 3-month and 6-month projections with confidence scores\n   4. **ADR Generation** - CORTEX 4.0 prioritized recommendations\n   5. **Report Generation** - Comprehensive markdown reports in cortex-brain/documents/analysis/\n   \n   **Strategic vs Tactical:**\n   - Architecture Intelligence: Long-term trends, forecasting, ADRs (strategic)\n   - System Alignment: Current issues, remediation tasks (tactical)"
+    request_echo_content: "Analyze architecture health and trends"
+    next_steps_content: "Ready to review? Say \"review architecture\" for full analysis or \"forecast technical debt\" for 3/6-month projections."
+
   lint_validation:
     <<: *standard_5_part_base
     name: Lint Validation
