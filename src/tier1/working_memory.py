@@ -230,6 +230,20 @@ class WorkingMemory:
             )
         """)
         
+        # Create swagger_contexts table (CORTEX 3.2.1: Scope Approval Gate)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS swagger_contexts (
+                context_id TEXT PRIMARY KEY,
+                complexity REAL NOT NULL,
+                scope_boundary TEXT NOT NULL,
+                team_size INTEGER DEFAULT 1,
+                velocity REAL,
+                status TEXT NOT NULL DEFAULT 'awaiting_approval',
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+        """)
+        
         # Create indexes for performance
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_conversations_created 
@@ -1589,3 +1603,126 @@ class WorkingMemory:
         except Exception as e:
             print(f"Failed to delete user profile: {e}")
             return False
+    
+    # ========== SWAGGER Context Storage (CORTEX 3.2.1: Scope Approval Gate) ==========
+    
+    def store_swagger_context(self, context_id: str, context_data: Dict[str, Any]) -> bool:
+        """
+        Store SWAGGER context for estimation workflow
+        
+        Used when scope approval is required - preserves SWAGGER analysis
+        during handoff to planning workflow so it can be resumed later.
+        
+        Args:
+            context_id: Unique identifier (format: swagger-YYYYMMDD-HHMMSS)
+            context_data: Dictionary with keys:
+                - complexity: SWAGGER complexity score (0-100)
+                - scope_boundary: ScopeBoundary dict or dataclass
+                - team_size: Number of developers
+                - velocity: Optional team velocity
+                - status: 'awaiting_approval', 'approved', 'estimated'
+                - created_at: ISO timestamp
+        
+        Returns:
+            True if storage successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT OR REPLACE INTO swagger_contexts 
+                (context_id, complexity, scope_boundary, team_size, velocity, status, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                context_id,
+                context_data['complexity'],
+                json.dumps(context_data['scope_boundary']),
+                context_data['team_size'],
+                context_data.get('velocity'),
+                context_data['status'],
+                context_data['created_at'],
+                datetime.now().isoformat()
+            ))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing SWAGGER context: {e}")
+            return False
+    
+    def retrieve_swagger_context(self, context_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve stored SWAGGER context
+        
+        Used when resuming estimation after user approves scope via
+        planning workflow or explicit approval command.
+        
+        Args:
+            context_id: Unique identifier to retrieve
+        
+        Returns:
+            Dictionary with SWAGGER context data or None if not found
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT complexity, scope_boundary, team_size, velocity, status, created_at, updated_at
+                FROM swagger_contexts
+                WHERE context_id = ?
+            ''', (context_id,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if row:
+                return {
+                    'context_id': context_id,
+                    'complexity': row[0],
+                    'scope_boundary': json.loads(row[1]),
+                    'team_size': row[2],
+                    'velocity': row[3],
+                    'status': row[4],
+                    'created_at': row[5],
+                    'updated_at': row[6]
+                }
+            return None
+        except Exception as e:
+            print(f"Error retrieving SWAGGER context: {e}")
+            return None
+    
+    def update_swagger_context_status(self, context_id: str, status: str) -> bool:
+        """
+        Update SWAGGER context status
+        
+        Status transitions:
+        - awaiting_approval → approved (user approves scope)
+        - approved → estimated (estimate generated)
+        
+        Args:
+            context_id: Context to update
+            status: New status value
+        
+        Returns:
+            True if update successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE swagger_contexts
+                SET status = ?, updated_at = ?
+                WHERE context_id = ?
+            ''', (status, datetime.now().isoformat(), context_id))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error updating SWAGGER context status: {e}")
+            return False
+

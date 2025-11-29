@@ -102,10 +102,11 @@ class IntentType(Enum):
     ADO_SUMMARY = "ado_summary"
     CODE_REVIEW = "code_review"
     
-    # Timeframe estimation (NEW - SWAGGER Integration)
+    # Timeframe estimation (NEW - SWAGGER Integration + 3.2.1 Scope Approval Gate)
     ESTIMATE = "estimate"
     TIMEFRAME = "timeframe"
     STORY_POINTS = "story_points"
+    APPROVE_SCOPE = "approve_scope"  # NEW 3.2.1: Approve inferred scope for estimation
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -200,10 +201,11 @@ INTENT_AGENT_MAP = {
     IntentType.ADO_SUMMARY: AgentType.ADO_ORCHESTRATOR,
     IntentType.CODE_REVIEW: AgentType.ADO_ORCHESTRATOR,
     
-    # Timeframe estimation mapping (NEW - SWAGGER Integration)
+    # Timeframe estimation mapping (NEW - SWAGGER Integration + 3.2.1 Scope Approval Gate)
     IntentType.ESTIMATE: AgentType.ESTIMATOR,
     IntentType.TIMEFRAME: AgentType.ESTIMATOR,
     IntentType.STORY_POINTS: AgentType.ESTIMATOR,
+    IntentType.APPROVE_SCOPE: AgentType.ESTIMATOR,  # NEW 3.2.1: Route approval to estimator
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

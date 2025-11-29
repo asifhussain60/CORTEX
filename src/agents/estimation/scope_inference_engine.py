@@ -11,7 +11,7 @@ Component of: SWAGGER Entry Point Module (Phase 3.2)
 import re
 import logging
 from dataclasses import dataclass, field
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Optional
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class ScopeEntities:
 
 @dataclass
 class ScopeBoundary:
-    """Scope boundary with safety limits"""
+    """Scope boundary with safety limits and user approval tracking"""
     table_count: int
     file_count: int
     service_count: int
@@ -37,6 +37,35 @@ class ScopeBoundary:
     estimated_complexity: float  # 0-100 scale
     confidence: float  # 0-100 (0.0-1.0 internally)
     gaps: List[str] = field(default_factory=list)
+    
+    # User approval tracking (CORTEX 3.2.1: Scope Approval Gate)
+    user_approved: bool = False
+    approval_timestamp: Optional[str] = None  # ISO format datetime
+    approval_method: Optional[str] = None  # 'interactive', 'plan', 'explicit'
+    swagger_context_id: Optional[str] = None  # Link to SWAGGER analysis
+    entities: Optional['ScopeEntities'] = None  # Full entity details
+    
+    def approve_scope(self, method: str = 'interactive') -> None:
+        """Mark scope as user-approved"""
+        from datetime import datetime
+        self.user_approved = True
+        self.approval_timestamp = datetime.now().isoformat()
+        self.approval_method = method
+    
+    def is_approval_required(self) -> bool:
+        """
+        Check if user approval is needed
+        
+        Returns True if:
+        - Confidence is below HIGH threshold (80%)
+        - Has ambiguous references (gaps)
+        - Not yet user-approved
+        """
+        return (
+            self.confidence < 0.8 or  # Low/medium confidence
+            len(self.gaps) > 0 or  # Has ambiguities
+            not self.user_approved  # Not yet approved
+        )
 
 
 class ScopeInferenceEngine:
