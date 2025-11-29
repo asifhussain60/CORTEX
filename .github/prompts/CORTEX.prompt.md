@@ -56,6 +56,38 @@
 
 ---
 
+## ⏱️ Timeframe Estimation
+
+**Module:** `src/agents/estimation/timeframe_estimator.py`
+
+**Quick Start:**
+- `estimate timeframe` - Estimate development timeframe for features
+- `timeline comparison` - Compare single developer vs team timelines
+- `project timeline` - Generate visual timeline with parallel tracks
+- `effort estimate` - Story points and sprint estimation
+
+**Key Features:**
+- **SWAGGER Complexity Analysis** - Convert complexity scores to sprint estimates
+- **Parallel Track Identification** - Automatically identify work that can be done concurrently
+- **Critical Path Calculation** - Find the minimum delivery timeline
+- **What-If Scenarios** - Compare 1, 2, 3, 5+ developer configurations
+- **Cost Projections** - Hourly rate calculations for different team sizes
+- **ASCII & HTML Timelines** - Visual Gantt charts for terminal and browser
+
+**Example Usage:**
+```
+You: "estimate timeframe for user authentication"
+CORTEX: 
+   📊 Estimated 14 story points (3 sprints single dev)
+   ⚡ With 2 developers: 1.5 sprints (50% faster)
+   🎯 Critical path: 12 days
+   💰 Cost at $75/hr: $8,400 (single) vs $9,240 (team of 2)
+```
+
+**Integration:** Response template `timeframe_estimate`, routing triggers in `response-templates.yaml`
+
+---
+
 ## 👤 User Profile System
 
 **Documentation:** #file:../../cortex-brain/documents/implementation-guides/user-profile-guide.md
@@ -275,6 +307,9 @@ help
 **Context Detection:**
 - In CORTEX development repository (has `cortex-brain/admin/`): Shows admin operations (`deploy cortex`, `generate docs`, `align`)
 - In user repositories: Shows only user-facing operations (planning, TDD, crawlers, etc.)
+
+**REST API:** CORTEX provides external REST API endpoints documented using OpenAPI 3.0 specification  
+See `docs/api/openapi.yaml` for complete API reference with interactive Swagger UI integration
 
 ---
 

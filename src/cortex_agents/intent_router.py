@@ -156,6 +156,23 @@ class IntentRouter(BaseAgent):
                 "use aws stack", "use gcp stack", "prefer azure", "prefer aws", "prefer gcp",
                 "no tech preference", "custom tech stack", "configure stack", "set stack"
             ],
+            # Timeframe estimation (NEW - SWAGGER Integration)
+            IntentType.ESTIMATE: [
+                "estimate timeframe", "time estimate", "how long will this take",
+                "timeframe", "story points", "sprint estimate", "parallel tracks",
+                "timeline comparison", "delivery timeline", "effort estimate",
+                "estimate effort", "project timeline", "estimate this", "estimate",
+                "how many sprints", "team size estimate", "cost projection",
+                "what-if scenarios", "estimate hours", "estimate days"
+            ],
+            IntentType.TIMEFRAME: [
+                "timeframe for", "timeframe estimate", "delivery timeframe",
+                "timeframe analysis", "track timeframe"
+            ],
+            IntentType.STORY_POINTS: [
+                "story points for", "calculate story points", "how many points",
+                "point estimate", "fibonacci points"
+            ],
         }
         
         # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
@@ -286,6 +303,30 @@ class IntentRouter(BaseAgent):
                 'rules_to_consider': [],  # No governance rules - user preference only
                 'skip_summary_generation': True,  # Interactive flow, no summary needed
                 'requires_documentation': False
+            },
+            # Timeframe estimation (NEW - SWAGGER Integration)
+            IntentType.ESTIMATE: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT'],
+                'requires_dor_validation': True,  # SWAGGER requires DoR before estimation
+                'skip_summary_generation': False,  # Estimates need detailed reports
+                'requires_documentation': True,
+                'create_persistent_artifact': True,  # Save estimation reports
+                'enable_parallel_analysis': True  # Enable parallel track analysis
+            },
+            IntentType.TIMEFRAME: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT'],
+                'requires_dor_validation': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'create_persistent_artifact': True,
+                'enable_parallel_analysis': True
+            },
+            IntentType.STORY_POINTS: {
+                'rules_to_consider': ['DEFINITION_OF_READY', 'DOR_ENFORCEMENT'],
+                'requires_dor_validation': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'create_persistent_artifact': True
             }
         }
 

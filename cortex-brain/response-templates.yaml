@@ -1694,6 +1694,67 @@ templates:
     response_type: detailed
     handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
 
+  timeframe_estimate:
+    <<: *standard_5_part_base
+    name: Timeframe Estimation
+    triggers:
+    - estimate timeframe
+    - time estimate
+    - how long will this take
+    - timeframe
+    - story points
+    - sprint estimate
+    - parallel tracks
+    - timeline comparison
+    - delivery timeline
+    - effort estimate
+    - estimate effort
+    - project timeline
+    response_type: detailed
+    handler: src.agents.estimation.timeframe_estimator.TimeframeEstimator
+    understanding_content: "You want to estimate the development timeframe for a feature or project, including parallel track analysis and team sizing."
+    challenge_content: "No Challenge - Timeframe estimation uses SWAGGER complexity analysis with parallel track decomposition, risk buffers, and cost projections."
+    response_content: |
+      **Timeframe Estimation Capabilities:**
+      
+      **Core Analysis:**
+      - Convert complexity scores to sprint estimates
+      - Identify parallel development tracks
+      - Calculate critical path duration
+      - Generate effort explanations with complexity factors
+      
+      **Visual Timelines:**
+      - Single developer vs max team comparison
+      - ASCII Gantt charts for terminal display
+      - Interactive HTML timelines (D3.js)
+      - Resource utilization histograms
+      
+      **Cost & Risk Analysis:**
+      - Cost projections for different team sizes
+      - Risk buffers (Conway's Law, integration overhead)
+      - Break-even analysis for team scaling
+      - Optimal team size recommendation
+      
+      **What-If Scenarios:**
+      - Compare 1, 2, 3, 5+ developer configurations
+      - Speedup factors and efficiency metrics
+      - Professional markdown reports
+    request_echo_content: "Generate timeframe estimate with parallel track analysis"
+    next_steps_content: |
+      **Available Commands:**
+      
+      1. **Basic Estimate** - "estimate timeframe for [feature]"
+      2. **With Timeline** - "generate timeline comparison for [feature]"
+      3. **Cost Analysis** - "estimate effort with cost projection at $[rate]/hour"
+      4. **What-If Scenarios** - "compare team sizes for [feature]"
+      
+      **Required Input:**
+      - Feature description or SWAGGER complexity score
+      - Optional: hourly rate for cost projections (default: $75/hr)
+      - Optional: team size constraints
+      
+      Say "estimate timeframe" with your feature description to begin.
+
 routing:
   default: fallback
   greeting_triggers:
@@ -2006,6 +2067,19 @@ routing:
   - reset cache
   - flush cache
   - clear validation cache
+  timeframe_estimate_triggers:
+  - estimate timeframe
+  - time estimate
+  - how long will this take
+  - timeframe
+  - story points
+  - sprint estimate
+  - parallel tracks
+  - timeline comparison
+  - delivery timeline
+  - effort estimate
+  - estimate effort
+  - project timeline
 formatting:
   mandatory_sections:
   - understanding

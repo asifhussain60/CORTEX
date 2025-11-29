@@ -204,7 +204,18 @@ class EntryPointScanner:
             "pr review": "CodeReviewOrchestrator",
             "review pull request": "CodeReviewOrchestrator",
             "pull request review": "CodeReviewOrchestrator",
-            "ado pr review": "CodeReviewOrchestrator"
+            "ado pr review": "CodeReviewOrchestrator",
+            # Timeframe Estimation triggers (NEW)
+            "estimate timeframe": "TimeframeEstimator",
+            "estimate timeline": "TimeframeEstimator",
+            "estimate delivery": "TimeframeEstimator",
+            "timeline comparison": "TimeframeEstimator",
+            "compare timelines": "TimeframeEstimator",
+            "project timeline": "TimeframeEstimator",
+            "delivery estimate": "TimeframeEstimator",
+            "what if scenarios": "TimeframeEstimator",
+            "team comparison": "TimeframeEstimator",
+            "resource planning": "TimeframeEstimator"
         }
         
         # Check trigger keywords

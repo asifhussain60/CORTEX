@@ -1,14 +1,14 @@
 {
   "last_stage": "build_content",
-  "timestamp": "2025-11-27T13:04:41.461873",
+  "timestamp": "2025-11-29T08:10:36.071162",
   "data": {
     "original_branch": "CORTEX-3.0",
     "branch_name": "main",
     "stats": {
-      "files_copied": 2780,
-      "files_excluded": 5959,
-      "dirs_created": 480,
-      "total_size": 98768609
+      "files_copied": 2190,
+      "files_excluded": 6569,
+      "dirs_created": 281,
+      "total_size": 94555813
     }
   },
   "version": "3.3.0"

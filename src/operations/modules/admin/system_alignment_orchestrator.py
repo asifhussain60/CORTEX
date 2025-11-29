@@ -66,10 +66,11 @@ class IntegrationScore:
     tested: bool = False  # +10 points
     wired: bool = False  # +10 points
     optimized: bool = False  # +10 points
+    api_documented: bool = False  # +10 points (NEW: Swagger/OpenAPI documentation)
     
     @property
     def score(self) -> int:
-        """Calculate 0-100 integration score."""
+        """Calculate 0-110 integration score (extended for API documentation)."""
         total = 0
         if self.discovered:
             total += 20
@@ -84,6 +85,8 @@ class IntegrationScore:
         if self.wired:
             total += 10
         if self.optimized:
+            total += 10
+        if self.api_documented:
             total += 10
         return total
     
@@ -110,6 +113,8 @@ class IntegrationScore:
             issues.append("Not wired to entry point")
         if not self.optimized:
             issues.append("Performance not validated")
+        if not self.api_documented:
+            issues.append("No Swagger/OpenAPI documentation")
         return issues
 
 
@@ -761,6 +766,17 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             score.optimized = perf_scorer.validate_performance(module_path, class_name)
         else:
             score.optimized = False
+        
+        # Layer 8: API documentation validation (check for Swagger/OpenAPI files)
+        # Search same paths as Gate 8 for consistency
+        api_doc_paths = [
+            self.project_root / "docs" / "api" / "swagger.json",
+            self.project_root / "docs" / "api" / "openapi.yaml",
+            self.project_root / "docs" / "api" / "openapi.yml",
+            self.project_root / "api" / "swagger.json",
+            self.project_root / "api" / "openapi.yaml"
+        ]
+        score.api_documented = any(path.exists() for path in api_doc_paths)
         
         return score
     

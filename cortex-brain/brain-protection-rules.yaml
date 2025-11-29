@@ -83,6 +83,7 @@ tier0_instincts:
   - "TEST_LOCATION_SEPARATION"  # NEW: Application tests in user repo, CORTEX tests in CORTEX folder
   - "DOCUMENT_ORGANIZATION_ENFORCEMENT"  # NEW: All docs in cortex-brain/documents/, NEVER repository root
   - "GIT_HISTORY_CONTEXT_REQUIRED"  # NEW: All requests must check git history before proceeding
+  - "API_DOCUMENTATION_REQUIRED"  # NEW: Swagger/OpenAPI documentation required for external APIs
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:

@@ -271,6 +271,87 @@ capabilities:
       - "View Discovery (element ID extraction)"
       - "Refactoring Intelligence (AST + performance analysis)"
     recommendation: "ready_to_use"
+
+  - id: "timeframe_estimation"
+    name: "Timeframe Estimation"
+    status: "implemented"
+    can_do: true
+    enhancement_needed: "none"
+    footprint_impact: "small"
+    priority: "high"
+    readiness: 100
+    version: "2.0.0"
+    integration_date: "2025-11-28"
+    features:
+      - "SWAGGER complexity to sprint estimation"
+      - "Parallel track decomposition and analysis"
+      - "Critical path calculation"
+      - "Visual timeline comparison (single dev vs max team)"
+      - "ASCII Gantt charts for terminal display"
+      - "Interactive HTML timelines (D3.js)"
+      - "Resource utilization histograms"
+      - "Risk buffers (Conway's Law, integration overhead)"
+      - "Cost projections for multiple team sizes"
+      - "Break-even analysis for team scaling"
+      - "Optimal team size recommendation"
+      - "What-if scenario analysis (1,2,3,5+ devs)"
+      - "Professional markdown report generation"
+      - "Industry best practices enforcement"
+    agents:
+      - "TimeframeEstimator"
+    storage:
+      - "cortex-brain/documents/reports/timeframe-*.md"
+    commands:
+      - "estimate timeframe"
+      - "time estimate"
+      - "story points"
+      - "sprint estimate"
+      - "parallel tracks"
+      - "timeline comparison"
+      - "delivery timeline"
+      - "effort estimate"
+    analysis_methods:
+      core:
+        - "analyze_parallel_tracks() - Decompose into independent work streams"
+        - "calculate_max_parallel() - Determine max team size"
+        - "calculate_critical_path() - Find longest dependency chain"
+        - "generate_effort_explanation() - Human-readable estimates"
+      timeline:
+        - "generate_timeline_comparison() - Single vs team analysis"
+        - "_calculate_sequential_timeline() - Single dev timeline"
+        - "_calculate_parallel_timeline() - Max team timeline"
+        - "_generate_timeline_ascii() - Terminal-friendly Gantt"
+        - "_generate_timeline_html() - Interactive D3.js chart"
+      cost_analysis:
+        - "_generate_cost_projection() - Multi-team cost analysis"
+        - "_calculate_optimal_team_size() - Best cost/time tradeoff"
+        - "_calculate_break_even() - When extra devs pay off"
+        - "_calculate_risk_buffers() - Integration + complexity buffers"
+      what_if:
+        - "generate_what_if_scenarios() - Compare team configurations"
+        - "_generate_team_recommendation() - AI recommendation"
+        - "_generate_scenario_comparison_table() - ASCII comparison"
+    performance_metrics:
+      speedup_with_parallel: "2x-3x (depending on track independence)"
+      risk_buffer_calculation: "Conway's Law + complexity + dependencies"
+      cost_accuracy: "Based on actual hourly rates"
+      timeline_granularity: "Sprint-level (2 weeks)"
+    use_cases:
+      - "Sprint planning and capacity estimation"
+      - "Team sizing decisions for features"
+      - "Cost-benefit analysis for staffing"
+      - "Visual timeline communication to stakeholders"
+      - "Risk assessment for project planning"
+      - "What-if analysis for delivery options"
+    benefits:
+      estimation_accuracy: "SWAGGER-calibrated complexity scoring"
+      visual_communication: "ASCII + HTML timeline options"
+      decision_support: "Optimal team size recommendations"
+      risk_awareness: "Built-in Conway's Law and integration buffers"
+    documentation:
+      user_guide: "cortex-brain/documents/implementation-guides/swagger-entry-point-guide.md"
+      response_template: "timeframe_estimate in response-templates.yaml"
+    recommendation: "ready_to_use"
     
   - id: "backend_testing"
     name: "Backend Testing"

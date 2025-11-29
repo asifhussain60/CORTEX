@@ -85,15 +85,26 @@ CORE_DIRS = {
     'scripts',          # Automation tools
 }
 
-# Directories to EXCLUDE
+# Directories to EXCLUDE (COMPREHENSIVE - prevents non-production content in releases)
 EXCLUDED_DIRS = {
+    # Test directories
     'tests',
+    'test_merge',       # Temporary merge testing folder
+    
+    # Workflow and checkpoint directories
     'workflow_checkpoints',
+    '.publish-checkpoint.json',
+    
+    # GitHub internal (non-prompts)
     '.github/workflows',
     '.github/hooks',
-    'docs',             # MkDocs site (not needed for users)
+    
+    # MkDocs/Documentation build directories (ADMIN ONLY)
+    'docs',             # MkDocs source (admin feature, not for users)
+    'site',             # MkDocs build output
+    
+    # Development artifacts
     'examples',
-    'site',
     'logs',
     'cortex-extension',
     '__pycache__',
@@ -101,9 +112,21 @@ EXCLUDED_DIRS = {
     '.venv',
     'venv',
     '.git',
-    'dist',
+    'dist',             # Distribution builds
     'publish',          # Don't include existing publish folder
     '.backup-archive',
+    '.temp-publish',    # Temporary publishing folder
+    'CORTEX-cleanup',   # Cleanup artifacts
+    
+    # Cache and temporary directories
+    '.cache',
+    '.cortex',          # Local CORTEX state cache
+    '.upgrades',        # Upgrade artifacts
+    '.vscode',          # Editor config (user-specific)
+    
+    # Template/scaffold directories
+    'templates',        # Development templates
+    
     # Admin-only directories (SECURITY: Users must not modify CORTEX)
     'cortex-brain/admin',
     'src/operations/modules/admin',
@@ -111,22 +134,54 @@ EXCLUDED_DIRS = {
     'tests/admin',
     'tests/operations/admin',
     'tests/operations/modules/admin',
+    
     # Demo/Mock Data (PRODUCTION SAFETY: Real data generated at runtime)
-    'cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO',  # Mock data for Phase 1 demos only
+    'cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO',
 }
 
-# File patterns to exclude
+# File patterns to exclude (COMPREHENSIVE - production cleanliness)
 EXCLUDED_PATTERNS = {
+    # Python bytecode
     '*.pyc',
     '*.pyo',
     '*.pyd',
+    
+    # OS artifacts
     '.DS_Store',
     'Thumbs.db',
+    
+    # Log and database files (CRITICAL: User generates at runtime)
     '*.log',
     '*.db',             # Exclude populated brain databases
     '*.db-journal',
+    '*.db-shm',
+    '*.db-wal',
+    
+    # Coverage/test artifacts
     '.coverage',
     'htmlcov',
+    
+    # MkDocs (ADMIN ONLY - not for user distribution)
+    'mkdocs.yml',
+    'mkdocs-*.yaml',
+    
+    # Root-level test files (development only)
+    'test_*.py',
+    
+    # Build artifacts
+    '*.egg-info',
+    '*.egg',
+    '.eggs',
+    
+    # IDE/editor
+    '*.swp',
+    '*.swo',
+    '*~',
+    
+    # Temporary/checkpoint files
+    '.publish-checkpoint.json',
+    '*.bak',
+    '*.tmp',
 }
 
 # Admin-only files to EXCLUDE (SECURITY: Users must not modify CORTEX)
@@ -136,6 +191,8 @@ EXCLUDED_ADMIN_FILES = {
     'scripts/deploy_cortex_simple.py',
     'scripts/validate_deployment.py',
     'scripts/publish_to_branch.py',
+    # MkDocs admin documentation
+    'cortex-brain/mkdocs-refresh-config.yaml',
 }
 
 
@@ -349,45 +406,71 @@ def branch_exists(branch_name: str, project_root: Path) -> bool:
 
 
 def should_include_path(path: Path, project_root: Path) -> bool:
-    """Check if path should be included in publish branch."""
+    """
+    Check if path should be included in publish branch.
+    
+    Production Validation Logic:
+    1. Core files (whitelist) - always included
+    2. Excluded admin files - always excluded
+    3. Excluded patterns (*.pyc, *.db, mkdocs*, test_*) - always excluded
+    4. Excluded directories - always excluded (checks full path, not just first dir)
+    5. Admin subdirectories - always excluded
+    6. MkDocs-specific files - always excluded
+    7. Core directories (src, cortex-brain, prompts, scripts) - included
+    8. .github/prompts/ and copilot-instructions.md - included
+    9. Everything else - excluded (whitelist approach)
+    """
     rel_path = path.relative_to(project_root)
     path_str = str(rel_path).replace('\\', '/')
     
-    # Check if it's a core file
+    # Step 1: Check if it's a core file (whitelist)
     if path_str in CORE_FILES:
         return True
     
-    # Exclude admin files (deployment, validation scripts)
+    # Step 2: Exclude admin files (deployment, validation scripts)
     if path_str in EXCLUDED_ADMIN_FILES:
         return False
     
-    # Exclude patterns
+    # Step 3: Exclude patterns (*.pyc, *.db, mkdocs*, test_*.py, etc.)
     for pattern in EXCLUDED_PATTERNS:
         if path.match(pattern):
             return False
+        # Also check filename directly for patterns like 'mkdocs*'
+        if '*' in pattern:
+            import fnmatch
+            if fnmatch.fnmatch(path.name, pattern):
+                return False
     
-    # Check excluded directories (including admin subdirectories)
-    first_dir = rel_path.parts[0] if len(rel_path.parts) > 0 else None
-    if first_dir in EXCLUDED_DIRS:
-        return False
+    # Step 4: Check excluded directories (full path matching, not just first dir)
+    # This catches nested excluded directories like cortex-brain/admin
+    for excluded_dir in EXCLUDED_DIRS:
+        # Check if path starts with excluded directory
+        if path_str.startswith(f"{excluded_dir}/") or path_str == excluded_dir:
+            return False
+        # Check if any part of path matches excluded directory name
+        if excluded_dir in rel_path.parts:
+            return False
     
-    # Check for admin subdirectories within included directories
+    # Step 5: Check for admin subdirectories within included directories
     for part in rel_path.parts:
-        # Exclude any path containing /admin/ subdirectory
         if part == 'admin':
             return False
     
-    # Also check the full path string for admin subdirectories
-    for excluded_admin_dir in ['cortex-brain/admin', 'src/operations/modules/admin', 'scripts/admin']:
-        if path_str.startswith(excluded_admin_dir):
-            return False
+    # Step 6: Additional MkDocs-specific exclusions
+    mkdocs_patterns = [
+        'mkdocs.yml',
+        'mkdocs-refresh-config.yaml',
+        'mkdocs-orchestrator-guide.md',
+    ]
+    if path.name in mkdocs_patterns:
+        return False
     
-    # Check if under core directories
+    # Step 7: Check if under core directories (whitelist)
     for core_dir in CORE_DIRS:
         if path_str.startswith(f"{core_dir}/") or path_str == core_dir:
             return True
     
-    # .github/ - include prompts/ directory AND copilot-instructions.md (critical for auto-activation)
+    # Step 8: .github/ - include prompts/ directory AND copilot-instructions.md (critical for auto-activation)
     if '.github' in rel_path.parts:
         # Include the prompts/ subdirectory
         if 'prompts' in rel_path.parts:
@@ -1028,6 +1111,113 @@ def publish_to_branch(
     temp_dir = project_root / '.temp-publish'
     
     try:
+        # STAGE 0: Feature Discovery (NEW - runs FIRST to ensure new functionality is cataloged)
+        if not checkpoint.should_skip_stage(PublishStage.VALIDATION):  # Run before validation
+            logger.info("\n🔍 STAGE 0: Feature Discovery & Wiring Validation")
+            
+            try:
+                # Import enhancement catalog and discovery engine
+                import sys
+                if str(project_root) not in sys.path:
+                    sys.path.insert(0, str(project_root))
+                
+                from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType
+                from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
+                
+                # Initialize catalog and discovery
+                catalog = EnhancementCatalog(brain_path=project_root / "cortex-brain")
+                engine = EnhancementDiscoveryEngine(repo_root=project_root)
+                
+                # Get last deployment review timestamp
+                last_review = catalog.get_last_review_timestamp('deployment')
+                
+                # Discover features (all if first time, or since last deployment)
+                logger.info("   Scanning for new features...")
+                if last_review:
+                    discovered = engine.discover_since(last_review)
+                    logger.info(f"   Discovered {len(discovered)} features since last deployment ({last_review.date()})")
+                else:
+                    discovered = engine.discover_all()
+                    logger.info(f"   Discovered {len(discovered)} features (first deployment scan)")
+                
+                # Add to catalog with deduplication
+                added_count = 0
+                for feature in discovered:
+                    # Map discovery type to FeatureType enum
+                    feature_type_map = {
+                        'operation': FeatureType.OPERATION,
+                        'agent': FeatureType.AGENT,
+                        'orchestrator': FeatureType.ORCHESTRATOR,
+                        'workflow': FeatureType.WORKFLOW,
+                        'template': FeatureType.TEMPLATE,
+                        'documentation': FeatureType.DOCUMENTATION,
+                        'integration': FeatureType.INTEGRATION,
+                        'utility': FeatureType.UTILITY,
+                    }
+                    ftype = feature_type_map.get(feature.type.lower(), FeatureType.UTILITY)
+                    
+                    if catalog.add_feature(
+                        name=feature.name,
+                        feature_type=ftype,
+                        description=feature.description or "",
+                        source=feature.source
+                    ):
+                        added_count += 1
+                
+                # Log deployment review
+                catalog.log_review('deployment', metadata={
+                    'features_discovered': len(discovered),
+                    'features_added': added_count,
+                    'version': VERSION
+                })
+                
+                # Get catalog stats
+                stats = catalog.get_catalog_stats()
+                logger.info(f"   ✅ Catalog updated: {stats['total_features']} total features")
+                logger.info(f"      - Operations: {stats['by_type'].get('operation', 0)}")
+                logger.info(f"      - Agents: {stats['by_type'].get('agent', 0)}")
+                logger.info(f"      - Orchestrators: {stats['by_type'].get('orchestrator', 0)}")
+                logger.info(f"      - Workflows: {stats['by_type'].get('workflow', 0)}")
+                
+                # Validate wiring - check critical features have entry points
+                logger.info("   Validating feature wiring...")
+                templates_path = project_root / "cortex-brain" / "response-templates.yaml"
+                if templates_path.exists():
+                    import yaml
+                    with open(templates_path, 'r', encoding='utf-8') as f:
+                        templates = yaml.safe_load(f)
+                    
+                    # Check for required triggers
+                    required_triggers = [
+                        ('swagger', 'Swagger/OpenAPI functionality'),
+                        ('timeframe', 'Timeframe estimation'),
+                        ('code review', 'Code review'),
+                        ('plan', 'Planning system'),
+                        ('tdd', 'TDD workflow'),
+                    ]
+                    
+                    all_triggers = str(templates.get('routing', {})).lower()
+                    template_content = str(templates.get('templates', {})).lower()
+                    combined_content = all_triggers + template_content
+                    
+                    missing_triggers = []
+                    for trigger, desc in required_triggers:
+                        if trigger not in combined_content:
+                            missing_triggers.append(f"{desc} ({trigger})")
+                    
+                    if missing_triggers:
+                        logger.warning(f"   ⚠️  Missing entry point triggers: {', '.join(missing_triggers)}")
+                    else:
+                        logger.info("   ✅ All critical features have entry point triggers")
+                
+                logger.info("✅ Feature discovery complete")
+                
+            except ImportError as e:
+                logger.warning(f"   ⚠️  Feature discovery skipped (import error): {e}")
+            except Exception as e:
+                logger.warning(f"   ⚠️  Feature discovery warning: {e}")
+                # Don't fail deployment on discovery errors - it's informational
+        
         # STAGE 1: Validation
         if not checkpoint.should_skip_stage(PublishStage.VALIDATION):
             logger.info("\n📋 STAGE 1: Validation")

@@ -26,6 +26,7 @@ class AgentType(Enum):
     FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
     PROFILE = auto()         # ProfileAgent (NEW - User Profile System)
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
+    ESTIMATOR = auto()       # TimeframeEstimator (NEW - SWAGGER Timeframe Estimation)
 
 
 class IntentType(Enum):
@@ -100,6 +101,11 @@ class IntentType(Enum):
     ADO_FEATURE = "ado_feature"
     ADO_SUMMARY = "ado_summary"
     CODE_REVIEW = "code_review"
+    
+    # Timeframe estimation (NEW - SWAGGER Integration)
+    ESTIMATE = "estimate"
+    TIMEFRAME = "timeframe"
+    STORY_POINTS = "story_points"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -193,6 +199,11 @@ INTENT_AGENT_MAP = {
     IntentType.ADO_FEATURE: AgentType.ADO_ORCHESTRATOR,
     IntentType.ADO_SUMMARY: AgentType.ADO_ORCHESTRATOR,
     IntentType.CODE_REVIEW: AgentType.ADO_ORCHESTRATOR,
+    
+    # Timeframe estimation mapping (NEW - SWAGGER Integration)
+    IntentType.ESTIMATE: AgentType.ESTIMATOR,
+    IntentType.TIMEFRAME: AgentType.ESTIMATOR,
+    IntentType.STORY_POINTS: AgentType.ESTIMATOR,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

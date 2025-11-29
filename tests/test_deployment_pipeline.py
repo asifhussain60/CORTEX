@@ -552,6 +552,98 @@ class TestFeatureCompleteness:
         assert params['auto_upload'].default == True, "auto_upload should default to True"
 
 
+class TestTimeframeEstimatorSystem:
+    """Validate Timeframe Estimator module is fully integrated (Gate 9)"""
+    
+    def test_timeframe_estimator_importable(self):
+        """TimeframeEstimator can be imported"""
+        from agents.estimation.timeframe_estimator import TimeframeEstimator
+        assert TimeframeEstimator is not None
+    
+    def test_timeframe_estimator_initialization(self):
+        """TimeframeEstimator can be initialized"""
+        from agents.estimation.timeframe_estimator import TimeframeEstimator
+        estimator = TimeframeEstimator()
+        assert estimator is not None
+    
+    def test_timeframe_estimator_core_methods(self):
+        """TimeframeEstimator has all required methods"""
+        from agents.estimation.timeframe_estimator import TimeframeEstimator
+        
+        estimator = TimeframeEstimator()
+        required_methods = [
+            "estimate_timeframe",
+            "generate_timeline_comparison",
+            "generate_what_if_scenarios",
+            "format_professional_report",
+            "_analyze_parallel_tracks",
+            "_calculate_critical_path"
+        ]
+        
+        for method in required_methods:
+            assert hasattr(estimator, method), f"TimeframeEstimator missing method: {method}"
+    
+    def test_timeframe_estimator_template_exists(self):
+        """Response template exists for timeframe estimation"""
+        template_file = Path(__file__).parent.parent / 'cortex-brain' / 'response-templates.yaml'
+        with open(template_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        
+        templates = data['templates']
+        assert 'timeframe_estimate' in templates, "Missing timeframe_estimate template"
+        
+        template = templates['timeframe_estimate']
+        assert 'triggers' in template, "Template missing triggers"
+        assert len(template['triggers']) > 0, "Template has no triggers"
+    
+    def test_timeframe_estimator_routing_triggers(self):
+        """Routing triggers exist for timeframe estimation"""
+        template_file = Path(__file__).parent.parent / 'cortex-brain' / 'response-templates.yaml'
+        with open(template_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        
+        routing = data.get('routing', {})
+        triggers = routing.get('timeframe_estimate_triggers', [])
+        assert len(triggers) > 0, "Missing timeframe_estimate_triggers in routing"
+        assert 'estimate timeframe' in triggers
+    
+    def test_timeframe_estimator_documented(self):
+        """TimeframeEstimator is documented in entry point"""
+        entry_point = Path(__file__).parent.parent / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        content = entry_point.read_text(encoding='utf-8')
+        
+        # Check for timeframe-related documentation
+        assert 'timeframe' in content.lower() or 'timeline' in content.lower(), \
+            "Missing timeframe/timeline documentation in CORTEX.prompt.md"
+    
+    def test_timeframe_estimator_capabilities(self):
+        """TimeframeEstimator is in capabilities.yaml"""
+        capabilities_file = Path(__file__).parent.parent / 'cortex-brain' / 'capabilities.yaml'
+        with open(capabilities_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        
+        capabilities = data.get('capabilities', [])
+        # capabilities.yaml uses list format with 'id' field
+        capability_ids = [c.get('id') for c in capabilities if isinstance(c, dict)]
+        assert 'timeframe_estimation' in capability_ids, "Missing timeframe_estimation in capabilities.yaml"
+        
+        # Find the timeframe_estimation capability
+        capability = next((c for c in capabilities if c.get('id') == 'timeframe_estimation'), None)
+        assert capability is not None, "timeframe_estimation capability not found"
+        # Check it's implemented
+        assert capability.get('status') == 'implemented', "timeframe_estimation not implemented"
+    
+    def test_gate9_validation_passes(self):
+        """Gate 9 (Timeframe Estimator) validation passes"""
+        from deployment.deployment_gates import DeploymentGates
+        
+        project_root = Path(__file__).parent.parent
+        gates = DeploymentGates(project_root)
+        
+        result = gates._validate_timeframe_estimator()
+        assert result['passed'], f"Gate 9 failed: {result['message']}"
+
+
 if __name__ == '__main__':
     # Run tests with verbose output
     pytest.main([__file__, '-v', '--tb=short'])
