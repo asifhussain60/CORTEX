@@ -239,10 +239,17 @@ class DashboardGenerator:
         
         template = self.jinja_env.get_template("dashboard.html.j2")
         
+        # Ensure chart_configs is a proper dictionary (convert any Undefined values to empty dict)
+        safe_chart_configs = {}
+        for key, value in chart_configs.items():
+            if value is not None:
+                safe_chart_configs[key] = value
+        
         html = template.render(
             data=data,
-            charts=chart_configs,
-            metadata=data['metadata'],
+            chart_configs=safe_chart_configs,  # Fixed: was 'charts', template expects 'chart_configs'
+            charts=safe_chart_configs,  # Keep for backward compatibility
+            metadata=data.get('metadata', {}),
             color_palette=self._get_color_palette(),
             d3_version='7.8.5'
         )
