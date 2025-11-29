@@ -1,0 +1,287 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.0, pluggy-1.6.0
+rootdir: D:\PROJECTS\CORTEX
+configfile: pytest.ini
+testpaths: tests
+plugins: cov-7.0.0, mock-3.15.1, xdist-3.8.0
+created: 8/8 workers
+8 workers [2160 items]
+
+........................................................................ [  3%]
+........................................................................ [  6%]
+........................................................................ [ 10%]
+.F.........FFF...FF..........F...................................sssssss [ 13%]
+......................................................................s. [ 16%]
+FF........F.....................s..ss..s..F....FF..FFFF.......F.F....F.. [ 20%]
+.......FF.FF..F.F...............F....F...........F.F.................... [ 23%]
+.....E.EE....F..............F............F.FF........F.........F.F.F.FF. [ 26%]
+........................................F.F.F.........F...FF.....F...... [ 30%]
+...s.s..F.FF...F....F...................................F...F........... [ 33%]
+......F.....................FFF.F..F.F..F..F.....F..F....F..F.F..F.FEEFF [ 36%]
+F.FF.EEEFE.............EE.........EEEEE.F.F...FF.FF....F.EE...FFE.F..FFF [ 40%]
+E.E......FF.FF.....F....F......FE.F.....FFF.F...F....F.........F........ [ 43%]
+..F............................s........................................ [ 46%]
+...................................F.................................sF. [ 50%]
+.......................................................F...FF..F..FF...F [ 53%]
+...sssssssssssssssssssFF.F.............................................. [ 56%]
+.............................s..................F.F..FF...F............. [ 60%]
+........................F.............F................F.......F..FFF.FF [ 63%]
+.F....F.F..................s......sssssss............................... [ 66%]
+...................................................................F.... [ 70%]
+..................sssssss.ssss.....................................sssss [ 73%]
+s.sssssss.........F...........F.................F...............E...F... [ 76%]
+...F...........................................sssssssss.........F....F. [ 79%]
+..........................F........................F............s....... [ 83%]
+......F.....F........................................................... [ 86%]
+...........F.F.FFFF.............E.E..E.EEE..EE.E.FEF..FE..F......F..F.F. [ 89%]
+F.....ssEEEEEFEE......FE....E.E..E......E......F.E..E.........E......... [ 93%]
+......E.........................FFFE...FF.F...F...F...FEEEEEEEEEEEE..... [ 96%]
+EEEEEFF.FF.............................................................. [ 99%]
+.                                                                        [100%]
+=========================== short test summary info ===========================
+FAILED tests/operations/test_cleanup_orchestrator.py::TestMDConsolidation::test_duplicate_detection
+FAILED tests/operations/test_cleanup_orchestrator.py::TestMDConsolidation::test_newest_file_kept
+FAILED tests/operations/test_cleanup_orchestrator.py::TestBloatDetection::test_entry_point_bloat_detection
+FAILED tests/operations/test_cleanup_orchestrator.py::TestBloatDetection::test_orchestrator_bloat_detection
+FAILED tests/operations/test_cleanup_orchestrator.py::TestOptimizationIntegration::test_optimization_trigger
+FAILED tests/operations/test_cleanup_orchestrator.py::TestOptimizationIntegration::test_optimization_failure_handling
+FAILED tests/operations/test_cleanup_orchestrator.py::TestErrorHandling::test_git_operation_failure
+FAILED tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizeCortexOrchestrator::test_validate_prerequisites_missing_tests
+FAILED tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizeCortexOrchestrator::test_validate_prerequisites_missing_knowledge_graph
+FAILED tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizationPlan::test_generate_plan_with_issues
+FAILED tests/integration/test_agent_coordination.py::TestLeftBrainAgentCoordination::test_executor_tester_validator_pipeline
+FAILED tests/integration/test_agent_coordination.py::TestRightBrainAgentCoordination::test_architect_pattern_matcher_integration
+FAILED tests/integration/test_agent_coordination.py::TestAgentErrorHandling::test_executor_failure_doesnt_crash_pipeline
+FAILED tests/integration/test_agent_coordination.py::TestAgentErrorHandling::test_invalid_intent_handled_gracefully
+FAILED tests/integration/test_agent_coordination.py::TestAgentMemorySharing::test_agents_access_shared_knowledge_graph
+FAILED tests/integration/test_agent_coordination.py::TestAgentMemorySharing::test_agents_access_shared_conversation_history
+FAILED tests/integration/test_agent_coordination.py::TestConcurrentAgentExecution::test_parallel_independent_operations
+FAILED tests/integration/test_error_recovery.py::TestValidationRules::test_hardcoded_credentials_blocked
+FAILED tests/integration/test_error_recovery.py::TestValidationRules::test_low_coverage_warning
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_story_refresh_changes_output_file
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_story_refresh_produces_git_diff
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_apply_narrator_voice_not_passthrough
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_operation_success_matches_actual_changes
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_story_output_has_expected_sections
+FAILED tests/operations/test_story_refresh_integration.py::TestStoryRefreshIntegration::test_operation_handles_missing_source
+FAILED tests/operations/test_story_refresh_integration.py::TestMockDetectionForAllOperations::test_no_mocks_in_demo_modules
+FAILED tests/operations/test_workspace_cleanup.py::test_cleanup_safe_profile_scans_and_reports
+FAILED tests/plugins/test_cleanup_plugin.py::TestGitHubArchival::test_archive_backups_to_github
+FAILED tests/plugins/test_code_review_plugin.py::TestSecurityScanner::test_detect_hardcoded_api_key
+FAILED tests/plugins/test_code_review_plugin.py::TestSecurityScanner::test_detect_sql_injection_concatenation
+FAILED tests/plugins/test_command_expansion.py::TestCommandExpansionPerformance::test_expansion_is_fast
+FAILED tests/plugins/test_doc_refresh_plugin.py::TestBackupAndSafety::test_no_file_creation_enforcement
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestExtensionGeneration::test_execute_extension_scaffold_success
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestExtensionGeneration::test_execute_with_custom_features
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestDirectoryStructureGeneration::test_directory_structure_creation
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestTypeScriptGeneration::test_brain_bridge_ts_generation
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestFeatureToggling::test_minimal_features
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestFeatureToggling::test_full_features
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestErrorHandling::test_execute_with_missing_context
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestPluginIntegration::test_plugin_lifecycle
+FAILED tests/plugins/test_extension_scaffold_plugin.py::TestPluginIntegration::test_generated_extension_structure
+FAILED tests/plugins/test_platform_switch_plugin.py::TestPlatformDetection::test_mac_detection_from_request
+FAILED tests/plugins/test_platform_switch_plugin.py::TestPlatformDetection::test_windows_detection_from_request
+FAILED tests/plugins/test_platform_switch_plugin.py::TestPlatformDetection::test_linux_detection_from_request
+FAILED tests/plugins/test_platform_switch_plugin.py::TestPluginInitialization::test_plugin_creates_successfully
+FAILED tests/plugins/test_platform_switch_plugin.py::TestPluginInitialization::test_plugin_has_triggers
+FAILED tests/plugins/test_platform_switch_plugin.py::TestTriggerDetection::test_can_handle_mac_requests
+FAILED tests/plugins/test_platform_switch_plugin.py::TestTriggerDetection::test_can_handle_windows_requests
+FAILED tests/plugins/test_platform_switch_plugin.py::TestDependencyVerification::test_get_venv_python_mac
+FAILED tests/plugins/test_platform_switch_plugin.py::TestBrainTests::test_runs_brain_tests
+FAILED tests/plugins/test_platform_switch_plugin.py::TestBrainTests::test_handles_test_failures
+FAILED tests/plugins/test_platform_switch_plugin.py::TestEndToEnd::test_full_execution_flow
+FAILED tests/plugins/test_system_refactor_plugin.py::TestPluginInitialization::test_plugin_registers_commands
+FAILED tests/plugins/test_system_refactor_plugin.py::TestReporting::test_report_formats_as_markdown
+FAILED tests/plugins/test_system_refactor_plugin.py::TestPluginExecution::test_plugin_handles_execution_errors
+FAILED tests/response_templates/test_integration.py::TestPerformance::test_trigger_lookup_performance
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_concise_help_generates
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_concise_help_has_bullets
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_concise_help_shows_natural_language
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_detailed_help_generates
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_detailed_help_has_examples
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_category_help_generates
+FAILED tests/test_cortex_help.py::TestHelpGeneration::test_category_help_has_table
+FAILED tests/test_cortex_help.py::TestCategoryFiltering::test_platform_commands_only
+FAILED tests/test_cortex_help.py::TestQuickReference::test_quick_reference_is_concise
+FAILED tests/test_cortex_help.py::TestIntelligentHandling::test_handles_detailed_request
+FAILED tests/test_cortex_help.py::TestIntelligentHandling::test_handles_category_request
+FAILED tests/test_cortex_help.py::TestIntelligentHandling::test_handles_generic_request
+FAILED tests/test_cortex_help.py::TestIntelligentHandling::test_defaults_to_concise
+FAILED tests/test_cortex_help.py::TestConvenienceFunctions::test_cortex_help_function
+FAILED tests/plugins/test_command_registry.py::TestPlatformSwitchCommands::test_platform_commands_registered
+FAILED tests/test_cortex_help.py::TestConvenienceFunctions::test_cortex_help_is_concise
+FAILED tests/test_cortex_help.py::TestHelpIntegration::test_includes_registered_commands
+FAILED tests/test_cortex_help.py::TestHelpIntegration::test_shows_command_stats
+FAILED tests/test_cortex_help.py::TestHelpFormatting::test_concise_uses_markdown
+FAILED tests/test_cortex_help.py::TestHelpFormatting::test_has_clear_sections
+FAILED tests/test_cortex_help.py::TestHelpFormatting::test_readable_line_length
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorImmutability::test_tier0_rules_immutable
+FAILED tests/plugins/test_doc_refresh_file_rules.py::TestDocRefreshFileCreationProhibition::test_fails_when_file_does_not_exist
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorImmutability::test_tier0_read_only_enforcement
+FAILED tests/plugins/test_doc_refresh_file_rules.py::TestDocRefreshFileCreationProhibition::test_prohibits_quick_read_creation
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorImmutability::test_challenge_generation_for_risky_change
+FAILED tests/plugins/test_doc_refresh_file_rules.py::TestDocRefreshFileCreationProhibition::test_prohibits_summary_variant_creation
+FAILED tests/test_risk_mitigation.py::TestInputSanitization::test_sql_injection_prevention
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorImmutability::test_rollback_mechanism_on_violation
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_config_structure
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorBoundaries::test_tier_write_boundaries
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_config_data_integrity
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_no_duplicate_operation_ids
+FAILED tests/test_risk_mitigation.py::TestBrainProtectorBoundaries::test_tier_read_permissions
+FAILED tests/test_risk_mitigation.py::TestDatabaseIntegrity::test_tier1_schema_integrity
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_slash_commands_load_performance
+FAILED tests/test_risk_mitigation.py::TestDatabaseIntegrity::test_tier2_fts5_integrity
+FAILED tests/test_risk_mitigation.py::TestDatabaseIntegrity::test_foreign_key_constraints
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_cortex_operations_load_performance
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_all_yaml_files_load_together
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_match_yaml_definitions
+FAILED tests/test_yaml_loading.py::TestYAMLLoading::test_design_metadata_phases
+FAILED tests/test_yaml_loading.py::TestYAMLLoading::test_yaml_loading_performance
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_yaml_files_are_valid_yaml
+FAILED tests/test_yaml_conversion.py::TestYAMLConversion::test_operations_have_module_structure
+FAILED tests/test_yaml_conversion.py::TestTokenReductionPreliminary::test_yaml_files_not_empty
+FAILED tests/test_yaml_loading.py::TestYAMLLoading::test_all_yaml_files_consistent
+FAILED tests/test_yaml_loading.py::TestYAMLTokenOptimization::test_yaml_file_sizes
+FAILED tests/test_yaml_loading.py::TestYAMLLoading::test_brain_protection_rules_structure
+FAILED tests/test_yaml_loading.py::TestYAMLLoading::test_brain_protection_rules_content
+FAILED tests/integration/test_phase_5_1_medium_priority.py::test_refactor_code_quality_workflow
+FAILED tests/operations/test_workspace_cleanup.py::test_cleanup_standard_profile_removes_old_logs_and_cache
+FAILED tests/tier0/test_skull_comprehensive.py::TestSkull003VisualRegression::test_detects_visual_test_patterns[test_playwright_screenshot]
+FAILED tests/tier0/test_skull_comprehensive.py::TestSkull004RetryWithoutLearning::test_requires_changed_approach
+FAILED tests/tier0/test_skull_comprehensive.py::TestSkull005TransformationVerification::test_blocks_transformation_claim_without_changes
+FAILED tests/tier0/test_skull_comprehensive.py::TestSkull005TransformationVerification::test_detects_pass_through_operations
+FAILED tests/tier0/test_skull_comprehensive.py::TestRealWorldIncidentPrevention::test_prevents_november_10th_story_refresh_incident
+FAILED tests/tier0/test_skull_comprehensive.py::TestMultipleViolations::test_css_retry_without_tests_or_diagnosis
+FAILED tests/tier0/test_skull_comprehensive.py::TestEnforcementBehavior::test_safe_passes_through
+FAILED tests/operations/test_cleanup_orchestrator.py::TestCleanupOrchestrator::test_initialization
+FAILED tests/tier0/test_skull_comprehensive.py::TestSkullResponseTemplateIntegration::test_help_command_shows_skull_banner
+FAILED tests/operations/test_cleanup_orchestrator.py::TestCleanupOrchestrator::test_metadata
+FAILED tests/ambient/test_terminal_monitor.py::TestTerminalMonitor::test_identifies_git_commands
+FAILED tests/ambient/test_terminal_monitor.py::TestTerminalMonitor::test_sanitizes_github_tokens
+FAILED tests/ambient/test_terminal_monitor.py::TestTerminalMonitor::test_sanitizes_api_keys
+FAILED tests/ambient/test_terminal_monitor.py::TestTerminalMonitor::test_blocks_malicious_rm_commands
+FAILED tests/ambient/test_terminal_monitor.py::TestTerminalMonitor::test_blocks_pipe_to_shell
+FAILED tests/tier1/entities/test_entity_extractor.py::TestGetConversationEntities::test_get_entities_after_extraction
+FAILED tests/tier1/entities/test_entity_extractor.py::TestGetEntityStatistics::test_get_statistics_includes_access_count
+FAILED tests/tier1/fifo/test_queue_manager.py::TestEnforceFifoLimit::test_evicts_oldest_when_at_capacity
+FAILED tests/tier1/messages/test_message_store.py::TestAddMessages::test_add_single_message
+FAILED tests/tier1/messages/test_message_store.py::TestAddMessages::test_add_multiple_messages
+FAILED tests/tier1/fifo/test_queue_manager.py::TestEnforceFifoLimit::test_never_evicts_active_conversation
+FAILED tests/tier1/messages/test_message_store.py::TestAddMessages::test_add_messages_to_different_conversations
+FAILED tests/tier1/messages/test_message_store.py::TestGetMessages::test_get_messages_preserves_order
+FAILED tests/tier1/messages/test_message_store.py::TestGetMessages::test_get_messages_empty_conversation
+FAILED tests/tier1/messages/test_message_store.py::TestGetMessages::test_get_messages_includes_all_fields
+FAILED tests/tier1/fifo/test_queue_manager.py::TestEnforceFifoLimit::test_eviction_logs_event
+FAILED tests/tier1/messages/test_message_store.py::TestDeleteMessages::test_delete_removes_all_messages
+FAILED tests/tier1/test_vision_api.py::TestBudgetEnforcement::test_reject_image_exceeding_budget
+FAILED tests/operations/test_workspace_cleanup.py::test_cleanup_vacuums_databases_when_present
+FAILED tests/tier1/test_vision_api.py::TestMetrics::test_metrics_collection
+FAILED tests/tier1/test_vision_api_auto_engagement.py::TestVisionAPIAutoEngagement::test_vision_api_auto_engagement_end_to_end
+FAILED tests/tier2/knowledge_graph/test_database.py::TestDatabasePerformance::test_connection_establishment_is_fast
+FAILED tests/tier2/knowledge_graph/test_database.py::TestDatabasePerformance::test_schema_creation_is_fast
+FAILED tests/tier2/knowledge_graph/test_pattern_store.py::TestPatternPerformance::test_pattern_storage_is_fast
+FAILED tests/tier2/knowledge_graph/test_pattern_store.py::TestPatternPerformance::test_pattern_retrieval_is_fast
+FAILED tests/performance/test_performance_regression.py::test_operation_environment_setup_performance
+FAILED tests/plugins/test_doc_refresh_plugin.py::TestStoryRefreshCapabilities::test_story_refresh_full_regeneration
+FAILED tests/plugins/test_doc_refresh_plugin.py::TestStoryRefreshCapabilities::test_story_refresh_file_not_exists_error
+FAILED tests/plugins/test_doc_refresh_plugin.py::TestStoryRefreshCapabilities::test_lab_notebook_condensation
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_node_modules
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_dist_build
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_generated_directory
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_vscode_files
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_git_directory
+FAILED tests/tier2/test_smart_filter.py::TestSmartFileFilter::test_filter_idea_files
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_analyzer_initialization
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_calculate_velocity_with_data
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_calculate_velocity_empty_data
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_velocity_calculation_accuracy
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_analyze_trends_with_data
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_trend_direction_increasing
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_date_range_filtering
+FAILED tests/tier3/analysis/test_velocity_analyzer.py::TestVelocityAnalyzer::test_velocity_with_zero_days
+FAILED tests/integration/test_error_recovery.py::TestFailureHandling::test_operation_failure_returns_error_report
+FAILED tests/tier3/analysis/test_insight_generator.py::TestInsight::test_insight_creation
+FAILED tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_empty_repository_handling
+FAILED tests/workflows/test_workflow_engine.py::TestWorkflowOrchestrator::test_execute_workflow_with_required_stage_failure
+FAILED tests/workflows/test_workflow_engine.py::TestWorkflowOrchestrator::test_execute_workflow_with_optional_stage_failure
+FAILED tests/workflows/test_workflow_engine.py::TestWorkflowOrchestrator::test_checkpoint_and_resume
+FAILED tests/workflows/test_workflow_integration.py::TestFeatureDevelopmentWorkflow::test_feature_development_happy_path
+FAILED tests/workflows/test_workflow_integration.py::TestFeatureDevelopmentWorkflow::test_feature_development_checkpoint_resume
+FAILED tests/workflows/test_workflow_integration.py::TestFeatureDevelopmentWorkflow::test_feature_development_required_stage_failure
+FAILED tests/workflows/test_workflow_integration.py::TestBugFixWorkflow::test_bug_fix_required_stage_failure
+FAILED tests/workflows/test_workflow_integration.py::TestRefactoringWorkflow::test_refactoring_required_stage_failure
+FAILED tests/workflows/test_workflow_integration.py::TestSecurityEnhancementWorkflow::test_security_required_stage_failure
+FAILED tests/integration/test_error_recovery.py::TestErrorRecoveryStrategies::test_retry_with_exponential_backoff
+FAILED tests/integration/test_error_recovery.py::TestErrorRecoveryStrategies::test_graceful_degradation
+FAILED tests/integration/test_error_recovery.py::TestOperationChainFailures::test_required_module_failure_stops_chain
+FAILED tests/integration/test_error_recovery.py::TestOperationChainFailures::test_optional_module_failure_continues_chain
+ERROR tests/plugins/test_command_expansion.py::TestRouterCommandExpansion::test_slash_command_expanded_before_routing
+ERROR tests/plugins/test_command_expansion.py::TestRouterCommandExpansion::test_natural_language_passes_through
+ERROR tests/plugins/test_command_expansion.py::TestRouterCommandExpansion::test_unknown_slash_command_passes_through
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_plugin_initialization
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_mode
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_oracle_from_code
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_apis_from_code
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_from_environment
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_apis_from_environment
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_parse_tnsnames
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_save_to_config
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_openapi_specs
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_validate_api_connection
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_non_interactive_mode
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_extract_namespace_from_dsn
+ERROR tests/plugins/test_configuration_wizard_plugin.py::TestConfigurationWizardPlugin::test_discover_all_integration
+ERROR tests/test_risk_mitigation.py::TestContextInjectionPerformance::test_context_injection_under_200ms
+ERROR tests/test_risk_mitigation.py::TestContextInjectionPerformance::test_fts5_search_under_100ms
+ERROR tests/test_yaml_conversion.py::TestYAMLConversion::test_slash_commands_structure
+ERROR tests/test_yaml_conversion.py::TestYAMLConversion::test_no_duplicate_commands
+ERROR tests/test_yaml_conversion.py::TestYAMLConversion::test_aliases_reference_valid_commands
+ERROR tests/test_yaml_conversion.py::TestYAMLConversion::test_commands_have_operation_mapping
+ERROR tests/tier2/knowledge_graph/test_database.py::TestDatabaseHealthCheck::test_health_check_detects_corrupted_database
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generator_initialization
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generate_velocity_insights_no_data
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generate_velocity_insights_with_data
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_empty_insights_handling
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generate_hotspot_insights_no_data
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_insight_data_structure
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generate_hotspot_insights_with_data
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_multiple_insight_types
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_generate_all_insights
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_insight_severity_assignment
+ERROR tests/tier3/analysis/test_insight_generator.py::TestInsightGenerator::test_insight_recommendations
+ERROR tests/integration/test_error_recovery.py::TestSKULLProtectionLayer::test_skull_001_blocks_untested_changes
+ERROR tests/integration/test_error_recovery.py::TestSKULLProtectionLayer::test_skull_001_allows_tested_changes
+ERROR tests/integration/test_error_recovery.py::TestSKULLProtectionLayer::test_skull_002_blocks_untested_integrations
+ERROR tests/integration/test_error_recovery.py::TestSKULLProtectionLayer::test_skull_003_warns_on_css_changes
+ERROR tests/integration/test_error_recovery.py::TestSKULLProtectionLayer::test_skull_004_warns_on_immediate_retry
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_analyzer_initialization
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_force_analysis_flag
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_force_collection_flag
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_collector_initialization
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_date_range_filtering
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_analyze_hotspots_basic
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_aggregation_across_contributors
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_collect_metrics_empty_period
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_save_and_retrieve_hotspots
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_get_metrics_with_specific_contributor
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_save_and_retrieve_metrics
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_get_unstable_files
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_get_metrics_date_filtering
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_churn_rate_filtering
+ERROR tests/tier3/metrics/test_git_metrics.py::TestGitMetricsCollector::test_duplicate_metric_handling
+ERROR tests/tier3/metrics/test_file_metrics.py::TestFileMetricsAnalyzer::test_stability_classification
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_full_system_initialization
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_get_summary_functionality
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_end_to_end_file_hotspots_workflow
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_end_to_end_insights_workflow
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_end_to_end_git_metrics_workflow
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_database_operations
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_refresh_all_functionality
+ERROR tests/tier3/test_context_intelligence_integration.py::TestContextIntelligenceIntegration::test_multi_day_analysis_consistency
+ERROR tests/integration/test_error_recovery.py::TestBrainTierProtection::test_tier0_immutability_enforced
+ERROR tests/integration/test_error_recovery.py::TestBrainTierProtection::test_tier1_schema_validation
+ERROR tests/integration/test_error_recovery.py::TestBrainTierProtection::test_tier1_retention_limit_enforced
+ERROR tests/integration/test_error_recovery.py::TestBrainTierProtection::test_tier2_yaml_validation
+ERROR tests/integration/test_error_recovery.py::TestBrainTierProtection::test_tier3_read_only_enforcement
+= 177 failed, 1836 passed, 81 skipped, 264 warnings, 68 errors in 217.10s (0:03:37) =

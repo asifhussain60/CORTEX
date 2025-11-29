@@ -1,0 +1,298 @@
+#!/usr/bin/env python3
+"""
+CORTEX Quick Capture - Fast context capture in <5 seconds
+
+Usage:
+    cortex-capture "brief summary"
+    cortex-capture "Add button component" --type feature
+    cortex-capture "Fix null pointer bug" --type bug
+    cortex-capture --interactive
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+License: Proprietary - See LICENSE file for terms
+Phase: Phase 4 - Advanced CLI & Integration
+"""
+
+import sys
+import os
+import json
+import subprocess
+from pathlib import Path
+from datetime import datetime
+from typing import Optional, Dict, List, Any
+import argparse
+
+# Add CORTEX root to path
+CORTEX_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(CORTEX_ROOT))
+
+try:
+    from src.tier1.working_memory import WorkingMemory
+    from src.tier2.knowledge_graph import KnowledgeGraph
+    from src.tier3.development_context import DevelopmentContext
+except ImportError as e:
+    print(f"[ERROR] Failed to import CORTEX modules: {e}")
+    print("[ERROR] Make sure you're running from CORTEX root directory")
+    sys.exit(1)
+
+
+class QuickCapture:
+    """Quick capture system for fast context recording"""
+    
+    def __init__(self, repo_path: Optional[Path] = None):
+        """Initialize quick capture system"""
+        self.repo_path = repo_path or Path.cwd()
+        self.brain_path = self.repo_path / "cortex-brain"
+        
+        # Verify brain exists
+        if not self.brain_path.exists():
+            print(f"[ERROR] CORTEX brain not found at: {self.brain_path}")
+            print("[ERROR] Run: python scripts/cortex_setup.py")
+            sys.exit(1)
+        
+        # Initialize tiers
+        try:
+            self.tier1 = WorkingMemory(self.brain_path)
+            self.tier2 = KnowledgeGraph(self.brain_path)
+            self.tier3 = DevelopmentContext(self.brain_path)
+        except Exception as e:
+            print(f"[ERROR] Failed to initialize brain tiers: {e}")
+            sys.exit(1)
+    
+    def capture(self, summary: str, capture_type: str = "general",
+                tags: Optional[List[str]] = None) -> bool:
+        """
+        Quick capture with minimal latency
+        
+        Args:
+            summary: Brief summary of what was done
+            capture_type: Type of capture (feature, bug, refactor, general)
+            tags: Optional tags for categorization
+        
+        Returns:
+            bool: True if capture successful
+        """
+        try:
+            start_time = datetime.now()
+            
+            # Gather minimal context
+            context = self._gather_context(capture_type)
+            
+            # Create conversation entry
+            conversation_id = self._create_conversation(
+                summary, capture_type, context, tags
+            )
+            
+            # Extract patterns (async if possible)
+            self._extract_patterns_quick(summary, capture_type, tags)
+            
+            # Calculate elapsed time
+            elapsed = (datetime.now() - start_time).total_seconds()
+            
+            print(f"✅ Captured in {elapsed:.2f}s (ID: {conversation_id})")
+            
+            # Warn if >5 seconds
+            if elapsed > 5.0:
+                print(f"⚠️  Capture took {elapsed:.2f}s (target: <5s)")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Capture failed: {e}")
+            return False
+    
+    def _gather_context(self, capture_type: str) -> Dict[str, Any]:
+        """Gather minimal context quickly"""
+        context = {
+            "timestamp": datetime.now().isoformat(),
+            "type": capture_type,
+            "repo_path": str(self.repo_path),
+        }
+        
+        # Add git info if available (fast operation)
+        try:
+            branch = subprocess.check_output(
+                ["git", "branch", "--show-current"],
+                cwd=self.repo_path,
+                stderr=subprocess.DEVNULL,
+                timeout=1
+            ).decode().strip()
+            context["git_branch"] = branch
+        except:
+            pass
+        
+        # Add changed files (fast operation)
+        try:
+            changed = subprocess.check_output(
+                ["git", "diff", "--name-only", "HEAD"],
+                cwd=self.repo_path,
+                stderr=subprocess.DEVNULL,
+                timeout=1
+            ).decode().strip().split('\n')
+            context["changed_files"] = [f for f in changed if f]
+        except:
+            pass
+        
+        return context
+    
+    def _create_conversation(self, summary: str, capture_type: str,
+                            context: Dict[str, Any],
+                            tags: Optional[List[str]]) -> str:
+        """Create conversation entry in Tier 1"""
+        try:
+            # Create conversation with minimal metadata
+            conversation = {
+                "role": "user",
+                "content": summary,
+                "metadata": {
+                    "capture_type": capture_type,
+                    "source": "quick-capture",
+                    "context": context,
+                    "tags": tags or []
+                }
+            }
+            
+            # Store in Tier 1
+            conversation_id = self.tier1.add_conversation(
+                conversation,
+                auto_extract=False  # Skip automatic extraction for speed
+            )
+            
+            return conversation_id
+            
+        except Exception as e:
+            raise Exception(f"Failed to create conversation: {e}")
+    
+    def _extract_patterns_quick(self, summary: str, capture_type: str,
+                                 tags: Optional[List[str]]) -> None:
+        """Quick pattern extraction (fire and forget)"""
+        try:
+            # Create simple pattern
+            pattern = {
+                "type": capture_type,
+                "summary": summary,
+                "tags": tags or [],
+                "confidence": 0.6,  # Lower confidence for quick captures
+                "source": "quick-capture"
+            }
+            
+            # Store in Tier 2 (async would be better)
+            self.tier2.add_pattern(pattern)
+            
+        except Exception as e:
+            # Don't fail capture if pattern extraction fails
+            print(f"⚠️  Pattern extraction failed: {e}")
+    
+    def interactive_capture(self) -> bool:
+        """Interactive capture mode with prompts"""
+        print("\n=== CORTEX Quick Capture ===\n")
+        
+        # Get summary
+        summary = input("Summary (one line): ").strip()
+        if not summary:
+            print("❌ Summary required")
+            return False
+        
+        # Get type
+        print("\nCapture type:")
+        print("  1. Feature")
+        print("  2. Bug fix")
+        print("  3. Refactor")
+        print("  4. General")
+        choice = input("Choice [4]: ").strip() or "4"
+        
+        type_map = {
+            "1": "feature",
+            "2": "bug",
+            "3": "refactor",
+            "4": "general"
+        }
+        capture_type = type_map.get(choice, "general")
+        
+        # Get tags
+        tags_input = input("Tags (comma-separated, optional): ").strip()
+        tags = [t.strip() for t in tags_input.split(",")] if tags_input else None
+        
+        # Confirm
+        print(f"\n📝 Capturing: {summary}")
+        print(f"   Type: {capture_type}")
+        if tags:
+            print(f"   Tags: {', '.join(tags)}")
+        
+        confirm = input("\nContinue? [Y/n]: ").strip().lower()
+        if confirm and confirm != 'y':
+            print("❌ Cancelled")
+            return False
+        
+        return self.capture(summary, capture_type, tags)
+
+
+def main():
+    """Main entry point"""
+    parser = argparse.ArgumentParser(
+        description="CORTEX Quick Capture - Capture context in <5 seconds",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  cortex-capture "Added purple button to UI"
+  cortex-capture "Fixed null pointer in parser" --type bug
+  cortex-capture "Refactored auth module" --type refactor --tags auth,security
+  cortex-capture --interactive
+        """
+    )
+    
+    parser.add_argument(
+        "summary",
+        nargs="?",
+        help="Brief summary of what was done"
+    )
+    
+    parser.add_argument(
+        "--type",
+        choices=["feature", "bug", "refactor", "general"],
+        default="general",
+        help="Type of capture (default: general)"
+    )
+    
+    parser.add_argument(
+        "--tags",
+        help="Comma-separated tags"
+    )
+    
+    parser.add_argument(
+        "--interactive", "-i",
+        action="store_true",
+        help="Interactive capture mode"
+    )
+    
+    parser.add_argument(
+        "--repo",
+        type=Path,
+        help="Repository path (default: current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    # Initialize capture system
+    try:
+        capture = QuickCapture(repo_path=args.repo)
+    except Exception as e:
+        print(f"[ERROR] Failed to initialize: {e}")
+        sys.exit(1)
+    
+    # Execute capture
+    if args.interactive:
+        success = capture.interactive_capture()
+    elif args.summary:
+        tags = [t.strip() for t in args.tags.split(",")] if args.tags else None
+        success = capture.capture(args.summary, args.type, tags)
+    else:
+        parser.print_help()
+        sys.exit(1)
+    
+    sys.exit(0 if success else 1)
+
+
+if __name__ == "__main__":
+    main()

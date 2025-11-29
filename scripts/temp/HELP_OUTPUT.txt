@@ -1,0 +1,33 @@
+
+==========================================================================================
+CORTEX COMMANDS
+==========================================================================================
+
+Status   Quick Command        Natural Language Example            Module              
+------------------------------------------------------------------------------------------
+⏸️ pend  build docs           generate documentation              update_documentati  
+⏸️ pend  check brain          check brain protection              brain_protection_c  
+🔄 part   cleanup              remove temporary files              workspace_cleanup   
+⏸️ pend  health check         check all protections               comprehensive_self  
+🎯 plan   help                 available commands                  command_help        
+🎯 plan   help search          search commands                     command_search      
+🎯 plan   plan this            collaborative planning              interactive_planni  
+🎯 plan   refactor code        refactor this module                refactoring_planni  
+⏸️ pend  run tests            run test suite                      run_tests           
+🔄 part   setup                initialize environment              environment_setup   
+🎯 plan   system design        architect a solution                architecture_plann  
+✅ read   update story         refresh cortex story                refresh_cortex_sto  
+------------------------------------------------------------------------------------------
+
+Legend:
+  ✅ ready    - Fully implemented and tested
+  🔄 partial  - Partially implemented (some modules ready)
+  ⏸️ pending  - Architecture ready, implementation pending
+  🎯 planned  - Design phase, CORTEX 2.1+
+
+Usage:
+  Natural language:  'setup environment' or 'refresh story'
+  Slash commands:    /setup or /CORTEX, refresh cortex story
+  Programmatic:      execute_operation('environment_setup')
+
+==========================================================================================
