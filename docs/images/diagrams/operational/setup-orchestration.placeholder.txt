@@ -1,2 +1,0 @@
-Placeholder for operational/setup-orchestration.png
-Generate using DALL-E prompt: docs/diagrams/prompts/08-setup-orchestration-prompt.md

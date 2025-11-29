@@ -176,6 +176,19 @@ class UpgradeOrchestrator:
                 # Log upgrade review in catalog
                 self._log_upgrade_review(new_version)
                 
+                # Run bootstrap verification to ensure CORTEX is fully wired
+                bootstrap_result = self._run_bootstrap_verification()
+                if bootstrap_result['status'] == 'healthy':
+                    message += f"\n\n🔧 Bootstrap Verification: ✅ PASSED ({bootstrap_result['checks_passed']} checks)"
+                elif bootstrap_result['status'] == 'warning':
+                    message += f"\n\n🔧 Bootstrap Verification: ⚠️ WARNING ({bootstrap_result['checks_passed']} passed, {bootstrap_result['checks_failed']} failed)"
+                    if bootstrap_result['issues']:
+                        message += f"\n   Issues: {', '.join(bootstrap_result['issues'][:3])}"
+                else:
+                    message += f"\n\n🔧 Bootstrap Verification: ❌ FAILED"
+                    if bootstrap_result['issues']:
+                        message += f"\n   Issues: {', '.join(bootstrap_result['issues'][:3])}"
+                
                 return (True, message)
             else:
                 logger.warning(f"Version mismatch after upgrade: expected {latest_version}, got {new_version}")
@@ -577,6 +590,133 @@ class UpgradeOrchestrator:
             logger.info(f"Logged upgrade review for version {version}")
         except Exception as e:
             logger.error(f"Failed to log upgrade review: {e}")
+    
+    def _run_bootstrap_verification(self) -> Dict:
+        """
+        Bootstrap Verification - ensures CORTEX is fully wired after upgrade.
+        
+        Verifies:
+        - Entry point (CORTEX.prompt.md) at correct location
+        - Brain structure intact (cortex-brain/)
+        - Response templates valid
+        - Key orchestrators wired
+        
+        Returns:
+            Dict with verification status and details
+        """
+        result = {
+            "status": "unknown",
+            "checks_passed": 0,
+            "checks_failed": 0,
+            "issues": [],
+            "checks": {}
+        }
+        
+        logger.info("Running bootstrap verification...")
+        
+        # Check 1: Entry point exists at .github/prompts/CORTEX.prompt.md
+        entry_point = self.cortex_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
+        if entry_point.exists():
+            result["checks"]["entry_point"] = True
+            result["checks_passed"] += 1
+            logger.info("  ✅ Entry point found at .github/prompts/CORTEX.prompt.md")
+        else:
+            result["checks"]["entry_point"] = False
+            result["checks_failed"] += 1
+            result["issues"].append("Entry point not found at .github/prompts/CORTEX.prompt.md")
+            logger.warning("  ❌ Entry point NOT found at expected location")
+        
+        # Check 2: cortex-brain/ structure exists
+        brain_path = self.cortex_root / 'cortex-brain'
+        required_dirs = ['tier1', 'tier3', 'documents', 'templates']
+        brain_ok = True
+        
+        if brain_path.exists():
+            for dir_name in required_dirs:
+                if not (brain_path / dir_name).exists():
+                    brain_ok = False
+                    result["issues"].append(f"Missing cortex-brain/{dir_name}/")
+        else:
+            brain_ok = False
+            result["issues"].append("cortex-brain/ directory not found")
+        
+        result["checks"]["brain_structure"] = brain_ok
+        if brain_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Brain structure verified")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Brain structure incomplete")
+        
+        # Check 3: response-templates.yaml exists and is valid
+        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        templates_ok = False
+        
+        if templates_file and templates_file.exists():
+            try:
+                import yaml
+                with open(templates_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f)
+                
+                if 'templates' in data:
+                    critical_templates = ['help_table', 'fallback']
+                    missing = [t for t in critical_templates if t not in data['templates']]
+                    if not missing:
+                        templates_ok = True
+                    else:
+                        result["issues"].append(f"Missing templates: {missing}")
+            except Exception as e:
+                result["issues"].append(f"Invalid response-templates.yaml: {e}")
+        else:
+            result["issues"].append("response-templates.yaml not found")
+        
+        result["checks"]["response_templates"] = templates_ok
+        if templates_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Response templates verified")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Response templates invalid or missing")
+        
+        # Check 4: Key orchestrators exist
+        orchestrators_path = self.cortex_root / 'src' / 'orchestrators'
+        key_orchestrators = [
+            'planning_orchestrator.py',
+            'upgrade_orchestrator.py',
+            'git_checkpoint_orchestrator.py'
+        ]
+        orchestrators_ok = True
+        
+        if orchestrators_path.exists():
+            for orch in key_orchestrators:
+                if not (orchestrators_path / orch).exists():
+                    orchestrators_ok = False
+                    result["issues"].append(f"Missing orchestrator: {orch}")
+        else:
+            orchestrators_ok = False
+            result["issues"].append("src/orchestrators/ directory not found")
+        
+        result["checks"]["orchestrators"] = orchestrators_ok
+        if orchestrators_ok:
+            result["checks_passed"] += 1
+            logger.info("  ✅ Key orchestrators present")
+        else:
+            result["checks_failed"] += 1
+            logger.warning("  ❌ Some orchestrators missing")
+        
+        # Calculate final status
+        total_checks = result["checks_passed"] + result["checks_failed"]
+        if result["checks_failed"] == 0:
+            result["status"] = "healthy"
+            logger.info(f"✅ Bootstrap verification PASSED: {result['checks_passed']}/{total_checks} checks")
+        elif result["checks_passed"] >= result["checks_failed"]:
+            result["status"] = "warning"
+            logger.warning(f"⚠️ Bootstrap verification WARNING: {result['checks_passed']}/{total_checks} checks passed")
+        else:
+            result["status"] = "error"
+            logger.error(f"❌ Bootstrap verification FAILED: {result['checks_passed']}/{total_checks} checks passed")
+        
+        return result
 
 
 def main():

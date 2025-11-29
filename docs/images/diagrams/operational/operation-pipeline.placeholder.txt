@@ -1,2 +1,0 @@
-Placeholder for operational/operation-pipeline.png
-Generate using DALL-E prompt: docs/diagrams/prompts/07-operation-pipeline-prompt.md

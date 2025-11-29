@@ -1,2 +1,0 @@
-Placeholder for integration/user-journey.png
-Generate using DALL-E prompt: docs/diagrams/prompts/13-user-journey-prompt.md
