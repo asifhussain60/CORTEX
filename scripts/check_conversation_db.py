@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-db_path = Path("d:/PROJECTS/CORTEX/cortex-brain/tier1/conversations.db")
+db_path = Path(__file__).resolve().parent.parent / "cortex-brain" / "tier1" / "conversations.db"
 
 if not db_path.exists():
     print(f"❌ Database not found: {db_path}")

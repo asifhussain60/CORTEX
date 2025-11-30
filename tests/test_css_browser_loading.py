@@ -54,7 +54,7 @@ class TestCSSCacheBusting:
     
     def test_css_load_order(self):
         """Verify custom.css loads after Material theme CSS."""
-        html_path = Path("d:/PROJECTS/CORTEX/site/index.html")
+        html_path = Path(__file__).resolve().parent.parent / "site" / "index.html"
         
         if not html_path.exists():
             pytest.skip("Run 'mkdocs build' first")

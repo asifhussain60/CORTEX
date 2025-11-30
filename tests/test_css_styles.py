@@ -20,7 +20,7 @@ class TestCSSStyles:
     @pytest.fixture
     def site_css_path(self):
         """Path to the built custom CSS file."""
-        return Path("d:/PROJECTS/CORTEX/site/stylesheets/custom.css")
+        return Path(__file__).resolve().parent.parent / "site" / "stylesheets" / "custom.css"
     
     @pytest.fixture
     def css_content(self, site_css_path):
@@ -112,7 +112,7 @@ class TestHTMLIntegration:
     @pytest.fixture
     def index_html_path(self):
         """Path to the built index.html file."""
-        return Path("d:/PROJECTS/CORTEX/site/index.html")
+        return Path(__file__).resolve().parent.parent / "site" / "index.html"
     
     @pytest.fixture
     def html_content(self, index_html_path):
@@ -149,7 +149,7 @@ class TestColorConsistency:
     @pytest.fixture
     def css_content(self):
         """Load the CSS file content."""
-        css_path = Path("d:/PROJECTS/CORTEX/site/stylesheets/custom.css")
+        css_path = Path(__file__).resolve().parent.parent / "site" / "stylesheets" / "custom.css"
         if not css_path.exists():
             pytest.skip("CSS file not found. Run 'mkdocs build' first.")
         return css_path.read_text(encoding='utf-8')
