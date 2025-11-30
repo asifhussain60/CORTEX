@@ -1272,7 +1272,10 @@ def publish_to_branch(
         
         # Import DeploymentGates system
         try:
-            # sys is already imported at module level, no need to reimport
+            # Add project root to sys.path for imports
+            if str(project_root) not in sys.path:
+                sys.path.insert(0, str(project_root))
+            
             from src.deployment.deployment_gates import DeploymentGates
             
             # Load alignment report if available
@@ -1423,7 +1426,7 @@ def publish_to_branch(
             
             try:
                 # Import enhancement catalog and discovery engine
-                import sys
+                # sys already imported at module level
                 if str(project_root) not in sys.path:
                     sys.path.insert(0, str(project_root))
                 
@@ -1475,7 +1478,7 @@ def publish_to_branch(
                 catalog.log_review('deployment', metadata={
                     'features_discovered': len(discovered),
                     'features_added': added_count,
-                    'version': VERSION
+                    'version': PACKAGE_VERSION
                 })
                 
                 # Get catalog stats

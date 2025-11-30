@@ -1679,13 +1679,16 @@ class DeploymentGates:
 
     def _validate_tdd_mastery_integration(self) -> Dict[str, Any]:
         """
-        Gate 13: TDD Mastery Integration - Git Checkpoint System.
+        Gate 13: TDD Mastery Integration - Git Checkpoint System + Vision API.
         
         Validates:
         - TDDWorkflowOrchestrator imports GitCheckpointOrchestrator
         - TDDWorkflowConfig has enable_git_checkpoints parameter
         - State transitions create checkpoints (RED, GREEN, REFACTOR phases)
         - tdd-mastery-guide.md documents git checkpoint functionality
+        - IntentRouter has VisionOrchestrator integration
+        - Vision API automatically triggers when images attached
+        - Response templates state Vision API usage explicitly
         
         Returns:
             Gate result with ERROR severity
@@ -1700,6 +1703,9 @@ class DeploymentGates:
                 "config_has_git_option": False,
                 "checkpoints_in_state_transitions": False,
                 "guide_documents_git": False,
+                "vision_orchestrator_integrated": False,
+                "vision_auto_trigger_enforced": False,
+                "vision_response_template_exists": False,
                 "issues": []
             }
         }
@@ -1748,17 +1754,60 @@ class DeploymentGates:
             else:
                 gate["details"]["issues"].append("tdd-mastery-guide.md not found")
             
+            # Check 5: IntentRouter has VisionOrchestrator integration
+            intent_router_path = self.project_root / "src" / "cortex_agents" / "intent_router.py"
+            if intent_router_path.exists():
+                content = intent_router_path.read_text(encoding='utf-8')
+                if "VisionOrchestrator" in content and "self.vision_orchestrator" in content:
+                    gate["details"]["vision_orchestrator_integrated"] = True
+                else:
+                    gate["details"]["issues"].append("IntentRouter missing VisionOrchestrator integration")
+            else:
+                gate["details"]["issues"].append("IntentRouter not found")
+            
+            # Check 6: Vision API auto-trigger enforcement exists
+            vision_enforcement_test_path = self.project_root / "tests" / "test_vision_api_enforcement.py"
+            if vision_enforcement_test_path.exists():
+                content = vision_enforcement_test_path.read_text(encoding='utf-8')
+                has_auto_trigger = (
+                    "test_intent_router_has_vision_orchestrator" in content and
+                    "test_vision_orchestrator_auto_processes_images" in content and
+                    "test_vision_results_injected_into_context" in content
+                )
+                if has_auto_trigger:
+                    gate["details"]["vision_auto_trigger_enforced"] = True
+                else:
+                    gate["details"]["issues"].append("Vision API auto-trigger enforcement tests incomplete")
+            else:
+                gate["details"]["issues"].append("Vision API enforcement tests not found")
+            
+            # Check 7: Response templates state Vision API usage
+            response_templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+            if response_templates_path.exists():
+                content = response_templates_path.read_text(encoding='utf-8')
+                if "vision" in content.lower() and ("analyzed screenshot" in content.lower() or "vision api" in content.lower()):
+                    gate["details"]["vision_response_template_exists"] = True
+                else:
+                    gate["details"]["issues"].append("Response templates don't explicitly state Vision API usage")
+            else:
+                gate["details"]["issues"].append("Response templates file not found")
+
+            
             # Fail gate if any checks failed
             if gate["details"]["issues"]:
                 gate["passed"] = False
                 gate["message"] = (
                     f"TDD Mastery integration incomplete: {len(gate['details']['issues'])} issues. "
-                    f"Git checkpoint system not fully wired into TDD workflow. "
+                    f"Git checkpoint system and/or Vision API not fully integrated into TDD workflow. "
                     f"Production deployment BLOCKED. Issues: {'; '.join(gate['details']['issues'])}"
                 )
                 logger.warning(f"Gate 13 FAILED: {gate['message']}")
             else:
-                gate["message"] = "TDD Mastery fully integrated with Git Checkpoint system. All checks passed."
+                gate["message"] = (
+                    "TDD Mastery fully integrated with Git Checkpoint system and Vision API. "
+                    "All checks passed: Git checkpoints enforced, Vision API auto-triggers on images, "
+                    "responses explicitly state Vision API usage."
+                )
                 logger.info("Gate 13 PASSED: TDD Mastery integration validated")
         
         except Exception as e:
