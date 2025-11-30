@@ -3,7 +3,7 @@ Unit Tests for Documentation Format Validator
 
 Tests validation of CORTEX admin documentation outputs against v1.0 specification.
 
-Copyright © 2024-2025 Asif Hussain. All rights reserved.
+Copyright ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import pytest
@@ -405,7 +405,7 @@ class TestDocumentationFormatValidator:
         result = validator.validate(str(test_file))
         result_str = str(result)
         
-        assert "✅ VALID" in result_str or "❌ INVALID" in result_str
+        assert "Γ£à VALID" in result_str or "Γ¥î INVALID" in result_str
         assert "Layers:" in result_str
         assert "Visualizations:" in result_str
         assert "File Size:" in result_str

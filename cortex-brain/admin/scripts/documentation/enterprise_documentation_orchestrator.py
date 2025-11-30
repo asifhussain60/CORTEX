@@ -722,14 +722,14 @@ class EnterpriseDocumentationOrchestrator:
             True if component should be regenerated, False to skip
             
         Component Mapping:
-            - diagrams → orchestrator + workflow features
-            - prompts → operation + agent features
-            - narratives → all features (1:1 with prompts)
-            - story → major features + template + documentation
-            - cortex_vs_copilot → comparison features
-            - architecture → all features
-            - technical → operation + agent + orchestrator features
-            - getting_started → workflow + integration features
+            - diagrams ΓåÆ orchestrator + workflow features
+            - prompts ΓåÆ operation + agent features
+            - narratives ΓåÆ all features (1:1 with prompts)
+            - story ΓåÆ major features + template + documentation
+            - cortex_vs_copilot ΓåÆ comparison features
+            - architecture ΓåÆ all features
+            - technical ΓåÆ operation + agent + orchestrator features
+            - getting_started ΓåÆ workflow + integration features
             
         MkDocs Integration Hook (Deferred):
             Future MkDocs view modifications can consume this method to:
@@ -822,28 +822,28 @@ class EnterpriseDocumentationOrchestrator:
         
         try:
             logger.info("="*80)
-            logger.info("⚡ CORTEX INCREMENTAL DOCUMENTATION GENERATION")
+            logger.info("ΓÜí CORTEX INCREMENTAL DOCUMENTATION GENERATION")
             logger.info("="*80)
             logger.info(f"Profile: {profile}")
             logger.info(f"Dry Run: {dry_run}")
             logger.info("")
             
             # Discover features and get last review timestamp
-            logger.info("📡 Phase 1: Enhancement Catalog Discovery")
+            logger.info("≡ƒôí Phase 1: Enhancement Catalog Discovery")
             discovered_features = self._discover_features_from_catalog()
             last_review = discovered_features.get('last_review', {}).get('timestamp')
             last_review_dt = datetime.fromisoformat(last_review) if last_review else None
             
             new_count = discovered_features.get('new_count', 0)
-            logger.info(f"   ✅ Discovered {len(discovered_features.get('features', []))} features ({new_count} new)")
+            logger.info(f"   Γ£à Discovered {len(discovered_features.get('features', []))} features ({new_count} new)")
             
             if last_review_dt:
                 days_since = (datetime.now() - last_review_dt).days
-                logger.info(f"   📊 Last review: {days_since} days ago")
+                logger.info(f"   ≡ƒôè Last review: {days_since} days ago")
             logger.info("")
             
             # Determine which components need regeneration
-            logger.info("🔍 Phase 2: Component Change Detection")
+            logger.info("≡ƒöì Phase 2: Component Change Detection")
             components_to_regenerate = []
             components_skipped = []
             
@@ -859,8 +859,8 @@ class EnterpriseDocumentationOrchestrator:
                 else:
                     components_skipped.append(component)
             
-            logger.info(f"   ✅ Components to regenerate: {len(components_to_regenerate)}")
-            logger.info(f"   ⏭️  Components skipped: {len(components_skipped)}")
+            logger.info(f"   Γ£à Components to regenerate: {len(components_to_regenerate)}")
+            logger.info(f"   ΓÅ¡∩╕Å  Components skipped: {len(components_skipped)}")
             
             if components_skipped:
                 logger.info(f"      Skipped: {', '.join(components_skipped)}")
@@ -870,14 +870,14 @@ class EnterpriseDocumentationOrchestrator:
             if not components_to_regenerate:
                 duration = (datetime.now() - start_time).total_seconds()
                 logger.info("="*80)
-                logger.info("✅ NO CHANGES DETECTED - DOCUMENTATION UP TO DATE")
+                logger.info("Γ£à NO CHANGES DETECTED - DOCUMENTATION UP TO DATE")
                 logger.info(f"   Duration: {duration:.2f}s (95% faster than full regeneration)")
                 logger.info("="*80)
                 
                 return OperationResult(
                     success=True,
                     status=OperationStatus.SUCCESS,
-                    message="✅ Documentation already up to date (no regeneration needed)",
+                    message="Γ£à Documentation already up to date (no regeneration needed)",
                     data={
                         "execution_summary": {
                             "mode": "incremental",
@@ -893,7 +893,7 @@ class EnterpriseDocumentationOrchestrator:
                 )
             
             # Regenerate only changed components
-            logger.info("📊 Phase 3: Selective Component Generation")
+            logger.info("≡ƒôè Phase 3: Selective Component Generation")
             generation_results = {}
             
             for component in components_to_regenerate:
@@ -912,7 +912,7 @@ class EnterpriseDocumentationOrchestrator:
             time_saved_percent = int(((120 - duration) / 120) * 100) if duration < 120 else 0
             
             logger.info("="*80)
-            logger.info(f"✅ INCREMENTAL GENERATION COMPLETE")
+            logger.info(f"Γ£à INCREMENTAL GENERATION COMPLETE")
             logger.info(f"   Components Regenerated: {len(components_to_regenerate)}")
             logger.info(f"   Components Skipped: {len(components_skipped)}")
             logger.info(f"   Duration: {duration:.2f}s (vs ~120s full)")
@@ -947,7 +947,7 @@ class EnterpriseDocumentationOrchestrator:
             return OperationResult(
                 success=True,
                 status=OperationStatus.SUCCESS,
-                message=f"✅ Incremental documentation generation completed ({time_saved_percent}% faster)",
+                message=f"Γ£à Incremental documentation generation completed ({time_saved_percent}% faster)",
                 data=result_data,
                 duration_seconds=duration
             )
@@ -958,7 +958,7 @@ class EnterpriseDocumentationOrchestrator:
             return OperationResult(
                 success=False,
                 status=OperationStatus.FAILED,
-                message=f"❌ Incremental generation failed: {str(e)}",
+                message=f"Γ¥î Incremental generation failed: {str(e)}",
                 errors=[str(e)],
                 duration_seconds=duration
             )

@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 # Read CopilotChats.md
-copilot_chats = Path(r"d:\PROJECTS\CORTEX\.github\CopilotChats.md").read_text(encoding='utf-8')
+copilot_chats = (Path(__file__).resolve().parent.parent / ".github" / "CopilotChats.md").read_text(encoding='utf-8')
 
 # Parse conversations (split by user prompts)
 conversations = re.split(r'^asifhussain60:', copilot_chats, flags=re.MULTILINE)

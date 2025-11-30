@@ -51,6 +51,27 @@ from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 # Import centralized config for cross-platform path resolution
 from src.config import config
 
+
+def safe_print(message: str) -> None:
+    """Print with Unicode fallback for Windows console encoding issues."""
+    try:
+        print(message)
+    except UnicodeEncodeError:
+        # Replace common emojis with ASCII equivalents
+        ascii_message = (message
+            .replace('🔧', '[TOOL]')
+            .replace('✅', '[OK]')
+            .replace('❌', '[X]')
+            .replace('🔒', '[LOCK]')
+            .replace('ℹ️', '[i]')
+            .replace('⏭️', '[>>]')
+            .replace('🔍', '[*]')
+            .replace('⚠️', '[!]')
+            .replace('🧠', '[BRAIN]')
+        )
+        print(ascii_message)
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -207,6 +228,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         optimized: 100     # Performance benchmarks pass
     """
     
+    # Track B: Persistent state file for alignment history
+    ALIGNMENT_STATE_FILE = "cortex-brain/.alignment-state.json"
+    
     def __init__(self, context: Optional[Dict[str, Any]] = None):
         """Initialize system alignment orchestrator."""
         super().__init__()
@@ -224,6 +248,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         self._agent_scanner = None
         self._entry_point_scanner = None
         self._documentation_scanner = None
+        
+        # Track B: Load persistent alignment state on initialization
+        self._alignment_state = self._load_alignment_state()
     
     def _load_config(self) -> Dict[str, Any]:
         """Load configuration from cortex.config.json."""
@@ -308,7 +335,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             if not interactive_fix and auto_prompt and (report.fix_templates or report.remediation_suggestions):
                 fix_count = len(report.fix_templates) + len(report.remediation_suggestions)
                 print(f"\n\n{'='*80}")
-                print(f"🔧 {fix_count} REMEDIATIONS AVAILABLE")
+                safe_print(f"🔧 {fix_count} REMEDIATIONS AVAILABLE")
                 print(f"{'='*80}")
                 print(f"\nSystem alignment detected {fix_count} issues with available fixes.")
                 print("\nOptions:")
@@ -320,7 +347,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 
                 if response == '1':
                     interactive_fix = True
-                    print("\n✅ Starting interactive remediation...\n")
+                    safe_print("\n✅ Starting interactive remediation...\n")
                 elif response == '2':
                     print("\n📊 Continuing to report generation...\n")
                 else:
@@ -369,6 +396,12 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             
             # Build result message
             message = self._format_report_summary(report, fixes_applied)
+            
+            # Track B: Save alignment state to persistent storage
+            try:
+                self._save_alignment_state(report)
+            except Exception as e:
+                logger.warning(f"Failed to save alignment state (non-critical): {e}")
             
             duration = (datetime.now() - start_time).total_seconds()
             monitor.complete()
@@ -1246,7 +1279,11 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         # Check if duplicate detection should be skipped (performance optimization)
         # DEFAULT: Skip duplicate detection in system alignment to prevent O(n²) catastrophe
         # Can be explicitly enabled via context: {'skip_duplicate_detection': False}
-        if self.context.get('skip_duplicate_detection', True):  # Changed default from False to True
+        skip_duplicate = True
+        if isinstance(self.context, dict):
+            skip_duplicate = self.context.get('skip_duplicate_detection', True)
+        
+        if skip_duplicate:  # Changed default from False to True
             logger.info("Skipping duplicate document detection (skip_duplicate_detection=True) - prevents O(n²) performance issue")
             return {
                 'score': 100,
@@ -1384,11 +1421,24 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         ]
         total_features = len(features_needing_remediation)
         
+        # PERFORMANCE FIX: Skip remediation generation for problematic features
+        # InteractivePlannerAgent and similar complex features cause 40+ second hangs
+        SKIP_REMEDIATION = {
+            'InteractivePlannerAgent',  # Known to hang for 40+ seconds
+            'PlannerAgent',
+            'ExecutionPlannerAgent'
+        }
+        
         # Collect features needing remediation
         for idx, (name, score) in enumerate(features_needing_remediation, 1):
             # Update progress
             if monitor:
                 monitor.update(f"Generating remediation suggestions ({idx}/{total_features}): {name}")
+            
+            # Skip remediation for known problematic features
+            if name in SKIP_REMEDIATION:
+                logger.warning(f"Skipping remediation generation for {name} (known performance issue)")
+                continue
             
             # Get feature metadata
             metadata = orchestrators.get(name) or agents.get(name)
@@ -1412,8 +1462,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                         feature_name=name,
                         suggestion_type="wiring",
                         content=wiring_suggestion["yaml_template"] + "\n\n" + wiring_suggestion["prompt_section"],
-                        file_path=None  # Suggestions shown in report, not saved
+                        file_path=None
                     ))
+                        
                 except Exception as e:
                     logger.warning(f"Failed to generate wiring suggestion for {name}: {e}")
             
@@ -1432,6 +1483,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                         content=test_skeleton["test_code"],
                         file_path=test_skeleton["test_path"]
                     ))
+                        
                 except Exception as e:
                     logger.warning(f"Failed to generate test suggestion for {name}: {e}")
             
@@ -2201,34 +2253,247 @@ graph TD
             tags=["admin", "validation", "alignment"]
         )
     
+    def _load_alignment_state(self) -> Dict[str, Any]:
+        """
+        Load persistent alignment state from disk.
+        
+        Track B Implementation: Provides long-term stability by persisting alignment
+        results across sessions. This prevents ephemeral cache-only storage issues.
+        
+        State File Location:
+            cortex-brain/.alignment-state.json
+        
+        State Structure:
+            {
+                "last_alignment": "2024-11-30T12:00:00",
+                "feature_scores": {
+                    "SystemAlignment": {"score": 90, "timestamp": "..."},
+                    "TDDWorkflow": {"score": 100, "timestamp": "..."}
+                },
+                "overall_health": 85,
+                "alignment_history": [
+                    {"timestamp": "...", "health": 85, "features": 12},
+                    {"timestamp": "...", "health": 90, "features": 15}
+                ]
+            }
+        
+        Returns:
+            Dict containing alignment state, or empty dict if file doesn't exist
+        """
+        state_path = self.project_root / self.ALIGNMENT_STATE_FILE
+        
+        if not state_path.exists():
+            logger.debug(f"No alignment state file found at {state_path}, starting fresh")
+            return {
+                "last_alignment": None,
+                "feature_scores": {},
+                "overall_health": 0,
+                "alignment_history": []
+            }
+        
+        try:
+            with open(state_path, 'r', encoding='utf-8') as f:
+                state = json.load(f)
+                logger.info(f"Loaded alignment state from {state_path}")
+                return state
+        except Exception as e:
+            logger.warning(f"Failed to load alignment state from {state_path}: {e}")
+            return {
+                "last_alignment": None,
+                "feature_scores": {},
+                "overall_health": 0,
+                "alignment_history": []
+            }
+    
+    def _save_alignment_state(self, report: AlignmentReport) -> None:
+        """
+        Save alignment state to persistent storage.
+        
+        Track B Implementation: Persists alignment results for historical tracking
+        and cross-session stability. Called after successful alignment completion.
+        
+        Args:
+            report: AlignmentReport to persist
+        
+        Side Effects:
+            - Creates/updates cortex-brain/.alignment-state.json
+            - Maintains alignment history (last 50 runs)
+            - Updates feature score timestamps
+        """
+        state_path = self.project_root / self.ALIGNMENT_STATE_FILE
+        
+        # Ensure directory exists
+        state_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Build state object
+        timestamp_str = report.timestamp.isoformat()
+        
+        # Convert feature scores to serializable format
+        feature_scores_dict = {}
+        for name, score in report.feature_scores.items():
+            feature_scores_dict[name] = {
+                "score": score.score,
+                "discovered": score.discovered,
+                "imported": score.imported,
+                "instantiated": score.instantiated,
+                "documented": score.documented,
+                "tested": score.tested,
+                "wired": score.wired,
+                "optimized": score.optimized,
+                "api_documented": score.api_documented,
+                "timestamp": timestamp_str
+            }
+        
+        # Load existing state to preserve history
+        existing_state = self._alignment_state
+        
+        # Add current run to history (keep last 50)
+        history_entry = {
+            "timestamp": timestamp_str,
+            "overall_health": report.overall_health,
+            "total_features": len(report.feature_scores),
+            "critical_issues": report.critical_issues,
+            "warnings": report.warnings
+        }
+        
+        alignment_history = existing_state.get("alignment_history", [])
+        alignment_history.append(history_entry)
+        alignment_history = alignment_history[-50:]  # Keep last 50 runs
+        
+        # Build new state
+        new_state = {
+            "last_alignment": timestamp_str,
+            "feature_scores": feature_scores_dict,
+            "overall_health": report.overall_health,
+            "alignment_history": alignment_history
+        }
+        
+        try:
+            with open(state_path, 'w', encoding='utf-8') as f:
+                json.dump(new_state, f, indent=2, ensure_ascii=False)
+            logger.info(f"Saved alignment state to {state_path}")
+            
+            # Update in-memory state
+            self._alignment_state = new_state
+            
+        except Exception as e:
+            logger.error(f"Failed to save alignment state to {state_path}: {e}")
+    
+    def _to_kebab_case(self, feature_name: str) -> str:
+        """
+        Convert CamelCase feature name to kebab-case.
+        
+        Reuses logic from documentation validation (line 847) for consistency.
+        
+        Args:
+            feature_name: CamelCase feature name (e.g., 'SystemAlignment', 'TDDWorkflow')
+        
+        Returns:
+            kebab-case name (e.g., 'system-alignment', 'tdd-workflow')
+        
+        Examples:
+            'SystemAlignmentOrchestrator' → 'system-alignment'
+            'TDDWorkflowAgent' → 'tdd-workflow'
+            'APIDocumentationModule' → 'api-documentation'
+        """
+        # Remove common suffixes
+        name_base = feature_name.replace("Orchestrator", "").replace("Agent", "").replace("Module", "")
+        
+        # Handle common acronyms (preserve them during split)
+        name_base = name_base.replace("TDD", "Tdd").replace("API", "Api").replace("HTTP", "Http")
+        name_base = name_base.replace("ADO", "Ado").replace("EPM", "Epm").replace("DoR", "Dor")
+        name_base = name_base.replace("DoD", "Dod").replace("OWASP", "Owasp")
+        
+        # Convert CamelCase to kebab-case
+        import re
+        kebab_name = re.sub(r'([A-Z])', r'-\1', name_base).lstrip('-').lower()
+        
+        return kebab_name
+    
     def _get_feature_files(self, feature_name: str, metadata: Dict[str, Any]) -> List[Path]:
         """
         Get list of files to track for cache invalidation.
         
+        CRITICAL: This method determines when cached integration scores are invalidated.
+        If a relevant file changes (wiring config, tests, guides), cache must be cleared
+        to force recalculation. This fixes the persistent 30% integration score bug.
+        
         Args:
-            feature_name: Feature name
-            metadata: Feature metadata with file paths
+            feature_name: Feature name (e.g., 'SystemAlignment', 'TDDWorkflow')
+            metadata: Feature metadata with file paths and type information
         
         Returns:
-            List of Paths to track for this feature
+            List of Paths to track for this feature's cache invalidation
+        
+        Tracked File Types:
+            1. Implementation file (from metadata['file_path'])
+            2. Test files (multiple patterns checked)
+            3. Guide files (kebab-case conversion applied)
+            4. Wiring configuration (response-templates.yaml) - CRITICAL FIX!
+        
+        Bug Fixes (Track A):
+            - BUG #1 FIXED: Now tracks response-templates.yaml (wiring config)
+            - BUG #2 FIXED: Test path checks multiple locations with correct patterns
+            - BUG #3 FIXED: Guide path uses kebab-case conversion (_to_kebab_case)
         """
         files = []
         
-        # Add main implementation file
+        # 1. Add main implementation file
         if 'file_path' in metadata:
             file_path = Path(metadata['file_path'])
             if file_path.exists():
                 files.append(file_path)
         
-        # Add test file if exists
-        test_path = self.project_root / 'tests' / f'test_{feature_name}.py'
-        if test_path.exists():
-            files.append(test_path)
+        # 2. Add test file with multiple pattern checks (FIX #2)
+        # Test files can be in different locations with different naming patterns
+        test_patterns = [
+            # Direct pattern (legacy)
+            self.project_root / 'tests' / f'test_{feature_name}.py',
+            # Orchestrator pattern (most common)
+            self.project_root / 'tests' / 'operations' / f'test_{feature_name.lower()}_orchestrator.py',
+            self.project_root / 'tests' / 'operations' / 'modules' / 'admin' / f'test_{feature_name.lower()}_orchestrator.py',
+            # Agent pattern
+            self.project_root / 'tests' / 'agents' / f'test_{feature_name.lower()}_agent.py',
+            self.project_root / 'tests' / 'cortex_agents' / f'test_{feature_name.lower()}_agent.py',
+            # Integration tests
+            self.project_root / 'tests' / 'integration' / f'test_{feature_name.lower()}.py',
+            # Module tests
+            self.project_root / 'tests' / 'modules' / f'test_{feature_name.lower()}.py'
+        ]
         
-        # Add module guide if exists
-        guide_path = self.project_root / '.github' / 'prompts' / 'modules' / f'{feature_name}-guide.md'
-        if guide_path.exists():
-            files.append(guide_path)
+        for test_path in test_patterns:
+            if test_path.exists():
+                files.append(test_path)
+                break  # Only add first match to avoid duplicates
+        
+        # 3. Add module guide with kebab-case conversion (FIX #3)
+        # Guide files use kebab-case naming (e.g., system-alignment-orchestrator-guide.md)
+        kebab_name = self._to_kebab_case(feature_name)
+        feature_type = metadata.get('feature_type', 'module').lower()
+        
+        guide_patterns = [
+            # Standard pattern with feature type
+            self.project_root / '.github' / 'prompts' / 'modules' / f'{kebab_name}-{feature_type}-guide.md',
+            # Without feature type suffix
+            self.project_root / '.github' / 'prompts' / 'modules' / f'{kebab_name}-guide.md',
+            # With 'orchestrator' suffix explicitly
+            self.project_root / '.github' / 'prompts' / 'modules' / f'{kebab_name}-orchestrator-guide.md',
+            # Legacy pattern (no conversion)
+            self.project_root / '.github' / 'prompts' / 'modules' / f'{feature_name}-guide.md'
+        ]
+        
+        for guide_path in guide_patterns:
+            if guide_path.exists():
+                files.append(guide_path)
+                break  # Only add first match
+        
+        # 4. Add wiring configuration file (FIX #1 - CRITICAL!)
+        # response-templates.yaml contains entry point triggers for all orchestrators
+        # When wiring changes (e.g., align adds new trigger), cache MUST invalidate
+        # This was the root cause of persistent 30% integration scores
+        templates_file = self.project_root / 'cortex-brain' / 'response-templates.yaml'
+        if templates_file.exists():
+            files.append(templates_file)
         
         return files
     
@@ -2304,81 +2569,26 @@ graph TD
     
     def _generate_dashboard(self, report: AlignmentReport, conflicts: List[Conflict]) -> str:
         """
-        Generate visual health dashboards (text + interactive HTML).
+        Generate visual health dashboard.
         
         Phase 3.12: Align 2.0 enhancement
-        Phase 4: Documentation Format Enforcement - Interactive HTML dashboards
-        
-        Generates two outputs:
-        1. Text dashboard - Console output (backward compatible)
-        2. HTML dashboard - Interactive D3.js visualizations (new)
         
         Args:
             report: Alignment report
             conflicts: List of conflicts
             
         Returns:
-            Formatted text dashboard string (HTML saved to file)
+            Formatted dashboard string
         """
-        logger.info("Generating health dashboards...")
+        logger.info("Generating health dashboard...")
         
-        # Generate text dashboard (existing functionality)
-        text_generator = DashboardGenerator(self.project_root)
-        text_dashboard = text_generator.generate_dashboard(report, conflicts)
+        generator = DashboardGenerator(self.project_root)
+        dashboard = generator.generate_dashboard(report, conflicts)
         
         # Save to history
-        text_generator.save_history(report)
+        generator.save_history(report)
         
-        # Generate interactive HTML dashboard (new functionality)
-        try:
-            from src.generators import EPMDashboardAdapter, DashboardTemplateGenerator
-            
-            logger.info("Generating interactive HTML dashboard...")
-            
-            # Transform report data to dashboard layers
-            adapter = EPMDashboardAdapter()
-            layers = adapter.transform_alignment_report(report, conflicts)
-            
-            # Determine status
-            if report.is_healthy:
-                status = "healthy"
-            elif report.has_warnings:
-                status = "warning"
-            else:
-                status = "critical"
-            
-            # Generate HTML
-            html_generator = DashboardTemplateGenerator()
-            html_content = html_generator.generate_dashboard(
-                operation="system-alignment",
-                title="CORTEX System Alignment Report",
-                data={'overall_health': report.overall_health, 'timestamp': report.timestamp.isoformat()},
-                layers=layers,
-                metadata={
-                    'author': 'CORTEX System Alignment',
-                    'status': status,
-                    'generated_at': report.timestamp.isoformat()
-                }
-            )
-            
-            # Save HTML dashboard
-            reports_dir = self.cortex_brain / "documents" / "reports"
-            reports_dir.mkdir(parents=True, exist_ok=True)
-            
-            timestamp_str = report.timestamp.strftime("%Y%m%d_%H%M%S")
-            html_file = reports_dir / f"SYSTEM_ALIGNMENT_DASHBOARD_{timestamp_str}.html"
-            
-            with open(html_file, 'w', encoding='utf-8') as f:
-                f.write(html_content)
-            
-            logger.info(f"✅ Interactive dashboard saved: {html_file}")
-            logger.info(f"   Open in browser for D3.js visualizations")
-            
-        except Exception as e:
-            logger.warning(f"Failed to generate HTML dashboard: {e}")
-            logger.info("Continuing with text dashboard only...")
-        
-        return text_dashboard
+        return dashboard
     
     def _validate_tdd_mastery_integration(self) -> Dict[str, Any]:
         """
@@ -2777,9 +2987,9 @@ graph TD
                 logger.info(f"⏭️ Skipped: {fix_template.description}")
         
         if applied_fixes:
-            print(f"\n\n✅ Applied {len(applied_fixes)} fixes successfully")
-            print(f"🔒 Checkpoint available for rollback: git reset --hard {engine.checkpoint_sha[:8]}")
+            safe_print(f"\n\n✅ Applied {len(applied_fixes)} fixes successfully")
+            safe_print(f"🔒 Checkpoint available for rollback: git reset --hard {engine.checkpoint_sha[:8]}")
         else:
-            print("\n\nℹ️ No fixes applied")
+            safe_print("\n\nℹ️ No fixes applied")
         
         return applied_fixes

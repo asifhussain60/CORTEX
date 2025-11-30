@@ -122,7 +122,10 @@ class ProgressMonitor:
         self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self._monitor_thread.start()
         
-        print(f"\n🔍 {self.operation_name} started...")
+        try:
+            print(f"\n🔍 {self.operation_name} started...")
+        except UnicodeEncodeError:
+            print(f"\n[*] {self.operation_name} started...")
     
     def update(self, step_name: str, current: int = 0, total: int = 0) -> None:
         """
@@ -151,7 +154,10 @@ class ProgressMonitor:
             self._monitor_thread.join(timeout=1.0)
         
         elapsed = self.state.elapsed_seconds if self.state else 0
-        print(f"✅ {self.operation_name} {message} ({elapsed:.1f}s)")
+        try:
+            print(f"✅ {self.operation_name} {message} ({elapsed:.1f}s)")
+        except UnicodeEncodeError:
+            print(f"[OK] {self.operation_name} {message} ({elapsed:.1f}s)")
     
     def fail(self, error_message: str) -> None:
         """Mark operation as failed"""
@@ -164,7 +170,10 @@ class ProgressMonitor:
             self._monitor_thread.join(timeout=1.0)
         
         elapsed = self.state.elapsed_seconds if self.state else 0
-        print(f"❌ {self.operation_name} failed: {error_message} ({elapsed:.1f}s)")
+        try:
+            print(f"❌ {self.operation_name} failed: {error_message} ({elapsed:.1f}s)")
+        except UnicodeEncodeError:
+            print(f"[X] {self.operation_name} failed: {error_message} ({elapsed:.1f}s)")
     
     def _monitor_loop(self) -> None:
         """Background monitoring loop"""
@@ -204,16 +213,25 @@ class ProgressMonitor:
             eta_sec = self.state.eta_seconds
             eta_str = f", ETA: {eta_sec:.0f}s" if eta_sec else ""
             
-            print(f"  ⏳ {step}: {current}/{total} ({pct:.1f}%, {elapsed:.1f}s{eta_str})")
+            try:
+                print(f"  ⏳ {step}: {current}/{total} ({pct:.1f}%, {elapsed:.1f}s{eta_str})")
+            except UnicodeEncodeError:
+                print(f"  [...] {step}: {current}/{total} ({pct:.1f}%, {elapsed:.1f}s{eta_str})")
         else:
-            print(f"  ⏳ {step} ({elapsed:.1f}s)")
+            try:
+                print(f"  ⏳ {step} ({elapsed:.1f}s)")
+            except UnicodeEncodeError:
+                print(f"  [...] {step} ({elapsed:.1f}s)")
     
     def _handle_hang(self) -> None:
         """Handle detected hang (called with lock held)"""
         if not self.state:
             return
         
-        print(f"\n⚠️  WARNING: No progress for {self.hang_timeout:.0f}s")
+        try:
+            print(f"\n⚠️  WARNING: No progress for {self.hang_timeout:.0f}s")
+        except UnicodeEncodeError:
+            print(f"\n[!] WARNING: No progress for {self.hang_timeout:.0f}s")
         print(f"   Last step: {self.state.current_step}")
         print(f"   Consider cancelling (Ctrl+C) if operation appears frozen")
         

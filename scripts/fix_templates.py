@@ -80,7 +80,7 @@ def main():
     possible_paths = [
         script_dir.parent / "cortex-brain" / "response-templates.yaml",
         script_dir / "cortex-brain" / "response-templates.yaml",
-        Path("d:/PROJECTS/CORTEX/cortex-brain/response-templates.yaml"),
+        Path(__file__).resolve().parent.parent / "cortex-brain" / "response-templates.yaml",
     ]
     
     templates_path = None

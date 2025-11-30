@@ -2,13 +2,13 @@
 
 **Sprint:** 1 of 8  
 **Duration:** 1 week  
-**Status:** 🚧 IN PROGRESS  
+**Status:** ≡ƒÜº IN PROGRESS  
 **Started:** November 28, 2025  
 **Target Completion:** December 5, 2025
 
 ---
 
-## 🎯 Sprint Goal
+## ≡ƒÄ» Sprint Goal
 
 Make CORTEX Rulebook impossible to miss at every entry point with:
 1. Welcome banner with rulebook link
@@ -17,7 +17,7 @@ Make CORTEX Rulebook impossible to miss at every entry point with:
 
 ---
 
-## 📋 Deliverables
+## ≡ƒôï Deliverables
 
 ### 1. Welcome Banner Enhancement
 
@@ -31,9 +31,9 @@ def _generate_greeting_response(self) -> str:
     return """
     Hello! I'm CORTEX, your AI assistant enhancement system.
     
-    🧠 **CORTEX Vision:** Transparent governance where rules guide development.
+    ≡ƒºá **CORTEX Vision:** Transparent governance where rules guide development.
     
-    📖 **Important:** Please review the CORTEX Rulebook before starting:
+    ≡ƒôû **Important:** Please review the CORTEX Rulebook before starting:
        #file:cortex-brain/governance/CORTEX-RULEBOOK.md
     
     This ensures you understand brain protection rules and development guidelines.
@@ -43,9 +43,9 @@ def _generate_greeting_response(self) -> str:
 ```
 
 **Validation:**
-- ✅ Link appears in all greeting responses
-- ✅ File reference uses correct syntax (#file:)
-- ✅ Language uses "vision" not "promise"
+- Γ£à Link appears in all greeting responses
+- Γ£à File reference uses correct syntax (#file:)
+- Γ£à Language uses "vision" not "promise"
 
 ### 2. Help Command Enhancement
 
@@ -54,7 +54,7 @@ def _generate_greeting_response(self) -> str:
 
 **New Section:**
 ```yaml
-## 📖 Governance & Rules
+## ≡ƒôû Governance & Rules
 
 **CORTEX Rulebook:** #file:cortex-brain/governance/CORTEX-RULEBOOK.md
 
@@ -71,9 +71,9 @@ Understanding governance rules helps you work effectively with CORTEX:
 ```
 
 **Validation:**
-- ✅ Section appears in help response
-- ✅ Commands functional (Sprint 3 implementation)
-- ✅ Rulebook link navigable
+- Γ£à Section appears in help response
+- Γ£à Commands functional (Sprint 3 implementation)
+- Γ£à Rulebook link navigable
 
 ### 3. Pre-Flight Acknowledgment Flow
 
@@ -130,7 +130,7 @@ def show_pre_flight_acknowledgment(self) -> str:
         Acknowledgment prompt text
     """
     return """
-    ## 📖 Welcome to CORTEX!
+    ## ≡ƒôû Welcome to CORTEX!
     
     Before we begin, please take a moment to review the CORTEX Rulebook:
     
@@ -155,14 +155,14 @@ def show_pre_flight_acknowledgment(self) -> str:
 ```
 
 **Validation:**
-- ✅ Shows only for first-time users
-- ✅ Experienced users (existing profile) skip
-- ✅ Acknowledgment persisted in Tier 3
-- ✅ Can be re-triggered with "show rulebook acknowledgment"
+- Γ£à Shows only for first-time users
+- Γ£à Experienced users (existing profile) skip
+- Γ£à Acknowledgment persisted in Tier 3
+- Γ£à Can be re-triggered with "show rulebook acknowledgment"
 
 ---
 
-## 🗄️ Database Schema (Sprint 2 Prep)
+## ≡ƒùä∩╕Å Database Schema (Sprint 2 Prep)
 
 **Location:** `cortex-brain/compliance-tracking-schema.sql`
 
@@ -219,14 +219,14 @@ CREATE INDEX IF NOT EXISTS idx_rule_views_rule
 ```
 
 **Schema Validation:**
-- ✅ Supports all Sprint 2 dashboard requirements
-- ✅ Indexes optimize query performance (<50ms target)
-- ✅ JSON context field allows flexible data storage
-- ✅ Resolution tracking for violation follow-up
+- Γ£à Supports all Sprint 2 dashboard requirements
+- Γ£à Indexes optimize query performance (<50ms target)
+- Γ£à JSON context field allows flexible data storage
+- Γ£à Resolution tracking for violation follow-up
 
 ---
 
-## 🧪 Testing Requirements
+## ≡ƒº¬ Testing Requirements
 
 ### Unit Tests (15 tests)
 
@@ -319,7 +319,7 @@ def test_experienced_users_skip_acknowledgment():
 def test_end_to_end_onboarding_with_rulebook_acknowledgment():
     """Test complete onboarding flow with rulebook."""
     # Simulate fresh user activation
-    # Verify greeting → acknowledgment → profile creation → ready
+    # Verify greeting ΓåÆ acknowledgment ΓåÆ profile creation ΓåÆ ready
     pass
 
 def test_rulebook_link_navigation_from_all_entry_points():
@@ -337,17 +337,17 @@ def test_rulebook_link_navigation_from_all_entry_points():
 
 ---
 
-## 📊 Success Criteria
+## ≡ƒôè Success Criteria
 
 **Sprint 1 Complete When:**
 
-1. ✅ All activation responses include rulebook link
-2. ✅ Help command shows governance section with 4 commands
-3. ✅ First-use acknowledgment flow functional
-4. ✅ Acknowledgment timestamp persisted in Tier 3
-5. ✅ All 15 unit tests pass (100% pass rate)
-6. ✅ 2 integration tests pass
-7. ✅ Manual validation checklist complete
+1. Γ£à All activation responses include rulebook link
+2. Γ£à Help command shows governance section with 4 commands
+3. Γ£à First-use acknowledgment flow functional
+4. Γ£à Acknowledgment timestamp persisted in Tier 3
+5. Γ£à All 15 unit tests pass (100% pass rate)
+6. Γ£à 2 integration tests pass
+7. Γ£à Manual validation checklist complete
 
 **Performance Targets:**
 - Acknowledgment check: <10ms
@@ -356,7 +356,7 @@ def test_rulebook_link_navigation_from_all_entry_points():
 
 ---
 
-## 🔄 Next Sprint Preview
+## ≡ƒöä Next Sprint Preview
 
 **Sprint 2: Active Compliance Dashboard**
 
@@ -373,7 +373,7 @@ After Sprint 1, we'll build:
 
 ---
 
-## 📚 References
+## ≡ƒôÜ References
 
 - **Option B Plan:** `OPTION-B-COMPREHENSIVE-DASHBOARD-PLAN.yaml`
 - **User Profile Guide:** `user-profile-guide.md`
@@ -383,6 +383,6 @@ After Sprint 1, we'll build:
 ---
 
 **Author:** Asif Hussain  
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**Sprint Status:** 🚧 IN PROGRESS  
+**Copyright:** ┬⌐ 2024-2025 Asif Hussain. All rights reserved.  
+**Sprint Status:** ≡ƒÜº IN PROGRESS  
 **Next Review:** December 5, 2025

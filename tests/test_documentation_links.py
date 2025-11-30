@@ -21,12 +21,12 @@ class TestDocumentationLinks:
     @pytest.fixture
     def docs_root(self):
         """Get the docs directory path."""
-        return Path("D:/PROJECTS/CORTEX/docs")
+        return Path(__file__).resolve().parent.parent / "docs"
     
     @pytest.fixture
     def project_root(self):
         """Get the project root path."""
-        return Path("D:/PROJECTS/CORTEX")
+        return Path(__file__).resolve().parent.parent
     
     def test_awakening_cortex_navigation_link(self, docs_root):
         """Test that awakening-of-cortex.md links to existing getting-started/navigation.md"""
@@ -157,7 +157,7 @@ class TestDiagramIndexGeneration:
     
     def test_diagram_index_uses_forward_slashes(self):
         """Test that diagrams/INDEX.md uses forward slashes in links, not backslashes."""
-        index_file = Path("D:/PROJECTS/CORTEX/docs/diagrams/INDEX.md")
+        index_file = Path(__file__).resolve().parent.parent / "docs" / "diagrams" / "INDEX.md"
         
         if index_file.exists():
             content = index_file.read_text(encoding='utf-8')

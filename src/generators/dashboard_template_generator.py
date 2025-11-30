@@ -4,7 +4,7 @@ Dashboard Template Generator
 Generates interactive HTML dashboards with D3.js visualizations according to
 CORTEX Documentation Format Specification v1.0.
 
-Copyright © 2024-2025 Asif Hussain. All rights reserved.
+Copyright ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
 """
 
@@ -412,7 +412,7 @@ class DashboardTemplateGenerator:
     def _generate_header(self, title: str, metadata: Optional[Dict[str, Any]]) -> str:
         """Generate dashboard header"""
         status = metadata.get('status', 'success') if metadata else 'success'
-        status_text = metadata.get('status_text', '✅ Success') if metadata else '✅ Success'
+        status_text = metadata.get('status_text', 'Γ£à Success') if metadata else 'Γ£à Success'
         
         return f'''<div class="header">
     <h1>{html.escape(title)}</h1>

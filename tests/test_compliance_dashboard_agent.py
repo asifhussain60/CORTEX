@@ -205,7 +205,7 @@ def test_can_handle_compliance_queries(agent):
 
 
 def test_full_workflow_execution(agent):
-    """Test complete workflow: request → execute → response."""
+    """Test complete workflow: request ΓåÆ execute ΓåÆ response."""
     # Create request
     request = AgentRequest(
         intent="show_compliance",
@@ -238,9 +238,9 @@ def test_compliance_score_extraction(agent):
     """Test compliance score extraction from summary text."""
     # Test various formats
     test_cases = [
-        ("✅ 85% compliant (27/32 rules passing)", 85),
-        ("⚠️ 65 % warning state", 65),
-        ("🔴 45% non-compliant", 45),
+        ("Γ£à 85% compliant (27/32 rules passing)", 85),
+        ("ΓÜá∩╕Å 65 % warning state", 65),
+        ("≡ƒö┤ 45% non-compliant", 45),
         ("100% healthy", 100),
         ("No percentage here", None),
     ]

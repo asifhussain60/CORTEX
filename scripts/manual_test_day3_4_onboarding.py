@@ -35,14 +35,14 @@ def print_header(title: str):
 
 def print_step(step: str, details: str = ""):
     """Print a test step."""
-    print(f"✓ {step}")
+    print(f"Γ£ô {step}")
     if details:
-        print(f"  → {details}")
+        print(f"  ΓåÆ {details}")
 
 
 def print_result(success: bool, message: str):
     """Print a test result."""
-    icon = "✅" if success else "❌"
+    icon = "Γ£à" if success else "Γ¥î"
     print(f"\n{icon} {message}\n")
 
 
@@ -280,7 +280,7 @@ def test_scenario_4_ux_validation():
             ]
             for i, passed in enumerate(quality_checks):
                 if not passed:
-                    print(f"  ❌ {check_names[i]}")
+                    print(f"  Γ¥î {check_names[i]}")
         
         return all_passed
     
@@ -291,7 +291,7 @@ def test_scenario_4_ux_validation():
 
 def main():
     """Run all manual test scenarios."""
-    print_header("🧪 MANUAL TESTING: Day 3-4 First-Time Acknowledgment")
+    print_header("≡ƒº¬ MANUAL TESTING: Day 3-4 First-Time Acknowledgment")
     print("Sprint 1: Rulebook Visibility Enhancement - US-1.3")
     print("Testing 3-step onboarding acknowledgment flow\n")
     
@@ -304,10 +304,10 @@ def main():
     results.append(("Scenario 4: UX Quality Validation", test_scenario_4_ux_validation()))
     
     # Summary
-    print_header("📊 MANUAL TESTING SUMMARY")
+    print_header("≡ƒôè MANUAL TESTING SUMMARY")
     
     for scenario, passed in results:
-        icon = "✅" if passed else "❌"
+        icon = "Γ£à" if passed else "Γ¥î"
         print(f"{icon} {scenario}: {'PASSED' if passed else 'FAILED'}")
     
     total = len(results)
@@ -318,10 +318,10 @@ def main():
     print(f"{'=' * 70}\n")
     
     if passed == total:
-        print("✅ ALL MANUAL TESTS PASSED - Ready to commit Day 3-4! ✅\n")
+        print("Γ£à ALL MANUAL TESTS PASSED - Ready to commit Day 3-4! Γ£à\n")
         return 0
     else:
-        print(f"❌ {total - passed} SCENARIO(S) FAILED - Review before committing ❌\n")
+        print(f"Γ¥î {total - passed} SCENARIO(S) FAILED - Review before committing Γ¥î\n")
         return 1
 
 

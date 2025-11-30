@@ -44,6 +44,9 @@ from src.workflows.test_execution_manager import TestExecutionManager
 from src.workflows.terminal_integration import TerminalIntegration
 from src.workflows.workspace_context_manager import WorkspaceContextManager
 
+# Phase 4 - Git Checkpoint Integration (2025-11-28)
+from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+
 # Phase 4 - TDD Mastery Integration (2025-11-24)
 import sys
 from pathlib import Path as PathLib
@@ -98,6 +101,9 @@ class TDDWorkflowConfig:
     
     # Layer 8: Test Location Isolation (2025-11-24)
     # CRITICAL: Application tests go in user repo, CORTEX tests stay in CORTEX
+    
+    # Phase 4 - Git Checkpoint Integration (2025-11-28)
+    enable_git_checkpoints: bool = True  # Auto-checkpoint at TDD phases
     user_repo_root: Optional[str] = None  # User's application root (outside CORTEX)
     is_cortex_test: bool = False  # True if testing CORTEX itself
     auto_detect_test_location: bool = True  # Auto-detect user repo vs CORTEX
@@ -223,6 +229,14 @@ class TDDWorkflowOrchestrator:
                 self.workspace_manager = WorkspaceContextManager(PathLib(config.project_root))
             except Exception as e:
                 print(f"⚠️  WorkspaceContextManager initialization failed: {e}")
+        
+        # Phase 4 - Git Checkpoint Integration (2025-11-28)
+        self.git_checkpoint: Optional[GitCheckpointOrchestrator] = None
+        if config.enable_git_checkpoints:
+            try:
+                self.git_checkpoint = GitCheckpointOrchestrator(PathLib(config.project_root))
+            except Exception as e:
+                print(f"⚠️  GitCheckpointOrchestrator initialization failed: {e}")
         
         # Phase 4 - TDD Mastery Integration: Agent initialization
         self.view_discovery: Optional[Any] = None
@@ -383,6 +397,16 @@ class TDDWorkflowOrchestrator:
         # Initialize state machine
         self.state_machine = TDDStateMachine(feature_name, session_id)
         
+        # Phase 4 - Git Checkpoint: Create checkpoint at session start
+        if self.git_checkpoint:
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    "tdd-session-start",
+                    f"TDD session started for {feature_name}"
+                )
+            except Exception as e:
+                print(f"⚠️  Git checkpoint creation failed: {e}")
+        
         # Create session context
         self.current_context = TDDContext(
             session_id=session_id,
@@ -533,6 +557,16 @@ class TDDWorkflowOrchestrator:
         if not self.state_machine.start_green_phase():
             raise RuntimeError(f"Cannot transition to GREEN from {self.state_machine.get_current_state()}")
         
+        # Phase 4 - Git Checkpoint: Create checkpoint at GREEN phase (tests passing)
+        if self.git_checkpoint:
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    "tdd-green",
+                    f"Tests passing: {tests_passing} tests GREEN for {self.state_machine.feature_name}"
+                )
+            except Exception as e:
+                print(f"⚠️  Git checkpoint creation failed: {e}")
+        
         # Parse test results
         tests_passing = test_results.get("passed", 0)
         code_lines_added = test_results.get("code_lines", 0)
@@ -635,6 +669,16 @@ class TDDWorkflowOrchestrator:
         if not self.state_machine.start_refactor_phase():
             raise RuntimeError(f"Cannot transition to REFACTOR from {self.state_machine.get_current_state()}")
         
+        # Phase 4 - Git Checkpoint: Create checkpoint at REFACTOR phase start
+        if self.git_checkpoint:
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    "tdd-refactor-start",
+                    f"Starting REFACTOR phase for {self.state_machine.feature_name}"
+                )
+            except Exception as e:
+                print(f"⚠️  Git checkpoint creation failed: {e}")
+        
         # Read source code
         source_code = Path(source_file).read_text()
         
@@ -693,6 +737,16 @@ class TDDWorkflowOrchestrator:
         Args:
             lines_refactored: Number of lines refactored
             iterations: Number of refactoring iterations
+        
+        # Phase 4 - Git Checkpoint: Create checkpoint after REFACTOR phase complete
+        if self.git_checkpoint:
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    "tdd-refactor-complete",
+                    f"Completed REFACTOR phase: {lines_refactored} lines refactored"
+                )
+            except Exception as e:
+                print(f"⚠️  Git checkpoint creation failed: {e}")
             
         Returns:
             True if completed successfully
@@ -717,6 +771,18 @@ class TDDWorkflowOrchestrator:
         
         # Complete cycle
         self.state_machine.complete_cycle()
+        
+        # Phase 4 - Git Checkpoint: Create checkpoint at cycle completion
+        if self.git_checkpoint:
+            try:
+                cycles = self.state_machine.get_cycle_metrics()
+                cycle_num = cycles[-1].cycle_number if cycles else 0
+                self.git_checkpoint.create_auto_checkpoint(
+                    "tdd-cycle-complete",
+                    f"Completed TDD cycle #{cycle_num} for {self.state_machine.feature_name}"
+                )
+            except Exception as e:
+                print(f"⚠️  Git checkpoint creation failed: {e}")
         
         # Get cycle metrics
         cycles = self.state_machine.get_cycle_metrics()

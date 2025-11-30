@@ -1,836 +1,516 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/asifhussain60/CORTEX/schemas/documentation-format-v1.0.json",
-  "title": "CORTEX Documentation Format Validation Schema",
-  "description": "JSON schema for validating CORTEX admin dashboard documentation outputs",
+  "title": "CORTEX Interactive Dashboard Format Validation Schema",
+  "description": "JSON schema for validating CORTEX admin operation dashboard outputs against DOCUMENTATION-FORMAT-SPEC-v1.0",
   "version": "1.0.0",
   "type": "object",
-  "required": [
-    "metadata",
-    "structure",
-    "layers",
-    "visualizations",
-    "security",
-    "export"
-  ],
+  "required": ["metadata", "overview", "visualizations", "diagrams", "dataTable", "recommendations"],
+  "additionalProperties": true,
+  
   "properties": {
     "metadata": {
       "type": "object",
-      "description": "Dashboard metadata and identification",
-      "required": ["title", "timestamp", "author", "version", "operation"],
+      "description": "Dashboard metadata and generation information",
+      "required": ["generatedAt", "version", "operationType", "author"],
       "properties": {
-        "title": {
+        "generatedAt": {
           "type": "string",
-          "description": "Dashboard title",
-          "minLength": 5,
-          "maxLength": 100,
-          "pattern": "^[A-Za-z0-9\\s\\-:]+$"
-        },
-        "timestamp": {
-          "type": "string",
-          "description": "ISO 8601 timestamp",
-          "format": "date-time"
-        },
-        "author": {
-          "type": "string",
-          "description": "Author attribution",
-          "const": "Asif Hussain | GitHub: github.com/asifhussain60/CORTEX"
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of dashboard generation"
         },
         "version": {
           "type": "string",
-          "description": "Format specification version",
-          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "CORTEX version (semantic versioning)"
         },
-        "operation": {
+        "operationType": {
           "type": "string",
-          "description": "Admin operation that generated this dashboard",
           "enum": [
-            "system-alignment",
-            "architecture-review",
-            "deployment-validation",
-            "test-validation",
-            "security-audit",
-            "performance-analysis",
-            "documentation-generation",
-            "brain-export",
-            "epm-setup"
-          ]
-        }
-      }
-    },
-    "structure": {
-      "type": "object",
-      "description": "HTML structure validation",
-      "required": ["doctype", "libraries", "csp", "tabs"],
-      "properties": {
-        "doctype": {
+            "enterprise_documentation",
+            "system_alignment",
+            "diagram_regeneration",
+            "design_sync",
+            "analytics",
+            "response_templates"
+          ],
+          "description": "Type of admin operation"
+        },
+        "author": {
           "type": "string",
-          "description": "HTML doctype",
-          "const": "<!DOCTYPE html>"
-        },
-        "libraries": {
-          "type": "object",
-          "description": "Required external libraries",
-          "required": ["d3js", "html2canvas", "jspdf"],
-          "properties": {
-            "d3js": {
-              "type": "object",
-              "required": ["version", "url"],
-              "properties": {
-                "version": {
-                  "type": "string",
-                  "description": "D3.js version (minimum 7.8.5)",
-                  "pattern": "^7\\.(8\\.[5-9]|9\\.\\d+|\\d{2,}\\.\\d+)$"
-                },
-                "url": {
-                  "type": "string",
-                  "format": "uri",
-                  "pattern": "^https://d3js\\.org/d3\\.v7\\.min\\.js$"
-                }
-              }
-            },
-            "html2canvas": {
-              "type": "object",
-              "required": ["version", "url"],
-              "properties": {
-                "version": {
-                  "type": "string",
-                  "pattern": "^1\\.[4-9]\\.\\d+$"
-                },
-                "url": {
-                  "type": "string",
-                  "format": "uri",
-                  "pattern": "^https://cdnjs\\.cloudflare\\.com/ajax/libs/html2canvas/"
-                }
-              }
-            },
-            "jspdf": {
-              "type": "object",
-              "required": ["version", "url"],
-              "properties": {
-                "version": {
-                  "type": "string",
-                  "pattern": "^2\\.[5-9]\\.\\d+$"
-                },
-                "url": {
-                  "type": "string",
-                  "format": "uri",
-                  "pattern": "^https://cdnjs\\.cloudflare\\.com/ajax/libs/jspdf/"
-                }
-              }
-            }
-          }
-        },
-        "csp": {
-          "type": "object",
-          "description": "Content Security Policy validation",
-          "required": ["present", "directives"],
-          "properties": {
-            "present": {
-              "type": "boolean",
-              "const": true
-            },
-            "directives": {
-              "type": "object",
-              "required": ["default-src", "script-src", "style-src"],
-              "properties": {
-                "default-src": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": ["'self'", "https://d3js.org", "https://cdnjs.cloudflare.com"]
-                  },
-                  "minItems": 1
-                },
-                "script-src": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": ["'self'", "'unsafe-inline'", "https://d3js.org", "https://cdnjs.cloudflare.com"]
-                  },
-                  "minItems": 2
-                },
-                "style-src": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": ["'self'", "'unsafe-inline'"]
-                  },
-                  "minItems": 2
-                }
-              }
-            }
-          }
-        },
-        "tabs": {
-          "type": "object",
-          "description": "Tab navigation structure",
-          "required": ["count", "navigation", "content"],
-          "properties": {
-            "count": {
-              "type": "integer",
-              "description": "Number of tabs (minimum 5)",
-              "minimum": 5
-            },
-            "navigation": {
-              "type": "object",
-              "required": ["present", "functional"],
-              "properties": {
-                "present": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "functional": {
-                  "type": "boolean",
-                  "const": true
-                }
-              }
-            },
-            "content": {
-              "type": "object",
-              "required": ["activeClass", "transitionEffect"],
-              "properties": {
-                "activeClass": {
-                  "type": "string",
-                  "const": "active"
-                },
-                "transitionEffect": {
-                  "type": "boolean",
-                  "const": true
-                }
-              }
-            }
-          }
+          "const": "CORTEX",
+          "description": "Dashboard generator (always CORTEX)"
         }
       }
     },
-    "layers": {
-      "type": "array",
-      "description": "Dashboard layers (minimum 5)",
-      "minItems": 5,
-      "items": {
-        "type": "object",
-        "required": ["id", "name", "order", "elements"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Layer DOM ID",
-            "pattern": "^layer-[a-z-]+$"
-          },
-          "name": {
-            "type": "string",
-            "description": "Layer display name",
-            "enum": [
-              "Executive Summary",
-              "Detailed Analysis",
-              "Issues & Recommendations",
-              "Technical Details",
-              "Export & Actions"
-            ]
-          },
-          "order": {
-            "type": "integer",
-            "description": "Tab order (1-5)",
-            "minimum": 1,
-            "maximum": 10
-          },
-          "elements": {
+    
+    "overview": {
+      "type": "object",
+      "description": "Tab 1: Overview with narrative intelligence",
+      "required": ["executiveSummary", "keyMetrics", "statusIndicator"],
+      "properties": {
+        "executiveSummary": {
+          "type": "string",
+          "minLength": 100,
+          "maxLength": 1000,
+          "description": "3-sentence executive summary in natural language"
+        },
+        "keyMetrics": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 10,
+          "description": "Top 5-10 key performance metrics",
+          "items": {
             "type": "object",
-            "description": "Required elements per layer",
-            "required": ["heading", "content"],
+            "required": ["label", "value", "status"],
             "properties": {
-              "heading": {
-                "type": "object",
-                "required": ["present", "level"],
-                "properties": {
-                  "present": {
-                    "type": "boolean",
-                    "const": true
-                  },
-                  "level": {
-                    "type": "string",
-                    "enum": ["h1", "h2", "h3"]
-                  }
-                }
+              "label": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 50,
+                "description": "Metric display label"
               },
-              "content": {
-                "type": "object",
-                "required": ["present", "minWordCount"],
-                "properties": {
-                  "present": {
-                    "type": "boolean",
-                    "const": true
-                  },
-                  "minWordCount": {
-                    "type": "integer",
-                    "minimum": 50
-                  }
-                }
+              "value": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "number" }
+                ],
+                "description": "Metric value (number or formatted string)"
               },
-              "visualization": {
-                "type": "object",
-                "description": "D3.js visualization (if required)",
-                "properties": {
-                  "present": {
-                    "type": "boolean"
-                  },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "gauge",
-                      "radial",
-                      "tree",
-                      "force-graph",
-                      "matrix",
-                      "heatmap",
-                      "timeline",
-                      "thumbnail"
-                    ]
-                  }
-                }
+              "trend": {
+                "type": "string",
+                "enum": ["up", "down", "stable"],
+                "description": "Trend direction"
+              },
+              "trendValue": {
+                "type": "string",
+                "pattern": "^[+-]\\d+(\\.\\d+)?%?$",
+                "description": "Trend magnitude (e.g., '+5%', '-2.5')"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["healthy", "warning", "critical"],
+                "description": "Metric status indicator"
               }
+            }
+          }
+        },
+        "statusIndicator": {
+          "type": "object",
+          "required": ["status", "message"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["healthy", "warning", "critical"],
+              "description": "Overall system health status"
+            },
+            "message": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "Status explanation message"
             }
           }
         }
       }
     },
+    
     "visualizations": {
       "type": "object",
-      "description": "D3.js visualization validation",
-      "required": ["count", "types", "interactivity", "accessibility"],
+      "description": "Tab 2: Interactive D3.js and Chart.js visualizations",
+      "required": ["forceGraph", "timeSeries"],
       "properties": {
-        "count": {
-          "type": "integer",
-          "description": "Number of D3.js visualizations (minimum 5, one per layer)",
-          "minimum": 5
-        },
-        "types": {
-          "type": "array",
-          "description": "Visualization types used",
-          "items": {
-            "type": "string",
-            "enum": [
-              "gauge",
-              "radial",
-              "tree",
-              "force-graph",
-              "matrix",
-              "heatmap",
-              "timeline",
-              "thumbnail",
-              "bar-chart",
-              "line-chart",
-              "scatter-plot"
-            ]
-          },
-          "minItems": 5
-        },
-        "interactivity": {
+        "forceGraph": {
           "type": "object",
-          "description": "Interactive features",
-          "required": ["hover", "click", "zoom"],
+          "description": "D3.js force-directed graph data",
+          "required": ["nodes", "links"],
           "properties": {
-            "hover": {
-              "type": "boolean",
-              "description": "Hover tooltips present",
-              "const": true
-            },
-            "click": {
-              "type": "boolean",
-              "description": "Click interactions present",
-              "const": true
-            },
-            "zoom": {
-              "type": "boolean",
-              "description": "Zoom/pan functionality (for complex visualizations)"
-            }
-          }
-        },
-        "accessibility": {
-          "type": "object",
-          "description": "Accessibility features",
-          "required": ["ariaLabels", "titles", "descriptions"],
-          "properties": {
-            "ariaLabels": {
-              "type": "boolean",
-              "description": "ARIA labels present on all SVG elements",
-              "const": true
-            },
-            "titles": {
-              "type": "boolean",
-              "description": "<title> tags in SVG elements",
-              "const": true
-            },
-            "descriptions": {
-              "type": "boolean",
-              "description": "<desc> tags in SVG elements",
-              "const": true
-            }
-          }
-        },
-        "sanitization": {
-          "type": "object",
-          "description": "Data sanitization for XSS prevention",
-          "required": ["implemented", "method"],
-          "properties": {
-            "implemented": {
-              "type": "boolean",
-              "const": true
-            },
-            "method": {
-              "type": "string",
-              "enum": ["textContent", "DOMPurify", "custom-sanitizer"]
-            }
-          }
-        }
-      }
-    },
-    "security": {
-      "type": "object",
-      "description": "Security validation",
-      "required": ["csp", "xss", "dataValidation", "inlineHandlers"],
-      "properties": {
-        "csp": {
-          "type": "object",
-          "description": "Content Security Policy compliance",
-          "required": ["present", "compliant"],
-          "properties": {
-            "present": {
-              "type": "boolean",
-              "const": true
-            },
-            "compliant": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        },
-        "xss": {
-          "type": "object",
-          "description": "XSS prevention measures",
-          "required": ["inputSanitization", "outputEncoding"],
-          "properties": {
-            "inputSanitization": {
-              "type": "boolean",
-              "description": "User input sanitized before rendering",
-              "const": true
-            },
-            "outputEncoding": {
-              "type": "boolean",
-              "description": "Data encoded for safe HTML output",
-              "const": true
-            }
-          }
-        },
-        "dataValidation": {
-          "type": "object",
-          "description": "Data validation before rendering",
-          "required": ["schemaValidation", "typeChecking"],
-          "properties": {
-            "schemaValidation": {
-              "type": "boolean",
-              "description": "JSON schema validation implemented",
-              "const": true
-            },
-            "typeChecking": {
-              "type": "boolean",
-              "description": "Runtime type checking for dashboard data",
-              "const": true
-            }
-          }
-        },
-        "inlineHandlers": {
-          "type": "object",
-          "description": "Inline event handler check",
-          "required": ["present", "count"],
-          "properties": {
-            "present": {
-              "type": "boolean",
-              "description": "Inline handlers NOT allowed",
-              "const": false
-            },
-            "count": {
-              "type": "integer",
-              "description": "Number of inline handlers (must be 0)",
-              "const": 0
-            }
-          }
-        }
-      }
-    },
-    "export": {
-      "type": "object",
-      "description": "Export functionality validation",
-      "required": ["formats", "functionality", "performance"],
-      "properties": {
-        "formats": {
-          "type": "object",
-          "description": "Supported export formats",
-          "required": ["pdf", "png", "pptx"],
-          "properties": {
-            "pdf": {
-              "type": "object",
-              "required": ["available", "functional", "includesAllLayers"],
-              "properties": {
-                "available": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "functional": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "includesAllLayers": {
-                  "type": "boolean",
-                  "const": true
-                }
-              }
-            },
-            "png": {
-              "type": "object",
-              "required": ["available", "functional", "highResolution"],
-              "properties": {
-                "available": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "functional": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "highResolution": {
-                  "type": "boolean",
-                  "description": "2x scale for high DPI displays",
-                  "const": true
-                }
-              }
-            },
-            "pptx": {
-              "type": "object",
-              "required": ["available", "functional", "preservesFormatting"],
-              "properties": {
-                "available": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "functional": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "preservesFormatting": {
-                  "type": "boolean",
-                  "const": true
-                }
-              }
-            }
-          }
-        },
-        "functionality": {
-          "type": "object",
-          "description": "Export button functionality",
-          "required": ["buttons", "errorHandling", "filenameFormat"],
-          "properties": {
-            "buttons": {
-              "type": "object",
-              "required": ["count", "labeled", "accessible"],
-              "properties": {
-                "count": {
-                  "type": "integer",
-                  "minimum": 3
-                },
-                "labeled": {
-                  "type": "boolean",
-                  "const": true
-                },
-                "accessible": {
-                  "type": "boolean",
-                  "const": true
-                }
-              }
-            },
-            "errorHandling": {
-              "type": "boolean",
-              "description": "Graceful error handling for failed exports",
-              "const": true
-            },
-            "filenameFormat": {
-              "type": "string",
-              "description": "Filename pattern with timestamp",
-              "pattern": "^cortex-[a-z-]+-\\d+\\.(pdf|png|pptx)$"
-            }
-          }
-        },
-        "performance": {
-          "type": "object",
-          "description": "Export performance metrics",
-          "required": ["maxDuration", "fileSizeLimit"],
-          "properties": {
-            "maxDuration": {
-              "type": "integer",
-              "description": "Maximum export duration in seconds",
-              "maximum": 5
-            },
-            "fileSizeLimit": {
-              "type": "integer",
-              "description": "Maximum file size in MB",
-              "maximum": 10
-            }
-          }
-        }
-      }
-    },
-    "performance": {
-      "type": "object",
-      "description": "Performance requirements",
-      "required": ["pageLoad", "rendering", "transitions", "fileSize"],
-      "properties": {
-        "pageLoad": {
-          "type": "object",
-          "required": ["duration", "acceptable"],
-          "properties": {
-            "duration": {
-              "type": "number",
-              "description": "Page load time in seconds",
-              "maximum": 2.0
-            },
-            "acceptable": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        },
-        "rendering": {
-          "type": "object",
-          "required": ["d3Duration", "acceptable"],
-          "properties": {
-            "d3Duration": {
-              "type": "number",
-              "description": "D3.js render time per chart in milliseconds",
-              "maximum": 500
-            },
-            "acceptable": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        },
-        "transitions": {
-          "type": "object",
-          "required": ["fps", "smooth"],
-          "properties": {
-            "fps": {
-              "type": "integer",
-              "description": "Frames per second for transitions",
-              "minimum": 60
-            },
-            "smooth": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        },
-        "fileSize": {
-          "type": "object",
-          "required": ["size", "acceptable"],
-          "properties": {
-            "size": {
-              "type": "number",
-              "description": "Total file size in MB",
-              "maximum": 2.0
-            },
-            "acceptable": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        }
-      }
-    },
-    "annotations": {
-      "type": "object",
-      "description": "Smart annotation system",
-      "required": ["present", "count", "schema"],
-      "properties": {
-        "present": {
-          "type": "boolean",
-          "description": "Annotations system implemented"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of annotations (minimum 5)",
-          "minimum": 5
-        },
-        "schema": {
-          "type": "object",
-          "description": "Annotation schema compliance",
-          "required": ["valid", "types"],
-          "properties": {
-            "valid": {
-              "type": "boolean",
-              "const": true
-            },
-            "types": {
+            "nodes": {
               "type": "array",
+              "minItems": 1,
               "items": {
-                "type": "string",
-                "enum": ["tooltip", "popover", "callout", "badge"]
-              },
-              "minItems": 1
-            }
-          }
-        }
-      }
-    },
-    "styling": {
-      "type": "object",
-      "description": "Styling requirements",
-      "required": ["colorPalette", "typography", "layout"],
-      "properties": {
-        "colorPalette": {
-          "type": "object",
-          "description": "CORTEX color palette compliance",
-          "required": ["primary", "secondary", "accent", "status"],
-          "properties": {
-            "primary": {
-              "type": "string",
-              "const": "#2c3e50"
+                "type": "object",
+                "required": ["id", "group", "label"],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique node identifier"
+                  },
+                  "group": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Node group for color coding"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Node display label"
+                  },
+                  "size": {
+                    "type": "number",
+                    "minimum": 1,
+                    "description": "Node size (optional)"
+                  }
+                }
+              }
             },
-            "secondary": {
-              "type": "string",
-              "const": "#3498db"
-            },
-            "accent": {
-              "type": "string",
-              "const": "#e74c3c"
-            },
-            "status": {
-              "type": "object",
-              "required": ["success", "warning", "error"],
-              "properties": {
-                "success": {
-                  "type": "string",
-                  "const": "#27ae60"
-                },
-                "warning": {
-                  "type": "string",
-                  "const": "#f39c12"
-                },
-                "error": {
-                  "type": "string",
-                  "const": "#e74c3c"
+            "links": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "type": "object",
+                "required": ["source", "target"],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "description": "Source node ID"
+                  },
+                  "target": {
+                    "type": "string",
+                    "description": "Target node ID"
+                  },
+                  "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Link strength (optional)"
+                  }
                 }
               }
             }
           }
         },
-        "typography": {
+        "timeSeries": {
           "type": "object",
-          "description": "Typography standards",
-          "required": ["fontFamily", "baseFontSize", "lineHeight"],
-          "properties": {
-            "fontFamily": {
-              "type": "string",
-              "pattern": "(apple-system|BlinkMacSystemFont|Segoe UI|Roboto|sans-serif)"
-            },
-            "baseFontSize": {
-              "type": "string",
-              "const": "16px"
-            },
-            "lineHeight": {
-              "type": "number",
-              "const": 1.6
-            }
-          }
-        },
-        "layout": {
-          "type": "object",
-          "description": "Layout structure",
-          "required": ["responsive", "tabNavigation", "contentPadding"],
-          "properties": {
-            "responsive": {
-              "type": "boolean",
-              "const": true
-            },
-            "tabNavigation": {
-              "type": "boolean",
-              "const": true
-            },
-            "contentPadding": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        }
-      }
-    },
-    "accessibility": {
-      "type": "object",
-      "description": "Accessibility requirements (WCAG AA)",
-      "required": ["aria", "keyboard", "screenReader", "colorContrast"],
-      "properties": {
-        "aria": {
-          "type": "object",
-          "required": ["labels", "roles", "descriptions"],
+          "description": "Chart.js time series data",
+          "required": ["labels", "datasets"],
           "properties": {
             "labels": {
-              "type": "boolean",
-              "const": true
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "string",
+                "description": "X-axis labels (dates or categories)"
+              }
             },
-            "roles": {
-              "type": "boolean",
-              "const": true
-            },
-            "descriptions": {
-              "type": "boolean",
-              "const": true
+            "datasets": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["label", "data"],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Dataset label"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Y-axis data points"
+                  },
+                  "borderColor": {
+                    "type": "string",
+                    "description": "Line color (CSS color)"
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "description": "Fill color (CSS color)"
+                  }
+                }
+              }
             }
           }
         },
-        "keyboard": {
+        "barChart": {
           "type": "object",
-          "required": ["navigation", "focusIndicators"],
+          "description": "Optional bar chart data",
+          "required": ["labels", "data"],
           "properties": {
-            "navigation": {
-              "type": "boolean",
-              "const": true
+            "labels": {
+              "type": "array",
+              "items": { "type": "string" }
             },
-            "focusIndicators": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        },
-        "screenReader": {
-          "type": "object",
-          "required": ["compatible", "altText"],
-          "properties": {
-            "compatible": {
-              "type": "boolean",
-              "const": true
-            },
-            "altText": {
-              "type": "boolean",
-              "description": "Alt text on all images and visualizations",
-              "const": true
-            }
-          }
-        },
-        "colorContrast": {
-          "type": "object",
-          "required": ["wcagAA", "ratio"],
-          "properties": {
-            "wcagAA": {
-              "type": "boolean",
-              "const": true
-            },
-            "ratio": {
-              "type": "number",
-              "description": "Minimum contrast ratio",
-              "minimum": 4.5
+            "data": {
+              "type": "array",
+              "items": { "type": "number" }
             }
           }
         }
       }
+    },
+    
+    "diagrams": {
+      "type": "array",
+      "description": "Tab 3: Mermaid diagrams with interactive controls",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["title", "mermaidCode", "type"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 100,
+            "description": "Diagram title"
+          },
+          "mermaidCode": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Mermaid diagram definition"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "flowchart",
+              "sequenceDiagram",
+              "classDiagram",
+              "stateDiagram",
+              "erDiagram",
+              "gantt",
+              "pie"
+            ],
+            "description": "Mermaid diagram type"
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional diagram description"
+          }
+        }
+      }
+    },
+    
+    "dataTable": {
+      "type": "array",
+      "description": "Tab 4: Sortable and filterable data table",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "status"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Item name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Item type/category"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "warning", "critical", "unknown"],
+            "description": "Item status"
+          },
+          "health": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Health percentage (0-100)"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "description": "Last update date (YYYY-MM-DD)"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    
+    "recommendations": {
+      "type": "array",
+      "description": "Tab 5: Prioritized actionable recommendations",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["priority", "title", "rationale", "steps", "expectedImpact", "estimatedEffort"],
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Recommendation priority level"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 100,
+            "description": "Recommendation title"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 500,
+            "description": "Why this recommendation matters"
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Implementation step"
+            },
+            "description": "Numbered action items"
+          },
+          "expectedImpact": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 200,
+            "description": "Quantified benefits"
+          },
+          "estimatedEffort": {
+            "type": "string",
+            "pattern": "^\\d+-?\\d*\\s*(min|hour|day)s?$",
+            "description": "Time/complexity estimate (e.g., '2-4 hours', '30 mins')"
+          },
+          "relatedResources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri-reference",
+              "description": "Link to documentation or guide"
+            },
+            "description": "Related documentation links"
+          }
+        }
+      }
+    }
+  },
+  
+  "definitions": {
+    "performanceCriteria": {
+      "description": "Performance validation criteria (checked programmatically, not in JSON)",
+      "generationTime": {
+        "description": "Dashboard generation time",
+        "maximum": 5,
+        "unit": "seconds"
+      },
+      "pageLoadTime": {
+        "description": "Initial page load time",
+        "maximum": 2,
+        "unit": "seconds"
+      },
+      "d3RenderTime": {
+        "description": "D3.js visualization render time",
+        "maximum": 1,
+        "unit": "seconds"
+      },
+      "tabSwitchTime": {
+        "description": "Tab switching animation time",
+        "maximum": 0.3,
+        "unit": "seconds"
+      },
+      "exportPDFTime": {
+        "description": "PDF export time",
+        "maximum": 7,
+        "unit": "seconds"
+      },
+      "exportPNGTime": {
+        "description": "PNG export time",
+        "maximum": 3,
+        "unit": "seconds"
+      },
+      "exportPPTXTime": {
+        "description": "PPTX export time",
+        "maximum": 10,
+        "unit": "seconds"
+      },
+      "memoryUsage": {
+        "description": "Peak memory usage during generation",
+        "maximum": 500,
+        "unit": "MB"
+      },
+      "fileSize": {
+        "description": "Generated HTML file size",
+        "maximum": 2,
+        "unit": "MB"
+      }
+    },
+    
+    "securityCriteria": {
+      "description": "Security validation criteria (checked programmatically)",
+      "cspHeaders": {
+        "required": true,
+        "description": "Content-Security-Policy headers must be present"
+      },
+      "noEval": {
+        "required": true,
+        "description": "No eval() usage allowed"
+      },
+      "noInlineHandlers": {
+        "required": true,
+        "description": "No inline event handlers (onclick, etc.)"
+      },
+      "inputSanitization": {
+        "required": true,
+        "description": "All user input must be sanitized"
+      },
+      "noExternalTrackers": {
+        "required": true,
+        "description": "No external analytics or tracking"
+      }
+    },
+    
+    "htmlStructure": {
+      "description": "Required HTML structure elements (checked via BeautifulSoup)",
+      "required": [
+        "nav.dashboard-tabs",
+        "button.tab-button[data-tab='overview']",
+        "button.tab-button[data-tab='visualizations']",
+        "button.tab-button[data-tab='diagrams']",
+        "button.tab-button[data-tab='data']",
+        "button.tab-button[data-tab='recommendations']",
+        "div.tab-content#overview-tab",
+        "div.tab-content#visualizations-tab",
+        "div.tab-content#diagrams-tab",
+        "div.tab-content#data-tab",
+        "div.tab-content#recommendations-tab",
+        "div.export-controls"
+      ]
+    },
+    
+    "d3jsRequirements": {
+      "description": "D3.js API usage requirements (checked via regex)",
+      "minimumVersion": "7.0.0",
+      "requiredAPIs": [
+        "d3.forceSimulation",
+        "d3.forceLink",
+        "d3.forceManyBody",
+        "d3.forceCenter",
+        "d3.select",
+        "d3.zoom"
+      ],
+      "interactiveFeatures": [
+        "zoom",
+        "pan",
+        "hover tooltips",
+        "click handlers",
+        "smooth transitions"
+      ]
+    },
+    
+    "chartjsRequirements": {
+      "description": "Chart.js configuration requirements",
+      "minimumVersion": "3.0.0",
+      "requiredOptions": [
+        "responsive: true",
+        "plugins.legend",
+        "plugins.tooltip",
+        "animation"
+      ]
+    },
+    
+    "mermaidRequirements": {
+      "description": "Mermaid diagram requirements",
+      "minimumVersion": "10.0.0",
+      "requiredFeatures": [
+        "diagram rendering",
+        "zoom controls",
+        "pan support",
+        "export functionality"
+      ]
     }
   }
 }

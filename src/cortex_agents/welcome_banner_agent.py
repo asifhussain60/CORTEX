@@ -327,30 +327,30 @@ class WelcomeBannerAgent(BaseAgent):
             Dict with banner text and metadata
         """
         banner_text = """
-╔══════════════════════════════════════════════════════════════════════════╗
-║                  🧠 CORTEX GOVERNANCE RULES ACTIVE                       ║
-╔══════════════════════════════════════════════════════════════════════════╗
+ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+Γòæ                  ≡ƒºá CORTEX GOVERNANCE RULES ACTIVE                       Γòæ
+ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
 
 CORTEX operates under strict governance rules to ensure quality and safety.
 
-📋 KEY RULES:
+≡ƒôï KEY RULES:
 - All feature work requires Definition of Ready (DoR) before starting
 - All completions require Definition of Done (DoD) validation
 - Git checkpoint required before high-risk operations
-- Test coverage ≥80% for all production code
+- Test coverage ΓëÑ80% for all production code
 - Architecture review for structural changes
 
-📖 QUICK ACCESS:
+≡ƒôû QUICK ACCESS:
 - Say "show rules" or "rulebook" to see full governance document
 - Say "help" to see available commands (includes governance section)
 - Say "compliance" to check your current compliance status
 
-✨ DISMISSAL:
+Γ£¿ DISMISSAL:
 - This banner appears once per session
 - Say "got it" or continue with your request to proceed
 
 Full Rulebook: cortex-brain/brain-protection-rules.yaml
-╚══════════════════════════════════════════════════════════════════════════╝
+ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
 """
         
         return {

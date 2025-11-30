@@ -96,7 +96,7 @@ def parse_conversation(content: str):
     return turns
 
 # Read plan.md
-plan_path = Path(r'd:\PROJECTS\CORTEX\.github\CopilotChats\plan.md')
+plan_path = Path(__file__).resolve().parent.parent / '.github' / 'CopilotChats' / 'plan.md'
 if not plan_path.exists():
     print(f'❌ Error: plan.md not found at {plan_path}')
     sys.exit(1)
@@ -125,7 +125,7 @@ wm = WorkingMemory()
 result = wm.import_conversation(
     conversation_turns=turns,
     import_source='plan.md',
-    workspace_path=r'd:\PROJECTS\CORTEX'
+    workspace_path=str(Path(__file__).resolve().parent.parent)
 )
 
 # Display results

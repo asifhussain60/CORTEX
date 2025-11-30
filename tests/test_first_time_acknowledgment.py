@@ -11,7 +11,7 @@ Test Coverage:
 - Backward compatibility (2 tests)
 - Integration (1 test)
 
-Target Coverage: ≥80%
+Target Coverage: ΓëÑ80%
 
 SPRINT 1 DAY 3-4: First-Time Acknowledgment Unit Tests
 Author: Asif Hussain (CORTEX Enhancement System)
@@ -182,7 +182,7 @@ def test_record_acknowledgment_success(orchestrator, temp_db):
     
     assert result["success"] is True
     assert "Onboarding completed successfully" in result["message"]
-    assert "🎉" in result["content"]
+    assert "≡ƒÄë" in result["content"]
     assert result["acknowledged_at"] is not None
     
     # Verify in database

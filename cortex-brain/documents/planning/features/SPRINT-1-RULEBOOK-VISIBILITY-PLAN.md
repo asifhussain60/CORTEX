@@ -3,11 +3,11 @@
 **Sprint Duration:** December 2-6, 2025 (1 week)  
 **Sprint Goal:** Implement governance rulebook visibility at all CORTEX entry points  
 **Priority:** HIGH (User awareness of governance system)  
-**Status:** 🟢 ACTIVE
+**Status:** ≡ƒƒó ACTIVE
 
 ---
 
-## 📋 Executive Summary
+## ≡ƒôï Executive Summary
 
 **Problem Statement:**
 Users interact with CORTEX without knowing 27 governance rules exist. Brain protection operates invisibly, leading to confusion when operations are blocked. Need proactive rule visibility to build user trust and understanding.
@@ -23,7 +23,7 @@ Implement 4-layer visibility strategy: welcome banner, help enhancement, first-t
 
 ---
 
-## 🎯 User Stories
+## ≡ƒÄ» User Stories
 
 ### Story 1: Welcome Banner (Priority: CRITICAL)
 
@@ -56,7 +56,7 @@ Implement 4-layer visibility strategy: welcome banner, help enhancement, first-t
 **So that** I can access governance rules anytime
 
 **Acceptance Criteria:**
-- [ ] Help command shows "🛡️ Governance & Rules" section
+- [ ] Help command shows "≡ƒ¢í∩╕Å Governance & Rules" section
 - [ ] Lists 5 quick commands: show rules, explain rule [name], my compliance, rulebook, show compliance
 - [ ] Brief description of brain protection purpose
 - [ ] Link to full rulebook documentation
@@ -125,56 +125,56 @@ Implement 4-layer visibility strategy: welcome banner, help enhancement, first-t
 
 ---
 
-## 🏗️ Technical Architecture
+## ≡ƒÅù∩╕Å Technical Architecture
 
 ### Component Structure
 
 ```
 Sprint 1 Components:
-├── WelcomeBannerAgent (NEW)
-│   ├── Checks session state (Tier 1)
-│   ├── Displays banner once per session
-│   └── Provides rulebook link
-├── HelpAgent (ENHANCED)
-│   ├── Existing help functionality
-│   └── + Governance section (5 commands)
-├── OnboardingOrchestrator (ENHANCED)
-│   ├── Existing profile setup (3 questions)
-│   └── + Governance acknowledgment (3 steps)
-├── ComplianceDashboardAgent (NEW)
-│   ├── Fetches compliance data from Tier 1
-│   ├── Opens dashboard in Simple Browser
-│   └── Real-time refresh integration
-└── Response Templates (ENHANCED)
-    ├── rulebook_welcome_banner
-    ├── help_table (updated)
-    ├── onboarding_governance_intro
-    └── compliance_dashboard_triggers
+Γö£ΓöÇΓöÇ WelcomeBannerAgent (NEW)
+Γöé   Γö£ΓöÇΓöÇ Checks session state (Tier 1)
+Γöé   Γö£ΓöÇΓöÇ Displays banner once per session
+Γöé   ΓööΓöÇΓöÇ Provides rulebook link
+Γö£ΓöÇΓöÇ HelpAgent (ENHANCED)
+Γöé   Γö£ΓöÇΓöÇ Existing help functionality
+Γöé   ΓööΓöÇΓöÇ + Governance section (5 commands)
+Γö£ΓöÇΓöÇ OnboardingOrchestrator (ENHANCED)
+Γöé   Γö£ΓöÇΓöÇ Existing profile setup (3 questions)
+Γöé   ΓööΓöÇΓöÇ + Governance acknowledgment (3 steps)
+Γö£ΓöÇΓöÇ ComplianceDashboardAgent (NEW)
+Γöé   Γö£ΓöÇΓöÇ Fetches compliance data from Tier 1
+Γöé   Γö£ΓöÇΓöÇ Opens dashboard in Simple Browser
+Γöé   ΓööΓöÇΓöÇ Real-time refresh integration
+ΓööΓöÇΓöÇ Response Templates (ENHANCED)
+    Γö£ΓöÇΓöÇ rulebook_welcome_banner
+    Γö£ΓöÇΓöÇ help_table (updated)
+    Γö£ΓöÇΓöÇ onboarding_governance_intro
+    ΓööΓöÇΓöÇ compliance_dashboard_triggers
 ```
 
 ### Data Flow
 
 ```
 User: First CORTEX interaction
-   ↓
+   Γåô
 UnifiedEntryPointOrchestrator
-   ↓
+   Γåô
 WelcomeBannerAgent.should_display()
-   ├─ Check Tier 1 session state
-   └─ If first interaction → Display banner
-   ↓
+   Γö£ΓöÇ Check Tier 1 session state
+   ΓööΓöÇ If first interaction ΓåÆ Display banner
+   Γåô
 User: "help"
-   ↓
+   Γåô
 HelpAgent.execute()
-   ├─ Load help_table template
-   └─ Include governance section
-   ↓
+   Γö£ΓöÇ Load help_table template
+   ΓööΓöÇ Include governance section
+   Γåô
 User: "show compliance"
-   ↓
+   Γåô
 ComplianceDashboardAgent.execute()
-   ├─ Fetch compliance from Tier 1
-   ├─ Generate dashboard HTML
-   └─ Open in Simple Browser
+   Γö£ΓöÇ Fetch compliance from Tier 1
+   Γö£ΓöÇ Generate dashboard HTML
+   ΓööΓöÇ Open in Simple Browser
 ```
 
 ### Database Schema Changes
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS session_state (
 
 ---
 
-## 📊 Implementation Plan
+## ≡ƒôè Implementation Plan
 
 ### Phase 1: Welcome Banner (Day 1 - Monday)
 
@@ -279,11 +279,11 @@ CREATE TABLE IF NOT EXISTS session_state (
 
 ---
 
-## ✅ Definition of Done (DoD)
+## Γ£à Definition of Done (DoD)
 
 **Code Quality:**
 - [ ] All 45 unit tests passing (15+10+12+8)
-- [ ] Code coverage ≥80% for new components
+- [ ] Code coverage ΓëÑ80% for new components
 - [ ] Lint validation passing (no critical violations)
 - [ ] Integration tests passing
 
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS session_state (
 
 ---
 
-## 🎯 Success Metrics
+## ≡ƒÄ» Success Metrics
 
 **Quantitative:**
 - 100% users see rulebook reference (banner tracking)
@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS session_state (
 
 ---
 
-## 🚨 Risk Assessment
+## ≡ƒÜ¿ Risk Assessment
 
 ### Risk 1: User Overwhelm (MEDIUM)
 
@@ -375,7 +375,7 @@ CREATE TABLE IF NOT EXISTS session_state (
 
 ---
 
-## 📅 Sprint Schedule
+## ≡ƒôà Sprint Schedule
 
 | Day | Date | Focus | Deliverable |
 |-----|------|-------|-------------|
@@ -385,11 +385,11 @@ CREATE TABLE IF NOT EXISTS session_state (
 | **Day 4** | Dec 5 (Thu) | Acknowledgment (Part 2) | Confirmation flow + 12 tests |
 | **Day 5** | Dec 6 (Fri) | Compliance Dashboard | ComplianceDashboardAgent + 8 tests |
 
-**Total Estimated Hours:** 15 hours (3 hours/day × 5 days)
+**Total Estimated Hours:** 15 hours (3 hours/day ├ù 5 days)
 
 ---
 
-## 🔄 Next Steps
+## ≡ƒöä Next Steps
 
 **Immediate Actions:**
 1. Create feature branches: `feature/sprint-1-welcome-banner`, `feature/sprint-1-help-enhancement`, etc.

@@ -10,7 +10,7 @@ Test Coverage:
 - Database operations (3 tests)
 - Edge cases (3 tests)
 
-Target Coverage: ≥80%
+Target Coverage: ΓëÑ80%
 
 SPRINT 1 DAY 1: WelcomeBannerAgent Unit Tests
 Author: Asif Hussain (CORTEX Enhancement System)
