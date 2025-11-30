@@ -290,7 +290,8 @@ class DashboardDataAdapter:
         metadata: Dict[str, Any],
         quality: Dict[str, Any],
         security: Dict[str, Any],
-        performance: Dict[str, Any]
+        performance: Dict[str, Any],
+        architecture: Optional[Dict[str, Any]] = None
     ) -> None:
         """
         Save all dashboard data files (replaces mock data).
@@ -300,6 +301,7 @@ class DashboardDataAdapter:
             quality: Transformed quality data
             security: Transformed security data
             performance: Transformed performance data
+            architecture: Architecture graph data (nodes/edges for D3.js)
         """
         data_dir = self.dashboard_dir / "data"
         data_dir.mkdir(exist_ok=True)
@@ -310,6 +312,10 @@ class DashboardDataAdapter:
             "security.json": security,
             "performance.json": performance
         }
+        
+        # Add architecture graph if provided
+        if architecture:
+            files["architecture.json"] = architecture
         
         for filename, data in files.items():
             filepath = data_dir / filename
@@ -323,7 +329,8 @@ class DashboardDataAdapter:
         quality_issues: List[Any],
         quality_score: float,
         vulnerabilities: List[Any],
-        metrics: List[Any]
+        metrics: List[Any],
+        architecture_graph: Optional[Dict[str, Any]] = None
     ) -> None:
         """
         Generate complete dashboard data from CORTEX analyzers.
@@ -336,6 +343,7 @@ class DashboardDataAdapter:
             quality_score: Overall quality score 0-100
             vulnerabilities: From SecurityScanner
             metrics: From PerformanceMetrics
+            architecture_graph: From ArchitectureGraphBuilder (nodes/edges)
         """
         logger.info("Generating dashboard data from CORTEX analyzers...")
         
@@ -344,7 +352,7 @@ class DashboardDataAdapter:
         security = self.transform_security_data(vulnerabilities)
         performance = self.transform_performance_data(metrics)
         
-        self.save_dashboard_data(metadata, quality, security, performance)
+        self.save_dashboard_data(metadata, quality, security, performance, architecture_graph)
         
         logger.info("✅ Dashboard data generation complete")
         logger.info(f"   Data directory: {self.dashboard_dir / 'data'}")

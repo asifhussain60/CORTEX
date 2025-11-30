@@ -23,6 +23,7 @@ import re
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
+from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,9 @@ class PlanningOrchestrator:
             skeleton_token_limit=200,
             section_token_limit=500
         )
+        
+        # NEW: Initialize git checkpoint orchestrator for planning workflow
+        self.git_checkpoint = GitCheckpointOrchestrator(project_root=str(self.cortex_root))
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -691,6 +695,16 @@ class PlanningOrchestrator:
             ...     checkpoint_callback=my_checkpoint_handler
             ... )
         """
+        # Create git checkpoint before starting plan generation
+        try:
+            feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+            self.git_checkpoint.create_auto_checkpoint(
+                operation="plan",
+                message=f"Starting plan generation: {feature_name}"
+            )
+        except Exception as e:
+            logger.warning(f"Git checkpoint failed: {e}")
+        
         try:
             # Step 1: Generate skeleton (200-token structure)
             logger.info("🧠 Generating plan skeleton (200-token limit)...")
@@ -1209,6 +1223,15 @@ class PlanningOrchestrator:
             
             logger.info(f"Approved plan: {plan_filename} (active → approved)")
             
+            # Create git checkpoint after successful approval
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="approve",
+                    message=f"Plan approved: {plan_filename}"
+                )
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed: {e}")
+            
             return {
                 'success': True,
                 'message': f"Plan '{plan_filename}' approved successfully",
@@ -1279,6 +1302,15 @@ class PlanningOrchestrator:
             old_path.unlink()
             
             logger.info(f"Completed plan: {plan_filename} (approved → completed)")
+            
+            # Create git checkpoint after successful completion
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="complete",
+                    message=f"Plan completed: {plan_filename}"
+                )
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed: {e}")
             
             return {
                 'success': True,

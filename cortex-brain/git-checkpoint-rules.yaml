@@ -21,6 +21,9 @@ auto_checkpoint:
     before_tdd_red: true             # Checkpoint before RED phase (test writing)
     after_tdd_green: true            # Checkpoint after GREEN phase (implementation)
     after_tdd_refactor: true         # Checkpoint after REFACTOR phase
+    before_plan_generation: true     # Checkpoint before planning workflow starts
+    after_plan_approval: true        # Checkpoint after plan approval
+    after_plan_completion: true      # Checkpoint after plan completion
     
   # Operations that trigger checkpoints
   operations:
@@ -31,6 +34,9 @@ auto_checkpoint:
     - "debug"
     - "tdd"
     - "test"
+    - "plan"       # Plan generation
+    - "approve"    # Plan approval
+    - "complete"   # Plan completion
 
 # ============================================================================
 # RETENTION POLICY

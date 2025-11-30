@@ -19,6 +19,7 @@ from src.crawlers.analyzers.csharp_analyzer import CSharpAnalyzer
 from src.crawlers.analyzers.javascript_analyzer import JavaScriptAnalyzer
 from src.crawlers.analyzers.coldfusion_analyzer import ColdFusionAnalyzer
 from src.crawlers.analyzers.generic_analyzer import GenericAnalyzer
+from src.discovery.architecture_graph_builder import ArchitectureGraphBuilder
 
 
 class ApplicationHealthOrchestrator:
@@ -40,6 +41,7 @@ class ApplicationHealthOrchestrator:
             '.cfc': ColdFusionAnalyzer(),
         }
         self.generic_analyzer = GenericAnalyzer()
+        self.architecture_builder = ArchitectureGraphBuilder()
     
     def analyze(self, project_path: str, scan_level: str = 'standard') -> Dict[str, Any]:
         """
@@ -62,6 +64,14 @@ class ApplicationHealthOrchestrator:
         # Step 1: Discover files using CrawlerOrchestrator
         crawler = CrawlerOrchestrator(scan_level=scan_level)
         scan_result = crawler.scan(project_path)
+        
+        # Step 1.5: Build architecture dependency graph
+        architecture_graph = None
+        try:
+            architecture_graph = self.architecture_builder.build_graph(project_path)
+        except Exception as e:
+            print(f"Warning: Could not build architecture graph: {e}")
+            architecture_graph = {"nodes": [], "edges": [], "error": str(e)}
         
         # Step 2: Analyze files by language
         language_results = {}
@@ -126,6 +136,7 @@ class ApplicationHealthOrchestrator:
             'total_files': scan_result.total_files,
             'languages': language_results,
             'file_types': scan_result.file_types,
+            'architecture_graph': architecture_graph,
             'scan_duration': round(duration, 2),
             'scan_level': scan_level,
             'timestamp': datetime.now().isoformat(),
