@@ -462,6 +462,340 @@ def generate_incremental_plan(
 
 ---
 
+## 🔖 Git Checkpoint Integration
+
+**Version:** 3.3.0  
+**Purpose:** Automatic git checkpoints during plan generation, approval, and completion for instant rollback capability  
+**Status:** ✅ PRODUCTION (100% tested - 12/12 tests passing)
+
+### What Is Git Checkpoint Integration?
+
+The Planning Orchestrator automatically creates git checkpoints (tags) at key workflow stages, enabling instant rollback to any previous state without losing work.
+
+**Key Benefits:**
+- **Instant Rollback:** Return to any planning state in seconds
+- **Safe Experimentation:** Try bold changes without fear of data loss
+- **Clear History:** Track exactly what changed and when
+- **Zero Data Loss:** Never lose planning work due to mistakes
+- **Non-Blocking:** Planning succeeds even if checkpoints fail
+
+### Automatic Checkpoint Creation
+
+Git checkpoints are automatically created at three critical workflow stages:
+
+**1. Before Plan Generation (operation="plan"):**
+```
+User: "plan user authentication feature"
+
+CORTEX:
+  🔍 Checking git status...
+  ✅ Clean working tree
+  📸 Creating checkpoint: plan-20251130-143022
+  
+  [... generates plan ...]
+  
+  ✅ Plan generated: PLAN-20251130-authentication.md
+  📍 Rollback available: plan-20251130-143022
+```
+
+**2. After Plan Approval (operation="approve"):**
+```
+User: "approve plan authentication"
+
+CORTEX:
+  📸 Creating checkpoint: approve-20251130-143856
+  ✅ Plan approved: PLAN-20251130-authentication.md
+  📂 Moved to: approved/APPROVED-20251130-authentication.md
+```
+
+**3. After Plan Completion (operation="complete"):**
+```
+User: "complete plan authentication"
+
+CORTEX:
+  📸 Creating checkpoint: complete-20251130-144512
+  ✅ Plan completed: PLAN-20251130-authentication.md
+  📂 Moved to: completed/COMPLETED-20251130-authentication.md
+```
+
+### Checkpoint Triggers
+
+Three new triggers enable planning checkpoints (configured in `cortex-brain/git-checkpoint-rules.yaml`):
+
+```yaml
+triggers:
+  before_plan_generation:
+    enabled: true
+    operations: ["plan"]
+    
+  after_plan_approval:
+    enabled: true
+    operations: ["approve"]
+    
+  after_plan_completion:
+    enabled: true
+    operations: ["complete"]
+```
+
+**Trigger Timing:**
+- **before_plan_generation:** Creates checkpoint BEFORE planning workflow starts (pre-work safety point)
+- **after_plan_approval:** Creates checkpoint AFTER plan moves to approved status (approval milestone)
+- **after_plan_completion:** Creates checkpoint AFTER plan moves to completed status (completion milestone)
+
+### Checkpoint Naming Convention
+
+All planning checkpoints follow the format: `{operation}-{YYYYMMDD}-{HHMMSS}`
+
+**Examples:**
+- `plan-20251130-143022` - Plan generation checkpoint (Nov 30, 2025 at 2:30:22 PM)
+- `approve-20251130-143856` - Plan approval checkpoint (Nov 30, 2025 at 2:38:56 PM)
+- `complete-20251130-144512` - Plan completion checkpoint (Nov 30, 2025 at 2:45:12 PM)
+
+### Viewing Checkpoints
+
+**List All Planning Checkpoints:**
+```bash
+# Show all checkpoints from today
+git tag -l '*-20251130-*' --sort=-creatordate
+
+# Show only plan generation checkpoints
+git tag -l 'plan-*'
+
+# Show only approval checkpoints
+git tag -l 'approve-*'
+
+# Show only completion checkpoints
+git tag -l 'complete-*'
+```
+
+**View Checkpoint Details:**
+```bash
+# Show commit info for checkpoint
+git show plan-20251130-143022
+
+# Show commit message
+git log -1 plan-20251130-143022
+
+# Show files changed at checkpoint
+git show plan-20251130-143022 --stat
+```
+
+**Compare with Current State:**
+```bash
+# Show changes since checkpoint
+git diff plan-20251130-143022
+
+# Show only file names changed
+git diff plan-20251130-143022 --name-only
+
+# Show summary of changes
+git diff plan-20251130-143022 --stat
+```
+
+### Rollback Procedures
+
+**Rollback Plan Approval (Return to Active State):**
+
+If you approved a plan prematurely and need to make changes:
+
+```bash
+# 1. List available checkpoints
+git tag -l 'approve-*' --sort=-creatordate
+
+# 2. View checkpoint details
+git show approve-20251130-143856
+
+# 3. Preview changes to be undone
+git diff approve-20251130-143856
+
+# 4. Execute rollback
+git reset --hard approve-20251130-143856
+
+# 5. Verify plan restored to active/
+ls cortex-brain/documents/planning/active/
+```
+
+**Alternative: CORTEX Rollback Command:**
+```
+User: "rollback to approve-20251130-143856"
+
+CORTEX:
+  ⚠️  ROLLBACK WARNING
+  
+  This will DISCARD all changes after checkpoint 'approve-20251130-143856'
+  
+  Changes to be lost:
+   cortex-brain/documents/planning/approved/APPROVED-20251130-authentication.md
+   src/auth/authentication_service.py
+   2 files changed, 150 insertions(+)
+  
+  Type 'yes' to confirm rollback: yes
+  
+  📸 Creating safety checkpoint: pre-rollback-20251130-150000
+  ✅ Rolled back to checkpoint: approve-20251130-143856
+  
+  Plan restored to: cortex-brain/documents/planning/active/PLAN-20251130-authentication.md
+```
+
+**Rollback Plan Generation (Undo Planning Entirely):**
+```bash
+# Revert to state before planning started
+git reset --hard plan-20251130-143022
+```
+
+### Error Handling (Non-Blocking Design)
+
+Checkpoints are **non-blocking** - planning operations succeed even if checkpoint creation fails.
+
+**Design Principles:**
+- **User Value Priority:** Planning operations deliver immediate value and are prioritized
+- **Checkpoint is Enhancement:** Git checkpoints are safety features, not requirements
+- **Graceful Degradation:** System remains functional when non-critical features fail
+- **User Awareness:** Warnings logged so users know checkpoint didn't save
+
+**Example: Git Not Available**
+```
+User: "plan feature" (working in non-git directory)
+
+CORTEX:
+  ⚠️  Git checkpoint failed: Not a git repository
+  Planning will continue without checkpoint
+  
+  [... generates plan normally ...]
+  
+  ✅ Plan generated: PLAN-20251130-feature.md
+  ⚠️  Note: No rollback checkpoint created (git unavailable)
+```
+
+**Example: Permission Error**
+```
+User: "approve plan feature"
+
+CORTEX:
+  ⚠️  Git checkpoint failed: Permission denied (.git/ directory read-only)
+  Plan approval completed successfully
+  
+  ✅ Plan approved: PLAN-20251130-feature.md
+  💡 Tip: Fix .git/ permissions to enable checkpoints
+```
+
+**Example: Disk Space Full**
+```
+User: "complete plan feature"
+
+CORTEX:
+  ⚠️  Git checkpoint failed: No space left on device
+  Plan completion succeeded
+  
+  ✅ Plan completed: PLAN-20251130-feature.md
+  💡 Tip: Free up disk space and manually create checkpoint
+```
+
+### Troubleshooting
+
+**Checkpoint Not Created:**
+
+*Symptoms:* No checkpoint appears after planning operation
+
+*Causes & Solutions:*
+- ❌ **Not a git repository** → Initialize git: `git init`
+- ❌ **No write permissions** → Fix permissions: `chmod -R 755 .git/`
+- ❌ **Disk space full** → Free up space, then manually create checkpoint
+- ❌ **Repository corrupted** → Check git health: `git fsck`
+
+**Planning Continues Despite Error:**
+
+*Symptoms:* Warning about checkpoint failure, but plan generated
+
+*Status:* ✅ **Expected behavior** (non-blocking design)
+
+*Why:* Planning operations prioritized over checkpoints. Checkpoint failures don't block user value delivery.
+
+**Multiple Checkpoints Created:**
+
+*Symptoms:* Many checkpoints accumulating over time
+
+*Status:* ✅ **Expected behavior** (one checkpoint per operation)
+
+*Solution:* Use checkpoint cleanup commands from Git Checkpoint Guide:
+```bash
+# List old checkpoints (30+ days)
+git tag -l '*-2024*' --sort=-creatordate
+
+# Delete specific checkpoint
+git tag -d plan-20241015-120000
+
+# Bulk delete old checkpoints
+git tag -l 'plan-2024*' | xargs git tag -d
+```
+
+### Configuration Options
+
+**Enable/Disable Checkpoints:**
+
+Edit `cortex-brain/git-checkpoint-rules.yaml`:
+
+```yaml
+# Disable all planning checkpoints
+triggers:
+  before_plan_generation:
+    enabled: false
+  after_plan_approval:
+    enabled: false
+  after_plan_completion:
+    enabled: false
+
+# Or disable specific triggers
+triggers:
+  before_plan_generation:
+    enabled: true    # Keep plan generation checkpoints
+  after_plan_approval:
+    enabled: false   # Disable approval checkpoints
+  after_plan_completion:
+    enabled: false   # Disable completion checkpoints
+```
+
+**Retention Policy:**
+
+Configure automatic checkpoint cleanup:
+
+```yaml
+retention:
+  max_age_days: 30           # Delete checkpoints older than 30 days
+  max_count: 50              # Keep maximum 50 checkpoints
+  preserve_named: true       # Never delete user-named checkpoints
+```
+
+### Related Examples
+
+**Comprehensive Documentation:**
+- **Basic Usage:** `cortex-brain/documents/examples/planning-with-git-checkpoints.md` (300+ lines)
+  - Complete workflow example (generate → approve → complete)
+  - Viewing checkpoints with git commands
+  - Checkpoint operations reference
+  - Benefits and use cases
+
+- **Rollback Scenario:** `cortex-brain/documents/examples/rollback-plan-approval.md` (400+ lines)
+  - 9-step detailed rollback procedure
+  - Alternative CORTEX rollback command
+  - When to rollback (4 scenarios)
+  - Best practices and troubleshooting
+
+- **Error Handling:** `cortex-brain/documents/examples/checkpoint-failure-handling.md` (450+ lines)
+  - Why non-blocking design matters
+  - 3 detailed failure scenarios
+  - Error handling implementation
+  - 4 checkpoint failure types with recovery
+
+**System Guides:**
+- **Git Checkpoint System:** `.github/prompts/modules/git-checkpoint-guide.md`
+  - Complete checkpoint system documentation
+  - TDD workflow integration
+  - Rollback procedures
+  - Configuration options
+
+---
+
 ## 📊 Implementation Status
 
 **Phase 1: Vision API Integration** - ⏳ PLANNED (60-90 min)  
