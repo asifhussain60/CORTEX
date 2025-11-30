@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Application Dashboard 2.0</title>
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/css/architecture_tab.css">
+    <link rel="stylesheet" href="../static/css/overview_tab.css">
+    <link rel="stylesheet" href="../static/css/health_tab.css">
+    <link rel="stylesheet" href="../static/css/metrics_tab.css">
+    <link rel="stylesheet" href="../static/css/reports_tab.css">
+    <!-- D3.js v7 for Architecture tab -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Chart.js for charts in other tabs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="dashboard-wrapper">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1>🧠 CORTEX Application Dashboard 2.0</h1>
+                    <p class="subtitle">Intelligent Code Analysis & Health Monitoring</p>
+                </div>
+                <div class="header-actions">
+                    <button id="refresh-data" class="action-btn" title="Refresh Data">
+                        <span class="icon">🔄</span>
+                        <span class="text">Refresh</span>
+                    </button>
+                    <button id="settings-btn" class="action-btn" title="Settings">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Settings</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <ul class="tab-list">
+                <li class="tab-item">
+                    <a href="#overview" class="tab-link active" data-tab="overview">
+                        <span class="tab-icon">📊</span>
+                        <span class="tab-label">Overview</span>
+                    </a>
+                </li>
+                <li class="tab-item">
+                    <a href="#architecture" class="tab-link" data-tab="architecture">
+                        <span class="tab-icon">🏛️</span>
+                        <span class="tab-label">Architecture</span>
+                    </a>
+                </li>
+                <li class="tab-item">
+                    <a href="#health" class="tab-link" data-tab="health">
+                        <span class="tab-icon">❤️</span>
+                        <span class="tab-label">Health</span>
+                    </a>
+                </li>
+                <li class="tab-item">
+                    <a href="#metrics" class="tab-link" data-tab="metrics">
+                        <span class="tab-icon">📈</span>
+                        <span class="tab-label">Metrics</span>
+                    </a>
+                </li>
+                <li class="tab-item">
+                    <a href="#reports" class="tab-link" data-tab="reports">
+                        <span class="tab-icon">📄</span>
+                        <span class="tab-label">Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <main class="tab-content-container">
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active" data-tab-content="overview">
+                <div class="overview-container">
+                    <!-- Quick Stats -->
+                    <section class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📁</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="total-files">-</h3>
+                                <p class="stat-label">Total Files</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔧</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="total-components">-</h3>
+                                <p class="stat-label">Components</p>
+                            </div>
+                        </div>
+                        <div class="stat-card health-stat">
+                            <div class="stat-icon">❤️</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="overall-health">-</h3>
+                                <p class="stat-label">Overall Health</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚠️</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="total-issues">-</h3>
+                                <p class="stat-label">Issues</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- System Status -->
+                    <section class="system-status">
+                        <h2 class="section-title">System Status</h2>
+                        <div class="status-indicators">
+                            <div class="status-item">
+                                <span class="status-dot status-green"></span>
+                                <span class="status-label">Code Quality</span>
+                                <span class="status-value" id="code-quality-status">Excellent</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-dot status-yellow"></span>
+                                <span class="status-label">Test Coverage</span>
+                                <span class="status-value" id="test-coverage-status">Good</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-dot status-green"></span>
+                                <span class="status-label">Dependencies</span>
+                                <span class="status-value" id="dependencies-status">Up to Date</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-dot status-green"></span>
+                                <span class="status-label">Security</span>
+                                <span class="status-value" id="security-status">No Issues</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Top Issues -->
+                    <section class="top-issues">
+                        <h2 class="section-title">Top Issues</h2>
+                        <div class="issues-list" id="top-issues-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <!-- Quick Actions -->
+                    <section class="quick-actions">
+                        <h2 class="section-title">Quick Actions</h2>
+                        <div class="actions-grid">
+                            <button class="action-card" data-action="run-tests">
+                                <span class="action-icon">🧪</span>
+                                <span class="action-label">Run Tests</span>
+                            </button>
+                            <button class="action-card" data-action="analyze-code">
+                                <span class="action-icon">🔍</span>
+                                <span class="action-label">Analyze Code</span>
+                            </button>
+                            <button class="action-card" data-action="generate-report">
+                                <span class="action-icon">📊</span>
+                                <span class="action-label">Generate Report</span>
+                            </button>
+                            <button class="action-card" data-action="view-logs">
+                                <span class="action-icon">📋</span>
+                                <span class="action-label">View Logs</span>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Architecture Tab -->
+            <div id="architecture-tab" class="tab-content" data-tab-content="architecture">
+                <!-- Architecture Tab Content (from architecture_tab.html) -->
+                <div class="architecture-container">
+                    <!-- Controls Panel -->
+                    <div class="controls-panel">
+                        <div class="control-group">
+                            <label for="zoom-level">Zoom:</label>
+                            <button id="zoom-in" class="control-btn" title="Zoom In">+</button>
+                            <span id="zoom-level">100%</span>
+                            <button id="zoom-out" class="control-btn" title="Zoom Out">-</button>
+                            <button id="zoom-reset" class="control-btn" title="Reset Zoom">Reset</button>
+                            <button id="fit-view" class="control-btn" title="Fit View">Fit</button>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Layout:</label>
+                            <button id="layout-force" class="control-btn active">Force</button>
+                            <button id="layout-circular" class="control-btn">Circular</button>
+                            <button id="layout-hierarchical" class="control-btn">Hierarchical</button>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="filter-language">Filter:</label>
+                            <select id="filter-language" class="control-select">
+                                <option value="all">All Languages</option>
+                                <option value="python">Python</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="typescript">TypeScript</option>
+                                <option value="csharp">C#</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <button id="export-svg" class="control-btn">Export SVG</button>
+                            <button id="export-png" class="control-btn">Export PNG</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Graph Container -->
+                    <div id="architecture-graph-container" class="graph-container">
+                        <svg id="graph-svg"></svg>
+                        <div class="loading-spinner" id="loading-spinner">
+                            <div class="spinner"></div>
+                            <p>Loading architecture graph...</p>
+                        </div>
+                    </div>
+
+                    <!-- Stats Panel -->
+                    <div id="stats-panel" class="stats-panel">
+                        <h3>Graph Statistics</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Nodes:</span>
+                            <span class="stat-value" id="node-count">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Edges:</span>
+                            <span class="stat-value" id="edge-count">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Density:</span>
+                            <span class="stat-value" id="graph-density">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Details Panel -->
+                    <div id="details-panel" class="details-panel">
+                        <h3>Component Details</h3>
+                        <div id="details-content" class="details-content">
+                            <p class="placeholder">Click on a node to view details</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Tab -->
+            <div id="health-tab" class="tab-content" data-tab-content="health">
+                <div class="health-container">
+                    <section class="health-overview">
+                        <h2 class="section-title">Health Overview</h2>
+                        <div class="health-score-card">
+                            <div class="health-score-circle" id="health-score-circle">
+                                <span class="health-score-value" id="health-score-value">-</span>
+                                <span class="health-score-label">Health Score</span>
+                            </div>
+                            <div class="health-trend">
+                                <canvas id="health-trend-chart"></canvas>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="health-metrics">
+                        <h2 class="section-title">Health Metrics</h2>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <h3>Code Complexity</h3>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="complexity-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="metric-value" id="complexity-value">-</span>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Test Coverage</h3>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="coverage-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="metric-value" id="coverage-value">-</span>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Documentation</h3>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="documentation-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="metric-value" id="documentation-value">-</span>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Code Duplication</h3>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="duplication-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="metric-value" id="duplication-value">-</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="health-recommendations">
+                        <h2 class="section-title">Recommendations</h2>
+                        <div class="recommendations-list" id="recommendations-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <section class="threshold-alerts">
+                        <h2 class="section-title">Threshold Alerts</h2>
+                        <div class="alerts-list" id="alerts-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Metrics Tab -->
+            <div id="metrics-tab" class="tab-content" data-tab-content="metrics">
+                <div class="metrics-container">
+                    <section class="metrics-overview">
+                        <h2 class="section-title">Metrics Overview</h2>
+                        <div class="metrics-cards">
+                            <div class="metrics-card">
+                                <h3>Code Complexity</h3>
+                                <canvas id="complexity-chart"></canvas>
+                            </div>
+                            <div class="metrics-card">
+                                <h3>Maintainability Index</h3>
+                                <canvas id="maintainability-chart"></canvas>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="test-coverage">
+                        <h2 class="section-title">Test Coverage</h2>
+                        <div class="coverage-visualization">
+                            <canvas id="coverage-chart"></canvas>
+                        </div>
+                    </section>
+
+                    <section class="module-size">
+                        <h2 class="section-title">Module Size Distribution</h2>
+                        <div class="size-distribution">
+                            <canvas id="size-distribution-chart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports-tab" class="tab-content" data-tab-content="reports">
+                <div class="reports-container">
+                    <section class="report-generation">
+                        <h2 class="section-title">Generate Report</h2>
+                        <div class="report-form">
+                            <div class="form-group">
+                                <label for="report-type">Report Type:</label>
+                                <select id="report-type" class="form-control">
+                                    <option value="executive">Executive Summary</option>
+                                    <option value="technical">Technical Report</option>
+                                    <option value="detailed">Detailed Analysis</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-format">Format:</label>
+                                <select id="report-format" class="form-control">
+                                    <option value="pdf">PDF</option>
+                                    <option value="html">HTML</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                            </div>
+                            <button id="generate-report-btn" class="btn-primary">Generate Report</button>
+                        </div>
+                    </section>
+
+                    <section class="report-history">
+                        <h2 class="section-title">Report History</h2>
+                        <div class="reports-list" id="reports-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2025 CORTEX - Intelligent Code Analysis System</p>
+            <p class="version">Version 3.2.0</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../static/js/dashboard.js"></script>
+    <script src="../static/js/architecture_tab.js"></script>
+    <script src="../static/js/overview_tab.js"></script>
+    <script src="../static/js/health_tab.js"></script>
+    <script src="../static/js/metrics_tab.js"></script>
+    <script src="../static/js/reports_tab.js"></script>
+</body>
+</html>

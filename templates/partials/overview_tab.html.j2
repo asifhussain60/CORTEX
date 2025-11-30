@@ -1,0 +1,120 @@
+<!-- Overview Tab Content -->
+<div class="overview-container">
+    <!-- Health Score Card -->
+    <div class="card card-primary">
+        <h2 class="card-title">🎯 Overall Health Score</h2>
+        <div class="health-score-display">
+            <div class="score-circle health-{{ health_category }}">
+                <span class="score-value">{{ health_score }}%</span>
+            </div>
+            <div class="score-details">
+                <p class="score-label">{{ health_label }}</p>
+                <p class="score-description">{{ health_description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Statistics Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📁</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ file_count | format_number }}</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ loc_count | format_number }}</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ component_count }}</div>
+                <div class="stat-label">Components</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🔗</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ dependency_count }}</div>
+                <div class="stat-label">Dependencies</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ issue_count }}</div>
+                <div class="stat-label">Issues Found</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-content">
+                <div class="stat-value">{{ vulnerability_count }}</div>
+                <div class="stat-label">Vulnerabilities</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Breakdown -->
+    <div class="card">
+        <h2 class="card-title">💬 Language Breakdown</h2>
+        <div class="chart-container">
+            <canvas id="language-chart"></canvas>
+        </div>
+        <div class="language-list">
+            {% for lang in languages %}
+            <div class="language-item">
+                <span class="language-name">{{ lang.name }}</span>
+                <span class="language-percentage">{{ lang.percentage }}%</span>
+                <div class="language-bar">
+                    <div class="language-bar-fill" style="width: {{ lang.percentage }}%; background-color: {{ lang.color }};"></div>
+                </div>
+                <span class="language-loc">{{ lang.loc | format_number }} LOC</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Quick Insights -->
+    <div class="card">
+        <h2 class="card-title">💡 Quick Insights</h2>
+        <div class="insights-list">
+            {% for insight in quick_insights %}
+            <div class="insight-item insight-{{ insight.severity }}">
+                <span class="insight-icon">{{ insight.icon }}</span>
+                <div class="insight-content">
+                    <p class="insight-title">{{ insight.title }}</p>
+                    <p class="insight-description">{{ insight.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+        <h2 class="card-title">📅 Recent Activity</h2>
+        <div class="activity-timeline">
+            {% for activity in recent_activities %}
+            <div class="activity-item">
+                <div class="activity-icon">{{ activity.icon }}</div>
+                <div class="activity-content">
+                    <p class="activity-title">{{ activity.title }}</p>
+                    <p class="activity-description">{{ activity.description }}</p>
+                    <p class="activity-timestamp">{{ activity.timestamp }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

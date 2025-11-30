@@ -1,0 +1,175 @@
+<!-- Quality Tab Content -->
+<div class="quality-container">
+    <!-- Quality Score Overview -->
+    <div class="card card-primary">
+        <h2 class="card-title">⭐ Code Quality Score</h2>
+        <div class="quality-score-display">
+            <div class="score-gauge">
+                <canvas id="quality-gauge"></canvas>
+            </div>
+            <div class="quality-breakdown">
+                <div class="quality-metric">
+                    <span class="metric-label">Maintainability:</span>
+                    <span class="metric-value quality-{{ maintainability_category }}">{{ maintainability_score }}%</span>
+                </div>
+                <div class="quality-metric">
+                    <span class="metric-label">Readability:</span>
+                    <span class="metric-value quality-{{ readability_category }}">{{ readability_score }}%</span>
+                </div>
+                <div class="quality-metric">
+                    <span class="metric-label">Test Coverage:</span>
+                    <span class="metric-value quality-{{ coverage_category }}">{{ test_coverage }}%</span>
+                </div>
+                <div class="quality-metric">
+                    <span class="metric-label">Documentation:</span>
+                    <span class="metric-value quality-{{ docs_category }}">{{ documentation_score }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Smells -->
+    <div class="card">
+        <h2 class="card-title">🔍 Code Smells Detected</h2>
+        <div class="smells-grid">
+            {% for smell in code_smells %}
+            <div class="smell-card severity-{{ smell.severity }}">
+                <div class="smell-header">
+                    <span class="smell-icon">{{ smell.icon }}</span>
+                    <span class="smell-type">{{ smell.type }}</span>
+                    <span class="smell-count">{{ smell.count }}</span>
+                </div>
+                <p class="smell-description">{{ smell.description }}</p>
+                <div class="smell-locations">
+                    <strong>Top Affected Files:</strong>
+                    <ul>
+                        {% for location in smell.top_locations[:3] %}
+                        <li>
+                            <code>{{ location.file }}</code>
+                            <span class="location-line">Line {{ location.line }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Complexity Analysis -->
+    <div class="card">
+        <h2 class="card-title">📊 Complexity Analysis</h2>
+        <div class="complexity-chart-container">
+            <canvas id="complexity-chart"></canvas>
+        </div>
+        <div class="complexity-stats">
+            <div class="stat-item">
+                <span class="stat-label">Average Complexity:</span>
+                <span class="stat-value">{{ avg_complexity | round(2) }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Highest Complexity:</span>
+                <span class="stat-value">{{ max_complexity }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Files Above Threshold:</span>
+                <span class="stat-value stat-{{ 'error' if high_complexity_files > 0 else 'success' }}">
+                    {{ high_complexity_files }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Coverage -->
+    <div class="card">
+        <h2 class="card-title">🎯 Test Coverage</h2>
+        <div class="coverage-display">
+            <div class="coverage-chart">
+                <canvas id="coverage-chart"></canvas>
+            </div>
+            <div class="coverage-details">
+                <h3>Coverage by Category</h3>
+                <div class="coverage-list">
+                    <div class="coverage-item">
+                        <span class="coverage-label">Line Coverage:</span>
+                        <div class="coverage-bar">
+                            <div class="coverage-fill" style="width: {{ line_coverage }}%;"></div>
+                        </div>
+                        <span class="coverage-percentage">{{ line_coverage }}%</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-label">Branch Coverage:</span>
+                        <div class="coverage-bar">
+                            <div class="coverage-fill" style="width: {{ branch_coverage }}%;"></div>
+                        </div>
+                        <span class="coverage-percentage">{{ branch_coverage }}%</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-label">Function Coverage:</span>
+                        <div class="coverage-bar">
+                            <div class="coverage-fill" style="width: {{ function_coverage }}%;"></div>
+                        </div>
+                        <span class="coverage-percentage">{{ function_coverage }}%</span>
+                    </div>
+                </div>
+                <div class="coverage-summary">
+                    <p><strong>Uncovered Files:</strong> {{ uncovered_files }}</p>
+                    <p><strong>Partially Covered:</strong> {{ partially_covered_files }}</p>
+                    <p><strong>Fully Covered:</strong> {{ fully_covered_files }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Duplication Analysis -->
+    <div class="card">
+        <h2 class="card-title">📋 Code Duplication</h2>
+        <div class="duplication-stats">
+            <div class="dup-stat">
+                <span class="dup-icon">📊</span>
+                <div class="dup-content">
+                    <span class="dup-value">{{ duplication_percentage }}%</span>
+                    <span class="dup-label">Duplicate Code</span>
+                </div>
+            </div>
+            <div class="dup-stat">
+                <span class="dup-icon">📄</span>
+                <div class="dup-content">
+                    <span class="dup-value">{{ duplicate_blocks }}</span>
+                    <span class="dup-label">Duplicate Blocks</span>
+                </div>
+            </div>
+            <div class="dup-stat">
+                <span class="dup-icon">📝</span>
+                <div class="dup-content">
+                    <span class="dup-value">{{ duplicate_lines }}</span>
+                    <span class="dup-label">Duplicate Lines</span>
+                </div>
+            </div>
+        </div>
+        <div class="duplication-list">
+            <h3>Top Duplication Instances</h3>
+            {% for dup in top_duplications %}
+            <div class="dup-item">
+                <div class="dup-header">
+                    <span class="dup-size">{{ dup.lines }} lines</span>
+                    <span class="dup-occurrences">{{ dup.occurrences }} occurrences</span>
+                </div>
+                <div class="dup-files">
+                    {% for file in dup.files %}
+                    <code>{{ file }}</code>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Quality Trends -->
+    <div class="card">
+        <h2 class="card-title">📈 Quality Trends</h2>
+        <div class="trends-chart-container">
+            <canvas id="quality-trends-chart"></canvas>
+        </div>
+    </div>
+</div>

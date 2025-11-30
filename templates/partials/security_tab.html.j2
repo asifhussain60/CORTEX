@@ -1,0 +1,186 @@
+<!-- Security Tab Content -->
+<div class="security-container">
+    <!-- Security Score Overview -->
+    <div class="card card-primary">
+        <h2 class="card-title">🔒 Security Score</h2>
+        <div class="security-score-display">
+            <div class="score-circle security-{{ security_category }}">
+                <span class="score-value">{{ security_score }}%</span>
+            </div>
+            <div class="security-summary">
+                <p class="security-label">{{ security_label }}</p>
+                <div class="security-stats">
+                    <span class="security-stat critical">{{ critical_vulns }} Critical</span>
+                    <span class="security-stat high">{{ high_vulns }} High</span>
+                    <span class="security-stat medium">{{ medium_vulns }} Medium</span>
+                    <span class="security-stat low">{{ low_vulns }} Low</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OWASP Top 10 Mapping -->
+    <div class="card">
+        <h2 class="card-title">🛡️ OWASP Top 10 Status</h2>
+        <div class="owasp-grid">
+            {% for owasp in owasp_top_10 %}
+            <div class="owasp-card owasp-{{ owasp.status }}">
+                <div class="owasp-header">
+                    <span class="owasp-rank">{{ owasp.rank }}</span>
+                    <span class="owasp-status-badge">{{ owasp.status_label }}</span>
+                </div>
+                <h3 class="owasp-title">{{ owasp.title }}</h3>
+                <p class="owasp-description">{{ owasp.description }}</p>
+                <div class="owasp-details">
+                    <span class="owasp-count">{{ owasp.vulnerability_count }} findings</span>
+                    {% if owasp.vulnerability_count > 0 %}
+                    <button class="btn btn-small" onclick="showOwaspDetails('{{ owasp.id }}')">
+                        View Details
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Vulnerability List -->
+    <div class="card">
+        <h2 class="card-title">⚠️ Detected Vulnerabilities</h2>
+        <div class="vulnerability-filters">
+            <button class="filter-btn active" data-filter="all">All ({{ total_vulns }})</button>
+            <button class="filter-btn" data-filter="critical">Critical ({{ critical_vulns }})</button>
+            <button class="filter-btn" data-filter="high">High ({{ high_vulns }})</button>
+            <button class="filter-btn" data-filter="medium">Medium ({{ medium_vulns }})</button>
+            <button class="filter-btn" data-filter="low">Low ({{ low_vulns }})</button>
+        </div>
+        <div class="vulnerability-list">
+            {% for vuln in vulnerabilities %}
+            <div class="vuln-item severity-{{ vuln.severity }}" data-severity="{{ vuln.severity }}">
+                <div class="vuln-header">
+                    <span class="vuln-severity">{{ vuln.severity | upper }}</span>
+                    <span class="vuln-type">{{ vuln.type }}</span>
+                    <span class="vuln-cwe">CWE-{{ vuln.cwe_id }}</span>
+                </div>
+                <h3 class="vuln-title">{{ vuln.title }}</h3>
+                <p class="vuln-description">{{ vuln.description }}</p>
+                <div class="vuln-location">
+                    <strong>Location:</strong>
+                    <code>{{ vuln.file }}</code>
+                    <span class="vuln-line">Line {{ vuln.line }}</span>
+                </div>
+                <div class="vuln-code">
+                    <strong>Vulnerable Code:</strong>
+                    <pre><code>{{ vuln.code_snippet }}</code></pre>
+                </div>
+                <div class="vuln-recommendation">
+                    <strong>Recommendation:</strong>
+                    <p>{{ vuln.recommendation }}</p>
+                </div>
+                <div class="vuln-actions">
+                    <button class="btn btn-small btn-primary" onclick="showVulnFix('{{ vuln.id }}')">
+                        💡 Show Fix
+                    </button>
+                    <button class="btn btn-small btn-secondary" onclick="copyVulnDetails('{{ vuln.id }}')">
+                        📋 Copy Details
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Security Best Practices -->
+    <div class="card">
+        <h2 class="card-title">✅ Security Best Practices</h2>
+        <div class="practices-list">
+            {% for practice in security_practices %}
+            <div class="practice-item practice-{{ practice.status }}">
+                <span class="practice-icon">{{ practice.icon }}</span>
+                <div class="practice-content">
+                    <h3 class="practice-title">{{ practice.title }}</h3>
+                    <p class="practice-description">{{ practice.description }}</p>
+                    <div class="practice-status">
+                        <span class="status-badge status-{{ practice.status }}">{{ practice.status_label }}</span>
+                        {% if practice.status != 'pass' %}
+                        <span class="practice-action">{{ practice.action_required }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Dependency Vulnerabilities -->
+    <div class="card">
+        <h2 class="card-title">📦 Dependency Vulnerabilities</h2>
+        <div class="dependency-vulns">
+            {% if dependency_vulnerabilities %}
+            <div class="dep-vuln-summary">
+                <p>Found <strong>{{ dependency_vulnerabilities | length }}</strong> vulnerable dependencies</p>
+            </div>
+            <div class="dep-vuln-list">
+                {% for dep in dependency_vulnerabilities %}
+                <div class="dep-vuln-item severity-{{ dep.severity }}">
+                    <div class="dep-info">
+                        <span class="dep-name">{{ dep.package_name }}</span>
+                        <span class="dep-version">{{ dep.current_version }}</span>
+                    </div>
+                    <div class="dep-vuln-details">
+                        <p class="dep-vuln-title">{{ dep.vulnerability_title }}</p>
+                        <p class="dep-vuln-cve">CVE: {{ dep.cve_id }}</p>
+                        <p class="dep-fix">Fixed in version: <strong>{{ dep.fixed_version }}</strong></p>
+                    </div>
+                    <div class="dep-actions">
+                        <button class="btn btn-small btn-primary" onclick="upgradeDependency('{{ dep.package_name }}', '{{ dep.fixed_version }}')">
+                            ⬆️ Upgrade
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-vulns">
+                <span class="success-icon">✅</span>
+                <p>No vulnerable dependencies detected</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Security Compliance -->
+    <div class="card">
+        <h2 class="card-title">📜 Compliance Status</h2>
+        <div class="compliance-grid">
+            {% for standard in compliance_standards %}
+            <div class="compliance-card compliance-{{ standard.status }}">
+                <div class="compliance-header">
+                    <span class="compliance-icon">{{ standard.icon }}</span>
+                    <span class="compliance-name">{{ standard.name }}</span>
+                </div>
+                <div class="compliance-score">
+                    <span class="score-value">{{ standard.score }}%</span>
+                    <span class="score-label">Compliant</span>
+                </div>
+                <div class="compliance-details">
+                    <p>{{ standard.passed }} / {{ standard.total }} checks passed</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Vulnerability Fix Modal (hidden by default) -->
+<div id="vuln-fix-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Recommended Fix</h3>
+            <button class="btn-close" onclick="closeVulnFixModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="fix-content"></div>
+        </div>
+    </div>
+</div>
