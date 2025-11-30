@@ -9,7 +9,7 @@ Validates:
 - Review timestamp integration
 
 Author: Asif Hussain
-Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Copyright: ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import sys
@@ -56,10 +56,10 @@ def test_component_change_detection():
     
     for component in components:
         should_regen = orchestrator._should_regenerate_component(component, last_review)
-        status = "✅ REGENERATE" if should_regen else "⏭️  SKIP"
-        print(f"   {component:20s} → {status}")
+        status = "Γ£à REGENERATE" if should_regen else "ΓÅ¡∩╕Å  SKIP"
+        print(f"   {component:20s} ΓåÆ {status}")
     
-    print("\n✅ Component change detection test complete")
+    print("\nΓ£à Component change detection test complete")
 
 
 def test_incremental_execution():
@@ -102,7 +102,7 @@ def test_incremental_execution():
         if components.get('skipped'):
             print(f"   Skipped: {', '.join(components['skipped'])}")
     
-    print("\n✅ Incremental execution test complete")
+    print("\nΓ£à Incremental execution test complete")
 
 
 def test_component_feature_mapping():
@@ -124,9 +124,9 @@ def test_component_feature_mapping():
     print("\nComponent-to-FeatureType Mappings:")
     for component, types in mappings.items():
         type_names = ', '.join(t.value for t in types)
-        print(f"   {component:20s} → {type_names}")
+        print(f"   {component:20s} ΓåÆ {type_names}")
     
-    print("\n✅ Mapping validation complete")
+    print("\nΓ£à Mapping validation complete")
 
 
 def test_catalog_integration():
@@ -166,7 +166,7 @@ def test_catalog_integration():
     else:
         print("\nNo previous review found (first run)")
     
-    print("\n✅ Catalog integration test complete")
+    print("\nΓ£à Catalog integration test complete")
 
 
 if __name__ == "__main__":
@@ -186,17 +186,17 @@ if __name__ == "__main__":
         test_incremental_execution()
         
         print("\n" + "="*80)
-        print("✅ ALL TESTS COMPLETED SUCCESSFULLY")
+        print("Γ£à ALL TESTS COMPLETED SUCCESSFULLY")
         print("="*80)
         print("\nPhase 1 implementation validated:")
-        print("   ✅ Component change detection functional")
-        print("   ✅ Incremental execution working")
-        print("   ✅ Feature-type mapping correct")
-        print("   ✅ Catalog integration operational")
+        print("   Γ£à Component change detection functional")
+        print("   Γ£à Incremental execution working")
+        print("   Γ£à Feature-type mapping correct")
+        print("   Γ£à Catalog integration operational")
         print("\nNext: Phase 2 - Enhanced Metadata")
         
     except Exception as e:
-        print(f"\n❌ TEST FAILED: {e}")
+        print(f"\nΓ¥î TEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

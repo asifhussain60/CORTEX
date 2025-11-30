@@ -22,7 +22,7 @@ USAGE:
 FEATURES:
 - Natural language query parsing (3 command variants)
 - Real-time compliance data from ComplianceDashboardGenerator
-- Color-coded status indicators (🟢 compliant, 🟡 warning, 🔴 violated)
+- Color-coded status indicators (≡ƒƒó compliant, ≡ƒƒí warning, ≡ƒö┤ violated)
 - Recent protection events timeline
 - Auto-refresh every 30 seconds
 - Graceful degradation if dashboard unavailable
@@ -156,14 +156,14 @@ class ComplianceDashboardAgent(BaseAgent):
             
             if browser_result["success"]:
                 message = (
-                    f"✅ Compliance dashboard opened successfully!\n\n"
+                    f"Γ£à Compliance dashboard opened successfully!\n\n"
                     f"Dashboard: {dashboard_result['dashboard_path']}\n"
                     f"Compliance Score: {dashboard_result.get('compliance_score', 'N/A')}%\n"
                     f"Auto-refresh: Every 30 seconds"
                 )
             else:
                 message = (
-                    f"⚠️ Dashboard generated but could not open Simple Browser.\n\n"
+                    f"ΓÜá∩╕Å Dashboard generated but could not open Simple Browser.\n\n"
                     f"Dashboard saved to: {dashboard_result['dashboard_path']}\n"
                     f"You can open it manually in any browser.\n\n"
                     f"Compliance Score: {dashboard_result.get('compliance_score', 'N/A')}%"
@@ -193,7 +193,7 @@ class ComplianceDashboardAgent(BaseAgent):
             return AgentResponse(
                 success=False,
                 result={},
-                message=f"❌ Failed to display compliance dashboard: {str(e)}",
+                message=f"Γ¥î Failed to display compliance dashboard: {str(e)}",
                 agent_name="ComplianceDashboardAgent",
                 error=str(e),
                 duration_ms=(datetime.now() - start_time).total_seconds() * 1000
@@ -330,7 +330,7 @@ class ComplianceDashboardAgent(BaseAgent):
 </head>
 <body>
     <div class="container">
-        <h1>🛡️ CORTEX Compliance Dashboard</h1>
+        <h1>≡ƒ¢í∩╕Å CORTEX Compliance Dashboard</h1>
         
         <div class="status-card">
             <div class="status-large">{compliance_text}</div>
@@ -368,7 +368,7 @@ class ComplianceDashboardAgent(BaseAgent):
             with open(self.dashboard_path, 'w', encoding='utf-8') as f:
                 f.write(html_content)
             
-            # Extract compliance score from text (e.g., "✅ 85% compliant")
+            # Extract compliance score from text (e.g., "Γ£à 85% compliant")
             compliance_score = self._extract_compliance_score(compliance_text)
             
             return {
@@ -406,7 +406,7 @@ class ComplianceDashboardAgent(BaseAgent):
         Extract compliance percentage from summary text.
         
         Args:
-            summary_text: Compliance summary string (e.g., "✅ 85% compliant")
+            summary_text: Compliance summary string (e.g., "Γ£à 85% compliant")
         
         Returns:
             Compliance percentage as integer, or None if not found

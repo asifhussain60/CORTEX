@@ -106,7 +106,7 @@ class OnboardingAcknowledgmentOrchestrator:
             Dict with welcome content and next step info
         """
         welcome_content = """
-# 🧠 Welcome to CORTEX Enhancement System
+# ≡ƒºá Welcome to CORTEX Enhancement System
 
 ## Your AI Coding Assistant with Governance
 
@@ -114,25 +114,25 @@ CORTEX is not just another AI assistant - it's a **governed, quality-enforced** 
 
 ### What Makes CORTEX Different?
 
-✅ **Transparent Governance:** All operations follow documented rules
-✅ **Quality Enforcement:** TDD, SOLID, security standards built-in
-✅ **Brain Protection:** Your project knowledge is protected and validated
-✅ **Rollback Safety:** Git checkpoints before risky operations
-✅ **Compliance Tracking:** Real-time dashboard of rule adherence
+Γ£à **Transparent Governance:** All operations follow documented rules
+Γ£à **Quality Enforcement:** TDD, SOLID, security standards built-in
+Γ£à **Brain Protection:** Your project knowledge is protected and validated
+Γ£à **Rollback Safety:** Git checkpoints before risky operations
+Γ£à **Compliance Tracking:** Real-time dashboard of rule adherence
 
 ### Why Governance Matters
 
 Without governance:
-- ❌ AI can make breaking changes without safety nets
-- ❌ Code quality degrades over time
-- ❌ Technical debt accumulates invisibly
-- ❌ No audit trail or rollback mechanism
+- Γ¥î AI can make breaking changes without safety nets
+- Γ¥î Code quality degrades over time
+- Γ¥î Technical debt accumulates invisibly
+- Γ¥î No audit trail or rollback mechanism
 
 With CORTEX governance:
-- ✅ Every change follows Definition of Ready/Done
-- ✅ Automated testing and validation
-- ✅ Safe experimentation with rollback points
-- ✅ Clear compliance visibility
+- Γ£à Every change follows Definition of Ready/Done
+- Γ£à Automated testing and validation
+- Γ£à Safe experimentation with rollback points
+- Γ£à Clear compliance visibility
 
 ### What Happens Next?
 
@@ -166,36 +166,36 @@ You'll go through a quick 3-step onboarding:
             Dict with rulebook content and next step info
         """
         rulebook_content = """
-# 📖 CORTEX Governance Rulebook (Overview)
+# ≡ƒôû CORTEX Governance Rulebook (Overview)
 
 ## The 7 Core Protection Layers
 
 ### 1. Definition of Ready (DoR)
 **Before starting any feature:**
-- ✅ Requirements are clear and documented
-- ✅ Acceptance criteria defined
-- ✅ Technical approach validated
-- ✅ No blockers present
+- Γ£à Requirements are clear and documented
+- Γ£à Acceptance criteria defined
+- Γ£à Technical approach validated
+- Γ£à No blockers present
 
 ### 2. Definition of Done (DoD)
 **Before marking work complete:**
-- ✅ Code complete and reviewed
-- ✅ Unit tests written (≥80% coverage)
-- ✅ Integration tests passing
-- ✅ Documentation updated
-- ✅ No regressions introduced
+- Γ£à Code complete and reviewed
+- Γ£à Unit tests written (ΓëÑ80% coverage)
+- Γ£à Integration tests passing
+- Γ£à Documentation updated
+- Γ£à No regressions introduced
 
 ### 3. TDD Enforcement
 **Test-Driven Development cycle:**
-- 🔴 **RED:** Write failing test first
-- 🟢 **GREEN:** Write minimal code to pass
-- 🔵 **REFACTOR:** Improve design without breaking tests
+- ≡ƒö┤ **RED:** Write failing test first
+- ≡ƒƒó **GREEN:** Write minimal code to pass
+- ≡ƒö╡ **REFACTOR:** Improve design without breaking tests
 
 ### 4. Git Checkpoint System
 **Before risky operations:**
-- ✅ Automatic git checkpoint created
-- ✅ Easy rollback if something breaks
-- ✅ Safe experimentation encouraged
+- Γ£à Automatic git checkpoint created
+- Γ£à Easy rollback if something breaks
+- Γ£à Safe experimentation encouraged
 
 ### 5. SOLID Principles
 **Code design standards:**
@@ -207,17 +207,17 @@ You'll go through a quick 3-step onboarding:
 
 ### 6. Security Standards (OWASP)
 **Security by design:**
-- ✅ Input validation
-- ✅ Authentication/Authorization
-- ✅ Sensitive data protection
-- ✅ Security scanning
+- Γ£à Input validation
+- Γ£à Authentication/Authorization
+- Γ£à Sensitive data protection
+- Γ£à Security scanning
 
 ### 7. Brain Integrity
 **Your project knowledge:**
-- ✅ Context validated before use
-- ✅ Lessons learned captured
-- ✅ Technical debt tracked
-- ✅ Architecture decisions documented
+- Γ£à Context validated before use
+- Γ£à Lessons learned captured
+- Γ£à Technical debt tracked
+- Γ£à Architecture decisions documented
 
 ## Quick Commands
 
@@ -231,10 +231,10 @@ You'll go through a quick 3-step onboarding:
 
 ## What This Means for You
 
-✅ **You can trust CORTEX** - Every operation is governed
-✅ **You stay in control** - Rollback any time
-✅ **Quality is built-in** - Not an afterthought
-✅ **Compliance is visible** - Real-time dashboard
+Γ£à **You can trust CORTEX** - Every operation is governed
+Γ£à **You stay in control** - Rollback any time
+Γ£à **Quality is built-in** - Not an afterthought
+Γ£à **Compliance is visible** - Real-time dashboard
 
 ---
 
@@ -263,24 +263,24 @@ You'll go through a quick 3-step onboarding:
             Dict with acknowledgment prompt and instructions
         """
         acknowledgment_content = """
-# ✅ Acknowledgment & Completion
+# Γ£à Acknowledgment & Completion
 
 ## Confirm Your Understanding
 
 By acknowledging, you confirm that you:
 
-1. ✅ Understand CORTEX operates under governance rules
-2. ✅ Agree to follow Definition of Ready/Done workflows
-3. ✅ Will use compliance dashboard for status tracking
-4. ✅ Know how to access rulebook and help commands
+1. Γ£à Understand CORTEX operates under governance rules
+2. Γ£à Agree to follow Definition of Ready/Done workflows
+3. Γ£à Will use compliance dashboard for status tracking
+4. Γ£à Know how to access rulebook and help commands
 
 ## Your Rights
 
 You always have the right to:
-- 📖 Review rules any time: `show rules`
-- 📊 Check compliance: `compliance`
-- ❓ Ask questions: `help`
-- 🔄 Request rollback: Git checkpoints are automatic
+- ≡ƒôû Review rules any time: `show rules`
+- ≡ƒôè Check compliance: `compliance`
+- Γ¥ô Ask questions: `help`
+- ≡ƒöä Request rollback: Git checkpoints are automatic
 
 ## Complete Onboarding
 
@@ -323,10 +323,10 @@ You always have the right to:
             self.governance.mark_onboarding_completed()
             
             completion_message = """
-# 🎉 Onboarding Complete!
+# ≡ƒÄë Onboarding Complete!
 
-✅ **Governance acknowledgment recorded**
-✅ **CORTEX is ready to assist you**
+Γ£à **Governance acknowledgment recorded**
+Γ£à **CORTEX is ready to assist you**
 
 ## What Happens Now?
 
@@ -349,7 +349,7 @@ Try these commands to get started:
 - Say `show rules` to review governance
 - Say `compliance` to check rule adherence
 
-**Welcome to governed AI development with CORTEX!** 🚀
+**Welcome to governed AI development with CORTEX!** ≡ƒÜÇ
 """
             
             return {

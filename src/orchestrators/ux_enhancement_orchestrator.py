@@ -656,7 +656,7 @@ class UXEnhancementOrchestrator:
         
         <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
             <p class="text-yellow-700">
-                <strong>Next Steps:</strong> Phase 2 will replace this placeholder with the full dashboard. 
+                <strong>🔍 Next Steps:</strong> Phase 2 will replace this placeholder with the full dashboard. 
                 The analysis data is ready - we just need to build the visualization layer!
             </p>
         </div>

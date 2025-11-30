@@ -814,7 +814,7 @@ class CodeReviewOrchestrator:
         md += "- ✓ Use your engineering judgment as final decision\n\n"
         
         # Next Steps
-        md += "## 🚀 Next Steps\n\n"
+        md += "## 🔍 Next Steps\n\n"
         if result.critical_issues:
             md += "### Immediate Actions (Critical Path)\n\n"
             md += "1. 🔴 **Fix critical issues** listed above (blocking)\n"

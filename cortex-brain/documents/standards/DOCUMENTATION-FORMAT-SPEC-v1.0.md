@@ -1,41 +1,31 @@
-# CORTEX Documentation Format Specification v1.0
+# CORTEX Interactive Dashboard Documentation Format Specification
 
 **Version:** 1.0.0  
-**Status:** ✅ APPROVED  
-**Effective Date:** 2025-11-28  
-**Author:** Asif Hussain  
-**Scope:** All Admin Entry Point Modules (EPMs)
+**Status:** Production Ready  
+**Created:** 2025-11-28  
+**Author:** Asif Hussain
 
 ---
 
-## 🎯 Purpose
+## 📋 Overview
 
-This specification defines the **mandatory format** for all CORTEX admin documentation outputs. All Entry Point Modules (EPMs) generating documentation MUST comply with this standard to ensure:
+This specification defines the mandatory format for all CORTEX admin operation documentation outputs. All admin Entry Point Modules (EPMs) MUST generate interactive D3.js dashboards conforming to this specification.
 
-- **Consistent user experience** across all admin operations
-- **Interactive exploration** via D3.js dashboards
-- **Multi-layer context** with tabbed navigation
-- **Export capabilities** for sharing and presentation
-- **Deployment validation** at gate checkpoints
+**Applies To:**
+- Enterprise Documentation Orchestrator
+- System Alignment Orchestrator
+- Diagram Regeneration Module
+- Design Sync Orchestrator
+- Analytics Dashboard
+- Response Templates Module
 
-**Enforcement:** Deployment pipelines MUST validate compliance before allowing releases.
+**Enforcement:** Deployment pipeline validates all outputs against this specification. Non-compliant outputs block deployment.
 
 ---
 
-## 📐 Core Architecture
+## 🏗️ HTML Structure Requirements
 
-### Format Type: Interactive HTML Dashboard
-
-All admin documentation outputs MUST be generated as **self-contained HTML files** with:
-
-1. **Embedded D3.js library** (v7.8.5 or higher)
-2. **Multi-layer tab navigation** (5 tabs minimum)
-3. **Interactive visualizations** (SVG-based)
-4. **Narrative intelligence** (contextual explanations)
-5. **Smart annotations** (JSON-driven tooltips)
-6. **Export functionality** (PDF, PNG, PPTX)
-
-### File Structure
+### Root Structure
 
 ```html
 <!DOCTYPE html>
@@ -43,31 +33,55 @@ All admin documentation outputs MUST be generated as **self-contained HTML files
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[Operation Name] - CORTEX Admin Dashboard</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://d3js.org https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
+    <title>CORTEX Dashboard - [Operation Name]</title>
     
-    <!-- REQUIRED: D3.js Library -->
+    <!-- Required Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     
-    <!-- REQUIRED: Export Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <!-- REQUIRED: Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://d3js.org https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://d3js.org https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline';">
-    
+    <!-- Dashboard Styles -->
     <style>
-        /* Embedded CSS - NO external stylesheets */
+        /* Base styles required */
     </style>
 </head>
 <body>
-    <!-- Tab Navigation -->
-    <!-- Content Layers -->
-    <!-- Interactive Visualizations -->
-    <!-- Export Controls -->
+    <!-- Tab navigation -->
+    <nav class="dashboard-tabs">
+        <button class="tab-button active" data-tab="overview">Overview</button>
+        <button class="tab-button" data-tab="visualizations">Visualizations</button>
+        <button class="tab-button" data-tab="diagrams">Diagrams</button>
+        <button class="tab-button" data-tab="data">Data</button>
+        <button class="tab-button" data-tab="recommendations">Recommendations</button>
+    </nav>
+    
+    <!-- Tab content -->
+    <div class="tab-content active" id="overview-tab">
+        <!-- Tab 1 content -->
+    </div>
+    <div class="tab-content" id="visualizations-tab">
+        <!-- Tab 2 content -->
+    </div>
+    <div class="tab-content" id="diagrams-tab">
+        <!-- Tab 3 content -->
+    </div>
+    <div class="tab-content" id="data-tab">
+        <!-- Tab 4 content -->
+    </div>
+    <div class="tab-content" id="recommendations-tab">
+        <!-- Tab 5 content -->
+    </div>
+    
+    <!-- Export controls -->
+    <div class="export-controls">
+        <button onclick="exportToPDF()">Export PDF</button>
+        <button onclick="exportToPNG()">Export PNG</button>
+        <button onclick="exportToPPTX()">Export PPTX</button>
+    </div>
     
     <script>
-        /* NO inline event handlers */
-        /* All JavaScript in <script> blocks */
+        // Dashboard logic
     </script>
 </body>
 </html>
@@ -75,297 +89,479 @@ All admin documentation outputs MUST be generated as **self-contained HTML files
 
 ---
 
-## 🗂️ Tab Structure (5-Layer Minimum)
+## 📑 Tab Structure (MANDATORY 5 Tabs)
 
-### Layer 1: Executive Summary (MANDATORY)
+### Tab 1: Overview (Narrative Intelligence)
 
-**Purpose:** High-level overview for quick decision-making
+**Purpose:** Executive summary with key metrics and natural language insights
 
-**Required Elements:**
-- **Operation Title** (H1 heading)
-- **Timestamp** (ISO 8601 format)
-- **Author Attribution** ("Asif Hussain | GitHub: github.com/asifhussain60/CORTEX")
-- **Status Badge** (✅ Success / ⚠️ Warning / ❌ Error)
-- **Key Metrics** (3-5 primary indicators)
-- **Health Score** (0-100% visualization)
-- **Quick Actions** (1-3 recommended next steps)
+**Required Sections:**
+1. **Operation Summary** - 3-sentence executive summary
+2. **Key Metrics** - Top 5 metrics with visual indicators
+3. **Status Indicator** - Overall health (Healthy/Warning/Critical)
+4. **Timestamp** - Generation time and version
+5. **Quick Actions** - Links to detailed tabs
 
-**Visualization:** Single D3.js gauge/radial chart for health score
-
-**Example:**
-```html
-<div id="layer-executive" class="tab-content active">
-    <h1>System Alignment Report</h1>
-    <div class="metadata">
-        <span class="timestamp">2025-11-28T14:32:10Z</span>
-        <span class="author">Asif Hussain | GitHub: github.com/asifhussain60/CORTEX</span>
-    </div>
-    <div class="status-badge success">✅ Alignment Successful</div>
-    
-    <div class="key-metrics">
-        <div class="metric">
-            <span class="label">Overall Score</span>
-            <span class="value">94.2%</span>
-        </div>
-        <!-- 2-4 more metrics -->
-    </div>
-    
-    <svg id="health-gauge"></svg>
-    
-    <div class="quick-actions">
-        <button onclick="exportReport('pdf')">Export PDF</button>
-        <button onclick="viewDetails()">View Details</button>
-    </div>
-</div>
-```
-
-### Layer 2: Detailed Analysis (MANDATORY)
-
-**Purpose:** In-depth breakdown of operation results
-
-**Required Elements:**
-- **Component Breakdown** (table or tree visualization)
-- **Issue Categorization** (grouped by severity)
-- **Trend Analysis** (historical comparison if available)
-- **Dependency Mapping** (relationship visualization)
-- **Performance Metrics** (timing, resource usage)
-
-**Visualization:** D3.js hierarchical tree OR force-directed graph
+**Narrative Intelligence Requirements:**
+- Natural language descriptions of trends
+- Contextual explanations of metrics
+- Actionable insights in plain English
+- Smart annotations explaining anomalies
 
 **Example Structure:**
-```javascript
-// D3.js Tree Visualization
-const treeData = {
-    name: "System Components",
-    children: [
-        {
-            name: "Tier 1: Working Memory",
-            status: "healthy",
-            score: 98.5,
-            children: [...]
-        },
-        {
-            name: "Tier 2: Knowledge Graph",
-            status: "warning",
-            score: 87.3,
-            issues: [...]
-        }
-    ]
-};
-```
-
-### Layer 3: Issues & Recommendations (MANDATORY)
-
-**Purpose:** Actionable insights and remediation steps
-
-**Required Elements:**
-- **Issue List** (filterable by severity/category)
-- **Root Cause Analysis** (for each critical issue)
-- **Remediation Templates** (copy-paste ready)
-- **Priority Matrix** (impact vs effort visualization)
-- **Dependencies** (what must be fixed first)
-
-**Visualization:** D3.js matrix/heatmap for priority scoring
-
-**Example:**
 ```html
-<div id="layer-issues" class="tab-content">
-    <div class="filter-controls">
-        <button data-severity="critical">Critical (3)</button>
-        <button data-severity="warning">Warnings (12)</button>
-        <button data-severity="info">Info (8)</button>
-    </div>
+<div class="tab-content active" id="overview-tab">
+    <section class="executive-summary">
+        <h2>Executive Summary</h2>
+        <p class="narrative"><!-- Auto-generated narrative --></p>
+    </section>
     
-    <div class="issue-list">
-        <div class="issue critical" data-id="ISS-001">
-            <h3>Missing Test Coverage for Authentication Module</h3>
-            <div class="root-cause">
-                TDD enforcement detected 3 files without corresponding tests.
-            </div>
-            <div class="remediation">
-                <button onclick="copyTemplate('ISS-001')">Copy Fix Template</button>
-                <pre class="template">
-# Test file: tests/test_authentication.py
-# Add these test cases:
-                </pre>
-            </div>
+    <section class="key-metrics">
+        <div class="metric-card">
+            <div class="metric-value">85%</div>
+            <div class="metric-label">System Health</div>
+            <div class="metric-trend">↗️ +5% from last week</div>
         </div>
-    </div>
+        <!-- 4 more metric cards -->
+    </section>
     
-    <svg id="priority-matrix"></svg>
-</div>
-```
-
-### Layer 4: Technical Details (MANDATORY)
-
-**Purpose:** Raw data and diagnostic information
-
-**Required Elements:**
-- **Configuration Snapshot** (relevant settings)
-- **File Manifest** (files analyzed/modified)
-- **Execution Trace** (operation steps with timing)
-- **Database Queries** (if applicable)
-- **API Calls** (if applicable)
-
-**Visualization:** D3.js timeline for execution trace
-
-**Example:**
-```html
-<div id="layer-technical" class="tab-content">
-    <div class="config-snapshot">
-        <h3>Active Configuration</h3>
-        <pre><code>{
-    "governance": {
-        "tdd_enforcement": true,
-        "brain_protection": true
-    }
-}</code></pre>
-    </div>
+    <section class="status-indicator">
+        <div class="status-badge healthy">✅ Healthy</div>
+        <p class="status-explanation">All systems operational</p>
+    </section>
     
-    <div class="file-manifest">
-        <h3>Files Analyzed (47)</h3>
-        <ul>
-            <li>src/tier1/working_memory.py (modified)</li>
-            <li>src/tier2/knowledge_graph.py (analyzed)</li>
-        </ul>
-    </div>
+    <section class="metadata">
+        <p>Generated: <span id="timestamp"></span></p>
+        <p>Version: CORTEX 3.4.0</p>
+    </section>
     
-    <svg id="execution-timeline"></svg>
-</div>
-```
-
-### Layer 5: Export & Actions (MANDATORY)
-
-**Purpose:** Report sharing and workflow integration
-
-**Required Elements:**
-- **Export Options** (PDF, PNG, PPTX with preview)
-- **Integration Links** (ADO work items, GitHub issues)
-- **Notification Settings** (email, Slack, Teams)
-- **Scheduled Reports** (recurring generation)
-- **API Access** (programmatic retrieval)
-
-**Visualization:** D3.js preview thumbnail of export output
-
-**Example:**
-```html
-<div id="layer-export" class="tab-content">
-    <div class="export-options">
-        <button onclick="exportPDF()">
-            <svg id="pdf-preview"></svg>
-            Export as PDF
-        </button>
-        <button onclick="exportPNG()">
-            <svg id="png-preview"></svg>
-            Export as PNG
-        </button>
-        <button onclick="exportPPTX()">
-            <svg id="pptx-preview"></svg>
-            Export as PowerPoint
-        </button>
-    </div>
-    
-    <div class="integration">
-        <h3>Create Work Items</h3>
-        <button onclick="createADOItems()">Create ADO Stories (3)</button>
-        <button onclick="createGitHubIssues()">Create GitHub Issues (3)</button>
-    </div>
+    <section class="quick-actions">
+        <button onclick="switchTab('visualizations')">View Visualizations</button>
+        <button onclick="switchTab('recommendations')">See Recommendations</button>
+    </section>
 </div>
 ```
 
 ---
 
-## 🎨 Styling Requirements
+### Tab 2: Visualizations (D3.js + Chart.js)
 
-### Color Palette (MANDATORY)
+**Purpose:** Interactive data visualizations with drill-down capabilities
+
+**Required Visualizations:**
+1. **Force-Directed Graph** (D3.js) - Component relationships, dependency graphs
+2. **Time Series Chart** (Chart.js) - Trend analysis, historical data
+3. **Bar Chart** (D3.js or Chart.js) - Comparative metrics
+4. **Heatmap** (D3.js) - Intensity visualization (optional)
+
+**D3.js Requirements (v7+):**
+- Interactive zoom and pan
+- Hover tooltips with detailed information
+- Click handlers for drill-down
+- Smooth transitions (duration: 750ms)
+- Responsive sizing (adapt to viewport)
+
+**Chart.js Requirements (v3+):**
+- Responsive: true
+- Interactive legend (toggle datasets)
+- Tooltip callbacks for custom formatting
+- Animation: { duration: 1000 }
+
+**Example Structure:**
+```html
+<div class="tab-content" id="visualizations-tab">
+    <section class="viz-section">
+        <h3>Component Dependency Graph</h3>
+        <div id="force-graph" class="d3-container"></div>
+    </section>
+    
+    <section class="viz-section">
+        <h3>Health Trend (Last 30 Days)</h3>
+        <canvas id="health-trend-chart"></canvas>
+    </section>
+    
+    <section class="viz-section">
+        <h3>Feature Status Distribution</h3>
+        <div id="status-bar-chart" class="d3-container"></div>
+    </section>
+</div>
+
+<script>
+    // Force-directed graph
+    const width = 800, height = 600;
+    const svg = d3.select("#force-graph")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .call(d3.zoom().on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        }));
+    
+    const g = svg.append("g");
+    
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+    
+    // Chart.js time series
+    const ctx = document.getElementById('health-trend-chart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'System Health',
+                data: healthScores,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => `Health: ${context.parsed.y}%`
+                    }
+                }
+            }
+        }
+    });
+</script>
+```
+
+---
+
+### Tab 3: Diagrams (Mermaid Embedding)
+
+**Purpose:** Architecture diagrams, flowcharts, sequence diagrams with interactive controls
+
+**Required Features:**
+1. **Mermaid Rendering** - Render Mermaid diagrams inline
+2. **Zoom Controls** - +/- buttons for zooming
+3. **Pan Support** - Drag to pan large diagrams
+4. **Fullscreen Mode** - Expand diagram to fullscreen
+5. **Export Diagram** - Download diagram as PNG/SVG
+
+**Mermaid Diagram Types:**
+- **Flowchart** - Process flows, decision trees
+- **Sequence Diagram** - Component interactions
+- **Class Diagram** - Object relationships
+- **State Diagram** - State transitions
+- **ER Diagram** - Data relationships
+
+**Example Structure:**
+```html
+<div class="tab-content" id="diagrams-tab">
+    <section class="diagram-controls">
+        <button onclick="zoomIn()">➕ Zoom In</button>
+        <button onclick="zoomOut()">➖ Zoom Out</button>
+        <button onclick="resetZoom()">🔄 Reset</button>
+        <button onclick="fullscreen()">⛶ Fullscreen</button>
+        <button onclick="exportDiagram()">💾 Export PNG</button>
+    </section>
+    
+    <section class="diagram-container">
+        <h3>System Architecture</h3>
+        <div class="mermaid-wrapper" id="diagram-1">
+            <pre class="mermaid">
+graph TD
+    A[User Request] --> B{Intent Router}
+    B --> C[Planning Agent]
+    B --> D[TDD Agent]
+    B --> E[Admin Agent]
+    C --> F[Response Template]
+    D --> F
+    E --> F
+    F --> G[User Response]
+            </pre>
+        </div>
+    </section>
+    
+    <section class="diagram-container">
+        <h3>Data Flow</h3>
+        <div class="mermaid-wrapper" id="diagram-2">
+            <pre class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant I as Intent Router
+    participant A as Agent
+    participant T as Template
+    U->>I: Request
+    I->>A: Route to agent
+    A->>T: Select template
+    T->>U: Formatted response
+            </pre>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Initialize Mermaid
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose',
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true
+        }
+    });
+    
+    // Zoom controls
+    let zoomLevel = 1.0;
+    function zoomIn() {
+        zoomLevel += 0.1;
+        document.querySelectorAll('.mermaid-wrapper').forEach(el => {
+            el.style.transform = `scale(${zoomLevel})`;
+        });
+    }
+    
+    function zoomOut() {
+        zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+        document.querySelectorAll('.mermaid-wrapper').forEach(el => {
+            el.style.transform = `scale(${zoomLevel})`;
+        });
+    }
+</script>
+```
+
+---
+
+### Tab 4: Data Tables (Sortable & Filterable)
+
+**Purpose:** Raw data access with sorting, filtering, and CSV export
+
+**Required Features:**
+1. **Sortable Columns** - Click headers to sort ascending/descending
+2. **Filter Controls** - Search box and column-specific filters
+3. **Pagination** - Show 25/50/100 rows per page
+4. **CSV Export** - Download full dataset
+5. **Column Visibility** - Show/hide columns
+
+**Example Structure:**
+```html
+<div class="tab-content" id="data-tab">
+    <section class="table-controls">
+        <input type="text" id="table-search" placeholder="Search...">
+        <select id="rows-per-page">
+            <option value="25">25 rows</option>
+            <option value="50">50 rows</option>
+            <option value="100">100 rows</option>
+        </select>
+        <button onclick="exportTableToCSV()">💾 Export CSV</button>
+    </section>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th data-sort="name">Feature Name <span class="sort-icon">⬍</span></th>
+                <th data-sort="type">Type <span class="sort-icon">⬍</span></th>
+                <th data-sort="status">Status <span class="sort-icon">⬍</span></th>
+                <th data-sort="health">Health <span class="sort-icon">⬍</span></th>
+                <th data-sort="lastUpdated">Last Updated <span class="sort-icon">⬍</span></th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body">
+            <!-- Rows dynamically inserted -->
+        </tbody>
+    </table>
+    
+    <div class="pagination">
+        <button onclick="prevPage()">← Previous</button>
+        <span id="page-info">Page 1 of 10</span>
+        <button onclick="nextPage()">Next →</button>
+    </div>
+</div>
+
+<script>
+    let tableData = []; // Loaded from JSON
+    let currentPage = 1;
+    let rowsPerPage = 25;
+    let sortColumn = 'name';
+    let sortDirection = 'asc';
+    
+    function renderTable() {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const sortedData = sortData(tableData, sortColumn, sortDirection);
+        const pageData = sortedData.slice(start, end);
+        
+        const tbody = document.getElementById('data-table-body');
+        tbody.innerHTML = pageData.map(row => `
+            <tr>
+                <td>${row.name}</td>
+                <td>${row.type}</td>
+                <td><span class="badge ${row.status}">${row.status}</span></td>
+                <td>${row.health}%</td>
+                <td>${row.lastUpdated}</td>
+            </tr>
+        `).join('');
+    }
+    
+    function sortData(data, column, direction) {
+        return [...data].sort((a, b) => {
+            if (a[column] < b[column]) return direction === 'asc' ? -1 : 1;
+            if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
+    
+    // Search implementation
+    document.getElementById('table-search').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        tableData = originalData.filter(row =>
+            Object.values(row).some(val =>
+                String(val).toLowerCase().includes(query)
+            )
+        );
+        currentPage = 1;
+        renderTable();
+    });
+</script>
+```
+
+---
+
+### Tab 5: Recommendations (Actionable Insights)
+
+**Purpose:** AI-generated recommendations with priority ranking and implementation steps
+
+**Required Sections:**
+1. **Priority Matrix** - High/Medium/Low priority recommendations
+2. **Implementation Steps** - Numbered action items
+3. **Expected Impact** - Quantified benefits
+4. **Estimated Effort** - Time/complexity estimates
+5. **Related Resources** - Links to documentation
+
+**Smart Annotations:**
+```json
+{
+  "recommendations": [
+    {
+      "priority": "high",
+      "title": "Improve Testing Coverage for Warning Features",
+      "rationale": "5 features at 70% coverage limiting deployment confidence",
+      "steps": [
+        "Generate test skeletons using System Alignment remediation",
+        "Fill in test cases for critical paths",
+        "Validate coverage increases to 80%+"
+      ],
+      "expectedImpact": "+5% overall health (70% → 75%)",
+      "estimatedEffort": "4-6 hours",
+      "relatedResources": [
+        "/docs/tdd-mastery-guide.md",
+        "/docs/test-strategy.yaml"
+      ]
+    }
+  ]
+}
+```
+
+**Example Structure:**
+```html
+<div class="tab-content" id="recommendations-tab">
+    <section class="priority-section high-priority">
+        <h3>🔴 High Priority (3)</h3>
+        <div class="recommendation-card">
+            <h4>Improve Testing Coverage</h4>
+            <p class="rationale">5 features at 70% coverage limiting deployment confidence</p>
+            <ol class="steps">
+                <li>Generate test skeletons using System Alignment</li>
+                <li>Fill in test cases for critical paths</li>
+                <li>Validate coverage increases to 80%+</li>
+            </ol>
+            <div class="impact">
+                <strong>Expected Impact:</strong> +5% overall health
+            </div>
+            <div class="effort">
+                <strong>Estimated Effort:</strong> 4-6 hours
+            </div>
+            <div class="resources">
+                <strong>Resources:</strong>
+                <a href="/docs/tdd-mastery-guide.md">TDD Guide</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="priority-section medium-priority">
+        <h3>🟡 Medium Priority (5)</h3>
+        <!-- Medium priority cards -->
+    </section>
+    
+    <section class="priority-section low-priority">
+        <h3>🟢 Low Priority (2)</h3>
+        <!-- Low priority cards -->
+    </section>
+</div>
+```
+
+---
+
+## 🎨 CSS Requirements
+
+### Base Styles (MANDATORY)
 
 ```css
 :root {
-    /* Primary Colors */
-    --cortex-primary: #2c3e50;      /* Dark blue-grey */
-    --cortex-secondary: #3498db;    /* Bright blue */
-    --cortex-accent: #e74c3c;       /* Red for alerts */
-    
-    /* Status Colors */
-    --status-success: #27ae60;      /* Green */
-    --status-warning: #f39c12;      /* Orange */
-    --status-error: #e74c3c;        /* Red */
-    --status-info: #3498db;         /* Blue */
-    
-    /* Neutral Colors */
-    --bg-primary: #ffffff;
-    --bg-secondary: #ecf0f1;
-    --text-primary: #2c3e50;
-    --text-secondary: #7f8c8d;
-    --border-color: #bdc3c7;
-    
-    /* Visualization Colors */
-    --viz-color-1: #3498db;
-    --viz-color-2: #2ecc71;
-    --viz-color-3: #f39c12;
-    --viz-color-4: #e74c3c;
-    --viz-color-5: #9b59b6;
+    --primary-color: #2196F3;
+    --success-color: #4CAF50;
+    --warning-color: #FF9800;
+    --danger-color: #F44336;
+    --bg-color: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --text-color: #333333;
+    --border-color: #DDDDDD;
 }
-```
 
-### Typography (MANDATORY)
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-```css
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
-                 "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
     line-height: 1.6;
-    color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; font-weight: 700; }
-h2 { font-size: 2rem; font-weight: 600; }
-h3 { font-size: 1.5rem; font-weight: 600; }
-
-code {
-    font-family: "SF Mono", Monaco, "Cascadia Code", "Courier New", monospace;
-    background: var(--bg-secondary);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-}
-
-pre code {
-    display: block;
-    padding: 1rem;
-    overflow-x: auto;
-}
-```
-
-### Layout (MANDATORY)
-
-```css
 /* Tab Navigation */
-.tab-navigation {
-    display: flex;
+.dashboard-tabs {
+    background: var(--card-bg);
     border-bottom: 2px solid var(--border-color);
-    margin-bottom: 2rem;
+    display: flex;
+    padding: 0 20px;
 }
 
 .tab-button {
-    padding: 1rem 2rem;
+    background: none;
     border: none;
-    background: transparent;
+    padding: 15px 25px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease;
 }
 
-.tab-button.active {
-    border-bottom-color: var(--cortex-secondary);
-    color: var(--cortex-secondary);
-    font-weight: 600;
+.tab-button:hover {
+    color: var(--primary-color);
 }
 
-/* Content Containers */
+.tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Tab Content */
 .tab-content {
     display: none;
-    padding: 2rem;
+    padding: 20px;
     animation: fadeIn 0.3s ease;
 }
 
@@ -377,74 +573,225 @@ pre code {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Cards */
+.metric-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.healthy {
+    background: var(--success-color);
+    color: white;
+}
+
+.status-badge.warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.status-badge.critical {
+    background: var(--danger-color);
+    color: white;
+}
+
+/* Data Tables */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+}
+
+.data-table th {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+}
+
+.data-table th:hover {
+    background: #1976D2;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table tr:hover {
+    background: #F5F5F5;
+}
+
+/* Export Controls */
+.export-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.export-controls button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.export-controls button:hover {
+    background: #1976D2;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .export-controls {
+        flex-direction: column;
+        bottom: 10px;
+        right: 10px;
+    }
+}
 ```
 
 ---
 
-## 📊 D3.js Visualization Requirements
+## 📊 Data Format Requirements
 
-### Mandatory Visualizations by Layer
+### JSON Data Structure
 
-| Layer | Visualization Type | Data Binding | Interactivity |
-|-------|-------------------|--------------|---------------|
-| Executive Summary | Gauge/Radial Chart | Health score (0-100%) | Hover tooltips |
-| Detailed Analysis | Tree/Force Graph | Component hierarchy | Click to expand, zoom/pan |
-| Issues & Recommendations | Matrix/Heatmap | Priority scoring | Filter by severity, click for details |
-| Technical Details | Timeline | Execution trace | Hover for timing, click for logs |
-| Export & Actions | Thumbnail Preview | Export output | Click to generate |
-
-### D3.js Code Standards
-
-**Data Sanitization (REQUIRED):**
-```javascript
-// ALWAYS sanitize user-generated content
-function sanitizeText(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+```json
+{
+  "metadata": {
+    "generatedAt": "2025-11-28T14:30:00Z",
+    "version": "3.4.0",
+    "operationType": "system_alignment",
+    "author": "CORTEX"
+  },
+  "overview": {
+    "executiveSummary": "3-sentence narrative summary",
+    "keyMetrics": [
+      {
+        "label": "System Health",
+        "value": "85%",
+        "trend": "up",
+        "trendValue": "+5%",
+        "status": "healthy"
+      }
+    ],
+    "statusIndicator": {
+      "status": "healthy",
+      "message": "All systems operational"
+    }
+  },
+  "visualizations": {
+    "forceGraph": {
+      "nodes": [
+        { "id": "feature1", "group": 1, "label": "Feature 1" }
+      ],
+      "links": [
+        { "source": "feature1", "target": "feature2", "value": 1 }
+      ]
+    },
+    "timeSeries": {
+      "labels": ["2025-11-01", "2025-11-08", "2025-11-15"],
+      "datasets": [
+        {
+          "label": "Health Score",
+          "data": [78, 82, 85]
+        }
+      ]
+    }
+  },
+  "diagrams": [
+    {
+      "title": "System Architecture",
+      "mermaidCode": "graph TD\nA[Start] --> B[End]",
+      "type": "flowchart"
+    }
+  ],
+  "dataTable": [
+    {
+      "name": "Feature 1",
+      "type": "operation",
+      "status": "healthy",
+      "health": 92,
+      "lastUpdated": "2025-11-28"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "title": "Recommendation title",
+      "rationale": "Why this matters",
+      "steps": ["Step 1", "Step 2"],
+      "expectedImpact": "Quantified benefit",
+      "estimatedEffort": "Time estimate",
+      "relatedResources": ["link1", "link2"]
+    }
+  ]
 }
-
-// Example usage in D3
-svg.selectAll("text")
-    .data(data)
-    .enter()
-    .append("text")
-    .text(d => sanitizeText(d.name)); // Prevents XSS
 ```
 
-**SVG Structure:**
-```javascript
-// Standard SVG setup
-const margin = {top: 20, right: 20, bottom: 30, left: 50};
-const width = 960 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+---
 
-const svg = d3.select("#chart-container")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-```
+## ⚡ Performance Requirements
 
-**Transitions (REQUIRED for all state changes):**
-```javascript
-// Smooth transitions (300ms standard)
-elements.transition()
-    .duration(300)
-    .ease(d3.easeQuadInOut)
-    .attr("opacity", 1);
-```
+### Mandatory Benchmarks
 
-**Accessibility (REQUIRED):**
-```javascript
-// Add ARIA labels for screen readers
-svg.append("title")
-    .text("System Health Gauge - 94% Healthy");
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| **Dashboard Generation** | <5 seconds | Time from method call to file written |
+| **Initial Page Load** | <2 seconds | DOMContentLoaded event |
+| **D3.js Render** | <1 second | First visualization visible |
+| **Tab Switching** | <300ms | Animation completion |
+| **Export PDF** | <7 seconds | File download starts |
+| **Export PNG** | <3 seconds | File download starts |
+| **Export PPTX** | <10 seconds | File download starts |
+| **Memory Usage** | <500MB | Peak during generation |
+| **File Size** | <2MB | Generated HTML file |
 
-svg.append("desc")
-    .text("A radial gauge showing system health at 94%, indicating healthy status");
-```
+### Optimization Techniques
+
+1. **Lazy Loading** - Load tab content on first view
+2. **Data Pagination** - Limit initial table rows to 25
+3. **Image Optimization** - Compress embedded images
+4. **Minification** - Minify inline JavaScript/CSS
+5. **CDN Usage** - Load D3.js/Chart.js from CDN
+6. **Caching** - Cache rendered visualizations
 
 ---
 
@@ -452,341 +799,143 @@ svg.append("desc")
 
 ### Content Security Policy (CSP)
 
-**MANDATORY CSP Header:**
 ```html
 <meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self' https://d3js.org https://cdnjs.cloudflare.com; 
-               script-src 'self' 'unsafe-inline' https://d3js.org https://cdnjs.cloudflare.com; 
+      content="default-src 'self'; 
+               script-src 'self' https://d3js.org https://cdn.jsdelivr.net; 
                style-src 'self' 'unsafe-inline'; 
-               img-src 'self' data:; 
-               connect-src 'self';">
+               img-src 'self' data:;">
 ```
 
 ### XSS Prevention
 
-**Input Sanitization (MANDATORY):**
-```javascript
-// Use DOMPurify or built-in sanitization
-function sanitizeHTML(html) {
-    const temp = document.createElement('div');
-    temp.textContent = html;
-    return temp.innerHTML;
-}
+- **Sanitize User Input** - Escape all user-generated content
+- **No eval()** - Never use eval() for data processing
+- **No inline event handlers** - Use addEventListener()
+- **Validate JSON** - Parse and validate all JSON data
 
-// For JSON data
-function sanitizeJSON(obj) {
-    return JSON.parse(JSON.stringify(obj, (key, value) => {
-        if (typeof value === 'string') {
-            return sanitizeHTML(value);
-        }
-        return value;
-    }));
-}
-```
+### Data Privacy
 
-**NO Inline Event Handlers:**
-```html
-<!-- ❌ FORBIDDEN -->
-<button onclick="doSomething()">Click</button>
-
-<!-- ✅ REQUIRED -->
-<button id="action-btn">Click</button>
-<script>
-    document.getElementById('action-btn').addEventListener('click', doSomething);
-</script>
-```
-
-### Data Validation
-
-**Schema Validation (REQUIRED before rendering):**
-```javascript
-// Validate dashboard data structure
-function validateDashboardData(data) {
-    const required = ['title', 'timestamp', 'status', 'metrics', 'layers'];
-    for (const field of required) {
-        if (!(field in data)) {
-            throw new Error(`Missing required field: ${field}`);
-        }
-    }
-    
-    if (data.layers.length < 5) {
-        throw new Error('Dashboard must have at least 5 layers');
-    }
-    
-    return true;
-}
-```
+- **No External Analytics** - No Google Analytics or tracking
+- **No External Fonts** - Use system fonts only
+- **Local Storage Only** - No cookies or session storage
+- **Admin-Only Access** - Dashboards require authentication
 
 ---
 
-## 📤 Export Functionality
+## 📤 Export Functionality Requirements
 
-### PDF Export (REQUIRED)
+### PDF Export
 
-**Implementation:**
-```javascript
-async function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    
-    // Capture each layer as image
-    const layers = document.querySelectorAll('.tab-content');
-    for (let i = 0; i < layers.length; i++) {
-        if (i > 0) pdf.addPage();
-        
-        const canvas = await html2canvas(layers[i]);
-        const imgData = canvas.toDataURL('image/png');
-        
-        const imgWidth = 190;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-    }
-    
-    pdf.save(`cortex-report-${Date.now()}.pdf`);
-}
-```
-
-### PNG Export (REQUIRED)
+**Library:** Playwright or Puppeteer  
+**Requirements:**
+- Preserve interactive elements as images
+- Maintain layout/styling
+- Include all tabs in multi-page PDF
+- Add table of contents
+- File size <10MB
 
 **Implementation:**
-```javascript
-async function exportPNG(layerId) {
-    const layer = document.getElementById(layerId);
-    const canvas = await html2canvas(layer, {
-        backgroundColor: '#ffffff',
-        scale: 2 // High resolution
-    });
-    
-    const link = document.createElement('a');
-    link.download = `cortex-${layerId}-${Date.now()}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-}
+```python
+async def export_to_pdf(html_file: str, output_file: str) -> bool:
+    """Export dashboard to PDF."""
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        await page.goto(f'file://{html_file}')
+        await page.pdf(path=output_file, format='A4', print_background=True)
+        await browser.close()
+    return True
 ```
 
-### PowerPoint Export (REQUIRED)
+### PNG Export
 
-**Implementation:**
-```javascript
-async function exportPPTX() {
-    // Convert layers to images
-    const slides = [];
-    const layers = document.querySelectorAll('.tab-content');
-    
-    for (const layer of layers) {
-        const canvas = await html2canvas(layer);
-        slides.push({
-            title: layer.querySelector('h1, h2, h3').textContent,
-            image: canvas.toDataURL('image/png')
-        });
-    }
-    
-    // Generate PPTX (requires PptxGenJS library)
-    const pptx = new PptxGenJS();
-    slides.forEach(slide => {
-        const pptxSlide = pptx.addSlide();
-        pptxSlide.addText(slide.title, {x: 0.5, y: 0.5, fontSize: 24});
-        pptxSlide.addImage({data: slide.image, x: 0.5, y: 1.5, w: 9, h: 5});
-    });
-    
-    pptx.writeFile({fileName: `cortex-report-${Date.now()}.pptx`});
-}
-```
+**Library:** Playwright screenshot  
+**Requirements:**
+- Capture current tab or full page
+- Resolution: 1920x1080 minimum
+- Format: PNG with transparency support
+- File size <5MB
 
----
+### PPTX Export
 
-## 📝 Smart Annotations (JSON Schema)
-
-### Annotation Structure
-
-**Format:**
-```json
-{
-    "annotations": [
-        {
-            "id": "ann-001",
-            "target": "#health-gauge",
-            "type": "tooltip",
-            "position": "top",
-            "trigger": "hover",
-            "content": {
-                "title": "Health Score Calculation",
-                "body": "Weighted average of 7 metrics: Tier 1 (20%), Tier 2 (20%), Tier 3 (15%), Agents (15%), Orchestrators (15%), Tests (10%), Documentation (5%)",
-                "links": [
-                    {
-                        "text": "Learn More",
-                        "url": "#layer-technical"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "ann-002",
-            "target": ".issue.critical",
-            "type": "popover",
-            "position": "right",
-            "trigger": "click",
-            "content": {
-                "title": "Critical Issue Details",
-                "body": "This issue must be resolved before deployment.",
-                "actions": [
-                    {
-                        "label": "Copy Fix Template",
-                        "action": "copyTemplate",
-                        "data": "ISS-001"
-                    },
-                    {
-                        "label": "Create ADO Task",
-                        "action": "createADOTask",
-                        "data": {"issueId": "ISS-001"}
-                    }
-                ]
-            }
-        }
-    ]
-}
-```
-
-### Implementation
-
-**JavaScript Handler:**
-```javascript
-function initializeAnnotations(annotations) {
-    annotations.forEach(ann => {
-        const target = document.querySelector(ann.target);
-        if (!target) return;
-        
-        const tooltip = createTooltip(ann);
-        
-        if (ann.trigger === 'hover') {
-            target.addEventListener('mouseenter', () => showTooltip(tooltip, target, ann.position));
-            target.addEventListener('mouseleave', () => hideTooltip(tooltip));
-        } else if (ann.trigger === 'click') {
-            target.addEventListener('click', () => togglePopover(tooltip, target, ann.position));
-        }
-    });
-}
-
-function createTooltip(annotation) {
-    const div = document.createElement('div');
-    div.className = `annotation ${annotation.type}`;
-    div.innerHTML = `
-        <h4>${sanitizeHTML(annotation.content.title)}</h4>
-        <p>${sanitizeHTML(annotation.content.body)}</p>
-        ${annotation.content.links ? renderLinks(annotation.content.links) : ''}
-        ${annotation.content.actions ? renderActions(annotation.content.actions) : ''}
-    `;
-    return div;
-}
-```
+**Library:** python-pptx  
+**Requirements:**
+- One slide per tab
+- Preserve visualizations as images
+- Maintain branding/styling
+- Add speaker notes with data summary
+- File size <15MB
 
 ---
 
 ## ✅ Validation Checklist
 
-**Pre-Deployment Validation (MANDATORY):**
-
 ### Structure Validation
-- [ ] HTML5 doctype present
-- [ ] All 5 layers implemented
+
+- [ ] All 5 tabs present (overview, visualizations, diagrams, data, recommendations)
 - [ ] Tab navigation functional
-- [ ] D3.js library loaded (v7.8.5+)
-- [ ] Export libraries present
+- [ ] Export controls present
+- [ ] CSP headers configured
+- [ ] Responsive design (mobile/tablet/desktop)
 
 ### Content Validation
-- [ ] Executive summary complete
-- [ ] Detailed analysis has visualizations
-- [ ] Issues list populated
-- [ ] Technical details accessible
-- [ ] Export options functional
 
-### Security Validation
-- [ ] CSP header present
-- [ ] No inline event handlers
-- [ ] Input sanitization implemented
-- [ ] XSS prevention verified
-- [ ] Data validation present
+- [ ] Executive summary (3 sentences)
+- [ ] Key metrics (5 minimum)
+- [ ] Status indicator (healthy/warning/critical)
+- [ ] D3.js visualization (at least 1)
+- [ ] Chart.js visualization (at least 1)
+- [ ] Mermaid diagram (at least 1)
+- [ ] Data table (sortable, filterable)
+- [ ] Recommendations (prioritized)
+
+### Functional Validation
+
+- [ ] Tab switching works
+- [ ] Visualizations interactive (zoom, pan, hover)
+- [ ] Table sorting works
+- [ ] Table filtering works
+- [ ] Export PDF works
+- [ ] Export PNG works
+- [ ] Export PPTX works
 
 ### Performance Validation
-- [ ] Page load < 2 seconds
-- [ ] D3.js render < 500ms per chart
-- [ ] Transitions smooth (60 FPS)
-- [ ] Export functions < 5 seconds
-- [ ] File size < 2 MB
 
-### Accessibility Validation
-- [ ] ARIA labels on all visualizations
-- [ ] Keyboard navigation works
-- [ ] Screen reader compatible
-- [ ] Color contrast meets WCAG AA
-- [ ] Alt text on all images
+- [ ] Generation time <5s
+- [ ] Page load time <2s
+- [ ] D3.js render time <1s
+- [ ] Memory usage <500MB
+- [ ] File size <2MB
 
-### Export Validation
-- [ ] PDF export generates all layers
-- [ ] PNG export high resolution (2x)
-- [ ] PPTX export preserves formatting
-- [ ] File names include timestamp
-- [ ] Export errors handled gracefully
+### Security Validation
+
+- [ ] CSP headers present
+- [ ] No eval() usage
+- [ ] No inline event handlers
+- [ ] User input sanitized
+- [ ] No external trackers
 
 ---
 
-## 🔧 Validation Tools
+## 📚 Migration Guide Reference
 
-### Automated Validation Script
-
-**Location:** `src/validators/documentation_format_validator.py`
-
-**Usage:**
-```python
-from src.validators.documentation_format_validator import DocumentationFormatValidator
-
-validator = DocumentationFormatValidator()
-result = validator.validate("path/to/dashboard.html")
-
-if result.is_valid:
-    print("✅ Dashboard complies with format specification")
-else:
-    print("❌ Validation failed:")
-    for error in result.errors:
-        print(f"  - {error}")
-```
-
-### Manual Validation Process
-
-1. **Visual Inspection:** Open dashboard in browser, verify all 5 tabs load
-2. **Interaction Testing:** Click all buttons, hover tooltips, test exports
-3. **Performance Testing:** Chrome DevTools > Performance tab (record page load)
-4. **Security Testing:** Browser console > check for CSP violations
-5. **Accessibility Testing:** Screen reader test (VoiceOver/NVDA)
-
----
-
-## 📚 Reference Implementation
-
-**Example Dashboard:** `cortex-brain/documents/examples/reference-dashboard-v1.0.html`
-
-**Template Generator:** `src/generators/dashboard_template_generator.py`
-
-**Migration Tool:** `src/tools/migrate_epms_to_v1.py`
+**See:** `cortex-brain/documents/guides/EPM-MIGRATION-GUIDE.md` for step-by-step instructions on updating existing admin EPMs to conform to this specification.
 
 ---
 
 ## 🔄 Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2025-11-28 | Initial specification |
+**v1.0.0** (2025-11-28)
+- Initial specification
+- Mandatory 5-tab structure
+- D3.js v7+ requirements
+- Export functionality requirements
+- Performance benchmarks
+- Security requirements
 
 ---
 
-## 📞 Support & Feedback
-
-**Questions:** Review this specification with CORTEX Planning Orchestrator  
-**Issues:** Report via `cortex feedback` command  
-**Updates:** Track in `cortex-brain/documents/standards/`
-
----
-
+**Author:** Asif Hussain  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Repository:** https://github.com/asifhussain60/CORTEX
+**License:** Source-Available (Use Allowed, No Contributions)

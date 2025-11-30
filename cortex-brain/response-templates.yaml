@@ -397,6 +397,338 @@ templates:
     response_content: "[Natural language explanation]"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
+  rulebook_welcome_banner:
+    name: Rulebook Welcome Banner
+    triggers:
+    - rulebook_welcome_banner
+    - welcome_banner
+    - governance_banner
+    response_type: banner
+    content: |
+      # 🧠 CORTEX Governance Rules
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 💬 Response
+      
+      ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+      Γòæ                  ≡ƒºá CORTEX GOVERNANCE RULES ACTIVE                       Γòæ
+      ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+      
+      CORTEX operates under strict governance rules to ensure quality and safety.
+      
+      ≡ƒôï KEY RULES:
+      - All feature work requires Definition of Ready (DoR) before starting
+      - All completions require Definition of Done (DoD) validation
+      - Git checkpoint required before high-risk operations
+      - Test coverage ΓëÑ80% for all production code
+      - Architecture review for structural changes
+      
+      ≡ƒôû QUICK ACCESS:
+      - Say "show rules" or "rulebook" to see full governance document
+      - Say "help" to see available commands (includes governance section)
+      - Say "compliance" to check your current compliance status
+      
+      Γ£¿ DISMISSAL:
+      - This banner appears once per session
+      - Say "got it" or continue with your request to proceed
+      
+      Full Rulebook: cortex-brain/brain-protection-rules.yaml
+      ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+      
+      ## 📝 Your Request
+      View CORTEX governance rules
+      
+      ## 🔍 Next Steps
+      - Say "got it" to dismiss this banner
+      - Say "show rules" for full documentation
+      - Continue with your request to start working
+  
+  governance_onboarding_step1:
+    name: Governance Onboarding - Step 1 (Welcome)
+    triggers:
+    - governance_onboarding_step1
+    - start governance onboarding
+    - first time setup
+    expected_orchestrator: OnboardingAcknowledgmentOrchestrator
+    response_type: narrative
+    content: |
+      # 🧠 CORTEX Governance Onboarding - Welcome
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You're starting CORTEX for the first time and want to understand the governance system.
+      
+      ## 💬 Response
+      
+      # ≡ƒºá Welcome to CORTEX Enhancement System
+      
+      ## Your AI Coding Assistant with Governance
+      
+      CORTEX is not just another AI assistant - it's a **governed, quality-enforced** development enhancement system.
+      
+      ### What Makes CORTEX Different?
+      
+      Γ£à **Transparent Governance:** All operations follow documented rules
+      Γ£à **Quality Enforcement:** TDD, SOLID, security standards built-in
+      Γ£à **Brain Protection:** Your project knowledge is protected and validated
+      Γ£à **Rollback Safety:** Git checkpoints before risky operations
+      Γ£à **Compliance Tracking:** Real-time dashboard of rule adherence
+      
+      ### Why Governance Matters
+      
+      Without governance:
+      - Γ¥î AI can make breaking changes without safety nets
+      - Γ¥î Code quality degrades over time
+      - Γ¥î Technical debt accumulates invisibly
+      - Γ¥î No audit trail or rollback mechanism
+      
+      With CORTEX governance:
+      - Γ£à Every change follows Definition of Ready/Done
+      - Γ£à Automated testing and validation
+      - Γ£à Safe experimentation with rollback points
+      - Γ£à Clear compliance visibility
+      
+      ### What Happens Next?
+      
+      You'll go through a quick 3-step onboarding:
+      1. **Welcome** (you are here) [1/3]
+      2. **Rulebook Overview** - Key rules explained
+      3. **Acknowledgment** - Confirm understanding
+      
+      **This takes 2-3 minutes and happens only once.**
+      
+      ---
+      
+      ## 📝 Your Request
+      Start governance onboarding
+      
+      ## 🔍 Next Steps
+      **Ready to continue?** Say "next" or "continue" to see the rulebook.
+  
+  governance_onboarding_step2:
+    name: Governance Onboarding - Step 2 (Rulebook)
+    triggers:
+    - governance_onboarding_step2
+    - show rulebook onboarding
+    - next
+    - continue
+    expected_orchestrator: OnboardingAcknowledgmentOrchestrator
+    response_type: narrative
+    content: |
+      # 🧠 CORTEX Governance Onboarding - Rulebook
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You want to learn about CORTEX's 7 core governance protection layers.
+      
+      ## 💬 Response
+      
+      # ≡ƒôû CORTEX Governance Rulebook (Overview)
+      
+      **Progress: [2/3]**
+      
+      ## The 7 Core Protection Layers
+      
+      ### 1. Definition of Ready (DoR)
+      **Before starting any feature:**
+      - Γ£à Requirements are clear and documented
+      - Γ£à Acceptance criteria defined
+      - Γ£à Technical approach validated
+      - Γ£à No blockers present
+      
+      ### 2. Definition of Done (DoD)
+      **Before marking work complete:**
+      - Γ£à Code complete and reviewed
+      - Γ£à Unit tests written (ΓëÑ80% coverage)
+      - Γ£à Integration tests passing
+      - Γ£à Documentation updated
+      - Γ£à No regressions introduced
+      
+      ### 3. TDD Enforcement
+      **Test-Driven Development cycle:**
+      - ≡ƒö┤ **RED:** Write failing test first
+      - ≡ƒƒó **GREEN:** Write minimal code to pass
+      - ≡ƒö╡ **REFACTOR:** Improve design without breaking tests
+      
+      ### 4. Git Checkpoint System
+      **Before risky operations:**
+      - Γ£à Automatic git checkpoint created
+      - Γ£à Easy rollback if something breaks
+      - Γ£à Safe experimentation encouraged
+      
+      ### 5. SOLID Principles
+      **Code design standards:**
+      - **S**ingle Responsibility
+      - **O**pen/Closed
+      - **L**iskov Substitution
+      - **I**nterface Segregation
+      - **D**ependency Inversion
+      
+      ### 6. Security Standards (OWASP)
+      **Security by design:**
+      - Γ£à Input validation
+      - Γ£à Authentication/Authorization
+      - Γ£à Sensitive data protection
+      - Γ£à Security scanning
+      
+      ### 7. Brain Integrity
+      **Your project knowledge:**
+      - Γ£à Context validated before use
+      - Γ£à Lessons learned captured
+      - Γ£à Technical debt tracked
+      - Γ£à Architecture decisions documented
+      
+      ## Quick Commands
+      
+      | Command | Purpose |
+      |---------|---------|
+      | `show rules` | Display full rulebook |
+      | `compliance` | Check your compliance status |
+      | `dor` | View Definition of Ready checklist |
+      | `dod` | View Definition of Done checklist |
+      | `help` | See all available commands |
+      
+      ## What This Means for You
+      
+      Γ£à **You can trust CORTEX** - Every operation is governed
+      Γ£à **You stay in control** - Rollback any time
+      Γ£à **Quality is built-in** - Not an afterthought
+      Γ£à **Compliance is visible** - Real-time dashboard
+      
+      ---
+      
+      **Full Rulebook:** `cortex-brain/brain-protection-rules.yaml`
+      
+      ## 📝 Your Request
+      Review governance rulebook
+      
+      ## 🔍 Next Steps
+      **Ready to acknowledge?** Say "acknowledge" or "I understand" to complete onboarding.
+  
+  governance_onboarding_step3:
+    name: Governance Onboarding - Step 3 (Acknowledgment)
+    triggers:
+    - governance_onboarding_step3
+    - acknowledge governance
+    - i acknowledge
+    - i understand and agree
+    - acknowledged
+    - confirm acknowledgment
+    expected_orchestrator: OnboardingAcknowledgmentOrchestrator
+    response_type: narrative
+    content: |
+      # 🧠 CORTEX Governance Onboarding - Acknowledgment
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You're ready to acknowledge the governance rules and complete onboarding.
+      
+      ## 💬 Response
+      
+      # Γ£à Acknowledgment & Completion
+      
+      **Progress: [3/3]**
+      
+      ## Confirm Your Understanding
+      
+      By acknowledging, you confirm that you:
+      
+      1. Γ£à Understand CORTEX operates under governance rules
+      2. Γ£à Agree to follow Definition of Ready/Done workflows
+      3. Γ£à Will use compliance dashboard for status tracking
+      4. Γ£à Know how to access rulebook and help commands
+      
+      ## Your Rights
+      
+      You always have the right to:
+      - ≡ƒôû Review rules any time: `show rules`
+      - ≡ƒôè Check compliance: `compliance`
+      - Γ¥ô Ask questions: `help`
+      - ≡ƒöä Request rollback: Git checkpoints are automatic
+      
+      ## Complete Onboarding
+      
+      **To acknowledge and complete setup, say:**
+      - "I acknowledge"
+      - "I understand and agree"
+      - "acknowledged"
+      - "confirm"
+      
+      ---
+      
+      **Need to review?**
+      - Say "back" to see rulebook again
+      - Say "show rules" for full documentation
+      
+      **Once you acknowledge, you won't see this onboarding again.**  
+      (But you can always access the rulebook with `show rules`)
+      
+      ## 📝 Your Request
+      Acknowledge governance rules
+      
+      ## 🔍 Next Steps
+      Say "I acknowledge" or "confirmed" to complete onboarding and start using CORTEX.
+  
+  governance_onboarding_complete:
+    name: Governance Onboarding - Complete
+    triggers:
+    - governance_onboarding_complete
+    - record acknowledgment
+    expected_orchestrator: OnboardingAcknowledgmentOrchestrator
+    response_type: success
+    content: |
+      # 🧠 CORTEX Governance Onboarding - Complete
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You've completed governance onboarding and acknowledged the rules.
+      
+      ## 💬 Response
+      
+      # ≡ƒÄë Onboarding Complete!
+      
+      Γ£à **Governance acknowledgment recorded**
+      Γ£à **CORTEX is ready to assist you**
+      
+      ## What Happens Now?
+      
+      - You won't see this onboarding again
+      - Welcome banner will appear once per session
+      - All governance rules are active
+      - Compliance dashboard is available
+      
+      ## Quick Start Commands
+      
+      Try these commands to get started:
+      - `help` - See all available commands
+      - `compliance` - Check your current status
+      - `show rules` - Review governance rules
+      - `plan [feature]` - Start feature planning
+      
+      ## Need Help?
+      
+      - Say `help` any time for command list
+      - Say `show rules` to review governance
+      - Say `compliance` to check rule adherence
+      
+      **Welcome to governed AI development with CORTEX!** ≡ƒÜÇ
+      
+      ## 📝 Your Request
+      Complete governance onboarding
+      
+      ## 🔍 Next Steps
+      Try your first command: `help`, `plan [feature]`, or `start tdd`
+  
   introduction_discovery:
     name: CORTEX Discovery & Introduction
     triggers:
@@ -1537,11 +1869,36 @@ templates:
       ---
 
 
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - This is new territory with no learned patterns.
+
+
+      ## 💬 Response
+
       ℹ️ **New Territory:** No learned patterns available for this request.
 
 
-      Generating fresh response using CORTEX capabilities.'
-    placeholders: []
+      Generating fresh response using CORTEX capabilities.
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
+    placeholders:
+    - understanding_content
+    - request_echo
+    - next_steps
   system_alignment_report:
     <<: *standard_5_part_base
     name: System Alignment Report

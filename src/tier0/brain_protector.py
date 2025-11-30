@@ -25,14 +25,6 @@ from typing import List, Optional, Dict, Any
 import json
 import yaml
 
-# Import compliance database for Sprint 2 integration
-try:
-    from src.tier1.compliance_database import ComplianceDatabase
-    COMPLIANCE_DB_AVAILABLE = True
-except ImportError:
-    COMPLIANCE_DB_AVAILABLE = False
-    print("WARNING: ComplianceDatabase not available - compliance logging disabled")
-
 
 class Severity(Enum):
     """Protection violation severity levels."""
@@ -137,15 +129,6 @@ class BrainProtector:
         self.APPLICATION_PATHS = self.rules_config.get('application_paths', [])
         self.BRAIN_STATE_FILES = self.rules_config.get('brain_state_files', [])
         self.protection_layers = self.rules_config.get('protection_layers', [])
-        
-        # Initialize compliance database (Sprint 2)
-        self.compliance_db = None
-        if COMPLIANCE_DB_AVAILABLE:
-            try:
-                self.compliance_db = ComplianceDatabase(brain_path=project_root / "cortex-brain")
-            except Exception as e:
-                print(f"WARNING: Failed to initialize compliance database: {e}")
-                print("Compliance logging will be disabled")
     
     def _load_rules(self) -> Dict[str, Any]:
         """
@@ -243,96 +226,6 @@ class BrainProtector:
             alternatives=alternatives,
             override_required=override_required
         )
-    
-    def format_user_notification(self, result: ProtectionResult) -> str:
-        """
-        Format user-facing notification for protection violations.
-        
-        Educational tone with rule explanation, suggested fix, and dashboard link.
-        Used for displaying violations in Copilot Chat responses.
-        
-        Args:
-            result: ProtectionResult with violations to notify about
-            
-        Returns:
-            Formatted notification string with markdown
-        """
-        if result.severity == Severity.SAFE:
-            return ""  # No notification needed for safe operations
-        
-        # Severity emoji mapping
-        severity_emoji = {
-            Severity.BLOCKED: "🔴",
-            Severity.WARNING: "🟡",
-            Severity.SAFE: "🟢"
-        }
-        
-        emoji = severity_emoji.get(result.severity, "⚠️")
-        severity_text = "BLOCKED" if result.severity == Severity.BLOCKED else "WARNING"
-        
-        # Build notification
-        notification = f"\n\n---\n\n## {emoji} Governance {severity_text}\n\n"
-        
-        if result.severity == Severity.BLOCKED:
-            notification += "**This operation violates CORTEX governance rules and cannot proceed.**\n\n"
-        else:
-            notification += "**This operation triggers governance warnings. Please review before proceeding.**\n\n"
-        
-        # List violations with educational context
-        notification += "### Rules Violated:\n\n"
-        for i, violation in enumerate(result.violations, 1):
-            # Get rule details from YAML
-            layer = self._get_layer_by_id(violation.layer.value)
-            rule_details = None
-            if layer:
-                for rule in layer.get('rules', []):
-                    if rule.get('rule_id') == violation.rule:
-                        rule_details = rule
-                        break
-            
-            notification += f"**{i}. {violation.rule.replace('_', ' ').title()}**\n"
-            notification += f"   - **Layer:** {violation.layer.value.replace('_', ' ').title()}\n"
-            notification += f"   - **Issue:** {violation.description}\n"
-            
-            # Add educational explanation
-            if rule_details:
-                rationale = rule_details.get('rationale', '')
-                if rationale:
-                    notification += f"   - **Why This Matters:** {rationale}\n"
-            
-            # Add suggested fix
-            if violation.evidence:
-                notification += f"   - **Evidence:** {violation.evidence}\n"
-            
-            if rule_details and 'remedy' in rule_details:
-                remedy = rule_details['remedy']
-                notification += f"   - **Suggested Fix:** {remedy}\n"
-            
-            notification += "\n"
-        
-        # Add alternatives if available
-        if result.alternatives:
-            notification += "### Recommended Alternatives:\n\n"
-            for alt in result.alternatives:
-                notification += f"- {alt}\n"
-            notification += "\n"
-        
-        # Add dashboard link
-        notification += "### 📊 Full Compliance Report:\n\n"
-        notification += "View the full compliance dashboard for detailed rule status and history:\n"
-        notification += "```\nshow compliance\n```\n\n"
-        
-        # Add override guidance for blocked operations
-        if result.override_required:
-            notification += "### ⚠️ Override Required:\n\n"
-            notification += "This operation requires explicit override. If you believe this is necessary:\n"
-            notification += "1. Document your justification in the commit message\n"
-            notification += "2. Tag the commit with `[OVERRIDE]`\n"
-            notification += "3. Ensure architectural review before merge\n\n"
-        
-        notification += "---\n\n"
-        
-        return notification
     
     def _check_instinct_immutability(self, request: ModificationRequest) -> List[Violation]:
         """Check Layer 1: Instinct Immutability violations using YAML rules."""
@@ -815,7 +708,7 @@ Your choice:
     
     def log_event(self, challenge: Challenge, user_decision: str, override_justification: Optional[str] = None):
         """
-        Log protection event to corpus callosum and compliance database.
+        Log protection event to corpus callosum.
         
         Args:
             challenge: Protection challenge
@@ -850,21 +743,6 @@ Your choice:
             "override_required": challenge.result.override_required
         }
         
-        # Append to JSONL log
+        # Append to log
         with open(self.log_path, 'a', encoding='utf-8') as f:
             f.write(json.dumps(event) + '\n')
-        
-        # Log to compliance database (Sprint 2)
-        if self.compliance_db is not None:
-            for violation in challenge.result.violations:
-                try:
-                    self.compliance_db.log_violation(
-                        rule_id=violation.rule,
-                        severity=violation.severity.value,
-                        description=violation.description,
-                        file_path=violation.file_path,
-                        user_id=challenge.request.user
-                    )
-                except Exception as e:
-                    # Don't fail entire logging if compliance DB fails
-                    print(f"WARNING: Failed to log violation to compliance DB: {e}")

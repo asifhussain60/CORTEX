@@ -3,7 +3,7 @@ Unit Tests for Dashboard Template Generator
 
 Tests generation of interactive HTML dashboards with D3.js visualizations.
 
-Copyright © 2024-2025 Asif Hussain. All rights reserved.
+Copyright ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import pytest
@@ -205,7 +205,7 @@ class TestDashboardTemplateGenerator:
             title="System Alignment Report",
             data={'overall_score': 94.2},
             layers=sample_layers,
-            metadata={'status': 'success', 'status_text': '✅ Healthy'}
+            metadata={'status': 'success', 'status_text': 'Γ£à Healthy'}
         )
         
         # Save to temp file
@@ -355,10 +355,10 @@ class TestDashboardTemplateGenerator:
             title="Test Dashboard",
             data={},
             layers=sample_layers,
-            metadata={'status': 'warning', 'status_text': '⚠️ Warning'}
+            metadata={'status': 'warning', 'status_text': 'ΓÜá∩╕Å Warning'}
         )
         
-        assert '⚠️ Warning' in html
+        assert 'ΓÜá∩╕Å Warning' in html
         assert 'status-badge warning' in html
 
 

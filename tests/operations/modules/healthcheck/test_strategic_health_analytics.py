@@ -7,7 +7,7 @@ Tests BrainAnalyticsCollector methods:
 - get_strategic_health_trends()
 
 Author: Asif Hussain
-Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Copyright: ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import pytest

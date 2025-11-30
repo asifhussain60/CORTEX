@@ -371,6 +371,8 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
       • Apply enhancements
       • Write/update tests
       • Validate functionality
+   
+   Ready to proceed with all phases, or focus on a specific phase?
 ```
 
 ---
@@ -455,12 +457,17 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 📝 **Your Request:** Complete DoR before proceeding with implementation
 
 🔍 **Next Steps:**
-   1. Answer clarifying questions above
-   2. Provide specific metrics/criteria
-   3. Remove ambiguous language
-   4. Validate all dependencies identified
-   5. Complete security review checklist
-   6. Resubmit for DoR validation
+   ☐ Phase 1: Clarification
+      • Answer clarifying questions above
+      • Provide specific metrics/criteria
+      • Remove ambiguous language
+   
+   ☐ Phase 2: Validation
+      • Validate all dependencies identified
+      • Complete security review checklist
+      • Resubmit for DoR validation
+   
+   Ready to proceed with all phases, or focus on a specific phase?
 ```
 
 ---

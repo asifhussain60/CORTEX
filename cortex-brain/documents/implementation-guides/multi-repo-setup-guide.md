@@ -12,11 +12,11 @@
 This guide shows how to use a single CORTEX installation (from REPO_A) to work with multiple repositories (REPO_B, REPO_C, etc.) using the hybrid approach.
 
 **Benefits:**
-- ✅ Single CORTEX installation (~100MB)
-- ✅ Repository-specific learning (isolated namespaces)
-- ✅ Shared knowledge graph
-- ✅ One upgrade updates all
-- ✅ Consistent configuration
+- Γ£à Single CORTEX installation (~100MB)
+- Γ£à Repository-specific learning (isolated namespaces)
+- Γ£à Shared knowledge graph
+- Γ£à One upgrade updates all
+- Γ£à Consistent configuration
 
 ---
 
@@ -81,7 +81,7 @@ cat > .github/copilot-instructions.md << 'EOF'
 
 **All CORTEX commands work across repositories:**
 - `plan [feature]` - Feature planning with DoR/DoD
-- `start tdd` - TDD workflow (RED→GREEN→REFACTOR)
+- `start tdd` - TDD workflow (REDΓåÆGREENΓåÆREFACTOR)
 - `discover views` - Auto-extract UI element IDs
 - `feedback` - Report issues to CORTEX team
 - `help` - Show all available commands
@@ -111,7 +111,7 @@ Namespace: `workspace.REPO_B.*`
 - Build System: [Will be detected on first use]
 - Test Framework: [Will be detected on first use]
 
-**🧠 CORTEX learns these over time through observation**
+**≡ƒºá CORTEX learns these over time through observation**
 
 ---
 
@@ -131,7 +131,7 @@ Namespace: `workspace.REPO_B.*`
 
 EOF
 
-echo "✅ Entry point created: .github/copilot-instructions.md"
+echo "Γ£à Entry point created: .github/copilot-instructions.md"
 ```
 
 ---
@@ -179,11 +179,11 @@ help
 ```
 
 **CORTEX will:**
-1. ✅ Detect you're in REPO_B (via working directory)
-2. ✅ Load shared CORTEX from REPO_A
-3. ✅ Create `workspace.REPO_B.*` namespace in Tier 3
-4. ✅ Start learning REPO_B-specific patterns
-5. ✅ Show help menu with all commands
+1. Γ£à Detect you're in REPO_B (via working directory)
+2. Γ£à Load shared CORTEX from REPO_A
+3. Γ£à Create `workspace.REPO_B.*` namespace in Tier 3
+4. Γ£à Start learning REPO_B-specific patterns
+5. Γ£à Show help menu with all commands
 
 **Test a command:**
 
@@ -193,7 +193,7 @@ show context
 
 **Expected output:**
 ```
-## 🧠 CORTEX Context Status
+## ≡ƒºá CORTEX Context Status
 
 **Repository:** REPO_B
 **Namespace:** workspace.REPO_B.*
@@ -229,14 +229,14 @@ sed -i '' 's/REPO_B/REPO_C/g' .github/copilot-instructions.md
 
 ```
 ~/PROJECTS/
-├── REPO_A/CORTEX/                    # Shared CORTEX installation
-│   └── cortex-brain/tier3/context.db # Contains all namespaces:
-│                                       # - workspace.REPO_A.*
-│                                       # - workspace.REPO_B.*
-│                                       # - workspace.REPO_C.*
-├── REPO_B/.github/copilot-instructions.md → Points to REPO_A/CORTEX
-├── REPO_C/.github/copilot-instructions.md → Points to REPO_A/CORTEX
-└── REPO_D/.github/copilot-instructions.md → Points to REPO_A/CORTEX
+Γö£ΓöÇΓöÇ REPO_A/CORTEX/                    # Shared CORTEX installation
+Γöé   ΓööΓöÇΓöÇ cortex-brain/tier3/context.db # Contains all namespaces:
+Γöé                                       # - workspace.REPO_A.*
+Γöé                                       # - workspace.REPO_B.*
+Γöé                                       # - workspace.REPO_C.*
+Γö£ΓöÇΓöÇ REPO_B/.github/copilot-instructions.md ΓåÆ Points to REPO_A/CORTEX
+Γö£ΓöÇΓöÇ REPO_C/.github/copilot-instructions.md ΓåÆ Points to REPO_A/CORTEX
+ΓööΓöÇΓöÇ REPO_D/.github/copilot-instructions.md ΓåÆ Points to REPO_A/CORTEX
 ```
 
 ---
@@ -244,7 +244,7 @@ sed -i '' 's/REPO_B/REPO_C/g' .github/copilot-instructions.md
 ## Benefits
 
 **Disk Space:**
-- Before: 100MB × 4 repos = 400MB
+- Before: 100MB ├ù 4 repos = 400MB
 - After: 100MB total (75% savings)
 
 **Upgrade:**
@@ -415,12 +415,12 @@ nano .github/copilot-instructions.md
 
 **What You Achieved:**
 
-✅ Single CORTEX installation serves all repositories  
-✅ Repository-specific learning (isolated namespaces)  
-✅ 75% disk space savings  
-✅ One upgrade updates all  
-✅ Consistent configuration  
-✅ No code duplication
+Γ£à Single CORTEX installation serves all repositories  
+Γ£à Repository-specific learning (isolated namespaces)  
+Γ£à 75% disk space savings  
+Γ£à One upgrade updates all  
+Γ£à Consistent configuration  
+Γ£à No code duplication
 
 **Next Steps:**
 
@@ -433,5 +433,5 @@ nano .github/copilot-instructions.md
 
 **Version:** 1.0  
 **Author:** Asif Hussain  
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**Copyright:** ┬⌐ 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available (Use Allowed, No Contributions)

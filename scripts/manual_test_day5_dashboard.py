@@ -37,7 +37,7 @@ def print_step(step_num: int, description: str):
 
 def print_result(passed: bool, message: str):
     """Print test result."""
-    icon = "✅" if passed else "❌"
+    icon = "Γ£à" if passed else "Γ¥î"
     print(f"\n{icon} {message}")
 
 
@@ -53,27 +53,27 @@ def test_scenario_1_query_parsing():
         query1 = agent._parse_query("show compliance")
         assert query1["action"] == "show_dashboard"
         assert query1["refresh"] is False
-        print(f"✓ Parsed query: {query1}")
+        print(f"Γ£ô Parsed query: {query1}")
         
         print_step(2, "Test 'compliance dashboard' query")
         query2 = agent._parse_query("compliance dashboard")
         assert query2["action"] == "show_dashboard"
-        print(f"✓ Parsed query: {query2}")
+        print(f"Γ£ô Parsed query: {query2}")
         
         print_step(3, "Test 'check governance status' query")
         query3 = agent._parse_query("check governance status")
         assert query3["action"] == "show_dashboard"
-        print(f"✓ Parsed query: {query3}")
+        print(f"Γ£ô Parsed query: {query3}")
         
         print_step(4, "Test query with filters")
         query4 = agent._parse_query("show security compliance")
         assert "security" in query4["filters"]
-        print(f"✓ Parsed query with filters: {query4}")
+        print(f"Γ£ô Parsed query with filters: {query4}")
         
         print_step(5, "Test refresh flag detection")
         query5 = agent._parse_query("refresh compliance dashboard")
         assert query5["refresh"] is True
-        print(f"✓ Detected refresh flag: {query5}")
+        print(f"Γ£ô Detected refresh flag: {query5}")
         
         print_result(True, "Scenario 1: Query Parsing: PASSED")
         return True
@@ -95,12 +95,12 @@ def test_scenario_2_dashboard_generation():
         result = agent._generate_fallback_dashboard()
         assert result["success"] is True
         assert "dashboard_path" in result
-        print(f"✓ Dashboard generated: {result['dashboard_path']}")
+        print(f"Γ£ô Dashboard generated: {result['dashboard_path']}")
         
         print_step(2, "Verify dashboard file exists")
         dashboard_path = Path(result["dashboard_path"])
         assert dashboard_path.exists()
-        print(f"✓ Dashboard file exists: {dashboard_path}")
+        print(f"Γ£ô Dashboard file exists: {dashboard_path}")
         
         print_step(3, "Validate HTML structure")
         with open(dashboard_path, 'r', encoding='utf-8') as f:
@@ -109,22 +109,22 @@ def test_scenario_2_dashboard_generation():
         assert "<!DOCTYPE html>" in html_content
         assert "</html>" in html_content
         assert "CORTEX Compliance Dashboard" in html_content
-        print("✓ HTML structure valid")
+        print("Γ£ô HTML structure valid")
         
         print_step(4, "Verify auto-refresh meta tag")
         assert 'meta http-equiv="refresh" content="30"' in html_content
-        print("✓ Auto-refresh configured (30 seconds)")
+        print("Γ£ô Auto-refresh configured (30 seconds)")
         
         print_step(5, "Verify compliance content")
         assert "governance" in html_content.lower()
         assert "show rules" in html_content.lower()
         assert "27 protection rules" in html_content.lower()
-        print("✓ Compliance content present")
+        print("Γ£ô Compliance content present")
         
         print_step(6, "Check dashboard styling")
         assert "<style>" in html_content
         assert "background: #1e1e1e" in html_content  # Dark theme
-        print("✓ Styling present (dark theme)")
+        print("Γ£ô Styling present (dark theme)")
         
         print_result(True, "Scenario 2: Dashboard Generation: PASSED")
         return True
@@ -148,39 +148,39 @@ def test_scenario_3_browser_integration():
             context={},
             user_message="show compliance dashboard"
         )
-        print("✓ Request created")
+        print("Γ£ô Request created")
         
         print_step(2, "Verify agent can handle request")
         can_handle = agent.can_handle(request)
         assert can_handle is True
-        print("✓ Agent recognizes compliance request")
+        print("Γ£ô Agent recognizes compliance request")
         
         print_step(3, "Execute full workflow")
         response = agent.execute(request)
         assert response is not None
         assert response.agent_name == "ComplianceDashboardAgent"
-        print(f"✓ Workflow executed (success={response.success})")
+        print(f"Γ£ô Workflow executed (success={response.success})")
         
         print_step(4, "Verify response structure")
         assert hasattr(response, 'result')
         assert hasattr(response, 'message')
         assert hasattr(response, 'duration_ms')
         assert response.duration_ms >= 0
-        print(f"✓ Response structure valid (duration: {response.duration_ms:.2f}ms)")
+        print(f"Γ£ô Response structure valid (duration: {response.duration_ms:.2f}ms)")
         
         print_step(5, "Verify dashboard path in response")
         if response.success:
             assert "dashboard_path" in response.result
             dashboard_path = Path(response.result["dashboard_path"])
             assert dashboard_path.exists()
-            print(f"✓ Dashboard accessible: {dashboard_path}")
+            print(f"Γ£ô Dashboard accessible: {dashboard_path}")
         else:
             # Graceful failure is acceptable (template may not exist)
-            print(f"⚠️  Dashboard generation used fallback (expected in test environment)")
+            print(f"ΓÜá∩╕Å  Dashboard generation used fallback (expected in test environment)")
         
         print_step(6, "Verify next actions provided")
         if response.success and len(response.next_actions) > 0:
-            print(f"✓ Next actions provided: {len(response.next_actions)} suggestions")
+            print(f"Γ£ô Next actions provided: {len(response.next_actions)} suggestions")
             for action in response.next_actions:
                 print(f"  - {action}")
         
@@ -204,12 +204,12 @@ def test_scenario_4_error_handling():
         invalid_path = Path("/nonexistent/path/dashboard.html")
         browser_result = agent._open_in_simple_browser(invalid_path)
         assert "success" in browser_result
-        print("✓ Handled invalid path gracefully")
+        print("Γ£ô Handled invalid path gracefully")
         
         print_step(2, "Test compliance score extraction with various formats")
         test_cases = [
-            ("✅ 85% compliant", 85),
-            ("⚠️ 65 % warning", 65),
+            ("Γ£à 85% compliant", 85),
+            ("ΓÜá∩╕Å 65 % warning", 65),
             ("100% healthy", 100),
             ("No percentage", None),
         ]
@@ -217,9 +217,9 @@ def test_scenario_4_error_handling():
         for text, expected in test_cases:
             score = agent._extract_compliance_score(text)
             assert score == expected, f"Expected {expected}, got {score} for '{text}'"
-            print(f"  ✓ '{text}' → {score}%")
+            print(f"  Γ£ô '{text}' ΓåÆ {score}%")
         
-        print("✓ Score extraction handles all formats")
+        print("Γ£ô Score extraction handles all formats")
         
         print_step(3, "Test can_handle with non-compliance queries")
         non_compliance_requests = [
@@ -230,15 +230,15 @@ def test_scenario_4_error_handling():
         for req in non_compliance_requests:
             can_handle = agent.can_handle(req)
             assert can_handle is False
-            print(f"  ✓ Correctly rejected: '{req.user_message}'")
+            print(f"  Γ£ô Correctly rejected: '{req.user_message}'")
         
-        print("✓ Properly rejects non-compliance queries")
+        print("Γ£ô Properly rejects non-compliance queries")
         
         print_step(4, "Test dashboard generation with missing compliance data")
         # This should not crash even if data unavailable
         result = agent._generate_fallback_dashboard()
         assert result["success"] is True
-        print("✓ Generates fallback dashboard when data unavailable")
+        print("Γ£ô Generates fallback dashboard when data unavailable")
         
         print_step(5, "Test execute method error handling")
         # Create edge case request
@@ -251,7 +251,7 @@ def test_scenario_4_error_handling():
         response = agent.execute(edge_request)
         assert response is not None
         assert response.agent_name == "ComplianceDashboardAgent"
-        print("✓ Execute handles edge cases without crashing")
+        print("Γ£ô Execute handles edge cases without crashing")
         
         print_result(True, "Scenario 4: Error Handling: PASSED")
         return True
@@ -285,16 +285,16 @@ def main():
     total = len(results)
     
     for name, result in results:
-        icon = "✅" if result else "❌"
+        icon = "Γ£à" if result else "Γ¥î"
         print(f"{icon} {name}: {'PASSED' if result else 'FAILED'}")
     
     print(f"\nTOTAL: {passed}/{total} scenarios passed ({passed/total*100:.0f}%)")
     
     if passed == total:
-        print("\n✅ ALL MANUAL TESTS PASSED - Ready to commit Day 5! ✅\n")
+        print("\nΓ£à ALL MANUAL TESTS PASSED - Ready to commit Day 5! Γ£à\n")
         return 0
     else:
-        print(f"\n❌ {total - passed} scenarios failed - Fix before committing ❌\n")
+        print(f"\nΓ¥î {total - passed} scenarios failed - Fix before committing Γ¥î\n")
         return 1
 
 

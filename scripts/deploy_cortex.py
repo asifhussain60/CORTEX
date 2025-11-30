@@ -171,6 +171,18 @@ EXCLUDED_PATTERNS = {
     # Root-level test files (development only)
     'test_*.py',
     
+    # Root-level dev/diagnostic scripts (development only)
+    'analyze_*.py',
+    'check_*.py',
+    'fix_*.py',
+    'run_*.py',
+    'initialize_*.py',
+    
+    # Validation artifacts (generated during testing)
+    '*-validation.json',
+    'alignment_result.txt',
+    '*-result.txt',
+    
     # Build artifacts
     '*.egg-info',
     '*.egg',
@@ -771,6 +783,158 @@ Or use Python directly:
 python -m src.setup.setup_orchestrator
 ```
 
+### 5️⃣ Validate Installation
+
+After initializing CORTEX, validate that everything is working correctly:
+
+```bash
+# Run installation validation
+python -m src.orchestrators.setup_epm_orchestrator --validate
+
+# Or via GitHub Copilot Chat:
+/CORTEX validate installation
+```
+
+**Expected Output:**
+```
+🧠 CORTEX Installation Validation
+
+Stage 1: Bootstrap Verification
+  ✅ Entry Point
+  ✅ Brain Structure
+  ✅ Response Templates
+  ✅ Orchestrators
+
+Stage 2: Deployment Gate Validation (16 Gates)
+  ✅ Gate  1: System Alignment (ERROR)
+  ✅ Gate  2: TDD Integration (ERROR)
+  ✅ Gate  3: Code Quality (ERROR)
+  ✅ Gate  4: Test Coverage (ERROR)
+  ✅ Gate  5: Documentation Complete (ERROR)
+  ✅ Gate  6: Template Format (ERROR)
+  ✅ Gate  7: Git Checkpoint System (ERROR)
+  ✅ Gate  8: SWAGGER Entry Points (ERROR)
+  ✅ Gate  9: Conversation Tracking (ERROR)
+  ✅ Gate 10: Align Admin-Only (WARNING)
+  ✅ Gate 11: Cleanup Data Preservation (ERROR)
+  ✅ Gate 12: Deploy Manifest Valid (ERROR)
+  ✅ Gate 13: TDD Mastery Integration (ERROR)
+  ✅ Gate 14: User Feature Packaging (ERROR)
+  ✅ Gate 15: Admin/User Separation (ERROR)
+  ✅ Gate 16: Align EPM User-Only (WARNING)
+
+📄 Validation report saved: cortex-brain/documents/reports/installation-validation-{{timestamp}}.md
+
+✅ CORTEX is ready to use!
+```
+
+**If Validation Fails:**
+
+```bash
+# Auto-fix common issues
+python -m src.orchestrators.setup_epm_orchestrator --validate --fix
+
+# Example output with fixes:
+🧠 CORTEX Installation Validation
+
+Stage 1: Bootstrap Verification
+  ❌ Response Templates
+  ❌ Brain Structure
+
+🔧 Attempting auto-remediation...
+  ✅ Fixed: response-templates.yaml restored
+  ✅ Fixed: Brain directories recreated
+
+Re-validating after fixes...
+  ✅ Response Templates
+  ✅ Brain Structure
+
+✅ CORTEX is ready to use (after auto-fixes)!
+```
+
+**View Detailed Report:**
+
+```bash
+# Check the validation report for detailed analysis
+cat cortex-brain/documents/reports/installation-validation-{{timestamp}}.md
+```
+
+The report includes:
+- Bootstrap verification results (entry point, brain, templates, orchestrators)
+- 16-gate validation results with severity levels
+- Specific error messages and recommendations
+- Auto-remediation actions (if `--fix` was used)
+- Next steps for manual fixes (if needed)
+
+**🔍 Understanding Gate Validation:**
+
+CORTEX uses a **16-gate validation system** to ensure complete functional integrity:
+
+**ERROR Gates (block deployment, warn on installation):**
+1. **System Alignment** - Alignment reports present
+2. **TDD Integration** - Tests run before deployment
+3. **Code Quality** - No mock/stub patterns in production
+4. **Test Coverage** - Minimum coverage thresholds met
+5. **Documentation Complete** - All features documented
+6. **Template Format** - Response templates properly formatted
+7. **Git Checkpoint System** - Checkpoint orchestrator complete
+8. **SWAGGER Entry Points** - Swagger features wired
+9. **Conversation Tracking** - Tier 1/3 databases functional
+11. **Cleanup Data Preservation** - Brain data preserved
+12. **Deploy Manifest Valid** - Deployment manifest exists
+13. **TDD Mastery Integration** - Git checkpoints in TDD workflow
+14. **User Feature Packaging** - 5 key features included
+15. **Admin/User Separation** - Admin tools excluded
+
+**WARNING Gates (non-blocking):**
+10. **Align Admin-Only** - Alignment triggers admin-only
+16. **Align EPM User-Only** - Setup EPM user-facing only
+
+**What Happens on Failure:**
+- **Deployment:** ERROR gates block deployment, deployment aborted
+- **Installation:** All gates run, report generated, user notified
+- **Auto-fix:** Common issues (templates, brain structure) auto-remediated
+- **Manual fix:** Complex issues (code changes) require manual intervention
+
+**⚠️ Common Validation Issues:**
+
+**Issue: Missing Response Templates**
+```bash
+# Auto-fix
+python -m src.orchestrators.setup_epm_orchestrator --validate --fix
+
+# Or manual fix
+cp cortex-brain/response-templates.yaml.bak cortex-brain/response-templates.yaml
+```
+
+**Issue: Incomplete Brain Structure**
+```bash
+# Auto-fix
+python -m src.orchestrators.setup_epm_orchestrator --validate --fix
+
+# Or manual fix
+mkdir -p cortex-brain/tier1 cortex-brain/tier3 cortex-brain/documents/reports
+```
+
+**Issue: Gate Failures (Code-Level)**
+
+These require code/documentation changes and cannot be auto-fixed. Review the detailed report:
+```bash
+cat cortex-brain/documents/reports/installation-validation-{{timestamp}}.md
+```
+
+Follow recommendations in the **Recommendations** section.
+
+**✅ Validation Success Criteria:**
+
+CORTEX is ready to use when:
+- ✅ Bootstrap verification: 4/4 checks passed
+- ✅ Gate validation: 14+ gates passed (ERROR gates must pass)
+- ✅ Overall status: HEALTHY or WARNING
+- ✅ Report shows: "CORTEX is ready to use!"
+
+After successful validation, you can start working with CORTEX immediately!
+
 ---
 
 ## 📚 Using CORTEX
@@ -1088,54 +1252,132 @@ def publish_to_branch(
     logger.info(f"Skip validation: {skip_validation}")
     logger.info("")
     
-    # Run validation gate first (unless resuming, dry-run, or skipped)
-    if not resume and not dry_run and not skip_validation:
+    # Run validation gate first (unless resuming or explicitly skipped)
+    # NOTE: Validation runs even in dry-run mode to catch issues before deployment
+    if not resume and not skip_validation:
         logger.info("" + "=" * 80)
-        logger.info("STAGE 0: Pre-Deployment Validation Gate")
+        logger.info("STAGE 0: Pre-Deployment Validation Gate (16-Gate System)")
         logger.info("" + "=" * 80)
         logger.info("")
         
-        validate_script = project_root / "scripts" / "validate_deployment.py"
-        if validate_script.exists():
-            try:
-                result = subprocess.run(
-                    [sys.executable, str(validate_script)],
-                    cwd=project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=60
-                )
-                
-                # Print validation output
-                for line in result.stdout.split('\n'):
-                    if line.strip():
-                        logger.info(line)
-                
-                if result.returncode != 0 and result.returncode != 2:
-                    logger.error("")
-                    logger.error("❌ VALIDATION FAILED - BRANCH PUBLISH BLOCKED")
-                    logger.error("")
-                    logger.error("Fix all CRITICAL and HIGH issues before publishing.")
-                    logger.error("Run: python scripts/validate_deployment.py")
-                    logger.error("")
-                    return False
-                elif result.returncode == 2:
-                    logger.warning("")
-                    logger.warning("⚠️  Validation warnings detected (non-blocking)")
-                    logger.warning("Review warnings above before proceeding")
-                    logger.warning("")
-                
-                logger.info("✅ Validation passed - proceeding with branch publish")
-                logger.info("")
+        # Import DeploymentGates system
+        try:
+            # sys is already imported at module level, no need to reimport
+            from src.deployment.deployment_gates import DeploymentGates
             
-            except subprocess.TimeoutExpired:
-                logger.error("❌ Validation timeout - aborting publish")
+            # Load alignment report if available
+            alignment_report = None
+            alignment_state = project_root / "cortex-brain" / ".alignment-state.json"
+            if alignment_state.exists():
+                try:
+                    import json
+                    with open(alignment_state, 'r', encoding='utf-8') as f:
+                        alignment_report = json.load(f)
+                    logger.info("✓ Loaded alignment report from .alignment-state.json")
+                except Exception as e:
+                    logger.warning(f"Could not load alignment report: {e}")
+            
+            # Initialize and run all 16 gates
+            logger.info("🔍 Executing comprehensive 16-gate validation system...")
+            logger.info("")
+            
+            gates = DeploymentGates(project_root)
+            validation_result = gates.validate_all_gates(alignment_report)
+            
+            # Display results
+            logger.info(f"Total Gates: {len(validation_result['gates'])}")
+            logger.info(f"Passed: {sum(1 for g in validation_result['gates'] if g['passed'])}")
+            logger.info(f"Failed: {sum(1 for g in validation_result['gates'] if not g['passed'])}")
+            logger.info("")
+            
+            # Show gate-by-gate results
+            for i, gate in enumerate(validation_result['gates'], 1):
+                status_icon = "✅" if gate['passed'] else "❌"
+                severity = gate['severity']
+                logger.info(f"  Gate {i:2d}: {status_icon} {gate['name']} ({severity})")
+                if not gate['passed']:
+                    logger.info(f"           {gate['message']}")
+            
+            logger.info("")
+            
+            # Generate validation report
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            report_dir = project_root / "cortex-brain" / "documents" / "reports"
+            report_dir.mkdir(parents=True, exist_ok=True)
+            report_file = report_dir / f"deployment-validation-{timestamp}.md"
+            
+            with open(report_file, 'w', encoding='utf-8') as f:
+                f.write(f"# Deployment Validation Report\n\n")
+                f.write(f"**Timestamp:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"**Version:** {PACKAGE_VERSION}\n")
+                f.write(f"**Overall Status:** {'✅ PASSED' if validation_result['passed'] else '❌ FAILED'}\n\n")
+                f.write(f"## Summary\n\n")
+                f.write(f"- **Total Gates:** {len(validation_result['gates'])}\n")
+                f.write(f"- **Passed:** {sum(1 for g in validation_result['gates'] if g['passed'])}\n")
+                f.write(f"- **Failed:** {sum(1 for g in validation_result['gates'] if not g['passed'])}\n")
+                f.write(f"- **Errors:** {len(validation_result['errors'])}\n")
+                f.write(f"- **Warnings:** {len(validation_result['warnings'])}\n\n")
+                
+                f.write(f"## Gate Results\n\n")
+                for i, gate in enumerate(validation_result['gates'], 1):
+                    status = "✅ PASSED" if gate['passed'] else "❌ FAILED"
+                    f.write(f"### Gate {i}: {gate['name']} ({gate['severity']})\n\n")
+                    f.write(f"**Status:** {status}\n\n")
+                    f.write(f"**Message:** {gate['message']}\n\n")
+                    
+                    # Include details if available
+                    if gate.get('details'):
+                        f.write(f"**Details:**\n\n")
+                        f.write(f"```json\n{json.dumps(gate['details'], indent=2)}\n```\n\n")
+                
+                if validation_result['errors']:
+                    f.write(f"## Blocking Errors\n\n")
+                    for error in validation_result['errors']:
+                        f.write(f"- {error}\n")
+                    f.write("\n")
+                
+                if validation_result['warnings']:
+                    f.write(f"## Warnings (Non-Blocking)\n\n")
+                    for warning in validation_result['warnings']:
+                        f.write(f"- {warning}\n")
+                    f.write("\n")
+            
+            logger.info(f"📄 Validation report saved: {report_file.relative_to(project_root)}")
+            logger.info("")
+            
+            # Block deployment on ERROR-severity failures
+            if not validation_result['passed']:
+                logger.error("❌ DEPLOYMENT BLOCKED - Critical gate failures detected")
+                logger.error("")
+                logger.error("Fix all ERROR-level gate failures before deployment:")
+                for error in validation_result['errors']:
+                    logger.error(f"  • {error}")
+                logger.error("")
+                logger.error(f"Review full report: {report_file.relative_to(project_root)}")
+                logger.error("")
                 return False
-            except Exception as e:
-                logger.warning(f"⚠️  Validation check failed: {e}")
-                logger.warning("Proceeding with caution...")
-        else:
-            logger.warning("⚠️  Validation script not found - proceeding without validation")
+            
+            # Warn about WARNING-level issues but proceed
+            if validation_result['warnings']:
+                logger.warning("⚠️  Validation warnings detected (non-blocking):")
+                for warning in validation_result['warnings']:
+                    logger.warning(f"  • {warning}")
+                logger.warning("")
+                logger.warning("Review warnings before proceeding to production")
+                logger.warning("")
+            
+            logger.info("✅ All 16 deployment gates passed - proceeding with deployment")
+            logger.info("")
+        
+        except ImportError as e:
+            logger.error(f"❌ Failed to import DeploymentGates: {e}")
+            logger.error("Deployment validation system not available - aborting")
+            return False
+        except Exception as e:
+            logger.error(f"❌ Validation system error: {e}")
+            logger.error("Deployment blocked due to validation failure")
+            traceback.print_exc()
+            return False
         
         logger.info("")
     
@@ -1179,7 +1421,8 @@ def publish_to_branch(
                 from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
                 
                 # Initialize catalog and discovery
-                catalog = EnhancementCatalog(brain_path=project_root / "cortex-brain")
+                # Note: EnhancementCatalog auto-discovers brain path, no need for explicit parameter
+                catalog = EnhancementCatalog()
                 engine = EnhancementDiscoveryEngine(repo_root=project_root)
                 
                 # Get last deployment review timestamp

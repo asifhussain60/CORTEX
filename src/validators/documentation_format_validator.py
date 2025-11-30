@@ -3,7 +3,7 @@ Documentation Format Validator
 
 Validates CORTEX admin documentation outputs against the v1.0 format specification.
 
-Copyright © 2024-2025 Asif Hussain. All rights reserved.
+Copyright ┬⌐ 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
 """
 
@@ -52,7 +52,7 @@ class ValidationResult:
     
     def __str__(self) -> str:
         """String representation of validation result"""
-        status = "✅ VALID" if self.is_valid else "❌ INVALID"
+        status = "Γ£à VALID" if self.is_valid else "Γ¥î INVALID"
         return (
             f"{status}\n"
             f"Errors: {len(self.errors)}\n"
@@ -199,10 +199,10 @@ class DocumentationFormatValidator:
         result = validator.validate("path/to/dashboard.html")
         
         if result.is_valid:
-            print("✅ Dashboard is compliant")
+            print("Γ£à Dashboard is compliant")
         else:
             for error in result.errors:
-                print(f"❌ {error.message}")
+                print(f"Γ¥î {error.message}")
     """
     
     # Required libraries with minimum versions
@@ -664,7 +664,7 @@ class DocumentationFormatValidator:
             "# CORTEX Documentation Format Validation Report",
             "",
             f"**Generated:** {timestamp}",
-            f"**Status:** {'✅ VALID' if result.is_valid else '❌ INVALID'}",
+            f"**Status:** {'Γ£à VALID' if result.is_valid else 'Γ¥î INVALID'}",
             "",
             "---",
             "",
@@ -682,7 +682,7 @@ class DocumentationFormatValidator:
         # Add errors
         if result.errors:
             report_lines.extend([
-                "## ❌ Errors (Must Fix)",
+                "## Γ¥î Errors (Must Fix)",
                 ""
             ])
             for i, error in enumerate(result.errors, 1):
@@ -697,7 +697,7 @@ class DocumentationFormatValidator:
         # Add warnings
         if result.warnings:
             report_lines.extend([
-                "## ⚠️ Warnings (Recommended Fixes)",
+                "## ΓÜá∩╕Å Warnings (Recommended Fixes)",
                 ""
             ])
             for i, warning in enumerate(result.warnings, 1):
@@ -710,7 +710,7 @@ class DocumentationFormatValidator:
         # Success message
         if result.is_valid:
             report_lines.extend([
-                "## ✅ Validation Successful",
+                "## Γ£à Validation Successful",
                 "",
                 "Dashboard complies with CORTEX Documentation Format Specification v1.0",
                 ""

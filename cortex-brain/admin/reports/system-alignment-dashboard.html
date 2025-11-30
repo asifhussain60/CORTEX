@@ -559,13 +559,13 @@
     <script>
         const dashboardData = {
   "metadata": {
-    "generatedAt": "2025-11-29T15:39:24.323502",
+    "generatedAt": "2025-11-30T07:41:03.165259",
     "version": "3.3.0",
     "operationType": "system_alignment",
     "author": "CORTEX"
   },
   "overview": {
-    "executiveSummary": "System alignment validation completed at 2025-11-29 15:39:24. Overall health is 77%, indicating a warning system state. Found 22 critical issues and 85 warnings across 38 registered features. 0 new features have been added since the last alignment review.",
+    "executiveSummary": "System alignment validation completed at 2025-11-30 07:41:03. Overall health is 77%, indicating a warning system state. Found 16 critical issues and 116 warnings across 42 registered features. 0 new features have been added since the last alignment review.",
     "keyMetrics": [
       {
         "label": "Overall Health",
@@ -574,17 +574,17 @@
       },
       {
         "label": "Total Features",
-        "value": 38,
+        "value": 42,
         "status": "info"
       },
       {
         "label": "Critical Issues",
-        "value": 22,
+        "value": 16,
         "status": "critical"
       },
       {
         "label": "Warnings",
-        "value": 85,
+        "value": 116,
         "status": "warning"
       },
       {
@@ -644,8 +644,8 @@
         },
         {
           "id": "DiagramRegenerationOrchestrator",
-          "group": "critical",
-          "label": "DiagramRegenerationOrchestrator (60%)"
+          "group": "warning",
+          "label": "DiagramRegenerationOrchestrator (80%)"
         },
         {
           "id": "OptimizeCortexOrchestrator",
@@ -664,8 +664,8 @@
         },
         {
           "id": "TDDWorkflowOrchestrator",
-          "group": "healthy",
-          "label": "TDDWorkflowOrchestrator (90%)"
+          "group": "warning",
+          "label": "TDDWorkflowOrchestrator (80%)"
         },
         {
           "id": "WorkflowOrchestrator",
@@ -674,28 +674,33 @@
         },
         {
           "id": "ADOWorkItemOrchestrator",
-          "group": "healthy",
-          "label": "ADOWorkItemOrchestrator (90%)"
+          "group": "warning",
+          "label": "ADOWorkItemOrchestrator (80%)"
+        },
+        {
+          "id": "ApplicationHealthOrchestrator",
+          "group": "warning",
+          "label": "ApplicationHealthOrchestrator (70%)"
         },
         {
           "id": "CodeReviewOrchestrator",
-          "group": "healthy",
-          "label": "CodeReviewOrchestrator (90%)"
+          "group": "warning",
+          "label": "CodeReviewOrchestrator (80%)"
         },
         {
           "id": "CommitOrchestrator",
-          "group": "critical",
-          "label": "CommitOrchestrator (60%)"
+          "group": "warning",
+          "label": "CommitOrchestrator (80%)"
         },
         {
           "id": "GitCheckpointOrchestrator",
-          "group": "healthy",
-          "label": "GitCheckpointOrchestrator (90%)"
+          "group": "warning",
+          "label": "GitCheckpointOrchestrator (80%)"
         },
         {
           "id": "LintValidationOrchestrator",
-          "group": "healthy",
-          "label": "LintValidationOrchestrator (90%)"
+          "group": "warning",
+          "label": "LintValidationOrchestrator (80%)"
         },
         {
           "id": "MasterSetupOrchestrator",
@@ -703,14 +708,19 @@
           "label": "MasterSetupOrchestrator (70%)"
         },
         {
+          "id": "OnboardingAcknowledgmentOrchestrator",
+          "group": "warning",
+          "label": "OnboardingAcknowledgmentOrchestrator (80%)"
+        },
+        {
           "id": "OnboardingOrchestrator",
-          "group": "critical",
-          "label": "OnboardingOrchestrator (60%)"
+          "group": "healthy",
+          "label": "OnboardingOrchestrator (90%)"
         },
         {
           "id": "PlanningOrchestrator",
-          "group": "healthy",
-          "label": "PlanningOrchestrator (90%)"
+          "group": "warning",
+          "label": "PlanningOrchestrator (80%)"
         },
         {
           "id": "RealignmentOrchestrator",
@@ -719,23 +729,23 @@
         },
         {
           "id": "RollbackOrchestrator",
-          "group": "critical",
-          "label": "RollbackOrchestrator (60%)"
+          "group": "warning",
+          "label": "RollbackOrchestrator (80%)"
         },
         {
           "id": "SessionCompletionOrchestrator",
-          "group": "healthy",
-          "label": "SessionCompletionOrchestrator (90%)"
+          "group": "warning",
+          "label": "SessionCompletionOrchestrator (80%)"
         },
         {
           "id": "SetupEPMOrchestrator",
-          "group": "healthy",
-          "label": "SetupEPMOrchestrator (90%)"
+          "group": "warning",
+          "label": "SetupEPMOrchestrator (80%)"
         },
         {
           "id": "SWAGGEREntryPointOrchestrator",
-          "group": "critical",
-          "label": "SWAGGEREntryPointOrchestrator (60%)"
+          "group": "warning",
+          "label": "SWAGGEREntryPointOrchestrator (70%)"
         },
         {
           "id": "UnifiedEntryPointOrchestrator",
@@ -744,13 +754,13 @@
         },
         {
           "id": "UpgradeOrchestrator",
-          "group": "healthy",
-          "label": "UpgradeOrchestrator (90%)"
+          "group": "warning",
+          "label": "UpgradeOrchestrator (80%)"
         },
         {
           "id": "UXEnhancementOrchestrator",
-          "group": "critical",
-          "label": "UXEnhancementOrchestrator (60%)"
+          "group": "warning",
+          "label": "UXEnhancementOrchestrator (80%)"
         },
         {
           "id": "BrainIngestionAdapterAgent",
@@ -759,23 +769,28 @@
         },
         {
           "id": "BrainIngestionAgent",
-          "group": "healthy",
-          "label": "BrainIngestionAgent (90%)"
+          "group": "warning",
+          "label": "BrainIngestionAgent (80%)"
         },
         {
           "id": "FeedbackAgent",
-          "group": "healthy",
-          "label": "FeedbackAgent (100%)"
+          "group": "warning",
+          "label": "FeedbackAgent (80%)"
         },
         {
           "id": "ViewDiscoveryAgent",
-          "group": "healthy",
-          "label": "ViewDiscoveryAgent (100%)"
+          "group": "warning",
+          "label": "ViewDiscoveryAgent (80%)"
         },
         {
           "id": "ADOAgent",
+          "group": "warning",
+          "label": "ADOAgent (80%)"
+        },
+        {
+          "id": "ComplianceDashboardAgent",
           "group": "critical",
-          "label": "ADOAgent (60%)"
+          "label": "ComplianceDashboardAgent (60%)"
         },
         {
           "id": "LearningCaptureAgent",
@@ -788,14 +803,19 @@
           "label": "ProfileAgent (70%)"
         },
         {
+          "id": "WelcomeBannerAgent",
+          "group": "warning",
+          "label": "WelcomeBannerAgent (70%)"
+        },
+        {
           "id": "ArchitectAgent",
           "group": "warning",
           "label": "ArchitectAgent (80%)"
         },
         {
           "id": "ArchitectureIntelligenceAgent",
-          "group": "critical",
-          "label": "ArchitectureIntelligenceAgent (60%)"
+          "group": "warning",
+          "label": "ArchitectureIntelligenceAgent (80%)"
         },
         {
           "id": "InteractivePlannerAgent",
@@ -837,7 +857,7 @@
         {
           "source": "health",
           "target": "DiagramRegenerationOrchestrator",
-          "value": 6.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -857,7 +877,7 @@
         {
           "source": "health",
           "target": "TDDWorkflowOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -867,27 +887,32 @@
         {
           "source": "health",
           "target": "ADOWorkItemOrchestrator",
-          "value": 9.0
+          "value": 8.0
+        },
+        {
+          "source": "health",
+          "target": "ApplicationHealthOrchestrator",
+          "value": 7.0
         },
         {
           "source": "health",
           "target": "CodeReviewOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "CommitOrchestrator",
-          "value": 6.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "GitCheckpointOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "LintValidationOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -896,13 +921,18 @@
         },
         {
           "source": "health",
+          "target": "OnboardingAcknowledgmentOrchestrator",
+          "value": 8.0
+        },
+        {
+          "source": "health",
           "target": "OnboardingOrchestrator",
-          "value": 6.0
+          "value": 9.0
         },
         {
           "source": "health",
           "target": "PlanningOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -912,22 +942,22 @@
         {
           "source": "health",
           "target": "RollbackOrchestrator",
-          "value": 6.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "SessionCompletionOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "SetupEPMOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "SWAGGEREntryPointOrchestrator",
-          "value": 6.0
+          "value": 7.0
         },
         {
           "source": "health",
@@ -937,12 +967,12 @@
         {
           "source": "health",
           "target": "UpgradeOrchestrator",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "UXEnhancementOrchestrator",
-          "value": 6.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -952,21 +982,26 @@
         {
           "source": "health",
           "target": "BrainIngestionAgent",
-          "value": 9.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "FeedbackAgent",
-          "value": 10.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "ViewDiscoveryAgent",
-          "value": 10.0
+          "value": 8.0
         },
         {
           "source": "health",
           "target": "ADOAgent",
+          "value": 8.0
+        },
+        {
+          "source": "health",
+          "target": "ComplianceDashboardAgent",
           "value": 6.0
         },
         {
@@ -981,13 +1016,18 @@
         },
         {
           "source": "health",
+          "target": "WelcomeBannerAgent",
+          "value": 7.0
+        },
+        {
+          "source": "health",
           "target": "ArchitectAgent",
           "value": 8.0
         },
         {
           "source": "health",
           "target": "ArchitectureIntelligenceAgent",
-          "value": 6.0
+          "value": 8.0
         },
         {
           "source": "health",
@@ -1000,52 +1040,52 @@
       "title": "System Health Trend",
       "data": [
         {
-          "date": "2025-11-19",
+          "date": "2025-11-20",
           "value": 60,
           "label": "Day 1"
         },
         {
-          "date": "2025-11-20",
+          "date": "2025-11-21",
           "value": 60,
           "label": "Day 2"
         },
         {
-          "date": "2025-11-21",
+          "date": "2025-11-22",
           "value": 61,
           "label": "Day 3"
         },
         {
-          "date": "2025-11-22",
+          "date": "2025-11-23",
           "value": 63,
           "label": "Day 4"
         },
         {
-          "date": "2025-11-23",
+          "date": "2025-11-24",
           "value": 65,
           "label": "Day 5"
         },
         {
-          "date": "2025-11-24",
+          "date": "2025-11-25",
           "value": 67,
           "label": "Day 6"
         },
         {
-          "date": "2025-11-25",
+          "date": "2025-11-26",
           "value": 69,
           "label": "Day 7"
         },
         {
-          "date": "2025-11-26",
+          "date": "2025-11-27",
           "value": 71,
           "label": "Day 8"
         },
         {
-          "date": "2025-11-27",
+          "date": "2025-11-28",
           "value": 73,
           "label": "Day 9"
         },
         {
-          "date": "2025-11-28",
+          "date": "2025-11-29",
           "value": 75,
           "label": "Day 10"
         }
@@ -1063,56 +1103,7 @@
   ],
   "dataTable": [
     {
-      "name": "DiagramRegenerationOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "CommitOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "OnboardingOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "RollbackOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "SWAGGEREntryPointOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "UXEnhancementOrchestrator",
-      "type": "orchestrator",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "ADOAgent",
-      "type": "agent",
-      "status": "critical",
-      "health": 60,
-      "issues": "Missing documentation, No test coverage, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "ArchitectureIntelligenceAgent",
+      "name": "ComplianceDashboardAgent",
       "type": "agent",
       "status": "critical",
       "health": 60,
@@ -1154,6 +1145,13 @@
       "issues": "Missing documentation, No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
+      "name": "ApplicationHealthOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 70,
+      "issues": "Missing documentation, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
       "name": "MasterSetupOrchestrator",
       "type": "orchestrator",
       "status": "warning",
@@ -1168,6 +1166,13 @@
       "issues": "Missing documentation, No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
+      "name": "SWAGGEREntryPointOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 70,
+      "issues": "Missing documentation, No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
       "name": "LearningCaptureAgent",
       "type": "agent",
       "status": "warning",
@@ -1176,6 +1181,13 @@
     },
     {
       "name": "ProfileAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 70,
+      "issues": "Missing documentation, Not wired to entry point, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "WelcomeBannerAgent",
       "type": "agent",
       "status": "warning",
       "health": 70,
@@ -1203,6 +1215,13 @@
       "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
+      "name": "DiagramRegenerationOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
       "name": "PublishBranchOrchestrator",
       "type": "orchestrator",
       "status": "warning",
@@ -1217,7 +1236,98 @@
       "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
+      "name": "TDDWorkflowOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "ADOWorkItemOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "CodeReviewOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "CommitOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "GitCheckpointOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "LintValidationOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "OnboardingAcknowledgmentOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "Missing documentation, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "PlanningOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "RollbackOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "SessionCompletionOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "SetupEPMOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
       "name": "UnifiedEntryPointOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "UpgradeOrchestrator",
+      "type": "orchestrator",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "UXEnhancementOrchestrator",
       "type": "orchestrator",
       "status": "warning",
       "health": 80,
@@ -1231,7 +1341,42 @@
       "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
+      "name": "BrainIngestionAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "FeedbackAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "ViewDiscoveryAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "ADOAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
       "name": "ArchitectAgent",
+      "type": "agent",
+      "status": "warning",
+      "health": 80,
+      "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
+    },
+    {
+      "name": "ArchitectureIntelligenceAgent",
       "type": "agent",
       "status": "warning",
       "health": 80,
@@ -1245,95 +1390,18 @@
       "issues": "No test coverage, Performance not validated, No Swagger/OpenAPI documentation"
     },
     {
-      "name": "TDDWorkflowOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "ADOWorkItemOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "CodeReviewOrchestrator",
+      "name": "OnboardingOrchestrator",
       "type": "orchestrator",
       "status": "healthy",
       "health": 90,
       "issues": "Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "GitCheckpointOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "LintValidationOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "PlanningOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "SessionCompletionOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "SetupEPMOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "UpgradeOrchestrator",
-      "type": "orchestrator",
-      "status": "healthy",
-      "health": 90,
-      "issues": "No test coverage, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "BrainIngestionAgent",
-      "type": "agent",
-      "status": "healthy",
-      "health": 90,
-      "issues": "Performance not validated, No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "FeedbackAgent",
-      "type": "agent",
-      "status": "healthy",
-      "health": 100,
-      "issues": "No Swagger/OpenAPI documentation"
-    },
-    {
-      "name": "ViewDiscoveryAgent",
-      "type": "agent",
-      "status": "healthy",
-      "health": 100,
-      "issues": "No Swagger/OpenAPI documentation"
     }
   ],
   "recommendations": [
     {
       "priority": "high",
-      "title": "Fix 22 critical integration issues immediately",
-      "rationale": "Features with <70% integration pose deployment risks and may cause system instability. 22 features currently below threshold.",
+      "title": "Fix 16 critical integration issues immediately",
+      "rationale": "Features with <70% integration pose deployment risks and may cause system instability. 16 features currently below threshold.",
       "steps": [
         "Run 'cortex align --interactive' to see detailed integration gaps",
         "Review missing documentation and test coverage",
@@ -1341,27 +1409,27 @@
         "Re-run alignment to verify improvements"
       ],
       "expectedImpact": "Improve system health from 77% to 85%+ by addressing critical gaps",
-      "estimatedEffort": "44-88 hours"
+      "estimatedEffort": "32-64 hours"
     },
     {
       "priority": "medium",
-      "title": "Address 85 integration warnings for production readiness",
-      "rationale": "Features with 70-90% integration are functional but lack production-grade quality assurance. 85 features need improvement.",
+      "title": "Address 116 integration warnings for production readiness",
+      "rationale": "Features with 70-90% integration are functional but lack production-grade quality assurance. 116 features need improvement.",
       "steps": [
         "Review documentation completeness for warning-level features",
         "Add missing test coverage (target: 80%+)",
         "Verify entry point wiring in response-templates.yaml",
         "Run performance benchmarks to validate optimization"
       ],
-      "expectedImpact": "Achieve 90% system health by elevating 85 features to healthy status",
-      "estimatedEffort": "85-170 hours"
+      "expectedImpact": "Achieve 90% system health by elevating 116 features to healthy status",
+      "estimatedEffort": "116-232 hours"
     },
     {
       "priority": "medium",
-      "title": "Clean up 53 orphaned entry point triggers",
-      "rationale": "Response templates reference 53 triggers without corresponding features. Causes user confusion.",
+      "title": "Clean up 57 orphaned entry point triggers",
+      "rationale": "Response templates reference 57 triggers without corresponding features. Causes user confusion.",
       "steps": [
-        "Review orphaned triggers: setup profile, plan, let's plan",
+        "Review orphaned triggers: plan, let's plan, plan a feature",
         "Remove invalid triggers from response-templates.yaml",
         "Update documentation to reflect removed entry points",
         "Re-run alignment to verify cleanup"
@@ -1371,16 +1439,16 @@
     },
     {
       "priority": "low",
-      "title": "Wire 6 ghost features to entry points",
-      "rationale": "Discovered 6 features without entry point triggers. Users cannot access these features.",
+      "title": "Wire 1 ghost features to entry points",
+      "rationale": "Discovered 1 features without entry point triggers. Users cannot access these features.",
       "steps": [
-        "Identify ghost features: DiagramRegenerationOrchestrator, CommitOrchestrator, OnboardingOrchestrator",
+        "Identify ghost features: ApplicationHealthOrchestrator",
         "Add entry point triggers to response-templates.yaml",
         "Test trigger-to-feature routing",
         "Update user documentation with new entry points"
       ],
-      "expectedImpact": "Expose 6 hidden features to users, increasing system utility",
-      "estimatedEffort": "60-120 mins"
+      "expectedImpact": "Expose 1 hidden features to users, increasing system utility",
+      "estimatedEffort": "10-20 mins"
     }
   ]
 };
