@@ -1,7 +1,8 @@
 """
 Tooling Installer Module
 
-Automatically installs missing development tooling (Python, Git, Node.js, etc.)
+Automatically installs missing development tooling (Python, Git, SQLite, etc.)
+Note: Node.js installation removed after migration to Python-only architecture
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -79,17 +80,12 @@ class ToolingInstaller:
             return False, f"Unsupported system: {self.system}"
     
     def install_node(self) -> Tuple[bool, str]:
-        """Install Node.js (for Vision API)."""
-        logger.info("Installing Node.js...")
-        
-        if self.system == 'Windows':
-            return self._install_with_package_manager('nodejs')
-        elif self.system == 'Darwin':
-            return self._install_with_package_manager('node')
-        elif self.system == 'Linux':
-            return self._install_with_package_manager('nodejs')
-        else:
-            return False, f"Unsupported system: {self.system}"
+        """
+        Deprecated: Node.js installation removed after migration to Python-only.
+        Returns success=False to indicate Node.js is not supported.
+        """
+        logger.warning("Node.js installation deprecated - CORTEX now uses Python-only architecture")
+        return False, "Node.js installation no longer supported (Python-only migration)"
     
     def install_sqlite(self) -> Tuple[bool, str]:
         """Install SQLite."""

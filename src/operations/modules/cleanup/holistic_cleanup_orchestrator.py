@@ -113,6 +113,23 @@ class FileCategorizationEngine:
             'patterns': [r'.*deprecated.*', r'.*obsolete.*', r'.*legacy.*'],
             'description': 'Explicitly deprecated files'
         },
+        'dependency_cache': {
+            'patterns': [
+                r'node_modules/.*',  # Node.js dependencies
+                r'__pycache__/.*',   # Python cache
+                r'\.pytest_cache/.*', # Pytest cache
+                r'venv/.*',          # Virtual environments
+            ],
+            'description': 'Dependency caches and virtual environments'
+        },
+        'config_artifact': {
+            'patterns': [
+                r'package\.json$',      # Node.js package file
+                r'package-lock\.json$', # Node.js lock file
+                r'yarn\.lock$',         # Yarn lock file
+            ],
+            'description': 'Configuration artifacts from deprecated technologies'
+        },
         'reports': {
             'patterns': [
                 r'.*REPORT.*\.md$', r'.*SUMMARY.*\.md$', 
@@ -126,9 +143,17 @@ class FileCategorizationEngine:
         """Categorize a single file"""
         categories = []
         
+        # Convert path to string for pattern matching (including directory structure)
+        path_str = str(file_path).replace('\\', '/')
+        
         for category, config in self.CATEGORIES.items():
             for pattern in config['patterns']:
-                if re.match(pattern, file_path.name, re.IGNORECASE):
+                # Check against full path for directory-based patterns
+                if re.search(pattern, path_str, re.IGNORECASE):
+                    categories.append(category)
+                    break
+                # Also check against just the filename
+                elif re.match(pattern, file_path.name, re.IGNORECASE):
                     categories.append(category)
                     break
         
@@ -246,7 +271,8 @@ class HolisticRepositoryScanner:
                 'total_directories': 0,
                 'total_size_bytes': 0
             },
-            'files_by_category': defaultdict(list),
+            'categories': defaultdict(list),  # Changed from files_by_category
+            'files_by_category': defaultdict(list),  # Keep for backwards compatibility
             'all_files': [],
             'duplicates': [],
             'orphaned_files': [],
@@ -275,6 +301,7 @@ class HolisticRepositoryScanner:
                 
                 for category in file_info.categories:
                     results['files_by_category'][category].append(file_info)
+                    results['categories'][category].append(asdict(file_info))  # Also add to categories
                 
                 # Check for duplicates
                 self._check_duplicates(file_path, results)
@@ -486,10 +513,11 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
         self.project_root = Path(project_root) if project_root and isinstance(project_root, str) else (project_root or Path.cwd())
         
         # Protected paths - NEVER touch these
+        # Note: node_modules/ and package.json removed - migrated to Python-only
         self.protected_paths = {
             'src/', 'tests/', 'cortex-brain/tier1/', 'cortex-brain/tier2/',
             'cortex-brain/tier3/', 'docs/', '.git/', '.github/',
-            '.vscode/', 'node_modules/', 'package.json', 'LICENSE',
+            '.vscode/', 'LICENSE',
             'README.md', 'requirements.txt', 'cortex.config.json'
         }
         

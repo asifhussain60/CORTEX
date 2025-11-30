@@ -144,12 +144,13 @@ class SetupEPMOrchestrator:
         return detected
     
     def _detect_language(self) -> str:
-        """Detect primary programming language"""
-        # Check for language-specific files
-        if (self.repo_path / "package.json").exists():
-            return "JavaScript/TypeScript"
+        """Detect primary programming language (Python prioritized)"""
+        # Check Python first (prioritized after migration from Node.js)
         if (self.repo_path / "requirements.txt").exists() or (self.repo_path / "setup.py").exists():
             return "Python"
+        # Check for other languages
+        if (self.repo_path / "package.json").exists():
+            return "JavaScript/TypeScript"
         if (self.repo_path / "Gemfile").exists():
             return "Ruby"
         if (self.repo_path / "pom.xml").exists() or (self.repo_path / "build.gradle").exists():
@@ -164,7 +165,21 @@ class SetupEPMOrchestrator:
         return "Unknown"
     
     def _detect_framework(self) -> str:
-        """Detect framework/library"""
+        """Detect framework/library (Python prioritized)"""
+        # Check Python frameworks first
+        if (self.repo_path / "requirements.txt").exists():
+            try:
+                reqs = (self.repo_path / "requirements.txt").read_text().lower()
+                if "django" in reqs:
+                    return "Django"
+                if "flask" in reqs:
+                    return "Flask"
+                if "fastapi" in reqs:
+                    return "FastAPI"
+            except Exception:
+                pass
+        
+        # Check Node.js frameworks (for cleanup detection only)
         if (self.repo_path / "package.json").exists():
             try:
                 pkg = json.loads((self.repo_path / "package.json").read_text())
@@ -183,39 +198,40 @@ class SetupEPMOrchestrator:
             except Exception:
                 pass
         
-        if (self.repo_path / "requirements.txt").exists():
-            try:
-                reqs = (self.repo_path / "requirements.txt").read_text().lower()
-                if "django" in reqs:
-                    return "Django"
-                if "flask" in reqs:
-                    return "Flask"
-                if "fastapi" in reqs:
-                    return "FastAPI"
-            except Exception:
-                pass
-        
         return "None detected"
     
     def _detect_build_system(self) -> str:
-        """Detect build system"""
-        if (self.repo_path / "package.json").exists():
-            return "npm/yarn"
+        """Detect build system (Python prioritized)"""
+        # Check Python build systems first
+        if (self.repo_path / "setup.py").exists():
+            return "setuptools"
+        if (self.repo_path / "requirements.txt").exists():
+            return "pip"
+        if (self.repo_path / "pyproject.toml").exists():
+            return "poetry"
+        # Check other build systems
         if (self.repo_path / "Makefile").exists():
             return "make"
+        if (self.repo_path / "package.json").exists():
+            return "npm/yarn"
         if (self.repo_path / "build.gradle").exists():
             return "Gradle"
         if (self.repo_path / "pom.xml").exists():
             return "Maven"
         if list(self.repo_path.glob("*.csproj")):
             return "MSBuild"
-        if (self.repo_path / "setup.py").exists():
-            return "setuptools"
         
         return "None detected"
     
     def _detect_test_framework(self) -> str:
-        """Detect test framework"""
+        """Detect test framework (Python prioritized)"""
+        # Check Python test frameworks first
+        if (self.repo_path / "pytest.ini").exists() or "pytest" in (self.repo_path / "requirements.txt").read_text() if (self.repo_path / "requirements.txt").exists() else "":
+            return "pytest"
+        if (self.repo_path / "tests").exists() and (self.repo_path / "tests" / "__init__.py").exists():
+            return "pytest"  # Assume pytest for Python test directories
+        
+        # Check Node.js test frameworks (for cleanup detection only)
         if (self.repo_path / "package.json").exists():
             try:
                 pkg = json.loads((self.repo_path / "package.json").read_text())
@@ -229,9 +245,6 @@ class SetupEPMOrchestrator:
                     return "Vitest"
             except Exception:
                 pass
-        
-        if (self.repo_path / "pytest.ini").exists() or "pytest" in (self.repo_path / "requirements.txt").read_text() if (self.repo_path / "requirements.txt").exists() else "":
-            return "pytest"
         
         if (self.repo_path / "phpunit.xml").exists():
             return "PHPUnit"
@@ -374,11 +387,17 @@ start tdd              # Begin TDD workflow
         return template
     
     def _generate_build_command(self, detected: Dict) -> str:
-        """Generate likely build command based on detection"""
+        """Generate likely build command based on detection (Python prioritized)"""
         build_system = detected.get("build_system", "")
         
-        if "npm" in build_system:
-            return "npm run build"
+        # Python build commands first
+        if "setuptools" in build_system:
+            return "python setup.py install"
+        if "pip" in build_system:
+            return "pip install -r requirements.txt"
+        if "poetry" in build_system:
+            return "poetry install"
+        # Other build systems
         if "make" in build_system:
             return "make"
         if "gradle" in build_system.lower():
@@ -387,18 +406,25 @@ start tdd              # Begin TDD workflow
             return "mvn package"
         if "msbuild" in build_system.lower():
             return "dotnet build"
+        if "npm" in build_system:
+            return "npm run build"
         
         return "# Build command not detected"
     
     def _generate_test_command(self, detected: Dict) -> str:
-        """Generate likely test command based on detection"""
+        """Generate likely test command based on detection (Python prioritized)"""
         test_framework = detected.get("test_framework", "")
         
-        if "jest" in test_framework.lower():
-            return "npm test"
+        # Python test commands first
         if "pytest" in test_framework.lower():
             return "pytest"
+        if "unittest" in test_framework.lower():
+            return "python -m unittest discover"
+        # Other test frameworks
+        if "jest" in test_framework.lower():
+            return "npm test"
         if "mocha" in test_framework.lower():
+            return "npm test"
             return "npm test"
         if "vitest" in test_framework.lower():
             return "vitest"
