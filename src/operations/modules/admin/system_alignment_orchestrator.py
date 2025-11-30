@@ -1431,14 +1431,14 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         
         # Collect features needing remediation
         for idx, (name, score) in enumerate(features_needing_remediation, 1):
-            # Update progress
-            if monitor:
-                monitor.update(f"Generating remediation suggestions ({idx}/{total_features}): {name}")
-            
-            # Skip remediation for known problematic features
+            # Skip remediation for known problematic features (check FIRST before progress update)
             if name in SKIP_REMEDIATION:
                 logger.warning(f"Skipping remediation generation for {name} (known performance issue)")
                 continue
+            
+            # Update progress (only for non-skipped features to avoid false timing perception)
+            if monitor:
+                monitor.update(f"Generating remediation suggestions ({idx}/{total_features}): {name}")
             
             # Get feature metadata
             metadata = orchestrators.get(name) or agents.get(name)
