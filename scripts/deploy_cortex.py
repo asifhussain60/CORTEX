@@ -519,6 +519,16 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
     logger.info("Building publish content...")
     staging_dir.mkdir(parents=True, exist_ok=True)
     
+    # Gate check: Ensure .github/ and .github/prompts/ directories exist
+    # This prevents file copy failures when CORTEX.prompt.md and copilot-instructions.md are copied
+    github_dir = staging_dir / ".github"
+    github_prompts_dir = github_dir / "prompts"
+    
+    logger.info("Creating .github directory structure...")
+    github_dir.mkdir(parents=True, exist_ok=True)
+    github_prompts_dir.mkdir(parents=True, exist_ok=True)
+    stats['dirs_created'] += 2  # Track directory creation
+    
     # Copy project structure
     manifest = []
     for item in project_root.rglob('*'):
