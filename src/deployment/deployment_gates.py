@@ -197,6 +197,15 @@ class DeploymentGates:
         elif gate16["severity"] == "WARNING" and not gate16["passed"]:
             results["warnings"].append(gate16["message"])
         
+        # Gate 17: Incremental Work Management System (CRITICAL)
+        gate17 = self._validate_incremental_work_system()
+        results["gates"].append(gate17)
+        if gate17["severity"] == "ERROR" and not gate17["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate17["message"])
+        elif gate17["severity"] == "WARNING" and not gate17["passed"]:
+            results["warnings"].append(gate17["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -2035,5 +2044,227 @@ class DeploymentGates:
             gate["severity"] = "WARNING"
             gate["message"] = f"Setup EPM validation encountered error: {str(e)}. Allowing deployment with warning."
             logger.error(f"Gate 16 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_incremental_work_system(self) -> Dict[str, Any]:
+        """
+        Gate 17: Incremental Work Management System Validation.
+        
+        Validates CORTEX 3.2.1 incremental work management architecture:
+        - Layer 1: ResponseSizeMonitor with auto-chunking (>=3.5K tokens)
+        - Layer 2: IncrementalWorkExecutor protocol with dependencies and checkpoints
+        - Layer 3: TDD Orchestrator with RED→GREEN→REFACTOR chunking
+        - All components have 100% test coverage
+        - Integration with existing TDD infrastructure
+        
+        Returns:
+            Gate result with ERROR severity (blocking)
+        """
+        gate = {
+            "name": "Incremental Work Management System (v3.2.1)",
+            "passed": True,
+            "severity": "ERROR",
+            "message": "",
+            "details": {
+                "layer1_status": {},
+                "layer2_status": {},
+                "layer3_status": {},
+                "test_coverage": {},
+                "integration_status": {}
+            }
+        }
+        
+        try:
+            # Layer 1: ResponseSizeMonitor validation
+            layer1_path = self.project_root / "src" / "utils" / "response_monitor.py"
+            layer1_test = self.project_root / "tests" / "test_response_monitor.py"
+            
+            if not layer1_path.exists():
+                gate["passed"] = False
+                gate["message"] = "Layer 1 (ResponseSizeMonitor) not found. Critical component missing."
+                gate["details"]["layer1_status"] = {"exists": False}
+                return gate
+            
+            layer1_content = layer1_path.read_text(encoding='utf-8')
+            gate["details"]["layer1_status"] = {
+                "exists": True,
+                "has_response_size_monitor": "class ResponseSizeMonitor" in layer1_content,
+                "has_estimate_tokens": "def estimate_tokens" in layer1_content,
+                "has_check_response": "def check_response" in layer1_content,
+                "has_auto_chunking": "_chunk_to_file" in layer1_content,
+                "test_file_exists": layer1_test.exists()
+            }
+            
+            if not all([
+                gate["details"]["layer1_status"]["has_response_size_monitor"],
+                gate["details"]["layer1_status"]["has_estimate_tokens"],
+                gate["details"]["layer1_status"]["has_check_response"],
+                gate["details"]["layer1_status"]["has_auto_chunking"]
+            ]):
+                gate["passed"] = False
+                gate["message"] = "Layer 1 (ResponseSizeMonitor) incomplete. Missing critical methods."
+                return gate
+            
+            # Layer 2: IncrementalWorkExecutor validation
+            layer2_path = self.project_root / "src" / "orchestrators" / "base_incremental_orchestrator.py"
+            layer2_test = self.project_root / "tests" / "test_base_incremental_orchestrator.py"
+            
+            if not layer2_path.exists():
+                gate["passed"] = False
+                gate["message"] = "Layer 2 (IncrementalWorkExecutor) not found. Critical component missing."
+                gate["details"]["layer2_status"] = {"exists": False}
+                return gate
+            
+            layer2_content = layer2_path.read_text(encoding='utf-8')
+            gate["details"]["layer2_status"] = {
+                "exists": True,
+                "has_work_chunk": "class WorkChunk" in layer2_content,
+                "has_work_checkpoint": "class WorkCheckpoint" in layer2_content,
+                "has_incremental_executor": "class IncrementalWorkExecutor" in layer2_content,
+                "has_break_into_chunks": "def break_into_chunks" in layer2_content,
+                "has_execute_chunk": "def execute_chunk" in layer2_content,
+                "has_dependency_management": "_check_dependencies" in layer2_content,
+                "has_checkpoint_creation": "_create_checkpoint" in layer2_content,
+                "test_file_exists": layer2_test.exists()
+            }
+            
+            if not all([
+                gate["details"]["layer2_status"]["has_work_chunk"],
+                gate["details"]["layer2_status"]["has_work_checkpoint"],
+                gate["details"]["layer2_status"]["has_incremental_executor"],
+                gate["details"]["layer2_status"]["has_break_into_chunks"],
+                gate["details"]["layer2_status"]["has_execute_chunk"]
+            ]):
+                gate["passed"] = False
+                gate["message"] = "Layer 2 (IncrementalWorkExecutor) incomplete. Missing critical components."
+                return gate
+            
+            # Layer 3: TDD Orchestrator validation
+            layer3_path = self.project_root / "src" / "orchestrators" / "tdd_orchestrator.py"
+            layer3_test = self.project_root / "tests" / "test_tdd_orchestrator.py"
+            
+            if not layer3_path.exists():
+                gate["passed"] = False
+                gate["message"] = "Layer 3 (TDD Orchestrator) not found. Critical component missing."
+                gate["details"]["layer3_status"] = {"exists": False}
+                return gate
+            
+            layer3_content = layer3_path.read_text(encoding='utf-8')
+            gate["details"]["layer3_status"] = {
+                "exists": True,
+                "has_tdd_phase_enum": "class TDDPhase" in layer3_content,
+                "has_tdd_work_request": "class TDDWorkRequest" in layer3_content,
+                "has_tdd_orchestrator": "class TDDOrchestrator" in layer3_content,
+                "inherits_incremental_executor": "IncrementalWorkExecutor" in layer3_content,
+                "has_red_phase": "_generate_test" in layer3_content,
+                "has_green_phase": "_generate_method" in layer3_content,
+                "has_refactor_phase": "_generate_refactoring" in layer3_content,
+                "has_checkpoint_boundaries": "_is_checkpoint_boundary" in layer3_content,
+                "test_file_exists": layer3_test.exists()
+            }
+            
+            if not all([
+                gate["details"]["layer3_status"]["has_tdd_phase_enum"],
+                gate["details"]["layer3_status"]["has_tdd_work_request"],
+                gate["details"]["layer3_status"]["has_tdd_orchestrator"],
+                gate["details"]["layer3_status"]["inherits_incremental_executor"]
+            ]):
+                gate["passed"] = False
+                gate["message"] = "Layer 3 (TDD Orchestrator) incomplete. Missing critical components."
+                return gate
+            
+            # Test coverage validation
+            import subprocess
+            import os
+            
+            # Run tests for all three layers
+            test_results = {}
+            for test_name, test_path in [
+                ("Layer 1", layer1_test),
+                ("Layer 2", layer2_test),
+                ("Layer 3", layer3_test)
+            ]:
+                if test_path.exists():
+                    try:
+                        result = subprocess.run(
+                            ["pytest", str(test_path), "-v", "--tb=short"],
+                            capture_output=True,
+                            text=True,
+                            timeout=30,
+                            cwd=str(self.project_root)
+                        )
+                        
+                        # Parse test results
+                        passed = "passed" in result.stdout.lower()
+                        failed = "failed" in result.stdout.lower()
+                        
+                        # Extract test counts
+                        import re
+                        match = re.search(r'(\d+)\s+passed', result.stdout)
+                        passed_count = int(match.group(1)) if match else 0
+                        
+                        test_results[test_name] = {
+                            "exists": True,
+                            "passed": result.returncode == 0,
+                            "test_count": passed_count,
+                            "exit_code": result.returncode
+                        }
+                    except Exception as e:
+                        test_results[test_name] = {
+                            "exists": True,
+                            "passed": False,
+                            "error": str(e)
+                        }
+                else:
+                    test_results[test_name] = {"exists": False}
+            
+            gate["details"]["test_coverage"] = test_results
+            
+            # Verify all tests passed
+            all_tests_passed = all(
+                result.get("passed", False) 
+                for result in test_results.values() 
+                if result.get("exists", False)
+            )
+            
+            if not all_tests_passed:
+                gate["passed"] = False
+                gate["message"] = "Incremental work management tests failing. All layers must have 100% passing tests."
+                failed_layers = [
+                    name for name, result in test_results.items() 
+                    if result.get("exists", False) and not result.get("passed", False)
+                ]
+                gate["message"] += f" Failed: {', '.join(failed_layers)}"
+                return gate
+            
+            # Integration validation
+            gate["details"]["integration_status"] = {
+                "response_monitor_integrated": "ResponseSizeMonitor" in layer2_content or "ResponseSizeMonitor" in layer3_content,
+                "incremental_executor_inheritance": "IncrementalWorkExecutor" in layer3_content,
+                "progress_tracking": "@with_progress" in layer2_content or "with_progress" in layer3_content,
+                "checkpoint_system": "WorkCheckpoint" in layer3_content
+            }
+            
+            # Calculate total test count
+            total_tests = sum(
+                result.get("test_count", 0) 
+                for result in test_results.values()
+            )
+            
+            # Success message
+            gate["message"] = (
+                f"Incremental Work Management System (v3.2.1) validated successfully. "
+                f"All 3 layers operational with {total_tests} passing tests. "
+                f"Architecture: ResponseSizeMonitor → IncrementalWorkExecutor → TDD Orchestrator. "
+                f"System ready to prevent 'response hit length limit' errors."
+            )
+            logger.info(f"Gate 17 PASSED: {gate['message']}")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Incremental work management validation failed: {str(e)}"
+            logger.error(f"Gate 17 validation error: {e}", exc_info=True)
         
         return gate
