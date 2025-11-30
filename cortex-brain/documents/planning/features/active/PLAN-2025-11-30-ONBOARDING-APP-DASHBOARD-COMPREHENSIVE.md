@@ -31,6 +31,103 @@
 
 ---
 
+## 🔀 Implementation Options Analysis
+
+### Option A: Comprehensive Onboarding Dashboard Enhancement (CURRENT PLAN)
+
+**Scope:** Full-featured dashboard with 5 tabs, clean architecture, WebSocket updates  
+**Estimated Effort:** 54 hours (6 weeks, 3 sprints)  
+**Status:** 🟡 IN PROGRESS (22% complete, 12h invested)
+
+**Pros:**
+- ✅ Complete feature set (architecture, quality, security, recommendations)
+- ✅ Demonstrates clean architecture principles
+- ✅ Real-time updates with WebSocket
+- ✅ Production-ready for demonstrations
+
+**Cons:**
+- ⚠️ Long timeline (6 weeks to completion)
+- ⚠️ High complexity (multiple moving parts)
+- ⚠️ Risk of architectural drift if not carefully managed
+
+**Best For:** Comprehensive codebase analysis tool with all visualization capabilities
+
+---
+
+### Option B: Extend Application Health Dashboard (TACTICAL ADDITION) ⚡ FAST TRACK
+
+**Scope:** Add UML diagram tab to existing Application Health Dashboard  
+**Estimated Effort:** 3-4 hours (single work session)  
+**Status:** 🆕 NOT STARTED (Alternative approach)
+
+**Implementation Strategy:**
+- Reuse existing code analysis infrastructure from Application Health Dashboard
+- Natural fit with existing quality/security/performance metrics
+- Add new "UML Diagrams" tab alongside current tabs
+- No architectural drift - extends proven patterns
+
+**Tactical Benefits:**
+- ⚡ **Speed:** 3-4 hours vs 42 hours remaining (92% time savings)
+- 🎯 **Focus:** Single feature addition vs multi-phase refactor
+- 🛡️ **Risk:** LOW - Extends working code vs comprehensive rewrite
+- 📊 **Value:** Delivers architecture visualization immediately
+
+**Implementation Details:**
+
+1. **Add UML Tab to Existing Dashboard** (1 hour)
+   - Extend current tab structure in `templates/dashboard_template.html`
+   - Add "UML Diagrams" navigation item
+   - Use Python diagrams library with SVG output for CSS integration
+
+2. **Wire DependencyGraph to Dashboard** (1 hour)
+   - Call `DependencyGraph.build()` in existing scan workflow
+   - Pass architecture data through existing `DashboardDataAdapter`
+   - No orchestrator changes needed
+
+3. **Create UML Visualization Component** (1.5 hours)
+   - Create `src/use_cases/render_uml_diagrams.py` using Python diagrams library
+   - Primary library: **diagrams** (`pip install diagrams`) - Modern programmatic diagram generation with Graphviz backend
+   - Secondary library: **pyreverse** (via `pip install pylint`) - Automatic class diagram extraction from Python code
+   - Backend: **graphviz** (`pip install graphviz` + system binary) - Industry-standard rendering engine
+   - Output format: **SVG** for seamless CSS integration with existing dashboard theme
+   - Node coloring by health score: green (healthy), yellow (warning), red (critical)
+   - Add CSS styling in `static/css/uml_diagrams.css` matching dashboard color scheme (#007bff, #28a745, #ffc107, #dc3545)
+   - Professional appearance: SVG legibility, color contrast, consistent typography matching D3.js charts
+
+4. **Test & Validate** (0.5 hours)
+   - Spot-check dependency edges against actual imports
+   - Verify graph renders for Python/C#/JavaScript projects
+   - Ensure performance (<2s for 500 nodes)
+
+**What You Get:**
+- ✅ Architecture visualization (dependency graphs)
+- ✅ Integrated with proven dashboard infrastructure
+- ✅ No disruption to existing features
+- ✅ Same quality/security/performance context
+- ✅ Demo-ready in <4 hours
+
+**What You Don't Get:**
+- ❌ Clean architecture refactor (use existing structure)
+- ❌ WebSocket real-time updates (static dashboard)
+- ❌ Recommendations tab (focus on visualization)
+- ❌ PPTX export (PDF/PNG already exist)
+
+**Decision Criteria:**
+
+**Choose Option B If:**
+- Need architecture visualization IMMEDIATELY (demo/presentation deadline)
+- Want to avoid multi-week refactoring project
+- Existing dashboard structure is adequate
+- Primary goal is dependency graph visualization
+
+**Choose Option A If:**
+- Have 6 weeks for comprehensive enhancement
+- Want clean architecture as reference implementation
+- Need real-time updates and recommendations
+- Building long-term "wow factor" demonstration tool
+
+---
+
 ## 📊 Implementation Progress (Updated: 2025-11-30)
 
 ### Overall Status: 🟡 IN PROGRESS (22% Complete - Phase 1)
@@ -244,9 +341,10 @@ This enhancement transforms the existing Application Health Dashboard into a com
 
 ### External Libraries (Need Verification)
 
-7. **D3.js v7** - For force-directed graphs
+7. **D3.js v7** - For force-directed graphs (Overview/Quality/Security tabs)
    - Already used in existing dashboard (confirmed in dashboard-20251129-164200.html)
    - **Version:** Verify v7 for latest features (zoom, pan, force simulation)
+   - **Note:** Architecture tab now uses Python-native rendering (see #10)
 
 8. **Chart.js v4** - For real-time metrics
    - Already used in RealLiveDataGenerator dashboards
@@ -256,7 +354,24 @@ This enhancement transforms the existing Application Health Dashboard into a com
    - **Status:** NOT IMPLEMENTED
    - **Requirement:** Python Socket.IO server + JS client integration
 
-10. **python-pptx** - For PowerPoint export
+10. **Python UML/Diagram Libraries** - For architecture visualization (NEW)
+    - **Primary:** `diagrams` - Modern programmatic diagram generation
+      - Version: Latest stable (pip install diagrams)
+      - Backend: Uses Graphviz for rendering
+      - Output: SVG format for CSS integration
+      - Use case: Class diagrams, component diagrams, dependency graphs
+    - **Secondary:** `pyreverse` (included with pylint) - Automatic extraction
+      - Version: Part of pylint package
+      - Use case: Auto-generate class diagrams from Python source code
+    - **Backend:** `graphviz` - Graph rendering engine
+      - Version: Latest stable (pip install graphviz)
+      - Required by diagrams library
+      - Provides DOT language compilation to SVG
+    - **Status:** NOT IMPLEMENTED
+    - **Requirement:** Add to requirements.txt with version pins
+    - **Benefit:** Native Python approach (no JavaScript dependencies for UML)
+
+11. **python-pptx** - For PowerPoint export
     - **Status:** NOT IMPLEMENTED (PDF/PNG exist via weasyprint, selenium)
     - **Requirement:** Install `python-pptx` package
 
@@ -597,30 +712,41 @@ Given this is a **local, offline dashboard generation tool** (not a web service)
 
 ---
 
-#### Task 1.2: Create Architecture Tab with D3.js Force-Directed Graph ⭐ HIGH PRIORITY
+#### Task 1.2: Create Architecture Tab with Python Native UML Rendering ⭐ HIGH PRIORITY
 
-**Description:** Add new "Architecture" tab to dashboard with interactive dependency graph visualization using D3.js force simulation.
+**Description:** Add new "Architecture" tab to dashboard with professional UML diagrams using native Python libraries (diagrams + pyreverse) with SVG output for CSS integration.
 
 **Current State:** Only "Overview" tab exists. No architecture visualization.
 
 **Implementation Steps:**
-1. Create `static/js/architecture_tab.js` with D3.js v7 force simulation
-2. Implement node coloring by health score (green = healthy, yellow = warning, red = critical)
-3. Add zoom/pan controls with mouse wheel and drag
-4. Add tooltips showing component name, LOC, dependency count on hover
-5. Update `templates/dashboard_template.html` to include Architecture tab container
+1. Install Python UML libraries: `pip install diagrams pylint graphviz`
+2. Create `src/visualization/uml_diagram_generator.py` using diagrams library
+3. Implement class diagram generation using pyreverse for automatic Python code extraction
+4. Generate component dependency graphs using diagrams library
+5. Add health score coloring to SVG nodes (green = healthy, yellow = warning, red = critical)
+6. Create `static/css/uml_diagrams.css` with professional styling matching dashboard theme:
+   - `.uml-node-healthy { fill: #28a745; }` (matches success color)
+   - `.uml-node-warning { fill: #ffc107; }` (matches warning color)
+   - `.uml-node-critical { fill: #dc3545; }` (matches danger color)
+   - `.uml-edge { stroke: #6c757d; stroke-width: 2px; }` (neutral gray)
+7. Embed SVG output in `templates/dashboard_template.html` Architecture tab
+8. Add zoom/pan controls using CSS transforms and JavaScript event handlers
+9. Add tooltips showing component name, LOC, dependency count on hover (HTML data attributes)
 
 **Acceptance Criteria:**
-- Graph renders 500 nodes in <2 seconds (performance target)
+- SVG diagram generates in <2 seconds for 500 nodes (Python execution + rendering)
+- Diagrams match existing dashboard color scheme (professional appearance validation)
+- CSS styling integrates seamlessly with D3.js visualizations in other tabs
 - Clicking node shows details panel (name, file path, metrics)
-- Zoom from 0.5x to 3x magnification without lag
+- Zoom from 0.5x to 3x magnification using CSS transforms
 - Tooltip appears within 100ms of hover
+- SVG is responsive and scales to viewport width
 
-**Estimated Effort:** 6 hours (4 hours D3.js coding, 2 hours interactivity)
+**Estimated Effort:** 6 hours (3 hours Python diagram coding, 2 hours CSS integration, 1 hour interactivity)
 
 **Dependencies:** Task 1.1 (needs architecture data)
 
-**Risk:** Medium (D3.js complexity, performance optimization)
+**Risk:** Low (diagrams library handles complexity, SVG is standard format)
 
 ---
 
@@ -943,26 +1069,40 @@ src/dashboard/
    - Success: `#28a745` (green)
    - Warning: `#ffc107` (yellow)
    - Danger: `#dc3545` (red)
+   - **UML Diagrams:** Apply same color scheme to SVG nodes/edges for consistency
 
 2. **Animations** - Smooth transitions
    - Tab switching: 300ms ease-in-out
    - Graph node hover: 150ms scale transform
    - Progress bar: Animated gradient fill
+   - **UML Diagrams:** CSS transitions on node hover (scale, shadow effects)
 
 3. **Responsive Layout** - Tablet support
    - Architecture graph scales to viewport
    - Tables stack vertically on narrow screens
    - Charts resize dynamically
+   - **UML Diagrams:** SVG viewBox ensures responsive scaling
 
 4. **Accessibility** - WCAG 2.1 Level AA
    - All charts have alt text
    - Color contrast ratio ≥4.5:1
    - Keyboard navigation for all interactive elements
+   - **UML Diagrams:** Add `<title>` and `<desc>` elements to SVG for screen readers
 
 5. **Loading States** - Clear feedback
    - Skeleton screens while loading data
    - Spinners for long operations
    - Empty state messages ("No vulnerabilities found")
+
+6. **CSS Integration for Python-Generated SVG** (NEW)
+   - Create `static/css/uml_diagrams.css` for SVG styling
+   - Define CSS classes matching existing dashboard theme:
+     - `.uml-container { width: 100%; height: 600px; overflow: auto; }`
+     - `.uml-node { cursor: pointer; transition: all 0.15s ease; }`
+     - `.uml-node:hover { filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); transform: scale(1.05); }`
+   - Ensure SVG text legibility (font-family, font-size, stroke-width)
+   - Test color contrast for node labels (white text on colored backgrounds)
+   - Validate professional appearance in side-by-side comparison with D3.js tabs
 
 **Acceptance Criteria:**
 - External reviewer rating ≥4/5 for visual appeal
@@ -989,9 +1129,10 @@ src/dashboard/
    - Troubleshooting common issues
 
 2. **Architecture Documentation**
-   - Clean architecture diagram (Mermaid)
-   - Component interaction flowchart
+   - Clean architecture diagram (Python diagrams library - generates SVG)
+   - Component interaction flowchart (using diagrams library for consistency)
    - Data flow from crawler → dashboard
+   - **Note:** Use native Python diagrams library instead of Mermaid for consistency with dashboard UML tab
 
 3. **API Documentation**
    - Docstrings for all public classes
@@ -1033,7 +1174,7 @@ src/dashboard/
 ```
 Week 1-2 (Sprint 1): Foundation & Quick Wins
 ├─ Task 1.1: DependencyGraph integration [4h]
-├─ Task 1.2: Architecture tab D3.js [6h]
+├─ Task 1.2: Architecture tab (Python UML) [6h]
 ├─ Task 1.3: 5-tab structure [8h]
 └─ Task 1.4: Multi-threading crawler [6h]
    Total: 24 hours
@@ -2290,7 +2431,7 @@ JSON Response → Browser Chart.js → Line charts with 30-day history
 ```
 Task 1.1 (Integrate DependencyGraph) [4h]
    ↓
-Task 1.2 (Architecture Tab with D3.js) [6h]  ← BLOCKS Phase 2
+Task 1.2 (Architecture Tab - Python UML) [6h]  ← BLOCKS Phase 2
    ↓
 Task 2.1 (Clean Architecture Refactor) [12h]  ← BLOCKS Tasks 2.2, 2.3
    ↓
