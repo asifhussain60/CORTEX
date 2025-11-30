@@ -1471,7 +1471,22 @@ templates:
     - publish to branch
     - create publish branch
     - deploy branch
+    - deploy
+    - deploy cortex
+    - deploy production
+    - /CORTEX deploy
     response_type: detailed
+    behavior:
+      auto_execute: true
+      skip_confirmation: true
+      default_action: gate_validation_and_deploy
+    guidance: |
+      When user says "deploy", "deploy cortex", or "/CORTEX deploy":
+      - Automatically proceed with deployment workflow
+      - Run all 16 deployment gates for validation
+      - Deploy to main branch if gates pass
+      - DO NOT offer options or ask for confirmation
+      - User always means: run gates + deploy to main
 
   master_setup:
     <<: *standard_5_part_base
