@@ -61,21 +61,72 @@ python --version
 git --version
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Python Environment Setup
+
+**CORTEX intelligently manages Python environments:**
+
+```mermaid
+graph TD
+    A[Start Setup] --> B{Existing Python<br/>Environment?}
+    B -->|No venv| C[Create .venv]
+    B -->|Global Python| C
+    B -->|Existing venv| D{Check Dependencies}
+    D -->|All Satisfied| E[Reuse Environment ✅]
+    D -->|Conflicts Found| F{Parent Project?}
+    D -->|Missing Packages| G[Install Missing]
+    F -->|Embedded CORTEX| H{Conflicts?}
+    F -->|Standalone| C
+    H -->|Yes| C
+    H -->|No| G
+    G --> E
+    C --> I[Install Requirements]
+    I --> E
+```
+
+**What CORTEX Does Automatically:**
+
+1. **Detects Environment Type:**
+   - Global Python → Creates isolated `.venv`
+   - Existing venv → Checks compatibility
+   - Parent project environment → Evaluates reuse safety
+
+2. **Checks Dependencies:**
+   - Validates all required packages (pytest, PyYAML, watchdog, etc.)
+   - Detects version conflicts (e.g., pytest 6.x vs 8.x)
+   - Identifies missing packages
+
+3. **Makes Smart Decision:**
+   - ✅ **Reuse:** All dependencies satisfied, no conflicts
+   - ✅ **Upgrade:** Missing packages only, installs them
+   - ⚠️ **Isolate:** Conflicts detected, creates separate `.venv`
+   - 🔒 **Protect:** Global Python, always creates `.venv`
+
+**Manual Installation (if needed):**
 
 ```bash
-# Create virtual environment (recommended)
-python -m venv .venv
+# CORTEX setup will handle this automatically, but for manual control:
 
-# Activate virtual environment
+# Option 1: Let CORTEX decide (recommended)
+python -m src.setup.setup_orchestrator
+
+# Option 2: Force new environment
+python -m venv .venv
 # Windows:
 .venv\Scripts\activate
 # macOS/Linux:
 source .venv/bin/activate
-
-# Install CORTEX dependencies
 pip install -r requirements.txt
 ```
+
+**Environment Decision Examples:**
+
+| Scenario | CORTEX Action | Reason |
+|----------|---------------|---------|
+| Global Python 3.11 | Create `.venv` | Isolation required |
+| Flask app venv with pytest 6.x | Create `.venv` | Conflict with pytest 8.4+ requirement |
+| Django app venv with all deps | Reuse + install missing | Compatible, efficient |
+| Parent project with PyYAML 6.0 | Reuse environment | All CORTEX deps satisfied |
+| Standalone CORTEX repo | Create `.venv` | Standard isolation |
 
 ### 3️⃣ Configure CORTEX
 

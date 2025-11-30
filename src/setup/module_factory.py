@@ -116,6 +116,12 @@ def create_orchestrator_from_yaml(
 def _auto_register_modules():
     """Auto-register all known module classes."""
     try:
+        from .modules.python_environment_module import PythonEnvironmentModule
+        register_module_class('python_environment', PythonEnvironmentModule)
+    except ImportError as e:
+        logger.warning(f"Could not load PythonEnvironmentModule: {e}")
+    
+    try:
         from .modules.vision_api_module import VisionAPIModule
         register_module_class('vision_api', VisionAPIModule)
     except ImportError as e:

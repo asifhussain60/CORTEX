@@ -1636,6 +1636,45 @@ templates:
     - holistic cleanup
     response_type: detailed
 
+  user_cleanup:
+    <<: *standard_5_part_base
+    name: User Repository Cleanup
+    expected_orchestrator: UserCleanupOrchestrator
+    triggers:
+    - user cleanup
+    - cleanup repository
+    - clean repository
+    - cleanup repo
+    - clean my repository
+    - repository cleanup
+    response_type: detailed
+
+  markdown_consolidation:
+    <<: *standard_5_part_base
+    name: Markdown Consolidation
+    expected_orchestrator: HolisticCleanupOrchestrator
+    triggers:
+    - consolidate markdown
+    - consolidate documents
+    - consolidate md files
+    - markdown consolidation
+    - merge markdown files
+    - consolidate files
+    response_type: detailed
+
+  cleanup_with_tests:
+    <<: *standard_5_part_base
+    name: Cleanup with Test Validation
+    expected_orchestrator: HolisticCleanupOrchestrator
+    triggers:
+    - cleanup with tests
+    - cleanup with validation
+    - cleanup with test harness
+    - surgical cleanup
+    - safe cleanup
+    - validated cleanup
+    response_type: detailed
+
   setup_epm:
     <<: *standard_5_part_base
     name: Setup Entry Point Module
