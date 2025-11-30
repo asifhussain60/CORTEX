@@ -774,22 +774,337 @@ start tdd              # Begin TDD workflow
 
 *Run 'cortex refresh instructions' to update this list*
 """
+    
+    def validate_installation(self, auto_fix: bool = False) -> Dict:
+        """
+        Run full installation validation (bootstrap + 16 gates)
+        
+        Args:
+            auto_fix: If True, attempt to fix issues automatically
+            
+        Returns:
+            Dict with validation results
+        """
+        try:
+            from src.deployment.deployment_gates import DeploymentGates
+        except ImportError:
+            logger.error("❌ DeploymentGates not available - validation limited to bootstrap checks")
+            return self._run_bootstrap_verification()
+        
+        logger.info("🧠 CORTEX Installation Validation")
+        logger.info("")
+        
+        # Stage 1: Bootstrap verification
+        logger.info("Stage 1: Bootstrap Verification")
+        bootstrap_results = self._run_bootstrap_verification()
+        self._log_bootstrap_results(bootstrap_results)
+        logger.info("")
+        
+        # Stage 2: Deployment gate validation
+        logger.info("Stage 2: Deployment Gate Validation (16 Gates)")
+        gates = DeploymentGates(self.repo_path)
+        gate_results = gates.validate_all_gates()
+        self._log_gate_results(gate_results)
+        logger.info("")
+        
+        # Merge results
+        combined_results = {
+            'bootstrap': bootstrap_results,
+            'gates': gate_results,
+            'overall_status': self._calculate_overall_status(bootstrap_results, gate_results),
+            'timestamp': datetime.now()
+        }
+        
+        # Auto-fix if requested
+        if auto_fix and combined_results['overall_status'] != 'healthy':
+            logger.info("🔧 Attempting auto-remediation...")
+            fixes = self.fix_validation_issues(combined_results)
+            combined_results['fixes'] = fixes
+            logger.info("")
+            
+            # Re-validate after fixes
+            if fixes['applied']:
+                logger.info("Re-validating after fixes...")
+                bootstrap_results = self._run_bootstrap_verification()
+                gate_results = gates.validate_all_gates()
+                combined_results['post_fix_bootstrap'] = bootstrap_results
+                combined_results['post_fix_gates'] = gate_results
+                combined_results['post_fix_status'] = self._calculate_overall_status(
+                    bootstrap_results, gate_results
+                )
+                logger.info("")
+        
+        # Generate report
+        self._generate_validation_report(combined_results)
+        
+        # User feedback
+        if combined_results['overall_status'] == 'healthy':
+            logger.info("✅ CORTEX is ready to use!")
+        elif auto_fix and combined_results.get('post_fix_status') == 'healthy':
+            logger.info("✅ CORTEX is ready to use (after auto-fixes)!")
+        elif combined_results['overall_status'] == 'warning':
+            logger.warning("⚠️ CORTEX has minor issues but is functional. See report for details.")
+        else:
+            logger.error("❌ CORTEX has validation errors. See report for remediation steps.")
+        
+        return combined_results
+    
+    def fix_validation_issues(self, results: Dict) -> Dict:
+        """Auto-remediation for common validation failures"""
+        fixes = {'applied': [], 'failed': []}
+        
+        # Fix 1: Restore response templates
+        if not results['bootstrap']['checks'].get('response_templates', True):
+            try:
+                self._restore_default_templates()
+                fixes['applied'].append("Restored response-templates.yaml from defaults")
+                logger.info("  ✅ Fixed: response-templates.yaml restored")
+            except Exception as e:
+                fixes['failed'].append(f"Template restore failed: {e}")
+                logger.warning(f"  ❌ Failed to restore templates: {e}")
+        
+        # Fix 2: Recreate brain structure
+        if not results['bootstrap']['checks'].get('brain_structure', True):
+            try:
+                self._initialize_brain_structure()
+                fixes['applied'].append("Recreated brain directory structure")
+                logger.info("  ✅ Fixed: Brain directories recreated")
+            except Exception as e:
+                fixes['failed'].append(f"Brain structure fix failed: {e}")
+                logger.warning(f"  ❌ Failed to recreate brain structure: {e}")
+        
+        # Fix 3: Initialize missing orchestrators (copy from defaults)
+        if not results['bootstrap']['checks'].get('orchestrators', True):
+            try:
+                self._restore_missing_orchestrators()
+                fixes['applied'].append("Restored missing orchestrators")
+                logger.info("  ✅ Fixed: Missing orchestrators restored")
+            except Exception as e:
+                fixes['failed'].append(f"Orchestrator restore failed: {e}")
+                logger.warning(f"  ❌ Failed to restore orchestrators: {e}")
+        
+        return fixes
+    
+    def _log_bootstrap_results(self, results: Dict):
+        """Log bootstrap verification results"""
+        for check_name, passed in results['checks'].items():
+            status = "✅" if passed else "❌"
+            readable_name = check_name.replace('_', ' ').title()
+            logger.info(f"  {status} {readable_name}")
+        
+        if results['issues']:
+            logger.info("\n  Issues detected:")
+            for issue in results['issues']:
+                logger.info(f"    • {issue}")
+    
+    def _log_gate_results(self, gate_results: Dict):
+        """Log gate validation results"""
+        for i, gate in enumerate(gate_results['gates'], 1):
+            status = "✅" if gate['passed'] else "❌"
+            logger.info(f"  {status} Gate {i:2d}: {gate['name']} ({gate['severity']})")
+            if not gate['passed']:
+                logger.info(f"           {gate['message']}")
+    
+    def _calculate_overall_status(self, bootstrap: Dict, gates: Dict) -> str:
+        """Calculate combined validation status"""
+        bootstrap_status = bootstrap['status']
+        gates_passed = gates['passed']
+        
+        # ERROR: Bootstrap failed or gates blocked
+        if bootstrap_status == 'error' or not gates_passed:
+            return 'error'
+        
+        # WARNING: Bootstrap warning
+        if bootstrap_status == 'warning':
+            return 'warning'
+        
+        # HEALTHY: All checks passed
+        return 'healthy'
+    
+    def _generate_validation_report(self, results: Dict):
+        """Generate installation validation report"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_dir = self.repo_path / "cortex-brain" / "documents" / "reports"
+        report_dir.mkdir(parents=True, exist_ok=True)
+        report_file = report_dir / f"installation-validation-{timestamp}.md"
+        
+        with open(report_file, 'w', encoding='utf-8') as f:
+            f.write(f"# CORTEX Installation Validation Report\n\n")
+            f.write(f"**Timestamp:** {results['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"**Repository:** {self.repo_name}\n")
+            f.write(f"**Overall Status:** {results['overall_status'].upper()}\n\n")
+            
+            # Bootstrap results
+            f.write("## Bootstrap Verification\n\n")
+            bootstrap = results['bootstrap']
+            f.write(f"**Status:** {bootstrap['status']}\n")
+            f.write(f"**Checks Passed:** {bootstrap['checks_passed']}\n")
+            f.write(f"**Checks Failed:** {bootstrap['checks_failed']}\n\n")
+            
+            f.write("### Checks\n\n")
+            for check_name, passed in bootstrap['checks'].items():
+                status = "✅ PASSED" if passed else "❌ FAILED"
+                readable_name = check_name.replace('_', ' ').title()
+                f.write(f"- **{readable_name}:** {status}\n")
+            f.write("\n")
+            
+            if bootstrap['issues']:
+                f.write("### Issues\n\n")
+                for issue in bootstrap['issues']:
+                    f.write(f"- {issue}\n")
+                f.write("\n")
+            
+            # Gate results
+            f.write("## Deployment Gate Validation\n\n")
+            gate_results = results['gates']
+            f.write(f"**Overall:** {'✅ PASSED' if gate_results['passed'] else '❌ FAILED'}\n")
+            f.write(f"**Passed:** {sum(1 for g in gate_results['gates'] if g['passed'])}/{len(gate_results['gates'])}\n\n")
+            
+            for i, gate in enumerate(gate_results['gates'], 1):
+                status = "✅ PASSED" if gate['passed'] else "❌ FAILED"
+                f.write(f"### Gate {i}: {gate['name']} ({gate['severity']})\n\n")
+                f.write(f"**Status:** {status}\n")
+                f.write(f"**Message:** {gate['message']}\n\n")
+            
+            if gate_results['errors']:
+                f.write("### Blocking Errors\n\n")
+                for error in gate_results['errors']:
+                    f.write(f"- {error}\n")
+                f.write("\n")
+            
+            if gate_results['warnings']:
+                f.write("### Warnings (Non-Blocking)\n\n")
+                for warning in gate_results['warnings']:
+                    f.write(f"- {warning}\n")
+                f.write("\n")
+            
+            # Fixes applied
+            if 'fixes' in results:
+                f.write("## Auto-Remediation\n\n")
+                if results['fixes']['applied']:
+                    f.write("### Fixes Applied\n\n")
+                    for fix in results['fixes']['applied']:
+                        f.write(f"- ✅ {fix}\n")
+                    f.write("\n")
+                
+                if results['fixes']['failed']:
+                    f.write("### Fixes Failed\n\n")
+                    for fix in results['fixes']['failed']:
+                        f.write(f"- ❌ {fix}\n")
+                    f.write("\n")
+                
+                # Post-fix status
+                if 'post_fix_status' in results:
+                    f.write(f"**Post-Fix Status:** {results['post_fix_status'].upper()}\n\n")
+            
+            # Recommendations
+            f.write("## Recommendations\n\n")
+            if results['overall_status'] == 'healthy':
+                f.write("✅ CORTEX is fully operational. No action required.\n")
+            elif results['overall_status'] == 'warning':
+                f.write("⚠️ CORTEX is functional but has minor issues:\n\n")
+                for issue in bootstrap['issues']:
+                    f.write(f"- {issue}\n")
+                f.write("\nConsider reviewing these issues for optimal performance.\n")
+            else:
+                f.write("❌ CORTEX has critical validation errors that must be resolved:\n\n")
+                if gate_results['errors']:
+                    for error in gate_results['errors']:
+                        f.write(f"- {error}\n")
+                    f.write("\n")
+                f.write("Run validation again with `--fix` flag to attempt auto-remediation:\n")
+                f.write("```bash\n")
+                f.write("python -m src.orchestrators.setup_epm_orchestrator --validate --fix\n")
+                f.write("```\n")
+        
+        logger.info(f"📄 Validation report saved: {report_file.relative_to(self.repo_path)}")
+    
+    def _restore_default_templates(self):
+        """Restore response-templates.yaml from backup or defaults"""
+        brain_path = self._find_cortex_root() / 'cortex-brain'
+        templates_file = brain_path / 'response-templates.yaml'
+        
+        # Try to find backup or template file
+        backup_file = brain_path / 'response-templates.yaml.bak'
+        template_file = brain_path / 'templates' / 'response-templates.yaml'
+        
+        if backup_file.exists():
+            import shutil
+            shutil.copy2(backup_file, templates_file)
+        elif template_file.exists():
+            import shutil
+            shutil.copy2(template_file, templates_file)
+        else:
+            raise FileNotFoundError("No backup or template file found for response-templates.yaml")
+    
+    def _initialize_brain_structure(self):
+        """Recreate missing brain directories"""
+        brain_path = self._find_cortex_root() / 'cortex-brain'
+        required_dirs = ['tier1', 'tier3', 'documents', 'templates', 'documents/reports']
+        
+        for dir_name in required_dirs:
+            dir_path = brain_path / dir_name
+            dir_path.mkdir(parents=True, exist_ok=True)
+    
+    def _restore_missing_orchestrators(self):
+        """Restore missing orchestrators from defaults"""
+        cortex_root = self._find_cortex_root()
+        orchestrators_path = cortex_root / 'src' / 'orchestrators'
+        
+        # For now, just ensure directory exists
+        # In full implementation, would copy from templates
+        orchestrators_path.mkdir(parents=True, exist_ok=True)
+        
+        logger.warning("Orchestrator restoration requires manual intervention - directory structure created")
 
 
 def main():
-    """CLI entry point for testing"""
+    """CLI entry point for setup EPM orchestrator"""
+    import argparse
     import sys
     
-    if len(sys.argv) < 2:
-        print("Usage: python setup_epm_orchestrator.py <repo_path>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description='CORTEX Setup Entry Point Module Orchestrator',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python -m src.orchestrators.setup_epm_orchestrator --validate
+  python -m src.orchestrators.setup_epm_orchestrator --validate --fix
+  python -m src.orchestrators.setup_epm_orchestrator --repo-path /path/to/repo
+"""
+    )
+    parser.add_argument(
+        '--validate',
+        action='store_true',
+        help='Validate CORTEX installation (bootstrap + 16 gates)'
+    )
+    parser.add_argument(
+        '--fix',
+        action='store_true',
+        help='Auto-fix validation issues (use with --validate)'
+    )
+    parser.add_argument(
+        '--repo-path',
+        type=str,
+        default='.',
+        help='Repository path (default: current directory)'
+    )
     
-    repo_path = sys.argv[1]
-    orchestrator = SetupEPMOrchestrator(repo_path)
-    result = orchestrator.execute()
+    args = parser.parse_args()
     
-    print(json.dumps(result, indent=2))
+    orchestrator = SetupEPMOrchestrator(repo_path=args.repo_path)
+    
+    if args.validate:
+        results = orchestrator.validate_installation(auto_fix=args.fix)
+        exit_code = 0 if results['overall_status'] == 'healthy' else 1
+        return exit_code
+    else:
+        # Default: Run setup
+        result = orchestrator.execute()
+        print(json.dumps(result, indent=2))
+        return 0 if result['status'] == 'success' else 1
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(main())

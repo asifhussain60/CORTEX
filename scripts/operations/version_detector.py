@@ -48,7 +48,7 @@ class VersionDetector:
         # Check common locations
         common_paths = [
             Path.home() / "PROJECTS" / "CORTEX",
-            Path("D:/PROJECTS/CORTEX"),
+            Path(__file__).resolve().parent.parent.parent,
             Path("C:/PROJECTS/CORTEX"),
         ]
         

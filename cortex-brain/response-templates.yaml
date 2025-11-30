@@ -405,6 +405,13 @@ templates:
     - governance_banner
     response_type: banner
     content: |
+      # 🧠 CORTEX Governance Rules
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 💬 Response
+      
       ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
       Γòæ                  ≡ƒºá CORTEX GOVERNANCE RULES ACTIVE                       Γòæ
       ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
@@ -429,6 +436,14 @@ templates:
       
       Full Rulebook: cortex-brain/brain-protection-rules.yaml
       ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+      
+      ## 📝 Your Request
+      View CORTEX governance rules
+      
+      ## 🔍 Next Steps
+      - Say "got it" to dismiss this banner
+      - Say "show rules" for full documentation
+      - Continue with your request to start working
   
   governance_onboarding_step1:
     name: Governance Onboarding - Step 1 (Welcome)
@@ -439,6 +454,16 @@ templates:
     expected_orchestrator: OnboardingAcknowledgmentOrchestrator
     response_type: narrative
     content: |
+      # 🧠 CORTEX Governance Onboarding - Welcome
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You're starting CORTEX for the first time and want to understand the governance system.
+      
+      ## 💬 Response
+      
       # ≡ƒºá Welcome to CORTEX Enhancement System
       
       ## Your AI Coding Assistant with Governance
@@ -478,6 +503,10 @@ templates:
       
       ---
       
+      ## 📝 Your Request
+      Start governance onboarding
+      
+      ## 🔍 Next Steps
       **Ready to continue?** Say "next" or "continue" to see the rulebook.
   
   governance_onboarding_step2:
@@ -490,6 +519,16 @@ templates:
     expected_orchestrator: OnboardingAcknowledgmentOrchestrator
     response_type: narrative
     content: |
+      # 🧠 CORTEX Governance Onboarding - Rulebook
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You want to learn about CORTEX's 7 core governance protection layers.
+      
+      ## 💬 Response
+      
       # ≡ƒôû CORTEX Governance Rulebook (Overview)
       
       **Progress: [2/3]**
@@ -566,6 +605,10 @@ templates:
       
       **Full Rulebook:** `cortex-brain/brain-protection-rules.yaml`
       
+      ## 📝 Your Request
+      Review governance rulebook
+      
+      ## 🔍 Next Steps
       **Ready to acknowledge?** Say "acknowledge" or "I understand" to complete onboarding.
   
   governance_onboarding_step3:
@@ -580,6 +623,16 @@ templates:
     expected_orchestrator: OnboardingAcknowledgmentOrchestrator
     response_type: narrative
     content: |
+      # 🧠 CORTEX Governance Onboarding - Acknowledgment
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You're ready to acknowledge the governance rules and complete onboarding.
+      
+      ## 💬 Response
+      
       # Γ£à Acknowledgment & Completion
       
       **Progress: [3/3]**
@@ -617,6 +670,12 @@ templates:
       
       **Once you acknowledge, you won't see this onboarding again.**  
       (But you can always access the rulebook with `show rules`)
+      
+      ## 📝 Your Request
+      Acknowledge governance rules
+      
+      ## 🔍 Next Steps
+      Say "I acknowledge" or "confirmed" to complete onboarding and start using CORTEX.
   
   governance_onboarding_complete:
     name: Governance Onboarding - Complete
@@ -626,6 +685,16 @@ templates:
     expected_orchestrator: OnboardingAcknowledgmentOrchestrator
     response_type: success
     content: |
+      # 🧠 CORTEX Governance Onboarding - Complete
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## 🎯 My Understanding Of Your Request
+      You've completed governance onboarding and acknowledged the rules.
+      
+      ## 💬 Response
+      
       # ≡ƒÄë Onboarding Complete!
       
       Γ£à **Governance acknowledgment recorded**
@@ -653,6 +722,12 @@ templates:
       - Say `compliance` to check rule adherence
       
       **Welcome to governed AI development with CORTEX!** ≡ƒÜÇ
+      
+      ## 📝 Your Request
+      Complete governance onboarding
+      
+      ## 🔍 Next Steps
+      Try your first command: `help`, `plan [feature]`, or `start tdd`
   
   introduction_discovery:
     name: CORTEX Discovery & Introduction
@@ -1396,7 +1471,22 @@ templates:
     - publish to branch
     - create publish branch
     - deploy branch
+    - deploy
+    - deploy cortex
+    - deploy production
+    - /CORTEX deploy
     response_type: detailed
+    behavior:
+      auto_execute: true
+      skip_confirmation: true
+      default_action: gate_validation_and_deploy
+    guidance: |
+      When user says "deploy", "deploy cortex", or "/CORTEX deploy":
+      - Automatically proceed with deployment workflow
+      - Run all 16 deployment gates for validation
+      - Deploy to main branch if gates pass
+      - DO NOT offer options or ask for confirmation
+      - User always means: run gates + deploy to main
 
   master_setup:
     <<: *standard_5_part_base
@@ -1794,11 +1884,36 @@ templates:
       ---
 
 
+      ## 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ## ⚠️ Challenge
+
+      No Challenge - This is new territory with no learned patterns.
+
+
+      ## 💬 Response
+
       ℹ️ **New Territory:** No learned patterns available for this request.
 
 
-      Generating fresh response using CORTEX capabilities.'
-    placeholders: []
+      Generating fresh response using CORTEX capabilities.
+
+
+      ## 📝 Your Request
+
+      {request_echo}
+
+
+      ## 🔍 Next Steps
+
+      {next_steps}'
+    placeholders:
+    - understanding_content
+    - request_echo
+    - next_steps
   system_alignment_report:
     <<: *standard_5_part_base
     name: System Alignment Report

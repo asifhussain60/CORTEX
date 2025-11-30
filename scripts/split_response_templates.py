@@ -48,8 +48,8 @@ def split_templates():
     """Split response-templates.yaml into category-specific files"""
     
     # Paths
-    source_file = Path('d:/PROJECTS/CORTEX/cortex-brain/response-templates.yaml')
-    output_dir = Path('d:/PROJECTS/CORTEX/cortex-brain/response-templates')
+    source_file = Path(__file__).resolve().parent.parent / 'cortex-brain' / 'response-templates.yaml'
+    output_dir = Path(__file__).resolve().parent.parent / 'cortex-brain' / 'response-templates'
     
     # Create output directory
     output_dir.mkdir(parents=True, exist_ok=True)

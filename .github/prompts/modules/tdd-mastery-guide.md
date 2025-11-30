@@ -82,14 +82,22 @@ CORTEX: 🎯 Found 4 code smells in Python code:
 ## State Machine
 
 ```
-IDLE → RED (test fails) → auto-debug session
+IDLE → RED (test fails) → auto-debug session → auto-checkpoint (git)
   ↓
-GREEN (test passes) → capture timing data → collect feedback
+GREEN (test passes) → capture timing data → collect feedback → auto-checkpoint (git)
   ↓
-REFACTOR → performance analysis → suggest optimizations
+REFACTOR → performance analysis → suggest optimizations → auto-checkpoint (git)
   ↓
 COMPLETE → validate improvements
 ```
+
+**Git Checkpoint Integration:**
+- **RED State:** Auto-checkpoint after test creation (captures failing test before implementation)
+- **GREEN State:** Auto-checkpoint after test passes (minimal working implementation)
+- **REFACTOR State:** Auto-checkpoint after refactoring (clean code while tests pass)
+- **Benefit:** Enforces TDD discipline, prevents implementation before test failure verification
+- **Configuration:** Set `auto_checkpoint.enabled: true` in `git-checkpoint-rules.yaml`
+- **See Also:** Git Checkpoint Orchestrator Guide for detailed configuration
 
 ---
 
