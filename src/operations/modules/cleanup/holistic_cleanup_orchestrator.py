@@ -39,6 +39,20 @@ except ImportError:
     logger = logging.getLogger(__name__)
     logger.warning("Cleanup validation modules not available - validation will be skipped")
 
+try:
+    from .cleanup_test_harness import CleanupTestHarness
+    TEST_HARNESS_AVAILABLE = True
+except ImportError:
+    TEST_HARNESS_AVAILABLE = False
+    logger.warning("Cleanup test harness not available - test validation will be skipped")
+
+try:
+    from .markdown_consolidation_engine import MarkdownConsolidationEngine
+    MARKDOWN_CONSOLIDATION_AVAILABLE = True
+except ImportError:
+    MARKDOWN_CONSOLIDATION_AVAILABLE = False
+    logger.warning("Markdown consolidation engine not available - consolidation will be skipped")
+
 logger = logging.getLogger(__name__)
 
 
@@ -478,6 +492,10 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             '.vscode/', 'node_modules/', 'package.json', 'LICENSE',
             'README.md', 'requirements.txt', 'cortex.config.json'
         }
+        
+        # Test harness (optional)
+        self.test_harness: Optional['CleanupTestHarness'] = None
+        self.enable_test_validation = True  # Can be disabled via context
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Module metadata"""
@@ -605,6 +623,37 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
                 logger.info("   Cleanup is safe to execute")
                 logger.info("")
             
+            # NEW: Phase 4.5: Test Harness Baseline (if enabled)
+            test_baseline_captured = False
+            if TEST_HARNESS_AVAILABLE and context.get('enable_test_validation', self.enable_test_validation):
+                logger.info("Phase 4.5: Test Harness Baseline")
+                logger.info("-" * 70)
+                
+                try:
+                    self.test_harness = CleanupTestHarness(
+                        workspace_root=self.project_root,
+                        test_command=context.get('test_command', 'pytest tests/ -v --tb=short'),
+                        coverage_command=context.get('coverage_command')
+                    )
+                    
+                    baseline = self.test_harness.capture_baseline()
+                    test_baseline_captured = True
+                    
+                    logger.info(f"✅ Test baseline captured: {baseline.passed_tests}/{baseline.total_tests} passing")
+                    logger.info(f"   Coverage: {baseline.coverage_percent:.1f}%")
+                    
+                    if baseline.failed_tests > 0:
+                        logger.warning(f"⚠️  Baseline has {baseline.failed_tests} failing tests")
+                        logger.warning("   Cleanup may introduce additional failures")
+                    
+                    logger.info("")
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️  Could not capture test baseline: {e}")
+                    logger.warning("   Proceeding without test validation")
+                    self.test_harness = None
+                    logger.info("")
+            
             # Phase 5: Summary
             logger.info("=" * 70)
             logger.info("CLEANUP MANIFEST SUMMARY")
@@ -646,50 +695,116 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             )
     
     def _execute_cleanup_actions(self, manifest_data: Dict[str, Any]) -> OperationResult:
-        """Execute actual cleanup actions from manifest"""
+        """Execute actual cleanup actions from manifest with category-level validation"""
         try:
             logger.info("Phase 4: Executing Cleanup Actions")
             logger.info("-" * 70)
             
             proposed_actions = manifest_data.get('proposed_actions', [])
             
+            # Group actions by category for batch validation
+            actions_by_category = defaultdict(list)
+            for action in proposed_actions:
+                category = action.get('category', 'other')
+                actions_by_category[category].append(action)
+            
             files_deleted = 0
             files_renamed = 0
             space_freed = 0.0
             errors = []
+            rollback_occurred = False
             
-            for action in proposed_actions:
-                try:
-                    file_path = Path(action['file'])
-                    
-                    if not file_path.exists():
-                        logger.warning(f"File not found, skipping: {file_path}")
-                        continue
-                    
-                    if action['action'] == 'delete':
-                        # Delete file
-                        file_size_mb = file_path.stat().st_size / (1024 * 1024)
-                        file_path.unlink()
-                        files_deleted += 1
-                        space_freed += file_size_mb
-                        logger.info(f"  ✅ Deleted: {file_path.name} ({file_size_mb:.2f} MB)")
+            # Process each category with test validation
+            for category, category_actions in actions_by_category.items():
+                logger.info(f"\n📦 Processing category: {category} ({len(category_actions)} actions)")
+                logger.info("-" * 50)
+                
+                # Backup files before deletion
+                if self.test_harness:
+                    files_to_backup = [Path(a['file']) for a in category_actions if Path(a['file']).exists()]
+                    backup_path = self.test_harness.backup_files(files_to_backup)
+                else:
+                    backup_path = None
+                
+                # Execute actions for this category
+                category_deleted = 0
+                category_renamed = 0
+                category_space_freed = 0.0
+                
+                for action in category_actions:
+                    try:
+                        file_path = Path(action['file'])
                         
-                    elif action['action'] == 'rename':
-                        # Rename file
-                        new_name = action.get('new_name')
-                        if new_name:
-                            new_path = file_path.parent / new_name
-                            if not new_path.exists():
-                                file_path.rename(new_path)
-                                files_renamed += 1
-                                logger.info(f"  ✅ Renamed: {file_path.name} → {new_name}")
-                            else:
-                                logger.warning(f"Target exists, skipping rename: {new_name}")
+                        if not file_path.exists():
+                            logger.warning(f"File not found, skipping: {file_path}")
+                            continue
                         
-                except Exception as e:
-                    error_msg = f"Failed to process {action['file']}: {str(e)}"
-                    errors.append(error_msg)
-                    logger.error(f"  ❌ {error_msg}")
+                        if action['action'] == 'delete':
+                            # Delete file
+                            file_size_mb = file_path.stat().st_size / (1024 * 1024)
+                            file_path.unlink()
+                            category_deleted += 1
+                            category_space_freed += file_size_mb
+                            logger.info(f"  ✅ Deleted: {file_path.name} ({file_size_mb:.2f} MB)")
+                            
+                        elif action['action'] == 'rename':
+                            # Rename file
+                            new_name = action.get('new_name')
+                            if new_name:
+                                new_path = file_path.parent / new_name
+                                if not new_path.exists():
+                                    file_path.rename(new_path)
+                                    category_renamed += 1
+                                    logger.info(f"  ✅ Renamed: {file_path.name} → {new_name}")
+                                else:
+                                    logger.warning(f"Target exists, skipping rename: {new_name}")
+                            
+                    except Exception as e:
+                        error_msg = f"Failed to process {action['file']}: {str(e)}"
+                        errors.append(error_msg)
+                        logger.error(f"  ❌ {error_msg}")
+                
+                # Validate with test harness after category cleanup
+                if self.test_harness and (category_deleted > 0 or category_renamed > 0):
+                    logger.info(f"\n🧪 Validating category: {category}")
+                    
+                    validation_result = self.test_harness.validate_category(category)
+                    
+                    if validation_result.has_failures():
+                        # Rollback this category
+                        logger.error(f"❌ Test validation failed for category: {category}")
+                        logger.error("   Rolling back changes...")
+                        
+                        if backup_path and self.test_harness.rollback_category(backup_path):
+                            logger.warning(f"✅ Rollback successful for {category}")
+                            rollback_occurred = True
+                            
+                            # Don't count these as successful actions
+                            errors.append(f"Category {category} rolled back due to test failures")
+                        else:
+                            logger.error(f"❌ Rollback failed for {category}")
+                            errors.append(f"Failed to rollback category {category}")
+                            
+                            # Still count the actions since we can't undo them
+                            files_deleted += category_deleted
+                            files_renamed += category_renamed
+                            space_freed += category_space_freed
+                        
+                        # Stop processing remaining categories
+                        logger.error("\n⚠️  Cleanup aborted due to test failures")
+                        logger.error("   Remaining categories will not be processed")
+                        break
+                    else:
+                        # Validation passed, keep the changes
+                        files_deleted += category_deleted
+                        files_renamed += category_renamed
+                        space_freed += category_space_freed
+                        logger.info(f"✅ Validation passed for {category}")
+                else:
+                    # No test harness, just count the actions
+                    files_deleted += category_deleted
+                    files_renamed += category_renamed
+                    space_freed += category_space_freed
             
             logger.info("")
             logger.info("=" * 70)
@@ -700,7 +815,18 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             logger.info(f"Space Freed: {space_freed:.2f} MB")
             if errors:
                 logger.warning(f"Errors: {len(errors)}")
+            if rollback_occurred:
+                logger.warning("⚠️  Some categories were rolled back due to test failures")
             logger.info("")
+            
+            # Generate test validation report if harness was used
+            if self.test_harness:
+                validation_report = self.test_harness.generate_validation_report()
+                validation_report_path = self.project_root / 'cortex-brain' / 'documents' / 'reports' / f'cleanup-test-validation-{datetime.now().strftime("%Y%m%d-%H%M%S")}.md'
+                validation_report_path.parent.mkdir(parents=True, exist_ok=True)
+                validation_report_path.write_text(validation_report, encoding='utf-8')
+                logger.info(f"📄 Test validation report: {validation_report_path.relative_to(self.project_root)}")
+                logger.info("")
             
             # NEW: Post-Cleanup Verification
             if VALIDATION_AVAILABLE:
@@ -752,6 +878,112 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
                 success=False,
                 status=OperationStatus.FAILED,
                 message=f"Cleanup execution failed: {str(e)}",
+                data={'error': str(e)}
+            )
+    
+    def execute_markdown_consolidation(
+        self,
+        documents_root: Optional[Path] = None,
+        dry_run: bool = True
+    ) -> OperationResult:
+        """
+        Execute markdown file consolidation.
+        
+        Args:
+            documents_root: Root directory for documents (default: cortex-brain/documents)
+            dry_run: If True, only preview changes
+            
+        Returns:
+            OperationResult with consolidation report
+        """
+        if not MARKDOWN_CONSOLIDATION_AVAILABLE:
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message="Markdown consolidation engine not available",
+                data={'error': 'Module not imported'}
+            )
+        
+        try:
+            logger.info("=" * 70)
+            logger.info("MARKDOWN CONSOLIDATION")
+            logger.info("=" * 70)
+            logger.info(f"Mode: {'DRY RUN' if dry_run else 'LIVE EXECUTION'}")
+            logger.info("")
+            
+            documents_root = documents_root or (self.project_root / 'cortex-brain' / 'documents')
+            
+            if not documents_root.exists():
+                return OperationResult(
+                    success=False,
+                    status=OperationStatus.FAILED,
+                    message=f"Documents directory not found: {documents_root}",
+                    data={'error': 'Directory not found'}
+                )
+            
+            # Initialize engine
+            engine = MarkdownConsolidationEngine(
+                documents_root=documents_root,
+                archive_retention_days=30
+            )
+            
+            # Phase 1: Discovery
+            logger.info("Phase 1: File Discovery")
+            logger.info("-" * 70)
+            discovered = engine.discover_files()
+            logger.info("")
+            
+            # Phase 2: Analysis
+            logger.info("Phase 2: Consolidation Analysis")
+            logger.info("-" * 70)
+            rules = engine.analyze_consolidation_opportunities()
+            logger.info("")
+            
+            # Phase 3: Execution
+            logger.info("Phase 3: Consolidation Execution")
+            logger.info("-" * 70)
+            report = engine.execute_consolidation(rules=rules, dry_run=dry_run)
+            logger.info("")
+            
+            # Save report
+            report_path = self.project_root / 'cortex-brain' / 'documents' / 'reports' / f'markdown-consolidation-{datetime.now().strftime("%Y%m%d-%H%M%S")}.md'
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            report_content = self._generate_consolidation_report(report)
+            report_path.write_text(report_content, encoding='utf-8')
+            
+            logger.info("=" * 70)
+            logger.info("CONSOLIDATION SUMMARY")
+            logger.info("=" * 70)
+            logger.info(f"Files: {report.files_before} → {report.files_after} ({report.files_before - report.files_after} reduced)")
+            logger.info(f"Size: {report.size_before_mb:.2f} MB → {report.size_after_mb:.2f} MB")
+            logger.info(f"Reduction: {((report.files_before - report.files_after) / report.files_before * 100) if report.files_before > 0 else 0:.1f}%")
+            logger.info(f"Archived: {len(report.archived_files)} files")
+            logger.info(f"Execution Time: {report.execution_time:.2f}s")
+            logger.info("")
+            
+            if dry_run:
+                logger.info("🔍 DRY RUN COMPLETE - No changes made")
+                logger.info(f"📄 Review report: {report_path.relative_to(self.project_root)}")
+                logger.info("To execute, run with dry_run=False or say 'approve consolidation'")
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message=f"Markdown consolidation {'preview' if dry_run else 'complete'}: {report.files_before - report.files_after} files reduced",
+                data={
+                    'report': report.to_dict(),
+                    'report_path': str(report_path),
+                    'dry_run': dry_run
+                }
+            )
+            
+        except Exception as e:
+            logger.error(f"Markdown consolidation failed: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Consolidation failed: {str(e)}",
                 data={'error': str(e)}
             )
     
@@ -891,6 +1123,79 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             lines.append("Cleanup has been blocked to protect CORTEX functionality.")
             lines.append("Please review and fix the critical issues listed above before proceeding.")
             lines.append("")
+        
+        return "\n".join(lines)
+
+    def _generate_consolidation_report(self, report) -> str:
+        """Generate markdown consolidation report"""
+        from .markdown_consolidation_engine import ConsolidationReport
+        
+        lines = []
+        
+        # Header
+        lines.append("# Markdown Consolidation Report")
+        lines.append("")
+        lines.append(f"**Generated:** {report.generated_at.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"**Execution Time:** {report.execution_time:.2f}s")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        
+        # Summary
+        lines.append("## 📊 Summary")
+        lines.append("")
+        lines.append(f"- **Files Before:** {report.files_before}")
+        lines.append(f"- **Files After:** {report.files_after}")
+        lines.append(f"- **Reduction:** {report.files_before - report.files_after} files ({((report.files_before - report.files_after) / report.files_before * 100) if report.files_before > 0 else 0:.1f}%)")
+        lines.append(f"- **Size Before:** {report.size_before_mb:.2f} MB")
+        lines.append(f"- **Size After:** {report.size_after_mb:.2f} MB")
+        lines.append(f"- **Archived Files:** {len(report.archived_files)}")
+        lines.append("")
+        
+        # Rules Applied
+        lines.append("## 📋 Rules Applied")
+        lines.append("")
+        
+        if not report.rules_applied:
+            lines.append("No consolidation rules were applied.")
+        else:
+            for i, rule in enumerate(report.rules_applied, 1):
+                lines.append(f"### Rule {i}: {rule.name}")
+                lines.append("")
+                lines.append(f"- **Action:** {rule.action.replace('_', ' ').title()}")
+                lines.append(f"- **Pattern:** `{rule.pattern}`")
+                lines.append(f"- **Files Affected:** {len(rule.file_paths)}")
+                if rule.target_filename:
+                    lines.append(f"- **Target File:** `{rule.target_filename}`")
+                lines.append(f"- **Estimated Reduction:** {rule.estimated_reduction} files")
+                lines.append("")
+                
+                if rule.file_paths and len(rule.file_paths) <= 10:
+                    lines.append("**Files:**")
+                    for file_path in rule.file_paths:
+                        lines.append(f"- `{file_path.name}`")
+                    lines.append("")
+                elif rule.file_paths:
+                    lines.append(f"**Files:** {len(rule.file_paths)} files (first 5 shown)")
+                    for file_path in rule.file_paths[:5]:
+                        lines.append(f"- `{file_path.name}`")
+                    lines.append(f"- ... and {len(rule.file_paths) - 5} more")
+                    lines.append("")
+        
+        # Errors
+        if report.errors:
+            lines.append("## ❌ Errors")
+            lines.append("")
+            for error in report.errors:
+                lines.append(f"- {error}")
+            lines.append("")
+        
+        # Footer
+        lines.append("---")
+        lines.append("")
+        lines.append("**Archive Location:** `.archive/` in documents root")
+        lines.append(f"**Retention Policy:** {30} days")
+        lines.append("")
         
         return "\n".join(lines)
 
