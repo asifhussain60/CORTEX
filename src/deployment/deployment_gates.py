@@ -206,6 +206,15 @@ class DeploymentGates:
         elif gate17["severity"] == "WARNING" and not gate17["passed"]:
             results["warnings"].append(gate17["message"])
         
+        # Gate 18: EPM Wiring Enforcement (CRITICAL)
+        gate18 = self._validate_epm_wiring_enforcement()
+        results["gates"].append(gate18)
+        if gate18["severity"] == "ERROR" and not gate18["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate18["message"])
+        elif gate18["severity"] == "WARNING" and not gate18["passed"]:
+            results["warnings"].append(gate18["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -2315,5 +2324,147 @@ class DeploymentGates:
             gate["severity"] = "ERROR"
             gate["message"] = f"Incremental work management validation failed: {str(e)}"
             logger.error(f"Gate 17 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_epm_wiring_enforcement(self) -> Dict[str, Any]:
+        """
+        Gate 18: Enforce SetupEPMOrchestrator is wired in alignment state.
+        
+        CRITICAL: Blocks deployment if EPM orchestrator not wired.
+        EPM (Entry Point Module) orchestrator is the primary entry point for
+        user repositories - must be operational before production deployment.
+        
+        Validates:
+        - Alignment state file exists
+        - SetupEPMOrchestrator entry exists
+        - wired field is true
+        
+        Returns:
+            Gate result with ERROR severity (blocks deployment if not wired)
+        """
+        logger = logging.getLogger(__name__)
+        gate = {
+            "name": "EPM Wiring Enforcement",
+            "passed": True,
+            "severity": "ERROR",  # Blocks deployment
+            "message": "",
+            "details": {}
+        }
+        
+        try:
+            # 1. Load alignment state
+            alignment_path = self.project_root / "cortex-brain" / ".alignment-state.json"
+            if not alignment_path.exists():
+                gate["passed"] = False
+                gate["message"] = (
+                    "Alignment state file not found. "
+                    "Cannot verify EPM orchestrator wiring status."
+                )
+                gate["details"]["action"] = "Run 'align' or 'system alignment' to generate alignment state"
+                gate["details"]["expected_path"] = str(alignment_path)
+                logger.error(f"Gate 18 FAILED: Alignment state not found at {alignment_path}")
+                return gate
+            
+            # 2. Parse JSON
+            import json
+            with open(alignment_path) as f:
+                alignment_state = json.load(f)
+            
+            # Get feature_scores dictionary (new alignment state structure)
+            feature_scores = alignment_state.get("feature_scores", {})
+            
+            gate["details"]["alignment_file_loaded"] = True
+            gate["details"]["orchestrator_count"] = len(feature_scores)
+            
+            # 3. Check SetupEPMOrchestrator exists in feature_scores
+            if "SetupEPMOrchestrator" not in feature_scores:
+                gate["passed"] = False
+                gate["message"] = (
+                    "SetupEPMOrchestrator not found in alignment state feature_scores. "
+                    "EPM orchestrator must be discovered before deployment."
+                )
+                gate["details"]["action"] = (
+                    "Ensure SetupEPMOrchestrator exists in src/orchestrators/ "
+                    "and run 'align' to discover it"
+                )
+                gate["details"]["available_orchestrators"] = list(feature_scores.keys())[:10]  # First 10
+                logger.error("Gate 18 FAILED: SetupEPMOrchestrator not in alignment state feature_scores")
+                return gate
+            
+            # 4. Validate wired = true
+            epm_status = feature_scores["SetupEPMOrchestrator"]
+            is_wired = epm_status.get("wired", False)
+            
+            gate["details"]["epm_status"] = {
+                "score": epm_status.get("score", 0),
+                "discovered": epm_status.get("discovered", False),
+                "imported": epm_status.get("imported", False),
+                "instantiated": epm_status.get("instantiated", False),
+                "documented": epm_status.get("documented", False),
+                "tested": epm_status.get("tested", False),
+                "wired": is_wired,
+                "optimized": epm_status.get("optimized", False),
+                "timestamp": epm_status.get("timestamp", "unknown")
+            }
+            
+            if not is_wired:
+                gate["passed"] = False
+                gate["message"] = (
+                    "SetupEPMOrchestrator NOT WIRED (wired=false). "
+                    "EPM must be wired in response templates before production deployment. "
+                    f"Current score: {epm_status.get('score', 0)}/100"
+                )
+                gate["details"]["action"] = (
+                    "Add SetupEPMOrchestrator trigger to response-templates.yaml "
+                    "and ensure routing configuration exists"
+                )
+                gate["details"]["missing_layers"] = []
+                
+                # Identify specific missing integration layers
+                if not epm_status.get("discovered"):
+                    gate["details"]["missing_layers"].append("discovery")
+                if not epm_status.get("imported"):
+                    gate["details"]["missing_layers"].append("import")
+                if not epm_status.get("instantiated"):
+                    gate["details"]["missing_layers"].append("instantiation")
+                if not epm_status.get("documented"):
+                    gate["details"]["missing_layers"].append("documentation")
+                if not epm_status.get("tested"):
+                    gate["details"]["missing_layers"].append("testing")
+                
+                logger.error(
+                    f"Gate 18 FAILED: SetupEPMOrchestrator wired=false "
+                    f"(score={epm_status.get('score', 0)})"
+                )
+                return gate
+            
+            # 5. Success
+            gate["message"] = (
+                f"SetupEPMOrchestrator confirmed wired and operational "
+                f"(score: {epm_status.get('score', 0)}/100). "
+                f"EPM entry point ready for production deployment."
+            )
+            gate["details"]["validation_timestamp"] = epm_status.get("timestamp", "unknown")
+            gate["details"]["quality_score"] = epm_status.get("score", 0)
+            
+            logger.info(
+                f"Gate 18 PASSED: SetupEPMOrchestrator wired "
+                f"(score={epm_status.get('score', 0)})"
+            )
+        
+        except json.JSONDecodeError as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Alignment state file is corrupted (invalid JSON): {str(e)}"
+            gate["details"]["action"] = "Delete .alignment-state.json and run 'align' to regenerate"
+            logger.error(f"Gate 18 JSON parse error: {e}", exc_info=True)
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"EPM wiring validation failed: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 18 validation error: {e}", exc_info=True)
         
         return gate
