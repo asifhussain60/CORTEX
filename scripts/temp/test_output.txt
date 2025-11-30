@@ -1,0 +1,1056 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.0, pluggy-1.6.0 -- D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\PROJECTS\CORTEX
+configfile: pytest.ini
+testpaths: tests
+plugins: cov-7.0.0, mock-3.15.1, xdist-3.8.0
+created: 8/8 workers
+8 workers [2160 items]
+
+scheduling tests via LoadScheduling
+
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_manager_initialization 
+tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_can_parse_syntax_error 
+tests/agents/health_validator/test_validators.py::TestGitValidator::test_validator_initialization 
+tests/agents/test_intent_router.py::TestTierIntegration::test_query_tier2_for_patterns 
+tests/entry_point/test_response_formatter.py::TestRecommendations::test_extract_recommendations_from_next_actions 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_rejects_invalid_workspace 
+tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_router_receives_tier_apis 
+[gw0] [  0%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_manager_initialization 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_can_parse_syntax_error 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_create_backup_dir 
+[gw3] [  0%] PASSED tests/agents/test_intent_router.py::TestTierIntegration::test_query_tier2_for_patterns 
+tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_parse_indentation_error 
+tests/agents/test_intent_router.py::TestTierIntegration::test_log_to_tier1_conversation 
+[gw2] [  0%] PASSED tests/agents/health_validator/test_validators.py::TestGitValidator::test_validator_initialization 
+[gw0] [  0%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_create_backup_dir 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_parse_indentation_error 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_get_backup_dir_before_creation 
+tests/agents/health_validator/test_validators.py::TestGitValidator::test_not_git_repo 
+tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_parse_invalid_syntax 
+[gw3] [  0%] PASSED tests/agents/test_intent_router.py::TestTierIntegration::test_log_to_tier1_conversation 
+[gw0] [  0%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_get_backup_dir_before_creation 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestSyntaxErrorParser::test_parse_invalid_syntax 
+tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_can_parse_import_error 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_get_backup_dir_after_creation 
+tests/agents/test_intent_router.py::TestTierIntegration::test_store_routing_pattern_in_tier2 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_can_parse_import_error 
+tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_optional_parameters_omitted 
+tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_parse_module_not_found 
+[gw2] [  0%] PASSED tests/agents/health_validator/test_validators.py::TestGitValidator::test_not_git_repo 
+tests/agents/health_validator/test_validators.py::TestGitValidator::test_clean_git_status 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_parse_module_not_found 
+[gw3] [  0%] PASSED tests/agents/test_intent_router.py::TestTierIntegration::test_store_routing_pattern_in_tier2 
+tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_parse_cannot_import_name 
+[gw2] [  0%] PASSED tests/agents/health_validator/test_validators.py::TestGitValidator::test_clean_git_status 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestImportErrorParser::test_parse_cannot_import_name 
+tests/agents/test_intent_router.py::TestEdgeCases::test_router_without_tier_apis 
+tests/agents/health_validator/test_validators.py::TestGitValidator::test_many_uncommitted_changes 
+tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_can_parse_runtime_error 
+[gw5] [  0%] PASSED tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_optional_parameters_omitted 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_can_parse_runtime_error 
+[gw2] [  0%] PASSED tests/agents/health_validator/test_validators.py::TestGitValidator::test_many_uncommitted_changes 
+tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_empty_file_path 
+tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_parse_name_error 
+[gw0] [  0%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_get_backup_dir_after_creation 
+tests/agents/health_validator/test_validators.py::TestDiskValidator::test_validator_initialization 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_file 
+[gw1] [  0%] PASSED tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_parse_name_error 
+[gw5] [  0%] PASSED tests/edge_cases/test_empty_inputs.py::TestEmptyInputs::test_empty_file_path 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestDiskValidator::test_validator_initialization 
+tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_parse_attribute_error 
+tests/edge_cases/test_input_validation.py::test_null_request_handling 
+tests/agents/health_validator/test_validators.py::TestDiskValidator::test_check_disk_space 
+[gw1] [  1%] PASSED tests/agents/error_corrector/test_parsers.py::TestRuntimeErrorParser::test_parse_attribute_error 
+[gw4] [  1%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_rejects_invalid_workspace 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestDiskValidator::test_check_disk_space 
+tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_can_parse_linter_error 
+[gw3] [  1%] PASSED tests/agents/test_intent_router.py::TestEdgeCases::test_router_without_tier_apis 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_rejects_file_as_workspace 
+tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_validator_initialization 
+tests/agents/test_intent_router.py::TestEdgeCases::test_empty_user_message 
+[gw1] [  1%] PASSED tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_can_parse_linter_error 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_validator_initialization 
+[gw3] [  1%] PASSED tests/agents/test_intent_router.py::TestEdgeCases::test_empty_user_message 
+tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_no_tier3 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_no_tier3 
+tests/agents/test_intent_router.py::TestEdgeCases::test_very_long_user_message 
+tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_good_performance 
+tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_parse_undefined_name 
+[gw3] [  1%] PASSED tests/agents/test_intent_router.py::TestEdgeCases::test_very_long_user_message 
+[gw4] [  1%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_rejects_file_as_workspace 
+[gw0] [  1%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_file 
+tests/agents/test_intent_router.py::TestEdgeCases::test_tier2_search_failure 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_nonexistent_file 
+[gw1] [  1%] PASSED tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_parse_undefined_name 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_detects_file_creation 
+tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_parse_unused_import 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_good_performance 
+[gw3] [  1%] PASSED tests/agents/test_intent_router.py::TestEdgeCases::test_tier2_search_failure 
+[gw1] [  1%] PASSED tests/agents/error_corrector/test_parsers.py::TestLinterErrorParser::test_parse_unused_import 
+tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_creates_learning_event 
+tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_low_performance 
+tests/agents/error_corrector/test_strategies.py::TestIndentationFixStrategy::test_can_fix_indentation_error 
+[gw3] [  1%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_creates_learning_event 
+tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_converts_to_lesson_dict 
+[gw0] [  1%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_nonexistent_file 
+[gw2] [  1%] PASSED tests/agents/health_validator/test_validators.py::TestPerformanceValidator::test_low_performance 
+[gw1] [  1%] PASSED tests/agents/error_corrector/test_strategies.py::TestIndentationFixStrategy::test_can_fix_indentation_error 
+[gw3] [  1%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_converts_to_lesson_dict 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_without_dir 
+tests/agents/error_corrector/test_strategies.py::TestIndentationFixStrategy::test_fix_indentation 
+tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_generates_title_from_problem 
+[gw3] [  1%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_generates_title_from_problem 
+tests/agents/test_agent_framework.py::TestAgentRequest::test_create_basic_request 
+tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_generates_prevention_rules 
+[gw2] [  2%] PASSED tests/agents/test_agent_framework.py::TestAgentRequest::test_create_basic_request 
+[gw3] [  2%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningEvent::test_generates_prevention_rules 
+[gw0] [  2%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_backup_without_dir 
+tests/agents/test_learning_capture_agent.py::TestLearningCaptureAgent::test_initializes_with_project_root 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_restore_file 
+tests/agents/test_agent_framework.py::TestAgentRequest::test_create_request_with_conversation 
+[gw2] [  2%] PASSED tests/agents/test_agent_framework.py::TestAgentRequest::test_create_request_with_conversation 
+tests/agents/test_agent_framework.py::TestAgentRequest::test_create_request_with_priority 
+[gw3] [  2%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningCaptureAgent::test_initializes_with_project_root 
+tests/agents/test_learning_capture_agent.py::TestLearningCaptureAgent::test_initializes_with_default_root 
+[gw2] [  2%] PASSED tests/agents/test_agent_framework.py::TestAgentRequest::test_create_request_with_priority 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestIndentationFixStrategy::test_fix_indentation 
+[gw3] [  2%] PASSED tests/agents/test_learning_capture_agent.py::TestLearningCaptureAgent::test_initializes_with_default_root 
+tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_unicode_error_from_operation 
+tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_can_fix_import_error 
+[gw0] [  2%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_restore_file 
+tests/agents/test_agent_framework.py::TestAgentResponse::test_create_success_response 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_can_fix_import_error 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_restore_nonexistent_backup 
+tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_add_known_import 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_add_known_import 
+[gw0] [  2%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_restore_nonexistent_backup 
+tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_add_unknown_import 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_rollback_all 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_add_unknown_import 
+tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_remove_unused_import 
+[gw3] [  2%] PASSED tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_unicode_error_from_operation 
+[gw0] [  2%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_rollback_all 
+tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_skull_violation_from_operation 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestImportFixStrategy::test_remove_unused_import 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_cleanup 
+[gw2] [  2%] PASSED tests/agents/test_agent_framework.py::TestAgentResponse::test_create_success_response 
+tests/agents/error_corrector/test_strategies.py::TestSyntaxFixStrategy::test_can_fix_syntax_error 
+tests/agents/test_agent_framework.py::TestAgentResponse::test_create_failure_response 
+[gw1] [  2%] PASSED tests/agents/error_corrector/test_strategies.py::TestSyntaxFixStrategy::test_can_fix_syntax_error 
+[gw0] [  2%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_cleanup 
+[gw2] [  2%] PASSED tests/agents/test_agent_framework.py::TestAgentResponse::test_create_failure_response 
+tests/agents/code_executor/test_backup.py::TestBackupManager::test_multiple_backups 
+tests/agents/test_agent_framework.py::TestAgentResponse::test_response_with_duration 
+[gw3] [  2%] PASSED tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_skull_violation_from_operation 
+tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_module_failure_from_operation 
+tests/agents/error_corrector/test_strategies.py::TestSyntaxFixStrategy::test_fix_missing_colon 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestAgentResponse::test_response_with_duration 
+tests/agents/test_agent_framework.py::TestAgentResponse::test_response_with_next_actions 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestAgentResponse::test_response_with_next_actions 
+[gw0] [  3%] PASSED tests/agents/code_executor/test_backup.py::TestBackupManager::test_multiple_backups 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_initialization 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_agent_initialization 
+[gw3] [  3%] PASSED tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_captures_module_failure_from_operation 
+tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_returns_none_for_successful_operation 
+[gw0] [  3%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_agent_initialization 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_initialization 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_can_handle_code_intent 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_can_handle 
+[gw0] [  3%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_can_handle_code_intent 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_can_handle_create_file_intent 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_can_handle 
+[gw1] [  3%] PASSED tests/agents/error_corrector/test_strategies.py::TestSyntaxFixStrategy::test_fix_missing_colon 
+[gw3] [  3%] PASSED tests/agents/test_learning_capture_agent.py::TestOperationLearningCapture::test_returns_none_for_successful_operation 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_execute 
+tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_can_fix_package_error 
+[gw0] [  3%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_can_handle_create_file_intent 
+tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_captures_unicode_encode_error 
+[gw1] [  3%] PASSED tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_can_fix_package_error 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_execute 
+tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_suggest_package_install 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_logging 
+[gw1] [  3%] PASSED tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_suggest_package_install 
+tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_suggest_package_from_pattern 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_logging 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_cannot_handle_other_intent 
+[gw1] [  3%] PASSED tests/agents/error_corrector/test_strategies.py::TestPackageFixStrategy::test_suggest_package_from_pattern 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_repr 
+tests/agents/error_corrector/test_validators.py::TestPathValidator::test_protected_path_detection 
+[gw0] [  3%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_cannot_handle_other_intent 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_agent_repr 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_create_operation 
+tests/agents/test_agent_framework.py::TestBaseAgent::test_measure_execution 
+[gw3] [  3%] PASSED tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_captures_unicode_encode_error 
+tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_captures_module_not_found_error 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestBaseAgent::test_measure_execution 
+tests/agents/test_agent_framework.py::TestAgentIntegration::test_full_agent_workflow 
+[gw2] [  3%] PASSED tests/agents/test_agent_framework.py::TestAgentIntegration::test_full_agent_workflow 
+tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier1_interaction 
+[gw3] [  3%] PASSED tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_captures_module_not_found_error 
+[gw2] [  4%] PASSED tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier1_interaction 
+tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_returns_none_for_unrecognized_exception 
+tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier2_interaction 
+[gw2] [  4%] PASSED tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier2_interaction 
+[gw1] [  4%] PASSED tests/agents/error_corrector/test_validators.py::TestPathValidator::test_protected_path_detection 
+[gw0] [  4%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_create_operation 
+tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier3_interaction 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_edit_operation 
+tests/agents/error_corrector/test_validators.py::TestPathValidator::test_empty_protected_paths 
+[gw3] [  4%] PASSED tests/agents/test_learning_capture_agent.py::TestExceptionLearningCapture::test_returns_none_for_unrecognized_exception 
+[gw1] [  4%] PASSED tests/agents/error_corrector/test_validators.py::TestPathValidator::test_empty_protected_paths 
+tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_captures_from_ambient_terminal_errors 
+[gw2] [  4%] PASSED tests/agents/test_agent_framework.py::TestAgentIntegration::test_agent_with_tier3_interaction 
+tests/agents/error_corrector/test_validators.py::TestPathValidator::test_relative_path_resolution 
+tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_initialization 
+[gw3] [  4%] PASSED tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_captures_from_ambient_terminal_errors 
+tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_ignores_old_ambient_events 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_initialization 
+tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_can_handle_check_governance 
+[gw1] [  4%] PASSED tests/agents/error_corrector/test_validators.py::TestPathValidator::test_relative_path_resolution 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_can_handle_check_governance 
+[gw0] [  4%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_edit_operation 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_successful_fix 
+tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_can_handle_assess_risk 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_delete_operation 
+[gw1] [  4%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_successful_fix 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_can_handle_assess_risk 
+[gw3] [  4%] PASSED tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_ignores_old_ambient_events 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_fix_with_changes_only 
+tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_handles_missing_ambient_log 
+tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_rejects_invalid_intent 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestChangeGovernorBasics::test_governor_rejects_invalid_intent 
+[gw1] [  4%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_fix_with_changes_only 
+tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_3_archive_forbidden 
+[gw0] [  4%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_delete_operation 
+[gw3] [  4%] PASSED tests/agents/test_learning_capture_agent.py::TestAmbientEventLearningCapture::test_handles_missing_ambient_log 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_batch_operation 
+tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_captures_from_fix_commit 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_3_archive_forbidden 
+tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_20_tdd_required 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_failed_fix 
+[gw2] [  4%] PASSED tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_20_tdd_required 
+[gw1] [  5%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_failed_fix 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_fix_missing_changes 
+tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_22_protected_file_deletion 
+[gw1] [  5%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_fix_missing_changes 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_invalid_fixed_content_type 
+[gw2] [  5%] PASSED tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_22_protected_file_deletion 
+[gw1] [  5%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_validate_invalid_fixed_content_type 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_is_safe_for_successful_fix 
+[gw1] [  5%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_is_safe_for_successful_fix 
+[gw0] [  5%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_batch_operation 
+[gw3] [  5%] PASSED tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_captures_from_fix_commit 
+tests/agents/error_corrector/test_validators.py::TestFixValidator::test_is_safe_for_invalid_fix 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_with_validation_failure 
+tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_ignores_non_fix_commits 
+[gw1] [  5%] PASSED tests/agents/error_corrector/test_validators.py::TestFixValidator::test_is_safe_for_invalid_fix 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_agent_initialization 
+[gw0] [  5%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_with_validation_failure 
+[gw7] [  5%] PASSED tests/entry_point/test_response_formatter.py::TestRecommendations::test_extract_recommendations_from_next_actions 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_creates_backup 
+tests/entry_point/test_response_formatter.py::TestRecommendations::test_extract_next_steps_from_metadata 
+[gw1] [  5%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_agent_initialization 
+tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_23_incremental_creation 
+[gw3] [  5%] PASSED tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_ignores_non_fix_commits 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_can_handle_health_check 
+[gw0] [  5%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_creates_backup 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_with_tier1_logging 
+[gw1] [  5%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_can_handle_health_check 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_can_handle_validate 
+[gw2] [  5%] PASSED tests/agents/test_change_governor.py::TestRuleCompliance::test_rule_23_incremental_creation 
+[gw1] [  5%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_can_handle_validate 
+tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_infers_category_from_files 
+tests/agents/test_change_governor.py::TestRiskAssessment::test_low_risk_simple_modification 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_cannot_handle_other_intent 
+[gw0] [  5%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_execute_with_tier1_logging 
+[gw1] [  5%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_cannot_handle_other_intent 
+[gw2] [  5%] PASSED tests/agents/test_change_governor.py::TestRiskAssessment::test_low_risk_simple_modification 
+tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_response_includes_next_actions 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_all_passing 
+tests/agents/test_change_governor.py::TestRiskAssessment::test_medium_risk_multiple_files 
+[gw0] [  5%] PASSED tests/agents/code_executor/test_integration.py::TestCodeExecutorIntegration::test_response_includes_next_actions 
+tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_new_file 
+[gw1] [  5%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_all_passing 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_with_failure 
+[gw3] [  5%] PASSED tests/agents/test_learning_capture_agent.py::TestGitCommitLearningCapture::test_infers_category_from_files 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestRiskAssessment::test_medium_risk_multiple_files 
+tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_saves_lesson_to_yaml 
+[gw1] [  6%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_with_failure 
+tests/agents/test_change_governor.py::TestRiskAssessment::test_high_risk_deletion 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_with_warnings 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestRiskAssessment::test_high_risk_deletion 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_new_file 
+tests/agents/test_change_governor.py::TestRiskAssessment::test_high_risk_protected_file 
+tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_existing_file 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestRiskAssessment::test_high_risk_protected_file 
+tests/agents/test_change_governor.py::TestRiskAssessment::test_critical_risk_governance_violations 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_existing_file 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestRiskAssessment::test_critical_risk_governance_violations 
+tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_overwrite 
+tests/agents/test_change_governor.py::TestMultiRuleValidation::test_multiple_violations 
+[gw3] [  6%] PASSED tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_saves_lesson_to_yaml 
+tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_generates_unique_ids 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestMultiRuleValidation::test_multiple_violations 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_overwrite 
+tests/agents/test_change_governor.py::TestMultiRuleValidation::test_tdd_with_tests_provided 
+tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_invalid_syntax 
+[gw1] [  6%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_execute_with_warnings 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestMultiRuleValidation::test_tdd_with_tests_provided 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_skip_tests_option 
+tests/agents/test_change_governor.py::TestMultiRuleValidation::test_allowed_with_warnings 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_with_invalid_syntax 
+tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_nested_directory 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestCreateOperation::test_create_nested_directory 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestMultiRuleValidation::test_allowed_with_warnings 
+tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_existing_file 
+tests/agents/test_change_governor.py::TestMultiRuleValidation::test_clean_change_approval 
+[gw2] [  6%] PASSED tests/agents/test_change_governor.py::TestMultiRuleValidation::test_clean_change_approval 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_existing_file 
+tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_initialization 
+tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_nonexistent_file 
+[gw2] [  6%] PASSED tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_initialization 
+tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_can_handle_commit_intent 
+[gw0] [  6%] PASSED tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_nonexistent_file 
+tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_string_replacement 
+[gw2] [  6%] PASSED tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_can_handle_commit_intent 
+tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_can_handle_git_commit_intent 
+[gw2] [  6%] PASSED tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_can_handle_git_commit_intent 
+tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_rejects_invalid_intent 
+[gw3] [  6%] PASSED tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_generates_unique_ids 
+tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_prevents_duplicate_lessons 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestCommitHandlerBasics::test_handler_rejects_invalid_intent 
+tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_feat_commit 
+[gw3] [  7%] PASSED tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_prevents_duplicate_lessons 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_feat_commit 
+tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_updates_last_updated_timestamp 
+tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_fix_commit 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_string_replacement 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_fix_commit 
+tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_backup 
+tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_docs_commit 
+[gw3] [  7%] PASSED tests/agents/test_learning_capture_agent.py::TestLessonSaving::test_updates_last_updated_timestamp 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_generate_docs_commit 
+tests/agents/test_learning_capture_agent.py::TestConvenienceFunctions::test_capture_operation_learning_quick_function 
+tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_infer_commit_type_from_files 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_backup 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestCommitMessageGeneration::test_infer_commit_type_from_files 
+tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_validation_failure 
+tests/agents/test_commit_handler.py::TestGitOperations::test_commit_with_staged_changes 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestGitOperations::test_commit_with_staged_changes 
+tests/agents/test_commit_handler.py::TestGitOperations::test_no_staged_changes 
+[gw3] [  7%] PASSED tests/agents/test_learning_capture_agent.py::TestConvenienceFunctions::test_capture_operation_learning_quick_function 
+tests/agents/test_learning_capture_agent.py::TestConvenienceFunctions::test_capture_exception_learning_quick_function 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestGitOperations::test_no_staged_changes 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestEditOperation::test_edit_with_validation_failure 
+tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_existing_file 
+tests/agents/test_commit_handler.py::TestGitOperations::test_dry_run_mode 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_existing_file 
+tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_without_confirmation 
+[gw2] [  7%] PASSED tests/agents/test_commit_handler.py::TestGitOperations::test_dry_run_mode 
+tests/agents/test_intent_router.py::TestIntentRouterBasics::test_router_initialization 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_without_confirmation 
+[gw2] [  7%] PASSED tests/agents/test_intent_router.py::TestIntentRouterBasics::test_router_initialization 
+tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_nonexistent_file 
+[gw0] [  7%] PASSED tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_nonexistent_file 
+tests/agents/test_intent_router.py::TestIntentRouterBasics::test_router_can_handle_all_requests 
+tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_with_backup 
+[gw2] [  7%] PASSED tests/agents/test_intent_router.py::TestIntentRouterBasics::test_router_can_handle_all_requests 
+tests/agents/test_intent_router.py::TestIntentClassification::test_classify_planning_intent 
+[gw2] [  7%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_classify_planning_intent 
+[gw3] [  7%] PASSED tests/agents/test_learning_capture_agent.py::TestConvenienceFunctions::test_capture_exception_learning_quick_function 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_operations.py::TestDeleteOperation::test_delete_with_backup 
+tests/agents/test_intent_router.py::TestIntentClassification::test_classify_code_intent 
+tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_multiple_creates 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_classify_code_intent 
+tests/agents/test_intent_router.py::TestIntentClassification::test_classify_test_intent 
+tests/agents/test_learning_capture_agent.py::TestIntegrationScenarios::test_full_unicode_error_learning_flow 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_multiple_creates 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_classify_test_intent 
+tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_mixed_operations 
+tests/agents/test_intent_router.py::TestIntentClassification::test_classify_fix_intent 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_classify_fix_intent 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_mixed_operations 
+tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_with_failures 
+tests/agents/test_intent_router.py::TestIntentClassification::test_classify_unknown_intent 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_with_failures 
+tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_empty_operations 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_operations.py::TestBatchOperation::test_batch_empty_operations 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_classify_unknown_intent 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validator_initialization 
+[gw3] [  8%] PASSED tests/agents/test_learning_capture_agent.py::TestIntegrationScenarios::test_full_unicode_error_learning_flow 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validator_initialization 
+tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_initialization 
+[gw7] [  8%] PASSED tests/entry_point/test_response_formatter.py::TestRecommendations::test_extract_next_steps_from_metadata 
+tests/entry_point/test_response_formatter.py::TestRecommendations::test_default_recommendations_success 
+tests/agents/test_intent_router.py::TestIntentClassification::test_preserve_valid_intent 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_python 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_python 
+[gw3] [  8%] PASSED tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_initialization 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestIntentClassification::test_preserve_valid_intent 
+tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_can_handle_screenshot_intent 
+tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_plan_to_planner 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_javascript 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_javascript 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_typescript 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_validate_typescript 
+[gw2] [  8%] PASSED tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_plan_to_planner 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_not_validate_other_files 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_should_not_validate_other_files 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_valid_python 
+[gw3] [  8%] PASSED tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_can_handle_screenshot_intent 
+tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_code_to_executor 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_valid_python 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_invalid_python 
+tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_can_handle_find_test_ids_intent 
+[gw0] [  8%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_invalid_python 
+[gw2] [  9%] PASSED tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_code_to_executor 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_empty_python 
+[gw3] [  9%] PASSED tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_can_handle_find_test_ids_intent 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_empty_python 
+tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_with_multiple_agents 
+tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_rejects_invalid_intent 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_python_with_imports 
+[gw2] [  9%] PASSED tests/agents/test_intent_router.py::TestRoutingDecisions::test_route_with_multiple_agents 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_python_with_imports 
+tests/agents/test_intent_router.py::TestRoutingDecisions::test_confidence_scoring 
+[gw3] [  9%] PASSED tests/agents/test_screenshot_analyzer.py::TestScreenshotAnalyzerBasics::test_analyzer_rejects_invalid_intent 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_python_indentation_error 
+tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_identify_login_page_elements 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_python_indentation_error 
+[gw2] [  9%] PASSED tests/agents/test_intent_router.py::TestRoutingDecisions::test_confidence_scoring 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_javascript_basic 
+tests/operations/test_cleanup_orchestrator.py::TestSafetyVerification::test_safety_verification 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_javascript_basic 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_empty_javascript 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_empty_javascript 
+tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_typescript_basic 
+[gw0] [  9%] PASSED tests/agents/code_executor/test_validators.py::TestSyntaxValidator::test_validate_typescript_basic 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_agent_initialization 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_agent_initialization 
+[gw2] [  9%] PASSED tests/operations/test_cleanup_orchestrator.py::TestSafetyVerification::test_safety_verification 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_can_handle_fix_intent 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_can_handle_fix_intent 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_reject_non_fix_intent 
+tests/operations/test_cleanup_orchestrator.py::TestSafetyVerification::test_core_files_protected 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_reject_non_fix_intent 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_fix_indentation_error 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_fix_indentation_error 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_suggest_import 
+[gw2] [  9%] PASSED tests/operations/test_cleanup_orchestrator.py::TestSafetyVerification::test_core_files_protected 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_suggest_import 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_suggest_package_install 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_parse_and_suggest_package_install 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_protect_cortex_tests 
+tests/operations/test_cleanup_orchestrator.py::TestBackupManagement::test_backup_detection 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_protect_cortex_tests 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_handle_unparseable_error 
+[gw0] [  9%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_handle_unparseable_error 
+tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_handle_missing_error_output 
+[gw0] [ 10%] PASSED tests/agents/error_corrector/test_integration.py::TestErrorCorrectorIntegration::test_handle_missing_error_output 
+tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_can_parse_pytest_error 
+[gw0] [ 10%] PASSED tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_can_parse_pytest_error 
+tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_parse_pytest_assertion_error 
+[gw1] [ 10%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_skip_tests_option 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_response_includes_suggestions 
+[gw0] [ 10%] PASSED tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_parse_pytest_assertion_error 
+tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_parse_pytest_with_test_name 
+[gw0] [ 10%] PASSED tests/agents/error_corrector/test_parsers.py::TestPytestErrorParser::test_parse_pytest_with_test_name 
+tests/operations/test_help_command.py::TestHelpCommandEdgeCases::test_invalid_format 
+[gw2] [ 10%] PASSED tests/operations/test_cleanup_orchestrator.py::TestBackupManagement::test_backup_detection 
+tests/operations/test_cleanup_orchestrator.py::TestBackupManagement::test_github_archival 
+[gw2] [ 10%] PASSED tests/operations/test_cleanup_orchestrator.py::TestBackupManagement::test_github_archival 
+tests/operations/test_cleanup_orchestrator.py::TestRootFolderCleanup::test_misplaced_files_detected 
+[gw2] [ 10%] PASSED tests/operations/test_cleanup_orchestrator.py::TestRootFolderCleanup::test_misplaced_files_detected 
+tests/operations/test_cleanup_orchestrator.py::TestRootFolderCleanup::test_allowed_root_files_preserved 
+[gw2] [ 10%] PASSED tests/operations/test_cleanup_orchestrator.py::TestRootFolderCleanup::test_allowed_root_files_preserved 
+tests/operations/test_cleanup_orchestrator.py::TestFileReorganization::test_script_reorganization 
+[gw7] [ 10%] PASSED tests/entry_point/test_response_formatter.py::TestRecommendations::test_default_recommendations_success 
+tests/entry_point/test_response_formatter.py::TestRecommendations::test_default_recommendations_failure 
+[gw6] [ 10%] PASSED tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_router_receives_tier_apis 
+tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_conversation_logged_to_tier1 
+[gw5] [ 10%] PASSED tests/edge_cases/test_input_validation.py::test_null_request_handling 
+[gw7] [ 10%] PASSED tests/entry_point/test_response_formatter.py::TestRecommendations::test_default_recommendations_failure 
+tests/entry_point/test_response_formatter.py::TestStatusSymbols::test_success_symbol 
+tests/edge_cases/test_input_validation.py::test_empty_string_request_handling 
+[gw0] [ 10%] PASSED tests/operations/test_help_command.py::TestHelpCommandEdgeCases::test_invalid_format 
+tests/operations/test_help_command.py::TestHelpCommandEdgeCases::test_find_nonexistent_command 
+[gw1] [ 10%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_response_includes_suggestions 
+tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_response_includes_metadata 
+[gw2] [ 10%] FAILED tests/operations/test_cleanup_orchestrator.py::TestFileReorganization::test_script_reorganization 
+[gw7] [ 10%] PASSED tests/entry_point/test_response_formatter.py::TestStatusSymbols::test_success_symbol 
+tests/entry_point/test_response_formatter.py::TestStatusSymbols::test_failure_symbol 
+[gw3] [ 10%] PASSED tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_identify_login_page_elements 
+tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_identify_form_elements 
+[gw0] [ 10%] PASSED tests/operations/test_help_command.py::TestHelpCommandEdgeCases::test_find_nonexistent_command 
+tests/operations/test_help_command.py::TestHelpCommandOutput::test_no_truncation_issues 
+[gw7] [ 10%] PASSED tests/entry_point/test_response_formatter.py::TestStatusSymbols::test_failure_symbol 
+tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_list_result 
+[gw6] [ 10%] PASSED tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_conversation_logged_to_tier1 
+tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_health_checks_all_tiers 
+[gw1] [ 10%] PASSED tests/agents/health_validator/test_integration.py::TestHealthValidatorIntegration::test_response_includes_metadata 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyzer_initialization 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyzer_initialization 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_all_passing 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_all_passing 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_with_warnings 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_with_warnings 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_with_errors 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_analyze_with_errors 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_no_errors 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_no_errors 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_critical_failure 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_critical_failure 
+tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_high_failures 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestResultAnalyzer::test_calculate_risk_high_failures 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_formatter_initialization 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_formatter_initialization 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_healthy_message 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_healthy_message 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_message_with_errors 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_message_with_errors 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_message_with_warnings 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_format_message_with_warnings 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_database_failure 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_database_failure 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_test_failure 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_test_failure 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_git_warning 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_git_warning 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_disk_failure 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_suggest_actions_disk_failure 
+tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_get_status_icon 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_reporting.py::TestReportFormatter::test_get_status_icon 
+tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_validator_initialization 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_validator_initialization 
+tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_missing_database 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_missing_database 
+tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_healthy_database 
+[gw7] [ 11%] PASSED tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_list_result 
+tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_dict_result 
+[gw1] [ 11%] PASSED tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_healthy_database 
+tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_oversized_database 
+[gw3] [ 11%] PASSED tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_identify_form_elements 
+tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_generic_element_identification 
+[gw0] [ 11%] PASSED tests/operations/test_help_command.py::TestHelpCommandOutput::test_no_truncation_issues 
+tests/operations/test_help_command.py::TestHelpCommandOutput::test_legend_completeness 
+[gw4] [ 12%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_detects_file_creation 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_detects_file_modification 
+[gw1] [ 12%] PASSED tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_oversized_database 
+tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_all_databases 
+[gw1] [ 12%] PASSED tests/agents/health_validator/test_validators.py::TestDatabaseValidator::test_check_all_databases 
+tests/agents/health_validator/test_validators.py::TestTestValidator::test_validator_initialization 
+[gw7] [ 12%] PASSED tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_dict_result 
+tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_simple_result 
+[gw1] [ 12%] PASSED tests/agents/health_validator/test_validators.py::TestTestValidator::test_validator_initialization 
+tests/agents/health_validator/test_validators.py::TestTestValidator::test_successful_test_run 
+[gw1] [ 12%] PASSED tests/agents/health_validator/test_validators.py::TestTestValidator::test_successful_test_run 
+tests/agents/health_validator/test_validators.py::TestTestValidator::test_failed_tests 
+[gw1] [ 12%] PASSED tests/agents/health_validator/test_validators.py::TestTestValidator::test_failed_tests 
+tests/integration/test_error_recovery.py::TestValidationRules::test_hardcoded_credentials_blocked 
+[gw5] [ 12%] PASSED tests/edge_cases/test_input_validation.py::test_empty_string_request_handling 
+tests/edge_cases/test_input_validation.py::test_very_large_request_handling 
+[gw7] [ 12%] PASSED tests/entry_point/test_response_formatter.py::TestDataFormatting::test_format_simple_result 
+tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_empty_response 
+[gw0] [ 12%] PASSED tests/operations/test_help_command.py::TestHelpCommandOutput::test_legend_completeness 
+tests/operations/test_help_command.py::TestHelpCommandOutput::test_usage_instructions_present 
+[gw6] [ 12%] PASSED tests/entry_point/test_cortex_entry.py::TestIntegrationWithTiers::test_health_checks_all_tiers 
+tests/entry_point/test_request_parser.py::TestInitialization::test_parser_creation 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestInitialization::test_parser_creation 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_plan_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_plan_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_code_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_code_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_test_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_test_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_fix_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_fix_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_commit_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_commit_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_resume_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_resume_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_health_check_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_health_check_intent 
+tests/entry_point/test_request_parser.py::TestIntentExtraction::test_unknown_intent 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestIntentExtraction::test_unknown_intent 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_file_path_extraction 
+[gw6] [ 12%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_file_path_extraction 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_code_block_extraction 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_code_block_extraction 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_inline_file_extraction 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_inline_file_extraction 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_bug_context_type 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_bug_context_type 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_feature_context_type 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_feature_context_type 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_create 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_create 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_modify 
+[gw1] [ 13%] ERROR tests/integration/test_error_recovery.py::TestValidationRules::test_hardcoded_credentials_blocked 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_modify 
+tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_delete 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestContextExtraction::test_operation_detection_delete 
+tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_critical_priority 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_critical_priority 
+tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_high_priority 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_high_priority 
+tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_medium_priority 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_medium_priority 
+tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_normal_priority 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestPriorityExtraction::test_normal_priority 
+tests/entry_point/test_request_parser.py::TestMetadata::test_conversation_id 
+[gw7] [ 13%] PASSED tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_empty_response 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestMetadata::test_conversation_id 
+tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_response_no_message 
+tests/entry_point/test_request_parser.py::TestMetadata::test_custom_metadata 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestMetadata::test_custom_metadata 
+tests/entry_point/test_request_parser.py::TestMetadata::test_parsed_timestamp 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestMetadata::test_parsed_timestamp 
+tests/entry_point/test_request_parser.py::TestBatchProcessing::test_batch_parse 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestBatchProcessing::test_batch_parse 
+tests/entry_point/test_request_parser.py::TestBatchProcessing::test_batch_with_conversation_id 
+[gw3] [ 13%] PASSED tests/agents/test_screenshot_analyzer.py::TestElementIdentification::test_generic_element_identification 
+tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_test_ids 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestBatchProcessing::test_batch_with_conversation_id 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_from_context 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_from_context 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_single_string 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_single_string 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_empty 
+[gw6] [ 13%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_extract_files_empty 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_planner 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_planner 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_code_executor 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_code_executor 
+tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_unknown 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestHelperMethods::test_infer_agent_type_unknown 
+tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_valid_request 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_valid_request 
+tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_empty_message 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_empty_message 
+tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_no_intent 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_no_intent 
+tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_unknown_intent_warning 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestRequestValidation::test_validate_unknown_intent_warning 
+tests/entry_point/test_request_parser.py::TestEdgeCases::test_empty_message 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestEdgeCases::test_empty_message 
+tests/entry_point/test_request_parser.py::TestEdgeCases::test_very_long_message 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestEdgeCases::test_very_long_message 
+tests/entry_point/test_request_parser.py::TestEdgeCases::test_message_with_special_characters 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestEdgeCases::test_message_with_special_characters 
+tests/entry_point/test_request_parser.py::TestEdgeCases::test_mixed_case_intent_keywords 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestEdgeCases::test_mixed_case_intent_keywords 
+tests/entry_point/test_request_parser.py::TestEdgeCases::test_multiple_intents 
+[gw6] [ 14%] PASSED tests/entry_point/test_request_parser.py::TestEdgeCases::test_multiple_intents 
+tests/entry_point/test_response_formatter.py::TestInitialization::test_formatter_creation 
+[gw0] [ 14%] PASSED tests/operations/test_help_command.py::TestHelpCommandOutput::test_usage_instructions_present 
+tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizeCortexOrchestrator::test_metadata 
+[gw7] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_response_no_message 
+tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_response_with_special_characters 
+[gw6] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestInitialization::test_formatter_creation 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_success_response 
+[gw3] [ 14%] PASSED tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_test_ids 
+tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_playwright_selectors 
+[gw6] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_success_response 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_error_response 
+[gw7] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_response_with_special_characters 
+tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_very_long_message 
+[gw0] [ 14%] ERROR tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizeCortexOrchestrator::test_metadata 
+[gw6] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_error_response 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_with_metadata 
+[gw7] [ 14%] PASSED tests/entry_point/test_response_formatter.py::TestEdgeCases::test_format_very_long_message 
+tests/integration/test_agent_coordination.py::TestMultiAgentWorkflow::test_feature_development_full_pipeline 
+[gw7] [ 15%] SKIPPED tests/integration/test_agent_coordination.py::TestMultiAgentWorkflow::test_feature_development_full_pipeline 
+tests/integration/test_agent_coordination.py::TestMultiAgentWorkflow::test_architecture_planning_workflow 
+[gw7] [ 15%] SKIPPED tests/integration/test_agent_coordination.py::TestMultiAgentWorkflow::test_architecture_planning_workflow 
+tests/integration/test_agent_coordination.py::TestCorpusCallosumCoordination::test_tactical_strategic_handoff 
+[gw3] [ 15%] PASSED tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_playwright_selectors 
+tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_recommendations 
+[gw4] [ 15%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_detects_file_modification 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_ignores_pycache_files 
+[gw6] [ 15%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_with_metadata 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_without_metadata 
+[gw7] [ 15%] FAILED tests/integration/test_agent_coordination.py::TestCorpusCallosumCoordination::test_tactical_strategic_handoff 
+[gw6] [ 15%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_without_metadata 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_with_recommendations 
+[gw3] [ 15%] PASSED tests/agents/test_screenshot_analyzer.py::TestTestIDGeneration::test_generate_recommendations 
+tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_missing_image_data 
+[gw3] [ 15%] PASSED tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_missing_image_data 
+tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_invalid_image_format 
+[gw3] [ 15%] PASSED tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_invalid_image_format 
+tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_unsupported_image_type 
+[gw3] [ 15%] PASSED tests/agents/test_screenshot_analyzer.py::TestErrorHandling::test_unsupported_image_type 
+tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_initialization 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_initialization 
+tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_can_handle_resume_intent 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_can_handle_resume_intent 
+tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_can_handle_restore_intent 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_can_handle_restore_intent 
+tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_rejects_invalid_intent 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestSessionResumerBasics::test_resumer_rejects_invalid_intent 
+tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_conversation_from_tier1 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_conversation_from_tier1 
+tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_missing_conversation 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_missing_conversation 
+tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_without_conversation_id 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestConversationRestoration::test_restore_without_conversation_id 
+tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_context_with_files 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_context_with_files 
+tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_context_with_entities 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_context_with_entities 
+tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_timeline 
+[gw3] [ 15%] PASSED tests/agents/test_session_resumer.py::TestContextReconstruction::test_reconstruct_timeline 
+tests/ambient/test_debouncer.py::TestDebouncer::test_debouncer_initialization 
+[gw3] [ 15%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_debouncer_initialization 
+tests/ambient/test_debouncer.py::TestDebouncer::test_custom_delay_initialization 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_custom_delay_initialization 
+tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_single_event 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_single_event 
+tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_multiple_events 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_buffers_multiple_events 
+tests/ambient/test_debouncer.py::TestDebouncer::test_resets_timer_on_new_event 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_with_recommendations 
+tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_without_recommendations 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestTextFormatting::test_format_without_recommendations 
+tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_success 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_success 
+tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_error 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_resets_timer_on_new_event 
+tests/ambient/test_debouncer.py::TestDebouncer::test_merges_duplicate_events 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_merges_duplicate_events 
+tests/ambient/test_debouncer.py::TestDebouncer::test_does_not_merge_different_files 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_does_not_merge_different_files 
+tests/ambient/test_debouncer.py::TestDebouncer::test_writes_to_tier1_on_flush 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_error 
+tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_details 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestMarkdownFormatting::test_format_markdown_details 
+tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_format_json_success 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_format_json_success 
+tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_format_json_error 
+[gw4] [ 16%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_ignores_pycache_files 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_ignores_git_directory 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_format_json_error 
+tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_json_structure 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestJSONFormatting::test_json_structure 
+tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_multiple_responses 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_writes_to_tier1_on_flush 
+tests/ambient/test_debouncer.py::TestDebouncer::test_concurrent_event_handling 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_concurrent_event_handling 
+tests/ambient/test_debouncer.py::TestDebouncer::test_clears_buffer_after_flush 
+[gw6] [ 16%] PASSED tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_multiple_responses 
+tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_with_summary 
+[gw3] [ 16%] PASSED tests/ambient/test_debouncer.py::TestDebouncer::test_clears_buffer_after_flush 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_watcher_initialization 
+[gw3] [ 16%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_watcher_initialization 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_dry_run_what_would 
+[gw3] [ 16%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_dry_run_what_would 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_dry_run_show_me 
+[gw3] [ 16%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_dry_run_show_me 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_execute 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_execute 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_apply 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_apply 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_actually 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_actually 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_for_real 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_live_run_for_real 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_default_live 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_default_live 
+tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_case_insensitive 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeDetection::test_detect_case_insensitive 
+tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_true 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_true 
+tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_false 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_false 
+tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_missing 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_dry_run_missing 
+tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_with_other_args 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeArgs::test_parse_with_other_args 
+tests/operations/test_execution_mode.py::TestExecutionModeFormatting::test_format_dry_run 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeFormatting::test_format_dry_run 
+tests/operations/test_execution_mode.py::TestExecutionModeFormatting::test_format_live 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestExecutionModeFormatting::test_format_live 
+tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_no_confirmation_dry_run 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_no_confirmation_dry_run 
+tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_confirmation_for_destructive_live 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_confirmation_for_destructive_live 
+tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_no_confirmation_for_safe_live 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestConfirmationPrompt::test_no_confirmation_for_safe_live 
+tests/operations/test_execution_mode.py::TestDryRunMixin::test_detect_mode_from_request 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestDryRunMixin::test_detect_mode_from_request 
+tests/operations/test_execution_mode.py::TestDryRunMixin::test_is_dry_run_check 
+[gw3] [ 17%] PASSED tests/operations/test_execution_mode.py::TestDryRunMixin::test_is_dry_run_check 
+tests/operations/test_execution_mode.py::TestDryRunMixin::test_print_copyright_header 
+[gw6] [ 17%] PASSED tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_with_summary 
+tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_without_summary 
+[gw6] [ 17%] PASSED tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_batch_without_summary 
+tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_empty_batch 
+[gw3] [ 17%] FAILED tests/operations/test_execution_mode.py::TestDryRunMixin::test_print_copyright_header 
+[gw6] [ 17%] PASSED tests/entry_point/test_response_formatter.py::TestBatchFormatting::test_format_empty_batch 
+tests/entry_point/test_response_formatter.py::TestErrorFormatting::test_format_exception 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestErrorFormatting::test_format_exception 
+tests/entry_point/test_response_formatter.py::TestErrorFormatting::test_format_exception_with_context 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestErrorFormatting::test_format_exception_with_context 
+tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_partial 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_ignores_git_directory 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_only_watches_allowed_extensions 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_only_watches_allowed_extensions 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_relative_paths_in_events 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_partial 
+tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_complete 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_complete 
+tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_with_message 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_with_message 
+tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_zero_total 
+[gw6] [ 18%] PASSED tests/entry_point/test_response_formatter.py::TestProgressFormatting::test_format_progress_zero_total 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_relative_paths_in_events 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_safe_path_validation 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_safe_path_validation 
+tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_event_contains_timestamp 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileSystemWatcher::test_event_contains_timestamp 
+tests/ambient/test_file_watcher.py::TestFileWatcherPatterns::test_watch_patterns_includes_common_extensions 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileWatcherPatterns::test_watch_patterns_includes_common_extensions 
+tests/ambient/test_file_watcher.py::TestFileWatcherPatterns::test_ignore_patterns_excludes_build_artifacts 
+[gw4] [ 18%] PASSED tests/ambient/test_file_watcher.py::TestFileWatcherPatterns::test_ignore_patterns_excludes_build_artifacts 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_monitor_initialization_with_git_repo 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_monitor_initialization_with_git_repo 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_monitor_initialization_with_non_git_repo 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_monitor_initialization_with_non_git_repo 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_rejects_non_existent_path 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_rejects_non_existent_path 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_hook_types_whitelist 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_hook_types_whitelist 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_installs_git_hooks 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_installs_git_hooks 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_hook_script_uses_absolute_paths 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_hook_script_uses_absolute_paths 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_backs_up_existing_hooks 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_backs_up_existing_hooks 
+tests/ambient/test_git_monitor.py::TestGitMonitor::test_skips_hook_install_if_capture_script_missing 
+[gw4] [ 18%] PASSED tests/ambient/test_git_monitor.py::TestGitMonitor::test_skips_hook_install_if_capture_script_missing 
+tests/ambient/test_git_monitor.py::TestGitHookSecurity::test_hook_permissions_are_restricted 
+[gw4] [ 18%] SKIPPED tests/ambient/test_git_monitor.py::TestGitHookSecurity::test_hook_permissions_are_restricted 
+tests/ambient/test_git_monitor.py::TestGitHookSecurity::test_hook_script_has_no_variables 
+[gw4] [ 19%] PASSED tests/ambient/test_git_monitor.py::TestGitHookSecurity::test_hook_script_has_no_variables 
+tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_daemon_initialization 
+[gw4] [ 19%] PASSED tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_daemon_initialization 
+tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_git_hooks_installed_on_start 
+[gw4] [ 19%] PASSED tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_git_hooks_installed_on_start 
+tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_captures_file_changes 
+[gw4] [ 19%] FAILED tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_captures_file_changes 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_very_large_request_handling 
+tests/edge_cases/test_input_validation.py::test_malformed_unicode_handling 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_malformed_unicode_handling 
+tests/edge_cases/test_input_validation.py::test_sql_injection_prevention 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_sql_injection_prevention 
+tests/edge_cases/test_input_validation.py::test_code_injection_prevention 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_code_injection_prevention 
+tests/edge_cases/test_input_validation.py::test_circular_reference_handling 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_circular_reference_handling 
+tests/edge_cases/test_input_validation.py::test_concurrent_same_request_deduplication 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_concurrent_same_request_deduplication 
+tests/edge_cases/test_input_validation.py::test_invalid_conversation_id_handling 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_invalid_conversation_id_handling 
+tests/edge_cases/test_input_validation.py::test_mixed_encoding_request 
+[gw5] [ 19%] PASSED tests/edge_cases/test_input_validation.py::test_mixed_encoding_request 
+tests/edge_cases/test_intent_routing.py::test_ambiguous_intent_resolution 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_ambiguous_intent_resolution 
+tests/edge_cases/test_intent_routing.py::test_multiple_conflicting_intents 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_multiple_conflicting_intents 
+tests/edge_cases/test_intent_routing.py::test_zero_confidence_intent_routing 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_zero_confidence_intent_routing 
+tests/edge_cases/test_intent_routing.py::test_intent_routing_loop_detection 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_intent_routing_loop_detection 
+tests/edge_cases/test_intent_routing.py::test_malformed_intent_data_handling 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_malformed_intent_data_handling 
+tests/edge_cases/test_intent_routing.py::test_intent_confidence_boundary_cases 
+[gw5] [ 19%] PASSED tests/edge_cases/test_intent_routing.py::test_intent_confidence_boundary_cases 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_json_config 
+[gw5] [ 19%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_json_config 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_yaml_syntax 
+[gw5] [ 19%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_yaml_syntax 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_truncated_database 
+[gw5] [ 19%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_truncated_database 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_operation_name 
+[gw5] [ 20%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_invalid_operation_name 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_malformed_natural_language 
+[gw5] [ 20%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_malformed_natural_language 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_special_characters_sql_injection 
+[gw5] [ 20%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_special_characters_sql_injection 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_unicode_edge_cases 
+[gw5] [ 20%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_unicode_edge_cases 
+tests/edge_cases/test_malformed_data.py::TestMalformedData::test_extremely_long_input 
+[gw5] [ 20%] PASSED tests/edge_cases/test_malformed_data.py::TestMalformedData::test_extremely_long_input 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_handoff_failure_recovery 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_handoff_failure_recovery 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_missing_agent_context_handling 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_missing_agent_context_handling 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_circular_dependency_detection 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_circular_dependency_detection 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_timeout_during_processing 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_timeout_during_processing 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_response_conflict_resolution 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_response_conflict_resolution 
+tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_state_corruption_recovery 
+[gw5] [ 20%] PASSED tests/edge_cases/test_multi_agent_coordination_edge.py::test_agent_state_corruption_recovery 
+tests/edge_cases/test_session_lifecycle.py::test_rapid_session_creation 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_rapid_session_creation 
+tests/edge_cases/test_session_lifecycle.py::test_session_overflow_protection 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_session_overflow_protection 
+tests/edge_cases/test_session_lifecycle.py::test_corrupted_session_data_recovery 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_corrupted_session_data_recovery 
+tests/edge_cases/test_session_lifecycle.py::test_session_timeout_exactly_30_minutes 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_session_timeout_exactly_30_minutes 
+tests/edge_cases/test_session_lifecycle.py::test_session_with_missing_metadata 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_session_with_missing_metadata 
+tests/edge_cases/test_session_lifecycle.py::test_session_resume_after_system_restart 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_session_resume_after_system_restart 
+tests/edge_cases/test_session_lifecycle.py::test_session_with_invalid_timestamps 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_session_with_invalid_timestamps 
+tests/edge_cases/test_session_lifecycle.py::test_concurrent_session_modifications 
+[gw5] [ 20%] PASSED tests/edge_cases/test_session_lifecycle.py::test_concurrent_session_modifications 
+tests/edge_cases/test_tier_failures.py::test_tier1_database_lock_failure 
+[gw5] [ 20%] PASSED tests/edge_cases/test_tier_failures.py::test_tier1_database_lock_failure 
+tests/edge_cases/test_tier_failures.py::test_tier2_knowledge_graph_unavailable 
+[gw5] [ 20%] PASSED tests/edge_cases/test_tier_failures.py::test_tier2_knowledge_graph_unavailable 
+tests/edge_cases/test_tier_failures.py::test_tier3_context_intelligence_error 
+[gw5] [ 20%] PASSED tests/edge_cases/test_tier_failures.py::test_tier3_context_intelligence_error 
+tests/edge_cases/test_tier_failures.py::test_multiple_tier_failures_simultaneously 
+[gw5] [ 21%] PASSED tests/edge_cases/test_tier_failures.py::test_multiple_tier_failures_simultaneously 
+tests/edge_cases/test_tier_failures.py::test_tier_recovery_after_failure 
+[gw5] [ 21%] PASSED tests/edge_cases/test_tier_failures.py::test_tier_recovery_after_failure 
+tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_creation 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_creation 
+tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_with_logging 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_with_logging 
+tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_without_logging 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestCortexEntryInitialization::test_entry_point_without_logging 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_simple_request 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_simple_request 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_new_session 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_new_session 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_existing_session 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_existing_session 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_logs_to_tier1 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_logs_to_tier1 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_markdown_format 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_markdown_format 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_json_format 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_json_format 
+tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_metadata 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSingleRequestProcessing::test_process_with_metadata 
+tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_multiple_messages 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_multiple_messages 
+tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_with_resume 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_with_resume 
+tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_without_resume 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestBatchProcessing::test_process_batch_without_resume 
+tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_get_session_info_active 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_get_session_info_active 
+tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_get_session_info_no_active 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_get_session_info_no_active 
+tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_end_session 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_end_session 
+tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_end_session_no_active 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestSessionManagement::test_end_session_no_active 
+tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_healthy 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_healthy 
+tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_tier1_error 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_tier1_error 
+tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_includes_timestamp 
+[gw5] [ 21%] PASSED tests/entry_point/test_cortex_entry.py::TestHealthStatus::test_get_health_status_includes_timestamp 
+tests/entry_point/test_cortex_entry.py::TestErrorHandling::test_process_with_router_error 
+[gw5] [ 22%] PASSED tests/entry_point/test_cortex_entry.py::TestErrorHandling::test_process_with_router_error 
+tests/entry_point/test_cortex_entry.py::TestErrorHandling::test_process_batch_with_partial_errors 
+[gw5] [ 22%] PASSED tests/entry_point/test_cortex_entry.py::TestErrorHandling::test_process_batch_with_partial_errors 
+
+=================================== ERRORS ====================================
+__ ERROR at setup of TestValidationRules.test_hardcoded_credentials_blocked ___
+[gw1] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+tests\integration\test_error_recovery.py:468: in brain_protector
+    return BrainProtector(brain_root=str(temp_brain_root))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: BrainProtector.__init__() got an unexpected keyword argument 'brain_root'
+_______ ERROR at setup of TestOptimizeCortexOrchestrator.test_metadata ________
+[gw0] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+tests\operations\test_optimize_cortex_orchestrator.py:47: in orchestrator
+    return OptimizeCortexOrchestrator(project_root=project_root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: BaseOperationModule.__init__() got an unexpected keyword argument 'project_root'
+================================== FAILURES ===================================
+______________ TestFileReorganization.test_script_reorganization ______________
+[gw2] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+tests\operations\test_cleanup_orchestrator.py:205: in test_script_reorganization
+    assert orchestrator.metrics.files_reorganized >= 1
+E   assert 0 >= 1
+E    +  where 0 = CleanupMetrics(timestamp=datetime.datetime(2025, 11, 11, 15, 8, 17, 698649), backups_deleted=0, backups_archived=0, files_reorganized=0, md_files_consolidated=0, root_files_cleaned=0, bloated_files_found=0, space_freed_bytes=0, git_commits_created=0, duration_seconds=0.0, optimization_triggered=False, warnings=[], errors=[]).files_reorganized
+E    +    where CleanupMetrics(timestamp=datetime.datetime(2025, 11, 11, 15, 8, 17, 698649), backups_deleted=0, backups_archived=0, files_reorganized=0, md_files_consolidated=0, root_files_cleaned=0, bloated_files_found=0, space_freed_bytes=0, git_commits_created=0, duration_seconds=0.0, optimization_triggered=False, warnings=[], errors=[]) = <CleanupOrchestrator id=cleanup_orchestrator phase=processing priority=100>.metrics
+------------------------------ Captured log call ------------------------------
+[32mINFO    [0m src.operations.modules.cleanup.cleanup_orchestrator:cleanup_orchestrator.py:475 Reorganizing files...
+_______ TestCorpusCallosumCoordination.test_tactical_strategic_handoff ________
+[gw7] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+tests\integration\test_agent_coordination.py:159: in test_tactical_strategic_handoff
+    architect = Architect(brain_root=str(mock_brain_root))
+                ^^^^^^^^^
+E   NameError: name 'Architect' is not defined
+_________________ TestDryRunMixin.test_print_copyright_header _________________
+[gw3] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+tests\operations\test_execution_mode.py:190: in test_print_copyright_header
+    mixin.print_copyright_header(
+src\operations\dry_run_mixin.py:116: in print_copyright_header
+    templates = self._load_templates()
+                ^^^^^^^^^^^^^^^^^^^^^^
+src\operations\dry_run_mixin.py:68: in _load_templates
+    data = yaml.safe_load(f)
+           ^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\yaml\__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\yaml\__init__.py:79: in load
+    loader = Loader(stream)
+             ^^^^^^^^^^^^^^
+.venv\Lib\site-packages\yaml\loader.py:34: in __init__
+    Reader.__init__(self, stream)
+.venv\Lib\site-packages\yaml\reader.py:85: in __init__
+    self.determine_encoding()
+.venv\Lib\site-packages\yaml\reader.py:124: in determine_encoding
+    self.update_raw()
+.venv\Lib\site-packages\yaml\reader.py:178: in update_raw
+    data = self.stream.read(size)
+           ^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py:23: in decode
+    return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 1223: character maps to <undefined>
+_____________ TestAmbientCaptureDaemon.test_captures_file_changes _____________
+[gw4] win32 -- Python 3.13.7 D:\PROJECTS\CORTEX\.venv\Scripts\python.exe
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1423: in patched
+    with self.decoration_helper(patched,
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1405: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:530: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'auto_capture_daemon' from 'D:\\PROJECTS\\CORTEX\\scripts\\cortex\\auto_capture_daemon.py'> does not have the attribute 'WorkingMemory'
+=========================== short test summary info ===========================
+FAILED tests/operations/test_cleanup_orchestrator.py::TestFileReorganization::test_script_reorganization - assert 0 >= 1
+ +  where 0 = CleanupMetrics(timestamp=datetime.datetime(2025, 11, 11, 15, 8, 17, 698649), backups_deleted=0, backups_archived=0, files_reorganized=0, md_files_consolidated=0, root_files_cleaned=0, bloated_files_found=0, space_freed_bytes=0, git_commits_created=0, duration_seconds=0.0, optimization_triggered=False, warnings=[], errors=[]).files_reorganized
+ +    where CleanupMetrics(timestamp=datetime.datetime(2025, 11, 11, 15, 8, 17, 698649), backups_deleted=0, backups_archived=0, files_reorganized=0, md_files_consolidated=0, root_files_cleaned=0, bloated_files_found=0, space_freed_bytes=0, git_commits_created=0, duration_seconds=0.0, optimization_triggered=False, warnings=[], errors=[]) = <CleanupOrchestrator id=cleanup_orchestrator phase=processing priority=100>.metrics
+FAILED tests/integration/test_agent_coordination.py::TestCorpusCallosumCoordination::test_tactical_strategic_handoff - NameError: name 'Architect' is not defined
+FAILED tests/operations/test_execution_mode.py::TestDryRunMixin::test_print_copyright_header - UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 1223: character maps to <undefined>
+FAILED tests/ambient/test_integration.py::TestAmbientCaptureDaemon::test_captures_file_changes - AttributeError: <module 'auto_capture_daemon' from 'D:\\PROJECTS\\CORTEX\\scripts\\cortex\\auto_capture_daemon.py'> does not have the attribute 'WorkingMemory'
+ERROR tests/integration/test_error_recovery.py::TestValidationRules::test_hardcoded_credentials_blocked - TypeError: BrainProtector.__init__() got an unexpected keyword argument 'brain_root'
+ERROR tests/operations/test_optimize_cortex_orchestrator.py::TestOptimizeCortexOrchestrator::test_metadata - TypeError: BaseOperationModule.__init__() got an unexpected keyword argument 'project_root'
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 6 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!! xdist.dsession.Interrupted: stopping after 1 failures !!!!!!!!!!!!
+= 4 failed, 468 passed, 4 skipped, 48 warnings, 2 errors in 227.73s (0:03:47) =

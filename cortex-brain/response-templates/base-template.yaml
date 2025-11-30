@@ -1,0 +1,1247 @@
+# CORTEX Response Template System v2.0
+# Markdown-Optimized Base Template
+# 
+# This base template leverages GitHub Copilot Chat's markdown rendering for
+# rich, hierarchical, and visually appealing responses.
+#
+# Author: Asif Hussain | © 2024-2025
+# Created: 2025-11-20
+# Version: 2.0.0
+
+schema_version: "2.0.0"
+created: "2025-11-20"
+last_updated: "2025-11-20"
+
+# ============================================================================
+# DESIGN PRINCIPLES
+# ============================================================================
+
+design_principles:
+  markdown_first:
+    description: "All templates designed for markdown rendering in VS Code Copilot Chat"
+    guidelines:
+      - "Use proper heading hierarchy (# ## ###)"
+      - "Leverage tables for structured data"
+      - "Use collapsible sections for complex information"
+      - "Bold/italic for emphasis, not just formatting"
+      - "Code blocks for file paths, commands, and code"
+      
+  adaptive_intelligence:
+    description: "Responses adapt format based on context, not one-size-fits-all"
+    principles:
+      - "Simple queries get concise answers (2-3 sentences)"
+      - "Complex work gets summary + collapsible details"
+      - "Data-heavy content uses tables and visual indicators"
+      - "Code shown only when needed (pseudocode > snippet > full code)"
+      - "Challenge section appears only when there's something to challenge"
+    
+    adaptation_triggers:
+      request_complexity:
+        simple: "Status check, help query, what is question"
+        moderate: "Single-phase implementation, bug fix, update"
+        complex: "Multi-phase feature, architecture design, planning"
+      
+      content_type:
+        informational: "Explaining concepts, answering questions"
+        actionable: "Implementation, changes made, next steps"
+        analytical: "Status reports, test results, metrics"
+        planning: "Feature planning, design decisions, roadmaps"
+      
+      information_density:
+        low: "1-2 key points, minimal supporting data"
+        medium: "3-5 key points with some supporting details"
+        high: "6+ key points, tables, metrics, complex relationships"
+    
+    response_matrix:
+      simple_informational: "concise (2-3 sentences)"
+      simple_actionable: "concise + bullet list"
+      moderate_informational: "summarized (summary + collapsible)"
+      moderate_actionable: "detailed (subsections)"
+      complex_analytical: "visual (tables, progress bars)"
+      complex_planning: "detailed + visual (phases, milestones, gates)"
+      
+  visual_hierarchy:
+    description: "Clear information architecture from high-level to detail"
+    levels:
+      1: "# Title - Operation type and context"
+      2: "## Major sections - Understanding, Challenge, Response, etc."
+      3: "### Subsections - Details within responses"
+      4: "#### Micro-details - Nested information"
+      
+  progressive_disclosure:
+    description: "Use collapsible sections to manage complexity"
+    patterns:
+      - "Lead with summary (always visible)"
+      - "Hide implementation details in <details> tags"
+      - "Collapse phase breakdowns by default"
+      - "Expand critical information inline"
+      - "Add 'Ask about X for details' prompts"
+      - "Trust user to request more information if needed"
+      
+  scanability:
+    description: "Users should grasp key information in 3 seconds"
+    techniques:
+      - "Emojis for visual anchors"
+      - "Bold text for key terms"
+      - "Tables for comparisons"
+      - "Status indicators (✅ ⚠️ ❌)"
+      - "Progress bars (▓▓▓░░░░░░) for percentages"
+      - "Horizontal rules for section breaks (use sparingly)"
+    
+  information_efficiency:
+    description: "Don't bury critical information in verbosity"
+    rules:
+      - "Most important information first (above the fold)"
+      - "Supporting details in collapsible sections"
+      - "Data in tables (faster to scan than paragraphs)"
+      - "Visual indicators (emojis, bars) for quick status"
+      - "Invite follow-up questions rather than info-dumping"
+    examples:
+      wrong: |
+        ## Response
+        I analyzed the codebase thoroughly by first examining the project structure,
+        then reviewing each file individually, checking imports, validating syntax,
+        running static analysis tools, and finally generating a comprehensive report.
+        The analysis involved 143 files across 12 modules. I checked for common issues
+        like circular dependencies, unused imports, and code smells. [... 5 more paragraphs]
+      
+      right: |
+        ## Response
+        Analyzed 143 files across 12 modules.
+        
+        | Issue Type | Count | Severity |
+        |------------|-------|----------|
+        | Circular Dependencies | 3 | 🔴 High |
+        | Unused Imports | 47 | 🟡 Medium |
+        | Code Smells | 12 | 🟢 Low |
+        
+        <details>
+        <summary>📋 <strong>Detailed Analysis</strong></summary>
+        
+        [Full analysis with file-by-file breakdown]
+        </details>
+        
+        *Ask about any specific issue category for remediation guidance.*
+
+# ============================================================================
+# BASE TEMPLATE STRUCTURE
+# ============================================================================
+
+base_template:
+  name: "Markdown-Optimized Base Template"
+  version: "2.0.0"
+  description: "Foundation template for all CORTEX responses with markdown-first design"
+  
+  # Header section - Always visible, consistent branding
+  header:
+    format: |
+      # {emoji} CORTEX {operation_type}
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    
+    guidelines:
+      - "Use single # for top-level heading"
+      - "Emoji provides visual context (🧠 for most operations)"
+      - "Operation type is clear and descriptive"
+      - "Author line uses bold for consistency"
+    
+    placeholders:
+      emoji: "🧠"
+      operation_type: "Operation Type"
+    
+    example: |
+      # 🧠 CORTEX Feature Implementation
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+  
+  # Understanding section - What we think user wants
+  understanding:
+    format: |
+      ## 🎯 My Understanding Of Your Request
+      {user_intent_summary}
+    
+    guidelines:
+      - "Use ## for major section headings"
+      - "Keep summary concise (1-2 sentences max)"
+      - "State what they want to ACHIEVE, not what they said"
+      - "No indentation needed with markdown headings"
+    
+    placeholders:
+      user_intent_summary: "Description of what user wants to achieve"
+    
+    max_length: 150
+    
+    example: |
+      ## 🎯 My Understanding Of Your Request
+      You want to implement user authentication with JWT tokens and session management
+  
+  # Challenge section - Intelligent validation (context-aware)
+  challenge:
+    description: "Smart challenge system - shows only when needed"
+    
+    decision_logic:
+      accept_only:
+        condition: "No concerns, request is sound"
+        format: |
+          ## ✓ Proceeding
+          {brief_rationale}
+        guidelines:
+          - "One sentence max - why this is sound"
+          - "Only show if assumptions validated"
+          - "Skip entirely for simple queries with no risk"
+        example: |
+          ## ✓ Proceeding
+          Standard authentication approach, all dependencies validated.
+      
+      challenge_only:
+        condition: "Significant concerns exist"
+        format: |
+          ## ⚡ Recommendation
+          {concern}
+          
+          ### 💡 Better Approach
+          {recommended_alternative}
+        guidelines:
+          - "State concern clearly and concisely"
+          - "Offer ONE best alternative (not list)"
+          - "Explain why it's better"
+        example: |
+          ## ⚡ Recommendation
+          Single-table design won't scale beyond 10K users.
+          
+          ### 💡 Better Approach
+          **Partition by date** - Split user data by registration date for 100x performance at scale.
+      
+      mixed:
+        condition: "Accept core request, challenge specific aspects"
+        format: |
+          ## ✓ Proceeding with Adjustment
+          {what_we_accept}
+          
+          **Recommended Change:** {what_to_adjust}
+        guidelines:
+          - "State what's good first"
+          - "Suggest ONE specific improvement"
+          - "Keep total under 3 sentences"
+        example: |
+          ## ✓ Proceeding with Adjustment
+          Authentication approach is sound.
+          
+          **Recommended Change:** Use bcrypt instead of SHA-256 for password hashing (industry standard).
+      
+      none:
+        condition: "Simple query, no validation needed"
+        format: null
+        guidelines:
+          - "Skip section entirely for: status checks, simple queries, documentation requests"
+          - "No assumptions to validate = no challenge section"
+        example: "# (Section omitted - no validation needed)"
+    
+    intelligent_routing:
+      rules:
+        - "IF simple query (status, help, what is) → none"
+        - "IF request validated with no concerns → accept_only"
+        - "IF major concerns with better approach → challenge_only"
+        - "IF mostly good but needs tweak → mixed"
+        - "DEFAULT → accept_only (trust user unless red flags)"
+  
+  # Response section - Adaptive verbosity and format
+  response:
+    description: "Intelligent response adaptation based on request type and complexity"
+    
+    adaptation_rules:
+      
+      concise:
+        condition: "Simple query, status check, quick answer"
+        format: |
+          ## 💬 Response
+          {one_paragraph_answer}
+        guidelines:
+          - "2-3 sentences max"
+          - "Direct answer, no elaboration"
+          - "Add 'Ask if you want details on [aspect]' at end"
+        example: |
+          ## 💬 Response
+          Documentation generated successfully. Created 43 files in `docs/` (API reference, guides, architecture diagrams). All cross-references validated.
+          
+          *Ask if you want details on any specific section.*
+      
+      summarized:
+        condition: "Multi-part work completed, user wants overview"
+        format: |
+          ## 💬 Response
+          {executive_summary}
+          
+          <details>
+          <summary>📊 <strong>Detailed Breakdown</strong></summary>
+          
+          {detailed_information}
+          </details>
+        guidelines:
+          - "Lead with 3-sentence summary"
+          - "Hide details in collapsible section"
+          - "Use tables for data-heavy content"
+        example: |
+          ## 💬 Response
+          Implemented authentication with JWT tokens, session management, and password hashing. All tests passing (47/47), coverage at 94%. Ready for staging deployment.
+          
+          <details>
+          <summary>📊 <strong>Implementation Details</strong></summary>
+          
+          | Component | Status | Coverage |
+          |-----------|--------|----------|
+          | JWT Service | ✅ Complete | 96% |
+          | Session Manager | ✅ Complete | 92% |
+          | Password Hash | ✅ Complete | 98% |
+          </details>
+      
+      detailed:
+        condition: "Complex implementation, planning, or troubleshooting"
+        format: |
+          ## 💬 Response
+          {natural_language_explanation}
+          
+          ### {section_heading}
+          {section_content}
+        guidelines:
+          - "Use subsections for logical grouping"
+          - "Lead each section with summary sentence"
+          - "Use lists for steps/items"
+          - "Add visual indicators (✅ ⚠️ ❌) for status"
+        example: |
+          ## 💬 Response
+          I'll implement authentication using three phases: foundation, core logic, and integration.
+          
+          ### Phase 1: Foundation
+          - ✅ Create base structure in `src/auth/`
+          - ✅ Set up test framework with fixtures
+          - ⏳ Initialize authentication service interface
+          
+          ### Phase 2: Core Logic (Next)
+          - JWT token generation with 24h expiration
+          - Password hashing using bcrypt (cost factor 12)
+          - Session management with Redis backend
+      
+      visual:
+        condition: "Status, metrics, comparisons, test results"
+        format: |
+          ## 💬 Response
+          {brief_context}
+          
+          | {column} | {column} | {column} |
+          |----------|----------|----------|
+          | {data}   | {data}   | {data}   |
+        guidelines:
+          - "Lead with 1-sentence context"
+          - "Use table for structured data"
+          - "Add progress bars for percentages: ▓▓▓▓░░░░░░"
+          - "Use emojis for quick scanning: 🟢 🟡 🔴"
+        example: |
+          ## 💬 Response
+          Test execution complete. 7 bugs fixed across 3 categories.
+          
+          | Category | Fixed | Status |
+          |----------|-------|--------|
+          | API Contracts | 6 | 🟢 Complete |
+          | Fixture Isolation | 1 | 🟢 Complete |
+          | Pass Rate | 40%→70%→100% | ▓▓▓▓▓▓▓▓▓▓ |
+    
+    code_display_rules:
+      
+      none:
+        condition: "Explanation sufficient, no code needed"
+        guideline: "Default for most responses - explain what, not how"
+        
+      pseudocode:
+        condition: "Logic flow needs illustration"
+        format: |
+          ```
+          IF user authenticated
+            ALLOW dashboard access
+          ELSE
+            REDIRECT to login
+          ```
+        guideline: "High-level logic, no syntax"
+        
+      snippet:
+        condition: "Key code change to show"
+        format: |
+          ```python
+          # Key change: Use bcrypt instead of SHA-256
+          hashed = bcrypt.hashpw(password, bcrypt.gensalt(12))
+          ```
+        guideline: "5-10 lines max, show critical part only"
+        
+      full_code:
+        condition: "User explicitly requests code OR complex implementation"
+        format: |
+          <details>
+          <summary>🔧 <strong>Implementation Code</strong></summary>
+          
+          ```python
+          {full_implementation}
+          ```
+          </details>
+        guideline: "Hide in collapsible section, include only when necessary"
+    
+    intelligent_routing:
+      decision_tree: |
+        1. Assess request complexity:
+           - Simple query (status, what is, help) → concise
+           - Quick action completed → concise or summarized
+           - Multi-part work → summarized (summary + collapsible details)
+           - Complex implementation → detailed (with subsections)
+           - Data/metrics → visual (tables, progress bars)
+        
+        2. Determine code display:
+           - IF implementation request → show pseudocode OR snippet
+           - IF user says "show code" → full_code
+           - ELSE → none (explain in natural language)
+        
+        3. Balance detail:
+           - Lead with essential information (above the fold)
+           - Hide supporting details in <details> tags
+           - Add "Ask about [X] for details" prompts
+           - Trust user to ask follow-ups if needed
+  
+  # Request Echo section - Confirm understanding
+  request_echo:
+    format: |
+      ## 📝 Your Request
+      {refined_request}
+    
+    guidelines:
+      - "MUST appear between Response and Next Steps"
+      - "One sentence refinement of user's request"
+      - "No colon after 'Your Request' (heading format)"
+      - "Keep under 80 characters"
+    
+    placement: "Between response and next_steps"
+    
+    placeholders:
+      refined_request: "Concise summary of user's request"
+    
+    max_length: 80
+    
+    example: |
+      ## 📝 Your Request
+      Implement user authentication with JWT and session management
+  
+  # Next Steps section - Actionable recommendations
+  next_steps:
+    format: |
+      ## 🔍 Next Steps
+      {context_specific_format}
+    
+    guidelines:
+      - "Format depends on work type (simple/phases/tracks/milestones)"
+      - "Use collapsible sections for complex breakdowns"
+      - "Indicate time estimates when appropriate"
+      - "Show when tasks can run in parallel"
+      - "End with a clear call-to-action question"
+    
+    formats:
+      simple_list:
+        description: "For quick, independent actions"
+        format: |
+          1. **{action}** - {description}
+          2. **{action}** - {description}
+          3. **{action}** - {description}
+        example: |
+          ## 🔍 Next Steps
+          
+          1. **Review README** - Check current content
+          2. **Update features** - Add new CORTEX 2.0 capabilities
+          3. **Refresh examples** - Use latest syntax
+      
+      phase_based:
+        description: "For complex projects with multiple phases"
+        format: |
+          <details>
+          <summary><strong>☐ Phase {number}: {name}</strong> ({duration})</summary>
+          
+          - {task}
+          - {task}
+          </details>
+        example: |
+          ## 🔍 Next Steps
+          
+          <details>
+          <summary><strong>☐ Phase 1: Foundation & Setup</strong> (2 hours)</summary>
+          
+          - Create module structure in `src/auth/`
+          - Initialize test suite (`tests/test_auth.py`)
+          - Set up fixtures and mocks
+          </details>
+          
+          <details>
+          <summary><strong>☐ Phase 2: Core Implementation</strong> (4 hours)</summary>
+          
+          - Write failing tests (RED)
+          - Implement functionality (GREEN)
+          - Refactor for quality (REFACTOR)
+          </details>
+          
+          ---
+          
+          **Ready to begin Phase 1?**
+      
+      parallel_tracks:
+        description: "For independent work that can run simultaneously"
+        format: |
+          **Track {letter}: {name}** ({duration})
+          - {task}
+          - {task}
+          
+          These tracks are independent and can run in parallel.
+          Which track(s) shall I start with? (You can choose multiple or ALL)
+        example: |
+          ## 🔍 Next Steps
+          
+          **Track A: Fix configuration issue** (30 min)
+          - Update `mkdocs.yml` Python path
+          - Test build locally
+          
+          **Track B: Address broken links** (45 min)
+          - Scan for 404s
+          - Update references
+          
+          **Track C: Update navigation** (1 hour)
+          - Restructure docs hierarchy
+          - Generate new nav tree
+          
+          These tracks are independent and can run in parallel.
+          Which track(s) shall I start with? (You can choose multiple or ALL)
+      
+      milestone_based:
+        description: "For architecture/design work with clear milestones"
+        format: |
+          **☐ Milestone {number}: {name}**
+          - {deliverable}
+          - {deliverable}
+          
+          Which milestone(s) would you like to tackle first?
+        example: |
+          ## 🔍 Next Steps
+          
+          **☐ Milestone 1: Architecture Design & Documentation**
+          - System architecture diagram (Mermaid)
+          - API contract specification (OpenAPI)
+          - Database schema design (ERD)
+          
+          **☐ Milestone 2: API Contracts & Integration Points**
+          - REST endpoint definitions
+          - Authentication flow diagram
+          - Error handling strategy
+          
+          **☐ Milestone 3: Implementation & Testing Strategy**
+          - Test plan with coverage targets
+          - CI/CD pipeline configuration
+          - Deployment checklist
+          
+          Which milestone(s) would you like to tackle first?
+    
+    placeholders:
+      context_specific_format: "Appropriate format based on work type"
+
+# ============================================================================
+# OPTIONAL SECTIONS
+# ============================================================================
+
+optional_sections:
+  
+  context_summary:
+    description: "Show what CORTEX remembered from past conversations"
+    format: |
+      <details>
+      <summary>🧠 <strong>Context Memory</strong> ({conversation_count} conversations loaded, Quality: {quality_score}/10 {quality_emoji})</summary>
+      
+      **Freshness:** {freshness_label} ({hours_since_last}h ago)  
+      **Entity Coverage:** {entity_coverage}%  
+      **Relevance Score:** {avg_relevance_score}/1.0 ({relevance_label})  
+      **Memory Health:** {memory_health}
+      
+      **Performance Metrics:**
+      - Average query time: {avg_query_time}ms
+      - Token usage: {token_usage}/{token_budget} ({token_percentage}%)
+      - Storage health: {storage_health}
+      
+      *Use `show context` for detailed view*
+      </details>
+    
+    placement: "After Response, before Request Echo"
+    condition: "Only show if conversation quality ≥ GOOD threshold"
+    
+    example: |
+      <details>
+      <summary>🧠 <strong>Context Memory</strong> (3 conversations loaded, Quality: 8/10 🟢)</summary>
+      
+      **Freshness:** Recent (2h ago)  
+      **Entity Coverage:** 85%  
+      **Relevance Score:** 0.78/1.0 (High)  
+      **Memory Health:** Healthy
+      
+      **Performance Metrics:**
+      - Average query time: 127ms
+      - Token usage: 324/500 (64.8%)
+      - Storage health: Optimal
+      
+      *Use `show context` for detailed view*
+      </details>
+  
+  smart_hint:
+    description: "Learning opportunity suggestion for high-quality conversations"
+    format: |
+      > ### 💡 CORTEX Learning Opportunity
+      > 
+      > **This conversation has exceptional strategic value:**
+      > {value_indicators}
+      > 
+      > **Quality Score: {score}/10 ({label})**
+      > 
+      > 📁 **To capture this conversation:**  
+      > Save conversation to file, then:
+      > ```
+      > capture conversation #file:cortex-brain/documents/conversation-captures/{filename}.md
+      > ```
+      > 
+      > *CORTEX will import directly to brain (Tier 1), extract entities, and learn patterns.*
+    
+    placement: "After Next Steps (final section)"
+    condition: "Only show if conversation quality ≥ EXCELLENT threshold"
+    
+    example: |
+      > ### 💡 CORTEX Learning Opportunity
+      > 
+      > **This conversation has exceptional strategic value:**
+      > - Multi-phase planning with clear execution
+      > - Challenge/Accept reasoning throughout
+      > - Design decisions documented
+      > - Complete implementation with tests
+      > 
+      > **Quality Score: 12/10 (EXCELLENT)**
+      > 
+      > 📁 **To capture this conversation:**  
+      > Save conversation to file, then:
+      > ```
+      > capture conversation #file:cortex-brain/documents/conversation-captures/2025-11-20-authentication.md
+      > ```
+      > 
+      > *CORTEX will import directly to brain (Tier 1), extract entities, and learn patterns.*
+
+# ============================================================================
+# MARKDOWN ELEMENTS LIBRARY
+# ============================================================================
+
+markdown_elements:
+  
+  headings:
+    h1: "# Title"
+    h2: "## Section"
+    h3: "### Subsection"
+    h4: "#### Detail"
+    usage: "One H1 per response, H2 for major sections, H3 for subsections"
+  
+  emphasis:
+    bold: "**text**"
+    italic: "*text*"
+    bold_italic: "***text***"
+    usage: "Bold for key terms, italic for subtle emphasis"
+  
+  lists:
+    unordered: "- Item"
+    ordered: "1. Item"
+    nested: "  - Nested item (2 spaces)"
+    checklist: "- [ ] Task"
+    usage: "Unordered for items, ordered for steps, checklist for progress"
+  
+  code:
+    inline: "`code`"
+    block: "```language\ncode\n```"
+    supported_languages:
+      - python
+      - javascript
+      - typescript
+      - bash
+      - yaml
+      - json
+      - markdown
+      - sql
+    usage: "Inline for file names/commands, block for code examples"
+  
+  tables:
+    simple: |
+      | Column 1 | Column 2 |
+      |----------|----------|
+      | Value 1  | Value 2  |
+    aligned: |
+      | Left | Center | Right |
+      |:-----|:------:|------:|
+      | L    |   C    |     R |
+    usage: "Use for structured data, test results, comparisons"
+  
+  links:
+    inline: "[text](url)"
+    reference: "[text][ref]\n\n[ref]: url"
+    usage: "Inline for single links, reference for multiple uses"
+  
+  quotes:
+    simple: "> Quote"
+    multi_line: "> Line 1\n> Line 2"
+    nested: "> Level 1\n>> Level 2"
+    usage: "Use for important callouts or quoted content"
+  
+  horizontal_rules:
+    format: "---"
+    usage: "Use sparingly to separate major sections (max 2 per response)"
+  
+  collapsible:
+    format: |
+      <details>
+      <summary>Title</summary>
+      
+      Content here
+      </details>
+    usage: "For complex information, phase breakdowns, context details"
+  
+  html_elements:
+    bold: "<strong>text</strong>"
+    emphasis: "<em>text</em>"
+    break: "<br>"
+    usage: "Use markdown equivalents when possible, HTML for special cases"
+
+# ============================================================================
+# VISUAL INDICATORS
+# ============================================================================
+
+visual_indicators:
+  
+  status_emojis:
+    success: "✅"
+    warning: "⚠️"
+    error: "❌"
+    info: "ℹ️"
+    in_progress: "⏳"
+    blocked: "🚫"
+    complete: "✔️"
+    pending: "⏸️"
+  
+  category_emojis:
+    brain: "🧠"
+    target: "🎯"
+    response: "💬"
+    request: "📝"
+    next_steps: "🔍"
+    security: "🔒"
+    test: "🧪"
+    code: "💻"
+    docs: "📚"
+    bug: "🐛"
+    feature: "✨"
+    performance: "⚡"
+    database: "🗄️"
+    api: "🔌"
+    cloud: "☁️"
+  
+  progress_indicators:
+    full: "▓"
+    empty: "░"
+    bar_10: "▓▓▓▓▓▓▓▓▓▓"
+    bar_50: "▓▓▓▓▓░░░░░"
+    bar_100: "▓▓▓▓▓▓▓▓▓▓ 100%"
+  
+  quality_indicators:
+    excellent: "🟢"
+    good: "🟡"
+    fair: "🟠"
+    poor: "🔴"
+    
+  checkbox_states:
+    unchecked: "☐"
+    checked: "☑"
+    partial: "◐"
+
+# ============================================================================
+# FORMATTING RULES
+# ============================================================================
+
+formatting_rules:
+  
+  prohibited:
+    - "❌ NEVER use separator lines (━━━, ═══, ───, ___, -----)"
+    - "❌ NEVER use empty file links []()"
+    - "❌ NEVER narrate tool calls ('Read...', 'Searched text for...')"
+    - "❌ NEVER use over-enthusiastic comments ('Perfect!', 'Excellent!')"
+    - "❌ NEVER show code unless requested"
+    - "❌ NEVER duplicate header sections"
+  
+  required:
+    - "✅ ALWAYS use proper heading hierarchy"
+    - "✅ ALWAYS include request echo between Response and Next Steps"
+    - "✅ ALWAYS use markdown tables for structured data"
+    - "✅ ALWAYS use collapsible sections for complex information"
+    - "✅ ALWAYS use visual indicators for status"
+    - "✅ ALWAYS end with clear call-to-action"
+  
+  best_practices:
+    - "Use emojis consistently for visual anchoring"
+    - "Keep paragraphs short (2-3 sentences max)"
+    - "Use bold for key terms, not decoration"
+    - "Tables should have headers and alignment"
+    - "Code blocks should specify language"
+    - "Lists should be parallel in structure"
+    - "Maintain professional, measured tone"
+    - "Focus on WHAT was done, not HOW"
+
+# ============================================================================
+# PERFORMANCE TARGETS
+# ============================================================================
+
+performance:
+  token_budget:
+    base_template: 250
+    with_mixin: 400
+    max_per_response: 1000
+    
+  rendering:
+    target_time: "<100ms"
+    cache_hit_rate: ">90%"
+    
+  readability:
+    heading_depth: "max 4 levels"
+    paragraph_length: "2-3 sentences"
+    sentence_length: "15-20 words average"
+    
+  quality:
+    user_comprehension: ">95% (3 second scan)"
+    action_clarity: "100% (clear next step)"
+    professional_tone: "maintained throughout"
+
+# ============================================================================
+# INTELLIGENT ADAPTATION EXAMPLES
+# ============================================================================
+
+adaptation_examples:
+  
+  example_1_simple_query:
+    user_request: "What's the status of CORTEX 3.0?"
+    context:
+      complexity: simple
+      type: informational
+      density: low
+    
+    template_selection:
+      understanding: "One sentence"
+      challenge: "none (skip section)"
+      response: "concise (2-3 sentences)"
+      code: "none"
+      next_steps: "simple_list (if any)"
+    
+    rendered_output: |
+      # 🧠 CORTEX Status Check
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      ## 🎯 My Understanding Of Your Request
+      You want the current implementation status of CORTEX 3.0.
+      
+      ## 💬 Response
+      CORTEX 3.0 Phase 0 complete (100% test pass rate). Tier 0-1 operational. Tier 2-3 in development (Track A 60% complete).
+      
+      *Ask about specific phases or tracks for details.*
+      
+      ## 📝 Your Request
+      Check CORTEX 3.0 status
+      
+      ## 🔍 Next Steps
+      1. **Review progress** - See `PHASE-0-COMPLETION-REPORT.md`
+      2. **Check roadmap** - View remaining Track A/B milestones
+      3. **Run health check** - Validate local installation
+    
+    token_count: 247
+    notes: "Challenge section omitted - no validation needed for simple query"
+  
+  example_2_completed_work:
+    user_request: "Did the authentication implementation finish?"
+    context:
+      complexity: moderate
+      type: actionable
+      density: medium
+    
+    template_selection:
+      understanding: "One sentence"
+      challenge: "none (skip section)"
+      response: "summarized (summary + collapsible details)"
+      code: "none"
+      next_steps: "simple_list"
+    
+    rendered_output: |
+      # 🧠 CORTEX Implementation Status
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      ## 🎯 My Understanding Of Your Request
+      You want confirmation that authentication implementation completed successfully.
+      
+      ## 💬 Response
+      ✅ Authentication complete. Implemented JWT tokens, session management, and password hashing. All 47 tests passing, coverage at 94%.
+      
+      <details>
+      <summary>📊 <strong>Implementation Details</strong></summary>
+      
+      | Component | Status | Coverage | Tests |
+      |-----------|--------|----------|-------|
+      | JWT Service | ✅ Complete | 96% | 18/18 ✅ |
+      | Session Manager | ✅ Complete | 92% | 15/15 ✅ |
+      | Password Hashing | ✅ Complete | 98% | 14/14 ✅ |
+      
+      **Files Modified:**
+      - `src/auth/jwt_service.py` (new)
+      - `src/auth/session_manager.py` (new)
+      - `src/auth/password_hasher.py` (new)
+      - `tests/test_auth.py` (new, 47 tests)
+      </details>
+      
+      *Ask about deployment or integration steps.*
+      
+      ## 📝 Your Request
+      Confirm authentication implementation status
+      
+      ## 🔍 Next Steps
+      1. **Review code** - Check `src/auth/` implementation
+      2. **Test locally** - Run `pytest tests/test_auth.py`
+      3. **Deploy to staging** - Ready for staging environment
+    
+    token_count: 412
+    notes: "Summary visible, details hidden. No challenge section (status check)."
+  
+  example_3_recommendation_needed:
+    user_request: "Use MD5 for password hashing in authentication"
+    context:
+      complexity: simple
+      type: actionable
+      density: low
+    
+    template_selection:
+      understanding: "One sentence"
+      challenge: "challenge_only (security concern)"
+      response: "concise"
+      code: "snippet (show better approach)"
+      next_steps: "simple_list"
+    
+    rendered_output: |
+      # 🧠 CORTEX Authentication Implementation
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      ## 🎯 My Understanding Of Your Request
+      You want to use MD5 for password hashing.
+      
+      ## ⚡ Recommendation
+      MD5 is cryptographically broken and vulnerable to rainbow table attacks.
+      
+      ### 💡 Better Approach
+      **Use bcrypt** - Industry standard with adaptive cost factor, resistant to GPU attacks:
+      
+      ```python
+      import bcrypt
+      
+      # Hash password
+      hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(12))
+      
+      # Verify password
+      if bcrypt.checkpw(password.encode(), hashed):
+          # Authentication successful
+      ```
+      
+      ## 💬 Response
+      I'll implement password hashing using bcrypt with cost factor 12 (OWASP recommended). This provides strong security with acceptable performance.
+      
+      ## 📝 Your Request
+      Implement password hashing
+      
+      ## 🔍 Next Steps
+      1. **Install bcrypt** - Run `pip install bcrypt`
+      2. **Implement hashing** - Add to `src/auth/password_hasher.py`
+      3. **Write tests** - Verify hash/verify functions
+    
+    token_count: 389
+    notes: "Challenge only (no accept). Code snippet shown for better approach."
+  
+  example_4_complex_implementation:
+    user_request: "Implement user dashboard with charts and filters"
+    context:
+      complexity: complex
+      type: planning
+      density: high
+    
+    template_selection:
+      understanding: "One sentence"
+      challenge: "accept_only (request is sound)"
+      response: "detailed (subsections + phases)"
+      code: "pseudocode (logic flow)"
+      next_steps: "phase_based (collapsible)"
+    
+    rendered_output: |
+      # 🧠 CORTEX Feature Implementation
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      ## 🎯 My Understanding Of Your Request
+      You want to implement a user dashboard with interactive charts and data filtering capabilities.
+      
+      ## ✓ Proceeding
+      Standard dashboard pattern with established libraries (Chart.js, React). All dependencies validated.
+      
+      ## 💬 Response
+      I'll implement the dashboard using three phases: UI foundation, data integration, and interactivity.
+      
+      ### Phase 1: UI Foundation
+      - ✅ Create dashboard layout with responsive grid
+      - ✅ Set up Chart.js for visualizations
+      - ⏳ Build filter panel component
+      
+      ### Phase 2: Data Integration
+      - Fetch user data from API endpoints
+      - Transform data for chart consumption
+      - Implement caching strategy (Redis)
+      
+      ```
+      API → Data Transform → Chart Render
+       ↓
+      Cache (Redis) → Filter → Update Charts
+      ```
+      
+      ### Phase 3: Interactivity
+      - Connect filters to chart updates
+      - Add date range picker
+      - Implement export functionality (CSV/PDF)
+      
+      <details>
+      <summary>📊 <strong>Technical Architecture</strong></summary>
+      
+      | Component | Technology | Status |
+      |-----------|-----------|--------|
+      | Frontend | React 18 | ✅ Ready |
+      | Charts | Chart.js 4.x | ✅ Ready |
+      | API | FastAPI | ✅ Existing |
+      | Cache | Redis | ⏳ Setup needed |
+      | Export | jsPDF + PapaParse | ⏳ Install needed |
+      </details>
+      
+      *Ask about specific components or technical decisions.*
+      
+      ## 📝 Your Request
+      Implement user dashboard with charts and filters
+      
+      ## 🔍 Next Steps
+      
+      <details>
+      <summary><strong>☐ Phase 1: UI Foundation</strong> (4 hours)</summary>
+      
+      - Create `src/dashboard/` directory structure
+      - Build responsive grid layout
+      - Set up Chart.js with sample data
+      - Implement filter panel UI
+      </details>
+      
+      <details>
+      <summary><strong>☐ Phase 2: Data Integration</strong> (3 hours)</summary>
+      
+      - Create API endpoints for dashboard data
+      - Set up Redis caching
+      - Transform data for charts
+      - Write integration tests
+      </details>
+      
+      <details>
+      <summary><strong>☐ Phase 3: Interactivity</strong> (3 hours)</summary>
+      
+      - Connect filters to data fetching
+      - Implement real-time chart updates
+      - Add export functionality
+      - End-to-end testing
+      </details>
+      
+      ---
+      
+      **Ready to begin Phase 1?**
+    
+    token_count: 687
+    notes: "Detailed response with subsections, pseudocode for flow, collapsible phases."
+  
+  example_5_test_results:
+    user_request: "Show me the test results"
+    context:
+      complexity: simple
+      type: analytical
+      density: high
+    
+    template_selection:
+      understanding: "One sentence"
+      challenge: "none (skip section)"
+      response: "visual (tables, progress bars)"
+      code: "none"
+      next_steps: "simple_list"
+    
+    rendered_output: |
+      # 🧠 CORTEX Test Results
+      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      ## 🎯 My Understanding Of Your Request
+      You want the latest test execution results.
+      
+      ## 💬 Response
+      
+      **Overall:** 834/834 passing ✅ | 63 skipped ⚠️ | 0 failures ❌
+      
+      **Pass Rate:** ▓▓▓▓▓▓▓▓▓▓ 100% (of non-skipped)
+      
+      | Category | Tests | Passing | Coverage |
+      |----------|-------|---------|----------|
+      | Unit Tests | 547 | 547 ✅ | 🟢 92% |
+      | Integration Tests | 287 | 287 ✅ | 🟡 78% |
+      | Skipped (Future) | 63 | N/A | - |
+      
+      <details>
+      <summary>📋 <strong>Skipped Test Breakdown</strong></summary>
+      
+      | Reason | Count | Milestone |
+      |--------|-------|-----------|
+      | Session Management | 19 | Phase 2 |
+      | CSS/UI Validation | 20 | 3.1+ |
+      | Namespace Protection | 6 | Phase 3 |
+      | Integration Edge Cases | 18 | Phase 5 |
+      </details>
+      
+      *Ask about specific test categories for details.*
+      
+      ## 📝 Your Request
+      Show test results
+      
+      ## 🔍 Next Steps
+      1. **Review skipped tests** - See deferral reasons in `test-strategy.yaml`
+      2. **Check coverage gaps** - Integration tests at 78% (target: 85%)
+      3. **Run full suite** - Execute `pytest -v` for detailed output
+    
+    token_count: 394
+    notes: "Visual format with tables and progress bars. Challenge section omitted."
+
+# ============================================================================
+# ADAPTATION DECISION TREE
+# ============================================================================
+
+adaptation_decision_tree:
+  
+  step_1_assess_request:
+    questions:
+      - "Is this a simple query (status, help, what is)?"
+      - "Is this a completed work report?"
+      - "Is this a complex implementation or planning?"
+      - "Is this data/metrics display?"
+    
+    outcomes:
+      simple_query: "Use concise format"
+      completed_work: "Use summarized format"
+      complex_work: "Use detailed format"
+      data_display: "Use visual format"
+  
+  step_2_validate_assumptions:
+    questions:
+      - "Does user reference files/components that need validation?"
+      - "Are there security/performance concerns?"
+      - "Is there a better approach?"
+    
+    outcomes:
+      no_concerns: "Skip challenge section OR use accept_only"
+      minor_concerns: "Use mixed (accept + recommended change)"
+      major_concerns: "Use challenge_only (recommend alternative)"
+  
+  step_3_determine_code_display:
+    questions:
+      - "Can concept be explained without code?"
+      - "Does user explicitly request code?"
+      - "Would pseudocode clarify logic?"
+      - "Is there a key snippet to show?"
+    
+    outcomes:
+      no_code: "Explain in natural language (default)"
+      pseudocode: "Show high-level logic flow"
+      snippet: "Show 5-10 line critical change"
+      full_code: "Show in collapsible section"
+  
+  step_4_format_response:
+    rules:
+      - "Lead with summary (always visible)"
+      - "Hide details in collapsible sections"
+      - "Use tables for structured data"
+      - "Add 'Ask about X' prompts"
+      - "Keep total under 1000 tokens"
+
+# ============================================================================
+# ANTI-PATTERNS TO AVOID
+# ============================================================================
+
+anti_patterns:
+  
+  forced_challenge:
+    wrong: |
+      ## ⚠️ Challenge: ✓ Accept
+      This is fine.
+    right: |
+      ## ✓ Proceeding
+      Standard approach, all dependencies validated.
+    explanation: "Don't force-display both options. Skip challenge section if nothing to challenge."
+  
+  verbose_explanation:
+    wrong: |
+      I analyzed the request thoroughly by examining each component individually,
+      validating all assumptions, checking dependencies, reviewing best practices,
+      and finally determining the optimal approach... [5 paragraphs]
+    right: |
+      Analyzed request. All dependencies validated. Proceeding with implementation.
+    explanation: "Users want answers, not process narration."
+  
+  code_dump:
+    wrong: |
+      Here's the complete implementation:
+      [100 lines of code in response]
+    right: |
+      Implemented authentication with JWT tokens.
+      
+      <details>
+      <summary>🔧 <strong>Implementation Code</strong></summary>
+      
+      ```python
+      [code here]
+      ```
+      </details>
+    explanation: "Hide code in collapsible section. Most users just want confirmation."
+  
+  buried_critical_info:
+    wrong: |
+      [3 paragraphs of background]
+      [2 paragraphs of approach]
+      ❌ CRITICAL: Database migration will cause 10 minutes downtime
+      [2 more paragraphs]
+    right: |
+      ⚠️ **CRITICAL:** Database migration will cause 10 minutes downtime
+      
+      [implementation details follow]
+    explanation: "Critical information first, always above the fold."
+
+version_history:
+  "2.0.0":
+    date: "2025-11-20"
+    changes:
+      - "Complete redesign for markdown-first approach"
+      - "Added heading hierarchy (# ## ###)"
+      - "Introduced collapsible sections"
+      - "Enhanced visual indicators"
+      - "Improved table formatting"
+      - "Added progressive disclosure pattern"
+    breaking_changes:
+      - "Changed from bold formatting (**Section:**) to heading format (## Section)"
+      - "Removed separator lines (---, ===)"
+      - "Updated section order and naming"
+  
+  "1.0.0":
+    date: "2025-11-08"
+    changes:
+      - "Initial template system with 18 templates"
+      - "Basic structure with bold section markers"
+      - "Token optimization strategy"

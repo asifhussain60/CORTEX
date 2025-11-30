@@ -1,0 +1,531 @@
+# CORTEX System Alignment - Self-Evolving Architecture
+# Version: 1.0
+# Purpose: Convention-based discovery system for future-proof alignment validation
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# Status: PLANNING
+
+metadata:
+  design_philosophy: "Convention Over Configuration - Zero Maintenance"
+  key_principle: "New features auto-discovered without align code updates"
+  admin_only: true
+  integration_point: "optimize entry point (automatic execution)"
+  estimated_time: "6-8 hours implementation"
+
+architecture:
+  discovery_engine:
+    description: "Filesystem-based convention scanner (no hardcoded lists)"
+    patterns:
+      - "Follow existing CORTEX patterns (agent discovery, template loading)"
+      - "Use Python AST for code analysis (not regex)"
+      - "Cache discovery results for performance (invalidate on file changes)"
+    
+  validation_engine:
+    description: "Multi-layer integration depth scoring"
+    scoring_algorithm:
+      discovered: 20    # File exists in correct location
+      imported: 40      # Can be imported without errors
+      instantiated: 60  # Class can be instantiated
+      documented: 70    # Has documentation in modules/
+      tested: 80        # Has tests in tests/
+      wired: 90         # Entry point trigger exists
+      optimized: 100    # Passes performance benchmarks
+  
+  reporting_engine:
+    description: "Actionable reports with auto-remediation suggestions"
+    outputs:
+      - "Integration health dashboard (per-feature scores)"
+      - "Deployment readiness report (pass/fail gates)"
+      - "Wiring suggestions (generated code snippets)"
+      - "Test skeleton generation (pytest templates)"
+
+discovery_rules:
+  orchestrators:
+    path: "src/orchestrators/**/*.py"
+    pattern: "*Orchestrator"
+    exclude:
+      - "base_orchestrator.py"
+      - "abstract_*.py"
+      - "__init__.py"
+    validation:
+      - "Must inherit from BaseOrchestrator or implement execute() method"
+      - "Must have docstring explaining purpose"
+      - "Must have corresponding test file in tests/orchestrators/"
+    
+  agents:
+    path: "src/agents/**/*.py"
+    pattern: "*Agent"
+    exclude:
+      - "base_agent.py"
+      - "abstract_*.py"
+      - "__init__.py"
+    validation:
+      - "Must inherit from BaseAgent or implement process() method"
+      - "Must have corresponding test file in tests/agents/"
+      - "Must be importable without side effects"
+  
+  entry_points:
+    source: "cortex-brain/response-templates.yaml"
+    validation:
+      - "All triggers must map to orchestrator methods"
+      - "No orphaned triggers (trigger exists but orchestrator missing)"
+      - "No ghost features (orchestrator exists but no trigger)"
+    discovery_method: "Parse YAML, extract all template triggers"
+  
+  documentation:
+    path: ".github/prompts/modules/*.md"
+    validation:
+      - "CORTEX.prompt.md must reference all user-facing modules"
+      - "Each orchestrator must have corresponding guide (or be in CORTEX.prompt.md)"
+      - "No broken #file: references"
+    discovery_method: "Filesystem scan + cross-reference validation"
+  
+  tests:
+    path: "tests/**/*.py"
+    pattern: "test_*.py"
+    validation:
+      - "Every orchestrator/agent must have test coverage >70%"
+      - "Tests must be runnable (no import errors)"
+      - "Pytest discovery must find all tests"
+    discovery_method: "Pytest native discovery (pytest --collect-only)"
+  
+  capabilities:
+    source: "cortex-brain/capabilities.yaml"
+    validation:
+      - "Every capability must have corresponding orchestrator"
+      - "Every orchestrator must be listed in capabilities"
+      - "Capability descriptions must match orchestrator docstrings"
+    discovery_method: "Parse YAML, cross-reference with discovered orchestrators"
+
+integration_with_optimize:
+  trigger: "optimize command in CORTEX dev repo"
+  execution_flow:
+    - step: "Admin detection"
+      method: "Check for cortex-brain/admin/ directory"
+      action: "If not admin → skip alignment, continue with normal optimize"
+    
+    - step: "Silent alignment validation"
+      method: "Run SystemAlignmentOrchestrator.run_full_validation()"
+      action: "Collect integration scores, issues, warnings"
+      output: "In-memory report (not displayed unless issues found)"
+    
+    - step: "Issue reporting (if problems detected)"
+      method: "Display alignment summary in optimize output"
+      action: "Show critical issues, suggest 'align report' for details"
+      example: |
+        🔧 Optimizing CORTEX brain...
+        ⚠️  3 alignment issues detected:
+           - PaymentOrchestrator (60% integration - missing tests)
+           - RefundAgent (40% integration - not wired)
+           - InvoiceGenerator (20% integration - no documentation)
+        
+        Run 'align report' for details and auto-remediation
+    
+    - step: "Continue normal optimize"
+      method: "Execute existing optimize operations"
+      action: "Clean brain, vacuum DBs, optimize cache, etc."
+
+phases:
+  phase_1_core_discovery:
+    name: "Convention-Based Discovery Engine"
+    duration: "2 hours"
+    deliverables:
+      - "src/orchestrators/admin/system_alignment_orchestrator.py"
+      - "src/discovery/orchestrator_scanner.py"
+      - "src/discovery/agent_scanner.py"
+      - "src/discovery/entry_point_scanner.py"
+      - "src/discovery/documentation_scanner.py"
+    
+    implementation:
+      orchestrator_scanner:
+        description: "Filesystem scan + AST analysis for orchestrators"
+        logic: |
+          1. Walk src/orchestrators/ recursively
+          2. For each .py file (excluding base/abstract):
+             a. Parse with AST
+             b. Find classes ending in 'Orchestrator'
+             c. Check if inherits from BaseOrchestrator
+             d. Extract docstring, methods, dependencies
+          3. Return list of discovered orchestrators with metadata
+        
+        example_output:
+          - name: "TDDWorkflowOrchestrator"
+            path: "src/orchestrators/tdd_workflow_orchestrator.py"
+            methods: ["execute", "start_session", "run_tests"]
+            docstring: "Complete Test-Driven Development workflow..."
+            dependencies: ["ViewDiscoveryAgent", "DebugAgent"]
+      
+      entry_point_scanner:
+        description: "Parse response-templates.yaml for all triggers"
+        logic: |
+          1. Load response-templates.yaml
+          2. Extract all template triggers
+          3. Map triggers to orchestrators (naming convention)
+          4. Detect orphaned triggers (no orchestrator) and ghost features
+        
+        example_output:
+          - trigger: "start tdd"
+            template: "tdd_workflow_start"
+            orchestrator: "TDDWorkflowOrchestrator"
+            status: "wired"
+          
+          - trigger: "deploy cortex"
+            template: "admin_deploy"
+            orchestrator: null
+            status: "orphaned"  # No orchestrator found
+  
+  phase_2_integration_validator:
+    name: "Integration Depth Scoring System"
+    duration: "2 hours"
+    deliverables:
+      - "src/validation/integration_scorer.py"
+      - "src/validation/wiring_validator.py"
+      - "src/validation/test_coverage_validator.py"
+    
+    implementation:
+      integration_scorer:
+        description: "Calculate 0-100% integration score per feature"
+        algorithm:
+          discovered: 20    # File exists
+          imported: 40      # Import successful (no errors)
+          instantiated: 60  # Can create instance
+          documented: 70    # Has docs in modules/ or CORTEX.prompt.md
+          tested: 80        # Test file exists with >70% coverage
+          wired: 90         # Entry point trigger configured
+          optimized: 100    # Performance benchmarks pass
+        
+        logic: |
+          1. Start with discovered=20 (file exists)
+          2. Try import → +20 if successful
+          3. Try instantiate() → +20 if successful
+          4. Check docs exist → +10 if found
+          5. Check tests exist → +10 if found
+          6. Check trigger mapped → +10 if found
+          7. Run performance check → +10 if passes
+        
+        example_output:
+          TDDWorkflowOrchestrator: 100%  # Fully integrated
+          PaymentOrchestrator: 60%       # Missing tests, not wired
+          RefundAgent: 40%               # Can import, but no docs/tests/wiring
+  
+  phase_3_deployment_validator:
+    name: "Package Purity & Deployment Gates"
+    duration: "1.5 hours"
+    deliverables:
+      - "src/validation/deployment_validator.py"
+      - "Enhancement to scripts/deploy_cortex.py"
+    
+    implementation:
+      package_purity_checker:
+        description: "Ensure no admin modules in user package"
+        validation_rules:
+          admin_exclusions:
+            - "cortex-brain/admin/"
+            - "src/orchestrators/admin/"
+            - "tests/admin/"
+            - "scripts/validate_alignment.py"
+            - "scripts/deploy_cortex.py"
+          
+          entry_point_sanitization:
+            - "Strip admin commands from CORTEX.prompt.md"
+            - "Remove admin triggers from response-templates.yaml"
+            - "Validate no 'align' command in deployed package"
+          
+          binary_size_monitoring:
+            - "Track package size before/after build"
+            - "Alert if >10% increase without justification"
+            - "Flag unexpected file additions"
+      
+      deployment_gates:
+        description: "Automated quality gates before deployment"
+        gates:
+          - gate: "All user orchestrators >80% integration"
+            severity: "ERROR"
+            action: "Abort deployment if fails"
+          
+          - gate: "No mocks/stubs in production code paths"
+            severity: "ERROR"
+            action: "Abort deployment if fails"
+          
+          - gate: "All tests passing (100%)"
+            severity: "ERROR"
+            action: "Abort deployment if fails"
+          
+          - gate: "Documentation synchronized"
+            severity: "WARNING"
+            action: "Allow deployment but report issue"
+          
+          - gate: "Version consistency (VERSION, prompt, package.json)"
+            severity: "ERROR"
+            action: "Abort deployment if fails"
+  
+  phase_4_optimize_integration:
+    name: "Integrate with Optimize Entry Point"
+    duration: "1 hour"
+    deliverables:
+      - "Enhancement to src/orchestrators/optimize_orchestrator.py"
+      - "Silent execution mode (only show if issues)"
+    
+    implementation:
+      optimize_enhancement:
+        description: "Add alignment validation to optimize flow"
+        code_location: "src/orchestrators/optimize_orchestrator.py"
+        
+        execution_logic: |
+          def execute(self):
+              # NEW: Admin-only alignment validation
+              if self._is_admin_environment():
+                  alignment_report = self._run_alignment_check()
+                  
+                  if not alignment_report.is_healthy:
+                      print(f"⚠️  {alignment_report.issues_found} alignment issues")
+                      print("   Run 'align report' for details")
+              
+              # EXISTING: Normal optimize operations
+              print("🔧 Optimizing CORTEX brain...")
+              self.clean_brain()
+              self.vacuum_databases()
+              self.optimize_cache()
+        
+        silent_mode:
+          description: "Don't spam output if everything is healthy"
+          behavior: |
+            If alignment_report.is_healthy:
+              - No output (silent execution)
+              - Continue to normal optimize
+            
+            If alignment_report.has_warnings:
+              - Show warning count
+              - Suggest 'align report' command
+            
+            If alignment_report.has_errors:
+              - Show error count
+              - Require 'align report' before continuing
+  
+  phase_5_self_healing:
+    name: "Auto-Remediation & Suggestions"
+    duration: "1.5 hours"
+    deliverables:
+      - "src/remediation/wiring_generator.py"
+      - "src/remediation/test_skeleton_generator.py"
+      - "src/remediation/documentation_generator.py"
+    
+    implementation:
+      wiring_generator:
+        description: "Generate integration code for unwired features"
+        example_output: |
+          # Suggested wiring for PaymentOrchestrator
+          
+          # 1. Add to response-templates.yaml:
+          payment_processing:
+            name: "Payment Processing"
+            triggers:
+              - "process payment"
+              - "handle payment"
+            response_type: "detailed"
+            content: "..."
+          
+          # 2. Update CORTEX.prompt.md:
+          ## 💳 Payment Processing
+          **Commands:**
+          - `process payment` - Handle payment transactions
+          ...
+      
+      test_skeleton_generator:
+        description: "Create pytest template for untested features"
+        example_output: |
+          # tests/orchestrators/test_payment_orchestrator.py
+          import pytest
+          from src.orchestrators.payment_orchestrator import PaymentOrchestrator
+          
+          class TestPaymentOrchestrator:
+              def test_initialization(self):
+                  orchestrator = PaymentOrchestrator()
+                  assert orchestrator is not None
+              
+              def test_execute(self):
+                  # TODO: Implement test logic
+                  pass
+  
+  phase_6_reporting:
+    name: "Alignment Reports & Dashboards"
+    duration: "1 hour"
+    deliverables:
+      - "src/reporting/alignment_reporter.py"
+      - "Feature activation dashboard template"
+      - "Deployment readiness report template"
+    
+    implementation:
+      alignment_report:
+        format: "Markdown with tables and charts"
+        sections:
+          - "Executive Summary (health score, issue count)"
+          - "Feature Integration Dashboard (table with scores)"
+          - "Critical Issues (blockers for deployment)"
+          - "Warnings (non-blocking issues)"
+          - "Auto-Remediation Suggestions (code snippets)"
+        
+        example_output: |
+          # CORTEX System Alignment Report
+          Generated: 2025-11-25 14:30:00
+          
+          ## Executive Summary
+          Overall Health: 85% ⚠️
+          Critical Issues: 2
+          Warnings: 5
+          
+          ## Feature Integration Dashboard
+          | Feature               | Score | Status    | Issues                     |
+          |-----------------------|-------|-----------|----------------------------|
+          | TDDWorkflowOrchestrator | 100%  | ✅ Healthy | None                       |
+          | ViewDiscoveryAgent      | 100%  | ✅ Healthy | None                       |
+          | PaymentOrchestrator     | 60%   | ⚠️ Warning | Missing tests, not wired   |
+          | RefundAgent             | 40%   | ❌ Critical | No docs, tests, or wiring  |
+          
+          ## Critical Issues
+          1. RefundAgent (40% integration)
+             - Missing documentation
+             - No test coverage
+             - Not wired to entry point
+             - **Action:** Run auto-remediation or remove feature
+          
+          2. PaymentOrchestrator (60% integration)
+             - Missing test coverage (0%)
+             - No entry point trigger configured
+             - **Action:** Add tests and wiring (see suggestions below)
+
+testing_strategy:
+  test_files:
+    - "tests/admin/test_system_alignment.py"
+    - "tests/discovery/test_orchestrator_scanner.py"
+    - "tests/validation/test_integration_scorer.py"
+    - "tests/validation/test_deployment_validator.py"
+  
+  coverage_target: "90%"
+  
+  test_scenarios:
+    - "Discover all orchestrators in src/orchestrators/"
+    - "Calculate integration scores correctly"
+    - "Detect orphaned triggers (no orchestrator)"
+    - "Detect ghost features (orchestrator but no trigger)"
+    - "Validate admin-only execution (graceful decline in user repos)"
+    - "Generate wiring suggestions for unwired features"
+    - "Generate test skeletons for untested features"
+    - "Validate deployment package purity (no admin leaks)"
+
+future_proofing:
+  design_principles:
+    - "Zero hardcoded feature lists (convention-based discovery)"
+    - "No manual updates required when adding features"
+    - "Self-healing architecture (auto-remediation suggestions)"
+    - "Continuous monitoring (integrate with optimize/healthcheck)"
+  
+  scalability:
+    - "Handles 100+ orchestrators without performance degradation"
+    - "Caches discovery results (invalidate on file changes)"
+    - "Parallel validation for large codebases"
+  
+  extensibility:
+    - "Pluggable discovery rules (add new scanners easily)"
+    - "Pluggable validation rules (add new checks easily)"
+    - "Pluggable remediation generators (add new fix patterns)"
+
+success_criteria:
+  technical:
+    - "align command executes in <5 seconds for full validation"
+    - "Discovers 100% of orchestrators/agents without manual config"
+    - "Integration scores accurate (validated against manual audit)"
+    - "No false positives (features marked unwired when they are wired)"
+    - "Admin-only execution enforced (fails gracefully in user repos)"
+  
+  business:
+    - "Zero maintenance required when adding new features"
+    - "Deployment confidence score >95% (no surprises in production)"
+    - "Developers can self-serve (auto-remediation suggestions)"
+    - "Reduces manual code review time by 70%"
+
+implementation_order:
+  1: "Phase 1: Core Discovery Engine (2 hours)"
+  2: "Phase 2: Integration Validator (2 hours)"
+  3: "Phase 4: Optimize Integration (1 hour) - Early integration for testing"
+  4: "Phase 3: Deployment Validator (1.5 hours)"
+  5: "Phase 5: Auto-Remediation (1.5 hours)"
+  6: "Phase 6: Reporting (1 hour)"
+
+rollout_strategy:
+  week_1:
+    - "Implement Phase 1-2 (discovery + validation)"
+    - "Test in CORTEX dev repo"
+    - "Validate discovery accuracy (manual audit comparison)"
+  
+  week_2:
+    - "Implement Phase 3-4 (deployment validator + optimize integration)"
+    - "Run full validation before next deployment"
+    - "Document findings and tune thresholds"
+  
+  week_3:
+    - "Implement Phase 5-6 (auto-remediation + reporting)"
+    - "Generate alignment report"
+    - "Fix all detected issues"
+    - "Validate 100% integration before deployment"
+
+risks_and_mitigations:
+  risk_1:
+    description: "False positives (features marked unwired when they are wired)"
+    probability: "Medium"
+    impact: "High (erodes trust in align)"
+    mitigation: "Extensive testing with manual audit comparison"
+  
+  risk_2:
+    description: "Performance degradation (slow discovery on large codebases)"
+    probability: "Low"
+    impact: "Medium (annoying but not blocking)"
+    mitigation: "Cache discovery results, parallel validation"
+  
+  risk_3:
+    description: "Admin detection bypass (user repo mistaken for admin)"
+    probability: "Low"
+    impact: "High (admin features exposed to users)"
+    mitigation: "Multi-marker detection, explicit admin flag"
+
+documentation_updates:
+  - file: ".github/prompts/CORTEX.prompt.md"
+    section: "Admin Operations"
+    content: |
+      ## 🔧 System Alignment (Admin Only)
+      
+      **Purpose:** Auto-discover and validate all CORTEX enhancements
+      
+      **Commands:**
+      - `align` - Run full system alignment (manual execution)
+      - `align report` - Show detailed alignment report
+      - `optimize` - Includes automatic alignment check (silent if healthy)
+      
+      **Automatic Execution:**
+      - Runs during `optimize` command in CORTEX dev repo
+      - Silent if all features >80% integrated
+      - Shows warnings if issues detected
+      
+      **Not Available:**
+      - User repositories (graceful decline)
+      - Deployed packages (admin-only feature)
+  
+  - file: "cortex-brain/response-templates.yaml"
+    section: "templates"
+    content: |
+      align_success:
+        name: "Alignment Success"
+        triggers:
+          - "align"
+          - "system alignment"
+          - "validate alignment"
+        response_type: "detailed"
+        content: "Admin-only alignment validation complete..."
+
+notes:
+  - "This design eliminates all hardcoded feature lists"
+  - "New orchestrators auto-discovered by file presence"
+  - "Zero maintenance required when adding features"
+  - "Admin-only execution enforced (not in deployed packages)"
+  - "Integration with optimize provides continuous monitoring"
+  - "Self-healing architecture (auto-remediation suggestions)"

@@ -1,0 +1,17 @@
+{
+  "label": "upgrade_migrations",
+  "metrics": {
+    "response_time_ms": 0.004499917849898338,
+    "memory_peak_mb": 0.00124359130859375,
+    "memory_current_mb": 0.0009002685546875,
+    "cpu_percent": 0.0,
+    "timestamp": "2025-11-25T15:42:19.806181",
+    "passed": true,
+    "violations": []
+  },
+  "thresholds": {
+    "response_time_ms": 500.0,
+    "memory_mb": 100.0,
+    "cpu_percent": 50.0
+  }
+}

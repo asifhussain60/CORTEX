@@ -1,9 +1,37 @@
-# KDS v3.0 - Key Data Streams System
+# CORTEX - Cognitive Operations and Reasoning TEXture
 
-**Version:** 3.0.0  
-**Status:** 🏗️ INFRASTRUCTURE READY  
-**Framework:** .NET 8.0 (Blazor) + Playwright + PowerShell  
-**Last Updated:** 2025-11-02
+**Version:** 5.2.0 (Response Template Architecture)  
+**Status:** ✅ ACTIVE - Production Ready  
+**License:** 📖 Source-Available (Use Allowed, No Contributions)  
+**Framework:** Browser-Native (SQL.js + TypeScript) + PowerShell  
+**Last Updated:** 2025-11-23
+
+[![GitHub](https://img.shields.io/badge/GitHub-asifhussain60%2FCORTEX-blue)](https://github.com/asifhussain60/CORTEX)
+[![License](https://img.shields.io/badge/License-Source--Available-green)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success)](https://github.com/asifhussain60/CORTEX)
+
+---
+
+## 📜 License & Usage
+
+**CORTEX is Source-Available:** This means the code is publicly viewable and usable, but external contributions are not accepted.
+
+✅ **You Can:**
+- Use CORTEX in your personal or commercial projects
+- Study the architecture and learn from the codebase
+- Deploy CORTEX as your GitHub Copilot enhancement
+- Fork for private experimentation and learning
+- Reference CORTEX in your work with attribution
+
+❌ **You Cannot:**
+- Submit pull requests or contributions (not accepted)
+- Create public derivatives or competing products
+- Remove copyright or attribution notices
+- Redistribute modified versions publicly
+
+**Why No Contributions?** CORTEX is a single-author project with a specific architectural vision. To maintain consistency and quality, development remains centralized. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+**Attribution:** When using CORTEX, please credit: "CORTEX by Asif Hussain (https://github.com/asifhussain60/CORTEX)"
 
 ---
 
@@ -13,10 +41,10 @@ GitHub Copilot is brilliant—can write code in any language, understand complex
 
 Every new chat session, Copilot forgets everything from previous conversations. You said "make it purple" five minutes ago? Gone. The file you discussed yesterday? Vanished. The architecture you explained last week? As if it never happened.
 
-**KDS is Copilot's brain** — a sophisticated dual-hemisphere cognitive system that:
+**CORTEX is Copilot's brain** — a sophisticated dual-hemisphere cognitive system that:
 
-- **Remembers** - Last 20 conversations preserved, "make it purple" references work across sessions
-- **Learns** - 3,247+ patterns accumulated from your project, each feature teaches the next
+- **Remembers** - 70-conversation FIFO capacity (growing with usage), "make it purple" references work across sessions
+- **Learns** - Pattern learning from your project, each feature teaches the next
 - **Protects** - Challenges risky proposals with data ("Test-first has 94% success rate vs 67% without")
 - **Coordinates** - LEFT BRAIN (tactical execution) + RIGHT BRAIN (strategic planning) work together
 - **Projects** - Knows your entire codebase, warns about hotspots, suggests optimal work times
@@ -24,30 +52,151 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 ### From Forgetful Intern to Expert Team Member
 
 **Week 1:** Copilot has amnesia, needs constant guidance, you explain architecture repeatedly  
-**Week 4:** Remembers 20 conversations, knows 500+ patterns, reuses workflows automatically  
-**Week 12:** Expert on YOUR project, 3,247 patterns, proactive warnings prevent issues  
+**Week 4:** Remembers recent conversations, learns patterns, reuses workflows automatically  
+**Week 12:** Expert on YOUR project, accumulated patterns, proactive warnings prevent issues  
 **Week 24:** Feels like a senior developer, challenges bad ideas with evidence, suggests similar features from months ago
 
-**KDS transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
+**CORTEX transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.**
+
+---
+
+## 🚀 Quick Start
+
+### Using CORTEX Entry Point
+
+**In GitHub Copilot Chat:**
+```
+/CORTEX help
+```
+
+### Upgrading CORTEX
+
+Keep CORTEX up-to-date with the latest features and bug fixes:
+
+```bash
+# Upgrade to latest version
+python scripts/cortex-upgrade.py
+
+# Preview upgrade without changes
+python scripts/cortex-upgrade.py --dry-run
+
+# Or from Copilot Chat
+/CORTEX upgrade
+```
+
+**Upgrade System Features:**
+- ✅ Preserves all brain data (conversations, learned patterns)
+- ✅ Auto-backup before upgrade with rollback capability
+- ✅ Intelligent config merging (preserves customizations)
+- ✅ Schema migrations for database upgrades
+- ✅ Zero data loss guarantee
+
+See **[Upgrade Guide](cortex-brain/documents/implementation-guides/UPGRADE-GUIDE.md)** for details.
+
+### First Time Setup
+
+**Option 1: Automatic Detection (Recommended)**
+
+Just try to use CORTEX - it will automatically detect if setup is needed:
+
+```bash
+# In GitHub Copilot Chat
+help
+
+# Or from terminal
+python -m src.main "help"
+```
+
+If setup is needed, you'll see a friendly prompt with instructions.
+
+**Option 2: Manual Setup**
+
+Run the setup command explicitly:
+
+```bash
+# From terminal
+python -m src.main --setup
+
+# Or in GitHub Copilot Chat
+setup cortex
+```
+
+**What Setup Does:**
+1. ✅ Analyzes your repository structure (languages, frameworks, file count)
+2. ✅ Installs required tooling (Python deps, Node.js deps, MkDocs)
+3. ✅ Initializes CORTEX brain (4-tier architecture with databases)
+4. ✅ Runs crawlers to learn your codebase
+5. ✅ Validates setup and provides quick start guide
+
+**Time:** 5-10 minutes | **Automatic:** Safe to re-run anytime
+
+### Using CORTEX
+
+In GitHub Copilot Chat, use the simple entry point:
+
+```
+help
+```
+
+[Your request - CORTEX will handle everything]
+```
+
+**From Terminal:**
+```bash
+# Interactive mode
+python -m src.main
+
+# Single command
+python -m src.main "create tests for auth.py"
+
+# With verbose logging
+python -m src.main "implement feature" --verbose
+```
+
+### What Can You Ask CORTEX?
+
+- **"Add user authentication"** → CORTEX plans multi-phase implementation
+- **"Continue"** → Resumes where you left off automatically
+- **"Test this feature"** → Generates comprehensive tests
+- **"Make it purple"** → Remembers context from earlier in conversation
+- **"What should I work on?"** → Analyzes your patterns and suggests tasks
 
 ---
 
 ## 📋 Overview
 
-KDS (Key Data Streams) is a prompt engineering system designed to manage GitHub Copilot context efficiently for building applications. It provides:
+CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhancement system designed to give GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. It provides:
 
-1. **Context Management** - Break features into planned phases/tasks with auto-execution
-2. **Task Orchestration** - Chain tasks using handoff JSON files
-3. **Test Standardization** - Playwright orchestration and test pattern reuse
-4. **Template-Driven Output** - Customizable user responses via Mustache templates
+1. **4-Tier Brain Architecture** - Instinct, Working Memory, Knowledge Graph, Development Context
+2. **10 Specialist Agents** - Intent routing, planning, execution, testing, validation, governance
+3. **Dual-Hemisphere Processing** - LEFT BRAIN (tactical) + RIGHT BRAIN (strategic)
+4. **Context Continuity** - "Make it purple" works across sessions (70-conversation FIFO capacity)
+5. **Pattern Learning** - Accumulates wisdom from every interaction
+6. **Quality Protection** - Challenges risky changes with evidence-based recommendations
+7. **Real-Time Performance Analytics** - Track metrics, health scores, and trends across projects
+8. **Community Feedback Loop** - Share insights via GitHub Gists, aggregate cross-project data
 
 ---
 
 ## 🗂️ Directory Structure
 
 ```
-KDS/
+CORTEX/
 ├── README.md                           # This file - system overview
+├── .github/
+│   ├── copilot-instructions.md         # Auto-loaded baseline context
+│   └── prompts/CORTEX.prompt.md        # 🎯 UNIVERSAL ENTRY POINT - Use /CORTEX
+├── scripts/
+│   ├── launchers/run-cortex.sh         # Quick launcher for CORTEX entry point
+│   └── maintenance/                    # Maintenance utilities
+├── cortex-brain/                       # The cognitive storage system
+│   ├── tier0/                          # Instinct (immutable rules)
+│   ├── tier1/                          # Working memory (last 20 conversations)
+│   ├── tier2/                          # Knowledge graph (patterns learned)
+│   └── tier3/                          # Development context (git, tests, metrics)
+├── scripts/                            # Automation and maintenance scripts
+├── cortex-design/                      # Implementation plans and architecture
+└── docs/                               # Comprehensive documentation
 │
 ├── docs/                               # 📚 ALL DOCUMENTATION
 │   ├── architecture/                   # System design & patterns

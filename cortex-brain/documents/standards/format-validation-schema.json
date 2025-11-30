@@ -1,0 +1,516 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/asifhussain60/CORTEX/schemas/documentation-format-v1.0.json",
+  "title": "CORTEX Interactive Dashboard Format Validation Schema",
+  "description": "JSON schema for validating CORTEX admin operation dashboard outputs against DOCUMENTATION-FORMAT-SPEC-v1.0",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["metadata", "overview", "visualizations", "diagrams", "dataTable", "recommendations"],
+  "additionalProperties": true,
+  
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Dashboard metadata and generation information",
+      "required": ["generatedAt", "version", "operationType", "author"],
+      "properties": {
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of dashboard generation"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "CORTEX version (semantic versioning)"
+        },
+        "operationType": {
+          "type": "string",
+          "enum": [
+            "enterprise_documentation",
+            "system_alignment",
+            "diagram_regeneration",
+            "design_sync",
+            "analytics",
+            "response_templates"
+          ],
+          "description": "Type of admin operation"
+        },
+        "author": {
+          "type": "string",
+          "const": "CORTEX",
+          "description": "Dashboard generator (always CORTEX)"
+        }
+      }
+    },
+    
+    "overview": {
+      "type": "object",
+      "description": "Tab 1: Overview with narrative intelligence",
+      "required": ["executiveSummary", "keyMetrics", "statusIndicator"],
+      "properties": {
+        "executiveSummary": {
+          "type": "string",
+          "minLength": 100,
+          "maxLength": 1000,
+          "description": "3-sentence executive summary in natural language"
+        },
+        "keyMetrics": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 10,
+          "description": "Top 5-10 key performance metrics",
+          "items": {
+            "type": "object",
+            "required": ["label", "value", "status"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 50,
+                "description": "Metric display label"
+              },
+              "value": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "number" }
+                ],
+                "description": "Metric value (number or formatted string)"
+              },
+              "trend": {
+                "type": "string",
+                "enum": ["up", "down", "stable"],
+                "description": "Trend direction"
+              },
+              "trendValue": {
+                "type": "string",
+                "pattern": "^[+-]\\d+(\\.\\d+)?%?$",
+                "description": "Trend magnitude (e.g., '+5%', '-2.5')"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["healthy", "warning", "critical"],
+                "description": "Metric status indicator"
+              }
+            }
+          }
+        },
+        "statusIndicator": {
+          "type": "object",
+          "required": ["status", "message"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["healthy", "warning", "critical"],
+              "description": "Overall system health status"
+            },
+            "message": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "Status explanation message"
+            }
+          }
+        }
+      }
+    },
+    
+    "visualizations": {
+      "type": "object",
+      "description": "Tab 2: Interactive D3.js and Chart.js visualizations",
+      "required": ["forceGraph", "timeSeries"],
+      "properties": {
+        "forceGraph": {
+          "type": "object",
+          "description": "D3.js force-directed graph data",
+          "required": ["nodes", "links"],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["id", "group", "label"],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique node identifier"
+                  },
+                  "group": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Node group for color coding"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Node display label"
+                  },
+                  "size": {
+                    "type": "number",
+                    "minimum": 1,
+                    "description": "Node size (optional)"
+                  }
+                }
+              }
+            },
+            "links": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "type": "object",
+                "required": ["source", "target"],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "description": "Source node ID"
+                  },
+                  "target": {
+                    "type": "string",
+                    "description": "Target node ID"
+                  },
+                  "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Link strength (optional)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "timeSeries": {
+          "type": "object",
+          "description": "Chart.js time series data",
+          "required": ["labels", "datasets"],
+          "properties": {
+            "labels": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "string",
+                "description": "X-axis labels (dates or categories)"
+              }
+            },
+            "datasets": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["label", "data"],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Dataset label"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Y-axis data points"
+                  },
+                  "borderColor": {
+                    "type": "string",
+                    "description": "Line color (CSS color)"
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "description": "Fill color (CSS color)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "barChart": {
+          "type": "object",
+          "description": "Optional bar chart data",
+          "required": ["labels", "data"],
+          "properties": {
+            "labels": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "data": {
+              "type": "array",
+              "items": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    
+    "diagrams": {
+      "type": "array",
+      "description": "Tab 3: Mermaid diagrams with interactive controls",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["title", "mermaidCode", "type"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 100,
+            "description": "Diagram title"
+          },
+          "mermaidCode": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Mermaid diagram definition"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "flowchart",
+              "sequenceDiagram",
+              "classDiagram",
+              "stateDiagram",
+              "erDiagram",
+              "gantt",
+              "pie"
+            ],
+            "description": "Mermaid diagram type"
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional diagram description"
+          }
+        }
+      }
+    },
+    
+    "dataTable": {
+      "type": "array",
+      "description": "Tab 4: Sortable and filterable data table",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "status"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Item name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Item type/category"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "warning", "critical", "unknown"],
+            "description": "Item status"
+          },
+          "health": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Health percentage (0-100)"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "description": "Last update date (YYYY-MM-DD)"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    
+    "recommendations": {
+      "type": "array",
+      "description": "Tab 5: Prioritized actionable recommendations",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["priority", "title", "rationale", "steps", "expectedImpact", "estimatedEffort"],
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Recommendation priority level"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 100,
+            "description": "Recommendation title"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 500,
+            "description": "Why this recommendation matters"
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Implementation step"
+            },
+            "description": "Numbered action items"
+          },
+          "expectedImpact": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 200,
+            "description": "Quantified benefits"
+          },
+          "estimatedEffort": {
+            "type": "string",
+            "pattern": "^\\d+-?\\d*\\s*(min|hour|day)s?$",
+            "description": "Time/complexity estimate (e.g., '2-4 hours', '30 mins')"
+          },
+          "relatedResources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri-reference",
+              "description": "Link to documentation or guide"
+            },
+            "description": "Related documentation links"
+          }
+        }
+      }
+    }
+  },
+  
+  "definitions": {
+    "performanceCriteria": {
+      "description": "Performance validation criteria (checked programmatically, not in JSON)",
+      "generationTime": {
+        "description": "Dashboard generation time",
+        "maximum": 5,
+        "unit": "seconds"
+      },
+      "pageLoadTime": {
+        "description": "Initial page load time",
+        "maximum": 2,
+        "unit": "seconds"
+      },
+      "d3RenderTime": {
+        "description": "D3.js visualization render time",
+        "maximum": 1,
+        "unit": "seconds"
+      },
+      "tabSwitchTime": {
+        "description": "Tab switching animation time",
+        "maximum": 0.3,
+        "unit": "seconds"
+      },
+      "exportPDFTime": {
+        "description": "PDF export time",
+        "maximum": 7,
+        "unit": "seconds"
+      },
+      "exportPNGTime": {
+        "description": "PNG export time",
+        "maximum": 3,
+        "unit": "seconds"
+      },
+      "exportPPTXTime": {
+        "description": "PPTX export time",
+        "maximum": 10,
+        "unit": "seconds"
+      },
+      "memoryUsage": {
+        "description": "Peak memory usage during generation",
+        "maximum": 500,
+        "unit": "MB"
+      },
+      "fileSize": {
+        "description": "Generated HTML file size",
+        "maximum": 2,
+        "unit": "MB"
+      }
+    },
+    
+    "securityCriteria": {
+      "description": "Security validation criteria (checked programmatically)",
+      "cspHeaders": {
+        "required": true,
+        "description": "Content-Security-Policy headers must be present"
+      },
+      "noEval": {
+        "required": true,
+        "description": "No eval() usage allowed"
+      },
+      "noInlineHandlers": {
+        "required": true,
+        "description": "No inline event handlers (onclick, etc.)"
+      },
+      "inputSanitization": {
+        "required": true,
+        "description": "All user input must be sanitized"
+      },
+      "noExternalTrackers": {
+        "required": true,
+        "description": "No external analytics or tracking"
+      }
+    },
+    
+    "htmlStructure": {
+      "description": "Required HTML structure elements (checked via BeautifulSoup)",
+      "required": [
+        "nav.dashboard-tabs",
+        "button.tab-button[data-tab='overview']",
+        "button.tab-button[data-tab='visualizations']",
+        "button.tab-button[data-tab='diagrams']",
+        "button.tab-button[data-tab='data']",
+        "button.tab-button[data-tab='recommendations']",
+        "div.tab-content#overview-tab",
+        "div.tab-content#visualizations-tab",
+        "div.tab-content#diagrams-tab",
+        "div.tab-content#data-tab",
+        "div.tab-content#recommendations-tab",
+        "div.export-controls"
+      ]
+    },
+    
+    "d3jsRequirements": {
+      "description": "D3.js API usage requirements (checked via regex)",
+      "minimumVersion": "7.0.0",
+      "requiredAPIs": [
+        "d3.forceSimulation",
+        "d3.forceLink",
+        "d3.forceManyBody",
+        "d3.forceCenter",
+        "d3.select",
+        "d3.zoom"
+      ],
+      "interactiveFeatures": [
+        "zoom",
+        "pan",
+        "hover tooltips",
+        "click handlers",
+        "smooth transitions"
+      ]
+    },
+    
+    "chartjsRequirements": {
+      "description": "Chart.js configuration requirements",
+      "minimumVersion": "3.0.0",
+      "requiredOptions": [
+        "responsive: true",
+        "plugins.legend",
+        "plugins.tooltip",
+        "animation"
+      ]
+    },
+    
+    "mermaidRequirements": {
+      "description": "Mermaid diagram requirements",
+      "minimumVersion": "10.0.0",
+      "requiredFeatures": [
+        "diagram rendering",
+        "zoom controls",
+        "pan support",
+        "export functionality"
+      ]
+    }
+  }
+}

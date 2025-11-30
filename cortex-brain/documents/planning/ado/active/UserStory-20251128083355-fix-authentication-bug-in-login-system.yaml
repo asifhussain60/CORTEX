@@ -1,0 +1,31 @@
+work_item_type: User Story
+title: Fix authentication bug in login system
+description: Need to fix authentication issues in `src/validators/git_history_validator.py`
+  and `src/orchestrators/ado_work_item_orchestrator.py`
+assigned_to: null
+iteration: null
+area_path: null
+priority: 2
+tags: []
+acceptance_criteria: []
+related_work_items: []
+created_date: '2025-11-28T08:33:55.976343'
+updated_date: '2025-11-28T08:33:55.976352'
+work_item_id: UserStory-20251128083355
+status: active
+git_context:
+  validation_status: BLOCKED
+  validation_message: Git history context required but not provided
+  required_actions:
+  - Run git history analysis before proceeding
+  - 'Check: git log --oneline [file] (recent activity)'
+  - 'Check: git log --grep="security|vulnerability" (security patterns)'
+  - 'Check: git shortlog -sn [file] (contributors)'
+  - 'Check: git blame [file] (line-level history)'
+  context_enrichment: {}
+quality_score: 0.0
+high_risk_files: []
+related_commits: []
+contributors: []
+sme_suggestions: []
+schema_version: '1.0'

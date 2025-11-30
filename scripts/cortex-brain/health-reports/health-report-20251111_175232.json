@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-11-11T17:52:32.346916",
+  "overall_health": "critical",
+  "health_score": 15.0,
+  "issues": [
+    {
+      "severity": "critical",
+      "category": "brain",
+      "title": "Missing brain tier: tier1",
+      "description": "Required brain tier directory not found: D:\\PROJECTS\\CORTEX\\scripts\\cortex-brain\\tier1",
+      "file_path": null,
+      "line_number": null,
+      "recommendation": "Initialize tier1 brain tier",
+      "auto_fixable": false
+    },
+    {
+      "severity": "critical",
+      "category": "brain",
+      "title": "Missing brain tier: tier2",
+      "description": "Required brain tier directory not found: D:\\PROJECTS\\CORTEX\\scripts\\cortex-brain\\tier2",
+      "file_path": null,
+      "line_number": null,
+      "recommendation": "Initialize tier2 brain tier",
+      "auto_fixable": false
+    },
+    {
+      "severity": "critical",
+      "category": "brain",
+      "title": "Missing brain tier: tier3",
+      "description": "Required brain tier directory not found: D:\\PROJECTS\\CORTEX\\scripts\\cortex-brain\\tier3",
+      "file_path": null,
+      "line_number": null,
+      "recommendation": "Initialize tier3 brain tier",
+      "auto_fixable": false
+    },
+    {
+      "severity": "high",
+      "category": "brain",
+      "title": "Missing brain database",
+      "description": "Brain database file not found",
+      "file_path": null,
+      "line_number": null,
+      "recommendation": "Initialize brain database",
+      "auto_fixable": false
+    }
+  ],
+  "obsolete_tests": [],
+  "statistics": {},
+  "recommendations": [
+    "Increase code coverage from 0.0% to at least 80%",
+    "Address 3 critical issues immediately"
+  ]
+}

@@ -1,0 +1,266 @@
+# CORTEX Documentation Governance Rules
+# Version: 1.0
+# Purpose: Prevent duplicate documentation, enforce canonical names, maintain structure integrity
+
+documentation_structure:
+  version: "1.0"
+  last_updated: "2025-11-27"
+  
+  # Fixed categories (never configurable)
+  fixed_categories:
+    reports:
+      description: "Time-series data, timestamped reports"
+      naming_pattern: "[TYPE]-[DATE]-[DESCRIPTION].md"
+      update_strategy: "create_timestamped"
+      examples:
+        - "ISSUE-3-PHASE-4-COMPLETE.md"
+        - "TDD-MASTERY-PHASE-1-REPORT.md"
+        - "ALIGNMENT-REPORT-20251127.md"
+    
+    analysis:
+      description: "Code analysis, architecture analysis, system reviews"
+      naming_pattern: "[SUBJECT]-analysis.md"
+      update_strategy: "version_or_update"
+      examples:
+        - "optimization-principles.yaml"
+        - "code-quality-analysis.md"
+        - "architecture-analysis.md"
+    
+    summaries:
+      description: "Project summaries, progress summaries, milestone reports"
+      naming_pattern: "[PROJECT]-summary.md"
+      update_strategy: "update_in_place"
+      examples:
+        - "cortex-3.2.0-summary.md"
+        - "quarterly-progress-summary.md"
+    
+    investigations:
+      description: "Bug investigations, issue analysis, root cause analysis"
+      naming_pattern: "investigation-[ISSUE]-[DESCRIPTION].md"
+      update_strategy: "create_timestamped"
+      examples:
+        - "investigation-issue-67-test-isolation.md"
+        - "investigation-performance-degradation.md"
+    
+    planning:
+      description: "Feature plans, ADO work items, RFC documents"
+      naming_pattern: "PLAN-[DATE]-[FEATURE].md"
+      update_strategy: "create_new"
+      subdirectories:
+        - "features/active"
+        - "features/approved"
+        - "ado/active"
+        - "ado/completed"
+        - "ado/blocked"
+        - "bugs/active"
+        - "rfcs/active"
+      examples:
+        - "PLAN-2025-11-27-authentication.md"
+        - "ADO-12345-user-dashboard.md"
+    
+    conversation-captures:
+      description: "Imported conversations, chat history"
+      naming_pattern: "conversation-[ID]-[DATE].md"
+      update_strategy: "create_new"
+      examples:
+        - "conversation-001-20251127.md"
+    
+    implementation-guides:
+      description: "How-to guides, tutorials, step-by-step instructions"
+      naming_pattern: "[FEATURE]-guide.md"
+      update_strategy: "append_phases"
+      examples:
+        - "tdd-mastery-guide.md"
+        - "planning-orchestrator-guide.md"
+        - "upgrade-guide.md"
+    
+    recommendations:
+      description: "Improvement suggestions, proposals, enhancement ideas"
+      naming_pattern: "[TOPIC]-recommendation.md"
+      update_strategy: "update_in_place"
+      examples:
+        - "documentation.md"
+        - "testing-improvements.md"
+    
+    feedback:
+      description: "User feedback, bug reports, feature requests"
+      naming_pattern: "CORTEX-FEEDBACK-[ID].md"
+      update_strategy: "create_timestamped"
+      examples:
+        - "CORTEX-FEEDBACK-20251127-123456.md"
+    
+    cache:
+      description: "Cache metadata, performance data"
+      naming_pattern: "cache-[TYPE].md"
+      update_strategy: "update_in_place"
+      examples:
+        - "cache-status.md"
+        - "cache-performance.md"
+
+  # Module guides (separate from documents)
+  module_guides:
+    location: ".github/prompts/modules/"
+    update_strategy: "update_in_place"
+    canonical_names:
+      planning: "planning-orchestrator-guide.md"
+      tdd: "tdd-mastery-guide.md"
+      tutorial: "hands-on-tutorial-guide.md"
+      upgrade: "upgrade-guide.md"
+      alignment: "system-alignment-guide.md"
+      cache: "cache-management-guide.md"
+      setup: "setup-epm-guide.md"
+      response_format: "response-format.md"
+      template: "template-guide.md"
+      code_review: "code-review-feature-guide.md"
+
+governance_rules:
+  # Rule 1: Search before creating
+  search_before_create:
+    enabled: true
+    search_locations:
+      - ".github/prompts/modules/"
+      - "cortex-brain/documents/"
+      - "CORTEX.prompt.md"
+      - "README.md"
+    similarity_threshold: 0.75  # 75% semantic similarity = potential duplicate
+    
+  # Rule 2: Update over duplicate
+  update_over_duplicate:
+    enabled: true
+    exceptions:
+      - "reports"  # Always timestamped
+      - "planning"  # Always new plan
+      - "conversation-captures"  # Always new conversation
+      - "feedback"  # Always new feedback
+    
+  # Rule 3: Canonical names
+  canonical_names:
+    enabled: true
+    enforcement: "strict"  # strict = block, warn = allow with warning
+    
+  # Rule 4: Index awareness
+  index_awareness:
+    enabled: true
+    index_files:
+      - "CORTEX.prompt.md"  # Primary index
+      - "response-templates.yaml"  # Template index
+      - "cortex-brain/documents/README.md"  # Category index
+    
+  # Rule 5: Consistency enforcement
+  consistency_enforcement:
+    enabled: true
+    check_tone: true
+    check_structure: true
+    check_terminology: true
+
+duplicate_detection:
+  algorithms:
+    - name: "exact_filename_match"
+      weight: 1.0
+      description: "Same filename in different locations"
+    
+    - name: "semantic_similarity"
+      weight: 0.8
+      description: "Content similarity using embeddings"
+      threshold: 0.75
+    
+    - name: "title_similarity"
+      weight: 0.6
+      description: "Similar document titles"
+      threshold: 0.80
+    
+    - name: "keyword_overlap"
+      weight: 0.5
+      description: "Overlapping key terms"
+      threshold: 0.60
+
+merge_strategies:
+  module_guides:
+    strategy: "update_in_place"
+    preserve:
+      - "User sections (no 🧠 prefix)"
+      - "Custom examples"
+      - "Project-specific notes"
+    update:
+      - "CORTEX sections (🧠 prefix)"
+      - "Version numbers"
+      - "Command references"
+  
+  implementation_guides:
+    strategy: "append_phases"
+    pattern: "## Phase N: [Description]"
+    preserve_history: true
+  
+  reports:
+    strategy: "create_timestamped"
+    archive_old: true
+    retention_days: 90
+  
+  analysis:
+    strategy: "version_or_update"
+    versioning_pattern: "[NAME]-v[VERSION].md"
+    update_threshold: "minor_changes"
+
+validation:
+  pre_flight_checks:
+    - check: "category_valid"
+      description: "Category exists in fixed_categories"
+      severity: "error"
+    
+    - check: "naming_pattern"
+      description: "Filename follows category pattern"
+      severity: "warning"
+    
+    - check: "duplicate_scan"
+      description: "No similar documents exist"
+      severity: "error"
+    
+    - check: "canonical_name"
+      description: "Module guides use canonical names"
+      severity: "error"
+    
+    - check: "index_reference"
+      description: "Document referenced in appropriate index"
+      severity: "warning"
+
+enforcement:
+  # Brain protection integration
+  brain_protection_rule: "PREVENT_DUPLICATE_DOCUMENTATION"
+  severity: "BLOCKED"
+  
+  # Validation on creation
+  validate_on_create: true
+  validate_on_update: true
+  
+  # Override mechanism
+  allow_override: false  # No overrides for duplicate prevention
+  require_justification: true
+
+metrics:
+  track_duplicates_prevented: true
+  track_consolidations: true
+  track_canonical_violations: true
+  report_frequency: "weekly"
+
+# Integration points
+integrations:
+  system_alignment:
+    enabled: true
+    check_doc_structure: true
+    report_duplicates: true
+    suggest_consolidation: true
+  
+  optimize:
+    enabled: true
+    include_doc_deduplication: true
+    consolidate_duplicates: true
+  
+  cleanup:
+    enabled: true
+    identify_redundant_docs: true
+    suggest_archive: true
+  
+  healthcheck:
+    enabled: true
+    validate_structure: true
+    check_index_consistency: true
