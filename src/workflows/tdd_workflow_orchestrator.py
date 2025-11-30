@@ -1,13 +1,15 @@
 """
-TDD Workflow Orchestrator - Phase 3 Milestone 3.1
+TDD Workflow Orchestrator - Phase 4 Milestone 3.2.1 - Vision API Integration
 
 Unified API for complete TDD workflow integrating:
 - Phase 1: Test generation (edge cases, domain knowledge, errors, parametrized)
 - Phase 2: State machine (RED→GREEN→REFACTOR), refactoring intelligence, session tracking
+- Phase 4: Vision API auto-scan for screenshot-driven test generation
 
 Author: Asif Hussain
 Created: 2025-11-23
-Phase: TDD Mastery Phase 3
+Updated: 2025-11-30 (v3.2.1 - Vision API Integration)
+Phase: TDD Mastery Phase 4
 """
 
 import ast
@@ -46,6 +48,9 @@ from src.workflows.workspace_context_manager import WorkspaceContextManager
 
 # Phase 4 - Git Checkpoint Integration (2025-11-28)
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+
+# Phase 4 - Vision API Integration (2025-11-30)
+from src.cortex_agents.screenshot_analyzer import ScreenshotAnalyzer
 
 # Phase 4 - TDD Mastery Integration (2025-11-24)
 import sys
@@ -108,6 +113,9 @@ class TDDWorkflowConfig:
     is_cortex_test: bool = False  # True if testing CORTEX itself
     auto_detect_test_location: bool = True  # Auto-detect user repo vs CORTEX
     enable_brain_learning: bool = True  # Capture test patterns to brain
+    
+    # Phase 4 - Vision API Integration (2025-11-30)
+    enable_vision_api: bool = True  # Auto-extract UI elements from screenshots
     
     # Integration paths
     view_discovery_db: str = "cortex-brain/tier2/knowledge_graph.db"
@@ -261,6 +269,16 @@ class TDDWorkflowOrchestrator:
                 print(f"⚠️  FeedbackAgent initialization failed: {e}")
                 self.feedback_agent = None
         
+        # Phase 4 - Vision API Integration (2025-11-30)
+        self.screenshot_analyzer: Optional[Any] = None
+        if config.enable_vision_api:
+            try:
+                brain_path = PathLib(config.project_root) / "cortex-brain"
+                self.screenshot_analyzer = ScreenshotAnalyzer(config={"brain_path": str(brain_path)})
+            except Exception as e:
+                print(f"⚠️  ScreenshotAnalyzer initialization failed: {e}")
+                self.screenshot_analyzer = None
+        
         # Current session
         self.current_session_id: Optional[str] = None
         self.current_context: Optional[TDDContext] = None
@@ -371,6 +389,37 @@ class TDDWorkflowOrchestrator:
         except Exception as e:
             print(f"⚠️  Failed to capture test patterns to brain: {e}")
     
+    def _analyze_screenshots_if_present(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Extract UI elements from screenshots if present in context.
+        
+        Phase 4 - Vision API Integration (2025-11-30).
+        
+        Args:
+            context: Test generation context (may contain "images" key)
+            
+        Returns:
+            Dict with extracted UI elements (buttons, inputs, labels, etc.)
+            Empty dict if no screenshots or analyzer unavailable
+        """
+        if not self.screenshot_analyzer:
+            return {}
+        
+        if "images" not in context or not context["images"]:
+            return {}
+        
+        try:
+            result = self.screenshot_analyzer.analyze(context["images"])
+            extracted = result.get("extracted_elements", {})
+            
+            if extracted:
+                print(f"✅ Vision API: Extracted {len(extracted)} UI elements from screenshots")
+            
+            return extracted
+        except Exception as e:
+            print(f"⚠️  Screenshot analysis failed: {e}")
+            return {}
+    
     def start_session(self, feature_name: str, session_id: Optional[str] = None) -> str:
         """
         Start new TDD session in brain memory.
@@ -454,6 +503,11 @@ class TDDWorkflowOrchestrator:
         if not self.state_machine.start_red_phase():
             raise RuntimeError(f"Cannot transition to RED from {self.state_machine.get_current_state()}")
         
+        # Phase 4 - Vision API Integration: Extract UI elements from screenshots if present
+        vision_context = self._analyze_screenshots_if_present(
+            {"images": scenarios} if scenarios and any(isinstance(s, (str, bytes)) and len(s) > 100 for s in scenarios) else {}
+        )
+        
         # Read source code
         source_code = Path(source_file).read_text()
         
@@ -496,6 +550,10 @@ class TDDWorkflowOrchestrator:
                 "ast_node": func_node,
                 "scenarios": scenarios
             }
+            
+            # Add vision context if available (Phase 4 - Vision API Integration)
+            if vision_context:
+                func_info["ui_elements"] = vision_context
             
             # Generate test code
             test_code = self.test_generator.generate(func_info)
