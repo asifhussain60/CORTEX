@@ -401,7 +401,7 @@ class UnifiedEntryPointOrchestrator:
         else:
             summary += "_No acceptance criteria defined_\n"
         
-        summary += "\n---\n\n## Next Steps\n\n"
+        summary += "\n---\n\n## 🔍 Next Steps\n\n"
         summary += "1. Review and refine acceptance criteria\n"
         summary += "2. Begin implementation\n"
         summary += "3. Track progress in work item file\n"
@@ -436,7 +436,7 @@ class UnifiedEntryPointOrchestrator:
         else:
             summary += "_No related work items_\n"
         
-        summary += "\n---\n\n## Next Steps\n\n"
+        summary += "\n---\n\n## 🔍 Next Steps\n\n"
         summary += "1. Create child user stories\n"
         summary += "2. Define technical architecture\n"
         summary += "3. Track implementation progress\n"

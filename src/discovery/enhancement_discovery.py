@@ -224,7 +224,26 @@ class EnhancementDiscoveryEngine:
                 
                 commit_hash = parts[0]
                 message = parts[1]
-                commit_date = datetime.fromisoformat(parts[2].replace(' ', 'T').split('+')[0].split('-')[0].strip())
+                
+                # Parse commit date safely
+                try:
+                    # Format: "2025-11-30 04:47:33 +0000"
+                    # Remove timezone and parse
+                    date_str = parts[2].strip()
+                    # Split on space to get "2025-11-30 04:47:33"
+                    if '+' in date_str:
+                        date_str = date_str.split('+')[0].strip()
+                    elif '-' in date_str and date_str.count('-') > 2:
+                        # Handle negative timezone offset
+                        date_parts = date_str.rsplit('-', 1)
+                        date_str = date_parts[0].strip()
+                    
+                    # Replace space with T for ISO format
+                    date_str = date_str.replace(' ', 'T')
+                    commit_date = datetime.fromisoformat(date_str)
+                except (ValueError, IndexError) as date_error:
+                    logger.warning(f"Failed to parse commit date '{parts[2]}': {date_error}")
+                    continue
                 
                 # Extract feature info from commit message
                 feature_info = self._parse_commit_message(message)

@@ -36,6 +36,7 @@ from src.tier3.context_intelligence import ContextIntelligence
 from src.config import config
 from src.core.context_management.unified_context_manager import UnifiedContextManager
 from src.response_templates import TemplateLoader
+from src.tier0.brain_protector import BrainProtector, ModificationRequest, Severity
 
 
 class CortexEntry:
@@ -140,7 +141,13 @@ class CortexEntry:
         )
         self.default_token_budget = 500  # Store as instance variable
         
-        self.logger.info("CORTEX entry point initialized with unified context manager")
+        # Initialize Brain Protector for Tier 0 governance enforcement
+        self.brain_protector = BrainProtector(
+            log_path=self.brain_path / "corpus-callosum" / "protection-events.jsonl",
+            rules_path=self.brain_path / "brain-protection-rules.yaml"
+        )
+        
+        self.logger.info("CORTEX entry point initialized with unified context manager and brain protector")
     
     def process(
         self,
@@ -235,6 +242,13 @@ class CortexEntry:
                 if resume_result:
                     return resume_result
                 # Fall through to normal routing if no context to resume
+            
+            # TIER 0 PROTECTION: Validate request against brain protection rules
+            # This includes git checkpoint enforcement, TDD validation, etc.
+            protection_result = self._validate_with_brain_protector(request)
+            if protection_result:
+                # Protection violation detected - return violation message
+                return protection_result
             
             # Route to appropriate agent(s)
             routing_response = self.router.execute(request)
@@ -875,6 +889,97 @@ Ready to continue! What would you like to do next?
             logger.setLevel(logging.INFO)
         
         return logger
+    
+    def _validate_with_brain_protector(self, request: AgentRequest) -> Optional[str]:
+        """
+        Validate request against brain protection rules (Tier 0 governance).
+        
+        This enforces:
+        - Git checkpoint requirements before development
+        - TDD workflow compliance
+        - SOLID principles
+        - Knowledge quality standards
+        - Commit integrity
+        
+        Args:
+            request: Parsed agent request
+            
+        Returns:
+            Formatted error message if BLOCKED, None if allowed to proceed
+        """
+        try:
+            # Convert AgentRequest to ModificationRequest for brain protector
+            mod_request = self._create_modification_request(request)
+            
+            # Analyze request against protection rules
+            result = self.brain_protector.analyze_request(mod_request)
+            
+            # Handle based on severity
+            if result.decision == "BLOCK":
+                # BLOCKED - cannot proceed
+                self.logger.warning(f"Request BLOCKED by brain protector: {result.message}")
+                
+                # Format violation message for user
+                violation_msg = f"⚠️ **Request Blocked - Tier 0 Protection**\n\n"
+                violation_msg += f"{result.message}\n\n"
+                
+                if result.violations:
+                    violation_msg += "**Violations:**\n"
+                    for v in result.violations:
+                        violation_msg += f"- [{v.severity.value.upper()}] {v.rule}: {v.description}\n"
+                        if v.evidence:
+                            violation_msg += f"  Evidence: {v.evidence}\n"
+                
+                if result.alternatives:
+                    violation_msg += "\n**Required Actions (choose one):**\n"
+                    for i, alt in enumerate(result.alternatives, 1):
+                        violation_msg += f"{i}. {alt}\n"
+                
+                violation_msg += "\n*Tier 0 rules cannot be bypassed. They protect CORTEX integrity.*"
+                
+                return violation_msg
+                
+            elif result.decision == "WARN":
+                # WARNING - log but allow to proceed
+                self.logger.warning(f"Request has warnings: {result.message}")
+                for v in result.violations:
+                    self.logger.warning(f"  - {v.rule}: {v.description}")
+                # Continue processing
+                
+            # ALLOW or WARN - proceed with request
+            return None
+            
+        except Exception as e:
+            # Don't block on protection validation errors
+            self.logger.error(f"Brain protector validation failed: {e}", exc_info=True)
+            return None
+    
+    def _create_modification_request(self, agent_request: AgentRequest) -> ModificationRequest:
+        """
+        Convert AgentRequest to ModificationRequest for brain protector.
+        
+        Args:
+            agent_request: Parsed agent request
+            
+        Returns:
+            ModificationRequest for brain protector analysis
+        """
+        # Extract file paths from user message
+        from src.cortex_agents.utils import extract_file_paths
+        files = extract_file_paths(agent_request.user_message)
+        
+        # Build modification request
+        return ModificationRequest(
+            intent=agent_request.intent,
+            description=agent_request.user_message,
+            files=files,
+            justification=agent_request.context.get('justification') if agent_request.context else None,
+            user="user",
+            metadata={
+                "conversation_id": agent_request.conversation_id,
+                "timestamp": datetime.now().isoformat()
+            }
+        )
     
     def cleanup(self) -> None:
         """

@@ -397,6 +397,46 @@ CREATE TABLE IF NOT EXISTS tier3_work_patterns (
 CREATE INDEX IF NOT EXISTS idx_work_patterns_time_slot ON tier3_work_patterns(time_slot);
 CREATE INDEX IF NOT EXISTS idx_work_patterns_success ON tier3_work_patterns(success_rate DESC);
 
+-- Strategic Feature Health History: Track healthcheck results over time
+CREATE TABLE IF NOT EXISTS tier3_strategic_health (
+    check_id TEXT PRIMARY KEY,             -- UUID for each healthcheck run
+    timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+    conversation_id TEXT,                  -- Link to conversation that triggered check
+    
+    -- Overall health status
+    overall_status TEXT NOT NULL,          -- "healthy", "warning", "critical", "error"
+    features_checked INTEGER NOT NULL DEFAULT 5, -- Total features validated
+    features_healthy INTEGER NOT NULL DEFAULT 0,
+    features_warning INTEGER NOT NULL DEFAULT 0,
+    features_critical INTEGER NOT NULL DEFAULT 0,
+    
+    -- Individual feature statuses
+    architecture_intelligence TEXT NOT NULL, -- "healthy", "warning", "critical", "error"
+    rollback_system TEXT NOT NULL,
+    swagger_dor TEXT NOT NULL,
+    ux_enhancement TEXT NOT NULL,
+    ado_agent TEXT NOT NULL,
+    
+    -- Aggregate metrics
+    total_issues INTEGER NOT NULL DEFAULT 0,
+    issue_summary TEXT,                    -- JSON array of all issues found
+    
+    -- Trend indicators (calculated)
+    improvement_since_last INTEGER,        -- +N features improved, -N degraded
+    days_since_last_check REAL,
+    
+    CHECK (overall_status IN ('healthy', 'warning', 'critical', 'error')),
+    CHECK (architecture_intelligence IN ('healthy', 'warning', 'critical', 'error')),
+    CHECK (rollback_system IN ('healthy', 'warning', 'critical', 'error')),
+    CHECK (swagger_dor IN ('healthy', 'warning', 'critical', 'error')),
+    CHECK (ux_enhancement IN ('healthy', 'warning', 'critical', 'error')),
+    CHECK (ado_agent IN ('healthy', 'warning', 'critical', 'error'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_strategic_health_timestamp ON tier3_strategic_health(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_strategic_health_status ON tier3_strategic_health(overall_status);
+CREATE INDEX IF NOT EXISTS idx_strategic_health_conversation ON tier3_strategic_health(conversation_id);
+
 -- ============================================================================
 -- TIER 4: MIND PALACE (Documentation & Story Tracking)
 -- ============================================================================

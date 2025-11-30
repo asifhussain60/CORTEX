@@ -1,9 +1,10 @@
 # Documentation Format Enforcement - Implementation Plan
 
 **Created:** 2025-11-26  
+**Updated:** 2025-11-29  
 **Status:** Planning  
 **Priority:** High  
-**Estimated Duration:** 2 weeks
+**Estimated Duration:** 2 weeks (88 hours)
 
 ---
 
@@ -122,9 +123,120 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 
 ---
 
-### ☐ Phase 2: Update Admin EPMs (Week 1, Days 3-5)
+### ☐ Phase 2: Dashboard Modernization & Enhancement (Week 1, Day 3)
 
-**Duration:** 3 days (24 hours)
+**Duration:** 1 day (8 hours)
+
+**Objective:** Transform the basic dashboard.html into a comprehensive, modern admin interface showcasing CORTEX architecture, tiers, databases, and system components with visual distinction between real and mock data.
+
+**Tasks:**
+
+1. **Add CORTEX Logo to Header** (1 hour)
+   - File: `templates/interactive-dashboard-template.html`
+   - Changes:
+     - Add `<img>` tag in header pointing to `docs/assets/images/CORTEX-logo.png`
+     - Use base64 encoding or relative path resolution for embedded dashboards
+     - Ensure logo scales properly (max height 40px, auto width)
+     - Position logo left of "CORTEX" text with 12px spacing
+   - **Output:** Header with professional branding
+
+2. **Implement Data Source Indicators** (2 hours)
+   - Add visual styling to differentiate real vs. mock data
+   - Real data styling:
+     - Badge: Green pill badge with ✓ icon and "Live Data" text
+     - Border: Subtle green left border (2px solid #10b981)
+     - Background: Light green tint (#f0fdf4)
+   - Mock data styling:
+     - Badge: Amber pill badge with ⚠️ icon and "Mock Data" text
+     - Border: Subtle amber left border (2px solid #f59e0b)
+     - Background: Light amber tint (#fffbeb)
+   - Add global notification banner when hybrid mode detected:
+     - Top banner: "⚠️ This dashboard contains both real and simulated data. Real data sections are marked with ✓ Live Data badges."
+     - Dismissible with localStorage persistence
+     - Amber background (#fef3c7) with dark text
+   - **Output:** Clear visual distinction preventing user confusion
+
+3. **Modernize Dashboard with CDN Resources** (3 hours)
+   - Add Font Awesome 6.5.1 (free tier):
+     - `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">`
+     - Use icons for: tiers (fa-layer-group), databases (fa-database), architecture (fa-sitemap), git (fa-code-branch), tests (fa-vial)
+   - Add Chart.js 4.4.0 for advanced visualizations:
+     - `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>`
+     - Replace simple D3.js charts with Chart.js for better performance
+   - Add Mermaid.js 10.6.1 for architecture diagrams:
+     - `<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>`
+     - Auto-initialize with `mermaid.initialize({ theme: 'dark', startOnLoad: true })`
+   - Keep footprint minimal: All CDN resources, no bundled assets
+   - **Output:** Modern, lightweight dashboard (<500KB total page weight)
+
+4. **Add Architecture Visualization Tab** (2 hours)
+   - New tab: "🏗️ Architecture" (insert as 2nd tab)
+   - Sections:
+     - **4-Tier Brain Architecture** (Mermaid flowchart):
+       ```mermaid
+       graph TD
+           T0[Tier 0: Governance<br/>SKULL Rules] --> T1[Tier 1: Working Memory<br/>70 Conversations FIFO]
+           T1 --> T2[Tier 2: Knowledge Graph<br/>Patterns & FTS5]
+           T2 --> T3[Tier 3: Dev Context<br/>Metrics & Hotspots]
+       ```
+     - **10 Specialist Agents** (D3.js force-directed graph):
+       - Nodes: Intent Router, Planner, Executor, TDD Master, Feedback, Git Checkpoint, etc.
+       - Edges: Communication flow
+       - Color coding: Strategic (blue), Tactical (green), Orchestrators (purple)
+     - **Dual-Hemisphere Processing** (SVG illustration):
+       - Left brain (tactical): Code execution, testing, debugging
+       - Right brain (strategic): Planning, governance, decision-making
+       - Corpus callosum: Communication bridge
+     - Real-time metrics:
+       - Current tier DB sizes (real data - green badge)
+       - Agent request counts (mock data initially - amber badge)
+       - Hemisphere load distribution (mock data - amber badge)
+   - **Output:** Comprehensive architecture overview
+
+5. **Add Database Visualization Tab** (2 hours)
+   - New tab: "💾 Databases" (insert as 3rd tab)
+   - Sections:
+     - **Tier 1: Working Memory** (Chart.js line chart):
+       - Conversation count over time (real data from working_memory.db)
+       - FIFO enforcement visualization (70-conversation sliding window)
+       - Query performance metrics (<100ms target line)
+     - **Tier 2: Knowledge Graph** (D3.js network diagram):
+       - Pattern nodes and relationships
+       - FTS5 search index status
+       - Top patterns by usage frequency (real data)
+     - **Tier 3: Development Context** (Chart.js bar chart):
+       - Code hotspots by file
+       - Git activity heatmap (commits per file)
+       - Test coverage by module (real data if available, mock otherwise)
+     - **Schema Health** (Table with status indicators):
+       - Current schema versions
+       - Migration status
+       - Integrity check results (real data - green checkmarks)
+   - **Output:** Complete database transparency
+
+**Acceptance Criteria:**
+- ✅ CORTEX logo visible in header on all pages
+- ✅ Real vs. mock data visually distinguished with badges and borders
+- ✅ Hybrid mode banner displays when both data types present
+- ✅ Font Awesome icons used throughout (minimum 10 unique icons)
+- ✅ Chart.js renders at least 3 different chart types
+- ✅ Mermaid diagrams render architecture flowchart
+- ✅ Architecture tab shows 4-tier system, 10 agents, dual-hemisphere model
+- ✅ Database tab displays all 3 tier DBs with real-time metrics
+- ✅ Total page weight <500KB (excluding external CDN resources)
+- ✅ Dashboard loads in <2 seconds on 3G connection
+- ✅ Mobile responsive (tested on 375px, 768px, 1024px widths)
+
+**Updated Files:**
+- `templates/interactive-dashboard-template.html` - Enhanced template
+- `src/utils/interactive_dashboard_generator.py` - Add data source tracking
+- `cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO/dashboard.html` - Modernized demo
+
+---
+
+### ☐ Phase 3: Update Admin EPMs (Week 1, Days 4-5)
+
+**Duration:** 2 days (16 hours)
 
 **EPMs to Update:**
 
@@ -132,6 +244,7 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
    - Module: `src/operations/modules/admin/enterprise_documentation_orchestrator.py`
    - Changes:
      - Replace static markdown generation with interactive dashboard
+     - **Add CORTEX logo to header** (source: `docs/assets/images/CORTEX-logo.png`)
      - Generate architecture tab with D3.js component graph
      - Add metrics tab with Chart.js visualizations
      - Embed existing Mermaid diagrams in dedicated tab
@@ -194,7 +307,7 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 
 ---
 
-### ☐ Phase 3: Deployment Validation Implementation (Week 2, Days 1-2)
+### ☐ Phase 4: Deployment Validation Implementation (Week 2, Days 1-2)
 
 **Duration:** 2 days (16 hours)
 
@@ -248,7 +361,7 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 
 ---
 
-### ☐ Phase 4: Testing & Validation (Week 2, Days 3-4)
+### ☐ Phase 5: Testing & Validation (Week 2, Days 3-4)
 
 **Duration:** 2 days (16 hours)
 
@@ -296,7 +409,7 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 
 ---
 
-### ☐ Phase 5: Documentation & Deployment (Week 2, Day 5)
+### ☐ Phase 6: Documentation & Deployment (Week 2, Day 5)
 
 **Duration:** 1 day (8 hours)
 
@@ -455,17 +568,17 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 ## 📦 Deliverables Summary
 
 ### Code Artifacts
-- `src/utils/interactive_dashboard_generator.py` - Dashboard generator utility
-- `templates/interactive-dashboard-template.html` - HTML template
+- `src/utils/interactive_dashboard_generator.py` - Dashboard generator utility (enhanced with data source tracking)
+- `templates/interactive-dashboard-template.html` - Modernized HTML template with Font Awesome, Chart.js, Mermaid.js
 - `src/validation/documentation_format_validator.py` - Format validator
 - Updated admin EPMs (6 modules)
 - Updated tests (8 test files)
 
 ### Documentation
-- `cortex-brain/documents/standards/DOCUMENTATION-FORMAT-SPEC-v1.0.md`
+- `cortex-brain/documents/standards/DOCUMENTATION-FORMAT-SPEC-v1.0.md` - Includes real vs. mock data guidelines
 - `cortex-brain/documents/standards/format-validation-schema.json`
 - `cortex-brain/documents/guides/EPM-MIGRATION-GUIDE.md`
-- `cortex-brain/documents/guides/INTERACTIVE-DASHBOARD-USER-GUIDE.md`
+- `cortex-brain/documents/guides/INTERACTIVE-DASHBOARD-USER-GUIDE.md` - Includes architecture & database tab documentation
 - Updated `.github/prompts/CORTEX.prompt.md`
 - Updated `.github/prompts/modules/system-alignment-guide.md`
 
@@ -473,18 +586,32 @@ Enforce new interactive documentation format (D3.js dashboards + multi-layer vis
 - `scripts/check_documentation_compliance.py` - Compliance monitoring
 - Updated `scripts/deploy_cortex.py` - Deployment validation
 
+### New Dashboard Features (Phase 2 Additions)
+- ✅ CORTEX logo in header (from `docs/assets/images/CORTEX-logo.png`)
+- ✅ Real vs. mock data visual indicators (badges, borders, background tints)
+- ✅ Hybrid mode warning banner (dismissible with localStorage)
+- ✅ Font Awesome 6.5.1 icons throughout dashboard
+- ✅ Chart.js 4.4.0 for advanced visualizations
+- ✅ Mermaid.js 10.6.1 for architecture diagrams
+- ✅ Architecture Visualization Tab (4-tier system, 10 agents, dual-hemisphere)
+- ✅ Database Visualization Tab (Tier 1/2/3 DBs with real-time metrics)
+- ✅ Total footprint <500KB (CDN-based, no bundled assets)
+
 ---
 
 ## 🎯 Next Steps After Approval
 
 1. **Immediate (Day 1):** Start Phase 1 - Create format specification
-2. **Week 1:** Complete Phases 1-2 (specification + EPM updates)
-3. **Week 2:** Complete Phases 3-5 (validation + testing + deployment)
-4. **Post-Deployment:** Monitor compliance, gather feedback, iterate
+2. **Day 3:** Complete Phase 2 - Dashboard modernization (logo, mock data indicators, architecture/DB tabs)
+3. **Week 1:** Complete Phase 3 - Update all admin EPMs
+4. **Week 2:** Complete Phases 4-6 - Validation, testing, deployment
+5. **Post-Deployment:** Monitor compliance, gather feedback, iterate
 
 ---
 
 **Plan Created:** 2025-11-26  
+**Last Updated:** 2025-11-29  
+**Estimated Completion:** 2 weeks (88 hours total)  
 **Estimated Completion:** 2 weeks (80 hours)  
 **Author:** Asif Hussain  
 **Status:** Awaiting Approval

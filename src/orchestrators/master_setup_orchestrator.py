@@ -584,7 +584,7 @@ class MasterSetupOrchestrator:
         content += f"""
 ---
 
-## Next Steps
+## 🔍 Next Steps
 
 1. **Activate virtual environment** (if created):
    ```bash

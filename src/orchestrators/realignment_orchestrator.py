@@ -358,7 +358,7 @@ class RealignmentOrchestrator:
             for i, error in enumerate(errors, 1):
                 content += f"{i}. {error}\n"
         
-        content += "\n---\n\n## Next Steps\n\n"
+        content += "\n---\n\n## 🔍 Next Steps\n\n"
         
         if after < 80.0:
             content += "⚠️ **Compliance still below 80%**\n\n"
