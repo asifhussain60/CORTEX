@@ -75,6 +75,9 @@ class DeploymentValidator:
         logger.info(f"Auto-fix: {self.auto_fix}")
         logger.info("")
         
+        # Environment Prerequisites (NEW - addresses upgrade deployment gap)
+        self.check_environment_prerequisites()
+        
         # Core Configuration
         self.check_config_module()
         
@@ -154,6 +157,138 @@ class DeploymentValidator:
         
         # Generate summary
         return self.generate_summary()
+    
+    def check_environment_prerequisites(self):
+        """
+        ENVIRONMENT_PREREQUISITES: Verify target environment meets CORTEX requirements.
+        
+        Addresses deployment gap from upgrade-issue.md where:
+        - NumPy failed to install (missing C compiler)
+        - pytest couldn't find tests
+        - 45+ minutes wasted on environment issues
+        
+        This check should be run BEFORE attempting deployment/upgrade.
+        """
+        check_id = "ENVIRONMENT_PREREQUISITES"
+        name = "Environment Prerequisites"
+        
+        issues = []
+        warnings = []
+        
+        # Check 1: Python version
+        try:
+            import sys
+            python_version = sys.version_info
+            if python_version < (3, 8):
+                issues.append(f"Python {python_version.major}.{python_version.minor} detected (requires 3.8+)")
+            else:
+                logger.info(f"  ✅ Python {python_version.major}.{python_version.minor}.{python_version.micro}")
+        except Exception as e:
+            issues.append(f"Cannot detect Python version: {e}")
+        
+        # Check 2: pip available
+        try:
+            result = subprocess.run(['pip', '--version'], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                logger.info(f"  ✅ pip available")
+            else:
+                issues.append("pip not available or not functional")
+        except Exception as e:
+            issues.append(f"pip check failed: {e}")
+        
+        # Check 3: git available
+        try:
+            result = subprocess.run(['git', '--version'], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                logger.info(f"  ✅ git available")
+            else:
+                issues.append("git not available (required for upgrade operations)")
+        except Exception as e:
+            issues.append(f"git check failed: {e}")
+        
+        # Check 4: Disk space
+        try:
+            import shutil
+            stat = shutil.disk_usage(self.project_root)
+            free_mb = stat.free / (1024 * 1024)
+            if free_mb < 500:
+                warnings.append(f"Low disk space: {free_mb:.0f} MB (recommend 500+ MB)")
+            else:
+                logger.info(f"  ✅ Disk space: {free_mb:.0f} MB available")
+        except Exception as e:
+            warnings.append(f"Disk space check failed: {e}")
+        
+        # Check 5: Write permissions
+        try:
+            test_file = self.project_root / '.write_test_tmp'
+            test_file.write_text('test')
+            test_file.unlink()
+            logger.info(f"  ✅ Write permissions")
+        except Exception as e:
+            issues.append(f"No write permissions: {e}")
+        
+        # Check 6: C compiler (optional - warn if missing)
+        import platform
+        if platform.system() == 'Windows':
+            compiler_available = False
+            try:
+                result = subprocess.run(['cl', '/?'], capture_output=True, text=True, timeout=5)
+                if result.returncode == 0:
+                    compiler_available = True
+                    logger.info(f"  ✅ C compiler available (cl.exe)")
+            except:
+                pass
+            
+            if not compiler_available:
+                try:
+                    result = subprocess.run(['gcc', '--version'], capture_output=True, text=True, timeout=5)
+                    if result.returncode == 0:
+                        compiler_available = True
+                        logger.info(f"  ✅ C compiler available (gcc)")
+                except:
+                    pass
+            
+            if not compiler_available:
+                warnings.append(
+                    "No C compiler detected (cl.exe, gcc). "
+                    "NumPy and scikit-learn will fail to install from source. "
+                    "Consider installing Visual Studio Build Tools or using pre-built wheels."
+                )
+        
+        # Determine result
+        if issues:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=False,
+                message=f"Environment prerequisites not met ({len(issues)} issues)",
+                details="\n".join(f"  • {issue}" for issue in issues),
+                fix_available=False,
+                fix_command="Install required tools: Python 3.8+, pip, git"
+            ))
+        elif warnings:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="MEDIUM",
+                passed=True,
+                message=f"✓ Environment prerequisites met (with {len(warnings)} warnings)",
+                details="\n".join(f"  ⚠ {warning}" for warning in warnings),
+                fix_available=False,
+                fix_command=None
+            ))
+        else:
+            self.results.append(ValidationResult(
+                check_id=check_id,
+                name=name,
+                severity="CRITICAL",
+                passed=True,
+                message="✓ All environment prerequisites met",
+                details=None,
+                fix_available=False,
+                fix_command=None
+            ))
     
     def check_config_module(self):
         """CONFIG_MODULE: Verify src/config.py exists and is valid."""

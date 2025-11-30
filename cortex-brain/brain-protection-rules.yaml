@@ -23,8 +23,8 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all layers
 rules:
-  total_count: 41  # Updated: Added GIT_HISTORY_CONTEXT_REQUIRED to Layer 9
-  layers: 16  # Updated: Added Layer 9 (Git History Context Validation)
+  total_count: 42  # Updated: Added OPERATIONAL_READINESS_ENFORCEMENT to Layer 10
+  layers: 17  # Updated: Added Layer 10 (Operational Readiness Enforcement)
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
   
@@ -84,6 +84,7 @@ tier0_instincts:
   - "DOCUMENT_ORGANIZATION_ENFORCEMENT"  # NEW: All docs in cortex-brain/documents/, NEVER repository root
   - "GIT_HISTORY_CONTEXT_REQUIRED"  # NEW: All requests must check git history before proceeding
   - "API_DOCUMENTATION_REQUIRED"  # NEW: Swagger/OpenAPI documentation required for external APIs
+  - "OPERATIONAL_READINESS_ENFORCEMENT"  # NEW: Block deployment if CORTEX not fully operational in target environment
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -5494,6 +5495,202 @@ challenge_template: |
           - Redundant Fixes: Zero (learn from past solutions)
           
           This universal rule transforms CORTEX from reactive to proactive analysis.
+
+  # Layer 10: Operational Readiness Enforcement
+  - layer_id: "operational_readiness_enforcement"
+    name: "Operational Readiness Enforcement"
+    description: "Block deployment/upgrade if CORTEX is not fully operational in target environment"
+    priority: 10
+    
+    rules:
+      - rule_id: "OPERATIONAL_READINESS_ENFORCEMENT"
+        name: "Operational Readiness Enforcement"
+        severity: "blocked"
+        description: "Deployment or upgrade completion MUST be validated with operational readiness checks: dependencies installed, imports work, databases accessible, configs valid. Failure triggers automatic rollback."
+        
+        detection:
+          combined_keywords:
+            deployment_actions:
+              - "deploy cortex"
+              - "upgrade cortex"
+              - "publish cortex"
+              - "release cortex"
+              - "upgrade complete"
+              - "deployment complete"
+            missing_validation:
+              - "operational_validation: false"
+              - "dependencies_validated: false"
+              - "imports_validated: false"
+          scope: ["intent", "operation_status"]
+          logic: "AND"
+        
+        alternatives:
+          - "STEP 1: Validate environment prerequisites (Python 3.8+, pip, git, disk space)"
+          - "STEP 2: Validate core dependencies installed (pytest, PyYAML, watchdog, psutil, send2trash)"
+          - "STEP 3: Validate optional dependencies (NumPy, scikit-learn - warn if missing)"
+          - "STEP 4: Validate core imports work (tier1, tier2, tier3 modules)"
+          - "STEP 5: Validate databases accessible (tier1, tier2, tier3 DBs exist)"
+          - "STEP 6: Validate operations config valid (cortex-operations.yaml)"
+          - "STEP 7: Validate response templates valid (response-templates.yaml)"
+          - "STEP 8: Validate brain protection rules valid (brain-protection-rules.yaml)"
+          - "STEP 9: Validate test suite discoverable (pytest --collect-only)"
+          - "STEP 10: Run smoke test (test_brain_protector.py or similar)"
+          - "STEP 11: If ANY critical check fails → ROLLBACK deployment"
+          - "STEP 12: If all checks pass → Declare 'CORTEX operational'"
+        
+        evidence_template: |
+          Operational readiness validation required!
+          
+          Operation: '{operation}'
+          Status: '{status}'
+          
+          ❌ BLOCKED: Cannot declare deployment/upgrade complete without operational validation
+          
+          **Real-World Failure (upgrade-issue.md):**
+          - User upgraded CORTEX (files copied successfully)
+          - NumPy failed to install (missing C compiler)
+          - Tests not discoverable (incorrect path)
+          - Manual verification took 45+ minutes
+          - Declared "success" but CORTEX was not operational
+          
+          **Required Validation Gates:**
+          
+          Gate 1: Environment Prerequisites
+          - [ ] Python 3.8+ available
+          - [ ] pip functional
+          - [ ] git available
+          - [ ] Disk space sufficient (500+ MB)
+          - [ ] Write permissions verified
+          - [ ] C compiler available (optional, warn if missing)
+          
+          Gate 2: Core Dependencies
+          - [ ] pytest installed and importable
+          - [ ] PyYAML installed and importable
+          - [ ] watchdog installed and importable
+          - [ ] psutil installed and importable
+          - [ ] send2trash installed and importable
+          
+          Gate 3: Optional Dependencies (warn only)
+          - [ ] NumPy installed (ML features)
+          - [ ] scikit-learn installed (ML features)
+          - [ ] pandas installed (data analysis)
+          
+          Gate 4: Core Imports
+          - [ ] from tier1.working_memory import WorkingMemory
+          - [ ] from tier3.development_context import DevelopmentContext
+          - [ ] No import errors
+          
+          Gate 5: Database Accessibility
+          - [ ] cortex-brain/tier1/working_memory.db exists
+          - [ ] cortex-brain/tier2/knowledge_graph.db exists (or auto-init)
+          - [ ] cortex-brain/tier3/development_context.db exists
+          
+          Gate 6: Configuration Validation
+          - [ ] cortex-operations.yaml exists and valid
+          - [ ] response-templates.yaml exists and valid
+          - [ ] brain-protection-rules.yaml exists and valid
+          
+          Gate 7: Test Suite Validation
+          - [ ] pytest --collect-only succeeds
+          - [ ] At least 10 tests discovered
+          - [ ] Smoke test passes (optional, warn only)
+          
+          **Rollback Triggers (Critical Failures):**
+          - Core dependency import fails
+          - Core module import fails
+          - Tier 1 or Tier 3 database missing
+          - Operations config invalid
+          - Response templates invalid
+          - Brain protection rules invalid
+          
+          **Success Criteria:**
+          ✅ ALL gates pass (or warnings only)
+          ✅ Time to operational: <5 minutes
+          ✅ Zero manual intervention required
+          ✅ User sees clear validation summary
+          
+          **Implementation:**
+          - upgrade_orchestrator.py: Call _validate_dependencies(), _validate_operational_readiness(), _validate_test_suite()
+          - validate_deployment.py: Add check_environment_prerequisites()
+          - Bootstrap verification: Enhanced with operational checks
+          - Auto-rollback: If critical checks fail
+        
+        rationale: |
+          OPERATIONAL_READINESS_ENFORCEMENT: User Trust & Time Savings
+          
+          **Problem Scenario (From upgrade-issue.md):**
+          
+          Timeline:
+          - Minute 0-5: Backup & file copy (SUCCESS)
+          - Minute 5-25: NumPy build failure (20 min wasted)
+          - Minute 25-35: Test discovery failure (10 min wasted)
+          - Minute 35-45: Manual verification (15 min wasted)
+          - Total: 45+ minutes to operational state
+          
+          Root Cause:
+          - Deployment validated SOURCE repository health
+          - Did NOT validate TARGET environment readiness
+          - Assumed "files copied = operational"
+          - No environment prerequisites check
+          - No dependency installation validation
+          - No operational smoke test
+          
+          Impact:
+          - Poor user experience ("Where are the tests?")
+          - Wasted time on manual troubleshooting
+          - Eroded trust in upgrade process
+          - Risk of incomplete installation
+          
+          **Correct Approach:**
+          
+          1. **Pre-Flight Environment Check:**
+             - Check Python version (3.8+)
+             - Check pip availability
+             - Check git availability
+             - Check disk space (500+ MB)
+             - Check write permissions
+             - Check C compiler (warn if missing)
+             - BLOCK if critical checks fail
+          
+          2. **Post-Copy Dependency Validation:**
+             - Install core dependencies (pytest, PyYAML, etc.)
+             - Verify all imports successful
+             - Warn if optional deps fail (NumPy, scikit-learn)
+             - ROLLBACK if core deps fail
+          
+          3. **Operational Readiness Validation:**
+             - Test core imports (tier1, tier2, tier3)
+             - Verify databases accessible
+             - Validate config files (YAML syntax)
+             - Run pytest --collect-only
+             - ROLLBACK if operational checks fail
+          
+          4. **Success Declaration:**
+             - Only after ALL gates pass
+             - Show validation summary
+             - Display time to operational
+             - List any warnings (optional deps)
+          
+          **Benefits:**
+          - Time to operational: 45 min → <5 min (90% reduction)
+          - Manual intervention: Required → None (100% reduction)
+          - User confidence: Low → High
+          - Rollback safety: Automatic on failure
+          
+          **Metrics:**
+          - Environment validation: <30 seconds
+          - Dependency validation: <2 minutes
+          - Operational validation: <1 minute
+          - Total overhead: <5 minutes
+          - User time saved: 40+ minutes
+          
+          **Edge Cases:**
+          - Windows without C compiler: Warn, continue (NumPy skipped)
+          - Tests not found: Warn, continue (non-critical)
+          - Optional deps fail: Warn, continue (graceful degradation)
+          - Core imports fail: ERROR, rollback (critical)
+          
+          This rule ensures CORTEX is ACTUALLY operational, not just "deployed".
 
 # Logging configuration
 logging:
