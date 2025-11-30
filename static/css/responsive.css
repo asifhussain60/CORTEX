@@ -1,0 +1,499 @@
+/**
+ * Responsive Design Styles
+ * Mobile-first responsive layout for onboarding dashboard
+ * 
+ * Breakpoints:
+ * - Mobile: < 640px
+ * - Tablet: 640px - 1023px
+ * - Desktop: 1024px+
+ */
+
+/* ========================================
+   BASE STYLES (Mobile-first)
+   ======================================== */
+
+.dashboard-container {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* ========================================
+   HEADER & NAVIGATION
+   ======================================== */
+
+.dashboard-header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+}
+
+.dashboard-title {
+    font-size: 1.5rem;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.dashboard-metadata {
+    font-size: 0.875rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* ========================================
+   TAB NAVIGATION - Mobile
+   ======================================== */
+
+.tab-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    overflow-x: visible;
+}
+
+.tab-button {
+    min-height: 44px; /* Touch-friendly minimum */
+    min-width: 44px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.tab-button.active {
+    border-left: 4px solid #0066cc;
+}
+
+/* Horizontal scroll for many tabs on small screens */
+@media (max-width: 480px) {
+    .tab-container {
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    
+    .tab-button {
+        flex-shrink: 0;
+        text-align: center;
+    }
+}
+
+/* ========================================
+   TAB CONTENT - Mobile
+   ======================================== */
+
+.tab-content {
+    padding: 16px;
+}
+
+.content-section {
+    margin-bottom: 24px;
+}
+
+.content-section h3 {
+    font-size: 1.125rem;
+    margin-bottom: 12px;
+}
+
+/* ========================================
+   TABLES - Mobile (Stackable)
+   ======================================== */
+
+.responsive-table {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+/* Stack table rows on very small screens */
+@media (max-width: 480px) {
+    .responsive-table table,
+    .responsive-table thead,
+    .responsive-table tbody,
+    .responsive-table th,
+    .responsive-table td,
+    .responsive-table tr {
+        display: block;
+    }
+    
+    .responsive-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .responsive-table tr {
+        margin-bottom: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px;
+    }
+    
+    .responsive-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    
+    .responsive-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 8px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+}
+
+/* Horizontal scroll for medium-small screens */
+@media (min-width: 481px) and (max-width: 767px) {
+    .responsive-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+}
+
+/* ========================================
+   METRICS GRID - Mobile
+   ======================================== */
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.metric-card {
+    padding: 16px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.metric-value {
+    font-size: 1.75rem;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   CHARTS - Mobile
+   ======================================== */
+
+.chart-container {
+    width: 100%;
+    height: 250px;
+    margin: 16px 0;
+    overflow-x: auto;
+}
+
+.chart-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========================================
+   UML DIAGRAMS - Mobile
+   ======================================== */
+
+.uml-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 400px;
+}
+
+.uml-diagram {
+    min-width: 100%;
+}
+
+.uml-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.uml-controls button {
+    flex: 1 1 auto;
+    min-width: 80px;
+    min-height: 44px;
+}
+
+/* ========================================
+   TABLET STYLES (640px - 1023px)
+   ======================================== */
+
+@media (min-width: 640px) {
+    .dashboard-header {
+        padding: 16px 24px;
+        flex-wrap: nowrap;
+    }
+    
+    .dashboard-title {
+        font-size: 1.75rem;
+        width: auto;
+        text-align: left;
+    }
+    
+    .dashboard-metadata {
+        width: auto;
+        text-align: right;
+        margin-top: 0;
+        margin-left: auto;
+    }
+    
+    .tab-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .tab-button {
+        flex: 0 1 auto;
+        text-align: center;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .tab-button.active {
+        border-left: none;
+        border-bottom: 3px solid #0066cc;
+    }
+    
+    .tab-content {
+        padding: 24px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+    
+    .uml-container {
+        max-height: 500px;
+    }
+}
+
+/* ========================================
+   DESKTOP STYLES (1024px+)
+   ======================================== */
+
+@media (min-width: 1024px) {
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+    
+    .dashboard-header {
+        padding: 20px 32px;
+    }
+    
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .tab-container {
+        padding: 16px;
+        gap: 12px;
+        justify-content: center;
+    }
+    
+    .tab-button {
+        min-width: 120px;
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
+    
+    .tab-content {
+        padding: 32px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    
+    .metric-card {
+        padding: 20px;
+    }
+    
+    .chart-container {
+        height: 400px;
+    }
+    
+    .uml-container {
+        max-height: 600px;
+    }
+    
+    /* Side-by-side layout for certain sections */
+    .two-column-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+}
+
+/* ========================================
+   LARGE DESKTOP (1440px+)
+   ======================================== */
+
+@media (min-width: 1440px) {
+    .dashboard-container {
+        max-width: 1600px;
+    }
+    
+    .tab-content {
+        padding: 40px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .chart-container {
+        height: 450px;
+    }
+    
+    .uml-container {
+        max-height: 700px;
+    }
+}
+
+/* ========================================
+   TOUCH ENHANCEMENTS
+   ======================================== */
+
+/* Larger touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+    .tab-button,
+    button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .tab-button:hover,
+    button:hover {
+        transform: none;
+    }
+    
+    /* Add active state for touch feedback */
+    .tab-button:active,
+    button:active {
+        transform: scale(0.97);
+        opacity: 0.8;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .tab-container {
+        display: none;
+    }
+    
+    .tab-content {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+    
+    .chart-container {
+        page-break-inside: avoid;
+    }
+    
+    .uml-container {
+        max-height: none;
+        overflow: visible;
+    }
+    
+    /* Remove interactive elements */
+    button,
+    .interactive-element {
+        display: none;
+    }
+}
+
+/* ========================================
+   LANDSCAPE ORIENTATION
+   ======================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .dashboard-header {
+        padding: 12px 16px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .tab-container {
+        padding: 8px;
+    }
+    
+    .tab-content {
+        padding: 16px;
+    }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   HIGH CONTRAST MODE
+   ======================================== */
+
+@media (prefers-contrast: high) {
+    .tab-button {
+        border: 2px solid currentColor;
+    }
+    
+    .tab-button.active {
+        background-color: #000;
+        color: #fff;
+    }
+    
+    .metric-card {
+        border: 2px solid currentColor;
+    }
+}
