@@ -1323,12 +1323,13 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-11-24 | Version 3.2.0 (Version Unification)  
+**Last Updated:** 2025-11-30 | Version 3.2.1 (Deployment System Enhancement)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 
-**What's New in 3.2.0:**
-- **Version Cleanup** - Removed all legacy 5.3.x references, unified to 3.2.0 scheme
+**What's New in 3.2.1:**
+- **Git Integration Enforcement** - 18-gate deployment system with git checkpoint validation
+- **Version Cleanup** - Removed all legacy 5.3.x references, unified versioning scheme
 - **Universal Upgrade System** - One command works for all repositories (standalone/embedded)
 - **Smart Detection** - Auto-detects installation type and applies appropriate upgrade method
 - **Zero Data Loss** - Automatic brain backup, path validation, post-upgrade verification
