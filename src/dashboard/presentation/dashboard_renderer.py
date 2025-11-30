@@ -21,15 +21,17 @@ from src.dashboard.use_cases.render_architecture_graph import RenderArchitecture
 from src.dashboard.use_cases.analyze_quality_metrics import AnalyzeQualityMetricsUseCase
 from src.dashboard.use_cases.scan_security_vulnerabilities import ScanSecurityVulnerabilitiesUseCase
 from src.dashboard.use_cases.generate_recommendations import GenerateRecommendationsUseCase
+from src.use_cases.render_uml_diagrams import render_uml_for_project
 
 # Import repositories
 from src.dashboard.data.json_repositories import (
     JSONComponentRepository,
     JSONDependencyRepository,
-    JSONIssueRepository
+    JSONIssueRepository,
+    JSONHealthScoreRepository
 )
 # Note: RecommendationRepository doesn't exist yet, will use Issue repo
-from src.dashboard.data.repository_interface import IRecommendationRepository
+# from src.dashboard.data.repository_interface import IRecommendationRepository
 
 
 class DashboardRenderer:
@@ -70,27 +72,33 @@ class DashboardRenderer:
         self.component_repo = JSONComponentRepository(data_dir / "components.json")
         self.dependency_repo = JSONDependencyRepository(data_dir / "dependencies.json")
         self.issue_repo = JSONIssueRepository(data_dir / "issues.json")
+        self.health_repo = JSONHealthScoreRepository(data_dir / "health.json")
         # TODO: Implement RecommendationRepository when needed
         self.recommendation_repo = None  # Placeholder
         
         # Initialize use cases
         self.overview_use_case = LoadOverviewUseCase(
             self.component_repo,
-            self.issue_repo
+            self.issue_repo,
+            self.health_repo
         )
         self.architecture_use_case = RenderArchitectureGraphUseCase(
             self.component_repo,
-            self.dependency_repo
+            self.dependency_repo,
+            self.health_repo
         )
         self.quality_use_case = AnalyzeQualityMetricsUseCase(
             self.component_repo,
             self.issue_repo
         )
         self.security_use_case = ScanSecurityVulnerabilitiesUseCase(
+            self.component_repo,
             self.issue_repo
         )
         self.recommendations_use_case = GenerateRecommendationsUseCase(
-            self.recommendation_repo
+            self.component_repo,
+            self.issue_repo,
+            self.dependency_repo
         )
     
     def _register_filters(self):
@@ -130,6 +138,10 @@ class DashboardRenderer:
         # Load main template
         template = self.jinja_env.get_template("onboarding_dashboard.html.j2")
         
+        # Helper to safely get data with defaults
+        def safe_get(data_dict, key, default=0):
+            return data_dict.get(key, default)
+        
         # Prepare template context
         context = {
             # Meta
@@ -139,17 +151,17 @@ class DashboardRenderer:
             "websocket_url": websocket_url,
             
             # Overview data
-            "health_score": dashboard_data["overview"]["health_score"],
-            "health_category": self._get_health_category(dashboard_data["overview"]["health_score"]),
-            "health_label": self._get_health_label(dashboard_data["overview"]["health_score"]),
-            "health_description": dashboard_data["overview"]["health_description"],
-            "file_count": dashboard_data["overview"]["file_count"],
-            "loc_count": dashboard_data["overview"]["loc_count"],
-            "component_count": dashboard_data["overview"]["component_count"],
-            "dependency_count": dashboard_data["overview"]["dependency_count"],
-            "issue_count": dashboard_data["overview"]["issue_count"],
-            "vulnerability_count": dashboard_data["overview"]["vulnerability_count"],
-            "languages": dashboard_data["overview"]["languages"],
+            "health_score": safe_get(dashboard_data["overview"], "health_score", 0),
+            "health_category": self._get_health_category(safe_get(dashboard_data["overview"], "health_score", 0)),
+            "health_label": self._get_health_label(safe_get(dashboard_data["overview"], "health_score", 0)),
+            "health_description": safe_get(dashboard_data["overview"], "health_description", "No data"),
+            "file_count": safe_get(dashboard_data["overview"], "file_count"),
+            "loc_count": safe_get(dashboard_data["overview"], "loc_count"),
+            "component_count": safe_get(dashboard_data["overview"], "component_count"),
+            "dependency_count": safe_get(dashboard_data["overview"], "dependency_count"),
+            "issue_count": safe_get(dashboard_data["overview"], "issue_count"),
+            "vulnerability_count": safe_get(dashboard_data["overview"], "vulnerability_count"),
+            "languages": safe_get(dashboard_data["overview"], "languages", []),
             "quick_insights": dashboard_data["overview"]["quick_insights"],
             "recent_activities": dashboard_data["overview"]["recent_activities"],
             
@@ -218,6 +230,11 @@ class DashboardRenderer:
             "estimated_payoff_weeks": dashboard_data["recommendations"]["estimated_payoff_weeks"],
             "refactoring_phases": dashboard_data["recommendations"]["refactoring_phases"],
             
+            # UML data
+            "uml_diagram_svg": dashboard_data["uml"]["svg"],
+            "uml_stats": dashboard_data["uml"]["stats"],
+            "uml_error": dashboard_data["uml"]["error"],
+            
             # Serialized data for JavaScript
             "dashboard_data": json.dumps(dashboard_data, indent=2)
         }
@@ -238,13 +255,43 @@ class DashboardRenderer:
         Returns:
             Dictionary containing all dashboard data organized by tab
         """
+        # Generate UML diagram during dashboard rendering
+        uml_data = self._generate_uml_diagram()
+        
         return {
             "overview": self.overview_use_case.execute(),
             "architecture": self.architecture_use_case.execute(),
             "quality": self.quality_use_case.execute(),
             "security": self.security_use_case.execute(),
-            "recommendations": self.recommendations_use_case.execute()
+            "recommendations": self.recommendations_use_case.execute(),
+            "uml": uml_data
         }
+    
+    def _generate_uml_diagram(self) -> Dict[str, Any]:
+        """
+        Generate UML diagram for the project.
+        
+        Returns:
+            Dictionary with SVG diagram and statistics
+        """
+        try:
+            svg_content, stats = render_uml_for_project(
+                project_path=str(self.project_path),
+                title=f"{self.project_path.name} Architecture",
+                exclude_patterns=['test_', '__pycache__', '.venv', 'site-packages', 'dist']
+            )
+            
+            return {
+                'svg': svg_content,
+                'stats': stats,
+                'error': None
+            }
+        except Exception as e:
+            return {
+                'svg': None,
+                'stats': {},
+                'error': str(e)
+            }
     
     def _get_health_category(self, score: float) -> str:
         """Get health category from score."""

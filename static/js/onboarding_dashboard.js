@@ -9,6 +9,7 @@
 // ========== Global State ==========
 let dashboardState = {
     currentTab: 'overview',
+    currentArchitectureView: 'dependency', // 'dependency' or 'uml'
     dashboardData: null,
     filters: {
         language: 'all',
@@ -466,6 +467,127 @@ function hideTooltip() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('CORTEX Dashboard script loaded');
 });
+
+// ========== Architecture Sub-Tab Switching ==========
+function switchArchitectureView(viewType) {
+    // Update state
+    dashboardState.currentArchitectureView = viewType;
+    
+    // Hide all views
+    document.querySelectorAll('.architecture-view').forEach(view => {
+        view.style.display = 'none';
+    });
+    
+    // Remove active class from all sub-tab buttons
+    document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected view
+    const viewId = viewType === 'dependency' ? 'dependency-view' : 'uml-view';
+    const selectedView = document.getElementById(viewId);
+    if (selectedView) {
+        selectedView.style.display = 'block';
+    }
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    
+    // If switching to UML view and no diagram exists, generate one
+    if (viewType === 'uml') {
+        const umlContainer = document.getElementById('uml-diagram-container');
+        if (umlContainer && umlContainer.querySelector('.uml-loading')) {
+            generateUMLDiagram();
+        }
+    }
+}
+
+// ========== UML Diagram Generation ==========
+function generateUMLDiagram() {
+    const container = document.getElementById('uml-diagram-container');
+    if (!container) return;
+    
+    // Show loading
+    container.innerHTML = '<div class="uml-loading">Loading UML diagram...</div>';
+    
+    // Get embedded UML data from template
+    const umlData = dashboardState.dashboardData?.uml;
+    
+    if (!umlData) {
+        container.innerHTML = `
+            <div class="uml-error">
+                <h3>UML Data Not Available</h3>
+                <p>UML diagram was not generated during dashboard creation.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    if (umlData.error) {
+        container.innerHTML = `
+            <div class="uml-error">
+                <h3>Error Generating UML</h3>
+                <p>${umlData.error}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    if (umlData.svg) {
+        container.innerHTML = umlData.svg;
+        
+        // Update statistics
+        updateUMLStats(umlData.stats);
+    } else {
+        container.innerHTML = `
+            <div class="uml-error">
+                <h3>No UML Diagram</h3>
+                <p>UML diagram generation did not produce output.</p>
+            </div>
+        `;
+    }
+}
+
+function updateUMLStats(stats) {
+    if (!stats) return;
+    
+    const updateStat = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    };
+    
+    updateStat('uml-class-count', stats.total_classes || 0);
+    updateStat('uml-relationship-count', stats.total_relationships || 0);
+    updateStat('uml-abstract-count', stats.abstract_classes || 0);
+    updateStat('uml-inheritance-count', stats.inheritance_relationships || 0);
+}
+
+function exportUMLDiagram() {
+    const container = document.getElementById('uml-diagram-container');
+    if (!container) return;
+    
+    const svgElement = container.querySelector('svg');
+    if (!svgElement) {
+        alert('No UML diagram to export');
+        return;
+    }
+    
+    // Serialize SVG
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svgElement);
+    
+    // Create blob and download
+    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'uml_diagram.svg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
 
 // ========== Keyboard Shortcuts ==========
 document.addEventListener('keydown', (e) => {

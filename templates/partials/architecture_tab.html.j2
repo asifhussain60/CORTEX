@@ -1,17 +1,31 @@
 <!-- Architecture Tab Content -->
 <div class="architecture-container">
-    <!-- Architecture Controls -->
-    <div class="card card-controls">
-        <div class="controls-grid">
-            <div class="control-group">
-                <label for="graph-type">Graph Type:</label>
-                <select id="graph-type" onchange="updateArchitectureGraph()">
-                    <option value="dependency">Dependency Graph</option>
-                    <option value="hierarchy">Component Hierarchy</option>
-                    <option value="dataflow">Data Flow</option>
-                    <option value="callgraph">Call Graph</option>
-                </select>
-            </div>
+    <!-- Architecture Sub-Tabs -->
+    <div class="card">
+        <div class="architecture-sub-tabs">
+            <button class="sub-tab-btn active" onclick="switchArchitectureView('dependency')">
+                🔗 Dependency Graph
+            </button>
+            <button class="sub-tab-btn" onclick="switchArchitectureView('uml')">
+                📐 UML Class Diagrams
+            </button>
+        </div>
+    </div>
+
+    <!-- Dependency Graph View -->
+    <div id="dependency-view" class="architecture-view active">
+        <!-- Architecture Controls -->
+        <div class="card card-controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="graph-type">Graph Type:</label>
+                    <select id="graph-type" onchange="updateArchitectureGraph()">
+                        <option value="dependency">Dependency Graph</option>
+                        <option value="hierarchy">Component Hierarchy</option>
+                        <option value="dataflow">Data Flow</option>
+                        <option value="callgraph">Call Graph</option>
+                    </select>
+                </div>
 
             <div class="control-group">
                 <label for="filter-language">Filter by Language:</label>
@@ -151,6 +165,64 @@
             </div>
         </div>
     </div>
+    </div> <!-- End dependency-view -->
+
+    <!-- UML Diagrams View -->
+    <div id="uml-view" class="architecture-view" style="display: none;">
+        <!-- UML Controls -->
+        <div class="card card-controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <p class="info-text">UML diagram generated with full project scope (50 classes max)</p>
+                </div>
+
+                <div class="control-group">
+                    <button class="btn btn-secondary" onclick="exportUMLDiagram()">
+                        💾 Export SVG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- UML Statistics -->
+        <div class="card">
+            <div class="uml-stats">
+                <div class="uml-stats-item">
+                    <div class="uml-stats-value" id="uml-class-count">{{ uml_stats.total_classes or 0 }}</div>
+                    <div class="uml-stats-label">Classes</div>
+                </div>
+                <div class="uml-stats-item">
+                    <div class="uml-stats-value" id="uml-relationship-count">{{ uml_stats.total_relationships or 0 }}</div>
+                    <div class="uml-stats-label">Relationships</div>
+                </div>
+                <div class="uml-stats-item">
+                    <div class="uml-stats-value" id="uml-abstract-count">{{ uml_stats.abstract_classes or 0 }}</div>
+                    <div class="uml-stats-label">Abstract</div>
+                </div>
+                <div class="uml-stats-item">
+                    <div class="uml-stats-value" id="uml-inheritance-count">{{ uml_stats.inheritance_relationships or 0 }}</div>
+                    <div class="uml-stats-label">Inheritance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UML Diagram Container -->
+        <div class="card card-full-height">
+            <h2 class="card-title">📐 UML Class Diagram</h2>
+            <div id="uml-diagram-container" class="uml-container">
+                {% if uml_diagram_svg %}
+                    {{ uml_diagram_svg | safe }}
+                {% elif uml_error %}
+                    <div class="uml-error">
+                        <h3>Error Generating UML</h3>
+                        <p>{{ uml_error }}</p>
+                    </div>
+                {% else %}
+                    <div class="uml-loading">No UML diagram available</div>
+                {% endif %}
+            </div>
+        </div>
+    </div> <!-- End uml-view -->
 </div>
 
 <script>
