@@ -315,15 +315,47 @@ class PlanningOrchestrator:
         
         Args:
             plan_path: Path to plan file
-            phase_data: Phase data dict
+            phase_data: Phase data dict with phase_id, name, content
         
         Returns:
             Progress dict with phase_number, total_phases, percent_complete
-        
-        Raises:
-            NotImplementedError: RED phase - not implemented yet
         """
-        raise NotImplementedError("RED phase: add_phase_to_plan() not implemented")
+        from src.utils.incremental_writer import IncrementalWriter
+        import yaml
+        
+        # Format phase as YAML string
+        phase_yaml = yaml.dump([phase_data], default_flow_style=False)
+        
+        # Append phase to plan
+        writer = IncrementalWriter(plan_path)
+        writer.append_section(f"phase_{phase_data.get('phase_id', 0)}", phase_yaml)
+        
+        # Get progress
+        last_phase_num = self.get_last_phase_number(plan_path)
+        
+        # Determine total phases:
+        # 1. If explicitly provided in phase_data, use it
+        # 2. Otherwise, use the highest phase_id seen so far (read from plan)
+        if "total_phases" in phase_data:
+            total_phases = phase_data["total_phases"]
+        else:
+            # Read plan to find max phase_id
+            max_phase_id = self._get_max_phase_id(plan_path)
+            total_phases = max(max_phase_id, last_phase_num)
+        
+        percent_complete = int((last_phase_num / total_phases) * 100) if total_phases > 0 else 0
+        
+        logger.info(f"Added phase {last_phase_num}/{total_phases} to plan: {plan_path.name}")
+        
+        # Return dict with success, message, and progress
+        return {
+            "success": True,
+            "message": f"Phase {last_phase_num}/{total_phases} added ({percent_complete}% complete)",
+            "phase_number": last_phase_num,
+            "total_phases": total_phases,
+            "percent_complete": percent_complete,
+            "percentage": percent_complete  # Alias for compatibility
+        }
     
     def get_last_phase_number(self, plan_path: Path) -> int:
         """
@@ -334,11 +366,50 @@ class PlanningOrchestrator:
         
         Returns:
             Last phase number (0 if no phases)
-        
-        Raises:
-            NotImplementedError: RED phase - not implemented yet
         """
-        raise NotImplementedError("RED phase: get_last_phase_number() not implemented")
+        from src.utils.incremental_writer import IncrementalWriter
+        
+        # Use IncrementalWriter to count phases
+        writer = IncrementalWriter(plan_path)
+        phase_count = writer.get_last_section_count("phases")
+        
+        return phase_count
+    
+    def _get_max_phase_id(self, plan_path: Path) -> int:
+        """
+        Get maximum phase_id from all phases in plan file.
+        
+        Args:
+            plan_path: Path to plan file
+        
+        Returns:
+            Maximum phase_id (0 if no phases)
+        """
+        import yaml
+        
+        if not plan_path.exists():
+            return 0
+        
+        try:
+            with open(plan_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Parse YAML to extract phase_ids
+            # Plan format has sections like "# phase_1", "# phase_2" with YAML content
+            max_id = 0
+            for line in content.split('\n'):
+                if line.startswith('# phase_'):
+                    # Extract phase number from header
+                    phase_id_str = line.replace('# phase_', '').strip()
+                    try:
+                        phase_id = int(phase_id_str)
+                        max_id = max(max_id, phase_id)
+                    except ValueError:
+                        continue
+            
+            return max_id
+        except Exception:
+            return 0
     
     def track_progress(self, feature_name: str, total_phases: int):
         """
@@ -350,23 +421,323 @@ class PlanningOrchestrator:
         
         Returns:
             ProgressTracker context manager
-        
-        Raises:
-            NotImplementedError: RED phase - not implemented yet
         """
-        raise NotImplementedError("RED phase: track_progress() not implemented")
+        from contextlib import contextmanager
+        from datetime import datetime
+        
+        class ProgressTracker:
+            def __init__(self, feature_name: str, total_phases: int):
+                self.feature_name = feature_name
+                self.total_phases = total_phases
+                self.current_phase = 0
+                self.start_time = datetime.now()
+                self.phase_start_time = None
+                self.expected_phase_time = 60  # Default 60 seconds per phase
+                
+            def update_phase(self, phase_num: int):
+                """Update current phase number."""
+                self.current_phase = phase_num
+                
+            def start_phase(self, phase_num: int):
+                """Mark start of a phase for hang detection."""
+                self.current_phase = phase_num
+                self.phase_start_time = datetime.now()
+                
+            def get_status(self) -> dict:
+                """Get current progress status."""
+                percentage = int((self.current_phase / self.total_phases) * 100) if self.total_phases > 0 else 0
+                elapsed = (datetime.now() - self.start_time).total_seconds()
+                remaining_phases = self.total_phases - self.current_phase
+                eta_seconds = remaining_phases * self.expected_phase_time if remaining_phases > 0 else 0
+                
+                # Check for hang
+                hang_detected = False
+                warning = ""
+                if self.phase_start_time:
+                    phase_elapsed = (datetime.now() - self.phase_start_time).total_seconds()
+                    if phase_elapsed > (self.expected_phase_time * 5):  # 5x threshold
+                        hang_detected = True
+                        warning = f"Phase {self.current_phase} taking longer than expected ({int(phase_elapsed)}s > {self.expected_phase_time * 5}s)"
+                
+                status = {
+                    "current_phase": self.current_phase,
+                    "total_phases": self.total_phases,
+                    "percentage": percentage,
+                    "message": f"Phase {self.current_phase}/{self.total_phases} ({percentage}%) - ETA: {int(eta_seconds)}s",
+                    "hang_detected": hang_detected
+                }
+                
+                if warning:
+                    status["warning"] = warning
+                    
+                return status
+                
+            def set_expected_phase_time(self, seconds: int):
+                """Set expected time per phase."""
+                self.expected_phase_time = seconds
+        
+        @contextmanager
+        def _tracker():
+            tracker = ProgressTracker(feature_name, total_phases)
+            try:
+                yield tracker
+            finally:
+                pass  # Cleanup if needed
+                
+        return _tracker()
     
     def cancel_planning(self, plan_path: Path) -> None:
         """
-        Cancel planning and cleanup.
+        Cancel planning and ensure partial work is saved.
         
         Args:
-            plan_path: Path to plan file to cancel
-        
-        Raises:
-            NotImplementedError: RED phase - not implemented yet
+            plan_path: Path to plan file being cancelled
+            
+        Note:
+            Since IncrementalWriter auto-flushes after each section,
+            partial work is already persisted. This is a no-op but
+            could be extended for cleanup in future.
         """
-        raise NotImplementedError("RED phase: cancel_planning() not implemented")
+        # Partial work already saved by IncrementalWriter
+        # File can be resumed by reading last phase number
+        pass
+    
+    def generate_plan_incremental(
+        self,
+        plan_name: str,
+        metadata: Dict[str, Any],
+        phases: List[Dict[str, Any]],
+        output_format: str = "yaml",
+        progress_callback: Optional[Callable[[int, int, str], None]] = None,
+        progress_handler: Optional[Callable[[str], None]] = None,
+        resume_if_exists: bool = False,
+        validate_incrementally: bool = False,
+        validation_error_handler: Optional[Callable[[str, List[str]], None]] = None,
+        validate_dor_dod: bool = False,
+        dor_dod_handler: Optional[Callable[[str, bool, bool], None]] = None
+    ) -> Dict[str, Any]:
+        """
+        Generate a plan incrementally with progress tracking and validation.
+        
+        This is the main entry point for Phase 4 incremental planning.
+        It creates an empty plan file first, then adds phases one by one.
+        
+        Args:
+            plan_name: Name of the plan (used for filename)
+            metadata: Plan metadata (name, description, etc.)
+            phases: List of phase dictionaries to add
+            output_format: Format for output (yaml, markdown, ado, swagger)
+            progress_callback: Called after each phase: callback(phase_num, total, phase_name)
+            progress_handler: Called with progress messages for display
+            resume_if_exists: If True, resume from last phase if plan exists
+            validate_incrementally: If True, validate each phase as added
+            validation_error_handler: Called on validation errors: handler(phase_id, errors)
+            validate_dor_dod: If True, validate DoR/DoD for each phase
+            dor_dod_handler: Called with DoR/DoD results: handler(phase_id, dor_valid, dod_valid)
+        
+        Returns:
+            Dict with:
+                - success: bool
+                - file_path: Path to generated plan
+                - message: Status message
+                - phases_added: Number of phases added
+                - phases_skipped: Number of phases skipped (if resumed)
+                - phases_rejected: Number of phases rejected (if validation enabled)
+                - resumed: bool indicating if plan was resumed
+        """
+        import yaml
+        from datetime import datetime
+        
+        try:
+            # Determine output path based on format
+            if output_format == "yaml":
+                plan_path = self.active_plans_dir / f"{plan_name}.yaml"
+            elif output_format == "markdown":
+                plan_path = self.active_plans_dir / f"{plan_name}.md"
+            elif output_format == "ado":
+                plan_path = self.active_plans_dir / f"ADO-{plan_name}.yaml"
+            elif output_format == "swagger":
+                plan_path = self.active_plans_dir / f"SWAGGER-{plan_name}.yaml"
+            else:
+                plan_path = self.active_plans_dir / f"{plan_name}.yaml"
+            
+            # Ensure directory exists
+            plan_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Track phases added/skipped/rejected
+            phases_added = 0
+            phases_skipped = 0
+            phases_rejected = 0
+            resumed = False
+            existing_phase_ids = set()
+            
+            # Check if resuming existing plan
+            if resume_if_exists and plan_path.exists():
+                resumed = True
+                # Load existing plan to determine which phases already exist
+                with open(plan_path, 'r', encoding='utf-8') as f:
+                    existing_data = yaml.safe_load(f)
+                    if existing_data and "phases" in existing_data:
+                        existing_phase_ids = {p.get("id") for p in existing_data["phases"] if "id" in p}
+                        phases_skipped = len(existing_phase_ids)
+            else:
+                # Create empty plan file with metadata
+                initial_data = {
+                    "metadata": {
+                        **metadata,
+                        "created_at": datetime.now().isoformat(),
+                        "status": "in_progress"
+                    },
+                    "phases": []
+                }
+                
+                with open(plan_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(initial_data, f, default_flow_style=False, sort_keys=False)
+            
+            # Add phases incrementally
+            total_phases = len(phases)
+            
+            for i, phase in enumerate(phases, 1):
+                phase_id = phase.get("id", str(i))
+                phase_name = phase.get("name", f"Phase {i}")
+                
+                # Skip if already exists (resuming)
+                if phase_id in existing_phase_ids:
+                    continue
+                
+                # Validate phase if requested
+                if validate_incrementally:
+                    validation_errors = self._validate_single_phase(phase)
+                    if validation_errors:
+                        if validation_error_handler:
+                            validation_error_handler(phase_id, validation_errors)
+                        phases_rejected += 1
+                        continue
+                
+                # Validate DoR/DoD if requested
+                if validate_dor_dod:
+                    dor_valid = self._validate_dor_for_phase(phase)
+                    dod_valid = self._validate_dod_for_phase(phase)
+                    if dor_dod_handler:
+                        dor_dod_handler(phase_id, dor_valid, dod_valid)
+                
+                # Add phase to plan
+                with open(plan_path, 'r', encoding='utf-8') as f:
+                    plan_data = yaml.safe_load(f)
+                
+                plan_data["phases"].append(phase)
+                
+                with open(plan_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
+                
+                phases_added += 1
+                
+                # Call progress callback
+                if progress_callback:
+                    progress_callback(i, total_phases, phase_name)
+                
+                # Send progress message
+                if progress_handler:
+                    percentage = int((i / total_phases) * 100)
+                    progress_handler(f"Planning: Phase {i}/{total_phases} ({percentage}% complete)")
+            
+            # Update metadata to mark complete
+            with open(plan_path, 'r', encoding='utf-8') as f:
+                plan_data = yaml.safe_load(f)
+            
+            plan_data["metadata"]["status"] = "complete"
+            plan_data["metadata"]["completed_at"] = datetime.now().isoformat()
+            
+            with open(plan_path, 'w', encoding='utf-8') as f:
+                yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
+            
+            # Build result
+            result = {
+                "success": True,
+                "file_path": str(plan_path),
+                "message": f"Plan generated: {phases_added} phases added",
+                "phases_added": phases_added,
+                "phases_skipped": phases_skipped,
+                "phases_rejected": phases_rejected,
+                "resumed": resumed
+            }
+            
+            logger.info(f"✅ Plan generated incrementally: {plan_path}")
+            return result
+            
+        except Exception as e:
+            logger.error(f"Failed to generate plan incrementally: {e}")
+            return {
+                "success": False,
+                "message": f"Error: {e}",
+                "phases_added": phases_added,
+                "phases_skipped": phases_skipped,
+                "phases_rejected": phases_rejected,
+                "resumed": resumed
+            }
+    
+    def _validate_single_phase(self, phase: Dict[str, Any]) -> List[str]:
+        """
+        Validate a single phase against schema requirements.
+        
+        Args:
+            phase: Phase dictionary to validate
+        
+        Returns:
+            List of validation error messages (empty if valid)
+        """
+        errors = []
+        
+        # Check for required fields from schema
+        phase_required_fields = self.schema.get("schema", {}).get("phase_required_fields", ["id", "name"])
+        
+        for field in phase_required_fields:
+            if field not in phase:
+                errors.append(f"Missing required field: {field}")
+        
+        return errors
+    
+    def _validate_dor_for_phase(self, phase: Dict[str, Any]) -> bool:
+        """
+        Validate Definition of Ready for a phase.
+        
+        Args:
+            phase: Phase dictionary
+        
+        Returns:
+            True if DoR is satisfied, False otherwise
+        """
+        # Check if phase has DoR defined
+        if "definition_of_ready" not in phase:
+            return True  # No DoR = always ready
+        
+        dor = phase["definition_of_ready"]
+        if not isinstance(dor, list):
+            return False
+        
+        # DoR is satisfied if list is non-empty
+        return len(dor) > 0
+    
+    def _validate_dod_for_phase(self, phase: Dict[str, Any]) -> bool:
+        """
+        Validate Definition of Done for a phase.
+        
+        Args:
+            phase: Phase dictionary
+        
+        Returns:
+            True if DoD is satisfied, False otherwise
+        """
+        # Check if phase has DoD defined
+        if "definition_of_done" not in phase:
+            return True  # No DoD = always done
+        
+        dod = phase["definition_of_done"]
+        if not isinstance(dod, list):
+            return False
+        
+        # DoD is satisfied if list is non-empty
+        return len(dod) > 0
     
     # ===== END PHASE 4 METHODS =====
     
