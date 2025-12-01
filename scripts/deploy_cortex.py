@@ -871,7 +871,7 @@ python scripts/post_deployment_check.py --report-only
 10. ✅ **System Alignment** - Convention-based feature discovery working
 
 **Validation Reports:**
-Reports are saved to `cortex-brain/documents/reports/post-deployment-validation-{timestamp}.md`
+Reports are saved to `cortex-brain/documents/reports/post-deployment-validation-{{timestamp}}.md`
 
 **If Validation Fails:**
 
