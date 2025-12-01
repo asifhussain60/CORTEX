@@ -280,7 +280,7 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         Run silent system alignment validation (admin-only).
         
         This method:
-        - Runs SystemAlignmentOrchestrator validation
+        - Runs AlignUtility validation (lightweight replacement)
         - Only outputs messages if issues are detected
         - Does not fail the optimization workflow
         - Provides gentle nudge to run 'align' for details
@@ -293,38 +293,36 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             Dict with alignment results or None if not admin environment
         """
         try:
-            # Lazy import to avoid dependency in user environments
-            from src.operations.modules.admin.system_alignment_orchestrator import (
-                SystemAlignmentOrchestrator
-            )
+            # Use lightweight align utility instead of heavy SystemAlignmentOrchestrator
+            from src.operations.modules.admin.align_utility import run_align_utility
             
-            # Create orchestrator
-            alignment_orch = SystemAlignmentOrchestrator(project_root=project_root)
+            # Run alignment validation
+            result = run_align_utility()
             
-            # Run silent validation (no verbose output)
-            result = alignment_orch.execute({})
-            
-            if not result.success:
+            if not result['success']:
                 return {
                     'is_healthy': False,
-                    'message': result.message,
-                    'report': result.data.get('report') if result.data else None
+                    'message': result['message'],
+                    'report': result.get('report_data')
                 }
             
-            # Check if report indicates issues
-            report = result.data.get('report') if result.data else None
-            if report:
-                is_healthy = report.is_healthy if hasattr(report, 'is_healthy') else True
+            # Extract health status from report
+            report_data = result.get('report_data')
+            if report_data:
+                is_healthy = report_data.get('is_healthy', True)
+                checks_passed = report_data.get('checks_passed', 0)
+                checks_total = report_data.get('checks_total', 0)
+                
                 return {
                     'is_healthy': is_healthy,
-                    'message': f"{report.critical_issues} critical issues, {report.warnings} warnings" if not is_healthy else "System healthy",
-                    'report': report
+                    'message': f"{checks_passed}/{checks_total} checks passed" if is_healthy else result['message'],
+                    'report': report_data
                 }
             
             return {'is_healthy': True, 'message': 'System healthy'}
         
         except ImportError:
-            # SystemAlignmentOrchestrator not available (user environment)
+            # align_utility not available (user environment)
             logger.debug("System alignment not available (user environment)")
             return None
         except Exception as e:
