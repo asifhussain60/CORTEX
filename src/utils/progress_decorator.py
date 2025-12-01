@@ -17,6 +17,89 @@ from typing import Callable, Optional, Any
 from .progress_monitor import ProgressMonitor
 
 
+def should_show_initial_notification(
+    estimated_seconds: float,
+    threshold_minutes: float = 5.0
+) -> bool:
+    """
+    Determine if initial notification should be shown for long operation.
+    
+    Args:
+        estimated_seconds: Estimated operation duration in seconds
+        threshold_minutes: Threshold in minutes (default: 5)
+    
+    Returns:
+        True if operation is expected to take longer than threshold
+    """
+    if estimated_seconds <= 0:
+        return False
+    
+    threshold_seconds = threshold_minutes * 60
+    return estimated_seconds > threshold_seconds
+
+
+def generate_initial_notification(
+    estimated_seconds: float,
+    operation_name: str
+) -> str:
+    """
+    Generate friendly initial notification message for long operation.
+    
+    Args:
+        estimated_seconds: Estimated duration in seconds
+        operation_name: Name of the operation
+    
+    Returns:
+        Formatted notification message with time estimate
+    """
+    # Format duration appropriately
+    if estimated_seconds >= 3600:  # 1+ hours
+        hours = estimated_seconds / 3600
+        if hours >= 2:
+            duration_str = f"{hours:.0f} hours"
+        else:
+            duration_str = f"{hours:.1f} hours"
+    elif estimated_seconds >= 60:  # 1+ minutes
+        minutes = estimated_seconds / 60
+        duration_str = f"{minutes:.0f}-{minutes + 5:.0f} minutes"
+    else:
+        duration_str = f"{estimated_seconds:.0f} seconds"
+    
+    # Generate friendly message
+    suggestions = [
+        "Good time for coffee ☕",
+        "Perfect time for a quick break",
+        "Time to stretch your legs",
+        "Great opportunity to grab a snack"
+    ]
+    
+    suggestion = suggestions[0] if estimated_seconds < 900 else suggestions[1]
+    
+    return (
+        f"\n⏳ {operation_name} will take approximately {duration_str}\n"
+        f"   {suggestion}\n"
+    )
+
+
+def format_step_progress(
+    current: int,
+    total: int,
+    description: str
+) -> str:
+    """
+    Format step progress message with (x/y) notation.
+    
+    Args:
+        current: Current step number
+        total: Total steps
+        description: Step description
+    
+    Returns:
+        Formatted progress string like "Step 3/7: Analyzing dependencies"
+    """
+    return f"Step {current}/{total}: {description}"
+
+
 class _ProgressContext:
     """Thread-local context for progress monitoring"""
     def __init__(self):
@@ -63,7 +146,8 @@ def with_progress(
     operation_name: Optional[str] = None,
     threshold_seconds: float = 5.0,
     hang_timeout: float = 30.0,
-    show_steps: bool = True
+    show_steps: bool = True,
+    estimated_duration: Optional[float] = None
 ):
     """
     Decorator to automatically monitor long-running operations.
@@ -76,9 +160,10 @@ def with_progress(
         threshold_seconds: Only show progress if operation takes >5s (default)
         hang_timeout: Seconds without update before hang warning (default: 30s)
         show_steps: Whether to show intermediate step updates (default: True)
+        estimated_duration: Optional estimated duration in seconds (triggers initial notification)
         
     Usage:
-        @with_progress(operation_name="System Alignment")
+        @with_progress(operation_name="System Alignment", estimated_duration=600)
         def align_system(self):
             items = get_items()
             for i, item in enumerate(items, 1):
@@ -98,12 +183,17 @@ def with_progress(
         - Hang detection: Warns if operation stalls
         - Thread-safe: Works with concurrent operations
         - Zero overhead: <0.1% performance impact
+        - Initial notifications: Warns user about long operations upfront
     """
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Any:
             # Determine operation name (use function name if not specified)
             op_name = operation_name or func.__name__.replace('_', ' ').title()
+            
+            # Show initial notification if operation is expected to be long
+            if estimated_duration and should_show_initial_notification(estimated_duration):
+                print(generate_initial_notification(estimated_duration, op_name))
             
             # Record start time
             start_time = time.time()
@@ -115,7 +205,6 @@ def with_progress(
                 update_interval_seconds=2.0
             )
             
-            # Set up context for yield_progress() calls
             _progress_context.monitor = monitor
             _progress_context.started = False
             _progress_context.start_time = start_time
@@ -146,7 +235,7 @@ def with_progress(
     return decorator
 
 
-def yield_progress(current: int, total: int, step: str = "Processing"):
+def yield_progress(current: int, total: int, step: str = "Processing", step_format: bool = False):
     """
     Yield progress from within a @with_progress decorated function.
     
@@ -157,6 +246,7 @@ def yield_progress(current: int, total: int, step: str = "Processing"):
         current: Current item index (1-based, e.g., 1, 2, 3...)
         total: Total items to process
         step: Step description (e.g., "Processing file.py")
+        step_format: If True, formats with "Step x/y:" prefix
         
     Usage:
         @with_progress(operation_name="File Processing")
@@ -164,6 +254,13 @@ def yield_progress(current: int, total: int, step: str = "Processing"):
             for i, file in enumerate(files, 1):
                 yield_progress(i, len(files), f"Processing {file.name}")
                 # Do work here
+        
+        # With step formatting:
+        @with_progress(operation_name="Onboarding")
+        def onboard():
+            for i, step in enumerate(steps, 1):
+                yield_progress(i, len(steps), step.name, step_format=True)
+                # Shows: "Step 1/7: Initialize environment"
                 
     Features:
         - Auto-start: Monitoring begins when threshold exceeded
@@ -181,7 +278,6 @@ def yield_progress(current: int, total: int, step: str = "Processing"):
         # Not in a monitored context - safely return
         return
     
-    # Check elapsed time
     elapsed = time.time() - _progress_context.start_time
     
     # Start monitor if we've exceeded threshold
@@ -189,9 +285,12 @@ def yield_progress(current: int, total: int, step: str = "Processing"):
         monitor.start()
         _progress_context.started = True
     
+    # Format message with step notation if requested
+    message = format_step_progress(current, total, step) if step_format else step
+    
     # Update progress (only if monitor started)
     if _progress_context.started:
-        monitor.update(step, current, total)
+        monitor.update(message, current, total)
 
 
 def is_monitoring_active() -> bool:
