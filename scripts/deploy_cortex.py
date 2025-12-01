@@ -838,6 +838,70 @@ Stage 2: Deployment Gate Validation (16 Gates)
 ✅ CORTEX is ready to use!
 ```
 
+### 6️⃣ Post-Deployment Validation
+
+**IMPORTANT:** After installation or upgrade, run comprehensive post-deployment validation to ensure CORTEX is production-ready with all features properly wired.
+
+```bash
+# Run comprehensive validation
+python scripts/post_deployment_check.py
+
+# Verbose output (see all checks)
+python scripts/post_deployment_check.py --verbose
+
+# Generate report only (no console output)
+python scripts/post_deployment_check.py --report-only
+```
+
+**Exit Codes:**
+- `0`: All validations passed ✅ (production ready)
+- `1`: Warnings detected ⚠️ (review but operational)
+- `2`: Critical failures ❌ (fix before using CORTEX)
+
+**What's Validated (10 Categories):**
+1. ✅ **Core Agents** - FeedbackAgent, ViewDiscoveryAgent, TDDAgent, PlanningAgent
+2. ✅ **Response Templates** - 11 critical templates loadable
+3. ✅ **Documentation Sync** - Entry point and modules synchronized
+4. ✅ **TDD Workflow** - TDD Mastery integration complete
+5. ✅ **Planning System** - DoR/DoD validation functional
+6. ✅ **ADO Integration** - ADO operations wired correctly
+7. ✅ **Entry Points** - All required modules present and documented
+8. ✅ **Database Schema** - Tier 1/2/3 databases healthy
+9. ✅ **Brain Protection** - SKULL rules active
+10. ✅ **System Alignment** - Convention-based feature discovery working
+
+**Validation Reports:**
+Reports are saved to `cortex-brain/documents/reports/post-deployment-validation-{timestamp}.md`
+
+**If Validation Fails:**
+
+```bash
+# 1. Review the validation report
+cat cortex-brain/documents/reports/post-deployment-validation-*.md
+
+# 2. Fix issues listed in the report (examples):
+#    - Missing agents: Check imports in orchestrators
+#    - Template issues: Validate response-templates.yaml syntax
+#    - Database errors: Run migrations from cortex-brain/migrations/
+#    - Entry point issues: Check .github/prompts/CORTEX.prompt.md
+
+# 3. Re-run validation until it passes
+python scripts/post_deployment_check.py
+
+# 4. If issues persist, use CORTEX diagnostics:
+/CORTEX healthcheck
+```
+
+**Common Issues:**
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Agent import fails | Missing dependencies | `pip install -r requirements.txt` |
+| Template not found | YAML syntax error | Validate `cortex-brain/response-templates.yaml` |
+| Database locked | Another process | Close VS Code, kill python processes |
+| Entry point missing | Module not documented | Add to `.github/prompts/CORTEX.prompt.md` |
+| TDD integration fail | Test framework missing | `pip install pytest` |
+
 **If Validation Fails:**
 
 ```bash
@@ -1781,6 +1845,59 @@ Clone with: git clone -b {branch_name} --single-branch <repo>
             logger.info("✅ Push successful")
         else:
             logger.info("⏩ Skipping push (already completed)")
+        
+        # STAGE 6.5: Post-Deployment Validation (NEW)
+        if not skip_validation:
+            logger.info("\n🔍 STAGE 6.5: Post-Deployment Validation")
+            logger.info("Running comprehensive validation on deployed code...")
+            
+            try:
+                # Run post-deployment validator as subprocess
+                validation_script = project_root / "scripts" / "post_deployment_check.py"
+                result = subprocess.run(
+                    [sys.executable, str(validation_script)],
+                    cwd=project_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=300  # 5 minute timeout
+                )
+                
+                # Print output
+                if result.stdout:
+                    logger.info(result.stdout)
+                if result.stderr:
+                    logger.warning(result.stderr)
+                
+                # Check exit code
+                if result.returncode == 2:  # Failures
+                    logger.error("\n❌ POST-DEPLOYMENT VALIDATION FAILED")
+                    logger.error("   Deployment succeeded but validation issues detected.")
+                    logger.error("   Review the validation report and fix issues ASAP.")
+                    logger.error("\n   Common fixes:")
+                    logger.error("   1. Run 'python scripts/post_deployment_check.py' locally")
+                    logger.error("   2. Fix identified issues")
+                    logger.error("   3. Redeploy with fixed code")
+                    # Don't fail deployment - already pushed, just warn
+                elif result.returncode == 1:  # Warnings
+                    logger.warning("\n⚠️  POST-DEPLOYMENT VALIDATION WARNINGS")
+                    logger.warning("   Deployment succeeded with minor issues.")
+                    logger.warning("   Review validation report in cortex-brain/documents/reports/")
+                else:  # Success
+                    logger.info("\n✅ POST-DEPLOYMENT VALIDATION PASSED")
+                    logger.info("   All features validated successfully!")
+                
+            except FileNotFoundError:
+                logger.warning("⚠️  Post-deployment validation skipped (script not found)")
+                logger.warning(f"   Expected: {validation_script}")
+            except subprocess.TimeoutExpired:
+                logger.error("❌ Post-deployment validation timed out after 5 minutes")
+            except Exception as e:
+                logger.error(f"❌ Post-deployment validation error: {e}")
+                logger.error("   Deployment succeeded but validation failed to run.")
+                logger.error("   Manually run: python scripts/post_deployment_check.py")
+        else:
+            logger.warning("\n⚠️  POST-DEPLOYMENT VALIDATION SKIPPED (--skip-validation flag)")
+            logger.warning("   Run manually: python scripts/post_deployment_check.py")
         
         # STAGE 7: Cleanup and Return
         if not checkpoint.should_skip_stage(PublishStage.CLEANUP):
