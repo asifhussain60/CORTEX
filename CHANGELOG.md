@@ -1,5 +1,21 @@
 # Changelog
 
+## [Phase 0.4] - 2025-12-01
+
+### Removed (Breaking Changes)
+- **Obsolete Test Files**: Removed 1 obsolete test files
+  - Tests were importing non-existent modules
+  - Tests were no longer maintained or relevant
+  - See `cortex-brain/obsolete-tests-manifest.json` for full list
+  - Action: Review manifest for removed files if needed
+
+### Technical Debt Reduction
+- Code cleanup as part of Phase 0 (Foundation: Code Quality & Debugging)
+- Improved test suite maintainability
+- Reduced false negatives in test discovery
+
+
+
 All notable changes to CORTEX will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
