@@ -264,18 +264,28 @@ git commit -m "Merge: Mac (Phases 0,2,3,7,9) + Windows (Phases 4,5,6,8,10)"
 ### Mac Progress
 
 - Phase 0: ✅ COMPLETE (Completed: 2025-12-01, Commit: 7535e518)
-- Phase 2: 🔨 IN PROGRESS (Started: 2025-12-01)
+- Phase 2: 🔨 IN PROGRESS (Started: 2025-12-01, Architecture sync utilities added)
 - Phase 3: ⏳ NOT STARTED (ready to start)
 - Phase 7: ⏳ NOT STARTED (blocked by Phase 3)
 - Phase 9: ⏳ NOT STARTED (ready to start)
 
 ### Windows Progress
 
-- Phase 4: ✅ COMPLETE (December 1, 2025)
+- Phase 4: ✅ COMPLETE (December 1, 2025) - **INTEGRATED** (Merged: 2025-12-01, Commit: dfd2eae9)
 - Phase 5: ⏳ NOT STARTED
-- Phase 6: ⏳ NOT STARTED (blocked by Phase 4) - Phase 4 COMPLETE, ready to start
+- Phase 6: ⏳ NOT STARTED (Phase 4 COMPLETE, ready to start)
 - Phase 8: ⏳ NOT STARTED (blocked by all phases)
-- Phase 10: ✅ COMPLETE (December 1, 2025)
+- Phase 10: ✅ COMPLETE (December 1, 2025) - **INTEGRATED** (Merged: 2025-12-01, Commit: dfd2eae9)
+
+### Integration Status
+
+**Last Integration:** December 1, 2025 at dfd2eae9
+- ✅ Phase 4 (Incremental Planning System) merged from CORTEX-3.0
+- ✅ Phase 10 (YAML Modularization) merged from CORTEX-3.0
+- ✅ Merge conflicts resolved (planning_orchestrator.py imports)
+- ✅ Python 3.9 compatibility fixes applied (UTC → timezone.utc)
+- ✅ Test suite validation: **286 tests passing** (core tier tests)
+- ✅ No integration regressions detected
 
 ---
 
