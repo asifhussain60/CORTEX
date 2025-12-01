@@ -23,7 +23,7 @@ Example:
 import json
 import logging
 from pathlib import Path
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
@@ -101,7 +101,7 @@ class PhaseCheckpointManager:
         else:
             data = {
                 'session_id': session_id,
-                'created_at': datetime.now(UTC).isoformat(),
+                'created_at': datetime.now(timezone.utc).isoformat(),
                 'checkpoints': []
             }
         
@@ -110,7 +110,7 @@ class PhaseCheckpointManager:
             'phase': phase,
             'checkpoint_id': checkpoint_id,
             'commit_sha': commit_sha,
-            'created_at': datetime.now(UTC).isoformat(),
+            'created_at': datetime.now(timezone.utc).isoformat(),
             'metrics': metrics or {}
         }
         
