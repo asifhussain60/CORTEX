@@ -90,18 +90,14 @@ class YAMLCache:
         
         path_str = str(path)
         
-        # Validate file exists
         if not path.exists():
             raise FileNotFoundError(f"YAML file not found: {path}")
         
-        # Initialize stats for this file if needed
         if path_str not in self._stats:
             self._stats[path_str] = {'hits': 0, 'misses': 0}
         
-        # Get current file modification time
         current_mtime = os.path.getmtime(path)
         
-        # Check cache validity (unless force reload)
         if not force_reload and path_str in self._cache:
             cached_entry = self._cache[path_str]
             if cached_entry['mtime'] == current_mtime:

@@ -111,13 +111,11 @@ class EnhancementCatalog:
         catalog.add_feature("Planning System 2.0", FeatureType.WORKFLOW, 
                           "Vision API + incremental planning", source="git")
         
-        # Get features since last review
         new_features = catalog.get_features_since(days=7)
         
         # Update acceptance status
         catalog.update_acceptance("Planning System 2.0", AcceptanceStatus.ACCEPTED)
         
-        # Get last review timestamp
         last_review = catalog.get_last_review_timestamp()
     """
     
@@ -140,7 +138,6 @@ class EnhancementCatalog:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database
         self._init_database()
         
         # In-memory cache
@@ -262,7 +259,6 @@ class EnhancementCatalog:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Check if exists
         cursor.execute("""
             SELECT id, first_seen FROM cortex_features WHERE feature_hash = ?
         """, (feature_hash,))
@@ -321,7 +317,6 @@ class EnhancementCatalog:
         Returns:
             List of features
         """
-        # Check cache first
         cache_key = f"since:{since_date}:{days}:{feature_type}:{status}"
         if cache_key in self._cache:
             cached_time, cached_features = self._cache[cache_key]

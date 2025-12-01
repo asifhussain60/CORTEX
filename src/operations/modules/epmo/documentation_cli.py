@@ -123,7 +123,6 @@ class EPMDocumentationCLI:
         )
         self._add_generate_arguments(generate_parser)
         
-        # Validate command
         validate_parser = subparsers.add_parser(
             'validate',
             help='Validate templates and configuration'
@@ -258,14 +257,12 @@ class EPMDocumentationCLI:
         """Execute generate command"""
         self._print_info(f"Generating documentation for project: {args.project_path}")
         
-        # Validate project path
         project_path = Path(args.project_path)
         if not project_path.exists():
             self._print_error(f"Project path does not exist: {project_path}")
             return 1
         
         try:
-            # Create documentation configuration
             doc_config = DocumentationConfig(
                 output_format=args.format,
                 include_code_examples=args.include_code,
@@ -273,7 +270,6 @@ class EPMDocumentationCLI:
                 output_directory=args.output
             )
             
-            # Initialize documentation generator
             brain_path = project_path / "cortex-brain"
             if not brain_path.exists():
                 self._print_warning(f"CORTEX brain not found at {brain_path}, using project root")
@@ -322,13 +318,11 @@ class EPMDocumentationCLI:
             validation_errors = 0
             
             if args.template:
-                # Validate specific template
                 result = template_engine.validate_template(args.template)
                 self._print_validation_result(args.template, result)
                 if not result['valid']:
                     validation_errors += 1
             else:
-                # Validate all templates
                 templates = template_engine.list_templates()
                 for template_name in templates:
                     result = template_engine.validate_template(template_name)
@@ -413,13 +407,11 @@ class EPMDocumentationCLI:
         self._print_info(f"Initializing EPM documentation in: {project_path}")
         
         try:
-            # Create configuration file
             config_path = project_path / "epm-docs.yaml"
             if config_path.exists() and not args.force:
                 self._print_error("Configuration file already exists (use --force to overwrite)")
                 return 1
             
-            # Create default configuration
             default_config = {
                 'project': {
                     'name': project_path.name,
@@ -441,11 +433,9 @@ class EPMDocumentationCLI:
             with open(config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(default_config, f, default_flow_style=False, indent=2)
             
-            # Create templates directory
             templates_dir = project_path / "cortex-brain/templates/documentation"
             templates_dir.mkdir(parents=True, exist_ok=True)
             
-            # Create example template
             example_template = """# {{ name or 'Project' }}
 
 {{ description or 'Project description.' }}

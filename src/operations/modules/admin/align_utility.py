@@ -219,7 +219,6 @@ class AlignUtility:
                     severity="ERROR"
                 )
             
-            # Validate YAML structure
             with open(rules_file, 'r', encoding='utf-8') as f:
                 rules = yaml.safe_load(f)
             
@@ -272,7 +271,6 @@ class AlignUtility:
                     severity="ERROR"
                 )
             
-            # Validate YAML structure
             with open(templates_file, 'r', encoding='utf-8') as f:
                 templates = yaml.safe_load(f)
             
@@ -323,7 +321,6 @@ class AlignUtility:
                     severity="WARNING"  # Changed from ERROR to WARNING - databases are optional
                 )
             
-            # Check database is readable
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             
@@ -381,7 +378,6 @@ class AlignUtility:
                     severity="ERROR"
                 )
             
-            # Check for key directories
             required_dirs = ["orchestrators", "cortex_agents", "operations"]
             missing_dirs = []
             
@@ -431,7 +427,6 @@ class AlignUtility:
                     severity="ERROR"
                 )
             
-            # Validate JSON structure
             with open(config_file, 'r', encoding='utf-8') as f:
                 config_data = json.load(f)
             
@@ -443,7 +438,6 @@ class AlignUtility:
                     severity="ERROR"
                 )
             
-            # Check for critical keys
             if 'machines' not in config_data:
                 return ValidationResult(
                     check_name="Configuration",
@@ -492,7 +486,6 @@ class AlignUtility:
         report.checks.append(self.validate_core_modules())
         report.checks.append(self.validate_configuration())
         
-        # Calculate execution time
         end_time = datetime.now()
         report.execution_time = (end_time - self.start_time).total_seconds()
         
@@ -514,7 +507,6 @@ def run_align_utility() -> Dict[str, Any]:
         console_output = report.format_console()
         safe_print(console_output)
         
-        # Return structured data for programmatic access
         return {
             'success': report.is_healthy,
             'message': f"System Status: {report.status_text}",

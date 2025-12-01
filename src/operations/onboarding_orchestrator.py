@@ -49,7 +49,6 @@ class OnboardingOrchestrator:
     
     def _find_cortex_root(self) -> Path:
         """Find CORTEX installation root (standalone or embedded)."""
-        # Check if we're in a CORTEX subdirectory
         current = self.project_root
         while current.parent != current:
             if (current / "cortex-brain").exists():
@@ -180,7 +179,6 @@ class OnboardingOrchestrator:
     def _run_quality_analysis(self, project_path: Path):
         """Run CodeQualityAnalyzer on project."""
         try:
-            # Import analyzer
             import sys
             sys.path.insert(0, str(self.cortex_root / "src"))
             from agents.optimization_health_monitor import CodeQualityAnalyzer, CodeQualityIssue
@@ -196,7 +194,6 @@ class OnboardingOrchestrator:
                 except Exception as e:
                     logger.warning(f"Failed to analyze {file_path}: {e}")
             
-            # Calculate overall score (0-100)
             # Simple formula: 100 - (issues * penalty)
             critical_count = sum(1 for i in quality_issues if getattr(i, 'severity', '') == 'critical')
             high_count = sum(1 for i in quality_issues if getattr(i, 'severity', '') == 'high')
@@ -217,7 +214,6 @@ class OnboardingOrchestrator:
     def _run_security_scan(self, project_path: Path):
         """Run SecurityScanner on project."""
         try:
-            # Import scanner
             import sys
             sys.path.insert(0, str(self.cortex_root / "src"))
             from plugins.code_review_plugin import SecurityScanner
@@ -275,7 +271,6 @@ class OnboardingOrchestrator:
     ) -> str:
         """Generate dashboard data using DashboardDataAdapter."""
         try:
-            # Import adapter
             import sys
             sys.path.insert(0, str(self.cortex_root / "src"))
             from operations.dashboard_data_adapter import DashboardDataAdapter
@@ -291,10 +286,8 @@ class OnboardingOrchestrator:
                 metrics
             )
             
-            # Return dashboard URL
             dashboard_path = self.cortex_root / "cortex-brain" / "documents" / "analysis" / "dashboard" / "dashboard.html"
             
-            # Return relative URL for local viewing
             return f"file://{dashboard_path}"
             
         except ImportError as e:

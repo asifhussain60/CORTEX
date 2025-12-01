@@ -188,7 +188,6 @@ class BreakingChangesAnalyzer(BaseAnalyzer):
         
         # Pattern 1: Public function/method signature changes (removed parameters)
         for i, line in enumerate(lines, 1):
-            # Check for function definitions
             if re.match(r'^\s*def\s+[a-z_][a-z0-9_]*\s*\(', line) and not line.strip().startswith('_'):
                 # Look for removed required parameters (heuristic: very few params)
                 param_match = re.search(r'def\s+(\w+)\s*\((.*?)\)', line)
@@ -215,7 +214,6 @@ class BreakingChangesAnalyzer(BaseAnalyzer):
         for i, line in enumerate(lines, 1):
             if class_pattern.match(line):
                 class_name = class_pattern.match(line).group(1)
-                # Check if class is marked as deprecated
                 if i > 1 and '@deprecated' in lines[i-2].lower():
                     findings.append(IssueFinding(
                         category=IssueCategory.BREAKING_CHANGE,
@@ -236,7 +234,6 @@ class BreakingChangesAnalyzer(BaseAnalyzer):
                 return_value = return_pattern.match(line).group(1).strip()
                 # Check for type changes (None -> value or value -> None)
                 if return_value == 'None' and i > 5:
-                    # Check if this is inside a public function
                     for j in range(max(0, i-10), i):
                         if re.match(r'^\s*def\s+[a-z_][a-z0-9_]*', lines[j]) and not lines[j].strip().startswith('_'):
                             findings.append(IssueFinding(
@@ -267,7 +264,6 @@ class BreakingChangesAnalyzer(BaseAnalyzer):
                 func_name = match.group(2)
                 params = match.group(3).strip()
                 
-                # Check for minimal parameters
                 if not params or params.count(',') < 1:
                     findings.append(IssueFinding(
                         category=IssueCategory.BREAKING_CHANGE,
@@ -286,7 +282,6 @@ class BreakingChangesAnalyzer(BaseAnalyzer):
         for i, line in enumerate(lines, 1):
             if interface_pattern.match(line):
                 interface_name = interface_pattern.match(line).group(1)
-                # Check next 10 lines for required properties
                 for j in range(i, min(i+10, len(lines))):
                     if re.search(r'^\s*(\w+)\s*:\s*', lines[j]) and '?' not in lines[j]:
                         findings.append(IssueFinding(
@@ -396,7 +391,6 @@ class CodeSmellAnalyzer(BaseAnalyzer):
                     func_start_line = i
                     indent_level = len(line) - len(line.lstrip())
         
-        # Check last function
         if current_func and (len(lines) - func_start_line) > 50:
             findings.append(IssueFinding(
                 category=IssueCategory.CODE_SMELL,
@@ -423,7 +417,6 @@ class CodeSmellAnalyzer(BaseAnalyzer):
         
         for i, line in enumerate(lines, 1):
             if class_pattern.match(line):
-                # Check previous class
                 if current_class and (i - class_start_line) > 300:
                     findings.append(IssueFinding(
                         category=IssueCategory.CODE_SMELL,
@@ -439,7 +432,6 @@ class CodeSmellAnalyzer(BaseAnalyzer):
                 current_class = class_pattern.match(line).group(1)
                 class_start_line = i
         
-        # Check last class
         if current_class and (len(lines) - class_start_line) > 300:
             findings.append(IssueFinding(
                 category=IssueCategory.CODE_SMELL,
@@ -530,7 +522,6 @@ class BestPracticesAnalyzer(BaseAnalyzer):
             
             result.files_analyzed += 1
             
-            # Check various best practices
             result.findings.extend(self._check_error_handling(file_path, content))
             result.findings.extend(self._check_naming_conventions(file_path, content))
             result.findings.extend(self._check_magic_numbers(file_path, content))
@@ -590,7 +581,6 @@ class BestPracticesAnalyzer(BaseAnalyzer):
         language = self._detect_language(file_path)
         
         if language == 'python':
-            # Check for non-snake_case function names
             func_pattern = re.compile(r'^\s*def\s+([a-zA-Z_][a-zA-Z0-9_]*)')
             for i, line in enumerate(lines, 1):
                 match = func_pattern.match(line)
@@ -882,7 +872,6 @@ class PerformanceAnalyzer(BaseAnalyzer):
         loop_stack = []
         
         for i, line in enumerate(lines, 1):
-            # Check for loop start
             if re.match(r'^\s*(for|while)\s+', line):
                 loop_depth += 1
                 loop_stack.append(i)
@@ -921,7 +910,6 @@ class PerformanceAnalyzer(BaseAnalyzer):
                 in_loop = True
                 loop_line = i
             elif in_loop:
-                # Check for database queries inside loops
                 if any(pattern in line.lower() for pattern in ['query', 'select', 'find', 'get', '.filter(']):
                     findings.append(IssueFinding(
                         category=IssueCategory.PERFORMANCE,

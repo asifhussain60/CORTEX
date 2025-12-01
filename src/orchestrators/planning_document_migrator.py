@@ -295,18 +295,15 @@ class PlanningDocumentMigrator:
         Returns:
             True if validation passed
         """
-        # Check that all original files were moved
         if len(original_plans) != len(migrations):
             logger.error(f"Migration count mismatch: {len(original_plans)} original, {len(migrations)} migrated")
             return False
         
-        # Check that no files remain in root
         remaining = self._find_plans_in_root()
         if len(remaining) > 0:
             logger.error(f"Found {len(remaining)} documents still in root after migration")
             return False
         
-        # Check that all target files exist
         for migration in migrations:
             target_path = Path(migration['target'])
             if not target_path.exists():

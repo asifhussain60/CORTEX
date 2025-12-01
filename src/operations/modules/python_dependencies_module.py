@@ -61,7 +61,6 @@ class PythonDependenciesModule(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")
@@ -69,13 +68,11 @@ class PythonDependenciesModule(BaseOperationModule):
         
         project_root = Path(project_root)
         
-        # Check requirements.txt
         requirements_file = project_root / "requirements.txt"
         if not requirements_file.exists():
             issues.append(f"requirements.txt not found: {requirements_file}")
             return False, issues
         
-        # Check Python command
         python_cmd = context.get('python_command', 'python3')
         try:
             result = subprocess.run(
@@ -195,7 +192,6 @@ class PythonDependenciesModule(BaseOperationModule):
     
     def _get_python_command(self, context: Dict[str, Any]) -> str:
         """Get Python command from context or determine from venv."""
-        # Check if venv path in context
         venv_path = context.get('venv_path')
         if venv_path:
             venv_path = Path(venv_path)

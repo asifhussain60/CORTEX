@@ -457,7 +457,6 @@ class HardcodedDataCleanerModule(BaseOperationModule):
         lower_line = line.lower()
         for keyword in self.PLACEHOLDER_KEYWORDS:
             if f'"{keyword}"' in lower_line or f"'{keyword}'" in lower_line:
-                # Check if it's not in a comment or test assertion
                 if 'assert' not in lower_line and '#' not in line[:line.find(keyword)] if keyword in line else True:
                     violations.append(HardcodedViolation(
                         file_path=file_path,
@@ -546,7 +545,6 @@ class HardcodedDataCleanerModule(BaseOperationModule):
             def visit_Return(self, node):
                 """Check for functions returning hardcoded dicts/lists."""
                 if isinstance(node.value, (ast.Dict, ast.List)):
-                    # Check if it's a large hardcoded structure
                     if isinstance(node.value, ast.Dict) and len(node.value.keys) > 3:
                         self.violations.append(HardcodedViolation(
                             file_path=file_path,
@@ -688,7 +686,6 @@ class HardcodedDataCleanerModule(BaseOperationModule):
                     by_file[v.file_path] = []
                 by_file[v.file_path].append(v)
         
-        # Process each file
         for file_path, file_violations in by_file.items():
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:

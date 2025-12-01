@@ -66,7 +66,6 @@ class GitHistoryValidator:
             config_path = self.repo_path / 'cortex-brain' / 'config' / 'git-history-rules.yaml'
         
         if not config_path.exists():
-            # Return defaults if config doesn't exist
             return {
                 'enforcement_level': 'BLOCKING',
                 'minimum_commits_analyzed': 5,
@@ -105,7 +104,6 @@ class GitHistoryValidator:
         operation = request_context.get('operation', 'unknown')
         has_context = request_context.get('has_git_history_context', False)
         
-        # Check exemptions (documentation files, configs)
         if self._is_exempt(files):
             return ValidationResult(
                 status='PASS',
@@ -139,7 +137,6 @@ class GitHistoryValidator:
         exemptions = self.config.get('exemptions', [])
         
         for file_path in files:
-            # Check if any exemption pattern matches
             for pattern in exemptions:
                 if re.match(pattern.replace('*', '.*'), file_path):
                     return True
@@ -164,31 +161,26 @@ class GitHistoryValidator:
         security_scan_done = git_context.get('security_scan_completed', False)
         contributor_analysis_done = git_context.get('contributor_analysis_completed', False)
         
-        # Calculate quality score
         score = 0.0
         issues = []
         
-        # Check commits analyzed (30 points)
         min_commits = self.config.get('minimum_commits_analyzed', 5)
         if commits_analyzed >= min_commits:
             score += 30.0
         else:
             issues.append(f'Only {commits_analyzed} commits analyzed (minimum: {min_commits})')
         
-        # Check lookback period (25 points)
         min_lookback = self.config.get('commit_lookback_months', 6)
         if lookback_months >= min_lookback:
             score += 25.0
         else:
             issues.append(f'Only {lookback_months} months lookback (minimum: {min_lookback})')
         
-        # Check security scan (25 points)
         if security_scan_done:
             score += 25.0
         else:
             issues.append('Security pattern scan not completed')
         
-        # Check contributor analysis (20 points)
         if contributor_analysis_done:
             score += 20.0
         else:
@@ -298,7 +290,6 @@ class GitHistoryValidator:
         since_date = (datetime.now() - timedelta(days=lookback_months * 30)).strftime('%Y-%m-%d')
         
         try:
-            # Get commit count
             result = subprocess.run(
                 ['git', 'log', '--oneline', f'--since={since_date}', '--', str(file_path)],
                 cwd=self.repo_path,
@@ -309,7 +300,6 @@ class GitHistoryValidator:
             commits = result.stdout.strip().split('\n') if result.stdout.strip() else []
             commit_count = len(commits)
             
-            # Get churn rate (lines added/deleted)
             churn_result = subprocess.run(
                 ['git', 'log', '--numstat', f'--since={since_date}', '--', str(file_path)],
                 cwd=self.repo_path,
@@ -380,7 +370,6 @@ class GitHistoryValidator:
             hotfix_commits = hotfix_result.stdout.strip().split('\n') if hotfix_result.stdout.strip() else []
             hotfix_count = len([c for c in hotfix_commits if c])
             
-            # Check for recent security fixes (30 days)
             recent_security_days = self.config.get('high_risk_indicators', {}).get('recent_security_fix_days', 30)
             recent_date = (datetime.now() - timedelta(days=recent_security_days)).strftime('%Y-%m-%d')
             
@@ -410,7 +399,6 @@ class GitHistoryValidator:
     def _analyze_contributors(self, file_path: Path) -> Dict:
         """Analyze contributors to the file"""
         try:
-            # Get top contributors
             result = subprocess.run(
                 ['git', 'shortlog', '-sn', '--', str(file_path)],
                 cwd=self.repo_path,
@@ -427,7 +415,6 @@ class GitHistoryValidator:
                         name = parts[1]
                         contributors.append({'name': name, 'commits': count})
             
-            # Get recent contributors (last 3 months)
             recent_date = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
             recent_result = subprocess.run(
                 ['git', 'shortlog', '-sn', f'--since={recent_date}', '--', str(file_path)],
@@ -488,7 +475,6 @@ class GitHistoryValidator:
     def _analyze_temporal_patterns(self, file_path: Path) -> Dict:
         """Analyze change frequency and temporal patterns"""
         try:
-            # Get commit dates for last 6 months
             lookback_months = self.config.get('commit_lookback_months', 6)
             since_date = (datetime.now() - timedelta(days=lookback_months * 30)).strftime('%Y-%m-%d')
             
@@ -507,11 +493,9 @@ class GitHistoryValidator:
                     'days_since_last_change': None
                 }
             
-            # Calculate days since last change
             last_change = datetime.strptime(dates[0], '%Y-%m-%d')
             days_since = (datetime.now() - last_change).days
             
-            # Calculate average frequency
             total_days = (datetime.now() - datetime.strptime(since_date, '%Y-%m-%d')).days
             avg_days_between = total_days / len(dates) if dates else 0
             
@@ -541,7 +525,6 @@ class GitHistoryValidator:
 
 # Example usage for testing
 if __name__ == '__main__':
-    # Initialize validator
     validator = GitHistoryValidator(Path.cwd())
     
     # Test validation without context

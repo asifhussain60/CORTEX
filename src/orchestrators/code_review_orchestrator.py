@@ -37,7 +37,6 @@ try:
 except ImportError as e:
     logger.warning(f"Phase 2 components not available: {e}")
     PHASE2_AVAILABLE = False
-    # Create placeholder classes
     PRContextBuilder = None
     DependencyGraph = None
     ADOClient = None
@@ -130,7 +129,6 @@ class CodeReviewOrchestrator:
         # Load configuration
         self.config = self._load_config()
         
-        # Initialize Phase 2 components if available
         self.ado_client = None
         self.context_builder = None
         
@@ -322,7 +320,6 @@ class CodeReviewOrchestrator:
         # Phase 3: Generate Report
         result = self._generate_report(pr_info, config, context_files, analysis_results)
         
-        # Calculate duration
         duration = (datetime.now() - start_time).total_seconds() * 1000
         result.analysis_duration_ms = duration
         
@@ -358,7 +355,6 @@ class CodeReviewOrchestrator:
                     file_contents=None  # Will load from disk
                 )
                 
-                # Get all files from graph
                 all_files = graph.get_all_files()
                 
                 logger.info(
@@ -423,7 +419,6 @@ class CodeReviewOrchestrator:
         }
         
         try:
-            # Import analyzers (Phase 3)
             from src.orchestrators.analysis_engine import (
                 BreakingChangesAnalyzer,
                 CodeSmellAnalyzer,
@@ -497,7 +492,6 @@ class CodeReviewOrchestrator:
                 logger.error(f"Analyzer {analyzer.name} failed: {e}")
                 continue
         
-        # Calculate aggregate metrics
         total_findings = sum(len(r.findings) for r in results["analyzer_results"])
         total_critical = sum(r.critical_count for r in results["analyzer_results"])
         total_warnings = sum(r.warning_count for r in results["analyzer_results"])
@@ -540,7 +534,6 @@ class CodeReviewOrchestrator:
         Returns:
             Code review result with report
         """
-        # Calculate risk score (0-100)
         risk_score = self._calculate_risk_score(analysis_results)
         
         # Generate executive summary
@@ -553,7 +546,6 @@ class CodeReviewOrchestrator:
             analysis_results.get("issues", [])
         )
         
-        # Create result
         result = CodeReviewResult(
             pr_info=pr_info,
             config=config,
@@ -1019,10 +1011,8 @@ def main():
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     
-    # Get CORTEX root
     cortex_root = os.environ.get('CORTEX_ROOT', os.getcwd())
     
-    # Initialize orchestrator
     orchestrator = CodeReviewOrchestrator(cortex_root)
     
     # Test initiation

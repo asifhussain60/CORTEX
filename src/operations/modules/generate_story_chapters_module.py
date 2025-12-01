@@ -294,7 +294,6 @@ class GenerateStoryChaptersModule(BaseOperationModule):
         chapter_id = chapter_def['id']
         chapter_path = story_dir / f"{chapter_id}.md"
         
-        # Create backup if exists
         backup_path = None
         if chapter_path.exists():
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -334,7 +333,6 @@ class GenerateStoryChaptersModule(BaseOperationModule):
             with open(chapter_path, 'r', encoding='utf-8') as f:
                 existing_content = f.read()
             
-            # Create backup
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_path = backup_dir / f"{chapter_id}_backup_{timestamp}.md"
             with open(backup_path, 'w', encoding='utf-8') as f:
@@ -473,7 +471,6 @@ class GenerateStoryChaptersModule(BaseOperationModule):
             feature_name = feature.get('name', '').lower()
             feature_category = feature.get('category', '').lower()
             
-            # Check if feature matches focus keywords
             for keyword in focus_keywords:
                 if keyword.lower() in feature_name or keyword.lower() in feature_category:
                     relevant.append(feature)

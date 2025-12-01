@@ -133,7 +133,6 @@ class PostDeploymentValidator:
         for feature_name, config in features_to_check.items():
             feature_issues = []
             
-            # Check orchestrator/agent file exists
             if "orchestrator" in config:
                 file_path = self.cortex_root / config["orchestrator"]
                 if not file_path.exists():
@@ -152,7 +151,6 @@ class PostDeploymentValidator:
                     if not self._can_import_module(file_path):
                         feature_issues.append(f"Agent import failed: {config['agent']}")
             
-            # Check triggers exist in response templates
             if templates and config.get("triggers"):
                 triggers_found = False
                 for trigger in config["triggers"]:
@@ -163,7 +161,6 @@ class PostDeploymentValidator:
                 if not triggers_found:
                     feature_issues.append(f"No triggers found in response-templates.yaml: {config['triggers']}")
             
-            # Check template exists
             if config.get("template"):
                 if not templates or config["template"] not in templates.get("templates", {}):
                     feature_issues.append(f"Template missing: {config['template']}")
@@ -202,7 +199,6 @@ class PostDeploymentValidator:
         try:
             templates = self._load_response_templates()
             
-            # Check critical templates
             critical_templates = [
                 "fallback",
                 "help_table",
@@ -240,7 +236,6 @@ class PostDeploymentValidator:
         print("📚 Validating Documentation...")
         print("-" * 80)
         
-        # Check entry point module
         entry_point = self.cortex_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if not entry_point.exists():
             self.issues.append("CORTEX.prompt.md missing")
@@ -249,7 +244,6 @@ class PostDeploymentValidator:
             print()
             return
         
-        # Check critical module guides
         modules_path = self.cortex_root / ".github" / "prompts" / "modules"
         critical_modules = [
             "response-format.md",
@@ -338,7 +332,6 @@ class PostDeploymentValidator:
                 conn = sqlite3.connect(str(db_path))
                 cursor = conn.cursor()
                 
-                # Check tables exist
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
                 tables = [row[0] for row in cursor.fetchall()]
                 
@@ -384,7 +377,6 @@ class PostDeploymentValidator:
             if trigger in triggers:
                 return True
         
-        # Check routing section
         for route_name, route_triggers in templates.get("routing", {}).items():
             if trigger in route_triggers:
                 return True

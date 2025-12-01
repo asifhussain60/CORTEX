@@ -54,7 +54,6 @@ class MLContextOptimizer:
         self.target_reduction = target_reduction
         self.min_quality = min_quality
         
-        # Initialize TF-IDF vectorizer
         self.vectorizer = TfidfVectorizer(
             max_features=1000,
             stop_words='english',
@@ -141,14 +140,12 @@ class MLContextOptimizer:
             )
         
         try:
-            # Calculate TF-IDF matrix
             tfidf_matrix = self.vectorizer.fit_transform(all_texts)
             
             # Separate intent vector from conversation vectors
             intent_vector = tfidf_matrix[-1]
             conversation_vectors = tfidf_matrix[:-1]
             
-            # Calculate cosine similarity scores
             relevance_scores = []
             for i in range(len(conversations)):
                 conv_vec = conversation_vectors[i]
@@ -163,7 +160,6 @@ class MLContextOptimizer:
             # Sort by relevance (descending)
             relevance_scores.sort(key=lambda x: x[1], reverse=True)
             
-            # Calculate how many conversations to keep
             keep_count = max(
                 min_conversations,
                 int(len(conversations) * (1 - self.target_reduction))
@@ -180,10 +176,8 @@ class MLContextOptimizer:
             # Reconstruct optimized conversation list (maintain chronological order)
             optimized = [conversations[i] for i in sorted(top_indices)]
             
-            # Calculate quality score
             quality = self._calculate_quality(relevance_scores, top_indices)
             
-            # Calculate metrics
             elapsed_time = datetime.now() - start_time
             metrics = self._calculate_metrics(
                 conversations, optimized, quality, elapsed_time, "ml_optimization"
@@ -279,12 +273,10 @@ class MLContextOptimizer:
         all_texts = pattern_texts + [query]
         
         try:
-            # Calculate TF-IDF
             tfidf_matrix = self.vectorizer.fit_transform(all_texts)
             query_vector = tfidf_matrix[-1]
             pattern_vectors = tfidf_matrix[:-1]
             
-            # Calculate relevance scores
             scores = []
             for i in range(len(patterns)):
                 pattern_vec = pattern_vectors[i]
@@ -302,7 +294,6 @@ class MLContextOptimizer:
             
             optimized = [patterns[i] for i in top_indices]
             
-            # Calculate metrics
             original_tokens = self._count_pattern_tokens(patterns)
             optimized_tokens = self._count_pattern_tokens(optimized)
             elapsed_time = datetime.now() - start_time
@@ -376,10 +367,8 @@ class MLContextOptimizer:
         vec1_dense = vec1.toarray().flatten()
         vec2_dense = vec2.toarray().flatten()
         
-        # Calculate dot product
         dot_product = np.dot(vec1_dense, vec2_dense)
         
-        # Calculate norms
         norm1 = np.linalg.norm(vec1_dense)
         norm2 = np.linalg.norm(vec2_dense)
         

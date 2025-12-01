@@ -135,7 +135,6 @@ class CriticalFileDetector:
         Returns:
             List of ImportInfo objects
         """
-        # Check cache
         if file_path in self._import_cache:
             return [
                 ImportInfo(module='', file_path=p, line_number=0)
@@ -196,11 +195,9 @@ class CriticalFileDetector:
         for part in module_parts:
             module_path = module_path / part
         
-        # Check for .py file
         if (module_path.with_suffix('.py')).exists():
             return module_path.with_suffix('.py')
         
-        # Check for __init__.py in directory
         if (module_path / '__init__.py').exists():
             return module_path / '__init__.py'
         

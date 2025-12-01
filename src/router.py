@@ -161,7 +161,6 @@ class CortexRouter:
         # Step 2: Inject context from Tiers 1-3 (Performance target: <200ms)
         context_start = time.perf_counter()
         
-        # Get or create conversation session
         if not conversation_id:
             conversation_id = self.session_manager.get_active_session()
             if not conversation_id:
@@ -188,7 +187,6 @@ class CortexRouter:
             workflow=workflow
         )
         
-        # Calculate total time
         total_time_ms = (time.perf_counter() - start_time) * 1000
         
         # Performance validation

@@ -222,7 +222,6 @@ class PhaseTrackerPlugin(BasePlugin):
         project_slug = project_name.lower().replace(" ", "-")
         tracking_id = f"{project_slug}-{timestamp}"
         
-        # Create tracking structure
         tracking = {
             "version": "1.0",
             "project": {
@@ -336,7 +335,6 @@ class PhaseTrackerPlugin(BasePlugin):
             phase_id = phase.get("phase_id")
             dependencies = phase.get("dependencies", [])
             
-            # Check dependencies exist
             for dep in dependencies:
                 if dep not in phase_ids:
                     errors.append(

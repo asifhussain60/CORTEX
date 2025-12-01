@@ -246,11 +246,9 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         
         issues = []
         
-        # Check project root
         if not self.project_root.exists():
             issues.append(f"Project root not found: {self.project_root}")
         
-        # Check required orchestrators
         design_sync = self.project_root / "src" / "operations" / "modules" / "design_sync" / "design_sync_orchestrator.py"
         optimize_cortex = self.project_root / "src" / "operations" / "modules" / "optimize" / "optimize_cortex_orchestrator.py"
         
@@ -260,12 +258,10 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         if not optimize_cortex.exists():
             issues.append("optimize_cortex_orchestrator.py not found")
         
-        # Check git
         git_dir = self.project_root / ".git"
         if not git_dir.exists():
             issues.append("Not a git repository")
         
-        # Check brain directories
         brain_dir = self.project_root / "cortex-brain"
         if not brain_dir.exists():
             issues.append("cortex-brain directory not found")
@@ -391,7 +387,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             else:
                 logger.info("\n[Phase 7/7] Governance check skipped (per user request)")
             
-            # Calculate metrics
             end_time = datetime.now()
             self.metrics.execution_time_seconds = (end_time - self.start_time).total_seconds()
             self.metrics.total_improvements = self._calculate_total_improvements()
@@ -442,7 +437,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             
             logger.info("🔄 Initializing design synchronization...")
             
-            # Create orchestrator
             design_sync = DesignSyncOrchestrator()
             
             # Execute with current mode and project root in context
@@ -481,7 +475,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             
             logger.info("🔍 Analyzing code health...")
             
-            # Create orchestrator
             optimize = OptimizeCortexOrchestrator(project_root=self.project_root)
             
             # Execute
@@ -557,7 +550,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         logger.info("🔍 Checking EPMO health and alignment...")
         
         try:
-            # Check for EPMO health issues
             epmo_health = self._check_epmo_health()
             
             if epmo_health['has_issues']:
@@ -686,7 +678,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                     f"SRP VIOLATION: {epmo_file.name} has {method_count} methods (limit: {MAX_METHODS}, suggests >3 responsibilities)"
                 )
         
-        # Calculate health score
         health_score = 100.0
         health_score -= len([i for i in issues if 'CRITICAL' in i]) * 20
         health_score -= len([i for i in issues if 'WARNING' in i]) * 5
@@ -747,7 +738,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     
     def _generate_health_report(self) -> SystemHealthReport:
         """Generate comprehensive health report."""
-        # Calculate health score (0-100)
         health_score = self._calculate_health_score()
         
         # Determine overall health
@@ -928,7 +918,6 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         """Format completion footer for display."""
         mode_display = "LIVE" if self.mode == ExecutionMode.LIVE else "DRY RUN"
         
-        # Get cache statistics
         cache_stats = self._validation_cache.get_stats("optimize")
         cache_summary = ""
         if cache_stats:

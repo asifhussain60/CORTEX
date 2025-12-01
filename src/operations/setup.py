@@ -162,12 +162,10 @@ def create_virtual_environment(project_root: Path) -> Tuple[bool, str]:
     """
     venv_path = project_root / '.venv'
     
-    # Check if already exists
     if venv_path.exists():
         return True, f"Virtual environment already exists at {venv_path}"
     
     try:
-        # Create venv
         subprocess.run(
             [sys.executable, '-m', 'venv', str(venv_path)],
             check=True,
@@ -246,7 +244,6 @@ def configure_gitignore(project_root: Path) -> Tuple[bool, str]:
             with open(gitignore_path, 'r', encoding='utf-8') as f:
                 existing_content = f.read()
             
-            # Check if CORTEX is already excluded
             if cortex_entry in existing_content or "CORTEX/" in existing_content:
                 return True, ".gitignore already contains CORTEX exclusion"
             
@@ -259,7 +256,6 @@ def configure_gitignore(project_root: Path) -> Tuple[bool, str]:
             
             return True, "Added CORTEX/ to existing .gitignore"
         else:
-            # Create new .gitignore with CORTEX exclusion
             with open(gitignore_path, 'w', encoding='utf-8') as f:
                 f.write(cortex_section.lstrip())
             
@@ -299,17 +295,13 @@ def initialize_brain_databases(project_root: Path) -> Tuple[bool, str]:
         tier_path = brain_path / tier
         db_path = tier_path / db_name
         
-        # Create tier directory if needed
         tier_path.mkdir(parents=True, exist_ok=True)
         
-        # Create database if it doesn't exist
         if not db_path.exists():
             try:
-                # Create empty database with basic table
                 conn = sqlite3.connect(str(db_path))
                 cursor = conn.cursor()
                 
-                # Create metadata table
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS metadata (
                         key TEXT PRIMARY KEY,

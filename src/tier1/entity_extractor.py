@@ -108,7 +108,6 @@ class EntityExtractor:
         if '.' not in path:
             return False
         
-        # Check valid extensions
         valid_exts = {
             'py', 'md', 'yaml', 'yml', 'json', 'jsonl', 'txt',
             'sql', 'db', 'html', 'css', 'js', 'ts', 'tsx',
@@ -176,7 +175,6 @@ class EntityExtractor:
         
         text_lower = text.lower()
         
-        # Check for known technical terms
         for term in self.TECHNICAL_TERMS:
             if term in text_lower:
                 # Count occurrences
@@ -193,7 +191,6 @@ class EntityExtractor:
                 term = compound.lower()
                 terms[term] = terms.get(term, 0) + 1
         
-        # Return as list of dicts
         return [{'term': term, 'count': count} for term, count in sorted(terms.items())]
     
     def extract_features(self, text: str) -> List[str]:

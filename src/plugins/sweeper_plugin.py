@@ -189,7 +189,6 @@ class SweeperPlugin(BasePlugin):
         start_time = datetime.now()
         
         try:
-            # Get workspace root
             workspace = context.get('workspace_root')
             if not workspace:
                 return {
@@ -219,7 +218,6 @@ class SweeperPlugin(BasePlugin):
             # Save audit log
             self._save_audit_log()
             
-            # Calculate execution time
             self.stats.execution_time_seconds = (
                 datetime.now() - start_time
             ).total_seconds()
@@ -306,13 +304,11 @@ class SweeperPlugin(BasePlugin):
         """Check if path is protected from deletion"""
         path = path.resolve()
         
-        # Check protected directories
         for protected_dir in self.protected_dirs:
             full_protected = (self.workspace_root / protected_dir).resolve()
             if path == full_protected or full_protected in path.parents:
                 return True
         
-        # Check protected patterns
         for pattern in self.protected_patterns:
             if path.match(pattern):
                 return True
@@ -334,7 +330,6 @@ class SweeperPlugin(BasePlugin):
                 dirs[:] = []  # Don't recurse into protected dirs
                 continue
             
-            # Classify each file
             for filename in files:
                 file_path = root_path / filename
                 
@@ -346,11 +341,9 @@ class SweeperPlugin(BasePlugin):
                 
                 # Skip if not a target extension
                 if file_path.suffix.lower() not in self.SCAN_EXTENSIONS:
-                    # Check for extensionless patterns
                     if not any(file_path.match(p) for p in self.BACKUP_PATTERNS + self.SESSION_PATTERNS):
                         continue
                 
-                # Classify the file
                 classification = self._classify_file(file_path)
                 classifications.append(classification)
         
@@ -402,7 +395,6 @@ class SweeperPlugin(BasePlugin):
         """
         filename = path.name.lower()
         
-        # Check for backup patterns
         for pattern in self.BACKUP_PATTERNS:
             if path.match(pattern):
                 return (
@@ -411,7 +403,6 @@ class SweeperPlugin(BasePlugin):
                     "Manual backup file (Git provides versioning)"
                 )
         
-        # Check for dated duplicates
         for pattern in self.DATED_PATTERNS:
             if path.match(pattern):
                 return (
@@ -420,7 +411,6 @@ class SweeperPlugin(BasePlugin):
                     "Dated duplicate file"
                 )
         
-        # Check for session reports
         for pattern in self.SESSION_PATTERNS:
             if path.match(pattern):
                 if age_days > 30:
@@ -436,7 +426,6 @@ class SweeperPlugin(BasePlugin):
                         f"Recent session report ({age_days} days old)"
                     )
         
-        # Check for reference documentation (NEW!)
         for pattern in self.REFERENCE_DOC_PATTERNS:
             if path.match(pattern):
                 if age_days > 60:
@@ -452,7 +441,6 @@ class SweeperPlugin(BasePlugin):
                         f"Recent reference doc ({age_days} days old)"
                     )
         
-        # Check by extension
         ext = path.suffix.lower()
         
         if ext in ['.bak', '.backup', '.old', '.orig']:

@@ -202,7 +202,6 @@ class IdGenerator:
         
         suggested_id = None
         
-        # Check for existing 'name' attribute
         if 'name' in attributes and attributes['name']:
             base_name = self._clean_name(attributes['name'])
             suggested_id = self._add_type_suffix(base_name, element_type)
@@ -213,7 +212,6 @@ class IdGenerator:
             if clean_text:
                 suggested_id = self._add_type_suffix(clean_text, element_type)
         
-        # Check for placeholder or title attributes
         elif 'placeholder' in attributes and attributes['placeholder']:
             clean_placeholder = self._clean_text_content(attributes['placeholder'])
             suggested_id = self._add_type_suffix(clean_placeholder, element_type)
@@ -280,7 +278,6 @@ class IdGenerator:
         if not base_name:
             return self._generate_generic_name(element_type)
         
-        # Get preferred prefixes/suffixes for element type
         conventions = self.naming_conventions.get(element_type, ["element"])
         
         # Choose most appropriate convention
@@ -362,12 +359,10 @@ class HTMLElementAnalyzer:
             analyses = self._analyze_line_elements(line, line_num)
             element_analyses.extend(analyses)
         
-        # Calculate metrics
         total_elements = len(element_analyses)
         elements_with_ids = sum(1 for analysis in element_analyses if analysis.current_id)
         elements_missing_ids = total_elements - elements_with_ids
         
-        # Calculate accessibility score
         accessibility_score = self._calculate_accessibility_score(element_analyses)
         
         # Generate recommendations
@@ -395,7 +390,6 @@ class HTMLElementAnalyzer:
         """Analyze a line for HTML elements requiring IDs"""
         analyses = []
         
-        # Define element patterns that should have IDs
         element_patterns = {
             ElementType.BUTTON: r'<button([^>]*)>(.*?)</button>|<input[^>]*type=["\']button["\'][^>]*>',
             ElementType.INPUT: r'<input([^>]*)>',
@@ -433,7 +427,6 @@ class HTMLElementAnalyzer:
             # Parse attributes
             attributes = self._parse_attributes(attributes_str)
             
-            # Check if element already has ID
             current_id = attributes.get('id')
             
             # Skip if element already has an ID (unless we want to validate it)
@@ -454,7 +447,6 @@ class HTMLElementAnalyzer:
                 analysis.suggested_id = self.id_generator.generate_id(analysis)
                 analysis.reasoning = self._explain_id_suggestion(analysis)
             
-            # Check for accessibility issues
             analysis.accessibility_issues = self._check_accessibility_issues(analysis)
             
             return analysis
@@ -673,7 +665,6 @@ class InvestigationHtmlIdMappingPlugin(BasePlugin):
                     "budget_remaining": budget_remaining
                 }
             
-            # Get HTML content
             file_content = context.get('file_content', '')
             if not file_content:
                 return {

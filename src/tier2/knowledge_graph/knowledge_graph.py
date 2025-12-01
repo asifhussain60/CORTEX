@@ -62,7 +62,6 @@ class KnowledgeGraph:
         """
         import uuid
         
-        # Validate namespace is provided
         if namespace is None or namespace == "":
             raise ValueError(
                 "namespace is required. Use 'cortex.*' for framework patterns "
@@ -226,7 +225,6 @@ class KnowledgeGraph:
             # Extract last folder name as workspace
             workspace_name = Path(workspace_path).name.lower()
         
-        # Check analysis type based on request and context
         request_lower = request.lower()
         files_analyzed = context.get('files_analyzed', [])
         
@@ -242,11 +240,9 @@ class KnowledgeGraph:
                 'session', 'manage', 'registration'
             ]
             
-            # Check for architectural analysis
             if any(pattern in request_lower for pattern in architecture_patterns):
                 return f'{workspace_name}_architecture'
             
-            # Check for feature-specific analysis
             for pattern in feature_patterns:
                 if pattern in request_lower:
                     # Extract the specific feature name, not just the word "feature"
@@ -258,7 +254,6 @@ class KnowledgeGraph:
                     else:
                         return f'{workspace_name}_features.{pattern}'
                     
-            # Check file patterns for architectural indicators
             architectural_files = [
                 'shell.html', 'config.route.js', 'app.js', 'layout', 'topnav'
             ]
@@ -305,7 +300,6 @@ class KnowledgeGraph:
             **metadata
         }
         
-        # Create pattern content from analysis data
         content = self._format_analysis_content(analysis_data, namespace)
         
         # Store pattern in knowledge graph

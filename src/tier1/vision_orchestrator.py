@@ -48,7 +48,6 @@ class VisionOrchestrator:
         self.logger = logging.getLogger(__name__)
         self.config = config
         
-        # Initialize components
         self.detector = ImageDetector(config)
         self.vision_api = VisionAPI(config)
         
@@ -117,7 +116,6 @@ class VisionOrchestrator:
         }
         
         try:
-            # Check if feature is enabled
             if not self.enabled or not self.auto_detect:
                 return result
             
@@ -205,7 +203,6 @@ class VisionOrchestrator:
                 )
                 result['context_data'] = self._extract_context_data(analysis_results)
             
-            # Calculate processing time
             result['processing_time_ms'] = (
                 datetime.now() - start_time
             ).total_seconds() * 1000

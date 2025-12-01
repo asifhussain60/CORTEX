@@ -32,9 +32,12 @@ import re
 import os
 import sys
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Callable, Any
 from datetime import datetime
+from enum import Enum
 import logging
+import functools
+import time
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -367,6 +370,312 @@ def check_markers_in_files(file_paths: List[str]) -> Tuple[bool, str]:
         return True, report
     else:
         return False, "✓ No debug markers found in staged files."
+
+
+# ============================================================================
+# PHASE 0.1 ACCEPTANCE CRITERIA: Decorators, Log Levels, Performance Tracking
+# ============================================================================
+
+class DebugLevel(Enum):
+    """Configurable log levels for debug operations."""
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+
+
+class PerformanceTracker:
+    """
+    Performance tracking for debug operations.
+    
+    Tracks timing measurements and execution statistics.
+    """
+    
+    def __init__(self):
+        """Initialize performance tracker."""
+        self.measurements = {}
+        self.operation_counts = {}
+    
+    def start_timer(self, operation_name: str) -> None:
+        """Start timing an operation."""
+        if operation_name not in self.measurements:
+            self.measurements[operation_name] = []
+        self.measurements[operation_name].append({
+            'start_time': time.time(),
+            'end_time': None,
+            'duration': None
+        })
+    
+    def stop_timer(self, operation_name: str) -> float:
+        """
+        Stop timing an operation and return duration.
+        
+        Returns:
+            Duration in seconds, or 0.0 if operation not started
+        """
+        if operation_name not in self.measurements or not self.measurements[operation_name]:
+            return 0.0
+        
+        measurement = self.measurements[operation_name][-1]
+        if measurement['end_time'] is None:
+            measurement['end_time'] = time.time()
+            measurement['duration'] = measurement['end_time'] - measurement['start_time']
+        
+        return measurement['duration']
+    
+    def get_statistics(self, operation_name: str) -> Dict[str, Any]:
+        """
+        Get statistics for an operation.
+        
+        Returns:
+            Dict with min, max, avg, count, total duration
+        """
+        if operation_name not in self.measurements:
+            return {
+                'count': 0,
+                'total': 0.0,
+                'min': 0.0,
+                'max': 0.0,
+                'avg': 0.0
+            }
+        
+        durations = [m['duration'] for m in self.measurements[operation_name] if m['duration'] is not None]
+        
+        if not durations:
+            return {
+                'count': 0,
+                'total': 0.0,
+                'min': 0.0,
+                'max': 0.0,
+                'avg': 0.0
+            }
+        
+        return {
+            'count': len(durations),
+            'total': sum(durations),
+            'min': min(durations),
+            'max': max(durations),
+            'avg': sum(durations) / len(durations)
+        }
+    
+    def reset(self, operation_name: Optional[str] = None) -> None:
+        """Reset tracking for specific operation or all operations."""
+        if operation_name:
+            if operation_name in self.measurements:
+                del self.measurements[operation_name]
+            if operation_name in self.operation_counts:
+                del self.operation_counts[operation_name]
+        else:
+            self.measurements = {}
+            self.operation_counts = {}
+
+
+# Global performance tracker instance
+_performance_tracker = PerformanceTracker()
+
+
+def debug_start(
+    operation_name: str,
+    level: str = "DEBUG",
+    log_args: bool = False
+) -> Callable:
+    """
+    Decorator to mark debug start with performance tracking.
+    
+    Args:
+        operation_name: Name of the operation being debugged
+        level: Log level (DEBUG, INFO, WARNING, ERROR)
+        log_args: If True, log function arguments
+    
+    Example:
+        @debug_start("authentication", level="INFO", log_args=True)
+        def authenticate_user(username, password):
+            return validate_credentials(username, password)
+    """
+    def decorator(func: Callable) -> Callable:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            # Start performance tracking
+            _performance_tracker.start_timer(operation_name)
+            
+            log_level = getattr(logging, level.upper(), logging.DEBUG)
+            
+            # Log operation start
+            log_msg = f"[DEBUG_START] {operation_name} - {func.__name__}"
+            if log_args:
+                args_str = ", ".join(repr(arg) for arg in args)
+                kwargs_str = ", ".join(f"{k}={repr(v)}" for k, v in kwargs.items())
+                all_args = ", ".join(filter(None, [args_str, kwargs_str]))
+                log_msg += f" | Args: ({all_args})"
+            
+            logger.log(log_level, log_msg)
+            
+            if os.environ.get("CORTEX_DEBUG_MODE") == "1":
+                print(f"🔍 START: {operation_name} ({func.__name__})")
+            
+            return func(*args, **kwargs)
+        
+        return wrapper
+    return decorator
+
+
+def debug_end(
+    operation_name: str,
+    level: str = "DEBUG",
+    log_result: bool = False
+) -> Callable:
+    """
+    Decorator to mark debug end with performance tracking.
+    
+    Args:
+        operation_name: Name of the operation being debugged
+        level: Log level (DEBUG, INFO, WARNING, ERROR)
+        log_result: If True, log function result
+    
+    Example:
+        @debug_start("authentication", level="INFO")
+        @debug_end("authentication", log_result=True)
+        def authenticate_user(username, password):
+            return validate_credentials(username, password)
+    """
+    def decorator(func: Callable) -> Callable:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            
+            # Stop performance tracking
+            duration = _performance_tracker.stop_timer(operation_name)
+            
+            log_level = getattr(logging, level.upper(), logging.DEBUG)
+            
+            # Log operation end
+            log_msg = f"[DEBUG_END] {operation_name} - {func.__name__} | Duration: {duration:.4f}s"
+            if log_result:
+                log_msg += f" | Result: {repr(result)}"
+            
+            logger.log(log_level, log_msg)
+            
+            if os.environ.get("CORTEX_DEBUG_MODE") == "1":
+                print(f"✓ END: {operation_name} ({duration:.4f}s)")
+            
+            return result
+        
+        return wrapper
+    return decorator
+
+
+class DebugScope:
+    """
+    Context manager for debug operation scopes with performance tracking.
+    
+    Provides automatic start/end logging and performance measurement.
+    
+    Example:
+        with DebugScope("database_query", level="INFO") as scope:
+            results = execute_query()
+            scope.log_metric("rows_returned", len(results))
+            scope.add_context("query_type", "SELECT")
+    """
+    
+    def __init__(
+        self,
+        operation_name: str,
+        level: str = "DEBUG",
+        auto_log: bool = True
+    ):
+        """
+        Initialize debug scope.
+        
+        Args:
+            operation_name: Name of the operation
+            level: Log level (DEBUG, INFO, WARNING, ERROR)
+            auto_log: If True, automatically log start/end
+        """
+        self.operation_name = operation_name
+        self.level = level
+        self.auto_log = auto_log
+        self.start_time = None
+        self.end_time = None
+        self.context = {}
+        self.metrics = {}
+        self.log_level = getattr(logging, level.upper(), logging.DEBUG)
+    
+    def __enter__(self):
+        """Enter context - start tracking."""
+        self.start_time = time.time()
+        _performance_tracker.start_timer(self.operation_name)
+        
+        if self.auto_log:
+            logger.log(self.log_level, f"[SCOPE_START] {self.operation_name}")
+            
+            if os.environ.get("CORTEX_DEBUG_MODE") == "1":
+                print(f"🔍 SCOPE START: {self.operation_name}")
+        
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit context - stop tracking and log results."""
+        self.end_time = time.time()
+        duration = _performance_tracker.stop_timer(self.operation_name)
+        
+        if self.auto_log:
+            log_msg = f"[SCOPE_END] {self.operation_name} | Duration: {duration:.4f}s"
+            
+            if self.context:
+                context_str = ", ".join(f"{k}={v}" for k, v in self.context.items())
+                log_msg += f" | Context: {{{context_str}}}"
+            
+            if self.metrics:
+                metrics_str = ", ".join(f"{k}={v}" for k, v in self.metrics.items())
+                log_msg += f" | Metrics: {{{metrics_str}}}"
+            
+            if exc_type:
+                log_msg += f" | Exception: {exc_type.__name__}"
+            
+            logger.log(self.log_level, log_msg)
+            
+            if os.environ.get("CORTEX_DEBUG_MODE") == "1":
+                status = "✗ FAILED" if exc_type else "✓ SUCCESS"
+                print(f"{status}: {self.operation_name} ({duration:.4f}s)")
+        
+        return False  # Don't suppress exceptions
+    
+    def add_context(self, key: str, value: Any) -> None:
+        """Add context information to scope."""
+        self.context[key] = value
+    
+    def log_metric(self, metric_name: str, value: Any) -> None:
+        """Log a metric for the current scope."""
+        self.metrics[metric_name] = value
+    
+    def get_elapsed(self) -> float:
+        """Get elapsed time so far."""
+        if self.start_time is None:
+            return 0.0
+        return time.time() - self.start_time
+
+
+def get_performance_stats(operation_name: str) -> Dict[str, Any]:
+    """
+    Get performance statistics for an operation.
+    
+    Args:
+        operation_name: Name of the operation to get stats for
+    
+    Returns:
+        Dict with count, total, min, max, avg duration
+    """
+    return _performance_tracker.get_statistics(operation_name)
+
+
+def reset_performance_tracking(operation_name: Optional[str] = None) -> None:
+    """
+    Reset performance tracking.
+    
+    Args:
+        operation_name: If provided, reset only this operation. Otherwise reset all.
+    """
+    _performance_tracker.reset(operation_name)
 
 
 if __name__ == "__main__":

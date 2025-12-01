@@ -215,7 +215,6 @@ class HTMLSecurityAnalyzer:
         lines = content.split('\n')
         
         for line_num, line in enumerate(lines, 1):
-            # Check for missing CSRF tokens in forms
             if '<form' in line.lower() and 'method="post"' in line.lower():
                 if not self._has_csrf_protection(content, line_num):
                     findings.append(SecurityFinding(
@@ -231,7 +230,6 @@ class HTMLSecurityAnalyzer:
                         owasp_category="A01:2021 – Broken Access Control"
                     ))
             
-            # Check for potential XSS via innerHTML
             if 'innerHTML' in line and any(unsafe in line for unsafe in ['user', 'input', 'param']):
                 findings.append(SecurityFinding(
                     type=SecurityVulnerabilityType.XSS_DOM,
@@ -547,7 +545,6 @@ class InvestigationSecurityPlugin(BasePlugin):
         findings = []
         lines = content.split('\n')
         
-        # Get security patterns for this language
         patterns = self.pattern_db.get_patterns_for_language(language)
         
         for vuln_type, pattern_list in patterns.items():

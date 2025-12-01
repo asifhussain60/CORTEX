@@ -212,7 +212,6 @@ class CoverageReporter:
         # Aggregate by plugin
         by_plugin = self._aggregate_by_plugin(by_file)
         
-        # Check threshold
         threshold_passed = overall.percentage >= self.threshold
         
         return CoverageReport(

@@ -168,7 +168,6 @@ class TDDStateMachine:
                 self.debug_manager = None
                 self.debug_agent = None
         
-        # Initialize feedback system
         self.feedback_agent: Optional[Any] = None
         if enable_feedback and FeedbackAgent:
             try:
@@ -390,7 +389,6 @@ class TDDStateMachine:
                 "current_state": self.session.current_state.value,
             }
         
-        # Calculate aggregate metrics
         total_tests = sum(c.tests_written for c in self.session.cycles)
         total_passing = sum(c.tests_passing for c in self.session.cycles)
         total_duration = sum(c.total_duration for c in self.session.cycles)

@@ -54,7 +54,6 @@ class DashboardGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.templates_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize components
         self.data_collector = DashboardDataCollector(self.brain_path)
         self.chart_builder = ChartConfigBuilder()
         
@@ -70,11 +69,9 @@ class DashboardGenerator:
         """Auto-detect CORTEX root directory."""
         current = Path.cwd()
         
-        # Check current directory
         if (current / "cortex-brain").exists():
             return current
         
-        # Check parent directories (up to 3 levels)
         for _ in range(3):
             current = current.parent
             if (current / "cortex-brain").exists():
@@ -121,7 +118,6 @@ class DashboardGenerator:
             output_path = self.output_dir / output_filename
             output_path.write_text(html_content, encoding='utf-8')
             
-            # Create symlink to latest
             latest_link = self.output_dir / "dashboard-latest.html"
             if latest_link.exists():
                 latest_link.unlink()
@@ -232,7 +228,6 @@ class DashboardGenerator:
         Returns:
             Complete HTML content
         """
-        # Check if template exists, create if not
         template_path = self.templates_dir / "dashboard.html.j2"
         if not template_path.exists():
             self._create_default_template(template_path)

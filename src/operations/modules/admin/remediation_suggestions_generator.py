@@ -56,7 +56,6 @@ class RemediationSuggestionsGenerator:
         
         # Collect features needing remediation
         for name, score in report.feature_scores.items():
-            # Get feature metadata
             metadata = orchestrators.get(name) or agents.get(name)
             if not metadata:
                 continue
@@ -146,7 +145,6 @@ class RemediationSuggestionsGenerator:
             
             for violation in report.doc_governance_violations:
                 if violation.get('type') == 'duplicate_document':
-                    # Create consolidation suggestion
                     file1 = self.project_root / violation['file']
                     file2 = self.project_root / violation['duplicate']
                     

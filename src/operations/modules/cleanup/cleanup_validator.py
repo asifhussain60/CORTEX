@@ -169,7 +169,6 @@ class CleanupValidator:
         """Check if test discovery would be affected"""
         errors = []
         
-        # Check if any test files would be deleted
         test_files = [f for f in files_to_delete if 'test' in f.name.lower()]
         
         if test_files:

@@ -142,7 +142,6 @@ class QueryCacheEngine:
             if cache_key in self.cache:
                 entry = self.cache[cache_key]
                 
-                # Check TTL expiration
                 if self._is_expired(entry):
                     self._remove_entry(cache_key)
                     self.misses += 1
@@ -181,7 +180,6 @@ class QueryCacheEngine:
         """
         cache_key = self._generate_cache_key(query, query_type)
         
-        # Calculate entry size
         size_bytes = self._calculate_size(result)
         
         # Don't cache if too large (>10% of total cache)
@@ -190,7 +188,6 @@ class QueryCacheEngine:
             return False
         
         with self.lock:
-            # Create cache entry
             entry = CacheEntry(
                 key=cache_key,
                 value=result,
@@ -364,7 +361,6 @@ class QueryCacheEngine:
         # Normalize query
         normalized_query = query.lower().strip()
         
-        # Create key with query type prefix
         key_data = f"{query_type.value}:{normalized_query}"
         
         # Hash for consistent key length
@@ -549,7 +545,6 @@ class SmartQueryCache:
         Returns:
             Query result (cached or fresh)
         """
-        # Classify query type
         query_type = self._classify_query(query)
         
         # Try cache first
@@ -629,7 +624,6 @@ if __name__ == "__main__":
     print("🚀 CORTEX 3.0 Phase 2 - Query Cache System Test")
     print("=" * 60)
     
-    # Initialize cache
     cache = SmartQueryCache(cache_size_mb=10)
     
     # Mock query function
@@ -664,7 +658,6 @@ if __name__ == "__main__":
         print(f"   Results: {len(result['results'])} items")
         print()
     
-    # Get cache statistics
     print("2. Cache Performance Statistics:")
     stats = cache.get_cache_stats()
     metrics = stats['performance_metrics']

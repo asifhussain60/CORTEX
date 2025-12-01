@@ -171,7 +171,6 @@ class CleanupVerifier:
             from src.cortex_agents.health_validator.agent import HealthValidator
             from src.cortex_agents.base_agent import AgentRequest
             
-            # Initialize validator (quick mode - skip tests)
             validator = HealthValidator("post-cleanup-validator", None, None, None)
             
             request = AgentRequest(

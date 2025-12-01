@@ -148,7 +148,6 @@ class ProductionReadinessChecklist:
         if self.enable_git_checks:
             items.extend(self._validate_git())
         
-        # Calculate summary
         passed_checks = sum(1 for item in items if item.status == CheckStatus.PASSED)
         failed_checks = sum(1 for item in items if item.status == CheckStatus.FAILED)
         warning_checks = sum(1 for item in items if item.status == CheckStatus.WARNING)
@@ -157,7 +156,6 @@ class ProductionReadinessChecklist:
         # Overall pass if no blocking failures
         passed = blocking_failures == 0
         
-        # Calculate score
         total_possible = len(items)
         score = (passed_checks + (warning_checks * 0.5)) / total_possible if total_possible > 0 else 0.0
         
@@ -176,7 +174,6 @@ class ProductionReadinessChecklist:
         """Validate test execution and coverage."""
         items = []
         
-        # Check 1: All tests passing
         total_tests = test_results.get('total_tests', 0)
         failed_tests = test_results.get('failed_tests', 0)
         
@@ -207,7 +204,6 @@ class ProductionReadinessChecklist:
                 details=f"All {total_tests} tests passing"
             ))
         
-        # Check 2: Test coverage threshold
         coverage = test_results.get('coverage_percentage', 0.0) / 100.0
         
         if coverage >= self.coverage_threshold:
@@ -273,7 +269,6 @@ class ProductionReadinessChecklist:
                 recommendation="Remove all debug statements, use proper logging instead"
             ))
         
-        # Check 4: Lint validation passed
         if lint_results:
             blocking_violations = sum(
                 result.blocking_violations
@@ -306,7 +301,6 @@ class ProductionReadinessChecklist:
                 details="Lint validation not run"
             ))
         
-        # Check 5: No critical code smells
         critical_smells = [s for s in code_smells if getattr(s, 'severity', '') == 'critical'] if code_smells else []
         
         if len(critical_smells) == 0:
@@ -333,7 +327,6 @@ class ProductionReadinessChecklist:
         """Validate documentation completeness."""
         items = []
         
-        # Check 6: README exists and updated
         readme_path = self.project_root / "README.md"
         if readme_path.exists():
             items.append(ChecklistItem(
@@ -353,7 +346,6 @@ class ProductionReadinessChecklist:
                 recommendation="Create README.md with project documentation"
             ))
         
-        # Check 7: Public API documentation (heuristic)
         # This is a simplified check - full implementation would parse code
         items.append(ChecklistItem(
             name="Public APIs documented",
@@ -378,7 +370,6 @@ class ProductionReadinessChecklist:
             details="Validated by cleanup scanner"
         ))
         
-        # Check 9: Dependencies up to date
         # This would require package manager integration
         items.append(ChecklistItem(
             name="Dependencies current",
@@ -395,7 +386,6 @@ class ProductionReadinessChecklist:
         items = []
         
         try:
-            # Check 10: No uncommitted changes
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 cwd=self.project_root,
@@ -431,7 +421,6 @@ class ProductionReadinessChecklist:
                     details="Not a git repository"
                 ))
             
-            # Check 11: Branch synchronized
             result = subprocess.run(
                 ['git', 'status', '-sb'],
                 cwd=self.project_root,

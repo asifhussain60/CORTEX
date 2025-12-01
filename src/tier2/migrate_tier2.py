@@ -121,7 +121,6 @@ class Tier2Migrator:
             END
         """)
         
-        # Create indexes
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_patterns_category 
             ON patterns(category)
@@ -307,11 +306,9 @@ class Tier2Migrator:
             self.stats['errors'].append(f"Source file not found: {self.source_yaml}")
             return self.stats
         
-        # Create database connection
         conn = sqlite3.connect(self.target_db)
         
         try:
-            # Create schema
             print("Creating database schema with FTS5...")
             self.create_schema(conn)
             

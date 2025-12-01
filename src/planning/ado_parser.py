@@ -164,7 +164,6 @@ class ADOTemplateParser:
         )
         
         with sqlite3.connect(self.db_path) as conn:
-            # Check for duplicate ADO number
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT id FROM ado_items WHERE ado_number = ?",

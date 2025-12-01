@@ -62,7 +62,6 @@ class CopyEntryPointsStep(OnboardingStep):
                 destination = project_root / file_path
                 
                 if source.exists():
-                    # Create parent directories if needed
                     destination.parent.mkdir(parents=True, exist_ok=True)
                     
                     # Copy file if it doesn't exist or is different
@@ -192,7 +191,6 @@ class InitializeBrainTiersStep(OnboardingStep):
             project_root = Path(context.get('project_root', Path.cwd()))
             brain_root = project_root / "cortex-brain"
             
-            # Create brain tier directories
             tier_dirs = [
                 "tier1",
                 "tier2", 
@@ -320,7 +318,6 @@ class AnalyzeDiscoveriesStep(OnboardingStep):
     def execute(self, context: Dict[str, Any]) -> StepResult:
         """Analyze discoveries and generate insights"""
         try:
-            # Get crawler results from context
             crawler_results = context.get('crawler_results', {})
             
             insights = {

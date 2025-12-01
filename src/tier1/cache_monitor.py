@@ -387,16 +387,12 @@ class CacheHealthReport:
         Returns:
             Dict with detailed health information
         """
-        # Get current status
         current_status = self.monitor.check_cache_health()
         
-        # Get recommendations
         recommendations = self.monitor.get_trim_recommendations()
         
-        # Get statistics
         statistics = self.monitor.get_statistics()
         
-        # Calculate health metrics
         token_count = current_status['total_tokens']
         health_score = self._calculate_health_score(token_count)
         risk_level = self._calculate_risk_level(token_count)

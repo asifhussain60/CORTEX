@@ -44,11 +44,9 @@ class BackupArchiver:
             return {'success': True, 'message': 'No backups to archive'}
         
         try:
-            # Create backup archive directory
             archive_dir = self.project_root / '.backup-archive'
             archive_dir.mkdir(exist_ok=True)
             
-            # Create timestamped manifest
             timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
             manifest_file = archive_dir / f'backup-manifest-{timestamp}.json'
             
@@ -94,7 +92,6 @@ class BackupArchiver:
             commit_msg = f"Archive {len(backup_files)} backup files before cleanup - {timestamp}"
             subprocess.run(['git', 'commit', '-m', commit_msg], cwd=str(self.project_root), check=True)
             
-            # Get commit SHA
             result = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=str(self.project_root),

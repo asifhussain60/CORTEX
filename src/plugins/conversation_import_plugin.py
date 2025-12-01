@@ -100,16 +100,13 @@ class ConversationImportPlugin(BasePlugin):
         try:
             self.logger.info("Initializing Conversation Import Plugin")
             
-            # Initialize storage paths
             self.brain_path = Path(self.get_brain_path())
             self.imported_conversations_dir = self.brain_path / "imported-conversations"
             self.imported_conversations_dir.mkdir(exist_ok=True, parents=True)
             
-            # Initialize conversation vault for CORTEX 3.0
             self.vault_dir = self.brain_path / "conversation-vault"
             self.vault_dir.mkdir(exist_ok=True, parents=True)
             
-            # Initialize Tier 1 connection
             self.tier1_db = self.brain_path / "tier1" / "conversations.db"
             
             if not self.tier1_db.exists():
@@ -158,10 +155,8 @@ class ConversationImportPlugin(BasePlugin):
     def _handle_capture(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Capture current conversation to vault using CORTEX 3.0 smart hint system."""
         try:
-            # Import smart hint system
             from src.tier1.smart_hint_integration import capture_current_conversation
             
-            # Get conversation from context
             user_prompt = context.get("user_prompt", "")
             assistant_response = context.get("assistant_response", "")
             
@@ -308,7 +303,6 @@ class ConversationImportPlugin(BasePlugin):
                 patterns = self._detect_patterns(assistant_response)
                 all_patterns.extend(patterns)
                 
-                # Create turn
                 turn = ConversationTurn(
                     user="asifhussain60",
                     timestamp=timestamp,
@@ -348,7 +342,6 @@ class ConversationImportPlugin(BasePlugin):
             'score': 0
         }
         
-        # Calculate score
         score = 0
         if elements['has_cortex_template']:
             score += 2
@@ -404,7 +397,6 @@ class ConversationImportPlugin(BasePlugin):
             
             wm = WorkingMemory(str(self.tier1_db))
             
-            # Create conversation session
             session_id = wm.start_conversation(
                 user_id="manual_import",
                 metadata={

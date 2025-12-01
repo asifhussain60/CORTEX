@@ -68,7 +68,6 @@ class FusionManager:
             # Run temporal correlation
             correlations = self.temporal_correlator.correlate_conversation(conversation_id)
             
-            # Calculate statistics
             stats = self._calculate_correlation_stats(correlations)
             
             # Generate summary
@@ -112,7 +111,6 @@ class FusionManager:
         """
         logger.info(f"Generating development story for conversation {conversation_id}")
         
-        # Get timeline data
         timeline_data = self.temporal_correlator.get_conversation_timeline(conversation_id)
         
         if not timeline_data['timeline']:
@@ -155,7 +153,6 @@ class FusionManager:
         """
         logger.info(f"Generating fusion insights for conversation {conversation_id}")
         
-        # Get correlations
         correlations = self.temporal_correlator.correlate_conversation(conversation_id)
         
         if not correlations:

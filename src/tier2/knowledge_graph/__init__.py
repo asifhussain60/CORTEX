@@ -16,14 +16,12 @@ New Structure (in progress):
 Once modularization is complete, this will import from the new coordinator.
 """
 
-# Import from modular types
 from .types import (
     Pattern,
     PatternType,
     RelationshipType
 )
 
-# Import KnowledgeGraph facade
 from .knowledge_graph import KnowledgeGraph
 
 # New modular components (partially complete)

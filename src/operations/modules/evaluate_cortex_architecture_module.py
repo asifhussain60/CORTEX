@@ -67,7 +67,6 @@ class EvaluateCortexArchitectureModule(BaseOperationModule):
         
         project_root = Path(context['project_root'])
         
-        # Check CORTEX-UNIFIED-ARCHITECTURE.yaml exists
         arch_file = project_root / "cortex-brain" / "CORTEX-UNIFIED-ARCHITECTURE.yaml"
         if not arch_file.exists():
             issues.append(f"Architecture file not found: {arch_file}")
@@ -122,7 +121,6 @@ class EvaluateCortexArchitectureModule(BaseOperationModule):
                 changes = self._detect_changes_since(architecture, last_refresh)
                 logger.info(f"Detected {len(changes)} changes since last refresh")
             
-            # Calculate change magnitude and recommend mode
             change_magnitude = self._calculate_change_magnitude(changes, feature_inventory)
             recommended_mode, rationale = self._determine_refresh_mode(
                 refresh_mode,
@@ -391,7 +389,6 @@ class EvaluateCortexArchitectureModule(BaseOperationModule):
         """Detect changes since last refresh timestamp."""
         changes = []
         
-        # Check metadata last_updated
         metadata = architecture.get('metadata', {})
         last_updated_str = metadata.get('last_updated', '')
         
@@ -407,7 +404,6 @@ class EvaluateCortexArchitectureModule(BaseOperationModule):
             except ValueError:
                 logger.warning(f"Invalid timestamp format: {last_updated_str}")
         
-        # Check implementation status changes
         impl_status = architecture.get('implementation_status', {})
         overview = impl_status.get('overview', {})
         

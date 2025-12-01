@@ -218,11 +218,6 @@ class UXEnhancementOrchestrator:
             Quality analysis results
         """
         # TODO: Replace with actual CodeCleanupValidator integration
-        # from src.validators.code_cleanup_validator import CodeCleanupValidator
-        # validator = CodeCleanupValidator()
-        # results = validator.analyze(codebase_path)
-        
-        # Mock data for now (will be replaced)
         return {
             "overall_score": 73,
             "maintainability": 72,
@@ -536,7 +531,6 @@ class UXEnhancementOrchestrator:
         Returns:
             Path to generated HTML file
         """
-        # Create output directory
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         project_name = dashboard_data.get("metadata", {}).get("projectName", "analysis")
         output_dir = self.analysis_output_dir / f"{project_name}-{timestamp}"
@@ -587,7 +581,6 @@ class UXEnhancementOrchestrator:
         perf_score = data.get("scores", {}).get("performance", 0)
         security_score = data.get("scores", {}).get("security", 0)
         
-        # Get metadata
         project_name = data.get("metadata", {}).get("projectName", "Unknown")
         timestamp = data.get("metadata", {}).get("timestamp", "")
         

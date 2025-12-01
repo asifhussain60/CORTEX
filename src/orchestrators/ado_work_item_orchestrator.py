@@ -218,10 +218,8 @@ class ADOWorkItemOrchestrator:
         self.blocked_dir.mkdir(parents=True, exist_ok=True)
         self.summaries_dir.mkdir(parents=True, exist_ok=True)
         
-        # Import ADO client if available
         self.ado_client = self._initialize_ado_client()
         
-        # Initialize git history validator
         self.git_validator = self._initialize_git_validator()
     
     def _initialize_ado_client(self):
@@ -229,7 +227,6 @@ class ADOWorkItemOrchestrator:
         try:
             from src.orchestrators.ado_client import ADOClient
             
-            # Check for config
             config_path = self.cortex_root / "cortex.config.json"
             if not config_path.exists():
                 logger.info("No ADO config found, operating in offline mode")
@@ -292,7 +289,6 @@ class ADOWorkItemOrchestrator:
             Tuple of (success, message, metadata)
         """
         try:
-            # Create metadata
             metadata = WorkItemMetadata(
                 work_item_type=work_item_type,
                 title=title,
@@ -308,7 +304,6 @@ class ADOWorkItemOrchestrator:
             if not metadata.work_item_id:
                 metadata.work_item_id = f"{work_item_type.value.replace(' ', '')}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
             
-            # Create work item file
             file_name = f"{metadata.work_item_id}-{self._slugify(title)}.md"
             file_path = self.active_dir / file_name
             
@@ -526,7 +521,6 @@ class ADOWorkItemOrchestrator:
             Tuple of (success, message)
         """
         try:
-            # Validate status
             valid_statuses = ['active', 'completed', 'blocked', 'cancelled']
             if new_status not in valid_statuses:
                 return False, f"Invalid status: {new_status}. Must be one of: {', '.join(valid_statuses)}"
@@ -760,7 +754,6 @@ class ADOWorkItemOrchestrator:
                 'has_git_history_context': False  # Force validator to run analysis
             }
             
-            # Validate and get git history context
             validation_result = self.git_validator.validate_request(request_context)
             
             # Store validation results in metadata
@@ -896,11 +889,9 @@ class ADOWorkItemOrchestrator:
         if not metadata.acceptance_criteria or len(metadata.acceptance_criteria) == 0:
             missing_fields.append("acceptance_criteria")
         
-        # Check description for technical approach
         if "technical" not in text and "implementation" not in text and "approach" not in text:
             missing_fields.append("technical_approach")
         
-        # Check for user flow
         if metadata.work_item_type in [WorkItemType.STORY, WorkItemType.FEATURE]:
             if "user" not in text and "flow" not in text and "interaction" not in text:
                 missing_fields.append("user_flow")
@@ -1101,7 +1092,6 @@ class ADOWorkItemOrchestrator:
             if part and part[0].isdigit():
                 part = part[1:]
             
-            # Validate letter
             valid_letters = [choice.letter for choice in round.choices]
             if part not in valid_letters:
                 return False, [], f"Invalid choice '{part}'. Valid choices: {', '.join(valid_letters)}"
@@ -1272,7 +1262,6 @@ class ADOWorkItemOrchestrator:
                     validation_message="✅ Pass" if passed else "❌ Fail"
                 ))
             
-            # Calculate category score (0-100)
             category_score = (category_points_earned / category_points_possible * 100) if category_points_possible > 0 else 0
             weight = category_config['weight'] / 100.0
             weighted_score = category_score * weight
@@ -1285,7 +1274,6 @@ class ADOWorkItemOrchestrator:
                 weighted_score=weighted_score
             ))
         
-        # Calculate overall score
         overall_score = sum(cat.weighted_score for cat in categories)
         
         # Add bonus points
@@ -1395,7 +1383,6 @@ class ADOWorkItemOrchestrator:
                     validation_message="✅ Pass" if passed else "❌ Fail"
                 ))
             
-            # Calculate category score
             category_score = (category_points_earned / category_points_possible * 100) if category_points_possible > 0 else 0
             weight = category_config['weight'] / 100.0
             weighted_score = category_score * weight
@@ -1408,7 +1395,6 @@ class ADOWorkItemOrchestrator:
                 weighted_score=weighted_score
             ))
         
-        # Calculate overall score
         overall_score = sum(cat.weighted_score for cat in categories)
         
         # Add bonus points
@@ -1455,7 +1441,6 @@ class ADOWorkItemOrchestrator:
             Tuple of (success, message, approval_record)
         """
         try:
-            # Validate DoR
             dor_result = self.validate_dor(metadata, ambiguity_score)
             
             if not dor_result.passed:
@@ -1463,7 +1448,6 @@ class ADOWorkItemOrchestrator:
                 logger.warning(message)
                 return False, message, None
             
-            # Check quality gates
             gates_passed = []
             
             # Gate 1: DoR score >= threshold
@@ -1478,7 +1462,6 @@ class ADOWorkItemOrchestrator:
             if not hasattr(metadata, 'clarification_context') or metadata.clarification_context:
                 gates_passed.append("Clarification Gate")
             
-            # Create approval record
             approval = ApprovalRecord(
                 work_item_id=work_item_id,
                 approval_stage="DoR Validation",
@@ -1505,7 +1488,6 @@ class ADOWorkItemOrchestrator:
     def _evaluate_validation(self, expr: str, metadata: WorkItemMetadata, ambiguity_score: int) -> bool:
         """Evaluate DoR validation expression."""
         try:
-            # Create safe evaluation context
             context = {
                 'metadata': metadata,
                 'ambiguity_score': ambiguity_score,
@@ -1526,7 +1508,6 @@ class ADOWorkItemOrchestrator:
     def _evaluate_dod_validation(self, expr: str, summary: WorkItemSummary) -> bool:
         """Evaluate DoD validation expression."""
         try:
-            # Create safe evaluation context
             context = {
                 'summary': summary,
                 'len': len,

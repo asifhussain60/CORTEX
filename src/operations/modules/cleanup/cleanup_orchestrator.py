@@ -128,7 +128,6 @@ class CleanupOrchestrator(BaseOperationModule):
         if not git_dir.exists():
             issues.append("Not a git repository - cannot archive backups")
         
-        # Check git status
         try:
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
@@ -160,7 +159,6 @@ class CleanupOrchestrator(BaseOperationModule):
             logger.info("CORTEX CLEANUP ORCHESTRATOR")
             logger.info("=" * 70)
             
-            # Get profile
             profile = context.get('profile', 'standard')
             dry_run = context.get('dry_run', False)
             start_time = datetime.now()
@@ -293,7 +291,6 @@ class CleanupOrchestrator(BaseOperationModule):
                 logger.info(f"✅ Optimization orchestrator {'triggered' if self.metrics.optimization_triggered else 'skipped'}")
                 logger.info("")
             
-            # Calculate duration
             end_time = datetime.now()
             self.metrics.duration_seconds = (end_time - start_time).total_seconds()
             
@@ -340,7 +337,6 @@ class CleanupOrchestrator(BaseOperationModule):
             if not path.exists():
                 continue
             
-            # Check if path is truly protected
             if not self._is_protected(path):
                 violations.append({
                     'path': str(protected),
@@ -365,7 +361,6 @@ class CleanupOrchestrator(BaseOperationModule):
             relative_path = path.relative_to(self.project_root)
             path_str = str(relative_path).replace('\\', '/')
             
-            # Check exact matches and prefix matches
             for protected in self.protected_paths:
                 if path_str == protected.rstrip('/'):
                     return True
@@ -657,7 +652,6 @@ class CleanupOrchestrator(BaseOperationModule):
     def _git_commit_cleanup(self) -> None:
         """Commit cleanup changes to git"""
         try:
-            # Check if there are changes
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 cwd=str(self.project_root),
@@ -712,7 +706,6 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
         try:
             logger.info("Triggering optimization orchestrator...")
             
-            # Import dynamically to avoid circular dependency
             from src.operations.modules.optimization.optimize_cortex_orchestrator import OptimizeCortexOrchestrator
             
             orchestrator = OptimizeCortexOrchestrator(self.project_root)
@@ -793,7 +786,6 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
                     skipped_files.append(str(test_file))
                     continue
                 
-                # Get file size before deletion
                 file_size = test_file.stat().st_size
                 
                 # Log details

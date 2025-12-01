@@ -130,13 +130,11 @@ class OptimizedContextLoader:
         
         # Load Tier 1: Recent Memory
         if "tier1" in structure["tiers_loaded"] and "tier1" in tiers:
-            # Get limit from structure
             limit = structure["components"].get("recent_memory", {}).get("conversation_count", 5)
             context["data"]["recent_memory"] = self._load_tier1(tiers["tier1"], limit)
         
         # Load Tier 2: Knowledge Graph with relevance scoring
         if "tier2" in structure["tiers_loaded"] and "tier2" in tiers:
-            # Get limit from structure
             limit = structure["components"].get("patterns", {}).get("pattern_count", 10)
             context["data"]["patterns"] = self._load_tier2(tiers["tier2"], query, limit)
         
@@ -212,7 +210,6 @@ class OptimizedContextLoader:
             Scored and ranked patterns
         """
         try:
-            # Get all patterns from tier2
             if hasattr(tier2_instance, 'get_patterns'):
                 all_patterns = tier2_instance.get_patterns()
             else:
@@ -252,7 +249,6 @@ class OptimizedContextLoader:
             Development context summary
         """
         try:
-            # Get summary, not full history
             if hasattr(tier3_instance, 'get_summary'):
                 summary = tier3_instance.get_summary()
             else:
@@ -285,7 +281,6 @@ class OptimizedContextLoader:
         conversations = []
         with open(conv_file, 'r') as f:
             lines = f.readlines()
-            # Get last N lines
             for line in lines[-limit:]:
                 try:
                     conversations.append(json.loads(line))
@@ -310,7 +305,6 @@ class OptimizedContextLoader:
         self.metrics["total_original_size"] += stats["original_size"]
         self.metrics["total_optimized_size"] += stats["compressed_size"]
         
-        # Calculate average reduction
         if self.metrics["total_original_size"] > 0:
             self.metrics["avg_reduction_percent"] = (
                 (self.metrics["total_original_size"] - self.metrics["total_optimized_size"]) /

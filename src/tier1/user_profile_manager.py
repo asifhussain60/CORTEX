@@ -136,7 +136,6 @@ class UserProfileManager:
             # Serialize config to JSON (None for NO_PREFERENCE)
             config_json = json.dumps(config) if config else None
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -148,7 +147,6 @@ class UserProfileManager:
                     WHERE id = 1
                 """, (config_json,))
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (id, interaction_mode, experience_level, tech_stack_preference)
                     VALUES (1, 'guided', 'mid', ?)
@@ -176,7 +174,6 @@ class UserProfileManager:
         Raises:
             ValueError: If configuration contains invalid values
         """
-        # Validate configuration
         self._validate_tech_stack_config(config)
         
         try:
@@ -185,7 +182,6 @@ class UserProfileManager:
             
             config_json = json.dumps(config)
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -197,7 +193,6 @@ class UserProfileManager:
                     WHERE id = 1
                 """, (config_json,))
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (id, interaction_mode, experience_level, tech_stack_preference)
                     VALUES (1, 'guided', 'mid', ?)

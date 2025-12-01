@@ -51,7 +51,6 @@ class UserDictionary:
     def _load(self) -> Dict:
         """Load dictionary from YAML file."""
         if not self.dictionary_path.exists():
-            # Create default structure
             return {
                 "version": "1.0",
                 "created": datetime.now().isoformat(),
@@ -79,7 +78,6 @@ class UserDictionary:
         self.data["last_updated"] = datetime.now().isoformat()
         self.data["stats"]["total_shortcuts"] = len(self.data["shortcuts"])
         
-        # Calculate most used
         if self.data["shortcuts"]:
             most_used = max(
                 self.data["shortcuts"].items(),

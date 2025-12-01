@@ -154,7 +154,6 @@ class HandsOnTutorialOrchestrator:
         """
         session_id = f"tutorial-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         
-        # Calculate total duration based on profile
         duration_map = {
             TutorialProfile.QUICK: 15,
             TutorialProfile.STANDARD: 25,
@@ -164,7 +163,6 @@ class HandsOnTutorialOrchestrator:
         # Welcome message
         welcome = self._generate_welcome_message(profile, duration_map[profile])
         
-        # Get first module
         first_module = self.modules["basics"]
         first_exercise = self._get_exercise_instructions(first_module.id, first_module.exercises[0])
         
@@ -594,7 +592,6 @@ For `src/auth/login.py`:
         if not progress:
             return {"error": "Session not found"}
         
-        # Get current module
         current_module = self.modules[progress.current_module]
         
         # Find next exercise or module

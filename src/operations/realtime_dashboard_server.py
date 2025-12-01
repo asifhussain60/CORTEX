@@ -89,7 +89,6 @@ class WebSocketConnection:
             self.rate_limit_window = now
             return False
         
-        # Check limit
         return self.message_count >= max_messages
     
     def increment_message_count(self):
@@ -204,7 +203,6 @@ class RealtimeDashboardServer:
         
         token_data = self.auth_tokens[token]
         
-        # Check expiration
         if datetime.now() > token_data['expires_at']:
             del self.auth_tokens[token]
             return None
@@ -232,7 +230,6 @@ class RealtimeDashboardServer:
             auth_data = json.loads(auth_message)
             token = auth_data.get('token')
             
-            # Validate token
             token_data = self.validate_token(token)
             if not token_data:
                 await websocket.send(json.dumps({
@@ -241,7 +238,6 @@ class RealtimeDashboardServer:
                 }))
                 return
             
-            # Check if admin (required for dashboard)
             if not token_data['is_admin']:
                 await websocket.send(json.dumps({
                     'type': 'error',
@@ -249,7 +245,6 @@ class RealtimeDashboardServer:
                 }))
                 return
             
-            # Check connection limit
             if len(self.connections) >= self.max_connections:
                 await websocket.send(json.dumps({
                     'type': 'error',
@@ -257,7 +252,6 @@ class RealtimeDashboardServer:
                 }))
                 return
             
-            # Create connection
             connection = WebSocketConnection(
                 id=connection_id,
                 websocket=websocket,

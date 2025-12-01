@@ -74,7 +74,6 @@ class DocMapperCrawler(BaseCrawler):
             doc_data['readme_exists'] = True
             doc_data['readme_quality'] = self._assess_readme_quality(readme_path)
         
-        # Check for help system
         doc_data['help_system'] = self._detect_help_system(project_path)
         
         # Find documentation directories
@@ -213,7 +212,6 @@ class DocMapperCrawler(BaseCrawler):
         Returns:
             Help system type or None
         """
-        # Check for response templates
         templates_path = project_path / 'cortex-brain' / 'response-templates.yaml'
         if templates_path.exists():
             try:
@@ -224,7 +222,6 @@ class DocMapperCrawler(BaseCrawler):
             except Exception:
                 pass
         
-        # Check for CLI help
         if (project_path / 'src' / 'cli.py').exists():
             return "CLI help system"
         
@@ -266,7 +263,6 @@ class DocMapperCrawler(BaseCrawler):
             try:
                 with open(module, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    # Check for docstrings
                     if '"""' in content or "'''" in content:
                         documented += 1
             except Exception:

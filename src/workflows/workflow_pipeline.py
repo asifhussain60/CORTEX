@@ -180,7 +180,6 @@ class WorkflowDefinition:
         errors = []
         stage_ids = {stage.id for stage in self.stages}
         
-        # Check all dependencies exist
         for stage in self.stages:
             for dep in stage.depends_on:
                 if dep not in stage_ids:
@@ -279,7 +278,6 @@ class WorkflowOrchestrator:
         Returns:
             Final workflow state
         """
-        # Initialize state
         state = WorkflowState(
             workflow_id=str(uuid.uuid4()),
             conversation_id=conversation_id,
@@ -293,12 +291,10 @@ class WorkflowOrchestrator:
             conversation_id=conversation_id
         )
         
-        # Validate workflow DAG
         dag_errors = self.workflow_def.validate_dag()
         if dag_errors:
             raise ValueError(f"Invalid workflow DAG: {dag_errors}")
         
-        # Get execution order
         execution_order = self.workflow_def.get_execution_order()
         
         # Execute stages in order
@@ -311,7 +307,6 @@ class WorkflowOrchestrator:
             if not stage_def:
                 continue
             
-            # Check if dependencies satisfied
             if not state.all_stages_before_completed(stage_id, stage_def.depends_on):
                 # Dependencies failed - skip if optional
                 if not stage_def.required:
@@ -376,7 +371,6 @@ class WorkflowOrchestrator:
         state.current_stage = stage_def.id
         state.stage_statuses[stage_def.id] = StageStatus.RUNNING
         
-        # Validate input
         if not stage_module.validate_input(state):
             return StageResult(
                 stage_id=stage_def.id,

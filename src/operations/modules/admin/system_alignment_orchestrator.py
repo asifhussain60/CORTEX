@@ -556,7 +556,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             if monitor:
                 monitor.update(f"Scoring integrations", current_idx, total_features)
             
-            # Get feature files for cache tracking
             feature_files = self._get_feature_files(name, metadata)
             
             # Try cache for integration score
@@ -873,7 +872,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             scanner_path = self.project_root / "src" / "discovery" / "entry_point_scanner.py"
             if scanner_path.exists():
                 scanner_content = scanner_path.read_text(encoding='utf-8')
-                # Check if agent name appears in the mappings dict
                 score.wired = f'"{name}"' in scanner_content or f"'{name}'" in scanner_content
             else:
                 score.wired = False
@@ -1024,7 +1022,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 "message": "Missing feedback-aggregation.yml workflow (Gap #7 - Feedback Automation)"
             })
         else:
-            # Validate workflow structure
             try:
                 import yaml
                 with open(feedback_workflow, "r", encoding="utf-8") as f:
@@ -1058,16 +1055,13 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 with open(templates_path, "r", encoding="utf-8") as f:
                     templates = yaml.safe_load(f)
                 
-                # Validate new template architecture
                 template_issues = []
                 base_templates = templates.get("base_templates", {})
                 template_defs = templates.get("templates", {})
                 
-                # Check for base template architecture (v3.2+)
                 if not base_templates:
                     template_issues.append("Missing base_templates section (v3.2 architecture)")
                 else:
-                    # Validate base templates have required structure
                     for base_name, base_data in base_templates.items():
                         if "base_structure" not in base_data:
                             template_issues.append(f"Base template '{base_name}' missing base_structure")
@@ -1091,7 +1085,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                     if "[✓ Accept OR ⚡ Challenge]" in content_str or "[Accept|Challenge]" in content_str:
                         template_issues.append(f"{template_name}: Old Challenge format detected")
                 
-                # Check for schema version
                 schema_version = templates.get("schema_version", "unknown")
                 if schema_version not in ["3.2", "3.3"]:
                     template_issues.append(f"Outdated schema_version: {schema_version} (expected 3.2+)")
@@ -1132,7 +1125,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 with open(brain_rules_path, "r", encoding="utf-8") as f:
                     brain_rules = yaml.safe_load(f)
                 
-                # Check NO_ROOT_FILES protection level
                 layers = brain_rules.get("layers", {})
                 layer_8 = layers.get("layer_8_document_organization", {})
                 rules = layer_8.get("rules", [])
@@ -1474,7 +1466,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             if monitor:
                 monitor.update(f"Generating remediation suggestions ({idx}/{total_features}): {name}")
             
-            # Get feature metadata
             metadata = orchestrators.get(name) or agents.get(name)
             if not metadata:
                 continue
@@ -1575,7 +1566,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             
             for violation in report.doc_governance_violations:
                 if violation.get('type') == 'duplicate_document':
-                    # Create consolidation suggestion
                     file1 = self.project_root / violation['file']
                     file2 = self.project_root / violation['duplicate']
                     
@@ -1722,11 +1712,9 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             Dict with catalog statistics and new features
         """
         try:
-            # Initialize catalog and discovery
             catalog = EnhancementCatalog()
             discovery = EnhancementDiscoveryEngine(self.project_root)
             
-            # Get last alignment review timestamp
             last_review = catalog.get_last_review_timestamp(review_type='alignment')
             
             # Discover features since last review
@@ -1782,7 +1770,6 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 notes=f"System alignment validation"
             )
             
-            # Get catalog stats
             stats = catalog.get_catalog_stats()
             
             return {
@@ -2169,7 +2156,6 @@ graph TD
         """
         issues = []
         
-        # Check Tier 1 database
         tier1_db = self.cortex_brain / "tier1" / "working_memory.db"
         if not tier1_db.exists():
             issues.append("Tier 1 database not found")
@@ -2187,7 +2173,6 @@ graph TD
             except Exception as e:
                 issues.append(f"Tier 1 database error: {str(e)}")
         
-        # Check Tier 2 database
         tier2_db = self.cortex_brain / "tier2" / "knowledge_graph.db"
         if not tier2_db.exists():
             issues.append("Tier 2 database not found")
@@ -2205,7 +2190,6 @@ graph TD
             except Exception as e:
                 issues.append(f"Tier 2 database error: {str(e)}")
         
-        # Check brain protection rules
         brain_rules = self.cortex_brain / "brain-protection-rules.yaml"
         if not brain_rules.exists():
             issues.append("Brain protection rules not found")
@@ -2256,11 +2240,9 @@ graph TD
         Returns:
             Classification: 'production', 'admin', or 'internal'
         """
-        # Check orchestrators
         if feature_name in orchestrators:
             return orchestrators[feature_name].get("classification", "production")
         
-        # Check agents
         if feature_name in agents:
             return agents[feature_name].get("classification", "production")
         
@@ -2704,7 +2686,6 @@ graph TD
             
             for config_line, config_name in required_configs:
                 if config_line not in content:
-                    # Check if config exists but with wrong default
                     if f'{config_name}: bool' in content:
                         issues.append({
                             'severity': 'warning',
@@ -2762,7 +2743,6 @@ graph TD
         try:
             content = state_machine_path.read_text(encoding='utf-8')
             
-            # Check TDDState enum
             required_states = ['IDLE', 'RED', 'GREEN', 'REFACTOR', 'DONE', 'ERROR']
             for state in required_states:
                 if f'{state} = ' not in content:
@@ -2772,7 +2752,6 @@ graph TD
                         'fix': f'Add {state} to TDDState enum'
                     })
             
-            # Check for TDDCycleMetrics
             if 'class TDDCycleMetrics' not in content:
                 issues.append({
                     'severity': 'critical',
@@ -2780,7 +2759,6 @@ graph TD
                     'fix': 'Add TDDCycleMetrics dataclass for cycle tracking'
                 })
             else:
-                # Check for required metrics
                 required_metrics = [
                     'red_duration',
                     'green_duration',
@@ -2828,7 +2806,6 @@ graph TD
         """
         issues = []
         
-        # Check TDDWorkflowConfig for autonomous settings
         tdd_workflow_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
         
         if not tdd_workflow_path.exists():
@@ -2837,7 +2814,6 @@ graph TD
         try:
             content = tdd_workflow_path.read_text(encoding='utf-8')
             
-            # Check batch processing
             if 'batch_max_workers' not in content:
                 issues.append({
                     'severity': 'warning',
@@ -2845,7 +2821,6 @@ graph TD
                     'fix': 'Add batch_max_workers: int = 4 for parallel test generation'
                 })
             
-            # Check terminal integration
             if 'enable_terminal_integration' not in content:
                 issues.append({
                     'severity': 'warning',
@@ -2853,7 +2828,6 @@ graph TD
                     'fix': 'Add enable_terminal_integration: bool = True for programmatic execution'
                 })
             
-            # Check BatchTestGenerator import
             if 'from src.workflows.batch_processor import BatchTestGenerator' not in content:
                 issues.append({
                     'severity': 'warning',
@@ -2861,7 +2835,6 @@ graph TD
                     'fix': 'Import and use BatchTestGenerator for autonomous batch processing'
                 })
             
-            # Check for TestExecutionManager (Phase 4)
             if 'from src.workflows.test_execution_manager import TestExecutionManager' not in content:
                 issues.append({
                     'severity': 'warning',
@@ -2893,7 +2866,6 @@ graph TD
         """
         issues = []
         
-        # Check git checkpoint system
         git_checkpoint_paths = [
             self.project_root / "src" / "workflows" / "git_checkpoint_system.py",
             self.project_root / "src" / "orchestrators" / "git_checkpoint_orchestrator.py",
@@ -2909,13 +2881,11 @@ graph TD
                 'fix': 'Ensure git checkpoint system exists in src/workflows/, src/orchestrators/, or src/operations/modules/'
             })
         
-        # Check TDD session tracking
         tdd_workflow_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
         if tdd_workflow_path.exists():
             try:
                 content = tdd_workflow_path.read_text(encoding='utf-8')
                 
-                # Check SessionManager import
                 if 'from src.tier1.sessions.session_manager import SessionManager' not in content:
                     issues.append({
                         'severity': 'warning',
@@ -2923,7 +2893,6 @@ graph TD
                         'fix': 'Import and use SessionManager for session persistence'
                     })
                 
-                # Check PageTracker import
                 if 'from src.workflows.page_tracking import PageTracker' not in content:
                     issues.append({
                         'severity': 'warning',
@@ -2931,7 +2900,6 @@ graph TD
                         'fix': 'Import PageTracker for progress checkpointing'
                     })
                 
-                # Check for save_progress method
                 if 'def save_progress' not in content:
                     issues.append({
                         'severity': 'warning',
@@ -2939,7 +2907,6 @@ graph TD
                         'fix': 'Add save_progress() method to checkpoint incremental work'
                     })
                 
-                # Check for resume_session method
                 if 'def resume_session' not in content:
                     issues.append({
                         'severity': 'warning',
@@ -2954,13 +2921,11 @@ graph TD
                     'fix': 'Check TDDWorkflowOrchestrator for syntax errors'
                 })
         
-        # Check Planning System 2.0 incremental planning
         planning_path = self.project_root / "src" / "orchestrators" / "planning_orchestrator.py"
         if planning_path.exists():
             try:
                 content = planning_path.read_text(encoding='utf-8')
                 
-                # Check for incremental planning phases
                 if 'skeleton' not in content.lower() or 'phase 1' not in content.lower():
                     issues.append({
                         'severity': 'warning',
@@ -2992,7 +2957,6 @@ graph TD
         engine = RemediationEngine(self.project_root)
         applied_fixes = []
         
-        # Create checkpoint before any fixes
         print("\n🔒 Creating safety checkpoint...")
         if not engine.create_checkpoint():
             logger.error("Failed to create checkpoint - aborting remediation")

@@ -83,7 +83,6 @@ class PatternDecay:
         conn = self.db.get_connection()
         cursor = conn.cursor()
         
-        # Get pattern data
         cursor.execute("""
             SELECT confidence, last_accessed, is_pinned
             FROM patterns
@@ -102,7 +101,6 @@ class PatternDecay:
         last_accessed = datetime.fromisoformat(row[1])
         is_pinned = bool(row[2])
         
-        # Calculate days since last access
         days_since_access = (as_of_date - last_accessed).days
         days_to_decay = max(0, days_since_access - self.DECAY_THRESHOLD_DAYS)
         
@@ -118,7 +116,6 @@ class PatternDecay:
                 "reason": "Pinned" if is_pinned else "Within threshold"
             }
         
-        # Calculate decay
         decay_amount = self.DECAY_RATE * days_to_decay
         new_confidence = max(0.0, current_confidence - decay_amount)
         should_delete = new_confidence < self.MIN_CONFIDENCE
@@ -173,7 +170,6 @@ class PatternDecay:
         decay_log_entries = 0
         
         for pattern_id, confidence, last_accessed in candidates:
-            # Check if already below threshold
             if confidence < self.MIN_CONFIDENCE:
                 # Delete immediately
                 cursor.execute("DELETE FROM patterns WHERE pattern_id = ?", (pattern_id,))
@@ -187,7 +183,6 @@ class PatternDecay:
                 decay_log_entries += 1
                 continue
             
-            # Calculate decay
             last_access_date = datetime.fromisoformat(last_accessed)
             days_since_access = (now - last_access_date).days
             days_to_decay = max(0, days_since_access - self.DECAY_THRESHOLD_DAYS)

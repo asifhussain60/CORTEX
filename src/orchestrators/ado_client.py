@@ -124,7 +124,6 @@ class ADOClient:
         try:
             parsed = urlparse(pr_url)
             
-            # Check host
             if "dev.azure.com" not in parsed.netloc:
                 logger.error(f"Invalid ADO URL (not dev.azure.com): {pr_url}")
                 return None
@@ -333,7 +332,6 @@ class ADOClient:
             iterations = data.get("value", [])
             
             if iterations:
-                # Return the latest iteration ID
                 latest = max(iterations, key=lambda x: x.get("id", 0))
                 return latest.get("id")
             
@@ -459,7 +457,6 @@ def main():
     with open(config_path, 'r') as f:
         config = json.load(f)
     
-    # Initialize client
     client = ADOClient(config)
     
     # Test with URL

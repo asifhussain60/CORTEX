@@ -102,7 +102,6 @@ class PerformanceBenchmarker:
         # Start memory tracking
         tracemalloc.start()
         
-        # Get initial CPU and memory state
         process = psutil.Process()
         cpu_before = process.cpu_percent(interval=0.1)
         
@@ -118,7 +117,6 @@ class PerformanceBenchmarker:
             cpu_after = process.cpu_percent(interval=0.1)
             cpu_avg = (cpu_before + cpu_after) / 2
             
-            # Get memory metrics
             current_memory, peak_memory = tracemalloc.get_traced_memory()
             tracemalloc.stop()
             
@@ -127,7 +125,6 @@ class PerformanceBenchmarker:
             memory_peak_mb = peak_memory / (1024 * 1024)
             memory_current_mb = current_memory / (1024 * 1024)
         
-        # Validate against thresholds
         violations = []
         
         if response_time_ms > self.thresholds.response_time_ms:
@@ -148,7 +145,6 @@ class PerformanceBenchmarker:
                 f"{self.thresholds.cpu_percent}%"
             )
         
-        # Create metrics object
         metrics = PerformanceMetrics(
             response_time_ms=response_time_ms,
             memory_peak_mb=memory_peak_mb,

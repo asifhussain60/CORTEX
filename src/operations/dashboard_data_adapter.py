@@ -142,7 +142,6 @@ class DashboardDataAdapter:
                 "suggestion": getattr(issue, 'suggestion', '')
             })
         
-        # Calculate technical debt estimate
         # Formula: critical * 4h + high * 2h + medium * 1h + low * 0.5h
         debt_hours = (
             by_severity["critical"] * 4 +

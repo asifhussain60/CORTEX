@@ -72,7 +72,6 @@ class LoadStoryTemplateModule(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         if 'project_root' not in context:
             issues.append("project_root not set in context")
             return False, issues
@@ -81,7 +80,6 @@ class LoadStoryTemplateModule(BaseOperationModule):
         if not project_root.exists():
             issues.append(f"Project root does not exist: {project_root}")
         
-        # Check story file exists
         story_path = project_root / "prompts" / "shared" / "story.md"
         if not story_path.exists():
             issues.append(f"Story file not found: {story_path}")
@@ -110,7 +108,6 @@ class LoadStoryTemplateModule(BaseOperationModule):
             with open(story_path, 'r', encoding='utf-8') as f:
                 story_content = f.read()
             
-            # Validate basic structure
             if not story_content.strip():
                 return OperationResult(
                     success=False,

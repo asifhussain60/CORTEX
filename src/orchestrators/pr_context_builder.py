@@ -107,7 +107,6 @@ class ImportAnalyzer:
     - Go: import
     """
     
-    # Import patterns by language
     PATTERNS = {
         Language.PYTHON: [
             r'^import\s+([a-zA-Z_][a-zA-Z0-9_\.]*)',
@@ -190,7 +189,6 @@ class ImportAnalyzer:
             if re.search(pattern, name):
                 return True
         
-        # Check directory name
         if 'test' in str(path.parent).lower():
             return True
         
@@ -613,7 +611,6 @@ class PRContextBuilder:
         """
         indirect_deps = set()
         
-        # Process imports from direct imports
         for filepath in graph.direct_imports:
             node = graph.nodes.get(filepath)
             if not node:
@@ -639,7 +636,6 @@ def main():
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     
-    # Get workspace root
     workspace_root = os.environ.get('CORTEX_ROOT', os.getcwd())
     
     # Test data
@@ -648,7 +644,6 @@ def main():
         "src/tier1/working_memory.py"
     ]
     
-    # Initialize builder
     builder = PRContextBuilder(
         workspace_root=workspace_root,
         max_files=50,

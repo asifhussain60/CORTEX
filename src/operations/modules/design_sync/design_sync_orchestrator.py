@@ -149,23 +149,19 @@ class DesignSyncOrchestrator(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root') or self.project_root
         if not project_root or not project_root.exists():
             issues.append("Project root not found or invalid")
             return False, issues
         
-        # Check git repository
         git_dir = project_root / '.git'
         if not git_dir.exists():
             issues.append("Not a git repository - sync requires git tracking")
         
-        # Check design directory
         design_dir = project_root / 'cortex-brain'
         if not design_dir.exists():
             issues.append("Design directory not found (cortex-brain/)")
         
-        # Check operations YAML
         operations_yaml = project_root / 'cortex-operations.yaml'
         if not operations_yaml.exists():
             issues.append("Operations YAML not found (cortex-operations.yaml)")
@@ -235,7 +231,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
         if not track_config.is_multi_track:
             return None
         
-        # Check if user specified track name in context
         if 'track_name' in context:
             track_name = context['track_name']
             for track in track_config.tracks.values():
@@ -258,7 +253,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
         
         # Filter modules by track's assigned phases
         for module_id, module_path in impl_state.modules.items():
-            # Check if module belongs to track phases
             # (Need to lookup module phase from operations.yaml)
             if module_id in track.modules:
                 filtered_state.modules[module_id] = module_path
@@ -411,7 +405,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
         logger.info(f"Design Sync Orchestrator started | Profile: {profile}")
         logger.info(f"Project: {project_root}")
         
-        # Initialize metrics
         metrics = SyncMetrics(
             sync_id=f"sync_{start_time.strftime('%Y%m%d_%H%M%S')}",
             timestamp=start_time
@@ -627,7 +620,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
         # Auto-detect design version
         brain_dir = project_root / 'cortex-brain'
         
-        # Check for versioned design directories
         for subdir in brain_dir.iterdir():
             if subdir.is_dir() and 'cortex-' in subdir.name and '-design' in subdir.name:
                 # Extract version (e.g., "cortex-2.0-design" → "2.0")
@@ -653,7 +645,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
             if 'STATUS' in md_file.name.upper():
                 state.status_files.append(md_file)
             
-            # Check if verbose (>500 lines)
             try:
                 line_count = len(md_file.read_text(encoding='utf-8', errors='ignore').splitlines())
                 if line_count > 500:
@@ -692,7 +683,6 @@ class DesignSyncOrchestrator(BaseOperationModule):
         if gaps.verbose_md_candidates:
             metrics.gaps_analyzed += 1
         
-        # Check for inconsistent module counts
         for op_id, op_data in impl_state.operations.items():
             if 'implementation_status' in op_data:
                 status = op_data['implementation_status']

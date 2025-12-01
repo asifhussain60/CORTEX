@@ -83,7 +83,6 @@ class ApplicationHealthOrchestrator:
             # Determine language from extension
             language = self._get_language_name(extension)
             
-            # Initialize language entry if needed
             if language not in language_results:
                 language_results[language] = {
                     'file_count': 0,

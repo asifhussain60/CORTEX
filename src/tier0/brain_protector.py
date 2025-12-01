@@ -109,7 +109,6 @@ class BrainProtector:
         """
         project_root = Path(__file__).parent.parent.parent
         
-        # Set up logging path
         if log_path is None:
             log_dir = project_root / "cortex-brain" / "corpus-callosum"
             log_dir.mkdir(parents=True, exist_ok=True)
@@ -251,7 +250,6 @@ class BrainProtector:
         """Check if a rule is violated based on YAML detection config."""
         detection = rule.get('detection', {})
         
-        # Check keyword-based detection
         if 'keywords' in detection:
             keywords = detection['keywords']
             scope = detection.get('scope', ['intent', 'description'])
@@ -265,7 +263,6 @@ class BrainProtector:
             if any(kw.lower() in text_to_check for kw in keywords):
                 return True
         
-        # Check combined keywords (AND logic)
         if 'combined_keywords' in detection:
             all_groups_match = True
             for group_name, group_keywords in detection['combined_keywords'].items():
@@ -287,20 +284,17 @@ class BrainProtector:
             if all_groups_match:
                 return True
         
-        # Check file-based detection
         if 'files' in detection:
             target_files = detection['files']
             keywords = detection.get('keywords', [])
             scope = detection.get('scope', ['intent'])
             
-            # Check if any request file matches target files
             file_match = any(
                 any(tf in req_file for tf in target_files)
                 for req_file in request.files
             )
             
             if file_match:
-                # Check keywords in scope
                 text_to_check = ""
                 if 'intent' in scope:
                     text_to_check += request.intent.lower() + " "
@@ -310,7 +304,6 @@ class BrainProtector:
                 if any(kw.lower() in text_to_check for kw in keywords):
                     return True
         
-        # Check path pattern detection
         if 'path_patterns' in detection:
             patterns = detection['path_patterns']
             contains_value = detection.get('contains', '')
@@ -324,7 +317,6 @@ class BrainProtector:
                 # Normalize path separators for cross-platform compatibility
                 file_lower = file_path.lower().replace('\\', '/')
                 
-                # Check if path matches pattern
                 pattern_match = False
                 for pattern in patterns:
                     pattern_lower = pattern.lower().replace('**', '')
@@ -333,18 +325,15 @@ class BrainProtector:
                         break
                 
                 if pattern_match:
-                    # Check contains condition
                     if contains_value and contains_value in file_lower:
                         return True
                     
-                    # Check contains_any condition
                     if contains_any:
                         if isinstance(contains_any, list):
                             # Case-insensitive check
                             if any(val.lower().strip('/') in file_lower for val in contains_any):
                                 return True
         
-        # Check file match with keywords
         if 'files' in detection and isinstance(detection['files'], str):
             # Template variable like {{brain_state_files}}
             if detection['files'] == "{{brain_state_files}}":
@@ -472,7 +461,6 @@ class BrainProtector:
         has_fix_claim = any(keyword.lower() in request.description.lower() for keyword in fix_claim_keywords)
         
         if has_fix_claim:
-            # Check if tests are mentioned
             test_keywords = ["test passed", "test verified", "validated by test", "pytest"]
             has_test_validation = any(keyword.lower() in request.description.lower() for keyword in test_keywords)
             
@@ -542,7 +530,6 @@ class BrainProtector:
         """Check Layer 8: Git Checkpoint Enforcement using YAML rules."""
         violations = []
         
-        # Import git checkpoint module for validation
         try:
             from src.operations.modules.git_checkpoint_module import GitCheckpointModule
             checkpoint_module = GitCheckpointModule()
@@ -557,12 +544,10 @@ class BrainProtector:
             "create new", "modify existing", "develop feature"
         ]
         
-        # Check if request is starting development work
         text_to_check = (request.intent + " " + request.description).lower()
         is_development_start = any(kw.lower() in text_to_check for kw in development_keywords)
         
         if is_development_start:
-            # Validate checkpoint exists
             try:
                 result = checkpoint_module.execute({
                     'operation': 'validate',
@@ -570,7 +555,6 @@ class BrainProtector:
                 })
                 
                 if not result.success:
-                    # Get rule configuration from YAML
                     layer = self._get_layer_by_id("instinct_immutability")
                     rule_config = None
                     if layer:
@@ -579,7 +563,6 @@ class BrainProtector:
                                 rule_config = rule
                                 break
                     
-                    # Create violation
                     violations.append(Violation(
                         layer=ProtectionLayer.INSTINCT_IMMUTABILITY,
                         rule="GIT_CHECKPOINT_ENFORCEMENT",

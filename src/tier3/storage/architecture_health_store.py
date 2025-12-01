@@ -61,7 +61,6 @@ class ArchitectureHealthStore:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database schema
         self._init_database()
     
     def _init_database(self):
@@ -225,7 +224,6 @@ class ArchitectureHealthStore:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get snapshots from last N days
         cursor.execute("""
             SELECT timestamp, overall_score, trend_direction
             FROM architecture_health_history

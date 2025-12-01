@@ -195,12 +195,10 @@ class ImageDetector:
             file_path = match.group(1)
             path = Path(file_path)
             
-            # Check if file exists
             if not path.exists():
                 self.logger.warning(f"Image file not found: {file_path}")
                 continue
             
-            # Check format
             format_type = path.suffix.lower().lstrip('.')
             if format_type not in self.supported_formats:
                 continue
@@ -292,7 +290,6 @@ class ImageDetector:
         images = []
         
         for attachment in attachments:
-            # Check if it's an image attachment
             if attachment.get('type') != 'image':
                 continue
             
@@ -305,7 +302,6 @@ class ImageDetector:
             if format_type not in self.supported_formats:
                 continue
             
-            # Get image data
             data = attachment.get('data', '')
             if not data:
                 continue

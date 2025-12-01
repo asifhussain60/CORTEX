@@ -100,7 +100,6 @@ class GitMetricsCollector:
                     current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
                     current_contributor = contributor
                     
-                    # Initialize metric for this date
                     key = (current_date, current_contributor)
                     if key not in metrics_by_date:
                         metrics_by_date[key] = {

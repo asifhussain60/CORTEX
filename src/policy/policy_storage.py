@@ -80,7 +80,6 @@ class PolicyStorage:
         repo_path = self.tier3_path / repo_name
         repo_path.mkdir(parents=True, exist_ok=True)
         
-        # Create subdirectories
         (repo_path / "policies").mkdir(exist_ok=True)
         (repo_path / "reports").mkdir(exist_ok=True)
         
@@ -94,7 +93,6 @@ class PolicyStorage:
         conn = sqlite3.connect(str(db_path))
         conn.row_factory = sqlite3.Row
         
-        # Create tables if not exist
         self._init_db_schema(conn)
         
         return conn
@@ -170,16 +168,13 @@ class PolicyStorage:
         
         policy_id = f"{repo_name}-{policy_name}".replace(" ", "-").lower()
         
-        # Calculate hash
         with open(policy_file, 'rb') as f:
             file_hash = hashlib.sha256(f.read()).hexdigest()
         
-        # Get storage paths
         repo_path = self.get_repo_path(repo_name)
         stored_policy = repo_path / "policies" / policy_file.name
         stored_hash = repo_path / "policies" / f"{policy_file.name}.sha256"
         
-        # Check if changed
         changed = True
         if stored_hash.exists():
             with open(stored_hash, 'r') as f:
@@ -247,7 +242,6 @@ class PolicyStorage:
         Returns:
             ComplianceReport object
         """
-        # Get policy
         conn = self.get_db_connection(repo_name)
         cursor = conn.cursor()
         
@@ -364,7 +358,6 @@ class PolicyStorage:
             if not policy_file.exists():
                 continue
             
-            # Calculate current hash
             with open(policy_file, 'rb') as f:
                 current_hash = hashlib.sha256(f.read()).hexdigest()
             
@@ -436,7 +429,6 @@ def main():
     """Test policy storage"""
     import tempfile
     
-    # Create sample policy
     sample_policy = """# Test Policy
 Version: 1.0
 Date: 2025-11-26
@@ -473,7 +465,6 @@ Date: 2025-11-26
         
         print(f"\n" + "=" * 60)
         
-        # Validate and store report
         report = storage.validate_and_store(
             repo_name="cortex-test",
             policy_id=policy_id,
@@ -482,14 +473,12 @@ Date: 2025-11-26
         
         print(f"\n" + "=" * 60)
         
-        # Check for changes
         changes = storage.check_for_changes("cortex-test")
         if not changes:
             print("✓ No policy changes detected")
         
         print(f"\n" + "=" * 60)
         
-        # Get history
         history = storage.get_validation_history("cortex-test", policy_id)
         print(f"📊 Validation History: {len(history)} record(s)")
         for i, record in enumerate(history, 1):

@@ -190,7 +190,6 @@ class SOLIDAnalyzer:
         for line_num, line in enumerate(lines, 1):
             class_match = class_pattern.match(line)
             if class_match:
-                # Check previous class
                 if current_class and method_count > 10:
                     violations.append(CodeViolation(
                         type=ViolationType.SOLID_SRP,
@@ -210,7 +209,6 @@ class SOLIDAnalyzer:
             if method_match and current_class:
                 method_count += 1
         
-        # Check last class
         if current_class and method_count > 10:
             violations.append(CodeViolation(
                 type=ViolationType.SOLID_SRP,
@@ -357,7 +355,6 @@ class SecurityScanner:
         
         lines = content.split('\n')
         
-        # Check for innerHTML usage
         innerHTML_pattern = re.compile(r'\.innerHTML\s*=')
         dangerouslySetInnerHTML_pattern = re.compile(r'dangerouslySetInnerHTML')
         
@@ -436,7 +433,6 @@ class PerformanceAnalyzer:
             if in_loop and line and not line[0].isspace() and line_num > loop_start:
                 in_loop = False
             
-            # Check for queries inside loop
             if in_loop:
                 query_keywords = ['query', 'execute', 'find', 'get', 'fetch', 'select']
                 if any(keyword in stripped.lower() for keyword in query_keywords):
@@ -478,7 +474,6 @@ class PerformanceAnalyzer:
                 if not line.startswith('    '):
                     in_async_function = False
             
-            # Check for blocking operations in async function
             if in_async_function:
                 blocking_patterns = [
                     (r'time\.sleep', "time.sleep() is blocking"),
@@ -509,7 +504,6 @@ class PerformanceAnalyzer:
         for line_num, line in enumerate(lines, 1):
             stripped = line.strip()
             
-            # Check for string concatenation in loops
             if re.search(r'(for|while)\s+.*:', stripped):
                 # Look at next few lines
                 for offset in range(1, min(10, len(lines) - line_num)):
@@ -653,16 +647,13 @@ class CodeReviewPlugin(BasePlugin):
                 files_reviewed += 1
                 lines_reviewed += len(content.split('\n'))
             
-            # Calculate review time
             review_time = (datetime.now() - start_time).total_seconds()
             
-            # Calculate overall score
             overall_score = self._calculate_score(all_violations, lines_reviewed)
             
             # Generate recommendations
             recommendations = self._generate_recommendations(all_violations)
             
-            # Create review result
             result = ReviewResult(
                 pr_id=pr_id,
                 violations=all_violations,
@@ -772,7 +763,6 @@ class CodeReviewPlugin(BasePlugin):
             for v in violations
         )
         
-        # Calculate score (0-100)
         # Normalize by lines of code
         penalty_per_100_lines = (total_penalty / lines_reviewed) * 100
         score = max(0.0, 100.0 - penalty_per_100_lines * 5)

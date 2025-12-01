@@ -105,7 +105,6 @@ class ToolingVerificationModule(BaseOperationModule):
                 'warnings': []
             }
             
-            # Check required tools
             for tool_name, tool_spec in self.REQUIRED_TOOLS.items():
                 result = self._check_tool(tool_name, tool_spec)
                 tool_results['required_tools'][tool_name] = result
@@ -116,7 +115,6 @@ class ToolingVerificationModule(BaseOperationModule):
                     self.log_error(f"✗ {tool_name}: {result['message']}")
                     tool_results['all_required_present'] = False
             
-            # Check optional tools
             for tool_name, tool_spec in self.OPTIONAL_TOOLS.items():
                 result = self._check_tool(tool_name, tool_spec)
                 tool_results['optional_tools'][tool_name] = result
@@ -188,7 +186,6 @@ class ToolingVerificationModule(BaseOperationModule):
             if result.returncode == 0:
                 version = result.stdout.strip() or result.stderr.strip()
                 
-                # Check minimum version if specified
                 min_version = tool_spec.get('min_version')
                 if min_version:
                     version_ok = self._check_version(version, min_version)

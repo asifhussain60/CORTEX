@@ -172,7 +172,6 @@ class RequestLogger:
                     except json.JSONDecodeError:
                         continue
         
-        # Return most recent
         return entries[-limit:] if len(entries) > limit else entries
     
     def get_request_response_pair(self, request_id: str) -> Dict:

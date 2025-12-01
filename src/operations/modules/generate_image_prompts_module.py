@@ -62,12 +62,10 @@ class GenerateImagePromptsModule(BaseOperationModule):
         
         project_root = Path(context['project_root'])
         
-        # Check source file exists
         source_path = project_root / "docs" / "story" / "CORTEX-STORY" / "CopilotRecommendedDiagrams.md"
         if not source_path.exists():
             issues.append(f"Source file not found: {source_path}")
         
-        # Check destination directory exists
         dest_dir = project_root / "docs" / "story" / "CORTEX-STORY"
         if not dest_dir.exists():
             issues.append(f"Destination directory not found: {dest_dir}")

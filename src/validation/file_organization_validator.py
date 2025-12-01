@@ -49,11 +49,9 @@ class FileOrganizationValidator:
         
     def _find_cortex_root(self) -> Path:
         """Find CORTEX root directory."""
-        # Check if we're in standalone CORTEX repo
         if (self.workspace_root / "cortex-brain").exists():
             return self.workspace_root
             
-        # Check if CORTEX is embedded in application
         cortex_path = self.workspace_root / "CORTEX"
         if cortex_path.exists():
             return cortex_path
@@ -75,7 +73,6 @@ class FileOrganizationValidator:
         self._check_test_locations()
         self._check_gitignore_rules()
         
-        # Calculate scores
         total_checks = 3
         passed_checks = total_checks - len([v for v in self.violations if v.severity == 'critical'])
         score = (passed_checks / total_checks) * 100
@@ -131,7 +128,6 @@ class FileOrganizationValidator:
         if not self.cortex_root.exists():
             return
             
-        # Check CORTEX tests are in CORTEX/tests/
         cortex_test_dir = self.cortex_root / "tests"
         if not cortex_test_dir.exists():
             self.violations.append(OrganizationViolation(
@@ -181,7 +177,6 @@ class FileOrganizationValidator:
             ))
             return
             
-        # Check if CORTEX/ is excluded
         gitignore_content = gitignore_path.read_text()
         if 'CORTEX/' not in gitignore_content and 'CORTEX' not in gitignore_content:
             self.violations.append(OrganizationViolation(
@@ -195,7 +190,6 @@ class FileOrganizationValidator:
     def _is_within_cortex_boundary(self, file_path: Path) -> bool:
         """Check if file is within CORTEX boundary."""
         try:
-            # Check if file is in CORTEX/ or .github/prompts/
             rel_path = file_path.relative_to(self.workspace_root)
             parts = rel_path.parts
             return parts[0] in ('CORTEX', '.github')

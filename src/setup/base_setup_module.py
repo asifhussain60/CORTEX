@@ -113,7 +113,6 @@ class BaseSetupModule(ABC):
                 )
             
             def validate_prerequisites(self, context: Dict) -> Tuple[bool, List[str]]:
-                # Check config file exists, etc.
                 return True, []
             
             def execute(self, context: Dict) -> SetupResult:

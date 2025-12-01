@@ -104,7 +104,6 @@ class PolicyValidator:
                 summary="No policy documents found. CORTEX will use best practices."
             )
         
-        # Validate against each policy
         total_rules = 0
         passed = 0
         
@@ -171,7 +170,6 @@ class PolicyValidator:
             # Convert rule to string for checking
             rule_str = f"{rule_key} {rule_value}" if isinstance(rule_value, str) else rule_key
             
-            # Check for PascalCase class naming
             if 'pascalcase' in rule_str.lower() or 'class' in rule_str.lower():
                 if self._check_class_naming():
                     passed += 1
@@ -185,7 +183,6 @@ class PolicyValidator:
                         recommendation='Rename classes to use PascalCase (e.g., MyClass)'
                     ))
             
-            # Check for snake_case function naming
             elif 'snake_case' in rule_str.lower() or 'function' in rule_str.lower():
                 if self._check_function_naming():
                     passed += 1
@@ -231,7 +228,6 @@ class PolicyValidator:
             
             rule_str = f"{rule_key} {rule_value}" if isinstance(rule_value, str) else rule_key
             
-            # Check for hardcoded credentials
             if 'hardcoded' in rule_str.lower() or 'credentials' in rule_str.lower():
                 if self._check_no_hardcoded_secrets():
                     passed += 1
@@ -245,7 +241,6 @@ class PolicyValidator:
                         recommendation='Use environment variables or secure vault for secrets'
                     ))
             
-            # Check environment variables
             elif 'environment' in rule_str.lower():
                 if self._check_env_var_usage():
                     passed += 1
@@ -291,7 +286,6 @@ class PolicyValidator:
             
             rule_str = f"{rule_key} {rule_value}" if isinstance(rule_value, str) else rule_key
             
-            # Check docstrings
             if 'docstring' in rule_str.lower():
                 if self._check_docstrings():
                     passed += 1
@@ -305,7 +299,6 @@ class PolicyValidator:
                         recommendation='Add docstrings to all public functions'
                     ))
             
-            # Check test coverage
             elif 'test' in rule_str.lower() or 'coverage' in rule_str.lower():
                 passed += 1  # CORTEX has good test coverage
             
@@ -356,7 +349,6 @@ class PolicyValidator:
     
     def _check_no_hardcoded_secrets(self) -> bool:
         """Check for hardcoded credentials"""
-        # Check cortex.config.json for sensitive data
         config_path = self.cortex_root / "cortex.config.json"
         if config_path.exists():
             with open(config_path, 'r') as f:
@@ -394,15 +386,12 @@ class PolicyValidator:
     
     def _find_cortex_root(self) -> Path:
         """Find CORTEX root directory"""
-        # Check if embedded
         if (self.repo_root / "CORTEX" / "cortex-brain").exists():
             return self.repo_root / "CORTEX"
         
-        # Check if standalone
         if (self.repo_root / "cortex-brain").exists():
             return self.repo_root
         
-        # Check common locations
         common_locations = [
             Path.home() / "PROJECTS" / "CORTEX",
             Path(__file__).parent.parent.parent  # 3 levels up

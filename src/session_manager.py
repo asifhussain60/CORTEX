@@ -41,7 +41,6 @@ class SessionManager:
         Args:
             db_path: Path to SQLite database (uses Tier 1 DB if None)
         """
-        # Import here to avoid circular dependency
         if db_path is None:
             from .config import config
             db_path = config.brain_path / "tier1" / "conversations.db"
@@ -120,7 +119,6 @@ class SessionManager:
         conn.commit()
         conn.close()
         
-        # Check FIFO queue limit (50 conversations)
         self._enforce_fifo_limit()
         
         return conversation_id
@@ -158,7 +156,6 @@ class SessionManager:
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
-        # Get most recent active conversation
         cursor.execute("""
             SELECT conversation_id, start_time
             FROM working_memory_conversations
@@ -232,10 +229,8 @@ class SessionManager:
         total_count = cursor.fetchone()[0]
         
         if total_count > 50:
-            # Calculate how many to delete
             to_delete = total_count - 50
             
-            # Get oldest completed conversations
             cursor.execute("""
                 SELECT conversation_id
                 FROM working_memory_conversations
@@ -288,7 +283,6 @@ class SessionManager:
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         
-        # Get conversation metadata
         cursor.execute("""
             SELECT conversation_id, start_time, end_time, intent, status
             FROM working_memory_conversations
@@ -303,7 +297,6 @@ class SessionManager:
         
         conversation_id, start_time, end_time, intent, status = row
         
-        # Get message count
         cursor.execute("""
             SELECT COUNT(*)
             FROM working_memory_messages

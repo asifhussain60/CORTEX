@@ -110,7 +110,6 @@ class EnhancedAmnesia:
         cursor = conn.cursor()
         
         try:
-            # Get patterns in namespace
             cursor.execute("""
                 SELECT pattern_id, scope, namespaces, title
                 FROM patterns
@@ -135,7 +134,6 @@ class EnhancedAmnesia:
                     logger.info(f"PROTECTED: {pattern_id} (CORTEX-core namespace)")
                     continue
                 
-                # Check if namespace is in the list
                 if namespace not in namespaces:
                     continue
                 
@@ -494,7 +492,6 @@ class EnhancedAmnesia:
             for pattern_id, title, scope, namespaces_json in cursor.fetchall():
                 namespaces = json.loads(namespaces_json) if namespaces_json else []
                 
-                # Check if would be protected
                 if scope == "generic" or "CORTEX-core" in namespaces:
                     preview['would_protect'] += 1
                     if len(preview['sample_protected']) < 5:

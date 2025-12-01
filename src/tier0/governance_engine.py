@@ -77,7 +77,6 @@ class GovernanceEngine:
             with open(self.governance_file, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
         
-        # Validate governance file structure
         if not data or 'rules' not in data:
             raise ValueError("Invalid governance file: missing 'rules' section")
         
@@ -319,7 +318,6 @@ class GovernanceEngine:
         if not rule:
             return None
         
-        # Define forbidden data types per tier
         tier_rules = {
             0: {
                 'allowed': ['governance', 'core_principles'],

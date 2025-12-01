@@ -169,7 +169,6 @@ class OperationsOrchestrator:
         logger.info(f"Starting operation: {self.operation_name} ({self.operation_id}) - LIVE mode")
         logger.info(f"Modules to execute: {len(self.modules)}")
         
-        # Initialize report
         report = OperationExecutionReport(
             operation_id=self.operation_id,
             operation_name=self.operation_name,
@@ -229,7 +228,6 @@ class OperationsOrchestrator:
                     # Single module: no parallel benefit
                     sequential_time_estimate += group_duration
             
-            # Calculate time saved
             report.time_saved_seconds = max(0, sequential_time_estimate - parallel_time_actual)
             
             # Operation completed successfully if no REQUIRED modules failed
@@ -256,7 +254,6 @@ class OperationsOrchestrator:
             self._rollback_modules(report)
         
         finally:
-            # Calculate duration
             end_time = datetime.now()
             report.total_duration_seconds = (end_time - start_time).total_seconds()
             report.timestamp = end_time
@@ -299,13 +296,11 @@ class OperationsOrchestrator:
         module_id = module.metadata.module_id
         
         try:
-            # Check if module should run
             if not module.should_run(self.context):
                 logger.info(f"Skipping module: {module_id} (should_run returned False)")
                 report.modules_skipped.append(module_id)
                 return True
             
-            # Validate prerequisites
             is_valid, issues = module.validate_prerequisites(self.context)
             if not is_valid:
                 logger.error(f"Prerequisites not met for {module_id}: {issues}")
@@ -459,12 +454,10 @@ class OperationsOrchestrator:
         module_id = module.metadata.module_id
         
         try:
-            # Check if module should run
             if not module.should_run(self.context):
                 logger.info(f"Skipping module: {module_id} (should_run returned False)")
                 return None, True
             
-            # Validate prerequisites
             is_valid, issues = module.validate_prerequisites(self.context)
             if not is_valid:
                 logger.error(f"Prerequisites not met for {module_id}: {issues}")
@@ -567,7 +560,6 @@ class OperationsOrchestrator:
                 if module_id in scheduled:
                     continue
                 
-                # Check if all dependencies are satisfied
                 dependencies_met = all(
                     dep in scheduled or dep not in module_map
                     for dep in module.metadata.dependencies

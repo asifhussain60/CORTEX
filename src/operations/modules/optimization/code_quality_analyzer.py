@@ -68,7 +68,6 @@ class CodeQualityAnalyzer:
                     
                     insights.append(f"Overall optimization score: {overall_score}/100")
                     
-                    # Process individual analyzer results
                     for analyzer_result in optimizer_results.get('results', []):
                         category = analyzer_result.get('category', 'Unknown')
                         score = analyzer_result.get('score', 0)

@@ -18,7 +18,6 @@ from typing import Dict, List, Any, Optional
 from datetime import datetime
 from pathlib import Path
 
-# Import core components
 try:
     from .real_time_metrics_dashboard import (
         RealTimeMetricsDashboard, 
@@ -52,7 +51,6 @@ except ImportError:
     IntegratedBrainPerformanceSystem = None
     create_optimized_brain_system = None
 
-# Import Phase 1 collectors
 try:
     from src.collectors import get_collector_manager, initialize_data_collectors
 except ImportError:
@@ -110,7 +108,6 @@ class DataCollectionIntegrationSystem:
         # Logger
         self.logger = logging.getLogger(__name__)
         
-        # Initialize system
         self._initialize_system()
     
     def _default_config(self) -> Dict[str, Any]:
@@ -141,17 +138,14 @@ class DataCollectionIntegrationSystem:
         self.logger.info("Initializing CORTEX 3.0 Data Collection Integration System")
         
         try:
-            # Initialize Phase 1 collectors
             self._initialize_collectors()
             
             # Initialize Phase 2 brain optimization
             self._initialize_brain_optimization()
             
-            # Initialize real-time dashboard
             if self.config.get('enable_dashboard', True):
                 self._initialize_dashboard()
             
-            # Initialize health monitoring
             if self.config.get('enable_health_monitoring', True):
                 self._initialize_health_monitoring()
             
@@ -166,13 +160,11 @@ class DataCollectionIntegrationSystem:
         """Initialize Phase 1 data collectors."""
         if initialize_data_collectors and get_collector_manager:
             try:
-                # Initialize collectors
                 initialize_data_collectors(
                     brain_path=self.brain_path,
                     workspace_path=self.workspace_path
                 )
                 
-                # Get manager
                 self.collector_manager = get_collector_manager(
                     brain_path=self.brain_path,
                     workspace_path=self.workspace_path
@@ -232,10 +224,8 @@ class DataCollectionIntegrationSystem:
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
         try:
-            # Calculate uptime
             uptime_seconds = (datetime.now() - self.start_time).total_seconds()
             
-            # Get component statuses
             component_status = {
                 'collectors': {
                     'available': self.collector_manager is not None,
@@ -259,7 +249,6 @@ class DataCollectionIntegrationSystem:
                 }
             }
             
-            # Get collector status
             if self.collector_manager:
                 try:
                     collector_health = self.collector_manager.get_collector_health()
@@ -291,7 +280,6 @@ class DataCollectionIntegrationSystem:
                 except Exception as e:
                     self.logger.warning(f"Error getting brain optimization status: {e}")
             
-            # Get dashboard status
             if self.dashboard:
                 try:
                     component_status['dashboard']['active'] = self.dashboard.monitoring_active
@@ -304,7 +292,6 @@ class DataCollectionIntegrationSystem:
                 except Exception as e:
                     self.logger.warning(f"Error getting dashboard status: {e}")
             
-            # Get health monitoring status
             if self.health_monitor:
                 try:
                     component_status['health_monitoring']['active'] = self.health_monitor.monitoring_active
@@ -317,7 +304,6 @@ class DataCollectionIntegrationSystem:
                 except Exception as e:
                     self.logger.warning(f"Error getting health monitoring status: {e}")
             
-            # Create status summary
             status = {
                 'system_status': self.system_status,
                 'uptime_seconds': uptime_seconds,
@@ -353,7 +339,6 @@ class DataCollectionIntegrationSystem:
                 'integration_status': {}
             }
             
-            # Get dashboard metrics
             if self.dashboard:
                 try:
                     dashboard_state = get_dashboard_summary(self.dashboard)
@@ -361,7 +346,6 @@ class DataCollectionIntegrationSystem:
                 except Exception as e:
                     metrics['dashboard_metrics'] = {'error': str(e)}
             
-            # Get health assessment
             if self.health_monitor:
                 try:
                     health_assessment = get_health_summary(self.health_monitor)
@@ -394,7 +378,6 @@ class DataCollectionIntegrationSystem:
                 except Exception as e:
                     metrics['brain_performance'] = {'error': str(e)}
             
-            # Get integration status
             metrics['integration_status'] = self.get_system_status()
             
             return metrics
@@ -426,7 +409,6 @@ class DataCollectionIntegrationSystem:
             # Restart collectors if needed
             if self.collector_manager:
                 try:
-                    # Check collector health first
                     collector_health = self.collector_manager.get_collector_health()
                     failed_collectors = [
                         collector_id for collector_id, health in collector_health.items()
@@ -572,7 +554,6 @@ if __name__ == "__main__":
     print("📊 CORTEX 3.0 Phase 2 - Data Collection Integration System Test")
     print("=" * 80)
     
-    # Create integration system
     integration_system = create_data_collection_integration(
         brain_path="cortex-brain",
         workspace_path=".",
@@ -590,7 +571,6 @@ if __name__ == "__main__":
     # Wait for initialization
     time.sleep(3)
     
-    # Get system status
     system_status = get_integration_summary(integration_system)
     
     print("🔧 System Status:")
@@ -615,7 +595,6 @@ if __name__ == "__main__":
     
     print("\n📈 Getting comprehensive metrics...")
     
-    # Get comprehensive metrics
     metrics = get_full_metrics(integration_system)
     
     if 'dashboard_metrics' in metrics and metrics['dashboard_metrics']:

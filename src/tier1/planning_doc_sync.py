@@ -51,7 +51,6 @@ class PlanningDocSyncEngine:
         self.template_dir = Path(template_dir)
         self.template_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize Jinja2 environment
         self.jinja_env = Environment(
             loader=FileSystemLoader(str(self.template_dir)),
             autoescape=False,  # Markdown doesn't need HTML escaping
@@ -88,7 +87,6 @@ class PlanningDocSyncEngine:
                 logger.warning(f"Conversation not found: {conversation_id}")
                 return None
             
-            # Check if conversation has planning document
             context = json.loads(conversation.get('context', '{}')) if conversation.get('context') else {}
             planning_doc_path = context.get('planning_doc')
             
@@ -98,9 +96,7 @@ class PlanningDocSyncEngine:
             
             planning_doc_path = Path(planning_doc_path)
             
-            # Check if sync needed (unless forced)
             if not force and planning_doc_path.exists():
-                # Check if conversation modified after last sync
                 last_sync = context.get('last_sync')
                 if last_sync:
                     # Simple check: if no new messages since last sync, skip
@@ -113,10 +109,8 @@ class PlanningDocSyncEngine:
             if session_id:
                 session = conversation_manager.load_planning_session(session_id)
             
-            # Calculate progress
             progress = self._calculate_progress(conversation, session)
             
-            # Get entity summary
             entities_summary = self._get_entities_summary(conversation_id, conversation_manager)
             
             # Prepare template context
@@ -163,7 +157,6 @@ class PlanningDocSyncEngine:
             return template.render(**context)
         except TemplateNotFound:
             logger.error(f"Template not found: {template_name}")
-            # Return basic markdown if template missing
             return self._render_basic_markdown(context)
         except Exception as e:
             logger.error(f"Error rendering template {template_name}: {e}", exc_info=True)

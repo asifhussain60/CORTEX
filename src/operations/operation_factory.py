@@ -38,11 +38,9 @@ class OperationFactory:
     Example Usage:
         factory = OperationFactory()
         
-        # Get available operations
         ops = factory.get_available_operations()
         # ['environment_setup', 'refresh_cortex_story', 'workspace_cleanup', ...]
         
-        # Create orchestrator for an operation
         orchestrator = factory.create_operation('refresh_cortex_story')
         report = orchestrator.execute_operation(context={'project_root': Path('...')})
     """
@@ -119,7 +117,6 @@ class OperationFactory:
             all_files = module_files + orchestrator_files
             logger.info(f"Found {len(module_files)} module files and {len(orchestrator_files)} orchestrator files")
             
-            # Import and register each module
             for module_file in all_files:
                 try:
                     module_name = module_file.stem
@@ -135,7 +132,6 @@ class OperationFactory:
                     
                     # Dynamic import - handle both direct modules and subdirectory orchestrators
                     import importlib
-                    # Get relative path from modules/ directory
                     rel_path = module_file.relative_to(modules_dir)
                     # Convert path to module notation (e.g., cleanup/cleanup_orchestrator → cleanup.cleanup_orchestrator)
                     module_parts = list(rel_path.parts[:-1]) + [module_name]
@@ -143,7 +139,6 @@ class OperationFactory:
                     
                     module = importlib.import_module(import_path)
                     
-                    # Get class
                     if hasattr(module, class_name):
                         module_class = getattr(module, class_name)
                         
@@ -210,7 +205,6 @@ class OperationFactory:
                 report = orchestrator.execute_operation(context={'project_root': Path('.')})
         """
         try:
-            # Get operation config
             op_config = self.get_operation_info(operation_id)
             if not op_config:
                 logger.error(f"Operation not found: {operation_id}")
@@ -232,7 +226,6 @@ class OperationFactory:
                 logger.error(f"No modules available for operation: {operation_id}")
                 return None
             
-            # Create orchestrator
             orchestrator = OperationsOrchestrator(
                 operation_id=operation_id,
                 operation_name=op_config.get('name', operation_id),
@@ -263,7 +256,6 @@ class OperationFactory:
             logger.warning(f"Profile must be string, got {type(profile).__name__}. Using 'standard'.")
             profile = 'standard'
         
-        # Check if operation has profile-specific modules
         profiles = op_config.get('profiles', {})
         if profile in profiles:
             return profiles[profile].get('modules', [])
@@ -282,7 +274,6 @@ class OperationFactory:
             Module instance, or None if not available
         """
         try:
-            # Check if class is registered
             if module_id not in self.module_classes:
                 logger.warning(f"Module class not registered: {module_id}")
                 return None

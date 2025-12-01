@@ -77,7 +77,6 @@ class PatternSuggestionEngine:
         
         self.database_path = database_path
         
-        # Create simple database connection object
         class SimpleDB:
             def __init__(self, path):
                 self.db_path = path
@@ -135,7 +134,6 @@ class PatternSuggestionEngine:
             logger.info("No patterns found matching search criteria")
             return []
         
-        # Calculate relevance scores
         scored_patterns = []
         for pattern in patterns:
             relevance_score = self._calculate_relevance_score(
@@ -239,7 +237,6 @@ class PatternSuggestionEngine:
             recency_normalized = 0.0  # Never accessed
         recency_weight = 0.10
         
-        # Calculate weighted score
         relevance_score = (
             (bm25_normalized * bm25_weight) +
             (confidence * confidence_weight) +

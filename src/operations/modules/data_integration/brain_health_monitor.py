@@ -21,7 +21,6 @@ from enum import Enum
 import logging
 import json
 
-# Import dashboard for metrics access
 try:
     from .real_time_metrics_dashboard import (
         RealTimeMetricsDashboard, 
@@ -195,18 +194,15 @@ class BrainHealthMonitor:
     def get_comprehensive_health_assessment(self) -> Dict[str, Any]:
         """Get comprehensive health assessment."""
         try:
-            # Get latest metrics from dashboard
             dashboard_state = self.dashboard.get_current_dashboard_state()
             latest_metrics = dashboard_state.get('latest_metrics', {})
             
             if not latest_metrics:
                 return {'error': 'No metrics available for health assessment'}
             
-            # Calculate overall health score
             overall_health = self._calculate_overall_health_score(latest_metrics)
             health_status = self._determine_health_status(overall_health)
             
-            # Calculate component health scores
             component_health = self._calculate_component_health_scores(latest_metrics)
             
             # Analyze health trends
@@ -223,7 +219,6 @@ class BrainHealthMonitor:
                 overall_health, component_health, risk_factors
             )
             
-            # Check for auto-healing triggers
             auto_healing_status = self._check_auto_healing_triggers(
                 overall_health, component_health, health_trend
             )
@@ -320,7 +315,6 @@ class BrainHealthMonitor:
         # Workspace health (5%)
         workspace_health = metrics.get('workspace_health_score', 0)
         
-        # Calculate weighted overall health
         overall_health = (
             collectors_health * weights['data_collectors'] +
             brain_performance_health * weights['brain_performance'] +
@@ -441,7 +435,6 @@ class BrainHealthMonitor:
         if len(recent_scores) < 3:
             return HealthTrend.STABLE
         
-        # Calculate trend
         start_avg = sum(recent_scores[:len(recent_scores)//3]) / (len(recent_scores)//3)
         end_avg = sum(recent_scores[-len(recent_scores)//3:]) / (len(recent_scores)//3)
         
@@ -466,7 +459,6 @@ class BrainHealthMonitor:
         # Simple linear trend prediction
         recent_scores = [score for _, score in self.health_history[-10:]]
         
-        # Calculate trend slope
         x_values = list(range(len(recent_scores)))
         n = len(recent_scores)
         
@@ -495,7 +487,6 @@ class BrainHealthMonitor:
             # Clamp to valid range
             predicted_score = max(0, min(100, predicted_score))
             
-            # Calculate confidence based on trend consistency
             confidence = self._calculate_prediction_confidence(recent_scores, slope)
             
             # Determine risk factors
@@ -526,7 +517,6 @@ class BrainHealthMonitor:
         if len(scores) < 3:
             return 0.5
         
-        # Calculate variance in scores
         mean_score = sum(scores) / len(scores)
         variance = sum((score - mean_score) ** 2 for score in scores) / len(scores)
         
@@ -643,7 +633,6 @@ class BrainHealthMonitor:
         if not self.auto_healing_enabled:
             return auto_healing_status
         
-        # Check cooldown
         if (self.last_healing_action and 
             datetime.now() - self.last_healing_action < timedelta(minutes=self.healing_cooldown_minutes)):
             auto_healing_status['cooldown_active'] = True
@@ -654,7 +643,6 @@ class BrainHealthMonitor:
         
         thresholds = self.config['auto_healing_thresholds']
         
-        # Check trigger conditions
         triggers = []
         
         # Critical overall health
@@ -834,7 +822,6 @@ class BrainHealthMonitor:
         
         while not self.stop_monitoring:
             try:
-                # Get current health assessment
                 assessment = self.get_comprehensive_health_assessment()
                 
                 if 'overall_health' in assessment:

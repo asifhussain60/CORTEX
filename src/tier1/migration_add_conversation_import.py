@@ -45,7 +45,6 @@ def migrate_add_conversation_import(db_path: str):
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        # Check if conversations table exists
         cursor.execute("""
             SELECT name FROM sqlite_master 
             WHERE type='table' AND name='conversations'
@@ -60,7 +59,6 @@ def migrate_add_conversation_import(db_path: str):
         print("✅ Found conversations table")
         print()
         
-        # Check if migration already applied
         cursor.execute("PRAGMA table_info(conversations)")
         columns = [row[1] for row in cursor.fetchall()]
         
@@ -152,7 +150,6 @@ def verify_migration(db_path: str):
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        # Check table schema
         cursor.execute("PRAGMA table_info(conversations)")
         columns = {row[1]: row[2] for row in cursor.fetchall()}  # name: type
         

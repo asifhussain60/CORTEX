@@ -403,11 +403,9 @@ class LintIntegration:
             logger.debug(f"Unsupported file type: {file_path}")
             return self._create_error_result(file_path, 'unknown', 'Unsupported file type')
         
-        # Get linter configuration
         linter_config = self.LINTER_CONFIG.get(language, {})
         linter = linter_config.get('primary')
         
-        # Check if linter is available
         if not self._is_linter_available(linter):
             logger.warning(f"Linter {linter} not available")
             return self._create_error_result(file_path, linter, 'Linter not installed')

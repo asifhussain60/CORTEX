@@ -61,7 +61,6 @@ class IntelligentQuestionRouter:
         self.template_renderer = TemplateRenderer()
         self.logger = logging.getLogger(__name__)
         
-        # Initialize routing rules
         self._initialize_routing_rules()
         
     def _initialize_routing_rules(self):
@@ -215,7 +214,6 @@ class IntelligentQuestionRouter:
         conversation_history = context.get('conversation_history') if context else None
         current_files = context.get('current_files') if context else None
         
-        # Get full routing result
         full_result = self.route_question(message, conversation_history, current_files)
         
         # Convert to expected format for tests

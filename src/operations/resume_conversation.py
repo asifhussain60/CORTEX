@@ -146,7 +146,6 @@ class ResumeConversationOperation:
         # Load full conversation details
         full_context = self.conversation_manager.get_conversation(conversation_id)
         
-        # Get planning document path (if exists)
         import json
         context = json.loads(full_context.get('context', '{}')) if full_context.get('context') else {}
         planning_doc = context.get('planning_doc')
@@ -224,7 +223,6 @@ class ResumeConversationOperation:
         # Sort by score (descending)
         scored_conversations.sort(key=lambda x: x[0], reverse=True)
         
-        # Return conversations only (without scores)
         return [conv for score, conv in scored_conversations]
     
     def _get_entities_preview(self, conversation_id: str) -> Dict[str, List[str]]:

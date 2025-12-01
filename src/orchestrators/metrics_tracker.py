@@ -114,7 +114,6 @@ class MetricsTracker:
         """
         try:
             with self._get_connection() as conn:
-                # Get start time
                 row = conn.execute(
                     "SELECT session_start_time FROM tdd_sessions WHERE session_id = ?",
                     (session_id,)
@@ -211,7 +210,6 @@ class MetricsTracker:
         """
         try:
             with self._get_connection() as conn:
-                # Get start time
                 row = conn.execute(
                     "SELECT phase_start_time, phase_name FROM tdd_phases WHERE phase_id = ?",
                     (phase_id,)
@@ -315,7 +313,6 @@ class MetricsTracker:
         """
         try:
             with self._get_connection() as conn:
-                # Get session data
                 session_row = conn.execute(
                     """
                     SELECT * FROM tdd_sessions WHERE session_id = ?
@@ -326,7 +323,6 @@ class MetricsTracker:
                 if not session_row:
                     return None
                 
-                # Get phases
                 phases = conn.execute(
                     """
                     SELECT phase_name, phase_duration_seconds, git_commit_sha

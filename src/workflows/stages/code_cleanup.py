@@ -37,7 +37,6 @@ class CodeCleanup(BaseWorkflowStage):
     
     def execute(self, state: WorkflowState) -> StageResult:
         """Perform code cleanup"""
-        # Get files to clean
         files = self._get_files_to_clean(state)
         
         if not files:
@@ -87,12 +86,10 @@ class CodeCleanup(BaseWorkflowStage):
         """Extract files to clean from state"""
         files = []
         
-        # Check implementation stage output
         implement_output = state.get_stage_output("implement")
         if implement_output and "files" in implement_output:
             files.extend(implement_output["files"])
         
-        # Check context
         if "modified_files" in state.context:
             files.extend(state.context["modified_files"])
         
@@ -111,7 +108,6 @@ class CodeCleanup(BaseWorkflowStage):
         # Simulate cleanup operations
         # In real implementation, would read file, apply fixes, write back
         
-        # Check file extension for applicable rules
         if file_path.endswith(".py"):
             issues.extend(self._python_cleanup(file_path))
         elif file_path.endswith((".ts", ".js")):

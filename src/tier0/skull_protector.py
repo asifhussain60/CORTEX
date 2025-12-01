@@ -106,14 +106,12 @@ class SkullProtector:
         """
         logger.info(f"[SKULL] Validating fix: {request.description}")
         
-        # Check applicable rules
         violations = []
         
         for rule_id, rule_config in self.rules.items():
             if request.fix_type not in rule_config["applies_to"]:
                 continue
                 
-            # Check rule
             validation = self._check_rule(rule_id, rule_config, request)
             
             if not validation.passed:
@@ -126,7 +124,6 @@ class SkullProtector:
         
         # If warnings but no blocking violations
         if violations:
-            # Return first warning
             return violations[0]
         
         # All checks passed
@@ -280,7 +277,6 @@ class SkullProtector:
     ) -> SkullValidation:
         """Check SKULL-004: Retry Without Learning."""
         
-        # Check if this is a retry
         if request.fix_type != "retry":
             return SkullValidation(
                 passed=True,

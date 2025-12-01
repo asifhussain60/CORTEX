@@ -353,14 +353,12 @@ class PluginManager:
             True if registration successful, False otherwise
         """
         try:
-            # Check if already registered
             if plugin.metadata.plugin_id in self.plugins:
                 self.logger.warning(
                     f"Plugin {plugin.metadata.plugin_id} already registered"
                 )
                 return False
             
-            # Initialize plugin
             if not plugin.initialize():
                 self.logger.error(
                     f"Failed to initialize plugin {plugin.metadata.plugin_id}"

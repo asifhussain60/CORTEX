@@ -96,7 +96,6 @@ class GovernanceDriftChecker:
                     'recommendations': ["Add governance rules"]
                 }
             
-            # Check 1: Rule position drift
             actual_order = [rule.get('id') for rule in rules]
             position_drifts = []
             
@@ -110,7 +109,6 @@ class GovernanceDriftChecker:
                 issues.append(f"POSITION DRIFT: {len(position_drifts)} rules out of optimal position")
                 recommendations.append(f"Reorder {len(position_drifts)} drifted rules to optimal positions")
             
-            # Check 2: Forward reference count
             forward_refs = []
             rule_ids = {rule.get('id'): idx for idx, rule in enumerate(rules)}
             
@@ -128,7 +126,6 @@ class GovernanceDriftChecker:
                 issues.append(f"FORWARD REFERENCES: {len(forward_refs)} detected (target: <3)")
                 recommendations.append(f"Reduce forward references from {len(forward_refs)} to <3")
             
-            # Check 3: File bloat
             with open(governance_path, 'r', encoding='utf-8') as f:
                 line_count = len(f.readlines())
             
@@ -136,7 +133,6 @@ class GovernanceDriftChecker:
                 issues.append(f"FILE BLOAT: {line_count} lines (target: <1200)")
                 recommendations.append("Remove redundant comments or split into focused sections")
             
-            # Check 4: Orphaned rules
             all_referenced = set()
             for rule in rules:
                 all_referenced.update(rule.get('referenced_by', []))
@@ -147,7 +143,6 @@ class GovernanceDriftChecker:
                 issues.append(f"ORPHANED RULES: {len(orphaned)} never referenced")
                 recommendations.append(f"Review orphaned rules: {', '.join(orphaned[:3])}")
             
-            # Check 5: Missing metadata
             missing_metadata = []
             for rule in rules:
                 rule_id = rule.get('id')
@@ -160,7 +155,6 @@ class GovernanceDriftChecker:
                 issues.append(f"MISSING METADATA: {len(missing_metadata)} fields missing")
                 recommendations.append(f"Add copilot_position and reference_count to all rules")
             
-            # Calculate health score
             health_score = 100.0
             health_score -= len(position_drifts) * 2.0
             health_score -= max(0, len(forward_refs) - 3) * 5.0

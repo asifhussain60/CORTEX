@@ -79,7 +79,6 @@ class DatabaseConnection:
         # Connection will be created on first access
         self._conn: Optional[sqlite3.Connection] = None
         
-        # Initialize schema on first connection
         self.init_schema()
     
     def get_connection(self) -> sqlite3.Connection:
@@ -144,7 +143,6 @@ class DatabaseConnection:
             target_version = self.SCHEMA_VERSION
         conn = self.get_connection()
         cursor = conn.cursor()
-        # Create schema_version table if not exists
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS schema_version (

@@ -272,7 +272,6 @@ class KnowledgeGraph:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-            # Check if exists
             cursor.execute("""
                 SELECT co_modification_count FROM relationships 
                 WHERE relationship_id = ?

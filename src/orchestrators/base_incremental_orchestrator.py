@@ -330,7 +330,6 @@ class IncrementalWorkExecutor(ABC):
             
             # Execute chunks with progress tracking
             for i, chunk in enumerate(chunks, 1):
-                # Check dependencies
                 if not self._check_dependencies(chunk, completed_ids):
                     logger.warning(f"⚠️ Chunk {chunk.chunk_id} blocked by dependencies")
                     chunk.status = "blocked"
@@ -344,7 +343,6 @@ class IncrementalWorkExecutor(ABC):
                 try:
                     result = self.execute_chunk(chunk)
                     
-                    # Check response size
                     output = result.get("output", "")
                     check_result = self.response_monitor.check_response(output)
                     
@@ -366,7 +364,6 @@ class IncrementalWorkExecutor(ABC):
                         "error": str(e)
                     })
                 
-                # Create checkpoint if at boundary
                 if self._is_checkpoint_boundary(chunk, chunks):
                     checkpoint = self._create_checkpoint(
                         [c for c in chunks if c.chunk_id in completed_ids],

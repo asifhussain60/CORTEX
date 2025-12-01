@@ -72,7 +72,6 @@ class PatternCache:
         
         match = self.cache[filepath][function_name]
         
-        # Check TTL
         if datetime.now() - match.matched_at > self.ttl:
             del self.cache[filepath][function_name]
             self.misses += 1

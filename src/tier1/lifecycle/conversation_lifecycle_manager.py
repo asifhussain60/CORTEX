@@ -95,7 +95,6 @@ class ConversationLifecycleManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create lifecycle events table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversation_lifecycle_events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,13 +108,11 @@ class ConversationLifecycleManager:
             )
         """)
         
-        # Create index for conversation queries
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_lifecycle_conversation 
             ON conversation_lifecycle_events(conversation_id)
         """)
         
-        # Create index for session queries
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_lifecycle_session 
             ON conversation_lifecycle_events(session_id)
@@ -138,12 +135,10 @@ class ConversationLifecycleManager:
         """
         user_request_lower = user_request.lower()
         
-        # Check for new conversation patterns
         for pattern in self.NEW_CONVERSATION_PATTERNS:
             if re.search(pattern, user_request_lower):
                 return ("new_conversation", 0.9)
         
-        # Check for continue patterns
         for pattern in self.CONTINUE_PATTERNS:
             if re.search(pattern, user_request_lower):
                 return ("continue", 0.85)
@@ -163,7 +158,6 @@ class ConversationLifecycleManager:
         """
         user_request_lower = user_request.lower()
         
-        # Check each workflow state's keywords
         state_scores = {}
         
         for state, patterns in self.WORKFLOW_KEYWORDS.items():
@@ -210,7 +204,6 @@ class ConversationLifecycleManager:
         Returns:
             Tuple of (should_create, reason)
         """
-        # Check explicit command
         intent, confidence = self.detect_command_intent(user_request)
         
         if intent == "new_conversation":
@@ -279,7 +272,6 @@ class ConversationLifecycleManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get current state
         cursor.execute("""
             SELECT workflow_state FROM conversations 
             WHERE conversation_id = ?

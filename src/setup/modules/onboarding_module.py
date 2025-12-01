@@ -74,18 +74,15 @@ class OnboardingModule(BaseSetupModule):
         """
         issues = []
         
-        # Check user project root exists
         user_root = context.get('user_project_root')
         if not user_root:
             issues.append("user_project_root not found in context")
         elif not Path(user_root).exists():
             issues.append(f"User project root does not exist: {user_root}")
         
-        # Check brain is initialized
         if not context.get('brain_initialized'):
             issues.append("CORTEX brain not initialized - cannot store onboarding data")
         
-        # Check documents directory exists
         project_root = context.get('project_root')
         if project_root:
             docs_path = Path(project_root) / 'cortex-brain' / 'documents' / 'analysis'
@@ -179,18 +176,15 @@ class OnboardingModule(BaseSetupModule):
             'config_files': []
         }
         
-        # Check for .NET solution
         sln_files = list(user_root.glob('*.sln'))
         if sln_files:
             info['project_type'] = 'dotnet'
             info['entry_points'].extend([str(f.relative_to(user_root)) for f in sln_files])
         
-        # Check for Node.js project
         if (user_root / 'package.json').exists():
             info['project_type'] = 'nodejs' if info['project_type'] == 'unknown' else 'dotnet+nodejs'
             info['config_files'].append('package.json')
         
-        # Check for Python project
         if (user_root / 'requirements.txt').exists() or (user_root / 'setup.py').exists():
             info['project_type'] = 'python' if info['project_type'] == 'unknown' else f"{info['project_type']}+python"
             if (user_root / 'requirements.txt').exists():
@@ -223,7 +217,6 @@ class OnboardingModule(BaseSetupModule):
         if 'nodejs' in project_info['project_type']:
             tech_stack['languages'].append('TypeScript/JavaScript')
             
-            # Check package.json for frameworks
             package_json = user_root / 'package.json'
             if package_json.exists():
                 try:
@@ -287,7 +280,6 @@ class OnboardingModule(BaseSetupModule):
         
         # Detect test frameworks
         if project_info['project_type'] in ['dotnet', 'dotnet+nodejs']:
-            # Check for C# test projects
             for test_dir in test_dirs:
                 csproj_files = list(test_dir.glob('*.csproj'))
                 for csproj in csproj_files:
@@ -299,7 +291,6 @@ class OnboardingModule(BaseSetupModule):
                     elif 'mstest' in content.lower():
                         testing['test_frameworks'].append('MSTest')
         
-        # Check package.json for JS/TS test frameworks
         package_json = user_root / 'package.json'
         if package_json.exists():
             try:

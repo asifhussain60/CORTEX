@@ -101,7 +101,6 @@ class ConfidenceResponseGenerator:
                 **template_context
             )
         
-        # Calculate confidence from best pattern
         best_pattern = patterns[0]
         confidence_score = self._calculate_pattern_confidence(best_pattern, patterns)
         
@@ -142,7 +141,6 @@ class ConfidenceResponseGenerator:
             except (ValueError, TypeError):
                 last_used = None
         
-        # Calculate confidence using scorer
         confidence_score = self.confidence_scorer.calculate_confidence(
             base_confidence=best_pattern.get("confidence", 0.5),
             usage_count=best_pattern.get("usage_count", 0),

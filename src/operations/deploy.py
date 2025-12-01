@@ -17,7 +17,6 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / "scripts"))
 
-# Import deployment function
 from deploy_cortex import publish_to_branch, PUBLISH_BRANCH
 
 

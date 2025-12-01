@@ -320,7 +320,6 @@ class DoRValidator:
         if not question:
             return False, [f"Question {question_id} not found"]
         
-        # Validate answer
         is_valid, feedback = self._validate_answer(question, answer)
         
         question.answer = answer
@@ -333,12 +332,10 @@ class DoRValidator:
         """Validate an answer for ambiguity and completeness."""
         feedback = []
         
-        # Check for empty/minimal answers
         if not answer or len(answer.strip()) < 10:
             feedback.append("Answer is too brief. Please provide more detail.")
             return False, feedback
         
-        # Check for vague terms
         vague_terms = [
             "improve", "enhance", "better", "good", "fast", "slow",
             "user-friendly", "nice", "clean", "simple", "easy",
@@ -350,7 +347,6 @@ class DoRValidator:
             feedback.extend([f"💡 Hint: {hint}" for hint in question.validation_hints])
             return False, feedback
         
-        # Check for measurability in requirements
         if question.category == "requirements" and "measurable" in question.question.lower():
             has_numbers = any(char.isdigit() for char in answer)
             has_metrics = any(term in answer.lower() for term in [
@@ -374,7 +370,6 @@ class DoRValidator:
         answered_required = len([q for q in self.questions if q.required and q.answer])
         valid_required = len([q for q in self.questions if q.required and q.is_valid])
         
-        # Calculate score
         if total_questions == 0:
             score = 0.0
         else:
@@ -521,7 +516,6 @@ class WorkDecomposer:
         
         self.features = features
         
-        # Calculate totals
         total_stories = sum(len(f.stories) for f in features)
         total_points = sum(f.total_story_points for f in features)
         total_hours = total_points * self.HOURS_PER_POINT
@@ -589,7 +583,6 @@ class WorkDecomposer:
             ("Documentation", "Documentation", "low"),
         ]
         
-        # Create feature for each relevant component
         feature_id = 1
         for name, category, risk in standard_features:
             # Check if this component is relevant based on requirements
@@ -1292,7 +1285,6 @@ class SWAGGEREntryPointOrchestrator:
             "complexity_score": complexity_score,
         }
         
-        # Get core estimate
         time_estimate = self.timeframe_estimator.estimate_timeframe(
             complexity_score,
             team_size=team_size
@@ -1390,13 +1382,11 @@ class SWAGGEREntryPointOrchestrator:
             "can_estimate": validation_result.can_estimate,
         }
         
-        # Check if DoR is now complete
         if validation_result.can_estimate:
             self.estimation_blocked = False
             response["message"] = "✅ DoR Complete! Estimation is now available."
             response["next_action"] = "estimate"
         else:
-            # Get next question
             next_q = self.dor_validator.get_next_question()
             if next_q:
                 response["next_question"] = self._format_question(next_q)
@@ -1529,7 +1519,6 @@ class SWAGGEREntryPointOrchestrator:
                 print(f"   💡 Hints: {', '.join(question.validation_hints)}")
             print()
             
-            # Get answer
             answer = self.interactive_callback(f"Your answer for '{question.id}': ")
             
             # Submit and validate
@@ -1544,7 +1533,6 @@ class SWAGGEREntryPointOrchestrator:
                 answer = self.interactive_callback(f"Your revised answer for '{question.id}': ")
                 self.dor_validator.submit_answer(question.id, answer)
         
-        # Check DoR status
         validation_result = self.dor_validator.validate_dor()
         
         print()

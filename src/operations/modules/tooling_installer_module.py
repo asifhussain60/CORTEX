@@ -299,7 +299,6 @@ def execute(context: Dict = None) -> Dict:
     """Execute tooling installation."""
     context = context or {}
     
-    # Get detection results
     detected_tools = context.get('detected_tools', {})
     missing = context.get('missing_tools', [])
     package_manager = detected_tools.get('package_manager', {})
@@ -313,7 +312,6 @@ def execute(context: Dict = None) -> Dict:
     results = installer.install_missing_tools(missing)
     installer.print_install_report(results)
     
-    # Check if all succeeded
     all_success = all(r['success'] for r in results.values())
     
     return {

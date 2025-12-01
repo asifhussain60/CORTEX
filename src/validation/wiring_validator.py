@@ -64,7 +64,6 @@ class WiringValidator:
             "wiring_suggestions": []
         }
         
-        # Check each entry point
         for trigger, metadata in entry_points.items():
             expected_orch = metadata.get("expected_orchestrator")
             
@@ -124,7 +123,6 @@ class WiringValidator:
             "orchestrator": orchestrator_name,
             "action": "create_orchestrator",
             "template": f"""
-# Create missing orchestrator: {orchestrator_name}
 
 from src.operations.base_operation_module import BaseOperationModule, OperationResult, OperationStatus
 
@@ -190,11 +188,9 @@ class {orchestrator_name}(BaseOperationModule):
         Returns:
             Status: 'wired', 'unwired', or 'admin'
         """
-        # Check if admin-only
         if "admin" in orchestrator_name.lower() or "system" in orchestrator_name.lower():
             return "admin"
         
-        # Check if wired
         if self.check_orchestrator_wired(orchestrator_name, entry_points):
             return "wired"
         
@@ -231,7 +227,6 @@ class {orchestrator_name}(BaseOperationModule):
                 description = cmd_info["description"]
                 source_file = cmd_info["source_file"]
                 
-                # Check if command appears in any routing trigger
                 found_in_routing = False
                 for trigger_group, triggers in routing_triggers.items():
                     for trigger in triggers:

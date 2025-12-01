@@ -125,7 +125,6 @@ class DashboardGenerator:
             lines.append("  ℹ️  Insufficient data for trend analysis (need 2+ data points)")
             return "\n".join(lines)
         
-        # Calculate trends
         current = report.overall_health
         previous = history[-2]['overall_health']
         

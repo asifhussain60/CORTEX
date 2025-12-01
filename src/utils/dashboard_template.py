@@ -90,7 +90,6 @@ class DashboardTemplate(ABC):
         if data is None:
             data = self.collect_data()
         
-        # Validate data
         if not self.validate_data(data):
             raise ValueError(f"Data validation failed for template: {self.template_name}")
         
@@ -102,7 +101,6 @@ class DashboardTemplate(ABC):
         with open(template_path, 'r', encoding='utf-8') as f:
             template_content = f.read()
         
-        # Create Jinja template
         template = Template(template_content)
         
         # Build chart configs from sections

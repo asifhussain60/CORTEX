@@ -336,7 +336,6 @@ class GitHubIntegration:
             medium = [v for v in violations if v["severity"] == "medium"]
             low = [v for v in violations if v["severity"] == "low"]
             
-            # Create summary
             summary_lines = [
                 "# 🤖 CORTEX Code Review",
                 "",
@@ -397,7 +396,6 @@ class GitHubIntegration:
                 comments=review_comments
             )
             
-            # Create commit status
             self.create_commit_status(
                 sha=commit_sha,
                 state=status_state,
@@ -405,7 +403,6 @@ class GitHubIntegration:
                 description=f"Score: {overall_score:.1f}/100, {len(violations)} issues found"
             )
             
-            # Create detailed check run
             annotations = []
             for violation in violations_to_post[:50]:  # GitHub limit
                 annotations.append({

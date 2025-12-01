@@ -385,7 +385,6 @@ class MarkdownConsolidationEngine:
         title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
         title = title_match.group(1) if title_match else file_path.stem
         
-        # Calculate content hash
         content_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()
         
         # Extract keywords (simple approach: words in title and first paragraph)
@@ -480,7 +479,6 @@ class MarkdownConsolidationEngine:
             logger.info(f"      [DRY RUN] Would merge {len(rule.file_paths)} files into {rule.target_filename}")
             return []
         
-        # Create consolidated file with dated sections
         consolidated_content = [
             f"# {rule.name} - Complete History",
             "",
@@ -527,7 +525,6 @@ class MarkdownConsolidationEngine:
             logger.info(f"      [DRY RUN] Would merge {len(rule.file_paths)} files into {rule.target_filename}")
             return []
         
-        # Create consolidated file with topic sections
         consolidated_content = [
             f"# {rule.name}",
             "",

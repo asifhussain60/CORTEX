@@ -194,7 +194,6 @@ class ContextOptimizer:
         
         # Tier 1: Recent memory
         if "tier1" in tiers:
-            # Get only recent conversations (not all 20)
             context["components"]["recent_memory"] = {
                 "conversation_count": 5,  # Only 5 most recent
                 "size_estimate": 2000
@@ -234,7 +233,6 @@ class ContextOptimizer:
         """
         compressed = context.copy()
         
-        # Calculate total estimated size
         total_size = sum(
             comp.get("size_estimate", 0) 
             for comp in context["components"].values()
@@ -315,7 +313,6 @@ class PatternRelevanceScorer:
         # Sort by score (descending)
         scored.sort(key=lambda p: p["relevance_score"], reverse=True)
         
-        # Return top N
         return scored[:limit]
     
     def _extract_keywords(self, query: str) -> List[str]:
@@ -429,7 +426,6 @@ class ContextCompressor:
         compressed = self._compress_metadata(compressed)
         stats["techniques_applied"].append("metadata_compression")
         
-        # Calculate stats
         stats["compressed_size"] = self._estimate_size(compressed)
         stats["reduction_bytes"] = stats["original_size"] - stats["compressed_size"]
         stats["reduction_percent"] = (
@@ -471,7 +467,6 @@ class ContextCompressor:
             nonlocal ref_counter
             
             if isinstance(obj, dict):
-                # Check if this dict was seen before
                 obj_str = json.dumps(obj, sort_keys=True)
                 if len(obj_str) > 100 and obj_str in seen:
                     return {"$ref": seen[obj_str]}

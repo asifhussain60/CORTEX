@@ -164,7 +164,6 @@ class RCAOrchestrator:
         for path in [self.active_path, self.completed_path, self.approved_path, self.templates_path]:
             path.mkdir(exist_ok=True)
         
-        # Initialize knowledge graph for pattern learning
         try:
             from src.tier2.knowledge_graph import KnowledgeGraph
             self.knowledge_graph = KnowledgeGraph()
@@ -204,7 +203,6 @@ class RCAOrchestrator:
             # Generate analysis ID
             analysis_id = incident_id or self._generate_analysis_id(incident_details)
             
-            # Create RCA analysis structure
             analysis = RCAAnalysis(
                 analysis_id=analysis_id,
                 incident=incident_details,
@@ -269,7 +267,6 @@ class RCAOrchestrator:
         if not initial_problem:
             initial_problem = analysis.incident.description or "Unknown incident"
         
-        # Create first Why question
         why_1 = WhyQuestion(
             depth=WhyDepth.WHY_1,
             question=f"Why did '{initial_problem}' occur?",
@@ -329,7 +326,6 @@ class RCAOrchestrator:
                 "error": "No active Why questions. Start analysis first: `analyze rca [id]`"
             }
         
-        # Get current question
         current_question = analysis.why_questions[-1]
         
         if current_question.answer:
@@ -348,7 +344,6 @@ class RCAOrchestrator:
         confidence = self._assess_answer_confidence(answer, current_question, analysis)
         current_question.confidence = confidence
         
-        # Check if we've reached sufficient depth
         current_depth = current_question.depth.value
         
         if current_depth >= 5:
@@ -857,7 +852,6 @@ After pasting content, save this file and run: `analyze rca {docx_path.stem}`
         if any(keyword in description_lower for keyword in technical_keywords):
             return "technical"
         
-        # Process indicators
         process_keywords = ['process', 'procedure', 'workflow', 'review', 'testing', 'deployment', 
                            'release', 'validation', 'approval', 'checklist']
         if any(keyword in description_lower for keyword in process_keywords):

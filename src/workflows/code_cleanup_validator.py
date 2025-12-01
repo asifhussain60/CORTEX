@@ -253,7 +253,6 @@ class CodeCleanupValidator:
             if self._has_exemption_marker(line, previous_line):
                 continue
             
-            # Check each pattern
             for pattern in patterns:
                 if pattern.search(line):
                     issues.append(CleanupIssue(
@@ -345,7 +344,6 @@ class CodeCleanupValidator:
                     comment_block_start = line_num
                 consecutive_comments += 1
             else:
-                # Check if we had a block of commented code
                 if consecutive_comments >= 5:  # 5+ consecutive comment lines
                     issues.append(CleanupIssue(
                         file_path=file_path,
@@ -372,12 +370,10 @@ class CodeCleanupValidator:
         Returns:
             List of CleanupIssue objects found in file
         """
-        # Check if file should be excluded
         if self._is_excluded(file_path):
             logger.debug(f"Skipping excluded file: {file_path}")
             return []
         
-        # Check if file exists
         if not file_path.exists():
             logger.warning(f"File not found: {file_path}")
             return []
@@ -422,7 +418,6 @@ class CodeCleanupValidator:
         """
         issues_by_file = {}
         
-        # Get all supported files
         patterns = ['*.py', '*.cs', '*.js', '*.ts', '*.jsx', '*.tsx']
         files = []
         

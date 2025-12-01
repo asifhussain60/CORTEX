@@ -20,7 +20,6 @@ Usage:
     # Update progress
     wsm.update_progress("Added login endpoint", files_touched=["src/auth.py"])
     
-    # Check if there's incomplete work
     if wsm.has_incomplete_work():
         state = wsm.get_current_state()
         print(f"Resume: {state.task_description}")
@@ -382,7 +381,6 @@ class WorkStateManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get session info
         cursor.execute("""
             SELECT task_description, status, started_at, last_activity, metadata
             FROM work_sessions
@@ -396,7 +394,6 @@ class WorkStateManager:
         
         task_description, status, started_at, last_activity, metadata = row
         
-        # Get all progress entries
         cursor.execute("""
             SELECT progress_note, files_touched
             FROM work_progress

@@ -307,7 +307,6 @@ class PlatformSwitchPlugin(BasePlugin):
     def _check_dependencies_exist(self, config: PlatformConfig) -> Dict[str, Any]:
         """Quick check if dependencies exist (don't install)."""
         try:
-            # Check Python
             result = subprocess.run(
                 [config.python_command, "--version"],
                 capture_output=True,
@@ -317,7 +316,6 @@ class PlatformSwitchPlugin(BasePlugin):
             
             python_ok = result.returncode == 0
             
-            # Check Git
             git_result = subprocess.run(
                 ["git", "--version"],
                 capture_output=True,
@@ -489,7 +487,6 @@ class PlatformSwitchPlugin(BasePlugin):
         self.log("\n📥 Step 1: Pulling latest code from Git...")
         
         try:
-            # Get current branch
             branch_result = subprocess.run(
                 ["git", "branch", "--show-current"],
                 cwd=self.project_root,
@@ -581,7 +578,6 @@ class PlatformSwitchPlugin(BasePlugin):
                 "shell": config.shell
             }
             
-            # Check Python version
             python_cmd = self._find_python_command(config)
             if python_cmd:
                 try:
@@ -596,7 +592,6 @@ class PlatformSwitchPlugin(BasePlugin):
                 except:
                     pass
             
-            # Check virtual environment
             venv_path = self.project_root / ".venv"
             env_details["venv_exists"] = venv_path.exists()
             env_details["venv_path"] = str(venv_path)
@@ -607,7 +602,6 @@ class PlatformSwitchPlugin(BasePlugin):
                 self.log(f"   ⚠️  Virtual environment not found at: {venv_path}")
                 self.log(f"   Creating virtual environment...")
                 
-                # Create venv
                 create_result = subprocess.run(
                     [python_cmd, "-m", "venv", str(venv_path)],
                     capture_output=True,
@@ -693,7 +687,6 @@ class PlatformSwitchPlugin(BasePlugin):
             
             python_cmd = self._get_venv_python(config)
             
-            # Check installed packages
             pip_result = subprocess.run(
                 [python_cmd, "-m", "pip", "list", "--format=json"],
                 capture_output=True,
@@ -775,7 +768,6 @@ class PlatformSwitchPlugin(BasePlugin):
         try:
             python_cmd = self._get_venv_python(config)
             
-            # Define test paths
             test_paths = [
                 "tests/tier0/test_brain_protector.py",
                 "tests/tier1/test_working_memory.py",

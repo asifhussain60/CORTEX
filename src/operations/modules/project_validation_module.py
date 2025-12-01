@@ -120,13 +120,11 @@ class ProjectValidationModule(BaseOperationModule):
                 'brain_subdirs_missing': []
             }
             
-            # Validate required directories
             dirs_valid, dirs_issues = self._validate_directories(project_root, validation_results)
             
             # Validate required files (warnings only, not blocking)
             self._validate_files(project_root, validation_results)
             
-            # Validate brain structure
             brain_valid, brain_issues = self._validate_brain_structure(project_root, validation_results)
             
             # Determine overall success
@@ -197,11 +195,9 @@ class ProjectValidationModule(BaseOperationModule):
         Returns:
             Path to project root
         """
-        # Check context first
         if 'project_root' in context:
             return Path(context['project_root'])
         
-        # Check environment variable
         env_root = os.environ.get('CORTEX_ROOT')
         if env_root:
             self.log_info(f"Using CORTEX_ROOT from environment: {env_root}")

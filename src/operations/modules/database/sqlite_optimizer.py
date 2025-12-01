@@ -118,7 +118,6 @@ class SQLiteOptimizer:
         }
         
         try:
-            # Get initial size
             initial_size = db_path.stat().st_size
             result['initial_size_bytes'] = initial_size
             result['initial_size_mb'] = round(initial_size / 1024 / 1024, 2)
@@ -151,12 +150,10 @@ class SQLiteOptimizer:
             # Close connection
             conn.close()
             
-            # Get final size
             final_size = db_path.stat().st_size
             result['final_size_bytes'] = final_size
             result['final_size_mb'] = round(final_size / 1024 / 1024, 2)
             
-            # Calculate space reclaimed
             space_reclaimed = initial_size - final_size
             result['space_reclaimed_bytes'] = space_reclaimed
             result['space_reclaimed_mb'] = round(space_reclaimed / 1024 / 1024, 2)
@@ -194,7 +191,6 @@ class SQLiteOptimizer:
     def _analyze_indexes(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Analyze index usage and recommendations."""
         try:
-            # Get all indexes
             cursor.execute("""
                 SELECT name, tbl_name, sql 
                 FROM sqlite_master 
@@ -221,7 +217,6 @@ class SQLiteOptimizer:
     def _get_table_stats(self, cursor: sqlite3.Cursor) -> List[Dict[str, Any]]:
         """Get statistics for all tables."""
         try:
-            # Get all tables
             cursor.execute("""
                 SELECT name 
                 FROM sqlite_master 
@@ -232,7 +227,6 @@ class SQLiteOptimizer:
             for row in cursor.fetchall():
                 table_name = row[0]
                 
-                # Get row count
                 cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
                 row_count = cursor.fetchone()[0]
                 

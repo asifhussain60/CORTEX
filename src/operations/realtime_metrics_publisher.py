@@ -20,7 +20,6 @@ Features:
     - Graceful degradation (works without WebSocket server)
 
 Usage:
-    # Initialize with WebSocket server
     publisher = RealtimeMetricsPublisher(
         dashboard=dashboard,
         websocket_server=server
@@ -50,7 +49,6 @@ from typing import Any, Dict, List, Optional, Set
 from dataclasses import dataclass, asdict
 from enum import Enum
 
-# Import RealTimeMetricsDashboard
 try:
     from src.operations.modules.data_integration.real_time_metrics_dashboard import (
         RealTimeMetricsDashboard,
@@ -67,7 +65,6 @@ except ImportError:
         MetricSeverity
     )
 
-# Import WebSocket server
 try:
     from src.operations.realtime_dashboard_server import RealtimeDashboardServer
 except ImportError:
@@ -186,10 +183,8 @@ class RealtimeMetricsPublisher:
         """Main publishing loop."""
         while self._running:
             try:
-                # Get current metrics snapshot
                 snapshot = self._get_current_snapshot()
                 
-                # Check if metrics changed (aggregation)
                 if self.enable_aggregation and self._snapshot_unchanged(snapshot):
                     await asyncio.sleep(self.publish_interval)
                     continue
@@ -241,7 +236,6 @@ class RealtimeMetricsPublisher:
         
         except Exception as e:
             logger.error(f"Error getting metrics snapshot: {e}")
-            # Return empty snapshot
             return UnifiedMetricsSnapshot(
                 timestamp=datetime.now(),
                 collectors_active=0,
@@ -289,7 +283,6 @@ class RealtimeMetricsPublisher:
             logger.debug("No WebSocket server available, skipping publish")
             return
         
-        # Create metrics update message
         message = MetricsUpdate(
             type='metrics_update',
             channel=PublishChannel.METRICS.value,
@@ -370,7 +363,6 @@ class RealtimeMetricsPublisher:
             current: Current item (optional)
             metadata: Additional metadata (optional)
         """
-        # Create progress update
         progress_update = OperationProgress(
             operation=operation,
             progress=progress,
@@ -493,16 +485,13 @@ class RealtimeMetricsPublisher:
 # Example usage
 async def main():
     """Example publisher usage."""
-    # Create dashboard (assuming already initialized)
     from src.operations.modules.data_integration.real_time_metrics_dashboard import create_real_time_dashboard
     dashboard = create_real_time_dashboard()
     
-    # Create WebSocket server
     from src.operations.realtime_dashboard_server import RealtimeDashboardServer
     server = RealtimeDashboardServer(host='0.0.0.0', port=8765)
     await server.start()
     
-    # Create publisher
     publisher = RealtimeMetricsPublisher(
         dashboard=dashboard,
         websocket_server=server,

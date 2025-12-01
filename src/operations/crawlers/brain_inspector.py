@@ -42,7 +42,6 @@ class BrainInspectorCrawler(BaseCrawler):
             'brain_health': 0.0
         }
         
-        # Calculate overall brain health score
         brain_data['brain_health'] = self._calculate_health(brain_data)
         
         self.log_info(f"Brain health: {brain_data['brain_health']:.1f}/10")
@@ -67,7 +66,6 @@ class BrainInspectorCrawler(BaseCrawler):
             'database_exists': False
         }
         
-        # Check for conversation database
         db_path = Path(self.project_root) / 'cortex-brain' / 'conversation-history.db'
         
         if not db_path.exists():
@@ -84,7 +82,6 @@ class BrainInspectorCrawler(BaseCrawler):
             cursor.execute("SELECT COUNT(*) FROM conversations")
             tier1_data['conversations'] = cursor.fetchone()[0]
             
-            # Get date range
             cursor.execute("""
                 SELECT MIN(timestamp), MAX(timestamp) 
                 FROM conversations
@@ -125,7 +122,6 @@ class BrainInspectorCrawler(BaseCrawler):
         
         cortex_brain = Path(self.project_root) / 'cortex-brain'
         
-        # Check knowledge graph files
         knowledge_files = {
             'knowledge-graph.yaml': 'knowledge_patterns',
             'capabilities.yaml': 'capabilities',
@@ -169,7 +165,6 @@ class BrainInspectorCrawler(BaseCrawler):
             'development_context_exists': False
         }
         
-        # Check development context file
         context_path = Path(self.project_root) / 'cortex-brain' / 'development-context.yaml'
         
         if not context_path.exists():

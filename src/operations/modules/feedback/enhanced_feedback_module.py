@@ -331,7 +331,6 @@ class EnhancedFeedbackModule(BaseOperationModule):
             
             feedback_id = feedback_report['cortex_feedback']['metadata']['feedback_id']
             
-            # Create private Gist
             gist = user.create_gist(
                 public=False,
                 files={

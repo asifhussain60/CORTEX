@@ -35,10 +35,8 @@ class ProgressBar:
         if self.total == 0:
             return "░" * self.width + " 0%"
         
-        # Calculate percentage (cap at 100%)
         percent = min(100, (self.current / self.total) * 100)
         
-        # Calculate filled blocks
         filled = int((min(self.current, self.total) / self.total) * self.width)
         
         # Build visual bar

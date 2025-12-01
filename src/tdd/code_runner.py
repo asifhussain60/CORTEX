@@ -108,7 +108,6 @@ class CodeRunner:
         Returns:
             ExecutionResult with output and metrics
         """
-        # Validate syntax first
         syntax_error = self.validate_syntax(code)
         if syntax_error:
             return ExecutionResult(

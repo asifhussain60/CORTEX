@@ -111,7 +111,6 @@ class IdeaQueue:
             'enrichments_processed': 0
         }
         
-        # Initialize database
         self._init_database()
         
         logger.info(f"IdeaQueue initialized: {self.db_path}, enrichment={enable_enrichment}")
@@ -148,7 +147,6 @@ class IdeaQueue:
             conversation_id = context.get('conversation_id') if context else None
             project = context.get('project') if context else self._detect_project()
             
-            # Create idea object
             idea = IdeaCapture(
                 idea_id=idea_id,
                 raw_text=raw_text,
@@ -494,7 +492,6 @@ class IdeaQueue:
         """Detect current project from working directory."""
         cwd = Path.cwd()
         
-        # Check if we're in CORTEX
         if 'CORTEX' in str(cwd):
             return 'CORTEX'
         
@@ -624,7 +621,6 @@ class IdeaQueue:
     
     def _find_related_ideas(self, text: str, current_id: str) -> List[str]:
         """Find related ideas using simple keyword matching."""
-        # Get component for current idea
         component = self._detect_component(text, None)
         
         if not component:
@@ -633,7 +629,6 @@ class IdeaQueue:
         # Find other ideas with same component
         related = self.filter_by_component(component)
         
-        # Return IDs of related ideas (excluding current)
         return [
             idea.idea_id for idea in related 
             if idea.idea_id != current_id and idea.status == 'pending'

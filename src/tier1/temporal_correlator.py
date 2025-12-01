@@ -163,7 +163,6 @@ class TemporalCorrelator:
         Returns:
             List of correlation results ordered by confidence score
         """
-        # Check if correlations already exist
         if not force_recalculate:
             existing = self._get_existing_correlations(conversation_id)
             if existing:
@@ -172,7 +171,6 @@ class TemporalCorrelator:
         
         logger.info(f"Calculating temporal correlations for conversation {conversation_id}")
         
-        # Get conversation turns
         turns = self._get_conversation_turns(conversation_id)
         if not turns:
             logger.warning(f"No turns found for conversation {conversation_id}")
@@ -355,7 +353,6 @@ class TemporalCorrelator:
         if not turn.files_mentioned or not event.file_path:
             return None
         
-        # Check for file path matches
         event_file = Path(event.file_path)
         matched_files = []
         
@@ -605,10 +602,8 @@ class TemporalCorrelator:
         Returns:
             Timeline data with conversation turns and correlated events
         """
-        # Get conversation turns (always include these)
         turns = self._get_conversation_turns(conversation_id)
         
-        # Get correlations for this conversation
         correlations = self.correlate_conversation(conversation_id)
         
         # Build timeline starting with conversation turns
@@ -626,7 +621,6 @@ class TemporalCorrelator:
 
         # Add correlated events if any exist
         if correlations:
-            # Get correlated events
             event_ids = [c.event_id for c in correlations]
             events_by_id = {}
             

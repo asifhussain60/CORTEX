@@ -34,7 +34,6 @@ class ContextStore:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database schema
         self._init_database()
     
     def _init_database(self):

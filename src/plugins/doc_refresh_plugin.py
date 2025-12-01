@@ -30,7 +30,6 @@ class DocRefreshPlugin(BasePlugin):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         
-        # Initialize services
         self.content_service = DocContentService()
         self.file_service = DocFileService()
         self.validation_service = DocValidationService()
@@ -61,7 +60,6 @@ class DocRefreshPlugin(BasePlugin):
         try:
             self.logger.info("Initializing DocRefresh Plugin with modular services")
             
-            # Validate all services are properly initialized
             services = [self.content_service, self.file_service, self.validation_service]
             
             for service in services:
@@ -102,7 +100,6 @@ class DocRefreshPlugin(BasePlugin):
         """Refresh all documentation files using services"""
         results = {'success': True, 'files_processed': 0, 'details': []}
         
-        # Define target documentation files
         doc_files = [
             ('Technical-CORTEX.md', 'technical'),
             ('Awakening Of CORTEX.md', 'story'), 
@@ -116,11 +113,9 @@ class DocRefreshPlugin(BasePlugin):
             try:
                 file_path = Path(f"docs/story/CORTEX-STORY/{filename}")
                 
-                # Validate file exists (NEVER CREATE NEW FILES)
                 if not self.validation_service.validate_no_new_files_rule('update', str(file_path)):
                     continue
                 
-                # Validate no variant files
                 if not self.validation_service.validate_no_variants_rule(filename):
                     continue
                 
@@ -170,7 +165,6 @@ class DocRefreshPlugin(BasePlugin):
         if not refresh_result.get('success'):
             return refresh_result
         
-        # Validate read time constraints
         content = refresh_result.get('content', '')
         validation_result = self.validation_service.validate_read_time(content, target_minutes=70)
         

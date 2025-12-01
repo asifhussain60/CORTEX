@@ -100,11 +100,9 @@ class TemplateHeaderValidator:
         # Load templates from YAML
         self._load_templates()
         
-        # Validate each template
         for template_name, template_content in self.templates.items():
             self._validate_template_header(template_name, template_content)
         
-        # Calculate scores
         total_templates = len(self.templates)
         if total_templates == 0:
             return {
@@ -170,7 +168,6 @@ class TemplateHeaderValidator:
                 severity='critical'
             ))
         
-        # Check for author attribution
         if not re.search(self.AUTHOR_PATTERN, template_content):
             self.violations.append(HeaderViolation(
                 template_name=template_name,
@@ -180,7 +177,6 @@ class TemplateHeaderValidator:
                 severity='critical'
             ))
         
-        # Check for GitHub link
         if not re.search(self.GITHUB_PATTERN, template_content):
             self.violations.append(HeaderViolation(
                 template_name=template_name,
@@ -190,7 +186,6 @@ class TemplateHeaderValidator:
                 severity='critical'
             ))
         
-        # Check for horizontal rule separator
         if not re.search(self.SEPARATOR_PATTERN, template_content):
             self.violations.append(HeaderViolation(
                 template_name=template_name,

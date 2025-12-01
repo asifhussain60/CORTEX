@@ -184,14 +184,12 @@ class WorkflowDefinition:
         """Validate workflow is a valid DAG (no cycles, all dependencies exist)"""
         errors = []
         
-        # Check all dependencies exist
         stage_ids = {s.id for s in self.stages}
         for stage in self.stages:
             for dep in stage.depends_on:
                 if dep not in stage_ids:
                     errors.append(f"Stage '{stage.id}' depends on non-existent stage '{dep}'")
         
-        # Check for cycles using topological sort
         if not errors:
             try:
                 self._topological_sort()
@@ -253,12 +251,10 @@ class WorkflowOrchestrator:
         # Stage registry: stage_id -> stage instance
         self._stages: Dict[str, WorkflowStage] = {}
         
-        # Validate workflow DAG
         errors = workflow_def.validate_dag()
         if errors:
             raise ValueError(f"Invalid workflow DAG: {', '.join(errors)}")
         
-        # Get execution order
         self.execution_order = workflow_def.get_execution_order()
     
     def register_stage(self, stage_id: str, stage: WorkflowStage) -> None:
@@ -272,7 +268,6 @@ class WorkflowOrchestrator:
         config: Optional[Dict[str, Any]] = None
     ) -> WorkflowState:
         """Execute the complete workflow"""
-        # Create initial state
         workflow_id = f"wf-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         state = WorkflowState(
             workflow_id=workflow_id,
@@ -286,7 +281,6 @@ class WorkflowOrchestrator:
         if self.context_injector:
             state.context = self.context_injector.inject_context(conversation_id)
         
-        # Initialize stage statuses
         for stage_def in self.workflow_def.stages:
             state.set_stage_status(stage_def.id, StageStatus.PENDING)
         
@@ -294,7 +288,6 @@ class WorkflowOrchestrator:
         for stage_id in self.execution_order:
             stage_def = self._get_stage_def(stage_id)
             
-            # Check if stage should be skipped
             if not self._should_execute_stage(stage_def, state):
                 state.set_stage_status(stage_id, StageStatus.SKIPPED)
                 continue
@@ -357,7 +350,6 @@ class WorkflowOrchestrator:
     
     def _should_execute_stage(self, stage_def: StageDefinition, state: WorkflowState) -> bool:
         """Check if stage should be executed"""
-        # Check all dependencies are satisfied
         for dep_id in stage_def.depends_on:
             dep_status = state.stage_statuses.get(dep_id)
             if dep_status != StageStatus.SUCCESS:
@@ -378,7 +370,6 @@ class WorkflowOrchestrator:
                 error=error_msg
             )
         
-        # Validate input
         if not stage.validate_input(state):
             error_msg = f"Stage '{stage_def.id}' input validation failed"
             state.set_stage_status(stage_def.id, StageStatus.FAILED)

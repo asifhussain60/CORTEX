@@ -106,7 +106,6 @@ def run_setup(
     context.setdefault('project_root', project_root)
     context.setdefault('setup_profile', profile)
     
-    # Create orchestrator and execute
     orchestrator = create_setup_orchestrator(profile=profile)
     return orchestrator.execute_setup(context)
 

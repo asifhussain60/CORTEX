@@ -69,7 +69,6 @@ class ThreatModelerStage:
         # Analyze request for threat indicators
         threats = self._identify_threats(user_request, state.context)
         
-        # Calculate overall risk
         risk_level = self._calculate_risk_level(threats)
         
         # Generate recommendations

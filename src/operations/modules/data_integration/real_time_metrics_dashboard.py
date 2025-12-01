@@ -23,7 +23,6 @@ from dataclasses import dataclass, asdict
 import logging
 from enum import Enum
 
-# Import Phase 1 data collectors
 try:
     from src.collectors.manager import CollectorManager, get_collector_manager
     from src.collectors.base_collector import CollectorMetric, CollectorHealth, CollectorStatus
@@ -156,11 +155,9 @@ class RealTimeMetricsDashboard:
         self.workspace_path = workspace_path or "."
         self.config = dashboard_config or self._default_config()
         
-        # Initialize logger early
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         
-        # Initialize Phase 1 collector manager
         self.collector_manager = None
         self._initialize_collectors()
         
@@ -246,7 +243,6 @@ class RealTimeMetricsDashboard:
                     workspace_path=self.workspace_path
                 )
                 
-                # Initialize and start collectors
                 if self.collector_manager.initialize():
                     self.collector_manager.start_all_collectors()
                     self.logger.info("Phase 1 data collectors initialized successfully")
@@ -277,10 +273,8 @@ class RealTimeMetricsDashboard:
             return
         
         try:
-            # Create metrics directory
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # Create database tables
             with sqlite3.connect(str(self.db_path)) as conn:
                 cursor = conn.cursor()
                 
@@ -364,13 +358,10 @@ class RealTimeMetricsDashboard:
     def get_current_dashboard_state(self) -> Dict[str, Any]:
         """Get current dashboard state and latest metrics."""
         try:
-            # Get latest unified snapshot
             latest_snapshot = self.get_unified_metrics_snapshot()
             
-            # Calculate uptime
             uptime_seconds = (datetime.now() - self.dashboard_start_time).total_seconds()
             
-            # Get system status
             dashboard_state = {
                 'dashboard_status': self.status.value,
                 'uptime_seconds': uptime_seconds,
@@ -423,7 +414,6 @@ class RealTimeMetricsDashboard:
         try:
             timestamp = datetime.now()
             
-            # Initialize metric values
             collectors_active = 0
             collectors_total = 0
             collection_success_rate = 0.0
@@ -462,7 +452,6 @@ class RealTimeMetricsDashboard:
                         if health.status == CollectorStatus.ACTIVE
                     )
                     
-                    # Calculate success rate
                     if collector_health:
                         successful_collections = sum(
                             1 for health in collector_health.values() 
@@ -470,7 +459,6 @@ class RealTimeMetricsDashboard:
                         )
                         collection_success_rate = successful_collections / len(collector_health)
                     
-                    # Get collection time metrics
                     all_metrics = self.collector_manager.collect_all_metrics()
                     if all_metrics:
                         collection_times = []
@@ -531,7 +519,6 @@ class RealTimeMetricsDashboard:
                 except Exception as e:
                     self.logger.warning(f"Failed to collect Phase 2 metrics: {e}")
             
-            # Check for alerts
             active_alerts = self._check_and_update_alerts({
                 'brain_health_score': brain_health_score,
                 'collection_success_rate': collection_success_rate,
@@ -544,7 +531,6 @@ class RealTimeMetricsDashboard:
                 'workspace_health_score': workspace_health_score
             })
             
-            # Create unified snapshot
             snapshot = UnifiedMetricsSnapshot(
                 timestamp=timestamp,
                 collectors_active=collectors_active,
@@ -919,7 +905,6 @@ if __name__ == "__main__":
     print("🎯 CORTEX 3.0 Phase 2 - Real-Time Metrics Dashboard Test")
     print("=" * 70)
     
-    # Create dashboard with test configuration
     test_config = {
         'monitoring_interval_seconds': 10,  # Faster for testing
         'auto_start': True,
@@ -940,7 +925,6 @@ if __name__ == "__main__":
     # Wait for initial data collection
     time.sleep(5)
     
-    # Get dashboard state
     dashboard_state = get_dashboard_summary(dashboard)
     
     print("📊 Current Dashboard State:")

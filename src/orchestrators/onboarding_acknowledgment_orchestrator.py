@@ -24,7 +24,6 @@ USAGE:
     
     orchestrator = OnboardingAcknowledgmentOrchestrator()
     
-    # Check if user needs onboarding
     if orchestrator.needs_onboarding():
         # Start onboarding flow
         step1 = orchestrator.execute_step_1()

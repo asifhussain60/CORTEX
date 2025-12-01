@@ -119,14 +119,12 @@ class AzureDevOpsIntegration:
             List of file changes with paths and content
         """
         try:
-            # Get iteration (commit range)
             iterations_url = (
                 f"{self.config.base_url}/git/repositories/"
                 f"{self.config.repository}/pullrequests/{pr_id}/iterations"
                 f"?api-version={self.config.api_version}"
             )
             
-            # Get file changes
             changes_url = (
                 f"{self.config.base_url}/git/repositories/"
                 f"{self.config.repository}/pullrequests/{pr_id}/iterations/1"
@@ -378,7 +376,6 @@ class AzureDevOpsIntegration:
             medium = [v for v in violations if v["severity"] == "medium"]
             low = [v for v in violations if v["severity"] == "low"]
             
-            # Create summary
             summary_lines = [
                 "# 🤖 CORTEX Code Review",
                 "",

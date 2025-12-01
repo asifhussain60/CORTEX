@@ -271,7 +271,6 @@ class EnterpriseDocumentationOrchestratorModule(BaseOperationModule):
             
             generator = RealLiveDataGenerator(analytics_root, docs_output_dir)
             
-            # Check if data exists
             if not generator.has_data():
                 logger.info("No analytics data found, skipping Real Live Data generation")
                 return None
@@ -285,7 +284,6 @@ class EnterpriseDocumentationOrchestratorModule(BaseOperationModule):
                 (f" + aggregate dashboard" if result['aggregate_dashboard'] else "")
             )
             
-            # Return navigation structure
             return generator.get_navigation_structure()
             
         except ImportError as e:

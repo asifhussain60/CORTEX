@@ -110,7 +110,6 @@ class VacuumSQLiteDatabasesModule(BaseOperationModule):
             
             for db_path in db_files:
                 try:
-                    # Get size before vacuum
                     size_before = db_path.stat().st_size
                     
                     # Run VACUUM
@@ -118,7 +117,6 @@ class VacuumSQLiteDatabasesModule(BaseOperationModule):
                     conn.execute("VACUUM")
                     conn.close()
                     
-                    # Get size after vacuum
                     size_after = db_path.stat().st_size
                     space_recovered = size_before - size_after
                     

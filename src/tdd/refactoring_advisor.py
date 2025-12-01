@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import textwrap
 
-# Import existing refactoring intelligence
 from src.workflows.refactoring_intelligence import (
     CodeSmellDetector,
     RefactoringEngine,
@@ -212,7 +211,6 @@ class RefactoringAdvisor:
         parts = smell.location.split(':')
         line_num = int(parts[1]) if len(parts) > 1 else 1
         
-        # Get code context (before)
         lines = code.splitlines()
         start = max(0, line_num - 3)
         end = min(len(lines), line_num + 3)

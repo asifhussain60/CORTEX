@@ -122,7 +122,6 @@ class ConnectionManager:
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        # Create schema_version table if not exists
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS schema_version (
                 version INTEGER PRIMARY KEY,
@@ -130,7 +129,6 @@ class ConnectionManager:
             )
         """)
         
-        # Get current version
         cursor.execute("SELECT MAX(version) FROM schema_version")
         current = cursor.fetchone()[0] or 0
         

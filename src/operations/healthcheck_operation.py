@@ -281,7 +281,6 @@ class HealthCheckOperation(BaseOperationModule):
                 logger.warning("Skipping analytics recording due to validation error")
                 return
             
-            # Initialize analytics collector
             analytics = BrainAnalyticsCollector(brain_path=self.brain_path)
             
             # Record strategic health snapshot
@@ -356,14 +355,12 @@ class HealthCheckOperation(BaseOperationModule):
         
         brain_path = Path.cwd() / "cortex-brain"
         
-        # Check brain directory exists
         if not brain_path.exists():
             return {
                 'status': 'critical',
                 'issues': ['cortex-brain/ directory not found'],
             }
         
-        # Check critical files
         critical_files = [
             'brain-protection-rules.yaml',
             'schema.sql',
@@ -376,7 +373,6 @@ class HealthCheckOperation(BaseOperationModule):
                 issues.append(f"Missing critical file: {file_name}")
                 status = 'critical'
         
-        # Check tier directories
         tiers = ['tier1', 'tier2', 'tier3']
         for tier in tiers:
             tier_path = brain_path / tier
@@ -384,7 +380,6 @@ class HealthCheckOperation(BaseOperationModule):
                 issues.append(f"Missing {tier}/ directory")
                 status = 'warning'
         
-        # Check documents organization
         docs_path = brain_path / "documents"
         if not docs_path.exists():
             issues.append("Missing documents/ directory")
@@ -417,14 +412,12 @@ class HealthCheckOperation(BaseOperationModule):
                 continue
             
             try:
-                # Get database size
                 size_mb = db_path.stat().st_size / (1024 * 1024)
                 
                 # Try to connect
                 conn = sqlite3.connect(str(db_path))
                 cursor = conn.cursor()
                 
-                # Check integrity
                 cursor.execute("PRAGMA integrity_check")
                 integrity_result = cursor.fetchone()[0]
                 
@@ -432,7 +425,6 @@ class HealthCheckOperation(BaseOperationModule):
                     issues.append(f"{db_name} database integrity check failed")
                     status = 'critical'
                 
-                # Get table count
                 cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'")
                 table_count = cursor.fetchone()[0]
                 
@@ -539,10 +531,8 @@ class HealthCheckOperation(BaseOperationModule):
         try:
             catalog = EnhancementCatalog()
             
-            # Get catalog statistics
             stats = catalog.get_catalog_stats()
             
-            # Check for staleness (> 7 days since any review)
             last_reviews = {}
             for review_type in ['documentation', 'epm_setup', 'alignment', 'upgrade', 'admin_help', 'healthcheck']:
                 last_review = catalog.get_last_review_timestamp(review_type)
@@ -555,12 +545,10 @@ class HealthCheckOperation(BaseOperationModule):
                         if status == 'healthy':
                             status = 'warning'
             
-            # Check for catalog integrity
             if stats['total_features'] == 0:
                 issues.append("Enhancement catalog is empty - run discovery")
                 status = 'warning'
             
-            # Check for discovery engine availability
             try:
                 engine = EnhancementDiscoveryEngine()
                 engine_status = 'available'

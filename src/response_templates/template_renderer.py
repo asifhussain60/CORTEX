@@ -75,10 +75,8 @@ class TemplateRenderer:
         # Apply verbosity filtering first
         content = self.apply_verbosity(content, verbosity)
         
-        # Process conditionals
         content = self._process_conditionals(content, context)
         
-        # Process loops
         content = self._process_loops(content, context)
         
         # Substitute placeholders
@@ -98,7 +96,6 @@ class TemplateRenderer:
         Returns:
             Enriched context with tech stack placeholders
         """
-        # Check if user_profile exists in context
         user_profile = context.get('user_profile', {})
         if not user_profile:
             return context
@@ -108,7 +105,6 @@ class TemplateRenderer:
         if not tech_stack or not isinstance(tech_stack, dict):
             return context
         
-        # Get cloud provider from tech stack
         cloud_provider = tech_stack.get('cloud_provider', '').lower()
         
         # Map to deployment options

@@ -17,7 +17,6 @@ from pathlib import Path
 from typing import Dict, Optional, List
 from datetime import datetime
 
-# Import CORTEX enhancement catalog
 from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
 from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 
@@ -79,7 +78,6 @@ class SetupEPMOrchestrator:
         """
         logger.info(f"Starting Setup EPM for repository: {self.repo_name}")
         
-        # Check for existing file
         output_path = self.repo_path / ".github" / "copilot-instructions.md"
         
         if output_path.exists() and not force:
@@ -148,7 +146,6 @@ class SetupEPMOrchestrator:
         # Check Python first (prioritized after migration from Node.js)
         if (self.repo_path / "requirements.txt").exists() or (self.repo_path / "setup.py").exists():
             return "Python"
-        # Check for other languages
         if (self.repo_path / "package.json").exists():
             return "JavaScript/TypeScript"
         if (self.repo_path / "Gemfile").exists():
@@ -166,7 +163,6 @@ class SetupEPMOrchestrator:
     
     def _detect_framework(self) -> str:
         """Detect framework/library (Python prioritized)"""
-        # Check Python frameworks first
         if (self.repo_path / "requirements.txt").exists():
             try:
                 reqs = (self.repo_path / "requirements.txt").read_text().lower()
@@ -202,14 +198,12 @@ class SetupEPMOrchestrator:
     
     def _detect_build_system(self) -> str:
         """Detect build system (Python prioritized)"""
-        # Check Python build systems first
         if (self.repo_path / "setup.py").exists():
             return "setuptools"
         if (self.repo_path / "requirements.txt").exists():
             return "pip"
         if (self.repo_path / "pyproject.toml").exists():
             return "poetry"
-        # Check other build systems
         if (self.repo_path / "Makefile").exists():
             return "make"
         if (self.repo_path / "package.json").exists():
@@ -225,7 +219,6 @@ class SetupEPMOrchestrator:
     
     def _detect_test_framework(self) -> str:
         """Detect test framework (Python prioritized)"""
-        # Check Python test frameworks first
         if (self.repo_path / "pytest.ini").exists() or "pytest" in (self.repo_path / "requirements.txt").read_text() if (self.repo_path / "requirements.txt").exists() else "":
             return "pytest"
         if (self.repo_path / "tests").exists() and (self.repo_path / "tests" / "__init__.py").exists():
@@ -517,7 +510,6 @@ start tdd              # Begin TDD workflow
             result["issues"].append("Entry point not found at .github/prompts/CORTEX.prompt.md")
             logger.warning("  ❌ Entry point NOT found at expected location")
         
-        # Check 2: cortex-brain/ structure exists
         brain_path = cortex_root / 'cortex-brain'
         required_dirs = ['tier1', 'tier3', 'documents', 'templates']
         brain_ok = True
@@ -569,7 +561,6 @@ start tdd              # Begin TDD workflow
             result["checks_failed"] += 1
             logger.warning("  ❌ Response templates invalid or missing")
         
-        # Check 4: Key orchestrators exist
         orchestrators_path = cortex_root / 'src' / 'orchestrators'
         key_orchestrators = [
             'planning_orchestrator.py',
@@ -595,7 +586,6 @@ start tdd              # Begin TDD workflow
             result["checks_failed"] += 1
             logger.warning("  ❌ Some orchestrators missing")
         
-        # Calculate final status
         total_checks = result["checks_passed"] + result["checks_failed"]
         if result["checks_failed"] == 0:
             result["status"] = "healthy"
@@ -654,11 +644,9 @@ start tdd              # Begin TDD workflow
             Dict with discovered capabilities
         """
         try:
-            # Initialize catalog and discovery engine
             catalog = EnhancementCatalog()
             discovery = EnhancementDiscoveryEngine()
             
-            # Get last review timestamp for EPM
             last_review = catalog.get_last_review_timestamp(review_type='epm_setup')
             
             # Discover features since last review (or all if first run)
@@ -696,7 +684,6 @@ start tdd              # Begin TDD workflow
                 notes=f"Setup EPM for {self.repo_name}"
             )
             
-            # Get all features (for template population)
             all_features = catalog.get_all_features(status=AcceptanceStatus.DISCOVERED)
             all_features.extend(catalog.get_all_features(status=AcceptanceStatus.ACCEPTED))
             

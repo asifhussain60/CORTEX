@@ -71,7 +71,6 @@ def create_orchestrator_from_yaml(
     # Load configuration
     config = load_setup_config(config_path)
     
-    # Get profile or use default
     if profile not in config.get('profiles', {}):
         logger.warning(f"Profile '{profile}' not found, using default")
         profile = config.get('default_profile', 'standard')
@@ -83,7 +82,6 @@ def create_orchestrator_from_yaml(
     logger.info(f"  Description: {profile_config['description']}")
     logger.info(f"  Modules: {len(selected_modules)}")
     
-    # Create orchestrator
     orchestrator = SetupOrchestrator()
     
     # Register modules
@@ -95,7 +93,6 @@ def create_orchestrator_from_yaml(
             logger.debug(f"Skipping module (not in profile): {module_id}")
             continue
         
-        # Get module class from registry
         module_class = MODULE_REGISTRY.get(module_id)
         if not module_class:
             logger.warning(f"Module class not found for: {module_id} (skipping)")

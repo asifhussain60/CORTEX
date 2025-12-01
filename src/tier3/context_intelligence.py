@@ -233,7 +233,6 @@ class ContextIntelligence:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database
         self._init_database()
     
     def _init_database(self):
@@ -332,7 +331,6 @@ class ContextIntelligence:
             WHERE expires_at < CURRENT_TIMESTAMP
         """)
         
-        # Get cache value
         cursor.execute("""
             SELECT cache_value FROM context_cache
             WHERE cache_key = ?
@@ -435,7 +433,6 @@ class ContextIntelligence:
                     current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
                     current_contributor = contributor
                     
-                    # Initialize metric for this date
                     key = (current_date, current_contributor)
                     if key not in metrics_by_date:
                         metrics_by_date[key] = {
@@ -591,7 +588,6 @@ class ContextIntelligence:
         period_end = date.today()
         period_start = period_end - timedelta(days=days)
         
-        # Check cache first (60 minute TTL)
         cache_key = f"file_hotspots_{days}d_{period_start}_{period_end}"
         cached = self._get_cache(cache_key)
         
@@ -618,7 +614,6 @@ class ContextIntelligence:
         
         # Cache miss or invalid - compute hotspots
         try:
-            # Get total commits in period
             since_str = period_start.strftime("%Y-%m-%d")
             cmd_total = [
                 "git", "-C", str(repo_path), "rev-list",
@@ -631,7 +626,6 @@ class ContextIntelligence:
             if total_commits == 0:
                 return []
             
-            # Get file edit counts
             cmd_files = [
                 "git", "-C", str(repo_path), "log",
                 f"--since={since_str}",
@@ -646,12 +640,10 @@ class ContextIntelligence:
                 if line.strip():
                     file_edits[line.strip()] = file_edits.get(line.strip(), 0) + 1
             
-            # Calculate churn rates and stability
             hotspots = []
             for file_path, edits in file_edits.items():
                 churn_rate = edits / total_commits
                 
-                # Classify stability
                 if churn_rate < self.CHURN_STABLE_THRESHOLD:
                     stability = Stability.STABLE
                 elif churn_rate < self.CHURN_MODERATE_THRESHOLD:
@@ -789,7 +781,6 @@ class ContextIntelligence:
             else:
                 previous_window.append(metric)
         
-        # Calculate velocities
         current_velocity = sum(m.commits_count for m in current_window)
         previous_velocity = sum(m.commits_count for m in previous_window)
         
@@ -826,7 +817,6 @@ class ContextIntelligence:
         """
         insights = []
         
-        # Check velocity trends
         velocity = self.calculate_commit_velocity()
         if velocity['trend'] == 'declining':
             insights.append(Insight(
@@ -841,7 +831,6 @@ class ContextIntelligence:
                 data_snapshot=velocity
             ))
         
-        # Check for unstable files
         unstable_files = self.get_unstable_files(limit=5)
         for hotspot in unstable_files:
             if hotspot.churn_rate > 0.3:  # >30% churn

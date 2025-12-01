@@ -61,13 +61,11 @@ class ConversationTrackingModule(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")
             return False, issues
         
-        # Check brain initialization
         brain_initialized = context.get('brain_initialized', False)
         if not brain_initialized:
             issues.append("Brain must be initialized before enabling conversation tracking")
@@ -102,7 +100,6 @@ class ConversationTrackingModule(BaseOperationModule):
                     duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Check if daemon is already running
             is_running = self._is_daemon_running()
             if is_running:
                 self.log_info("Ambient capture daemon already running")

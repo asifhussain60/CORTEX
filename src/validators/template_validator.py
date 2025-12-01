@@ -325,7 +325,6 @@ class TemplateValidator:
         info = []
         content = template_data.get('content', '')
         
-        # Check if standard emojis are used
         expected_emojis = {
             'header': ('🧠', '\\U0001F9E0'),
             'understanding': ('🎯', '\\U0001F3AF'),

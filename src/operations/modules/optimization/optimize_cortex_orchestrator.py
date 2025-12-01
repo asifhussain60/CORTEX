@@ -98,24 +98,20 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root') or self.project_root
         if not project_root or not project_root.exists():
             issues.append("Project root not found or invalid")
         
-        # Check git repository
         if project_root:
             git_dir = project_root / '.git'
             if not git_dir.exists():
                 issues.append("Not a git repository - optimization requires git tracking")
         
-        # Check test suite
         if project_root:
             tests_dir = project_root / 'tests'
             if not tests_dir.exists():
                 issues.append("Test suite not found")
         
-        # Check knowledge graph
         if project_root:
             brain_dir = project_root / 'cortex-brain'
             knowledge_graph = brain_dir / 'knowledge-graph.yaml'
@@ -149,7 +145,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         logger.info("CORTEX OPTIMIZATION ORCHESTRATOR")
         logger.info("=" * 80)
         
-        # Initialize metrics
         metrics = OptimizationMetrics(
             optimization_id=f"opt_{start_time.strftime('%Y%m%d_%H%M%S')}",
             timestamp=start_time
@@ -184,7 +179,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 paths_fixed = path_cleanup_result.get('paths_replaced', 0)
                 if paths_fixed > 0:
                     logger.info(f"✅ Replaced {paths_fixed} hardcoded paths with CORTEX_ROOT variable")
-                    # Create git commit for path fixes
                     self._create_git_commit_for_path_cleanup(project_root, path_cleanup_result, metrics)
                 else:
                     logger.info("ℹ️  No hardcoded paths found")
@@ -280,7 +274,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         Returns:
             True if admin environment, False otherwise
         """
-        # Check for admin directories
         admin_ops = project_root / "src" / "operations" / "modules" / "admin"
         admin_brain = project_root / "cortex-brain" / "admin"
         
@@ -546,7 +539,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 insights_count = len(kg['validation_insights'])
                 insights.append(f"{insights_count} validation insights captured")
                 
-                # Check for high-frequency patterns
                 for name, data in kg['validation_insights'].items():
                     if isinstance(data, dict):
                         freq = data.get('frequency', 0)
@@ -587,7 +579,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         module_dirs = [d for d in ops_dir.iterdir() if d.is_dir() and not d.name.startswith('__')]
         insights.append(f"{len(module_dirs)} operation categories")
         
-        # Check for incomplete modules
         for module_dir in module_dirs:
             py_files = list(module_dir.glob('*.py'))
             if len(py_files) == 0:
@@ -625,7 +616,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             total_rules = sum(len(layer.get('rules', [])) for layer in layers)
             insights.append(f"{total_rules} protection rules defined")
             
-            # Check for SKULL rules
             skull_rules = [
                 rule for layer in layers
                 for rule in layer.get('rules', [])
@@ -877,7 +867,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             Commit hash if successful, None otherwise
         """
         try:
-            # Check if there are changes
             status_result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 cwd=project_root,
@@ -905,7 +894,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                 check=True
             )
             
-            # Get commit hash
             hash_result = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=project_root,
@@ -1021,7 +1009,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         if paths_replaced == 0:
             return
         
-        # Create descriptive commit message
         commit_message = f"fix: Replace {paths_replaced} hardcoded path(s) with CORTEX_ROOT variable\n\n"
         commit_message += f"Modified {files_modified} file(s) to use dynamic path resolution.\n"
         commit_message += "This ensures CORTEX works across multiple development machines.\n\n"
@@ -1036,7 +1023,6 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             if len(modified_files) > 10:
                 commit_message += f"  - ... and {len(modified_files) - 10} more file(s)\n"
         
-        # Create commit
         commit_hash = self._git_commit(project_root, commit_message)
         
         if commit_hash:

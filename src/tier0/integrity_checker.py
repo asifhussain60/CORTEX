@@ -81,7 +81,6 @@ class IntegrityChecker:
         self.brain_root = Path(brain_root)
         self.auto_repair = auto_repair
         
-        # Define data structure paths
         self.data_paths = {
             "tier1_history": self.brain_root / "conversation-history.jsonl",
             "tier1_context": self.brain_root / "conversation-context.jsonl",
@@ -103,23 +102,18 @@ class IntegrityChecker:
             "checks_run": []
         }
         
-        # Check Tier 1: Conversation History
         issues.extend(self._check_tier1_history())
         metadata["checks_run"].append("tier1_history")
         
-        # Check Tier 1: Conversation Context
         issues.extend(self._check_tier1_context())
         metadata["checks_run"].append("tier1_context")
         
-        # Check Tier 2: Knowledge Graph
         issues.extend(self._check_tier2_knowledge())
         metadata["checks_run"].append("tier2_knowledge")
         
-        # Check Tier 3: Development Context
         issues.extend(self._check_tier3_context())
         metadata["checks_run"].append("tier3_context")
         
-        # Check cross-tier consistency
         issues.extend(self._check_cross_tier_consistency())
         metadata["checks_run"].append("cross_tier_consistency")
         
@@ -151,7 +145,6 @@ class IntegrityChecker:
         issues = []
         history_path = self.data_paths["tier1_history"]
         
-        # Check if file exists
         if not history_path.exists():
             issues.append(IntegrityIssue(
                 component="tier1_history",
@@ -168,12 +161,10 @@ class IntegrityChecker:
             
             return issues
         
-        # Check file corruption
         try:
             with open(history_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             
-            # Validate JSON Lines format
             for i, line in enumerate(lines, 1):
                 if not line.strip():
                     continue
@@ -181,7 +172,6 @@ class IntegrityChecker:
                 try:
                     entry = json.loads(line)
                     
-                    # Check required fields
                     required_fields = ["timestamp", "conversation_id", "role", "content"]
                     missing_fields = [f for f in required_fields if f not in entry]
                     
@@ -195,7 +185,6 @@ class IntegrityChecker:
                             auto_repairable=False
                         ))
                     
-                    # Check timestamp validity
                     if "timestamp" in entry:
                         try:
                             datetime.fromisoformat(entry["timestamp"])
@@ -298,12 +287,10 @@ class IntegrityChecker:
             
             return issues
         
-        # Check YAML corruption
         try:
             with open(knowledge_path, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
             
-            # Validate structure
             if data is None:
                 issues.append(IntegrityIssue(
                     component="tier2_knowledge",
@@ -323,7 +310,6 @@ class IntegrityChecker:
                     affected_data=str(knowledge_path)
                 ))
             else:
-                # Check for patterns section
                 if "patterns" not in data:
                     issues.append(IntegrityIssue(
                         component="tier2_knowledge",
@@ -335,7 +321,6 @@ class IntegrityChecker:
                         repair_action="Add 'patterns' section"
                     ))
                 
-                # Check confidence values
                 patterns = data.get("patterns", {})
                 for pattern_id, pattern_data in patterns.items():
                     if isinstance(pattern_data, dict):
@@ -391,7 +376,6 @@ class IntegrityChecker:
             
             return issues
         
-        # Check YAML corruption and staleness
         try:
             with open(context_path, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
@@ -405,7 +389,6 @@ class IntegrityChecker:
                     affected_data=str(context_path)
                 ))
             elif isinstance(data, dict):
-                # Check for last_updated timestamp
                 if "last_updated" in data:
                     try:
                         last_updated = datetime.fromisoformat(data["last_updated"])
@@ -470,7 +453,6 @@ class IntegrityChecker:
                             except json.JSONDecodeError:
                                 pass
             
-            # Check Tier 2 for raw conversation data
             knowledge_path = self.data_paths["tier2_knowledge"]
             if knowledge_path.exists():
                 with open(knowledge_path, 'r', encoding='utf-8') as f:
@@ -505,7 +487,6 @@ class IntegrityChecker:
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, 'w', encoding='utf-8') as f:
-                # Initialize with header comment
                 pass
         except Exception as e:
             print(f"Failed to repair missing history: {e}")

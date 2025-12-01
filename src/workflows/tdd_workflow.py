@@ -124,7 +124,6 @@ class TDDWorkflow:
             results['error'] = f"REFACTOR phase error: {str(e)}"
             return results
         
-        # Validate Definition of Done (Rule #21)
         try:
             dod_result = self._validate_dod(refactor_result['files'])
             results['dod_validated'] = dod_result['passed']

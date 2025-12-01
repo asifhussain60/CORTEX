@@ -140,7 +140,6 @@ class CommitOrchestrator:
         
         issues = []
         
-        # Check current branch
         branch = self._get_current_branch()
         if not branch:
             issues.append("Failed to get current branch")
@@ -152,12 +151,10 @@ class CommitOrchestrator:
                 "issues": issues
             }
         
-        # Check for untracked files
         untracked = self._get_untracked_files()
         if untracked:
             issues.append(f"Found {len(untracked)} untracked file(s)")
         
-        # Check for uncommitted changes
         has_changes = self._has_uncommitted_changes()
         if has_changes:
             issues.append("Found uncommitted changes")
@@ -233,7 +230,6 @@ class CommitOrchestrator:
                 return False, f"Merge conflict detected. Please resolve conflicts manually:\n{output}"
             return False, f"Failed to pull: {output}"
         
-        # Check for conflicts after pull
         if self._has_merge_conflicts():
             return False, "Merge conflicts detected. Please resolve conflicts and run 'commit' again."
         
@@ -397,7 +393,6 @@ class CommitOrchestrator:
         steps_completed.append("Pushed to origin")
         logger.info(f"✅ {msg}")
         
-        # Calculate duration
         duration = (datetime.now() - start_time).total_seconds()
         
         logger.info("\n" + "=" * 60)

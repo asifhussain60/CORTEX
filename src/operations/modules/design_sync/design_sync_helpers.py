@@ -55,7 +55,6 @@ class RecentUpdatesGenerator:
         updates = []
         
         try:
-            # Get commits from last N days
             since_date = (datetime.now() - timedelta(days=lookback_days)).strftime('%Y-%m-%d')
             
             result = subprocess.run(
@@ -180,7 +179,6 @@ class CommitReporter:
                 )
                 
                 if result.returncode == 0:
-                    # Get commit hash
                     hash_result = subprocess.run(
                         ['git', 'rev-parse', 'HEAD'],
                         cwd=project_root,

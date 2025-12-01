@@ -304,7 +304,6 @@ class TDDWorkflowOrchestrator:
         source_path = Path(source_file).resolve()
         cortex_root = Path(__file__).parent.parent.parent.resolve()  # CORTEX root
         
-        # Check if testing CORTEX code itself
         try:
             source_path.relative_to(cortex_root)
             # Source is within CORTEX → Tests stay in CORTEX
@@ -443,7 +442,6 @@ class TDDWorkflowOrchestrator:
         if not session_id:
             session_id = f"tdd_{uuid.uuid4().hex[:8]}"
         
-        # Initialize state machine
         self.state_machine = TDDStateMachine(feature_name, session_id)
         
         # Phase 4 - Git Checkpoint: Create checkpoint at session start
@@ -456,7 +454,6 @@ class TDDWorkflowOrchestrator:
             except Exception as e:
                 print(f"⚠️  Git checkpoint creation failed: {e}")
         
-        # Create session context
         self.current_context = TDDContext(
             session_id=session_id,
             feature_name=feature_name,
@@ -676,7 +673,6 @@ class TDDWorkflowOrchestrator:
         print(f"🔧 Running tests with {self.test_executor.framework}...")
         test_results = self.test_executor.run_tests(test_file=test_file, verbose=verbose)
         
-        # Check for execution errors
         if 'error' in test_results:
             print(f"❌ Test execution failed: {test_results['error']}")
             return {
@@ -842,7 +838,6 @@ class TDDWorkflowOrchestrator:
             except Exception as e:
                 print(f"⚠️  Git checkpoint creation failed: {e}")
         
-        # Get cycle metrics
         cycles = self.state_machine.get_cycle_metrics()
         latest_cycle = cycles[-1] if cycles else None
         
@@ -982,7 +977,6 @@ class TDDWorkflowOrchestrator:
         # Search in project root for view files
         project_root = PathLib(self.config.project_root)
         
-        # Get module name (without extension)
         module_name = module_path.stem
         
         # Search for views with same or similar names

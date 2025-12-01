@@ -35,7 +35,6 @@ class WorkspaceContextManager:
         # Discover workspace
         workspace.discover_workspace()
         
-        # Get active file from editor
         active_file = workspace.get_active_file_context()
         
         # Map test to source
@@ -187,7 +186,6 @@ class WorkspaceContextManager:
         # Determine if test or source file
         is_test = self._is_test_file(self.active_file)
         
-        # Get relative path
         try:
             relative_path = self.active_file.relative_to(self.workspace_root)
         except ValueError:
@@ -292,7 +290,6 @@ class WorkspaceContextManager:
                     if (self.workspace_root / indicator).exists():
                         scores[ptype] += 2  # Exact matches score higher
         
-        # Return highest scoring type
         if max(scores.values()) == 0:
             return 'unknown'
         
@@ -301,12 +298,10 @@ class WorkspaceContextManager:
     def _detect_test_framework(self) -> str:
         """Auto-detect test framework."""
         if self.project_type == 'python':
-            # Check pytest indicators
             for indicator in self.FRAMEWORK_INDICATORS['pytest']:
                 if (self.workspace_root / indicator).exists():
                     return 'pytest'
             
-            # Check for unittest imports in test files
             test_dirs = self._find_test_directories()
             for test_dir in test_dirs:
                 for test_file in test_dir.glob('test_*.py'):
@@ -321,7 +316,6 @@ class WorkspaceContextManager:
                 if (self.workspace_root / indicator).exists():
                     return 'jest'
             
-            # Check package.json
             package_json = self.workspace_root / 'package.json'
             if package_json.exists():
                 data = json.loads(package_json.read_text())
@@ -331,7 +325,6 @@ class WorkspaceContextManager:
             return 'jest'  # Default for JS/TS
         
         elif self.project_type == 'csharp':
-            # Check for xunit references in .csproj
             for csproj in self.workspace_root.glob('**/*.csproj'):
                 content = csproj.read_text()
                 if 'xunit' in content.lower():
@@ -395,7 +388,6 @@ class WorkspaceContextManager:
             if re.search(pattern, name):
                 return True
         
-        # Check if in test directory
         for test_dir in self.test_directories:
             try:
                 file_path.relative_to(test_dir)
@@ -448,7 +440,6 @@ def on_workspace_context_available(workspace_context: Dict[str, Any]) -> Dict[st
     workspace_root = Path(workspace_context.get('workspace_root', '.'))
     manager = WorkspaceContextManager(workspace_root)
     
-    # Set active file if provided
     if 'active_file' in workspace_context:
         manager.active_file = Path(workspace_context['active_file'])
     

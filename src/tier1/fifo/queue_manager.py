@@ -27,7 +27,6 @@ class QueueManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create conversations table if it doesn't exist
         cursor.execute("""
             SELECT name FROM sqlite_master 
             WHERE type='table' AND name='conversations'
@@ -47,7 +46,6 @@ class QueueManager:
                 )
             """)
         
-        # Create eviction_log table if it doesn't exist
         cursor.execute("""
             SELECT name FROM sqlite_master 
             WHERE type='table' AND name='eviction_log'

@@ -52,13 +52,11 @@ class BaseDataCollector(ABC):
         """Collect data with caching support"""
         start_time = time.time()
         
-        # Check cache
         if (not force_refresh and 
             self.cached_result and 
             self.last_collection and
             (datetime.now() - self.last_collection).total_seconds() < self.cache_duration_seconds):
             
-            # Return cached result
             self.cached_result.collection_time_ms = (time.time() - start_time) * 1000
             return self.cached_result
         
@@ -132,7 +130,6 @@ class BrainMetricsCollector(BaseDataCollector):
             "learning_rate": 3.2
         })
         
-        # Calculate overall brain health
         metrics["brain_health_score"] = self._calculate_brain_health(metrics)
         
         return metrics
@@ -369,7 +366,6 @@ class WorkspaceHealthCollector(BaseDataCollector):
     def _analyze_build_status(self) -> Dict[str, Any]:
         """Analyze build and compilation status"""
         try:
-            # Check for common build files
             build_indicators = [
                 'Makefile', 'package.json', 'requirements.txt', 
                 'setup.py', 'pyproject.toml', '.csproj'

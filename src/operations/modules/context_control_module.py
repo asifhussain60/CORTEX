@@ -112,11 +112,9 @@ class ContextControlModule(BaseOperationModule):
         if any(trigger in request_lower for trigger in self.CLEAR_TRIGGERS):
             return "clear"
         
-        # Check show triggers
         if any(trigger in request_lower for trigger in self.SHOW_TRIGGERS):
             return "show"
         
-        # Check forget triggers LAST
         if any(trigger in request_lower for trigger in self.FORGET_TRIGGERS):
             return "forget"
         
@@ -282,12 +280,10 @@ class ContextControlModule(BaseOperationModule):
         if not self.working_memory:
             return 0
         
-        # Get all conversations
         conversations = self.working_memory.get_recent_conversations(limit=20)
         
         removed_count = 0
         for conv in conversations:
-            # Check if conversation is about topic
             summary = conv.get('summary', '').lower()
             entities = conv.get('entities', {})
             
@@ -320,7 +316,6 @@ class ContextControlModule(BaseOperationModule):
         if not self.working_memory:
             return 0
         
-        # Get count before clearing
         conversations = self.working_memory.get_recent_conversations(limit=20)
         count = len(conversations)
         

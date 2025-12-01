@@ -169,7 +169,6 @@ class Tier1API:
             outcome=outcome
         )
         
-        # Get conversation summary
         conversation = self.conversation_manager.get_conversation(conversation_id)
         
         # Handle case where conversation doesn't exist or was already deleted

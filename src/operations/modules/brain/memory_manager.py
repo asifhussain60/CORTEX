@@ -116,18 +116,15 @@ class MemoryPool:
             Allocation ID if successful
         """
         with self.lock:
-            # Check if allocation would exceed pool limit
             if self.current_size_bytes + size_bytes > self.max_size_bytes:
                 # Try to free some memory first
                 freed = self.cleanup_inactive_allocations()
                 self.logger.info(f"Freed {freed} bytes for new allocation")
                 
-                # Check again
                 if self.current_size_bytes + size_bytes > self.max_size_bytes:
                     self.logger.warning(f"Pool {self.zone.value} at capacity: {self.current_size_bytes}/{self.max_size_bytes}")
                     return None
             
-            # Create allocation
             self.allocation_counter += 1
             allocation_id = f"{self.zone.value}_{self.allocation_counter}"
             
@@ -191,7 +188,6 @@ class MemoryPool:
             to_cleanup = []
             
             for alloc_id, allocation in self.allocations.items():
-                # Check if allocation is old and unused
                 age = datetime.now() - allocation.timestamp
                 
                 if not allocation.is_active or age > timedelta(hours=1):
@@ -222,7 +218,6 @@ class MemoryPool:
         total_allocations = len(self.allocations)
         avg_allocation_size = self.current_size_bytes / max(total_allocations, 1)
         
-        # Calculate variance in allocation sizes
         size_variance = 0.0
         for allocation in self.allocations.values():
             size_variance += (allocation.size_bytes - avg_allocation_size) ** 2
@@ -287,7 +282,6 @@ class BrainMemoryManager:
         # Logger
         self.logger = logging.getLogger(__name__)
         
-        # Initialize memory tracking
         if not tracemalloc.is_tracing():
             tracemalloc.start()
         
@@ -329,7 +323,6 @@ class BrainMemoryManager:
         Returns:
             Allocation ID if successful
         """
-        # Check memory pressure
         pressure = self.get_memory_pressure()
         
         if pressure == MemoryPressure.CRITICAL:
@@ -627,7 +620,6 @@ if __name__ == "__main__":
     print("🧠 CORTEX 3.0 Phase 2 - Memory Manager Test")
     print("=" * 55)
     
-    # Initialize memory manager
     memory_manager = BrainMemoryManager(total_memory_limit_mb=100)
     
     # Test memory allocation
@@ -650,7 +642,6 @@ if __name__ == "__main__":
         else:
             print(f"   ❌ Failed to allocate {size/(1024*1024):.1f}MB in {zone.value}")
     
-    # Get memory metrics
     print("\n2. Memory Usage Analysis:")
     metrics = memory_manager.get_memory_metrics()
     

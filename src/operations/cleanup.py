@@ -120,7 +120,6 @@ def is_safe_to_delete(path: Path, project_root: Path) -> Tuple[bool, str]:
     path_str = str(path)
     path_name = path.name.lower()
     
-    # Check if in protected directory
     try:
         rel_path = path.relative_to(project_root)
         parts = rel_path.parts
@@ -130,15 +129,12 @@ def is_safe_to_delete(path: Path, project_root: Path) -> Tuple[bool, str]:
         # Path not relative to project_root
         return False, "Outside project root"
     
-    # Check protected filenames
     if path.name in protected_files:
         return False, f"Protected file: {path.name}"
     
-    # Check protected extensions
     if path.suffix.lower() in protected_extensions:
         return False, f"Protected extension: {path.suffix}"
     
-    # Check for brain databases
     if '.db' in path_name and 'cortex-brain' in path_str:
         return False, "Brain database file"
     
@@ -367,7 +363,6 @@ def cleanup_workspace(
     if categories is None:
         categories = list(CleanupCategory)
     
-    # Initialize cache
     cache = get_cache()
     
     result = CleanupResult()
@@ -395,7 +390,6 @@ def cleanup_workspace(
         items_to_delete.extend([(item, CleanupCategory.CACHE_DIRS) for item in large_caches])
         print(f"  Found {len(large_caches)} large cache files")
     
-    # Get cache statistics
     cache_stats = cache.get_stats("cleanup")
     if cache_stats:
         hit_rate = cache_stats.get('hit_rate', 0.0)
@@ -418,7 +412,6 @@ def cleanup_workspace(
             'message': 'Workspace already clean'
         }
     
-    # Calculate total size
     total_size = sum(get_size(item[0]) for item in items_to_delete)
     total_mb = total_size / (1024 * 1024)
     

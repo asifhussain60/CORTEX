@@ -78,7 +78,6 @@ class FileMetricsAnalyzer:
         period_start = period_end - timedelta(days=days)
         
         try:
-            # Get total commits in period
             since_str = period_start.strftime("%Y-%m-%d")
             cmd_total = [
                 "git", "-C", str(repo_path), "rev-list",
@@ -91,7 +90,6 @@ class FileMetricsAnalyzer:
             if total_commits == 0:
                 return []
             
-            # Get file edit counts
             cmd_files = [
                 "git", "-C", str(repo_path), "log",
                 f"--since={since_str}",
@@ -106,7 +104,6 @@ class FileMetricsAnalyzer:
                 if line.strip():
                     file_edits[line.strip()] = file_edits.get(line.strip(), 0) + 1
             
-            # Calculate churn rates and stability
             hotspots = []
             for file_path, edits in file_edits.items():
                 churn_rate = edits / total_commits

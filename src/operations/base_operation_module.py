@@ -188,7 +188,6 @@ class BaseOperationModule(ABC):
         self._metadata = None
         self._last_result = None
         self._execution_mode = ExecutionMode.LIVE
-        # Create logger for this specific module class
         self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")
     
     @property

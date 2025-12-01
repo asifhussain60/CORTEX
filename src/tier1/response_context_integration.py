@@ -58,7 +58,6 @@ class ResponseContextIntegration:
         conversations = context_data.get('relevant_conversations', [])
         relevance_scores = context_data.get('relevance_scores', [])
         
-        # Calculate quality indicators
         quality = ResponseContextIntegration._calculate_quality_indicators(
             conversations, relevance_scores
         )
@@ -104,7 +103,6 @@ class ResponseContextIntegration:
                 'memory_health': 'Empty'
             }
         
-        # Calculate average relevance score
         scores = [s.get('score', 0.0) for s in relevance_scores]
         avg_score = sum(scores) / len(scores) if scores else 0.0
         overall_score = avg_score * 10  # Scale to 0-10

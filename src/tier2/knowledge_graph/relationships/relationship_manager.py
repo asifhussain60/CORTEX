@@ -108,7 +108,6 @@ class RelationshipManager:
         conn = self.db.get_connection()
         cursor = conn.cursor()
 
-        # Validate both patterns exist
         cursor.execute("SELECT 1 FROM patterns WHERE pattern_id = ?", (from_pattern,))
         if cursor.fetchone() is None:
             raise ValueError(f"Source pattern not found: {from_pattern}")

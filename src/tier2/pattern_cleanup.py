@@ -148,7 +148,6 @@ class PatternCleanup:
                     logger.info(f"Skipping pattern {pattern_id}: Protected by CORTEX-core namespace")
                     continue
                 
-                # Calculate decay
                 last_access_date = datetime.fromisoformat(last_accessed)
                 days_since_access = (now - last_access_date).days
                 days_to_decay = max(0, days_since_access - self.DECAY_THRESHOLD_DAYS)
@@ -262,7 +261,6 @@ class PatternCleanup:
                         p2 = pattern_list[j]
                         p2_id, p2_title, p2_content = p2[0], p2[1], p2[2]
                         
-                        # Calculate similarity (simple Jaccard-style)
                         similarity = self._calculate_similarity(p1_title, p1_content, p2_title, p2_content)
                         
                         if similarity >= self.SIMILARITY_THRESHOLD:

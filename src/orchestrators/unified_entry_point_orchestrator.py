@@ -93,7 +93,6 @@ class UnifiedEntryPointOrchestrator:
         self.summaries_dir = self.cortex_root / "cortex-brain" / "documents" / "summaries"
         self.summaries_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize sub-orchestrators
         self.code_review_orch = self._init_code_review()
         self.ado_work_item_orch = self._init_ado_work_item()
         self.planning_orch = self._init_planning()
@@ -206,10 +205,8 @@ class UnifiedEntryPointOrchestrator:
                 result.implementation_notes = "ADO work item orchestrator not available"
                 return result
             
-            # Import work item type
             from src.orchestrators.ado_work_item_orchestrator import WorkItemType
             
-            # Create story
             if acceptance_criteria:
                 kwargs["acceptance_criteria"] = acceptance_criteria
             
@@ -265,10 +262,8 @@ class UnifiedEntryPointOrchestrator:
                 result.implementation_notes = "ADO work item orchestrator not available"
                 return result
             
-            # Import work item type
             from src.orchestrators.ado_work_item_orchestrator import WorkItemType
             
-            # Create feature
             if related_stories:
                 kwargs["related_work_items"] = related_stories
             

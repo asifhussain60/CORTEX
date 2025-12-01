@@ -30,7 +30,6 @@ except ImportError:
     from query_cache import SmartQueryCache, CacheMetrics
     from memory_manager import BrainMemoryManager, MemoryMetrics, MemoryZone, MemoryPressure
 
-# Import Phase 1 data collectors
 try:
     from src.collectors.brain_performance_collector import BrainPerformanceCollector
     from src.collectors.base_collector import CollectorMetric, CollectorPriority
@@ -98,7 +97,6 @@ class IntegratedBrainPerformanceSystem:
         self.brain_path = brain_path
         self.config = config or {}
         
-        # Initialize core components
         self.optimization_engine = BrainOptimizationEngine(brain_path)
         self.query_cache = SmartQueryCache(
             cache_size_mb=self.config.get('cache_size_mb', 50)
@@ -107,7 +105,6 @@ class IntegratedBrainPerformanceSystem:
             total_memory_limit_mb=self.config.get('memory_limit_mb', 200)
         )
         
-        # Initialize data collector (Phase 1 integration)
         self.performance_collector = None
         if BrainPerformanceCollector:
             try:
@@ -250,12 +247,10 @@ class IntegratedBrainPerformanceSystem:
     
     def get_unified_performance_snapshot(self) -> BrainPerformanceSnapshot:
         """Get comprehensive performance snapshot."""
-        # Get component metrics
         optimization_summary = self.optimization_engine.get_performance_summary()
         cache_stats = self.query_cache.get_cache_stats()
         memory_metrics = self.memory_manager.get_memory_metrics()
         
-        # Calculate tier averages
         tier_performance = optimization_summary['tier_performance']
         tier1_avg = tier_performance['tier1']['average_ms']
         tier2_avg = tier_performance['tier2']['average_ms']
@@ -282,7 +277,6 @@ class IntegratedBrainPerformanceSystem:
         
         optimizations_completed = len(optimization_summary['optimization_results'])
         
-        # Calculate health score
         health_score = self._calculate_health_score(
             tier1_avg, tier2_avg, tier3_avg, cache_hit_rate, memory_pressure
         )
@@ -347,7 +341,6 @@ class IntegratedBrainPerformanceSystem:
             memory_results = self.memory_manager.optimize_memory_usage()
             optimization_results['memory_optimization_results'] = memory_results
             
-            # Calculate overall improvement
             total_improvement = sum(
                 result.performance_improvement for result in engine_results.values()
             )
@@ -375,7 +368,6 @@ class IntegratedBrainPerformanceSystem:
         if not recent_snapshots:
             return {'error': 'No recent performance data available'}
         
-        # Calculate trends
         trends = {
             'period_hours': hours,
             'snapshots_analyzed': len(recent_snapshots),
@@ -555,7 +547,6 @@ if __name__ == "__main__":
     print("🧠 CORTEX 3.0 Phase 2 - Integrated Brain Performance System Test")
     print("=" * 75)
     
-    # Create optimized brain system
     system = create_optimized_brain_system("cortex-brain", {
         'cache_size_mb': 20,
         'memory_limit_mb': 100

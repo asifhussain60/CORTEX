@@ -42,14 +42,12 @@ class ConversationManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Check if tables exist
         cursor.execute("""
             SELECT name FROM sqlite_master 
             WHERE type='table' AND name='conversations'
         """)
         
         if not cursor.fetchone():
-            # Create schema
             cursor.execute("""
                 CREATE TABLE conversations (
                     conversation_id TEXT PRIMARY KEY,

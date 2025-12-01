@@ -190,7 +190,6 @@ class RollbackOrchestrator:
             - merge_in_progress (bool): Whether merge is in progress
         """
         try:
-            # Check for uncommitted changes
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 cwd=self.project_root,
@@ -208,7 +207,6 @@ class RollbackOrchestrator:
                         filename = line[3:].strip()
                         uncommitted.append(filename)
             
-            # Check for merge in progress
             merge_head = self.project_root / '.git' / 'MERGE_HEAD'
             merge_in_progress = merge_head.exists()
             
@@ -241,7 +239,6 @@ class RollbackOrchestrator:
         """
         git_status = self._get_git_status()
         
-        # Check for uncommitted changes
         if git_status['uncommitted_changes']:
             files = '\n'.join(f"  - {f}" for f in git_status['uncommitted_changes'])
             return {
@@ -250,7 +247,6 @@ class RollbackOrchestrator:
                 'details': SAFETY_MSG_UNCOMMITTED_DETAILS.format(files=files)
             }
         
-        # Check for merge in progress
         if git_status['merge_in_progress']:
             return {
                 'safe': False,
@@ -359,7 +355,6 @@ class RollbackOrchestrator:
                 'message': ROLLBACK_MSG_FORCED.format(checkpoint_id=checkpoint_id)
             }
         
-        # Validate checkpoint exists before proceeding
         if not self.validate_checkpoint(checkpoint_id):
             return {
                 'executed': False,

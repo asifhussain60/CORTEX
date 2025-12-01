@@ -59,7 +59,6 @@ class DocumentConverter:
         self.cache_dir = cache_dir or Path.cwd() / ".cache" / "conversions"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
-        # Check available converters
         self.has_pandoc = self._check_pandoc()
         self.has_pdftotext = self._check_pdftotext()
         self.has_python_docx = self._check_python_docx()
@@ -94,7 +93,6 @@ class DocumentConverter:
                 error_message=f"File not found: {file_path}"
             )
         
-        # Check cache first
         cached_path = self._get_cached_path(file_path)
         if self._is_cache_valid(file_path, cached_path):
             elapsed = (datetime.now() - start_time).total_seconds()

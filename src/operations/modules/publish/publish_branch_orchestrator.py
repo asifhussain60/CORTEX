@@ -87,12 +87,10 @@ class PublishBranchOrchestrator(BaseOperationModule):
         if not project_root.exists():
             return False, f"Project root does not exist: {project_root}"
         
-        # Check for publish script
         publish_script = project_root / "scripts" / "publish_to_branch.py"
         if not publish_script.exists():
             return False, f"Publish script not found: {publish_script}"
         
-        # Check for git (unless dry run)
         dry_run = context.get('dry_run', False)
         if not dry_run:
             git_dir = project_root / ".git"

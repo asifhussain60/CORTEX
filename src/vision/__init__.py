@@ -66,7 +66,6 @@ class VisionAPIIntegration:
         Returns:
             Analysis results or fallback results
         """
-        # Validate file
         if not os.path.exists(image_path):
             return self._handle_error(
                 FailureType.PROCESSING_ERROR,
@@ -74,10 +73,8 @@ class VisionAPIIntegration:
                 image_path
             )
         
-        # Get file info
         file_size_kb = os.path.getsize(image_path) / 1024
         
-        # Check file size
         if file_size_kb > 5000:  # 5MB limit
             return self._handle_error(
                 FailureType.FILE_TOO_LARGE,

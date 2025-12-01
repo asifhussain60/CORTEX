@@ -89,7 +89,6 @@ class PythonEnvironmentModule(BaseSetupModule):
     def validate_prerequisites(self, context: Dict) -> Tuple[bool, str]:
         """Validate Python is available."""
         try:
-            # Check Python version
             version_info = sys.version_info
             if version_info < (3, 8):
                 # Handle both named tuple and regular tuple
@@ -146,7 +145,6 @@ class PythonEnvironmentModule(BaseSetupModule):
     def rollback(self, context: Dict) -> bool:
         """Rollback environment changes if needed."""
         try:
-            # Check if we created a new venv
             venv_path = context.get('cortex_venv_path')
             if venv_path and Path(venv_path).exists():
                 self.logger.info(f"🗑️ Removing created venv: {venv_path}")
@@ -173,7 +171,6 @@ class PythonEnvironmentModule(BaseSetupModule):
         # Detect parent project (for embedded installations)
         parent_project = self._detect_parent_project(context)
         
-        # Check dependencies
         missing_packages, conflicts = self._check_dependencies()
         dependencies_satisfied = not missing_packages and not conflicts
         
@@ -210,7 +207,6 @@ class PythonEnvironmentModule(BaseSetupModule):
         """Detect if CORTEX is embedded in a parent project."""
         project_root = context.get('project_root', Path.cwd())
         
-        # Check if CORTEX is in a subdirectory
         if project_root.name == 'CORTEX':
             parent = project_root.parent
             
@@ -307,7 +303,6 @@ class PythonEnvironmentModule(BaseSetupModule):
         self.logger.info(f"🔨 Creating isolated virtual environment: {venv_path}")
         
         try:
-            # Create venv
             subprocess.run(
                 [sys.executable, '-m', 'venv', str(venv_path)],
                 check=True,

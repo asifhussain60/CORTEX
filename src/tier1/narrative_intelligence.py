@@ -112,7 +112,6 @@ class NarrativeIntelligence:
             with sqlite3.connect(self.database_path) as conn:
                 cursor = conn.cursor()
                 
-                # Create story_elements table
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS story_elements (
                         element_id TEXT PRIMARY KEY,
@@ -126,7 +125,6 @@ class NarrativeIntelligence:
                     )
                 """)
                 
-                # Create development_narratives table
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS development_narratives (
                         narrative_id TEXT PRIMARY KEY,
@@ -223,7 +221,6 @@ class NarrativeIntelligence:
                 story_elements, analysis, story_type, narrative_style
             )
             
-            # Create narrative object
             narrative = DevelopmentNarrative(
                 narrative_id=None,  # Auto-generated
                 title=self._generate_story_title(analysis, story_type),
@@ -310,7 +307,6 @@ class NarrativeIntelligence:
         if not elements:
             return analysis
         
-        # Calculate time span
         if len(elements) > 1:
             time_span = elements[-1].timestamp - elements[0].timestamp
             analysis["time_span_hours"] = time_span.total_seconds() / 3600
@@ -633,7 +629,6 @@ class NarrativeIntelligence:
         narrative.append(f"## The Story of {time_desc.title()}")
         narrative.append("")
         
-        # Set the scene
         if analysis["dominant_themes"]:
             main_theme = analysis["dominant_themes"][0]["theme"]
             narrative.append(f"This is the story of how {main_theme} came to life in our codebase. ")
@@ -930,7 +925,6 @@ Consider expanding the time range or checking if story elements are being proper
             with sqlite3.connect(self.database_path) as conn:
                 cursor = conn.cursor()
                 
-                # Get narrative counts by type
                 cursor.execute("""
                     SELECT story_type, COUNT(*) as count, AVG(confidence_score) as avg_confidence
                     FROM development_narratives 
@@ -939,7 +933,6 @@ Consider expanding the time range or checking if story elements are being proper
                 narrative_stats = {row[0]: {"count": row[1], "avg_confidence": row[2]} 
                                  for row in cursor.fetchall()}
                 
-                # Get story element statistics
                 cursor.execute("""
                     SELECT element_type, COUNT(*) as count
                     FROM story_elements 
@@ -947,7 +940,6 @@ Consider expanding the time range or checking if story elements are being proper
                 """)
                 element_stats = {row[0]: row[1] for row in cursor.fetchall()}
                 
-                # Get total counts
                 cursor.execute("SELECT COUNT(*) FROM development_narratives")
                 total_narratives = cursor.fetchone()[0]
                 
@@ -979,7 +971,6 @@ Consider expanding the time range or checking if story elements are being proper
             elif timestamp is None:
                 timestamp = datetime.now()
             
-            # Create story element from conversation
             content = " ".join([msg.get("content", "") for msg in messages])
             related_files = self._extract_files_from_content(content)
             context_tags = self._extract_context_tags_from_content(content)

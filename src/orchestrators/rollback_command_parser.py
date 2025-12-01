@@ -64,13 +64,11 @@ class RollbackCommandParser:
         Returns:
             Error response dict if invalid, None if valid
         """
-        # Check for empty
         if not checkpoint_id:
             return self._create_error_response(
                 self.ERROR_MISSING_CHECKPOINT.format(format=command_format)
             )
         
-        # Check format (alphanumeric + hyphens only)
         if not re.match(self.CHECKPOINT_ID_PATTERN, checkpoint_id):
             return self._create_error_response(
                 self.ERROR_INVALID_FORMAT.format(checkpoint_id=checkpoint_id)
@@ -113,7 +111,6 @@ class RollbackCommandParser:
             session_id = session_match.group(1).strip()
             checkpoint_id = session_match.group(2).strip()
             
-            # Validate checkpoint ID
             error = self._validate_checkpoint_id(
                 checkpoint_id, 
                 "rollback session <session-id> to <checkpoint-id>"
@@ -128,7 +125,6 @@ class RollbackCommandParser:
         if standard_match:
             checkpoint_id = standard_match.group(1).strip()
             
-            # Validate checkpoint ID
             error = self._validate_checkpoint_id(checkpoint_id, "rollback to <checkpoint-id>")
             if error:
                 return error
@@ -140,7 +136,6 @@ class RollbackCommandParser:
         if shorthand_match:
             checkpoint_id = shorthand_match.group(1).strip()
             
-            # Validate checkpoint ID
             error = self._validate_checkpoint_id(checkpoint_id, "rollback <checkpoint-id>")
             if error:
                 return error

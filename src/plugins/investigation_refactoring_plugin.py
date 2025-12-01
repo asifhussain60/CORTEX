@@ -623,7 +623,6 @@ class InvestigationRefactoringPlugin(BasePlugin):
         suggestions = []
         
         if entity_type == 'file':
-            # Get file content from context
             file_content = context.get('file_content', '')
             if file_content:
                 suggestions = self.analyzer.analyze_file(target_entity, file_content)

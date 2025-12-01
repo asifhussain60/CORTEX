@@ -272,11 +272,9 @@ class Tier1Migrator:
             self.stats['errors'].append(f"Source file not found: {self.source_jsonl}")
             return self.stats
         
-        # Create database connection
         conn = sqlite3.connect(self.target_db)
         
         try:
-            # Create schema
             print("Creating database schema...")
             self.create_schema(conn)
             

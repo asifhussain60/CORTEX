@@ -265,7 +265,6 @@ class RemediationEngine:
             return True
         
         try:
-            # Check for uncommitted changes
             result = subprocess.run(
                 ["git", "status", "--porcelain"],
                 cwd=self.project_root,
@@ -279,7 +278,6 @@ class RemediationEngine:
                 if response != 'y':
                     return False
             
-            # Create checkpoint commit
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             message = f"CORTEX Align: Pre-remediation checkpoint {timestamp}"
             
@@ -295,7 +293,6 @@ class RemediationEngine:
                 check=True
             )
             
-            # Get commit SHA
             result = subprocess.run(
                 ["git", "rev-parse", "HEAD"],
                 cwd=self.project_root,

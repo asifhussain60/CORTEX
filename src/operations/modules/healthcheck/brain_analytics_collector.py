@@ -65,7 +65,6 @@ class BrainAnalyticsCollector:
             'recommendations': []
         }
         
-        # Calculate overall brain health score
         analytics['health_score'] = self._calculate_brain_health_score(analytics)
         
         # Generate recommendations
@@ -226,7 +225,6 @@ class BrainAnalyticsCollector:
     def _get_token_stats(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get token usage statistics from Tier 1."""
         try:
-            # Check if token_metrics table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='token_metrics'"
             )
@@ -293,7 +291,6 @@ class BrainAnalyticsCollector:
     def _get_session_stats(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get session statistics from Tier 1."""
         try:
-            # Check if sessions table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='sessions'"
             )
@@ -397,7 +394,6 @@ class BrainAnalyticsCollector:
     def _get_decay_analysis(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get pattern decay analysis from Tier 2."""
         try:
-            # Check if decay tracking exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='pattern_decay_history'"
             )
@@ -433,7 +429,6 @@ class BrainAnalyticsCollector:
     def _get_relationship_stats(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get relationship statistics from Tier 2."""
         try:
-            # Check if relationships table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='relationships'"
             )
@@ -465,7 +460,6 @@ class BrainAnalyticsCollector:
     def _get_code_metrics(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get code metrics from Tier 3."""
         try:
-            # Check if code_metrics table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='code_metrics'"
             )
@@ -494,7 +488,6 @@ class BrainAnalyticsCollector:
     def _get_git_activity(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get git activity from Tier 3."""
         try:
-            # Check if git_activity table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='git_activity'"
             )
@@ -520,7 +513,6 @@ class BrainAnalyticsCollector:
     def _get_developer_patterns(self, cursor: sqlite3.Cursor) -> Dict[str, Any]:
         """Get developer patterns from Tier 3."""
         try:
-            # Check if developer_patterns table exists
             cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='developer_patterns'"
             )
@@ -700,7 +692,6 @@ class BrainAnalyticsCollector:
             'ado_agent': ado_agent.get('status', 'error')
         }
         
-        # Calculate aggregate metrics
         features_healthy = sum(1 for s in statuses.values() if s == 'healthy')
         features_warning = sum(1 for s in statuses.values() if s == 'warning')
         features_critical = sum(1 for s in statuses.values() if s == 'critical')
@@ -731,7 +722,6 @@ class BrainAnalyticsCollector:
         issue_summary = json.dumps(all_issues) if all_issues else None
         total_issues = len(all_issues)
         
-        # Calculate improvement since last check
         improvement_since_last, days_since_last = self._calculate_health_trends(statuses)
         
         # Store in Tier 3 database
@@ -835,7 +825,6 @@ class BrainAnalyticsCollector:
                 'message': 'No strategic health data available'
             }
         
-        # Calculate metrics
         current_status = history[0]['overall_status']
         total_checks = len(history)
         
@@ -856,7 +845,6 @@ class BrainAnalyticsCollector:
         most_stable = min(feature_changes, key=feature_changes.get)
         most_volatile = max(feature_changes, key=feature_changes.get)
         
-        # Calculate improvement/degradation rates
         improvements = sum(h.get('improvement_since_last', 0) or 0 for h in history if h.get('improvement_since_last', 0) and h['improvement_since_last'] > 0)
         degradations = sum(abs(h.get('improvement_since_last', 0) or 0) for h in history if h.get('improvement_since_last', 0) and h['improvement_since_last'] < 0)
         
@@ -864,7 +852,6 @@ class BrainAnalyticsCollector:
         improvement_rate = (improvements / total_changes * 100) if total_changes > 0 else 0
         degradation_rate = (degradations / total_changes * 100) if total_changes > 0 else 0
         
-        # Calculate check frequency
         if len(history) > 1:
             first_check = datetime.fromisoformat(history[-1]['timestamp'])
             last_check = datetime.fromisoformat(history[0]['timestamp'])
@@ -900,7 +887,6 @@ class BrainAnalyticsCollector:
             conn = sqlite3.connect(self.tier3_db)
             cursor = conn.cursor()
             
-            # Get last check
             cursor.execute('''
                 SELECT timestamp, architecture_intelligence, rollback_system,
                        swagger_dor, ux_enhancement, ado_agent
@@ -917,11 +903,9 @@ class BrainAnalyticsCollector:
             
             last_timestamp, last_arch, last_rollback, last_dor, last_ux, last_ado = row
             
-            # Calculate days since last check
             last_check_time = datetime.fromisoformat(last_timestamp)
             days_since = (datetime.now() - last_check_time).total_seconds() / 86400
             
-            # Calculate improvement (compare status rankings)
             status_rank = {'critical': 0, 'error': 0, 'warning': 1, 'healthy': 2}
             
             last_statuses = {

@@ -164,7 +164,6 @@ class DocumentOrganizer:
         """
         filename_lower = filename.lower()
         
-        # Check filename patterns for each category
         for category, patterns in self.patterns.items():
             for pattern in patterns:
                 if re.match(pattern, filename_lower, re.IGNORECASE):
@@ -229,7 +228,6 @@ class DocumentOrganizer:
         if category is None:
             return None, f"Could not detect category for: {source_path.name}"
         
-        # Validate category
         if category not in DocumentCategory.all_categories():
             return None, f"Invalid category: {category}"
         
@@ -283,7 +281,6 @@ class DocumentOrganizer:
             "skipped": []
         }
         
-        # Get markdown files
         pattern = "**/*.md" if recursive else "*.md"
         md_files = list(directory.glob(pattern))
         
@@ -326,7 +323,6 @@ class DocumentOrganizer:
         if not category_path.exists():
             return f"Category directory not found: {category}"
         
-        # Get all markdown files
         md_files = sorted(category_path.glob("*.md"))
         
         # Build index
@@ -447,7 +443,6 @@ def organize_brain_documents(brain_path: Path, dry_run: bool = False) -> Dict[st
     if not dry_run:
         organizer.update_all_indexes()
     
-    # Get statistics
     stats = organizer.get_statistics()
     
     return {

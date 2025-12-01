@@ -271,7 +271,6 @@ class SessionCompletionOrchestrator:
         """
         logger.info(f"📊 Generating diff summary: {start_commit[:8]}..{end_commit[:8]}")
         
-        # Get diff stats
         success, output = self._run_command([
             "git", "diff", "--stat", f"{start_commit}..{end_commit}"
         ])

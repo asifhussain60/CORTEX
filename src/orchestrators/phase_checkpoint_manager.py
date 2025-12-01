@@ -213,7 +213,6 @@ class PhaseCheckpointManager:
         Returns:
             Checkpoint ID if successful, None if failed
         """
-        # Create git checkpoint
         checkpoint_result = self.git_checkpoint.create_checkpoint(
             session_id=session_id,
             checkpoint_type=checkpoint_type,

@@ -210,7 +210,6 @@ class Tier2LearningIntegration:
             by_level[level]['total'] += 1
             by_level[level][response.response] += 1
         
-        # Calculate rates for each level
         level_stats = {}
         for level, counts in by_level.items():
             level_stats[level] = {

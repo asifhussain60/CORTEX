@@ -164,7 +164,6 @@ class EnvironmentSetup:
             self.result.steps_failed.append(f"exception: {str(e)}")
         
         finally:
-            # Calculate duration
             end_time = datetime.now()
             self.result.duration_seconds = (end_time - self.start_time).total_seconds()
             
@@ -245,13 +244,11 @@ class EnvironmentSetup:
         print("\n📦 Step 3: Syncing git repository...")
         
         try:
-            # Check if .git directory exists
             git_dir = self.project_root / '.git'
             if not git_dir.exists():
                 print("⚠️  Not a git repository - skipping")
                 return False
             
-            # Check git status
             result = subprocess.run(
                 ['git', 'status', '--porcelain'],
                 cwd=self.project_root,
@@ -300,7 +297,6 @@ class EnvironmentSetup:
         """Setup or verify virtual environment."""
         print("\n🐍 Step 4: Setting up virtual environment...")
         
-        # Check if we're already in a virtual environment
         in_venv = hasattr(sys, 'real_prefix') or (
             hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
         )
@@ -310,7 +306,6 @@ class EnvironmentSetup:
             self.result.steps_completed.append('virtual_environment')
             return True
         
-        # Check for common virtual environment directories
         venv_dirs = ['.venv', 'venv', 'env']
         existing_venv = None
         
@@ -396,7 +391,6 @@ class EnvironmentSetup:
         """Enable conversation tracking."""
         print("\n💬 Step 7: Enabling conversation tracking...")
         
-        # Check if conversation database exists
         db_path = self.project_root / 'cortex-brain' / 'conversation-history.db'
         
         if db_path.exists():
@@ -419,7 +413,6 @@ class EnvironmentSetup:
             self.result.steps_failed.append('brain_initialization')
             return False
         
-        # Check for essential brain files
         essential_files = [
             'brain-protection-rules.yaml',
             'knowledge-graph.yaml',

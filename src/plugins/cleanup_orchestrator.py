@@ -114,7 +114,6 @@ class DynamicCleanupOrchestrator:
         # Load rules
         self.rules = self._load_rules()
         
-        # Initialize state
         self.stats = CleanupStats()
         self.cleanup_items: List[CleanupItem] = []
         self.protected_dirs: Set[Path] = set()
@@ -167,12 +166,10 @@ class DynamicCleanupOrchestrator:
         """Check if path is protected from deletion"""
         path = path.resolve()
         
-        # Check protected directories
         for protected_dir in self.protected_dirs:
             if path == protected_dir or protected_dir in path.parents:
                 return True
         
-        # Check protected patterns
         for pattern in self.protected_patterns:
             if path.match(pattern):
                 return True
@@ -276,12 +273,10 @@ class DynamicCleanupOrchestrator:
                     if not any(p.match(excl) for excl in exclude_patterns)
                 ]
             
-            # Create CleanupItem for each found path
             for found_path in found_paths:
                 try:
                     size = found_path.stat().st_size if found_path.is_file() else 0
                     if found_path.is_dir():
-                        # Calculate directory size
                         size = sum(f.stat().st_size for f in found_path.rglob('*') if f.is_file())
                     
                     item = CleanupItem(
@@ -377,7 +372,6 @@ class DynamicCleanupOrchestrator:
         self.stats = CleanupStats()
         self.cleanup_items = []
         
-        # Process each category
         categories = self.rules.get('categories', {})
         for category_name, category_config in categories.items():
             try:
@@ -399,7 +393,6 @@ class DynamicCleanupOrchestrator:
         if mode == CleanupMode.LIVE:
             self._execute_cleanup_actions()
         
-        # Calculate statistics
         self.stats.execution_time_seconds = (datetime.now() - start_time).total_seconds()
         
         # Generate report
@@ -443,7 +436,6 @@ class DynamicCleanupOrchestrator:
     
     def _archive_item(self, item: CleanupItem) -> None:
         """Archive a file or directory"""
-        # Get archive destination from rules
         category_config = self.rules['categories'].get(item.category, {})
         archive_to = category_config.get('archive_to', 'cortex-brain/archives')
         
@@ -561,7 +553,6 @@ def print_cleanup_report(report: Dict[str, Any]) -> None:
 if __name__ == "__main__":
     import sys
     
-    # Get workspace root
     workspace = Path(__file__).parent.parent.parent
     
     # Always run in live mode

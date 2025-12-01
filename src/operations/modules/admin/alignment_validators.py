@@ -121,7 +121,6 @@ class FullValidationRunner:
             if monitor:
                 monitor.update(f"Scoring integrations", current_idx, total_features)
             
-            # Get feature files for cache tracking
             feature_files = self._get_feature_files(name, metadata)
             
             # Try cache for integration score
@@ -245,7 +244,6 @@ class FullValidationRunner:
             monitor.update("Generating remediation suggestions")
         self._generate_remediation_suggestions(report, orchestrators, agents)
         
-        # Calculate overall health
         if report.feature_scores:
             production_scores = [
                 s for s in report.feature_scores.values()

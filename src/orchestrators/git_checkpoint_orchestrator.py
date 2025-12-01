@@ -203,7 +203,6 @@ class GitCheckpointOrchestrator:
         """
         logger.info(f"🔖 Creating checkpoint for session {session_id}, phase {phase}")
         
-        # Check for uncommitted changes
         if self._has_uncommitted_changes():
             logger.warning("⚠️ Uncommitted changes detected. Stashing before checkpoint.")
             success, _ = self._run_git_command(["stash", "push", "-m", f"CORTEX auto-stash before {phase}"])
@@ -211,7 +210,6 @@ class GitCheckpointOrchestrator:
                 logger.error("❌ Failed to stash changes")
                 return None
         
-        # Get current state
         current_branch = self._get_current_branch()
         current_sha = self._get_current_commit_sha()
         
@@ -219,7 +217,6 @@ class GitCheckpointOrchestrator:
             logger.error("❌ Failed to get current git state")
             return None
         
-        # Create checkpoint record
         checkpoint = {
             "checkpoint_id": current_sha,
             "session_id": session_id,
@@ -256,7 +253,6 @@ class GitCheckpointOrchestrator:
         """
         logger.info(f"💾 Committing phase completion: {phase}")
         
-        # Check if there are changes to commit
         if not self._has_uncommitted_changes():
             logger.info("ℹ️ No changes to commit")
             return self._get_current_commit_sha()
@@ -291,7 +287,6 @@ class GitCheckpointOrchestrator:
             logger.error(f"❌ Failed to commit: {output}")
             return None
         
-        # Get new commit SHA
         commit_sha = self._get_current_commit_sha()
         logger.info(f"✅ Phase committed: {commit_sha[:8] if commit_sha else 'unknown'}")
         
@@ -409,7 +404,6 @@ class GitCheckpointOrchestrator:
                 "has_conflicts": bool
             }
         """
-        # Check git status
         success, status_output = self._run_git_command(["status", "--porcelain"])
         if not success:
             logger.error("Failed to check git status")
@@ -433,13 +427,11 @@ class GitCheckpointOrchestrator:
             if status_code == '??':
                 untracked_files.append(filepath)
         
-        # Check for merge/rebase in progress
         git_dir = self.project_root / ".git"
         merge_in_progress = (git_dir / "MERGE_HEAD").exists()
         rebase_in_progress = (git_dir / "rebase-merge").exists() or (git_dir / "rebase-apply").exists()
         cherry_pick_in_progress = (git_dir / "CHERRY_PICK_HEAD").exists()
         
-        # Check for conflicts
         has_conflicts = any('U' in line[:2] for line in status_output.split('\n') if line.strip())
         
         is_dirty = bool(modified_files or staged_files or merge_in_progress or rebase_in_progress)
@@ -543,7 +535,6 @@ class GitCheckpointOrchestrator:
         if not self.config.get("safety", {}).get("warn_on_uncommitted", True):
             return True, None
         
-        # Get user consent
         choice = self.prompt_user_consent(dirty_state)
         
         if choice == "commit":
@@ -588,13 +579,11 @@ class GitCheckpointOrchestrator:
         )
         checkpoint_name = f"{checkpoint_type}-{timestamp}"
         
-        # Get current commit
         current_sha = self._get_current_commit_sha()
         if not current_sha:
             logger.error("Failed to get current commit SHA")
             return None
         
-        # Create annotated git tag
         success, output = self._run_git_command([
             "tag", "-a", checkpoint_name, "-m", message
         ])
@@ -676,7 +665,6 @@ class GitCheckpointOrchestrator:
             else:
                 to_keep.append(cp)
         
-        # Check count limit
         if len(to_keep) > max_count:
             # Keep newest max_count checkpoints
             to_keep.sort(key=lambda x: x["timestamp"], reverse=True)
@@ -757,7 +745,6 @@ class GitCheckpointOrchestrator:
                     logger.info("🚫 Rollback cancelled")
                     return False
         
-        # Create safety checkpoint before rollback
         if self.config.get("safety", {}).get("create_backup_before_rollback", True):
             logger.info("📸 Creating safety checkpoint before rollback...")
             self.create_auto_checkpoint("pre-rollback", f"Safety checkpoint before rollback to {checkpoint_name}")

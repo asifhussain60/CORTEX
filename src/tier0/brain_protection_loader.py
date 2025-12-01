@@ -72,14 +72,11 @@ def load_brain_protection_rules(rules_path: Optional[Path] = None, force_reload:
     else:
         rules_path = Path(rules_path)
     
-    # Validate file exists
     if not rules_path.exists():
         raise FileNotFoundError(f"Brain protection rules not found: {rules_path}")
     
-    # Get current file modification time
     current_mtime = os.path.getmtime(rules_path)
     
-    # Check cache validity (unless force reload)
     if not force_reload and _brain_rules_cache is not None and _cache_file_mtime == current_mtime:
         # Cache hit - file unchanged
         _cache_hit_count += 1
@@ -147,10 +144,6 @@ def clear_cache():
     _brain_rules_cache = None
     _cache_file_mtime = None
     # Keep stats for performance tracking
-    # _cache_hit_count = 0
-    # _cache_miss_count = 0
-
-
 def reset_cache_stats():
     """
     Reset cache statistics counters.

@@ -199,7 +199,6 @@ class PatternStore:
         conn = self.db.get_connection()
         cursor = conn.cursor()
         
-        # Get pattern
         cursor.execute("""
             SELECT pattern_id, title, content, pattern_type, confidence,
                    created_at, last_accessed, access_count, source, metadata, is_pinned,

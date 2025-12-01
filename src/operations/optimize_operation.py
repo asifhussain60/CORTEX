@@ -82,12 +82,10 @@ class OptimizeOperation(BaseOperationModule):
         """
         issues = []
         
-        # Check CORTEX brain exists
         brain_path = Path.cwd() / "cortex-brain"
         if not brain_path.exists():
             issues.append("cortex-brain/ directory not found")
         
-        # Check databases exist
         tier1_db = brain_path / "tier1" / "working_memory.db"
         tier2_db = brain_path / "tier2" / "knowledge_graph.db"
         
@@ -322,7 +320,6 @@ class OptimizeOperation(BaseOperationModule):
         try:
             from src.utils.yaml_cache import get_cache_stats, clear_cache
             
-            # Get cache stats before
             stats_before = get_cache_stats()
             
             # Clear cache (will rebuild on next access)
@@ -359,7 +356,6 @@ class OptimizeOperation(BaseOperationModule):
         for db_path in databases:
             if db_path.exists():
                 try:
-                    # Get size before
                     size_before = db_path.stat().st_size / (1024 * 1024)
                     
                     if not dry_run:
@@ -368,7 +364,6 @@ class OptimizeOperation(BaseOperationModule):
                         conn.execute("VACUUM")
                         conn.close()
                         
-                        # Get size after
                         size_after = db_path.stat().st_size / (1024 * 1024)
                         saved = size_before - size_after
                     else:
@@ -715,7 +710,6 @@ class OptimizeOperation(BaseOperationModule):
                         self.logger.info(f"[DRY RUN] Would remove duplicate: {dup_file.relative_to(root_path)} "
                                        f"(identical to {keep_file.relative_to(root_path)})")
                     else:
-                        # Create .archive subdirectory
                         archive_dir = dup_file.parent / ".archive"
                         archive_dir.mkdir(exist_ok=True)
                         
@@ -851,7 +845,6 @@ class OptimizeOperation(BaseOperationModule):
             file_name_lower = file_path.stem.lower()
             parent_name_lower = file_path.parent.name.lower()
             
-            # Check against each topic
             for topic, keywords in topic_keywords.items():
                 if any(keyword in file_name_lower or keyword in parent_name_lower for keyword in keywords):
                     clusters[topic].append(file_path)

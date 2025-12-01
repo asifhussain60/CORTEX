@@ -50,7 +50,6 @@ class EntityExtractor:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create entities table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS entities (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,7 +63,6 @@ class EntityExtractor:
             )
         """)
         
-        # Create conversation-entity relationships table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversation_entities (
                 conversation_id TEXT NOT NULL,
@@ -163,7 +161,6 @@ class EntityExtractor:
             entity_id = cursor.lastrowid
             conn.commit()
         
-        # Get full entity
         cursor.execute("""
             SELECT id, entity_type, entity_name, file_path, first_seen, last_accessed, access_count
             FROM entities

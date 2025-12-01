@@ -533,7 +533,6 @@ class Plugin(BasePlugin):
                     continue
                 
                 try:
-                    # Check if directory is empty
                     if not any(dir_path.iterdir()):
                         empty_dirs.append(dir_path)
                         
@@ -656,12 +655,10 @@ class Plugin(BasePlugin):
         
         potential_orphans = []
         
-        # Check for isolated files in unexpected locations
         for file_path in self.root_path.rglob('*'):
             if not file_path.is_file() or self._should_preserve(file_path):
                 continue
             
-            # Check if file is in an unexpected location
             parts = file_path.relative_to(self.root_path).parts
             
             if len(parts) > 1 and parts[0] not in ['src', 'tests', 'docs', 'scripts', 
@@ -736,7 +733,6 @@ class Plugin(BasePlugin):
                 if path_str.startswith(protected) or path_str == protected.rstrip('/'):
                     return True
             
-            # Check preserve patterns
             for pattern in self.preserve_patterns:
                 if self._match_pattern(path_str, pattern):
                     return True
@@ -833,11 +829,9 @@ class Plugin(BasePlugin):
             return {'success': True, 'message': 'No backups to archive'}
         
         try:
-            # Create backup archive directory
             archive_dir = self.root_path / '.backup-archive'
             archive_dir.mkdir(exist_ok=True)
             
-            # Create timestamped manifest
             timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
             manifest_file = archive_dir / f'backup-manifest-{timestamp}.json'
             
@@ -906,14 +900,12 @@ class Plugin(BasePlugin):
                 )
                 
                 if git_commit.returncode != 0:
-                    # Check if it's just "nothing to commit"
                     if 'nothing to commit' not in git_commit.stdout.lower():
                         return {
                             'success': False,
                             'error': f"Git commit failed: {git_commit.stderr}"
                         }
                 
-                # Get commit SHA
                 git_sha = subprocess.run(
                     ['git', 'rev-parse', 'HEAD'],
                     cwd=str(self.root_path),
@@ -984,7 +976,6 @@ class Plugin(BasePlugin):
                     with open(manifest_file, 'r', encoding='utf-8') as f:
                         manifest = json.load(f)
                     
-                    # Check if this archive was successfully pushed
                     # We'll check if the commit exists in the remote
                     archived_files = manifest.get('files', [])
                     
@@ -1041,7 +1032,6 @@ class Plugin(BasePlugin):
         """
         logger.info("Checking for bloated documentation to archive...")
         
-        # Define patterns for bloated documentation
         doc_patterns_to_check = [
             ('*CAPABILITY-ANALYSIS*.md', 35 * 1024),  # > 35 KB capability analysis
             ('*CODE-EXAMPLES*.md', 30 * 1024),        # > 30 KB code examples
@@ -1062,7 +1052,6 @@ class Plugin(BasePlugin):
         if not brain_path.exists():
             return
         
-        # Create archive directory with timestamp
         timestamp = datetime.now().strftime('%Y-%m-%d')
         archive_dir = brain_path / 'archives' / f'converted-to-yaml-{timestamp}'
         
@@ -1106,11 +1095,9 @@ class Plugin(BasePlugin):
             logger.info("No bloated documentation found to archive")
             return
         
-        # Create archive directory and README
         if not self.dry_run:
             archive_dir.mkdir(parents=True, exist_ok=True)
             
-            # Create archive README
             readme_content = f"""# Documentation Conversion Archive - {datetime.now().strftime('%B %d, %Y')}
 
 This directory contains markdown documentation that has been converted to machine-readable formats for better efficiency and automation.

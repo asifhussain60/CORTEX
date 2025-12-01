@@ -132,7 +132,6 @@ class PluginRegistry:
         """
         text_lower = text.lower()
         
-        # Check each plugin's natural language patterns
         for plugin in self._plugins.values():
             if hasattr(plugin.metadata, 'natural_language_patterns'):
                 for pattern in plugin.metadata.natural_language_patterns:

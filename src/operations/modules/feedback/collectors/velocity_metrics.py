@@ -44,7 +44,6 @@ class VelocityMetricsCollector:
     def _get_story_points(self, project_root: Path) -> int:
         """Get average story points per sprint."""
         try:
-            # Check for ADO work items database
             ado_db = project_root / 'cortex-brain' / 'ado-work-items.db'
             
             if ado_db.exists():

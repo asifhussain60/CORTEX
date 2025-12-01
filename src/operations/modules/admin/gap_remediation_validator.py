@@ -52,7 +52,6 @@ class GapRemediationValidator:
                 "message": "Missing feedback-aggregation.yml workflow (Gap #7 - Feedback Automation)"
             })
         else:
-            # Validate workflow structure
             try:
                 import yaml
                 with open(feedback_workflow, "r", encoding="utf-8") as f:
@@ -86,16 +85,13 @@ class GapRemediationValidator:
                 with open(templates_path, "r", encoding="utf-8") as f:
                     templates = yaml.safe_load(f)
                 
-                # Validate new template architecture
                 template_issues = []
                 base_templates = templates.get("base_templates", {})
                 template_defs = templates.get("templates", {})
                 
-                # Check for base template architecture (v3.2+)
                 if not base_templates:
                     template_issues.append("Missing base_templates section (v3.2 architecture)")
                 else:
-                    # Validate base templates have required structure
                     for base_name, base_data in base_templates.items():
                         if "base_structure" not in base_data:
                             template_issues.append(f"Base template '{base_name}' missing base_structure")
@@ -119,7 +115,6 @@ class GapRemediationValidator:
                     if "[✓ Accept OR ⚡ Challenge]" in content_str or "[Accept|Challenge]" in content_str:
                         template_issues.append(f"{template_name}: Old Challenge format detected")
                 
-                # Check for schema version
                 schema_version = templates.get("schema_version", "unknown")
                 if schema_version not in ["3.2", "3.3"]:
                     template_issues.append(f"Outdated schema_version: {schema_version} (expected 3.2+)")
@@ -160,7 +155,6 @@ class GapRemediationValidator:
                 with open(brain_rules_path, "r", encoding="utf-8") as f:
                     brain_rules = yaml.safe_load(f)
                 
-                # Check NO_ROOT_FILES protection level
                 layers = brain_rules.get("layers", {})
                 layer_8 = layers.get("layer_8_document_organization", {})
                 rules = layer_8.get("rules", [])

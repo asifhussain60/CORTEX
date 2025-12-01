@@ -78,7 +78,6 @@ class UpgradeOrchestrator:
                 check=True
             )
             
-            # Get remote version
             latest_version = self._get_remote_version()
             
             # Compare versions
@@ -101,7 +100,6 @@ class UpgradeOrchestrator:
         Returns:
             Tuple of (success, message)
         """
-        # Check for updates
         has_updates, current_version, latest_version = self.check_for_updates()
         
         if not has_updates:
@@ -109,7 +107,6 @@ class UpgradeOrchestrator:
         
         logger.info(f"Upgrading from {current_version} to {latest_version}")
         
-        # Create backup
         backup_id = None
         if backup:
             backup_id = self._create_backup()
@@ -436,7 +433,6 @@ class UpgradeOrchestrator:
             logger.info("No migrations directory found")
             return True
         
-        # Get list of migration files
         migration_files = sorted(migrations_dir.glob("*.sql"))
         
         if not migration_files:
@@ -452,7 +448,6 @@ class UpgradeOrchestrator:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             
-            # Create migrations tracking table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS schema_migrations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -466,7 +461,6 @@ class UpgradeOrchestrator:
             for migration_file in migration_files:
                 migration_name = migration_file.name
                 
-                # Check if already applied
                 cursor.execute(
                     "SELECT 1 FROM schema_migrations WHERE migration_name = ?",
                     (migration_name,)
@@ -540,7 +534,6 @@ class UpgradeOrchestrator:
         try:
             catalog = EnhancementCatalog()
             
-            # Get last upgrade review timestamp
             last_review = catalog.get_last_review_timestamp('upgrade')
             
             # Discover new features since last review
@@ -664,7 +657,6 @@ class UpgradeOrchestrator:
             result["issues"].append("Entry point not found at .github/prompts/CORTEX.prompt.md")
             logger.warning("  ❌ Entry point NOT found at expected location")
         
-        # Check 2: cortex-brain/ structure exists
         brain_path = self.cortex_root / 'cortex-brain'
         required_dirs = ['tier1', 'tier3', 'documents', 'templates']
         brain_ok = True
@@ -716,7 +708,6 @@ class UpgradeOrchestrator:
             result["checks_failed"] += 1
             logger.warning("  ❌ Response templates invalid or missing")
         
-        # Check 4: Key orchestrators exist
         orchestrators_path = self.cortex_root / 'src' / 'orchestrators'
         key_orchestrators = [
             'planning_orchestrator.py',
@@ -742,7 +733,6 @@ class UpgradeOrchestrator:
             result["checks_failed"] += 1
             logger.warning("  ❌ Some orchestrators missing")
         
-        # Calculate final status
         total_checks = result["checks_passed"] + result["checks_failed"]
         if result["checks_failed"] == 0:
             result["status"] = "healthy"
@@ -853,7 +843,6 @@ class UpgradeOrchestrator:
         
         logger.info("Validating operational readiness...")
         
-        # Check 1: Core imports work
         try:
             import sys
             sys.path.insert(0, str(self.cortex_root / 'src'))
@@ -867,7 +856,6 @@ class UpgradeOrchestrator:
             result["errors"].append(f"Import failed: {e}")
             logger.error(f"  ❌ Core imports FAILED: {e}")
         
-        # Check 2: Databases accessible
         brain_path = self.cortex_root / 'cortex-brain'
         
         tier1_db = brain_path / 'tier1' / 'working_memory.db'
@@ -893,7 +881,6 @@ class UpgradeOrchestrator:
             result["errors"].append("Tier 3 database not found")
             logger.error("  ❌ Tier 3 database NOT FOUND")
         
-        # Check 3: Operations config valid
         try:
             import yaml
             ops_config = self.cortex_root / 'cortex-operations.yaml'
@@ -913,7 +900,6 @@ class UpgradeOrchestrator:
             result["errors"].append(f"Operations config error: {e}")
             logger.error(f"  ❌ Operations config ERROR: {e}")
         
-        # Check 4: Response templates valid
         try:
             templates_file = brain_path / 'response-templates.yaml'
             if templates_file.exists():
@@ -932,7 +918,6 @@ class UpgradeOrchestrator:
             result["errors"].append(f"Response templates error: {e}")
             logger.error(f"  ❌ Response templates ERROR: {e}")
         
-        # Check 5: Brain protection rules valid
         try:
             rules_file = brain_path / 'brain-protection-rules.yaml'
             if rules_file.exists():
@@ -951,7 +936,6 @@ class UpgradeOrchestrator:
             result["errors"].append(f"Brain protection rules error: {e}")
             logger.error(f"  ❌ Brain protection rules ERROR: {e}")
         
-        # Calculate final status
         critical_checks = [
             result["imports"],
             result["tier1_db"],
@@ -993,7 +977,6 @@ class UpgradeOrchestrator:
         
         logger.info("Validating test suite...")
         
-        # Check 1: pytest is available
         try:
             import pytest
             result["pytest_available"] = True
@@ -1004,7 +987,6 @@ class UpgradeOrchestrator:
             result["status"] = "critical"
             return False, result
         
-        # Check 2: pytest can collect tests
         try:
             test_result = subprocess.run(
                 ['pytest', '--collect-only', '-q'],

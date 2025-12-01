@@ -161,7 +161,6 @@ class LintValidationOrchestrator:
         
         logger.info("🔍 Running Roslynator analysis...")
         
-        # Check if roslynator is available
         success, _ = self._run_command(["dotnet", "roslynator", "--version"], project_path.parent)
         if not success:
             logger.warning("⚠️ Roslynator not installed. Run: dotnet tool install -g roslynator.dotnet.cli")
@@ -270,7 +269,6 @@ class LintValidationOrchestrator:
         
         logger.info("🔍 Running ESLint analysis...")
         
-        # Check if eslint is available
         eslint_path = project_path / "node_modules" / ".bin" / "eslint"
         if not eslint_path.exists():
             logger.warning("⚠️ ESLint not installed. Run: npm install eslint")

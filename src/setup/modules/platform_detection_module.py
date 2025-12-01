@@ -63,7 +63,6 @@ class PlatformDetectionModule(BaseSetupModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")

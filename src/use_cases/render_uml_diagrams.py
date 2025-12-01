@@ -137,7 +137,6 @@ class UMLDiagramRenderer:
         Returns:
             SVG content as string
         """
-        # Create Graphviz Digraph
         dot = Digraph(comment=title, format='svg')
         dot.attr(
             rankdir='TB',  # Top to bottom layout
@@ -246,7 +245,6 @@ class UMLDiagramRenderer:
         # Extract base classes
         bases = [self._get_base_name(base) for base in node.bases]
         
-        # Check if abstract
         is_abstract = any(
             isinstance(dec, ast.Name) and dec.id == 'abstractmethod'
             for item in node.body
@@ -254,7 +252,6 @@ class UMLDiagramRenderer:
             for dec in item.decorator_list
         )
         
-        # Get docstring
         docstring = ast.get_docstring(node)
         
         return ClassInfo(
@@ -291,7 +288,6 @@ class UMLDiagramRenderer:
         """
         parts = []
         
-        # Class name (bold, italic if abstract)
         if class_info.is_abstract:
             parts.append(f"«abstract»\\n{class_info.name}")
         else:

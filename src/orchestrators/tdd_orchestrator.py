@@ -146,7 +146,6 @@ class TDDOrchestrator(IncrementalWorkExecutor):
                 ))
                 chunk_counter += 1
             
-            # Create chunks for each requirement
             for req_index, requirement in enumerate(tdd_request.requirements, 1):
                 test_number = tdd_request.existing_tests + req_index
                 
