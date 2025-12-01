@@ -66,7 +66,6 @@ class WorkspaceHealthCollector(BaseCollector):
                 self.logger.warning(f"Workspace path does not exist: {self.workspace_path}")
                 return False
             
-            # Check for development tools
             self._check_development_environment()
             
             # Initial git status
@@ -81,7 +80,6 @@ class WorkspaceHealthCollector(BaseCollector):
     
     def _check_development_environment(self) -> None:
         """Check availability of development tools"""
-        # Check Python
         try:
             result = subprocess.run(['python', '--version'], 
                                   capture_output=True, text=True, timeout=5)
@@ -96,7 +94,6 @@ class WorkspaceHealthCollector(BaseCollector):
             except:
                 pass
         
-        # Check Node.js
         try:
             result = subprocess.run(['node', '--version'], 
                                   capture_output=True, text=True, timeout=5)
@@ -105,7 +102,6 @@ class WorkspaceHealthCollector(BaseCollector):
         except:
             pass
         
-        # Check Git
         try:
             result = subprocess.run(['git', '--version'], 
                                   capture_output=True, text=True, timeout=5)
@@ -282,7 +278,6 @@ class WorkspaceHealthCollector(BaseCollector):
         metrics = []
         
         try:
-            # Check for common build/test files
             build_files = {
                 "package.json": ["npm test", "npm run build"],
                 "requirements.txt": ["python -m pytest", "python setup.py build"],

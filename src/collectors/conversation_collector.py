@@ -139,13 +139,11 @@ class ConversationCollector(BaseCollector):
             self.captures_path.mkdir(exist_ok=True)
             self.vault_path.mkdir(exist_ok=True)
             
-            # Create vault year/month structure
             now = datetime.now()
             year_path = self.vault_path / str(now.year)
             month_path = year_path / f"{now.month:02d}"
             month_path.mkdir(parents=True, exist_ok=True)
             
-            # Initialize Tier 1 database if needed
             self._init_tier1_database()
             
             self.status = CollectorStatus.ACTIVE
@@ -203,7 +201,6 @@ class ConversationCollector(BaseCollector):
             # Extract metadata
             metadata = self._extract_metadata(content)
             
-            # Calculate quality score
             quality_score = self._calculate_quality_score(content, metadata, messages)
             quality_level = self._determine_quality_level(quality_score)
             
@@ -403,7 +400,6 @@ class ConversationCollector(BaseCollector):
             conn = sqlite3.connect(self.tier1_db_path)
             cursor = conn.cursor()
             
-            # Create conversations table if not exists
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS conversations (
                     conversation_id TEXT PRIMARY KEY,
@@ -466,7 +462,6 @@ class ConversationCollector(BaseCollector):
     def _archive_conversation(self, source_file: Path, conversation: ProcessedConversation):
         """Archive conversation to vault with metadata"""
         try:
-            # Create archive path
             timestamp = conversation.timestamp
             year_path = self.vault_path / str(timestamp.year)
             month_path = year_path / f"{timestamp.month:02d}"
@@ -477,7 +472,6 @@ class ConversationCollector(BaseCollector):
             archive_filename = f"{timestamp.strftime('%Y-%m-%d')}-{quality_prefix}-{source_file.stem}.md"
             archive_path = month_path / archive_filename
             
-            # Create archive content with metadata header
             archive_content = f"""---
 conversation_id: {conversation.conversation_id}
 title: {conversation.title}
@@ -596,7 +590,6 @@ source_file: {conversation.source_file}
                 ))
                 return metrics
             
-            # Process each new conversation
             processed_count = 0
             error_count = 0
             

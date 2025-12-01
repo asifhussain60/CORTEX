@@ -199,7 +199,6 @@ class BrainPerformanceCollector(BaseCollector):
         metrics = []
         
         try:
-            # Process memory usage
             process = psutil.Process()
             memory_info = process.memory_info()
             

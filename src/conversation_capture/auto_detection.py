@@ -92,7 +92,6 @@ class AutoDetectionEngine:
         try:
             self.monitoring_active = False
             
-            # Process any remaining conversation
             if self.current_conversation:
                 self._process_detected_conversation()
             
@@ -129,7 +128,6 @@ class AutoDetectionEngine:
                 'timestamp': current_time.isoformat()
             })
             
-            # Check for conversation patterns
             detection_result = self._analyze_conversation_patterns()
             
             return {
@@ -154,7 +152,6 @@ class AutoDetectionEngine:
             if not self.monitoring_active or not self.last_activity:
                 return None
             
-            # Calculate idle time
             idle_seconds = (datetime.now() - self.last_activity).total_seconds()
             
             if idle_seconds >= self.idle_threshold_seconds and self.current_conversation:
@@ -177,13 +174,11 @@ class AutoDetectionEngine:
             Quality metrics and scoring
         """
         try:
-            # Calculate individual scores
             length_score = self._calculate_length_score(conversation)
             depth_score = self._calculate_depth_score(conversation)
             entity_score = self._calculate_entity_score(conversation)
             context_score = self._calculate_context_score(conversation)
             
-            # Calculate weighted overall score
             overall_score = (
                 length_score * self.quality_weights['length'] +
                 depth_score * self.quality_weights['depth'] +
@@ -227,7 +222,6 @@ class AutoDetectionEngine:
             'completion_indicators': []
         }
         
-        # Check for completion indicators
         last_message = self.current_conversation[-1]['content'].lower()
         
         completion_phrases = [
@@ -240,7 +234,6 @@ class AutoDetectionEngine:
             if phrase in last_message:
                 patterns['completion_indicators'].append(f"Completion phrase: '{phrase}'")
         
-        # Check for task completion
         task_completion_phrases = [
             'done', 'finished', 'completed', 'working now',
             'fixed', 'resolved', 'implemented', 'tested'
@@ -258,7 +251,6 @@ class AutoDetectionEngine:
             # Score conversation quality
             quality_metrics = self.score_conversation_quality(self.current_conversation)
             
-            # Check if conversation meets quality threshold
             should_capture = (
                 len(self.current_conversation) >= self.min_conversation_length and
                 quality_metrics.overall_score >= self.quality_threshold
@@ -352,10 +344,8 @@ class AutoDetectionEngine:
         # File patterns
         file_matches = re.findall(r'\b[a-zA-Z0-9_-]+\.\w+\b', all_text)
         
-        # Class/type patterns
         class_matches = re.findall(r'\b[A-Z][a-zA-Z0-9]*(?:Controller|Service|Manager|Component)?\b', all_text)
         
-        # Function patterns
         function_matches = re.findall(r'\b[a-zA-Z_][a-zA-Z0-9_]*\s*\(', all_text)
         
         # Technology patterns
@@ -393,7 +383,6 @@ class AutoDetectionEngine:
             if score > 0:
                 context_scores.append(score)
         
-        # Return average score of present contexts
         return sum(context_scores) / len(context_scores) if context_scores else 0.2
     
     def _identify_quality_issues(self, conversation: List[Dict[str, Any]], scores: Dict[str, float]) -> List[str]:

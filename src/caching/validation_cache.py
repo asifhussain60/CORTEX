@@ -210,7 +210,6 @@ class ValidationCache:
             
             result_json, file_hashes_json, timestamp_str, ttl_seconds = row
             
-            # Check TTL
             timestamp = datetime.fromisoformat(timestamp_str)
             if ttl_seconds > 0:
                 age_seconds = (datetime.now() - timestamp).total_seconds()
@@ -220,7 +219,6 @@ class ValidationCache:
                     logger.debug(f"Cache EXPIRED: {operation}:{key} (age: {age_seconds}s, TTL: {ttl_seconds}s)")
                     return None
             
-            # Check file hashes
             cached_hashes = json.loads(file_hashes_json)
             current_hashes = self._calculate_file_hashes(files)
             
@@ -433,7 +431,6 @@ class ValidationCache:
             now = datetime.now()
             for row in cursor.fetchall():
                 key, timestamp_str, ttl_seconds = row
-                # Check if expired
                 if ttl_seconds > 0:
                     timestamp = datetime.fromisoformat(timestamp_str)
                     age_seconds = (now - timestamp).total_seconds()

@@ -23,10 +23,6 @@ from abc import ABC, abstractmethod
 from ..cortex_agents.base_agent import BaseAgent
 from ..cortex_agents.intent_router import IntentRouter
 # Note: Using placeholder imports for now - will be updated when implementing specific agents
-# from ..cortex_agents.work_planner import WorkPlannerAgent
-# from ..cortex_agents.code_executor import CodeExecutorAgent
-
-
 class AgentTier(Enum):
     """Agent hierarchy tiers"""
     PRIMARY = "primary"      # Original 10 specialist agents
@@ -459,7 +455,6 @@ class EnhancedAgentSystem:
         self.orchestrator = MultiAgentOrchestrator()
         self.logger = logging.getLogger(__name__)
         
-        # Initialize agents
         self._initialize_primary_agents()
         self._initialize_sub_agents()
         

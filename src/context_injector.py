@@ -83,7 +83,6 @@ class ContextInjector:
         
         self.db_path = db_path
         
-        # Initialize engines only if tiers are available
         self.wm = WorkingMemory(db_path) if TIER1_AVAILABLE else None
         self.kg = KnowledgeGraph() if TIER2_AVAILABLE else None
         self.ci = ContextIntelligence() if TIER3_AVAILABLE else None
@@ -145,7 +144,6 @@ class ContextInjector:
         if include_tiers.get('tier3', True) and self.ci:
             context['tier3'] = self._inject_tier3()
         
-        # Calculate injection time
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         self._last_injection_time_ms = elapsed_ms
         
@@ -241,7 +239,6 @@ class ContextInjector:
                     tier1_context['active_entities']
                 )
                     
-                # Create user-friendly context summary
                 tier1_context['context_display'] = self.formatter.format_context_summary(
                     tier1_context['relevant_conversations'],
                     tier1_context['active_entities'],
@@ -327,7 +324,6 @@ class ContextInjector:
             "SPA": ["spa/noorcanvas/"]
         }
         
-        # Check each pattern
         for namespace, patterns in namespace_patterns.items():
             if any(pattern in file_path_lower for pattern in patterns):
                 return namespace

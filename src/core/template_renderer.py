@@ -177,7 +177,6 @@ class TemplateRenderer:
             (RequestComplexity.COMPLEX, ContentType.ANALYTICAL): ResponseFormat.VISUAL,
         }
         
-        # Get format from matrix or default to SUMMARIZED
         format_key = (context.complexity, context.content_type)
         response_format = format_matrix.get(format_key, ResponseFormat.SUMMARIZED)
         
@@ -248,7 +247,6 @@ class TemplateRenderer:
         template = self.templates[template_name]
         placeholders = placeholders or {}
         
-        # Get adaptation decision
         decision = self.decide_adaptation(context)
         
         # Build response sections
@@ -361,7 +359,6 @@ class TemplateRenderer:
 
 # Example usage
 if __name__ == "__main__":
-    # Initialize renderer
     renderer = TemplateRenderer("cortex-brain/response-templates/templates-v3-intelligent.yaml")
     
     # Example 1: Simple help request

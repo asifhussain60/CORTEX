@@ -77,13 +77,11 @@ class CacheHealthMonitor:
         issues = []
         recommendations = []
         
-        # Check cache size
         cache_size_mb = self._get_cache_size_mb()
         if cache_size_mb > 100:
             issues.append(f"Large cache size: {cache_size_mb:.1f}MB")
             recommendations.append("Consider clearing old entries with 'cortex cache clear --older-than 7d'")
         
-        # Check entry age distribution
         total_entries, avg_age_hours, oldest_age_days, stale_count = self._get_age_distribution()
         
         if oldest_age_days > 30:
@@ -96,13 +94,11 @@ class CacheHealthMonitor:
         if stale_count > 0:
             issues.append(f"{stale_count} stale entries (>7 days old)")
         
-        # Check hit rate
         hit_rate = self._get_overall_hit_rate()
         if hit_rate < 0.3 and total_entries > 10:
             issues.append(f"Low hit rate: {hit_rate * 100:.1f}%")
             recommendations.append("Cache may not be effective. Consider reviewing cached operations or clearing cache.")
         
-        # Check for corruption
         corruption_issues = self._check_corruption()
         if corruption_issues:
             issues.extend(corruption_issues)
@@ -152,7 +148,6 @@ class CacheHealthMonitor:
         try:
             conn = sqlite3.connect(self.cache.cache_db)
             
-            # Get all timestamps
             cursor = conn.execute("SELECT timestamp FROM cache_entries")
             timestamps = [row[0] for row in cursor.fetchall()]
             
@@ -210,13 +205,11 @@ class CacheHealthMonitor:
         try:
             conn = sqlite3.connect(self.cache.cache_db)
             
-            # Check integrity
             cursor = conn.execute("PRAGMA integrity_check")
             result = cursor.fetchone()
             if result and result[0] != 'ok':
                 issues.append(f"Database corruption detected: {result[0]}")
             
-            # Check for orphaned stats
             cursor = conn.execute("""
                 SELECT COUNT(*) FROM cache_stats 
                 WHERE operation NOT IN (
@@ -227,7 +220,6 @@ class CacheHealthMonitor:
             if orphaned > 0:
                 issues.append(f"{orphaned} orphaned statistics entries")
             
-            # Check for invalid JSON
             cursor = conn.execute("SELECT operation, key, result_json FROM cache_entries")
             invalid_json = 0
             for row in cursor.fetchall():

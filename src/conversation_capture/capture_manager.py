@@ -80,10 +80,8 @@ class ConversationCaptureManager:
     def initialize(self) -> bool:
         """Initialize the conversation capture system"""
         try:
-            # Create capture directory
             self.capture_dir.mkdir(parents=True, exist_ok=True)
             
-            # Initialize working memory
             if not self.working_memory.initialize():
                 self.logger.error("Failed to initialize working memory")
                 return False
@@ -112,7 +110,6 @@ class ConversationCaptureManager:
             # Generate unique capture ID
             capture_id = f"capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
             
-            # Create capture file
             capture_file = self.capture_dir / f"{capture_id}.md"
             
             # Generate instructions and template
@@ -190,7 +187,6 @@ CORTEX will extract patterns, entities, and successful approaches for future use
                         ]
                     }
             
-            # Validate capture ID
             if capture_id not in self.active_captures:
                 return {
                     'success': False,
@@ -204,7 +200,6 @@ CORTEX will extract patterns, entities, and successful approaches for future use
             capture_info = self.active_captures[capture_id]
             capture_file = Path(capture_info['file_path'])
             
-            # Check if file exists and has content
             if not capture_file.exists():
                 return {
                     'success': False,
@@ -216,7 +211,6 @@ CORTEX will extract patterns, entities, and successful approaches for future use
             with open(capture_file, 'r', encoding='utf-8') as f:
                 content = f.read().strip()
             
-            # Validate content (not just template)
             if self._is_still_template(content):
                 return {
                     'success': False,
@@ -244,7 +238,6 @@ CORTEX will extract patterns, entities, and successful approaches for future use
                     ]
                 }
             
-            # Import into working memory (Tier 1)
             memory_result = self._import_to_working_memory(conversation_data)
             
             if memory_result['success']:
@@ -306,7 +299,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             active = []
             for capture_id, info in self.active_captures.items():
                 if info['status'] == 'awaiting_paste':
-                    # Check if file still exists and has content
                     capture_file = Path(info['file_path'])
                     if capture_file.exists():
                         with open(capture_file, 'r', encoding='utf-8') as f:
@@ -350,7 +342,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             info = self.active_captures[capture_id]
             capture_file = Path(info['file_path'])
             
-            # Check file status
             file_exists = capture_file.exists()
             file_size = capture_file.stat().st_size if file_exists else 0
             
@@ -384,7 +375,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
     def _find_most_recent_capture(self) -> Optional[str]:
         """Find the most recently created capture file that hasn't been imported yet"""
         try:
-            # Check active captures first
             awaiting_captures = [
                 (cid, info) for cid, info in self.active_captures.items()
                 if info['status'] == 'awaiting_paste'
@@ -403,7 +393,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             # Sort by modification time, most recent first
             capture_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
             
-            # Return the capture_id from the filename
             most_recent = capture_files[0]
             capture_id = most_recent.stem  # Remove .md extension
             
@@ -472,10 +461,8 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
                 content_start_idx = i + 1
                 break
         
-        # Get content after header
         actual_content = '\n'.join(lines[content_start_idx:]).strip()
         
-        # Check if there's meaningful conversation content
         conversation_lines = [
             line.strip() for line in actual_content.split('\n') 
             if line.strip() and (
@@ -498,7 +485,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             # Detect intent from conversation
             intent = self._detect_intent(messages, user_hint)
             
-            # Calculate conversation metadata
             metadata = {
                 'total_messages': len(messages),
                 'user_messages': len([m for m in messages if m['role'] == 'user']),
@@ -617,7 +603,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
         if not messages:
             return 'UNKNOWN'
         
-        # Get user messages for analysis
         user_messages = [msg['content'].lower() for msg in messages if msg['role'] == 'user']
         all_text = ' '.join(user_messages + [user_hint.lower()])
         
@@ -638,7 +623,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
             if score > 0:
                 intent_scores[intent] = score
         
-        # Return highest scoring intent
         if intent_scores:
             return max(intent_scores.items(), key=lambda x: x[1])[0]
         
@@ -746,7 +730,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
         failed = 0
         
         for file_path in file_paths:
-            # Validate file
             validation_error = self._validate_file(file_path)
             if validation_error:
                 results.append({
@@ -781,7 +764,6 @@ CORTEX now remembers this conversation. Future requests like "make it purple" wi
                     failed += 1
                     continue
                 
-                # Import to working memory
                 import_result = self._import_to_working_memory(parsed)
                 
                 if import_result['success']:

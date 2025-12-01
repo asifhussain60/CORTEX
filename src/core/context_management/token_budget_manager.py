@@ -79,7 +79,6 @@ class TokenBudgetManager:
             equal_share = available_budget // len(tier_relevance_scores)
             return {tier: equal_share for tier in tier_relevance_scores}
         
-        # Calculate total relevance
         total_relevance = sum(active_tiers.values())
         
         # Allocate proportionally
@@ -313,7 +312,6 @@ class TokenBudgetManager:
         if not historical_usage:
             return self.total_budget
         
-        # Calculate total usage for each historical entry
         total_usages = [sum(usage.values()) for usage in historical_usage]
         
         # Sort and find percentile

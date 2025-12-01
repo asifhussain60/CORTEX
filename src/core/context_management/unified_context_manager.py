@@ -260,7 +260,6 @@ class UnifiedContextManager:
         current_files = current_files or []
         prioritize = prioritize or ['tier1', 'tier2', 'tier3']
         
-        # Check cache
         cache_key = self._cache_key(user_request, token_budget, current_files)
         cached = self._get_cached(cache_key)
         if cached:
@@ -289,7 +288,6 @@ class UnifiedContextManager:
         tier2_context = self._build_tier2_context(tier2_data, tier_budgets['tier2'])
         tier3_context = self._build_tier3_context(tier3_data, tier_budgets['tier3'])
         
-        # Calculate actual token usage
         tier1_tokens = self._estimate_tokens(tier1_context)
         tier2_tokens = self._estimate_tokens(tier2_context)
         tier3_tokens = self._estimate_tokens(tier3_context)
@@ -335,7 +333,6 @@ class UnifiedContextManager:
         """Load context from Tier 1 (Working Memory)"""
         conversations = []
         
-        # Get recent conversations
         all_convs = self.tier1.conversation_manager.get_recent_conversations(limit=10)
         
         # Filter relevant ones
@@ -383,7 +380,6 @@ class UnifiedContextManager:
         insights = []
         
         try:
-            # Get unstable files
             unstable_files = self.tier3.get_unstable_files(limit=10)
             for hotspot in unstable_files[:5]:  # Top 5 unstable files
                 insights.append({
@@ -394,7 +390,6 @@ class UnifiedContextManager:
                     'severity': 'WARNING' if hotspot.stability.value == 'UNSTABLE' else 'INFO'
                 })
             
-            # Get recent insights
             recent_insights = self.tier3.generate_insights()
             for insight in recent_insights[:5]:  # Top 5 insights
                 insights.append({

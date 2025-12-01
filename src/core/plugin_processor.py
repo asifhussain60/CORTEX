@@ -37,7 +37,6 @@ class PluginProcessor:
             if not os.path.isabs(plugin_path):
                 plugin_path = self.cortex_root / plugin_path
             
-            # Check cache
             cache_key = str(plugin_path)
             if cache_key in self.plugin_cache:
                 return self.plugin_cache[cache_key], None
@@ -46,7 +45,6 @@ class PluginProcessor:
             with open(plugin_path, 'r', encoding='utf-8') as f:
                 config_dict = yaml.safe_load(f)
             
-            # Validate schema
             is_valid, error = validate_plugin_schema(config_dict)
             if not is_valid:
                 return None, f"Schema validation failed: {error}"
@@ -155,7 +153,6 @@ class PluginProcessor:
             
             # Execute each workflow step
             for step in plugin.workflow:
-                # Check condition
                 if step.condition and not self._eval_condition(step.condition, params, results):
                     continue
                 
@@ -216,7 +213,6 @@ class PluginProcessor:
             for key, value in params.items():
                 condition = condition.replace(f"${key}", str(value))
             
-            # Check for simple conditions
             if condition == "auto_deploy_flag":
                 return params.get("deploy", False)
             if condition == "new_technical_features":

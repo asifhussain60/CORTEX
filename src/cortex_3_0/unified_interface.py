@@ -163,7 +163,6 @@ class RequestAnalyzer:
     def _determine_optimal_mode(self, complexity: RequestComplexity, context: Dict[str, Any]) -> CortexMode:
         """Determine optimal CORTEX mode based on complexity and context"""
         
-        # Check for explicit mode preference
         if "force_20" in context:
             return CortexMode.CORTEX_20_COMPATIBILITY
         elif "force_30" in context:
@@ -214,15 +213,12 @@ class CortexUnifiedInterface:
         self.cortex_brain_path = cortex_brain_path
         self.config = config or {}
         
-        # Initialize analyzers
         self.request_analyzer = RequestAnalyzer()
         
-        # Initialize 3.0 systems
         self.dual_channel_memory = DualChannelMemory(cortex_brain_path)
         self.enhanced_agents = EnhancedAgentSystem()
         self.smart_context = SmartContextIntelligence(cortex_brain_path)
         
-        # Initialize 2.0 systems for compatibility
         self.universal_operations = UniversalOperationsSystem(cortex_brain_path)
         self.intent_router = IntentRouter()
         
@@ -239,7 +235,6 @@ class CortexUnifiedInterface:
         start_time = datetime.now()
         context = context or {}
         
-        # Create unified request
         request = CortexRequest(
             request_id=f"req_{int(start_time.timestamp())}",
             user_message=user_message,
@@ -263,7 +258,6 @@ class CortexUnifiedInterface:
             else:  # CORTEX_30_HYBRID
                 response_data = await self._process_with_30_hybrid(request)
                 
-            # Create unified response
             duration = (datetime.now() - start_time).total_seconds()
             
             response = CortexResponse(
@@ -337,7 +331,6 @@ class CortexUnifiedInterface:
         if not request.session_id:
             request.session_id = await self.smart_context.start_intelligent_session(request.user_message)
             
-        # Get intelligent context
         context = await self.smart_context.get_intelligent_context(
             request.session_id, request.user_message
         )

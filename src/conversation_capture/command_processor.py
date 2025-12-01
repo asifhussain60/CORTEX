@@ -132,7 +132,6 @@ class CaptureCommandProcessor:
                     
                     # Handle capture command (both template and direct mode)
                     if command_type == 'capture':
-                        # Check for file: parameters (direct import mode)
                         # Support both #file: (GitHub Copilot style) and file: syntax
                         file_matches = re.findall(r'(?:#file:|file:)([^\s]+)', user_input, re.IGNORECASE)
                         if file_matches:
@@ -155,7 +154,6 @@ class CaptureCommandProcessor:
     def _handle_capture_command(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Handle capture conversation command (template mode or direct mode)"""
         
-        # Check if files were provided (direct mode)
         if params.get('files'):
             return self._handle_direct_import(params['files'])
         
@@ -318,7 +316,6 @@ class CaptureCommandProcessor:
         file_path = Path(result['file_path'])
         file_name = file_path.name
         
-        # Create vscode:// link for opening file
         vscode_link = f"vscode://file/{file_path.absolute()}"
         
         return f"""
