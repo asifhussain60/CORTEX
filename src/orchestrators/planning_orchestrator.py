@@ -24,6 +24,8 @@ from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+from src.agents.security.threat_modeler_agent import ThreatModelerAgent
+from src.agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +60,9 @@ class PlanningOrchestrator:
         
         # NEW: Initialize git checkpoint orchestrator for planning workflow
         self.git_checkpoint = GitCheckpointOrchestrator(project_root=str(self.cortex_root))
+        
+        # NEW: Initialize ThreatModelerAgent for security analysis
+        self.threat_modeler = ThreatModelerAgent()
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -1994,3 +1999,134 @@ class PlanningOrchestrator:
         tier1.update_swagger_context_status(swagger_context_id, 'estimated')
         
         return result
+    
+    # ========================================
+    # Threat Modeling Integration
+    # ========================================
+    
+    def analyze_threats(
+        self,
+        feature_description: str,
+        plan_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Analyze security threats for a feature using ThreatModelerAgent.
+        
+        This method integrates threat modeling into the planning workflow,
+        providing STRIDE-based threat analysis with mitigations.
+        
+        Args:
+            feature_description: Natural language description of feature
+            plan_data: Optional plan data for enhanced context
+        
+        Returns:
+            Threat analysis result with:
+            - threats: List of identified threats
+            - mitigations: Mitigation strategies
+            - owasp_mapping: OWASP Top 10 mappings
+            - risk_summary: Risk rating summary
+        """
+        try:
+            # Prepare context for threat modeler
+            context = {
+                'feature_description': feature_description,
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            # Add plan data if available
+            if plan_data:
+                context['plan_metadata'] = plan_data.get('metadata', {})
+                context['phases'] = plan_data.get('phases', [])
+            
+            # Create agent request
+            request = AgentRequest(
+                intent='analyze_threats',
+                context=context,
+                user_input=feature_description
+            )
+            
+            # Execute threat analysis
+            logger.info("🔒 Analyzing security threats...")
+            response = self.threat_modeler.execute(request)
+            
+            if not response.success:
+                logger.error(f"Threat analysis failed: {response.message}")
+                return {
+                    'success': False,
+                    'error': response.message,
+                    'threats': [],
+                    'mitigations': []
+                }
+            
+            logger.info(f"✅ Threat analysis complete: {len(response.result.get('threats', []))} threats identified")
+            return {
+                'success': True,
+                'threats': response.result.get('threats', []),
+                'mitigations': response.result.get('mitigations', []),
+                'owasp_mapping': response.result.get('owasp_mapping', {}),
+                'risk_summary': response.result.get('risk_summary', {}),
+                'report': response.result.get('report', '')
+            }
+            
+        except Exception as e:
+            error_msg = f"Threat analysis failed: {e}"
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'threats': [],
+                'mitigations': []
+            }
+    
+    def integrate_threats_into_plan(
+        self,
+        plan_data: Dict[str, Any],
+        threat_analysis: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Integrate threat analysis results into plan data.
+        
+        Adds security section and updates DoD with threat mitigations.
+        
+        Args:
+            plan_data: Existing plan data
+            threat_analysis: Results from analyze_threats()
+        
+        Returns:
+            Updated plan data with integrated threats
+        """
+        try:
+            # Add security section if not present
+            if 'security' not in plan_data:
+                plan_data['security'] = {}
+            
+            # Integrate threat data
+            plan_data['security']['threat_analysis'] = {
+                'threats': threat_analysis.get('threats', []),
+                'mitigations': threat_analysis.get('mitigations', []),
+                'owasp_mapping': threat_analysis.get('owasp_mapping', {}),
+                'risk_summary': threat_analysis.get('risk_summary', {}),
+                'analyzed_at': datetime.now().isoformat()
+            }
+            
+            # Add threat mitigations to DoD
+            if 'definition_of_done' not in plan_data:
+                plan_data['definition_of_done'] = []
+            
+            # Add security DoD items
+            critical_threats = [t for t in threat_analysis.get('threats', []) 
+                              if t.get('risk_rating') in ['CRITICAL', 'HIGH']]
+            
+            if critical_threats:
+                plan_data['definition_of_done'].append({
+                    'category': 'Security',
+                    'item': f'All {len(critical_threats)} critical/high threats mitigated',
+                    'threat_count': len(critical_threats)
+                })
+            
+            logger.info(f"✅ Threats integrated into plan: {len(threat_analysis.get('threats', []))} threats")
+            return plan_data
+            
+        except Exception as e:
+            logger.error(f"Failed to integrate threats: {e}")
+            return plan_data

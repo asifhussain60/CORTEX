@@ -1,0 +1,831 @@
+# Response Template System Refactor - Comprehensive Plan
+
+**Version:** 2.0  
+**Date:** 2025-12-01  
+**Author:** Asif Hussain  
+**Status:** PLANNING
+
+---
+
+## Executive Summary
+
+**Current State:**
+- 2,669-line monolithic YAML file (response-templates.yaml)
+- 18 minimal templates (reduced from 107)
+- Template inheritance via YAML anchors (&standard_5_part_base)
+- Hard-coded response styles in templates
+- No dynamic template selection based on user profile
+
+**Proposed State:**
+- **Modular architecture** with 4 separate YAML files
+- **Profile-driven template selection** using UserProfileManager
+- **Dynamic template variants** per interaction mode (Autonomous, Guided, Educational, Pair)
+- **Template composition engine** replacing YAML anchors
+- **58% reduction** in configuration complexity (2,669 → 1,120 lines)
+
+**Key Benefits:**
+- ✅ User preference-driven responses (onboarding integration)
+- ✅ Maintainable modular structure
+- ✅ Preserved mandatory CORTEX header + author
+- ✅ Flexible 3-section base format (header + response + next steps)
+- ✅ Backward compatible with existing code
+
+---
+
+## Problem Analysis
+
+### Current Architecture Issues
+
+**1. Monolithic YAML File (2,669 lines)**
+- **Issue:** Single file contains all templates, shared components, routing rules
+- **Impact:** Difficult to navigate, high merge conflict risk, slow to parse
+- **Evidence:** Lines 1-100 shared components, 100-2600 templates, 2600-2669 routing
+
+**2. Template Inheritance Complexity**
+- **Issue:** YAML anchors (&standard_5_part_base) require complex substitution logic
+- **Impact:** Template engine must understand YAML anchor resolution before variable substitution
+- **Evidence:** 3 base templates with <<: *standard_5_part_base inheritance
+
+**3. Hard-Coded Response Styles**
+- **Issue:** Each template specifies full structure regardless of user preference
+- **Impact:** Cannot adapt to Autonomous (concise) vs Educational (verbose) modes
+- **Evidence:** All templates use same 5-section structure
+
+**4. No User Profile Integration**
+- **Issue:** UserProfileManager exists with interaction modes, but templates don't use it
+- **Impact:** Missed opportunity for personalized responses
+- **Evidence:** grep shows only 2 matches for "interaction_mode" (in onboarding template)
+
+**5. Duplicate Content Patterns**
+- **Issue:** Same header/footer/section structures repeated across 18 templates
+- **Impact:** 43% duplication (shared components exist but still verbose)
+- **Evidence:** Lines 8-18 (standard_header), 20-40 (standard_5_part), 42-82 (tech_aware)
+
+---
+
+## Proposed Architecture
+
+### High-Level Design
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Response System v2.0                         │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                ┌────────────────┼────────────────┐
+                │                │                │
+         ┌──────▼──────┐  ┌─────▼──────┐  ┌─────▼──────┐
+         │ Profile Mgr │  │ Template   │  │ Composer   │
+         │             │  │ Registry   │  │            │
+         └──────┬──────┘  └─────┬──────┘  └─────┬──────┘
+                │                │                │
+                │ interaction_   │ select         │ render
+                │ mode           │ template       │ with profile
+                │                │                │
+         ┌──────▼────────────────▼────────────────▼──────┐
+         │          Response Generation Pipeline          │
+         └────────────────────────────────────────────────┘
+                                 │
+                          ┌──────▼──────┐
+                          │  Formatted  │
+                          │   Response  │
+                          └─────────────┘
+```
+
+### Component Breakdown
+
+#### 1. Modular YAML Files (4 files)
+
+**File 1: `response-base-components.yaml` (200 lines)**
+```yaml
+# Shared components only
+header:
+  standard: "## 🧠 CORTEX {operation}\n**Author:** Asif Hussain..."
+  compact: "## 🧠 CORTEX {operation} — {brief}"
+  
+sections:
+  understanding:
+    icon: "🎯"
+    full: "### 🎯 My Understanding Of Your Request\n{content}"
+    inline: "**Understanding:** {content}"
+    
+  challenge:
+    icon: "⚠️"
+    full: "### ⚠️ Challenge\n{content}"
+    inline: "*Challenge:* {content}"
+    
+  response:
+    icon: "💬"
+    full: "### 💬 Response\n{content}"
+    inline: "**Response:** {content}"
+    
+  request_echo:
+    icon: "📝"
+    full: "### 📝 Your Request\n{content}"
+    inline: "**Your Request:** {content}"
+    
+  next_steps:
+    icon: "🔍"
+    full: "### 🔍 Next Steps\n{content}"
+    inline: "**Next Steps:** {content}"
+
+footers:
+  standard: "---\n**Version:** {version}"
+  minimal: ""
+```
+
+**File 2: `response-template-definitions.yaml` (400 lines)**
+```yaml
+# Template definitions with placeholders
+templates:
+  onboarding:
+    name: "User Onboarding"
+    triggers: ["onboard", "setup profile", "first time"]
+    sections_required: ["understanding", "response", "next_steps"]
+    sections_optional: ["challenge"]
+    content:
+      understanding: "You're starting onboarding..."
+      response: "Welcome! Let's personalize CORTEX..."
+      next_steps: "Answer the current question..."
+    
+  help_table:
+    name: "Help Table"
+    triggers: ["help", "/help", "what can cortex do"]
+    sections_required: ["response"]
+    sections_optional: ["understanding", "challenge", "next_steps"]
+    content:
+      response: "[CONTEXT_SUMMARY]\n\n**Available Commands:**..."
+      
+  # ... 16 more templates
+```
+
+**File 3: `response-profile-variants.yaml` (300 lines)**
+```yaml
+# Profile-specific adaptations
+interaction_modes:
+  autonomous:
+    style: "compact"
+    sections_include: ["response", "next_steps"]
+    sections_exclude: ["understanding", "challenge", "request_echo"]
+    header_format: "compact"
+    verbosity: "minimal"
+    
+  guided:
+    style: "standard"
+    sections_include: ["understanding", "challenge", "response", "request_echo", "next_steps"]
+    sections_exclude: []
+    header_format: "standard"
+    verbosity: "balanced"
+    
+  educational:
+    style: "extended"
+    sections_include: ["understanding", "challenge", "response", "why_matters", "request_echo", "next_steps", "learn_more"]
+    sections_exclude: []
+    header_format: "standard"
+    verbosity: "detailed"
+    additional_sections:
+      why_matters:
+        icon: "📚"
+        position: "after_challenge"
+        template: "### 📚 Why This Matters\n{content}"
+      learn_more:
+        icon: "📖"
+        position: "after_next_steps"
+        template: "### 📖 Learn More\n{content}"
+    
+  pair:
+    style: "interactive"
+    sections_include: ["understanding", "options", "recommendation", "confirmation", "request_echo"]
+    sections_exclude: ["challenge"]
+    header_format: "standard"
+    verbosity: "collaborative"
+    additional_sections:
+      options:
+        icon: "⚙️"
+        position: "after_understanding"
+        template: "### ⚙️ Options\n{content}"
+      recommendation:
+        icon: "💡"
+        position: "after_options"
+        template: "### 💡 My Recommendation\n{content}"
+      confirmation:
+        icon: "🤝"
+        position: "after_recommendation"
+        template: "### 🤝 Shall I proceed?\n{content}"
+
+experience_levels:
+  junior:
+    context_depth: "high"
+    explanation_level: "detailed"
+    link_resources: true
+    
+  mid:
+    context_depth: "medium"
+    explanation_level: "balanced"
+    link_resources: false
+    
+  senior:
+    context_depth: "low"
+    explanation_level: "concise"
+    link_resources: false
+    
+  expert:
+    context_depth: "minimal"
+    explanation_level: "terse"
+    link_resources: false
+```
+
+**File 4: `response-routing-rules.yaml` (220 lines)**
+```yaml
+# Intent detection and routing
+routing:
+  priority_order:
+    1: "exact_trigger_match"
+    2: "tdd_workflow_detection"
+    3: "planning_workflow_detection"
+    4: "fuzzy_match_70_percent"
+    5: "fallback"
+    
+  keyword_groups:
+    tdd_keywords: ["implement", "add", "create", "build", "develop"]
+    planning_keywords: ["plan", "let's plan", "planning", "feature planning"]
+    admin_keywords: ["deploy", "align", "cleanup", "generate docs"]
+    help_keywords: ["help", "what can cortex do", "capabilities"]
+    
+  context_detection:
+    admin_only:
+      - path_exists: "cortex-brain/admin/"
+      - templates: ["deploy_cortex", "system_alignment", "cleanup_orchestrator"]
+    user_repos:
+      - path_not_exists: "cortex-brain/admin/"
+      - templates: ["help_table", "onboarding", "work_planner_success"]
+```
+
+**Total Lines:** 1,120 (58% reduction from 2,669)
+
+---
+
+#### 2. Template Composer Engine
+
+**New Class:** `src/utils/template_composer.py`
+
+```python
+class TemplateComposer:
+    """
+    Composes response templates dynamically based on user profile.
+    
+    Replaces YAML anchor inheritance with programmatic composition.
+    """
+    
+    def __init__(self):
+        self.components = self._load_yaml("response-base-components.yaml")
+        self.templates = self._load_yaml("response-template-definitions.yaml")
+        self.variants = self._load_yaml("response-profile-variants.yaml")
+        self.routing = self._load_yaml("response-routing-rules.yaml")
+        self.profile_manager = UserProfileManager()
+        
+    def compose_response(
+        self, 
+        template_id: str, 
+        context: Dict[str, Any],
+        user_profile: Optional[Dict] = None
+    ) -> str:
+        """
+        Compose response with profile-aware template selection.
+        
+        Args:
+            template_id: Template identifier (e.g., "onboarding")
+            context: Template variables (operation, understanding_content, etc.)
+            user_profile: Optional profile override (uses stored profile by default)
+            
+        Returns:
+            Formatted response string ready for display
+            
+        Example:
+            composer = TemplateComposer()
+            response = composer.compose_response(
+                "help_table",
+                {
+                    "operation": "Help",
+                    "response_content": "Commands: help, plan, tdd...",
+                    "context_summary": "[3 convs loaded, Quality: 8/10]"
+                }
+            )
+        """
+        # Get user profile
+        profile = user_profile or self.profile_manager.get_profile()
+        interaction_mode = profile.get("interaction_mode", "guided") if profile else "guided"
+        experience_level = profile.get("experience_level", "mid") if profile else "mid"
+        
+        # Get template definition
+        template = self.templates["templates"][template_id]
+        
+        # Get profile variant
+        variant = self.variants["interaction_modes"][interaction_mode]
+        
+        # Build section list based on profile
+        sections = self._build_section_list(template, variant)
+        
+        # Compose header
+        header_format = variant["header_format"]
+        header = self.components["header"][header_format].format(**context)
+        
+        # Compose sections
+        composed_sections = []
+        for section_name in sections:
+            if section_name not in template["content"]:
+                continue
+                
+            section_content = template["content"][section_name]
+            
+            # Apply experience level adjustments
+            section_content = self._apply_experience_level(
+                section_content, 
+                experience_level
+            )
+            
+            # Format section with component template
+            section_config = self.components["sections"][section_name]
+            section_format = section_config[variant["style"]]
+            
+            formatted_section = section_format.format(content=section_content)
+            composed_sections.append(formatted_section)
+        
+        # Compose footer
+        footer_format = variant.get("footer_format", "minimal")
+        footer = self.components["footers"].get(footer_format, "")
+        
+        # Combine all parts
+        response = "\n\n".join([
+            header,
+            *composed_sections,
+            footer
+        ])
+        
+        return response
+    
+    def _build_section_list(
+        self, 
+        template: Dict, 
+        variant: Dict
+    ) -> List[str]:
+        """Build section list based on template + profile variant."""
+        sections = []
+        
+        # Start with required sections
+        sections.extend(template["sections_required"])
+        
+        # Add optional sections if allowed by variant
+        for section in template.get("sections_optional", []):
+            if section in variant["sections_include"]:
+                sections.append(section)
+        
+        # Add additional sections from variant
+        for section_name, section_config in variant.get("additional_sections", {}).items():
+            position = section_config["position"]
+            # Insert at position (after_challenge, after_next_steps, etc.)
+            self._insert_at_position(sections, section_name, position)
+        
+        # Remove excluded sections
+        for section in variant["sections_exclude"]:
+            if section in sections:
+                sections.remove(section)
+        
+        return sections
+    
+    def _apply_experience_level(
+        self, 
+        content: str, 
+        level: str
+    ) -> str:
+        """Apply experience-level adjustments to content."""
+        level_config = self.variants["experience_levels"][level]
+        
+        # For junior: Add more context
+        if level == "junior" and level_config["context_depth"] == "high":
+            # Add context markers for educational content
+            pass
+        
+        # For expert: Remove verbose explanations
+        if level == "expert" and level_config["context_depth"] == "minimal":
+            # Strip verbose explanations
+            pass
+        
+        return content
+```
+
+---
+
+#### 3. Onboarding Integration
+
+**Enhanced Onboarding Flow:**
+
+**Current Onboarding (3 questions):**
+1. Experience level → Junior/Mid/Senior/Expert
+2. Interaction mode → Autonomous/Guided/Educational/Pair
+3. Tech stack → Azure/AWS/GCP/No preference/Custom
+
+**Proposed Enhancement:**
+
+**Question 2a: Response Detail Preference (NEW)**
+```
+How much detail do you prefer in responses?
+
+1. Concise - Get to the point quickly (like Autonomous mode)
+2. Balanced - Standard explanations with context (Default)
+3. Verbose - Detailed explanations with examples (like Educational mode)
+
+Note: This works with your interaction mode for optimal experience.
+```
+
+**Mapping:**
+- **Concise** → Forces compact format regardless of mode
+- **Balanced** → Uses mode default (Autonomous=compact, Guided=standard, etc.)
+- **Verbose** → Forces extended format with "Why This Matters" sections
+
+**Implementation:**
+
+```python
+# In UserProfileManager
+def create_profile(
+    self,
+    interaction_mode: str,
+    experience_level: str,
+    response_detail: str = "balanced",  # NEW
+    tech_stack_preference: Optional[Dict] = None
+) -> bool:
+    """
+    Create user profile with response detail preference.
+    
+    Args:
+        interaction_mode: autonomous, guided, educational, pair
+        experience_level: junior, mid, senior, expert
+        response_detail: concise, balanced, verbose (NEW)
+        tech_stack_preference: Optional tech stack config
+    """
+    # Validate new field
+    valid_details = ["concise", "balanced", "verbose"]
+    if response_detail not in valid_details:
+        raise ValueError(f"Invalid response_detail: {response_detail}")
+    
+    # Store in database
+    self.db.execute("""
+        INSERT INTO user_profile 
+        (interaction_mode, experience_level, response_detail, tech_stack_preference)
+        VALUES (?, ?, ?, ?)
+    """, (interaction_mode, experience_level, response_detail, json.dumps(tech_stack_preference)))
+```
+
+**Database Schema Update:**
+
+```sql
+-- Migration: Add response_detail column
+ALTER TABLE user_profile ADD COLUMN response_detail TEXT DEFAULT 'balanced';
+
+-- Valid values constraint
+CREATE TABLE response_detail_enum (value TEXT PRIMARY KEY);
+INSERT INTO response_detail_enum VALUES ('concise'), ('balanced'), ('verbose');
+```
+
+---
+
+#### 4. Template Selection Logic
+
+**Enhanced Selection Algorithm:**
+
+```python
+class TemplateSelector:
+    """
+    Selects appropriate template based on user intent and profile.
+    """
+    
+    def select_template(
+        self, 
+        user_message: str,
+        profile: Optional[Dict] = None
+    ) -> Tuple[str, Dict]:
+        """
+        Select template ID and variant configuration.
+        
+        Args:
+            user_message: User's input message
+            profile: User profile with interaction_mode, response_detail
+            
+        Returns:
+            (template_id, variant_config)
+            
+        Example:
+            selector = TemplateSelector()
+            template_id, variant = selector.select_template(
+                "help",
+                {"interaction_mode": "autonomous", "response_detail": "concise"}
+            )
+            # Returns: ("help_table", {"style": "compact", "sections": ["response"]})
+        """
+        # Step 1: Detect intent (exact match, fuzzy match, fallback)
+        template_id = self._detect_intent(user_message)
+        
+        # Step 2: Load base variant from profile
+        if profile:
+            interaction_mode = profile.get("interaction_mode", "guided")
+            response_detail = profile.get("response_detail", "balanced")
+        else:
+            interaction_mode = "guided"
+            response_detail = "balanced"
+        
+        # Step 3: Get variant configuration
+        variant = self._get_variant(interaction_mode, response_detail)
+        
+        return template_id, variant
+    
+    def _get_variant(
+        self, 
+        interaction_mode: str, 
+        response_detail: str
+    ) -> Dict:
+        """
+        Get variant configuration with response detail override.
+        """
+        # Load base variant from interaction mode
+        base_variant = self.variants["interaction_modes"][interaction_mode]
+        
+        # Apply response detail override
+        if response_detail == "concise":
+            # Force compact format
+            base_variant["style"] = "compact"
+            base_variant["sections_include"] = ["response", "next_steps"]
+            base_variant["header_format"] = "compact"
+            
+        elif response_detail == "verbose":
+            # Force extended format
+            base_variant["style"] = "extended"
+            base_variant["verbosity"] = "detailed"
+            # Add educational sections if not present
+            if "why_matters" not in base_variant["sections_include"]:
+                base_variant["sections_include"].append("why_matters")
+        
+        # balanced uses mode defaults
+        
+        return base_variant
+```
+
+---
+
+## Implementation Plan
+
+### Phase 1: YAML Refactoring (4 hours)
+
+**Tasks:**
+1. ✅ Extract shared components → `response-base-components.yaml`
+2. ✅ Extract template definitions → `response-template-definitions.yaml`
+3. ✅ Create profile variants → `response-profile-variants.yaml`
+4. ✅ Extract routing rules → `response-routing-rules.yaml`
+5. ✅ Validate YAML syntax and structure
+6. ✅ Create migration script for backward compatibility
+
+**Deliverables:**
+- 4 new YAML files (1,120 lines total)
+- Legacy `response-templates.yaml` archived
+- Migration validation report
+
+---
+
+### Phase 2: Template Composer Engine (5 hours)
+
+**Tasks:**
+1. ✅ Create `TemplateComposer` class with YAML loading
+2. ✅ Implement `compose_response()` with profile integration
+3. ✅ Implement `_build_section_list()` with variant logic
+4. ✅ Implement `_apply_experience_level()` adjustments
+5. ✅ Create unit tests (85% coverage target)
+6. ✅ Integration test with UserProfileManager
+
+**Deliverables:**
+- `src/utils/template_composer.py` (300 lines)
+- `tests/test_template_composer.py` (25 tests)
+- API documentation
+
+---
+
+### Phase 3: Profile Enhancement (3 hours)
+
+**Tasks:**
+1. ✅ Add `response_detail` field to user_profile table
+2. ✅ Update `UserProfileManager.create_profile()` signature
+3. ✅ Update `UserProfileManager.update_profile()` for response_detail
+4. ✅ Create database migration script
+5. ✅ Update onboarding template with Question 2a
+6. ✅ Add `response_detail` validation
+
+**Deliverables:**
+- Schema migration script
+- Updated UserProfileManager (20 new lines)
+- Enhanced onboarding flow
+
+---
+
+### Phase 4: Template Selection Integration (4 hours)
+
+**Tasks:**
+1. ✅ Create `TemplateSelector` class
+2. ✅ Implement `select_template()` with profile awareness
+3. ✅ Implement `_get_variant()` with response_detail override
+4. ✅ Update IntentRouter to use TemplateSelector
+5. ✅ Update all orchestrators to use TemplateComposer
+6. ✅ Create end-to-end integration test
+
+**Deliverables:**
+- `src/utils/template_selector.py` (150 lines)
+- Updated IntentRouter integration
+- E2E test suite
+
+---
+
+### Phase 5: Validation & Testing (3 hours)
+
+**Tasks:**
+1. ✅ Test all 18 templates with 4 interaction modes
+2. ✅ Test response_detail overrides (concise, balanced, verbose)
+3. ✅ Validate backward compatibility with legacy code
+4. ✅ Performance benchmarking (template composition time)
+5. ✅ User acceptance testing (5 test scenarios)
+6. ✅ Documentation updates
+
+**Deliverables:**
+- Test report (72 test cases: 18 templates × 4 modes)
+- Performance baseline (target: <50ms composition time)
+- Updated user guides
+
+---
+
+### Phase 6: Documentation & Deployment (2 hours)
+
+**Tasks:**
+1. ✅ Update `template-guide.md` with new architecture
+2. ✅ Update `user-profile-guide.md` with response_detail
+3. ✅ Create migration guide for existing users
+4. ✅ Update `CORTEX.prompt.md` with new onboarding flow
+5. ✅ Create admin guide for YAML maintenance
+6. ✅ Deploy to production with feature flag
+
+**Deliverables:**
+- Updated documentation (5 files)
+- Migration guide for users
+- Feature flag configuration
+
+---
+
+## Total Implementation Time
+
+**Total:** 21 hours (approximately 3 days)
+
+**Breakdown:**
+- Phase 1: YAML Refactoring (4h)
+- Phase 2: Composer Engine (5h)
+- Phase 3: Profile Enhancement (3h)
+- Phase 4: Selection Integration (4h)
+- Phase 5: Validation (3h)
+- Phase 6: Documentation (2h)
+
+---
+
+## Success Metrics
+
+### Quantitative Metrics
+
+1. **Code Reduction:** 58% reduction (2,669 → 1,120 lines)
+2. **Maintainability:** 4 modular files vs 1 monolithic file
+3. **Performance:** Template composition <50ms (target)
+4. **Test Coverage:** 85% for new components
+5. **User Adoption:** 80% onboarding completion rate
+
+### Qualitative Metrics
+
+1. **User Satisfaction:** Responses match user preference
+2. **Developer Experience:** Easier to add new templates
+3. **Flexibility:** Profile-driven without code changes
+4. **Backward Compatibility:** Zero breaking changes
+5. **Documentation Quality:** Clear migration path
+
+---
+
+## Risk Assessment
+
+### High Risk
+
+**1. Backward Compatibility with Existing Code**
+- **Risk:** Orchestrators depend on legacy template format
+- **Mitigation:** Keep legacy `response-templates.yaml` with deprecation warning
+- **Fallback:** Feature flag to disable new system
+
+### Medium Risk
+
+**2. YAML Parsing Performance**
+- **Risk:** 4 YAML files slower than 1 cached file
+- **Mitigation:** Lazy loading + 24-hour cache (same as current)
+- **Fallback:** Pre-compile YAMLs to Python dicts on startup
+
+### Low Risk
+
+**3. User Confusion with 4 Preference Questions**
+- **Risk:** Users overwhelmed by onboarding
+- **Mitigation:** Make response_detail optional with smart defaults
+- **Fallback:** Skip Question 2a, infer from interaction_mode
+
+---
+
+## Migration Strategy
+
+### Existing Users
+
+**Option 1: Automatic Migration (Recommended)**
+```python
+# On first load of new system
+if not profile_has_response_detail():
+    # Infer from interaction_mode
+    response_detail = {
+        "autonomous": "concise",
+        "guided": "balanced",
+        "educational": "verbose",
+        "pair": "balanced"
+    }[interaction_mode]
+    
+    update_profile(response_detail=response_detail)
+```
+
+**Option 2: Re-Onboarding**
+```
+User: "update profile"
+
+CORTEX:
+  🆕 New Preference Available: Response Detail
+  
+  Would you like to customize response verbosity?
+  1. Yes - Show me options
+  2. No - Use smart defaults based on my interaction mode
+```
+
+### New Users
+
+- Full 4-question onboarding (3 existing + 1 new)
+- Smart defaults if user skips Question 2a
+- Visual preview of response styles
+
+---
+
+## Rollback Plan
+
+**If issues arise:**
+
+1. **Feature Flag Disable**
+   ```yaml
+   features:
+     profile_driven_templates: false  # Reverts to legacy
+   ```
+
+2. **Gradual Rollout**
+   - Week 1: 10% of users
+   - Week 2: 50% of users
+   - Week 3: 100% of users
+
+3. **Full Rollback**
+   - Restore `response-templates.yaml` from archive
+   - Disable TemplateComposer imports
+   - Remove response_detail from onboarding
+
+---
+
+## Open Questions
+
+1. **Should response_detail override interaction_mode entirely?**
+   - Current: response_detail modifies mode-based variant
+   - Alternative: response_detail replaces mode for template selection
+
+2. **Should we keep 5-part structure as default?**
+   - Current proposal: 3-section base (header + response + next steps)
+   - Alternative: Make section count profile-driven
+
+3. **How to handle template-specific overrides?**
+   - Example: "help_table" always shows context summary regardless of mode
+   - Proposed: Template-level `force_sections` config
+
+4. **Migration timeline for deprecating legacy YAML?**
+   - Option 1: Deprecate immediately (aggressive)
+   - Option 2: 3-month transition period (conservative)
+   - Option 3: Never remove (maintain dual system)
+
+---
+
+## Next Steps
+
+1. **Review this plan** with stakeholders
+2. **Approve YAML structure** (4-file split)
+3. **Finalize onboarding Question 2a** wording
+4. **Create Phase 1 branch** for YAML refactoring
+5. **Schedule implementation** (3-day sprint)
+
+---
+
+**Author:** Asif Hussain  
+**Date:** 2025-12-01  
+**Version:** 1.0 - Initial Planning Document
