@@ -129,7 +129,6 @@ class GitHubIssueFormatter:
         """
         issues = []
         
-        # Create summary issue
         summary_issue = self._create_summary_issue(report)
         issues.append(summary_issue)
         

@@ -42,7 +42,6 @@ class MigrationRunner:
             List of migration version numbers
         """
         async with aiosqlite.connect(self.database_path) as db:
-            # Check if schema_migrations table exists
             cursor = await db.execute(
                 """
                 SELECT name FROM sqlite_master 
@@ -54,7 +53,6 @@ class MigrationRunner:
             if not table_exists:
                 return []
             
-            # Get applied migrations
             cursor = await db.execute(
                 "SELECT version FROM schema_migrations ORDER BY version"
             )
@@ -70,7 +68,6 @@ class MigrationRunner:
         """
         applied = await self.get_applied_migrations()
         
-        # Get all SQL migration files
         migration_files = sorted(self.migrations_dir.glob("*.sql"))
         
         # Filter to only pending migrations
@@ -140,7 +137,6 @@ class MigrationRunner:
         logger.warning("Resetting database - all data will be lost!")
         
         async with aiosqlite.connect(self.database_path) as db:
-            # Get all tables
             cursor = await db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table'"
             )

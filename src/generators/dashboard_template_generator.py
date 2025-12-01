@@ -692,7 +692,6 @@ class DashboardTemplateGenerator:
         Returns:
             Basic HTML template string
         """
-        # Create minimal layers
         layers = [
             DashboardLayer(
                 layer_id='layer-executive',

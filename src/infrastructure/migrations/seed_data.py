@@ -120,7 +120,6 @@ async def seed_database(db_context) -> dict:
     patterns = generate_test_patterns(10)
     context_items = generate_test_context_items(15)
     
-    # Create repositories
     conv_repo = ConversationRepository(db_context)
     pattern_repo = PatternRepository(db_context)
     context_repo = ContextRepository(db_context)

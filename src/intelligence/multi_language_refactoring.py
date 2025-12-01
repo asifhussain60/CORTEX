@@ -36,7 +36,6 @@ class MultiLanguageRefactoringOrchestrator:
         self.parser_registry = ParserRegistry()
         self.language_detector = LanguageDetector()
         
-        # Initialize analyzers
         self.analyzers: Dict[Language, BaseAnalyzer] = {
             Language.PYTHON: PythonAnalyzer(),
             Language.JAVASCRIPT: JavaScriptAnalyzer(),
@@ -81,7 +80,6 @@ class MultiLanguageRefactoringOrchestrator:
                 'smells': []
             }
         
-        # Check if parser available
         if not self.parser_registry.is_available(language):
             return {
                 'success': False,

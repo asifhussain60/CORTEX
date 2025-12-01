@@ -54,7 +54,6 @@ class BrainMetricsCollector:
             - All keys match template placeholders in response-templates.yaml
             - Missing tiers return safe defaults (0, 'Unknown', etc.)
         """
-        # Get nested tier metrics
         tier1_metrics = self._get_tier1_metrics()
         tier2_metrics = self._get_tier2_metrics()
         tier3_metrics = self._get_tier3_metrics()
@@ -93,10 +92,8 @@ class BrainMetricsCollector:
         Schema Compatibility:
             - Includes 'schema_version' key for template validation
         """
-        # Get base metrics
         base = self._get_token_base_metrics()
         
-        # Calculate savings
         savings_data = self._calculate_token_savings(base)
         
         # Add optimization breakdown
@@ -319,11 +316,9 @@ class BrainMetricsCollector:
     
     def _calculate_derived_metrics(self) -> Dict[str, Any]:
         """Calculate derived metrics from base metrics."""
-        # Get base metrics first
         tier1 = self._get_tier1_metrics()
         tier2 = self._get_tier2_metrics()
         
-        # Calculate learning rate
         if tier1['session_duration_hours'] > 0:
             patterns_per_hour = tier2['patterns_count'] / tier1['session_duration_hours']
         else:
@@ -462,7 +457,6 @@ class BrainMetricsCollector:
     
     def _check_tier0_health(self) -> str:
         """Check Tier 0 brain protection health."""
-        # Check if brain protection rules file exists
         rules_file = Path(config.brain_path) / 'brain-protection-rules.yaml'
         return '✅ Protected' if rules_file.exists() else '⚠️ Missing rules'
     

@@ -90,7 +90,6 @@ Examples:
     
     args = parser.parse_args()
     
-    # Initialize CORTEX
     try:
         entry = CortexEntry(
             brain_path=args.brain,
@@ -132,18 +131,15 @@ Examples:
     try:
         while True:
             try:
-                # Get user input
                 user_input = input("You: ").strip()
                 
                 if not user_input:
                     continue
                 
-                # Check for exit commands
                 if user_input.lower() in ["exit", "quit", "q"]:
                     print("\nGoodbye!")
                     break
                 
-                # Process message
                 response = entry.process(
                     user_input,
                     resume_session=True,

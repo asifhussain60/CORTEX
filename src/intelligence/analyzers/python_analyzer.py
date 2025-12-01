@@ -54,7 +54,6 @@ class PythonAnalyzer(BaseAnalyzer):
         
         for node in ast.walk(ast_tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                # Calculate method length
                 if hasattr(node, 'end_lineno') and hasattr(node, 'lineno'):
                     length = node.end_lineno - node.lineno + 1
                     

@@ -79,7 +79,6 @@ class DocumentGovernanceMixin:
             >>> print(doc_path)
             /cortex-brain/documents/reports/test-report.md
         """
-        # Check for brain_path attribute
         if not hasattr(self, 'brain_path'):
             raise AttributeError(
                 "DocumentGovernanceMixin requires 'brain_path' attribute on host class"
@@ -93,7 +92,6 @@ class DocumentGovernanceMixin:
                 f"{', '.join(self.VALID_CATEGORIES)}"
             )
         
-        # Validate category
         if category not in self.VALID_CATEGORIES:
             raise ValueError(
                 f"Invalid category '{category}'. Valid categories: "
@@ -104,10 +102,8 @@ class DocumentGovernanceMixin:
         documents_dir = Path(self.brain_path) / "documents"
         category_dir = documents_dir / category
         
-        # Create category directory if missing
         category_dir.mkdir(parents=True, exist_ok=True)
         
-        # Create document
         doc_path = category_dir / filename
         doc_path.write_text(content, encoding='utf-8')
         
