@@ -1963,6 +1963,7 @@ templates:
     - validate alignment
     - run system alignment
     response_type: detailed
+    handler: src.operations.align.run_align
 
   system_alignment_fix:
     <<: *standard_5_part_base
@@ -1995,18 +1996,6 @@ templates:
     - sync design
     - synchronize design
     - align design
-    response_type: detailed
-
-  setup_epm:
-    <<: *standard_5_part_base
-    name: Setup Entry Point Module
-    triggers:
-    - setup copilot instructions
-    - setup instructions
-    - generate copilot instructions
-    - create copilot instructions
-    - setup epm
-    - copilot instructions
     response_type: detailed
 
   tdd_workflow_start:
@@ -2086,46 +2075,6 @@ templates:
     response_content: "**Rollback Workflow Steps:**\n   \n   1. **Checkpoint Validation** - Verify checkpoint exists in PhaseCheckpointManager\n   2. **Safety Checks** - Detect uncommitted changes and merge conflicts\n   3. **Preview Changes** - Show git diff of changes to be discarded\n   4. **User Confirmation** - Require explicit 'yes' confirmation\n   5. **Execute Rollback** - Run git reset --hard to checkpoint\n   \n   **Safety Features:**\n   • Blocks rollback if uncommitted changes exist\n   • Blocks rollback if merge in progress\n   • Shows diff preview before confirmation\n   • Dry-run mode (--dry-run) for preview without execution\n   • Force mode (--force) to bypass safety checks (DANGER: loses changes)\n   \n   **Checkpoint Types:**\n   • pre-work - Before starting feature work\n   • tdd-red - After writing failing test\n   • tdd-green - After making test pass\n   • refactoring - After code cleanup\n   • post-work - After completing feature"
     request_echo_content: "Rollback to previous checkpoint"
     next_steps_content: "**Execution Options:**\n   \n   1. **Safe Rollback** - Say \"rollback to <checkpoint-id>\" for full safety workflow\n   2. **Preview Only** - Say \"rollback to <checkpoint-id> --dry-run\" to see diff without executing\n   3. **Force Rollback** - Say \"rollback to <checkpoint-id> --force\" to bypass safety (⚠️ loses uncommitted changes)\n   \n   **Finding Checkpoints:**\n   • Say \"list checkpoints\" to see available checkpoint IDs\n   • Checkpoint IDs follow format: phase-YYYYMMDD-HHMMSS (e.g., tdd-green-20251129-140000)\n   \n   **Resolution Tips:**\n   • If uncommitted changes block rollback: commit or stash first\n   • If merge in progress: complete merge or abort with \"git merge --abort\"\n   \n   Ready to rollback? Provide checkpoint ID or say \"list checkpoints\" to see options."
-
-  cache_management:
-    <<: *standard_5_part_base
-    name: Cache Management
-    triggers:
-    - cache status
-    - cache clear
-    - cache dashboard
-    response_type: admin
-    handler: src.operations.cache_commands
-    understanding_content: "You want to view or manage the CORTEX ValidationCache that accelerates repeated operations."
-    challenge_content: "No Challenge - Cache management provides visibility into performance optimizations."
-    response_content: |
-      The ValidationCache stores validation results to avoid redundant computation.
-      
-      **Available Operations:**
-      • `cache status` - Show hit rates, entry counts, effectiveness metrics
-      • `cache clear` - Invalidate all cached results (or specify operation)
-      • `cache dashboard` - Interactive performance dashboard with recommendations
-      
-      **Performance Gains:**
-      • Optimize: 6.4x speedup (45s → 7s)
-      • Cleanup: 5.5x speedup (22s → 4s)
-      • Alignment: 4.2x speedup (30s → 7s)
-      
-      **Auto-Invalidation:** Cache updates automatically when files change (SHA256 tracking)
-      
-      **When to Clear:**
-      • After major refactoring
-      • Low hit rates (<30%)
-      • Suspected corruption or stale results
-    request_echo_content: "Manage CORTEX ValidationCache"
-    next_steps_content: |
-      **Recommended Actions:**
-      
-      1. Run `cache status` for detailed metrics
-      2. Use `cache clear [operation]` for operation-specific invalidation
-      3. View cache-troubleshooting-guide.md for optimization tips
-      
-      Say "cache status" to begin analysis.
 
   ado_planning:
     <<: *standard_5_part_base
