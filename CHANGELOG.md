@@ -5,6 +5,60 @@ All notable changes to CORTEX will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2025-12-01
+
+### Added - Phase 0: Foundation & Code Quality
+- **Debug Marker System (Phase 0.1)**
+  - `@debug_start` and `@debug_end` decorators with configurable log levels
+  - `PerformanceTracker` class with timing and statistics
+  - `DebugScope` context manager for operation scopes
+  - Enhanced `src/utils/debug_markers.py` (413 → 721 lines, +308 lines)
+
+- **Mock Detection Pipeline (Phase 0.2)**
+  - AST-based detection of `unittest.mock` usage in production code (`src/`)
+  - CI/CD workflow integration (`.github/workflows/no-mocks.yml`)
+  - Pre-commit hook (`.githooks/pre-commit`)
+  - Exception list for legitimate mock usage
+  - Skip patterns for backup files
+  - 11/11 tests passing
+
+- **Comment Cleanup Tools (Phase 0.3)**
+  - AST-based comment detection and removal
+  - Detects obvious comments, commented-out code, vague TODOs
+  - Validates docstring format (Google style preferred)
+  - Syntax validation with automatic backup creation
+  - Dry-run mode for safe testing
+  - 13/13 tests passing
+  - Minimal impact: 2 files modified, 10 comments removed
+
+- **Deprecated Code Removal Tools (Phase 0.4)**
+  - AST-based detection of `@deprecated` decorators
+  - Automatic removal of deprecated functions, classes, and async functions
+  - TODO reference cleanup for deprecated code
+  - Broken reference detection after removal
+  - Manifest updates (`cortex-brain/obsolete-tests-manifest.json`)
+  - CHANGELOG entry generation for breaking changes
+  - 16/16 tests passing
+
+### Technical Details
+- **TDD Workflow:** All Phase 0 deliverables completed using RED→GREEN→REFACTOR cycle
+- **Test Coverage:** 40 tests total (100% passing)
+  - Phase 0.2: 11 tests (mock detection)
+  - Phase 0.3: 13 tests (comment cleanup)
+  - Phase 0.4: 16 tests (deprecated code removal)
+- **Git Checkpoints:** Each phase committed separately for traceability
+- **Safety:** All scripts include dry-run mode, backup creation, and syntax validation
+
+### Scripts Added
+- `scripts/verify_no_mocks.py` - Mock detection pipeline
+- `scripts/cleanup_comments.py` - Comment cleanup tool
+- `scripts/remove_deprecated.py` - Deprecated code removal tool
+
+### Test Files Added
+- `tests/test_verify_no_mocks.py` - Mock detection tests
+- `tests/test_cleanup_comments.py` - Comment cleanup tests
+- `tests/test_remove_deprecated.py` - Deprecated removal tests
+
 ## [3.3.0] - 2025-11-30
 
 ### Added
