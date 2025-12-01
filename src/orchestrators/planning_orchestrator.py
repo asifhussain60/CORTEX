@@ -25,7 +25,7 @@ from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
-from src.agents.base_agent import AgentRequest
+from src.cortex_agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
