@@ -27,6 +27,7 @@ class AgentType(Enum):
     PROFILE = auto()         # ProfileAgent (NEW - User Profile System)
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
     ESTIMATOR = auto()       # TimeframeEstimator (NEW - SWAGGER Timeframe Estimation)
+    RCA = auto()             # RCAAgent (NEW - Root Cause Analysis)
 
 
 class IntentType(Enum):
@@ -107,6 +108,12 @@ class IntentType(Enum):
     TIMEFRAME = "timeframe"
     STORY_POINTS = "story_points"
     APPROVE_SCOPE = "approve_scope"  # NEW 3.2.1: Approve inferred scope for estimation
+    
+    # Root Cause Analysis (NEW - RCA Module)
+    RCA = "rca"
+    ROOT_CAUSE_ANALYSIS = "root_cause_analysis"
+    FIVE_WHYS = "five_whys"
+    IMPORT_RCA = "import_rca"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -206,6 +213,12 @@ INTENT_AGENT_MAP = {
     IntentType.TIMEFRAME: AgentType.ESTIMATOR,
     IntentType.STORY_POINTS: AgentType.ESTIMATOR,
     IntentType.APPROVE_SCOPE: AgentType.ESTIMATOR,  # NEW 3.2.1: Route approval to estimator
+    
+    # Root Cause Analysis mapping (NEW - RCA Module)
+    IntentType.RCA: AgentType.RCA,
+    IntentType.ROOT_CAUSE_ANALYSIS: AgentType.RCA,
+    IntentType.FIVE_WHYS: AgentType.RCA,
+    IntentType.IMPORT_RCA: AgentType.RCA,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,
