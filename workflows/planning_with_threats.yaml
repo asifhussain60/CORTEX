@@ -1,0 +1,253 @@
+# CORTEX Planning Workflow with Integrated Threat Modeling
+# Complete planning workflow with security threat analysis and validation
+
+workflow_id: "planning_with_threats"
+name: "Planning Workflow with Threat Modeling"
+description: "Generate comprehensive feature plans with integrated STRIDE threat analysis"
+version: "1.0.0"
+
+# Configuration
+config:
+  threat_modeling:
+    enabled: true
+    auto_mitigations: true
+    owasp_mapping: true
+    risk_threshold: "MEDIUM"  # Minimum risk level to include in report
+  
+  checkpoints:
+    enabled: true
+    auto_approve: false  # Require user approval at checkpoints
+    
+  documentation:
+    auto_organize: true
+    include_threat_report: true
+
+stages:
+  # Stage 1: Definition of Ready validation
+  - id: "validate_dor"
+    script: "dor_validator"
+    description: "Validate feature meets Definition of Ready criteria"
+    required: true
+    depends_on: []
+    timeout_seconds: 180
+    parameters:
+      criteria:
+        - "Clear feature description provided"
+        - "Success criteria defined"
+        - "Known constraints identified"
+        - "Stakeholders identified"
+  
+  # Stage 2: Generate plan skeleton
+  - id: "generate_skeleton"
+    script: "incremental_plan_generator"
+    description: "Generate 200-token plan skeleton"
+    required: true
+    depends_on: ["validate_dor"]
+    timeout_seconds: 300
+    parameters:
+      token_limit: 200
+      include_phases: ["Phase 1", "Phase 2", "Phase 3"]
+  
+  # Stage 3: Checkpoint - Skeleton approval
+  - id: "checkpoint_skeleton"
+    script: "checkpoint_handler"
+    description: "User approval of plan skeleton"
+    required: true
+    depends_on: ["generate_skeleton"]
+    timeout_seconds: 600
+    user_interaction: true
+  
+  # Stage 4: Security threat modeling
+  - id: "threat_analysis"
+    script: "threat_modeler_agent"
+    description: "STRIDE-based threat analysis with OWASP mapping"
+    required: true
+    depends_on: ["checkpoint_skeleton"]
+    timeout_seconds: 600
+    parameters:
+      framework: "STRIDE"
+      include_mitigations: true
+      include_code_examples: true
+      owasp_mapping: true
+      risk_threshold: "MEDIUM"
+    error_handling:
+      on_failure: "warn"  # Continue even if threat analysis fails
+      fallback: "basic_security_checklist"
+  
+  # Stage 5: Fill Phase 1 sections
+  - id: "fill_phase_1"
+    script: "section_filler"
+    description: "Fill Phase 1 sections (Requirements, Dependencies, Architecture)"
+    required: true
+    depends_on: ["threat_analysis"]
+    timeout_seconds: 900
+    parameters:
+      sections: ["Requirements", "Dependencies", "Architecture"]
+      token_limit_per_section: 500
+      include_threat_context: true
+  
+  # Stage 6: Checkpoint - Phase 1 approval
+  - id: "checkpoint_phase_1"
+    script: "checkpoint_handler"
+    description: "User approval of Phase 1 sections"
+    required: true
+    depends_on: ["fill_phase_1"]
+    timeout_seconds: 600
+    user_interaction: true
+  
+  # Stage 7: Fill Phase 2 sections
+  - id: "fill_phase_2"
+    script: "section_filler"
+    description: "Fill Phase 2 sections (Implementation, Tests, Integration)"
+    required: true
+    depends_on: ["checkpoint_phase_1"]
+    timeout_seconds: 900
+    parameters:
+      sections: ["Implementation", "Tests", "Integration"]
+      token_limit_per_section: 500
+      include_security_requirements: true
+  
+  # Stage 8: Checkpoint - Phase 2 approval
+  - id: "checkpoint_phase_2"
+    script: "checkpoint_handler"
+    description: "User approval of Phase 2 sections"
+    required: true
+    depends_on: ["fill_phase_2"]
+    timeout_seconds: 600
+    user_interaction: true
+  
+  # Stage 9: Fill Phase 3 sections
+  - id: "fill_phase_3"
+    script: "section_filler"
+    description: "Fill Phase 3 sections (Acceptance, Security, Deployment)"
+    required: true
+    depends_on: ["checkpoint_phase_2"]
+    timeout_seconds: 900
+    parameters:
+      sections: ["Acceptance", "Security", "Deployment"]
+      token_limit_per_section: 500
+      include_threat_mitigations: true
+  
+  # Stage 10: Checkpoint - Phase 3 approval
+  - id: "checkpoint_phase_3"
+    script: "checkpoint_handler"
+    description: "User approval of Phase 3 sections"
+    required: true
+    depends_on: ["fill_phase_3"]
+    timeout_seconds: 600
+    user_interaction: true
+  
+  # Stage 11: Integrate threats into plan
+  - id: "integrate_threats"
+    script: "threat_integrator"
+    description: "Integrate threat analysis into plan document"
+    required: true
+    depends_on: ["checkpoint_phase_3"]
+    timeout_seconds: 300
+    parameters:
+      add_security_section: true
+      update_dod: true
+      threat_summary: true
+  
+  # Stage 12: Validate Definition of Done
+  - id: "validate_dod"
+    script: "dod_validator"
+    description: "Validate plan meets Definition of Done criteria"
+    required: true
+    depends_on: ["integrate_threats"]
+    timeout_seconds: 180
+    parameters:
+      criteria:
+        - "All phases have tasks with time estimates"
+        - "Security threats identified and mitigated"
+        - "Test strategy defined"
+        - "Success criteria measurable"
+        - "Dependencies documented"
+  
+  # Stage 13: Write complete plan
+  - id: "write_plan"
+    script: "checkpointed_plan_writer"
+    description: "Write complete plan to disk with checkpoints"
+    required: true
+    depends_on: ["validate_dod"]
+    timeout_seconds: 300
+    parameters:
+      output_directory: "cortex-brain/documents/planning/active"
+      include_checkpoints: true
+      format: "markdown"
+  
+  # Stage 14: Auto-organize document
+  - id: "organize_document"
+    script: "document_organizer"
+    description: "Auto-organize plan into correct directory"
+    required: false
+    depends_on: ["write_plan"]
+    timeout_seconds: 60
+  
+  # Stage 15: Generate threat report
+  - id: "generate_threat_report"
+    script: "threat_report_generator"
+    description: "Generate standalone threat modeling report"
+    required: false
+    depends_on: ["integrate_threats"]
+    timeout_seconds: 300
+    parameters:
+      output_directory: "cortex-brain/documents/reports"
+      format: "markdown"
+      include_code_examples: true
+
+# Error handling
+error_handling:
+  on_stage_failure:
+    - "Log error to cortex-brain/logs"
+    - "Create checkpoint for recovery"
+    - "Notify user with actionable feedback"
+  
+  retry_strategy:
+    max_retries: 2
+    backoff_multiplier: 2
+    retryable_errors:
+      - "TimeoutError"
+      - "TemporaryFailure"
+      - "NetworkError"
+
+# Success criteria
+success_criteria:
+  - "Plan file created in active directory"
+  - "All DoR and DoD criteria validated"
+  - "Threat analysis completed successfully"
+  - "All phases have tasks with estimates"
+  - "Security section populated with mitigations"
+
+# Output artifacts
+outputs:
+  - name: "feature_plan"
+    path: "cortex-brain/documents/planning/active/{feature_name}.md"
+    type: "markdown"
+  
+  - name: "threat_report"
+    path: "cortex-brain/documents/reports/threat-analysis-{feature_name}.md"
+    type: "markdown"
+    optional: true
+  
+  - name: "checkpoint_log"
+    path: "workflow_checkpoints/planning-{session_id}.json"
+    type: "json"
+
+# Metrics to track
+metrics:
+  - name: "total_duration_seconds"
+    type: "timer"
+  
+  - name: "threat_count"
+    type: "counter"
+    source: "threat_analysis"
+  
+  - name: "checkpoint_approvals"
+    type: "counter"
+  
+  - name: "plan_token_count"
+    type: "gauge"
+  
+  - name: "dod_criteria_met"
+    type: "gauge"

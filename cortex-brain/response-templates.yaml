@@ -1510,6 +1510,148 @@ templates:
     - system realignment
     response_type: detailed
 
+  threat_report_quick:
+    <<: *standard_5_part_base
+    name: Threat Analysis Quick Report
+    triggers:
+    - threat report
+    - security threats
+    - show threats
+    - threat analysis
+    response_type: detailed
+    operation_name: Threat Analysis
+    understanding_content: "You want a quick security threat analysis for the feature."
+    challenge_content: "No Challenge - STRIDE-based threat analysis identifies potential security vulnerabilities."
+    response_content: |
+      **Threat Analysis Summary**
+      
+      **Threats Identified:** {threat_count}
+      **Risk Distribution:**
+      - Critical: {critical_count}
+      - High: {high_count}
+      - Medium: {medium_count}
+      - Low: {low_count}
+      
+      **OWASP Top 10 Mapping:**
+      {owasp_summary}
+      
+      **Top Threats:**
+      {top_threats}
+      
+      **Recommended Mitigations:**
+      {quick_mitigations}
+    request_echo_content: "{user_request}"
+    next_steps_content: |
+      1. Review identified threats
+      2. Implement recommended mitigations
+      3. Add security tests for critical threats
+      4. Update DoD with security criteria
+
+  threat_report_detailed:
+    <<: *standard_5_part_base
+    name: Threat Analysis Detailed Report
+    triggers:
+    - detailed threat report
+    - full threat analysis
+    - comprehensive threat report
+    response_type: detailed
+    operation_name: Comprehensive Threat Analysis
+    understanding_content: "You want a comprehensive security threat analysis with full details and code examples."
+    challenge_content: "No Challenge - Detailed STRIDE analysis with mitigation strategies and implementation guidance."
+    response_content: |
+      **Comprehensive Threat Analysis**
+      
+      ## Executive Summary
+      - **Feature:** {feature_name}
+      - **Analysis Date:** {analysis_date}
+      - **Total Threats:** {threat_count}
+      - **Risk Score:** {risk_score}/100
+      
+      ## Threat Breakdown by STRIDE
+      
+      ### Spoofing Threats
+      {spoofing_threats}
+      
+      ### Tampering Threats
+      {tampering_threats}
+      
+      ### Repudiation Threats
+      {repudiation_threats}
+      
+      ### Information Disclosure Threats
+      {info_disclosure_threats}
+      
+      ### Denial of Service Threats
+      {dos_threats}
+      
+      ### Elevation of Privilege Threats
+      {privilege_threats}
+      
+      ## OWASP Top 10 2021 Mapping
+      {owasp_detailed}
+      
+      ## Mitigation Strategies
+      {detailed_mitigations}
+      
+      ## Implementation Examples
+      {code_examples}
+      
+      ## Testing Recommendations
+      {test_recommendations}
+    request_echo_content: "{user_request}"
+    next_steps_content: |
+      ☐ Phase 1: Address Critical Threats
+      ☐ Phase 2: Address High-Risk Threats
+      ☐ Phase 3: Implement Mitigations
+      ☐ Phase 4: Add Security Tests
+      ☐ Phase 5: Security Review
+
+  dod_threat_checklist:
+    <<: *standard_5_part_base
+    name: Definition of Done - Security Checklist
+    triggers:
+    - security dod
+    - threat checklist
+    - security checklist
+    response_type: detailed
+    operation_name: Security DoD Checklist
+    understanding_content: "You need a security checklist for Definition of Done validation."
+    challenge_content: "No Challenge - Security validation ensures all identified threats are mitigated."
+    response_content: |
+      **Security Definition of Done Checklist**
+      
+      ## Critical Threats (Must Complete)
+      {critical_threat_checklist}
+      
+      ## High-Risk Threats (Must Complete)
+      {high_threat_checklist}
+      
+      ## Medium-Risk Threats (Should Complete)
+      {medium_threat_checklist}
+      
+      ## Security Testing
+      ☐ Input validation tests for all user inputs
+      ☐ Authentication/authorization tests
+      ☐ SQL injection prevention tests
+      ☐ XSS prevention tests
+      ☐ CSRF token validation tests
+      
+      ## Code Review
+      ☐ Security-focused code review completed
+      ☐ No hardcoded secrets or credentials
+      ☐ Proper error handling (no information leakage)
+      ☐ Secure communication (HTTPS/TLS)
+      
+      ## Documentation
+      ☐ Security architecture documented
+      ☐ Threat mitigation strategies documented
+      ☐ Security test coverage documented
+      
+      **DoD Status:** {dod_completion}%
+    request_echo_content: "{user_request}"
+    next_steps_content: |
+      Complete all critical and high-risk checklist items before marking feature as done.
+
   fallback:
     <<: *standard_5_part_base
     name: Fallback Response
@@ -2659,6 +2801,26 @@ routing:
   - code health
   - project health
   - scan application
+  threat_analysis_triggers:
+  - threat report
+  - security threats
+  - show threats
+  - threat analysis
+  - analyze threats
+  - security analysis
+  - threat modeling
+  - stride analysis
+  threat_detailed_triggers:
+  - detailed threat report
+  - full threat analysis
+  - comprehensive threat report
+  - detailed security analysis
+  security_dod_triggers:
+  - security dod
+  - threat checklist
+  - security checklist
+  - security validation
+  - validate security
 formatting:
   mandatory_sections:
   - understanding

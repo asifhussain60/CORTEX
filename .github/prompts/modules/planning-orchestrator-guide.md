@@ -857,6 +857,194 @@ retention:
 
 ---
 
+## 🛡️ Threat Modeling Integration
+
+**What:** Automated security threat analysis using STRIDE framework integrated into planning workflow
+
+**When:** Threat modeling runs automatically after DoR validation and before plan generation
+
+**Framework:** STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)
+
+### How It Works
+
+```
+User: "plan user authentication feature"
+    ↓
+CORTEX: 
+  ✅ DoR validation passed
+  🔒 Running threat analysis...
+  ✅ Identified 8 threats (2 Critical, 3 High, 3 Medium)
+  ✅ Generated mitigation strategies with code examples
+  ✅ Mapped to OWASP Top 10 2021
+  ✅ Updated DoD with security criteria
+    ↓
+Plan Output:
+  - Phase sections (Requirements, Architecture, Implementation)
+  - Security section with threat analysis
+  - DoD updated with threat mitigations
+  - Standalone threat report generated
+```
+
+### Threat Analysis Output
+
+**Quick Summary:**
+- Total threats identified
+- Risk distribution (Critical/High/Medium/Low)
+- OWASP Top 10 mapping
+- Top 3 threats requiring immediate attention
+- Quick mitigation recommendations
+
+**Detailed Report Includes:**
+- Full STRIDE breakdown
+- Each threat with:
+  - Category (e.g., Spoofing)
+  - Description
+  - Risk rating (CRITICAL/HIGH/MEDIUM/LOW)
+  - Attack scenario
+  - Mitigation strategy
+  - Implementation code example (C#)
+  - Test recommendations
+- OWASP Top 10 2021 mapping
+- Context-aware risk scoring
+
+### Feature-Specific Threat Templates
+
+CORTEX uses specialized threat templates based on feature type:
+
+**Authentication Features:**
+- Credential stuffing attacks
+- Session hijacking
+- Weak password policies
+- Multi-factor authentication bypass
+
+**API Features:**
+- Broken authentication
+- Excessive data exposure
+- Lack of rate limiting
+- Injection attacks
+
+**Data Storage Features:**
+- SQL injection
+- Insecure data at rest
+- Missing encryption
+- Sensitive data exposure
+
+**File Upload Features:**
+- Malicious file upload
+- Path traversal
+- Unrestricted file types
+- Denial of service via large files
+
+**Payment Processing:**
+- PCI-DSS compliance gaps
+- Payment data exposure
+- Transaction tampering
+- Insecure payment gateway integration
+
+### Accessing Threat Reports
+
+**Quick Report (in chat):**
+```
+User: "show threats"
+CORTEX: [Displays quick summary with top threats and mitigations]
+```
+
+**Detailed Report (file):**
+```
+Location: cortex-brain/documents/reports/threat-analysis-[feature-name].md
+Auto-opens: Yes (when threat analysis completes)
+Format: Markdown with structured sections
+```
+
+**Integrated in Plan:**
+```
+Location: cortex-brain/documents/planning/active/[plan-name].md
+Section: ## Security Threat Analysis
+Includes: All identified threats, mitigations, DoD updates
+```
+
+### Security DoD Checklist
+
+Threat modeling automatically adds security items to Definition of Done:
+
+**Critical/High Threats (Must Complete):**
+- [ ] SQL injection prevention implemented and tested
+- [ ] Authentication bypass vulnerability mitigated
+- [ ] Sensitive data encryption at rest configured
+
+**Medium Threats (Should Complete):**
+- [ ] Rate limiting implemented for API endpoints
+- [ ] Input validation for all user inputs
+- [ ] Error handling doesn't leak sensitive information
+
+**Security Testing:**
+- [ ] Unit tests for all security controls
+- [ ] Integration tests for authentication/authorization
+- [ ] Security-focused code review completed
+
+### Commands
+
+```bash
+# Run threat analysis on feature description
+"analyze threats for [feature]"
+
+# Show quick threat summary
+"show threats"
+
+# Show detailed threat report
+"detailed threat report"
+
+# Show security DoD checklist
+"security checklist"
+
+# Validate security DoD
+"validate security"
+```
+
+### Example: Authentication Feature Threat Analysis
+
+```markdown
+## 🛡️ Security Threat Analysis
+
+**Feature:** User Authentication System
+**Analysis Date:** 2025-12-01
+**Total Threats:** 8
+**Risk Score:** 72/100 (HIGH)
+
+### Critical Threats (2)
+
+1. **Weak Password Storage (Spoofing)**
+   - **Risk:** CRITICAL
+   - **OWASP:** A02:2021 - Cryptographic Failures
+   - **Attack:** Attacker gains database access and cracks passwords
+   - **Mitigation:** Use Argon2id or bcrypt with high cost factor
+   ```csharp
+   using Microsoft.AspNetCore.Identity;
+   var hasher = new PasswordHasher<User>();
+   string hashedPassword = hasher.HashPassword(user, password);
+   ```
+
+2. **Missing Multi-Factor Authentication (Spoofing)**
+   - **Risk:** CRITICAL
+   - **OWASP:** A07:2021 - Identification and Authentication Failures
+   - **Attack:** Compromised password grants full account access
+   - **Mitigation:** Implement TOTP-based MFA
+   ```csharp
+   // Implementation code provided...
+   ```
+
+### High Threats (3)
+[Details for each high threat...]
+
+### DoD Integration
+- [ ] Argon2id password hashing implemented
+- [ ] MFA enabled for all user accounts
+- [ ] Session timeout configured (15 minutes)
+- [ ] All security tests passing (15/15)
+```
+
+---
+
 ## 🔒 Security Review (OWASP Integration)
 
 **Auto-Detection:** CORTEX identifies feature type (authentication/api/data_storage/file_upload/payment) and applies relevant OWASP Top 10 categories.
