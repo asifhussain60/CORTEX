@@ -1,14 +1,14 @@
 # 🚀 CORTEX Setup Guide
 
-**Version:** 3.3.0  
+**Version:** 3.5.0  
 **Branch:** main  
-**Updated:** 2025-11-25
+**Updated:** 2025-12-01
 
 ---
 
 ## 📦 What is This?
 
-This is the **production-ready CORTEX deployment package** - a clean, minimal installation for end users.
+This is the **production-ready CORTEX deployment package** with **shared environment support** (Phase 1.1).
 
 **What you get:**
 - ✅ Complete CORTEX source code (`src/`)
@@ -16,6 +16,7 @@ This is the **production-ready CORTEX deployment package** - a clean, minimal in
 - ✅ GitHub Copilot integration (`.github/prompts/`)
 - ✅ Modular documentation (`prompts/`)
 - ✅ Automation scripts (`scripts/`)
+- ✅ **Shared tooling environment** (Phase 1.1) - install once, use everywhere
 - ✅ All dependencies (`requirements.txt`)
 
 **What's excluded:**
@@ -61,7 +62,55 @@ python --version
 git --version
 ```
 
-### 2️⃣ Python Environment Setup
+### 2️⃣ Shared CORTEX Environment (NEW - Phase 1.1)
+
+**CORTEX now uses a shared tooling environment at `~/.cortex/venv/`**
+
+**Benefits:**
+- ✅ Install tooling **once** instead of 10+ times per project
+- ✅ Setup time: 10x → 1x + fast linking (270 seconds saved per project)
+- ✅ Project-specific dependencies stay isolated
+- ✅ No version conflicts between projects
+
+**How It Works:**
+
+```mermaid
+graph LR
+    A[~/.cortex/venv/] --> B[Project 1]
+    A --> C[Project 2]
+    A --> D[Project N]
+    B -.->|isolated| E[.project-site-packages/]
+    C -.->|isolated| F[.project-site-packages/]
+    D -.->|isolated| G[.project-site-packages/]
+```
+
+**Setup Process:**
+
+```bash
+# 1. Create shared CORTEX environment (one-time, ~30 seconds)
+python -m src.orchestrators.setup_orchestrator --create-shared
+
+# 2. Link your project to shared environment (~2 seconds)
+python -m src.orchestrators.setup_orchestrator --link-project /path/to/your/project
+
+# 3. Install project-specific dependencies (if needed)
+python -m src.orchestrators.setup_orchestrator --install-deps /path/to/your/project
+```
+
+**Manual Verification:**
+
+```bash
+# Check shared environment exists
+ls ~/.cortex/venv/
+
+# Check project config
+cat cortex.config.json | grep shared_cortex_venv
+
+# Verify Python executable
+python -c "import sys; print(sys.executable)"
+```
+
+### 3️⃣ Python Environment Setup (Legacy - Single Project)
 
 **CORTEX intelligently manages Python environments:**
 

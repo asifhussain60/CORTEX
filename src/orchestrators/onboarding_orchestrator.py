@@ -720,6 +720,14 @@ To update: `update profile`"""
                 "Application name must be at least 3 characters long."
             )
         
+        # Show expectation message for long-running setup (Phase 1.2)
+        # Setup typically takes 7-10 minutes (environment setup, dependencies)
+        expectation_msg = generate_initial_notification(
+            estimated_seconds=600,  # 10 minutes
+            operation_name="Application Onboarding"
+        )
+        print(expectation_msg)
+        
         # Store application name in Tier 1
         self.working_memory.store_application_name(app_name)
         

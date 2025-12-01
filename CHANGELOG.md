@@ -5,6 +5,64 @@ All notable changes to CORTEX will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2025-12-01
+
+### Added - Phase 1: Setup & Onboarding Enhancement
+
+- **Shared CORTEX Tooling Environment (Phase 1.1)**
+  - Global shared venv at `~/.cortex/venv/` for common tooling (pytest, pyyaml, requests, playwright)
+  - Project-specific dependency isolation via `.project-site-packages/`
+  - 10x → 1x + linking setup time reduction (270 seconds saved per project)
+  - Cross-platform Python executable detection (Windows/Linux/Mac)
+  - `SetupOrchestrator` class with shared environment management
+  - Project linking with performance reports
+  - PYTHONPATH configuration for project dependencies
+  - 11/11 tests passing in 98.28s
+
+- **Long-Running Operation Notifications (Phase 1.2)**
+  - Initial expectation messages for operations >5 minutes
+  - `generate_initial_notification()` with friendly time estimates
+  - Coffee break suggestions ("Good time for coffee ☕")
+  - Integrated into onboarding workflow (10-minute setup notification)
+  - Step progress formatting with (x/y) notation
+
+- **Application Name Requirement (Phase 1.3)**
+  - `--app-name` parameter required for onboarding
+  - Application name validation (minimum 3 characters)
+  - Tier 1 storage via `store_application_name()`
+  - Personalized CORTEX interactions using app name
+  - Updated help text: `onboard application --app-name <name>`
+  - Regex-based parameter extraction with quote support
+
+- **Enhanced Setup Guide (Phase 1.4)**
+  - Moved from `scripts/temp/` to `docs/SETUP-CORTEX.md`
+  - Shared environment setup instructions
+  - Multi-repo configuration guidance
+  - Mermaid diagrams for shared venv architecture
+  - Manual verification commands
+  - Legacy single-project setup preserved
+
+### Changed
+- OnboardingOrchestrator now shows 10-minute setup notification before starting
+- SETUP-CORTEX.md updated from v3.3.0 to v3.5.0 with shared environment docs
+
+### Technical Details
+- **TDD Workflow:** All Phase 1 deliverables follow RED→GREEN→REFACTOR cycle
+- **Test Coverage:** 11 tests total (100% passing)
+  - Phase 1.1: Shared environment creation, project linking, dependencies
+  - Edge cases: existing config, missing requirements
+- **Files Modified:**
+  - `src/orchestrators/setup_orchestrator.py` (255 lines, v3.5.0)
+  - `src/orchestrators/onboarding_orchestrator.py` (Phase 1.2 & 1.3 integration)
+  - `docs/SETUP-CORTEX.md` (333 lines, Phase 1.1 documentation)
+- **Platform Support:** Windows (Scripts/python.exe), Unix (bin/python)
+
+### Scripts Added
+- `SetupOrchestrator` with CLI interface for shared environment management
+
+### Test Files Added
+- `tests/test_setup_orchestrator.py` (225 lines, 11 tests)
+
 ## [3.4.0] - 2025-12-01
 
 ### Added - Phase 0: Foundation & Code Quality
