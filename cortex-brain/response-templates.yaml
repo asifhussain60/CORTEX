@@ -114,6 +114,9 @@ templates:
       **Important:** Tech stack is context for deployment, NOT a constraint.  
       CORTEX will always recommend the best solution first.
       
+      **Note:** First-time setup may take 10-15 minutes if shared environment needs to be created.
+      You'll see step-by-step progress (Step 1/7, 2/7, etc.) during setup.
+      
       {onboarding_question}
     request_echo_content: "Set up CORTEX profile"
     next_steps_content: |
@@ -2821,6 +2824,28 @@ routing:
   - security checklist
   - security validation
   - validate security
+  
+  # Long-Running Operation Templates (Phase 1.2)
+  long_running_initial_notification:
+    template: |
+      ⏳ {operation_name} will take approximately {estimated_duration}
+         Good time for {suggestion}
+    default_suggestion: "coffee ☕"
+    duration_thresholds:
+      - range: [5, 10]  # 5-10 minutes
+        suggestion: "a quick break ☕"
+      - range: [10, 20]  # 10-20 minutes
+        suggestion: "coffee ☕"
+      - range: [20, 60]  # 20-60 minutes
+        suggestion: "lunch 🍽️"
+      - range: [60, 999]  # 1+ hours
+        suggestion: "a walk 🚶"
+  
+  long_running_step_progress:
+    template: "Step {current}/{total}: {description}"
+    show_percentage: false
+    show_eta: true
+
 formatting:
   mandatory_sections:
   - understanding
@@ -2828,3 +2853,4 @@ formatting:
   - response
   - request_echo
   - next_steps
+

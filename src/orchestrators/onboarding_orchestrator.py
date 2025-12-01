@@ -1,5 +1,5 @@
 """
-Onboarding Orchestrator (CORTEX 3.2.1)
+Onboarding Orchestrator (CORTEX 3.2.2)
 
 Handles first-time user onboarding with 2-question micro-survey to establish
 user profile preferences. Integrates with Tier 1 for profile storage and
@@ -11,14 +11,21 @@ Features:
 - Input validation with user-friendly errors
 - Profile creation in Tier 1 with FIFO exemption
 - Resumable (can update profile anytime)
+- Progress notifications for long-running setup
 
 Author: Asif Hussain
-Version: 3.2.1
+Version: 3.2.2
 """
 
 from typing import Dict, Any, Optional
 from pathlib import Path
 import json
+
+from src.utils.progress_decorator import (
+    with_progress,
+    yield_progress,
+    generate_initial_notification
+)
 
 class OnboardingOrchestrator:
     """
@@ -281,7 +288,6 @@ CORTEX will always recommend the best technical solution first, then show how to
             tech_stack_preference = None
         # else: selected_preset["value"] is None (no preference)
         
-        # Create profile in Tier 1 with all three fields
         if self.tier1:
             success = self.tier1.create_profile(
                 interaction_mode=self._pending_profile["interaction_mode"],
@@ -339,7 +345,6 @@ Now, let's tackle your request!"""
         Returns:
             Formatted message with update options
         """
-        # Get current profile
         current_profile = self.tier1.get_profile() if self.tier1 else None
         
         if not current_profile:
@@ -496,7 +501,6 @@ Now, let's tackle your request!"""
         Returns:
             Formatted message with tech stack options
         """
-        # Get current profile
         current_profile = self.tier1.get_profile() if self.tier1 else None
         
         if not current_profile:
