@@ -43,6 +43,7 @@ from src.caching import get_cache
 from src.governance import DocumentGovernance
 from src.utils.progress_monitor import ProgressMonitor
 from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
+from src.utils.skull_test_runner import run_skull_tests, format_skull_test_summary
 
 # Import enhancement catalog for temporal feature tracking
 from src.utils.enhancement_catalog import EnhancementCatalog, FeatureType, AcceptanceStatus
@@ -403,6 +404,39 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
             except Exception as e:
                 logger.warning(f"Failed to save alignment state (non-critical): {e}")
             
+            # MANDATORY: Run SKULL test suite after alignment
+            logger.info("\n" + "="*80)
+            logger.info("MANDATORY VALIDATION: Running SKULL test suite...")
+            logger.info("="*80)
+            
+            skull_result = run_skull_tests(project_root=self.project_root)
+            
+            # Add SKULL results to context
+            if 'skull_tests' not in context:
+                context['skull_tests'] = skull_result
+            
+            if not skull_result['success']:
+                error_msg = (
+                    f"❌ SKULL tests FAILED after alignment - "
+                    f"{skull_result['tests_failed']}/{skull_result['tests_run']} tests failed. "
+                    f"Brain protection compromised!"
+                )
+                logger.error(error_msg)
+                
+                duration = (datetime.now() - start_time).total_seconds()
+                monitor.fail("SKULL tests failed")
+                
+                return OperationResult(
+                    success=False,
+                    status=OperationStatus.FAILED,
+                    message=error_msg,
+                    data={"report": report, "fixes_applied": fixes_applied, "skull_tests": skull_result},
+                    errors=[f"SKULL test failure: {skull_result.get('error', 'Tests failed')}"],
+                    duration_seconds=duration
+                )
+            
+            logger.info(format_skull_test_summary(skull_result))
+            
             duration = (datetime.now() - start_time).total_seconds()
             monitor.complete()
             
@@ -410,7 +444,7 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                 success=report.is_healthy,
                 status=OperationStatus.SUCCESS if report.is_healthy else OperationStatus.WARNING,
                 message=message,
-                data={"report": report, "fixes_applied": fixes_applied},
+                data={"report": report, "fixes_applied": fixes_applied, "skull_tests": skull_result},
                 duration_seconds=duration
             )
             

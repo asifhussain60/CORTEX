@@ -176,6 +176,21 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                     errors=metrics.errors
                 )
             
+            # Phase 2.3: Hardcoded Path Cleanup
+            logger.info("\n[Phase 2.3] Scanning and fixing hardcoded paths...")
+            path_cleanup_result = self._cleanup_hardcoded_paths(project_root, metrics)
+            
+            if path_cleanup_result['success']:
+                paths_fixed = path_cleanup_result.get('paths_replaced', 0)
+                if paths_fixed > 0:
+                    logger.info(f"✅ Replaced {paths_fixed} hardcoded paths with CORTEX_ROOT variable")
+                    # Create git commit for path fixes
+                    self._create_git_commit_for_path_cleanup(project_root, path_cleanup_result, metrics)
+                else:
+                    logger.info("ℹ️  No hardcoded paths found")
+            else:
+                logger.warning(f"⚠️ Path cleanup encountered issues: {path_cleanup_result.get('message', 'Unknown error')}")
+            
             # Phase 2.5: Silent System Alignment Check (admin-only)
             if self._is_admin_environment(project_root):
                 logger.info("\n[Phase 2.5] Running system alignment check...")
@@ -910,6 +925,125 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
         except Exception as e:
             logger.error(f"Error during git commit: {e}")
             return None
+    
+    def _cleanup_hardcoded_paths(
+        self,
+        project_root: Path,
+        metrics: OptimizationMetrics
+    ) -> Dict[str, Any]:
+        """
+        Clean up hardcoded absolute paths across CORTEX files.
+        
+        This method:
+        - Scans for absolute Windows/Unix paths
+        - Replaces with CORTEX_ROOT variable
+        - Tracks all replacements for git commit
+        
+        Args:
+            project_root: Project root directory
+            metrics: Metrics collector
+        
+        Returns:
+            Dict with cleanup results
+        """
+        try:
+            from src.operations.modules.optimization.hardcoded_data_cleaner_module import HardcodedDataCleanerModule
+            
+            logger.info("Scanning for hardcoded paths...")
+            cleaner = HardcodedDataCleanerModule()
+            
+            # Run scan with automatic fixing enabled
+            cleaner_result = cleaner.execute(context={
+                'project_root': project_root,
+                'scan_paths': ['src', 'tests', '.github', 'cortex-brain/documents'],
+                'exclude_patterns': ['__pycache__', '.git', 'dist', '.venv', 'node_modules', 'archives'],
+                'fail_on_critical': False,  # Don't fail on hardcoded paths, just fix them
+                'fix_paths': True,  # Enable automatic path fixing
+                'base_path_var': 'CORTEX_ROOT'  # Use CORTEX_ROOT variable
+            })
+            
+            if cleaner_result.success:
+                fix_results = cleaner_result.data.get('fix_results', {})
+                paths_replaced = fix_results.get('paths_replaced', 0)
+                files_modified = fix_results.get('files_modified', 0)
+                errors = fix_results.get('errors', [])
+                
+                # Update metrics
+                metrics.optimizations_attempted += 1
+                if paths_replaced > 0:
+                    metrics.optimizations_succeeded += 1
+                
+                return {
+                    'success': True,
+                    'paths_replaced': paths_replaced,
+                    'files_modified': files_modified,
+                    'modified_files': fix_results.get('modified_files', {}),
+                    'errors': errors
+                }
+            else:
+                logger.warning(f"Path cleanup failed: {cleaner_result.message}")
+                return {
+                    'success': False,
+                    'message': cleaner_result.message,
+                    'paths_replaced': 0,
+                    'files_modified': 0,
+                    'errors': cleaner_result.errors or []
+                }
+        
+        except Exception as e:
+            logger.error(f"Path cleanup error: {e}", exc_info=True)
+            metrics.errors.append(f"Path cleanup error: {str(e)}")
+            return {
+                'success': False,
+                'message': str(e),
+                'paths_replaced': 0,
+                'files_modified': 0,
+                'errors': [str(e)]
+            }
+    
+    def _create_git_commit_for_path_cleanup(
+        self,
+        project_root: Path,
+        cleanup_result: Dict[str, Any],
+        metrics: OptimizationMetrics
+    ) -> None:
+        """
+        Create git commit for path cleanup changes.
+        
+        Args:
+            project_root: Project root directory
+            cleanup_result: Results from path cleanup operation
+            metrics: Metrics collector
+        """
+        paths_replaced = cleanup_result.get('paths_replaced', 0)
+        files_modified = cleanup_result.get('files_modified', 0)
+        
+        if paths_replaced == 0:
+            return
+        
+        # Create descriptive commit message
+        commit_message = f"fix: Replace {paths_replaced} hardcoded path(s) with CORTEX_ROOT variable\n\n"
+        commit_message += f"Modified {files_modified} file(s) to use dynamic path resolution.\n"
+        commit_message += "This ensures CORTEX works across multiple development machines.\n\n"
+        
+        # List modified files
+        modified_files = cleanup_result.get('modified_files', {})
+        if modified_files:
+            commit_message += "Files modified:\n"
+            for file_path, count in list(modified_files.items())[:10]:  # Limit to 10 files
+                commit_message += f"  - {Path(file_path).name}: {count} replacement(s)\n"
+            
+            if len(modified_files) > 10:
+                commit_message += f"  - ... and {len(modified_files) - 10} more file(s)\n"
+        
+        # Create commit
+        commit_hash = self._git_commit(project_root, commit_message)
+        
+        if commit_hash:
+            metrics.git_commits.append(commit_hash)
+            logger.info(f"Created git commit for path cleanup: {commit_hash[:8]}")
+        else:
+            logger.warning("Failed to create git commit for path cleanup")
     
     def _deduplicate_documentation(
         self,

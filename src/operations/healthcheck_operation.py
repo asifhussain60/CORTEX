@@ -31,6 +31,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.enhancement_catalog import EnhancementCatalog
 from discovery.enhancement_discovery import EnhancementDiscoveryEngine
+from utils.skull_test_runner import run_skull_tests, format_skull_test_summary
 
 
 logger = logging.getLogger(__name__)
@@ -197,6 +198,41 @@ class HealthCheckOperation(BaseOperationModule):
             else:
                 status = OperationStatus.SUCCESS
                 message = "✅ Health check: HEALTHY"
+            
+            # MANDATORY: Run SKULL test suite after healthcheck (unless quick mode)
+            # Skip in quick mode to avoid expensive operations
+            if not quick:
+                logger.info("\n" + "="*80)
+                logger.info("MANDATORY VALIDATION: Running SKULL test suite...")
+                logger.info("="*80)
+                
+                skull_result = run_skull_tests(project_root=Path.cwd())
+                health_report['skull_tests'] = skull_result
+                
+                if not skull_result['success']:
+                    error_msg = (
+                        f"❌ SKULL tests FAILED - "
+                        f"{skull_result['tests_failed']}/{skull_result['tests_run']} tests failed. "
+                        f"Brain protection compromised!"
+                    )
+                    logger.error(error_msg)
+                    health_report['errors'].append(error_msg)
+                    
+                    # Override status to FAILED if SKULL tests fail
+                    status = OperationStatus.FAILED
+                    message = f"❌ Health check: SKULL TESTS FAILED ({skull_result['tests_failed']} failed)"
+                    
+                    return OperationResult(
+                        success=False,
+                        status=status,
+                        message=message,
+                        data=health_report,
+                        errors=[f"SKULL test failure: {skull_result.get('error', 'Tests failed')}"]
+                    )
+                
+                logger.info(format_skull_test_summary(skull_result))
+            else:
+                logger.info("[QUICK MODE] Skipping SKULL test validation")
             
             return OperationResult(
                 success=status == OperationStatus.SUCCESS,

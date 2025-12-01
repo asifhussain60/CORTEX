@@ -202,6 +202,8 @@ class HardcodedDataCleanerModule(BaseOperationModule):
         scan_paths = context.get('scan_paths', ['src', 'tests'])
         exclude_patterns = context.get('exclude_patterns', ['__pycache__', '.git', 'dist', '.venv'])
         fail_on_critical = context.get('fail_on_critical', True)
+        fix_paths = context.get('fix_paths', False)  # Enable automatic path fixing
+        base_path_var = context.get('base_path_var', 'CORTEX_ROOT')  # Variable name for base path
         
         metrics = HardcodedDataMetrics()
         
@@ -219,6 +221,23 @@ class HardcodedDataCleanerModule(BaseOperationModule):
             
             # Categorize violations
             self._categorize_violations(metrics)
+            
+            # Fix path violations if requested
+            fix_results = None
+            if fix_paths and metrics.violations:
+                logger.info("\n🔧 Attempting automatic path fixes...")
+                fix_results = self._fix_path_violations(
+                    metrics.violations,
+                    base_path_var
+                )
+                
+                if fix_results['paths_replaced'] > 0:
+                    logger.info(f"✅ Fixed {fix_results['paths_replaced']} paths in {fix_results['files_modified']} files")
+                else:
+                    logger.info("ℹ️  No paths were automatically fixed")
+                
+                if fix_results['errors']:
+                    logger.warning(f"⚠️  Encountered {len(fix_results['errors'])} errors during fixing")
             
             # Generate report
             report = self._generate_report(metrics)
@@ -271,7 +290,13 @@ class HardcodedDataCleanerModule(BaseOperationModule):
                         }
                         for v in metrics.violations
                     ],
-                    'report': report
+                    'report': report,
+                    'fix_results': fix_results if fix_results else {
+                        'files_modified': 0,
+                        'paths_replaced': 0,
+                        'errors': [],
+                        'modified_files': {}
+                    }
                 }
             )
         
@@ -630,6 +655,132 @@ class HardcodedDataCleanerModule(BaseOperationModule):
                 report += f"**Context:** {violation.context}\n\n"
         
         return report
+    
+    def _fix_path_violations(
+        self,
+        violations: List[HardcodedViolation],
+        base_path_var: str = 'CORTEX_ROOT'
+    ) -> Dict[str, Any]:
+        """
+        Automatically fix hardcoded path violations.
+        
+        Strategy:
+        1. Detect base path (D:\PROJECTS\CORTEX, /Users/*/PROJECTS/CORTEX)
+        2. Replace with Path variable or relative path
+        3. Track changes per file
+        
+        Args:
+            violations: List of path violations to fix
+            base_path_var: Variable name for base path (default: CORTEX_ROOT)
+        
+        Returns:
+            Dict with keys: files_modified, paths_replaced, errors, modified_files
+        """
+        files_modified = {}
+        total_replaced = 0
+        errors = []
+        
+        # Group violations by file
+        by_file = {}
+        for v in violations:
+            if v.violation_type == 'hardcoded_path':
+                if v.file_path not in by_file:
+                    by_file[v.file_path] = []
+                by_file[v.file_path].append(v)
+        
+        # Process each file
+        for file_path, file_violations in by_file.items():
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    lines = content.split('\n')
+                
+                # Sort by line number (descending) to avoid offset issues
+                file_violations.sort(key=lambda v: v.line_number, reverse=True)
+                
+                replacements = 0
+                for violation in file_violations:
+                    line_idx = violation.line_number - 1
+                    if 0 <= line_idx < len(lines):
+                        old_line = lines[line_idx]
+                        new_line = self._replace_hardcoded_path(
+                            old_line,
+                            violation.context,
+                            base_path_var
+                        )
+                        
+                        if new_line != old_line:
+                            lines[line_idx] = new_line
+                            replacements += 1
+                
+                # Write back if changes made
+                if replacements > 0:
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write('\n'.join(lines))
+                    
+                    files_modified[str(file_path)] = replacements
+                    total_replaced += replacements
+                    logger.info(f"Fixed {replacements} paths in {file_path.name}")
+            
+            except Exception as e:
+                errors.append(f"{file_path}: {str(e)}")
+                logger.error(f"Error fixing {file_path}: {e}")
+        
+        return {
+            'files_modified': len(files_modified),
+            'paths_replaced': total_replaced,
+            'errors': errors,
+            'modified_files': files_modified
+        }
+    
+    def _replace_hardcoded_path(
+        self,
+        line: str,
+        path_context: str,
+        base_path_var: str
+    ) -> str:
+        """
+        Replace hardcoded path in a line with relative or variable reference.
+        
+        Args:
+            line: Line containing hardcoded path
+            path_context: Context showing which path to replace (from violation)
+            base_path_var: Variable name for base path
+        
+        Returns:
+            Modified line
+        """
+        # Extract actual path from context (format: "Hardcoded path: D:\PROJECTS\CORTEX\...")
+        path_match = re.search(r'Hardcoded path: (.+)', path_context)
+        if not path_match:
+            return line
+        
+        hardcoded_path = path_match.group(1)
+        
+        # Determine base path pattern (Windows, Unix)
+        if re.match(r'[A-Z]:\\', hardcoded_path, re.IGNORECASE):
+            # Windows: D:\PROJECTS\CORTEX\src\file.py or C:\Users\Developer\PROJECTS\CORTEX\src\file.py
+            # Try to match standard CORTEX path pattern
+            base_match = re.search(r'([A-Z]:.+?\\CORTEX)', hardcoded_path, re.IGNORECASE)
+            if base_match:
+                base = base_match.group(1)
+                relative = hardcoded_path.replace(base, '').lstrip('\\')
+                # Replace with Path variable
+                new_path = f'Path({base_path_var}) / "{relative.replace(chr(92), "/")}".replace("/", os.sep)'
+                return line.replace(f'"{hardcoded_path}"', new_path).replace(f"'{hardcoded_path}'", new_path)
+        
+        elif hardcoded_path.startswith('/'):
+            # Unix: /Users/asifhussain/PROJECTS/CORTEX/src/file.py
+            base_match = re.search(r'(/(?:Users|home)/[^/]+/[^/]+/CORTEX)', hardcoded_path, re.IGNORECASE)
+            if base_match:
+                base = base_match.group(1)
+                relative = hardcoded_path.replace(base, '').lstrip('/')
+                # Replace with Path variable
+                new_path = f'Path({base_path_var}) / "{relative}"'
+                return line.replace(f'"{hardcoded_path}"', new_path).replace(f"'{hardcoded_path}'", new_path)
+        
+        # Fallback: return unchanged if pattern not recognized
+        return line
     
     def rollback(self, context: Dict[str, Any]) -> bool:
         """

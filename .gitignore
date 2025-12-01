@@ -19,6 +19,64 @@ sql.js/
 # Python cache
 **/__pycache__/
 *.pyc
+*.pyo
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Build artifacts (should NEVER be committed - Phase 1 fix)
+dist/
+publish/
+cortex-publish/
+*.egg-info/
+
+# Database files (local only - should be in cortex-brain/ subdirs, not root)
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+logs/
+scripts/temp/*.log
+
+# Temporary files
+test_merge/
+scripts/temp/*.zip
+*.tmp
+*.bak
+*.swp
+*~
+
+# Large files (should be external)
+*.zip
+*.tar.gz
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.sublime-*
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # Simulations (temporary exploration files)
 cortex-brain/simulations/
@@ -43,6 +101,8 @@ docs/_archive-docs-cleanup/
 # Coverage files
 .coverage
 .coverage.*
+htmlcov/
+*.cover
 
 # Optimization and cleanup logs
 cortex-optimization.log
@@ -53,7 +113,8 @@ scripts/temp/cortex-optimization.log
 .cortex/
 
 # Pytest cache (state files)
-.pytest_cache/v/cache/lastfailed
+.pytest_cache/
+.tox/
 
 # Database files (working state, not configuration)
 # Exclude ALL database files in cortex-brain (brain data should not be committed)
@@ -72,3 +133,23 @@ workspace/
 publish/CORTEX-v*/
 .publish-checkpoint.json
 .publish-checkpoint.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Optimization reports (generated, can be recreated)
+cortex-brain/documents/reports/optimization-report-*.json
