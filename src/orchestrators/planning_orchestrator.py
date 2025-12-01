@@ -277,6 +277,99 @@ class PlanningOrchestrator:
         except (ValueError, AttributeError):
             return False
     
+    # ===== PHASE 4: INCREMENTAL PLANNING METHODS =====
+    
+    def create_empty_plan(self, feature_name: str) -> Path:
+        """
+        Create empty plan file with metadata.
+        
+        Args:
+            feature_name: Name of feature being planned
+        
+        Returns:
+            Path to created plan file
+        """
+        from datetime import datetime
+        from src.utils.incremental_writer import IncrementalWriter
+        
+        # Create plan path in active directory
+        plan_path = self.plans_dir / "active" / f"{feature_name}.yaml"
+        
+        # Prepare metadata
+        metadata = {
+            "name": feature_name,
+            "created_at": datetime.now().isoformat(),
+            "status": "planning"
+        }
+        
+        # Create empty plan file
+        writer = IncrementalWriter(plan_path)
+        writer.create_empty(metadata)
+        
+        logger.info(f"Created empty plan: {plan_path}")
+        return plan_path
+    
+    def add_phase_to_plan(self, plan_path: Path, phase_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Add phase to plan incrementally.
+        
+        Args:
+            plan_path: Path to plan file
+            phase_data: Phase data dict
+        
+        Returns:
+            Progress dict with phase_number, total_phases, percent_complete
+        
+        Raises:
+            NotImplementedError: RED phase - not implemented yet
+        """
+        raise NotImplementedError("RED phase: add_phase_to_plan() not implemented")
+    
+    def get_last_phase_number(self, plan_path: Path) -> int:
+        """
+        Get last phase number from plan file.
+        
+        Args:
+            plan_path: Path to plan file
+        
+        Returns:
+            Last phase number (0 if no phases)
+        
+        Raises:
+            NotImplementedError: RED phase - not implemented yet
+        """
+        raise NotImplementedError("RED phase: get_last_phase_number() not implemented")
+    
+    def track_progress(self, feature_name: str, total_phases: int):
+        """
+        Context manager for progress tracking.
+        
+        Args:
+            feature_name: Feature name
+            total_phases: Total phases in plan
+        
+        Returns:
+            ProgressTracker context manager
+        
+        Raises:
+            NotImplementedError: RED phase - not implemented yet
+        """
+        raise NotImplementedError("RED phase: track_progress() not implemented")
+    
+    def cancel_planning(self, plan_path: Path) -> None:
+        """
+        Cancel planning and cleanup.
+        
+        Args:
+            plan_path: Path to plan file to cancel
+        
+        Raises:
+            NotImplementedError: RED phase - not implemented yet
+        """
+        raise NotImplementedError("RED phase: cancel_planning() not implemented")
+    
+    # ===== END PHASE 4 METHODS =====
+    
     def generate_markdown(self, plan_data: Dict[str, Any]) -> str:
         """
         Generate Markdown view from YAML plan.
