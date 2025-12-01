@@ -178,6 +178,17 @@ class IntentRouter(BaseAgent):
                 "approve estimation scope", "scope is correct", "yes approve",
                 "accept scope", "scope confirmation", "validate scope"
             ],
+            # Application Health Dashboard (NEW - Application Onboarding)
+            IntentType.APPLICATION_HEALTH: [
+                "show health dashboard", "health dashboard", "application health",
+                "app health", "analyze application", "application analysis",
+                "code health", "project health", "codebase health"
+            ],
+            IntentType.ONBOARD_APPLICATION: [
+                "onboard application", "onboard app", "setup application",
+                "analyze my application", "scan application", "scan project",
+                "analyze project", "project analysis"
+            ],
         }
         
         # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
@@ -245,6 +256,21 @@ class IntentRouter(BaseAgent):
                 'rules_to_consider': ['TDD_ENFORCEMENT', 'TEST_COVERAGE'],
                 'skip_summary_generation': True,
                 'requires_dod_validation': True
+            },
+            IntentType.APPLICATION_HEALTH: {
+                'rules_to_consider': ['CRAWLER_ACTIVATION', 'PATTERN_ANALYSIS'],
+                'enable_crawlers': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'requires_report_generation': True
+            },
+            IntentType.ONBOARD_APPLICATION: {
+                'rules_to_consider': ['CRAWLER_ACTIVATION', 'DEEP_ANALYSIS'],
+                'enable_crawlers': True,
+                'enable_deep_crawl': True,
+                'skip_summary_generation': False,
+                'requires_documentation': True,
+                'requires_report_generation': True
             },
             IntentType.REFACTOR: {
                 'rules_to_consider': ['DEFINITION_OF_DONE', 'SOLID_PRINCIPLES'],

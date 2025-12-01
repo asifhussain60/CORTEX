@@ -49,7 +49,7 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 # Package metadata
-PACKAGE_VERSION = "3.3.0"  # Unified deployment system
+PACKAGE_VERSION = "3.4.0"  # Unified deployment system
 PUBLISH_BRANCH = "main"
 
 # Checkpoint file for fault tolerance
@@ -1354,6 +1354,67 @@ def publish_to_branch(
     logger.info(f"Skip validation: {skip_validation}")
     logger.info("")
     
+    # PRE-VALIDATION: Generate preliminary deployment manifest for Gate 15
+    # Gate 15 validates admin/user separation and needs the manifest before validation runs
+    if not resume and not skip_validation:
+        logger.info("\n📄 Generating preliminary deployment manifest for validation...")
+        preliminary_manifest_dir = project_root / "publish"
+        preliminary_manifest_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Get current project files using the exclusion rules
+        import os
+        current_files = []
+        for root, dirs, files in os.walk(project_root):
+            # Skip excluded directories
+            dirs[:] = [d for d in dirs if not any(pattern in str(Path(root) / d) for pattern in [
+                '.git', '__pycache__', '.pytest_cache', 'node_modules', '.venv', 'venv',
+                'workflow_checkpoints', 'logs', 'test_merge', 'static/temp'
+            ])]
+            
+            for file in files:
+                file_path = Path(root) / file
+                rel_path = file_path.relative_to(project_root)
+                current_files.append(rel_path)
+        
+        # Filter out admin patterns (Gate 15 validation requirements)
+        admin_patterns = [
+            "admin/",
+            "deployment_gates.py",
+            "deploy_cortex.py",
+            "system_alignment_orchestrator.py",
+            "enterprise_documentation_orchestrator.py",
+            "deployment/",
+            "validate_deployment.py",
+            "scripts/deploy",
+            "scripts/validate_deployment",
+            "publish_branch_orchestrator.py",
+        ]
+        
+        filtered_files = [
+            f for f in current_files 
+            if not any(pattern in str(f).replace('\\', '/') for pattern in admin_patterns)
+        ]
+        
+        # Create preliminary manifest
+        preliminary_manifest = {
+            "version": PACKAGE_VERSION,
+            "generated_at": datetime.now().isoformat(),
+            "files": [str(f).replace('\\', '/') for f in filtered_files],
+            "stats": {
+                "preliminary": True,
+                "file_count": len(filtered_files),
+                "note": "Preliminary manifest for Gate 15 validation - will be regenerated after build"
+            }
+        }
+        
+        manifest_path = preliminary_manifest_dir / "deployment-manifest.json"
+        with open(manifest_path, 'w', encoding='utf-8') as f:
+            json.dump(preliminary_manifest, f, indent=2)
+        
+        logger.info(f"✅ Preliminary manifest created: {len(filtered_files)} files")
+        logger.info(f"   Location: {manifest_path.relative_to(project_root)}")
+        logger.info("")
+    
     # Run validation gate first (unless resuming or explicitly skipped)
     # NOTE: Validation runs even in dry-run mode to catch issues before deployment
     if not resume and not skip_validation:
@@ -1375,7 +1436,6 @@ def publish_to_branch(
             alignment_state = project_root / "cortex-brain" / ".alignment-state.json"
             if alignment_state.exists():
                 try:
-                    import json
                     with open(alignment_state, 'r', encoding='utf-8') as f:
                         alignment_report = json.load(f)
                     logger.info("✓ Loaded alignment report from .alignment-state.json")
@@ -1619,64 +1679,6 @@ def publish_to_branch(
             except Exception as e:
                 logger.warning(f"   ⚠️  Feature discovery warning: {e}")
                 # Don't fail deployment on discovery errors - it's informational
-        
-        # PRE-STAGE 1: Generate preliminary deployment manifest for Gate 15
-        # Gate 15 validates admin/user separation and needs the manifest before validation runs
-        logger.info("\n📄 Generating preliminary deployment manifest...")
-        preliminary_manifest_dir = project_root / "publish"
-        preliminary_manifest_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Get current project files using the exclusion rules
-        current_files = []
-        for root, dirs, files in os.walk(project_root):
-            # Skip excluded directories
-            dirs[:] = [d for d in dirs if not any(pattern in str(Path(root) / d) for pattern in [
-                '.git', '__pycache__', '.pytest_cache', 'node_modules', '.venv', 'venv',
-                'workflow_checkpoints', 'logs', 'test_merge', 'static/temp'
-            ])]
-            
-            for file in files:
-                file_path = Path(root) / file
-                rel_path = file_path.relative_to(project_root)
-                current_files.append(rel_path)
-        
-        # Filter out admin patterns (Gate 15 validation requirements)
-        admin_patterns = [
-            "admin/",
-            "deployment_gates.py",
-            "deploy_cortex.py",
-            "system_alignment_orchestrator.py",
-            "enterprise_documentation_orchestrator.py",
-            "deployment/",
-            "validate_deployment.py",
-            "scripts/deploy",
-            "scripts/validate_deployment",
-        ]
-        
-        filtered_files = [
-            f for f in current_files 
-            if not any(pattern in str(f).replace('\\', '/') for pattern in admin_patterns)
-        ]
-        
-        # Create preliminary manifest
-        preliminary_manifest = {
-            "version": PACKAGE_VERSION,
-            "generated_at": datetime.now().isoformat(),
-            "files": [str(f).replace('\\', '/') for f in filtered_files],
-            "stats": {
-                "preliminary": True,
-                "file_count": len(filtered_files),
-                "note": "Preliminary manifest for Gate 15 validation - will be regenerated after build"
-            }
-        }
-        
-        manifest_path = preliminary_manifest_dir / "deployment-manifest.json"
-        with open(manifest_path, 'w', encoding='utf-8') as f:
-            json.dump(preliminary_manifest, f, indent=2)
-        
-        logger.info(f"✅ Preliminary manifest created: {len(filtered_files)} files")
-        logger.info(f"   Location: {manifest_path.relative_to(project_root)}")
-        logger.info(f"   (Will be regenerated with actual packaged files after build)")
         
         # STAGE 1: Validation
         if not checkpoint.should_skip_stage(PublishStage.VALIDATION):

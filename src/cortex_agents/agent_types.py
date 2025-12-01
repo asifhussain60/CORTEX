@@ -28,6 +28,7 @@ class AgentType(Enum):
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
     ESTIMATOR = auto()       # TimeframeEstimator (NEW - SWAGGER Timeframe Estimation)
     RCA = auto()             # RCAAgent (NEW - Root Cause Analysis)
+    APPLICATION_HEALTH = auto()  # ApplicationHealthOrchestrator (NEW - Application Health Dashboard)
 
 
 class IntentType(Enum):
@@ -114,6 +115,10 @@ class IntentType(Enum):
     ROOT_CAUSE_ANALYSIS = "root_cause_analysis"
     FIVE_WHYS = "five_whys"
     IMPORT_RCA = "import_rca"
+    
+    # Application Health Dashboard (NEW - Application Onboarding)
+    APPLICATION_HEALTH = "application_health"
+    ONBOARD_APPLICATION = "onboard_application"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -219,6 +224,10 @@ INTENT_AGENT_MAP = {
     IntentType.ROOT_CAUSE_ANALYSIS: AgentType.RCA,
     IntentType.FIVE_WHYS: AgentType.RCA,
     IntentType.IMPORT_RCA: AgentType.RCA,
+    
+    # Application Health Dashboard mapping (NEW - Application Onboarding)
+    IntentType.APPLICATION_HEALTH: AgentType.APPLICATION_HEALTH,
+    IntentType.ONBOARD_APPLICATION: AgentType.APPLICATION_HEALTH,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

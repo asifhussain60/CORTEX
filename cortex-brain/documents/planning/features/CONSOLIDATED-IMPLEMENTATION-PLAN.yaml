@@ -1,0 +1,696 @@
+# CORTEX Consolidated Implementation Plan
+# Version: 1.0.0
+# Created: 2025-12-01
+# Author: Asif Hussain
+# Organization: Feature-based (not sprint-based)
+# Strategy: Foundation first, then complete features end-to-end
+
+metadata:
+  plan_id: "CONSOLIDATED-PLAN-2025-12-01"
+  version: "1.0.0"
+  created_date: "2025-12-01"
+  status: "draft"
+  organization_strategy: "feature-based"
+  implementation_philosophy: "foundation-first, then feature-completion"
+  
+# Phases will be added incrementally below
+phases:
+  - phase_id: "phase_0"
+    name: "Foundation: Code Quality & Debugging"
+    priority: 1
+    status: "not-started"
+    description: "Establish baseline code quality, debugging infrastructure, and eliminate technical debt"
+    rationale: "Must establish clean foundation before adding features"
+    
+    objectives:
+      - "Implement debugging marker system for development tracking"
+      - "Add pipeline verification to detect mock objects in production code"
+      - "Remove unnecessary comments and deprecated code"
+      - "Establish code quality baseline for future work"
+    
+    deliverables:
+      - id: "0.1"
+        name: "Debugging Marker System"
+        description: "Add marker-based debugging for developer workflow visibility"
+        files_affected:
+          - "src/utils/debug_markers.py"
+          - "cortex-brain/brain-protection-rules.yaml"
+        acceptance_criteria:
+          - "Markers can be inserted at any code location"
+          - "Markers auto-log execution flow without performance impact"
+          - "Markers removed automatically before commit (git hook)"
+        estimated_effort: "4 hours"
+        
+      - id: "0.2"
+        name: "Mock Detection Pipeline Step"
+        description: "Add CI/CD verification that no mock objects exist in production code"
+        files_affected:
+          - "scripts/verify_no_mocks.py"
+          - ".github/workflows/cortex-ci.yml"
+          - "src/cortex_agents/test_validator.py"
+        acceptance_criteria:
+          - "Pipeline fails if unittest.mock imports found in src/"
+          - "Exception list for test utilities maintained"
+          - "Clear error messages indicate which files contain mocks"
+        estimated_effort: "3 hours"
+        
+      - id: "0.3"
+        name: "Unnecessary Commenting Cleanup"
+        description: "Remove redundant comments, update docstrings to Google style"
+        files_affected:
+          - "src/**/*.py (all Python files)"
+          - "cortex-brain/cleanup-rules.yaml"
+        acceptance_criteria:
+          - "Commented-out code removed (except git-tracked history)"
+          - "Obvious comments removed (e.g., '# Create variable' above variable creation)"
+          - "Docstrings follow Google Python Style Guide"
+          - "Complex logic retains explanatory comments"
+        estimated_effort: "6 hours"
+        
+      - id: "0.4"
+        name: "Deprecated Code Removal"
+        description: "Remove all deprecated functions, classes, and modules"
+        files_affected:
+          - "src/**/*.py"
+          - "tests/**/*.py"
+          - "cortex-brain/obsolete-tests-manifest.json"
+        acceptance_criteria:
+          - "All @deprecated decorated code removed"
+          - "No TODO comments referencing deprecated code"
+          - "Obsolete test manifest updated"
+          - "Breaking changes documented in CHANGELOG.md"
+        estimated_effort: "5 hours"
+    
+    dependencies: []
+    
+    testing_requirements:
+      - "All existing tests pass after cleanup"
+      - "Code coverage remains ≥85%"
+      - "No new linting errors introduced"
+    
+    total_estimated_effort: "18 hours"
+
+  - phase_id: "phase_1"
+    name: "Setup & Onboarding Enhancement"
+    priority: 2
+    status: "not-started"
+    description: "Fix multi-repo Python environment issues, enhance onboarding UX, add application naming"
+    rationale: "Setup problems block user adoption; must fix before adding features"
+    
+    objectives:
+      - "Resolve Python environment conflicts across multiple CORTEX-enabled repos"
+      - "Implement shared CORTEX tooling environment to eliminate duplication"
+      - "Add user expectation management for long-running operations"
+      - "Require application name as parameter for onboarding"
+    
+    deliverables:
+      - id: "1.1"
+        name: "Shared CORTEX Tooling Environment"
+        description: "Create global CORTEX tooling environment separate from project-specific Python environments"
+        challenge_raised: true
+        challenge_details: |
+          CHALLENGE: Installing identical tooling 10 times is inefficient, but shared environments 
+          risk version conflicts. ALTERNATIVE: Create ~/.cortex/venv/ as shared tooling environment 
+          with symlinks from each project. Project-specific dependencies stay isolated.
+        files_affected:
+          - "src/orchestrators/setup_orchestrator.py"
+          - "scripts/setup-cortex.sh"
+          - "cortex.config.json"
+          - "docs/SETUP-CORTEX.md"
+        acceptance_criteria:
+          - "Shared CORTEX venv created at ~/.cortex/venv/"
+          - "Each project references shared environment via config"
+          - "Project-specific dependencies installed separately"
+          - "Setup time reduced from 10x to 1x + 10 symlinks"
+        estimated_effort: "8 hours"
+        
+      - id: "1.2"
+        name: "Long-Running Operation Notifications"
+        description: "Add user expectation management for operations >5 minutes"
+        files_affected:
+          - "src/orchestrators/onboarding_orchestrator.py"
+          - "src/utils/progress_decorator.py"
+          - "cortex-brain/response-templates.yaml"
+        acceptance_criteria:
+          - "Operations >5 min show initial notification: 'This will take 10-15 minutes. Good time for coffee.'"
+          - "Progress decorator enhanced with time estimates"
+          - "Onboarding shows step-by-step progress (1/7, 2/7, etc.)"
+        estimated_effort: "3 hours"
+        
+      - id: "1.3"
+        name: "Application Name Requirement"
+        description: "Rename 'onboard application' to require application name as parameter"
+        files_affected:
+          - "src/orchestrators/onboarding_orchestrator.py"
+          - "src/cortex_agents/intent_router.py"
+          - "cortex-brain/tier1/working_memory.db (schema)"
+          - "cortex-brain/response-templates.yaml"
+        acceptance_criteria:
+          - "Onboarding requires --app-name parameter"
+          - "Application name stored in Tier 1 working memory"
+          - "CORTEX uses application name in all subsequent interactions"
+          - "Help text updated: 'onboard application <name>'"
+        estimated_effort: "4 hours"
+        
+      - id: "1.4"
+        name: "Onboarding Module Completion"
+        description: "Complete unfinished onboarding application module (request mentions 'does not')"
+        files_affected:
+          - "src/orchestrators/onboarding_orchestrator.py"
+          - "tests/test_onboarding_orchestrator.py"
+        acceptance_criteria:
+          - "All onboarding steps complete end-to-end"
+          - "Error handling covers edge cases (missing files, invalid structure)"
+          - "Integration tests verify full onboarding workflow"
+        estimated_effort: "6 hours"
+    
+    dependencies:
+      - "phase_0 (Foundation must be clean before setup changes)"
+    
+    testing_requirements:
+      - "Test setup across 3 different repos"
+      - "Verify no conflicts between shared and project environments"
+      - "Test onboarding with valid and invalid application names"
+      - "Verify long-running operation notifications appear"
+    
+    total_estimated_effort: "21 hours"
+
+  - phase_id: "phase_2"
+    name: "Architecture Synchronization"
+    priority: 3
+    status: "not-started"
+    description: "Auto-update ARCHITECTURE.md and key files during deployments to keep documentation live"
+    rationale: "Documentation drift creates confusion; must stay synchronized with code"
+    
+    objectives:
+      - "Trigger architecture updates during deploy (not align)"
+      - "Identify all files CORTEX checks for planning/enhancements"
+      - "Keep documentation 'live' through automated synchronization"
+    
+    deliverables:
+      - id: "2.1"
+        name: "Deploy-Triggered Architecture Updates"
+        description: "Move architecture synchronization from align CLI to deploy CLI"
+        challenge_raised: true
+        challenge_details: |
+          CHALLENGE: Updating architecture during 'align' is too frequent and noisy. 
+          RECOMMENDATION: Move to deploy orchestrator - it's version-gated, less frequent, 
+          and captures significant changes. Architecture updates should align with version bumps.
+        files_affected:
+          - "src/orchestrators/deploy_orchestrator.py"
+          - "src/orchestrators/align_orchestrator.py"
+          - "docs/ARCHITECTURE.md"
+          - "cortex-brain/operations-config.yaml"
+        acceptance_criteria:
+          - "deploy_cortex.py includes architecture sync step"
+          - "ARCHITECTURE.md updated with latest features before version bump"
+          - "align_orchestrator.py NO LONGER updates architecture"
+          - "Sync only triggers during deploy, not align"
+        estimated_effort: "5 hours"
+        
+      - id: "2.2"
+        name: "Key Files Inventory for Planning"
+        description: "Identify all files CORTEX references during planning and ensure they stay current"
+        files_affected:
+          - "src/orchestrators/planning_orchestrator.py"
+          - "cortex-brain/TRUTH-SOURCES.yaml"
+          - "cortex-brain/documents/planning/KEY-FILES-INVENTORY.md"
+        acceptance_criteria:
+          - "Document lists all files checked during planning (ARCHITECTURE.md, capabilities.yaml, etc.)"
+          - "Each file tagged with update frequency (deploy/weekly/manual)"
+          - "Automated check verifies key files updated in last 30 days"
+        estimated_effort: "4 hours"
+        
+      - id: "2.3"
+        name: "Live Documentation System"
+        description: "Implement auto-update hooks for documentation based on code changes"
+        files_affected:
+          - "src/utils/doc_sync_hooks.py"
+          - ".git/hooks/post-commit"
+          - "cortex-brain/doc-generation-rules.yaml"
+        acceptance_criteria:
+          - "Git hook triggers doc sync after commits to src/"
+          - "Doc sync identifies which documentation files need updates"
+          - "Sync runs during deploy, not during development"
+          - "Manual override available: 'cortex sync docs'"
+        estimated_effort: "6 hours"
+    
+    dependencies:
+      - "phase_0 (Clean code needed before doc sync)"
+      - "phase_1 (Setup must work before deployment changes)"
+    
+    testing_requirements:
+      - "Test deploy triggers architecture update"
+      - "Verify align does NOT trigger architecture update"
+      - "Validate key files inventory complete"
+      - "Test doc sync hook doesn't slow down commits"
+    
+    total_estimated_effort: "15 hours"
+
+  - phase_id: "phase_3"
+    name: "TDD Workflow Enhancement - Tier Feeding"
+    priority: 4
+    status: "not-started"
+    description: "Extract development insights during RED→GREEN→REFACTOR cycles to feed CORTEX tiers"
+    rationale: "Tiers need continuous learning from development activity, not just git commit messages"
+    
+    objectives:
+      - "Feed tiers during development phases, not from commit messages"
+      - "Extract patterns during RED (test creation), GREEN (implementation), REFACTOR phases"
+      - "Eliminate circular dependency of extracting from git comments"
+    
+    deliverables:
+      - id: "3.1"
+        name: "Development Phase Insight Extraction"
+        description: "Extract insights during RED→GREEN→REFACTOR phases instead of from git comments"
+        challenge_raised: true
+        challenge_details: |
+          CHALLENGE: Extracting from git comments creates circular dependency - commit messages 
+          summarize work that should already be in tiers. ALTERNATIVE: Extract insights during 
+          each TDD phase:
+          - RED: Capture test intent, requirements, edge cases
+          - GREEN: Capture implementation patterns, dependencies, decisions
+          - REFACTOR: Capture improvements, performance gains, simplifications
+          This feeds tiers in real-time, not post-hoc from commit messages.
+        files_affected:
+          - "src/orchestrators/tdd_orchestrator.py"
+          - "src/tier1/working_memory.py"
+          - "src/tier2/pattern_storage.py"
+          - "src/tier3/development_context.py"
+        acceptance_criteria:
+          - "RED phase extracts test requirements and edge cases to Tier 1"
+          - "GREEN phase extracts implementation patterns to Tier 2"
+          - "REFACTOR phase extracts improvements and metrics to Tier 3"
+          - "Extraction happens automatically during each phase"
+          - "No git comment parsing needed"
+        estimated_effort: "10 hours"
+        
+      - id: "3.2"
+        name: "Pattern Learning from TDD Cycles"
+        description: "Enhance Tier 2 to learn development patterns from completed TDD cycles"
+        files_affected:
+          - "src/tier2/pattern_storage.py"
+          - "src/tier2/semantic_search.py"
+          - "cortex-brain/tier2/knowledge_graph.db (schema update)"
+        acceptance_criteria:
+          - "Completed TDD cycles stored as patterns"
+          - "Patterns include: test strategy, implementation approach, refactoring type"
+          - "Future TDD cycles suggest relevant patterns"
+          - "Pattern matching uses FTS5 semantic search"
+        estimated_effort: "8 hours"
+        
+      - id: "3.3"
+        name: "Development Context Real-Time Updates"
+        description: "Update Tier 3 with code metrics and hotspots during development, not post-commit"
+        files_affected:
+          - "src/tier3/development_context.py"
+          - "src/tier3/code_metrics.py"
+          - "src/utils/realtime_metrics.py"
+        acceptance_criteria:
+          - "Code complexity metrics calculated during GREEN phase"
+          - "Refactoring impact measured during REFACTOR phase"
+          - "Hotspot detection updates in real-time"
+          - "Metrics stored in Tier 3 before commit"
+        estimated_effort: "7 hours"
+    
+    dependencies:
+      - "phase_0 (TDD requires clean code foundation)"
+    
+    testing_requirements:
+      - "Run full TDD cycle and verify all phases feed tiers"
+      - "Verify Tier 1 captures test requirements"
+      - "Verify Tier 2 learns implementation patterns"
+      - "Verify Tier 3 updates code metrics"
+      - "Test extraction does not slow down TDD workflow (max 2% overhead)"
+    
+    total_estimated_effort: "25 hours"
+
+  - phase_id: "phase_4"
+    name: "Incremental Planning System"
+    priority: 5
+    status: "not-started"
+    description: "Update planning orchestrator to generate plans incrementally (empty file first, then phases)"
+    rationale: "Large plan generation creates long wait times and risks data loss if interrupted"
+    
+    objectives:
+      - "Generate empty plan files first with metadata only"
+      - "Add phases incrementally to show progress"
+      - "Apply to all planning document types (YAML, MD, ADO, Swagger)"
+    
+    deliverables:
+      - id: "4.1"
+        name: "Incremental Plan Generation"
+        description: "Refactor planning_orchestrator.py to create plans in small increments"
+        files_affected:
+          - "src/orchestrators/planning_orchestrator.py"
+          - "src/orchestrators/ado_orchestrator.py"
+          - "src/orchestrators/swagger_orchestrator.py"
+          - "src/utils/incremental_writer.py"
+        acceptance_criteria:
+          - "Step 1: Create empty plan file with metadata and headers"
+          - "Step 2: Add phases one at a time with progress updates"
+          - "Step 3: Show 'Phase 1/5 added' after each phase"
+          - "Plans resumable if interrupted (check existing file, continue from last phase)"
+          - "Applied to YAML, MD, ADO, and Swagger plan generation"
+        estimated_effort: "12 hours"
+        
+      - id: "4.2"
+        name: "Progress Visualization for Planning"
+        description: "Show real-time progress during plan generation with ETA"
+        files_affected:
+          - "src/utils/progress_decorator.py"
+          - "src/orchestrators/planning_orchestrator.py"
+        acceptance_criteria:
+          - "Progress decorator shows 'Planning: Phase 3/7 (43% complete, ETA 2m 15s)'"
+          - "Hang detection if phase takes >5x expected time"
+          - "User can cancel without losing work (partial plan saved)"
+        estimated_effort: "5 hours"
+        
+      - id: "4.3"
+        name: "Plan Validation During Generation"
+        description: "Validate each phase as it's added to catch errors early"
+        files_affected:
+          - "src/orchestrators/planning_orchestrator.py"
+          - "src/tier0/plan_validator.py"
+        acceptance_criteria:
+          - "YAML schema validated after each phase added"
+          - "DoR/DoD validation runs incrementally"
+          - "Errors reported immediately, not after all phases generated"
+          - "Invalid phase discarded, generation continues"
+        estimated_effort: "6 hours"
+    
+    dependencies:
+      - "phase_0 (Need clean code for refactoring)"
+    
+    testing_requirements:
+      - "Generate 10-phase plan and verify incremental creation"
+      - "Interrupt plan generation mid-way, verify resumable"
+      - "Test invalid phase rejection without stopping generation"
+      - "Verify progress updates accurate"
+    
+    total_estimated_effort: "23 hours"
+
+  - phase_id: "phase_5"
+    name: "Response Template System Refactor"
+    priority: 6
+    status: "not-started"
+    description: "Refactor monolithic 2,669-line response-templates.yaml into modular profile-driven system"
+    rationale: "Monolithic templates hard to maintain; user profile integration missing"
+    
+    objectives:
+      - "Split monolithic YAML into 4 modular files (base components, templates, profiles, routing)"
+      - "Integrate UserProfileManager for interaction mode-driven responses"
+      - "Support dynamic template variants (Autonomous, Guided, Educational, Pair modes)"
+      - "Replace YAML anchors with template composition engine"
+      - "Reduce configuration complexity by 58% (2,669 → 1,120 lines)"
+    
+    deliverables:
+      - id: "5.1"
+        name: "Modular YAML Structure"
+        description: "Split response-templates.yaml into 4 focused files"
+        files_affected:
+          - "cortex-brain/response-templates/base-components.yaml (new)"
+          - "cortex-brain/response-templates/template-definitions.yaml (new)"
+          - "cortex-brain/response-templates/profile-variants.yaml (new)"
+          - "cortex-brain/response-templates/routing-rules.yaml (new)"
+          - "cortex-brain/response-templates.yaml (legacy, deprecated)"
+        acceptance_criteria:
+          - "base-components.yaml: 200 lines (header, sections, footers)"
+          - "template-definitions.yaml: 400 lines (18 templates with placeholders)"
+          - "profile-variants.yaml: 300 lines (4 interaction modes)"
+          - "routing-rules.yaml: 220 lines (trigger mapping)"
+          - "Total: 1,120 lines (58% reduction)"
+        estimated_effort: "8 hours"
+        
+      - id: "5.2"
+        name: "Template Composition Engine"
+        description: "Replace YAML anchor inheritance with Python composition engine"
+        files_affected:
+          - "src/response_templates/composer.py (new)"
+          - "src/response_templates/template_manager.py"
+          - "src/response_templates/profile_adapter.py (new)"
+        acceptance_criteria:
+          - "Load 4 YAML files into in-memory structure"
+          - "Compose template based on profile interaction_mode"
+          - "Autonomous mode: compact format, minimal sections"
+          - "Educational mode: extended format, 'Why This Matters' sections"
+          - "Backward compatible with existing template manager API"
+        estimated_effort: "12 hours"
+        
+      - id: "5.3"
+        name: "UserProfile Integration"
+        description: "Connect template system to UserProfileManager for profile-driven responses"
+        files_affected:
+          - "src/response_templates/template_manager.py"
+          - "src/orchestrators/user_profile_manager.py"
+          - "src/cortex_agents/intent_router.py"
+        acceptance_criteria:
+          - "Intent router passes user_id to template manager"
+          - "Template manager fetches profile from UserProfileManager"
+          - "Profile interaction_mode determines template variant"
+          - "Fallback to 'guided' mode if no profile exists"
+        estimated_effort: "6 hours"
+        
+      - id: "5.4"
+        name: "Dynamic Section Rendering"
+        description: "Support interaction mode-specific section inclusion/exclusion"
+        files_affected:
+          - "src/response_templates/composer.py"
+          - "src/response_templates/section_renderer.py (new)"
+        acceptance_criteria:
+          - "Autonomous: Excludes 'Understanding', 'Challenge', 'Request Echo'"
+          - "Guided: Includes all 5 standard sections"
+          - "Educational: Adds 'Why This Matters', 'Learn More' sections"
+          - "Pair: Replaces 'Response' with 'Options' + 'Recommendation'"
+          - "Mandatory header (🧠 CORTEX + Author) ALWAYS present"
+        estimated_effort: "7 hours"
+        
+      - id: "5.5"
+        name: "Backward Compatibility Layer"
+        description: "Ensure existing code continues working during migration"
+        files_affected:
+          - "src/response_templates/legacy_adapter.py (new)"
+          - "src/response_templates/template_manager.py"
+        acceptance_criteria:
+          - "Legacy code using old template manager API works unchanged"
+          - "New code can use profile-driven API"
+          - "Deprecation warnings for old API usage"
+          - "Migration guide in docs/RESPONSE-TEMPLATE-MIGRATION.md"
+        estimated_effort: "5 hours"
+    
+    dependencies:
+      - "phase_0 (Clean code needed before refactoring)"
+    
+    testing_requirements:
+      - "Test all 18 templates render correctly"
+      - "Test all 4 interaction modes produce correct variants"
+      - "Verify mandatory header present in all modes"
+      - "Test backward compatibility with legacy code"
+      - "Performance: Template loading <50ms, composition <10ms"
+    
+    total_estimated_effort: "38 hours"
+
+  - phase_id: "phase_6"
+    name: "Threat Modeling Integration"
+    priority: 7
+    status: "not-started"
+    description: "Integrate automated STRIDE-based threat modeling into Planning Orchestrator"
+    rationale: "Security threats should be identified during planning, not discovered in production"
+    
+    objectives:
+      - "Auto-detect security threats during feature planning (zero user effort)"
+      - "Use STRIDE framework (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Privilege Escalation)"
+      - "Generate actionable mitigations with implementation guidance"
+      - "Enforce threat mitigation validation in DoD"
+      - "3-5 minute analysis per feature with risk ratings"
+    
+    deliverables:
+      - id: "6.1"
+        name: "Enhanced ThreatModeler Agent"
+        description: "Upgrade existing threat_modeler.py with STRIDE analysis and feature templates"
+        files_affected:
+          - "src/agents/security/threat_modeler.py"
+          - "src/agents/security/stride_analyzer.py (new)"
+          - "cortex-brain/agents/threat-modeler-config.yaml"
+        acceptance_criteria:
+          - "STRIDE analysis for all 6 categories"
+          - "Feature-specific threat templates (auth, API, data, upload, payment)"
+          - "Auto-mitigation suggestions with code examples"
+          - "Risk rating calculation (High/Medium/Low)"
+          - "OWASP Top 10 mapping for each threat"
+        estimated_effort: "8 hours"
+        
+      - id: "6.2"
+        name: "Planning Orchestrator Integration"
+        description: "Inject threat modeling phase into planning workflow after DoR validation"
+        files_affected:
+          - "src/orchestrators/planning_orchestrator.py"
+          - "src/workflows/definitions/planning-with-threats.yaml (new)"
+          - "src/workflows/workflow_pipeline.py"
+        acceptance_criteria:
+          - "Threat modeling triggered automatically after DoR passes"
+          - "Feature type detection (auth/api/data/etc) passed to ThreatModeler"
+          - "Threat report embedded in planning document"
+          - "DoD validation requires threat mitigations"
+          - "Workflow resumable if threat modeling fails"
+        estimated_effort: "6 hours"
+        
+      - id: "6.3"
+        name: "Threat Report Formatting"
+        description: "Add threat report templates to response-templates system"
+        files_affected:
+          - "cortex-brain/response-templates/threat-reports.yaml (new)"
+          - "src/response_templates/threat_formatter.py (new)"
+        acceptance_criteria:
+          - "Quick view: Risk summary table (threat, risk level, mitigation)"
+          - "Detailed view: Full STRIDE breakdown with code examples"
+          - "Progressive disclosure: Quick view by default, detailed on request"
+          - "Markdown tables for easy reading"
+        estimated_effort: "4 hours"
+        
+      - id: "6.4"
+        name: "DoD Threat Mitigation Validation"
+        description: "Enhance DoD validation to verify threat mitigations addressed"
+        files_affected:
+          - "src/orchestrators/planning_orchestrator.py"
+          - "src/tier0/dod_validator.py (new)"
+        acceptance_criteria:
+          - "DoD fails if High-risk threats unmitigated"
+          - "DoD warns if Medium-risk threats unmitigated"
+          - "Low-risk threats documented but not blocking"
+          - "Validation checks plan document for mitigation evidence"
+        estimated_effort: "5 hours"
+        
+      - id: "6.5"
+        name: "Feature Type Threat Templates"
+        description: "Create threat template library for common feature types"
+        files_affected:
+          - "cortex-brain/agents/threat-templates/auth.yaml (new)"
+          - "cortex-brain/agents/threat-templates/api.yaml (new)"
+          - "cortex-brain/agents/threat-templates/data-storage.yaml (new)"
+          - "cortex-brain/agents/threat-templates/file-upload.yaml (new)"
+          - "cortex-brain/agents/threat-templates/payment.yaml (new)"
+        acceptance_criteria:
+          - "Each template has typical threats for feature type"
+          - "Mitigations include code examples (C#, Python, JS as appropriate)"
+          - "OWASP Top 10 references included"
+          - "Risk ratings calibrated per template"
+        estimated_effort: "6 hours"
+    
+    dependencies:
+      - "phase_4 (Incremental planning needed for threat report generation)"
+    
+    testing_requirements:
+      - "Test threat modeling for auth feature (should detect credential storage, session management)"
+      - "Test API feature (should detect injection, rate limiting)"
+      - "Test file upload feature (should detect malicious files, path traversal)"
+      - "Verify DoD blocks high-risk threats without mitigation"
+      - "Test workflow resumption after threat modeling failure"
+    
+    total_estimated_effort: "29 hours"
+
+  - phase_id: "phase_7"
+    name: "Brain Health & Learning Systems"
+    priority: 8
+    status: "not-started"
+    description: "Complete Tier 1/2 implementation for conversation learning and pattern recognition"
+    rationale: "RCA revealed incomplete Tier 1/2 implementation; brain learning capability exists but not activated"
+    
+    objectives:
+      - "Implement full Tier 1 schema (conversations, user profiles, entities)"
+      - "Activate Tier 2 pattern learning and relationship graphs"
+      - "Add schema migration system for future evolution"
+      - "Enable brain-assisted responses with context injection"
+      - "Improve Overall Quality Score from 6.0/10 to 8.5/10"
+    
+    deliverables:
+      - id: "7.1"
+        name: "Tier 1 Schema Completion"
+        description: "Implement missing Tier 1 tables for conversation history and user profiles"
+        files_affected:
+          - "cortex-brain/tier1/working_memory.db"
+          - "src/tier1/working_memory.py"
+          - "src/tier1/schema_migrations.py (new)"
+          - "cortex-brain/schemas/tier1-schema.sql"
+        acceptance_criteria:
+          - "conversations table: Store all chat history with timestamps"
+          - "user_profile table: Preferences, interaction mode, experience level"
+          - "working_memory table: Temporary context storage with TTL"
+          - "entities table: Named entity tracking (files, functions, projects)"
+          - "Migration system supports zero-downtime schema evolution"
+        estimated_effort: "10 hours"
+        
+      - id: "7.2"
+        name: "Tier 2 Pattern Learning Activation"
+        description: "Implement pattern storage and relationship graph functionality"
+        files_affected:
+          - "cortex-brain/tier2/knowledge_graph.db"
+          - "src/tier2/pattern_storage.py"
+          - "src/tier2/relationship_mapper.py (new)"
+          - "src/tier2/semantic_search.py"
+        acceptance_criteria:
+          - "patterns table: Store learned workflows and code patterns"
+          - "relationships table: Graph edges between entities (file→function, feature→file)"
+          - "FTS5 semantic search operational"
+          - "Pattern matching with relevance scoring"
+          - "Auto-learn from completed TDD cycles (integrates with Phase 3)"
+        estimated_effort: "12 hours"
+        
+      - id: "7.3"
+        name: "Brain Initialization System"
+        description: "Add brain setup on first run with health monitoring"
+        files_affected:
+          - "src/orchestrators/brain_init_orchestrator.py (new)"
+          - "cortex.config.json"
+          - "src/utils/brain_health_monitor.py (new)"
+        acceptance_criteria:
+          - "First-run wizard initializes all 3 tiers"
+          - "Health monitoring dashboard: 'cortex brain health'"
+          - "Schema version tracking for each tier"
+          - "Automated repair for missing tables/indexes"
+          - "Health metrics: query latency, storage usage, pattern count"
+        estimated_effort: "8 hours"
+        
+      - id: "7.4"
+        name: "Context Injection for Responses"
+        description: "Enable brain-assisted responses using learned context"
+        files_affected:
+          - "src/response_templates/context_injector.py (new)"
+          - "src/cortex_agents/intent_router.py"
+          - "src/tier1/working_memory.py"
+          - "src/tier2/pattern_storage.py"
+        acceptance_criteria:
+          - "Intent router queries Tier 1 for recent conversation context"
+          - "Pattern matcher suggests relevant workflows from Tier 2"
+          - "Context injected into response templates before rendering"
+          - "Example: User asks about feature, CORTEX recalls past discussion"
+          - "Performance: Context retrieval <100ms (Tier 1 FIFO)"
+        estimated_effort: "9 hours"
+        
+      - id: "7.5"
+        name: "FIFO Conversation Management"
+        description: "Implement 70-conversation FIFO as designed (Tier 1 governance)"
+        files_affected:
+          - "src/tier1/working_memory.py"
+          - "src/tier1/fifo_manager.py (new)"
+          - "cortex-brain/tier1/working_memory.db"
+        acceptance_criteria:
+          - "Auto-archive conversations older than 70th most recent"
+          - "Archived conversations moved to Tier 2 (knowledge graph)"
+          - "FIFO maintains <100ms query performance"
+          - "Manual override: 'cortex brain keep conversation <id>'"
+        estimated_effort: "6 hours"
+    
+    dependencies:
+      - "phase_0 (Need clean foundation)"
+      - "phase_3 (TDD tier feeding integrates with pattern learning)"
+    
+    testing_requirements:
+      - "Test full conversation lifecycle (create → store → retrieve → archive)"
+      - "Test pattern learning from 3 completed TDD cycles"
+      - "Test context injection improves response relevance (manual validation)"
+      - "Load test: 1000 conversations, verify <100ms query latency"
+      - "Test FIFO archival at 70-conversation threshold"
+      - "Health monitoring detects missing tables/indexes"
+    
+    total_estimated_effort: "45 hours"

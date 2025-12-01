@@ -20,6 +20,7 @@ from src.cortex_agents.health_validator.agent import HealthValidator
 from src.cortex_agents.tactical.code_executor import CodeExecutor
 from src.agents.feedback_agent import FeedbackAgent
 from src.cortex_agents.ado_agent import ADOAgent
+from src.cortex_agents.application_health_agent import ApplicationHealthAgent
 
 
 class AgentExecutor:
@@ -165,6 +166,13 @@ class AgentExecutor:
         elif agent_type == AgentType.ADO_ORCHESTRATOR:
             agent = ADOAgent(
                 name="ADOAgent",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+        elif agent_type == AgentType.APPLICATION_HEALTH:
+            agent = ApplicationHealthAgent(
+                name="ApplicationHealthAgent",
                 tier1_api=self.tier1,
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3
