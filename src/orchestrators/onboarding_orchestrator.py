@@ -48,7 +48,13 @@ class OnboardingOrchestrator:
             tier1_api: Tier 1 API instance for profile storage
         """
         self.tier1 = tier1_api
-        self.working_memory = WorkingMemory()
+        
+        # Initialize working_memory (Phase 1.3)
+        # Use provided tier1_api if available, otherwise create new WorkingMemory
+        if tier1_api:
+            self.working_memory = tier1_api
+        else:
+            self.working_memory = WorkingMemory()
         
         # Experience level choices
         self.experience_levels = {
@@ -189,7 +195,7 @@ How do you prefer to work with AI assistants?
 **Your choice (1-4):**"""
         
         return {
-            "status": "awaiting_mode",
+            "status": "awaiting_interaction_mode",
             "content": message,
             "experience_level": selected_level["value"],
             "step": "interaction_mode"
@@ -332,7 +338,7 @@ Now, let's tackle your request!"""
         delattr(self, '_pending_profile')
         
         return {
-            "status": "completed",
+            "status": "complete",
             "content": confirmation,
             "profile": {
                 "interaction_mode": saved_interaction_mode,
@@ -573,6 +579,116 @@ To update: `update profile`"""
         }
         
         return descriptions.get(mode, "Unknown mode")
+    
+    # ========== Phase 1.4: Integration & Helper Methods ==========
+    
+    def present_onboarding(self) -> Dict[str, Any]:
+        """
+        Entry point for onboarding flow - presents first question.
+        
+        Returns:
+            Dict with status and welcome message including first question
+        """
+        welcome_message = self._generate_welcome_message()
+        
+        return {
+            "status": "awaiting_experience_level",
+            "content": welcome_message,
+            "step": "experience_level"
+        }
+    
+    def process_interaction_choice(self, choice: str, experience_level: str) -> Dict[str, Any]:
+        """
+        Alias for process_mode_choice() for API consistency.
+        
+        Args:
+            choice: User's interaction mode choice (1-4)
+            experience_level: Previously selected experience level
+        
+        Returns:
+            Dict with next step or error
+        """
+        # Check if onboarding was started (has pending profile or experience was set)
+        if not hasattr(self, '_pending_profile') and not experience_level:
+            return {
+                "status": "error",
+                "message": "Onboarding state lost. Please restart onboarding.",
+                "step": "restart"
+            }
+        
+        return self.process_mode_choice(choice, experience_level)
+    
+    def get_profile(self) -> Optional[Dict[str, Any]]:
+        """
+        Get the stored user profile.
+        
+        Returns:
+            Profile dict or None if not exists
+        """
+        if self.tier1:
+            return self.tier1.get_profile()
+        return None
+    
+    def get_onboarding_status(self) -> Dict[str, Any]:
+        """
+        Check onboarding completion status.
+        
+        Returns:
+            Dict with completion status and current step
+        """
+        profile = self.get_profile()
+        app_name = self.get_application_name()
+        
+        if profile and app_name:
+            return {
+                "complete": True,
+                "application_name": app_name,
+                "profile": profile
+            }
+        elif hasattr(self, '_pending_profile'):
+            return {
+                "complete": False,
+                "in_progress": True,
+                "pending_data": self._pending_profile
+            }
+        else:
+            return {
+                "complete": False,
+                "in_progress": False
+            }
+    
+    def reset_onboarding(self) -> None:
+        """
+        Reset onboarding state (clear pending data).
+        """
+        if hasattr(self, '_pending_profile'):
+            delattr(self, '_pending_profile')
+    
+    def validate_profile_data(self, profile_data: Dict[str, Any]) -> bool:
+        """
+        Validate profile data structure and values.
+        
+        Args:
+            profile_data: Profile dict to validate
+        
+        Returns:
+            True if valid, False otherwise
+        """
+        if not isinstance(profile_data, dict):
+            return False
+        
+        # Check required fields
+        if 'experience_level' in profile_data:
+            valid_levels = ["junior", "mid", "senior", "expert"]
+            if profile_data['experience_level'] not in valid_levels:
+                return False
+        
+        if 'interaction_mode' in profile_data:
+            valid_modes = ["autonomous", "guided", "educational", "pair"]
+            if profile_data['interaction_mode'] not in valid_modes:
+                return False
+        
+        return True
     
     def start_onboarding(self, command: str) -> str:
         """
