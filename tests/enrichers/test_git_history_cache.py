@@ -7,7 +7,7 @@ This module validates 1-hour TTL cache for git history queries.
 import pytest
 from pathlib import Path
 import json
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
 from src.enrichers.git_history_cache import GitHistoryCache
 
 
@@ -67,7 +67,7 @@ class TestGitHistoryCache:
         cache_file = cache.metadata_dir / "history-cache.json"
         
         # Write cache with old timestamp (2 hours ago)
-        old_timestamp = datetime.now(UTC) - timedelta(hours=2)
+        old_timestamp = datetime.now(timezone.utc) - timedelta(hours=2)
         old_data = {
             "cached_at": old_timestamp.isoformat(),
             "commits": [
@@ -120,7 +120,7 @@ class TestGitHistoryCache:
         cache_file = cache.metadata_dir / "history-cache.json"
         
         # Write cache with 59 minutes old timestamp
-        almost_stale = datetime.now(UTC) - timedelta(minutes=59)
+        almost_stale = datetime.now(timezone.utc) - timedelta(minutes=59)
         data = {
             "cached_at": almost_stale.isoformat(),
             "commits": [{"sha": "boundary123", "message": "Boundary test"}]
@@ -140,7 +140,7 @@ class TestGitHistoryCache:
         cache_file = cache.metadata_dir / "history-cache.json"
         
         # Write cache with 61 minutes old timestamp
-        stale = datetime.now(UTC) - timedelta(minutes=61)
+        stale = datetime.now(timezone.utc) - timedelta(minutes=61)
         data = {
             "cached_at": stale.isoformat(),
             "commits": [{"sha": "stale123", "message": "Stale test"}]
