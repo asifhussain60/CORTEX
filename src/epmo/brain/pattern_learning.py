@@ -86,7 +86,6 @@ class PatternLearningEngine:
             return list(self._pattern_cache.values())
         
         try:
-            # Get patterns from brain
             brain_patterns = self.brain.get_documentation_patterns(
                 category='documentation',
                 min_confidence=min_success_rate
@@ -282,7 +281,6 @@ class PatternLearningEngine:
         if not project_context:
             return True
         
-        # Check tag overlap
         config_tags = set(config.get('tags', []))
         pattern_tags = set(pattern.context_tags)
         
@@ -314,7 +312,6 @@ class PatternLearningEngine:
         if not self.brain:
             return
             
-        # Get recent corrections for learning
         corrections = self.brain.get_recent_corrections(days=30)
         
         for correction in corrections:

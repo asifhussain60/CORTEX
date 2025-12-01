@@ -70,7 +70,6 @@ class SessionBannerHandler:
                 - session_id (str): Current/new session ID
                 - is_new_session (bool): Whether session was just created
         """
-        # Check session state
         check_request = AgentRequest(
             intent="check_session",
             context={"session_id": session_id},
@@ -94,7 +93,6 @@ class SessionBannerHandler:
         current_session_id = session_data.get("session_id", session_id)
         is_new_session = session_data.get("is_new_session", False)
         
-        # Get banner content if needed
         banner_content = ""
         if show_banner:
             content_request = AgentRequest(

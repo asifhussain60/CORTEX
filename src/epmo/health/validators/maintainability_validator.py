@@ -30,7 +30,6 @@ class MaintainabilityValidator(BaseValidator):
         if not python_files:
             return [self.create_result("no_files", 1.0, "No files to validate")]
         
-        # Check code consistency
         consistency_score = self._check_code_consistency(python_files)
         results.append(self.create_result(
             "code_consistency",
@@ -39,7 +38,6 @@ class MaintainabilityValidator(BaseValidator):
             ValidationSeverity.LOW if consistency_score < 0.7 else ValidationSeverity.INFO
         ))
         
-        # Check dependency management
         dependency_score = self._check_dependency_management(python_files)
         results.append(self.create_result(
             "dependency_management",
@@ -48,7 +46,6 @@ class MaintainabilityValidator(BaseValidator):
             ValidationSeverity.MEDIUM if dependency_score < 0.6 else ValidationSeverity.INFO
         ))
         
-        # Check for code duplication
         duplication_score = self._check_code_duplication(python_files)
         results.append(self.create_result(
             "code_duplication",
@@ -57,7 +54,6 @@ class MaintainabilityValidator(BaseValidator):
             ValidationSeverity.MEDIUM if duplication_score < 0.7 else ValidationSeverity.INFO
         ))
         
-        # Check error handling consistency
         error_handling_score = self._check_error_handling(python_files)
         results.append(self.create_result(
             "error_handling",
@@ -70,7 +66,6 @@ class MaintainabilityValidator(BaseValidator):
     
     def _check_code_consistency(self, python_files: List[Path]) -> float:
         """Check for consistent coding patterns across files."""
-        # Check naming consistency
         naming_patterns = {
             'snake_case_functions': 0,
             'camel_case_functions': 0,
@@ -150,7 +145,6 @@ class MaintainabilityValidator(BaseValidator):
             if tree:
                 for node in ast.walk(tree):
                     if isinstance(node, ast.FunctionDef):
-                        # Get function body as string (simplified)
                         body_hash = hash(ast.dump(node))
                         function_bodies.append(body_hash)
         

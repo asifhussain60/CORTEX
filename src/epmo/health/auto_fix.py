@@ -149,7 +149,6 @@ def test_{module_name}_placeholder():
             
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):
-                    # Check if function has any error handling
                     has_try_except = any(isinstance(n, ast.Try) for n in ast.walk(node))
                     
                     if not has_try_except and len(node.body) > 1:

@@ -308,11 +308,9 @@ class MarkdownGenerator:
             if file_analysis.docstring:
                 api_parts.append(file_analysis.docstring)
             
-            # Classes
             for class_model in file_analysis.classes:
                 api_parts.append(self._format_class_documentation(class_model))
             
-            # Functions
             for function in file_analysis.functions:
                 if function.visibility == 'public':  # Only document public functions
                     api_parts.append(self._format_function_documentation(function))
@@ -347,7 +345,6 @@ class MarkdownGenerator:
         """Format documentation for a function."""
         parts = []
         
-        # Function signature
         signature = f"`{function.name}({', '.join(function.parameters)})`"
         if function.return_type:
             signature += f" → `{function.return_type}`"

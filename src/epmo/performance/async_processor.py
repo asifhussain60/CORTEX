@@ -148,7 +148,6 @@ class AsyncDocumentProcessor:
         self._loop = asyncio.get_event_loop()
         self._task_queue = asyncio.Queue(maxsize=self.max_queue_size)
         
-        # Initialize executors based on processing mode
         if self.processing_mode in [ProcessingMode.THREAD, ProcessingMode.HYBRID]:
             self._thread_executor = ThreadPoolExecutor(max_workers=self.max_workers)
         
@@ -280,7 +279,6 @@ class AsyncDocumentProcessor:
             elif task.status == TaskStatus.CANCELLED:
                 raise RuntimeError(f"Task {task_id} was cancelled")
             
-            # Check timeout
             if timeout and time.time() - start_time > timeout:
                 raise asyncio.TimeoutError(f"Task {task_id} timeout after {timeout}s")
             
@@ -303,7 +301,6 @@ class AsyncDocumentProcessor:
             self._stats.queue_size = self._task_queue.qsize() if self._task_queue else 0
             self._stats.active_workers = len([w for w in self._workers if not w.done()])
             
-            # Calculate execution time statistics
             if self._execution_times:
                 self._stats.avg_execution_time = sum(self._execution_times) / len(self._execution_times)
                 self._stats.max_execution_time = max(self._execution_times)
@@ -373,7 +370,6 @@ class AsyncDocumentProcessor:
         
         while self._running:
             try:
-                # Get next task with timeout
                 task = await asyncio.wait_for(
                     self._task_queue.get(),
                     timeout=1.0
@@ -462,7 +458,6 @@ class AsyncDocumentProcessor:
         """Periodic statistics update and progress callbacks."""
         while self._running:
             try:
-                # Calculate throughput
                 completed_tasks = self._stats.completed_tasks
                 await asyncio.sleep(self.stats_update_interval)
                 

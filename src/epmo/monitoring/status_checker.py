@@ -180,7 +180,6 @@ class StatusChecker:
         # Dependency tracking
         self._dependency_graph: Dict[str, List[str]] = {}  # check_name -> depends_on
         
-        # Initialize storage
         if self.enable_persistence:
             self._init_storage()
         
@@ -289,7 +288,6 @@ class StatusChecker:
         # Determine overall status
         overall_status = self._calculate_overall_status(check_results)
         
-        # Get dependencies status
         dependencies_status = self._get_dependencies_status(check_results)
         
         return ServiceStatusSummary(
@@ -343,14 +341,12 @@ class StatusChecker:
                 recent_results = [r for r in results if r.timestamp > cutoff_time]
                 
                 if recent_results:
-                    # Calculate uptime percentage
                     operational_count = sum(
                         1 for r in recent_results 
                         if r.status == ServiceStatus.OPERATIONAL
                     )
                     uptime_percentage = (operational_count / len(recent_results)) * 100
                     
-                    # Calculate average response time
                     avg_response_time = sum(r.response_time_ms for r in recent_results) / len(recent_results)
                     
                     # Detect trend direction
@@ -507,7 +503,6 @@ class StatusChecker:
         start_time = time.time()
         
         try:
-            # Check dependencies first
             if config.depends_on:
                 for dep_name in config.depends_on:
                     dep_status = self._current_status.get(dep_name, ServiceStatus.UNKNOWN)
@@ -578,7 +573,6 @@ class StatusChecker:
             allow_redirects=True
         )
         
-        # Check status code
         expected_codes = check_config.get('expected_status_codes', [200])
         if response.status_code not in expected_codes:
             return StatusCheckResult(
@@ -594,7 +588,6 @@ class StatusChecker:
                 }
             )
         
-        # Check response content if specified
         expected_content = check_config.get('expected_response_contains')
         if expected_content and expected_content not in response.text:
             return StatusCheckResult(
@@ -698,7 +691,6 @@ class StatusChecker:
         # Execute custom function
         result = check_function()
         
-        # Validate result format
         if not isinstance(result, dict):
             raise ValueError("Custom function must return dictionary")
         
@@ -759,7 +751,6 @@ class StatusChecker:
     def _check_system_processes(self) -> Dict[str, Any]:
         """Custom function to check system processes."""
         try:
-            # Get basic system info
             cpu_percent = psutil.cpu_percent(interval=1.0)
             memory = psutil.virtual_memory()
             process_count = len(psutil.pids())
@@ -936,7 +927,6 @@ class StatusChecker:
             conn = sqlite3.connect(self.storage_path)
             cursor = conn.cursor()
             
-            # Create status_results table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS status_results (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -950,7 +940,6 @@ class StatusChecker:
                 )
             """)
             
-            # Create index for efficient queries
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_status_check_timestamp 
                 ON status_results(check_name, timestamp)
@@ -979,7 +968,6 @@ class StatusChecker:
                         if not config.enabled:
                             continue
                         
-                        # Check if it's time to run this check
                         last_check = last_check_times.get(check_name, 0)
                         if current_time - last_check >= config.interval_seconds:
                             try:

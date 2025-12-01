@@ -80,20 +80,17 @@ class DependencyMapper:
         # Parse all Python files in the EPMO
         analyses = self.ast_parser.parse_epmo(epmo_path)
         
-        # Create dependency graph
         graph = DependencyGraph(epmo_path=str(epmo_path))
         
         # Extract all relationships
         for analysis in analyses:
             self._extract_module_dependencies(analysis, epmo_path, graph)
         
-        # Calculate reverse dependencies (imported_by)
         self._calculate_reverse_dependencies(graph)
         
         # Detect circular dependencies
         self._detect_circular_dependencies(graph)
         
-        # Calculate coupling scores
         self._calculate_coupling_scores(graph)
         
         # Determine dependency layers (topological sort)
@@ -112,13 +109,11 @@ class DependencyMapper:
         relative_path = analysis.file_path.relative_to(epmo_path)
         module_name = str(relative_path).replace('/', '.').replace('.py', '')
         
-        # Initialize module dependencies
         if module_name not in graph.modules:
             graph.modules[module_name] = ModuleDependencies(module_path=module_path)
         
         module_deps = graph.modules[module_name]
         
-        # Process each import
         for import_info in analysis.imports:
             dependency = self._process_import(
                 import_info, module_name, epmo_path, analysis.file_path
@@ -188,7 +183,6 @@ class DependencyMapper:
             dots = len(import_module) - len(import_module.lstrip('.'))
             module_part = import_module[dots:]
             
-            # Get source module path relative to EPMO
             source_relative = source_file.relative_to(epmo_path)
             source_parts = source_relative.parts[:-1]  # Remove filename
             
@@ -208,16 +202,13 @@ class DependencyMapper:
     
     def _is_external_import(self, module_name: str, epmo_path: Path) -> bool:
         """Determine if an import is external to the EPMO."""
-        # Check if it's a standard library module
         if module_name.split('.')[0] in self.stdlib_modules:
             return True
         
-        # Check if it exists within the EPMO
         module_path = epmo_path / f"{module_name.replace('.', '/')}.py"
         if module_path.exists():
             return False
         
-        # Check if it's a package within the EPMO
         package_path = epmo_path / module_name.replace('.', '/') / "__init__.py"
         if package_path.exists():
             return False
@@ -281,7 +272,6 @@ class DependencyMapper:
             path.pop()
             rec_stack.remove(node)
         
-        # Check all nodes for cycles
         for module in graph.modules:
             if module not in visited:
                 dfs_cycle_detect(module, [])
@@ -310,7 +300,6 @@ class DependencyMapper:
         adj_list = defaultdict(list)
         in_degree = defaultdict(int)
         
-        # Initialize all modules with in-degree 0
         for module in graph.modules:
             in_degree[module] = 0
         

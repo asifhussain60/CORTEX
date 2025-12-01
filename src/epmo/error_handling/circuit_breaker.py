@@ -158,7 +158,6 @@ class CircuitBreaker:
             CircuitBreakerError: If circuit breaker is open
         """
         with self._lock:
-            # Check if we should allow the call
             if not self._should_allow_request():
                 self.metrics.rejected_requests += 1
                 raise CircuitBreakerError(
@@ -284,7 +283,6 @@ class CircuitBreaker:
             return True
         
         elif self._state == CircuitBreakerState.OPEN:
-            # Check if timeout period has elapsed
             if current_time - self._state_changed_time >= self.config.timeout_duration:
                 self._change_state(CircuitBreakerState.HALF_OPEN)
                 return True
@@ -296,7 +294,6 @@ class CircuitBreaker:
                 self._half_open_calls >= self.config.max_half_open_calls):
                 return False
             
-            # Check if recovery timeout has elapsed
             if (self._half_open_start_time and 
                 current_time - self._half_open_start_time >= self.config.recovery_timeout):
                 # If we've had some successes, close; otherwise, open
@@ -316,7 +313,6 @@ class CircuitBreaker:
             self.metrics.total_requests += 1
             self.metrics.last_success_time = time.time()
             
-            # Check if this is a slow request
             if execution_time > self.config.slow_request_threshold:
                 self.metrics.slow_requests += 1
                 # Treat slow requests as partial failures
@@ -337,7 +333,6 @@ class CircuitBreaker:
                 if execution_time <= self.config.slow_request_threshold:
                     self._half_open_successes += 1
                     
-                    # Check if we should close the circuit
                     if self._half_open_successes >= self.config.success_threshold:
                         self._change_state(CircuitBreakerState.CLOSED)
     
@@ -382,7 +377,6 @@ class CircuitBreaker:
         if len(self._call_history) < self.config.minimum_throughput:
             return
         
-        # Check failure threshold
         recent_failures = sum(1 for call in self._call_history[-self.config.failure_threshold:] 
                              if not call['success'])
         
@@ -390,7 +384,6 @@ class CircuitBreaker:
             self._change_state(CircuitBreakerState.OPEN)
             return
         
-        # Check error percentage threshold
         recent_calls = self._call_history[-self.config.sliding_window_size:]
         if len(recent_calls) >= self.config.minimum_throughput:
             failed_calls = sum(1 for call in recent_calls if not call['success'])

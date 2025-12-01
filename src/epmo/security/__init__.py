@@ -16,7 +16,6 @@ Components:
 
 __version__ = "3.0.0"
 
-# Import security components
 from .authentication import AuthenticationManager, AuthenticationError
 from .authorization import AuthorizationManager, AuthorizationError, Role, Permission
 from .validation import InputValidator, ValidationError

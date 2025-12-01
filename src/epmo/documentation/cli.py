@@ -310,11 +310,9 @@ Examples:
                 for item in path.rglob('__init__.py'):
                     epmos.append(item.parent)
             else:
-                # Check if current directory is an EPMO
                 if (path / '__init__.py').exists():
                     epmos.append(path)
                 else:
-                    # Check immediate subdirectories
                     for item in path.iterdir():
                         if item.is_dir() and (item / '__init__.py').exists():
                             epmos.append(item)
@@ -409,7 +407,6 @@ Examples:
                     output_file.parent.mkdir(parents=True, exist_ok=True)
                     output_file.write_text(documentation, encoding='utf-8')
             
-            # Calculate generation time
             generation_time = (datetime.now() - start_time).total_seconds()
             model.metadata.generation_time_seconds = generation_time
             
@@ -464,7 +461,6 @@ Examples:
         if project_root.is_file():
             project_root = project_root.parent
         
-        # Create configurations
         config = self.create_generation_config(args)
         diagram_config = self.create_diagram_config(args)
         
@@ -527,7 +523,6 @@ Examples:
         for result in failed:
             print(f"\n❌ {result['epmo_name']}: {result['error']}")
         
-        # Validate output if requested
         if args.validate_output and not args.dry_run:
             print("\n🔍 Validating generated documentation...")
             # Implementation would validate output files

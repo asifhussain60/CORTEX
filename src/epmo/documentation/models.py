@@ -398,7 +398,6 @@ def create_epmo_model(
     Returns:
         Complete EPMDocumentationModel ready for documentation generation
     """
-    # Create metadata
     metadata = DocumentationMetadata(
         epmo_name=epmo_path.name,
         epmo_path=str(epmo_path),
@@ -486,7 +485,6 @@ def create_epmo_model(
         )
         files.append(file_analysis)
     
-    # Create architecture metrics
     architecture = ArchitectureMetrics(
         total_modules=dependency_analysis.get('total_modules', 0),
         total_classes=ast_analysis.get('total_classes', 0),
@@ -500,7 +498,6 @@ def create_epmo_model(
         dependency_layers=dependency_analysis.get('dependency_layers', [])
     )
     
-    # Create health metrics if available
     health = None
     if health_data and health_data.get('status') == 'success':
         health = HealthMetrics(
@@ -512,7 +509,6 @@ def create_epmo_model(
             priority_issues=health_data.get('priority_issues_count', 0)
         )
     
-    # Create model
     model = EPMDocumentationModel(
         metadata=metadata,
         files=files,

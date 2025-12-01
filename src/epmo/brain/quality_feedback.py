@@ -137,7 +137,6 @@ class QualityFeedbackLoop:
             # Update trend analysis
             self._update_quality_trends()
             
-            # Check for quality alerts
             alerts = self._check_quality_alerts(metrics)
             for alert in alerts:
                 self.logger.warning(f"Quality alert: {alert}")
@@ -155,7 +154,6 @@ class QualityFeedbackLoop:
             feedback: User feedback on documentation quality
         """
         try:
-            # Validate feedback
             if not 0 <= feedback.overall_rating <= 1:
                 raise ValueError("Overall rating must be between 0 and 1")
             
@@ -182,7 +180,6 @@ class QualityFeedbackLoop:
         """Analyze metrics for immediate insights"""
         insights = []
         
-        # Check individual scores against thresholds
         scores = {
             QualityDimension.READABILITY.value: metrics.readability_score,
             QualityDimension.COMPLETENESS.value: metrics.completeness_score,
@@ -256,7 +253,6 @@ class QualityFeedbackLoop:
     def _calculate_dimension_trend(self, dimension: str) -> Optional[QualityTrend]:
         """Calculate trend for a specific quality dimension"""
         try:
-            # Get recent metrics (last 30 entries or 30 days)
             recent_cutoff = datetime.now() - timedelta(days=30)
             recent_metrics = [
                 m for m in self._quality_history[-30:]
@@ -286,7 +282,6 @@ class QualityFeedbackLoop:
             if len(scores) < 3:
                 return None
             
-            # Calculate trend slope using linear regression
             slope = self._calculate_trend_slope(timestamps, scores)
             
             # Determine trend direction
@@ -297,7 +292,6 @@ class QualityFeedbackLoop:
             else:
                 trend_direction = 'declining'
             
-            # Calculate confidence based on data consistency
             confidence = self._calculate_trend_confidence(scores, slope)
             
             # Current and target averages
@@ -376,7 +370,6 @@ class QualityFeedbackLoop:
         sum_xy = sum(x * y for x, y in zip(x_values, y_values))
         sum_x_squared = sum(x * x for x in x_values)
         
-        # Calculate slope using least squares formula
         denominator = n * sum_x_squared - sum_x * sum_x
         if denominator == 0:
             return 0.0
@@ -389,7 +382,6 @@ class QualityFeedbackLoop:
         if len(scores) < 3:
             return 0.0
         
-        # Calculate R-squared for trend line fit
         mean_score = statistics.mean(scores)
         variance = statistics.variance(scores) if len(scores) > 1 else 0
         
@@ -593,13 +585,10 @@ class QualityFeedbackLoop:
         if not recent_metrics:
             return {"message": "No quality data available for analysis"}
         
-        # Calculate current quality statistics
         quality_stats = self._calculate_quality_statistics(recent_metrics, recent_feedback)
         
-        # Get trend analysis
         trends = dict(self._trend_cache)
         
-        # Get top recommendations
         top_recommendations = sorted(
             self._recommendations_cache,
             key=lambda r: r.expected_impact * r.confidence,
@@ -675,7 +664,6 @@ class QualityFeedbackLoop:
         """Identify key areas needing improvement"""
         areas = []
         
-        # Check metrics against thresholds
         avg_readability = statistics.mean([m.readability_score for m in metrics])
         avg_completeness = statistics.mean([m.completeness_score for m in metrics])
         avg_accuracy = statistics.mean([m.accuracy_score for m in metrics])
@@ -687,7 +675,6 @@ class QualityFeedbackLoop:
         if avg_accuracy < 0.90:
             areas.append("accuracy")
         
-        # Check user feedback patterns
         if feedback:
             avg_user_rating = statistics.mean([f.overall_rating for f in feedback])
             if avg_user_rating < 0.7:
@@ -699,7 +686,6 @@ class QualityFeedbackLoop:
         """Get current quality alerts"""
         alerts = []
         
-        # Check recent trends
         for dimension, trend in self._trend_cache.items():
             if trend.trend_direction == 'declining' and trend.confidence > 0.7:
                 alerts.append(f"Declining trend in {dimension}")
@@ -707,7 +693,6 @@ class QualityFeedbackLoop:
             if trend.current_average < trend.target_average * 0.8:
                 alerts.append(f"{dimension} significantly below target")
         
-        # Check recommendation priorities
         critical_recs = [r for r in self._recommendations_cache if r.priority == 'critical']
         if critical_recs:
             alerts.append(f"{len(critical_recs)} critical improvement recommendations")

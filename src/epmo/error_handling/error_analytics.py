@@ -211,7 +211,6 @@ class ErrorAnalytics:
         with self._lock:
             current_time = time.time()
             
-            # Get recent errors for analysis
             analysis_window = current_time - (self.analysis_window_hours * 3600)
             recent_errors = [
                 error for error in self._error_history
@@ -305,7 +304,6 @@ class ErrorAnalytics:
             trends = self.get_error_trends()
             component_health = self.get_component_health()
             
-            # Calculate overall metrics
             total_errors = len(self._error_history)
             unique_error_codes = len(set(error['error_code'] for error in self._error_history))
             affected_components = len(set(error['component'] for error in self._error_history))
@@ -372,7 +370,6 @@ class ErrorAnalytics:
         if len(hourly_counts) < 2:
             return patterns
         
-        # Calculate baseline and detect spikes
         counts = list(hourly_counts.values())
         baseline = statistics.mean(counts)
         std_dev = statistics.stdev(counts) if len(counts) > 1 else 0
@@ -409,7 +406,6 @@ class ErrorAnalytics:
         
         for error_code, count in error_counts.items():
             if count >= self._thresholds['recurring_error_count']:
-                # Calculate time distribution
                 error_times = [
                     error['timestamp'] for error in errors
                     if error['error_code'] == error_code
@@ -469,11 +465,9 @@ class ErrorAnalytics:
                     clusters.append(current_cluster)
                 current_cluster = [error]
         
-        # Check final cluster
         if len(current_cluster) >= 3:
             clusters.append(current_cluster)
         
-        # Create patterns for significant clusters
         for i, cluster in enumerate(clusters):
             if len(cluster) >= 5:  # Significant cluster threshold
                 error_codes = [error['error_code'] for error in cluster]
@@ -512,7 +506,6 @@ class ErrorAnalytics:
         total_errors = len(errors)
         
         for component, count in component_counts.items():
-            # Calculate component error rate
             error_rate = count / total_errors if total_errors > 0 else 0
             
             # Detect if component has unusually high error rate
@@ -560,7 +553,6 @@ class ErrorAnalytics:
             if len(window_errors) < 3:
                 continue
             
-            # Check for component sequence patterns
             components = [error['component'] for error in sorted(window_errors, key=lambda e: e['timestamp'])]
             
             # Look for patterns where one component failure leads to others
@@ -604,7 +596,6 @@ class ErrorAnalytics:
         if len(timed_errors) < 10:
             return patterns
         
-        # Calculate baseline response time
         response_times = [error['response_time'] for error in timed_errors]
         baseline_response_time = statistics.median(response_times[:len(response_times)//2])  # First half as baseline
         
@@ -656,7 +647,6 @@ class ErrorAnalytics:
         current_time = time.time()
         period_start = current_time - period_seconds
         
-        # Get errors in period
         period_errors = [
             error for error in self._error_history
             if error['timestamp'] > period_start
@@ -665,7 +655,6 @@ class ErrorAnalytics:
         if not period_errors:
             return None
         
-        # Calculate trend
         total_errors = len(period_errors)
         error_rate = total_errors / (period_seconds / 3600)  # Errors per hour
         
@@ -739,7 +728,6 @@ class ErrorAnalytics:
         """Calculate health score for a component."""
         error_count = len(metrics['error_times'])
         
-        # Calculate error rate (errors per hour)
         if metrics['error_times']:
             time_span = max(metrics['error_times']) - min(metrics['error_times'])
             if time_span > 0:
@@ -771,7 +759,6 @@ class ErrorAnalytics:
         else:
             trend = "stable"
         
-        # Get most common errors
         most_common_errors = [
             code for code, count in metrics['error_codes'].most_common(5)
         ]
@@ -799,7 +786,6 @@ class ErrorAnalytics:
             if error['timestamp'] > recent_window
         ]
         
-        # Check for immediate frequency spikes
         if len(recent_errors) > 10:  # More than 10 errors in 5 minutes
             logger.warning(f"Real-time frequency spike detected: {len(recent_errors)} errors in 5 minutes")
     

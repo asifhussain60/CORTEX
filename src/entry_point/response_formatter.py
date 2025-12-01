@@ -72,7 +72,6 @@ class ResponseFormatter:
             "expert": None  # No limit
         }
         
-        # Initialize template system (v2.0)
         if template_file is None:
             # Default location
             from src.config import config
@@ -446,11 +445,9 @@ class ResponseFormatter:
         """Extract recommendations from response."""
         recommendations = []
         
-        # Check next_actions first
         if response.next_actions:
             recommendations.extend(response.next_actions)
         
-        # Check result for recommendations
         if isinstance(response.result, dict) and "recommendations" in response.result:
             recs = response.result["recommendations"]
             if isinstance(recs, list):
@@ -458,7 +455,6 @@ class ResponseFormatter:
             elif isinstance(recs, str):
                 recommendations.append(recs)
         
-        # Check metadata for next steps
         if response.metadata and "next_steps" in response.metadata:
             steps = response.metadata["next_steps"]
             if isinstance(steps, list):

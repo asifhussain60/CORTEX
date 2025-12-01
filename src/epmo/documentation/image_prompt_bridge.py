@@ -152,7 +152,6 @@ class ImagePromptIntegrationBridge:
             tiers.append(tier_data)
             tier_id += 1
         
-        # Create agents from classes (conceptual mapping)
         agents = []
         agent_id = 0
         for file_analysis in model.files[:10]:  # Limit to avoid too many agents
@@ -168,7 +167,6 @@ class ImagePromptIntegrationBridge:
                     agents.append(agent_data)
                     agent_id += 1
         
-        # Create plugins from external dependencies
         plugins = []
         if model.architecture and model.architecture.external_dependencies:
             for i, ext_dep in enumerate(model.architecture.external_dependencies[:5]):
@@ -498,11 +496,9 @@ Create a component overview diagram for '{model.metadata.epmo_name}' showing mod
         saved_files = {}
         
         for prompt in image_prompts:
-            # Create filename
             filename = f"{prompt.prompt_id}.md"
             file_path = output_dir / filename
             
-            # Create prompt file content
             content = f"""# {prompt.title}
 
 **Prompt ID:** {prompt.prompt_id}  

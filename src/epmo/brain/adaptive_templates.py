@@ -117,7 +117,6 @@ class AdaptiveTemplateSystem:
             Template recommendation with reasoning
         """
         try:
-            # Get successful patterns for context
             context_tags = self._extract_context_tags(project_context)
             successful_patterns = self.pattern_engine.analyze_successful_patterns()
             
@@ -332,7 +331,6 @@ class AdaptiveTemplateSystem:
         score = 0.0
         total_checks = 0
         
-        # Check preference alignment
         pref_mappings = {
             'include_diagrams': 'diagrams',
             'include_health': 'health_metrics', 
@@ -511,7 +509,6 @@ class AdaptiveTemplateSystem:
         if total_usage == 0:
             return {"message": "No template usage data available"}
         
-        # Calculate analytics
         best_template = max(
             self._template_performance.items(),
             key=lambda x: x[1]['success_rate'] * x[1]['avg_quality']

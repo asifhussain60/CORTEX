@@ -153,7 +153,6 @@ class HealthMonitor:
         self._system_metrics_cache: Dict[str, float] = {}
         self._metrics_cache_time = 0.0
         
-        # Initialize default system health checks
         if enable_system_checks:
             self._register_default_health_checks()
     
@@ -276,7 +275,6 @@ class HealthMonitor:
                 critical_count += 1
                 overall_status = HealthStatus.CRITICAL
                 
-                # Check if this is a critical component
                 check = self._health_checks.get(check_name)
                 if check and check.critical:
                     critical_failures.append(check_name)
@@ -285,7 +283,6 @@ class HealthMonitor:
         if critical_failures:
             overall_status = HealthStatus.CRITICAL
         
-        # Get system metrics
         system_metrics = self._get_system_metrics()
         
         # Generate recommendations
@@ -293,7 +290,6 @@ class HealthMonitor:
             check_results, system_metrics, critical_failures
         )
         
-        # Create report
         report = SystemHealthReport(
             timestamp=time.time(),
             overall_status=overall_status,
@@ -375,7 +371,6 @@ class HealthMonitor:
         if not recent_reports:
             return {'message': 'No health data available for the specified period'}
         
-        # Calculate trends
         status_counts = {status.value: 0 for status in HealthStatus}
         health_scores = []
         
@@ -581,7 +576,6 @@ class HealthMonitor:
             # Execute check function with timeout
             result = check.check_function()
             
-            # Validate result format
             if not isinstance(result, dict) or 'status' not in result:
                 raise ValueError("Health check must return dict with 'status' field")
             

@@ -196,7 +196,6 @@ class ErrorManager:
         Returns:
             Structured CortexError
         """
-        # Classify the error if not provided
         if isinstance(exception, CortexError):
             cortex_error = exception
         else:
@@ -428,7 +427,6 @@ class ErrorManager:
         exception_type = type(exception).__name__
         exception_message = str(exception)
         
-        # Check against known patterns
         for pattern in self._error_patterns:
             if (pattern['exception_type'] == exception_type or 
                 any(keyword in exception_message.lower() for keyword in pattern['keywords'])):

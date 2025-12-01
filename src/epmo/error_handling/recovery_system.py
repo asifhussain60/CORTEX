@@ -157,10 +157,8 @@ class RecoverySystem:
                 retry_config, fallback_config, context
             )
             
-            # Calculate total time
             total_time = time.time() - start_time
             
-            # Create result
             recovery_result = RecoveryResult(
                 success=result.get('success', False),
                 attempts_made=result.get('attempts', 0),
@@ -356,7 +354,6 @@ class RecoverySystem:
                 if attempt == retry_config.max_attempts - 1:
                     return self._handle_final_failure(e, attempt + 1, fallback_config)
                 
-                # Calculate delay with exponential backoff
                 delay = min(
                     retry_config.initial_delay * (retry_config.backoff_multiplier ** attempt),
                     retry_config.max_delay
@@ -586,7 +583,6 @@ class RecoverySystem:
                 if attempt == retry_config.max_attempts - 1:
                     return self._handle_final_failure(e, attempt + 1, fallback_config)
                 
-                # Calculate delay
                 delay = min(
                     retry_config.initial_delay * (retry_config.backoff_multiplier ** attempt),
                     retry_config.max_delay
@@ -603,17 +599,14 @@ class RecoverySystem:
     
     def _should_retry(self, exception: Exception, retry_config: RetryConfig) -> bool:
         """Determine if an exception should trigger a retry."""
-        # Check specific exception types
         if retry_config.retry_on_exceptions:
             if not any(isinstance(exception, exc_type) for exc_type in retry_config.retry_on_exceptions):
                 return False
         
-        # Check status codes (for HTTP-like exceptions)
         if retry_config.retry_on_status_codes and hasattr(exception, 'status_code'):
             if exception.status_code not in retry_config.retry_on_status_codes:
                 return False
         
-        # Check custom predicates
         if retry_config.retry_on_predicates:
             for predicate in retry_config.retry_on_predicates:
                 try:

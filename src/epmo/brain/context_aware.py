@@ -188,7 +188,6 @@ class ContextAwareGenerator:
             elif any(tech in technologies for tech in ['django', 'flask', 'fastapi', 'spring', 'express']):
                 primary_domain = 'backend'
             elif 'python' in technologies and any(file.name in ['requirements.txt'] for file in project_path.rglob('*.txt')):
-                # Check for ML libraries
                 req_files = list(project_path.rglob('requirements.txt'))
                 if req_files:
                     content = req_files[0].read_text()
@@ -240,7 +239,6 @@ class ContextAwareGenerator:
             if any((project_path / f).exists() for f in ['kubernetes', 'k8s', 'helm']):
                 return {'style': 'distributed'}
             
-            # Check for service directories
             service_dirs = [d for d in project_path.iterdir() 
                           if d.is_dir() and 'service' in d.name.lower()]
             if len(service_dirs) > 2:
@@ -277,7 +275,6 @@ class ContextAwareGenerator:
                 except:
                     continue
             
-            # Check package names and directories
             dir_names = [d.name.lower() for d in project_path.rglob('*') if d.is_dir()]
             content_to_check.extend(dir_names)
             
@@ -296,7 +293,6 @@ class ContextAwareGenerator:
     def _assess_project_maturity(self, project_path: Path) -> str:
         """Assess project maturity level"""
         try:
-            # Check for production indicators
             prod_indicators = [
                 'Dockerfile', 'docker-compose.yml', '.github/workflows',
                 'CI.yml', 'deployment', 'terraform', 'ansible'
@@ -305,7 +301,6 @@ class ContextAwareGenerator:
             if any((project_path / indicator).exists() for indicator in prod_indicators):
                 return 'production'
             
-            # Check for development indicators
             dev_indicators = ['tests', 'test', '__tests__', 'spec']
             test_dirs = [d for d in project_path.rglob('*') 
                         if d.is_dir() and any(indicator in d.name.lower() for indicator in dev_indicators)]

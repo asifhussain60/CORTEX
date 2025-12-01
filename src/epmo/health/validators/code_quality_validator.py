@@ -66,18 +66,15 @@ class CodeQualityValidator(BaseValidator):
                     complexity = self.calculate_complexity(node)
                     total_complexity += complexity
                     
-                    # Check naming convention
                     if not self.check_naming_convention(node.name, "snake_case"):
                         naming_violations += 1
                 
                 elif isinstance(node, ast.ClassDef):
                     total_classes += 1
                     
-                    # Check naming convention
                     if not self.check_naming_convention(node.name, "PascalCase"):
                         naming_violations += 1
         
-        # Calculate scores and create results
         results.extend(self._evaluate_complexity(total_complexity, total_functions))
         results.extend(self._evaluate_file_sizes(large_files, total_files))
         results.extend(self._evaluate_naming_conventions(naming_violations, total_functions + total_classes))
@@ -207,7 +204,6 @@ class CodeQualityValidator(BaseValidator):
         """Evaluate code organization and structure."""
         results = []
         
-        # Check for __init__.py files in packages
         package_dirs = set()
         init_files = set()
         
@@ -217,7 +213,6 @@ class CodeQualityValidator(BaseValidator):
             else:
                 package_dirs.add(file_path.parent)
         
-        # Calculate package organization score
         if package_dirs:
             missing_init = package_dirs - init_files
             organization_score = 1.0 - (len(missing_init) / len(package_dirs))

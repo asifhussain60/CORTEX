@@ -154,7 +154,6 @@ class PerformanceMonitor:
         # Alert callbacks
         self._alert_callbacks: List[Callable[[str, Dict[str, Any]], None]] = []
         
-        # Process information
         self._process = psutil.Process()
         self._last_disk_io = None
         self._last_network_io = None
@@ -280,7 +279,6 @@ class PerformanceMonitor:
     def get_current_app_metrics(self) -> ApplicationMetrics:
         """Get current application metrics."""
         with self._lock:
-            # Calculate response time statistics
             avg_response_time = 0.0
             max_response_time = 0.0
             min_response_time = 0.0
@@ -290,7 +288,6 @@ class PerformanceMonitor:
                 max_response_time = max(self.response_times)
                 min_response_time = min(self.response_times)
             
-            # Calculate requests per second
             uptime = time.time() - self._start_time
             requests_per_second = self._total_requests / uptime if uptime > 0 else 0.0
             
@@ -321,7 +318,6 @@ class PerformanceMonitor:
         """Get current system health status."""
         status = HealthStatus()
         
-        # Get latest metrics
         current_system = self.get_current_system_metrics()
         current_app = self.get_current_app_metrics()
         
@@ -334,7 +330,6 @@ class PerformanceMonitor:
             'queue_normal': current_app.queue_size < self.alert_thresholds['queue_size']
         }
         
-        # Calculate error rate
         if current_app.total_requests > 0:
             error_rate = current_app.failed_requests / current_app.total_requests
             checks['error_rate_normal'] = error_rate < self.alert_thresholds['error_rate']
@@ -448,7 +443,6 @@ class PerformanceMonitor:
                     self.system_metrics.append(system_metrics)
                     self.app_metrics.append(app_metrics)
                 
-                # Check for alerts
                 self._check_alerts(system_metrics, app_metrics)
                 
                 time.sleep(self.collection_interval)

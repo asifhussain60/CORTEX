@@ -33,7 +33,6 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 
-# Import core components
 from .parser import analyze_epmo_structure
 from .dependency_mapper import analyze_epmo_dependencies
 from .health_integration import HealthIntegration
@@ -50,7 +49,6 @@ from .models import (
     validate_model
 )
 
-# Import Phase 4.2 components
 from .markdown_generator import generate_markdown_documentation, MarkdownGenerator
 from .mermaid_generator import (
     create_diagrams_for_model, MultiModalDiagramGenerator, 
@@ -115,7 +113,6 @@ def generate_documentation(
         except Exception:
             pass  # Health integration optional
         
-        # Create comprehensive model
         model = create_epmo_model(
             epmo_path=epmo_path,
             ast_analysis=ast_analysis,
@@ -209,10 +206,8 @@ def generate_brain_enhanced_documentation(
             create_simple_generation_request
         )
         
-        # Create brain API
         brain_api = create_brain_integration_api()
         
-        # Create generation request
         request = create_simple_generation_request(
             project_path=epmo_path,
             output_path=project_root / 'documentation' / 'generated',

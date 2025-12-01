@@ -53,11 +53,9 @@ class CortexEntry:
     Example:
         entry = CortexEntry()
         
-        # Process single request
         response = entry.process("Create tests for auth.py")
         print(response)
         
-        # Process with session continuity
         response = entry.process(
             "Make the button purple",
             resume_session=True  # References previous conversation
@@ -79,7 +77,6 @@ class CortexEntry:
             enable_logging: Whether to enable detailed logging
             skip_setup_check: Skip first-time setup check (for setup command itself)
         """
-        # Set brain path (use config if not provided)
         if brain_path is None:
             brain_path = config.brain_path
         self.brain_path = Path(brain_path)
@@ -87,14 +84,12 @@ class CortexEntry:
         # Setup logging
         self.logger = self._setup_logging(enable_logging)
         
-        # Check for first-time setup (unless skipped)
         if not skip_setup_check:
             self._check_first_time_setup()
         
         # Ensure brain directory structure exists
         config.ensure_paths_exist()
         
-        # Initialize tier APIs
         self.tier1 = Tier1API(
             self.brain_path / "tier1" / "conversations.db",
             self.brain_path / "tier1" / "requests.log"
@@ -102,12 +97,10 @@ class CortexEntry:
         self.tier2 = KnowledgeGraph(str(self.brain_path / "tier2" / "knowledge_graph.db"))
         self.tier3 = ContextIntelligence(str(self.brain_path / "tier3" / "context.db"))
         
-        # Initialize components
         self.parser = RequestParser()
         self.formatter = ResponseFormatter()
         self.session_manager = SessionManager(db_path=str(self.brain_path / "tier1" / "conversations.db"))
         
-        # Initialize template system for instant responses
         template_file = self.brain_path / "response-templates.yaml"
         self.template_loader = None
         if template_file.exists():
@@ -118,7 +111,6 @@ class CortexEntry:
             except Exception as e:
                 self.logger.warning(f"Template system initialization failed: {e}")
         
-        # Initialize router with tier APIs
         self.router = IntentRouter(
             name="IntentRouter",
             tier1_api=self.tier1,
@@ -175,11 +167,9 @@ class CortexEntry:
             if template_response:
                 return template_response
             
-            # Check for setup command first
             if self._is_setup_command(user_message):
                 return self._handle_setup_command(user_message, format_type)
             
-            # Get or create session
             conversation_id = self._get_conversation_id(resume_session)
             
             # Log request to Tier 1
@@ -413,7 +403,6 @@ class CortexEntry:
                 self.tier1.process_message(conversation_id, "assistant", response.message)
                 
             except Exception as e:
-                # Create error response
                 error_response = AgentResponse(
                     success=False,
                     result=None,
@@ -467,7 +456,6 @@ class CortexEntry:
             "overall_status": "healthy"
         }
         
-        # Check Tier 1
         try:
             summary = self.tier1.get_summary()
             health["tiers"]["tier1"] = {
@@ -479,7 +467,6 @@ class CortexEntry:
             health["tiers"]["tier1"] = {"status": "error", "error": str(e)}
             health["overall_status"] = "degraded"
         
-        # Check Tier 2
         try:
             stats = self.tier2.get_statistics()
             health["tiers"]["tier2"] = {
@@ -491,7 +478,6 @@ class CortexEntry:
             health["tiers"]["tier2"] = {"status": "error", "error": str(e)}
             health["overall_status"] = "degraded"
         
-        # Check Tier 3
         try:
             summary = self.tier3.get_context_summary()
             health["tiers"]["tier3"] = {
@@ -560,7 +546,6 @@ class CortexEntry:
         if intent in implementation_intents:
             return True
         
-        # Check for implementation keywords in message
         implementation_keywords = [
             "implement", "create", "add", "build", "develop",
             "refactor", "fix", "test", "complete", "finish",
@@ -611,7 +596,6 @@ class CortexEntry:
         Validates brain structure exists and prompts user if missing.
         This provides automatic guidance for first-time users.
         """
-        # Check for essential brain components
         required_paths = [
             self.brain_path / "tier1",
             self.brain_path / "tier2",
@@ -737,7 +721,6 @@ The setup process will:
         from src.tier1.working_memory import WorkingMemory
         
         try:
-            # Get working memory instance
             wm = WorkingMemory(self.brain_path / "tier1" / "working_memory.db")
             
             # Priority 1: Active conversation

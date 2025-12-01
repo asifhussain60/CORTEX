@@ -113,7 +113,6 @@ class BrainConnector:
             
             if not db_path.exists():
                 self.logger.warning(f"Database not found: {db_path}")
-                # Create minimal connection for safety
                 conn = sqlite3.connect(":memory:")
                 conn.row_factory = sqlite3.Row
                 self._connection_cache[db_name] = conn

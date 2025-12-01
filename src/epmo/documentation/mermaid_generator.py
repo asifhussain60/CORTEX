@@ -72,11 +72,9 @@ class MermaidDiagramGenerator:
             all_classes = all_classes[:self.config.max_nodes]
             logger.warning(f"Limited class diagram to {self.config.max_nodes} classes")
         
-        # Define classes
         for module_name, class_model in all_classes:
             class_name = f"{module_name}_{class_model.name}" if self.config.group_by_module else class_model.name
             
-            # Class definition
             mermaid_lines.append(f"    class {class_name} {{")
             
             # Add methods (limit to public methods)
@@ -132,7 +130,6 @@ class MermaidDiagramGenerator:
             dependencies = sorted(dependencies, key=lambda d: d.strength, reverse=True)[:self.config.max_edges]
             logger.warning(f"Limited dependency diagram to {self.config.max_edges} relationships")
         
-        # Define nodes with styling
         for module in modules:
             module_id = module.replace('.', '_').replace('-', '_')
             
@@ -209,7 +206,6 @@ class MermaidDiagramGenerator:
                 file_groups[group] = []
             file_groups[group].append(file_analysis)
         
-        # Create subgraphs for each group
         for group_name, files in file_groups.items():
             group_id = group_name.replace('.', '_').replace('-', '_')
             mermaid_lines.append(f"    subgraph {group_id}[{group_name}]")
@@ -484,7 +480,6 @@ Create a UML-style class diagram showing object-oriented design relationships.
                 dep_diagram = self.generate_dependency_multimodal(model)
                 diagrams.append(dep_diagram)
             
-            # Class diagram (only if classes exist)
             total_classes = sum(len(f.classes) for f in model.files)
             if total_classes > 0:
                 class_diagram = self.generate_class_multimodal(model)

@@ -202,7 +202,6 @@ class ResourceOptimizer:
             if sys.platform.startswith('linux'):
                 self._linux_memory_optimization()
             
-            # Calculate results
             end_memory = self._get_memory_usage()
             result.resources_freed_mb = start_memory - end_memory
             result.execution_time_ms = (time.time() - start_time) * 1000
@@ -242,7 +241,6 @@ class ResourceOptimizer:
         result = OptimizationResult(optimization_type="cpu")
         
         try:
-            # Get current CPU usage
             cpu_percent = psutil.cpu_percent(interval=1.0)
             cpu_count = psutil.cpu_count()
             
@@ -383,7 +381,6 @@ class ResourceOptimizer:
             end_memory = self._get_memory_usage()
             peak_memory = max(start_memory, end_memory)
             
-            # Create resource profile
             profile = ResourceProfile(
                 operation_type=operation_name,
                 baseline_memory_mb=start_memory,
