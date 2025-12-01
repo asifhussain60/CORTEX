@@ -23,7 +23,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all layers
 rules:
-  total_count: 43  # Updated: Added THREAT_MODELING_ENFORCEMENT to security rules
+  total_count: 44  # Updated: Added DEBUG_MARKER_REMOVAL_ENFORCEMENT to code quality rules
   layers: 17  # Updated: Added Layer 10 (Operational Readiness Enforcement)
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -86,6 +86,7 @@ tier0_instincts:
   - "GIT_HISTORY_CONTEXT_REQUIRED"  # NEW: All requests must check git history before proceeding
   - "API_DOCUMENTATION_REQUIRED"  # NEW: Swagger/OpenAPI documentation required for external APIs
   - "OPERATIONAL_READINESS_ENFORCEMENT"  # NEW: Block deployment if CORTEX not fully operational in target environment
+  - "DEBUG_MARKER_REMOVAL_ENFORCEMENT"  # NEW: Block commits containing debug markers (MARKER, DEBUG, FIXME, TODO, BREAKPOINT)
 
 # Application-specific paths that don't belong in CORTEX core
 application_paths:
@@ -5761,6 +5762,123 @@ challenge_template: |
           - Core imports fail: ERROR, rollback (critical)
           
           This rule ensures CORTEX is ACTUALLY operational, not just "deployed".
+      
+      - rule_id: "DEBUG_MARKER_REMOVAL_ENFORCEMENT"
+        name: "Debug Marker Removal Enforcement"
+        severity: "blocked"
+        description: "Git commits containing debug markers (MARKER, DEBUG, FIXME, TODO, BREAKPOINT) MUST be blocked to prevent debugging artifacts from reaching production"
+        
+        detection:
+          combined_keywords:
+            commit_attempt:
+              - "git commit"
+              - "commit changes"
+              - "stage files"
+              - "ready to commit"
+            marker_patterns:
+              - "# MARKER:"
+              - "# DEBUG:"
+              - "# FIXME:"
+              - "# TODO:"
+              - "# BREAKPOINT:"
+          scope: ["intent", "file_content"]
+          logic: "AND"
+        
+        alternatives:
+          - "STEP 1: Run debug marker scanner: python src/utils/debug_markers.py scan src/"
+          - "STEP 2: Review found markers and determine if they should be removed"
+          - "STEP 3: Remove markers: python src/utils/debug_markers.py remove <file>"
+          - "STEP 4: Or manually remove marker comments from code"
+          - "STEP 5: Verify markers removed: python src/utils/debug_markers.py scan src/"
+          - "STEP 6: Stage cleaned files: git add <files>"
+          - "STEP 7: Retry commit (pre-commit hook will validate)"
+        
+        evidence_template: |
+          Debug markers detected in staged files!
+          
+          Operation: '{operation}'
+          Markers found: {marker_count}
+          
+          ❌ BLOCKED: Cannot commit code with debug markers
+          
+          **Why Debug Markers Must Be Removed:**
+          
+          1. **Production Readiness**
+             - Debug markers indicate incomplete/temporary code
+             - MARKER: Used during development to track execution
+             - DEBUG: Code meant for debugging only
+             - FIXME: Temporary fixes needing proper implementation
+             - TODO: Incomplete implementations
+             - BREAKPOINT: Execution pause points
+          
+          2. **Code Quality**
+             - Markers clutter codebase
+             - Confuse future developers
+             - Indicate lack of review
+             - Suggest rushed implementation
+          
+          3. **Professional Standards**
+             - Clean code ready for review
+             - No debugging artifacts
+             - Proper implementation complete
+             - Ready for production
+          
+          **Marker Types Detected:**
+          
+          {marker_details}
+          
+          **Automated Removal Available:**
+          
+          ```bash
+          # Scan for all markers
+          python src/utils/debug_markers.py scan src/
+          
+          # Remove from specific file
+          python src/utils/debug_markers.py remove src/orchestrators/example.py
+          
+          # Dry-run to see what would be removed
+          python src/utils/debug_markers.py remove src/orchestrators/example.py --dry-run
+          ```
+          
+          **Git Pre-Commit Hook Protection:**
+          
+          The git pre-commit hook automatically scans staged Python files for markers:
+          - Located: `.git/hooks/pre-commit`
+          - Auto-scans: All staged .py files
+          - Blocks commit: If any markers found
+          - Clear guidance: Shows exact locations
+          
+          **Manual Removal:**
+          
+          1. Open files listed above
+          2. Find lines with markers (MARKER:, DEBUG:, etc.)
+          3. Remove marker comments
+          4. Ensure code still functions
+          5. Stage cleaned files: git add <files>
+          6. Retry commit
+          
+          **Exceptions:**
+          
+          - If marker is intentional (e.g., TODO in documentation): Convert to proper format
+          - If marker is critical for tracking: Move to issue tracker or planning document
+          - If fixing marker is complex: Create separate task and remove marker
+          
+          **Benefits of Clean Commits:**
+          - Professional code quality
+          - Clear git history
+          - Production-ready code
+          - Easy code review
+          - No confusion for future developers
+          
+          **Pre-Commit Hook Installation:**
+          
+          Copy the hook to your .git/hooks directory:
+          ```bash
+          cp scripts/git-hooks/pre-commit .git/hooks/pre-commit
+          chmod +x .git/hooks/pre-commit  # Unix/Mac only
+          ```
+          
+          The hook will automatically validate all future commits.
 
 # Logging configuration
 logging:

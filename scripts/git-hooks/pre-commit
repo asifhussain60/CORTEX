@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""
+Git Pre-Commit Hook - Debug Marker Detection
+
+Prevents commits containing debug markers from being committed to the repository.
+Part of Phase 0 Deliverable 0.1 - Debugging Marker System
+
+This hook scans staged Python files for debug markers (MARKER, DEBUG, FIXME, TODO, BREAKPOINT)
+and blocks the commit if any are found, providing clear guidance on removal.
+
+Installation:
+    Copy this file to .git/hooks/pre-commit and make it executable:
+    cp scripts/git-hooks/pre-commit .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+
+Author: Asif Hussain
+License: Source-Available (Use Allowed, No Contributions)
+"""
+
+import sys
+import subprocess
+from pathlib import Path
+
+# Add src to path for imports
+cortex_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(cortex_root))
+
+from src.utils.debug_markers import check_markers_in_files
+
+
+def get_staged_python_files():
+    """Get list of staged Python files."""
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        files = result.stdout.strip().split('\n')
+        python_files = [f for f in files if f.endswith('.py')]
+        return python_files
+    
+    except subprocess.CalledProcessError as e:
+        print(f"Error getting staged files: {e}")
+        return []
+
+
+def main():
+    """Main hook execution."""
+    print("🔍 Checking for debug markers in staged files...")
+    
+    staged_files = get_staged_python_files()
+    
+    if not staged_files:
+        print("✓ No Python files staged for commit.")
+        return 0
+    
+    print(f"   Scanning {len(staged_files)} Python file(s)...")
+    
+    has_markers, report = check_markers_in_files(staged_files)
+    
+    if has_markers:
+        print("\n" + "=" * 80)
+        print("⛔ COMMIT BLOCKED - Debug Markers Detected")
+        print("=" * 80)
+        print(report)
+        print("\n" + "=" * 80)
+        print("To fix:")
+        print("  1. Remove the markers listed above from your code")
+        print("  2. Or use: python src/utils/debug_markers.py remove <file>")
+        print("  3. Stage the cleaned files: git add <file>")
+        print("  4. Retry your commit")
+        print("=" * 80)
+        return 1
+    else:
+        print("✓ No debug markers found. Commit allowed.")
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
