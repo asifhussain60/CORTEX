@@ -116,7 +116,6 @@ class RequestLogger:
             )
         """)
         
-        # Create indexes for common queries
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_raw_requests_conv_id
             ON tier1_raw_requests(conversation_id)

@@ -178,7 +178,6 @@ class NamespaceDetector:
         # Score each namespace
         scores = defaultdict(list)  # namespace -> list of (weight, factor)
         
-        # Check against all pattern sets
         self._score_patterns(message_lower, self.cortex_patterns, scores)
         self._score_patterns(message_lower, self.workspace_patterns, scores) 
         self._score_patterns(message_lower, self.ambiguous_patterns, scores)
@@ -187,7 +186,6 @@ class NamespaceDetector:
         self._add_contextual_scores(user_message, conversation_history, 
                                   current_files, scores)
         
-        # Calculate final scores
         final_scores = {}
         contributing_factors = []
         
@@ -205,19 +203,15 @@ class NamespaceDetector:
                 contributing_factors=["No specific namespace indicators found"]
             )
         
-        # Get top scoring namespace
         primary_namespace = max(final_scores.keys(), key=final_scores.get)
         primary_score = final_scores[primary_namespace]
         
-        # Get second highest for comparison
         remaining_scores = {k: v for k, v in final_scores.items() 
                           if k != primary_namespace}
         second_score = max(remaining_scores.values()) if remaining_scores else 0
         
-        # Calculate confidence based on score difference
         confidence = self._calculate_confidence(primary_score, second_score)
         
-        # Check if clarification needed
         needs_clarification = (
             primary_namespace == NamespaceType.AMBIGUOUS or
             confidence < 0.7 or
@@ -348,7 +342,6 @@ class NamespaceDetector:
         conversation_history = context.get('conversation_history') if context else None
         current_files = context.get('current_files') if context else None
         
-        # Get full detection result
         full_result = self.detect_namespace(user_message, conversation_history, current_files)
         
         # Convert to expected format for tests

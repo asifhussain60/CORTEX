@@ -190,7 +190,6 @@ class FileTracker:
         cursor = conn.cursor()
         
         try:
-            # Get all conversations with related files
             cursor.execute("""
                 SELECT conversation_id, related_files FROM tier1_conversations
                 WHERE related_files IS NOT NULL AND related_files != '[]'
@@ -319,7 +318,6 @@ class FileTracker:
             """)
             conversations_with_files = cursor.fetchone()[0]
             
-            # Get all files
             cursor.execute("""
                 SELECT related_files FROM tier1_conversations
                 WHERE related_files IS NOT NULL AND related_files != '[]'
@@ -335,7 +333,6 @@ class FileTracker:
                 for filepath in files:
                     file_counts[filepath] += 1
             
-            # Get most modified files
             most_modified = [
                 {'file': filepath, 'modification_count': count}
                 for filepath, count in file_counts.most_common(10)

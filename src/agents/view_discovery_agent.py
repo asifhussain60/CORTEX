@@ -196,7 +196,6 @@ class ViewDiscoveryAgent:
         # Find all elements with IDs or significant attributes
         lines = content.split('\n')
         for line_num, line in enumerate(lines, start=1):
-            # Check for self-closing tags
             for match in self.SELF_CLOSING_PATTERN.finditer(line):
                 element = self._extract_element_info(
                     match.group('tag'),

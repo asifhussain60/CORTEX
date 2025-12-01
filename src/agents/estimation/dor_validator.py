@@ -200,7 +200,6 @@ class DoRValidator:
         # Reset criteria
         self._initialize_criteria()
         
-        # Validate each criterion
         self._validate_requirements_documented(requirements)
         self._validate_ambiguity_removed(requirements)
         self._validate_dependencies(requirements, context.get('dependencies', []))
@@ -251,13 +250,11 @@ class DoRValidator:
         """Check if requirements are documented (>100 chars with substance)"""
         criterion = DoRCriterion.REQUIREMENTS_DOCUMENTED
         
-        # Check minimum content
         if len(requirements.strip()) < 100:
             self.criteria_status[criterion].satisfied = False
             self.criteria_status[criterion].notes = "Requirements too brief (< 100 chars)"
             return
         
-        # Check for key sections
         has_what = any(w in requirements.lower() for w in ['feature', 'function', 'capability', 'should', 'must', 'will'])
         has_who = any(w in requirements.lower() for w in ['user', 'customer', 'admin', 'developer', 'system'])
         has_why = any(w in requirements.lower() for w in ['because', 'so that', 'in order to', 'benefit', 'value'])
@@ -299,7 +296,6 @@ class DoRValidator:
         """Check if dependencies are identified"""
         criterion = DoRCriterion.DEPENDENCIES_IDENTIFIED
         
-        # Check for dependency mentions in requirements
         dep_keywords = ['depends on', 'requires', 'needs', 'uses', 'integrates with', 'connects to', 
                        'database', 'api', 'service', 'library', 'module', 'package']
         has_dep_mentions = any(kw in requirements.lower() for kw in dep_keywords)
@@ -363,7 +359,6 @@ class DoRValidator:
         """Check if acceptance criteria are measurable"""
         criterion = DoRCriterion.ACCEPTANCE_CRITERIA_MEASURABLE
         
-        # Check for AC list
         if acceptance_criteria and len(acceptance_criteria) >= 2:
             # Check if AC are measurable (contain numbers, comparisons, or specific actions)
             measurable_count = 0
@@ -377,7 +372,6 @@ class DoRValidator:
                 self.criteria_status[criterion].evidence = f"{len(acceptance_criteria)} measurable AC defined"
                 return
         
-        # Check in requirements text
         ac_keywords = ['acceptance criteria', 'definition of done', 'done when', 
                       'success criteria', 'given', 'when', 'then']
         if any(kw in requirements.lower() for kw in ac_keywords):

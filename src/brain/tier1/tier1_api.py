@@ -29,7 +29,6 @@ Example Usage:
     # Search conversations
     results = api.search("authentication bug")
     
-    # Get co-modified files
     patterns = api.get_file_patterns("src/auth.py", min_confidence=0.3)
 """
 
@@ -408,7 +407,6 @@ class Tier1API:
             resolved = api.resolve_reference("it", conv_id)
             # Returns: "auth.py"
         """
-        # Get conversation context
         conv = self.conversation_manager.get_conversation(
             conversation_id,
             include_messages=True
@@ -466,15 +464,12 @@ class Tier1API:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get conversation count
         cursor.execute("SELECT COUNT(*) FROM tier1_conversations")
         total_conversations = cursor.fetchone()[0]
         
-        # Get message count
         cursor.execute("SELECT COUNT(*) FROM tier1_messages")
         total_messages = cursor.fetchone()[0]
         
-        # Get unique files tracked
         cursor.execute("""
             SELECT COUNT(DISTINCT file_a)
             FROM (
@@ -485,11 +480,9 @@ class Tier1API:
         """)
         unique_files = cursor.fetchone()[0]
         
-        # Get file relationship count
         cursor.execute("SELECT COUNT(*) FROM tier1_file_tracking")
         total_relationships = cursor.fetchone()[0]
         
-        # Get oldest and newest conversation dates
         cursor.execute("""
             SELECT MIN(created_at), MAX(created_at)
             FROM tier1_conversations
@@ -523,18 +516,15 @@ class Tier1API:
         """
         warnings = []
         
-        # Check FIFO queue size
         stats = self.get_stats()
         if stats['total_conversations'] > 20:
             warnings.append(
                 f"FIFO queue exceeded: {stats['total_conversations']} > 20 conversations"
             )
         
-        # Check database file exists
         if not self.db_path.exists():
             warnings.append(f"Database file not found: {self.db_path}")
         
-        # Check FTS5 index exists
         import sqlite3
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()

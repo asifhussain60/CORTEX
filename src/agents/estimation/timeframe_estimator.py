@@ -129,7 +129,6 @@ class TimeframeEstimator:
         Returns:
             Enhanced TimeEstimate with parallel tracks, explanations, sprint allocation
         """
-        # Validate inputs
         complexity = max(0, min(100, complexity))
         team_size = max(1, team_size)
         
@@ -318,7 +317,6 @@ class TimeframeEstimator:
         
         breakdown = {}
         
-        # Calculate proportions based on entity counts
         table_count = len(scope.get('tables', []))
         file_count = len(scope.get('files', []))
         service_count = len(scope.get('services', []))
@@ -550,7 +548,6 @@ class TimeframeEstimator:
         # Build dependency graph
         track_dict = {t.track_id: t for t in tracks}
         
-        # Calculate longest path using dynamic programming
         def longest_path(track_id: int, memo: Dict[int, float]) -> float:
             if track_id in memo:
                 return memo[track_id]
@@ -707,10 +704,8 @@ class TimeframeEstimator:
         Returns:
             Dict containing ASCII timeline, HTML timeline, and comparison metrics
         """
-        # Calculate single developer timeline (sequential)
         single_timeline = self._calculate_sequential_timeline(estimate)
         
-        # Calculate max team timeline (parallel)
         max_team_size = estimate.max_parallel_tracks
         team_timeline = self._calculate_parallel_timeline(estimate, max_team_size)
         
@@ -734,7 +729,6 @@ class TimeframeEstimator:
             team_timeline, max_team_size
         )
         
-        # Calculate risk buffers (Conway's Law)
         risk_buffers = self._calculate_risk_buffers(estimate)
         
         return {
@@ -811,7 +805,6 @@ class TimeframeEstimator:
         scheduled = {}  # track_id -> (start_hour, end_hour)
         
         for track in sorted(estimate.parallel_tracks, key=lambda t: t.start_sprint):
-            # Calculate start based on dependencies
             if track.dependencies:
                 dep_end_times = [scheduled.get(d, (0, 0))[1] for d in track.dependencies]
                 start_hour = max(dep_end_times) if dep_end_times else 0.0
@@ -1315,7 +1308,6 @@ class TimeframeEstimator:
                 'utilization_percent': (len(active_devs) / team_size) * 100 if team_size > 0 else 0
             })
         
-        # Calculate statistics
         avg_utilization = sum(u['utilization_percent'] for u in utilization) / len(utilization) if utilization else 0
         peak_utilization = max(u['active_developers'] for u in utilization) if utilization else 0
         
@@ -1385,7 +1377,6 @@ class TimeframeEstimator:
                 f"Add 10% buffer for {dep_count} task dependencies"
             )
         
-        # Calculate totals
         buffers['total_buffer_percent'] = (
             buffers['integration_buffer'] +
             buffers['complexity_buffer'] +
@@ -1405,7 +1396,6 @@ class TimeframeEstimator:
         """Generate cost projections for different team configurations"""
         projections = []
         
-        # Calculate for team sizes 1 through max
         for size in range(1, team_size + 1):
             overhead = 1 + ((size - 1) * 0.05)
             effective_hours = (single_timeline['total_hours'] / size) * overhead

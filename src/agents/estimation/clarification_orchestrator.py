@@ -107,7 +107,6 @@ class ClarificationOrchestrator:
         # Use the inference engine to extract entities from response
         extracted_entities = self.inference_engine.extract_entities(user_response)
         
-        # Calculate confidence from entity extraction
         confidence = self.inference_engine.calculate_confidence(extracted_entities, user_response)
         
         # Detect vague keywords in response
@@ -119,7 +118,6 @@ class ClarificationOrchestrator:
         if vague_count > 0:
             confidence = max(0.0, confidence - (vague_count * 0.15))
         
-        # Check if response has actual content
         has_entities = (
             len(extracted_entities.tables) > 0 or
             len(extracted_entities.files) > 0 or
@@ -212,7 +210,6 @@ class ClarificationOrchestrator:
         
         self.reset()
         
-        # Check if clarification is needed
         if not self.should_clarify(initial_validation):
             return {
                 'final_scope': initial_validation,
@@ -236,7 +233,6 @@ class ClarificationOrchestrator:
             # In real usage, this would wait for user input
             # For now, we return the workflow state
             
-            # Check if we should stop
             if self.should_stop_clarification(current_validation):
                 break
         

@@ -18,7 +18,6 @@ from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass, field
 import logging
 
-# Import implementation data structures
 from .implementation_discovery_engine import ImplementationData, CodeElement, APIEndpoint
 
 logger = logging.getLogger(__name__)
@@ -84,7 +83,6 @@ class MermaidDiagramGenerator:
                 modules[module_path] = []
             modules[module_path].append(cls)
             
-        # Create diagram for each module
         for module_path, module_classes in modules.items():
             diagram = self._create_class_diagram(module_path, module_classes)
             diagrams.append(diagram)
@@ -214,7 +212,6 @@ class MermaidDiagramGenerator:
         """Generate high-level architecture diagrams"""
         diagrams = []
         
-        # Create component architecture diagram
         if implementation_data.new_classes or implementation_data.new_endpoints:
             diagram = self._create_architecture_diagram(implementation_data)
             diagrams.append(diagram)
@@ -492,7 +489,6 @@ class VisualAssetGenerator:
         prompts.extend(self.prompt_generator.generate_ui_prompts(implementation_data))
         prompts.extend(self.prompt_generator.generate_concept_prompts(implementation_data))
         
-        # Create output files
         diagram_files = await self._save_diagrams(diagrams, implementation_data.feature_name)
         prompt_files = await self._save_prompts(prompts, implementation_data.feature_name)
         
@@ -516,7 +512,6 @@ class VisualAssetGenerator:
         """Save Mermaid diagrams to files"""
         saved_files = []
         
-        # Create diagrams directory
         diagrams_dir = Path(self.workspace_path) / "docs" / "diagrams" 
         diagrams_dir.mkdir(parents=True, exist_ok=True)
         
@@ -524,7 +519,6 @@ class VisualAssetGenerator:
             filename = diagram.suggested_filename
             file_path = diagrams_dir / filename
             
-            # Create markdown file with Mermaid diagram
             content = f"""# {diagram.title}
 
 {diagram.description}
@@ -552,7 +546,6 @@ class VisualAssetGenerator:
         """Save image prompts to files"""
         saved_files = []
         
-        # Create prompts directory
         prompts_dir = Path(self.workspace_path) / "docs" / "image-prompts"
         prompts_dir.mkdir(parents=True, exist_ok=True)
         
@@ -560,7 +553,6 @@ class VisualAssetGenerator:
             filename = prompt.suggested_filename.replace('.png', '.md')
             file_path = prompts_dir / filename
             
-            # Create markdown file with prompt
             content = f"""# {prompt.title}
 
 **Type:** {prompt.prompt_type}  
@@ -608,7 +600,6 @@ if __name__ == "__main__":
     from .implementation_discovery_engine import ImplementationData, CodeElement, APIEndpoint
     
     async def test_visual_generation():
-        # Create test implementation data
         test_data = ImplementationData(
             feature_name="User Authentication",
             discovery_timestamp=datetime.now(),

@@ -61,13 +61,11 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
             Result[str] with conversation_id on success, errors on failure
         """
         try:
-            # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             Guard.against_empty(request.title, "title")
             Guard.against_empty(request.content, "content")
             Guard.against_empty(request.file_path, "file_path")
             
-            # Calculate quality if not provided
             if request.quality_score is None:
                 # Simple heuristic: length-based quality
                 content_length = len(request.content)
@@ -86,14 +84,12 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
             else:
                 quality_score = request.quality_score
             
-            # Create quality value object
             quality = ConversationQuality(
                 score=quality_score,
                 turn_count=max(1, request.content.count("User:")),
                 entity_count=request.entity_count or 0
             )
             
-            # Check if should capture
             if not quality.should_capture:
                 return Result.failure([
                     f"Conversation quality too low ({quality.quality_level}). "
@@ -103,7 +99,6 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
             # Store in database using Unit of Work
             try:
                 async with self._uow as uow:
-                    # Create conversation entity
                     conversation = Conversation(
                         conversation_id=request.conversation_id,
                         title=request.title,
@@ -115,7 +110,6 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
                         namespace="general"  # Default namespace for conversations
                     )
                     
-                    # Check if conversation already exists
                     existing = await uow.conversations.get_by_id(request.conversation_id)
                     if existing:
                         # Update existing conversation
@@ -145,16 +139,6 @@ class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, Res
                 return Result.failure([f"Failed to store conversation: {str(db_error)}"])
             
             # TODO: Raise domain event
-            # event = ConversationCapturedEvent(
-            #     conversation_id=request.conversation_id,
-            #     title=request.title,
-            #     quality_score=quality.score,
-            #     entity_count=quality.entity_count,
-            #     file_path=request.file_path,
-            #     captured_at=request.captured_at or datetime.now()
-            # )
-            # dispatcher.dispatch(event)
-            
             return Result.success(request.conversation_id)
             
         except ValueError as e:
@@ -196,7 +180,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
             Result[str] with pattern_id on success, errors on failure
         """
         try:
-            # Validate input
             Guard.against_empty(request.pattern_id, "pattern_id")
             Guard.against_empty(request.pattern_name, "pattern_name")
             Guard.against_empty(request.pattern_type, "pattern_type")
@@ -205,7 +188,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
             Guard.against_empty(request.namespace, "namespace")
             Guard.against_out_of_range(request.confidence_score, 0.0, 1.0, "confidence_score")
             
-            # Create namespace value object
             namespace = Namespace(value=request.namespace)
             
             # Create confidence value object (initial observation with 100% success)
@@ -215,7 +197,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
                 success_rate=1.0  # Initial pattern starts with 100% success
             )
             
-            # Check if confidence is sufficient
             if confidence.is_experimental:
                 logger.warning(
                     f"Pattern {request.pattern_id} has experimental confidence: "
@@ -225,7 +206,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
             # Store in database using Unit of Work
             try:
                 async with self._uow as uow:
-                    # Create pattern entity
                     pattern = Pattern(
                         pattern_id=request.pattern_id,
                         pattern_name=request.pattern_name,
@@ -241,7 +221,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
                         learned_at=request.learned_at or datetime.now()
                     )
                     
-                    # Check if pattern already exists
                     existing = await uow.patterns.get_by_id(request.pattern_id)
                     if existing:
                         # Update existing pattern
@@ -275,16 +254,6 @@ class LearnPatternHandler(IRequestHandler[LearnPatternCommand, Result[str]]):
                 return Result.failure([f"Failed to store pattern: {str(db_error)}"])
             
             # TODO: Raise domain event
-            # event = PatternLearnedEvent(
-            #     pattern_id=request.pattern_id,
-            #     pattern_type=request.pattern_type,
-            #     confidence=confidence.score,
-            #     source_conversation_id=request.source_conversation_id,
-            #     pattern_name=request.pattern_name,
-            #     learned_at=request.learned_at or datetime.now()
-            # )
-            # dispatcher.dispatch(event)
-            
             return Result.success(request.pattern_id)
             
         except ValueError as e:
@@ -316,12 +285,10 @@ class UpdateContextRelevanceHandler(IRequestHandler[UpdateContextRelevanceComman
             Result[bool] with True on success, errors on failure
         """
         try:
-            # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             Guard.against_empty(request.reason, "reason")
             Guard.against_out_of_range(request.new_relevance_score, 0.0, 1.0, "new_relevance_score")
             
-            # Create relevance score value object
             relevance = RelevanceScore(value=request.new_relevance_score)
             
             # TODO: Get old relevance from database
@@ -336,16 +303,6 @@ class UpdateContextRelevanceHandler(IRequestHandler[UpdateContextRelevanceComman
             )
             
             # TODO: Raise domain event
-            # event = ContextRelevanceUpdatedEvent(
-            #     conversation_id=request.conversation_id,
-            #     old_score=old_relevance,
-            #     new_score=relevance.value,
-            #     reason=request.reason,
-            #     affected_queries=[],  # TODO: Calculate affected queries
-            #     updated_at=request.updated_at or datetime.now()
-            # )
-            # dispatcher.dispatch(event)
-            
             return Result.success(True)
             
         except ValueError as e:
@@ -386,11 +343,9 @@ class UpdatePatternConfidenceHandler(IRequestHandler[UpdatePatternConfidenceComm
             Result[bool] with True on success, errors on failure
         """
         try:
-            # Validate input
             Guard.against_empty(request.pattern_id, "pattern_id")
             Guard.against_empty(request.context_id, "context_id")
             
-            # Get current pattern and update confidence
             try:
                 async with self._uow as uow:
                     # Retrieve existing pattern
@@ -399,7 +354,6 @@ class UpdatePatternConfidenceHandler(IRequestHandler[UpdatePatternConfidenceComm
                     if not pattern:
                         return Result.failure([f"Pattern not found: {request.pattern_id}"])
                     
-                    # Create current confidence value object
                     current_confidence = PatternConfidence(
                         score=pattern.confidence,
                         observation_count=pattern.observation_count,
@@ -471,13 +425,11 @@ class DeleteConversationHandler(IRequestHandler[DeleteConversationCommand, Resul
             Result[bool] with True on success, errors on failure
         """
         try:
-            # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             
             # Delete conversation from database
             try:
                 async with self._uow as uow:
-                    # Check if conversation exists
                     conversation = await uow.conversations.get_by_id(request.conversation_id)
                     
                     if not conversation:

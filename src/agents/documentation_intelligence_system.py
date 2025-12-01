@@ -18,7 +18,6 @@ from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass, field
 import logging
 
-# Import the implementation data structures
 from .implementation_discovery_engine import ImplementationData, CodeElement, APIEndpoint
 
 logger = logging.getLogger(__name__)
@@ -88,16 +87,12 @@ class DocumentationGapAnalyzer:
         """Find documentation gaps for the implemented feature"""
         gaps = []
         
-        # Check for missing class documentation
         gaps.extend(self._check_class_documentation(implementation_data.new_classes))
         
-        # Check for missing API documentation
         gaps.extend(self._check_api_documentation(implementation_data.new_endpoints))
         
-        # Check for outdated documentation
         gaps.extend(self._check_outdated_documentation(implementation_data))
         
-        # Check for broken links
         gaps.extend(self._check_broken_references())
         
         logger.info(f"Found {len(gaps)} documentation gaps")
@@ -126,7 +121,6 @@ class DocumentationGapAnalyzer:
         gaps = []
         
         for endpoint in endpoints:
-            # Check if endpoint is documented in API docs
             api_doc_exists = self._find_api_documentation(endpoint)
             
             if not api_doc_exists:
@@ -180,7 +174,6 @@ class DocumentationGapAnalyzer:
                 with open(doc_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                     
-                # Check for references to modified files
                 for file_change in implementation_data.files_changed:
                     if file_change.change_type == 'modified':
                         file_name = Path(file_change.file_path).name
@@ -222,7 +215,6 @@ class DocumentationGapAnalyzer:
                     if link_path.startswith(('http://', 'https://', 'mailto:')):
                         continue
                         
-                    # Check if referenced file exists
                     if link_path.startswith('#'):
                         # Internal anchor - would need more sophisticated check
                         continue
@@ -341,7 +333,6 @@ curl -X {endpoint.method} "http://localhost:8000{endpoint.path}"
 ```python
 from {self._get_module_path(cls.file_path)} import {cls.name}
 
-# Create instance
 instance = {cls.name}()
 ```
 
@@ -405,7 +396,6 @@ if response.status_code == 200:
 ```python
 from {self._get_module_path(cls.file_path)} import {cls.name}
 
-# Create and use instance
 {cls.name.lower()} = {cls.name}()
 # Add usage example here
 ```
@@ -445,7 +435,6 @@ class CrossReferenceManager:
             content = f.read()
             lines = content.split('\n')
             
-        # Check existing references
         for line_num, line in enumerate(lines, 1):
             # Find file references
             file_refs = re.findall(r'`([^`]+\.(?:py|cs|js|ts))`', line)
@@ -506,10 +495,8 @@ class DocumentationIntelligenceSystem:
         # Update cross-references
         broken_refs, new_refs = self.reference_manager.update_cross_references(implementation_data)
         
-        # Create file updates
         file_updates = self._create_file_updates(gaps, api_docs, class_docs, examples)
         
-        # Calculate coverage metrics
         coverage_before = self._calculate_documentation_coverage_before(implementation_data)
         coverage_after = self._calculate_documentation_coverage_after(gaps, file_updates)
         
@@ -540,7 +527,6 @@ class DocumentationIntelligenceSystem:
         """Create file update plans based on gaps and generated content"""
         updates = []
         
-        # Create API documentation file
         if api_docs:
             api_content = self._combine_api_docs(api_docs)
             updates.append(DocumentationUpdate(
@@ -550,7 +536,6 @@ class DocumentationIntelligenceSystem:
                 reason="Generated API documentation for new endpoints"
             ))
             
-        # Create class documentation
         if class_docs:
             class_content = self._combine_class_docs(class_docs)
             updates.append(DocumentationUpdate(
@@ -560,7 +545,6 @@ class DocumentationIntelligenceSystem:
                 reason="Generated class documentation for new classes"
             ))
             
-        # Create examples documentation
         if examples:
             examples_content = '\n'.join(examples)
             updates.append(DocumentationUpdate(
@@ -657,7 +641,6 @@ if __name__ == "__main__":
     from .implementation_discovery_engine import ImplementationData, CodeElement, APIEndpoint
     
     async def test_documentation_intelligence():
-        # Create test implementation data
         test_data = ImplementationData(
             feature_name="test_auth_feature",
             discovery_timestamp=datetime.now(),

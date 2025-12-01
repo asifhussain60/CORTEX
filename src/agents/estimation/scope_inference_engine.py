@@ -317,7 +317,6 @@ class ScopeInferenceEngine:
                 dep_confidence = 10
             score += dep_confidence
         
-        # Check for vague keywords penalty
         if requirements_text and self._contains_vague_keywords(requirements_text):
             # Ensure vague requirements stay in medium confidence range (0.30-0.70)
             # If we extracted some entities but text is vague, cap at 0.60

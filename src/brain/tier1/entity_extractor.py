@@ -178,18 +178,15 @@ class EntityExtractor:
         if ref_lower.startswith('the '):
             partial = ref_lower[4:]  # Remove "the "
             
-            # Check recent messages for matching entities
             for msg in context.get('recent_messages', []):
                 content = msg.get('content', '')
                 entities = self.extract_entities(content)
                 
-                # Check all entity types
                 for entity_list in entities.values():
                     for entity in entity_list:
                         if partial in entity.lower():
                             return entity
         
-        # Check against related files
         related_files = context.get('related_files', [])
         for filepath in related_files:
             if reference.lower() in filepath.lower():
@@ -266,15 +263,12 @@ class EntityExtractor:
         for filepath in filepaths:
             path_lower = filepath.lower()
             
-            # Check for test files
             if 'test' in path_lower or 'spec' in path_lower:
                 categories['tests'].append(filepath)
             
-            # Check for config files
             elif any(ext in path_lower for ext in ['.json', '.yaml', '.yml', '.xml', '.config', '.toml']):
                 categories['config'].append(filepath)
             
-            # Check for documentation
             elif any(ext in path_lower for ext in ['.md', '.txt', '.rst', '.adoc']):
                 categories['documentation'].append(filepath)
             

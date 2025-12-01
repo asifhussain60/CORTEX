@@ -404,7 +404,6 @@ class FeatureCompletionOrchestrator(BaseAgent):
         self.visual_generator: Optional[VisualAssetGenerator] = None
         self.optimization_monitor: Optional[OptimizationHealthMonitor] = None
         
-        # Initialize metrics and monitoring
         self.metrics_collector = MetricsCollector()
         
     def detect_feature_completion(self, user_input: str) -> Optional[str]:
@@ -446,7 +445,6 @@ class FeatureCompletionOrchestrator(BaseAgent):
         logger.info(f"Starting feature completion orchestration for: {feature_description}")
         
         try:
-            # Check that sub-agents are initialized
             if not self._are_subagents_ready():
                 raise RuntimeError("Sub-agents not properly initialized")
             
@@ -514,7 +512,6 @@ class FeatureCompletionOrchestrator(BaseAgent):
             logger.error(f"Critical failure in FCO orchestration: {e}")
             errors.append(f"Critical failure: {e}")
             
-            # Return partial results with error information
             return AlignmentReport(
                 feature_description=feature_description,
                 execution_start=execution_start,
@@ -533,7 +530,6 @@ class FeatureCompletionOrchestrator(BaseAgent):
                 errors=errors
             )
         
-        # Calculate summary metrics
         files_updated = len(doc_updates.files_updated)
         diagrams_created = len(visual_assets.mermaid_diagrams) + len(visual_assets.architecture_diagrams)
         gaps_resolved = len(doc_updates.gaps_found)
@@ -542,7 +538,6 @@ class FeatureCompletionOrchestrator(BaseAgent):
         # Determine execution status
         execution_status = 'complete' if not errors else 'partial'
         
-        # Create comprehensive report
         report = AlignmentReport(
             feature_description=feature_description,
             execution_start=execution_start,

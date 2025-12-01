@@ -785,7 +785,6 @@ app.UseIpRateLimiting();''',
             # Identify threats using templates and keywords
             threats = self._identify_threats_enhanced(feature_requirements, feature_type, context)
             
-            # Calculate risk ratings
             for threat in threats:
                 threat.risk_rating = self._calculate_risk_rating_enhanced(
                     threat, feature_type, context
@@ -862,7 +861,6 @@ app.UseIpRateLimiting();''',
                 if keyword in requirements_lower:
                     scores[feature_type] += weight
         
-        # Return highest scoring type or 'general'
         max_score = max(scores.values())
         if max_score == 0:
             return 'general'
@@ -885,7 +883,6 @@ app.UseIpRateLimiting();''',
         threats = []
         requirements_lower = requirements.lower()
         
-        # Get templates for feature type
         templates = self.threat_templates.get(feature_type, [])
         
         # Add general threats if feature type is unknown
@@ -893,12 +890,10 @@ app.UseIpRateLimiting();''',
             templates.extend(self._get_general_threats())
         
         for template in templates:
-            # Check if threat keywords match requirements
             keywords_matched = [kw for kw in template['keywords'] 
                               if kw in requirements_lower]
             
             if keywords_matched:
-                # Get mitigation strategies
                 mitigation_key = template['name'].lower().replace(' ', '_')
                 mitigations = [self.mitigation_database.get(mitigation_key)] if mitigation_key in self.mitigation_database else []
                 

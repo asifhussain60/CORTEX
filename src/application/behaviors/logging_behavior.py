@@ -176,7 +176,6 @@ class LoggingBehavior(IPipelineBehavior):
         sanitized = {}
         
         for key, value in data.items():
-            # Check if key is sensitive
             if any(sensitive in key.lower() for sensitive in self.sensitive_fields):
                 sanitized[key] = '***REDACTED***'
             elif isinstance(value, dict):

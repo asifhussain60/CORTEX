@@ -218,7 +218,6 @@ class CodeScanner:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
                 
-            # Class pattern
             class_pattern = r'(?:public|private|internal|protected)?\s*class\s+(\w+)'
             for match in re.finditer(class_pattern, content):
                 line_num = content[:match.start()].count('\n') + 1
@@ -264,7 +263,6 @@ class GitAnalyzer:
         since_str = since_date.strftime("%Y-%m-%d")
         
         try:
-            # Get commits from the last N days
             cmd = [
                 'git', 'log',
                 f'--since="{since_str}"',
@@ -309,7 +307,6 @@ class GitAnalyzer:
                 
                 change_type = {'A': 'added', 'M': 'modified', 'D': 'deleted'}[status]
                 
-                # Get line count changes for this file
                 lines_added, lines_deleted = self._get_line_changes(current_commit, file_path)
                 
                 change = FileChange(
@@ -612,7 +609,6 @@ class ImplementationDiscoveryEngine:
         """
         logger.info(f"Starting implementation discovery for feature: {feature_name}")
         
-        # Get recent changes (last 7 days by default)
         file_changes = self.git_analyzer.get_recent_changes(days_back=7)
         changed_files = [change.file_path for change in file_changes 
                         if change.change_type != 'deleted']
@@ -632,7 +628,6 @@ class ImplementationDiscoveryEngine:
         test_files = self.test_analyzer.discover_test_files()
         test_cases = self.test_analyzer.analyze_test_files(test_files)
         
-        # Calculate metrics
         total_lines_added = sum(change.lines_added for change in file_changes)
         total_lines_deleted = sum(change.lines_deleted for change in file_changes)
         complexity_score = sum(e.complexity for e in new_elements)
