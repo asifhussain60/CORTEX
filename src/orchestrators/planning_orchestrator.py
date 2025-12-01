@@ -514,13 +514,17 @@ class PlanningOrchestrator:
         validate_incrementally: bool = False,
         validation_error_handler: Optional[Callable[[str, List[str]], None]] = None,
         validate_dor_dod: bool = False,
-        dor_dod_handler: Optional[Callable[[str, bool, bool], None]] = None
+        dor_dod_handler: Optional[Callable[[str, bool, bool], None]] = None,
+        use_modular_output: bool = False,
+        modular_threshold: int = 20480
     ) -> Dict[str, Any]:
         """
         Generate a plan incrementally with progress tracking and validation.
         
         This is the main entry point for Phase 4 incremental planning.
         It creates an empty plan file first, then adds phases one by one.
+        
+        Phase 10 enhancement: Supports automatic modular output for large plans.
         
         Args:
             plan_name: Name of the plan (used for filename)
@@ -534,16 +538,19 @@ class PlanningOrchestrator:
             validation_error_handler: Called on validation errors: handler(phase_id, errors)
             validate_dor_dod: If True, validate DoR/DoD for each phase
             dor_dod_handler: Called with DoR/DoD results: handler(phase_id, dor_valid, dod_valid)
+            use_modular_output: If True, force modular output (index + phase files)
+            modular_threshold: Size threshold in bytes for automatic modular output (default 20KB)
         
         Returns:
             Dict with:
                 - success: bool
-                - file_path: Path to generated plan
+                - file_path: Path to generated plan (or index if modular)
                 - message: Status message
                 - phases_added: Number of phases added
                 - phases_skipped: Number of phases skipped (if resumed)
                 - phases_rejected: Number of phases rejected (if validation enabled)
                 - resumed: bool indicating if plan was resumed
+                - modular: bool indicating if modular structure was created
         """
         import yaml
         from datetime import datetime
@@ -651,18 +658,49 @@ class PlanningOrchestrator:
             with open(plan_path, 'w', encoding='utf-8') as f:
                 yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
             
+            # Phase 10: Check if modular output should be used
+            modular_output_used = False
+            final_file_path = plan_path
+            
+            if use_modular_output or plan_path.stat().st_size > modular_threshold:
+                from src.utils.file_structure_optimizer import FileStructureOptimizer
+                
+                optimizer = FileStructureOptimizer(
+                    threshold_bytes=modular_threshold,
+                    module_key='phases'
+                )
+                
+                # Create modular structure (index + phase files)
+                plan_dir = plan_path.parent / plan_name
+                plan_dir.mkdir(parents=True, exist_ok=True)
+                
+                try:
+                    index_path = optimizer.split_into_modules(plan_data, plan_dir)
+                    modular_output_used = True
+                    final_file_path = index_path
+                    
+                    # Remove original monolithic file
+                    plan_path.unlink()
+                    
+                    logger.info(f"✨ Created modular structure: {index_path}")
+                except Exception as e:
+                    logger.warning(f"Failed to create modular structure: {e}")
+                    # Fall back to monolithic file
+                    modular_output_used = False
+            
             # Build result
             result = {
                 "success": True,
-                "file_path": str(plan_path),
-                "message": f"Plan generated: {phases_added} phases added",
+                "file_path": str(final_file_path),
+                "message": f"Plan generated: {phases_added} phases added" + (" (modular)" if modular_output_used else ""),
                 "phases_added": phases_added,
                 "phases_skipped": phases_skipped,
                 "phases_rejected": phases_rejected,
-                "resumed": resumed
+                "resumed": resumed,
+                "modular": modular_output_used
             }
             
-            logger.info(f"✅ Plan generated incrementally: {plan_path}")
+            logger.info(f"✅ Plan generated incrementally: {final_file_path}")
             return result
             
         except Exception as e:
@@ -673,7 +711,8 @@ class PlanningOrchestrator:
                 "phases_added": phases_added,
                 "phases_skipped": phases_skipped,
                 "phases_rejected": phases_rejected,
-                "resumed": resumed
+                "resumed": resumed,
+                "modular": False
             }
     
     def _validate_single_phase(self, phase: Dict[str, Any]) -> List[str]:
