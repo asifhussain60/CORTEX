@@ -23,7 +23,7 @@ description: "Automated architectural protection challenges"
 
 # Total protection rules across all layers
 rules:
-  total_count: 42  # Updated: Added OPERATIONAL_READINESS_ENFORCEMENT to Layer 10
+  total_count: 43  # Updated: Added THREAT_MODELING_ENFORCEMENT to security rules
   layers: 17  # Updated: Added Layer 10 (Operational Readiness Enforcement)
   severity_levels: ["blocked", "warning", "info"]
   enforcement: "automated via Brain Protector agent"
@@ -76,6 +76,7 @@ tier0_instincts:
   - "GIT_COMMIT_PRIVACY_VALIDATION"  # CRITICAL: NEVER commit files with absolute paths (C:\, /home/, machine names)
   - "SECURITY_INJECTION"  # NEW: Prevent SQL injection, XSS, command injection
   - "SECURITY_AUTHENTICATION"  # NEW: Enforce authentication/authorization best practices
+  - "THREAT_MODELING_ENFORCEMENT"  # NEW: Require STRIDE threat analysis for all planning workflows
   - "BRAIN_ARCHITECTURE_INTEGRITY"  # NEW: Protect 4-tier brain architecture from degradation
   - "DEPLOYMENT_VERSION_TRACKING"  # NEW: Enforce .cortex-version file presence and validity
   - "UPGRADE_BRAIN_PRESERVATION"  # NEW: Never overwrite brain data during upgrades
@@ -500,6 +501,75 @@ protection_layers:
           ✅ GOOD:
           hashed = bcrypt.hashpw(password, bcrypt.gensalt())
           API_KEY = os.getenv("API_KEY")  # Environment variable
+      
+      - rule_id: "THREAT_MODELING_ENFORCEMENT"
+        name: "Security - Threat Modeling Required"
+        severity: "blocked"
+        description: "Planning workflow executed without STRIDE threat analysis"
+        
+        detection:
+          keywords:
+            - "skip threat"
+            - "bypass threat"
+            - "no threat analysis"
+            - "threat analysis disabled"
+          scope: ["intent", "flags", "workflow"]
+          workflow_triggers:
+            - operation: "planning"
+              required_stages: ["threat_analysis"]
+              stage_config:
+                name: "threat_analysis"
+                required: true
+                timeout: 600
+                on_failure: "block"  # Override YAML's "warn" with governance "block"
+        
+        alternatives:
+          - "Execute STRIDE threat analysis (Stage 4 in planning_with_threats.yaml)"
+          - "Use --allow-skip-threats flag for exceptional cases (triggers warning)"
+          - "Review identified threats and mitigations before proceeding"
+        
+        evidence_template: "Threat modeling required: '{description}'"
+        
+        rationale: |
+          Threat Modeling Enforcement:
+          - ALL planning workflows MUST execute STRIDE threat analysis
+          - Stage 4 (threat_analysis) in planning_with_threats.yaml MUST complete successfully
+          - Threats must be identified, documented, and mitigations defined
+          - Bypass only allowed with explicit --allow-skip-threats flag (triggers governance warning)
+          
+          STRIDE Framework:
+          - Spoofing: Identity verification vulnerabilities
+          - Tampering: Data integrity risks
+          - Repudiation: Non-repudiation gaps
+          - Information Disclosure: Confidentiality breaches
+          - Denial of Service: Availability threats
+          - Elevation of Privilege: Authorization bypass
+          
+          Example workflow enforcement:
+          ❌ BLOCKED:
+          User: "plan authentication feature"
+          CORTEX: Executes planning WITHOUT threat analysis
+          BrainProtector: BLOCKED - THREAT_MODELING_ENFORCEMENT violated
+          
+          ✅ ALLOWED:
+          User: "plan authentication feature"
+          CORTEX: Executes planning_with_threats.yaml (includes Stage 4: threat_analysis)
+          ThreatModelerAgent: Identifies 8 threats (2 CRITICAL, 3 HIGH, 3 MEDIUM)
+          BrainProtector: PASSED - Threat analysis completed
+          
+          ✅ ALLOWED (with warning):
+          User: "plan authentication feature --allow-skip-threats"
+          CORTEX: Skips threat analysis per user request
+          BrainProtector: WARNING - Threat analysis bypassed (user accepted risk)
+          
+        exceptions:
+          - flag: "--allow-skip-threats"
+            action: "warn"
+            message: "Threat analysis bypassed by user request (not recommended - security risks unassessed)"
+          - condition: "workflow == 'planning_with_threats.yaml'"
+            action: "enforce_stage_completion"
+            stage: "threat_analysis"
+            on_failure: "block"  # Override workflow's on_failure="warn"
       
       - rule_id: "BRAIN_ARCHITECTURE_INTEGRITY"
         name: "Brain Architecture Integrity"

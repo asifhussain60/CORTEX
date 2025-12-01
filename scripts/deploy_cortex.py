@@ -607,6 +607,34 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
     # Create PACKAGE-INFO.md
     create_package_info(staging_dir, stats)
     
+    # Generate deployment manifest for Gate 15 validation
+    # Must write to project_root/publish/ for Gate 15 to find it
+    logger.info("Generating deployment manifest...")
+    manifest_data = {
+        "version": "3.3.0",
+        "generated_at": datetime.now().isoformat(),
+        "files": [str(p.relative_to(project_root)) for p in manifest if p.is_file()],
+        "stats": stats
+    }
+    
+    # Write to both locations:
+    # 1. project_root/publish/ for Gate 15 validation
+    # 2. staging_dir/ for inclusion in deployment package
+    publish_dir = project_root / "publish"
+    publish_dir.mkdir(parents=True, exist_ok=True)
+    
+    manifest_file_gate = publish_dir / "deployment-manifest.json"
+    with open(manifest_file_gate, 'w', encoding='utf-8') as f:
+        json.dump(manifest_data, f, indent=2)
+    
+    manifest_file_staging = staging_dir / "deployment-manifest.json"
+    with open(manifest_file_staging, 'w', encoding='utf-8') as f:
+        json.dump(manifest_data, f, indent=2)
+    
+    logger.info(f"  ✅ Deployment manifest created: {len(manifest_data['files'])} files")
+    logger.info(f"     - {manifest_file_gate.relative_to(project_root)}")
+    logger.info(f"     - {manifest_file_staging.relative_to(project_root)}")
+    
     return stats
 
 
@@ -1591,6 +1619,64 @@ def publish_to_branch(
             except Exception as e:
                 logger.warning(f"   ⚠️  Feature discovery warning: {e}")
                 # Don't fail deployment on discovery errors - it's informational
+        
+        # PRE-STAGE 1: Generate preliminary deployment manifest for Gate 15
+        # Gate 15 validates admin/user separation and needs the manifest before validation runs
+        logger.info("\n📄 Generating preliminary deployment manifest...")
+        preliminary_manifest_dir = project_root / "publish"
+        preliminary_manifest_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Get current project files using the exclusion rules
+        current_files = []
+        for root, dirs, files in os.walk(project_root):
+            # Skip excluded directories
+            dirs[:] = [d for d in dirs if not any(pattern in str(Path(root) / d) for pattern in [
+                '.git', '__pycache__', '.pytest_cache', 'node_modules', '.venv', 'venv',
+                'workflow_checkpoints', 'logs', 'test_merge', 'static/temp'
+            ])]
+            
+            for file in files:
+                file_path = Path(root) / file
+                rel_path = file_path.relative_to(project_root)
+                current_files.append(rel_path)
+        
+        # Filter out admin patterns (Gate 15 validation requirements)
+        admin_patterns = [
+            "admin/",
+            "deployment_gates.py",
+            "deploy_cortex.py",
+            "system_alignment_orchestrator.py",
+            "enterprise_documentation_orchestrator.py",
+            "deployment/",
+            "validate_deployment.py",
+            "scripts/deploy",
+            "scripts/validate_deployment",
+        ]
+        
+        filtered_files = [
+            f for f in current_files 
+            if not any(pattern in str(f).replace('\\', '/') for pattern in admin_patterns)
+        ]
+        
+        # Create preliminary manifest
+        preliminary_manifest = {
+            "version": PACKAGE_VERSION,
+            "generated_at": datetime.now().isoformat(),
+            "files": [str(f).replace('\\', '/') for f in filtered_files],
+            "stats": {
+                "preliminary": True,
+                "file_count": len(filtered_files),
+                "note": "Preliminary manifest for Gate 15 validation - will be regenerated after build"
+            }
+        }
+        
+        manifest_path = preliminary_manifest_dir / "deployment-manifest.json"
+        with open(manifest_path, 'w', encoding='utf-8') as f:
+            json.dump(preliminary_manifest, f, indent=2)
+        
+        logger.info(f"✅ Preliminary manifest created: {len(filtered_files)} files")
+        logger.info(f"   Location: {manifest_path.relative_to(project_root)}")
+        logger.info(f"   (Will be regenerated with actual packaged files after build)")
         
         # STAGE 1: Validation
         if not checkpoint.should_skip_stage(PublishStage.VALIDATION):
