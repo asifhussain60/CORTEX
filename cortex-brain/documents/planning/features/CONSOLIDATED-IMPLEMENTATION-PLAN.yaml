@@ -1,9 +1,12 @@
-# CORTEX Consolidated Implementation Plan
+# CORTEX Consolidated Implementation Plan - INDEX
 # Version: 1.0.0
 # Created: 2025-12-01
 # Author: Asif Hussain
 # Organization: Feature-based (not sprint-based)
 # Strategy: Foundation first, then complete features end-to-end
+#
+# NOTE: This is an INDEX file. Detailed phase information is in phases/ subdirectory.
+# This structure optimizes load time and reduces context window usage.
 
 metadata:
   plan_id: "CONSOLIDATED-PLAN-2025-12-01"
@@ -12,1138 +15,191 @@ metadata:
   status: "draft"
   organization_strategy: "feature-based"
   implementation_philosophy: "foundation-first, then feature-completion"
-  
-# Phases will be added incrementally below
+  phase_directory: "phases/"
+  total_phases: 11
+
+# Phase Index - Load individual phases from phases/ directory
+# Each phase file contains complete deliverables, dependencies, and acceptance criteria
 phases:
   - phase_id: "phase_0"
     name: "Foundation: Code Quality & Debugging"
-    priority: 1
+    file: "phases/phase-0-foundation-code-quality-and-debugging.yaml"
     status: "not-started"
-    description: "Establish baseline code quality, debugging infrastructure, and eliminate technical debt"
-    rationale: "Must establish clean foundation before adding features"
-    
-    objectives:
-      - "Implement debugging marker system for development tracking"
-      - "Add pipeline verification to detect mock objects in production code"
-      - "Remove unnecessary comments and deprecated code"
-      - "Establish code quality baseline for future work"
-    
-    deliverables:
-      - id: "0.1"
-        name: "Debugging Marker System"
-        description: "Add marker-based debugging for developer workflow visibility"
-        files_affected:
-          - "src/utils/debug_markers.py"
-          - "cortex-brain/brain-protection-rules.yaml"
-        acceptance_criteria:
-          - "Markers can be inserted at any code location"
-          - "Markers auto-log execution flow without performance impact"
-          - "Markers removed automatically before commit (git hook)"
-        estimated_effort: "4 hours"
-        
-      - id: "0.2"
-        name: "Mock Detection Pipeline Step"
-        description: "Add CI/CD verification that no mock objects exist in production code"
-        files_affected:
-          - "scripts/verify_no_mocks.py"
-          - ".github/workflows/cortex-ci.yml"
-          - "src/cortex_agents/test_validator.py"
-        acceptance_criteria:
-          - "Pipeline fails if unittest.mock imports found in src/"
-          - "Exception list for test utilities maintained"
-          - "Clear error messages indicate which files contain mocks"
-        estimated_effort: "3 hours"
-        
-      - id: "0.3"
-        name: "Unnecessary Commenting Cleanup"
-        description: "Remove redundant comments, update docstrings to Google style"
-        files_affected:
-          - "src/**/*.py (all Python files)"
-          - "cortex-brain/cleanup-rules.yaml"
-        acceptance_criteria:
-          - "Commented-out code removed (except git-tracked history)"
-          - "Obvious comments removed (e.g., '# Create variable' above variable creation)"
-          - "Docstrings follow Google Python Style Guide"
-          - "Complex logic retains explanatory comments"
-        estimated_effort: "6 hours"
-        
-      - id: "0.4"
-        name: "Deprecated Code Removal"
-        description: "Remove all deprecated functions, classes, and modules"
-        files_affected:
-          - "src/**/*.py"
-          - "tests/**/*.py"
-          - "cortex-brain/obsolete-tests-manifest.json"
-        acceptance_criteria:
-          - "All @deprecated decorated code removed"
-          - "No TODO comments referencing deprecated code"
-          - "Obsolete test manifest updated"
-          - "Breaking changes documented in CHANGELOG.md"
-        estimated_effort: "5 hours"
-    
-    dependencies: []
-    
-    testing_requirements:
-      - "All existing tests pass after cleanup"
-      - "Code coverage remains ≥85%"
-      - "No new linting errors introduced"
-    
-    total_estimated_effort: "18 hours"
+    priority: 1
+    estimated_effort: "18 hours"
+
+  - phase_id: "phase_0"
+    name: "Foundation: Code Quality & Debugging"
+    file: "phases/phase-0-foundation.yaml"
+    status: "not-started"
+    priority: 1
+    estimated_effort: "18 hours"
 
   - phase_id: "phase_1"
     name: "Setup & Onboarding Enhancement"
+    file: "phases/phase-1-setup-and-onboarding-enhancement.yaml"
+    status: "completed"
     priority: 2
-    status: "not-started"
-    description: "Fix multi-repo Python environment issues, enhance onboarding UX, add application naming"
-    rationale: "Setup problems block user adoption; must fix before adding features"
-    
-    objectives:
-      - "Resolve Python environment conflicts across multiple CORTEX-enabled repos"
-      - "Implement shared CORTEX tooling environment to eliminate duplication"
-      - "Add user expectation management for long-running operations"
-      - "Require application name as parameter for onboarding"
-    
-    deliverables:
-      - id: "1.1"
-        name: "Shared CORTEX Tooling Environment"
-        description: "Create global CORTEX tooling environment separate from project-specific Python environments"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: Installing identical tooling 10 times is inefficient, but shared environments 
-          risk version conflicts. ALTERNATIVE: Create ~/.cortex/venv/ as shared tooling environment 
-          with symlinks from each project. Project-specific dependencies stay isolated.
-        files_affected:
-          - "src/orchestrators/setup_orchestrator.py"
-          - "scripts/setup-cortex.sh"
-          - "cortex.config.json"
-          - "docs/SETUP-CORTEX.md"
-        acceptance_criteria:
-          - "Shared CORTEX venv created at ~/.cortex/venv/"
-          - "Each project references shared environment via config"
-          - "Project-specific dependencies installed separately"
-          - "Setup time reduced from 10x to 1x + 10 symlinks"
-        estimated_effort: "8 hours"
-        
-      - id: "1.2"
-        name: "Long-Running Operation Notifications"
-        description: "Add user expectation management for operations >5 minutes"
-        files_affected:
-          - "src/orchestrators/onboarding_orchestrator.py"
-          - "src/utils/progress_decorator.py"
-          - "cortex-brain/response-templates.yaml"
-        acceptance_criteria:
-          - "Operations >5 min show initial notification: 'This will take 10-15 minutes. Good time for coffee.'"
-          - "Progress decorator enhanced with time estimates"
-          - "Onboarding shows step-by-step progress (1/7, 2/7, etc.)"
-        estimated_effort: "3 hours"
-        
-      - id: "1.3"
-        name: "Application Name Requirement"
-        description: "Rename 'onboard application' to require application name as parameter"
-        files_affected:
-          - "src/orchestrators/onboarding_orchestrator.py"
-          - "src/cortex_agents/intent_router.py"
-          - "cortex-brain/tier1/working_memory.db (schema)"
-          - "cortex-brain/response-templates.yaml"
-        acceptance_criteria:
-          - "Onboarding requires --app-name parameter"
-          - "Application name stored in Tier 1 working memory"
-          - "CORTEX uses application name in all subsequent interactions"
-          - "Help text updated: 'onboard application <name>'"
-        estimated_effort: "4 hours"
-        
-      - id: "1.4"
-        name: "Onboarding Module Completion"
-        description: "Complete unfinished onboarding application module (request mentions 'does not')"
-        files_affected:
-          - "src/orchestrators/onboarding_orchestrator.py"
-          - "tests/test_onboarding_orchestrator.py"
-        acceptance_criteria:
-          - "All onboarding steps complete end-to-end"
-          - "Error handling covers edge cases (missing files, invalid structure)"
-          - "Integration tests verify full onboarding workflow"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_0 (Foundation must be clean before setup changes)"
-    
-    testing_requirements:
-      - "Test setup across 3 different repos"
-      - "Verify no conflicts between shared and project environments"
-      - "Test onboarding with valid and invalid application names"
-      - "Verify long-running operation notifications appear"
-    
-    total_estimated_effort: "21 hours"
+    estimated_effort: "21 hours"
+    completion_date: "2025-11-25"
+    completion_notes: "Multi-Application Context System implemented on alternate machine"
 
   - phase_id: "phase_2"
     name: "Architecture Synchronization"
-    priority: 3
+    file: "phases/phase-2-architecture-synchronization.yaml"
     status: "not-started"
-    description: "Auto-update ARCHITECTURE.md and key files during deployments to keep documentation live"
-    rationale: "Documentation drift creates confusion; must stay synchronized with code"
-    
-    objectives:
-      - "Trigger architecture updates during deploy (not align)"
-      - "Identify all files CORTEX checks for planning/enhancements"
-      - "Keep documentation 'live' through automated synchronization"
-    
-    deliverables:
-      - id: "2.1"
-        name: "Deploy-Triggered Architecture Updates"
-        description: "Move architecture synchronization from align CLI to deploy CLI"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: Updating architecture during 'align' is too frequent and noisy. 
-          RECOMMENDATION: Move to deploy orchestrator - it's version-gated, less frequent, 
-          and captures significant changes. Architecture updates should align with version bumps.
-        files_affected:
-          - "src/orchestrators/deploy_orchestrator.py"
-          - "src/orchestrators/align_orchestrator.py"
-          - "docs/ARCHITECTURE.md"
-          - "cortex-brain/operations-config.yaml"
-        acceptance_criteria:
-          - "deploy_cortex.py includes architecture sync step"
-          - "ARCHITECTURE.md updated with latest features before version bump"
-          - "align_orchestrator.py NO LONGER updates architecture"
-          - "Sync only triggers during deploy, not align"
-        estimated_effort: "5 hours"
-        
-      - id: "2.2"
-        name: "Key Files Inventory for Planning"
-        description: "Identify all files CORTEX references during planning and ensure they stay current"
-        files_affected:
-          - "src/orchestrators/planning_orchestrator.py"
-          - "cortex-brain/TRUTH-SOURCES.yaml"
-          - "cortex-brain/documents/planning/KEY-FILES-INVENTORY.md"
-        acceptance_criteria:
-          - "Document lists all files checked during planning (ARCHITECTURE.md, capabilities.yaml, etc.)"
-          - "Each file tagged with update frequency (deploy/weekly/manual)"
-          - "Automated check verifies key files updated in last 30 days"
-        estimated_effort: "4 hours"
-        
-      - id: "2.3"
-        name: "Live Documentation System"
-        description: "Implement auto-update hooks for documentation based on code changes"
-        files_affected:
-          - "src/utils/doc_sync_hooks.py"
-          - ".git/hooks/post-commit"
-          - "cortex-brain/doc-generation-rules.yaml"
-        acceptance_criteria:
-          - "Git hook triggers doc sync after commits to src/"
-          - "Doc sync identifies which documentation files need updates"
-          - "Sync runs during deploy, not during development"
-          - "Manual override available: 'cortex sync docs'"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_0 (Clean code needed before doc sync)"
-      - "phase_1 (Setup must work before deployment changes)"
-    
-    testing_requirements:
-      - "Test deploy triggers architecture update"
-      - "Verify align does NOT trigger architecture update"
-      - "Validate key files inventory complete"
-      - "Test doc sync hook doesn't slow down commits"
-    
-    total_estimated_effort: "15 hours"
+    priority: 3
+    estimated_effort: "15 hours"
 
   - phase_id: "phase_3"
     name: "TDD Workflow Enhancement - Tier Feeding"
-    priority: 4
+    file: "phases/phase-3-tdd-workflow-enhancement---tier-feeding.yaml"
     status: "not-started"
-    description: "Extract development insights during RED→GREEN→REFACTOR cycles to feed CORTEX tiers"
-    rationale: "Tiers need continuous learning from development activity, not just git commit messages"
-    
-    objectives:
-      - "Feed tiers during development phases, not from commit messages"
-      - "Extract patterns during RED (test creation), GREEN (implementation), REFACTOR phases"
-      - "Eliminate circular dependency of extracting from git comments"
-    
-    deliverables:
-      - id: "3.1"
-        name: "Development Phase Insight Extraction"
-        description: "Extract insights during RED→GREEN→REFACTOR phases instead of from git comments"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: Extracting from git comments creates circular dependency - commit messages 
-          summarize work that should already be in tiers. ALTERNATIVE: Extract insights during 
-          each TDD phase:
-          - RED: Capture test intent, requirements, edge cases
-          - GREEN: Capture implementation patterns, dependencies, decisions
-          - REFACTOR: Capture improvements, performance gains, simplifications
-          This feeds tiers in real-time, not post-hoc from commit messages.
-        files_affected:
-          - "src/orchestrators/tdd_orchestrator.py"
-          - "src/tier1/working_memory.py"
-          - "src/tier2/pattern_storage.py"
-          - "src/tier3/development_context.py"
-        acceptance_criteria:
-          - "RED phase extracts test requirements and edge cases to Tier 1"
-          - "GREEN phase extracts implementation patterns to Tier 2"
-          - "REFACTOR phase extracts improvements and metrics to Tier 3"
-          - "Extraction happens automatically during each phase"
-          - "No git comment parsing needed"
-        estimated_effort: "10 hours"
-        
-      - id: "3.2"
-        name: "Pattern Learning from TDD Cycles"
-        description: "Enhance Tier 2 to learn development patterns from completed TDD cycles"
-        files_affected:
-          - "src/tier2/pattern_storage.py"
-          - "src/tier2/semantic_search.py"
-          - "cortex-brain/tier2/knowledge_graph.db (schema update)"
-        acceptance_criteria:
-          - "Completed TDD cycles stored as patterns"
-          - "Patterns include: test strategy, implementation approach, refactoring type"
-          - "Future TDD cycles suggest relevant patterns"
-          - "Pattern matching uses FTS5 semantic search"
-        estimated_effort: "8 hours"
-        
-      - id: "3.3"
-        name: "Development Context Real-Time Updates"
-        description: "Update Tier 3 with code metrics and hotspots during development, not post-commit"
-        files_affected:
-          - "src/tier3/development_context.py"
-          - "src/tier3/code_metrics.py"
-          - "src/utils/realtime_metrics.py"
-        acceptance_criteria:
-          - "Code complexity metrics calculated during GREEN phase"
-          - "Refactoring impact measured during REFACTOR phase"
-          - "Hotspot detection updates in real-time"
-          - "Metrics stored in Tier 3 before commit"
-        estimated_effort: "7 hours"
-    
-    dependencies:
-      - "phase_0 (TDD requires clean code foundation)"
-    
-    testing_requirements:
-      - "Run full TDD cycle and verify all phases feed tiers"
-      - "Verify Tier 1 captures test requirements"
-      - "Verify Tier 2 learns implementation patterns"
-      - "Verify Tier 3 updates code metrics"
-      - "Test extraction does not slow down TDD workflow (max 2% overhead)"
-    
-    total_estimated_effort: "25 hours"
+    priority: 4
+    estimated_effort: "25 hours"
 
   - phase_id: "phase_4"
     name: "Incremental Planning System"
-    priority: 5
+    file: "phases/phase-4-incremental-planning-system.yaml"
     status: "not-started"
-    description: "Update planning orchestrator to generate plans incrementally (empty file first, then phases)"
-    rationale: "Large plan generation creates long wait times and risks data loss if interrupted"
-    
-    objectives:
-      - "Generate empty plan files first with metadata only"
-      - "Add phases incrementally to show progress"
-      - "Apply to all planning document types (YAML, MD, ADO, Swagger)"
-    
-    deliverables:
-      - id: "4.1"
-        name: "Incremental Plan Generation"
-        description: "Refactor planning_orchestrator.py to create plans in small increments"
-        files_affected:
-          - "src/orchestrators/planning_orchestrator.py"
-          - "src/orchestrators/ado_orchestrator.py"
-          - "src/orchestrators/swagger_orchestrator.py"
-          - "src/utils/incremental_writer.py"
-        acceptance_criteria:
-          - "Step 1: Create empty plan file with metadata and headers"
-          - "Step 2: Add phases one at a time with progress updates"
-          - "Step 3: Show 'Phase 1/5 added' after each phase"
-          - "Plans resumable if interrupted (check existing file, continue from last phase)"
-          - "Applied to YAML, MD, ADO, and Swagger plan generation"
-        estimated_effort: "12 hours"
-        
-      - id: "4.2"
-        name: "Progress Visualization for Planning"
-        description: "Show real-time progress during plan generation with ETA"
-        files_affected:
-          - "src/utils/progress_decorator.py"
-          - "src/orchestrators/planning_orchestrator.py"
-        acceptance_criteria:
-          - "Progress decorator shows 'Planning: Phase 3/7 (43% complete, ETA 2m 15s)'"
-          - "Hang detection if phase takes >5x expected time"
-          - "User can cancel without losing work (partial plan saved)"
-        estimated_effort: "5 hours"
-        
-      - id: "4.3"
-        name: "Plan Validation During Generation"
-        description: "Validate each phase as it's added to catch errors early"
-        files_affected:
-          - "src/orchestrators/planning_orchestrator.py"
-          - "src/tier0/plan_validator.py"
-        acceptance_criteria:
-          - "YAML schema validated after each phase added"
-          - "DoR/DoD validation runs incrementally"
-          - "Errors reported immediately, not after all phases generated"
-          - "Invalid phase discarded, generation continues"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_0 (Need clean code for refactoring)"
-    
-    testing_requirements:
-      - "Generate 10-phase plan and verify incremental creation"
-      - "Interrupt plan generation mid-way, verify resumable"
-      - "Test invalid phase rejection without stopping generation"
-      - "Verify progress updates accurate"
-    
-    total_estimated_effort: "23 hours"
+    priority: 5
+    estimated_effort: "23 hours"
 
   - phase_id: "phase_5"
     name: "Response Template System Refactor"
-    priority: 6
+    file: "phases/phase-5-response-template-system-refactor.yaml"
     status: "not-started"
-    description: "Refactor monolithic 2,669-line response-templates.yaml into modular profile-driven system"
-    rationale: "Monolithic templates hard to maintain; user profile integration missing"
-    
-    objectives:
-      - "Split monolithic YAML into 4 modular files (base components, templates, profiles, routing)"
-      - "Integrate UserProfileManager for interaction mode-driven responses"
-      - "Support dynamic template variants (Autonomous, Guided, Educational, Pair modes)"
-      - "Replace YAML anchors with template composition engine"
-      - "Reduce configuration complexity by 58% (2,669 → 1,120 lines)"
-    
-    deliverables:
-      - id: "5.1"
-        name: "Modular YAML Structure"
-        description: "Split response-templates.yaml into 4 focused files"
-        files_affected:
-          - "cortex-brain/response-templates/base-components.yaml (new)"
-          - "cortex-brain/response-templates/template-definitions.yaml (new)"
-          - "cortex-brain/response-templates/profile-variants.yaml (new)"
-          - "cortex-brain/response-templates/routing-rules.yaml (new)"
-          - "cortex-brain/response-templates.yaml (legacy, deprecated)"
-        acceptance_criteria:
-          - "base-components.yaml: 200 lines (header, sections, footers)"
-          - "template-definitions.yaml: 400 lines (18 templates with placeholders)"
-          - "profile-variants.yaml: 300 lines (4 interaction modes)"
-          - "routing-rules.yaml: 220 lines (trigger mapping)"
-          - "Total: 1,120 lines (58% reduction)"
-        estimated_effort: "8 hours"
-        
-      - id: "5.2"
-        name: "Template Composition Engine"
-        description: "Replace YAML anchor inheritance with Python composition engine"
-        files_affected:
-          - "src/response_templates/composer.py (new)"
-          - "src/response_templates/template_manager.py"
-          - "src/response_templates/profile_adapter.py (new)"
-        acceptance_criteria:
-          - "Load 4 YAML files into in-memory structure"
-          - "Compose template based on profile interaction_mode"
-          - "Autonomous mode: compact format, minimal sections"
-          - "Educational mode: extended format, 'Why This Matters' sections"
-          - "Backward compatible with existing template manager API"
-        estimated_effort: "12 hours"
-        
-      - id: "5.3"
-        name: "UserProfile Integration"
-        description: "Connect template system to UserProfileManager for profile-driven responses"
-        files_affected:
-          - "src/response_templates/template_manager.py"
-          - "src/orchestrators/user_profile_manager.py"
-          - "src/cortex_agents/intent_router.py"
-        acceptance_criteria:
-          - "Intent router passes user_id to template manager"
-          - "Template manager fetches profile from UserProfileManager"
-          - "Profile interaction_mode determines template variant"
-          - "Fallback to 'guided' mode if no profile exists"
-        estimated_effort: "6 hours"
-        
-      - id: "5.4"
-        name: "Dynamic Section Rendering"
-        description: "Support interaction mode-specific section inclusion/exclusion"
-        files_affected:
-          - "src/response_templates/composer.py"
-          - "src/response_templates/section_renderer.py (new)"
-        acceptance_criteria:
-          - "Autonomous: Excludes 'Understanding', 'Challenge', 'Request Echo'"
-          - "Guided: Includes all 5 standard sections"
-          - "Educational: Adds 'Why This Matters', 'Learn More' sections"
-          - "Pair: Replaces 'Response' with 'Options' + 'Recommendation'"
-          - "Mandatory header (🧠 CORTEX + Author) ALWAYS present"
-        estimated_effort: "7 hours"
-        
-      - id: "5.5"
-        name: "Backward Compatibility Layer"
-        description: "Ensure existing code continues working during migration"
-        files_affected:
-          - "src/response_templates/legacy_adapter.py (new)"
-          - "src/response_templates/template_manager.py"
-        acceptance_criteria:
-          - "Legacy code using old template manager API works unchanged"
-          - "New code can use profile-driven API"
-          - "Deprecation warnings for old API usage"
-          - "Migration guide in docs/RESPONSE-TEMPLATE-MIGRATION.md"
-        estimated_effort: "5 hours"
-    
-    dependencies:
-      - "phase_0 (Clean code needed before refactoring)"
-    
-    testing_requirements:
-      - "Test all 18 templates render correctly"
-      - "Test all 4 interaction modes produce correct variants"
-      - "Verify mandatory header present in all modes"
-      - "Test backward compatibility with legacy code"
-      - "Performance: Template loading <50ms, composition <10ms"
-    
-    total_estimated_effort: "38 hours"
+    priority: 6
+    estimated_effort: "38 hours"
 
   - phase_id: "phase_6"
     name: "Threat Modeling Integration"
-    priority: 7
+    file: "phases/phase-6-threat-modeling-integration.yaml"
     status: "not-started"
-    description: "Integrate automated STRIDE-based threat modeling into Planning Orchestrator"
-    rationale: "Security threats should be identified during planning, not discovered in production"
-    
-    objectives:
-      - "Auto-detect security threats during feature planning (zero user effort)"
-      - "Use STRIDE framework (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Privilege Escalation)"
-      - "Generate actionable mitigations with implementation guidance"
-      - "Enforce threat mitigation validation in DoD"
-      - "3-5 minute analysis per feature with risk ratings"
-    
-    deliverables:
-      - id: "6.1"
-        name: "Enhanced ThreatModeler Agent"
-        description: "Upgrade existing threat_modeler.py with STRIDE analysis and feature templates"
-        files_affected:
-          - "src/agents/security/threat_modeler.py"
-          - "src/agents/security/stride_analyzer.py (new)"
-          - "cortex-brain/agents/threat-modeler-config.yaml"
-        acceptance_criteria:
-          - "STRIDE analysis for all 6 categories"
-          - "Feature-specific threat templates (auth, API, data, upload, payment)"
-          - "Auto-mitigation suggestions with code examples"
-          - "Risk rating calculation (High/Medium/Low)"
-          - "OWASP Top 10 mapping for each threat"
-        estimated_effort: "8 hours"
-        
-      - id: "6.2"
-        name: "Planning Orchestrator Integration"
-        description: "Inject threat modeling phase into planning workflow after DoR validation"
-        files_affected:
-          - "src/orchestrators/planning_orchestrator.py"
-          - "src/workflows/definitions/planning-with-threats.yaml (new)"
-          - "src/workflows/workflow_pipeline.py"
-        acceptance_criteria:
-          - "Threat modeling triggered automatically after DoR passes"
-          - "Feature type detection (auth/api/data/etc) passed to ThreatModeler"
-          - "Threat report embedded in planning document"
-          - "DoD validation requires threat mitigations"
-          - "Workflow resumable if threat modeling fails"
-        estimated_effort: "6 hours"
-        
-      - id: "6.3"
-        name: "Threat Report Formatting"
-        description: "Add threat report templates to response-templates system"
-        files_affected:
-          - "cortex-brain/response-templates/threat-reports.yaml (new)"
-          - "src/response_templates/threat_formatter.py (new)"
-        acceptance_criteria:
-          - "Quick view: Risk summary table (threat, risk level, mitigation)"
-          - "Detailed view: Full STRIDE breakdown with code examples"
-          - "Progressive disclosure: Quick view by default, detailed on request"
-          - "Markdown tables for easy reading"
-        estimated_effort: "4 hours"
-        
-      - id: "6.4"
-        name: "DoD Threat Mitigation Validation"
-        description: "Enhance DoD validation to verify threat mitigations addressed"
-        files_affected:
-          - "src/orchestrators/planning_orchestrator.py"
-          - "src/tier0/dod_validator.py (new)"
-        acceptance_criteria:
-          - "DoD fails if High-risk threats unmitigated"
-          - "DoD warns if Medium-risk threats unmitigated"
-          - "Low-risk threats documented but not blocking"
-          - "Validation checks plan document for mitigation evidence"
-        estimated_effort: "5 hours"
-        
-      - id: "6.5"
-        name: "Feature Type Threat Templates"
-        description: "Create threat template library for common feature types"
-        files_affected:
-          - "cortex-brain/agents/threat-templates/auth.yaml (new)"
-          - "cortex-brain/agents/threat-templates/api.yaml (new)"
-          - "cortex-brain/agents/threat-templates/data-storage.yaml (new)"
-          - "cortex-brain/agents/threat-templates/file-upload.yaml (new)"
-          - "cortex-brain/agents/threat-templates/payment.yaml (new)"
-        acceptance_criteria:
-          - "Each template has typical threats for feature type"
-          - "Mitigations include code examples (C#, Python, JS as appropriate)"
-          - "OWASP Top 10 references included"
-          - "Risk ratings calibrated per template"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_4 (Incremental planning needed for threat report generation)"
-    
-    testing_requirements:
-      - "Test threat modeling for auth feature (should detect credential storage, session management)"
-      - "Test API feature (should detect injection, rate limiting)"
-      - "Test file upload feature (should detect malicious files, path traversal)"
-      - "Verify DoD blocks high-risk threats without mitigation"
-      - "Test workflow resumption after threat modeling failure"
-    
-    total_estimated_effort: "29 hours"
+    priority: 7
+    estimated_effort: "29 hours"
 
   - phase_id: "phase_7"
     name: "Brain Health & Learning Systems"
-    priority: 8
+    file: "phases/phase-7-brain-health-and-learning-systems.yaml"
     status: "not-started"
-    description: "Complete Tier 1/2 implementation for conversation learning and pattern recognition"
-    rationale: "RCA revealed incomplete Tier 1/2 implementation; brain learning capability exists but not activated"
-    
-    objectives:
-      - "Implement full Tier 1 schema (conversations, user profiles, entities)"
-      - "Activate Tier 2 pattern learning and relationship graphs"
-      - "Add schema migration system for future evolution"
-      - "Enable brain-assisted responses with context injection"
-      - "Improve Overall Quality Score from 6.0/10 to 8.5/10"
-    
-    deliverables:
-      - id: "7.1"
-        name: "Tier 1 Schema Completion"
-        description: "Implement missing Tier 1 tables for conversation history and user profiles"
-        files_affected:
-          - "cortex-brain/tier1/working_memory.db"
-          - "src/tier1/working_memory.py"
-          - "src/tier1/schema_migrations.py (new)"
-          - "cortex-brain/schemas/tier1-schema.sql"
-        acceptance_criteria:
-          - "conversations table: Store all chat history with timestamps"
-          - "user_profile table: Preferences, interaction mode, experience level"
-          - "working_memory table: Temporary context storage with TTL"
-          - "entities table: Named entity tracking (files, functions, projects)"
-          - "Migration system supports zero-downtime schema evolution"
-        estimated_effort: "10 hours"
-        
-      - id: "7.2"
-        name: "Tier 2 Pattern Learning Activation"
-        description: "Implement pattern storage and relationship graph functionality"
-        files_affected:
-          - "cortex-brain/tier2/knowledge_graph.db"
-          - "src/tier2/pattern_storage.py"
-          - "src/tier2/relationship_mapper.py (new)"
-          - "src/tier2/semantic_search.py"
-        acceptance_criteria:
-          - "patterns table: Store learned workflows and code patterns"
-          - "relationships table: Graph edges between entities (file→function, feature→file)"
-          - "FTS5 semantic search operational"
-          - "Pattern matching with relevance scoring"
-          - "Auto-learn from completed TDD cycles (integrates with Phase 3)"
-        estimated_effort: "12 hours"
-        
-      - id: "7.3"
-        name: "Brain Initialization System"
-        description: "Add brain setup on first run with health monitoring"
-        files_affected:
-          - "src/orchestrators/brain_init_orchestrator.py (new)"
-          - "cortex.config.json"
-          - "src/utils/brain_health_monitor.py (new)"
-        acceptance_criteria:
-          - "First-run wizard initializes all 3 tiers"
-          - "Health monitoring dashboard: 'cortex brain health'"
-          - "Schema version tracking for each tier"
-          - "Automated repair for missing tables/indexes"
-          - "Health metrics: query latency, storage usage, pattern count"
-        estimated_effort: "8 hours"
-        
-      - id: "7.4"
-        name: "Context Injection for Responses"
-        description: "Enable brain-assisted responses using learned context"
-        files_affected:
-          - "src/response_templates/context_injector.py (new)"
-          - "src/cortex_agents/intent_router.py"
-          - "src/tier1/working_memory.py"
-          - "src/tier2/pattern_storage.py"
-        acceptance_criteria:
-          - "Intent router queries Tier 1 for recent conversation context"
-          - "Pattern matcher suggests relevant workflows from Tier 2"
-          - "Context injected into response templates before rendering"
-          - "Example: User asks about feature, CORTEX recalls past discussion"
-          - "Performance: Context retrieval <100ms (Tier 1 FIFO)"
-        estimated_effort: "9 hours"
-        
-      - id: "7.5"
-        name: "FIFO Conversation Management"
-        description: "Implement 70-conversation FIFO as designed (Tier 1 governance)"
-        files_affected:
-          - "src/tier1/working_memory.py"
-          - "src/tier1/fifo_manager.py (new)"
-          - "cortex-brain/tier1/working_memory.db"
-        acceptance_criteria:
-          - "Auto-archive conversations older than 70th most recent"
-          - "Archived conversations moved to Tier 2 (knowledge graph)"
-          - "FIFO maintains <100ms query performance"
-          - "Manual override: 'cortex brain keep conversation <id>'"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_0 (Need clean foundation)"
-      - "phase_3 (TDD tier feeding integrates with pattern learning)"
-    
-    testing_requirements:
-      - "Test full conversation lifecycle (create → store → retrieve → archive)"
-      - "Test pattern learning from 3 completed TDD cycles"
-      - "Test context injection improves response relevance (manual validation)"
-      - "Load test: 1000 conversations, verify <100ms query latency"
-      - "Test FIFO archival at 70-conversation threshold"
-      - "Health monitoring detects missing tables/indexes"
-    
-    total_estimated_effort: "45 hours"
+    priority: 8
+    estimated_effort: "45 hours"
 
   - phase_id: "phase_8"
     name: "Final Integration & Cleanup"
-    priority: 9
+    file: "phases/phase-8-final-integration-and-cleanup.yaml"
     status: "not-started"
-    description: "Clean up old code, wire in all new CLI-wrapped functionality, and establish patch release capability"
-    rationale: "Consolidate all enhancements, remove deprecated code, ensure all features accessible via CLI"
-    
-    objectives:
-      - "Remove deprecated code and consolidate duplicate implementations"
-      - "Wire all new orchestrators/agents into CLI entry points"
-      - "Update file path references during cleanup reorganization"
-      - "Establish patch release deployment for incremental updates"
-      - "Validate complete system integration end-to-end"
-    
-    deliverables:
-      - id: "8.1"
-        name: "Deprecated Code Removal"
-        description: "Remove all deprecated code paths, consolidate duplicates, clean up technical debt"
-        files_affected:
-          - "src/**/*.py (audit for deprecated functions)"
-          - "cortex-brain/documents/planning/DEPRECATION-MANIFEST.md (new)"
-          - "scripts/cleanup/remove_deprecated.py (new)"
-        acceptance_criteria:
-          - "All functions marked @deprecated removed"
-          - "Duplicate implementations consolidated to single source"
-          - "Dead code (unreferenced functions) removed"
-          - "Deprecation manifest documents what was removed and why"
-          - "All tests updated to use new implementations"
-        estimated_effort: "8 hours"
-        
-      - id: "8.2"
-        name: "CLI Wrapper Integration"
-        description: "Ensure all new orchestrators/agents accessible via natural language CLI"
-        files_affected:
-          - "src/cortex_agents/intent_router.py"
-          - "cortex-brain/response-templates.yaml"
-          - "cortex-brain/operations-config.yaml"
-          - "tests/integration/test_cli_integration.py (new)"
-        acceptance_criteria:
-          - "All Phase 0-7 orchestrators have CLI triggers"
-          - "Natural language commands mapped to new functionality"
-          - "Response templates exist for all new operations"
-          - "Integration tests verify CLI → orchestrator flow"
-          - "Help system updated with new commands"
-        estimated_effort: "6 hours"
-        
-      - id: "8.3"
-        name: "Enhanced Cleanup CLI - Path Reference Updates"
-        description: "Update cleanup CLI to search and update file path references during reorganization"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: When cleanup reorganizes files (e.g., moves deprecated code to archives/), 
-          other files may still reference old paths, causing import errors and broken functionality.
-          SOLUTION: Add path reference scanner and updater to cleanup CLI:
-          - Scan all Python files for import statements
-          - Detect references to files being moved/renamed
-          - Automatically update imports to new paths
-          - Generate report of updated references
-          - Support dry-run mode to preview changes before applying
-        files_affected:
-          - "src/orchestrators/holistic_cleanup_orchestrator.py"
-          - "src/utils/path_reference_scanner.py (new)"
-          - "src/utils/import_updater.py (new)"
-          - "scripts/cleanup/update_path_references.py (new)"
-          - "tests/utils/test_path_reference_scanner.py (new)"
-        acceptance_criteria:
-          - "Path scanner detects all import statements in Python files"
-          - "Scanner identifies references to files being moved"
-          - "Updater rewrites imports with new paths (relative/absolute)"
-          - "Dry-run mode shows preview without modifying files"
-          - "Generated report lists all updated references"
-          - "Supports undo operation (backup original files)"
-          - "Integrated into cleanup workflow (automatic step)"
-        estimated_effort: "10 hours"
-        
-      - id: "8.4"
-        name: "Patch Release Deployment Strategy"
-        description: "Implement hot-fix/patch release system for incremental updates without full reinstall"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: Current deployment always publishes complete CORTEX package. For bug fixes
-          or small feature additions, users must re-setup entirely. This is heavyweight and risky.
-          SOLUTION: Add patch release capability to deployment system:
-          - Version format: X.Y.Z where Z = patch number
-          - Patch release includes only changed files + manifest
-          - Manifest specifies file operations (add/update/delete)
-          - Users run 'cortex patch apply' to incrementally update
-          - Rollback support: 'cortex patch rollback <version>'
-          - Validation: Verify patch applies cleanly before committing
-        files_affected:
-          - "scripts/deploy_cortex.py"
-          - "scripts/patch_builder.py (new)"
-          - "src/orchestrators/patch_orchestrator.py (new)"
-          - "cortex-brain/patches/ (new directory)"
-          - "tests/orchestrators/test_patch_orchestrator.py (new)"
-        acceptance_criteria:
-          - "Patch builder detects changed files since last release"
-          - "Patch manifest includes: version, files changed, operations, checksums"
-          - "Patch orchestrator validates current version before applying"
-          - "Apply operation updates only changed files (preserves brain data)"
-          - "Rollback operation restores previous file versions"
-          - "Patch release tagged in git: vX.Y.Z-patch"
-          - "Users can list available patches: 'cortex patch list'"
-          - "Automated testing validates patch applies/rolls back correctly"
-        estimated_effort: "14 hours"
-        
-      - id: "8.5"
-        name: "End-to-End Integration Validation"
-        description: "Comprehensive test suite validating all phases integrate correctly"
-        files_affected:
-          - "tests/integration/test_full_workflow.py (new)"
-          - "tests/integration/test_phase_integration.py (new)"
-          - "scripts/validate_integration.py (new)"
-        acceptance_criteria:
-          - "Test creates new feature using Planning (Phase 4)"
-          - "Test implements feature using TDD (Phase 3)"
-          - "Test validates threat modeling runs (Phase 6)"
-          - "Test verifies brain learning captures patterns (Phase 7)"
-          - "Test confirms response templates adapt to profile (Phase 5)"
-          - "All orchestrators callable via CLI (Phase 8.2)"
-          - "Cleanup preserves data and updates paths (Phase 8.3)"
-          - "Patch release applies and rolls back (Phase 8.4)"
-        estimated_effort: "10 hours"
-    
-    dependencies:
-      - "phase_0 (Foundation complete)"
-      - "phase_1 (Setup working)"
-      - "phase_2 (Architecture synchronized)"
-      - "phase_3 (TDD integrated)"
-      - "phase_4 (Incremental planning operational)"
-      - "phase_5 (Response templates refactored)"
-      - "phase_6 (Threat modeling integrated)"
-      - "phase_7 (Brain systems active)"
-    
-    testing_requirements:
-      - "Full system regression testing (all 656 existing tests pass)"
-      - "Integration tests for all new CLI triggers"
-      - "Path reference scanner tested with sample reorganization"
-      - "Patch builder creates valid manifests"
-      - "Patch application doesn't break brain data"
-      - "Patch rollback restores exact previous state"
-      - "End-to-end workflow test covers all phases"
-    
-    total_estimated_effort: "48 hours"
+    priority: 9
+    estimated_effort: "48 hours"
 
   - phase_id: "phase_9"
     name: "Application Health Dashboard - Live Repository Testing"
-    priority: 10
+    file: "phases/phase-9-application-health-dashboard---live-repo.yaml"
     status: "not-started"
-    description: "Test Application Health Dashboard with live development repositories to validate multi-language analysis, architecture graph generation, and report accuracy"
-    rationale: "December 1, 2025 wiring fix completed dashboard integration into intent routing. Need production validation with real-world codebases before declaring feature complete."
-    
-    context:
-      wiring_status: "✅ COMPLETE (December 1, 2025)"
-      changes_made:
-        - "agent_types.py: Added IntentType.APPLICATION_HEALTH, IntentType.ONBOARD_APPLICATION, AgentType.APPLICATION_HEALTH (+9 lines)"
-        - "intent_router.py: Added dashboard keywords and rule context (+25 lines)"
-        - "application_health_agent.py: NEW agent wrapper with lazy initialization (+159 lines)"
-        - "agent_executor.py: Added ApplicationHealthAgent instantiation (+10 lines)"
-      integration_flow: "User request → IntentRouter → AgentExecutor → ApplicationHealthAgent → ApplicationHealthOrchestrator → Response"
-      supported_commands:
-        - "show health dashboard"
-        - "health dashboard"
-        - "application health"
-        - "analyze application"
-        - "onboard application"
-        - "scan project"
-    
-    objectives:
-      - "Validate dashboard works with real-world multi-project codebases"
-      - "Test progressive crawling (overview/standard/deep) on large repositories"
-      - "Verify multi-language analysis (Python, C#, JavaScript/TypeScript, ColdFusion)"
-      - "Confirm architecture graph generation accuracy"
-      - "Validate report generation and caching performance"
-      - "Test CLI wrappers and natural language triggers"
-    
-    test_repositories:
-      - name: "KSESSIONS"
-        path: "D:\\PROJECTS\\KSESSIONS"
-        expected_characteristics:
-          primary_language: "Python"
-          estimated_size: "Medium (5K-20K LOC)"
-          architecture: "Session management system"
-          test_focus:
-            - "Python AST-based analysis accuracy"
-            - "Function/class detection"
-            - "Dependency graph generation"
-            - "Cache hit rate optimization"
-        
-      - name: "NOOR CANVAS"
-        path: "D:\\PROJECTS\\NOOR CANVAS"
-        expected_characteristics:
-          primary_language: "Mixed (JavaScript/TypeScript, possibly React/Vue)"
-          estimated_size: "Large (20K-100K LOC)"
-          architecture: "Canvas/drawing application"
-          test_focus:
-            - "Multi-language analysis (JS/TS)"
-            - "Framework detection (React/Angular/Vue)"
-            - "Large repository crawling performance"
-            - "Progressive scan level effectiveness"
-            - "Memory efficiency with 50K+ files"
-    
-    deliverables:
-      - id: "9.1"
-        name: "Live Repository Test Suite"
-        description: "Automated test suite that runs dashboard analysis on KSESSIONS and NOOR CANVAS"
-        files_affected:
-          - "tests/integration/test_live_repositories.py (new)"
-          - "tests/integration/live_repo_fixtures.py (new)"
-          - "cortex.config.json (add test_repositories section)"
-        acceptance_criteria:
-          - "Test suite runs dashboard analysis on both repositories"
-          - "Validates report structure (total_files, languages, LOC counts)"
-          - "Checks architecture graph nodes/edges exist"
-          - "Verifies scan completes without errors"
-          - "Measures performance (overview <30s, standard <2min, deep <5min)"
-          - "Tests can run in CI/CD if repositories available"
-        estimated_effort: "8 hours"
-        
-      - id: "9.2"
-        name: "Multi-Language Analysis Validation"
-        description: "Verify language-specific analyzers work correctly on real code"
-        files_affected:
-          - "tests/integration/test_language_analyzers.py (new)"
-          - "src/orchestrators/application_health_orchestrator.py (validation updates)"
-        acceptance_criteria:
-          - "Python analyzer: Detects functions, classes, imports in KSESSIONS"
-          - "JavaScript/TypeScript analyzer: Detects React components, hooks in NOOR CANVAS"
-          - "Generic analyzer: Handles unknown file types gracefully"
-          - "Language detection accuracy >95%"
-          - "LOC counts match manual verification (±5% tolerance)"
-        estimated_effort: "6 hours"
-        
-      - id: "9.3"
-        name: "Architecture Graph Validation"
-        description: "Validate architecture graph generation produces accurate dependency maps"
-        files_affected:
-          - "tests/integration/test_architecture_graph.py (new)"
-          - "src/orchestrators/application_health_orchestrator.py"
-        acceptance_criteria:
-          - "Graph contains expected nodes (files/modules/components)"
-          - "Edges represent actual import/dependency relationships"
-          - "No circular dependencies falsely reported"
-          - "Graph serialization (JSON) is valid and complete"
-          - "Graph can be rendered in dashboard (future enhancement)"
-        estimated_effort: "5 hours"
-        
-      - id: "9.4"
-        name: "Progressive Crawling Performance Testing"
-        description: "Validate overview/standard/deep scan levels meet performance targets"
-        files_affected:
-          - "tests/performance/test_progressive_crawling.py (new)"
-          - "cortex-brain/documents/reports/dashboard-performance-benchmarks.md (new)"
-        acceptance_criteria:
-          - "Overview scan (KSESSIONS): <30 seconds"
-          - "Standard scan (KSESSIONS): <2 minutes"
-          - "Deep scan (KSESSIONS): <5 minutes"
-          - "Overview scan (NOOR CANVAS): <45 seconds (larger repo)"
-          - "Standard scan (NOOR CANVAS): <3 minutes"
-          - "Deep scan (NOOR CANVAS): <7 minutes"
-          - "Memory usage stays <2GB for largest scan"
-          - "Performance report documents actual times vs targets"
-        estimated_effort: "6 hours"
-        
-      - id: "9.5"
-        name: "Caching & Incremental Analysis Validation"
-        description: "Test hash-based caching and incremental updates on file changes"
-        files_affected:
-          - "tests/integration/test_dashboard_caching.py (new)"
-          - "src/orchestrators/application_health_orchestrator.py"
-        acceptance_criteria:
-          - "First scan: Full analysis (cache miss)"
-          - "Second scan (no changes): <100ms (cache hit, 97%+ faster)"
-          - "File modified: Only re-analyze changed file + dependents"
-          - "Cache invalidation works correctly"
-          - "Cache hit rate >90% for typical development workflow"
-        estimated_effort: "5 hours"
-        
-      - id: "9.6"
-        name: "CLI Integration & Natural Language Testing"
-        description: "Validate all natural language triggers and CLI wrappers work correctly"
-        files_affected:
-          - "tests/integration/test_dashboard_cli.py (new)"
-          - "src/cortex_agents/application_health_agent.py (validation)"
-        acceptance_criteria:
-          - "All 9 keywords trigger dashboard analysis correctly"
-          - "'show health dashboard' → ApplicationHealthAgent.execute()"
-          - "'analyze application D:\\PROJECTS\\KSESSIONS' → Scans specified path"
-          - "'onboard application' → Interactive path selection"
-          - "Error handling: Invalid path, permission denied, empty directory"
-          - "Response template renders correctly with report data"
-        estimated_effort: "4 hours"
-        
-      - id: "9.7"
-        name: "Align & Deploy Gate Integration"
-        description: "Wire dashboard into System Alignment validation and deployment gates"
-        challenge_raised: true
-        challenge_details: |
-          CHALLENGE: User requested "proper wiring in align, deploy gates, cli wrappers".
-          CLI wrappers complete (December 1, 2025 wiring fix). Need to add:
-          1. System Alignment integration - validate dashboard health during 'align'
-          2. Deployment gate integration - add Gate 19: Application Health Check
-          SOLUTION: Add dashboard validation as alignment check and deployment gate
-        files_affected:
-          - "src/orchestrators/align_orchestrator.py"
-          - "scripts/deploy_cortex.py (add Gate 19)"
-          - "cortex-brain/documents/planning/GATE-19-APPLICATION-HEALTH-SPEC.md (new)"
-        acceptance_criteria:
-          - "System Alignment: 'align' command runs dashboard health check"
-          - "Alignment fails if dashboard orchestrator not wired (regression prevention)"
-          - "Deployment Gate 19: Application Health Check"
-          - "Gate 19 validates: Dashboard triggers work, analysis completes, report generated"
-          - "Gate 19 checks: Intent routing, agent instantiation, orchestrator execution"
-          - "Gate failure blocks deployment with detailed error report"
-          - "Gate 19 runs during 'python scripts/deploy_cortex.py'"
-        estimated_effort: "8 hours"
-        
-      - id: "9.8"
-        name: "Production Readiness Report"
-        description: "Generate comprehensive validation report documenting dashboard production readiness"
-        files_affected:
-          - "cortex-brain/documents/reports/APPLICATION-HEALTH-DASHBOARD-PRODUCTION-READY.md (new)"
-          - "cortex-brain/documents/reports/live-repository-test-results.json (new)"
-        acceptance_criteria:
-          - "Report documents all test results from deliverables 9.1-9.7"
-          - "Performance benchmarks table (overview/standard/deep for both repos)"
-          - "Language analysis accuracy metrics (Python, JS/TS)"
-          - "Architecture graph validation results"
-          - "Cache hit rate statistics"
-          - "CLI integration test results (all 9 keywords)"
-          - "Align & deploy gate validation status"
-          - "Known limitations and future enhancements documented"
-          - "Production deployment recommendation: GO/NO-GO with justification"
-        estimated_effort: "6 hours"
-    
-    dependencies:
-      - "phase_0 (Foundation needed for clean testing environment)"
-      - "Wiring fix complete (December 1, 2025 - ALREADY DONE)"
-    
-    testing_requirements:
-      - "All tests pass on both KSESSIONS and NOOR CANVAS repositories"
-      - "Performance targets met for all scan levels"
-      - "Cache hit rate >90% on repeated scans"
-      - "Multi-language analysis accuracy >95%"
-      - "Architecture graph contains expected structure"
-      - "CLI triggers work for all 9 keywords"
-      - "Align integration detects dashboard health"
-      - "Deploy Gate 19 validates dashboard functionality"
-      - "No regressions in existing 656 CORTEX tests"
-    
-    risks:
-      - risk: "NOOR CANVAS may be too large for deep scan performance target"
-        mitigation: "Add adaptive timeout, skip analysis for files >100KB in deep mode"
-        severity: "Medium"
-      
-      - risk: "Repository paths may not exist on all dev machines"
-        mitigation: "Make test suite configurable via cortex.config.json, skip if path missing"
-        severity: "Low"
-      
-      - risk: "Multi-threaded crawling may cause file handle exhaustion"
-        mitigation: "Limit worker threads to 100, add file handle monitoring"
-        severity: "Medium"
-    
-    total_estimated_effort: "48 hours"
-    
-    notes:
-      - "Dashboard wiring already complete per December 1, 2025 report"
-      - "This phase focuses on production validation, not implementation"
-      - "Align/deploy gate integration is NEW work requested by user"
-      - "Test repositories represent real-world usage scenarios"
-      - "Success criteria: Production-ready status with comprehensive validation report"
+    priority: 10
+    estimated_effort: "48 hours"
+
+  - phase_id: "phase_10"
+    name: "Systematic YAML Modularization"
+    file: "phases/phase-10-systematic-yaml-modularization.yaml"
+    status: "not-started"
+    priority: 11
+    estimated_effort: "6.5 hours"
+
 
 # ========================================
 # PLAN SUMMARY
 # ========================================
 
 summary:
-  total_phases: 10
-  total_estimated_effort_hours: 310
-  
+  total_phases: 11
+  total_estimated_effort_hours: 316.5
   phase_breakdown:
-    phase_0: "Foundation (48 hours) - Database, brain protection, entry points"
-    phase_1: "Planning System 2.0 (36 hours) - Vision API, DoR/DoD, file-based workflow"
-    phase_2: "TDD Workflow Enhancements (28 hours) - View discovery, auto-debug, performance refactoring"
-    phase_3: "Architecture Intelligence (24 hours) - Trend analysis, debt forecasting, ADR generation"
-    phase_4: "Code Review System (24 hours) - PR analysis, dependency crawling, fix templates"
-    phase_5: "User Profile System (20 hours) - Tech stack preference, interaction modes"
-    phase_6: "Enhancement Catalog (18 hours) - Feature tracking, temporal awareness"
-    phase_7: "Git Checkpoint Integration (16 hours) - Auto-checkpoints, rollback safety"
-    phase_8: "Upgrade System 2.0 (48 hours) - Brain preservation, embedded detection"
-    phase_9: "Application Health Dashboard Testing (48 hours) - Live repo validation, align/deploy integration"
-  
+    phase_0: Foundation (48 hours) - Database, brain protection, entry points
+    phase_1: Planning System 2.0 (36 hours) - Vision API, DoR/DoD, file-based workflow
+    phase_2: TDD Workflow Enhancements (28 hours) - View discovery, auto-debug, performance
+      refactoring
+    phase_3: Architecture Intelligence (24 hours) - Trend analysis, debt forecasting,
+      ADR generation
+    phase_4: Code Review System (24 hours) - PR analysis, dependency crawling, fix
+      templates
+    phase_5: User Profile System (20 hours) - Tech stack preference, interaction modes
+    phase_6: Enhancement Catalog (18 hours) - Feature tracking, temporal awareness
+    phase_7: Git Checkpoint Integration (16 hours) - Auto-checkpoints, rollback safety
+    phase_8: Upgrade System 2.0 (48 hours) - Brain preservation, embedded detection
+    phase_9: Application Health Dashboard Testing (48 hours) - Live repo validation,
+      align/deploy integration
+    phase_10: Systematic YAML Modularization (6.5 hours) - Auto-split large YAMLs,
+      planning orchestrator integration, response template grouping
   critical_path:
-    - "Phase 0 (Foundation) → Phase 9 (Dashboard Testing)"
-    - "Phase 1 (Planning) → Phase 2 (TDD) → Phase 7 (Git Checkpoints)"
-    - "Phase 3 (Architecture Intelligence) complements Phase 2 (TDD)"
-    - "Phase 4 (Code Review) depends on Phase 2 (TDD) for test generation"
-    - "Phase 5 (User Profile) enables Phase 1 (Planning) tech stack preference"
-    - "Phase 6 (Enhancement Catalog) supports Phase 8 (Upgrade) 'What's New' feature"
-  
+  - Phase 0 (Foundation) → Phase 9 (Dashboard Testing)
+  - Phase 1 (Planning) → Phase 2 (TDD) → Phase 7 (Git Checkpoints)
+  - Phase 3 (Architecture Intelligence) complements Phase 2 (TDD)
+  - Phase 4 (Code Review) depends on Phase 2 (TDD) for test generation
+  - Phase 5 (User Profile) enables Phase 1 (Planning) tech stack preference
+  - Phase 6 (Enhancement Catalog) supports Phase 8 (Upgrade) 'What's New' feature
+  - Phase 10 (YAML Modularization) enhances Phase 4 (Incremental Planning) output
   parallel_work_opportunities:
-    track_a: "Phase 1 (Planning) + Phase 5 (User Profile) - Independent systems"
-    track_b: "Phase 3 (Architecture Intelligence) + Phase 6 (Enhancement Catalog) - Separate databases"
-    track_c: "Phase 4 (Code Review) after Phase 2 (TDD) complete"
-    track_d: "Phase 7 (Git Checkpoints) + Phase 8 (Upgrade) - Different concerns"
-    track_e: "Phase 9 (Dashboard Testing) requires Phase 0 foundation only"
-  
+    track_a: Phase 1 (Planning) + Phase 5 (User Profile) - Independent systems
+    track_b: Phase 3 (Architecture Intelligence) + Phase 6 (Enhancement Catalog) -
+      Separate databases
+    track_c: Phase 4 (Code Review) after Phase 2 (TDD) complete
+    track_d: Phase 7 (Git Checkpoints) + Phase 8 (Upgrade) - Different concerns
+    track_e: Phase 9 (Dashboard Testing) requires Phase 0 foundation only
+    track_f: Phase 10 (YAML Modularization) can run parallel with Phase 4 (Planning)
+      or after completion
   deployment_readiness:
-    minimum_viable: "Phase 0 complete - CORTEX functional with existing features"
-    enhanced_capabilities: "Phases 0-5 complete - Planning, TDD, Architecture, Code Review, User Profile"
-    production_ready: "All 10 phases complete - Full feature set validated"
-  
+    minimum_viable: Phase 0 complete - CORTEX functional with existing features
+    enhanced_capabilities: Phases 0-5 complete - Planning, TDD, Architecture, Code
+      Review, User Profile
+    production_ready: All 11 phases complete - Full feature set validated with automatic
+      YAML optimization
   risk_summary:
     high_risk_phases:
-      - "Phase 1: Vision API integration (external dependency)"
-      - "Phase 8: Upgrade system (brain data migration risk)"
-      - "Phase 9: Large repository testing (performance unknowns)"
-    
+    - 'Phase 1: Vision API integration (external dependency)'
+    - 'Phase 8: Upgrade system (brain data migration risk)'
+    - 'Phase 9: Large repository testing (performance unknowns)'
     mitigation_strategy:
-      - "Phase 1: Vision API failures degrade gracefully, don't block planning"
-      - "Phase 8: Comprehensive backup before upgrade, automated rollback"
-      - "Phase 9: Adaptive timeouts, configurable test paths, skip-if-missing logic"
-  
+    - 'Phase 1: Vision API failures degrade gracefully, don''t block planning'
+    - 'Phase 8: Comprehensive backup before upgrade, automated rollback'
+    - 'Phase 9: Adaptive timeouts, configurable test paths, skip-if-missing logic'
   success_criteria:
-    - "All 656 existing CORTEX tests pass (no regressions)"
-    - "Phase-specific acceptance criteria met (documented per deliverable)"
-    - "Performance targets achieved (Phase 9: overview <45s, standard <3min, deep <7min)"
-    - "Integration tests pass (align orchestrator, deploy Gate 19, CLI triggers)"
-    - "Documentation complete (guides, specs, reports)"
-  
+  - All 656 existing CORTEX tests pass (no regressions)
+  - Phase-specific acceptance criteria met (documented per deliverable)
+  - 'Performance targets achieved (Phase 9: overview <45s, standard <3min, deep <7min)'
+  - 'Performance targets achieved (Phase 10: Index loads 80%+ faster, 85%+ token
+    reduction)'
+  - Integration tests pass (align orchestrator, deploy Gate 19, CLI triggers)
+  - Documentation complete (guides, specs, reports)
   user_requirements_mapping:
-    original_request: "comprehensive fix for Application Health Dashboard with proper wiring in align, deploy gates, cli wrappers"
+    original_request: comprehensive fix for Application Health Dashboard with proper
+      wiring in align, deploy gates, cli wrappers
     resolution:
-      dashboard_status: "✅ COMPLETE (December 1, 2025 wiring fix)"
-      comprehensive_plan: "✅ CREATED (CONSOLIDATED-IMPLEMENTATION-PLAN.yaml, 10 phases, 310 hours)"
-      align_integration: "✅ PLANNED (Phase 9.7: System Alignment integration)"
-      deploy_gates: "✅ PLANNED (Phase 9.7: Gate 19 - Application Health Check)"
-      cli_wrappers: "✅ COMPLETE (December 1, 2025 wiring fix - 9 keywords)"
-      live_testing: "✅ PLANNED (Phase 9: KSESSIONS, NOOR CANVAS validation)"
-  
+      dashboard_status: ✅ COMPLETE (December 1, 2025 wiring fix)
+      comprehensive_plan: ✅ CREATED (CONSOLIDATED-IMPLEMENTATION-PLAN.yaml, 11 phases,
+        316.5 hours)
+      align_integration: '✅ PLANNED (Phase 9.7: System Alignment integration)'
+      deploy_gates: '✅ PLANNED (Phase 9.7: Gate 19 - Application Health Check)'
+      cli_wrappers: ✅ COMPLETE (December 1, 2025 wiring fix - 9 keywords)
+      live_testing: '✅ PLANNED (Phase 9: KSESSIONS, NOOR CANVAS validation)'
   next_steps:
-    immediate: "Create CONSOLIDATED-PLAN-SUMMARY.md (user requested alongside this file)"
-    short_term: "Implement Phase 0 (Foundation) - 48 hours"
-    medium_term: "Parallel tracks: Phase 1+5 (Planning+Profile), Phase 3+6 (Architecture+Catalog)"
-    long_term: "Complete all phases sequentially/parallel, validate with Phase 9"
-  
+    immediate: Create CONSOLIDATED-PLAN-SUMMARY.md (user requested alongside this
+      file)
+    short_term: Implement Phase 0 (Foundation) - 48 hours
+    medium_term: 'Parallel tracks: Phase 1+5 (Planning+Profile), Phase 3+6 (Architecture+Catalog)'
+    long_term: Complete all phases sequentially/parallel, validate with Phase 9
   notes:
-    - "Plan created December 1, 2025 in response to user request for comprehensive dashboard fix"
-    - "Dashboard wiring already complete (December 1, 2025 report), plan focuses on validation and enhancement"
-    - "Phase 9 addresses user's specific request for live repository testing (KSESSIONS, NOOR CANVAS)"
-    - "Total effort 310 hours assumes foundation-first approach with parallel work opportunities"
-    - "Estimated completion: ~8-10 weeks with 1 full-time developer, ~4-5 weeks with 2 developers on parallel tracks"
+  - Plan created December 1, 2025 in response to user request for comprehensive dashboard
+    fix
+  - Dashboard wiring already complete (December 1, 2025 report), plan focuses on validation
+    and enhancement
+  - Phase 9 addresses user's specific request for live repository testing (KSESSIONS,
+    NOOR CANVAS)
+  - Total effort 310 hours assumes foundation-first approach with parallel work opportunities
+  - Phase 10 added December 1, 2025 to make YAML modularization systematic (Option
+    B from user request)
+  - Phase 10 makes manual optimization of this file automatic for all future planning
+    operations
+  - 'Estimated completion: ~8-10 weeks with 1 full-time developer, ~4-5 weeks with
+    2 developers on parallel tracks'
