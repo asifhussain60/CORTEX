@@ -1,0 +1,62 @@
+# Phase 4: Incremental Planning System
+# Part of CONSOLIDATED-IMPLEMENTATION-PLAN v1.0.0
+# Created: 2025-12-01
+
+phase_id: phase_4
+name: Incremental Planning System
+priority: 5
+status: not-started
+description: Update planning orchestrator to generate plans incrementally (empty file
+  first, then phases)
+rationale: Large plan generation creates long wait times and risks data loss if interrupted
+objectives:
+- Generate empty plan files first with metadata only
+- Add phases incrementally to show progress
+- Apply to all planning document types (YAML, MD, ADO, Swagger)
+deliverables:
+- id: '4.1'
+  name: Incremental Plan Generation
+  description: Refactor planning_orchestrator.py to create plans in small increments
+  files_affected:
+  - src/orchestrators/planning_orchestrator.py
+  - src/orchestrators/ado_orchestrator.py
+  - src/orchestrators/swagger_orchestrator.py
+  - src/utils/incremental_writer.py
+  acceptance_criteria:
+  - 'Step 1: Create empty plan file with metadata and headers'
+  - 'Step 2: Add phases one at a time with progress updates'
+  - 'Step 3: Show ''Phase 1/5 added'' after each phase'
+  - Plans resumable if interrupted (check existing file, continue from last phase)
+  - Applied to YAML, MD, ADO, and Swagger plan generation
+  estimated_effort: 12 hours
+- id: '4.2'
+  name: Progress Visualization for Planning
+  description: Show real-time progress during plan generation with ETA
+  files_affected:
+  - src/utils/progress_decorator.py
+  - src/orchestrators/planning_orchestrator.py
+  acceptance_criteria:
+  - 'Progress decorator shows ''Planning: Phase 3/7 (43% complete, ETA 2m 15s)'''
+  - Hang detection if phase takes >5x expected time
+  - User can cancel without losing work (partial plan saved)
+  estimated_effort: 5 hours
+- id: '4.3'
+  name: Plan Validation During Generation
+  description: Validate each phase as it's added to catch errors early
+  files_affected:
+  - src/orchestrators/planning_orchestrator.py
+  - src/tier0/plan_validator.py
+  acceptance_criteria:
+  - YAML schema validated after each phase added
+  - DoR/DoD validation runs incrementally
+  - Errors reported immediately, not after all phases generated
+  - Invalid phase discarded, generation continues
+  estimated_effort: 6 hours
+dependencies:
+- phase_0 (Need clean code for refactoring)
+testing_requirements:
+- Generate 10-phase plan and verify incremental creation
+- Interrupt plan generation mid-way, verify resumable
+- Test invalid phase rejection without stopping generation
+- Verify progress updates accurate
+total_estimated_effort: 23 hours

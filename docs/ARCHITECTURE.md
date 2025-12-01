@@ -3,10 +3,11 @@ title: CORTEX Architecture
 description: Complete system architecture including 4-tier brain, 16-agent + 28-orchestrator system, investigation capabilities, and memory persistence
 date: 2025-12-01
 ---
+<!-- Architecture synchronized: 2025-12-01T15:51:16.091835 -->
 
 # CORTEX Architecture
 
-**Version:** 3.4.0  
+**Version:** 3.5.0  
 **Status:** Production Ready  
 **Author:** Asif Hussain
 
@@ -14,7 +15,7 @@ date: 2025-12-01
 
 ## 🎯 System Overview
 
-CORTEX is built on a **4-tier brain architecture** inspired by human cognition, with a **16-agent intelligent routing system**, **28-orchestrator workflow system**, **native investigation capabilities** for root cause analysis, and **persistent memory** across sessions.
+CORTEX is built on a **4-tier brain architecture** inspired by human cognition, with a **94-agent intelligent routing system**, **30-orchestrator workflow system**, **native investigation capabilities** for root cause analysis, and **persistent memory** across sessions.
 
 ```mermaid
 graph TD

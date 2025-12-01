@@ -26,6 +26,7 @@ from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
 from src.agents.base_agent import AgentRequest
+from src.utils.file_structure_optimizer import FileStructureOptimizer
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,9 @@ class PlanningOrchestrator:
         
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
+        
+        # NEW: Initialize FileStructureOptimizer for modular YAML structures
+        self.file_optimizer = FileStructureOptimizer(threshold_bytes=20 * 1024)  # 20KB threshold
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -443,6 +447,21 @@ class PlanningOrchestrator:
             with open(output_path, 'w', encoding='utf-8') as f:
                 yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
             
+            # NEW: Check if file should be split into modular structure
+            if self.file_optimizer.should_split(output_path):
+                logger.info(f"File exceeds threshold, splitting into modular structure...")
+                try:
+                    index_path, phase_paths = self.file_optimizer.split_into_phases(
+                        source_file=output_path,
+                        phases_key="phases",
+                        output_dir=output_path.parent
+                    )
+                    logger.info(f"✓ Modular structure created: {len(phase_paths)} phase files")
+                    output_path = index_path  # Update path to index file
+                except Exception as split_error:
+                    logger.warning(f"⚠️ Failed to split into modular structure: {split_error}")
+                    # Continue with monolithic file
+            
             # NEW Sprint 2: Auto-organize plan into correct category
             try:
                 organized_path, organize_message = self.document_organizer.organize_document(output_path)
@@ -464,16 +483,17 @@ class PlanningOrchestrator:
     def load_plan(self, plan_path: Path) -> Tuple[bool, Optional[Dict[str, Any]], List[str]]:
         """
         Load and validate plan from YAML file.
+        Supports both monolithic and modular structures with lazy loading.
         
         Args:
-            plan_path: Path to plan YAML file
+            plan_path: Path to plan YAML file (index or monolithic)
         
         Returns:
             Tuple of (success, plan_data, errors)
         """
         try:
-            with open(plan_path, 'r', encoding='utf-8') as f:
-                plan_data = yaml.safe_load(f)
+            # Use FileStructureOptimizer for intelligent loading
+            plan_data = self.file_optimizer.load_plan_with_phases(plan_path)
             
             is_valid, errors = self.validate_plan(plan_data)
             return (is_valid, plan_data, errors)

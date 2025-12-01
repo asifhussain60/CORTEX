@@ -196,7 +196,6 @@ class CortexEntry:
                 context_data = self.context_manager.build_context(
                     conversation_id=conversation_id,
                     user_request=user_message,
-                    current_files=[],  # TODO: Get from workspace
                     token_budget=500
                 )
                 
@@ -321,10 +320,15 @@ class CortexEntry:
             if template:
                 self.logger.info(f"Template matched: {template.template_id}")
                 
+                # Build context for template rendering
+                context = {
+                    'operation': template.metadata.get('name', template.template_id.replace('_', ' ').title()) if template.metadata else template.template_id.replace('_', ' ').title()
+                }
+                
                 # Render template with formatter
                 return self.formatter.format_from_template(
                     template.template_id,
-                    context={},
+                    context=context,
                     verbosity="concise" if format_type == "text" else "detailed"
                 )
         except Exception as e:

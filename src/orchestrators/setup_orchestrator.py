@@ -72,10 +72,8 @@ class SetupOrchestrator:
         Creates directory structure and initializes Python virtual environment
         with system site packages isolation enabled.
         """
-        # Create .cortex directory if it doesn't exist
         self.shared_venv_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Create virtual environment with system isolation
         venv.create(
             str(self.shared_venv_path),
             system_site_packages=False,
@@ -105,7 +103,6 @@ class SetupOrchestrator:
                 capture_output=True
             )
         
-        # Create marker file with package list
         marker_file = self.shared_venv_path / ".cortex-tooling-installed"
         marker_data = {"packages": self.CORTEX_TOOLING}
         marker_file.write_text(json.dumps(marker_data, indent=2))
@@ -171,7 +168,6 @@ class SetupOrchestrator:
         if not requirements_file.exists():
             return
         
-        # Create project-specific site-packages directory
         project_site_packages = project_dir / ".project-site-packages"
         project_site_packages.mkdir(parents=True, exist_ok=True)
         
@@ -197,7 +193,6 @@ class SetupOrchestrator:
                 )
                 installed_packages.append(requirement)
         
-        # Create dependency tracking file
         deps_file = project_dir / ".project-dependencies.json"
         deps_data = {"packages": installed_packages}
         deps_file.write_text(json.dumps(deps_data, indent=2))

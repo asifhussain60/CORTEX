@@ -64,6 +64,11 @@ class TemplateLoader:
                 # Traditional template with direct content
                 content = template_config.get('content', '')
             
+            # Build metadata dictionary including the name field
+            metadata = template_config.get('metadata', {})
+            if 'name' in template_config:
+                metadata['name'] = template_config['name']
+            
             template = Template(
                 template_id=template_id,
                 triggers=template_config.get('triggers', []),
@@ -71,7 +76,7 @@ class TemplateLoader:
                 context_needed=template_config.get('context_needed', False),
                 content=content,
                 verbosity=template_config.get('verbosity', 'concise'),
-                metadata=template_config.get('metadata', {})
+                metadata=metadata
             )
             
             self._templates[template_id] = template
@@ -86,7 +91,7 @@ class TemplateLoader:
         """Compose final template content from base structure + placeholders.
         
         This method handles templates that use YAML anchor inheritance with base_structure.
-        It substitutes placeholder fields like {understanding_content} with their actual values.
+        It substitutes placeholder fields like {{understanding_content}} with their actual values.
         
         Args:
             template_config: Template configuration with base_structure
@@ -95,7 +100,7 @@ class TemplateLoader:
             Composed template content with placeholders substituted
             
         Example:
-            base_structure: "## 🎯 {understanding_content}"
+            base_structure: "## 🎯 {{understanding_content}}"
             understanding_content: "You want help"
             Result: "## 🎯 You want help"
         """
@@ -104,13 +109,19 @@ class TemplateLoader:
         # Substitute placeholder fields (anything ending in _content, _name, etc.)
         for key, value in template_config.items():
             # Skip non-content fields
-            if key in ['base_structure', 'triggers', 'response_type', '<<']:
+            if key in ['base_structure', 'triggers', 'response_type', 'context_needed', 
+                      'verbosity', 'metadata', 'name', 'handler', 'expected_orchestrator', '<<']:
                 continue
             
-            # Replace {key} with value
-            placeholder = f'{{{key}}}'
-            if placeholder in base and value:
-                base = base.replace(placeholder, str(value))
+            # Replace {{key}} with value (double braces for runtime substitution)
+            placeholder_double = f'{{{{{key}}}}}'
+            if placeholder_double in base and value:
+                base = base.replace(placeholder_double, str(value))
+            
+            # Also handle single braces for backward compatibility
+            placeholder_single = f'{{{key}}}'
+            if placeholder_single in base and value:
+                base = base.replace(placeholder_single, str(value))
         
         return base
     

@@ -49,7 +49,6 @@ class OnboardingOrchestrator:
         """
         self.tier1 = tier1_api
         
-        # Initialize working_memory (Phase 1.3)
         # Use provided tier1_api if available, otherwise create new WorkingMemory
         if tier1_api:
             self.working_memory = tier1_api
@@ -677,7 +676,6 @@ To update: `update profile`"""
         if not isinstance(profile_data, dict):
             return False
         
-        # Check required fields
         if 'experience_level' in profile_data:
             valid_levels = ["junior", "mid", "senior", "expert"]
             if profile_data['experience_level'] not in valid_levels:
@@ -713,7 +711,6 @@ To update: `update profile`"""
                 "Example: onboard application --app-name MyProject"
             )
         
-        # Validate app name
         if not self._validate_app_name(app_name):
             raise ValueError(
                 f"Invalid application name '{app_name}'. "
@@ -731,7 +728,6 @@ To update: `update profile`"""
         # Store application name in Tier 1
         self.working_memory.store_application_name(app_name)
         
-        # Return confirmation
         return f"Onboarding started for application '{app_name}'. Profile configuration in progress..."
     
     def _extract_app_name(self, command: str) -> Optional[str]:

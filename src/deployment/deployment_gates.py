@@ -214,6 +214,15 @@ class DeploymentGates:
         elif gate18["severity"] == "WARNING" and not gate18["passed"]:
             results["warnings"].append(gate18["message"])
         
+        # Gate 19: Token Efficiency Validation (CRITICAL)
+        gate19 = self._validate_token_efficiency()
+        results["gates"].append(gate19)
+        if gate19["severity"] == "ERROR" and not gate19["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate19["message"])
+        elif gate19["severity"] == "WARNING" and not gate19["passed"]:
+            results["warnings"].append(gate19["message"])
+        
         return results
     
     def _validate_integration_scores(
@@ -2420,5 +2429,109 @@ class DeploymentGates:
             gate["message"] = f"EPM wiring validation failed: {str(e)}"
             gate["details"]["error_type"] = type(e).__name__
             logger.error(f"Gate 18 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_token_efficiency(self) -> Dict[str, Any]:
+        """
+        Gate 19: Token Efficiency Validation (CRITICAL).
+        
+        Validates that all governance files are within their token budgets.
+        Blocks deployment if any file exceeds its allocation.
+        
+        Token Budgets (from TOKEN_EFFICIENCY_ENFORCEMENT SKULL rule):
+        - CORTEX.prompt.md: 5,000 tokens (currently 11,836 = 136% over)
+        - brain-protection-rules.yaml: 8,000 tokens (currently 63,098 = 688% over)
+        - response-templates.yaml: 3,000 tokens (currently 22,752 = 658% over)
+        - copilot-instructions.md: 1,000 tokens (currently 3,416 = 241% over)
+        
+        Total Budget: 17,000 tokens
+        Current Total: 101,102 tokens (494.7% over budget)
+        
+        Returns:
+            Gate result with detailed token analysis
+        """
+        gate = {
+            "name": "Token Efficiency",
+            "passed": True,
+            "severity": "ERROR",
+            "message": "",
+            "details": {}
+        }
+        
+        try:
+            # Import governance_tokens validation function
+            from src.operations.modules.admin.governance_tokens import validate_token_budgets
+            
+            # Run token validation
+            result = validate_token_budgets()
+            
+            gate["details"] = result.get("report_data", {})
+            
+            if not result["success"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"Token budget validation FAILED. "
+                    f"Total: {gate['details'].get('total_current', 0):,} tokens "
+                    f"(Budget: {gate['details'].get('total_budget', 0):,} tokens). "
+                    f"Overage: {gate['details'].get('total_overage', 0):,} tokens. "
+                    f"Deployment BLOCKED until optimization completes."
+                )
+                
+                # Add specific file violations to message
+                files = gate["details"].get("files", [])
+                violations = [f for f in files if not f.get("is_compliant", True)]
+                if violations:
+                    gate["message"] += f"\n\nViolations ({len(violations)} files):"
+                    for file_info in violations[:5]:  # Show first 5
+                        gate["message"] += (
+                            f"\n  • {file_info['file']}: "
+                            f"{file_info['current']:,} / {file_info['budget']:,} tokens "
+                            f"({file_info['overage_pct']:.1f}% over)"
+                        )
+                    if len(violations) > 5:
+                        gate["message"] += f"\n  ... and {len(violations) - 5} more"
+                
+                gate["message"] += (
+                    "\n\nACTION REQUIRED: Execute token optimization phases:"
+                    "\n  Phase 1: Modularization (101K → 11K, -88.8%)"
+                    "\n  Phase 2: Template compression (11K → 5K, -94.9%)"
+                    "\n  Phase 3: Lazy loading (5K → 3K, -96.9%)"
+                    "\n  Phase 4: Reference compression (3K → 2K, -98.0%)"
+                    "\n\nSee: cortex-brain/documents/planning/TOKEN-OPTIMIZATION-HOLISTIC-PLAN.md"
+                )
+                
+                logger.error(
+                    f"Gate 19 FAILED: Token budget exceeded "
+                    f"({gate['details'].get('total_current', 0):,} / "
+                    f"{gate['details'].get('total_budget', 0):,} tokens)"
+                )
+            else:
+                gate["message"] = (
+                    f"All governance files within token budgets. "
+                    f"Total: {gate['details'].get('total_current', 0):,} / "
+                    f"{gate['details'].get('total_budget', 0):,} tokens "
+                    f"({gate['details'].get('compliance_pct', 0):.1f}% compliant)."
+                )
+                logger.info(
+                    f"Gate 19 PASSED: Token efficiency validated "
+                    f"({gate['details'].get('total_current', 0):,} tokens)"
+                )
+        
+        except ImportError as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = (
+                f"Token efficiency validation module not found: {str(e)}. "
+                f"Ensure governance_tokens.py exists in src/operations/modules/admin/"
+            )
+            logger.error(f"Gate 19 import error: {e}", exc_info=True)
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["severity"] = "ERROR"
+            gate["message"] = f"Token efficiency validation failed: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 19 validation error: {e}", exc_info=True)
         
         return gate

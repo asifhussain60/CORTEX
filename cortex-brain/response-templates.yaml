@@ -6,7 +6,7 @@ optimization:
   minimal_templates: 18
   reduction_strategy: Core essentials only + fallback pattern
 shared:
-  standard_header: '## 🧠 CORTEX {title}
+  standard_header: '## 🧠 CORTEX {{title}}
 
     **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
@@ -17,77 +17,77 @@ shared:
 base_templates:
   standard_5_part: &standard_5_part_base
     base_structure: |
-      ## 🧠 CORTEX {operation}
+      ## 🧠 CORTEX {{operation}}
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       ### 🎯 My Understanding Of Your Request
-      {understanding_content}
+      {{understanding_content}}
       
       ### ⚠️ Challenge
-      {challenge_content}
+      {{challenge_content}}
       
       ### 💬 Response
-      {response_content}
+      {{response_content}}
       
       ### 📝 Your Request
-      {request_echo_content}
+      {{request_echo_content}}
       
       ### 🔍 Next Steps
-      {next_steps_content}
+      {{next_steps_content}}
   
   tech_aware_response: &tech_aware_base
     base_structure: |
-      ## 🧠 CORTEX {operation}
+      ## 🧠 CORTEX {{operation}}
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       ### 🎯 My Understanding Of Your Request
-      {understanding_content}
+      {{understanding_content}}
       
       ### ⚠️ Challenge
-      {challenge_content}
+      {{challenge_content}}
       
       ### 💬 Response
       
       **🏆 Recommended Solution:**
-      {recommended_solution}
+      {{recommended_solution}}
       
       {{#if has_tech_stack}}
-      **🔧 {cloud_provider_name}-Aligned Implementation:**
-      {company_aligned_implementation}
+      **🔧 {{cloud_provider_name}}-Aligned Implementation:**
+      {{company_aligned_implementation}}
       
       *Deployment Options:*
-      - **Cloud Platform:** {cloud_deployment}
-      - **Container Orchestration:** {container_orchestration}
-      - **CI/CD:** {cicd_pipeline}
-      - **Infrastructure as Code:** {iac_tool}
-      - **Monitoring:** {monitoring_platform}
+      - **Cloud Platform:** {{cloud_deployment}}
+      - **Container Orchestration:** {{container_orchestration}}
+      - **CI/CD:** {{cicd_pipeline}}
+      - **Infrastructure as Code:** {{iac_tool}}
+      - **Monitoring:** {{monitoring_platform}}
       {{/if}}
       
       ### 📝 Your Request
-      {request_echo_content}
+      {{request_echo_content}}
       
       ### 🔍 Next Steps
-      {next_steps_content}
+      {{next_steps_content}}
   
   compact_format: &compact_format_base
     base_structure: |
-      ## 🧠 CORTEX {operation}
-      **{understanding_brief}** | *No Challenge*
+      ## 🧠 CORTEX {{operation}}
+      **{{understanding_brief}}** | *No Challenge*
       
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       💬 **Response:**
-      {response_content}
+      {{response_content}}
       
-      📝 **Your Request:** {request_echo_content}
+      📝 **Your Request:** {{request_echo_content}}
       
-      🔍 Next Steps: {next_steps_content}
+      🔍 Next Steps: {{next_steps_content}}
 templates:
   onboarding:
     <<: *standard_5_part_base
@@ -2168,6 +2168,11 @@ templates:
     - optimize system
     - clean and optimize
     response_type: detailed
+    understanding_content: "You want to optimize CORTEX system performance by cleaning brain databases, removing outdated cache entries, and compacting SQLite files."
+    challenge_content: "No Challenge - Optimization is a safe, non-destructive operation with automatic backups."
+    response_content: "**Optimization Process:**\n   \n   1. **Brain Database Cleaning** - Removes outdated conversation entries (70-conversation FIFO)\n   2. **Cache Cleanup** - Clears expired cache entries and orphaned data\n   3. **SQLite Vacuuming** - Compacts Tier 1, Tier 2, and Tier 3 databases\n   4. **Performance Validation** - Verifies query performance (<100ms requirement)\n   \n   **Expected Results:**\n   • Space savings: 50-200 MB typical\n   • Query performance: <100ms (Tier 1), <500ms (Tier 2/3)\n   • Database integrity: Validated after optimization\n   • Cache effectiveness: 6.4x speedup maintained\n   \n   **Safety Features:**\n   • Automatic backup before optimization\n   • Read-only operations during validation\n   • Rollback capability if issues detected"
+    request_echo_content: "Optimize CORTEX system (clean databases, vacuum SQLite, improve performance)"
+    next_steps_content: "**Optimization Complete:**\n   \n   1. ✅ Check space savings reported above\n   2. ✅ Verify query performance metrics\n   3. ✅ Run `healthcheck` to validate system integrity\n   4. ✅ Continue normal CORTEX operations\n   \n   **Performance Monitoring:**\n   Use `cache status` to check effectiveness metrics after optimization."
 
   workflow_execution:
     <<: *standard_5_part_base

@@ -5,6 +5,8 @@ CORTEX Simplified Deployment Script
 Deploys CORTEX to main branch using git worktree approach.
 Radically simpler than deploy_cortex.py - no temp directories, no checkpoints, no rebuilds.
 
+Phase 2.1: Added architecture synchronization before deployment.
+
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
@@ -15,6 +17,12 @@ import sys
 import shutil
 from pathlib import Path
 from typing import List, Set
+
+
+# Add src to path for architecture sync import
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from src.utils.architecture_sync import ArchitectureSync
 
 
 def run_command(cmd: List[str], cwd: Path = None, check: bool = True) -> subprocess.CompletedProcess:
@@ -104,7 +112,6 @@ def merge_copilot_instructions(main_worktree: Path, cortex_root: Path) -> None:
     with open(cortex_instructions, 'r', encoding='utf-8') as f:
         cortex_content = f.read()
     
-    # Markers for CORTEX section
     cortex_start_marker = "# GitHub Copilot Instructions for CORTEX"
     cortex_end_marker = "**License:** Source-Available (Use Allowed, No Contributions)"
     
@@ -172,33 +179,48 @@ def deploy_cortex() -> int:
     print()
     
     try:
+        # Step 0: Synchronize ARCHITECTURE.md before deployment
+        print("🔄 Synchronizing ARCHITECTURE.md...")
+        arch_sync = ArchitectureSync(cortex_root)
+        success, message = arch_sync.update_architecture_doc()
+        if success:
+            print(f"  ✅ Architecture synchronized")
+            # Show key stats
+            for line in message.strip().split('\n'):
+                if line.strip():
+                    print(f"     {line.strip()}")
+        else:
+            print(f"  ⚠️  Warning: Architecture sync failed: {message}")
+            print("     Continuing with deployment...")
+        print()
+        
         # Step 1: Clean up any existing worktree
         if main_worktree.exists():
-            print("🧹 Cleaning up existing worktree...")
+            print("🧹 Step 1: Cleaning up existing worktree...")
             run_command(['git', 'worktree', 'remove', '--force', str(main_worktree)], cwd=cortex_root, check=False)
             if main_worktree.exists():
                 shutil.rmtree(main_worktree)
         
         # Step 2: Create worktree for main branch
-        print("📦 Creating worktree for main branch...")
+        print("📦 Step 2: Creating worktree for main branch...")
         run_command(['git', 'worktree', 'add', str(main_worktree), 'main'], cwd=cortex_root)
         print("  ✅ Worktree created")
         print()
         
         # Step 3: Copy files to main worktree
-        print("📋 Copying files to main worktree...")
+        print("📋 Step 3: Copying files to main worktree...")
         exclude_patterns = get_exclude_patterns()
         file_count, total_size = copy_files(cortex_root, main_worktree, exclude_patterns)
         print(f"  ✅ Copied {file_count} files ({total_size / (1024*1024):.2f} MB)")
         print()
         
         # Step 4: Merge copilot-instructions.md
-        print("🔀 Merging copilot-instructions.md...")
+        print("🔀 Step 4: Merging copilot-instructions.md...")
         merge_copilot_instructions(main_worktree, cortex_root)
         print()
         
         # Step 5: Commit changes
-        print("💾 Committing changes to main branch...")
+        print("💾 Step 5: Committing changes to main branch...")
         run_command(['git', 'add', '.'], cwd=main_worktree)
         
         # Check if there are changes to commit
@@ -206,7 +228,7 @@ def deploy_cortex() -> int:
         if status.stdout.strip():
             run_command([
                 'git', 'commit', '-m', 
-                f'Deploy CORTEX 3.2.0\n\nDeployed {file_count} files ({total_size / (1024*1024):.2f} MB)'
+                f'Deploy CORTEX 3.5.0\n\nDeployed {file_count} files ({total_size / (1024*1024):.2f} MB)\nArchitecture synchronized before deployment'
             ], cwd=main_worktree)
             print("  ✅ Changes committed")
         else:
@@ -214,13 +236,13 @@ def deploy_cortex() -> int:
         print()
         
         # Step 6: Push to origin
-        print("☁️  Pushing to origin/main...")
+        print("☁️  Step 6: Pushing to origin/main...")
         run_command(['git', 'push', 'origin', 'main'], cwd=main_worktree)
         print("  ✅ Pushed to origin")
         print()
         
         # Step 7: Cleanup worktree
-        print("🧹 Cleaning up worktree...")
+        print("🧹 Step 7: Cleaning up worktree...")
         run_command(['git', 'worktree', 'remove', str(main_worktree)], cwd=cortex_root)
         print("  ✅ Worktree removed")
         print()

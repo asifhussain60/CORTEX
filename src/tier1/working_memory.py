@@ -1609,7 +1609,6 @@ class WorkingMemory:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Check if application record exists
             cursor.execute("SELECT COUNT(*) FROM application WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
