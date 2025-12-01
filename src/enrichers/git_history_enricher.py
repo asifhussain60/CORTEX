@@ -123,7 +123,6 @@ class GitHistoryEnricher:
             >>> print(f"{changes['total_commits']} commits in last 7 days")
         """
         try:
-            # Get commits from last N days
             since_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
             
             cmd = [

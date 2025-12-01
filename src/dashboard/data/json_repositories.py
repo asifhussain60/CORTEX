@@ -255,7 +255,6 @@ class JSONHealthScoreRepository(IHealthScoreRepository):
         if system_health:
             return HealthScore.from_dict(system_health)
         else:
-            # Return default health score
             return HealthScore()
     
     def get_component_health(self, component_path: str) -> Optional[HealthScore]:

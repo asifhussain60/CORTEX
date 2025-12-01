@@ -175,14 +175,12 @@ class BrowserCacheHeaders:
         
         stat = file_path.stat()
         
-        # Check If-None-Match (ETag validation)
         if_none_match = request_headers.get('If-None-Match', '')
         if if_none_match:
             current_etag = f'"{stat.st_mtime}-{stat.st_size}"'
             if if_none_match == current_etag:
                 return True
         
-        # Check If-Modified-Since
         if_modified_since = request_headers.get('If-Modified-Since', '')
         if if_modified_since:
             try:

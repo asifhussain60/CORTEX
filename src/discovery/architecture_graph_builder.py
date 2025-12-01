@@ -144,11 +144,9 @@ class ArchitectureGraphBuilder:
     def _add_node(self, file_path: Path, repo_root: Path) -> None:
         """Add a node for the given file."""
         try:
-            # Get relative path as node ID
             relative_path = file_path.relative_to(repo_root)
             node_id = str(relative_path).replace('\\', '/')
             
-            # Get display label (filename without extension)
             label = file_path.stem
             
             # Determine language
@@ -157,7 +155,6 @@ class ArchitectureGraphBuilder:
             # Count lines of code
             loc = self._count_loc(file_path)
             
-            # Create node
             node = ModuleNode(
                 id=node_id,
                 label=label,
@@ -207,7 +204,6 @@ class ArchitectureGraphBuilder:
             
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
-                    # import module
                     for alias in node.names:
                         self._add_edge_if_internal(source_id, alias.name, repo_root)
                 

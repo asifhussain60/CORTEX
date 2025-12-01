@@ -245,7 +245,6 @@ class CapabilityScanner:
                 continue
             
             try:
-                # Get first commit (when feature was added)
                 file_path = capability.files[0]
                 result = subprocess.run(
                     ['git', 'log', '--diff-filter=A', '--format=%ad', '--date=short', '--', file_path],
@@ -258,7 +257,6 @@ class CapabilityScanner:
                 if result.stdout.strip():
                     capability.git_added = result.stdout.strip().split('\n')[-1]
                 
-                # Get last modification date
                 result = subprocess.run(
                     ['git', 'log', '-1', '--format=%ad', '--date=short', '--', file_path],
                     capture_output=True,

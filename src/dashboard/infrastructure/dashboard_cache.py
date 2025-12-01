@@ -89,7 +89,6 @@ class DashboardCache:
         self._misses = 0
         self._evictions = 0
         
-        # Create cache directory if persistence enabled
         if self.enable_persistence:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
             logger.info(f"Dashboard cache persistence enabled: {self.cache_dir}")
@@ -113,7 +112,6 @@ class DashboardCache:
             logger.debug(f"Cache MISS: {key}")
             return None
         
-        # Check expiration
         if entry.is_expired():
             del self._cache[key]
             self._misses += 1
@@ -147,7 +145,6 @@ class DashboardCache:
         now = datetime.now()
         expires_at = now + timedelta(hours=ttl)
         
-        # Calculate size
         try:
             size_bytes = len(json.dumps(value, default=str))
         except Exception:
@@ -162,7 +159,6 @@ class DashboardCache:
             size_bytes=size_bytes
         )
         
-        # Check memory limit and evict if necessary
         self._ensure_memory_limit(size_bytes)
         
         self._cache[key] = entry
@@ -320,7 +316,6 @@ class DashboardCache:
         Returns:
             Generated cache key
         """
-        # Create deterministic string from args
         args_str = json.dumps(
             {
                 'args': args,

@@ -19,7 +19,6 @@ class ExpressionSpecification(Specification[T]):
     Provides a simple way to create specifications without creating new classes.
     
     Example:
-        # Create specification from lambda
         is_adult = ExpressionSpecification(lambda person: person.age >= 18)
         
         # Use in filtering

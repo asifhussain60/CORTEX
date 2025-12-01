@@ -255,7 +255,6 @@ class EntryPointScanner:
             "resource planning": "TimeframeEstimator"
         }
         
-        # Check trigger keywords
         trigger_lower = trigger.lower()
         template_lower = template_name.lower()
         
@@ -291,7 +290,6 @@ class EntryPointScanner:
         orphaned_triggers = []
         wired_orchestrators = set()
         
-        # Check for orphaned triggers
         for trigger, metadata in entry_points.items():
             expected = metadata["expected_orchestrator"]
             if expected and expected not in discovered_orchestrators:

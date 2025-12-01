@@ -93,7 +93,6 @@ class PPTXExporter:
         
         logger.info("Starting PPTX export...")
         
-        # Create presentation
         self.prs = Presentation()
         self._setup_presentation()
         
@@ -127,7 +126,6 @@ class PPTXExporter:
     
     def _setup_presentation(self):
         """Setup presentation metadata and slide layouts"""
-        # Set presentation properties
         self.prs.core_properties.title = self.config.title
         self.prs.core_properties.author = self.config.author
         self.prs.core_properties.created = datetime.now()

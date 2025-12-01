@@ -89,7 +89,6 @@ class DocumentationScanner:
             # Extract #file: references
             file_refs = re.findall(r'#file:([^\s\)]+)', content)
             
-            # Check for broken references
             broken_refs = []
             for ref in file_refs:
                 ref_path = self.prompts_dir / ref
@@ -153,7 +152,6 @@ class DocumentationScanner:
             if "admin" in orchestrator_name.lower():
                 continue
             
-            # Check if mentioned in documentation
             name_parts = re.findall(r'[A-Z][a-z]+', orchestrator_name)
             
             found = any(

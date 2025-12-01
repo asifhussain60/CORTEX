@@ -58,7 +58,6 @@ class RenderArchitectureGraphUseCase:
         logger.info(f"Rendering architecture graph (filter: {filter_by})")
         
         try:
-            # Get data from repositories
             components = self.component_repo.get_all()
             dependencies = self.dependency_repo.get_all()
             
@@ -114,7 +113,6 @@ class RenderArchitectureGraphUseCase:
                 }
                 links.append(link)
             
-            # Calculate graph statistics
             circular_deps = [d for d in dependencies if d.is_circular]
             cross_layer_deps = [d for d in dependencies if d.is_cross_layer]
             

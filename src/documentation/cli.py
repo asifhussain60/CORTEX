@@ -18,7 +18,6 @@ def cmd_generate(args):
     print(f"Parallel: {'Yes' if args.parallel else 'No'}")
     print(f"{'='*60}\n")
     
-    # Initialize orchestrator
     orchestrator = DocumentationOrchestrator(
         workspace_root=args.workspace,
         output_dir=args.output
@@ -116,7 +115,6 @@ def cmd_validate(args):
         print(f"❌ Documentation directory not found: {docs_dir}")
         return 1
     
-    # Check required files
     required_files = [
         'index.md',
         'EXECUTIVE-SUMMARY.md',
@@ -137,13 +135,11 @@ def cmd_validate(args):
             missing.append(file)
             print(f"  ❌ {file} (missing)")
     
-    # Check ChatGPT prompts
     prompts_dir = docs_dir / 'chatgpt-prompts'
     if prompts_dir.exists():
         prompt_count = len(list(prompts_dir.glob('*.md')))
         print(f"\n  ✅ ChatGPT prompts: {prompt_count} files")
     
-    # Check Mermaid diagrams
     diagrams_dir = docs_dir / 'mermaid'
     if diagrams_dir.exists():
         diagram_count = len(list(diagrams_dir.rglob('*.mmd')))
@@ -219,7 +215,6 @@ Examples:
   # Scan workspace for capabilities
   python -m src.documentation.cli scan
   
-  # Validate generated documentation
   python -m src.documentation.cli validate --docs-dir docs
   
   # Show generation report
@@ -261,7 +256,6 @@ Examples:
     )
     scan_parser.set_defaults(func=cmd_scan)
     
-    # Validate command
     validate_parser = subparsers.add_parser('validate', help='Validate generated documentation')
     validate_parser.add_argument(
         '--docs-dir',

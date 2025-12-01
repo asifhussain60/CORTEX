@@ -292,7 +292,6 @@ class InputValidator:
         if check_extension:
             extension = file.suffix.lower()
             
-            # Check forbidden list first (security priority)
             if extension in self.forbidden_extensions:
                 return ValidationResult(
                     is_valid=False,
@@ -305,7 +304,6 @@ class InputValidator:
                     }
                 )
             
-            # Check allowed list
             if extension not in self.allowed_extensions:
                 return ValidationResult(
                     is_valid=False,

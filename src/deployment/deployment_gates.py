@@ -19,7 +19,6 @@ import ast
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
-# Import template validator
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from validation.template_header_validator import TemplateHeaderValidator
@@ -429,7 +428,6 @@ class DeploymentGates:
             'template_gen' - Part of test template generation
             'production' - In production code path
         """
-        # Get the line where mock was found
         match_line_num = content[:match_start].count('\n')
         lines = content.split('\n')
         match_line = lines[match_line_num] if match_line_num < len(lines) else ""
@@ -444,22 +442,18 @@ class DeploymentGates:
             if 'imports =' in context_text or '[' in context_text:
                 return 'template_gen'
         
-        # Check if in __main__ block
         lines_before = lines[:match_line_num]
         for line in reversed(lines_before[-50:]):  # Check last 50 lines
             if 'if __name__' in line and '__main__' in line:
                 return 'main_block'
         
-        # Check surrounding context for clues
         context_start = max(0, match_start - 500)
         context_end = min(len(content), match_start + 500)
         context = content[context_start:context_end].lower()
         
-        # Check for introspection patterns
         if 'introspect' in context or 'getattribute' in context or 'property name' in context:
             return 'introspection'
         
-        # Check for template generation patterns
         if 'template' in context and ('generate' in context or 'test_code' in context):
             return 'template_gen'
         
@@ -469,7 +463,6 @@ class DeploymentGates:
             if 'import' in context and ('[' in context or 'list' in context):
                 return 'template_gen'
         
-        # Check for test helper functions
         if 'get_test_instance' in context or 'for testing' in context:
             return 'main_block'
         
@@ -538,12 +531,10 @@ class DeploymentGates:
         
         versions = {}
         
-        # Check VERSION file
         version_file = self.project_root / "VERSION"
         if version_file.exists():
             versions["VERSION"] = version_file.read_text().strip()
         
-        # Check package.json
         package_json = self.project_root / "package.json"
         if package_json.exists():
             try:
@@ -552,7 +543,6 @@ class DeploymentGates:
             except Exception:
                 versions["package.json"] = "error"
         
-        # Check CORTEX.prompt.md
         prompt_path = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if prompt_path.exists():
             try:
@@ -564,7 +554,6 @@ class DeploymentGates:
             except Exception:
                 pass
         
-        # Check consistency
         unique_versions = set(versions.values())
         
         if len(unique_versions) > 1:
@@ -616,7 +605,6 @@ class DeploymentGates:
             critical_issues = []
             warnings = []
             
-            # Validate schema version
             if schema_version not in ["3.2", "3.3"]:
                 warnings.append(f"Schema version {schema_version} (expected 3.2+)")
             
@@ -624,14 +612,11 @@ class DeploymentGates:
             if not base_templates:
                 critical_issues.append("Missing base_templates section (v3.2 architecture required)")
             else:
-                # Validate base template structure
                 for base_name, base_data in base_templates.items():
                     if "base_structure" not in base_data:
                         critical_issues.append(f"Base template '{base_name}' missing base_structure")
             
-            # Validate individual templates
             for template_name, template_data in template_defs.items():
-                # Check for old format patterns
                 content_str = str(template_data.get("content", "")) + str(template_data.get("base_structure", ""))
                 if "[✓ Accept OR ⚡ Challenge]" in content_str:
                     critical_issues.append(f"Template '{template_name}' uses old Challenge format")
@@ -727,14 +712,12 @@ class DeploymentGates:
             "can_instantiate": False
         }
         
-        # Check 1: Orchestrator file exists
         orchestrator_path = self.project_root / "src" / "orchestrators" / "git_checkpoint_orchestrator.py"
         if orchestrator_path.exists():
             checks["orchestrator_exists"] = True
         else:
             issues.append("GitCheckpointOrchestrator file not found")
         
-        # Check 2: Can import orchestrator
         if checks["orchestrator_exists"]:
             try:
                 import sys
@@ -748,12 +731,10 @@ class DeploymentGates:
             except Exception as e:
                 issues.append(f"Import error: {e}")
         
-        # Check 3: Configuration file exists
         config_path = self.project_root / "cortex-brain" / "git-checkpoint-rules.yaml"
         if config_path.exists():
             checks["config_exists"] = True
             
-            # Check 4: Validate configuration content
             try:
                 import yaml
                 with open(config_path, 'r', encoding='utf-8') as f:
@@ -765,7 +746,6 @@ class DeploymentGates:
                 if missing_sections:
                     issues.append(f"Config missing sections: {', '.join(missing_sections)}")
                 else:
-                    # Validate auto_checkpoint settings
                     auto_cp = config.get("auto_checkpoint", {})
                     if not auto_cp.get("enabled"):
                         issues.append("Auto-checkpoints disabled in config")
@@ -777,14 +757,12 @@ class DeploymentGates:
                     if missing_triggers:
                         issues.append(f"Missing checkpoint triggers: {', '.join(missing_triggers)}")
                     
-                    # Validate retention policy
                     retention = config.get("retention", {})
                     if not retention.get("max_age_days"):
                         issues.append("Retention policy missing max_age_days")
                     if not retention.get("max_count"):
                         issues.append("Retention policy missing max_count")
                     
-                    # Validate safety checks
                     safety = config.get("safety", {})
                     required_safety = ["detect_uncommitted_changes", "warn_on_uncommitted"]
                     missing_safety = [s for s in required_safety if not safety.get(s)]
@@ -802,7 +780,6 @@ class DeploymentGates:
         else:
             issues.append("git-checkpoint-rules.yaml not found")
         
-        # Check 5: Brain protection rule active
         brain_rules_path = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
         if brain_rules_path.exists():
             try:
@@ -826,7 +803,6 @@ class DeploymentGates:
         else:
             issues.append("brain-protection-rules.yaml not found")
         
-        # Check 6: Can instantiate orchestrator
         if checks["orchestrator_imports"]:
             try:
                 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
@@ -843,7 +819,6 @@ class DeploymentGates:
             except Exception as e:
                 issues.append(f"Cannot instantiate orchestrator: {e}")
         
-        # Calculate overall status
         gate["details"] = {
             "checks": checks,
             "issues": issues,
@@ -902,7 +877,6 @@ class DeploymentGates:
             "documented_in_prompt": False
         }
         
-        # Check 1: Look for API documentation files
         api_doc_paths = [
             self.project_root / "docs" / "api" / "swagger.json",
             self.project_root / "docs" / "api" / "openapi.yaml",
@@ -921,7 +895,6 @@ class DeploymentGates:
         if not checks["api_file_exists"]:
             issues.append("No API documentation file found (swagger.json or openapi.yaml)")
         
-        # Check 2: Validate OpenAPI structure
         if api_doc_file:
             try:
                 import yaml
@@ -934,14 +907,12 @@ class DeploymentGates:
                     with open(api_doc_file, 'r', encoding='utf-8') as f:
                         spec = yaml.safe_load(f)
                 
-                # Validate required OpenAPI 3.0+ fields
                 required_fields = ["openapi", "info", "paths"]
                 missing_fields = [f for f in required_fields if f not in spec]
                 
                 if missing_fields:
                     issues.append(f"Invalid OpenAPI structure: missing {', '.join(missing_fields)}")
                 else:
-                    # Check OpenAPI version
                     version = spec.get("openapi", "")
                     if not version.startswith("3."):
                         issues.append(f"OpenAPI version {version} not supported (require 3.0+)")
@@ -966,7 +937,6 @@ class DeploymentGates:
             except Exception as e:
                 issues.append(f"Could not validate API doc structure: {e}")
         
-        # Check 3: Verify in capabilities.yaml
         capabilities_path = self.project_root / "cortex-brain" / "capabilities.yaml"
         if capabilities_path.exists():
             try:
@@ -986,7 +956,6 @@ class DeploymentGates:
         else:
             issues.append("capabilities.yaml not found")
         
-        # Check 4: Verify documented in CORTEX.prompt.md
         prompt_path = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if prompt_path.exists():
             try:
@@ -1003,7 +972,6 @@ class DeploymentGates:
         else:
             issues.append("CORTEX.prompt.md not found")
         
-        # Calculate overall status
         gate["details"] = {
             "checks": checks,
             "issues": issues,
@@ -1079,14 +1047,12 @@ class DeploymentGates:
             "entry_point_wired": False
         }
         
-        # Check 1: Module file exists
         module_path = self.project_root / "src" / "agents" / "estimation" / "timeframe_estimator.py"
         if module_path.exists():
             checks["module_exists"] = True
         else:
             issues.append("TimeframeEstimator module not found at src/agents/estimation/timeframe_estimator.py")
         
-        # Check 2: Can import module
         if checks["module_exists"]:
             try:
                 import sys
@@ -1096,7 +1062,6 @@ class DeploymentGates:
                 from src.agents.estimation.timeframe_estimator import TimeframeEstimator
                 checks["module_imports"] = True
                 
-                # Check 3: Required methods exist
                 estimator = TimeframeEstimator()
                 required_methods = [
                     "estimate_timeframe",
@@ -1118,7 +1083,6 @@ class DeploymentGates:
             except Exception as e:
                 issues.append(f"Error instantiating TimeframeEstimator: {e}")
         
-        # Check 4: Test file exists
         test_path = self.project_root / "tests" / "test_timeframe_estimator.py"
         if test_path.exists():
             checks["has_tests"] = True
@@ -1134,7 +1098,6 @@ class DeploymentGates:
         else:
             issues.append("No test file found at tests/test_timeframe_estimator.py")
         
-        # Check 6: Documentation exists
         doc_paths = [
             self.project_root / "cortex-brain" / "documents" / "implementation-guides" / "swagger-entry-point-guide.md",
             self.project_root / ".github" / "prompts" / "modules" / "timeframe-estimation-guide.md"
@@ -1173,7 +1136,6 @@ class DeploymentGates:
         else:
             issues.append("response-templates.yaml not found")
         
-        # Calculate overall status
         gate["details"] = {
             "checks": checks,
             "issues": issues,
@@ -1312,11 +1274,9 @@ class DeploymentGates:
                         issues.append(f"BLOCKED FILE: {item.name} matches blocked pattern '{pattern}'")
                         break
         
-        # Check 3: Check for specific blocked files
         for blocked_file in blocked_specific_files:
             file_path = self.project_root / blocked_file
             if file_path.exists():
-                # Check if not already captured by patterns
                 rel_path = str(blocked_file)
                 if rel_path not in blocked_found["files"]:
                     blocked_found["files"].append(rel_path)
@@ -1329,7 +1289,6 @@ class DeploymentGates:
             try:
                 content = deploy_script.read_text(encoding='utf-8')
                 
-                # Check for critical exclusions
                 critical_exclusions = [
                     'test_merge',
                     '.deploy-staging',   # Current staging folder name
@@ -1354,7 +1313,6 @@ class DeploymentGates:
         else:
             issues.append("deploy_cortex.py not found - cannot validate exclusion configuration")
         
-        # Calculate results
         gate["details"] = {
             "blocked_found": blocked_found,
             "issues": issues,
@@ -1420,7 +1378,6 @@ class DeploymentGates:
             "orchestrator_wiring": False
         }
         
-        # Check 1: CORTEX.prompt.md at .github/prompts/
         entry_point = self.project_root / '.github' / 'prompts' / 'CORTEX.prompt.md'
         if entry_point.exists():
             checks["entry_point"] = True
@@ -1438,7 +1395,6 @@ class DeploymentGates:
         else:
             issues.append(f"CRITICAL: Entry point not found at .github/prompts/CORTEX.prompt.md")
         
-        # Check 2: cortex-brain/ folder structure
         brain_path = self.project_root / 'cortex-brain'
         required_brain_dirs = ['tier1', 'tier3', 'documents', 'templates']
         if brain_path.exists():
@@ -1490,7 +1446,6 @@ class DeploymentGates:
         else:
             issues.append("response-templates.yaml not found in cortex-brain/")
         
-        # Check 5: Brain protection rules exist
         protection_file = brain_path / 'brain-protection-rules.yaml' if brain_path.exists() else None
         if protection_file and protection_file.exists():
             try:
@@ -1508,7 +1463,6 @@ class DeploymentGates:
         else:
             issues.append("brain-protection-rules.yaml not found in cortex-brain/")
         
-        # Check 6: Key orchestrators wired to entry points
         # Check that response-templates.yaml references key orchestrators
         wired_ok = True
         if templates_file and templates_file.exists():
@@ -1529,7 +1483,6 @@ class DeploymentGates:
             wired_ok = False
         checks["orchestrator_wiring"] = wired_ok
         
-        # Calculate results
         passed_checks = sum(1 for v in checks.values() if v)
         total_checks = len(checks)
         
@@ -1588,7 +1541,6 @@ class DeploymentGates:
         }
         
         try:
-            # Import validator
             from validators.next_steps_validator import NextStepsValidator
             
             validator = NextStepsValidator(self.project_root)
@@ -1746,7 +1698,6 @@ class DeploymentGates:
                 else:
                     gate["details"]["issues"].append("TDDWorkflowConfig missing enable_git_checkpoints parameter")
             
-            # Check 3: State transitions create checkpoints
             if tdd_orch_path.exists():
                 content = tdd_orch_path.read_text(encoding='utf-8')
                 has_checkpoints = (
@@ -1873,35 +1824,30 @@ class DeploymentGates:
             else:
                 gate["details"]["missing_features"].append("SWAGGER complexity analyzer")
             
-            # Check 2: Work planner
             planner_path = self.project_root / "src" / "orchestrators" / "planning_orchestrator.py"
             if planner_path.exists():
                 gate["details"]["required_features"]["work_planner"] = True
             else:
                 gate["details"]["missing_features"].append("Work planner (feature planning)")
             
-            # Check 3: ADO EPM
             ado_path = self.project_root / "src" / "orchestrators" / "ado_work_item_orchestrator.py"
             if ado_path.exists():
                 gate["details"]["required_features"]["ado_epm"] = True
             else:
                 gate["details"]["missing_features"].append("ADO EPM (work item management)")
             
-            # Check 4: View discovery crawler
             view_discovery_path = self.project_root / "src" / "agents" / "view_discovery_agent.py"
             if view_discovery_path.exists():
                 gate["details"]["required_features"]["view_discovery"] = True
             else:
                 gate["details"]["missing_features"].append("View discovery crawler")
             
-            # Check 5: Feedback system
             feedback_path = self.project_root / "src" / "agents" / "feedback_agent.py"
             if feedback_path.exists():
                 gate["details"]["required_features"]["feedback_system"] = True
             else:
                 gate["details"]["missing_features"].append("Feedback system")
             
-            # Check deployment manifest includes all features
             manifest_path = self.project_root / "publish" / "deployment-manifest.json"
             if manifest_path.exists():
                 manifest_content = json.loads(manifest_path.read_text(encoding='utf-8'))
@@ -1981,7 +1927,6 @@ class DeploymentGates:
                 "publish_branch_orchestrator.py"
             ]
             
-            # Check each file in manifest
             for file_path in packaged_files:
                 for pattern in admin_patterns:
                     if pattern in file_path:
@@ -2046,7 +1991,6 @@ class DeploymentGates:
         }
         
         try:
-            # Check Setup EPM orchestrator
             epm_path = self.project_root / "src" / "orchestrators" / "setup_epm_orchestrator.py"
             if not epm_path.exists():
                 gate["passed"] = False
@@ -2068,7 +2012,6 @@ class DeploymentGates:
                 "enterprise documentation"
             ]
             
-            # Check for admin triggers
             for trigger in admin_triggers:
                 if trigger.lower() in content.lower():
                     gate["details"]["admin_triggers_found"].append(trigger)
@@ -2316,7 +2259,6 @@ class DeploymentGates:
                 "checkpoint_system": "WorkCheckpoint" in layer3_content
             }
             
-            # Calculate total test count
             total_tests = sum(
                 result.get("test_count", 0) 
                 for result in test_results.values()

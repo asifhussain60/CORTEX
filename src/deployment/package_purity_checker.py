@@ -71,25 +71,21 @@ class PackagePurityChecker:
             "unexpected_files": []
         }
         
-        # Check for admin directory leaks
         admin_leaks = self._check_admin_directories()
         if admin_leaks:
             results["is_pure"] = False
             results["admin_leaks"] = admin_leaks
         
-        # Check for admin commands in prompts
         prompt_leaks = self._check_prompt_sanitization()
         if prompt_leaks:
             results["is_pure"] = False
             results["prompt_leaks"] = prompt_leaks
         
-        # Check for admin triggers in templates
         template_leaks = self._check_template_sanitization()
         if template_leaks:
             results["is_pure"] = False
             results["template_leaks"] = template_leaks
         
-        # Check for unexpected file additions
         unexpected = self._check_unexpected_files()
         if unexpected:
             results["unexpected_files"] = unexpected
@@ -121,7 +117,6 @@ class PackagePurityChecker:
         """
         leaks = []
         
-        # Check main prompt
         prompt_path = self.package_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if not prompt_path.exists():
             return leaks
@@ -198,7 +193,6 @@ class PackagePurityChecker:
             if file_path.is_dir():
                 continue
             
-            # Check if file matches expected patterns
             relative_path = file_path.relative_to(self.package_root)
             
             # Skip if matches any expected pattern
