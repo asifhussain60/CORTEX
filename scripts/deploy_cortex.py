@@ -633,7 +633,7 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
     
     logger.info(f"  ✅ Deployment manifest created: {len(manifest_data['files'])} files")
     logger.info(f"     - {manifest_file_gate.relative_to(project_root)}")
-    logger.info(f"     - {manifest_file_staging.relative_to(project_root)}")
+    logger.info(f"     - {manifest_file_staging}")
     
     return stats
 
